@@ -20,6 +20,16 @@
   white-space: nowrap; 
 }
 
+.trigger > .block{
+  -webkit-border-top-right-radius: 25px;
+  -webkit-border-top-left-radius: 25px;
+  -moz-border-radius-topright: 25px;
+  -moz-border-radius-topleft: 25px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  padding-top: 15px;
+}
+
 /*.value > .block{
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;

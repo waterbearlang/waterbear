@@ -79,6 +79,7 @@ function block(options){
         wrapper.addClass('value').addClass(opts['type'].name.toLowerCase());
     }
     if (opts.trigger){
+        wrapper.addClass('trigger');
         block.append('<b class="trigger"></b>');
     }else if(opts.slot){
         block.append('<b class="slot"></b>');

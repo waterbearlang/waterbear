@@ -1,0 +1,140 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    background-color: #333333;
+}
+
+.menu {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 48%;
+    height: 18%;
+    background-color: red;
+}
+
+a {
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    padding: 3px 6px;
+    margin: 0px 5px;
+    /*  height: 25px;*/
+    float: left;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
+}
+
+.motion > .block, .motion > .next > .tab, .motion > .block > .contained > .tab, a.motion {
+    background-color: #4a6cd4;
+}
+
+.looks > .block, .looks > .next > .tab, .looks > .block > .contained > .tab, a.looks {
+    background-color: #8f56e3;
+}
+
+.sound > .block, .sound > .next > .tab, .sound > .block > .contained > .tab, a.sound {
+    background-color: #cf4ad9;
+}
+
+.pen > .block, .pen > .next > .tab, .pen > .block > .contained > .tab, a.pen {
+    background-color: #00a178;
+}
+
+.control > .block, .control > .next > .tab, .control > .block > .contained > .tab, a.control {
+    background-color: #e1ab18;
+}
+
+.sensing > .block, .sensing > .next > .tab, .sensing > .block > .contained > .tab, a.sensing {
+    background-color: #0494dc;
+}
+
+.operators > .block, .operators > .next > .tab, .operators > .block > .contained > .tab, a.operators {
+    background-color: #62c213;
+}
+
+.variables > .block, .variables > .next > .tab, .variables > .block > .contained > .tab, a.variables {
+    background-color: #e66a22;
+}
+
+.workspace {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 48%;
+    height: 78%;
+    background-color: #cccccc;
+}
+
+.sprite_info {
+    height: 40px;
+}
+
+.scripts_workspace, .sounds_workspace, .costumes_workspace {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: none;
+    /*  border: 1px solid purple;*/
+}
+
+.scripts_workspace {
+    display: block;
+}
+
+.stage {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 48%;
+    height: 58%;
+    background-color: #ffffff;
+}
+
+.sprites {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    width: 48%;
+    height: 38%;
+    background-color: #cccccc;
+}
+
+#menu_overlay {
+    display: none;
+    color: #efefef;
+    /*height: 450px;*/
+    width: 600px;
+    padding: 35px;
+    background-image: url(../images/white.png);
+}
+
+div.content_wrap {
+    height: 441px;
+    z-index: 1001
+}
+
+div.content_wrap .wrapper {
+    margin-bottom: 20px;
+    margin-right: 35px;
+}
+
+/* default close button positioned on upper right corner */
+#menu_overlay .close {
+    background-image: url(../images/close.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    right: -10px;
+    top: 5px;
+    cursor: pointer;
+    height: 35px;
+    width: 35px;
+}
+
+div.content_wrap table{
+    width: 100%;
+}

@@ -1,21 +1,53 @@
 body, html {
     height: 100%;
+    width: 100%;
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+    overflow: hidden;
 }
 
 body {
     background-color: #333333;
 }
 
-.menu {
+header{
     position: absolute;
     top: 0px;
+    left: 0px;
+    height: 18%;
+    width: 48%;
+    background-color: white;
+}
+
+header img{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+h1{
+    font-family: Georgia, serif;
+    font-size: 18px;
+    position: absolute;
+    top: 0px;
+    left: 80px;
+}
+
+header p{
+    text-align: right;
+}
+
+.menu {
+    position: absolute;
+    top: 19%;
     left: 0px;
     width: 48%;
     height: 18%;
     background-color: red;
 }
 
-a {
+.menu a {
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     border-radius: 15px;
@@ -66,7 +98,7 @@ a {
     left: 0px;
     bottom: 0px;
     width: 48%;
-    height: 78%;
+    height: 60%;
     background-color: #cccccc;
 }
 

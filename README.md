@@ -1,6 +1,8 @@
-# Scratch Blocks
+# Waterbear
 
-This is an attempt to create a system of draggable, snappable blocks, similar to what is used in the Scratch programming language, using HTML, CSS, and Javascript. The goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects.
+Waterbear is a programming toolkit for making programming more accessible to beginners, and more fun for all. The first part of it is a system of blocks inspired by Scratch (http://scratch.mit.edu) that can be used to create new visual languages.
+
+It is an attempt to create a system of draggable, snappable blocks, similar to what is used in the Scratch programming language, using HTML, CSS, and Javascript. The goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects.
 
 The motivation for this project is to reduce syntax errors in the same way that garbage collection has reduced memory errors, or bounds checking has reduced overrun errors.
 
@@ -8,8 +10,6 @@ The look and feel is different from Scratch, which is implemented in Squeak Smal
 
 ## Todo
 
-* Modify test page to be more obviously different from Scratch, make it waterbear
-* Move from bitbucket to github
 * Visual distinctiveness of value blocks and slots
 * Test on iPad (fixing drag'n'drop on touch devices requires research)
 * Get rid of double-handling clicks (inserting multiple blocks per click)

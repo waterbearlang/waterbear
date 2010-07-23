@@ -10,7 +10,7 @@ The look and feel is different from Scratch, which is implemented in Squeak Smal
 
 ## Todo
 
-* Visual distinctiveness of value blocks and slots
+* Visual distinctiveness of value blocks and slots (right/left for values, top/bottom of slots)
 * Test on iPad (fixing drag'n'drop on touch devices requires research)
 * Get rid of double-handling clicks (inserting multiple blocks per click)
 * Reduce padding in value blocks

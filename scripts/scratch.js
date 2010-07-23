@@ -13,7 +13,7 @@ $(function() {
 });
 
 function log(msg){
-    $('.workspace .stage').append('<p>' + msg + '</p>');
+    $('.stage').append('<p>' + msg + '</p>');
 }
 
 $('.scripts_workspace')[0].ontouchmove = function(event){

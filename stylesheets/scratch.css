@@ -4,22 +4,22 @@ body, html {
     margin: 0px;
     border: 0px;
     padding: 0px;
-    overflow: hidden;
 }
 body {
     background-color: #FFFFF;
 }
 
-header{
+.header{
     position: absolute;
     top: 0px;
     left: 0px;
     height: 18%;
     width: 48%;
     background-color: white;
+    background-color: red;
 }
 
-header img{
+.header img{
     position: absolute;
     top: 0px;
     left: 0px;

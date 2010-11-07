@@ -17,9 +17,7 @@ function log(msg){
 }
 
 $('.scripts_workspace')[0].ontouchmove = function(event){
-    log('cancelling a touch event');
-    event.preventDefault();
-    event.stopPropagation(true);
+     event.preventDefault();
 };
 
 function menu(klass, specs){

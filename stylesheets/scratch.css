@@ -33,8 +33,11 @@ h1{
     left: 80px;
 }
 
-header p{
+.header p{
+    font-family: Georgia;
+    font-size: 10px;
     text-align: right;
+    padding-right: 20px;
 }
 
 .menu {

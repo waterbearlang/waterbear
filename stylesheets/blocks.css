@@ -36,7 +36,7 @@
   border-radius: 0px;
 }
 */
-p {
+.wrapper p {
   padding: 7px 20px;
   padding-bottom: 3px;
   margin: 0px;
@@ -71,7 +71,7 @@ p {
     border: 1px solid white;
 }
 
-label, p {
+.wrapper label, .wrapper p {
   font-family: Georgia;
   font-size: 12px;
 }

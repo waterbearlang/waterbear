@@ -135,3 +135,7 @@ input {
   height: 16px; 
 }
 
+.selected > .block{
+    border: blue ridge thick;
+}
+

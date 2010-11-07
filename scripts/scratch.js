@@ -1,17 +1,3 @@
-$(function() {
-  return $('a[rel]').overlay({
-    mask: 'darkred',
-    effect: 'apple',
-    onBeforeLoad: function() {
-        var klass = this.getTrigger().attr('class');
-        var menu = menus[klass];
-        return this.getOverlay()
-            .find('.content_wrap').empty()
-            .append(menus[this.getTrigger().attr('class')]);
-    }
-  });
-});
-
 function log(msg){
     $('.stage').append('<p>' + msg + '</p>');
 }
@@ -20,8 +6,21 @@ $('.scripts_workspace')[0].ontouchmove = function(event){
      event.preventDefault();
 };
 
-function menu(klass, specs){
-    var col = $('<table><tr><td></td><td></td></tr></table>');
+$('.select').live('click', function(event){
+    var self = $(event.target);
+    if (self.hasClass('selected')){
+        return;
+    }
+    $('.select.selected').removeClass('selected').siblings('.option').hide();
+    self.addClass('selected').siblings('.option').show();
+});
+
+function menu(title, specs, show){
+    var klass = title.toLowerCase();
+    var body = $('<section class="submenu"></section>');
+    var select = $('<h3 class="select">' + title + '</h3>').appendTo(body);
+    var options = $('<div class="option"></div>').appendTo(body);
+    var col = $('<table><tr><td></td><td></td></tr></table>').appendTo(options);
     var half = Math.round((specs.length + 1) / 2);
     var col1 = col.find('td').eq(0);
     var col2 = col.find('td').eq(1);
@@ -33,11 +32,17 @@ function menu(klass, specs){
             col2.append(block(spec));
         }
     });
-    return col;
+    $('.block_menu').append(body);
+    if (show){
+        select.addClass('selected');
+    }else{
+        options.hide();
+    }
+    return body;
 }
 
 var menus = {
-    motion: menu('motion', [
+    motion: menu('Motion', [
         {label: 'move [number: 10] steps'},
         {label: 'turn [clockwise] [number:15] degrees'},
         {label: 'turn [counterclockwise] [number:15] degrees'},
@@ -55,7 +60,7 @@ var menus = {
         {label: 'y position', 'type': Number},
         {label: 'direction', 'type': Number}        
     ]),
-    looks: menu('looks', [
+    looks: menu('Looks', [
         {label: 'switch to costume [costume]'},
         {label: 'next costume'},
         {label: 'costume #', 'type': Number},
@@ -74,7 +79,7 @@ var menus = {
         {label: 'go to front'},
         {label: 'go back [number:1] layers'}
     ]),
-    sound: menu('sound', [
+    sound: menu('Sound', [
         {label: 'play sound [sound_or_record]'},
         {label: 'play sound [sound_or_record] until done'},
         {label: 'stop all sounds'},
@@ -89,7 +94,7 @@ var menus = {
         {label: 'set tempo to [number:60] bpm'},
         {label: 'tempo', 'type': Number}
     ]),
-    pen: menu('pen', [
+    pen: menu('Pen', [
         {label: 'clear'},
         {label: 'pen down'},
         {label: 'pen up'},
@@ -102,7 +107,7 @@ var menus = {
         {label: 'set pen size to [number:1]'},
         {label: 'stamp'}
     ]),
-    control: menu('control', [
+    control: menu('Control', [
         {label: 'when [flag] clicked', trigger: true},
         {label: 'when [key] key pressed', trigger: true},
         {label: 'when [sprite] clicked', trigger: true},
@@ -119,8 +124,8 @@ var menus = {
         {label: 'repeat until [boolean]'},
         {label: 'stop script'},
         {label: 'stop all [stop]', tab: false}
-    ]),
-    sensing: menu('sensing', [
+    ], true),
+    sensing: menu('Sensing', [
         {label: 'touching [sprite_or_mouse_or_edge]?', 'type': Boolean},
         {label: 'touching [color_eyedropper]?', 'type': Boolean},
         {label: '[color_eyedropper] is touching [color_eyedropper]?', 'type': Boolean},
@@ -139,7 +144,7 @@ var menus = {
         {label: '[sensor] sensor value', type: Number},
         {label: 'sensor [button_or_connection]?', type: Boolean}
     ]),
-    operators: menu('operators', [
+    operators: menu('Operators', [
         {label: '[number] + [number]', type: Number},
         {label: '[number] - [number]', type: Number},
         {label: '[number] * [number]', type: Number},
@@ -158,7 +163,7 @@ var menus = {
         {label: 'round [number]', type: Number},
         {label: '[function] of [number:10]', type: Number}
     ]),
-    variables: menu('variables', [
+    variables: menu('Variables', [
         {button: 'Make a variable'},
         {button: 'Make a list'}
     ])

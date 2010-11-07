@@ -121,11 +121,15 @@ function label(value){
 }
 
 
-$('.content_wrap .wrapper').live('click', function(event) {
+$('.submenu .wrapper').live('click', function(event) {
     var copy = $(this).clone();
     $('.scripts_workspace').append(copy);
     copy.center();
-    $('#menu_overlay .close').click();
+});
+
+$('.scripts_workspace .wrapper').live('click', function(event, callback){
+    $('.scripts_workspace .selected').removeClass('selected');
+    $(event.target).closest('.wrapper').addClass('selected');
 });
 
 $('.scripts_workspace .wrapper').live('dragstart', {handle: '.block'}, function(event, callback) {
@@ -272,4 +276,33 @@ $('.scripts_workspace .socket').live('drop', function(event, callback) {
 $('.scripts_workspace .socket').live('dropend', function(event, callback) {
     // console.log('socket dropend');
     // $(callback.drag).css('border', '1px solid white');
+});
+
+$('body').live('keypress', function(event){
+    // charCode 8 is delete
+    switch(event.charCode){
+        case 8: // delete key pressed
+            var selected = $('.scripts_workspace .wrapper.selected');
+            if (selected.length){
+                var next = selected.find('.next > .wrapper');
+                if (next.length){
+                    var deletep = confirm('Delete selected block and its contents?');
+                    if (deletep){
+                        selected.remove();
+                    }
+                }else{
+                    selected.remove();
+                }
+            }
+            break;
+        default:
+            console.log('keypress: %s', event.charCode);
+            break;
+    }
+//    console.log('keypress: %o', event);
+});
+
+$('.scripts_workspace input[type=text]').live('keypress', function(event){
+    console.log('caught a keypress in a textfield');
+    event.stopPropagation();
 });

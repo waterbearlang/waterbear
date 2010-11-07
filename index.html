@@ -12,36 +12,29 @@
     <link rel="apple-touch-startup-image" href="default.png"><!-- 320x460 image -->
   </head>
   <body>
-    <div class="header">
-        <img src="images/waterbear.png" />
-        <h1>Waterbear</h1>
-        <p>Demo: <a href="http://livingcode.org/projects/waterbear/">livingcode.org/projects/waterbear/</a></p>
-        <p>Source and info: <a href="http://github.com/delza/waterbear">github.com/delza/waterbear</a></p>
-        <p>Waterbear image via: <a href="http://commons.wikimedia.org/wiki/File:Waterbear.jpg">commons.wikimedia.org</a>
-    </div>
-    <div class='menu'>
-      <a class='motion' href='#' rel='#menu_overlay'>Motion</a>
-      <a class='looks' href='#' rel='#menu_overlay'>Looks</a>
-      <a class='sound' href='#' rel='#menu_overlay'>Sound</a>
-      <a class='pen' href='#' rel='#menu_overlay'>Pen</a>
-      <a class='control' href='#' rel='#menu_overlay'>Control</a>
-      <a class='sensing' href='#' rel='#menu_overlay'>Sensing</a>
-      <a class='operators' href='#' rel='#menu_overlay'>Operators</a>
-      <a class='variables' href='#' rel='#menu_overlay'>Variables</a>
-    </div>
-    <div class='workspace'>
-      <div class='sprite_info'></div>
-      <div class='scripts_tab'></div>
-      <div class='costumes_tab'></div>
-      <div class='sounds_tab'></div>
-      <div class='scripts_workspace'></div>
-      <div class='sounds_workspace'></div>
-      <div class='costumes_workspace'></div>
-    </div>
-    <div class='stage'></div>
-    <div class='sprites'></div>
-    <div id='menu_overlay'>
-      <div class='content_wrap'><br /></div>
+    <div class="content">
+        <div class="header">
+            <img src="images/waterbear.png" />
+            <h1>Waterbear</h1>
+            <p>Demo: <a href="http://livingcode.org/projects/waterbear/">livingcode.org/projects/waterbear/</a></p>
+            <p>Source and info: <a href="http://github.com/delza/waterbear">github.com/delza/waterbear</a></p>
+            <p>Waterbear image via: <a href="http://commons.wikimedia.org/wiki/File:Waterbear.jpg">commons.wikimedia.org</a>
+                <button class="goto_script">Script</button>
+                <button class="goto_stage">Stage</button>
+        </div>
+        <div class="block_menu">
+        </div>
+        <div class='workspace'>
+          <div class='sprite_info'></div>
+          <div class='scripts_tab'></div>
+          <div class='costumes_tab'></div>
+          <div class='sounds_tab'></div>
+          <div class='scripts_workspace'></div>
+          <div class='sounds_workspace'></div>
+          <div class='costumes_workspace'></div>
+        </div>
+        <div class='stage'></div>
+        <div class='sprites'></div>
     </div>
     <script src='lib/jquery.min.js'></script>
     <script src='lib/jquery.tools.min.js'></script>

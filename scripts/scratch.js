@@ -2,37 +2,42 @@ function log(msg){
     $('.stage').append('<p>' + msg + '</p>');
 }
 
-$('.scripts_workspace')[0].ontouchmove = function(event){
+$('.scripts_workspace').get(0).ontouchmove = function(event){
      event.preventDefault();
 };
 
-$('.select').live('click', function(event){
-    var self = $(event.target);
+function accordion(target, event){
+    var self = $(target);
+    console.log('self: %o', self);
+    console.log('event: %o', event);
     if (self.hasClass('selected')){
         return;
     }
     $('.select.selected').removeClass('selected').siblings('.option').hide();
     self.addClass('selected').siblings('.option').show();
-});
+}
+
+$('.select').live('click', accordion);
+$('.select').live('tap', accordion);
 
 function menu(title, specs, show){
     var klass = title.toLowerCase();
-    var body = $('<section class="submenu"></section>');
-    var select = $('<h3 class="select">' + title + '</h3>').appendTo(body);
-    var options = $('<div class="option"></div>').appendTo(body);
-    var col = $('<table><tr><td></td><td></td></tr></table>').appendTo(options);
+    var body = $.h('<section class="submenu"></section>');
+    var select = $.h('<h3 class="select">' + title + '</h3>').appendTo(body);
+    var options = $.h('<div class="option"></div>').appendTo(body);
+    var col = $.h('<table><tr><td></td><td></td></tr></table>').appendTo(options);
     var half = Math.round((specs.length + 1) / 2);
     var col1 = col.find('td').eq(0);
     var col2 = col.find('td').eq(1);
     specs.forEach(function(spec, idx){
         spec.klass = klass;
         if (idx < half){
-            col1.append(block(spec));
+            col1._append(block(spec));
         }else{
-            col2.append(block(spec));
+            col2._append(block(spec));
         }
     });
-    $('.block_menu').append(body);
+    $('.block_menu')._append(body);
     if (show){
         select.addClass('selected');
     }else{

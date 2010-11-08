@@ -1,4 +1,4 @@
-$.fn.extend({
+$.extend($.fn,{
   long_name: function() {
     var names;
     names = [];
@@ -45,18 +45,79 @@ $.fn.extend({
         top: ph - dy
       });
     });
+  },
+  parentBlock: function(){
+      var p = this.closest('.wrapper').parent();
+      if (p.is('.next')){
+          return p.closest('.wrapper');
+      }
+      return null;
+  },
+  nextBlock: function(){
+      var n = this.closest('.wrapper').children('.next').children('.wrapper');
+      if (n.length){
+          return n;
+     }
+     return null;
+  },
+  _append: function(nodes_or_sel){
+      var self = this.get(0);
+      var nodes;
+      if(nodes_or_sel.dom){
+          nodes = nodes_or_sel;
+      }else{
+          nodes = $(nodes_or_sel);
+      }
+      nodes.dom.forEach(function(node){
+          self.appendChild(node);
+      });
+      return this;
+  },
+  appendTo: function(sel){
+      var target = $(sel);
+      if (target.dom.length){
+          target = target.get(0);
+          this.dom.forEach(function(node){
+              target.appendChild(node);
+          });
+      }
+      return this;
+  },
+  eq: function(index){
+      var r = $();
+      r.dom = [this.get(index)];
+      return r;
+  },
+  children: function(sel){
+      var r = $();
+      this.dom.forEach(function(node){
+          r.dom = r.dom.concat(Array.prototype.slice.call(node.children));
+      });
+      if(sel !== undefined){
+          r = r.filter(sel);
+      }
+      return r;
   }
 });
 
+$.h = function(html){
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    var innerNodes = Array.prototype.slice.call(div.children);
+    var r = $();
+    r.dom = innerNodes;
+    return r;
+};
+
 function button(options){
-    return $('<button>' + options.button + '</button>');
+    return $.h('<button>' + options.button + '</button>');
 }
 
 function block(options){
     if (options.button){
         return button(options);
     }
-    opts = $.extend({
+    var opts = {
         klass: 'control',
         tab: true, // Something can come after
         trigger: false, // This is the start of a handler
@@ -64,7 +125,8 @@ function block(options){
         containers: 0,  // Something cannot be inside
         label: 'Step', // label is its own mini-language
         type: null
-    }, options);
+    };
+    $.extend(opts, options);
     if (opts.trigger){
         opts.slot = false; // can't have both slot and trigger
     }
@@ -72,7 +134,7 @@ function block(options){
         opts.tab = false; // values nest, but do not follow
         opts.slot = false;
     }
-    var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
+    var wrapper = $.h('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
     var block = wrapper.children();
     if (opts['type']){
         block.addClass(opts['type'].name.toLowerCase());
@@ -123,8 +185,9 @@ function label(value){
 
 $('.submenu .wrapper').live('click', function(event) {
     var copy = $(this).clone();
-    $('.scripts_workspace').append(copy);
+    $('.scripts_workspace')._append(copy);
     copy.center();
+    copy.click();
 });
 
 $('.scripts_workspace .wrapper').live('click', function(event, callback){
@@ -145,7 +208,7 @@ $('.scripts_workspace .wrapper').live('dragstart', {handle: '.block'}, function(
     }
     if(!drag.parent().is('.scripts_workspace')){
         console.log('unparenting drag node');
-        $('.scripts_workspace').append(this);
+        $('.scripts_workspace')._append(this);
     }
     callback.offX = pos.left;
     callback.offY = pos.top;
@@ -203,7 +266,7 @@ $('.scripts_workspace .tab').live('dropstart', function(event, callback){
 $('.scripts_workspace .tab').live('drop', function(event, callback) {
   // console.log('tab drop');
   try{
-      $(this).parent().append($(callback.drag).closest('.wrapper'));
+      $(this).parent()._append($(callback.drag).closest('.wrapper'));
       $(callback.drag).closest('.wrapper').css({position: 'relative', top: 0, left: 0});
   }catch(e){
       console.log('What just happened? I was trying to append %o to %o', $(callback.drag).closest('.wrapper').get(), $(this).parent().get());
@@ -269,7 +332,7 @@ $('.scripts_workspace .socket').live('drop', function(event, callback) {
     var drag = $(callback.drag);
     socket.find('input').css('border', '0px').hide();
     socket.css('border', '');
-    socket.append(drag);
+    socket._append(drag);
     drag.css({position: 'relative', top: 0, left: 0, border: ''});
 });
 
@@ -299,7 +362,6 @@ $('body').live('keypress', function(event){
             console.log('keypress: %s', event.charCode);
             break;
     }
-//    console.log('keypress: %o', event);
 });
 
 $('.scripts_workspace input[type=text]').live('keypress', function(event){

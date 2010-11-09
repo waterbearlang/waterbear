@@ -97,6 +97,20 @@ $.extend($.fn,{
           r = r.filter(sel);
       }
       return r;
+  },
+  siblings: function(sel){
+      var r = $();
+      this.dom.forEach(function(node){
+          Array.prototype.slice.call(node.parentElement.children).forEach(function(child){
+              if (node !== child){
+                  r.dom.push(child);
+              }
+          });
+      });
+      if (sel !== undefined){
+          r = r.filter(sel);
+      }
+      return r;
   }
 });
 

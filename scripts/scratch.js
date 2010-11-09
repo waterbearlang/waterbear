@@ -8,8 +8,6 @@ $('.scripts_workspace').get(0).ontouchmove = function(event){
 
 function accordion(target, event){
     var self = $(target);
-    console.log('self: %o', self);
-    console.log('event: %o', event);
     if (self.hasClass('selected')){
         return;
     }

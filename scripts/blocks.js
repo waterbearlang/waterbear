@@ -57,18 +57,26 @@ $.extend($.fn,{
       }
       return cn;
   },
+  socketNiches: function(ntype){
+      return this.children('block').children('p').find('.socket.' + ntype);
+  },
   selectBlock: function(){
     $('.scripts_workspace .selected').removeClass('selected');
     return this.addClass('selected');
+  },
+  unselectBlock: function(){
+      return this.removeClass('selected');
   },
   moveTo: function(x,y){
       return this.css({left: x + 'px', top: y + 'px'});
   },
   niches: function(ntype){
       // return an ordered list of open niches
-      // types are Step (tab or container), and socket types Number, Boolean, String 
-      if (ntype === 'Step'){
-          var n = this.containerNiches();
+      // types are step (tab or container), and socket types number, noolean, ntring 
+      if (ntype === 'step'){
+          return this.stepNiches().noChildren();
+      }else{
+          return this.socketNiches(ntype).noChildren();
       }
   },
   appendToBlock: function(block){
@@ -76,13 +84,11 @@ $.extend($.fn,{
       // if the block being appended is already a child of this block, and there is another available slot, move to the next available slot
       // if the block being appended is the wrong type, return false
   },
-  noChildren: function(block){
-      var self = this;
-      this.dom.forEach(function(elem, idx){
-          if ($(elem).children('.wrapper').dom.length){
-              this.dom.splice(idx, 1); // Removing items while traversing may cause BAD THINGS TO HAPPEN
-          }
+  noChildren: function(){
+      this.dom.filter(function(elem){
+          return $(elem).children('.wrapper').dom.length < 1;
       });
+      return this;
   }
 });
 
@@ -164,15 +170,23 @@ $('.submenu .wrapper').live('click', function(elem, event) {
     $('.scripts_workspace')._append(copy);
     copy.center();
     copy.selectBlock();
-    event.stopPropagation();
 });
 
 $('.scripts_workspace').live('click', function(elem, event){
+    if (event.srcElement !== elem){
+        return
+    }
     $.selectedBlock().moveTo(event.offsetX, event.offsetY);
 });
 
 $('.scripts_workspace .wrapper').live('click', function(elem, event){
-    $(elem).selectBlock();
+    var self = $(elem);
+    if (self.is('.selected')){
+        self.unselectBlock();
+    }else{
+        self.selectBlock();
+    }
+    event.stopPropagation();
 });
 
 $('body').live('keypress', function(event){

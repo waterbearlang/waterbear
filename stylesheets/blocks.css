@@ -135,6 +135,51 @@ input {
   height: 16px; 
 }
 
+p{
+    overflow-y: hidden;
+}
+
+.boolean{
+    margin-right: 6px;
+    margin-left:6px;
+}
+
+input[type=number]{
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/* Corners loosely based on this: http://css-tricks.com/triangle-breadcrumbs/ */
+.boolean:after{
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 6px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    left: 100%;
+    z-index: 2;
+}
+.boolean:before{
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 6px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    right: 100%;
+    z-index: 2;
+}
+
 .selected > .block{
     border: blue ridge thick;
 }

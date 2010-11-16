@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Raphael Workshop</title>
+    <style>
+        .canvas{
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas"></div>
+    <script src="../lib/jquery.min.js"></script>
+    <script src="../lib/raphael-min.js"></script>
+    <script>
+    var WIDTH = 500,
+        HEIGHT = 500,
+        paper = Raphael($('.canvas')[0], WIDTH, HEIGHT);
+    // Utility methods I usually need
+    
+    function Path(){
+        this._path = [];
+    }
+    Path.prototype.moveto = function(x, y){
+        this._path.push('M' + x + ' ' + y);
+    };
+    Path.prototype.moveby = function(x, y){
+        this._path.push('m' + x + ' ' + y);
+    };
+    Path.prototype.lineto = function(x, y){
+        this._path.push('L' + x + ' ' + y);
+    };
+    Path.prototype.lineby = function(x, y){
+        this._path.push('l' + x + ' ' + y);
+    };
+    Path.prototype.closepath = function(){
+        this._path.push('Z');
+    };
+    Path.prototype.horizontalto = function(x){
+        this._path.push('H' + x);
+    };
+    Path.prototype.horizontalby = function(x){
+        this._path.push('h' + x);
+    };
+    Path.prototype.verticalto = function(y){
+        this._path.push('V' + y);
+    };
+    Path.prototype.verticalby = function(y){
+        this._path.push('v', + y);
+    };
+    Path.prototype.beziercurveto = function(cx1, cy1, cx2, cy2, x, y){
+        this._path.push('C' + [cx1, cy1, cx2, cy2, x, y].map(function(p){return Math.round(p);}).join(' '));
+    };
+    Path.prototype.beziercurveby = function(cx1, cy1, cx2, cy2, x, y){
+        this._path.push('c' + [cx1, cy1, cx2, cy2, x, y].join(' '));
+    };
+    // Can add smooth and quadratic beziers and elliptical arcs as needed
+    Path.prototype.toString = function(){
+        return this._path.join(' ');
+    };
+
+    var $u = {
+        removeItem: function(list, item){
+            list.splice(list.indexOf(item), 1);
+        },
+        random: function(a,b){
+            // 'Returns an integer between a and b, inclusive';
+            // 'If b is not specified, returns an integer between 0 and a';
+            if (b === undefined){
+                b = a;
+                a = 0;
+            }
+            return Math.floor(Math.random() * (b-a + 1)) + a;
+        },
+        choice: function(list){
+            // This is an exclusive, or mutating choice that
+            // picks a random item from a list and removes that
+            // item before returning it
+            var idx = $u.random(0, list.length - 1);
+            var item = list[idx];
+            list.splice(idx, 1); // remove item from list
+            return item;
+        },
+        range: function(start, stop, step){
+            // similar to Python's range function
+            // should be extended to handle negative steps
+            if (stop === undefined){
+                stop = start;
+                start = 0;
+            }
+            if (step === undefined){
+                step = 1;
+            }
+            var r = [], i;
+            for(i = start; i < stop; i += step){
+                r.push(i);
+            }
+            return r;
+        },
+        iterrange: function(start, stop, step, func){
+            var r = $u.range(start, stop, step);
+            for (var i in r){
+                func(r[i]);
+            }
+        },
+        line: function(x1, y1, x2, y2, attr){
+            var path = new Path();
+            path.moveto(x1, y1);
+            path.lineto(x2, y2);
+            return paper.path(path).attr(attr);
+        },
+        blueprint: function(spacing){
+            var background = '#3459B3';
+            var lines = '#4B6DBC';
+            if (spacing === undefined){
+                spacing = 10;
+            }
+            paper.rect(0,0,WIDTH,HEIGHT).attr('fill', background);
+            var lineattrs = {stroke: lines, 'stroke-width': 0.5};
+            $u.iterrange(0, WIDTH, spacing, function(x){
+                $u.line(x, 0, x, HEIGHT, lineattrs);
+            });
+            $u.iterrange(0, HEIGHT, spacing, function(y){
+                $u.line(0, y, WIDTH, y, lineattrs);
+            });
+        },
+        curve: function(vertArray, attr, tightness){
+            // Catmull-Rom curve, approximated with beziers
+            if (vertArray.length > 3) {
+                var b = [],
+                    curTightness = tightness || 0,
+                    s = 1 - curTightness;
+                var path = new Path();
+                path.moveto(vertArray[1][0], vertArray[1][1]);
+                 /*
+                 * Matrix to convert from Catmull-Rom to cubic Bezier
+                 * where t = curTightness
+                 * |0         1          0         0       |
+                 * |(t-1)/6   1          (1-t)/6   0       |
+                 * |0         (1-t)/6    1         (t-1)/6 |
+                 * |0         0          0         0       |
+                 */
+                 for (var i = 1; (i+2) < vertArray.length; i++) {
+                     b[0] = [vertArray[i][0], vertArray[i][1]];
+                     b[1] = [vertArray[i][0] + (s * vertArray[i+1][0] - s * vertArray[i-1][0]) / 6,
+                        vertArray[i][1] + (s * vertArray[i+1][1] - s * vertArray[i-1][1]) / 6];
+                     b[2] = [vertArray[i+1][0] + (s * vertArray[i][0] - s * vertArray[i+2][0]) / 6,
+                        vertArray[i+1][1] + (s * vertArray[i][1] - s * vertArray[i+2][1]) / 6];
+                     b[3] = [vertArray[i+1][0], vertArray[i+1][1]];
+                     path.beziercurveto(b[1][0], b[1][1], b[2][0], b[2][1], b[3][0], b[3][1]);
+                 }
+                 return paper.path(path).attr(attr);
+             }
+        },
+        sketchline: function(x1, y1, x2, y2, attr){
+            var random = $u.random;
+            for (var i = 0; i < 2; i++){
+                $u.curve([[ x1 + random(-2,2), y1 +random(-2,2)],
+                          [ x1 + random(-2,2), y1 +random(-2,2)],
+                          [ x1+(x2 -x1)/3 + random(-2,2), y1 + (y2-y1)/3 +random(-2,2)],
+                          [ x1+2*(x2-x1)/3 + random(-2,2), y1+ 2*(y2-y1)/3 +random(-2,2)], 
+                          [ x2 + random(-2,2), y2 +random(-2,2)],
+                          [ x2 + random(-2,2), y2 +random(-2,2)]], attr);
+            }
+        },
+        sketchrect: function(x, y, w, h, attr){
+            $u.sketchline(x,y,x,y+h, attr);
+            $u.sketchline(x,y,x+w,y, attr);
+            $u.sketchline(x+w,y,x+w,y+h, attr);
+            $u.sketchline(x,y+h,x+w,y+h, attr);
+        }
+    };
+    // Raphael cheat sheet:
+    // paper.circle(x,y,radius)
+    // paper.rect(x,y,width,height[,corner_radius])
+    // paper.ellipse(x,y,h_radius,y_radius)
+    // paper.image(src,x,y,width,height)
+    // paper.set() // used for grouping elements
+    // paper.text(x,y,txt)
+    // paper.path(svg_path_string)
+    // paper.clear() // clears all elements from canvas
+    // element.node() // gives access to DOM object
+    // element.remove() 
+    // element.hide()
+    // element.show()
+    // element.rotate(degrees, isAbsolute)
+    // element.rotate(degrees, origin_x, origin_y)
+    // element.translate(dx, dy)
+    // element.scale(xtimes, ytimes, [centerx, centery])
+    // element.attr(name,value)
+    // element.attr({parameters})
+    // element.attr(name) // returns current value
+    // element.attr([names]) // array of names, returns array of values
+    // element.attr() // returns all names
+    // ATTRIBUTES:
+    //     clip-rect: comma or space separated x, y, width, height as string
+    //     cursor: name of cursor as string
+    //     cx: number
+    //     cy: number
+    //     fill: colour or gradient
+    //         linear gradient: "<angle>-<color>[-<color:offset>]-<color>"
+    //         radial gradient: "r[(<fx>,<fy>)]<color>[-<color>[:offset]]-<color>"
+    //         Focal coordinates are from 0..1
+    //         Radial gradients can only be applied to circles and ellipses
+    //     fill-opacity: number
+    //     font: string
+    //     font-family: string
+    //     font-size: number
+    //     font-weight: string
+    //     height: number
+    //     href: string (url, turns element into hyperlink)
+    //     opacity: number
+    //     path: pathString
+    //     r: number
+    //     rotation: number
+    //     rx: number
+    //     ry: number
+    //     scale: string
+    //     src: string (url)
+    //     stroke: color
+    //     stroke-dasharray: string
+    //     stroke-linecap: ["butt", "square", "round"]
+    //     stroke-linejoin: ["bevel", "round", "miter"]
+    //     stroke-miterlimit: number
+    //     stroke-opacity: number
+    //     stroke-width: number
+    //     target: string (used with href)
+    //     text-anchor: ["start", "middle", "end"]
+    //     title: string
+    //     translation: string
+    //     width: number
+    //     x: number
+    //     y: number
+    // element.animate({newattrs}, ms, callback)
+    // element.animate({newattrs}, ms, easing, callback)
+    // element.animate({keyframes}, ms)
+    // ATTRIBUTES THAT CAN BE ANIMATED
+    //     clip-rect: string
+    //     cx: number
+    //     cy: number
+    //     fill: color
+    //     fill-opacity: number
+    //     font-size: number
+    //     height: number
+    //     opacity: number
+    //     path: pathstring
+    //     r: number
+    //     rotation: string
+    //     rx: number
+    // element.animateWith([same as animate, but first argument is an element to synchronize with])
+    // element.animateAlong(pathobject|pathstring, ms, rotateFlag, callback)
+    // element.animateAlongBack(pathobject|pathstring, ms, rotateFlag, callback)
+    // element.onAnimation(func)
+    // element.getBBox()
+    // element.toFront()
+    // element.toBack()
+    // element.insertBefore(elem)
+    // element.insertAfter(elem)
+    // element.clone()
+    // path.getTotalLength()
+    // path.getPointAtLength()
+    // path.getSubpath(from_px, to_px)
+    // paper.setSize(width, height)
+    // Raphael.getRGB(colorstring)
+    // Raphael.angle(x1, y1, x2, y2[, x3, y3])
+    // Raphael.rad(degrees)
+    // Raphael.deg(radians)
+    // Raphael.snapTo(values, value[, tolerance])
+    // Raphael.getColor()
+    // Raphael.getColor.reset()
+    // Raphael.registerFont(font)
+    // paper.getFont(family[, weight][, style][, stretch])
+    // paper.print(x, y, text, font, font_size)
+        
+    
+    // Code goes here
+    $u.blueprint();
+    var lineattr = {stroke: '#FFFFFF', 'stroke-width': 2};
+    $u.sketchline( 150, 150, 200,200, lineattr);
+    $u.sketchline( 180,200,200,200, lineattr);
+    $u.sketchline( 200,180, 200, 200, lineattr);
+
+    $u.sketchline( 150,90, 180,65, lineattr);
+    $u.sketchline( 180,75, 180,65, lineattr);
+    $u.sketchline( 170,65, 180,65, lineattr);
+    
+    $u.sketchrect(70,90,70,50, lineattr);
+    $u.sketchrect(210,180,60,90, lineattr);
+    $u.sketchrect(190,40,80,50, lineattr);
+
+    // var c;
+    // $u.range(100).forEach(function(idx){
+    //     c = paper.circle($u.random(WIDTH), $u.random(HEIGHT), $u.random(40,100));
+    //     c.attr({fill: Raphael.getColor(), 'fill-opacity': 0.3});
+    // });
+    </script>
+</body>
+</html>

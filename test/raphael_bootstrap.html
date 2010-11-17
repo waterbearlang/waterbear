@@ -11,6 +11,7 @@
         	font-style: normal;
         }        
         .wftext{
+            fill: #FFFFFF;
 			font-weight: normal;
 			font-style: normal;
 			line-height:normal;
@@ -18,14 +19,28 @@
             font-family: 'DadhandRegular', Georgia, "New Century Schoolbook", "Nimbus Roman No9 L", serif;
             font-size-adjust: 0.45;
         }
-        .canvas{
-            width: 500px;
-            height: 500px;
+        .wfline{
+            stroke: #FFFFFF;
+            stoke-width: 2px;
+        }
+        .nobp .wfline{
+            stroke: #333333;
+        }
+        .nobp .wftext{
+            fill: #333333;
         }
     </style>
 </head>
 <body>
-    <div class="canvas"></div>
+    <pre><code>
+        sketch 500 500 true
+        arrow 150  150 200 200
+        arrow 150 90 180 65
+        rect 70 90 70 50 Baz
+        rect 210 180 60 90 Foo
+        rect 190 40 80 50 Bar
+        img 400 400 80 50
+    </code><pre>
     <script src="../lib/jquery.min.js"></script>
     <script src="../lib/raphael-min.js"></script>
     <script>
@@ -33,54 +48,60 @@
         var path = new Path()
             .moveto(x1, y1)
             .lineto(x2, y2);
-        return paper.path(path);
+        return this.path(path);
     };
+    Raphael.fn.blueprint = function(spacing){
+        var background = '#3459B3';
+        var self = this;
+        var lines = '#4B6DBC';
+        if (spacing === undefined){
+            spacing = 10;
+        }
+        this.rect(0,0,WIDTH,HEIGHT).attr('fill', background);
+        var lineattrs = {stroke: lines, 'stroke-width': 0.5};
+        $u.iterrange(0, WIDTH, spacing, function(x){
+            self.line(x, 0, x, HEIGHT).attr(lineattrs);
+        });
+        $u.iterrange(0, HEIGHT, spacing, function(y){
+            self.line(0, y, WIDTH, y).attr(lineattrs);
+        });
+    }
     jQuery.fn.extend({
         sketch: function(){
-            this.each(function(elem){
-                var self = $(elem);
-                var lines = self.text().split('\n');
+            this.each(function(){
+                var self = $(this);
+                var elem = this;
+                var lines = $.trim(self.text()).split('\n');
                 if (lines.length && /^sketch/.test(lines[0])){
-                    $.each(lines, function(line){
-                        var x,y,x1,y1,x2,y2,h,w,text,angle;
-                        var words = line.split(/\s+/);
+                    var sketch;
+                    $.each(lines, function(idx, line){
+                        var words = $.trim(line).split(/\s+/);
                         var cmd = words[0];
-                        var sketch;
                         switch(cmd){
                             case 'sketch':
-                                elem.innerText = '';
-                                w = parseInt(word[1], 10);
-                                h = parseInt(word[2], 10);
-                                sketch = new Sketch(elem, w, h);
+                                self.text('');
+                                var w = $u.integ(words[1]),
+                                    h = $u.integ(words[2]),
+                                    bp = words.length > 3 && words[3] === 'true';
+                                sketch = new Sketch(elem, w, h, bp);
                                 break;
                             case 'line':
-                                x1 = parseInt(word[1], 10);
-                                y1 = parseInt(word[2], 10);
-                                x2 = parseInt(word[3], 10);
-                                y2 = parseInt(word[4], 10);
-                                sketch.line(x1, y1, x2, y2);
-                                break;
                             case 'rect':
-                                x = parseInt(word[1], 10);
-                                y = parseInt(word[2], 10);
-                                w = parseInt(word[3], 10);
-                                h = parseInt(word[4], 10);
-                                text = word.slice(5).join(' ');
-                                sketch.rect(x,y,w,h,text);
+                            case 'arrow':
+                            case 'img':
+                                var args = $u.intarray(words.slice(1,5));
+                                args.push(words.slice(5).join(' ')); // text for rect
+                                sketch[cmd].apply(sketch, args);
                                 break;
                             case 'text':
-                                x = parseInt(word[1], 10);
-                                y = parseInt(word[2], 10);
-                                text = word.slice(3).join(' ');
+                                var x = parseInt(words[1], 10),
+                                    y = parseInt(words[2], 10),
+                                    text = words.slice(3).join(' ');
                                 sketch.text(x,y,text);
                                 break;
-                            case 'arrow':
-                                x1 = parseInt(word[1], 10);
-                                y1 = parseInt(word[2], 10);
-                                x2 = parseInt(word[3], 10);
-                                x3 = parseInt(word[4], 10);
-                                angle = Raphael.angle(x1, y1, x2, y2);
-                                break;
+                        }
+                        if (sketch){
+                            sketch.draw();
                         }
                     });
                 }
@@ -170,11 +191,21 @@
              return this;
          }
      };
-    Path.prototype.sketchline = function(x1, y1, x2, y2){
+    
+    function Sketch(elem, width,height,blueprint){
+        this._paper = Raphael(elem, width, height);
+        if(blueprint){
+            this._paper.blueprint();
+        }else{
+            $(elem).addClass('nobp');
+        }
+        this._path = new Path();
+    }
+    Sketch.prototype.line = function(x1, y1, x2, y2){
         var random = $u.random;
         var overlines = $u.choice([1,1,1,1,1,1,1,2,2,2,3]);
         for (var i = 0; i < overlines; i++){
-            this.curve([[ x1 + random(-2,2), y1 +random(-2,2)],
+            this._path.curve([[ x1 + random(-2,2), y1 +random(-2,2)],
                       [ x1 + random(-2,2), y1 +random(-2,2)],
                       [ x1+(x2 -x1)/3 + random(-2,2), y1 + (y2-y1)/3 +random(-2,2)],
                       [ x1+2*(x2-x1)/3 + random(-2,2), y1+ 2*(y2-y1)/3 +random(-2,2)], 
@@ -183,29 +214,59 @@
         }
         return this;
     };
-    Path.prototype.sketchrect = function(x, y, w, h, text){
-        this.sketchline(x,y,x,y+h);
-        this.sketchline(x,y,x+w,y);
-        this.sketchline(x+w,y,x+w,y+h);
-        this.sketchline(x,y+h,x+w,y+h);
+    Sketch.prototype.rect = function(x, y, w, h, text){
+        this.line(x,y,x,y+h);
+        this.line(x,y,x+w,y);
+        this.line(x+w,y,x+w,y+h);
+        this.line(x,y+h,x+w,y+h);
         if (text !== undefined){
-            var t = paper.text(x+w/2,y+h/2,text).node;
-            t.removeAttribute('style');
-            t.removeAttribute('font');
-            t.setAttribute('class', 'wftext');
+            this.text(x+w/2,y+h/2,text);
         }
         return this;
     };
-    
-    function Sketch(elem, width,height){
-        this._paper = Raphael(elem, width, height);
-        this._path = new Path();
-    }
+    Sketch.prototype.text = function(x, y, text){
+        var t = this._paper.text(x,y,text).node;
+        t.removeAttribute('style');
+        t.removeAttribute('font');
+        t.removeAttribute('fill');
+        t.setAttribute('class', 'wftext');
+        return this;
+    };
+    Sketch.prototype.arrow = function(x1,y1,x2,y2){
+        var angle = Raphael.angle(x1,y1,x2,y2);
+        var x3,y3,x4,y4;
+        x3 = $u.dcos(angle + 45) * 10 + x2;
+        y3 = $u.dsin(angle + 45) * 10 + y2;
+        x4 = $u.dcos(angle - 45) * 10 + x2;
+        y4 = $u.dsin(angle - 45) * 10 + y2;
+        this.line(x1,y1,x2,y2);
+        this.line(x2,y2,x3,y3);
+        this.line(x2,y2,x4,y4);
+        return this;
+    };
+    Sketch.prototype.img = function(x,y,w,h){
+        this.rect(x,y,w,h);
+        this.line(x,y,x+w,y+h);
+        this.line(x+w,y,x,y+h);
+    };
+    Sketch.prototype.draw = function(){
+        var n = this._paper.path(this._path).node;
+        n.removeAttribute('stroke');
+        n.setAttribute('class', 'wfline');
+        return this;
+    };
+
 
 
     var $u = {
         removeItem: function(list, item){
             list.splice(list.indexOf(item), 1);
+        },
+        dcos: function(degrees){
+            return Math.cos(Raphael.rad(degrees));
+        },
+        dsin: function(degrees){
+            return Math.sin(Raphael.rad(degrees));
         },
         random: function(a,b){
             // 'Returns an integer between a and b, inclusive';
@@ -247,20 +308,11 @@
                 func(r[i]);
             }
         },
-        blueprint: function(spacing){
-            var background = '#3459B3';
-            var lines = '#4B6DBC';
-            if (spacing === undefined){
-                spacing = 10;
-            }
-            paper.rect(0,0,WIDTH,HEIGHT).attr('fill', background);
-            var lineattrs = {stroke: lines, 'stroke-width': 0.5};
-            $u.iterrange(0, WIDTH, spacing, function(x){
-                paper.line(x, 0, x, HEIGHT).attr(lineattrs);
-            });
-            $u.iterrange(0, HEIGHT, spacing, function(y){
-                paper.line(0, y, WIDTH, y).attr(lineattrs);
-            });
+        intarray: function(array){
+            return $.map(array, $u.integ);
+        },
+        integ: function(str){
+            return parseInt(str, 10);
         }
     };
     // Raphael cheat sheet:
@@ -367,22 +419,14 @@
         
     
     // Code goes here
-    $u.blueprint();
-    var lineattr = {stroke: '#FFFFFF', 'stroke-width': 2};
-    
-    var arrow1 = paper.path(new Path()
-        .sketchline( 150, 150, 200,200)
-        .sketchline( 180,200,200,200)
-        .sketchline( 200,180, 200, 200)).attr(lineattr);
-
-    var arrow2 = paper.path(new Path()
-        .sketchline( 150,90, 180,65)
-        .sketchline( 180,75, 180,65)
-        .sketchline( 170,65, 180,65)).attr(lineattr);
-    
-    var bazBox = paper.path(new Path().sketchrect(70,90,70,50,'Baz')).attr(lineattr);
-    var fooBox = paper.path(new Path().sketchrect(210,180,60,90,'Foo')).attr(lineattr);
-    var barBox = paper.path(new Path().sketchrect(190,40,80,50,'Bar')).attr(lineattr);
+    // var sketch = new Sketch($('.canvas')[0], WIDTH, HEIGHT, true)
+    //     .arrow( 150, 150, 200,200)
+    //     .arrow( 150,90, 180,65)
+    //     .rect(70,90,70,50,'Baz')
+    //     .rect(210,180,60,90,'Foo')
+    //     .rect(190,40,80,50,'Bar')
+    //     .draw();
+    $('code').sketch();
     
     // var c;
     // $u.range(100).forEach(function(idx){

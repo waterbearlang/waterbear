@@ -36,7 +36,7 @@
         sketch 500 500 true
         arrow 150  150 200 200
         arrow 150 90 180 65
-        rect 70 90 70 50 Baz
+        ellipse 70 90 70 50
         rect 210 180 60 90 Foo
         rect 190 40 80 50 Bar
         img 400 400 80 50
@@ -89,6 +89,7 @@
                             case 'rect':
                             case 'arrow':
                             case 'img':
+                            case 'ellipse':
                                 var args = $u.intarray(words.slice(1,5));
                                 args.push(words.slice(5).join(' ')); // text for rect
                                 sketch[cmd].apply(sketch, args);
@@ -249,14 +250,19 @@
         this.line(x,y,x+w,y+h);
         this.line(x+w,y,x,y+h);
     };
+    Sketch.prototype.ellipse = function(x,y,w,h){
+        var points = $u.ellipse(x,y,w,h,8);
+        points.push(points[0]);
+        console.log('points: %d', points.length);
+        this._path.curve(points);
+        
+    };
     Sketch.prototype.draw = function(){
         var n = this._paper.path(this._path).node;
         n.removeAttribute('stroke');
         n.setAttribute('class', 'wfline');
         return this;
     };
-
-
 
     var $u = {
         removeItem: function(list, item){
@@ -313,7 +319,43 @@
         },
         integ: function(str){
             return parseInt(str, 10);
-        }
+        },
+        ellipse: function(x,y,w,h,steps){
+        /*
+        * This functions returns an array containing 36 points to draw an
+        * ellipse in the rect defined by x,y,w,h
+        * TODO: move x,y to center of rect, reduce w,h by half
+        */
+            w = w/2;
+            h = h/2;
+            x = x + w;
+            y = y + h;
+            if (steps === undefined){
+                steps = 36;
+            }
+            var points = [];
+            var a = w, // semi-major axis
+                b = h, // semi-minor axis
+                beta = 0;
+            if (w > h){
+                a = h;
+                b = w;
+                beta = -Math.PI / 2;
+            } 
+            var sinbeta = Math.sin(beta);
+            var cosbeta = Math.cos(beta);
+            var i, alpha, sinalpha, cosalpha,X,Y;
+            for (i = 0; i < 360; i += 360 / steps) {
+                alpha = i * (Math.PI / 180) ;
+                sinalpha = Math.sin(alpha);
+                cosalpha = Math.cos(alpha);
+                X = x + (a * cosalpha * cosbeta - b * sinalpha * sinbeta);
+                Y = y + (a * cosalpha * sinbeta + b * sinalpha * cosbeta);
+
+                points.push([X,Y]);
+            }
+            return points;
+            }
     };
     // Raphael cheat sheet:
     // paper.circle(x,y,radius)

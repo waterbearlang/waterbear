@@ -3,6 +3,21 @@
 <head>
     <title>Raphael Workshop</title>
     <style>
+        @font-face {
+        	font-family: 'DadhandRegular';
+        	src: url('../lib/dadhand-webfont.eot');
+        	src: local('☺'), url('../lib/dadhand-webfont.woff') format('woff'), url('../lib/dadhand-webfont.ttf') format('truetype'), url('../lib/dadhand-webfont.svg#webfontiNDkHeiT') format('svg');
+        	font-weight: normal;
+        	font-style: normal;
+        }        
+        .wftext{
+			font-weight: normal;
+			font-style: normal;
+			line-height:normal;
+			font-size: 18pt;
+            font-family: 'DadhandRegular', Georgia, "New Century Schoolbook", "Nimbus Roman No9 L", serif;
+            font-size-adjust: 0.45;
+        }
         .canvas{
             width: 500px;
             height: 500px;
@@ -14,6 +29,64 @@
     <script src="../lib/jquery.min.js"></script>
     <script src="../lib/raphael-min.js"></script>
     <script>
+    Raphael.fn.line = function(x1,y1, x2,y2){
+        var path = new Path()
+            .moveto(x1, y1)
+            .lineto(x2, y2);
+        return paper.path(path);
+    };
+    jQuery.fn.extend({
+        sketch: function(){
+            this.each(function(elem){
+                var self = $(elem);
+                var lines = self.text().split('\n');
+                if (lines.length && /^sketch/.test(lines[0])){
+                    $.each(lines, function(line){
+                        var x,y,x1,y1,x2,y2,h,w,text,angle;
+                        var words = line.split(/\s+/);
+                        var cmd = words[0];
+                        var sketch;
+                        switch(cmd){
+                            case 'sketch':
+                                elem.innerText = '';
+                                w = parseInt(word[1], 10);
+                                h = parseInt(word[2], 10);
+                                sketch = new Sketch(elem, w, h);
+                                break;
+                            case 'line':
+                                x1 = parseInt(word[1], 10);
+                                y1 = parseInt(word[2], 10);
+                                x2 = parseInt(word[3], 10);
+                                y2 = parseInt(word[4], 10);
+                                sketch.line(x1, y1, x2, y2);
+                                break;
+                            case 'rect':
+                                x = parseInt(word[1], 10);
+                                y = parseInt(word[2], 10);
+                                w = parseInt(word[3], 10);
+                                h = parseInt(word[4], 10);
+                                text = word.slice(5).join(' ');
+                                sketch.rect(x,y,w,h,text);
+                                break;
+                            case 'text':
+                                x = parseInt(word[1], 10);
+                                y = parseInt(word[2], 10);
+                                text = word.slice(3).join(' ');
+                                sketch.text(x,y,text);
+                                break;
+                            case 'arrow':
+                                x1 = parseInt(word[1], 10);
+                                y1 = parseInt(word[2], 10);
+                                x2 = parseInt(word[3], 10);
+                                x3 = parseInt(word[4], 10);
+                                angle = Raphael.angle(x1, y1, x2, y2);
+                                break;
+                        }
+                    });
+                }
+            });
+        }
+    });
     var WIDTH = 500,
         HEIGHT = 500,
         paper = Raphael($('.canvas')[0], WIDTH, HEIGHT);
@@ -24,41 +97,111 @@
     }
     Path.prototype.moveto = function(x, y){
         this._path.push('M' + x + ' ' + y);
+        return this;
     };
     Path.prototype.moveby = function(x, y){
         this._path.push('m' + x + ' ' + y);
+        return this;
     };
     Path.prototype.lineto = function(x, y){
         this._path.push('L' + x + ' ' + y);
+        return this;
     };
     Path.prototype.lineby = function(x, y){
         this._path.push('l' + x + ' ' + y);
+        return this;
     };
     Path.prototype.closepath = function(){
         this._path.push('Z');
+        return this;
     };
     Path.prototype.horizontalto = function(x){
         this._path.push('H' + x);
+        return this;
     };
     Path.prototype.horizontalby = function(x){
         this._path.push('h' + x);
+        return this;
     };
     Path.prototype.verticalto = function(y){
         this._path.push('V' + y);
+        return this;
     };
     Path.prototype.verticalby = function(y){
         this._path.push('v', + y);
+        return this;
     };
     Path.prototype.beziercurveto = function(cx1, cy1, cx2, cy2, x, y){
         this._path.push('C' + [cx1, cy1, cx2, cy2, x, y].map(function(p){return Math.round(p);}).join(' '));
+        return this;
     };
     Path.prototype.beziercurveby = function(cx1, cy1, cx2, cy2, x, y){
         this._path.push('c' + [cx1, cy1, cx2, cy2, x, y].join(' '));
+        return this;
     };
     // Can add smooth and quadratic beziers and elliptical arcs as needed
     Path.prototype.toString = function(){
         return this._path.join(' ');
     };
+    Path.prototype.curve = function(vertArray, tightness){
+    // Catmull-Rom curve, approximated with beziers
+        if (vertArray.length > 3) {
+            var b = [],
+                curTightness = tightness || 0,
+                s = 1 - curTightness;
+            this.moveto(vertArray[1][0], vertArray[1][1]);
+             /*
+             * Matrix to convert from Catmull-Rom to cubic Bezier
+             * where t = curTightness
+             * |0         1          0         0       |
+             * |(t-1)/6   1          (1-t)/6   0       |
+             * |0         (1-t)/6    1         (t-1)/6 |
+             * |0         0          0         0       |
+             */
+             for (var i = 1; (i+2) < vertArray.length; i++) {
+                 b[0] = [vertArray[i][0], vertArray[i][1]];
+                 b[1] = [vertArray[i][0] + (s * vertArray[i+1][0] - s * vertArray[i-1][0]) / 6,
+                    vertArray[i][1] + (s * vertArray[i+1][1] - s * vertArray[i-1][1]) / 6];
+                 b[2] = [vertArray[i+1][0] + (s * vertArray[i][0] - s * vertArray[i+2][0]) / 6,
+                    vertArray[i+1][1] + (s * vertArray[i][1] - s * vertArray[i+2][1]) / 6];
+                 b[3] = [vertArray[i+1][0], vertArray[i+1][1]];
+                 this.beziercurveto(b[1][0], b[1][1], b[2][0], b[2][1], b[3][0], b[3][1]);
+             }
+             return this;
+         }
+     };
+    Path.prototype.sketchline = function(x1, y1, x2, y2){
+        var random = $u.random;
+        var overlines = $u.choice([1,1,1,1,1,1,1,2,2,2,3]);
+        for (var i = 0; i < overlines; i++){
+            this.curve([[ x1 + random(-2,2), y1 +random(-2,2)],
+                      [ x1 + random(-2,2), y1 +random(-2,2)],
+                      [ x1+(x2 -x1)/3 + random(-2,2), y1 + (y2-y1)/3 +random(-2,2)],
+                      [ x1+2*(x2-x1)/3 + random(-2,2), y1+ 2*(y2-y1)/3 +random(-2,2)], 
+                      [ x2 + random(-2,2), y2 +random(-2,2)],
+                      [ x2 + random(-2,2), y2 +random(-2,2)]]);
+        }
+        return this;
+    };
+    Path.prototype.sketchrect = function(x, y, w, h, text){
+        this.sketchline(x,y,x,y+h);
+        this.sketchline(x,y,x+w,y);
+        this.sketchline(x+w,y,x+w,y+h);
+        this.sketchline(x,y+h,x+w,y+h);
+        if (text !== undefined){
+            var t = paper.text(x+w/2,y+h/2,text).node;
+            t.removeAttribute('style');
+            t.removeAttribute('font');
+            t.setAttribute('class', 'wftext');
+        }
+        return this;
+    };
+    
+    function Sketch(elem, width,height){
+        this._paper = Raphael(elem, width, height);
+        this._path = new Path();
+    }
+
 
     var $u = {
         removeItem: function(list, item){
@@ -104,12 +247,6 @@
                 func(r[i]);
             }
         },
-        line: function(x1, y1, x2, y2, attr){
-            var path = new Path();
-            path.moveto(x1, y1);
-            path.lineto(x2, y2);
-            return paper.path(path).attr(attr);
-        },
         blueprint: function(spacing){
             var background = '#3459B3';
             var lines = '#4B6DBC';
@@ -119,56 +256,11 @@
             paper.rect(0,0,WIDTH,HEIGHT).attr('fill', background);
             var lineattrs = {stroke: lines, 'stroke-width': 0.5};
             $u.iterrange(0, WIDTH, spacing, function(x){
-                $u.line(x, 0, x, HEIGHT, lineattrs);
+                paper.line(x, 0, x, HEIGHT).attr(lineattrs);
             });
             $u.iterrange(0, HEIGHT, spacing, function(y){
-                $u.line(0, y, WIDTH, y, lineattrs);
+                paper.line(0, y, WIDTH, y).attr(lineattrs);
             });
-        },
-        curve: function(vertArray, attr, tightness){
-            // Catmull-Rom curve, approximated with beziers
-            if (vertArray.length > 3) {
-                var b = [],
-                    curTightness = tightness || 0,
-                    s = 1 - curTightness;
-                var path = new Path();
-                path.moveto(vertArray[1][0], vertArray[1][1]);
-                 /*
-                 * Matrix to convert from Catmull-Rom to cubic Bezier
-                 * where t = curTightness
-                 * |0         1          0         0       |
-                 * |(t-1)/6   1          (1-t)/6   0       |
-                 * |0         (1-t)/6    1         (t-1)/6 |
-                 * |0         0          0         0       |
-                 */
-                 for (var i = 1; (i+2) < vertArray.length; i++) {
-                     b[0] = [vertArray[i][0], vertArray[i][1]];
-                     b[1] = [vertArray[i][0] + (s * vertArray[i+1][0] - s * vertArray[i-1][0]) / 6,
-                        vertArray[i][1] + (s * vertArray[i+1][1] - s * vertArray[i-1][1]) / 6];
-                     b[2] = [vertArray[i+1][0] + (s * vertArray[i][0] - s * vertArray[i+2][0]) / 6,
-                        vertArray[i+1][1] + (s * vertArray[i][1] - s * vertArray[i+2][1]) / 6];
-                     b[3] = [vertArray[i+1][0], vertArray[i+1][1]];
-                     path.beziercurveto(b[1][0], b[1][1], b[2][0], b[2][1], b[3][0], b[3][1]);
-                 }
-                 return paper.path(path).attr(attr);
-             }
-        },
-        sketchline: function(x1, y1, x2, y2, attr){
-            var random = $u.random;
-            for (var i = 0; i < 2; i++){
-                $u.curve([[ x1 + random(-2,2), y1 +random(-2,2)],
-                          [ x1 + random(-2,2), y1 +random(-2,2)],
-                          [ x1+(x2 -x1)/3 + random(-2,2), y1 + (y2-y1)/3 +random(-2,2)],
-                          [ x1+2*(x2-x1)/3 + random(-2,2), y1+ 2*(y2-y1)/3 +random(-2,2)], 
-                          [ x2 + random(-2,2), y2 +random(-2,2)],
-                          [ x2 + random(-2,2), y2 +random(-2,2)]], attr);
-            }
-        },
-        sketchrect: function(x, y, w, h, attr){
-            $u.sketchline(x,y,x,y+h, attr);
-            $u.sketchline(x,y,x+w,y, attr);
-            $u.sketchline(x+w,y,x+w,y+h, attr);
-            $u.sketchline(x,y+h,x+w,y+h, attr);
         }
     };
     // Raphael cheat sheet:
@@ -277,18 +369,21 @@
     // Code goes here
     $u.blueprint();
     var lineattr = {stroke: '#FFFFFF', 'stroke-width': 2};
-    $u.sketchline( 150, 150, 200,200, lineattr);
-    $u.sketchline( 180,200,200,200, lineattr);
-    $u.sketchline( 200,180, 200, 200, lineattr);
-
-    $u.sketchline( 150,90, 180,65, lineattr);
-    $u.sketchline( 180,75, 180,65, lineattr);
-    $u.sketchline( 170,65, 180,65, lineattr);
     
-    $u.sketchrect(70,90,70,50, lineattr);
-    $u.sketchrect(210,180,60,90, lineattr);
-    $u.sketchrect(190,40,80,50, lineattr);
+    var arrow1 = paper.path(new Path()
+        .sketchline( 150, 150, 200,200)
+        .sketchline( 180,200,200,200)
+        .sketchline( 200,180, 200, 200)).attr(lineattr);
 
+    var arrow2 = paper.path(new Path()
+        .sketchline( 150,90, 180,65)
+        .sketchline( 180,75, 180,65)
+        .sketchline( 170,65, 180,65)).attr(lineattr);
+    
+    var bazBox = paper.path(new Path().sketchrect(70,90,70,50,'Baz')).attr(lineattr);
+    var fooBox = paper.path(new Path().sketchrect(210,180,60,90,'Foo')).attr(lineattr);
+    var barBox = paper.path(new Path().sketchrect(190,40,80,50,'Bar')).attr(lineattr);
+    
     // var c;
     // $u.range(100).forEach(function(idx){
     //     c = paper.circle($u.random(WIDTH), $u.random(HEIGHT), $u.random(40,100));

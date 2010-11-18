@@ -34,12 +34,17 @@
 <body>
     <pre><code>
         sketch 500 500 true
+        crossellipse 30 30 70 40
+        crossellipse 300 30 40 40
         arrow 150  150 200 200
         arrow 150 90 180 65
-        ellipse 70 90 70 50
+        ellipse 70 90 70 50 Baz
         rect 210 180 60 90 Foo
         rect 190 40 80 50 Bar
-        img 400 400 80 50
+        img 250 300 50 80
+        fatarrowleft 30 400 80 50
+        fatarrowright 390 400 80 50
+        options 300 100 140 30
     </code><pre>
     <script src="../lib/jquery.min.js"></script>
     <script src="../lib/raphael-min.js"></script>
@@ -90,6 +95,10 @@
                             case 'arrow':
                             case 'img':
                             case 'ellipse':
+                            case 'crossellipse':
+                            case 'fatarrowleft':
+                            case 'fatarrowright':
+                            case 'options':
                                 var args = $u.intarray(words.slice(1,5));
                                 args.push(words.slice(5).join(' ')); // text for rect
                                 sketch[cmd].apply(sketch, args);
@@ -204,14 +213,13 @@
     }
     Sketch.prototype.line = function(x1, y1, x2, y2){
         var random = $u.random;
+        var dx = (x2 - x1) / 3;
+        var dy = (y2 - y1) / 3;
+        var splitline = [[x1,y1],[x1,y1],[x1+dx,y1+dy],[x1+dx*2,y1+dy*2],[x2,y2],[x2,y2]];
         var overlines = $u.choice([1,1,1,1,1,1,1,2,2,2,3]);
         for (var i = 0; i < overlines; i++){
-            this._path.curve([[ x1 + random(-2,2), y1 +random(-2,2)],
-                      [ x1 + random(-2,2), y1 +random(-2,2)],
-                      [ x1+(x2 -x1)/3 + random(-2,2), y1 + (y2-y1)/3 +random(-2,2)],
-                      [ x1+2*(x2-x1)/3 + random(-2,2), y1+ 2*(y2-y1)/3 +random(-2,2)], 
-                      [ x2 + random(-2,2), y2 +random(-2,2)],
-                      [ x2 + random(-2,2), y2 +random(-2,2)]]);
+            this._path.curve(splitline.map($u.nudge));
+            // this._path.curve($.map(splitline, $u.nudge));
         }
         return this;
     };
@@ -249,14 +257,65 @@
         this.rect(x,y,w,h);
         this.line(x,y,x+w,y+h);
         this.line(x+w,y,x,y+h);
+        return this;
     };
-    Sketch.prototype.ellipse = function(x,y,w,h){
-        var points = $u.ellipse(x,y,w,h,8);
-        points.push(points[0]);
-        console.log('points: %d', points.length);
-        this._path.curve(points);
-        
+    Sketch.prototype.ellipse = function(x,y,w,h,text){
+        var points = $u.ellipse(x,y,w,h, 8);
+        var count = $u.random(3, 19);
+        $u.range(count).forEach(function(i){
+            points.push(points[i % 8]);
+        });
+        if (text !== undefined){
+            this.text(x+w/2,y+h/2,text);
+        }
+        this._path.curve(points.map($u.nudge));
+        return this;
     };
+    Sketch.prototype.crossellipse = function(x,y,w,h){
+        var points = $u.ellipse(x,y,w,h, 8);
+        this.line(points[1][0],points[1][1],points[5][0],points[5][1]);
+        this.line(points[3][0],points[3][1],points[7][0],points[7][1]);
+        var count = $u.random(3, 19);
+        $u.range(count).forEach(function(i){
+            points.push(points[i % 8]);
+        });
+        this._path.curve(points.map($u.nudge));
+        return this;
+    };
+    Sketch.prototype.fatarrowright = function(x,y,w,h,text){
+        var dW = w/3, // vertical inset for body of arrow
+            dH = h/5,  // horizontal inset for point of arrow
+            x2 = x+w-dW, x3=x+w;
+            y2 = y+dH, y3 = y+h/2, y4 = y+h-dH, y5 = y+h;
+        this.line(x,y2,x2,y2).line(x2,y2,x2,y).line(x2,y,x3,y3)
+            .line(x3,y3,x2,y5).line(x2,y5,x2,y4).line(x2,y4,x,y4)
+            .line(x,y4,x,y2);
+        return this;
+    };
+    Sketch.prototype.fatarrowleft = function(x,y,w,h,text){
+        x=x+w; // draw from right to left
+        var dW = w/3, // vertical inset for body of arrow
+            dH = h/5,  // horizontal inset for point of arrow
+            x2 = x-w+dW, x3=x-w;
+            y2 = y+dH, y3 = y+h/2, y4 = y+h-dH, y5 = y+h;
+        this.line(x,y2,x2,y2).line(x2,y2,x2,y).line(x2,y,x3,y3)
+            .line(x3,y3,x2,y5).line(x2,y5,x2,y4).line(x2,y4,x,y4)
+            .line(x,y4,x,y2);
+        return this;
+    };
+    Sketch.prototype.triangledown = function(x,y,w,h){
+        return this.line(x,y,x+w,y).line(x+w,y,x+w/2,y+h).line(x+w/2,y+h,x,y);
+    };
+    Sketch.prototype.options = function(x,y,w,h,text){
+        if (!text.length){
+            text = 'options';
+        }
+        this.rect(x,y,w-h,h,text);
+        this.rect(x+w-h,y,h,h);
+        var off=8;
+        this.triangledown(x+w-h+off,y+off,h-off*2,h-off*2);
+        return this;
+    }
     Sketch.prototype.draw = function(){
         var n = this._paper.path(this._path).node;
         n.removeAttribute('stroke');
@@ -320,11 +379,13 @@
         integ: function(str){
             return parseInt(str, 10);
         },
+        nudge: function(pt){
+            return [pt[0] + $u.random(-2,2), pt[1] + $u.random(-2, 2)];
+        },
         ellipse: function(x,y,w,h,steps){
         /*
-        * This functions returns an array containing 36 points to draw an
+        * This functions returns an array containing points to draw an
         * ellipse in the rect defined by x,y,w,h
-        * TODO: move x,y to center of rect, reduce w,h by half
         */
             w = w/2;
             h = h/2;

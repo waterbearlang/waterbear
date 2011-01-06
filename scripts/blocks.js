@@ -33,6 +33,16 @@ $.extend($.fn,{
       });
     });
   },
+  blockType: function(){
+      console.log('block type of %o', this.dom[0]);
+      if (this.is('.trigger')) return 'trigger';
+      if (this.is('.step')) return 'step';
+      if (this.is('.number')) return 'number';
+      if (this.is('.boolean')) return 'boolean';
+      if (this.is('.string')) return 'string';
+      console.log('unknown value for block: %o', this);
+      return 'unknown';
+  },
   parentBlock: function(){
       var p = this.closest('.wrapper').parent();
       if (p.is('.next')){
@@ -72,7 +82,7 @@ $.extend($.fn,{
   },
   niches: function(ntype){
       // return an ordered list of open niches
-      // types are step (tab or container), and socket types number, noolean, ntring 
+      // types are step (tab or container), and socket types number, boolean, string 
       if (ntype === 'step'){
           return this.stepNiches().noChildren();
       }else{
@@ -83,6 +93,31 @@ $.extend($.fn,{
       // if this block has an open slot, and the block being appended also has an open slot, put it in the first available slot
       // if the block being appended is already a child of this block, and there is another available slot, move to the next available slot
       // if the block being appended is the wrong type, return false
+      console.log('appendToBlock');
+      var type = block.blockType();
+      // FIXME: Make sure we cannot add a parent to a child
+      if (type == 'trigger'){
+          console.log('cannot add a trigger to another block');
+          return false;
+      }
+      var niches = this.niches(type);
+      if (!niches.dom.length){
+          console.log('no open niches of type %s', type);
+          return false;
+      }
+      if (this == block.parentBlock){
+          console.log('move to the next available niche');
+          return true;
+      }else{
+          console.log('append to block');
+          niches.first()._append(block);
+          block.css({
+              position: 'relative',
+              left: 0 + 'px',
+              top: 0 + 'px'
+          });
+          return true;
+      }
   },
   noChildren: function(){
       this.dom.filter(function(elem){
@@ -128,6 +163,7 @@ function block(options){
         block.append('<b class="trigger"></b>');
     }else if(opts.slot){
         block.append('<b class="slot"></b>');
+        wrapper.addClass('step');
     }
     for (var i = 0; i < opts.containers; i++){
         block.append('</b><div class="contained"><i class="tab"></i></div>');
@@ -174,7 +210,14 @@ $('.submenu .wrapper').live('click', function(elem, event) {
 
 $('.scripts_workspace').live('click', function(elem, event){
     if (event.srcElement !== elem){
-        return
+        var selected = $('.scripts_workspace .selected');
+        if (!selected.dom.length) return;
+        var wrapper = $(event.srcElement).closest('.wrapper');
+        if (!wrapper.dom.length) return;
+        if (!wrapper.is('.scripts_workspace .wrapper')) return;
+        if (wrapper.dom[0] == selected.dom[0]) return;
+        wrapper.appendToBlock(selected);
+        return;
     }
     $.selectedBlock().moveTo(event.offsetX, event.offsetY);
 });

@@ -13,6 +13,7 @@ The look and feel is different from Scratch, which is implemented in Squeak Smal
 * ✓ Move from popup dialog to sidebar with zooming interface
 * ✓ Remove all dragging, use selected element and click/touch
 * ✓ Switch from jQuery to Zepto
+* Get tap event working, not sure why it doesn't now (bad browser sniffing?)
 * Zoom into script view
 * Toggle between control views for different sprites / stage
 * Toggle between script/skin/sound views for a specific sprite

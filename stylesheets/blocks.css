@@ -2,7 +2,6 @@
 .wrapper, .socket {
   display: inline-block;
   position: relative;
-/*  border: 1px solid green; */
 }
 
 .socket {
@@ -126,10 +125,6 @@ p{
     overflow-y: hidden;
 }
 
-.boolean{
-    margin-right: 6px;
-    margin-left:6px;
-}
 
 .socket{
     border-width: 2px 0px;

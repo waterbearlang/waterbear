@@ -1,5 +1,5 @@
 var userAgent = navigator.userAgent.toLowerCase();
-var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1 || userAgent.indexOf('ipad') != -1) ? true : false;
 clickEvent = isiPhone ? 'tap' : 'click';
 
 $.selectedBlock = function(){

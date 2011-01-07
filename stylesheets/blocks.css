@@ -16,8 +16,15 @@
   -moz-border-radius: 10px;
   border-radius: 10px;
   padding-bottom: 1px;
-  background-color: #ffcc66;
+  border: 2px solid #FFCC66;
+/*  background-color: #ffcc66;*/
   white-space: nowrap; 
+}
+
+.value .block{
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
 }
 
 .trigger > .block{
@@ -30,12 +37,6 @@
   padding-top: 15px;
 }
 
-/*.value > .block{
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-  border-radius: 0px;
-}
-*/
 .wrapper p {
   padding: 7px 20px;
   padding-bottom: 3px;
@@ -47,21 +48,6 @@
     margin: 1px;
 }
 
-/* Differentiate between different value types - Scratch does this by shape (sort of) */
-/*.value > .block{
-    border: 1px solid white;
-}
-
-.boolean.socket, .boolean > .block{
-    outline: 1px solid red;
-}
-.string.socket, .string > .block{
-    outline: 1px solid blue;
-}
-.number.socket, .number > .block{
-    outline: 1px solid green;
-}
-*/
 .socket {
   padding: 0px;
   margin: 0px;
@@ -132,7 +118,8 @@ input {
   margin-right: 5px;
   border: 0px;
   padding: 0px;
-  height: 16px; 
+  height: 16px;
+  background-color: white;
 }
 
 p{
@@ -144,40 +131,24 @@ p{
     margin-left:6px;
 }
 
-input[type=number]{
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+.socket{
+    border-width: 2px 0px;
+    border-style: solid;
 }
 
-/* Corners loosely based on this: http://css-tricks.com/triangle-breadcrumbs/ */
-.boolean:after{
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 6px solid white;
-    position: absolute;
-    top: 50%;
-    margin-top: -8px;
-    left: 100%;
-    z-index: 2;
+.value.wrapper{
+    border-width: 0px 2px;
+    border-style: solid;
 }
-.boolean:before{
-    content: " ";
-    display: block;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-right: 6px solid white;
-    position: absolute;
-    top: 50%;
-    margin-top: -8px;
-    right: 100%;
-    z-index: 2;
+
+.boolean{
+    border-color: red;
+}
+.number{
+    border-color: blue;
+}
+.string{
+    border-color: green;
 }
 
 .selected > .block{

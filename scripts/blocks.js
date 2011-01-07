@@ -1,3 +1,7 @@
+var userAgent = navigator.userAgent.toLowerCase();
+var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1) ? true : false;
+clickEvent = isiPhone ? 'tap' : 'click';
+
 $.selectedBlock = function(){
     return $('.scripts_workspace .selected');
 };
@@ -201,14 +205,14 @@ function label(value){
     return value;
 }
 
-$('.submenu .wrapper').live('click', function(elem, event) {
+$('.submenu .wrapper').live(clickEvent, function(elem, event) {
     var copy = $(elem.cloneNode(true));
     $('.scripts_workspace')._append(copy);
     copy.center();
     copy.selectBlock();
 });
 
-$('.scripts_workspace').live('click', function(elem, event){
+$('.scripts_workspace').live(clickEvent, function(elem, event){
     if (event.srcElement !== elem){
         var selected = $('.scripts_workspace .selected');
         if (!selected.dom.length) return;
@@ -222,7 +226,7 @@ $('.scripts_workspace').live('click', function(elem, event){
     $.selectedBlock().moveTo(event.offsetX, event.offsetY);
 });
 
-$('.scripts_workspace .wrapper').live('click', function(elem, event){
+$('.scripts_workspace .wrapper').live(clickEvent, function(elem, event){
     var self = $(elem);
     if (self.is('.selected')){
         self.unselectBlock();

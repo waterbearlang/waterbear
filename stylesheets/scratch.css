@@ -80,35 +80,43 @@ h1{
 
 
 .motion > .block, .motion > .next > .tab, .motion > .block > .contained > .tab {
-    background-color: #4a6cd4;
+/*    background-color: #4a6cd4;*/
+    border: 2px solid #4a6cd4;
 }
 
 .looks > .block, .looks > .next > .tab, .looks > .block > .contained > .tab {
-    background-color: #8f56e3;
+/*    background-color: #8f56e3;*/
+    border: 2px solid #8f56e3;
 }
 
 .sound > .block, .sound > .next > .tab, .sound > .block > .contained > .tab {
-    background-color: #cf4ad9;
+    background-color: hsla(296, 65%, 57%, .25);
+    border: 2px solid hsl(296, 65%, 57%);
 }
 
 .pen > .block, .pen > .next > .tab, .pen > .block > .contained > .tab {
-    background-color: #00a178;
+/*    background-color: #00a178;*/
+    border: 2px solid #00a178;
 }
 
 .control > .block, .control > .next > .tab, .control > .block > .contained > .tab {
-    background-color: #e1ab18;
+    background-color: hsla(44, 81%, 49%, .25);
+    border: 2px solid hsl(44, 81%, 49%);
 }
 
 .sensing > .block, .sensing > .next > .tab, .sensing > .block > .contained > .tab {
-    background-color: #0494dc;
+/*    background-color: #0494dc;*/
+    border: 2px solid #0494dc;
 }
 
 .operators > .block, .operators > .next > .tab, .operators > .block > .contained > .tab {
-    background-color: #62c213;
+/*    background-color: #62c213;*/
+    border: 2px solid #62c213;
 }
 
 .variables > .block, .variables > .next > .tab, .variables > .block > .contained > .tab {
-    background-color: #e66a22;
+/*    background-color: #e66a22;*/
+    border: 2px solid #e66a22;
 }
 
 .workspace {

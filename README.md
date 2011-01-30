@@ -13,14 +13,15 @@ The look and feel is different from Scratch, which is implemented in Squeak Smal
 * ✓ Move from popup dialog to sidebar with zooming interface
 * ✓ Remove all dragging, use selected element and click/touch
 * ✓ Switch from jQuery to Zepto
-* Get tap event working, not sure why it doesn't now (bad browser sniffing?)
+* ✓ Get tap event working, not sure why it doesn't now (bad browser sniffing?)
 * Zoom into script view
+* Prevent clicks in inputs from bubbling
 * Toggle between control views for different sprites / stage
 * Toggle between script/skin/sound views for a specific sprite
 * Visual distinctiveness of value blocks and slots (right/left for values, top/bottom of slots)
 * Test on iPad (fixing drag'n'drop on touch devices requires research)
 * Get rid of double-handling clicks (inserting multiple blocks per click)
-* Reduce padding in value blocks
+* ✓ Reduce padding in value blocks
 * Remove blocks delete key or trash icon
 * Create a larger script workspace, with scrollbars
 * Multiple script blocks (allows one per sprite, for instance)
@@ -28,6 +29,6 @@ The look and feel is different from Scratch, which is implemented in Squeak Smal
 * Force blocks into two columns
 * Fix position when dragging out of a snapped position (still needs some tweaks)
 * [optional] Allow contained blocks to overflow right edge of block without growing block
-
+* Re-enable dragging, at least for positioning
 
 

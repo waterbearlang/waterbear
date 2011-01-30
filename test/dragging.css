@@ -1,0 +1,33 @@
+.sprite{
+    position: absolute;
+    width: 150px;
+    height: 120px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: 3px solid rgba(0,0,0,.5);
+}
+
+#sprite1{
+    top: 20px;
+    left: 20px;
+    background-color: rgba(255,40,40,.5);
+}
+
+#sprite2{
+    top: 20px;
+    right: 20px;
+    background-color: rgba(40,255,40,.5);
+}
+
+#sprite3{
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(40, 40, 255,.5);
+}
+
+#sprite4{
+    bottom: 20px;
+    left: 20px;
+    background-color: rgba(40,150,150,.5);
+}

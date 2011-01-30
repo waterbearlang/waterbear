@@ -2,9 +2,9 @@ function log(msg){
     $('.stage').append('<p>' + msg + '</p>');
 }
 
-$('.scripts_workspace').get(0).ontouchmove = function(event){
-     event.preventDefault();
-};
+// $('.scripts_workspace').get(0).ontouchmove = function(event){
+//      event.preventDefault();
+// };
 
 function accordion(target, event){
     var self = $(target);
@@ -15,8 +15,7 @@ function accordion(target, event){
     self.addClass('selected').siblings('.option').show();
 }
 
-$('.select').live('click', accordion);
-$('.select').live('tap', accordion);
+$('.select').live(clickEvent, accordion);
 
 function menu(title, specs, show){
     var klass = title.toLowerCase();

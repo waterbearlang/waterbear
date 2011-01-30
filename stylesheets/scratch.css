@@ -79,44 +79,90 @@ h1{
 }
 
 
-.motion > .block, .motion > .next > .tab, .motion > .block > .contained > .tab {
-/*    background-color: #4a6cd4;*/
-    border: 2px solid #4a6cd4;
+.motion > .block, 
+.motion > .next > .tab, 
+.motion > .block > .contained > .tab,
+.motion > .block > .contained,
+.motion > .block > .slot {
+    background-color: hsl(225, 65%, 93%);
+    border: 2px solid hsl(225,65%,83%);
 }
 
-.looks > .block, .looks > .next > .tab, .looks > .block > .contained > .tab {
-/*    background-color: #8f56e3;*/
-    border: 2px solid #8f56e3;
+.looks > .block, 
+.looks > .next > .tab, 
+.looks > .block > .contained > .tab,
+.looks > .block > .contained,
+.looks > .block > .slot {
+    background-color: hsl(264,62%,89%);
+    border: 2px solid hsl(264,62%,79%);
 }
 
-.sound > .block, .sound > .next > .tab, .sound > .block > .contained > .tab {
-    background-color: hsla(296, 65%, 57%, .25);
+.sound > .block, 
+.sound > .next > .tab, 
+.sound > .block > .contained > .tab,
+.sound > .block > .contained,
+.sound > .block > .slot {
+    background-color: hsl(296, 65%, 77%);
     border: 2px solid hsl(296, 65%, 57%);
 }
 
-.pen > .block, .pen > .next > .tab, .pen > .block > .contained > .tab {
-/*    background-color: #00a178;*/
-    border: 2px solid #00a178;
+.pen > .block, 
+.pen > .next > .tab, 
+.pen > .block > .contained > .tab,
+.pen > .block > .contained,
+.pen > .block > .slot {
+    background-color: hsl(15,100%,83%);
+    border: 2px solid hsl(15,100%,63%);
 }
 
-.control > .block, .control > .next > .tab, .control > .block > .contained > .tab {
-    background-color: hsla(44, 81%, 49%, .25);
+.control > .block, 
+.control > .next > .tab, 
+.control > .block > .contained > .tab,
+.control > .block > .contained,
+.control > .block > .slot {
+    background-color: hsl(44, 81%, 85%);
     border: 2px solid hsl(44, 81%, 49%);
 }
 
-.sensing > .block, .sensing > .next > .tab, .sensing > .block > .contained > .tab {
-/*    background-color: #0494dc;*/
-    border: 2px solid #0494dc;
+.sensing > .block, 
+.sensing > .next > .tab, 
+.sensing > .block > .contained > .tab,
+.sensing > .block > .contained,
+.sensing > .block > .slot {
+    background-color: hsl(200,98%,76%);
+    border: 2px solid hsl(200,98%,56%);
 }
 
-.operators > .block, .operators > .next > .tab, .operators > .block > .contained > .tab {
-/*    background-color: #62c213;*/
-    border: 2px solid #62c213;
+.operators > .block, 
+.operators > .next > .tab, 
+.operators > .block > .contained > .tab,
+.operators > .block > .contained,
+.operators > .block > .slot {
+    background-color: hsl(93,90%,76%);
+    border: 2px solid hsl(93,90%,66%);
 }
 
-.variables > .block, .variables > .next > .tab, .variables > .block > .contained > .tab {
-/*    background-color: #e66a22;*/
+.variables > .block, 
+.variables > .next > .tab, 
+.variables > .block > .contained > .tab,
+.variables > .block > .contained,
+.variables > .block > .slot {
+    background-color: #e66a22;
     border: 2px solid #e66a22;
+}
+
+.slot{
+    background-color: white !important;
+    border-top: 0 !important;
+    top: -2px;
+}
+.tab{
+    border-top: 0 !important;
+}
+.contained{
+    background-color: white !important;
+    border-right: 0 !important;
+    right: -2px;
 }
 
 .workspace {

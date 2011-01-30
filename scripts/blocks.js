@@ -196,12 +196,12 @@ function label(value){
     // [string:default] => a string socket with a default value
     // [message] => a message combo box
     // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/
-    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input type="number" value="$1"></div>');
-    value = value.replace(/\[number\]/g, '<div class="number socket"><input type="number"></div>');
-    value = value.replace(/\[boolean:(true|false)\]/g, '<div class="boolean socket"><input type="boolean" value="$1"></div>');
-    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><input type="boolean"></div>');
-    value = value.replace(/\[string:(.+)\]/g, '<div class="string socket"><input type="text" value="$1"></div>');
-    value = value.replace(/\[string\]/g, '<div class="string socket"><input type="text"></div>');
+    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input value="$1"></div>');
+    value = value.replace(/\[number\]/g, '<div class="number socket"><input></div>');
+    value = value.replace(/\[boolean:(true|false)\]/g, '<div class="boolean socket"><input value="$1"></div>');
+    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><input></div>');
+    value = value.replace(/\[string:(.+)\]/g, '<div class="string socket"><input value="$1"></div>');
+    value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
     return value;
 }
 
@@ -224,6 +224,10 @@ $('.scripts_workspace').live(clickEvent, function(elem, event){
         return;
     }
     $.selectedBlock().moveTo(event.offsetX, event.offsetY);
+});
+
+$('input').live(clickEvent, function(elem, event){
+    event.stopPropagation();
 });
 
 $('.scripts_workspace .wrapper').live(clickEvent, function(elem, event){

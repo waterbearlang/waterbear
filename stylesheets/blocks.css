@@ -84,7 +84,8 @@
 }
 
 .tab {
-  z-index: 10; 
+/*  z-index: 10; */
+    top: -2px;
 }
 
 .contained {
@@ -105,7 +106,6 @@
 
 .next {
   position: relative;
-  padding-top: 1px;
   background-color: transparent;
   width: 100%;
   overflow: visible; 
@@ -147,6 +147,6 @@ p{
 }
 
 .selected > .block{
-    border: blue ridge thick;
+    outline: blue ridge thick;
 }
 

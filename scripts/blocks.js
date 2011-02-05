@@ -10,7 +10,7 @@ $.extend($.fn,{
   long_name: function() {
     var names;
     names = [];
-    this.dom.forEach(function(e) {
+    this.each(function(e) {
       var parts = [e.tagName.toLowerCase()];
       e.id ? parts.push('#' + e.id) : null;
       e.className ? parts.push('.' + e.className.split(/\s/).join('.')) : null;
@@ -22,7 +22,7 @@ $.extend($.fn,{
       return this.closest('.wrapper').long_name();
   },
   center: function() {
-    return this.dom.forEach(function(elem) {
+    return this.each(function(elem) {
       var dx, dy, p, ph, pw, t;
       t = $(elem);
       dx = t.width() / 2;
@@ -38,7 +38,7 @@ $.extend($.fn,{
     });
   },
   blockType: function(){
-      console.log('block type of %o', this.dom[0]);
+      console.log('block type of %o', this[0]);
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
       if (this.is('.number')) return 'number';
@@ -66,8 +66,8 @@ $.extend($.fn,{
   stepNiches: function(){
       var cn = this.containerNiches();
       var nn = this.nextNiche();
-      if (nn.dom.length){
-          cn.dom.push(nn.get(0));
+      if (nn.length){
+          cn.push(nn.get(0));
       }
       return cn;
   },
@@ -105,7 +105,7 @@ $.extend($.fn,{
           return false;
       }
       var niches = this.niches(type);
-      if (!niches.dom.length){
+      if (!niches.length){
           console.log('no open niches of type %s', type);
           return false;
       }
@@ -114,7 +114,7 @@ $.extend($.fn,{
           return true;
       }else{
           console.log('append to block');
-          niches.first()._append(block);
+          niches.first().append(block);
           block.css({
               position: 'relative',
               left: 0 + 'px',
@@ -124,15 +124,15 @@ $.extend($.fn,{
       }
   },
   noChildren: function(){
-      this.dom.filter(function(elem){
-          return $(elem).children('.wrapper').dom.length < 1;
+      this.filter(function(elem){
+          return $(elem).children('.wrapper').length < 1;
       });
       return this;
   }
 });
 
 function button(options){
-    return $.h('<button>' + options.button + '</button>');
+    return $('<button>' + options.button + '</button>');
 }
 
 function block(options){
@@ -156,7 +156,7 @@ function block(options){
         opts.tab = false; // values nest, but do not follow
         opts.slot = false;
     }
-    var wrapper = $.h('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
+    var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
     var block = wrapper.children();
     if (opts['type']){
         block.addClass(opts['type'].name.toLowerCase());
@@ -205,32 +205,33 @@ function label(value){
     return value;
 }
 
-$('.submenu .wrapper').live(clickEvent, function(elem, event) {
-    var copy = $(elem.cloneNode(true));
-    $('.scripts_workspace')._append(copy);
+$('.submenu .wrapper').live(clickEvent, function(event) {
+    console.log('this: %o', this);
+    var copy = $(this.cloneNode(true));
+    $('.scripts_workspace').append(copy);
     copy.center();
     copy.selectBlock();
 });
 
-$('.scripts_workspace').live(clickEvent, function(elem, event){
-    if (event.srcElement !== elem){
+$('.scripts_workspace').live(clickEvent, function(event){
+    if (event.srcElement !== this){
         var selected = $('.scripts_workspace .selected');
-        if (!selected.dom.length) return;
+        if (!selected.length) return;
         var wrapper = $(event.srcElement).closest('.wrapper');
-        if (!wrapper.dom.length) return;
+        if (!wrapper.length) return;
         if (!wrapper.is('.scripts_workspace .wrapper')) return;
-        if (wrapper.dom[0] == selected.dom[0]) return;
+        if (wrapper[0] == selected[0]) return;
         wrapper.appendToBlock(selected);
         return;
     }
     $.selectedBlock().moveTo(event.offsetX, event.offsetY);
 });
 
-$('input').live(clickEvent, function(elem, event){
+$('input').live(clickEvent, function(event){
     event.stopPropagation();
 });
 
-$('.scripts_workspace .wrapper').live(clickEvent, function(elem, event){
+$('.scripts_workspace .wrapper').live(clickEvent, function(event){
     var self = $(elem);
     if (self.is('.selected')){
         self.unselectBlock();

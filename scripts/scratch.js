@@ -19,22 +19,22 @@ $('.select').live(clickEvent, accordion);
 
 function menu(title, specs, show){
     var klass = title.toLowerCase();
-    var body = $.h('<section class="submenu"></section>');
-    var select = $.h('<h3 class="select">' + title + '</h3>').appendTo(body);
-    var options = $.h('<div class="option"></div>').appendTo(body);
-    var col = $.h('<table><tr><td></td><td></td></tr></table>').appendTo(options);
+    var body = $('<section class="submenu"></section>');
+    var select = $('<h3 class="select">' + title + '</h3>').appendTo(body);
+    var options = $('<div class="option"></div>').appendTo(body);
+    var col = $('<table><tr><td></td><td></td></tr></table>').appendTo(options);
     var half = Math.round((specs.length + 1) / 2);
     var col1 = col.find('td').eq(0);
     var col2 = col.find('td').eq(1);
     specs.forEach(function(spec, idx){
         spec.klass = klass;
         if (idx < half){
-            col1._append(block(spec));
+            col1.append(block(spec));
         }else{
-            col2._append(block(spec));
+            col2.append(block(spec));
         }
     });
-    $('.block_menu')._append(body);
+    $('.block_menu').append(body);
     if (show){
         select.addClass('selected');
     }else{

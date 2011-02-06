@@ -43,6 +43,9 @@
     </style>
     <script src="/lib/jquery-1.5.min.js"></script>
     <script>
+        var userAgent = navigator.userAgent.toLowerCase();
+        var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1 || userAgent.indexOf('ipad') != -1) ? true : false;
+        moveEvent = isiPhone ? 'touchmove' : 'mouseover';
         $(function(){
             var body = $(document.body);
             var size = Math.min(body.width(), body.height());
@@ -63,7 +66,7 @@
         function div(c){
             return $('<div class="whole ' + c + '"></div>').css('background-color', randcolor());
         }
-        $('.whole').live('mouseover', function(){
+        $('.whole').live(moveevent, function(){
             $(this).removeClass('whole')
             .append(div('nw')).append(div('ne')).append(div('sw')).append(div('se'));
             return false;

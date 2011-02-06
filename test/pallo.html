@@ -45,7 +45,7 @@
     <script>
         var userAgent = navigator.userAgent.toLowerCase();
         var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1 || userAgent.indexOf('ipad') != -1) ? true : false;
-        moveEvent = isiPhone ? 'touchmove' : 'mouseover';
+        var moveevent = isiPhone ? 'touchmove' : 'mouseover';
         $(function(){
             var body = $(document.body);
             var size = Math.min(body.width(), body.height());

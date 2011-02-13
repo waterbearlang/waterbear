@@ -45,7 +45,7 @@
     <script>
         var userAgent = navigator.userAgent.toLowerCase();
         var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1 || userAgent.indexOf('ipad') != -1) ? true : false;
-        var moveevent = isiPhone ? 'touchmove' : 'mouseover';
+        var moveevent = isiPhone ? 'touchstart' : 'mouseover';
         $(function(){
             var body = $(document.body);
             var size = Math.min(body.width(), body.height());
@@ -67,8 +67,11 @@
             return $('<div class="whole ' + c + '"></div>').css('background-color', randcolor());
         }
         $('.whole').live(moveevent, function(){
-            $(this).removeClass('whole')
-            .append(div('nw')).append(div('ne')).append(div('sw')).append(div('se'));
+            var self = $(this);
+            if (self.width() > 16){
+                self.removeClass('whole').css('background-color', 'transparent')
+                .append(div('nw')).append(div('ne')).append(div('sw')).append(div('se'));
+            }
             return false;
         });
     </script>

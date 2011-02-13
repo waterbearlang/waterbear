@@ -1,12 +1,16 @@
 # Waterbear
 
-Waterbear is a programming toolkit for making programming more accessible to beginners, and more fun for all. The first part of it is a system of blocks inspired by Scratch (http://scratch.mit.edu) that can be used to create new visual languages.
+Waterbear is a toolkit for making programming more accessible and fun. Not a language itself, but a block syntax inspired by Scratch (http://scratch.mit.edu/) that can be used to represent langauges. Waterbear's blocks drag and snap together, representing code that eliminates syntax errors much like garbage collection alleviates memory errors and bound checking helps prevent overrun errors.
 
-It is an attempt to create a system of draggable, snappable blocks, similar to what is used in the Scratch programming language, using HTML, CSS, and Javascript. The goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects.
+Waterbear's system of draggable, snappable blocks, are built using clean HTML5, CSS3, and Javascript. The goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects.
 
-The motivation for this project is to reduce syntax errors in the same way that garbage collection has reduced memory errors, or bounds checking has reduced overrun errors.
+The motivation is to reduce syntax errors in the same way that garbage collection has reduced memory errors, or bounds checking has reduced overrun errors. I have also been testing various programming systems on my own kids, and Scratch is the one tool they were able to pick up easily, both for creating projects and for reading/modifying other people's projects. Waterbear is a way of relaxing some of the restrictions imposed on Scratch, and opening it up to the web at large.
 
-The look and feel is different from Scratch, which is implemented in Squeak Smalltalk's Morphic environment. Scratch Blocks are intended to use web technologies naturally, without trying to force them into a different paradigm. In other words, this project is attempting to create blocks in a web-centric way. Waterbear is also trying to be easy to use on both desktop/laptop browsers and on iPads and smart phones.
+The look and feel of Waterbear differs from Scratch, which is implemented in Squeak Smalltalk's Morphic environment. Waterbear blocks are intended to use web technologies naturally, without trying to force them into a different paradigm. In other words, this project is attempting to create blocks in a web-centric way. Waterbear is designed to be easy to use on both desktop/laptop browsers and on iPads and smart phones.
+
+
+
+I've been programming Javascript since 1997, pushing the envelope of what can be done. I was writing what are now called Ajax programs back in IE4.0. I'm excited that after years of being at the cutting edge of Javascript, I can't keep up with all of the JS changes and tools anymore. It's a great time to be working with open web technologies, and I'd like to share some of my enthusiasm.
 
 ## Todo
 

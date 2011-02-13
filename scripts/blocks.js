@@ -2,6 +2,7 @@ var userAgent = navigator.userAgent.toLowerCase();
 var isiPhone = (userAgent.indexOf('iphone') != -1 || userAgent.indexOf('ipod') != -1 || userAgent.indexOf('ipad') != -1) ? true : false;
 clickEvent = isiPhone ? 'tap' : 'click';
 
+
 $.selectedBlock = function(){
     return $('.scripts_workspace .selected');
 };
@@ -38,13 +39,11 @@ $.extend($.fn,{
     });
   },
   blockType: function(){
-      console.log('block type of %o', this[0]);
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
       if (this.is('.number')) return 'number';
       if (this.is('.boolean')) return 'boolean';
       if (this.is('.string')) return 'string';
-      console.log('unknown value for block: %o', this);
       return 'unknown';
   },
   parentBlock: function(){
@@ -205,42 +204,6 @@ function label(value){
     return value;
 }
 
-$('.submenu .wrapper').live(clickEvent, function(event) {
-    console.log('this: %o', this);
-    var copy = $(this.cloneNode(true));
-    $('.scripts_workspace').append(copy);
-    copy.center();
-    copy.selectBlock();
-});
-
-$('.scripts_workspace').live(clickEvent, function(event){
-    if (event.srcElement !== this){
-        var selected = $('.scripts_workspace .selected');
-        if (!selected.length) return;
-        var wrapper = $(event.srcElement).closest('.wrapper');
-        if (!wrapper.length) return;
-        if (!wrapper.is('.scripts_workspace .wrapper')) return;
-        if (wrapper[0] == selected[0]) return;
-        wrapper.appendToBlock(selected);
-        return;
-    }
-    $.selectedBlock().moveTo(event.offsetX, event.offsetY);
-});
-
-$('input').live(clickEvent, function(event){
-    event.stopPropagation();
-});
-
-$('.scripts_workspace .wrapper').live(clickEvent, function(event){
-    var self = $(elem);
-    if (self.is('.selected')){
-        self.unselectBlock();
-    }else{
-        self.selectBlock();
-    }
-    event.stopPropagation();
-});
-
 $('body').live('keypress', function(event){
     // charCode 8 is delete
     switch(event.charCode){
@@ -265,6 +228,5 @@ $('body').live('keypress', function(event){
 });
 
 $('.scripts_workspace input[type=text]').live('keypress', function(event){
-    console.log('caught a keypress in a textfield');
     event.stopPropagation();
 });

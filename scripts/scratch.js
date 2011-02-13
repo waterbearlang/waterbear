@@ -6,8 +6,8 @@ function log(msg){
 //      event.preventDefault();
 // };
 
-function accordion(target, event){
-    var self = $(target);
+function accordion(event){
+    var self = $(this);
     if (self.hasClass('selected')){
         return;
     }

@@ -9,7 +9,11 @@
 //    Values can only be attached to sockets of a compatible type
 // Drag any block to anywhere that is not the block menu or on a canvas: undo the drag
 
-
+(function($){
+    var drag_target = null;
+    var drop_targets = [];
+    
+})(jQuery);
 
 $('.block_menu .wrapper').drag('init', function(event){
     var self = $(this);

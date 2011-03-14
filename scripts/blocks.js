@@ -38,7 +38,7 @@ $.extend($.fn,{
       });
     });
   },
-  blockType: function(){
+  block_type: function(){
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
       if (this.is('.number')) return 'number';
@@ -97,7 +97,7 @@ $.extend($.fn,{
       // if the block being appended is already a child of this block, and there is another available slot, move to the next available slot
       // if the block being appended is the wrong type, return false
       console.log('appendToBlock');
-      var type = block.blockType();
+      var type = block.block_type();
       // FIXME: Make sure we cannot add a parent to a child
       if (type == 'trigger'){
           console.log('cannot add a trigger to another block');

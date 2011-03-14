@@ -150,3 +150,10 @@ p{
     outline: blue ridge thick;
 }
 
+.drag_active{
+    background-color: green;
+}
+
+.drop_active{
+    background-color: yellow;
+}

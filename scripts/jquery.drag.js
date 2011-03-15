@@ -123,7 +123,7 @@
         }
         // get position and append target to .content, adjust offsets
         // set last offset
-        $(document.body).append(drag_target);
+        $('.content').append(drag_target);
         drag_target.offset(start_position);
         // start timer for drag events
         timer = setTimeout(hit_test, drag_timeout);

@@ -35,7 +35,7 @@
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
 (function($){
-    var drag_target, drop_targets, drop_rects, start_position, timer, cloned, dragging, current_position;
+    var drag_target, drop_targets, drop_rects, start_position, timer, cloned, dragging, current_position, distance;
     var is_touch = window.ontouchstart && true;
     var drag_timeout = 20;
     // TODO: update this whenever we switch to a new workspace
@@ -94,8 +94,7 @@
     function init_drag(event){
         // Called on mousedown or touchstart, we haven't started dragging yet
         // TODO: Don't start drag on a text input
-        console.log('attempt to init_drag');
-        if (!blend(event)) return;
+        if (!blend(event)) return undefined;
         console.log('init_drag');
         var target = $(event.target).closest('.wrapper');
         if (target.length){
@@ -113,10 +112,10 @@
     
     function start_drag(event){
         // called on mousemove or touchmove if not already dragging
-        if (!blend(event)) return;
-        if (!drag_target) return;
+        if (!blend(event)) return undefined;
+        if (!drag_target) return undefined;
         console.log('start_drag');
-        start_position = drag_target.offset();
+        current_position = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
         if (drag_target.is('.block_menu .wrapper')){
             drag_target = drag_target.clone();
@@ -132,17 +131,21 @@
     }
     
     function drag(event){
-        if (!blend(event)) return;
-        if (!drag_target) return;
-        if (!start_position) start_drag(event);
-        console.log('continue drag');
+        if (!blend(event)) return undefined;
+        if (!drag_target) return undefined;
+        if (!current_position) start_drag(event);
         // update the variables, distance, button pressed
-        current_position = drag_target.offset();
+        var next_position = {left: event.pageX, top: event.pageY};
+        var dX = next_position.left - current_position.left;
+        var dY = next_position.top - current_position.top;
+        var curr_pos = drag_target.offset();
+        drag_target.offset({left: curr_pos.left + dX, top: curr_pos.top + dY});
+        current_position = next_position;
         return false;
     }
     
     function end_drag(end){
-        console.log('end drag');
+        console.log('end_drag');
         clearTimeout(timer);
         // TODO:
            // is it over the menu
@@ -182,16 +185,17 @@
     }
     
     if (is_touch){
-        console.log('initializing touch events');
-        $('.scripts_workspace, .block_menu')
-            .delegate('.block', 'touchstart', init_drag)
-            .delegate('.block', 'touchmove', drag)
-            .delegate('.block', 'touchend', end_drag);
+        $('.scripts_workspace, .block_menu').delegate('.block', 'touchstart', init_drag);
+        $('.content').live('touchmove', drag)
+                     .live('touchend', end_drag);
     }else{
-        console.log('initializing mouse events');
         $('.scripts_workspace, .block_menu').delegate('.block', 'mousedown', init_drag);
-        $('.content').live('mousemove', drag)
-                     .live('mouseup', end_drag);
+        $('.content').live('mousemove', drag);
+        $('.content').live('mouseup', end_drag);
+    }
+    
+    function mag(p1, p2){
+        return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     }
     
     function overlap(r1, r2){ // determine area of overlap between two rects

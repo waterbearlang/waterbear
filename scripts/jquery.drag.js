@@ -41,11 +41,6 @@
     // TODO: update this whenever we switch to a new workspace
     var target_canvas = $('.workspace:visible .scripts_workspace');
     
-    $(document.body).bind('click', function(event){
-        console.log('tap…');
-    });
-    
-
     function reset(){
         drag_target = null;
         potential_drop_targets = $();
@@ -106,10 +101,6 @@
         if (target.length){
             drag_target = target;
             start_position = target.offset();
-            potential_drop_targets = get_potential_drop_targets();
-            drop_rects = $.map(potential_drop_targets, function(elem, idx){
-                return $(elem).rect();
-            });
         }else{
             console.log('no target in init_drag');
             drag_target = null;
@@ -135,6 +126,17 @@
         // TODO: handle detach better
         $('.content').append(drag_target);
         drag_target.offset(start_position);
+        potential_drop_targets = get_potential_drop_targets();
+        // console.log('%s potential drop targets', potential_drop_targets.length);
+        // console.log('drop targets: [%s]', $.map(potential_drop_targets, function(elem, idx){
+        //     return $(elem).long_name();
+        // }).join(', '));
+        drop_rects = $.map(potential_drop_targets, function(elem, idx){
+            return $(elem).rect();
+        });
+        // console.log('%s drop_rects', drop_rects.length);
+        // console.log('drop rects: %o', drop_rects);
+
         // start timer for drag events
         timer = setTimeout(hit_test, drag_timeout);
         return false;
@@ -173,25 +175,22 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-           console.log('drag_target rect: %s', drag_target.rect_str());
-           console.log('target_canvas rect: %s', target_canvas.rect_str());
-           console.log('overlap: %s', drag_target.overlap(target_canvas));
-        if (drop_target){
-            console.log('FIXME: attach drag_target to drop_target');
+        if (drop_target && drop_target.length){
+            console.log('FIXME: attach drag_target to drop_target: %o', drop_target);
         }else if (drag_target.overlap(target_canvas)){
-            console.log('Drop onto canvas');
+            // console.log('Drop onto canvas');
             var curr_pos = drag_target.offset();
             target_canvas.append(drag_target);
             drag_target.offset(curr_pos);
         }else if (drag_target.contained_by($('.block_menu'))){
-            console.log('remove drag target');
+            // console.log('remove drag target');
             drag_target.remove();
         }else{
             if (cloned){
-                console.log('remove cloned block');
+                // console.log('remove cloned block');
                 drag_target.remove();
             }else{
-                console.log('put block back where we found it');
+                // console.log('put block back where we found it');
                 // TODO: put back in original parent as well?
                 target_canvas.append(drag_target);
                 drag_target.offset(start_position);
@@ -206,12 +205,22 @@
         if (!drag_target) return;
         var drop_idx = -1;
         var drop_area = 0;
-        var drag_rect = drag_target.rect();
-        $.each(drop_rects, function(elem, idx){
-            var area = overlap(drag_rect, elem);
+        var drag_type = drag_target.block_type();
+        var drag_target_slot = drag_target.children('.block');
+        switch(drag_type){
+            case 'trigger': return; // no slot
+            case 'step': drag_target_slot = drag_target_slot.children('.slot');
+        }
+        var drag_rect = drag_target_slot.rect();
+        // console.log('drag_rect: %s', rect_str(drag_rect));
+        var area = 0;
+        $.each(drop_rects, function(idx, elem){
+            area = overlap(drag_rect, elem);
+            // console.log('match vs. %s: %s', rect_str(elem), area);
             if (area > drop_area){
                 drop_idx = idx;
                 drop_area = area;
+                // console.log('found potential match');
             }
         });
         if (drop_target && drop_target.length){
@@ -243,11 +252,15 @@
         return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     }
     
+    function rect_str(r){
+        return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', center_x = ' + r.center_x + ', center_y = ' + r.center_y + '>'; 
+    }
+    
     function overlap(r1, r2){ // determine area of overlap between two rects
-        if (r1.left > r2.right){ console.log('left greater than right'); return 0; }
-        if (r1.right < r2.left){ console.log('right less than left'); return 0; }
-        if (r1.top > r2.bottom){ console.log('top less than bottom'); return 0; }
-        if (r1.bottom < r2.top){ console.log('bottom greater than top'); return 0; }
+        if (r1.left > r2.right){ return 0; }
+        if (r1.right < r2.left){ return 0; }
+        if (r1.top > r2.bottom){ return 0; }
+        if (r1.bottom < r2.top){ return 0; }
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
     }
@@ -255,8 +268,7 @@
     // jQuery extensions
     $.fn.extend({
         rect_str: function(){
-            var r = this.rect();
-            return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', center_x = ' + r.center_x + ', center_y = ' + r.center_y + '>'; 
+            return rect_str(this.rect());
         },
         rect: function(){
             var pos = this.offset();

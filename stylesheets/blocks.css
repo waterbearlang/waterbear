@@ -63,7 +63,6 @@
 
 .tab, .slot {
   display: block;
-  position: absolute;
   left: 0px;
   margin: 0px;
   margin-left: 30px;
@@ -81,11 +80,13 @@
 
 .slot {
   background-color: #FFF;
+  position: absolute;
 }
 
 .tab {
 /*  z-index: 10; */
     top: -2px;
+    position: relative;
 }
 
 .contained {

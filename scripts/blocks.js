@@ -6,7 +6,7 @@ $.extend($.fn,{
   long_name: function() {
     var names;
     names = [];
-    this.each(function(e) {
+    this.each(function(idx,e) {
       var parts = [e.tagName.toLowerCase()];
       e.id ? parts.push('#' + e.id) : null;
       e.className ? parts.push('.' + e.className.split(/\s/).join('.')) : null;

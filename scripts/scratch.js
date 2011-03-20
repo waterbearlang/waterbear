@@ -1,12 +1,7 @@
-function log(msg){
-    $('.stage').append('<p>' + msg + '</p>');
-}
-
-// $('.scripts_workspace').get(0).ontouchmove = function(event){
-//      event.preventDefault();
-// };
+(function($){
 
 function accordion(event){
+    // console.log('accordion');
     var self = $(this);
     if (self.hasClass('selected')){
         return;
@@ -15,7 +10,7 @@ function accordion(event){
     self.addClass('selected').siblings('.option').show();
 }
 
-$('.select').live(clickEvent, accordion);
+$('.block_menu').delegate('.select', 'click', accordion);
 
 function menu(title, specs, show){
     var klass = title.toLowerCase();
@@ -170,3 +165,5 @@ var menus = {
         {button: 'Make a list'}
     ])
 };
+
+})(jQuery);

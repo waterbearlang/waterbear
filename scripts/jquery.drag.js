@@ -36,16 +36,15 @@
 
 (function($){
     var drag_target, potential_drop_targets, drop_target, drop_rects, start_position, timer, cloned, dragging, current_position, distance;
-    var is_touch = window.hasOwnProperty('ontouchstart') && true;
+    window.is_touch = window.hasOwnProperty('ontouchstart') && true;
     var drag_timeout = 20;
     // TODO: update this whenever we switch to a new workspace
     var target_canvas = $('.workspace:visible .scripts_workspace');
-    $(document.body).bind('touchmove', function(event){
-        if (event.originalEvent.touches.length < 2){
-            // console.log('prevent workspace dragging');
-            event.preventDefault();
-        }
+    
+    $(document.body).bind('click', function(event){
+        console.log('tap…');
     });
+    
 
     function reset(){
         drag_target = null;

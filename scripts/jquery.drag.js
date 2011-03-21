@@ -90,7 +90,7 @@
     }
     
     function socket_targets(type){
-        return target_canvas.find('.socket.' + type + ':has(:input)');
+        return target_canvas.find('.socket.' + type + ':not(:has(.value))');
     }
         
     function init_drag(event){
@@ -218,6 +218,9 @@
             }else{
                 // console.log('put block back where we found it');
                 if (start_parent){
+                    if (start_parent.is('.socket')){
+                        start_parent.children('input').remove();
+                    }
                     start_parent.append(drag_target);
                     drag_target.css({
                         position: 'relative',

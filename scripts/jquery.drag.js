@@ -35,7 +35,7 @@
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
 (function($){
-    var drag_target, potential_drop_targets, drop_target, drop_rects, start_position, timer, cloned, dragging, current_position, distance;
+    var drag_target, potential_drop_targets, drop_target, drop_rects, start_position, timer, cloned, dragging, current_position, distance, start_parent;
     window.is_touch = window.hasOwnProperty('ontouchstart') && true;
     var drag_timeout = 20;
     // TODO: update this whenever we switch to a new workspace
@@ -47,6 +47,7 @@
         drop_rects = [];
         drop_target = $();
         start_position = null;
+        start_parent = null;
         current_position = null;
         timer = null;
         dragging = false;
@@ -101,6 +102,9 @@
         if (target.length){
             drag_target = target;
             start_position = target.offset();
+            if (! target.parent().is('.scripts_workspace')){
+                start_parent = target.parent();
+            }
         }else{
             console.log('no target in init_drag');
             drag_target = null;
@@ -124,6 +128,9 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         // TODO: handle detach better
+        if (drag_target.parent().is('.socket')){
+            drag_target.parent().append('<input />');
+        }
         $('.content').append(drag_target);
         drag_target.offset(start_position);
         potential_drop_targets = get_potential_drop_targets();
@@ -175,8 +182,27 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
+        drag_target.removeClass('drag_active');
         if (drop_target && drop_target.length){
+            drop_target.removeClass('drop_active');
             console.log('FIXME: attach drag_target to drop_target: %o', drop_target);
+            if (drag_target.block_type() === 'step'){
+                drop_target.append(drag_target);
+                drag_target.css({
+                    position: 'relative',
+                    left: 0,
+                    top: -8
+                });
+            }else{
+                console.log('trying to drop: into %s', drop_target.long_name());
+                drop_target.find('input').remove();
+                drop_target.append(drag_target);
+                drag_target.css({
+                    position: 'relative',
+                    left: 0,
+                    top: 0
+                });
+            }
         }else if (drag_target.overlap(target_canvas)){
             // console.log('Drop onto canvas');
             var curr_pos = drag_target.offset();
@@ -191,9 +217,17 @@
                 drag_target.remove();
             }else{
                 // console.log('put block back where we found it');
-                // TODO: put back in original parent as well?
-                target_canvas.append(drag_target);
-                drag_target.offset(start_position);
+                if (start_parent){
+                    start_parent.append(drag_target);
+                    drag_target.css({
+                        position: 'relative',
+                        top: 0,
+                        left: 0
+                    });
+                }else{
+                    target_canvas.append(drag_target);
+                    drag_target.offset(start_position);
+                }
             }
         }
     }

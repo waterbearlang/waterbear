@@ -1,0 +1,30 @@
+Standard Objects
+
+    String
+    Array
+    Object
+
+Arithmetic Operators
+    (+, -, *, /, %, ++, --, unary -, unary +)
+    
+Assignment Operators
+    (=, *=, /=, %=, +=, -=, <<=, >>=, >>>=, &=, ^=, |=)
+
+Bitwise Operators
+    (&, |, ^, ~, <<, >>, >>>)
+Comparison Operators
+    (==, !=, ===, !==, >, >=, <, <=)
+Logical Operators
+    (&&, ||, !)
+
+String Operators
+    (+ and +=)
+
+Member Operators
+    (object.property and object["property"])
+
+Special Operators
+    delete Operator
+    instanceof Operator
+    typeof Operator
+

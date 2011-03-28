@@ -40,13 +40,13 @@ function menu(title, specs, show){
 
 var menus = {
     motion: menu('Motion', [
-        {label: 'move [number: 10] steps'},
-        {label: 'turn [clockwise] [number:15] degrees'},
-        {label: 'turn [counterclockwise] [number:15] degrees'},
-        {label: 'point in direction [degrees:90]'},
-        {label: 'point towards [sprite_or_mouse]'},
-        {label: 'go to x: [number:0] y: [number:0]'},
-        {label: 'go to [sprite_or_mouse]'},
+        {label: 'move [number: 10] steps', script: 'this.move({1});'},
+        {label: 'turn [clockwise] [number:15] degrees', script: 'this.turn(-{1});'},
+        {label: 'turn [counterclockwise] [number:15] degrees', script: 'this.turn({1});'},
+        {label: 'point in direction [degrees:90]', script: 'this.turnTo({1});'},
+        {label: 'point towards [sprite_or_mouse]', script: 'this.turnTo(this.angleTo({1}));'},
+        {label: 'go to x: [number:0] y: [number:0]', script: 'this.moveTo([{1},{2}]);'},
+        {label: 'go to [sprite_or_mouse]', script: 'this.moveTo({1}.position());'},
         {label: 'glide [number:1] secs to x: [number:0] y: [number:0]'},
         {label: 'change x by [number:10]'},
         {label: 'set x to [number:0]'},

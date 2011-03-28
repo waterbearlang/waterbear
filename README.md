@@ -74,13 +74,17 @@ limitations under the License.
     - ✓ Drop into workspace
     - ✓ Delete when appropriate
     - ✓ Move back when appropriate
-    - Snap together
-  - On starting drag, un-snap more intelligently (and put back properly)
-  - When dropping a value, remove the input element
+    - ✓ Snap together
+    - Avoid random moving when blocks on canvas are rearranged
+  - ✓ On starting drag, un-snap more intelligently (and put back properly)
+  - ✓ When dropping a value, remove the input element
   - When dragging a value out of a socket, replace the input element with current value
   - Don't start drag on input element
   - Don't allow clicks into input element in blocks menu
 * Attach script snippets to blocks
+  - ✓ Tab to show built script
+  - Extract expressions/values
+  - Implement script building mini-language
 * Build an animation using blocks
 * ✓ Build up drag-n-drop from first principles
 * ✓ Get it working on iPad
@@ -90,6 +94,7 @@ limitations under the License.
 * Test in Firefox
 * Mini-language for building blocks to bind a language/library
 * Clean up look of IDE
+  - ✓ Get tabs working for workspaces
 * Save and restore projects
 * ✓ Move from popup dialog to sidebar with zooming interface
 * ✓ Remove all dragging, use selected element and click/touch
@@ -97,7 +102,7 @@ limitations under the License.
 * ✓ Get tap event working, not sure why it doesn't now (bad browser sniffing?)
 * Zoom into script view
 * Toggle between control views for different sprites / stage
-* Toggle between script/skin/sound views for a specific sprite
+* ✓ Toggle between script/skin/sound views for a specific sprite
 * Visual distinctiveness of value blocks and slots (right/left for values, top/bottom of slots)
 * ✓ Reduce padding in value blocks
 * ✓ Remove blocks delete key or drag back to menu
@@ -108,5 +113,24 @@ limitations under the License.
 * [optional] Allow contained blocks to overflow right edge of block without growing block
 * ✓ Re-enable dragging, at least for positioning
 * Fix issues listed at http://thechangelog.com/post/3032074343/top-ten-reasons-why-i-wont-use-your-open-source-project
+  - Readme
+    - Description
+    - Installation instructions
+    - Where to get help
+    - Contribution guidelines
+    - Contributor list
+    - Credits, inspirations, alternatives
+  - Test, specs, features, examples
+  - Project home page
+  - Design help
+  - Domain name
+  - Twitter account
+  - Clear licensing
+  - Reach out
+    - Twitter
+    - Facebook
+    - IRC
+  - Speak at conferences and meetups
+  - Submit to the Changelog
 
 

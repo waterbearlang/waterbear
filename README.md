@@ -78,6 +78,7 @@ limitations under the License.
     - Avoid random moving when blocks on canvas are rearranged
   - ✓ On starting drag, un-snap more intelligently (and put back properly)
   - ✓ When dropping a value, remove the input element
+  - On drop, remove "active_drop" class
   - When dragging a value out of a socket, replace the input element with current value
   - Don't start drag on input element
   - Don't allow clicks into input element in blocks menu

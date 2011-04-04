@@ -73,7 +73,7 @@ var menus = {
         {label: 'stop script'}
     ], true),
     sensing: menu('Sensing', [
-        {label: "[ask [string:What's your name?] and wait"},
+        {label: "ask [string:What's your name?] and wait", script: ""},
         {label: 'answer', 'type': String},
         {label: 'mouse x', 'type': Number},
         {label: 'mouse y', 'type': Number},

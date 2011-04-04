@@ -44,7 +44,7 @@ body {
     position: relative;
     width: 150%;
     height: 100%;
-    background-color: #FFCCCC;
+/*    background-color: #FFCCCC;*/
 }
 
 .header{
@@ -53,8 +53,6 @@ body {
     left: 33%;
     height: 18%;
     width: 30%;
-    background-color: white;
-    background-color: red;
 }
 
 .header img{
@@ -97,20 +95,20 @@ h1{
     border: 2px solid hsl(264,62%,79%);
 }
 
-.sound > .block, 
-.sound > .next > .tab, 
-.sound > .block > .contained > .tab,
-.sound > .block > .contained,
-.sound > .block > .slot {
+.transform > .block, 
+.transform > .next > .tab, 
+.transform > .block > .contained > .tab,
+.transform > .block > .contained,
+.transform > .block > .slot {
     background-color: hsl(296, 65%, 77%);
     border: 2px solid hsl(296, 65%, 57%);
 }
 
-.pen > .block, 
-.pen > .next > .tab, 
-.pen > .block > .contained > .tab,
-.pen > .block > .contained,
-.pen > .block > .slot {
+.path > .block, 
+.path > .next > .tab, 
+.path > .block > .contained > .tab,
+.path > .block > .contained,
+.path > .block > .slot {
     background-color: hsl(15,100%,83%);
     border: 2px solid hsl(15,100%,63%);
 }
@@ -142,11 +140,11 @@ h1{
     border: 2px solid hsl(93,90%,66%);
 }
 
-.variables > .block, 
-.variables > .next > .tab, 
-.variables > .block > .contained > .tab,
-.variables > .block > .contained,
-.variables > .block > .slot {
+.shapes > .block, 
+.shapes > .next > .tab, 
+.shapes > .block > .contained > .tab,
+.shapes > .block > .contained,
+.shapes > .block > .slot {
     background-color: #e66a22;
     border: 2px solid #e66a22;
 }
@@ -246,7 +244,7 @@ h1{
     height: 100%;
     left: 0px;
     top: 0px;
-    background-color: #FFCCFF;
+/*    background-color: #FFCCFF;*/
     overflow: auto;
 }
 

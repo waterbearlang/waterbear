@@ -97,9 +97,10 @@
         // Called on mousedown or touchstart, we haven't started dragging yet
         // TODO: Don't start drag on a text input
         if (!blend(event)) return undefined;
-        if ($(event.target).is('input')) return undefined;
+        var eT = $(event.target);
+        if (eT.is('input') && ! eT.contained_by($('.block_menu'))) return undefined;
         // console.log('init_drag');
-        var target = $(event.target).closest('.wrapper');
+        var target = eT.closest('.wrapper');
         if (target.length){
             drag_target = target;
             start_position = target.offset();

@@ -61,6 +61,12 @@ $.extend($.fn,{
           }
           script = script.replace(/\[\[\d\]\]/g, blksf);
       }
+      next = this.nextBlock().extract_script();
+      if (script.indexOf('[[next]]') > -1){
+          script.replace('[[next]]', next);
+      }else{
+          script = script + '\n' + next;
+      }
       return script;
   },
   write_script: function(view){

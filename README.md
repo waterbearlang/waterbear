@@ -87,6 +87,8 @@ limitations under the License.
   - ✓ Extract expressions/values
   - ✓ Implement script building mini-language
   - Provide script templates for every block
+  - Autogenerate variable names
+  - Lazy evaluation of variables (mouse position, etc.)
 * Build an animation using blocks
 * ✓ Build up drag-n-drop from first principles
 * ✓ Get it working on iPad

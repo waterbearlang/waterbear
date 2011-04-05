@@ -20,13 +20,21 @@ function tab_select(event){
         $('.workspace:visible .scripts_workspace').show();
     }else if (self.is('.scripts_text_view_tab')){
         $('.workspace:visible .scripts_text_view').show();
-    }else if (self.is('.sounds_workspace_tab')){
-        $('.workspace:visible .sounds_workspace').show();
-    }else if (self.is('.costumes_workspace')){
-        $('.workspace:visible .costumes_workspace').show();
+        update_scripts_view();
     }
 }
 $('.chrome_tab').live('click', tab_select);
+
+function update_scripts_view(){
+    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+    var view = $('.workspace:visible .scripts_text_view');
+    blocks.each(function(){$(this).write_script(view);});
+}
+
+function run_scripts(event){
+    // FIXME
+}
+$('.run_scripts').live('click', run_scripts);
 
 function menu(title, specs, show){
     var klass = title.toLowerCase();
@@ -83,23 +91,23 @@ var menus = {
         {label: 'timer', 'type': Number}
     ]),
     operators: menu('Operators', [
-        {label: '[number] + [number]', type: Number},
-        {label: '[number] - [number]', type: Number},
-        {label: '[number] * [number]', type: Number},
-        {label: '[number] / [number]', type: Number},
-        {label: 'pick random [number:1] to [number:10]', type: Number},
-        {label: '[number] < [number]', type: Boolean},
-        {label: '[number] = [number]', type: Boolean},
-        {label: '[number] > [number]', type: Boolean},
-        {label: '[boolean] and [boolean]', type: Boolean},
-        {label: '[boolean] or [boolean]', type: Boolean},
-        {label: 'not [boolean]', type: Boolean},
-        {label: 'join [string:hello] [string:world]', type: String},
-        {label: 'letter [number:1] of [string:world]', type: String},
-        {label: 'length of [string:world]', type: Number},
-        {label: '[number] mod [number]', type: Number},
-        {label: 'round [number]', type: Number},
-        {label: '[function] of [number:10]', type: Number}
+        {label: '[number] + [number]', type: Number, script: "({{1}} + {{2}})"},
+        {label: '[number] - [number]', type: Number, script: "({{1}} - {{2}})"},
+        {label: '[number] * [number]', type: Number, script: "({{1]} * {{2}})"},
+        {label: '[number] / [number]', type: Number, script: "({{1}} / {{2}})"},
+        {label: 'pick random [number:1] to [number:10]', type: Number, script: "randint({{1}}, {{2}})"},
+        {label: '[number] < [number]', type: Boolean, script: "({{1}} < {{2}})"},
+        {label: '[number] = [number]', type: Boolean, script: "({{1}} == {{2}})"},
+        {label: '[number] > [number]', type: Boolean, script: "({{1}} > {{2}})"},
+        {label: '[boolean] and [boolean]', type: Boolean, script: "({{1}} && {{2}})"},
+        {label: '[boolean] or [boolean]', type: Boolean, script: "({{1}} || {{2}})"},
+        {label: 'not [boolean]', type: Boolean, script: "(! {{1}})"},
+        {label: 'join [string:hello] [string:world]', type: String, script: "({{1}} + {{2}})"},
+        {label: 'letter [number:1] of [string:world]', type: String, script: "{{2}}[{{1}}"},
+        {label: 'length of [string:world]', type: Number, script: "({{1}}.length)"},
+        {label: '[number] mod [number]', type: Number, script: "({{1}} % {{2}})"},
+        {label: 'round [number]', type: Number, script: "Math.round({{1}})"},
+        {label: '[function] of [number:10]', type: Number, script: "Math.{{1}}({{2}})"}
     ]),
     shapes: menu('Shapes', [
         {label: 'circle x: [number] y: [number] radius: [number]'},

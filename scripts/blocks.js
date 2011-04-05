@@ -41,12 +41,43 @@ $.extend($.fn,{
       if (this.is('.string')) return 'string';
       return 'unknown';
   },
+  extract_script: function(){
+      if (this.is('input')) return this.val();
+      var script = this.data('script');
+      if (!script) return null;
+      var exprs = $.map(this.socketBlocks(), function(elem, idx){return $(elem).extract_script();});
+      var blks = $.map(this.childBlocks(), function(elem, idx){return $(elem).extract_script();});
+      if (exprs.length){
+          function exprf(match, offset, s){
+              var idx = parseInt(match.slice(2,-2), 10) - 1;
+              return exprs[idx];
+          };
+          script = script.replace(/\{\{\d\}\}/g, exprf);
+      }
+      if (blks.length){
+          function blksf(match, offset, s){
+              var idx = parseInt(match.slice(2,-2), 10) - 1;
+              return blks[idx];
+          }
+          script = script.replace(/\[\[\d\]\]/g, blksf);
+      }
+      return script;
+  },
+  write_script: function(view){
+      view.append('<code><pre>' + this.extract_script() + '</pre></code>');
+  },
   parentBlock: function(){
       var p = this.closest('.wrapper').parent();
       if (p.is('.next')){
           return p.closest('.wrapper');
       }
       return null;
+  },
+  childBlocks: function(){
+      return this.find('> .block > .contained > .wrapper');
+  },
+  socketBlocks: function(){
+      return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input');
   },
   nextNiche: function(){
       return this.children('.next');
@@ -168,6 +199,9 @@ function block(options){
     }
     if (opts.tab){
         wrapper.append('<div class="next"><i class="tab"></i></div>');
+    }
+    if (opts.script){
+        wrapper.data('script', opts.script);
     }
     return wrapper;
 }

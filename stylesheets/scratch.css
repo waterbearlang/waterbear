@@ -157,6 +157,11 @@ h1{
 .tab{
     border-top: 0 !important;
 }
+
+.run_scripts{
+    float: right;
+}
+
 .contained{
     background-color: white !important;
     border-right: 0 !important;

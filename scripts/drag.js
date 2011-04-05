@@ -97,6 +97,7 @@
         // Called on mousedown or touchstart, we haven't started dragging yet
         // TODO: Don't start drag on a text input
         if (!blend(event)) return undefined;
+        if ($(event.target).is('input')) return undefined;
         // console.log('init_drag');
         var target = $(event.target).closest('.wrapper');
         if (target.length){
@@ -121,7 +122,7 @@
         current_position = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
         if (drag_target.is('.block_menu .wrapper')){
-            drag_target = drag_target.clone();
+            drag_target = drag_target.clone(true);
             cloned = true;
         }
         dragging = true;

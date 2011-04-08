@@ -1,3 +1,11 @@
+Notes:
+
+Each script workspace should be in it's own closure, protected from other namespaces.
+Each workspace should have it's own state object for maintaining state between block steps
+Each workspace state object should subscribe to mouse and keyboard events to expose those to sensing blocks.
+Each workspace has a timer and a frame counter.
+
+
 Standard Objects
 
     String

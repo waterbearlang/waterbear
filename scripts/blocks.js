@@ -70,7 +70,7 @@ $.extend($.fn,{
       return script;
   },
   write_script: function(view){
-      view.append('<code><pre>' + this.extract_script() + '</pre></code>');
+      view.append('<code><pre>var state={};\n' + this.extract_script() + '</pre></code>');
   },
   parentBlock: function(){
       var p = this.closest('.wrapper').parent();

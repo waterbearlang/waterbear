@@ -1,4 +1,4 @@
-$.selectedBlock = function(){
+$.selected_block = function(){
     return $('.scripts_workspace .selected');
 };
 
@@ -47,8 +47,8 @@ $.extend($.fn,{
       if (this.is('.empty')) return '// do nothing';
       var script = this.data('script');
       if (!script) return null;
-      var exprs = $.map(this.socketBlocks(), function(elem, idx){return $(elem).extract_script();});
-      var blks = $.map(this.childBlocks(), function(elem, idx){return $(elem).extract_script();});
+      var exprs = $.map(this.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
+      var blks = $.map(this.child_blocks(), function(elem, idx){return $(elem).extract_script();});
       if (exprs.length){
           console.log('expressions: %o', exprs);
           function exprf(match, offset, s){
@@ -65,7 +65,7 @@ $.extend($.fn,{
           }
           script = script.replace(/\[\[\d\]\]/g, blksf);
       }
-      next = this.nextBlock().extract_script();
+      next = this.next_block().extract_script();
       if (script.indexOf('[[next]]') > -1){
           script = script.replace('[[next]]', next);
       }else{
@@ -81,47 +81,47 @@ $.extend($.fn,{
   write_script: function(view){
       view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');
   },
-  parentBlock: function(){
+  parent_block: function(){
       var p = this.closest('.wrapper').parent();
       if (p.is('.next')){
           return p.closest('.wrapper');
       }
       return null;
   },
-  childBlocks: function(){
+  child_blocks: function(){
       var empty = this.find('> .block > .contained:not(:has(.wrapper))').map(function(){
           return $('<span class="empty"></span>');
       });
       return this.find('> .block > .contained > .wrapper').add(empty);
   },
-  socketBlocks: function(){
+  socket_blocks: function(){
       return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input');
   },
-  nextNiche: function(){
+  next_niche: function(){
       return this.children('.next');
   },
-  nextBlock: function(){
-      return this.nextNiche().children('.wrapper');
+  next_block: function(){
+      return this.next_niche().children('.wrapper');
   },
-  containerNiches: function(){
+  container_niches: function(){
       return this.children('.block').children('.contained');
   },
-  stepNiches: function(){
-      var cn = this.containerNiches();
-      var nn = this.nextNiche();
+  step_niches: function(){
+      var cn = this.container_niches();
+      var nn = this.next_niche();
       if (nn.length){
           cn.push(nn.get(0));
       }
       return cn;
   },
-  socketNiches: function(ntype){
+  socket_niches: function(ntype){
       return this.children('block').children('p').find('.socket.' + ntype);
   },
-  selectBlock: function(){
+  select_block: function(){
     $('.scripts_workspace .selected').removeClass('selected');
     return this.addClass('selected');
   },
-  unselectBlock: function(){
+  unselect_block: function(){
       return this.removeClass('selected');
   },
   moveTo: function(x,y){
@@ -131,16 +131,16 @@ $.extend($.fn,{
       // return an ordered list of open niches
       // types are step (tab or container), and socket types number, boolean, string 
       if (ntype === 'step'){
-          return this.stepNiches().noChildren();
+          return this.step_niches().children_count();
       }else{
-          return this.socketNiches(ntype).noChildren();
+          return this.socket_niches(ntype).children_count();
       }
   },
-  appendToBlock: function(block){
+  append_to_block: function(block){
       // if this block has an open slot, and the block being appended also has an open slot, put it in the first available slot
       // if the block being appended is already a child of this block, and there is another available slot, move to the next available slot
       // if the block being appended is the wrong type, return false
-      console.log('appendToBlock');
+      console.log('append_to_block');
       var type = block.block_type();
       // FIXME: Make sure we cannot add a parent to a child
       if (type == 'trigger'){
@@ -152,7 +152,7 @@ $.extend($.fn,{
           console.log('no open niches of type %s', type);
           return false;
       }
-      if (this == block.parentBlock){
+      if (this == block.parent_block){
           console.log('move to the next available niche');
           return true;
       }else{
@@ -166,7 +166,7 @@ $.extend($.fn,{
           return true;
       }
   },
-  noChildren: function(){
+  children_count: function(){
       this.filter(function(elem){
           return $(elem).children('.wrapper').length < 1;
       });
@@ -224,8 +224,12 @@ function block(options){
     return wrapper;
 }
 
+var keys_supported = 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'.split('').concat(['up', 'down', 'left', 'right',
+    'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 'pause', 'capslock', 'esc', 'space',
+    'pageup', 'pagedown', 'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']); 
+
 var keys_input = '<div class="string keys"><select>' + 
-        'abcdefghijklmnopqrstuvwxyz'.split('').map(function(letter){return '<option>' + letter + '</option>';}).join('') +
+        keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') +
     '</select></div>';
 
 function label(value){

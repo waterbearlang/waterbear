@@ -17,22 +17,6 @@ $.extend($.fn,{
   info: function(){
       return this.closest('.wrapper').long_name();
   },
-  center: function() {
-    return this.each(function(elem) {
-      var dx, dy, p, ph, pw, t;
-      t = $(elem);
-      dx = t.width() / 2;
-      dy = t.height() / 2;
-      p = $(elem.offsetParent);
-      pw = p.width() / 2;
-      ph = p.height() / 2;
-      return t.css({
-        position: 'absolute',
-        left: pw - dx + 'px',
-        top: ph - dy + 'px'
-      });
-    });
-  },
   block_type: function(){
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
@@ -97,80 +81,11 @@ $.extend($.fn,{
   socket_blocks: function(){
       return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input');
   },
-  next_niche: function(){
-      return this.children('.next');
-  },
   next_block: function(){
-      return this.next_niche().children('.wrapper');
-  },
-  container_niches: function(){
-      return this.children('.block').children('.contained');
-  },
-  step_niches: function(){
-      var cn = this.container_niches();
-      var nn = this.next_niche();
-      if (nn.length){
-          cn.push(nn.get(0));
-      }
-      return cn;
-  },
-  socket_niches: function(ntype){
-      return this.children('block').children('p').find('.socket.' + ntype);
-  },
-  select_block: function(){
-    $('.scripts_workspace .selected').removeClass('selected');
-    return this.addClass('selected');
-  },
-  unselect_block: function(){
-      return this.removeClass('selected');
+      return this.find('> .block > .contained > .wrapper');
   },
   moveTo: function(x,y){
       return this.css({left: x + 'px', top: y + 'px'});
-  },
-  niches: function(ntype){
-      // return an ordered list of open niches
-      // types are step (tab or container), and socket types number, boolean, string 
-      if (ntype === 'step'){
-          return this.step_niches().children_count();
-      }else{
-          return this.socket_niches(ntype).children_count();
-      }
-  },
-  append_to_block: function(block){
-      // if this block has an open slot, and the block being appended also has an open slot, put it in the first available slot
-      // if the block being appended is already a child of this block, and there is another available slot, move to the next available slot
-      // if the block being appended is the wrong type, return false
-      console.log('append_to_block');
-      var type = block.block_type();
-      // FIXME: Make sure we cannot add a parent to a child
-      if (type == 'trigger'){
-          console.log('cannot add a trigger to another block');
-          return false;
-      }
-      var niches = this.niches(type);
-      if (!niches.length){
-          console.log('no open niches of type %s', type);
-          return false;
-      }
-      if (this == block.parent_block){
-          console.log('move to the next available niche');
-          return true;
-      }else{
-          console.log('append to block');
-          niches.first().append(block);
-          block.css({
-              position: 'relative',
-              left: 0 + 'px',
-              top: 0 + 'px'
-          });
-          return true;
-      }
-  },
-  children_count: function(){
-      this.filter(function(elem){
-          return $(elem).children('.wrapper').length < 1;
-      });
-      return this;
   }
 });
 
@@ -228,7 +143,7 @@ var keys_supported = 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'.split('').conca
     'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 'pause', 'capslock', 'esc', 'space',
     'pageup', 'pagedown', 'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']); 
 
-var keys_input = '<div class="string keys"><select>' + 
+var keys_input = '<div class="string keys autosocket"><select>' + 
         keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') +
     '</select></div>';
 
@@ -260,29 +175,7 @@ function label(value){
     return value;
 }
 
-$('body').live('keypress', function(event){
-    // charCode 8 is delete
-    switch(event.charCode){
-        case 8: // delete key pressed
-            var selected = $('.scripts_workspace .wrapper.selected');
-            if (selected.length){
-                var next = selected.find('.next > .wrapper');
-                if (next.length){
-                    var deletep = confirm('Delete selected block and its contents?');
-                    if (deletep){
-                        selected.remove();
-                    }
-                }else{
-                    selected.remove();
-                }
-            }
-            break;
-        default:
-            console.log('keypress: %s', event.charCode);
-            break;
-    }
-});
-
+// Is this an unneeded bit from the click-to-position experiment?
 $('.scripts_workspace input[type=text]').live('keypress', function(event){
     event.stopPropagation();
 });

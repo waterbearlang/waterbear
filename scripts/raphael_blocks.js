@@ -32,7 +32,9 @@ function update_scripts_view(){
 }
 
 function run_scripts(event){
-    // FIXME
+    $(document.body).scrollLeft(10000);
+    var blocks = $('.workspace:visible .scripts_workspace > .trigger');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
 }
 $('.run_scripts').live('click', run_scripts);
 
@@ -64,8 +66,8 @@ function menu(title, specs, show){
 
 var menus = {
     control: menu('Control', [
-        {label: 'when [flag] clicked', trigger: true, script: '$(".run_scripts").click(function(){\n[[next]]\n})}'},
-        {label: 'when [key] key pressed', trigger: true, script: 'FIXME'},
+        {label: 'when program runs', trigger: true, script: 'function _start(){\n[[next]]\n}\n_start();\n'},
+        {label: 'when [key] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}, function(){\n[[next]]\n})}'},
         {label: 'wait [number:1] secs', script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'},
         {label: 'forever', containers: 1, tab: false, script: 'while(true){\n[[1]]\n}'},
         {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[next]]\n});'},
@@ -129,13 +131,11 @@ var menus = {
         {label: 'rotate to [number]', script: 'state.shape.rotate({{1}}, true);'},
         {label: 'rotate by [number] around x: [number] y: [number]', script: 'state.shape.rotate({{1}}, {{2}}, {{3}}, false);'},
         {label: 'rotate to [number] around x: [number] y: [number]', script: 'state.shape.rotate({{1}}, {{2}}, {{3}}, true);'},
-        {label: 'translate by x: [number] y: [number]'},
-        {label: 'scale by [number]'},
-        {label: 'scaled by [number] centered at x: [number] y: [number]'},
-        {label: 'scale by [number] [number]'},
-        {label: 'scale by [number] [number] centered at x: [number] y: [number]'},
-        {label: 'to front'},
-        {label: 'to back'}
+        {label: 'translate by x: [number] y: [number]', script: 'state.shape.translate({{1}}, {{2}});'},
+        {label: 'scale by [number]', script: 'state.shape.scale({{1}}, {{2}});'},
+        {label: 'scaled by [number] centered at x: [number] y: [number]', script: 'state.shape.scale({{1}}, {{2}}, {{3}}, {{4}});'},
+        {label: 'to front', script: 'state.shape.toFront();'},
+        {label: 'to back', script: 'state.shape.toBack();'}
     ])
 };
 

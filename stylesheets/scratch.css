@@ -177,12 +177,7 @@ h1{
     background-color: #cccccc;
 }
 
-.sprite_info {
-    height: 40px;
-    display: none;
-}
-
-.scripts_workspace, .sounds_workspace, .costumes_workspace {
+.scripts_workspace, .scripts_text_view {
     width: 100%;
     height: 100%;
     position: relative;
@@ -219,28 +214,19 @@ h1{
 }
 
 .chrome_tab.selected{
-    background-color: #cccccc;
+    background-color: #CCC;
     color: #333;
     border-color: #333;
 }
 
 .stage {
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 20px;
+    top: 20px;
     width: 30%;
-    height: 58%;
-    background-color: #ffffff;
-}
-
-.sprites {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    width: 30%;
-    height: 38%;
-    outline: red solid thin;
-    background-color: #cccccc;
+    bottom: 20px;
+    background-color: #FFF;
+    border: 1px solid #CCC;
 }
 
 .block_menu{

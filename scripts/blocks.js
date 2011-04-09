@@ -42,14 +42,18 @@ $.extend($.fn,{
       return 'unknown';
   },
   extract_script: function(){
+      if (this.length === 0) return '';
       if (this.is('input')) return this.val();
+      if (this.is('.empty')) return '// do nothing';
       var script = this.data('script');
       if (!script) return null;
       var exprs = $.map(this.socketBlocks(), function(elem, idx){return $(elem).extract_script();});
       var blks = $.map(this.childBlocks(), function(elem, idx){return $(elem).extract_script();});
       if (exprs.length){
+          console.log('expressions: %o', exprs);
           function exprf(match, offset, s){
               var idx = parseInt(match.slice(2,-2), 10) - 1;
+              console.log('index: %d, expression: %s', idx, exprs[idx]);
               return exprs[idx];
           };
           script = script.replace(/\{\{\d\}\}/g, exprf);
@@ -63,14 +67,19 @@ $.extend($.fn,{
       }
       next = this.nextBlock().extract_script();
       if (script.indexOf('[[next]]') > -1){
-          script.replace('[[next]]', next);
+          script = script.replace('[[next]]', next);
       }else{
           script = script + '\n' + next;
       }
       return script;
   },
+  wrap_script: function(){
+      // wrap the top-level script to prevent leaking into globals
+      var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
+      return '(function($){\nvar state = new State();\n' + script + '\n})(jQuery);';
+  },
   write_script: function(view){
-      view.append('<code><pre>var state={};\n' + this.extract_script() + '</pre></code>');
+      view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');
   },
   parentBlock: function(){
       var p = this.closest('.wrapper').parent();
@@ -80,7 +89,10 @@ $.extend($.fn,{
       return null;
   },
   childBlocks: function(){
-      return this.find('> .block > .contained > .wrapper');
+      var empty = this.find('> .block > .contained:not(:has(.wrapper))').map(function(){
+          return $('<span class="empty"></span>');
+      });
+      return this.find('> .block > .contained > .wrapper').add(empty);
   },
   socketBlocks: function(){
       return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input');

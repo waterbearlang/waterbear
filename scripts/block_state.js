@@ -3,7 +3,6 @@
 function State(){
     this.timer = new Timer();
     this.subscribe_mouse_events();
-    this.subscribe_keyboard_events();
     this.shape = null;
     this.shape_references = {};
     var stage = $('.stage');

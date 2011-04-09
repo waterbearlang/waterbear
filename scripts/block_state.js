@@ -1,10 +1,13 @@
 // Encapsulate workspace-specific state to allow one block to build on the next
 
-function State(){
-    this.timer = new Timer();
-    this.subscribe_mouse_events();
+function Local(){
     this.shape = null;
     this.shape_references = {};
+};
+
+function Global(){
+    this.timer = new Timer();
+    this.subscribe_mouse_events();
     var stage = $('.stage');
     this.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());
     this.mouse_x = -1;
@@ -12,7 +15,7 @@ function State(){
     this.mouse_down = false;
 };
 
-State.prototype.subscribe_mouse_events = function(){
+Global.prototype.subscribe_mouse_events = function(){
     var self = this;
     $('.stage').mousedown(function(evt){self.mouse_down = true;})
                .mousemove(function(evt){self.mouse_x = evt.offset_x;

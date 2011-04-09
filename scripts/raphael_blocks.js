@@ -82,14 +82,14 @@ var menus = {
         {label: 'stop script', script: 'FIXME'}
     ], true),
     sensing: menu('Sensing', [
-        {label: "ask [string:What's your name?] and wait", script: "state.answer = prompt({{1}});"},
-        {label: 'answer', 'type': String, script: 'state.answer'},
-        {label: 'mouse x', 'type': Number, script: 'state.mouse_x'},
-        {label: 'mouse y', 'type': Number, script: 'state.mouse_y'},
-        {label: 'mouse down', 'type': Boolean, script: 'state.mouse_down'},
+        {label: "ask [string:What's your name?] and wait", script: "local.answer = prompt({{1}});"},
+        {label: 'answer', 'type': String, script: 'local.answer'},
+        {label: 'mouse x', 'type': Number, script: 'global.mouse_x'},
+        {label: 'mouse y', 'type': Number, script: 'global.mouse_y'},
+        {label: 'mouse down', 'type': Boolean, script: 'global.mouse_down'},
         {label: 'key [key] pressed?', 'type': Boolean, script: '$(document).bind("keydown", {{1}}, function(){\n[[1]]\n});'},
-        {label: 'reset timer', script: 'FIXME', script: 'state.timer.reset()'},
-        {label: 'timer', 'type': Number, script: 'state.timer.value()'}
+        {label: 'reset timer', script: 'FIXME', script: 'global.timer.reset()'},
+        {label: 'timer', 'type': Number, script: 'global.timer.value()'}
     ]),
     operators: menu('Operators', [
         {label: '[number] + [number]', type: Number, script: "({{1}} + {{2}})"},
@@ -111,31 +111,31 @@ var menus = {
         {label: '[function] of [number:10]', type: Number, script: "Math.{{1}}({{2}})"}
     ]),
     shapes: menu('Shapes', [
-        {label: 'circle x: [number] y: [number] radius: [number]', script: 'state.shape = state.paper.circle({{1}}, {{2}}, {{3}});'},
-        {label: 'rect x: [number] y: [number] width: [number] height: [number]', script: 'state.shape = state.paper.rect({{1}}, {{2}}, {{3}});'},
-        {label: 'rounded rect x: [number] y: [number] width: [number] height: [number] radius: [number]', script: 'state.shape = state.paper.rect({{1}}, {{2}}, {{3}}, {{4}});'},
-        {label: 'ellipse x: [number] y: [number] x radius: [number] y radius: [number]', script: 'state.shape = state.paper.ellipse({{1}}, {{2}}, {{3}}, {{4}});'},
-        {label: 'image src: [string] x: [number] y: [number] width: [number] height: [number]', script: 'state.shape = state.paper.image("{{1}}", {{2}}, {{3}}, {{4}}, {{5}});'},
-        {label: 'name shape: [string]', script: 'state.shape_references["{{1}}"] = state.shape;'},
-        {label: 'refer to [shape]', script: 'state.shape = shape_references["{{1}}"];'}
+        {label: 'circle x: [number] y: [number] radius: [number]', script: 'local.shape = global.paper.circle({{1}}, {{2}}, {{3}});'},
+        {label: 'rect x: [number] y: [number] width: [number] height: [number]', script: 'local.shape = global.paper.rect({{1}}, {{2}}, {{3}});'},
+        {label: 'rounded rect x: [number] y: [number] width: [number] height: [number] radius: [number]', script: 'local.shape = global.paper.rect({{1}}, {{2}}, {{3}}, {{4}});'},
+        {label: 'ellipse x: [number] y: [number] x radius: [number] y radius: [number]', script: 'local.shape = global.paper.ellipse({{1}}, {{2}}, {{3}}, {{4}});'},
+        {label: 'image src: [string] x: [number] y: [number] width: [number] height: [number]', script: 'local.shape = global.paper.image("{{1}}", {{2}}, {{3}}, {{4}}, {{5}});'},
+        {label: 'name shape: [string]', script: 'local.shape_references["{{1}}"] = local.shape;'},
+        {label: 'refer to [shape]', script: 'local.shape = local.shape_references["{{1}}"];'}
     ]),
     text: menu('Path', [
-        {label: 'text [string] at x: [number] y: [number]', script: 'state.shape = state.paper.image("{{1}}", {{2}}, {{3}});' },
+        {label: 'text [string] at x: [number] y: [number]', script: 'local.shape = global.paper.text("{{1}}", {{2}}, {{3}});' },
         {label: 'font family: [string] weight: [number] style: [fontstyle]', script: 'FIXME'}
     ]),
     transform: menu('Transform', [
-        {label: 'clear canvas', script: 'state.paper.clear();'},
-        {label: 'hide', script: 'state.shape.hide();'},
-        {label: 'show', script: 'state.shape.show();'},
-        {label: 'rotate by [number]', script: 'state.shape.rotate({{1}}, false);'},
-        {label: 'rotate to [number]', script: 'state.shape.rotate({{1}}, true);'},
-        {label: 'rotate by [number] around x: [number] y: [number]', script: 'state.shape.rotate({{1}}, {{2}}, {{3}}, false);'},
-        {label: 'rotate to [number] around x: [number] y: [number]', script: 'state.shape.rotate({{1}}, {{2}}, {{3}}, true);'},
-        {label: 'translate by x: [number] y: [number]', script: 'state.shape.translate({{1}}, {{2}});'},
-        {label: 'scale by [number]', script: 'state.shape.scale({{1}}, {{2}});'},
-        {label: 'scaled by [number] centered at x: [number] y: [number]', script: 'state.shape.scale({{1}}, {{2}}, {{3}}, {{4}});'},
-        {label: 'to front', script: 'state.shape.toFront();'},
-        {label: 'to back', script: 'state.shape.toBack();'}
+        {label: 'clear canvas', script: 'global.paper.clear();'},
+        {label: 'hide', script: 'local.shape.hide();'},
+        {label: 'show', script: 'local.shape.show();'},
+        {label: 'rotate by [number]', script: 'local.shape.rotate({{1}}, false);'},
+        {label: 'rotate to [number]', script: 'local.shape.rotate({{1}}, true);'},
+        {label: 'rotate by [number] around x: [number] y: [number]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, false);'},
+        {label: 'rotate to [number] around x: [number] y: [number]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, true);'},
+        {label: 'translate by x: [number] y: [number]', script: 'local.shape.translate({{1}}, {{2}});'},
+        {label: 'scale by [number]', script: 'local.shape.scale({{1}}, {{2}});'},
+        {label: 'scaled by [number] centered at x: [number] y: [number]', script: 'local.shape.scale({{1}}, {{2}}, {{3}}, {{4}});'},
+        {label: 'to front', script: 'local.shape.toFront();'},
+        {label: 'to back', script: 'local.shape.toBack();'}
     ])
 };
 

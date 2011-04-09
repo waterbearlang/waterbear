@@ -43,17 +43,9 @@ function menu(title, specs, show){
     var body = $('<section class="submenu"></section>');
     var select = $('<h3 class="select">' + title + '</h3>').appendTo(body);
     var options = $('<div class="option"></div>').appendTo(body);
-    var col = $('<table><tr><td></td><td></td></tr></table>').appendTo(options);
-    var half = Math.round((specs.length + 1) / 2);
-    var col1 = col.find('td').eq(0);
-    var col2 = col.find('td').eq(1);
     specs.forEach(function(spec, idx){
         spec.klass = klass;
-        if (idx < half){
-            col1.append(block(spec));
-        }else{
-            col2.append(block(spec));
-        }
+        options.append(block(spec));
     });
     $('.block_menu').append(body);
     if (show){

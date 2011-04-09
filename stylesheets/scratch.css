@@ -253,9 +253,16 @@ h1{
     background-color: #EEE;
 }
 
+.option{
+    position: relative;
+    overflow: hidden;
+    padding: 15px;
+}
+
 .submenu .wrapper {
     margin-bottom: 20px;
     margin-right: 35px;
+    float: left;
 }
 
 .submenu table{

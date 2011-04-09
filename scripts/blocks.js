@@ -224,6 +224,10 @@ function block(options){
     return wrapper;
 }
 
+var keys_input = '<div class="string keys"><select>' + 
+        'abcdefghijklmnopqrstuvwxyz'.split('').map(function(letter){return '<option>' + letter + '</option>';}).join('') +
+    '</select></div>';
+
 function label(value){
     // Recognize special values in the label string and replace them with 
     // appropriate markup. Some values are dynamic and based on the objects currently
@@ -248,6 +252,7 @@ function label(value){
     value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><input></div>');
     value = value.replace(/\[string:(.+)\]/g, '<div class="string socket"><input value="$1"></div>');
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
+    value = value.replace(/\[key\]/g, keys_input);
     return value;
 }
 

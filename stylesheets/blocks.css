@@ -1,5 +1,5 @@
 /* Styles for steps and containers */
-.wrapper, .socket {
+.wrapper, .socket, .keys{
   display: inline-block;
   position: relative;
 }
@@ -59,6 +59,7 @@
 .wrapper label, .wrapper p {
   font-family: Georgia;
   font-size: 12px;
+  white-space: nowrap;
 }
 
 .tab, .slot {

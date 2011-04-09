@@ -59,11 +59,11 @@ function menu(title, specs, show){
 var menus = {
     control: menu('Control', [
         {label: 'when program runs', trigger: true, script: 'function _start(){\n[[next]]\n}\n_start();\n'},
-        {label: 'when [key] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}, function(){\n[[next]]\n})}'},
+        {label: 'when [key] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}", function(){\n[[next]]\n});'},
         {label: 'wait [number:1] secs', script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'},
         {label: 'forever', containers: 1, tab: false, script: 'while(true){\n[[1]]\n}'},
         {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[next]]\n});'},
-        {label: 'broadcast [message]', script: 'FIXME'},
+        {label: 'broadcast [message]', script: '$(".stage").trigger("{{1}}", "function(){\n[[next]]\n});'},
         {label: 'broadcast [message] and wait', script: 'FIXME'},
         {label: 'when I receive [message]', trigger: true, script: 'FIXME'},
         {label: 'forever if [boolean]', containers: 1, tab: false, script: 'while({{1}}){\n[[1]]\n}'},

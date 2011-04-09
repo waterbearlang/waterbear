@@ -27,17 +27,17 @@ $.extend($.fn,{
   },
   extract_script: function(){
       if (this.length === 0) return '';
-      if (this.is('input')) return this.val();
+      if (this.is(':input')) return this.val();
       if (this.is('.empty')) return '// do nothing';
       var script = this.data('script');
       if (!script) return null;
       var exprs = $.map(this.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
       var blks = $.map(this.child_blocks(), function(elem, idx){return $(elem).extract_script();});
       if (exprs.length){
-          console.log('expressions: %o', exprs);
+          // console.log('expressions: %o', exprs);
           function exprf(match, offset, s){
               var idx = parseInt(match.slice(2,-2), 10) - 1;
-              console.log('index: %d, expression: %s', idx, exprs[idx]);
+              // console.log('index: %d, expression: %s', idx, exprs[idx]);
               return exprs[idx];
           };
           script = script.replace(/\{\{\d\}\}/g, exprf);
@@ -79,10 +79,10 @@ $.extend($.fn,{
       return this.find('> .block > .contained > .wrapper').add(empty);
   },
   socket_blocks: function(){
-      return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input');
+      return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input, > .block > p > label > .autosocket > select');
   },
   next_block: function(){
-      return this.find('> .block > .contained > .wrapper');
+      return this.find('> .next > .wrapper');
   },
   moveTo: function(x,y){
       return this.css({left: x + 'px', top: y + 'px'});
@@ -136,6 +136,8 @@ function block(options){
     if (opts.script){
         wrapper.data('script', opts.script);
     }
+    // add update handlers
+    wrapper.find('.autoupdate select').simpleCombo();
     return wrapper;
 }
 
@@ -144,8 +146,11 @@ var keys_supported = 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'.split('').conca
     'pageup', 'pagedown', 'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']); 
 
 var keys_input = '<div class="string keys autosocket"><select>' + 
-        keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') +
-    '</select></div>';
+        keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') + '</select></div>';
+    
+var current_messages = [];
+    
+var messages_input = '<div class="string messages autosocket autoupdate"><select>' + current_messages.map(function(letter){return '<option>' + letter + '</option>';}).join('') + '</select></div>';
 
 function label(value){
     // Recognize special values in the label string and replace them with 
@@ -154,9 +159,9 @@ function label(value){
     //
     // values include:
     //
-    // [flag] => the start flag image
+    // [flag] => the start flag image (no longer relevant)
     // [key] => any valid key on the keyboard
-    // [sprite] => any currently defined sprite
+    // [sprite] => any currently defined sprite (not currently supported)
     // [number] => an empty number socket
     // [number:default] => a number socket with a default value
     // [boolean] => an empty boolean socket
@@ -164,7 +169,8 @@ function label(value){
     // [string] => an empty string socket
     // [string:default] => a string socket with a default value
     // [message] => a message combo box
-    // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/
+    // [shape] => a stored shape reference
+    // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/ (not currently used)
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input value="$1"></div>');
     value = value.replace(/\[number\]/g, '<div class="number socket"><input></div>');
     value = value.replace(/\[boolean:(true|false)\]/g, '<div class="boolean socket"><input value="$1"></div>');
@@ -172,10 +178,7 @@ function label(value){
     value = value.replace(/\[string:(.+)\]/g, '<div class="string socket"><input value="$1"></div>');
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
     value = value.replace(/\[key\]/g, keys_input);
+    value = value.replace(/\[message\]/g, messages_input);
     return value;
 }
 
-// Is this an unneeded bit from the click-to-position experiment?
-$('.scripts_workspace input[type=text]').live('keypress', function(event){
-    event.stopPropagation();
-});

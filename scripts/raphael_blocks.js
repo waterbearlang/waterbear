@@ -71,17 +71,17 @@ var menus = {
         {label: 'when program runs', trigger: true, script: 'function _start(){\n[[next]]\n}\n_start();\n'},
         {label: 'when [key] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}", function(){\n[[next]]\n});'},
         {label: 'wait [number:1] secs', script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'},
-        {label: 'forever', containers: 1, tab: false, script: 'while(true){\n[[1]]\n}'},
+        {label: 'forever', containers: 1, slot: false, script: 'while(true){\n[[1]]\n}'},
         {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[next]]\n});'},
         {label: 'broadcast [string:ack] message', script: '$(".stage").trigger("{{1}}"'},
         // {label: 'broadcast [string:ack] message and wait', script: 'FIXME'},
         {label: 'when I receive [string:ack] message', trigger: true, script: '$(".stage").bind("{{1}}", function(){\n[[next]]\n});'},
-        {label: 'forever if [boolean]', containers: 1, tab: false, script: 'while({{1}}){\n[[1]]\n}'},
+        {label: 'forever if [boolean]', containers: 1, slot: false, script: 'while({{1}}){\n[[1]]\n}'},
         {label: 'if [boolean]', containers: 1, script: 'if({{1}}{\n[[1]]\n}'},
         {label: 'if [boolean] else', containers: 2, script: 'if({{1}}{\n[[1]]\n}else{\n[[2]]\n}'},
-        {label: 'wait until [boolean]', script: 'FIXME'},
-        {label: 'repeat until [boolean]', script: 'while(!({{1}})){\n[[1]]\n}'},
-        {label: 'stop script', script: 'FIXME'}
+        // {label: 'wait until [boolean]', script: 'FIXME'},
+        {label: 'repeat until [boolean]', script: 'while(!({{1}})){\n[[1]]\n}'}
+        // {label: 'stop script', script: 'FIXME'}
     ], true),
     sensing: menu('Sensing', [
         {label: "ask [string:What's your name?] and wait", script: "local.answer = prompt({{1}});"},
@@ -90,7 +90,7 @@ var menus = {
         {label: 'mouse y', 'type': Number, script: 'global.mouse_y'},
         {label: 'mouse down', 'type': Boolean, script: 'global.mouse_down'},
         {label: 'key [key] pressed?', 'type': Boolean, script: '$(document).bind("keydown", {{1}}, function(){\n[[1]]\n});'},
-        {label: 'reset timer', script: 'FIXME', script: 'global.timer.reset()'},
+        {label: 'reset timer', script: 'global.timer.reset()'},
         {label: 'timer', 'type': Number, script: 'global.timer.value()'}
     ]),
     operators: menu('Operators', [
@@ -119,15 +119,15 @@ var menus = {
         {label: 'sine of [number:10] degrees', type: Number, script: 'Math.sin(deg2rad({{1}}))'},
         {label: 'tangent of [number:10] degrees', type: Number, script: 'Math.tan(deg2rad({{1}}))'},
         {label: '[number:10] to the power of [number:2]', type: Number, script: 'Math.pow({{1}}, {{2}})'},
-        {label: 'round [Number:10]', type: Number, script: 'Math.round({{1}})'},
-        {label: 'square root of [Number:10]', type: Number, script: 'Math.sqrt({{1}})'}
+        {label: 'round [number:10]', type: Number, script: 'Math.round({{1}})'},
+        {label: 'square root of [number:10]', type: Number, script: 'Math.sqrt({{1}})'}
     ]),
     shapes: menu('Shapes', [
-        {label: 'circle x: [number:0] y: [number:0] radius: [number:0]', script: 'local.shape = global.paper.circle({{1}}, {{2}}, {{3}});'},
-        {label: 'rect x: [number:0] y: [number:0] width: [number:0] height: [number:0]', script: 'local.shape = global.paper.rect({{1}}, {{2}}, {{3}});'},
-        {label: 'rounded rect x: [number:0] y: [number:0] width: [number:0] height: [number:0] radius: [number:0]', script: 'local.shape = global.paper.rect({{1}}, {{2}}, {{3}}, {{4}});'},
-        {label: 'ellipse x: [number:0] y: [number:0] x radius: [number:0] y radius: [number:0]', script: 'local.shape = global.paper.ellipse({{1}}, {{2}}, {{3}}, {{4}});'},
-        {label: 'image src: [string:http://waterbearlang.com/images/waterbear.png] x: [number:0] y: [number:0] width: [number:0] height: [number:0]', script: 'local.shape = global.paper.image("{{1}}", {{2}}, {{3}}, {{4}}, {{5}});'},
+        {label: 'circle with radius [number:0]', script: 'local.shape = global.paper.circle(0, 0, {{1}});'},
+        {label: 'rect with width [number:0] and height [number:0]', script: 'local.shape = global.paper.rect(0, 0, {{1}}, {{2}});'},
+        {label: 'rounded with width [number:0] height [number:0] and radius: [number:0]', script: 'local.shape = global.paper.rect(0, 0, {{1}}, {{2}}, {{3}});'},
+        {label: 'ellipse x radius [number:0] y radius [number:0]', script: 'local.shape = global.paper.ellipse(0, 0, {{1}}, {{2}});'},
+        {label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', script: 'local.shape = global.paper.image("{{1}}", {{0}}, {{0}});'},
         {label: 'name shape: [string:shape1]', script: 'local.shape_references["{{1}}"] = local.shape;'},
         {label: 'refer to shape [string:shape1]', script: 'local.shape = local.shape_references["{{1}}"];'},
         {label: 'with shape [string:shape1] do', containers: 1, script: 'local.oldshape = local.shape;\nlocal.shape = local.shape_references["{{1}}"];\n[[1]]\nlocal.shape = local.oldshape;'},
@@ -153,6 +153,8 @@ var menus = {
         {label: 'rotate by [number:0] around x: [number:0] y: [number:0]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, false);'},
         {label: 'rotate to [number:0] around x: [number:0] y: [number:0]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, true);'},
         {label: 'translate by x: [number:0] y: [number:0]', script: 'local.shape.translate({{1}}, {{2}});'},
+        {label: 'position at x [number:0] y [number:0]', script: 'local.shape.attr({x: {{1}}, y: {{2}});'},
+        {label: 'size width [number:100] height [number:100]', script: 'local.shape.attr({width: {{1}}, height: {{2}})'},
         {label: 'scale by [number:0]', script: 'local.shape.scale({{1}}, {{2}});'},
         {label: 'scaled by [number:0] centered at x: [number:0] y: [number:0]', script: 'local.shape.scale({{1}}, {{2}}, {{3}}, {{4}});'},
         {label: 'to front', script: 'local.shape.toFront();'},

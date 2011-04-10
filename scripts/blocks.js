@@ -94,25 +94,42 @@ function button(options){
 }
 
 function block(options){
+    // Options include:
+    //
+    // Menu blocks subset:
+    //
+    // label: required (yes, there are required options, deal with it)
+    // klass: [control] (for styling)
+    // trigger: [false] (is this a trigger?)
+    // containers: [0] (how many sub-scripts does this hold?)
+    // slot: [true] (can scripts follow this block in sequence?)
+    // type: String, Number, or Boolean if this is a value block
+    // 
+    // Script block additions:
+    // 
+    // position [0,0] (root blocks only)
+    // sockets: array of values or value blocks
+    // contained: array of contained blocks
+    // next: block that follows this block
     if (options.button){
         return button(options);
     }
     var opts = {
         klass: 'control',
-        tab: true, // Something can come after
+        slot: true, // Something can come after
         trigger: false, // This is the start of a handler
-        slot: true, // something can come before
+        flap: true, // something can come before
         containers: 0,  // Something cannot be inside
         label: 'Step', // label is its own mini-language
         type: null
     };
     $.extend(opts, options);
     if (opts.trigger){
-        opts.slot = false; // can't have both slot and trigger
+        opts.flap = false; // can't have both flap and trigger
     }
     if (opts['type']){
-        opts.tab = false; // values nest, but do not follow
-        opts.slot = false;
+        opts.slot = false; // values nest, but do not follow
+        opts.flap = false;
     }
     var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
     var block = wrapper.children();
@@ -123,21 +140,20 @@ function block(options){
     if (opts.trigger){
         wrapper.addClass('trigger');
         block.append('<b class="trigger"></b>');
-    }else if(opts.slot){
-        block.append('<b class="slot"></b>');
+    }else if(opts.flap){
+        block.append('<b class="flap"></b>');
         wrapper.addClass('step');
     }
     for (var i = 0; i < opts.containers; i++){
-        block.append('</b><div class="contained"><i class="tab"></i></div>');
+        block.append('</b><div class="contained"><i class="slot"></i></div>');
     }
-    if (opts.tab){
-        wrapper.append('<div class="next"><i class="tab"></i></div>');
+    if (opts.slot){
+        wrapper.append('<div class="next"><i class="slot"></i></div>');
     }
     if (opts.script){
         wrapper.data('script', opts.script);
     }
     // add update handlers
-    wrapper.find('.autoupdate select').simpleCombo();
     return wrapper;
 }
 
@@ -169,7 +185,7 @@ function label(value){
     // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/ (not currently used)
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input value="$1"></div>');
     value = value.replace(/\[number\]/g, '<div class="number socket"><input></div>');
-    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></div>');
+    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></select></div>');
     value = value.replace(/\[string:(.+?)\]/g, '<div class="string socket"><input value="$1"></div>');
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
     value = value.replace(/\[key\]/g, keys_input);

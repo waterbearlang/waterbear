@@ -109,18 +109,18 @@ var menus = {
         {label: 'when [key] key pressed', trigger: true},
         {label: 'when [sprite] clicked', trigger: true},
         {label: 'wait [number:1] secs'},
-        {label: 'forever', containers: 1, tab: false},
+        {label: 'forever', containers: 1, slot: false},
         {label: 'repeat [number:10]', containers: 1},
         {label: 'broadcast [message]'},
         {label: 'broadcast [message] and wait'},
         {label: 'when I receive [message]', trigger: true},
-        {label: 'forever if [boolean]', containers: 1, tab: false},
+        {label: 'forever if [boolean]', containers: 1, slot: false},
         {label: 'if [boolean]', containers: 1},
         {label: 'if [boolean] else', containers: 2},
         {label: 'wait until [boolean]'},
         {label: 'repeat until [boolean]'},
         {label: 'stop script'},
-        {label: 'stop all [stop]', tab: false}
+        {label: 'stop all [stop]', slot: false}
     ], true),
     sensing: menu('Sensing', [
         {label: 'touching [sprite_or_mouse_or_edge]?', 'type': Boolean},

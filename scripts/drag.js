@@ -4,8 +4,8 @@
 // Drag any block from anywhere besides menu to menu: delete block and attached blocks
 // Drag any attached block to canvas: detach and add to canvas
 // Drag any block (from block menu, canvas, or attached) to a matching, open attachment point: add to that script at that point
-//    Triggers have no slot, so no attachment point
-//    Steps can only be attached to slot -> tab
+//    Triggers have no flap, so no attachment point
+//    Steps can only be attached to flap -> slot
 //    Values can only be attached to sockets of a compatible type
 // Drag any block to anywhere that is not the block menu or on a canvas: undo the drag
 
@@ -245,12 +245,12 @@
         var drop_idx = -1;
         var drop_area = 0;
         var drag_type = drag_target.block_type();
-        var drag_target_slot = drag_target.children('.block');
+        var drag_target_flap = drag_target.children('.block');
         switch(drag_type){
-            case 'trigger': return; // no slot
-            case 'step': drag_target_slot = drag_target_slot.children('.slot');
+            case 'trigger': return; // no flap
+            case 'step': drag_target_flap = drag_target_flap.children('.flap');
         }
-        var drag_rect = drag_target_slot.rect();
+        var drag_rect = drag_target_flap.rect();
         // console.log('drag_rect: %s', rect_str(drag_rect));
         var area = 0;
         $.each(drop_rects, function(idx, elem){

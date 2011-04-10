@@ -1,16 +1,12 @@
-/* YUI Reset */
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+/* YUI Reset, adapted */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
 	margin:0;
 	padding:0;
 }
-table {
-	border-collapse:collapse;
-	border-spacing:0;
-}
-fieldset,img { 
+img { 
 	border:0;
 }
-address,caption,cite,code,dfn,em,strong,th,var {
+caption,cite,code,em,strong,th {
 	font-style:normal;
 	font-weight:normal;
 }
@@ -27,7 +23,8 @@ h1,h2,h3,h4,h5,h6 {
 q:before,q:after {
 	content:'';
 }
-abbr,acronym { border:0;
+abbr,acronym { 
+    border:0;
 }
  
 /* Scratch Layout Styles */
@@ -37,14 +34,13 @@ html, body {
 }
 
 body {
-    background-color: #FFFFFF;
+    background-color: #FFF;
 }
 
 .content{
     position: relative;
     width: 150%;
     height: 100%;
-/*    background-color: #FFCCCC;*/
 }
 
 .header{
@@ -76,97 +72,34 @@ h1{
     padding-right: 20px;
 }
 
+.motion{ border-color: hsl(225,65%,83%); }
+.motion > .block{ background-color: hsl(225, 65%, 93%); }
 
-.motion > .block, 
-.motion > .next > .tab, 
-.motion > .block > .contained > .tab,
-.motion > .block > .contained,
-.motion > .block > .slot {
-    background-color: hsl(225, 65%, 93%);
-    border: 2px solid hsl(225,65%,83%);
-}
+.looks{ border-color: hsl(264,62%,79%); }
+.looks > .block{ background-color: hsl(264,62%,89%); }
 
-.looks > .block, 
-.looks > .next > .tab, 
-.looks > .block > .contained > .tab,
-.looks > .block > .contained,
-.looks > .block > .slot {
-    background-color: hsl(264,62%,89%);
-    border: 2px solid hsl(264,62%,79%);
-}
+.transform{ border-color: hsl(296, 65%, 57%); }
+.transform > .block{ background-color: hsl(296, 65%, 77%); }
 
-.transform > .block, 
-.transform > .next > .tab, 
-.transform > .block > .contained > .tab,
-.transform > .block > .contained,
-.transform > .block > .slot {
-    background-color: hsl(296, 65%, 77%);
-    border: 2px solid hsl(296, 65%, 57%);
-}
+.path{ border-color: hsl(15,100%,63%); }
+.path > .block{ background-color: hsl(15,100%,83%); }
 
-.path > .block, 
-.path > .next > .tab, 
-.path > .block > .contained > .tab,
-.path > .block > .contained,
-.path > .block > .slot {
-    background-color: hsl(15,100%,83%);
-    border: 2px solid hsl(15,100%,63%);
-}
+.control{ border-color: hsl(44, 81%, 49%); }
+.control > .block{ background-color: hsl(44, 81%, 85%); }
 
-.control > .block, 
-.control > .next > .tab, 
-.control > .block > .contained > .tab,
-.control > .block > .contained,
-.control > .block > .slot {
-    background-color: hsl(44, 81%, 85%);
-    border: 2px solid hsl(44, 81%, 49%);
-}
+.sensing{ border-color: hsl(200,98%,56%); }
+.sensing > .block{ background-color: hsl(200,98%,76%); }
 
-.sensing > .block, 
-.sensing > .next > .tab, 
-.sensing > .block > .contained > .tab,
-.sensing > .block > .contained,
-.sensing > .block > .slot {
-    background-color: hsl(200,98%,76%);
-    border: 2px solid hsl(200,98%,56%);
-}
+.operators{ border-color: hsl(93,90%,66%); }
+.operators > .block{ background-color: hsl(93,90%,76%); }
 
-.operators > .block, 
-.operators > .next > .tab, 
-.operators > .block > .contained > .tab,
-.operators > .block > .contained,
-.operators > .block > .slot {
-    background-color: hsl(93,90%,76%);
-    border: 2px solid hsl(93,90%,66%);
-}
+.shapes{ border-color: #e66a22; }
+.shapes > .block{ background-color: #e66a22; }
 
-.shapes > .block, 
-.shapes > .next > .tab, 
-.shapes > .block > .contained > .tab,
-.shapes > .block > .contained,
-.shapes > .block > .slot {
-    background-color: #e66a22;
-    border: 2px solid #e66a22;
-}
-
-.slot{
-    background-color: white !important;
-    border-top: 0 !important;
-    top: -2px;
-}
-.tab{
-    border-top: 0 !important;
-}
-
-.run_scripts{
+.run_scripts, .clear_scripts{
     float: right;
 }
 
-.contained{
-    background-color: white !important;
-    border-right: 0 !important;
-    right: -2px;
-}
 
 .workspace {
     position: absolute;
@@ -174,7 +107,8 @@ h1{
     bottom: 0px;
     width: 30%;
     height: 70%;
-    background-color: #cccccc;
+    background-color: #FFF;
+    border: 1px solid #CCC;
 }
 
 .scripts_workspace, .scripts_text_view {
@@ -263,8 +197,4 @@ h1{
     margin-bottom: 20px;
     margin-right: 35px;
     float: left;
-}
-
-.submenu table{
-    width: 100%;
 }

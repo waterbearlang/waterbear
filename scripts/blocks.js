@@ -93,6 +93,24 @@ function button(options){
     return $('<button>' + options.button + '</button>');
 }
 
+$.fn.extend({
+    block_description: function(){
+        var desc = {
+            klass: this.data('klass'),
+            label: this.data('label'),
+            script: this.data('script'),
+            containers: this.data('containers')
+        };
+        if (this.parent().is('.scripts_workspace')){ desc.offset = this.offset(); }
+        if (this.is('.trigger')){ desc.trigger = true; }
+        if (this.is('number')){ desc['type'] = Number; }
+        if (this.is('string')){ desc['type'] = String; }
+        if (this.is('boolean')){ desc['type'] = Boolean; }
+        return desc;
+    }
+    
+});
+
 function block(options){
     // Options include:
     //
@@ -132,6 +150,7 @@ function block(options){
         opts.flap = false;
     }
     var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
+    wrapper.data('label', opts.label);
     var block = wrapper.children();
     if (opts['type']){
         block.addClass(opts['type'].name.toLowerCase());
@@ -147,6 +166,7 @@ function block(options){
     for (var i = 0; i < opts.containers; i++){
         block.append('</b><div class="contained"><i class="slot"></i></div>');
     }
+    wrapper.data('containers', opts.containers);
     if (opts.slot){
         wrapper.append('<div class="next"><i class="slot"></i></div>');
     }

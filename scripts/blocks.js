@@ -148,10 +148,6 @@ var keys_supported = 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'.split('').conca
 var keys_input = '<div class="string keys autosocket"><select>' + 
         keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') + '</select></div>';
     
-var current_messages = [];
-    
-var messages_input = '<div class="string messages autosocket autoupdate"><select>' + current_messages.map(function(letter){return '<option>' + letter + '</option>';}).join('') + '</select></div>';
-
 function label(value){
     // Recognize special values in the label string and replace them with 
     // appropriate markup. Some values are dynamic and based on the objects currently
@@ -173,12 +169,10 @@ function label(value){
     // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/ (not currently used)
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input value="$1"></div>');
     value = value.replace(/\[number\]/g, '<div class="number socket"><input></div>');
-    value = value.replace(/\[boolean:(true|false)\]/g, '<div class="boolean socket"><input value="$1"></div>');
-    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><input></div>');
-    value = value.replace(/\[string:(.+)\]/g, '<div class="string socket"><input value="$1"></div>');
+    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></div>');
+    value = value.replace(/\[string:(.+?)\]/g, '<div class="string socket"><input value="$1"></div>');
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
     value = value.replace(/\[key\]/g, keys_input);
-    value = value.replace(/\[message\]/g, messages_input);
     return value;
 }
 

@@ -148,6 +148,10 @@ p{
     border-color: green;
 }
 
+.string input{
+    min-width: 10em;
+}
+
 .selected > .block{
     outline: blue ridge thick;
 }
@@ -159,3 +163,4 @@ p{
 .drop_active{
     background-color: yellow;
 }
+

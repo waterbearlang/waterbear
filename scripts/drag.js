@@ -98,7 +98,7 @@
         // TODO: Don't start drag on a text input
         if (!blend(event)) return undefined;
         var eT = $(event.target);
-        if (eT.is('input') && ! eT.contained_by($('.block_menu'))) return undefined;
+        if (eT.is(':input') && ! eT.contained_by($('.block_menu'))) return undefined;
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){

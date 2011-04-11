@@ -95,6 +95,10 @@ function button(options){
 
 $.fn.extend({
     block_description: function(){
+        if (this.length < 1) return '';
+        if (this.is(':input')){
+            return this.val();
+        }
         var desc = {
             klass: this.data('klass'),
             label: this.data('label'),
@@ -103,9 +107,12 @@ $.fn.extend({
         };
         if (this.parent().is('.scripts_workspace')){ desc.offset = this.offset(); }
         if (this.is('.trigger')){ desc.trigger = true; }
-        if (this.is('number')){ desc['type'] = Number; }
-        if (this.is('string')){ desc['type'] = String; }
-        if (this.is('boolean')){ desc['type'] = Boolean; }
+        if (this.is('.number')){ desc['type'] = Number; }
+        if (this.is('.string')){ desc['type'] = String; }
+        if (this.is('.boolean')){ desc['type'] = Boolean; }
+        desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
+        desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
+        desc.next = this.next_block().block_description();
         return desc;
     }
     

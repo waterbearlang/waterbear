@@ -136,5 +136,13 @@ limitations under the License.
     - IRC
   - Speak at conferences and meetups
   - Submit to the Changelog
+  
+# Bugs
+
+* Clicking into tabs doesn't work on iPad
+* Dragging block out of a Boolean socket doesn't restore select element
+* Clicking into an input doesn't select contents
+* Clicking into an input after the first input puts cursor in first input
+* HSB fill colour isn't working
 
 

@@ -86,7 +86,7 @@
     }
     
     function step_targets(){
-        return target_canvas.find('.next, .contained').not(':has(.wrapper)');
+        return target_canvas.find('.slot:only-child');
     }
     
     function socket_targets(type){
@@ -187,13 +187,12 @@
         drag_target.removeClass('drag_active');
         if (drop_target && drop_target.length){
             drop_target.removeClass('drop_active');
-            console.log('FIXME: attach drag_target to drop_target: %o', drop_target);
             if (drag_target.block_type() === 'step'){
-                drop_target.append(drag_target);
+                drop_target.parent().append(drag_target);
                 drag_target.css({
                     position: 'relative',
                     left: 0,
-                    top: -8
+                    top: 0
                 });
             }else{
                 console.log('trying to drop: into %s', drop_target.long_name());

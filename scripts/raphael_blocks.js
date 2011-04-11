@@ -1,5 +1,7 @@
 (function($){
 
+// UI Chrome Section
+
 function accordion(event){
     // console.log('accordion');
     var self = $(this);
@@ -45,6 +47,35 @@ function clear_scripts(event){
     }
 }
 $('.clear_scripts').live('click', clear_scripts);
+
+// Load and Save Section
+
+function save_current_scripts(){
+    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+    if (blocks.length){
+        var scripts = JSON.stringify(blocks.map(function(){return $(this).block_description();}).get());
+        localStorage['current_scripts'] = scripts;
+    }
+}
+$(window).unload(save_current_scripts);
+
+function load_current_scripts(){
+    if (localStorage['current_scripts']){
+        var workspace = $('.workspace:visible .scripts_workspace');
+        var blocks = JSON.parse(localStorage['current_scripts']);
+        $.each(blocks, function(idx, value){
+            var block = Block(value);
+            workspace.append(block);
+            block.attr('position', 'absolute');
+            block.offset(value.offset);
+        });
+    }else{
+        'no scripts';
+    }
+}
+$(document).ready(load_current_scripts);
+
+// Build the Blocks menu
 
 function menu(title, specs, show){
     var klass = title.toLowerCase();

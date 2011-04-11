@@ -163,6 +163,7 @@ function Block(options){
     }
     var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + Label(opts.label) + '</label></p></div></div>');
     wrapper.data('label', opts.label);
+    wrapper.data('klass', opts.klass);
     var block = wrapper.children();
     if (opts['type']){
         block.addClass(opts['type'].name.toLowerCase());
@@ -188,7 +189,9 @@ function Block(options){
     if (opts.sockets){
         $.each(opts.sockets, function(idx, value){
             if ($.isPlainObject(value)){
-                block.find('> p > label > .socket').eq(idx).empty().append(Block(value));
+                var child = Block(value);
+                block.find('> p > label > .socket').eq(idx).empty().append(child);
+                child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
                 block.find('> p > label > .socket > :input').eq(idx).val(value);
             }
@@ -197,10 +200,19 @@ function Block(options){
     if (opts.contained){
         $.each(opts.contained, function(idx, value){
             if ($.isPlainObject(value)){
-                block.find('> contained').eq(idx).append(Block(value));
-            }else{ // empty slot
+                var child = Block(value);
+                console.log('appending new block %o at index %d', child, idx);
+                block.find('> contained').eq(idx).append(child);
+                child.attr({position: 'relative', left: 0, top: 0});
             }
         });
+    }
+    if (opts.next){
+        if ($.isPlainObject(opts.next)){
+            var child = Block(opts.next);
+            wrapper.find('> .next').append(child);
+            child.attr({position: 'relative', left: 0, top: 0});
+        }
     }
     // add update handlers
     return wrapper;

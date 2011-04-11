@@ -91,14 +91,11 @@
 
 .slot {
     top: -7px;
-    position: relative;
+    position: absolute;
     background-color: #FFF;
     width: 20px;
 }
 
-.contained > .slot{
-    top: -8px;
-}
 
 .contained {
   background-color: white;

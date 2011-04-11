@@ -75,7 +75,6 @@ limitations under the License.
     - ✓ Delete when appropriate
     - ✓ Move back when appropriate
     - ✓ Snap together
-    - Avoid random moving when blocks on canvas are rearranged
   - ✓ On starting drag, un-snap more intelligently (and put back properly)
   - ✓ When dropping a value, remove the input element
   - On drop, remove "active_drop" class
@@ -86,9 +85,9 @@ limitations under the License.
   - ✓ Tab to show built script
   - ✓ Extract expressions/values
   - ✓ Implement script building mini-language
-  - Provide script templates for every block
-  - Autogenerate variable names
-  - Lazy evaluation of variables (mouse position, etc.)
+  - ✓ Provide script templates for every block
+  - x Autogenerate variable names
+  - x Lazy evaluation of variables (mouse position, etc.)
 * Build an animation using blocks
 * ✓ Build up drag-n-drop from first principles
 * ✓ Get it working on iPad
@@ -112,7 +111,7 @@ limitations under the License.
 * ✓ Remove blocks delete key or drag back to menu
 * Create a larger script workspace, with scrollbars
 * Multiple script workspaces (allows one per sprite, for instance)
-* Force blocks into two columns (get rid of table, ick)
+* ✓ Force blocks into two columns (get rid of table, ick)
 * Fix position when dragging out of a snapped position (still needs some tweaks)
 * [optional] Allow contained blocks to overflow right edge of block without growing block
 * ✓ Re-enable dragging, at least for positioning
@@ -144,5 +143,6 @@ limitations under the License.
 * Clicking into an input doesn't select contents
 * Clicking into an input after the first input puts cursor in first input
 * HSB fill colour isn't working
-
-
+* Visual cues when snapping are overly subtle
+* Snap regions too small
+* Random movement when rearranging blocks in the script workspace

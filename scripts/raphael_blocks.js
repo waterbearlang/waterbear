@@ -53,7 +53,7 @@ function menu(title, specs, show){
     var options = $('<div class="option"></div>').appendTo(body);
     specs.forEach(function(spec, idx){
         spec.klass = klass;
-        options.append(block(spec));
+        options.append(Block(spec));
     });
     $('.block_menu').append(body);
     if (show){

@@ -73,10 +73,14 @@ $.extend($.fn,{
       return null;
   },
   child_blocks: function(){
-      var empty = this.find('> .block > .contained:not(:has(.wrapper))').map(function(){
-          return $('<span class="empty"></span>');
+      return this.find('> .block > .contained').map(function(){
+          var kids = $(this).children('.wrapper');
+          if (kids.length){
+              return kids;
+          }else{
+              return $('<span class="empty"></span>');
+          }
       });
-      return this.find('> .block > .contained > .wrapper').add(empty);
   },
   socket_blocks: function(){
       return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input, > .block > p > label > .autosocket > select');
@@ -96,6 +100,7 @@ function button(options){
 $.fn.extend({
     block_description: function(){
         if (this.length < 1) return '';
+        if (this.is('.empty')) return '';
         if (this.is(':input')){
             return this.val();
         }
@@ -118,7 +123,7 @@ $.fn.extend({
     
 });
 
-function block(options){
+function Block(options){
     // Options include:
     //
     // Menu blocks subset:
@@ -156,7 +161,7 @@ function block(options){
         opts.slot = false; // values nest, but do not follow
         opts.flap = false;
     }
-    var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + label(opts.label) + '</label></p></div></div>');
+    var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + Label(opts.label) + '</label></p></div></div>');
     wrapper.data('label', opts.label);
     var block = wrapper.children();
     if (opts['type']){
@@ -180,6 +185,23 @@ function block(options){
     if (opts.script){
         wrapper.data('script', opts.script);
     }
+    if (opts.sockets){
+        $.each(opts.sockets, function(idx, value){
+            if ($.isPlainObject(value)){
+                block.find('> p > label > .socket').eq(idx).empty().append(Block(value));
+            }else{ // presumably a string
+                block.find('> p > label > .socket > :input').eq(idx).val(value);
+            }
+        });
+    }
+    if (opts.contained){
+        $.each(opts.contained, function(idx, value){
+            if ($.isPlainObject(value)){
+                block.find('> contained').eq(idx).append(Block(value));
+            }else{ // empty slot
+            }
+        });
+    }
     // add update handlers
     return wrapper;
 }
@@ -191,7 +213,7 @@ var keys_supported = 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'.split('').conca
 var keys_input = '<div class="string keys autosocket"><select>' + 
         keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') + '</select></div>';
     
-function label(value){
+function Label(value){
     // Recognize special values in the label string and replace them with 
     // appropriate markup. Some values are dynamic and based on the objects currently
     // in the environment

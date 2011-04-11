@@ -38,6 +38,14 @@ function run_scripts(event){
 }
 $('.run_scripts').live('click', run_scripts);
 
+function clear_scripts(event){
+    if (confirm('Throw out the current script?')){
+        $('.workspace:visible > *').empty();
+        $('.stage').replaceWith('<div class="stage"></div>');
+    }
+}
+$('.clear_scripts').live('click', clear_scripts);
+
 function menu(title, specs, show){
     var klass = title.toLowerCase();
     var body = $('<section class="submenu"></section>');
@@ -132,10 +140,10 @@ var menus = {
         {label: 'refer to shape [string:shape1]', script: 'local.shape = local.shape_references["{{1}}"];'},
         {label: 'with shape [string:shape1] do', containers: 1, script: 'local.oldshape = local.shape;\nlocal.shape = local.shape_references["{{1}}"];\n[[1]]\nlocal.shape = local.oldshape;'},
         {label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', script: 'local.shape.attr("clip-rect", "{{1}},{{2}},{{3}},{{4}}");'},
-        {label: 'fill red [number:100]% green [number:100]% blue [number:100]%', script: 'local.shape.attr("color", "rgb({{1}}%,{{2}}%,{{3}}%)");'},
-        {label: 'fill red [number:100]% green [number:100]% blue [number:100]% alpha [number:100]%', script: 'local.shape.attr("color", "rgba({{1}}%,{{2}}%,{{3}}%,{{4}}/100)");'},
-        {label: 'fill hue [number:240]degrees saturation [number:100]% brightness [number:100]%', script: 'local.shape.attr("color", "hsb({{1}}deg,{{2}}%,{{3}}%)");'},
-        {label: 'fill hue [number:240]degrees saturation [number:100]% brightness [number:100]% alpha [number:100]%', script: 'local.shape.attr("color", "hsba({{1}}deg,{{2}}%,{{3}}%,{{4}}/100)");'},
+        {label: 'fill red [number:100]% green [number:100]% blue [number:100]%', script: 'local.shape.attr("fill", "rgb({{1}}%,{{2}}%,{{3}}%)");'},
+        {label: 'fill red [number:100]% green [number:100]% blue [number:100]% alpha [number:100]%', script: 'local.shape.attr("fill", "rgba({{1}}%,{{2}}%,{{3}}%,{{4}}/100)");'},
+        {label: 'fill hue [number:240]degrees saturation [number:100]% brightness [number:100]%', script: 'local.shape.attr("fill", "hsb({{1}}deg,{{2}}%,{{3}}%)");'},
+        {label: 'fill hue [number:240]degrees saturation [number:100]% brightness [number:100]% alpha [number:100]%', script: 'local.shape.attr("fill", "hsba({{1}}deg,{{2}}%,{{3}}%,{{4}}/100)");'},
         {label: 'clone', script: 'local.shape = local.shape.clone()'},
         {label: 'fill opacity [number:100]%', script: 'local.shape.attr("fill-opacity", "{{1}}%")'},
         {label: 'href [string:http://waterbearlang.com]', script: 'local.shape.attr("href", "{{1}}")'}
@@ -153,7 +161,7 @@ var menus = {
         {label: 'rotate by [number:0] around x: [number:0] y: [number:0]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, false);'},
         {label: 'rotate to [number:0] around x: [number:0] y: [number:0]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, true);'},
         {label: 'translate by x: [number:0] y: [number:0]', script: 'local.shape.translate({{1}}, {{2}});'},
-        {label: 'position at x [number:0] y [number:0]', script: 'local.shape.attr({x: {{1}}, y: {{2}});'},
+        {label: 'position at x [number:0] y [number:0]', script: 'local.shape.attr({x: {{1}}, y: {{2}}, cx:{{1}}, cy: {{2}}});'},
         {label: 'size width [number:100] height [number:100]', script: 'local.shape.attr({width: {{1}}, height: {{2}})'},
         {label: 'scale by [number:0]', script: 'local.shape.scale({{1}}, {{2}});'},
         {label: 'scaled by [number:0] centered at x: [number:0] y: [number:0]', script: 'local.shape.scale({{1}}, {{2}}, {{3}}, {{4}});'},

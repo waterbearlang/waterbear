@@ -132,9 +132,10 @@ h1{
 
 .chrome_tab{
     float: left;
-    margin-right: 1px;
+    margin-right: 5px;
     position: relative;
-    border: 2px solid #666;
+    bottom: -2px;
+    border: 1px solid #666;
     border-bottom: 0px;
     -webkit-border-top-right-radius: 4px;
     -webkit-border-top-left-radius: 4px;
@@ -144,12 +145,13 @@ h1{
     border-top-left-radius: 4px;
     width: 24%;
     background-color: #999;
-    color: #666;
+    color: #333;
+    z-index: 1;
 }
 
 .chrome_tab.selected{
-    background-color: #CCC;
-    color: #333;
+    background-color: #FFF;
+    color: #000;
     border-color: #333;
 }
 

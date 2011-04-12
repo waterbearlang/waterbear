@@ -51,6 +51,7 @@ $('.clear_scripts').live('click', clear_scripts);
 // Load and Save Section
 
 function save_current_scripts(){
+    $(document.body).scrollLeft(0);
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     if (blocks.length){
         var scripts = JSON.stringify(blocks.map(function(){return $(this).block_description();}).get());
@@ -97,13 +98,6 @@ function menu(title, specs, show){
 
 var DEGREE = Math.PI / 180;
 
-function rad2deg(rad){
-    return rad / DEGREE;
-}
-
-function deg2rad(deg){
-    return deg * DEGREE;
-}
 
 var menus = {
     control: menu('Control', [
@@ -158,7 +152,6 @@ var menus = {
         {label: 'sine of [number:10] degrees', type: Number, script: 'Math.sin(deg2rad({{1}}))'},
         {label: 'tangent of [number:10] degrees', type: Number, script: 'Math.tan(deg2rad({{1}}))'},
         {label: '[number:10] to the power of [number:2]', type: Number, script: 'Math.pow({{1}}, {{2}})'},
-        {label: 'round [number:10]', type: Number, script: 'Math.round({{1}})'},
         {label: 'square root of [number:10]', type: Number, script: 'Math.sqrt({{1}})'}
     ]),
     shapes: menu('Shapes', [
@@ -172,9 +165,6 @@ var menus = {
         {label: 'with shape [string:shape1] do', containers: 1, script: 'local.oldshape = local.shape;\nlocal.shape = local.shape_references["{{1}}"];\n[[1]]\nlocal.shape = local.oldshape;'},
         {label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', script: 'local.shape.attr("clip-rect", "{{1}},{{2}},{{3}},{{4}}");'},
         {label: 'fill red [number:100]% green [number:100]% blue [number:100]%', script: 'local.shape.attr("fill", "rgb({{1}}%,{{2}}%,{{3}}%)");'},
-        {label: 'fill red [number:100]% green [number:100]% blue [number:100]% alpha [number:100]%', script: 'local.shape.attr("fill", "rgba({{1}}%,{{2}}%,{{3}}%,{{4}}/100)");'},
-        {label: 'fill hue [number:240]degrees saturation [number:100]% brightness [number:100]%', script: 'local.shape.attr("fill", "hsb({{1}}deg,{{2}}%,{{3}}%)");'},
-        {label: 'fill hue [number:240]degrees saturation [number:100]% brightness [number:100]% alpha [number:100]%', script: 'local.shape.attr("fill", "hsba({{1}}deg,{{2}}%,{{3}}%,{{4}}/100)");'},
         {label: 'clone', script: 'local.shape = local.shape.clone()'},
         {label: 'fill opacity [number:100]%', script: 'local.shape.attr("fill-opacity", "{{1}}%")'},
         {label: 'href [string:http://waterbearlang.com]', script: 'local.shape.attr("href", "{{1}}")'}

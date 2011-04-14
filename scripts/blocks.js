@@ -16,6 +16,15 @@ function randint(start, stop){
     return Math.floor(Math.random() * factor) + start;
 }
 
+function showColorPicker(){
+    // change to use colorwheel.js
+    $('#color_popup').bPopup();
+}
+$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
+$(document).ready(function(){
+    window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
+});
+
 
 $.selected_block = function(){
     return $('.scripts_workspace .selected');
@@ -263,11 +272,13 @@ function Label(value){
     // [message] => a message combo box
     // [shape] => a stored shape reference
     // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/ (not currently used)
-    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input value="$1"></div>');
-    value = value.replace(/\[number\]/g, '<div class="number socket"><input></div>');
+    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input type="number" value="$1"></div>');
+    value = value.replace(/\[number\]/g, '<div class="number socket"><input type="number"></div>');
     value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></select></div>');
     value = value.replace(/\[string:(.+?)\]/g, '<div class="string socket"><input value="$1"></div>');
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
+    value = value.replace(/\[color\]/g, '<div class="color socket"><input type="color"></div>');
+    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<div class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></div>');
     value = value.replace(/\[key\]/g, keys_input);
     return value;
 }

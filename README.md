@@ -16,6 +16,8 @@ Waterbear is pre-alpha software, very raw, and in constant flux right now.
 
 Waterbear is pure Javascript. The only external dependencies are on jQuery (currently 1.5.1) and Modernizr (1.6). Some Waterbear block sets may have further dependencies, on Processing.js, Raphael.js, or Crafty.js (for instance).
 
+Update: Have removed Modernizr dependency, but added dependencies on bPopup (http://dinbror.dk/blog/bPopup/) and Colorwheel (http://jweir.github.com/colorwheel/). Have also regressed Raphael to an earlier version to avoid bugs in the current version.
+
 ## Demo
 
 There is a demo of a recent build (not guaranteed to be working at any given time) of waterbear here: <a href="http://waterbearlang.com/">waterbear.livingcode.org</a>, if you would like a (very early) sneak preview.
@@ -138,11 +140,11 @@ limitations under the License.
   
 # Bugs
 
+* Not saving current values with value blocks
 * Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents
 * Clicking into an input after the first input puts cursor in first input
-* HSB fill colour isn't working
 * Visual cues when snapping are overly subtle
 * Snap regions too small
 * Random movement when rearranging blocks in the script workspace

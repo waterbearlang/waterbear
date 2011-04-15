@@ -18,7 +18,13 @@ function randint(start, stop){
 
 function showColorPicker(){
     // change to use colorwheel.js
-    $('#color_popup').bPopup();
+    var self = $(this);
+    cw.input(this);
+    cw.onchange(function(){
+        var color = self.val();
+        self.css({color: color, 'background-color': color});
+    });
+    $('#color_popup').bPopup({modalColor: 'transparent'});
 }
 $('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
 $(document).ready(function(){
@@ -143,6 +149,7 @@ $.fn.extend({
         if (this.is('.number')){ desc['type'] = Number; }
         if (this.is('.string')){ desc['type'] = String; }
         if (this.is('.boolean')){ desc['type'] = Boolean; }
+        if (this.is('.color')){desc['type'] = 'Color; }
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();

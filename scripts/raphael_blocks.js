@@ -165,7 +165,8 @@ var menus = {
         {label: 'refer to shape [string:shape1]', script: 'local.shape = local.shape_references["{{1}}"];'},
         {label: 'with shape [string:shape1] do', containers: 1, script: 'local.oldshape = local.shape;\nlocal.shape = local.shape_references["{{1}}"];\n[[1]]\nlocal.shape = local.oldshape;'},
         {label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', script: 'local.shape.attr("clip-rect", "{{1}},{{2}},{{3}},{{4}}");'},
-        {label: 'fill [color:#FFFFFF]', script: 'local.shape.attr("fill", "{{1}}");'},
+        {label: 'fill color [color:#FFFFFF]', script: 'local.shape.attr("fill", "{{1}}");'},
+        {label: 'stroke color [color:#000000]', script: 'local.shape.attr("stroke", "{{1}}");'},
         {label: 'clone', script: 'local.shape = local.shape.clone()'},
         {label: 'fill opacity [number:100]%', script: 'local.shape.attr("fill-opacity", "{{1}}%")'},
         {label: 'href [string:http://waterbearlang.com]', script: 'local.shape.attr("href", "{{1}}")'}

@@ -149,7 +149,7 @@ $.fn.extend({
         if (this.is('.number')){ desc['type'] = Number; }
         if (this.is('.string')){ desc['type'] = String; }
         if (this.is('.boolean')){ desc['type'] = Boolean; }
-        if (this.is('.color')){desc['type'] = 'Color; }
+        if (this.is('.color')){ desc['type'] = 'Color'; }
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -228,7 +228,11 @@ function Block(options){
                 block.find('> p > label > .socket').eq(idx).empty().append(child);
                 child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
-                block.find('> p > label > .socket > :input').eq(idx).val(value);
+                var socket = block.find('> p > label > .socket :input').eq(idx);
+                socket.val(value);
+                if (socket.attr('type') === 'color'){
+                    socket.css({color: value, 'background-color': value});
+                }
             }
         });
     }

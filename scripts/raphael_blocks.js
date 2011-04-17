@@ -38,7 +38,7 @@ function run_scripts(event){
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
     $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
 }
-$('.run_scripts').live('click', run_scripts);
+$('.run_scripts').click(run_scripts);
 
 function clear_scripts(event){
     if (confirm('Throw out the current script?')){
@@ -46,24 +46,63 @@ function clear_scripts(event){
         $('.stage').replaceWith('<div class="stage"></div>');
     }
 }
-$('.clear_scripts').live('click', clear_scripts);
+$('.clear_scripts').click(clear_scripts);
+
+$('.goto_script').click(function(){$(document.body).scrollLeft(0);});
+$('.goto_stage').click(function(){$(document.body).scrollLeft(100000);});
 
 // Load and Save Section
 
-function save_current_scripts(){
-    $(document.body).scrollLeft(0);
+function scripts_as_object(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     if (blocks.length){
-        var scripts = JSON.stringify(blocks.map(function(){return $(this).block_description();}).get());
-        localStorage['current_scripts'] = scripts;
-    }
+        return blocks.map(function(){return $(this).block_description();}).get();
+    }else{
+        return [];
+    }   
+}
+
+function save_current_scripts(){
+    $(document.body).scrollLeft(0);
+    localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
 }
 $(window).unload(save_current_scripts);
 
+
+function save_named_scripts(){
+    var title = $('#script_name').val();
+    var description = $('#script_description').val();
+    var date = Date.now();
+    if (title){
+        if (localStorage[title]){
+            if (!confirm('A script with that title exist. Overwrite?')){
+                return;
+            }
+        }
+        localStorage[title] = JSON.stringify({
+            title: title,
+            description: description,
+            date: date,
+            scripts: scripts_as_object()
+        });
+        reset_and_close_save_dialog();
+    }
+}
+
+function reset_and_close_save_dialog(){
+        $('#script_name').val('');
+        $('#script_description').val('');
+        $('#save_dialog').bPopup().close();
+}
+
+$('#save_dialog .save').click(save_named_scripts);
+$('#save_dialog .cancel').click(reset_and_close_save_dialog);
+$('.save_scripts').click(function(){ $('#save_dialog').bPopup(); });
+
 function load_current_scripts(){
-    if (localStorage['current_scripts']){
+    if (localStorage['__current_scripts']){
         var workspace = $('.workspace:visible .scripts_workspace');
-        var blocks = JSON.parse(localStorage['current_scripts']);
+        var blocks = JSON.parse(localStorage['__current_scripts']);
         $.each(blocks, function(idx, value){
             var block = Block(value);
             workspace.append(block);
@@ -105,16 +144,13 @@ var menus = {
         {label: 'when [key] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}", function(){\n[[next]]\n});'},
         {label: 'wait [number:1] secs', script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'},
         {label: 'forever', containers: 1, slot: false, script: 'while(true){\n[[1]]\n}'},
-        {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[next]]\n});'},
+        {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[1]]\n});'},
         {label: 'broadcast [string:ack] message', script: '$(".stage").trigger("{{1}}"'},
-        // {label: 'broadcast [string:ack] message and wait', script: 'FIXME'},
         {label: 'when I receive [string:ack] message', trigger: true, script: '$(".stage").bind("{{1}}", function(){\n[[next]]\n});'},
         {label: 'forever if [boolean]', containers: 1, slot: false, script: 'while({{1}}){\n[[1]]\n}'},
         {label: 'if [boolean]', containers: 1, script: 'if({{1}}{\n[[1]]\n}'},
         {label: 'if [boolean] else', containers: 2, script: 'if({{1}}{\n[[1]]\n}else{\n[[2]]\n}'},
-        // {label: 'wait until [boolean]', script: 'FIXME'},
         {label: 'repeat until [boolean]', script: 'while(!({{1}})){\n[[1]]\n}'}
-        // {label: 'stop script', script: 'FIXME'}
     ], true),
     sensing: menu('Sensing', [
         {label: "ask [string:What's your name?] and wait", script: "local.answer = prompt({{1}});"},
@@ -158,7 +194,7 @@ var menus = {
     shapes: menu('Shapes', [
         {label: 'circle with radius [number:0]', script: 'local.shape = global.paper.circle(0, 0, {{1}});'},
         {label: 'rect with width [number:0] and height [number:0]', script: 'local.shape = global.paper.rect(0, 0, {{1}}, {{2}});'},
-        {label: 'rounded with width [number:0] height [number:0] and radius: [number:0]', script: 'local.shape = global.paper.rect(0, 0, {{1}}, {{2}}, {{3}});'},
+        {label: 'rounded rect with width [number:0] height [number:0] and radius [number:0]', script: 'local.shape = global.paper.rect(0, 0, {{1}}, {{2}}, {{3}});'},
         {label: 'ellipse x radius [number:0] y radius [number:0]', script: 'local.shape = global.paper.ellipse(0, 0, {{1}}, {{2}});'},
         {label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', script: 'local.shape = global.paper.image("{{1}}", {{0}}, {{0}});'},
         {label: 'name shape: [string:shape1]', script: 'local.shape_references["{{1}}"] = local.shape;'},

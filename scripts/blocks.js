@@ -6,6 +6,26 @@ function deg2rad(deg){
     return deg * DEGREE;
 }
 
+function range(start, end, step){
+    var rg = [];
+    if (end === undefined){
+        end = start;
+        start = 0;
+    }
+    if (step === undefined){
+        step = 1;
+    }
+    var i,val;
+    len = end - start;
+    for (i = 0; i < len; i++){
+        val = i * step + start;
+        if (val > (end-1)) break;
+        rg.push(val);
+    }
+    return rg;
+}
+
+
 function randint(start, stop){
     // return an integer between start and stop, inclusive
     if (stop === undefined){
@@ -17,7 +37,6 @@ function randint(start, stop){
 }
 
 function showColorPicker(){
-    // change to use colorwheel.js
     var self = $(this);
     cw.input(this);
     cw.onchange(function(){

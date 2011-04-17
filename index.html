@@ -28,8 +28,10 @@
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
             <div class="scripts_text_view_tab chrome_tab">Script Text</div>
-            <button class="run_scripts">Run Scripts</button>
-            <button class="clear_scripts">Clear Scripts</button>
+            <button class="run_scripts">Run</button>
+            <button class="clear_scripts">Clear</button>
+            <button class="save_scripts">Save</button>
+            <button class="restore_scripts">Restore</button>
         </div>
         <div class="workspace">
             <div class="scripts_workspace"></div>
@@ -39,6 +41,15 @@
     </div>
     <div class="hidden" id="color_popup">
         <div id="color_contents"></div>
+    </div>
+    <div class="hidden" id="save_dialog">
+        <div id="save_dialog_contents">
+            <h2>Save the current script</h2>
+            <input id="script_name" placeholder="Script Name" />
+            <textarea id="script_description" placeholder="Optional Description"></textarea>
+            <button class="save">Save</button>
+            <button class="cancel">Cancel</button>
+        </div>
     </div>
     <script src="lib/jquery-1.5.1.min.js"></script>
     <script src="lib/jquery.hotkeys.js"></script>

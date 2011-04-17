@@ -126,7 +126,7 @@
   overflow: visible; 
 }
 
-input {
+.block input {
   margin-left: 5px;
   width: 3em;
   margin-right: 5px;
@@ -136,7 +136,7 @@ input {
   background-color: white;
 }
 
-p{
+.block p{
     overflow-y: hidden;
 }
 
@@ -159,6 +159,10 @@ p{
 }
 .string{
     border-color: green;
+}
+
+.color{
+    border-color: yellow;
 }
 
 .string input{

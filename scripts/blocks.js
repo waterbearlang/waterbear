@@ -259,8 +259,7 @@ function Block(options){
         $.each(opts.contained, function(idx, value){
             if ($.isPlainObject(value)){
                 var child = Block(value);
-                console.log('appending new block %o at index %d', child, idx);
-                block.find('> contained').eq(idx).append(child);
+                block.find('> .contained').eq(idx).append(child);
                 child.attr({position: 'relative', left: 0, top: 0});
             }
         });

@@ -220,31 +220,31 @@ h1{
 
 /* Save Dialog */
 
-#save_dialog{
+.dialog{
     background-color: #CCC;
     font-family: Helvetica;
     padding: 1em;
 }
 
-#save_dialog h2{
+.dialog h2{
     font-size: 200%;
     font-weight: bold;
     text-align: center;
 }
 
-#save_dialog input{
+.dialog input{
     width: 100%;
     font-size: 180%;
     margin-bottom: 1em;
 }
 
-#save_dialog textarea{
+.dialog textarea{
     width: 100%;
     height: 5em;
     font-size: 150%;
 }
 
-#save_dialog button{
+.dialog button{
     font-size: 120%;
     float: right;
     -webkit-border-radius: 10px;
@@ -253,4 +253,7 @@ h1{
     background-color: #3F6;
     color: #333;
     margin: 1em;
+}
+
+.dialog .description{
 }

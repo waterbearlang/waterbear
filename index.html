@@ -42,12 +42,20 @@
     <div class="hidden" id="color_popup">
         <div id="color_contents"></div>
     </div>
-    <div class="hidden" id="save_dialog">
+    <div class="hidden dialog" id="save_dialog">
         <div id="save_dialog_contents">
             <h2>Save the current script</h2>
             <input id="script_name" placeholder="Script Name" />
             <textarea id="script_description" placeholder="Optional Description"></textarea>
             <button class="save">Save</button>
+            <button class="cancel">Cancel</button>
+        </div>
+    </div>
+    <div class="hidden dialog" id="restore_dialog">
+        <div id="save_dialog_contents">
+            <h2>Restore a script</h2>
+            <ul id="script_list">
+            </ul>
             <button class="cancel">Cancel</button>
         </div>
     </div>

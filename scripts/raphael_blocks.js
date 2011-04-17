@@ -90,25 +90,77 @@ function save_named_scripts(){
 }
 
 function reset_and_close_save_dialog(){
-        $('#script_name').val('');
-        $('#script_description').val('');
-        $('#save_dialog').bPopup().close();
+    $('#script_name').val('');
+    $('#script_description').val('');
+    $('#save_dialog').bPopup().close();
+}
+
+function reset_and_close_restore_dialog(){
+    $('#script_list').empty();
+    $('#restore_dialog').bPopup().close();
+}
+
+function populate_and_show_restore_dialog(){
+    var list = $('#script_list');
+    var script_obj;
+    var idx, value, key, script_li;
+    for (idx = 0; idx < localStorage.length; idx++){
+        key = localStorage.key(idx);
+        if (key === '__current_scripts') continue;
+        value = localStorage[key];
+        script_obj = JSON.parse(value);
+        if (script_obj.description){
+            script_li = $('<li>' + script_obj.title + '<button class="restore">Restore</button><button class="delete">Delete</button><button class="description">Description</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span><p class="description hidden">' + script_obj.description + '<p></li>');
+        }else{
+            script_li = $('<li><span class="title">' + script_obj.title + '</span><button class="restore">Restore</button><button class="delete">Delete</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span></li>');
+        }
+        script_li.data('scripts', script_obj.scripts); // avoid re-parsing later
+        list.append(script_li);
+    }
+    $('#restore_dialog').bPopup();
+}
+
+function restore_named_scripts(event){
+    clear_scripts();
+    load_scripts_from_object($(this).closest('li').data('scripts'));
+    reset_and_close_restore_dialog();
+}
+
+function delete_named_scripts(event){
+    if (confirm('Are you sure you want to delete this script?')){
+        var title = $(this).siblings('.title').text();
+        localStorage.removeItem(title);
+    }
+}
+
+function toggle_description(event){
+    $(this).siblings('.description').toggleClass('hidden');
 }
 
 $('#save_dialog .save').click(save_named_scripts);
 $('#save_dialog .cancel').click(reset_and_close_save_dialog);
 $('.save_scripts').click(function(){ $('#save_dialog').bPopup(); });
 
+$('.restore_scripts').click( populate_and_show_restore_dialog );
+$('#restore_dialog .cancel').click(reset_and_close_restore_dialog);
+$('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
+                    .delegate('.description', 'click', toggle_description)
+                    .delegate('.delete', 'click', delete_named_scripts);
+
+function load_scripts_from_object(blocks){
+    var workspace = $('.workspace:visible .scripts_workspace');
+    $.each(blocks, function(idx, value){
+        var block = Block(value);
+        workspace.append(block);
+        block.attr('position', 'absolute');
+        block.offset(value.offset);
+    });
+}
+
 function load_current_scripts(){
     if (localStorage['__current_scripts']){
-        var workspace = $('.workspace:visible .scripts_workspace');
         var blocks = JSON.parse(localStorage['__current_scripts']);
-        $.each(blocks, function(idx, value){
-            var block = Block(value);
-            workspace.append(block);
-            block.attr('position', 'absolute');
-            block.offset(value.offset);
-        });
+        load_scripts_from_object(blocks);
     }else{
         'no scripts';
     }

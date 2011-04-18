@@ -244,6 +244,12 @@ h1{
     font-size: 150%;
 }
 
+.dialog ul{
+    min-width: 400px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
 .dialog button{
     font-size: 120%;
     float: right;
@@ -252,8 +258,22 @@ h1{
     border-radius: 10px;
     background-color: #3F6;
     color: #333;
-    margin: 1em;
+    margin-left: 1em;
 }
 
-.dialog .description{
+.dialog .action{
+    margin-left: .2em;
+    font-size: 90%;
+}
+
+.dialog li{
+    display: block;
+    clear: both;
+    margin-bottom: .5em
+}
+
+.dialog .timestamp{
+    clear: both;
+    font-size: 80%;
+    color: #666;
 }

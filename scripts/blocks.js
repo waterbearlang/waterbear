@@ -174,7 +174,6 @@ $.fn.extend({
         desc.next = this.next_block().block_description();
         return desc;
     }
-    
 });
 
 function Block(options){

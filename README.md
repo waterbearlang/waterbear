@@ -140,7 +140,8 @@ limitations under the License.
   
 # Bugs
 
-* Not saving current values with value blocks
+* Make sure restore dialogue scrolls
+* Block labels wrapping on Firefox
 * Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents

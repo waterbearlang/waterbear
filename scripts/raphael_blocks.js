@@ -110,9 +110,9 @@ function populate_and_show_restore_dialog(){
         value = localStorage[key];
         script_obj = JSON.parse(value);
         if (script_obj.description){
-            script_li = $('<li>' + script_obj.title + '<button class="restore">Restore</button><button class="delete">Delete</button><button class="description">Description</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span><p class="description hidden">' + script_obj.description + '<p></li>');
+            script_li = $('<li>' + script_obj.title + '<button class="restore action">Restore</button><button class="delete action">Delete</button><button class="show_description action">Description</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span><p class="description hidden">' + script_obj.description + '<p></li>');
         }else{
-            script_li = $('<li><span class="title">' + script_obj.title + '</span><button class="restore">Restore</button><button class="delete">Delete</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span></li>');
+            script_li = $('<li><span class="title">' + script_obj.title + '</span><button class="restore action">Restore</button><button class="delete action">Delete</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span></li>');
         }
         script_li.data('scripts', script_obj.scripts); // avoid re-parsing later
         list.append(script_li);
@@ -144,7 +144,7 @@ $('.save_scripts').click(function(){ $('#save_dialog').bPopup(); });
 $('.restore_scripts').click( populate_and_show_restore_dialog );
 $('#restore_dialog .cancel').click(reset_and_close_restore_dialog);
 $('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
-                    .delegate('.description', 'click', toggle_description)
+                    .delegate('.show_description', 'click', toggle_description)
                     .delegate('.delete', 'click', delete_named_scripts);
 
 function load_scripts_from_object(blocks){

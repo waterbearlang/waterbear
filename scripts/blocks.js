@@ -163,10 +163,12 @@ $.fn.extend({
         if (this.parent().is('.scripts_workspace')){ desc.offset = this.offset(); }
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){ desc.trigger = true; }
-        if (this.is('.number')){ desc['type'] = Number; }
-        if (this.is('.string')){ desc['type'] = String; }
-        if (this.is('.boolean')){ desc['type'] = Boolean; }
-        if (this.is('.color')){ desc['type'] = 'Color'; }
+        if (this.is('.number')){ desc['type'] = 'number'; }
+        if (this.is('.string')){ desc['type'] = 'string'; }
+        if (this.is('.boolean')){ desc['type'] = 'boolean'; }
+        if (this.is('.color')){ desc['type'] = 'color'; }
+        console.log(this);
+        console.log('type is now %s', desc['type']);
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -184,7 +186,7 @@ function Block(options){
     // trigger: [false] (is this a trigger?)
     // containers: [0] (how many sub-scripts does this hold?)
     // slot: [true] (can scripts follow this block in sequence?)
-    // type: String, Number, or Boolean if this is a value block
+    // type: string, number, color, or boolean if this is a value block
     // 
     // Script block additions:
     // 
@@ -214,8 +216,8 @@ function Block(options){
     wrapper.data('klass', opts.klass);
     var block = wrapper.children();
     if (opts['type']){
-        block.addClass(opts['type'].name.toLowerCase());
-        wrapper.addClass('value').addClass(opts['type'].name.toLowerCase());
+        block.addClass(opts['type']);
+        wrapper.addClass('value').addClass(opts['type']);
     }
     if (opts.trigger){
         wrapper.addClass('trigger');

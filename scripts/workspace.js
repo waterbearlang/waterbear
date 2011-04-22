@@ -110,7 +110,7 @@ function populate_and_show_restore_dialog(){
         value = localStorage[key];
         script_obj = JSON.parse(value);
         if (script_obj.description){
-            script_li = $('<li>' + script_obj.title + '<button class="restore action">Restore</button><button class="delete action">Delete</button><button class="show_description action">Description</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span><p class="description hidden">' + script_obj.description + '<p></li>');
+            script_li = $('<li><span class="title">' + script_obj.title + '</span><button class="restore action">Restore</button><button class="delete action">Delete</button><button class="show_description action">Description</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span><p class="description hidden">' + script_obj.description + '<p></li>');
         }else{
             script_li = $('<li><span class="title">' + script_obj.title + '</span><button class="restore action">Restore</button><button class="delete action">Delete</button><br /><span class="timestamp">Saved on ' + new Date(script_obj.date).toDateString() + '</span></li>');
         }
@@ -129,6 +129,8 @@ function restore_named_scripts(event){
 function delete_named_scripts(event){
     if (confirm('Are you sure you want to delete this script?')){
         var title = $(this).siblings('.title').text();
+        $(this).parent().remove();
+        console.log('remove %s', title);
         localStorage.removeItem(title);
     }
 }
@@ -158,11 +160,11 @@ function load_scripts_from_object(blocks){
 }
 
 function load_current_scripts(){
-    if (localStorage['__current_scripts']){
+    if (localStorage.__current_scripts){
         var blocks = JSON.parse(localStorage['__current_scripts']);
-        load_scripts_from_object(blocks);
-    }else{
-        'no scripts';
+        if (blocks.length){
+            load_scripts_from_object(blocks);
+        }
     }
 }
 $(document).ready(load_current_scripts);

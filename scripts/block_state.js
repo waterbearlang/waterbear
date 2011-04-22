@@ -1,4 +1,7 @@
 // Encapsulate workspace-specific state to allow one block to build on the next
+// Also provide a runtime environment for the block script
+
+var DEGREE = Math.PI / 180;
 
 function Local(){
     this.shape = null;

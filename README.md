@@ -142,6 +142,7 @@ limitations under the License.
 
 * Make sure restore dialogue scrolls
 * Block labels wrapping on Firefox
+* Restored value blocks get converted to step blocks
 * Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents

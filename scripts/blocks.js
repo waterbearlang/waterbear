@@ -71,6 +71,7 @@ $.extend($.fn,{
       return this.closest('.wrapper').long_name();
   },
   block_type: function(){
+      // FIXME: Move all type-specific functionality to 
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
       if (this.is('.number')) return 'number';
@@ -146,10 +147,6 @@ $.extend($.fn,{
   }
 });
 
-function button(options){
-    return $('<button>' + options.button + '</button>');
-}
-
 $.fn.extend({
     block_description: function(){
         if (this.length < 1) return '';
@@ -164,6 +161,7 @@ $.fn.extend({
             containers: this.data('containers')
         };
         if (this.parent().is('.scripts_workspace')){ desc.offset = this.offset(); }
+        // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){ desc.trigger = true; }
         if (this.is('.number')){ desc['type'] = Number; }
         if (this.is('.string')){ desc['type'] = String; }
@@ -194,9 +192,6 @@ function Block(options){
     // sockets: array of values or value blocks
     // contained: array of contained blocks
     // next: block that follows this block
-    if (options.button){
-        return button(options);
-    }
     var opts = {
         klass: 'control',
         slot: true, // Something can come after
@@ -300,6 +295,8 @@ function Label(value){
     // [message] => a message combo box
     // [shape] => a stored shape reference
     // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/ (not currently used)
+    
+    // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input type="number" value="$1"></div>');
     value = value.replace(/\[number\]/g, '<div class="number socket"><input type="number"></div>');
     value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></select></div>');

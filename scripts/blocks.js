@@ -1,40 +1,3 @@
-function rad2deg(rad){
-    return rad / DEGREE;
-}
-
-function deg2rad(deg){
-    return deg * DEGREE;
-}
-
-function range(start, end, step){
-    var rg = [];
-    if (end === undefined){
-        end = start;
-        start = 0;
-    }
-    if (step === undefined){
-        step = 1;
-    }
-    var i,val;
-    len = end - start;
-    for (i = 0; i < len; i++){
-        val = i * step + start;
-        if (val > (end-1)) break;
-        rg.push(val);
-    }
-    return rg;
-}
-
-
-function randint(start, stop){
-    // return an integer between start and stop, inclusive
-    if (stop === undefined){
-        stop = start;
-        start = 0;
-    }
-    var factor = stop - start + 1;
-    return Math.floor(Math.random() * factor) + start;
-}
 
 function showColorPicker(){
     var self = $(this);
@@ -83,33 +46,36 @@ $.extend($.fn,{
       if (this.length === 0) return '';
       if (this.is(':input')) return this.val();
       if (this.is('.empty')) return '// do nothing';
-      var script = this.data('script');
-      if (!script) return null;
-      var exprs = $.map(this.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
-      var blks = $.map(this.child_blocks(), function(elem, idx){return $(elem).extract_script();});
-      if (exprs.length){
-          // console.log('expressions: %o', exprs);
-          function exprf(match, offset, s){
-              var idx = parseInt(match.slice(2,-2), 10) - 1;
-              // console.log('index: %d, expression: %s', idx, exprs[idx]);
-              return exprs[idx];
-          };
-          script = script.replace(/\{\{\d\}\}/g, exprf);
-      }
-      if (blks.length){
-          function blksf(match, offset, s){
-              var idx = parseInt(match.slice(2,-2), 10) - 1;
-              return blks[idx];
+      return this.map(function(){
+          var self = $(this);
+          var script = self.data('script');
+          if (!script) return null;
+          var exprs = $.map(self.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
+          var blks = $.map(self.child_blocks(), function(elem, idx){return $(elem).extract_script();});
+          if (exprs.length){
+              // console.log('expressions: %o', exprs);
+              function exprf(match, offset, s){
+                  var idx = parseInt(match.slice(2,-2), 10) - 1;
+                  // console.log('index: %d, expression: %s', idx, exprs[idx]);
+                  return exprs[idx];
+              };
+              script = script.replace(/\{\{\d\}\}/g, exprf);
           }
-          script = script.replace(/\[\[\d\]\]/g, blksf);
-      }
-      next = this.next_block().extract_script();
-      if (script.indexOf('[[next]]') > -1){
-          script = script.replace('[[next]]', next);
-      }else{
-          script = script + '\n' + next;
-      }
-      return script;
+          if (blks.length){
+              function blksf(match, offset, s){
+                  var idx = parseInt(match.slice(2,-2), 10) - 1;
+                  return blks[idx];
+              }
+              script = script.replace(/\[\[\d\]\]/g, blksf);
+          }
+          next = self.next_block().extract_script();
+          if (script.indexOf('[[next]]') > -1){
+              script = script.replace('[[next]]', next);
+          }else{
+              script = script + '\n' + next;
+          }
+          return script;
+      }).get().join('\n\n');
   },
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
@@ -167,8 +133,6 @@ $.fn.extend({
         if (this.is('.string')){ desc['type'] = 'string'; }
         if (this.is('.boolean')){ desc['type'] = 'boolean'; }
         if (this.is('.color')){ desc['type'] = 'color'; }
-        console.log(this);
-        console.log('type is now %s', desc['type']);
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -271,13 +235,14 @@ function Block(options){
     return wrapper;
 }
 
-var keys_supported = 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'.split('').concat(['up', 'down', 'left', 'right',
-    'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 'pause', 'capslock', 'esc', 'space',
-    'pageup', 'pagedown', 'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']); 
-
-var keys_input = '<div class="string keys autosocket"><select>' + 
-        keys_supported.map(function(letter){return '<option>' + letter + '</option>';}).join('') + '</select></div>';
-    
+        
+function choice_func(s, listname){
+    var list = choice_lists[listname];
+    return '<div class="string ' + listname + ' autosocket"><select>' + 
+        list.map(function(item){ return '<option>' + item + '</option>';}).join('') +
+        '</select></div>';
+}
+            
 function Label(value){
     // Recognize special values in the label string and replace them with 
     // appropriate markup. Some values are dynamic and based on the objects currently
@@ -285,18 +250,13 @@ function Label(value){
     //
     // values include:
     //
-    // [flag] => the start flag image (no longer relevant)
-    // [key] => any valid key on the keyboard
-    // [sprite] => any currently defined sprite (not currently supported)
     // [number] => an empty number socket
     // [number:default] => a number socket with a default value
     // [boolean] => an empty boolean socket
     // [boolean:default] => a boolean with a default value
     // [string] => an empty string socket
     // [string:default] => a string socket with a default value
-    // [message] => a message combo box
-    // [shape] => a stored shape reference
-    // [stop] => stop sign graphic  /\[number:(-?\d*\.\d+)\]/ (not currently used)
+    // [choice:options] => a fixed set of options, listed in options parameter function
     
     // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input type="number" value="$1"></div>');
@@ -306,7 +266,7 @@ function Label(value){
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
     value = value.replace(/\[color\]/g, '<div class="color socket"><input type="color"></div>');
     value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<div class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></div>');
-    value = value.replace(/\[key\]/g, keys_input);
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);  
     return value;
 }
 

@@ -67,82 +67,30 @@ limitations under the License.
 <a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Waterbear Documentation</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://waterbearlang.com/" property="cc:attributionName" rel="cc:attributionURL">Dethe Elza</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.<br />Permissions beyond the scope of this license may be available at <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.apache.org/licenses/LICENSE-2.0" rel="cc:morePermissions">http://www.apache.org/licenses/LICENSE-2.0</a>.
 
 
-## Todo
+# Coming Features
 
-* Finish drag-n-drop implementation
-  - ✓ Get it working on iPad (again)
-  - ✓ Actually move the block in the hit_test call
-  - Handle dropping blocks
-    - ✓ Drop into workspace
-    - ✓ Delete when appropriate
-    - ✓ Move back when appropriate
-    - ✓ Snap together
-  - ✓ On starting drag, un-snap more intelligently (and put back properly)
-  - ✓ When dropping a value, remove the input element
-  - On drop, remove "active_drop" class
-  - When dragging a value out of a socket, replace the input element with current value
-  - ✓ Don't start drag on input element outside of blocks menu
-  - ✓ Don't allow clicks into input element in blocks menu
-* Attach script snippets to blocks
-  - ✓ Tab to show built script
-  - ✓ Extract expressions/values
-  - ✓ Implement script building mini-language
-  - ✓ Provide script templates for every block
-  - x Autogenerate variable names
-  - x Lazy evaluation of variables (mouse position, etc.)
-* Build an animation using blocks
-* ✓ Build up drag-n-drop from first principles
-* ✓ Get it working on iPad
-* ✓ Right/left borders for values
-* ✓ Top/bottom borders for slots
-* ✓ Dragging on mobile
-* Test in Firefox
-* ✓ Mini-language for building blocks to bind a language/library
-* ✓ Clean up look of IDE
-  - ✓ Get tabs working for workspaces
-* Save and restore projects
-* ✓ Move from popup dialog to sidebar with zooming interface
-* ✓ Remove all dragging, use selected element and click/touch
-* ✓ Switch from jQuery to Zepto (and back again)
-* ✓ Get tap event working, not sure why it doesn't now (bad browser sniffing?)
+* Autogenerate variable names
+* Full web site with tutorial and forums
+* Option blocks - generalize block creation with selection lists
 * Zoom into script view
-* Toggle between control views for different sprites / stage
-* ✓ Toggle between script/skin/sound views for a specific sprite
-* ✓ Visual distinctiveness of value blocks and slots (right/left for values, top/bottom of slots)
-* ✓ Reduce padding in value blocks
-* ✓ Remove blocks delete key or drag back to menu
-* Create a larger script workspace, with scrollbars
+* Build new blocks in Workspace
+* Show all blocks (workaround for block drift bug)
+* Larger script workspace, with scrollbars
 * Multiple script workspaces (allows one per sprite, for instance)
-* ✓ Force blocks into two columns (get rid of table, ick)
-* Fix position when dragging out of a snapped position (still needs some tweaks)
 * [optional] Allow contained blocks to overflow right edge of block without growing block
-* ✓ Re-enable dragging, at least for positioning
-* Fix issues listed at http://thechangelog.com/post/3032074343/top-ten-reasons-why-i-wont-use-your-open-source-project
-  - ✓ Readme
-    - ✓ Description
-    - ✓ Installation instructions
-    - ✓ Where to get help
-    - Contribution guidelines
-    - Contributor list
-    - Credits, inspirations, alternatives
-  - Test, specs, features, examples
-  - ✓ Project home page
-  - Design help
-  - ✓ Domain name
-  - ✓ Twitter account
-  - ✓ Clear licensing
-  - Reach out
-    - Twitter
-    - Facebook
-    - IRC
-  - Speak at conferences and meetups
-  - Submit to the Changelog
+* Contribution guidelines
+* Contributor list
+* Credits, inspirations, alternatives
+* Built-in demos
+* Test, specs, features, examples
+* Reach out: Facebook, IRC
+* Get design help, especially for workspace
+* Waterbear logo
   
 # Bugs
 
 * Make sure restore dialogue scrolls
 * Block labels wrapping on Firefox
-* Restored value blocks get converted to step blocks
 * Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents
@@ -150,3 +98,4 @@ limitations under the License.
 * Visual cues when snapping are overly subtle
 * Snap regions too small
 * Random movement when rearranging blocks in the script workspace
+* On drop, remove "active_drop" class

@@ -30,7 +30,7 @@ $('.chrome_tab').live('click', tab_select);
 function update_scripts_view(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     var view = $('.workspace:visible .scripts_text_view');
-    blocks.each(function(){$(this).write_script(view);});
+    blocks.write_script(view);
 }
 
 function run_scripts(event){
@@ -120,6 +120,22 @@ function populate_and_show_restore_dialog(){
     $('#restore_dialog').bPopup();
 }
 
+function populate_demos_dialog(demos){
+    var list = $('#demos_list');
+    var idx, value, key, script_li;
+    $.each(demos, function(){
+        if (this.description){
+            script_li = $('<li><span class="title">' + this.title + '</span><button class="load action">Load</button><button class="show_description action">Description</button><p class="description hidden">' + this.description + '<p></li>');
+        }else{
+            script_li = $('<li><span class="title">' + this.title + '</span><button class="load action">Load</button></li>');
+        }
+        script_li.data('scripts', this.scripts); // avoid re-parsing later
+        list.append(script_li);
+    });
+}
+window.populate_demos_dialog = populate_demos_dialog; // expose this as a public method
+
+
 function restore_named_scripts(event){
     clear_scripts();
     load_scripts_from_object($(this).closest('li').data('scripts'));
@@ -148,6 +164,10 @@ $('#restore_dialog .cancel').click(reset_and_close_restore_dialog);
 $('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
                     .delegate('.show_description', 'click', toggle_description)
                     .delegate('.delete', 'click', delete_named_scripts);
+                    
+$('#demos_dialog').delegate('.load', 'click', restore_named_scripts)
+                  .delegate('.show_description', 'click', toggle_description);
+$('.demo_scripts').click(function(){$('#demos_dialog').bPopup(); });
 
 function load_scripts_from_object(blocks){
     var workspace = $('.workspace:visible .scripts_workspace');

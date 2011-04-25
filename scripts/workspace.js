@@ -167,6 +167,7 @@ $('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
                     
 $('#demos_dialog').delegate('.load', 'click', restore_named_scripts)
                   .delegate('.show_description', 'click', toggle_description);
+$('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
 $('.demo_scripts').click(function(){$('#demos_dialog').bPopup(); });
 
 function load_scripts_from_object(blocks){

@@ -90,3 +90,10 @@ function randint(start, stop){
     var factor = stop - start + 1;
     return Math.floor(Math.random() * factor) + start;
 }
+
+function angle(shape){
+    // return the angle of rotation
+    var tform = shape.rotate();
+    if (tform === 0) return tform;
+    return parseInt(tform.split(/\s+/)[0], 10);
+}

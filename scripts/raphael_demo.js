@@ -29,7 +29,7 @@ window.choice_lists = {
 var menus = {
     control: menu('Control', [
         {label: 'when program runs', trigger: true, script: 'function _start(){\n[[next]]\n}\n_start();\n'},
-        {label: 'when [choice:keys] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}", function(){\n[[next]]\nreturn false;});'},
+        {label: 'when [choice:keys] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}", function(){\nconsole.log("{{1}}");\n[[next]]\nreturn false;});'},
         {label: 'wait [number:1] secs', script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'},
         {label: 'forever', containers: 1, slot: false, script: 'while(true){\n[[1]]\n}'},
         {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[1]]\n});'},
@@ -104,7 +104,7 @@ var menus = {
         {label: 'stroke opacity [number:100]%', script: 'local.shape.attr("stroke-opacity", "{{1}}%");'},
         {label: 'stroke width [number:1]', script: 'local.shape.attr("stroke-width", {{1}});'},
         {label: 'rotate [number:5] degrees', script: 'local.shape.attr("rotate", local.shape.attr("rotate") + {{1}});'},
-        {label: 'rotate [number:5] degrees around x [number:0] y [number:0]', script: 'local.shape.rotate(local.shape.attr("rotate") + {{1}}, {{2}}, {{3}});'},
+        {label: 'rotate [number:5] degrees around x [number:0] y [number:0]', script: 'local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});'},
         {label: 'clone', script: 'local.shape = local.shape.clone()'},
         {label: 'fill opacity [number:100]%', script: 'local.shape.attr("fill-opacity", "{{1}}%")'},
         {label: 'href [string:http://waterbearlang.com]', script: 'local.shape.attr("href", "{{1}}")'}
@@ -119,7 +119,6 @@ var menus = {
         {label: 'show', script: 'local.shape.show();'},
         {label: 'rotate by [number:0]', script: 'local.shape.rotate({{1}}, false);'},
         {label: 'rotate to [number:0]', script: 'local.shape.rotate({{1}}, true);'},
-        {label: 'rotate by [number:0] around x: [number:0] y: [number:0]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, false);'},
         {label: 'rotate to [number:0] around x: [number:0] y: [number:0]', script: 'local.shape.rotate({{1}}, {{2}}, {{3}}, true);'},
         {label: 'translate by x: [number:0] y: [number:0]', script: 'local.shape.translate({{1}}, {{2}});'},
         {label: 'position at x [number:0] y [number:0]', script: 'local.shape.attr("translation", ""+{{1}} +"," + {{2}});'},

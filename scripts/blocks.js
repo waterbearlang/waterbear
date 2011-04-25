@@ -208,7 +208,6 @@ function Block(options){
                 child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
                 var socket = block.find('> p > label > .socket :input, > p > label > .autosocket select').eq(idx);
-                console.log('setting value of %o to %s', socket, value);
                 socket.val(value);
                 if (socket.attr('type') === 'color'){
                     socket.css({color: value, 'background-color': value});

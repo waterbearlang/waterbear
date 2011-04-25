@@ -89,7 +89,6 @@ limitations under the License.
   
 # Bugs
 
-* Wrappers on stage are getting set to position: relative!
 * Make sure restore dialogue scrolls
 * Block labels wrapping on Firefox
 * Clicking into tabs doesn't work on iPad
@@ -98,5 +97,4 @@ limitations under the License.
 * Clicking into an input after the first input puts cursor in first input
 * Visual cues when snapping are overly subtle
 * Snap regions too small
-* Random movement when rearranging blocks in the script workspace (check order of setting position vs. adding/removing from canvas)
 * On drop, remove "active_drop" class

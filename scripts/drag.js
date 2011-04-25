@@ -133,6 +133,7 @@
         if (drag_target.parent().is('.socket')){
             drag_target.parent().append('<input />');
         }
+        drag_target.css('position', 'absolute');
         $('.content').append(drag_target);
         drag_target.offset(start_position);
         potential_drop_targets = get_potential_drop_targets();
@@ -195,7 +196,7 @@
                     top: 0
                 });
             }else{
-                console.log('trying to drop: into %s', drop_target.long_name());
+                // console.log('trying to drop: into %s', drop_target.long_name());
                 drop_target.find('input').remove();
                 drop_target.append(drag_target);
                 drag_target.css({

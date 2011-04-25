@@ -207,7 +207,8 @@ function Block(options){
                 block.find('> p > label > .socket').eq(idx).empty().append(child);
                 child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
-                var socket = block.find('> p > label > .socket :input').eq(idx);
+                var socket = block.find('> p > label > .socket :input, > p > label > .autosocket select').eq(idx);
+                console.log('setting value of %o to %s', socket, value);
                 socket.val(value);
                 if (socket.attr('type') === 'color'){
                     socket.css({color: value, 'background-color': value});
@@ -236,10 +237,16 @@ function Block(options){
 }
 
         
-function choice_func(s, listname){
+function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
     return '<div class="string ' + listname + ' autosocket"><select>' + 
-        list.map(function(item){ return '<option>' + item + '</option>';}).join('') +
+        list.map(function(item){
+            if (item === default_opt){
+                return '<option selected>' + item + '</option>';
+            }else{
+                return '<option>' + item + '</option>';
+            }
+        }).join('') +
         '</select></div>';
 }
             
@@ -266,7 +273,8 @@ function Label(value){
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
     value = value.replace(/\[color\]/g, '<div class="color socket"><input type="color"></div>');
     value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<div class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></div>');
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);  
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
     return value;
 }
 

@@ -14,6 +14,35 @@ Raphael.fn.arcslice = function(radius, fromangle, toangle){
         return arc;
 };
 
+Raphael.fn.regularPolygon = function(cx,cy,radius, sides, pointsOnly){
+    var angle = 0;
+    var theta = Math.PI * 2 / sides;
+    var x = Math.cos(0) * radius + cx;
+    var y = Math.sin(0) * radius + cy;
+    if (pointsOnly){
+        var points = [[x,y]];
+    }else{
+        var path = this.path();
+        path.moveTo(x,y);
+    }
+    for (var i = 1; i < sides; i++){
+        x = Math.cos(theta * i) * radius + cx;
+        y = Math.sin(theta * i) * radius + cy;
+        if (pointsOnly){
+            points.push([x,y]);
+        }else{
+            path.lineTo(x,y);
+        }
+    }
+    if (pointsOnly){
+        return points;
+    }else{
+        path.andClose();
+        return path;
+    }
+};
+
+
 // expose these globally so the Block/Label methods can find them
 window.choice_lists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'

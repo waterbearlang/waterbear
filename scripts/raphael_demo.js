@@ -59,6 +59,7 @@ var menus = {
     control: menu('Control', [
         {label: 'when program runs', trigger: true, script: 'function _start(){\n[[next]]\n}\n_start();\n'},
         {label: 'when [choice:keys] key pressed', trigger: true, script: '$(document).bind("keydown", "{{1}}", function(){\nconsole.log("{{1}}");\n[[next]]\nreturn false;});'},
+        {label: 'every 1/[number:30] of a second', trigger: true, script: 'setInterval(function(){\n[[next]]},\n1000/{{1}}\n);'},
         {label: 'wait [number:1] secs', script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'},
         {label: 'forever', containers: 1, slot: false, script: 'while(true){\n[[1]]\n}'},
         {label: 'repeat [number:10]', containers: 1, script: 'range({{1}}).forEach(function(){\n[[1]]\n});'},
@@ -136,11 +137,14 @@ var menus = {
         {label: 'rotate [number:5] degrees around x [number:0] y [number:0]', script: 'local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});'},
         {label: 'clone', script: 'local.shape = local.shape.clone()'},
         {label: 'fill opacity [number:100]%', script: 'local.shape.attr("fill-opacity", "{{1}}%")'},
-        {label: 'href [string:http://waterbearlang.com]', script: 'local.shape.attr("href", "{{1}}")'}
-    ]),
-    text: menu('Path', [
+        {label: 'href [string:http://waterbearlang.com]', script: 'local.shape.attr("href", "{{1}}")'},
         {label: 'text [string:Hello World] at x: [number:0] y: [number:0]', script: 'local.shape = global.paper.text("{{1}}", {{2}}, {{3}});' }
         // {label: 'font family: [string:Helvetica] weight: [number:0] style: [fontstyle]', script: 'FIXME'}
+    ]),
+    text: menu('Sketchy', [
+        {label: 'sketchy rect with width [number:50] and height [number: 50]', script: 'local.shape = global.paper.sk_rect(0,0, {{1}},{{2}};'},
+        {label: 'sketchy ellipse with width [number:50] and height [number:50]', script: 'local.shape = global.paper.sk_ellipse(0,0, {{1}}, {{2}};'},
+        {label: 'sketchy line from x1 [number:10] y1 [number:10] to x2 [number:40] y2 [number:40]', script: 'local.shape = global.paper.sk_line({{1}}, {{2}}, {{3}}, {{4}});'}
     ]),
     transform: menu('Transform', [
         {label: 'clear canvas', script: 'global.paper.clear();'},

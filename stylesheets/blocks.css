@@ -151,23 +151,6 @@
     border-style: solid;
 }
 
-.boolean{
-    border-color: red;
-}
-.number{
-    border-color: blue;
-}
-.string{
-    border-color: green;
-}
-
-.color{
-    border-color: yellow;
-}
-
-.string input{
-    min-width: 10em;
-}
 
 .selected > .block{
     outline: blue ridge thick;

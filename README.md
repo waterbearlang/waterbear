@@ -86,6 +86,9 @@ limitations under the License.
 * Reach out: Facebook, IRC
 * Get design help, especially for workspace
 * Waterbear logo
+* Better code formatting for code view
+* Script embedding
+* Server for saving and sharing scripts
   
 # Bugs
 

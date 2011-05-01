@@ -25,7 +25,7 @@ function tab_select(event){
         update_scripts_view();
     }
 }
-$('.chrome_tab').live('click', tab_select);
+$('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
 
 function update_scripts_view(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');

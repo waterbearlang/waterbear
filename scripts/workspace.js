@@ -121,7 +121,7 @@ function populate_and_show_restore_dialog(){
 }
 
 function populate_demos_dialog(demos){
-    var list = $('#demos_list');
+    var list = $('#demo_list');
     var idx, value, key, script_li;
     $.each(demos, function(){
         if (this.description){
@@ -140,6 +140,12 @@ function restore_named_scripts(event){
     clear_scripts();
     load_scripts_from_object($(this).closest('li').data('scripts'));
     reset_and_close_restore_dialog();
+}
+
+function restore_demo_scripts(event){
+    clear_scripts();
+    load_scripts_from_object($(this).closest('li').data('scripts'));
+    $('#demos_dialog').bPopup().close();
 }
 
 function delete_named_scripts(event){
@@ -165,7 +171,7 @@ $('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
                     .delegate('.show_description', 'click', toggle_description)
                     .delegate('.delete', 'click', delete_named_scripts);
                     
-$('#demos_dialog').delegate('.load', 'click', restore_named_scripts)
+$('#demos_dialog').delegate('.load', 'click', restore_demo_scripts)
                   .delegate('.show_description', 'click', toggle_description);
 $('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
 $('.demo_scripts').click(function(){$('#demos_dialog').bPopup(); });

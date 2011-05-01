@@ -39,37 +39,8 @@ body {
 
 .content{
     position: relative;
-    width: 150%;
+    width: 200%;
     height: 100%;
-}
-
-.header{
-    position: absolute;
-    top: 0px;
-    left: 33%;
-    height: 18%;
-    width: 30%;
-}
-
-.header img{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
-h1{
-    font-family: Georgia, serif;
-    font-size: 18px;
-    position: absolute;
-    top: 0px;
-    left: 80px;
-}
-
-.header p{
-    font-family: Georgia;
-    font-size: 10px;
-    text-align: right;
-    padding-right: 20px;
 }
 
 .tab_bar button{
@@ -79,10 +50,10 @@ h1{
 
 .workspace {
     position: absolute;
-    left: 33%;
+    left: 15%;
     bottom: 0px;
-    width: 30%;
-    height: 70%;
+    width: 35%;
+    height: 95%;
     background-color: #FFF;
     border: 1px solid #CCC;
 }
@@ -93,7 +64,6 @@ h1{
     position: relative;
     display: none;
     overflow: auto;
-    /*  border: 1px solid purple;*/
 }
 
 .scripts_workspace {
@@ -102,9 +72,16 @@ h1{
 
 .tab_bar{
     position: absolute;
-    left: 33%;
-    bottom: 70%;
-    width: 30%;
+    left: 15%;
+    bottom: 95%;
+    width: 35%;
+}
+
+.tab_bar2{
+    position: absolute;
+    right: 0%;
+    bottom: 95%;
+    width: 50%;
 }
 
 .chrome_tab{
@@ -134,21 +111,20 @@ h1{
 
 .stage {
     position: absolute;
-    right: 20px;
-    top: 20px;
-    width: 30%;
-    bottom: 20px;
+    height: 95%;
+    right: 0px;
+    width: 50%;
+    bottom: 0px;
     background-color: #FFF;
     border: 1px solid #CCC;
 }
 
 .block_menu{
     position: absolute;
-    width: 30%;
+    width: 15%;
     height: 100%;
     left: 0px;
     top: 0px;
-/*    background-color: #FFCCFF;*/
     overflow: auto;
 }
 

@@ -72,7 +72,9 @@ $.extend($.fn,{
           if (script.indexOf('[[next]]') > -1){
               script = script.replace('[[next]]', next);
           }else{
-              script = script + '\n' + next;
+              if (self.is('.step, .trigger')){
+                  script = script + '\n' + next;
+              }
           }
           return script;
       }).get().join('\n\n');

@@ -43,6 +43,28 @@ Raphael.fn.regularPolygon = function(cx,cy,radius, sides, pointsOnly){
 };
 
 
+
+Local.prototype.getTweet = function(name, callback){
+    var jsonTwitterFeed = "https://twitter.com/statuses/user_timeline/" + name + ".json";
+    $.ajax({
+        url: jsonTwitterFeed,
+        dataType: 'jsonp',
+        data: 'count=1',
+        success: function(data, textStatus, jqXHR){
+            $.each(data, function(idx,value){
+                callback(value.text);                
+            });            
+        },
+        error: function(XHR, textStatus, errorThrown){
+            callback(textStatus);
+            console.log('getTweet error %s: %s', textStatus, errorThrown);
+        }
+    });
+};
+
+window.getTweet = Local.prototype.getTweet;
+
+
 // expose these globally so the Block/Label methods can find them
 window.choice_lists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
@@ -51,7 +73,9 @@ window.choice_lists = {
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown', 
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
     linecap: ['round', 'butt', 'square'],
-    linejoin: ['round', 'bevel', 'mitre']
+    linejoin: ['round', 'bevel', 'mitre'],
+    easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
+    fontweight: ['normal', 'bold', 'inherit']
 };
 
 
@@ -408,18 +432,29 @@ var menus = {
         },
         {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
-            script: 'local.shape = global.paper.text("{{1}}", {{2}}, {{3}});' 
+            script: 'local.shape = global.paper.text({{2}}, {{3}}, "{{1}}");' 
+        },
+        {   label: 'font family [string:Helvetica]',
+            script: 'local.shape.attr("font-family", "{{1}}");'
+        },
+        {
+            label: 'font size [number:12]',
+            script: 'local.shape.attr("font-size", {{1}});'
+        },
+        {
+            label: 'font weight [choice:fontweight]',
+            script: 'local.shape.attr("font-weight", "{{1}}");'
         }
         // {label: 'font family: [string:Helvetica] weight: [number:0] style: [fontstyle]', script: 'FIXME'}
     ]),
     text: menu('Sketchy', [
         {
-            label: 'sketchy rect with width [number:50] and height [number: 50]', 
-            script: 'local.shape = global.paper.sk_rect(0,0, {{1}},{{2}};'
+            label: 'sketchy rect with width [number:50] and height [number:50]', 
+            script: 'local.shape = global.paper.sk_rect(0,0, {{1}},{{2}});'
         },
         {
             label: 'sketchy ellipse with width [number:50] and height [number:50]', 
-            script: 'local.shape = global.paper.sk_ellipse(0,0, {{1}}, {{2}};'
+            script: 'local.shape = global.paper.sk_ellipse(0,0, {{1}}, {{2}});'
         },
         {
             label: 'sketchy line from x1 [number:10] y1 [number:10] to x2 [number:40] y2 [number:40]', 
@@ -478,6 +513,64 @@ var menus = {
         {
             label: 'to back', 
             script: 'local.shape.toBack();'
+        }
+    ]),
+    animation: menu('Animation', [
+        {
+            label: 'position x [number:10] y [number:10] over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({translation: "{{1}}, {{2}}"}, {{3}}, "{{4}}");'
+        },
+        {
+            label: 'opacity [number:50]% over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({opacity: {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'fill color [color:#00FF00] over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({fill, "{{1}}", {{2}}, "{{3}}");'
+        },
+        {
+            label: 'fill opacity [number:50]% over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({"fill-opacity": {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'stroke color [color:#FF0000] over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({stroke: "{{1}}", {{2}}, "{{3}}");'
+        },
+        {
+            label: 'stroke opacity [number:50]% over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({"stroke-opacity": {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'width [number:10] over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({width: {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'height [number:10] over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({height: {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'radius [number:25] over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({r: {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'rotation [number:15] degrees over [number:500] ms with [choice:easing]',
+            script: 'local.shape.animate({rotation: {{1}} }, {{2}}, "{{3}}");'
+        },
+        {
+            label: 'stop animations',
+            script: 'local.shape.stop()'
+        }
+    ]),
+        animation: menu('Twitter', [
+        {
+            label: 'get tweet for [string]',
+            containers: 1,
+            script: 'local.getTweet("{{1}}", function(tweet){local.lastTweet = tweet;\n[[1]]});'
+        },
+        {
+            label: 'last tweet',
+            type: 'string',
+            script: '"+local.lastTweet+"'
         }
     ])
 };

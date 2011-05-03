@@ -42,6 +42,24 @@ Raphael.fn.regularPolygon = function(cx,cy,radius, sides, pointsOnly){
     }
 };
 
+Raphael.fn.imageWithNaturalHeight = function(url){
+    var img = this.image(url, 0, 0, 0, 0);
+    function getWidthAndHeight() {
+        img.attr({width: this.width, height: this.height});
+        return true;
+    }
+    function loadFailure() {
+        console.log("'" + this.name + "' failed to load.");
+        return true;
+    }
+    var myImage = new Image();
+    myImage.name = url;
+    myImage.onload = getWidthAndHeight;
+    myImage.onerror = loadFailure;
+    myImage.src = "http://waterbearlang.com/images/waterbear.png";
+    return img;
+};
+
 
 
 Local.prototype.getTweet = function(name, callback){
@@ -359,7 +377,7 @@ var menus = {
         },
         {
             label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', 
-            script: 'local.shape = global.paper.image("{{1}}", {{0}}, {{0}});'
+            script: 'local.shape = global.paper.imageWithNaturalHeight("{{1}}");'
         },
         {
             label: 'name shape: [string:shape1]', 
@@ -445,7 +463,6 @@ var menus = {
             label: 'font weight [choice:fontweight]',
             script: 'local.shape.attr("font-weight", "{{1}}");'
         }
-        // {label: 'font family: [string:Helvetica] weight: [number:0] style: [fontstyle]', script: 'FIXME'}
     ]),
     text: menu('Sketchy', [
         {

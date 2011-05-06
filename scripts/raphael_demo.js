@@ -119,19 +119,13 @@ var menus = {
             script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'
         },
         {
-            label: 'forever', 
-            containers: 1, 
-            slot: false, 
-            script: 'while(true){\n[[1]]\n}'
-        },
-        {
             label: 'repeat [number:10]', 
             containers: 1, 
             script: 'range({{1}}).forEach(function(){\n[[1]]\n});'
         },
         {
             label: 'broadcast [string:ack] message', 
-            script: '$(".stage").trigger("{{1}}"'
+            script: '$(".stage").trigger("{{1}}");'
         },
         {
             label: 'when I receive [string:ack] message', 
@@ -139,7 +133,7 @@ var menus = {
             script: '$(".stage").bind("{{1}}", function(){\n[[next]]\n});'
         },
         {
-            label: 'forever if [boolean]', 
+            label: 'forever if [boolean:false]', 
             containers: 1, 
             slot: false, 
             script: 'while({{1}}){\n[[1]]\n}'
@@ -147,12 +141,12 @@ var menus = {
         {
             label: 'if [boolean]', 
             containers: 1, 
-            script: 'if({{1}}{\n[[1]]\n}'
+            script: 'if({{1}}){\n[[1]]\n}'
         },
         {
             label: 'if [boolean] else', 
             containers: 2, 
-            script: 'if({{1}}{\n[[1]]\n}else{\n[[2]]\n}'
+            script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}'
         },
         {
             label: 'repeat until [boolean]', 
@@ -161,8 +155,8 @@ var menus = {
     ], false),
     sensing: menu('Sensing', [
         {
-            label: "ask [string:What's your name?] and wait", 
-            script: "local.answer = prompt({{1}});"
+            label: 'ask [string:What\'s your name?] and wait',
+            script: 'local.answer = prompt("{{1}}");'
         },
         {
             label: 'answer', 
@@ -233,7 +227,7 @@ var menus = {
         {
             label: '[number:0] * [number:0]', 
             'type': 'number', 
-            script: "({{1]} * {{2}})"
+            script: "({{1}} * {{2}})"
         },
         {
             label: '[number:0] / [number:0]',
@@ -281,7 +275,7 @@ var menus = {
         {
             label: 'letter [number:1] of [string:world]', 
             'type': 'string', 
-            script: "{{2}}[{{1}}"
+            script: "{{2}}[{{1}}]"
         },
         {
             label: 'length of [string:world]', 
@@ -513,7 +507,7 @@ var menus = {
         },
         {
             label: 'size width [number:100] height [number:100]', 
-            script: 'local.shape.attr({width: {{1}}, height: {{2}})'
+            script: 'local.shape.attr({width: {{1}}, height: {{2}} })'
         },
         {
             label: 'scale by [number:0]', 
@@ -543,7 +537,7 @@ var menus = {
         },
         {
             label: 'fill color [color:#00FF00] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({fill, "{{1}}", {{2}}, "{{3}}");'
+            script: 'local.shape.animate({fill: "{{1}}"}, {{2}}, "{{3}}");'
         },
         {
             label: 'fill opacity [number:50]% over [number:500] ms with [choice:easing]',
@@ -551,7 +545,7 @@ var menus = {
         },
         {
             label: 'stroke color [color:#FF0000] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({stroke: "{{1}}", {{2}}, "{{3}}");'
+            script: 'local.shape.animate({stroke: "{{1}}"}, {{2}}, "{{3}}");'
         },
         {
             label: 'stroke opacity [number:50]% over [number:500] ms with [choice:easing]',
@@ -582,7 +576,7 @@ var menus = {
         {
             label: 'get tweet for [string]',
             containers: 1,
-            script: 'local.getTweet("{{1}}", function(tweet){local.lastTweet = tweet;\n[[1]]});'
+            script: 'local.getTweet("{{1}}", function(tweet){\nlocal.lastTweet = tweet;\n[[1]]\n});'
         },
         {
             label: 'last tweet',

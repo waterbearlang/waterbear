@@ -105,7 +105,7 @@ $.extend($.fn,{
       });
   },
   socket_blocks: function(){
-      return this.find('> .block > p > label > .socket > .wrapper, > .block > p > label > .socket > input, > .block > p > label > .autosocket > select');
+      return this.find('> .block > p > label').children('.socket, .autosocket').children('input, select');
   },
   next_block: function(){
       return this.find('> .next > .wrapper');
@@ -269,6 +269,7 @@ function Label(value){
     // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input type="number" value="$1"></div>');
     value = value.replace(/\[number\]/g, '<div class="number socket"><input type="number"></div>');
+    value = value.replace(/\[boolean:(true|false)\]/g, '<div class="boolean socket"><select><option>true</option><option selected>false</option></select></div>');
     value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></select></div>');
     value = value.replace(/\[string:(.+?)\]/g, '<div class="string socket"><input value="$1"></div>');
     value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');

@@ -503,7 +503,7 @@ var menus = {
         },
         {
             label: 'position at x [number:0] y [number:0]', 
-            script: 'local.shape.attr("translation", ""+{{1}} +"," + {{2}});'
+            script: 'local.shape.attr("translation", ""+ {{1}} +"," + {{2}});'
         },
         {
             label: 'size width [number:100] height [number:100]', 

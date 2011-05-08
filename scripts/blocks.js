@@ -55,6 +55,7 @@ $.extend($.fn,{
           if (exprs.length){
               // console.log('expressions: %o', exprs);
               function exprf(match, offset, s){
+                  // console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
                   var idx = parseInt(match.slice(2,-2), 10) - 1;
                   // console.log('index: %d, expression: %s', idx, exprs[idx]);
                   return exprs[idx];
@@ -105,7 +106,7 @@ $.extend($.fn,{
       });
   },
   socket_blocks: function(){
-      return this.find('> .block > p > label').children('.socket, .autosocket').children('input, select');
+      return this.find('> .block > p > label').children('.socket, .autosocket').children('input, select, .wrapper');
   },
   next_block: function(){
       return this.find('> .next > .wrapper');

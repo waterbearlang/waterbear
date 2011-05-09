@@ -55,12 +55,14 @@ $.extend($.fn,{
           if (exprs.length){
               // console.log('expressions: %o', exprs);
               function exprf(match, offset, s){
-                  // console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
+                  console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
                   var idx = parseInt(match.slice(2,-2), 10) - 1;
                   // console.log('index: %d, expression: %s', idx, exprs[idx]);
                   return exprs[idx];
               };
               script = script.replace(/\{\{\d\}\}/g, exprf);
+          }else{
+              console.log('no exprs found');
           }
           if (blks.length){
               function blksf(match, offset, s){
@@ -106,7 +108,7 @@ $.extend($.fn,{
       });
   },
   socket_blocks: function(){
-      return this.find('> .block > p > label').children('.socket, .autosocket').children('input, select, .wrapper');
+      return this.find('> .block > .blockhead > label').children('.socket, .autosocket').children('input, select, .wrapper');
   },
   next_block: function(){
       return this.find('> .next > .wrapper');
@@ -178,7 +180,7 @@ function Block(options){
         opts.slot = false; // values nest, but do not follow
         opts.flap = false;
     }
-    var wrapper = $('<div class="wrapper ' + opts.klass + '"><div class="block"><p><label>' + Label(opts.label) + '</label></p></div></div>');
+    var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><label>' + Label(opts.label) + '</label></span></span></span>');
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
     var block = wrapper.children();
@@ -194,11 +196,11 @@ function Block(options){
         wrapper.addClass('step');
     }
     for (var i = 0; i < opts.containers; i++){
-        block.append('</b><div class="contained"><i class="slot"></i></div>');
+        block.append('</b><span class="contained"><i class="slot"></i></span>');
     }
     wrapper.data('containers', opts.containers);
     if (opts.slot){
-        wrapper.append('<div class="next"><i class="slot"></i></div>');
+        wrapper.append('<span class="next"><i class="slot"></i></span>');
     }
     if (opts.script){
         wrapper.data('script', opts.script);
@@ -207,10 +209,10 @@ function Block(options){
         $.each(opts.sockets, function(idx, value){
             if ($.isPlainObject(value)){
                 var child = Block(value);
-                block.find('> p > label > .socket').eq(idx).empty().append(child);
+                block.find('> .blockhead > label > .socket').eq(idx).empty().append(child);
                 child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
-                var socket = block.find('> p > label > .socket :input, > p > label > .autosocket select').eq(idx);
+                var socket = block.find('> .blockhead > label > .socket :input, > .blockhead > label > .autosocket select').eq(idx);
                 socket.val(value);
                 if (socket.attr('type') === 'color'){
                     socket.css({color: value, 'background-color': value});
@@ -241,7 +243,7 @@ function Block(options){
         
 function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
-    return '<div class="string ' + listname + ' autosocket"><select>' + 
+    return '<span class="string ' + listname + ' autosocket"><select>' + 
         list.map(function(item){
             if (item === default_opt){
                 return '<option selected>' + item + '</option>';
@@ -249,7 +251,7 @@ function choice_func(s, listname, default_opt){
                 return '<option>' + item + '</option>';
             }
         }).join('') +
-        '</select></div>';
+        '</select></span>';
 }
             
 function Label(value){
@@ -268,14 +270,14 @@ function Label(value){
     // [choice:options] => a fixed set of options, listed in options parameter function
     
     // FIXME: Move specific type handling to raphael_demo.js
-    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<div class="number socket"><input type="number" value="$1"></div>');
-    value = value.replace(/\[number\]/g, '<div class="number socket"><input type="number"></div>');
-    value = value.replace(/\[boolean:(true|false)\]/g, '<div class="boolean socket"><select><option>true</option><option selected>false</option></select></div>');
-    value = value.replace(/\[boolean\]/g, '<div class="boolean socket"><select><option>true</option><option>false</option></select></div>');
-    value = value.replace(/\[string:(.+?)\]/g, '<div class="string socket"><input value="$1"></div>');
-    value = value.replace(/\[string\]/g, '<div class="string socket"><input></div>');
-    value = value.replace(/\[color\]/g, '<div class="color socket"><input type="color"></div>');
-    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<div class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></div>');
+    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<span class="number socket"><input type="number" value="$1"></span>');
+    value = value.replace(/\[number\]/g, '<span class="number socket"><input type="number"></span>');
+    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
+    value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
+    value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
+    value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
+    value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
+    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
     return value;

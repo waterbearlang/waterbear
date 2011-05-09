@@ -38,13 +38,16 @@
   padding-top: 15px;
 }
 
-.wrapper p {
+.blockhead{
+  font-family: Georgia;
+  font-size: 12px;
+  white-space: nowrap;
   padding: 7px 20px;
   padding-bottom: 6px;
   margin: 0px;
 }
 
-.value > .block > p{
+.value > .block > .blockhead{
     padding: 3px 10px 3px 10px;
     margin: 1px;
 }
@@ -58,11 +61,6 @@
     border: 1px solid white;
 }
 
-.wrapper label, .wrapper p {
-  font-family: Georgia;
-  font-size: 12px;
-  white-space: nowrap;
-}
 
 .slot, .flap {
   display: block;
@@ -86,6 +84,7 @@
 .flap {
   position: absolute;
   top: -7px;
+  left: 0px;
   background-color: inherit;
 }
 
@@ -98,6 +97,7 @@
 
 
 .contained {
+  display: block;
   background-color: white;
   position: relative;
   padding-top: 1px;
@@ -120,6 +120,7 @@
 
 .next {
   position: relative;
+  display: block;
   background-color: transparent;
   border-color: inherit;
   width: 100%;
@@ -136,7 +137,7 @@
   background-color: white;
 }
 
-.block p{
+.block .blockhead{
     overflow-y: hidden;
 }
 

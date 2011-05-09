@@ -34,7 +34,7 @@ function update_scripts_view(){
 }
 
 function run_scripts(event){
-    $(document.body).scrollLeft(10000);
+    $(document).scrollLeft(10000);
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
     $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
 }
@@ -83,8 +83,8 @@ function clear_scripts(event, force){
 }
 $('.clear_scripts').click(clear_scripts);
 
-$('.goto_script').click(function(){$(document.body).scrollLeft(0);});
-$('.goto_stage').click(function(){$(document.body).scrollLeft(100000);});
+$('.goto_script').click(function(){$(document).scrollLeft(0);});
+$('.goto_stage').click(function(){$(document).scrollLeft(100000);});
 
 // Load and Save Section
 
@@ -98,7 +98,7 @@ function scripts_as_object(){
 }
 
 function save_current_scripts(){
-    $(document.body).scrollLeft(0);
+    $(document).scrollLeft(0);
     localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
 }
 $(window).unload(save_current_scripts);

@@ -95,7 +95,6 @@ limitations under the License.
 * Recursive value blocks not being replaced
 * Regex replace not working in Firefox  
 * Make sure restore dialogue scrolls
-* Block labels wrapping on Firefox
 * Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents

@@ -39,8 +39,9 @@ function Timer(){
 }
 
 Timer.prototype.update_time = function(){
+    var self = this;
     this.time = Math.round(Date.now() - this.start_time);
-    setTimeout(this.update_time, 1000);
+    setTimeout(function(){self.update_time()}, 1000);
 };
 
 Timer.prototype.reset = function(){

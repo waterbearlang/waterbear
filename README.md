@@ -92,8 +92,6 @@ limitations under the License.
   
 # Bugs
 
-* Recursive value blocks not being replaced
-* Regex replace not working in Firefox  
 * Make sure restore dialogue scrolls
 * Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element

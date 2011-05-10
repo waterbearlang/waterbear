@@ -89,6 +89,13 @@ limitations under the License.
 * Better code formatting for code view
 * Script embedding
 * Server for saving and sharing scripts
+* Two ways to beautify JS:
+  - https://github.com/einars/js-beautify/blob/master/beautify.js
+  - https://github.com/douglascrockford/JSLint/blob/master/jslint.js
+  - try 'em both, see what sticks
+* JS to coffeescript:
+  - https://github.com/mindynamics/js2cs
+  
   
 # Bugs
 

@@ -2,7 +2,7 @@
 
 ## Description
 
-Waterbear is a toolkit for making programming more accessible and fun. Not a language itself, but a block syntax inspired by Scratch (http://scratch.mit.edu/) that can be used to represent langauges. Waterbear's blocks drag and snap together, representing code that eliminates syntax errors much like garbage collection alleviates memory errors and bound checking helps prevent overrun errors.
+Waterbear is a toolkit for making programming more accessible and fun. Not a language itself, but a block syntax inspired by Scratch (http://scratch.mit.edu/) that can be used to represent languages. Waterbear's blocks drag and snap together, representing code that eliminates syntax errors much like garbage collection alleviates memory errors and bound checking helps prevent overrun errors.
 
 Waterbear's system of draggable, snappable blocks, are built using clean HTML5, CSS3, and Javascript. The goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects.
 
@@ -31,8 +31,6 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 * My kids, Azlen and Mina, for helping test so many programming environments and being my best critics
 * Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real
 * Scratch, the primary source of inspiration for this project
-* Alice
-* StarLogo
 * Basic
 * Quartz Composer
 * NodeBox
@@ -40,6 +38,14 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 * Processing.js
 * Raphael
 * Crafty
+
+## Related Projects
+
+* Scratch http://scratch.mit.edu/
+* Alice 3D: http://www.alice.org/ 
+* Design Blocks: http://www.kickstarter.com/projects/evhan55/designblocks-visual-programming-for-artists
+* Open Blocks: http://education.mit.edu/openblocks
+* StarLogo: http://education.mit.edu/projects/starlogo-tng
 
 
 ## Contributors
@@ -71,10 +77,9 @@ limitations under the License.
 
 * Autogenerate variable names
 * Full web site with tutorial and forums
-* Option blocks - generalize block creation with selection lists
 * Zoom into script view
 * Build new blocks in Workspace
-* Show all blocks (workaround for block drift bug)
+* Show all blocks (workaround for block drift bug) or autolayout
 * Larger script workspace, with scrollbars
 * Multiple script workspaces (allows one per sprite, for instance)
 * [optional] Allow contained blocks to overflow right edge of block without growing block
@@ -95,15 +100,14 @@ limitations under the License.
   - try 'em both, see what sticks
 * JS to coffeescript:
   - https://github.com/mindynamics/js2cs
+* Flared borders: http://orderedlist.com/blog/articles/flared-borders-with-css/
   
   
 # Bugs
 
 * Make sure restore dialogue scrolls
-* Clicking into tabs doesn't work on iPad
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents
 * Clicking into an input after the first input puts cursor in first input
 * Visual cues when snapping are overly subtle
 * Snap regions too small
-* On drop, remove "active_drop" class

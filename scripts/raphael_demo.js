@@ -161,7 +161,7 @@ var menus = {
         {
             label: 'answer', 
             'type': 'string', 
-            script: 'local.answer'
+            script: '"+local.answer+"'
         },
         {
             label: 'mouse x', 

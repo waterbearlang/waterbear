@@ -330,7 +330,8 @@
             return this.outerWidth() * this.outerHeight();
         },
         contained_by: function(target){
-            return this.overlap(target) === this.area();
+            var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
+            return this.overlap(target) >= this.area();
         }
     });
     

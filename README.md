@@ -53,7 +53,7 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 
 * Dethe Elza (https://github.com/dethe)
 * Martyn Eggleton (https://github.com/stretchyboy)
-* 
+* Chistopher de Beer (http://github.com/christopherdebeer)
 
 ## License
 
@@ -101,6 +101,7 @@ limitations under the License.
   - try 'em both, see what sticks
 * JS to coffeescript:
   - https://github.com/mindynamics/js2cs
+  - (more recent) http://ricostacruz.com/js2coffee/
 * Flared borders: http://orderedlist.com/blog/articles/flared-borders-with-css/
   
   

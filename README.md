@@ -46,13 +46,14 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 * Design Blocks: http://www.kickstarter.com/projects/evhan55/designblocks-visual-programming-for-artists
 * Open Blocks: http://education.mit.edu/openblocks
 * StarLogo: http://education.mit.edu/projects/starlogo-tng
+* Google App Inventor: http://appinventor.googlelabs.com/about/
 
 
 ## Contributors
 
-* Dethe Elza
-* [Your name here]
-
+* Dethe Elza (https://github.com/dethe)
+* Martyn Eggleton (https://github.com/stretchyboy)
+* 
 
 ## License
 

@@ -103,6 +103,16 @@ limitations under the License.
   - https://github.com/mindynamics/js2cs
   - (more recent) http://ricostacruz.com/js2coffee/
 * Flared borders: http://orderedlist.com/blog/articles/flared-borders-with-css/
+* High-level components like Android AppInventor:
+  - UI: Button, canvas, checkbox, clock, image, label, listpicker, password, textbox, tinydb???
+  - Media: Camera, imagepicker, player, sound, videoplayer
+  - Animation: Ball, imagesprite
+  - Social: Contact picker, email picker, phone call, phone number picker, texting, twitter
+  - Sensors: Accelerometer, location, orientation
+  - Screen arrangement: Vertical, horizontal, table
+  - Mindstorms: Color sensor, directions, drive, light sensor, sound sensor, touch sensor, ultrasonic sensor
+  - Other: Activity starter, barcode scanner, bluetooth scanner, bluetooth server, notifier, speech recognizer, text to speech, tinywebdb, web
+* Also like AppInventor: Configuration sheets for high-level components
   
   
 # Bugs

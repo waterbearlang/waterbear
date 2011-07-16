@@ -83,7 +83,8 @@ $.extend($.fn,{
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
-      return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + script + '\n})(jQuery);';
+      var bscript = js_beautify(script);
+      return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + bscript + '\n})(jQuery);';
   },
   write_script: function(view){
       view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');

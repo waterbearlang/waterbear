@@ -1,17 +1,4 @@
 
-function showColorPicker(){
-    var self = $(this);
-    cw.input(this);
-    cw.onchange(function(){
-        var color = self.val();
-        self.css({color: color, 'background-color': color});
-    });
-    $('#color_popup').bPopup({modalColor: 'transparent'});
-}
-$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
-$(document).ready(function(){
-    window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
-});
 
 
 $.selected_block = function(){

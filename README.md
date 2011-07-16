@@ -76,6 +76,10 @@ limitations under the License.
 
 # Coming Features
 
+* Move JS, Raphael, Sketchy, Arduino to plugins
+* Format UI from plugins
+* Move wrap_scripts to language plugin
+* Use a library loader (YepNope)
 * Autogenerate variable names
 * Full web site with tutorial and forums
 * Zoom into script view
@@ -92,11 +96,11 @@ limitations under the License.
 * Reach out: Facebook, IRC
 * Get design help, especially for workspace
 * Waterbear logo
-* Better code formatting for code view
+* √ Better code formatting for code view
 * Script embedding
 * Server for saving and sharing scripts
 * Two ways to beautify JS:
-  - https://github.com/einars/js-beautify/blob/master/beautify.js
+  - √ https://github.com/einars/js-beautify/blob/master/beautify.js
   - https://github.com/douglascrockford/JSLint/blob/master/jslint.js
   - try 'em both, see what sticks
 * JS to coffeescript:
@@ -113,7 +117,17 @@ limitations under the License.
   - Mindstorms: Color sensor, directions, drive, light sensor, sound sensor, touch sensor, ultrasonic sensor
   - Other: Activity starter, barcode scanner, bluetooth scanner, bluetooth server, notifier, speech recognizer, text to speech, tinywebdb, web
 * Also like AppInventor: Configuration sheets for high-level components
-  
+
+# On Chromeless (nee 
+
+>    Absolutely, You can use processes [1], though the api for interactin with external procs is rather miserable at the moment [2]. Or you can use JSCtypes [3], for which there's a tiny toy example you can start from [4].
+
+>    lloyd
+
+>    [1] http://nochro.me/#module/lib/child_process
+>    [2] https://github.com/mozilla/chromeless/issues/130
+>    [3] https://wiki.mozilla.org/JSctypes
+>    [4] https://github.com/mozilla/chromeless/tree/master/examples/jsctypes  
   
 # Bugs
 

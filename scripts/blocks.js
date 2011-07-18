@@ -27,54 +27,10 @@ $.extend($.fn,{
       if (this.is('.number')) return 'number';
       if (this.is('.boolean')) return 'boolean';
       if (this.is('.string')) return 'string';
+      if (this.is('.float')) return 'float';
+      if (this.is('.int')) return 'int';
+      if (this.is('.any')) return 'any';
       return 'unknown';
-  },
-  extract_script: function(){
-      if (this.length === 0) return '';
-      if (this.is(':input')) return this.val();
-      if (this.is('.empty')) return '// do nothing';
-      return this.map(function(){
-          var self = $(this);
-          var script = self.data('script');
-          if (!script) return null;
-          var exprs = $.map(self.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
-          var blks = $.map(self.child_blocks(), function(elem, idx){return $(elem).extract_script();});
-          if (exprs.length){
-              // console.log('expressions: %o', exprs);
-              function exprf(match, offset, s){
-                  // console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
-                  var idx = parseInt(match.slice(2,-2), 10) - 1;
-                  // console.log('index: %d, expression: %s', idx, exprs[idx]);
-                  return exprs[idx];
-              };
-              script = script.replace(/\{\{\d\}\}/g, exprf);
-          }
-          if (blks.length){
-              function blksf(match, offset, s){
-                  var idx = parseInt(match.slice(2,-2), 10) - 1;
-                  return blks[idx];
-              }
-              script = script.replace(/\[\[\d\]\]/g, blksf);
-          }
-          next = self.next_block().extract_script();
-          if (script.indexOf('[[next]]') > -1){
-              script = script.replace('[[next]]', next);
-          }else{
-              if (self.is('.step, .trigger')){
-                  script = script + '\n' + next;
-              }
-          }
-          return script;
-      }).get().join('\n\n');
-  },
-  wrap_script: function(){
-      // wrap the top-level script to prevent leaking into globals
-      var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
-      var bscript = js_beautify(script);
-      return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + bscript + '\n})(jQuery);';
-  },
-  write_script: function(view){
-      view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');
   },
   parent_block: function(){
       var p = this.closest('.wrapper').parent();

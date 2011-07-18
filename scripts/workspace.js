@@ -206,6 +206,25 @@ function load_current_scripts(){
 }
 $(document).ready(load_current_scripts);
 
+// Tab UI
+
+// UI Section
+
+function tab_select(event){
+    var self = $(this);
+    $('.tab_bar .selected').removeClass('selected');
+    self.addClass('selected');
+    $('.workspace:visible > div:visible').hide();
+    if (self.is('.scripts_workspace_tab')){
+        $('.workspace:visible .scripts_workspace').show();
+    }else if (self.is('.scripts_text_view_tab')){
+        $('.workspace:visible .scripts_text_view').show();
+        update_scripts_view();
+    }
+}
+$('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
+
+
 // Build the Blocks menu, this is a public method
 
 function menu(title, specs, show){

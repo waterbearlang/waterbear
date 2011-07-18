@@ -18,6 +18,137 @@ window.choice_lists = {
     analogrefs:['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL']
 };
 
+window.set_defaultscript = function(script){
+    window.defaultscript = script; 
+};
+
+window.load_defaultscript = function(script){
+    if (typeof window.defaultscript != 'undefined'){
+        //console.log("window.defaultscript =", window.defaultscript);
+        load_scripts_from_object(window.defaultscript);
+    }
+};
+
+window.update_scripts_view = function(){
+    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+    var view = $('.workspace:visible .scripts_text_view');
+    blocks.write_script(view);
+}
+
+function run_scripts(event){
+    $(document).scrollLeft(10000);
+    var blocks = $('.workspace:visible .scripts_workspace > .trigger');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
+}
+$('.run_scripts').click(run_scripts);
+
+jQuery.fn.extend({
+  extract_script: function(){
+      if (this.length === 0) {return '';}
+      if (this.is(':input')) {return this.val();}
+      if (this.is('.empty')) {return '// do nothing';}
+      return this.map(function(){
+          var self = $(this);
+          var script = self.data('script');
+          if (!script) {return null;}
+          var exprs = $.map(self.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
+          var blks = $.map(self.child_blocks(), function(elem, idx){return $(elem).extract_script();});
+          if (exprs.length){
+              // console.log('expressions: %o', exprs);
+              var exprf = function(match, offset, s){
+                  // console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
+                  var idx = parseInt(match.slice(2,-2), 10) - 1;
+                  // console.log('index: %d, expression: %s', idx, exprs[idx]);
+                  return exprs[idx];
+              };
+              script = script.replace(/\{\{\d\}\}/g, exprf);
+          }
+          if (blks.length){
+              var blksf = function(match, offset, s){
+                  var idx = parseInt(match.slice(2,-2), 10) - 1;
+                  return blks[idx];
+              };
+              script = script.replace(/\[\[\d\]\]/g, blksf);
+          }
+          next = self.next_block().extract_script();
+          if (script.indexOf('[[next]]') > -1){
+              script = script.replace('[[next]]', next);
+          }else{
+              if (self.is('.step, .trigger')){
+                  script = script + '\n' + next;
+              }
+          }
+          return script;
+      }).get().join('\n\n');
+  },
+  wrap_script: function(){
+      // wrap the top-level script to prevent leaking into globals
+      var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
+      //return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + script + '\n})(jQuery);';
+      return script;
+  },
+  write_script: function(view){
+      view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');
+  }
+});
+
+function test_block(block){
+    var name = block.data('klass') + ': ' + block.data('label');
+    try{
+        eval(block.wrap_script());
+        // console.log('passed: %s', name);
+        return true;
+    }catch(e){
+        if (e.name === 'SyntaxError'){
+            console.error('failed: %s, %o', name, e);
+            return false;
+        }else{
+            // console.warn('passed with error: %s, %o', name, e);
+            return true;
+        }
+    }
+}
+
+function test(){
+    var blocks = $('.block_menu .wrapper');
+    var total = blocks.length;
+    var success = 0;
+    var fail = 0;
+    console.log('running %d tests', total);
+    blocks.each(function(idx, elem){
+        setTimeout(function(){
+            // console.log('running test %d', idx);
+            if(test_block($(elem)))
+            {
+              success++;
+            }
+            else
+            {
+              fail++;
+            }
+            if( success + fail === total){
+                console.log('Ran %d tests, %d successes, %s failures', total, success, fail);
+            }
+        }, 10);
+    });
+}
+window.test = test;
+
+function clear_scripts(event, force){
+    if (force || confirm('Throw out the current script?')){
+        $('.workspace:visible > *').empty();
+        $('.stage').replaceWith('<div class="stage"></div>');
+    }
+}
+
+function clear_scripts_default(event, force){
+  clear_scripts(event, force);
+  load_defaultscript();  
+}
+
+
+$('.clear_scripts').click(clear_scripts_default);
+
 
 var menus = {
     control: menu('Control', [

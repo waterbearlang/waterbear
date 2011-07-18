@@ -76,10 +76,12 @@ limitations under the License.
 
 # Coming Features
 
+* Make front page about Waterbear, start IDE on subsequent page
+* Wrap scripts to avoid global pollution on run, not on display
 * Move JS, Raphael, Sketchy, Arduino to plugins
 * Format UI from plugins
 * Move wrap_scripts to language plugin
-* Use a library loader (YepNope)
+* √ Use a library loader (YepNope)
 * Autogenerate variable names
 * Full web site with tutorial and forums
 * Zoom into script view
@@ -120,7 +122,7 @@ limitations under the License.
 
 # On Chromeless (nee 
 
->    Absolutely, You can use processes [1], though the api for interactin with external procs is rather miserable at the moment [2]. Or you can use JSCtypes [3], for which there's a tiny toy example you can start from [4].
+>    Absolutely, You can use processes [1], though the api for interacting with external procs is rather miserable at the moment [2]. Or you can use JSCtypes [3], for which there's a tiny toy example you can start from [4].
 
 >    lloyd
 
@@ -128,6 +130,8 @@ limitations under the License.
 >    [2] https://github.com/mozilla/chromeless/issues/130
 >    [3] https://wiki.mozilla.org/JSctypes
 >    [4] https://github.com/mozilla/chromeless/tree/master/examples/jsctypes  
+
+Short answer: No, but if you want to write code for Chromeless to make it work...
   
 # Bugs
 

@@ -6,7 +6,8 @@
  */
 
 yepnope({
-    load: ['lib/raphael-1.3.1-min.js',
+    load: [ 'plugins/javascript.css',
+            'lib/raphael-1.3.1-min.js',
             'lib/raphael-path.js',
             'lib/sketchy.js',
             'lib/colorwheel.js',

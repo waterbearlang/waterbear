@@ -1,3 +1,7 @@
+yepnope({
+    load: 'plugins/arduino.css'
+});
+
 (function(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
     

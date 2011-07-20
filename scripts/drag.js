@@ -78,9 +78,14 @@
     function get_potential_drop_targets(){
         switch(drag_target.block_type()){
             case 'step': return step_targets();
-            case 'number': return socket_targets('number');
-            case 'boolean': return socket_targets('boolean');
-            case 'string': return socket_targets('string');
+            case 'number': return socket_targets2('any,number');
+            //case 'int': return socket_targets('number').add(socket_targets('int'));
+            case 'int': return socket_targets2('any,number,int'); 
+            //case 'float': return socket_targets('number').add(socket_targets('float'));
+            case 'float': return socket_targets2('any,number,float'); 
+            case 'boolean': return socket_targets2('any,boolean');
+            case 'string': return socket_targets2('any,string');
+            case 'any': return socket_targets2('any');
             default: return $();
         }
     }
@@ -92,13 +97,26 @@
     function socket_targets(type){
         return target_canvas.find('.socket.' + type + ':not(:has(.value))');
     }
+    
+    /*a slower but more flexible way of doing the socket targets
+    This method could have its setting be held in an array and 
+    so might be better for config*/
+    function socket_targets2(types){
+        var type_array = types.split(',');
+        var res = $();
+        for(var i = 0 ; i< type_array.length ; i++)
+        {
+          res = res.add(target_canvas.find('.socket.' + type_array[i] + ':not(:has(.value))'));
+        }
+        return res;
+    }
         
     function init_drag(event){
         // Called on mousedown or touchstart, we haven't started dragging yet
         // TODO: Don't start drag on a text input
-        if (!blend(event)) return undefined;
+        if (!blend(event)) {return undefined;}
         var eT = $(event.target);
-        if (eT.is(':input') && ! eT.contained_by($('.block_menu'))) return undefined;
+        if (eT.is(':input') && ! eT.contained_by($('.block_menu'))) {return undefined;}
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){
@@ -117,8 +135,8 @@
     function start_drag(event){
         // console.log('trying to start drag');
         // called on mousemove or touchmove if not already dragging
-        if (!blend(event)) return undefined;
-        if (!drag_target) return undefined;
+        if (!blend(event)) {return undefined;}
+        if (!drag_target) {return undefined;}
         // console.log('start_drag');
         current_position = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
@@ -154,9 +172,9 @@
     
     function drag(event){
         // console.log('trying to drag, honestly');
-        if (!blend(event)) return undefined;
-        if (!drag_target) return undefined;
-        if (!current_position) start_drag(event);
+        if (!blend(event)) {return undefined;}
+        if (!drag_target) {return undefined;}
+        if (!current_position) {start_drag(event);}
         event.preventDefault();
         // update the variables, distance, button pressed
         var next_position = {left: event.pageX, top: event.pageY};
@@ -172,7 +190,7 @@
         // console.log('end_drag');
         clearTimeout(timer);
         timer = null;
-        if (!dragging) return undefined;
+        if (!dragging) {return undefined;}
         handle_drop();
         reset();
         return false;
@@ -241,7 +259,7 @@
         // test the dragging rect(s) against the target rect(s)
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
-        if (!drag_target) return;
+        if (!drag_target) {return;}
         var drop_idx = -1;
         var drop_area = 0;
         var drag_type = drag_target.block_type();
@@ -330,8 +348,8 @@
             return this.outerWidth() * this.outerHeight();
         },
         contained_by: function(target){
-            var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
-            return this.overlap(target) >= this.area();
+          var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
+          return this.overlap(target) >= targetArea;  
         }
     });
     

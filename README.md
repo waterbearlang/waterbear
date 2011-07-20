@@ -76,11 +76,14 @@ limitations under the License.
 
 # Coming Features
 
-* Make front page about Waterbear, start IDE on subsequent page
-* Wrap scripts to avoid global pollution on run, not on display
+* Create and manipulate arrays and objects
+* Create new functions
+* Support for any() type variables (fix String troubles)
+* √ Make front page about Waterbear, start IDE on subsequent page
+* √ Wrap scripts to avoid global pollution on run, not on display
 * Move JS, Raphael, Sketchy, Arduino to plugins
 * Format UI from plugins
-* Move wrap_scripts to language plugin
+* √ Move wrap_scripts to language plugin
 * √ Use a library loader (YepNope)
 * Autogenerate variable names
 * Full web site with tutorial and forums

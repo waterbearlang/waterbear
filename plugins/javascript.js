@@ -258,6 +258,20 @@ var menus = {
             script: 'while(!({{1}})){\n[[1]]\n}'
         }
     ], false),
+    array: menu('Arrays', [
+        {
+            label: 'new array',
+            script: 'local.last_var = [];'
+        },
+        {
+            label: 'new array named [string]',
+            script: 'local.last_var = local.variables["{{1}}"] = [];'
+        },
+        {
+            label: 'array append [any]',
+            script: 'local.last_var.push("{{1}}");'
+        } 
+    ], false),
     sensing: menu('Sensing', [
         {
             label: 'ask [string:What\'s your name?] and wait',

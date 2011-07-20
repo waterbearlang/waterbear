@@ -6,6 +6,8 @@ var DEGREE = Math.PI / 180;
 function Local(){
     this.shape = null;
     this.shape_references = {};
+    this.last_var = null;
+    this.variables = {};
 };
 
 function Global(){

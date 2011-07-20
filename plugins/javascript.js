@@ -61,7 +61,7 @@ jQuery.fn.extend({
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.pretty_script();
-      return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + bscript + '\n})(jQuery);';
+      return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + script + '\n})(jQuery);';
   },
   pretty_script: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));

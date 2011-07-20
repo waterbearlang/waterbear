@@ -24,7 +24,7 @@ There is a demo of a recent build (not guaranteed to be working at any given tim
 
 ## Where to get help
 
-The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOTGLYPH org]. As the project progresses I will set up a mailing list or forum, buglist, etc.  The documentation for Waterbear will live here: <a href="docs/">Waterbear Documentation</a>. You can follow this project on twitter at <a href="http://twitter.com/water_bear">@water_bear</a>.
+The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOTGLYPH org]. As the project progresses I will set up a mailing list or forum, buglist, etc.  The documentation for Waterbear will live here: <a href="docs/">Waterbear Documentation</a>. You can follow this project on twitter at <a href="http://twitter.com/waterbearlang">@waterbearlang</a>.
 
 ## Acknowledgements
 
@@ -135,6 +135,8 @@ Short answer: No, but if you want to write code for Chromeless to make it work..
   
 # Bugs
 
+* When switching languages, clear the scripts
+* When saving and restoring, language matters - restore needed plugins
 * Make sure restore dialogue scrolls
 * Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents

@@ -150,7 +150,7 @@ Raphael.fn.imageWithNaturalHeight = function(url){
 };
 
 
-window.update_scripts_view(){
+window.update_scripts_view = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     var view = $('.workspace:visible .scripts_text_view');
     blocks.write_script(view);

@@ -225,7 +225,8 @@ function tab_select(event){
 }
 $('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
 
-function show_workspace(){
+// Expose this to draggging and saving functionality
+window.show_workspace = function(){
     $('.workspace:visible .scripts_text_view').hide();
     $('.workspace:visible .scripts_workspace').show();
 }

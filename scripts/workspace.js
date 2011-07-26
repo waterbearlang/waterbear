@@ -73,6 +73,7 @@ function scripts_as_object(){
 }
 
 function save_current_scripts(){
+    show_workspace();
     $(document).scrollLeft(0);
     localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
 }
@@ -223,6 +224,11 @@ function tab_select(event){
     }
 }
 $('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
+
+function show_workspace(){
+    $('.workspace:visible .scripts_text_view').hide();
+    $('.workspace:visible .scripts_workspace').show();
+}
 
 
 // Build the Blocks menu, this is a public method

@@ -145,6 +145,8 @@
             cloned = true;
         }
         dragging = true;
+        // Make sure the workspace is available to drag to
+        show_workspace();
         // get position and append target to .content, adjust offsets
         // set last offset
         // TODO: handle detach better

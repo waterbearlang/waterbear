@@ -231,14 +231,16 @@
                     top: 0
                 });
             }
+        }else if ($('.block_menu').cursor_over()){
+            drag_target.remove();
         }else if (drag_target.overlap(target_canvas)){
             // console.log('Drop onto canvas');
             var curr_pos = drag_target.offset();
             target_canvas.append(drag_target);
             drag_target.offset(curr_pos);
-        }else if (drag_target.contained_by($('.block_menu'))){
+        // }else if (drag_target.contained_by($('.block_menu'))){
             // console.log('remove drag target');
-            drag_target.remove();
+            // drag_target.remove();
         }else{
             if (cloned){
                 // console.log('remove cloned block');
@@ -358,6 +360,11 @@
         contained_by: function(target){
           var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
           return this.overlap(target) >= targetArea;  
+        },
+        cursor_over: function(){
+            var rect = this.rect();
+            return current_position.left >= rect.left && current_position.left <= rect.right &&
+                   current_position.top >= rect.top && current_position.top <= rect.bottom;
         }
     });
     

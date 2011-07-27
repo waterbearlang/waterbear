@@ -50,7 +50,7 @@ $.extend($.fn,{
       });
   },
   socket_blocks: function(){
-      return this.find('> .block > .blockhead > label').children('.socket, .autosocket').children('input, select, .wrapper');
+      return this.find('> .block > .blockhead > .label').children('.socket, .autosocket').children('input, select, .wrapper');
   },
   next_block: function(){
       return this.find('> .next > .wrapper');
@@ -122,7 +122,7 @@ function Block(options){
         opts.slot = false; // values nest, but do not follow
         opts.flap = false;
     }
-    var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><label>' + Label(opts.label) + '</label></span></span></span>');
+    var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
     var block = wrapper.children();
@@ -151,10 +151,10 @@ function Block(options){
         $.each(opts.sockets, function(idx, value){
             if ($.isPlainObject(value)){
                 var child = Block(value);
-                block.find('> .blockhead > label > .socket').eq(idx).empty().append(child);
+                block.find('> .blockhead > .label > .socket').eq(idx).empty().append(child);
                 child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
-                var socket = block.find('> .blockhead > label > .socket :input, > .blockhead > label > .autosocket select').eq(idx);
+                var socket = block.find('> .blockhead > .label > .socket :input, > .blockhead > .label > .autosocket select').eq(idx);
                 socket.val(value);
                 if (socket.attr('type') === 'color'){
                     socket.css({color: value, 'background-color': value});

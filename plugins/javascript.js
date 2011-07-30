@@ -23,11 +23,12 @@ jQuery.fn.extend({
   extract_script: function(){
       if (this.length === 0) return '';
       if (this.is(':input')){
-          if (this.parent().is('.string') || this.parent().is('.color'){
+          if (this.parent().is('.string') || this.parent().is('.color')){
               return '"' + this.val() + '"';
           }else{
               return this.val();
           }
+      }
       if (this.is('.empty')) return '// do nothing';
       return this.map(function(){
           var self = $(this);
@@ -263,20 +264,20 @@ var menus = {
             script: 'while(!({{1}})){[[1]]}'
         }
     ], false),
-    // array: menu('Arrays', [
-    //     {
-    //         label: 'new array',
-    //         script: 'local.last_var = [];'
-    //     },
-    //     {
-    //         label: 'new array named [string]',
-    //         script: 'local.last_var = local.variables[{{1}}] = [];'
-    //     },
-    //     {
-    //         label: 'array append [any]',
-    //         script: 'local.last_var.push({{1}});'
-    //     } 
-    // ], false),
+    array: menu('Arrays', [
+        {
+            label: 'new array',
+            script: 'local.last_var = [];'
+        },
+        {
+            label: 'new array named [string]',
+            script: 'local.last_var = local.variables[{{1}}] = [];'
+        },
+        {
+            label: 'array append [any]',
+            script: 'local.last_var.push({{1}});'
+        } 
+    ], false),
     sensing: menu('Sensing', [
         {
             label: 'ask [string:What\'s your name?] and wait',

@@ -149,15 +149,21 @@
         show_workspace();
         // get position and append target to .content, adjust offsets
         // set last offset
-        // TODO: handle detach better
+        // TODO: handle detach better (generalize restoring sockets, put in language file)
         if (drag_target.parent().is('.socket')){
             var classes = drag_target.parent().attr('class');
 
             classes = classes.replace("socket","").trim();
             // console.log(classes);
-            if(!classes || classes=="string")
-                classes = '\"text\"'
-            drag_target.parent().append('<input type="'+classes+'"/>');
+            if(classes == "boolean"){           
+                drag_target.parent().append(
+                    '<select><option>true</option><option>false</option></select>');
+            }else{
+                if(!classes || classes=="string"){
+                    classes = '\"text\"';
+                }
+                drag_target.parent().append('<input type="'+classes+'"/>');
+            }
         }
         drag_target.css('position', 'absolute');
         $('.content').append(drag_target);
@@ -215,6 +221,7 @@
         if (drop_target && drop_target.length){
             drop_target.removeClass('drop_active');
             if (drag_target.block_type() === 'step'){
+                // Drag a step to snap to a step
                 drop_target.parent().append(drag_target);
                 drag_target.css({
                     position: 'relative',
@@ -222,8 +229,9 @@
                     top: 0
                 });
             }else{
+                // Insert a value block into a socket
                 // console.log('trying to drop: into %s', drop_target.long_name());
-                drop_target.find('input').remove();
+                drop_target.find('input, select').remove();
                 drop_target.append(drag_target);
                 drag_target.css({
                     position: 'relative',
@@ -232,8 +240,10 @@
                 });
             }
         }else if ($('.block_menu').cursor_over()){
+            // delete block if dragged back to menu
             drag_target.remove();
         }else if (drag_target.overlap(target_canvas)){
+            // generally dragged to canvas, position it there
             // console.log('Drop onto canvas');
             var curr_pos = drag_target.offset();
             target_canvas.append(drag_target);

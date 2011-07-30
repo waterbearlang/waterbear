@@ -141,8 +141,8 @@ Short answer: No, but if you want to write code for Chromeless to make it work..
 * When switching languages, clear the scripts
 * When saving and restoring, language matters - restore needed plugins
 * Make sure restore dialogue scrolls
-* Dragging block out of a Boolean socket doesn't restore select element
+* √ Dragging block out of a Boolean socket doesn't restore select element
 * Clicking into an input doesn't select contents
-* Clicking into an input after the first input puts cursor in first input
+* √ Clicking into an input after the first input puts cursor in first input
 * Visual cues when snapping are overly subtle
 * Snap regions too small

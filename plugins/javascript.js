@@ -52,16 +52,16 @@ jQuery.fn.extend({
               script = script.replace('[[next]]', next);
           }else{
               if (self.is('.step, .trigger')){
-                  script = script + '\n' + next;
+                  script = script + next;
               }
           }
           return script;
-      }).get().join('\n\n');
+      }).get().join('');
   },
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.pretty_script();
-      return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + script + '\n})(jQuery);';
+      return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
   },
   pretty_script: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
@@ -207,26 +207,26 @@ var menus = {
         {
             label: 'when program runs', 
             trigger: true, 
-            script: 'function _start(){\n[[next]]\n}\n_start();\n'
+            script: 'function _start(){[[next]]}_start();'
             },
         {
             label: 'when [choice:keys] key pressed', 
             trigger: true, 
-            script: '$(document).bind("keydown", "{{1}}", function(){\nconsole.log("{{1}}");\n[[next]]\nreturn false;});'
+            script: '$(document).bind("keydown", "{{1}}", function(){console.log("{{1}}");[[next]]return false;});'
         },
         {
             label: 'every 1/[number:30] of a second', 
             trigger: true, 
-            script: 'setInterval(function(){\n[[next]]},\n1000/{{1}}\n);'
+            script: 'setInterval(function(){[[next]]},1000/{{1}});'
         },
         {
             label: 'wait [number:1] secs', 
-            script: 'setTimeout(function(){\n[[next]]},\n1000*{{1}}\n);'
+            script: 'setTimeout(function(){[[next]]},1000*{{1}});'
         },
         {
             label: 'repeat [number:10]', 
             containers: 1, 
-            script: 'range({{1}}).forEach(function(){\n[[1]]\n});'
+            script: 'range({{1}}).forEach(function(){[[1]]});'
         },
         {
             label: 'broadcast [string:ack] message', 
@@ -235,27 +235,27 @@ var menus = {
         {
             label: 'when I receive [string:ack] message', 
             trigger: true, 
-            script: '$(".stage").bind("{{1}}", function(){\n[[next]]\n});'
+            script: '$(".stage").bind("{{1}}", function(){[[next]]});'
         },
         {
             label: 'forever if [boolean:false]', 
             containers: 1, 
             slot: false, 
-            script: 'while({{1}}){\n[[1]]\n}'
+            script: 'while({{1}}){[[1]]}'
         },
         {
             label: 'if [boolean]', 
             containers: 1, 
-            script: 'if({{1}}){\n[[1]]\n}'
+            script: 'if({{1}}){[[1]]}'
         },
         {
             label: 'if [boolean] else', 
             containers: 2, 
-            script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}'
+            script: 'if({{1}}){[[1]]}else{[[2]]}'
         },
         {
             label: 'repeat until [boolean]', 
-            script: 'while(!({{1}})){\n[[1]]\n}'
+            script: 'while(!({{1}})){[[1]]}'
         }
     ], false),
     array: menu('Arrays', [
@@ -300,7 +300,7 @@ var menus = {
         {
             label: 'key [choice:keys] pressed?', 
             'type': 'boolean', 
-            script: '$(document).bind("keydown", {{1}}, function(){\n[[1]]\n});'
+            script: '$(document).bind("keydown", {{1}}, function(){[[1]]});'
         },
         {
             label: 'stage width', 
@@ -503,7 +503,7 @@ var menus = {
         {
             label: 'with shape [string:shape1] do', 
             containers: 1, 
-            script: 'local.oldshape = local.shape;\nlocal.shape = local.shape_references["{{1}}"];\n[[1]]\nlocal.shape = local.oldshape;'
+            script: 'local.oldshape = local.shape;local.shape = local.shape_references["{{1}}"];[[1]]local.shape = local.oldshape;'
         },
         {
             label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', 
@@ -695,7 +695,7 @@ var menus = {
         {
             label: 'get tweet for [string]',
             containers: 1,
-            script: 'local.getTweet("{{1}}", function(tweet){\nlocal.lastTweet = tweet;\n[[1]]\n});'
+            script: 'local.getTweet("{{1}}", function(tweet){local.lastTweet = tweet;[[1]]});'
         },
         {
             label: 'last tweet',
@@ -708,10 +708,10 @@ var menus = {
 var demos = [
     {title: 'Rotating Squares',
      description: 'Just a simple animation test',
-     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){\n[[next]]\n}\n_start();\n","containers":0,"offset":{"top":99,"left":540},"trigger":true,"sockets":[],"contained":[],"next":{"klass":"control","label":"repeat [number:10]","script":"range({{1}}).forEach(function(){\n[[1]]\n});","containers":1,"sockets":["10"],"contained":[{"klass":"shapes","label":"rect with width [number:0] and height [number:0]","script":"local.shape = global.paper.rect(0, 0, {{1}}, {{2}});","containers":0,"sockets":["25","25"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","sockets":["1",{"klass":"sensing","label":"stage width","script":"global.stage_width","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""},{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","sockets":["1",{"klass":"sensing","label":"stage height","script":"global.stage_height","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"animation","label":"rotation [number:15] degrees over [number:500] ms with [choice:easing]","script":"local.shape.animate({rotation: {{1}} }, {{2}}, \"{{3}}\");","containers":0,"sockets":["360","5000",">"],"contained":[],"next":""}}}],"next":""}}]},
+     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[next]]}_start();","containers":0,"offset":{"top":99,"left":540},"trigger":true,"sockets":[],"contained":[],"next":{"klass":"control","label":"repeat [number:10]","script":"range({{1}}).forEach(function(){[[1]]});","containers":1,"sockets":["10"],"contained":[{"klass":"shapes","label":"rect with width [number:0] and height [number:0]","script":"local.shape = global.paper.rect(0, 0, {{1}}, {{2}});","containers":0,"sockets":["25","25"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","sockets":["1",{"klass":"sensing","label":"stage width","script":"global.stage_width","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""},{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","sockets":["1",{"klass":"sensing","label":"stage height","script":"global.stage_height","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"animation","label":"rotation [number:15] degrees over [number:500] ms with [choice:easing]","script":"local.shape.animate({rotation: {{1}} }, {{2}}, \"{{3}}\");","containers":0,"sockets":["360","5000",">"],"contained":[],"next":""}}}],"next":""}}]},
     {title: 'Solipong',
     description: 'Pong Solitaire, work in progress',
-    scripts: [{"klass":"control","label":"when program runs","script":"function _start(){\n[[next]]\n}\n_start();\n","containers":0,"offset":{"top":121,"left":651},"trigger":true,"sockets":[],"contained":[],"next":{"klass":"shapes","label":"arc at radius [number:100] from [number:0] degrees to [number:30] degrees","script":"local.shape = global.paper.arcslice({{1}}, {{2}}, {{3}});","containers":0,"sockets":["100","0","30"],"contained":[],"next":{"klass":"shapes","label":"stroke linecap [choice:linecap]","script":"local.shape.attr(\"stroke-linecap\", \"{{1}}\");","containers":0,"sockets":["round"],"contained":[],"next":{"klass":"shapes","label":"stroke width [number:1]","script":"local.shape.attr(\"stroke-width\", {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.shape_references[\"{{1}}\"] = local.shape;","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"circle with radius [number:0]","script":"local.shape = global.paper.circle(0, 0, {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"shapes","label":"fill color [color:#FFFFFF]","script":"local.shape.attr(\"fill\", \"{{1}}\");","containers":0,"sockets":["#545ca5"],"contained":[],"next":{"klass":"shapes","label":"stroke transparent","script":"local.shape.attr(\"stroke\", \"transparent\");","containers":0,"sockets":[],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.shape_references[\"{{1}}\"] = local.shape;","containers":0,"sockets":["ball"],"contained":[],"next":""}}}}}}}}}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){\n[[next]]\nreturn false;});","containers":0,"offset":{"top":127,"left":942},"trigger":true,"sockets":["right"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.shape = local.shape_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){\n[[next]]\nreturn false;});","containers":0,"offset":{"top":279,"left":939},"trigger":true,"sockets":["left"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.shape = local.shape_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["-5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}}]
+    scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[next]]}_start();","containers":0,"offset":{"top":121,"left":651},"trigger":true,"sockets":[],"contained":[],"next":{"klass":"shapes","label":"arc at radius [number:100] from [number:0] degrees to [number:30] degrees","script":"local.shape = global.paper.arcslice({{1}}, {{2}}, {{3}});","containers":0,"sockets":["100","0","30"],"contained":[],"next":{"klass":"shapes","label":"stroke linecap [choice:linecap]","script":"local.shape.attr(\"stroke-linecap\", \"{{1}}\");","containers":0,"sockets":["round"],"contained":[],"next":{"klass":"shapes","label":"stroke width [number:1]","script":"local.shape.attr(\"stroke-width\", {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.shape_references[\"{{1}}\"] = local.shape;","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"circle with radius [number:0]","script":"local.shape = global.paper.circle(0, 0, {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"shapes","label":"fill color [color:#FFFFFF]","script":"local.shape.attr(\"fill\", \"{{1}}\");","containers":0,"sockets":["#545ca5"],"contained":[],"next":{"klass":"shapes","label":"stroke transparent","script":"local.shape.attr(\"stroke\", \"transparent\");","containers":0,"sockets":[],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.shape_references[\"{{1}}\"] = local.shape;","containers":0,"sockets":["ball"],"contained":[],"next":""}}}}}}}}}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){[[next]]return false;});","containers":0,"offset":{"top":127,"left":942},"trigger":true,"sockets":["right"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.shape = local.shape_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){[[next]]return false;});","containers":0,"offset":{"top":279,"left":939},"trigger":true,"sockets":["left"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.shape = local.shape_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["-5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}}]
     }
 ];
 populate_demos_dialog(demos);

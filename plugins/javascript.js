@@ -22,7 +22,12 @@ yepnope({
 jQuery.fn.extend({
   extract_script: function(){
       if (this.length === 0) return '';
-      if (this.is(':input')) return this.val();
+      if (this.is(':input')){
+          if (this.parent().is('.string') || this.parent().is('.color'){
+              return '"' + this.val() + '"';
+          }else{
+              return this.val();
+          }
       if (this.is('.empty')) return '// do nothing';
       return this.map(function(){
           var self = $(this);
@@ -212,7 +217,7 @@ var menus = {
         {
             label: 'when [choice:keys] key pressed', 
             trigger: true, 
-            script: '$(document).bind("keydown", "{{1}}", function(){console.log("{{1}}");[[next]]return false;});'
+            script: '$(document).bind("keydown", {{1}}, function(){console.log("{{1}}");[[next]]return false;});'
         },
         {
             label: 'every 1/[number:30] of a second', 
@@ -230,12 +235,12 @@ var menus = {
         },
         {
             label: 'broadcast [string:ack] message', 
-            script: '$(".stage").trigger("{{1}}");'
+            script: '$(".stage").trigger({{1}});'
         },
         {
             label: 'when I receive [string:ack] message', 
             trigger: true, 
-            script: '$(".stage").bind("{{1}}", function(){[[next]]});'
+            script: '$(".stage").bind({{1}}, function(){[[next]]});'
         },
         {
             label: 'forever if [boolean:false]', 
@@ -265,22 +270,22 @@ var menus = {
     //     },
     //     {
     //         label: 'new array named [string]',
-    //         script: 'local.last_var = local.variables["{{1}}"] = [];'
+    //         script: 'local.last_var = local.variables[{{1}}] = [];'
     //     },
     //     {
     //         label: 'array append [any]',
-    //         script: 'local.last_var.push("{{1}}");'
+    //         script: 'local.last_var.push({{1}});'
     //     } 
     // ], false),
     sensing: menu('Sensing', [
         {
             label: 'ask [string:What\'s your name?] and wait',
-            script: 'local.answer = prompt("{{1}}");'
+            script: 'local.answer = prompt({{1}});'
         },
         {
             label: 'answer', 
             'type': 'string', 
-            script: '"+local.answer+"'
+            script: '+local.answer+'
         },
         {
             label: 'mouse x', 
@@ -490,20 +495,20 @@ var menus = {
         },
         {
             label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', 
-            script: 'local.shape = global.paper.imageWithNaturalHeight("{{1}}");'
+            script: 'local.shape = global.paper.imageWithNaturalHeight({{1}});'
         },
         {
             label: 'name shape: [string:shape1]', 
-            script: 'local.shape_references["{{1}}"] = local.shape;'
+            script: 'local.shape_references[{{1}}] = local.shape;'
         },
         {
             label: 'refer to shape [string:shape1]', 
-            script: 'local.shape = local.shape_references["{{1}}"];'
+            script: 'local.shape = local.shape_references[{{1}}];'
         },
         {
             label: 'with shape [string:shape1] do', 
             containers: 1, 
-            script: 'local.oldshape = local.shape;local.shape = local.shape_references["{{1}}"];[[1]]local.shape = local.oldshape;'
+            script: 'local.oldshape = local.shape;local.shape = local.shape_references[{{1}}];[[1]]local.shape = local.oldshape;'
         },
         {
             label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', 
@@ -511,11 +516,11 @@ var menus = {
         },
         {
             label: 'fill color [color:#FFFFFF]', 
-            script: 'local.shape.attr("fill", "{{1}}");'
+            script: 'local.shape.attr("fill", {{1}});'
         },
         {
             label: 'stroke color [color:#000000]', 
-            script: 'local.shape.attr("stroke", "{{1}}");'
+            script: 'local.shape.attr("stroke", {{1}});'
         },
         {
             label: 'fill transparent', 
@@ -527,15 +532,15 @@ var menus = {
         },
         {
             label: 'stroke linecap [choice:linecap]', 
-            script: 'local.shape.attr("stroke-linecap", "{{1}}");'
+            script: 'local.shape.attr("stroke-linecap", {{1}});'
         },
         {
             label: 'stroke linejoin [choice:linejoin]', 
-            script: 'local.shape.attr("stroke-linejoin", "{{1}}");'
+            script: 'local.shape.attr("stroke-linejoin", {{1}});'
         },
         {
             label: 'stroke opacity [number:100]%', 
-            script: 'local.shape.attr("stroke-opacity", "{{1}}%");'
+            script: 'local.shape.attr("stroke-opacity", {{1}}+"%");'
         },
         {
             label: 'stroke width [number:1]', 
@@ -555,18 +560,18 @@ var menus = {
         },
         {
             label: 'fill opacity [number:100]%', 
-            script: 'local.shape.attr("fill-opacity", "{{1}}%")'
+            script: 'local.shape.attr("fill-opacity", {{1}}+"%")'
         },
         {
             label: 'href [string:http://waterbearlang.com]', 
-            script: 'local.shape.attr("href", "{{1}}")'
+            script: 'local.shape.attr("href", {{1}})'
         },
         {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
-            script: 'local.shape = global.paper.text({{2}}, {{3}}, "{{1}}");' 
+            script: 'local.shape = global.paper.text({{2}}, {{3}}, {{1}});' 
         },
         {   label: 'font family [string:Helvetica]',
-            script: 'local.shape.attr("font-family", "{{1}}");'
+            script: 'local.shape.attr("font-family", {{1}});'
         },
         {
             label: 'font size [number:12]',
@@ -574,7 +579,7 @@ var menus = {
         },
         {
             label: 'font weight [choice:fontweight]',
-            script: 'local.shape.attr("font-weight", "{{1}}");'
+            script: 'local.shape.attr("font-weight", {{1}});'
         }
     ]),
     text: menu('Sketchy', [
@@ -622,7 +627,7 @@ var menus = {
         },
         {
             label: 'position at x [number:0] y [number:0]', 
-            script: 'local.shape.attr("translation", ""+{{1}} +"," + {{2}});'
+            script: 'local.shape.attr("translation", {{1}} + "," + {{2}});'
         },
         {
             label: 'size width [number:100] height [number:100]', 
@@ -648,43 +653,43 @@ var menus = {
     animation: menu('Animation', [
         {
             label: 'position x [number:10] y [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({translation: "{{1}}, {{2}}"}, {{3}}, "{{4}}");'
+            script: 'local.shape.animate({translation: "{{1}}, {{2}}"}, {{3}}, {{4}});'
         },
         {
             label: 'opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({opacity: {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({opacity: {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'fill color [color:#00FF00] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({fill: "{{1}}"}, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({fill: {{1}}}, {{2}}, {{3}});'
         },
         {
             label: 'fill opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({"fill-opacity": {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({"fill-opacity": {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'stroke color [color:#FF0000] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({stroke: "{{1}}"}, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({stroke: {{1}}}, {{2}}, {{3}});'
         },
         {
             label: 'stroke opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({"stroke-opacity": {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({"stroke-opacity": {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'width [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({width: {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({width: {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'height [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({height: {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({height: {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'radius [number:25] over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({r: {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({r: {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'rotation [number:15] degrees over [number:500] ms with [choice:easing]',
-            script: 'local.shape.animate({rotation: {{1}} }, {{2}}, "{{3}}");'
+            script: 'local.shape.animate({rotation: {{1}} }, {{2}}, {{3}});'
         },
         {
             label: 'stop animations',
@@ -695,12 +700,12 @@ var menus = {
         {
             label: 'get tweet for [string]',
             containers: 1,
-            script: 'local.getTweet("{{1}}", function(tweet){local.lastTweet = tweet;[[1]]});'
+            script: 'local.getTweet({{1}}, function(tweet){local.lastTweet = tweet;[[1]]});'
         },
         {
             label: 'last tweet',
             type: 'string',
-            script: '"+local.lastTweet+"'
+            script: '+local.lastTweet+'
         }
     ])
 };

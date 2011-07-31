@@ -78,6 +78,8 @@ $.fn.extend({
         if (this.is('.trigger')){ desc.trigger = true; }
         if (this.is('.number')){ desc['type'] = 'number'; }
         if (this.is('.string')){ desc['type'] = 'string'; }
+        if (this.is('.comment')){ desc['type'] = 'string'; }
+        if (this.is('.any')){ desc['type'] = 'any';}
         if (this.is('.boolean')){ desc['type'] = 'boolean'; }
         if (this.is('.color')){ desc['type'] = 'color'; }
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
@@ -218,6 +220,8 @@ function Label(value){
     value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
     value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
+    value = value.replace(/\[any:(.+?)\]/g, '<span class="any socket"><input value="$1"></span>');
+    value = value.replace(/\[any\]/g, '<span class="any socket"><input></span>');
     value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
     value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);

@@ -30,6 +30,7 @@ $.extend($.fn,{
       if (this.is('.float')) return 'float';
       if (this.is('.int')) return 'int';
       if (this.is('.any')) return 'any';
+      if (this.is('.comment')) return 'comment';
       return 'unknown';
   },
   parent_block: function(){

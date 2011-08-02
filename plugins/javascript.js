@@ -352,9 +352,16 @@ var menus = {
         },
         {
             label: 'string [string] split on [string]',
-            script: 'return local.get("string", {{1}}).split({{2}});'
+            script: 'return local.get("string", {{1}}).split({{2}});',
             type: 'array'
-        }
+        },
+        {
+            label: 'comment [string]',
+            script: '// {{1}};\n'
+        },
+        {
+            label: 'console log [string]',
+            script: 'console.log({{1}})'
     ], false),
     sensing: menu('Sensing', [
         {

@@ -271,90 +271,12 @@ var menus = {
         },
         {
             label: 'new array named [string]',
-            script: 'local.set("array", {{1}}, []);'
-        },
-        {
-            label: 'new array named [string] with array [array]',
-            script: 'local.set("array", {{1}}, {{2}});'
-        },
-        {
-            label: 'array named [string]',
-            script: 'return local.get("array", {{1]}});',
-            type: 'array'
-        },
-        {
-            label: 'array [string] item [number:0]',
-            script: 'return local.get("array", {{1}})[{{2}}];',
-            type: 'any'
-        },
-        {
-            label: 'array [string] join with [string:, ]',
-            script: 'return local.get("array", {{1}}).join({{2}});',
-            type: 'string'
+            script: 'local.last_var = local.variables[{{1}}] = [];'
         },
         {
             label: 'array append [any]',
             script: 'local.last_var.push({{1}});'
-        },
-        {
-            label: 'array [string] length',
-            script: 'return local.get({{1}}).length;',
-            type: 'number'
-        },
-        {
-            label: 'array [string] remove item [number:0]',
-            script: 'return local.get("array", {{1}}).splice({{1}}, 1)[0];',
-            type: 'any'
-        },
-        {
-            label: 'array [string] pop',
-            script: 'return local.get("array", {{1}}).pop();',
-            type: 'any'
-        },
-        {
-            label: 'array [string] shift',
-            script: 'return local.get("array", {{1}}).shift();',
-            type: 'any'
-        },
-        {   
-            label: 'array [string] reverse',
-            script: 'return local.get("array", {{1}}).reverse();',
-            type: 'array'
-        },
-        {
-            label: 'array [string] concat [array]',
-            script: 'return local.get("array", {{1}}).concat({{2}});',
-            type: 'array'
-        }
-    ], false),
-    objects: menu('Objects', [
-        {
-            label: 'new object',
-            script: 'local.last_var = {};'
-        },
-        {
-            label: 'new object named [string]',
-            script: 'local.set("object", {{1}}, {});'
-        },
-        {
-            label: 'object key [string] = value [any]',
-            script: 'local.last_var[{{1}}] = {{2}};'
-        },
-        {
-            label: 'object named [string] key [string] = value [any]',
-            script: 'local.get("object", {{1}})[{{2}}] = {{3}};'
-        }
-    ], false),
-    strings: menu('Strings', [
-        {
-            label: 'string named [string] = [string]',
-            script: 'local.set("string", {{1}}, {{2}});'
-        },
-        {
-            label: 'string [string] split on [string]',
-            script: 'return local.get("string", {{1}}).split({{2}});'
-            type: 'array'
-        }
+        } 
     ], false),
     sensing: menu('Sensing', [
         {

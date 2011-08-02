@@ -6,8 +6,51 @@ var DEGREE = Math.PI / 180;
 function Local(){
     this.shape = null;
     this.shape_references = {};
+    this.array_references = {};
+    this.object_references = {};
+    this.function_references = {};
+    this.regex_references = {};
+    this.string_references = {};
     this.last_var = null;
     this.variables = {};
+};
+
+Local.prototype.set = function(type, name, value){
+    if (this[type] === undefined){
+        this[type] = {};
+    }
+    if (this[type][name] !== undefined){
+        console.log('Warning: overwriting %s named %s', type, name);
+    }
+    this[type][name] = value;
+    this.last_var = value;
+    return this;
+};
+
+Local.prototype.get = function(type, name){
+    if (this[type] === undefined){
+        console.log('Cannot remove %s from unknown type %s', name, type);
+        return undefined;
+    }
+    if (this[type][name] === undefined){
+        console.log('No %s named %s to remove', type, name);
+        return undefined;
+    }
+    return this[type][name];
+};
+
+Local.prototype.delete = function(type, name){
+    if (this[type] === undefined){
+        console.log('Cannot remove %s from unknown type %s', name, type);
+        return undefined;
+    }
+    if (this[type][name] === undefined){
+        console.log('No %s named %s to remove', type, name);
+        return undefined;
+    }
+    var value = this[type][name];
+    delete this[type][name];
+    return value;
 };
 
 function Global(){

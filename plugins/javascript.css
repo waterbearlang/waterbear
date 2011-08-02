@@ -6,14 +6,14 @@
 .looks{ border-color: hsl(264,62%,79%); }
 .looks > .block{ background-color: hsl(264,62%,89%); }
 
-.array{ border-color: hsl(195, 65%, 79%); }
-.array > .block{ background-color: hsl: 195, 62% 89%); }
+.arrays{ border-color: hsl(195, 65%, 79%); }
+.arrays > .block{ background-color: hsl(195, 62%, 89%); }
 
-.object{ border-color: hsl(75, 90%, 66%); }
-.object > .block { background-color: hsl(75, 90%, 76%); }
+.objects{ border-color: hsl(75, 90%, 66%); }
+.objects > .block { background-color: hsl(75, 90%, 76%); }
 
-.function{ border-color: hsl(25, 100%, 63%); }
-.function > .block { background-color: hsl(25, 100%, 83%); }
+.functions{ border-color: hsl(25, 100%, 63%); }
+.functions > .block { background-color: hsl(25, 100%, 83%); }
 
 .transform{ border-color: hsl(296, 65%, 57%); }
 .transform > .block{ background-color: hsl(296, 65%, 77%); }

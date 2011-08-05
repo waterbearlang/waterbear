@@ -74,7 +74,7 @@ $.fn.extend({
             script: this.data('script'),
             containers: this.data('containers')
         };
-        if (this.parent().is('.scripts_workspace')){ desc.offset = this.offset(); }
+        if (this.parent().is('.scripts_workspace')){ desc.position = this.position(); }
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){ desc.trigger = true; }
         if (this.is('.number')){ desc['type'] = 'number'; }

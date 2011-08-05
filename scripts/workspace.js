@@ -186,14 +186,22 @@ $('#demos_dialog').delegate('.load', 'click', restore_demo_scripts)
                   .delegate('.show_description', 'click', toggle_description);
 $('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
 $('.demo_scripts').click(function(){$('#demos_dialog').bPopup(); });
+$('.layout_blocks').click(layout_blocks);
+
+function layout_blocks(){
+    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+    blocks.each(function(idx){
+        var stagger = (idx + 1) * 30;
+        $(this).css({position:'absolute', left: stagger, top: stagger});
+    });
+}
 
 function load_scripts_from_object(blocks){
     var workspace = $('.workspace:visible .scripts_workspace');
     $.each(blocks, function(idx, value){
         var block = Block(value);
         workspace.append(block);
-        block.attr('position', 'absolute');
-        block.offset(value.offset);
+        block.css({position: 'absolute', left: value.position.left, top: value.position.top});
     });
 }
 

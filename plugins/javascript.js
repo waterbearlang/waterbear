@@ -362,6 +362,7 @@ var menus = {
         {
             label: 'console log [string]',
             script: 'console.log({{1}})'
+        }
     ], false),
     sensing: menu('Sensing', [
         {

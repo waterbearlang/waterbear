@@ -1,5 +1,7 @@
 # Waterbear
 
+> "It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self-critical?" --Alan Perlis
+
 ## Description
 
 Waterbear is a toolkit for making programming more accessible and fun. Not a language itself, but a block syntax inspired by Scratch (http://scratch.mit.edu/) that can be used to represent languages. Waterbear's blocks drag and snap together, representing code that eliminates syntax errors much like garbage collection alleviates memory errors and bound checking helps prevent overrun errors.
@@ -42,7 +44,7 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 ## Related Projects
 
 * Scratch http://scratch.mit.edu/
-* Alice 3D: http://www.alice.org/ 
+* Alice 3D: http://www.alice.org/
 * Design Blocks: http://www.kickstarter.com/projects/evhan55/designblocks-visual-programming-for-artists
 * Open Blocks: http://education.mit.edu/openblocks
 * StarLogo: http://education.mit.edu/projects/starlogo-tng
@@ -123,7 +125,7 @@ limitations under the License.
   - Other: Activity starter, barcode scanner, bluetooth scanner, bluetooth server, notifier, speech recognizer, text to speech, tinywebdb, web
 * Also like AppInventor: Configuration sheets for high-level components
 
-# On Chromeless (nee 
+# On Chromeless (nee
 
 >    Absolutely, You can use processes [1], though the api for interacting with external procs is rather miserable at the moment [2]. Or you can use JSCtypes [3], for which there's a tiny toy example you can start from [4].
 
@@ -132,10 +134,10 @@ limitations under the License.
 >    [1] http://nochro.me/#module/lib/child_process
 >    [2] https://github.com/mozilla/chromeless/issues/130
 >    [3] https://wiki.mozilla.org/JSctypes
->    [4] https://github.com/mozilla/chromeless/tree/master/examples/jsctypes  
+>    [4] https://github.com/mozilla/chromeless/tree/master/examples/jsctypes
 
 Short answer: No, but if you want to write code for Chromeless to make it work...
-  
+
 # Bugs
 
 * When switching languages, clear the scripts

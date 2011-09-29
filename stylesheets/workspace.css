@@ -101,6 +101,7 @@ body {
     background-color: #999;
     color: #333;
     z-index: 1;
+    cursor: pointer;
 }
 
 .chrome_tab.selected{
@@ -135,6 +136,7 @@ body {
     color: #333;
     background-color: #CCC;
     border: 1px solid #333;
+    cursor: pointer;
 }
 
 .block_menu .selected{
@@ -146,6 +148,10 @@ body {
     position: relative;
     overflow: hidden;
     padding: 15px;
+}
+
+.option input {
+  cursor: pointer;
 }
 
 .submenu .wrapper {

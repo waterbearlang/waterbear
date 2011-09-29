@@ -167,6 +167,10 @@
     background-color: green;
 }
 
+.drag_indication{
+    opacity: 0.75;
+}
+
 .drop_active{
     background-color: yellow;
 }

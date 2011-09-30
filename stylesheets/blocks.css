@@ -8,6 +8,11 @@
   position: relative;
 }
 
+.label {
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
 
 .block {
   position: relative;
@@ -20,6 +25,7 @@
   border-width: 2px;
   border-style: solid;
   white-space: nowrap; 
+  cursor: pointer;
 }
 
 .value .block{
@@ -159,6 +165,10 @@
 
 .drag_active{
     background-color: green;
+}
+
+.drag_indication{
+    opacity: 0.75;
 }
 
 .drop_active{

@@ -205,7 +205,7 @@ function load_scripts_from_object(blocks){
     });
 }
 
-function load_current_scripts(){
+window.load_current_scripts = function(){
     if (localStorage.__current_scripts){
         var blocks = JSON.parse(localStorage['__current_scripts']);
         if (blocks.length){
@@ -213,7 +213,7 @@ function load_current_scripts(){
         }
     }
 }
-$(document).ready(load_current_scripts);
+// $(document).ready(load_current_scripts);
 
 // Tab UI
 

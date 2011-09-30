@@ -141,6 +141,8 @@ Short answer: No, but if you want to write code for Chromeless to make it work..
 
 # Bugs
 
+* Keypressed sensor block broken
+* Empty blocks insert comments that break scripts
 * When switching languages, clear the scripts
 * When saving and restoring, language matters - restore needed plugins
 * Make sure restore dialogue scrolls

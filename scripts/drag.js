@@ -121,6 +121,7 @@
         var target = eT.closest('.wrapper');
         if (target.length){
             drag_target = target;
+            drag_target.addClass("drag_indication");
             start_position = target.offset();
             if (! target.parent().is('.scripts_workspace')){
                 start_parent = target.parent();
@@ -141,7 +142,9 @@
         current_position = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
         if (drag_target.is('.block_menu .wrapper')){
+            drag_target.removeClass('drag_indication');
             drag_target = drag_target.clone(true);
+            drag_target.addClass('drag_indication');
             cloned = true;
         }
         dragging = true;
@@ -218,6 +221,7 @@
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
         drag_target.removeClass('drag_active');
+        drag_target.removeClass("drag_indication");
         if (drop_target && drop_target.length){
             drop_target.removeClass('drop_active');
             if (drag_target.block_type() === 'step'){

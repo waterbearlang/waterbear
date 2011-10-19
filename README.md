@@ -30,7 +30,7 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 
 ## Acknowledgements
 
-* My kids, Azlen and Mina, for helping test so many programming environments and being my best critics
+* My kids, for helping test so many programming environments and being my best critics
 * Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real
 * Scratch, the primary source of inspiration for this project
 * Basic

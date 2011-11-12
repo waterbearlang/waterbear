@@ -29,6 +29,7 @@ $.extend($.fn,{
       if (this.is('.string')) return 'string';
       if (this.is('.float')) return 'float';
       if (this.is('.int')) return 'int';
+      if (this.is('.array')) return 'array';
       if (this.is('.any')) return 'any';
       if (this.is('.comment')) return 'comment';
       return 'unknown';
@@ -81,6 +82,7 @@ $.fn.extend({
         if (this.is('.string')){ desc['type'] = 'string'; }
         if (this.is('.comment')){ desc['type'] = 'string'; }
         if (this.is('.any')){ desc['type'] = 'any';}
+        if (this.is('.array')){ desc['type'] = 'array';}
         if (this.is('.boolean')){ desc['type'] = 'boolean'; }
         if (this.is('.color')){ desc['type'] = 'color'; }
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
@@ -221,6 +223,8 @@ function Label(value){
     value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
     value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
+    value = value.replace(/\[array:(.+?)\]/g, '<span class="array socket"><input value="$1"></span>');
+    value = value.replace(/\[array\]/g, '<span class="array socket"><input></span>');
     value = value.replace(/\[any:(.+?)\]/g, '<span class="any socket"><input value="$1"></span>');
     value = value.replace(/\[any\]/g, '<span class="any socket"><input></span>');
     value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');

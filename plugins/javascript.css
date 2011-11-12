@@ -12,6 +12,9 @@
 .objects{ border-color: hsl(75, 90%, 66%); }
 .objects > .block { background-color: hsl(75, 90%, 76%); }
 
+.functions{ border-color: hsl(300, 90%, 66%); }
+.functions > .block {background-color: hsl(300, 90%, 76%); }
+
 .strings{ border-color: hsl(240, 65%, 83%); }
 .strings > .block {background-color: hsl(240, 65%, 93%); }
 

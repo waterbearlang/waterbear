@@ -21,7 +21,7 @@ $.extend($.fn,{
       return this.closest('.wrapper').long_name();
   },
   block_type: function(){
-      // FIXME: Move all type-specific functionality to 
+      // FIXME: Move all type-specific functionality to plugins
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
       if (this.is('.number')) return 'number';
@@ -61,6 +61,15 @@ $.extend($.fn,{
   },
   moveTo: function(x,y){
       return this.css({left: x + 'px', top: y + 'px'});
+  },
+  addSocketHelp: function(){
+    var self = $(this);
+    var type = self.block_type();
+    var desc = 'this is a ' + type + ' socket. You can type in a value or drag in a matching value block';
+    if(type === 'any'){
+        desc = 'this is a socket that can take any type. Strings must be quoted.';
+    }
+    $(this).attr('title', desc);
   }
 });
 
@@ -81,6 +90,8 @@ $.fn.extend({
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){ desc.trigger = true; }
         if (this.is('.number')){ desc['type'] = 'number'; }
+        if (this.is('.float')){desc['type'] = 'float'; }
+        if (this.is('.int')){desc['type'] == 'int';}
         if (this.is('.string')){ desc['type'] = 'string'; }
         if (this.is('.comment')){ desc['type'] = 'string'; }
         if (this.is('.any')){ desc['type'] = 'any';}
@@ -135,6 +146,10 @@ function Block(options){
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
     var block = wrapper.children();
+    block.find('.socket').addSocketHelp();
+    if (opts['help']){
+        block.attr('title', opts['help']);
+    }
     if (opts['type']){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
@@ -236,6 +251,10 @@ function Label(value){
     // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<span class="number socket"><input type="number" value="$1"></span>');
     value = value.replace(/\[number\]/g, '<span class="number socket"><input type="number"></span>');
+    value = value.replace(/\[float:(-?\d*\.?\d+)\]/g, '<span class="float socket"><input type="number" value="$1"></span>');
+    value = value.replace(/\[float\]/g, '<span class="float socket"><input type="number"></span>');
+    value = value.replace(/\[int:(-?\d*)\]/g, '<span class="int socket"><input type="number" value="$1"></span>');
+    value = value.replace(/\[int\]/g, '<span class="int socket"><input type="number"></span>');
     value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
     value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');

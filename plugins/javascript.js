@@ -29,7 +29,7 @@ jQuery.fn.extend({
               return this.val();
           }
       }
-      if (this.is('.empty')) return '// do nothing';
+      if (this.is('.empty')) return '/* do nothing */';
       return this.map(function(){
           var self = $(this);
           var script = self.data('script');
@@ -210,13 +210,19 @@ window.choice_lists = {
     fontweight: ['normal', 'bold', 'inherit']
 };
 
-
+// Hints for building blocks
+//
+//
+// Value blocks can nest, so don't end them with semi-colons (i.e., if there is a "type" specified).
+//
+//
 var menus = {
     control: menu('Control', [
         {
             label: 'when program runs', 
             trigger: true, 
-            script: 'function _start(){[[next]]}_start();'
+            script: 'function _start(){[[next]]}_start();',
+            help: 'this trigger will run its scripts once when the program starts'
             },
         {
             label: 'when [choice:keys] key pressed', 
@@ -297,17 +303,17 @@ var menus = {
         },
         {
             label: 'array named [string]',
-            script: 'local.get("array", {{1]}});',
+            script: 'local.get("array", {{1}})',
             type: 'array'
         },
         {
             label: 'array [string] item [number:0]',
-            script: 'local.get("array", {{1}})[{{2}}];',
+            script: 'local.get("array", {{1}})[{{2}}]',
             type: 'any'
         },
         {
             label: 'array [string] join with [string:, ]',
-            script: 'local.get("array", {{1}}).join({{2}});',
+            script: 'local.get("array", {{1}}).join({{2}})',
             type: 'string'
         },
         {
@@ -320,27 +326,27 @@ var menus = {
         },
         {
             label: 'array [string] length',
-            script: 'local.get({{1}}).length;',
+            script: 'local.get({{1}}).length',
             type: 'number'
         },
         {
             label: 'array [string] remove item [number:0]',
-            script: 'local.get("array", {{1}}).splice({{1}}, 1)[0];',
+            script: 'local.get("array", {{1}}).splice({{1}}, 1)[0]',
             type: 'any'
         },
         {
             label: 'array [string] pop',
-            script: 'local.get("array", {{1}}).pop();',
+            script: 'local.get("array", {{1}}).pop()',
             type: 'any'
         },
         {
             label: 'array [string] shift',
-            script: 'local.get("array", {{1}}).shift();',
+            script: 'local.get("array", {{1}}).shift()',
             type: 'any'
         },
         {   
             label: 'array [string] reverse',
-            script: 'local.get("array", {{1}}).reverse();',
+            script: 'local.get("array", {{1}}).reverse()',
             type: 'array'
         },
         {
@@ -385,32 +391,32 @@ var menus = {
         },
         {
             label: 'string [string] split on [string]',
-            script: 'local.get("string", {{1}}).split({{2}});',
+            script: '{{1}}.split({{2}})',
             type: 'array'
         },
         {
             label: 'string [string] character at [number:0]',
-            script: 'local.get("string", {{1}}[{{2}}];',
+            script: 'local.get("string", {{1}}[{{2}}]',
             type: 'string'
         },
         {
             label: 'string [string] length',
-            script: 'local.get("string", {{1}}.length;',
+            script: 'local.get("string", {{1}}.length',
             type: 'number'
         },
         {
             label: 'string [string] indexOf [string]',
-            script: 'local.get("string", {{1}}.indexOf({{2}});',
+            script: 'local.get("string", {{1}}.indexOf({{2}})',
             type: 'number'
         },
         {
             label: 'string [string] replace [string] with [string]',
-            script: 'local.get("string", {{1}}.replace({{2}}, {{3}});',
+            script: 'local.get("string", {{1}}.replace({{2}}, {{3}})',
             type: 'string'
         },
         {
             label: 'to string [any]',
-            script: '{{1}}.toString();',
+            script: '{{1}}.toString()',
             type: 'string'
         },
         {
@@ -418,8 +424,12 @@ var menus = {
             script: '// {{1}};\n'
         },
         {
-            label: 'console log [string]',
+            label: 'console log [any]',
             script: 'console.log({{1}})'
+        },
+        {
+            label: 'console log format [string] arguments [array]',
+            script: 'var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);'
         }
     ], false),
     sensing: menu('Sensing', [
@@ -430,7 +440,7 @@ var menus = {
         {
             label: 'answer', 
             'type': 'string', 
-            script: '+local.answer+'
+            script: 'local.answer'
         },
         {
             label: 'mouse x', 

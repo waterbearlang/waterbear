@@ -203,6 +203,9 @@ window.choice_lists = {
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
     linecap: ['round', 'butt', 'square'],
     linejoin: ['round', 'bevel', 'mitre'],
+    arity: ['0', '1', '2', '3', 'array', 'object'],
+    types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'any'],
+    rettypes = ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any', 'this'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
 };
@@ -367,6 +370,11 @@ var menus = {
         {
             label: 'object named [string] key [string] = value [any]',
             script: 'local.get("object", {{1}})[{{2}}] = {{3}};'
+        }
+    ], false),
+    functions: menu('Functions', [
+        {
+            label: 'function named [string] with [
         }
     ], false),
     strings: menu('Strings', [

@@ -79,9 +79,12 @@ limitations under the License.
 
 # Coming Features
 
+* Make scripts left-aligned instead of free-floating
+* Add local variable selection to top of containers
 * Create and manipulate arrays and objects
 * Create new functions
 * Support for any() type variables (fix String troubles)
+* √ Add disclosure triangles to containers
 * √ Make front page about Waterbear, start IDE on subsequent page
 * √ Wrap scripts to avoid global pollution on run, not on display
 * Move JS, Raphael, Sketchy, Arduino to plugins

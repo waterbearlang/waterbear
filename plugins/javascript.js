@@ -205,7 +205,7 @@ window.choice_lists = {
     linejoin: ['round', 'bevel', 'mitre'],
     arity: ['0', '1', '2', '3', 'array', 'object'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'any'],
-    rettypes = ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any', 'this'],
+    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any', 'this'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
 };
@@ -374,7 +374,8 @@ var menus = {
     ], false),
     functions: menu('Functions', [
         {
-            label: 'function named [string] with [
+            label: 'function named [string] with [choice:arity] arguments returning [choice:rettypes]',
+            create: 'function',
         }
     ], false),
     strings: menu('Strings', [

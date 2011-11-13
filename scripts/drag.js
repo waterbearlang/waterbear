@@ -79,9 +79,11 @@
         switch(drag_target.block_type()){
             case 'step': return step_targets();
             case 'number': return socket_targets2('any,number');
-            //case 'int': return socket_targets('number').add(socket_targets('int'));
+            case 'array': return socket_targets2('any,array');
+            case 'object': return socket_targets2('any,object');
+            case 'function': return socket_targets2('any,function');
+            case 'color': return socket_targets2('any,color');
             case 'int': return socket_targets2('any,number,int'); 
-            //case 'float': return socket_targets('number').add(socket_targets('float'));
             case 'float': return socket_targets2('any,number,float'); 
             case 'boolean': return socket_targets2('any,boolean');
             case 'string': return socket_targets2('any,string');

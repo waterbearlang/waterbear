@@ -149,6 +149,9 @@ function Block(options){
     for (var i = 0; i < opts.containers; i++){
         block.append('</b><span class="contained"><i class="slot"></i></span>');
     }
+    if (opts.containers){
+        block.find('> .blockhead > .label').prepend('<span class="disclosure open">▼</span>');
+    }
     wrapper.data('containers', opts.containers);
     if (opts.slot){
         wrapper.append('<span class="next"><i class="slot"></i></span>');
@@ -190,6 +193,16 @@ function Block(options){
     // add update handlers
     return wrapper;
 }
+
+$('.scripts_workspace').delegate('.disclosure', 'click', function(event){
+    var self = $(event.target);
+    if (self.is('.open')){
+        self.text('►').closest('.block').find('> .contained').hide();
+    }else{
+        self.text('▼').closest('.block').find('> .contained').show();
+    }
+    self.toggleClass('open closed');
+});
 
         
 function choice_func(s, listname, default_opt){

@@ -122,6 +122,8 @@
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){
+            drop_cursor = $('<div class="drop_cursor"></div>');
+            target_canvas.prepend(drop_cursor);
             drag_target = target;
             drag_target.addClass("drag_indication");
             start_position = target.offset();
@@ -260,8 +262,10 @@
         }else if (drag_target.overlap(target_canvas)){
             // generally dragged to canvas, position it there
             console.log('Drop onto canvas');
-            var curr_pos = drag_target.offset();
-            target_canvas.append(drag_target);
+//            var curr_pos = drag_target.offset();
+            drop_cursor.before(drag_target);
+            drop_cursor.remove();
+            drop_cursor = null;
             drag_target.css({position: 'relative', top: 0, left: 0, display: 'block'});
         }else{
             if (cloned){
@@ -291,6 +295,25 @@
             drag_placeholder = null;
         }
     }
+    
+    function position_drop_cursor(){
+        var self, top, middle, bottom, x = drag_target.position().top;
+        console.log('cursor: %s', x);
+        target_canvas.prepend(drop_cursor);
+        drop_cursor.show();
+        target_canvas.children('.wrapper').each(function(idx){
+            self = $(this);
+            top = self.position().top
+            bottom = top + self.outerHeight();
+            middle = (bottom - top) / 2 + top;
+            if (x < middle){
+                self.before(drop_cursor);
+                return false;
+            }else{
+                self.after(drop_cursor);
+            }
+        });
+    }
         
     function hit_test(){
         // test the dragging rect(s) against the target rect(s)
@@ -302,7 +325,9 @@
         var drag_type = drag_target.block_type();
         var drag_target_flap = drag_target.children('.block');
         switch(drag_type){
-            case 'trigger': return; // no flap
+            case 'trigger':
+                setTimeout(hit_test, drag_timeout);
+                return position_drop_cursor(); // no flap
             case 'step': drag_target_flap = drag_target_flap.children('.flap');
         }
         var drag_rect = drag_target_flap.rect();
@@ -323,8 +348,10 @@
         if (drop_idx > -1){
             drop_target = potential_drop_targets.eq(drop_idx).addClass('drop_active');
             drag_target.addClass('drag_active');
+            drop_cursor.hide();
         }else{
             drag_target.removeClass('drag_active');
+            position_drop_cursor();
             drop_target = null;
         }
         timer = setTimeout(hit_test, drag_timeout);

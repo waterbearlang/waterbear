@@ -71,6 +71,11 @@ body {
     display: block;
 }
 
+.drop_cursor {
+    height: 1px;
+    border-bottom: 1px solid #CCC;
+}
+
 .tab_bar{
     position: absolute;
     left: 15%;

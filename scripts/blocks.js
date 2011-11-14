@@ -86,7 +86,6 @@ $.fn.extend({
             script: this.data('script'),
             containers: this.data('containers')
         };
-        if (this.parent().is('.scripts_workspace')){ desc.position = this.position(); }
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){ desc.trigger = true; }
         if (this.is('.number')){ desc['type'] = 'number'; }
@@ -121,7 +120,6 @@ function Block(options){
     // 
     // Script block additions:
     // 
-    // position [0,0] (root blocks only)
     // sockets: array of values or value blocks
     // contained: array of contained blocks
     // next: block that follows this block
@@ -179,7 +177,6 @@ function Block(options){
             if ($.isPlainObject(value)){
                 var child = Block(value);
                 block.find('> .blockhead > .label > .socket').eq(idx).empty().append(child);
-                child.attr({position: 'relative', left: 0, top: 0});
             }else{ // presumably a string
                 var socket = block.find('> .blockhead > .label > .socket :input, > .blockhead > .label > .autosocket select').eq(idx);
                 socket.val(value);
@@ -194,7 +191,6 @@ function Block(options){
             if ($.isPlainObject(value)){
                 var child = Block(value);
                 block.find('> .contained').eq(idx).append(child);
-                child.attr({position: 'relative', left: 0, top: 0});
             }
         });
     }
@@ -202,7 +198,6 @@ function Block(options){
         if ($.isPlainObject(opts.next)){
             var child = Block(opts.next);
             wrapper.find('> .next').append(child);
-            child.attr({position: 'relative', left: 0, top: 0});
         }
     }
     // add update handlers

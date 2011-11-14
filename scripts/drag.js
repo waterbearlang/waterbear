@@ -35,7 +35,7 @@
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
 (function($){
-    var drag_target, potential_drop_targets, drop_target, drop_rects, start_position, timer, cloned, dragging, current_position, distance, start_parent;
+    var drag_target, potential_drop_targets, drop_target, drop_rects, start_position, timer, cloned, dragging, current_position, distance, start_parent, drop_cursor, drag_placeholder;
     window.is_touch = window.hasOwnProperty('ontouchstart') && true;
     var drag_timeout = 20;
     // TODO: update this whenever we switch to a new workspace
@@ -171,6 +171,11 @@
             }
         }
         drag_target.css('position', 'absolute');
+        if (drag_target.is('.scripts_workspace .wrapper')){
+            drag_placeholder = $('<div class="drag_placeholder"></div>');
+            drag_placeholder.height(drag_target.outerHeight());
+            drag_target.before(drag_placeholder);
+        }
         $('.content').append(drag_target);
         drag_target.offset(start_position);
         potential_drop_targets = get_potential_drop_targets();
@@ -228,41 +233,42 @@
             drop_target.removeClass('drop_active');
             if (drag_target.block_type() === 'step'){
                 // Drag a step to snap to a step
+                console.log('snapping a step togther')
                 drop_target.parent().append(drag_target);
                 drag_target.css({
                     position: 'relative',
                     left: 0,
-                    top: 0
+                    top: 0,
+                    display: 'inline-block'
                 });
             }else{
                 // Insert a value block into a socket
-                // console.log('trying to drop: into %s', drop_target.long_name());
+                console.log('Inserting a value into a socket');
                 drop_target.find('input, select').remove();
                 drop_target.append(drag_target);
                 drag_target.css({
                     position: 'relative',
                     left: 0,
-                    top: 0
+                    top: 0,
+                    display: 'inline-block'
                 });
             }
         }else if ($('.block_menu').cursor_over()){
             // delete block if dragged back to menu
+            console.log('deleting a block');
             drag_target.remove();
         }else if (drag_target.overlap(target_canvas)){
             // generally dragged to canvas, position it there
-            // console.log('Drop onto canvas');
+            console.log('Drop onto canvas');
             var curr_pos = drag_target.offset();
             target_canvas.append(drag_target);
-            drag_target.offset(curr_pos);
-        // }else if (drag_target.contained_by($('.block_menu'))){
-            // console.log('remove drag target');
-            // drag_target.remove();
+            drag_target.css({position: 'relative', top: 0, left: 0, display: 'block'});
         }else{
             if (cloned){
-                // console.log('remove cloned block');
+                console.log('remove cloned block');
                 drag_target.remove();
             }else{
-                // console.log('put block back where we found it');
+                console.log('put block back where we found it');
                 if (start_parent){
                     if (start_parent.is('.socket')){
                         start_parent.children('input').remove();
@@ -271,13 +277,18 @@
                     drag_target.css({
                         position: 'relative',
                         top: 0,
-                        left: 0
+                        left: 0,
+                        display: 'inline-block'
                     });
                 }else{
                     target_canvas.append(drag_target);
                     drag_target.offset(start_position);
                 }
             }
+        }
+        if (drag_placeholder){
+            drag_placeholder.remove();
+            drag_placeholder = null;
         }
     }
         

@@ -199,9 +199,10 @@ function layout_blocks(){
 function load_scripts_from_object(blocks){
     var workspace = $('.workspace:visible .scripts_workspace');
     $.each(blocks, function(idx, value){
+        console.log('restoring block %s', idx);
         var block = Block(value);
         workspace.append(block);
-        block.css({position: 'absolute', left: value.position.left, top: value.position.top});
+        block.css({position: 'relative', left: 0, top: 0, display: 'block'});
     });
 }
 
@@ -209,6 +210,7 @@ window.load_current_scripts = function(){
     if (localStorage.__current_scripts){
         var blocks = JSON.parse(localStorage['__current_scripts']);
         if (blocks.length){
+            console.log('restoring %s blocks', blocks.length);
             load_scripts_from_object(blocks);
         }
     }

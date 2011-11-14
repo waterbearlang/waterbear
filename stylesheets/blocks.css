@@ -4,6 +4,10 @@
   position: relative;
 }
 
+.scripts_workspace > .wrapper{
+  margin-bottom: 15px;
+}
+
 .socket {
   position: relative;
 }

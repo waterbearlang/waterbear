@@ -83,6 +83,7 @@ limitations under the License.
 * Add local variable selection to top of containers
 * Create and manipulate arrays and objects
 * Create new functions
+* Move block scripts aside, don't store with blocks on stage or saved blocks
 * Support for any() type variables (fix String troubles)
 * √ Add disclosure triangles to containers
 * √ Make front page about Waterbear, start IDE on subsequent page

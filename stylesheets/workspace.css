@@ -241,3 +241,49 @@ body {
     font-size: 80%;
     color: #666;
 }
+/* These additions should only change the appearance of the tabs*/
+
+
+.chrome_tab {
+    margin-left: 5px;
+    position: relative;
+    border: 1px solid #666;
+    border-bottom: 0px;
+    cursor: pointer;
+    width: 15%;
+    background-color: #999;
+    color: #F2F2F2;
+    z-index: 1;
+    padding: 5px;
+    margin-bottom: 4px;
+}
+
+.chrome_tab.selected {
+    background-color: #4D736D;
+    color: white;
+    border-color: #333;
+    font-weight: bold;
+}
+
+/* The following rules help make the dialogs a bit easier on the eyes*/
+
+.dialog button.delete, button.cancel {
+    background-color: #854D53;
+}
+
+.dialog li {
+    margin-top: 1.5em;
+}
+
+.dialog li button {
+    margin-top: 0px;
+}
+
+ /* This last one might be a bit contreversial but I think that users shouldn't 
+ need to realize that the stage is just off to the right of the workspace. This
+ will also make it easier for others to diable the stage with just a css rule*/
+html, body {
+    overflow: hidden;
+}
+
+

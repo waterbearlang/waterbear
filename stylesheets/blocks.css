@@ -169,7 +169,8 @@
 
 /*This class is added to the block that is bieng moved when it is aligned to snap in*/
 .drag_active{
-    background-color: green;
+/*    background-color: green;*/
+/*    A box shadow might look nice here ?*/
 }
 
 /*This class is added to the block that is moving*/

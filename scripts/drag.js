@@ -41,6 +41,8 @@
     // TODO: update this whenever we switch to a new workspace
     var target_canvas = $('.workspace:visible .scripts_workspace');
     
+    var snap_dist = 25; //In pixels
+    
     function reset(){
         drag_target = null;
         potential_drop_targets = $();
@@ -341,6 +343,13 @@
                 drop_area = area;
                 // console.log('found potential match');
             }
+	    else if(drag_rect && elem){
+		val = dist(drag_rect["left"], drag_rect["top"], elem["left"], elem["top"]);
+		if(val < snap_dist){ 
+		    drop_idx = idx;
+		    drop_area = area;
+		}
+	    }
         });
         if (drop_target && drop_target.length){
             drop_target.removeClass('drop_active');
@@ -371,6 +380,10 @@
     // Utility methods
     function mag(p1, p2){
         return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
+    }
+    //I didn't really need to rewrite the above, but I was tired and Couldn't get it to work. Sill can't :(
+    function dist(p1, p2, m1, m2){
+        return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));	
     }
     
     function rect_str(r){

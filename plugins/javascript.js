@@ -19,6 +19,28 @@ yepnope({
     complete: setup
 });
 
+var dependencies = new Array();
+
+/*
+ * remove duplicates from an array
+ * @param arr <array> which may contain duplicates
+ * @return array with no duplicates
+ */
+function eliminateDuplicates(arr) {
+    var i,
+    len=arr.length,
+    out=[],
+    obj={};
+
+    for (i=0;i<len;i++) {
+        obj[arr[i]]=0;
+    }
+    for (i in obj) {
+        out.push(i);
+    }
+    return out;
+}
+
 jQuery.fn.extend({
   extract_script: function(){
       if (this.length === 0) return '';
@@ -34,6 +56,14 @@ jQuery.fn.extend({
           var self = $(this);
           var script = self.data('script');
           if (!script) return null;
+	  
+	    //Get the depend statments that the block requires.
+	    var depend = self.data('depend');
+	    console.log(depend);
+	    if (depend) {
+	      dependencies.push(depend);
+	    }
+	  
           var exprs = $.map(self.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
           var blks = $.map(self.child_blocks(), function(elem, idx){return $(elem).extract_script();});
           if (exprs.length){
@@ -67,13 +97,25 @@ jQuery.fn.extend({
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.pretty_script();
-      return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
+      
+      //Remove duplicates from compiled array
+        dependencies = eliminateDuplicates(dependencies);
+        console.log("Depend:" + dependencies);
+        //stringify the array, then Add the list of compiled dependancies to the
+        script = dependencies.join("\n")+"\n\n"+script;
+        //Make sure we start fresh each time.
+        dependencies = new Array(); // when a block is removed now its dependancies are too
+	
+	return script;
+      
+      //It seemed as though Dethe had not been using this.
+      //return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
   },
   pretty_script: function(){
-      return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
+      return js_beautify(this.map(function(){return $(this).extract_script();}).get().join(''));
   },
   write_script: function(view){
-      view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
+      view.html('<pre class="language-javascript">' + this.wrap_script() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
   }
 });
@@ -222,7 +264,8 @@ var menus = {
             label: 'when program runs', 
             trigger: true, 
             script: 'function _start(){[[next]]}_start();',
-            help: 'this trigger will run its scripts once when the program starts'
+            help: 'this trigger will run its scripts once when the program starts',
+	    depend: '//This is a bad example of a depend statment :)'
             },
         {
             label: 'when [choice:keys] key pressed', 
@@ -381,7 +424,7 @@ var menus = {
     functions: menu('Functions', [
         {
             label: 'function named [string] with [choice:arity] arguments returning [choice:rettypes]',
-            create: 'function',
+            create: 'function'
         }
     ], false),
     strings: menu('Strings', [
@@ -730,7 +773,7 @@ var menus = {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
             script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});' 
         },
-        {   label: 'font family [string:Helvetica]',
+        {label: 'font family [string:Helvetica]',
             script: 'local.last_var.attr("font-family", {{1}});'
         },
         {

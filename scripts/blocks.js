@@ -84,7 +84,8 @@ $.fn.extend({
             klass: this.data('klass'),
             label: this.data('label'),
             script: this.data('script'),
-            containers: this.data('containers')
+            containers: this.data('containers'),
+	    depend: this.data('depend')//Support for Dependancies
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){ desc.trigger = true; }
@@ -130,7 +131,8 @@ function Block(options){
         flap: true, // something can come before
         containers: 0,  // Something cannot be inside
         label: 'Step', // label is its own mini-language
-        type: null
+        type: null,
+	depend: '' // Support Dependancies
     };
     $.extend(opts, options);
     if (opts.trigger){
@@ -141,8 +143,11 @@ function Block(options){
         opts.flap = false;
     }
     var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
+    //Store some info for later
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
+    wrapper.data('depend', opts.depend);
+    
     var block = wrapper.children();
     block.find('.socket').addSocketHelp();
     if (opts['help']){

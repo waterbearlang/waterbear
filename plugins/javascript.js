@@ -260,22 +260,6 @@ window.choice_lists = {
     fontweight: ['normal', 'bold', 'inherit']
 };
 
-    var a = {
-	"title":"123",
-	"description":"",
-	"date":1321978089754,
-	"scripts":[{
-	    "klass":"control",
-	    "label":"when program runs",
-	    "script":"function _start(){[[next]]}_start();",
-	    "containers":0,
-	    "trigger":true,
-	    "sockets":[],
-	    "contained":[],
-	    "next":""
-	}]
-	};
-
 // Hints for building blocks
 //
 //

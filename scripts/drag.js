@@ -74,7 +74,7 @@
         // fix target?
         return event;
     }
-    //FIXME
+
     function get_potential_drop_targets(){
 	btype = drag_target.block_type();
 	if(btype == 'step')
@@ -151,20 +151,17 @@
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
         if (drag_target.parent().is('.socket')){
-	    //I thnk these next two lines could be replaced by drag_target.block_type();
-            var classes = drag_target.parent().attr('class');
-            classes = classes.replace("socket","").trim();
-
-	    if(vartypes[classes].defaulthtml){
-		drag_target.parent().append(vartypes[classes].defaulthtml);
+	    type = drag_target.block_type();
+	    if(vartypes[type].defaulthtml){
+		drag_target.parent().append(vartypes[type].defaulthtml);
 	    }
 	    else{
-		if(vartypes[classes].htmltype)
-		    classes = vartypes[classes].htmltype;
-                if(!classes || classes=="string"){
-                    classes = '\"text\"';
+		if(vartypes[type].htmltype)
+		    type = vartypes[type].htmltype;
+                if(!type || type=="string"){
+                    type = '\"text\"';
                 }
-                drag_target.parent().append('<input type="'+classes+'"/>');
+                drag_target.parent().append('<input type="'+type+'"/>');
             }
         }
         drag_target.css('position', 'absolute');
@@ -218,7 +215,6 @@
     }
     
     function handle_drop(){
-	console.log("Abcd "+drag_target.block_type());
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target

@@ -70,7 +70,7 @@ jQuery.fn.extend({
       return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
   },
   pretty_script: function(){
-      return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
+      return js_beautify(this.map(function(){return $(this).extract_script();}).get().join(''));
   },
   write_script: function(view){
       view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
@@ -194,6 +194,56 @@ Local.prototype.getTweet = function(name, callback){
 window.getTweet = Local.prototype.getTweet;
 
 
+
+
+/**
+     'example':{
+        type:'example',
+        htmltype:'number',
+        targets: 'any,number,int',
+        defaulthtml: '<select><option>true</option><option>false</option></select>',
+        filters: ['javascript']
+    }
+ */
+window.vartypes = {
+    'number':{
+        htmltype:'number',
+        targets: 'any,number',
+        defaulthtml: ''
+    },
+    'array':{
+        targets: 'any,array'
+    },
+    'object':{
+        targets: 'any,object'
+    },
+    'function':{
+        targets: 'any,function'
+    },
+    'color':{
+        targets: 'any,color'
+    },
+    'int':{
+        htmltype:'number',
+        targets: 'any,number,int'
+    },
+    'float':{
+        htmltype:'number',
+        targets: 'any,number,int'
+    },
+    'boolean':{
+        htmltype:'select',
+        defaulthtml: '<select><option>true</option><option>false</option></select>',
+        targets: 'any,boolean'
+    },
+    'string':{
+        targets: 'any,string'
+    },
+    'any':{
+        targets: 'any'
+    }
+};
+
 // expose these globally so the Block/Label methods can find them
 window.choice_lists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
@@ -209,6 +259,22 @@ window.choice_lists = {
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
 };
+
+    var a = {
+	"title":"123",
+	"description":"",
+	"date":1321978089754,
+	"scripts":[{
+	    "klass":"control",
+	    "label":"when program runs",
+	    "script":"function _start(){[[next]]}_start();",
+	    "containers":0,
+	    "trigger":true,
+	    "sockets":[],
+	    "contained":[],
+	    "next":""
+	}]
+	};
 
 // Hints for building blocks
 //
@@ -730,7 +796,7 @@ var menus = {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
             script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});' 
         },
-        {   label: 'font family [string:Helvetica]',
+        {label: 'font family [string:Helvetica]',
             script: 'local.last_var.attr("font-family", {{1}});'
         },
         {

@@ -24,16 +24,25 @@ $.extend($.fn,{
       // FIXME: Move all type-specific functionality to plugins
       if (this.is('.trigger')) return 'trigger';
       if (this.is('.step')) return 'step';
-      if (this.is('.number')) return 'number';
-      if (this.is('.boolean')) return 'boolean';
-      if (this.is('.string')) return 'string';
-      if (this.is('.float')) return 'float';
-      if (this.is('.int')) return 'int';
-      if (this.is('.array')) return 'array';
-      if (this.is('.object')) return 'object';
-      if (this.is('.function')) return 'function';
-      if (this.is('.any')) return 'any';
-      if (this.is('.comment')) return 'comment';
+      
+      var classes = this.attr('class');
+      if(classes){
+	  classes = classes.replace("socket","").replace("wrapper","")
+	  classes = classes.replace("drag_indication","").replace("value","")
+	  classes = classes.replace("  "," ").trim();
+	  //Please let me know if there is a better way to do this. I first thought of array_intersection, 
+	  //but since vartypes has a bunch of other stuff, i couldn't figure how to get it to work.
+	  var clas;
+	  $.each(classes.split(" "), function(){
+	      if(vartypes[this]){
+		  clas = this;
+		  return;
+	      }  
+	  });
+	  if(clas){
+	      return clas;
+	  }
+      }
       return 'unknown';
   },
   parent_block: function(){
@@ -87,18 +96,12 @@ $.fn.extend({
             containers: this.data('containers')
         };
         // FIXME: Move specific type handling to raphael_demo.js
-        if (this.is('.trigger')){ desc.trigger = true; }
-        if (this.is('.number')){ desc['type'] = 'number'; }
-        if (this.is('.float')){desc['type'] = 'float'; }
-        if (this.is('.int')){desc['type'] == 'int';}
-        if (this.is('.string')){ desc['type'] = 'string'; }
-        if (this.is('.comment')){ desc['type'] = 'string'; }
-        if (this.is('.any')){ desc['type'] = 'any';}
-        if (this.is('.array')){ desc['type'] = 'array';}
-        if (this.is('.object')){ desc['type'] = 'object';}
-        if (this.is('.function')){ desc['type'] = 'function';}
-        if (this.is('.boolean')){ desc['type'] = 'boolean'; }
-        if (this.is('.color')){ desc['type'] = 'color'; }
+	type = this.block_type();
+	if(type == 'trigger')
+	    desc.trigger = true;
+	else
+	    desc['type'] = this.block_type();
+	
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -136,7 +139,7 @@ function Block(options){
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
     }
-    if (opts['type']){
+    if (opts['type'] && opts['type']!='step'){
         opts.slot = false; // values nest, but do not follow
         opts.flap = false;
     }
@@ -148,7 +151,7 @@ function Block(options){
     if (opts['help']){
         block.attr('title', opts['help']);
     }
-    if (opts['type']){
+    if (opts['type'] && opts['type']!='step'){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
     }
@@ -244,14 +247,16 @@ function Label(value){
     // [choice:options] => a fixed set of options, listed in options parameter function
     
     // FIXME: Move specific type handling to raphael_demo.js
+    
+    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
+    value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
+    /*
     value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<span class="number socket"><input type="number" value="$1"></span>');
     value = value.replace(/\[number\]/g, '<span class="number socket"><input type="number"></span>');
     value = value.replace(/\[float:(-?\d*\.?\d+)\]/g, '<span class="float socket"><input type="number" value="$1"></span>');
     value = value.replace(/\[float\]/g, '<span class="float socket"><input type="number"></span>');
     value = value.replace(/\[int:(-?\d*)\]/g, '<span class="int socket"><input type="number" value="$1"></span>');
     value = value.replace(/\[int\]/g, '<span class="int socket"><input type="number"></span>');
-    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
-    value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
     value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
     value = value.replace(/\[array:(.+?)\]/g, '<span class="array socket"><input value="$1"></span>');
@@ -262,10 +267,55 @@ function Label(value){
     value = value.replace(/\[function]/g, '<span class="function socket"><input></span>');
     value = value.replace(/\[any:(.+?)\]/g, '<span class="any socket"><input value="$1"></span>');
     value = value.replace(/\[any\]/g, '<span class="any socket"><input></span>');
-    value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
+    */
+   
+   value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
     value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+   
+   value = value.replace(/\[([a-zA-Z]*)\]$/g,  function(a, type){
+
+	// a is the whole string    [int]
+	// type is the first match   int
+	data = vartypes[type];
+	
+	if(data.defaulthtml)
+	    defaulthtml = data.defaulthtml; //Options here could be expanded upon
+	else{
+	    classes = data.htmltype;
+	    if(!classes || classes=="string"){ //default to text
+		classes = '\"text\"';
+	    }
+	    defaulthtml = '<span class="'+type+' socket" title="'+type+'"><input  type="'+classes+'" /></span>';
+	}
+	return defaulthtml;
+    });
+   //A lot of this code is copy/pasted Is there a better way?
+    value = value.replace(/\[([a-zA-Z]*)\:(.*?)\]/g,    function(a, type, val){
+	//console.log(" a "+a+" b "+b+" c "+c+" d "+d+" e "+e+" f "+f+" g "+g);
+	// a is the whole string [int:10]
+	// type is the first match  int
+	// val is the second match 10
+	// d is string that comes after
+	
+	data = vartypes[type];
+	if(data.defaulthtml){
+	    defaulthtml = data.defaulthtml; //Options here could be expanded upon
+	}
+	else{
+	    classes = data.htmltype;
+	    if(!classes || classes=="string"){ //default to text
+		classes = '\"text\"';	
+	    }
+	    inputtype = 'type="'+classes+'"';
+	    defaulthtml = '<span class="'+type+' socket" title="'+type+'"><input value="'+val+'" '+inputtype+' /></span>';
+	}
+	return defaulthtml;
+    });
+   
+   
+    
     return value;
 }
 

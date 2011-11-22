@@ -96,6 +96,7 @@ function save_named_scripts(){
             date: date,
             scripts: scripts_as_object()
         });
+	console.log(localStorage[title]);
         reset_and_close_save_dialog();
     }
 }

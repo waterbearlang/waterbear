@@ -181,6 +181,15 @@ body {
     background-color: blue;
 }
 
+/*Description of saves*/
+.description{
+    font-size: .8em;
+    color: #515151;
+}
+/* This function isn't really needed with the left align system. */
+.layout_blocks{
+    display: none;
+}
 
 /* Save/Restore Dialogs */
 
@@ -188,6 +197,10 @@ body {
     background-color: #CCC;
     font-family: Helvetica;
     padding: 1em;
+    border: 0px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
 }
 
 .dialog h2{
@@ -197,9 +210,14 @@ body {
 }
 
 .dialog input{
-    width: 100%;
     font-size: 180%;
     margin-bottom: 1em;
+    width: 99%;
+    border: 0px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    padding-left: 10px;
 }
 
 .dialog textarea{
@@ -211,7 +229,7 @@ body {
 .dialog ul{
     min-width: 400px;
     margin-top: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
 
 .dialog button{
@@ -220,9 +238,14 @@ body {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    background-color: #3F6;
-    color: #333;
     margin-left: 1em;
+    background-color: #4D736D;
+    color: white;
+    margin-left: 1em;
+    border: 0px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: .5em;
 }
 
 .dialog .action{
@@ -240,6 +263,12 @@ body {
     clear: both;
     font-size: 80%;
     color: #666;
+    margin-top: 1.5em;
+}
+
+.dialog button.delete, button.cancel {
+    background-color: #854D53; /*This is a redish color*/
+    margin-top: .5em;
 }
 /* These additions should only change the appearance of the tabs*/
 
@@ -263,20 +292,6 @@ body {
     color: white;
     border-color: #333;
     font-weight: bold;
-}
-
-/* The following rules help make the dialogs a bit easier on the eyes*/
-
-.dialog button.delete, button.cancel {
-    background-color: #854D53;
-}
-
-.dialog li {
-    margin-top: 1.5em;
-}
-
-.dialog li button {
-    margin-top: 0px;
 }
 
  /* This last one might be a bit contreversial but I think that users shouldn't 

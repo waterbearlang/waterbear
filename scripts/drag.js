@@ -294,6 +294,10 @@
             drag_placeholder.remove();
             drag_placeholder = null;
         }
+        if (drop_cursor){
+            drop_cursor.remove();
+            drop_cursor = null;
+        }
     }
     
     function position_drop_cursor(){

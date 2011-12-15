@@ -122,10 +122,7 @@
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){
-            drop_cursor = $('<div class="drop_cursor"></div>');
-            target_canvas.prepend(drop_cursor);
-            drag_target = target;
-            drag_target.addClass("drag_indication");
+            drag_target = target; 
             start_position = target.offset();
             if (! target.parent().is('.scripts_workspace')){
                 start_parent = target.parent();
@@ -142,6 +139,9 @@
         // called on mousemove or touchmove if not already dragging
         if (!blend(event)) {return undefined;}
         if (!drag_target) {return undefined;}
+        drop_cursor = $('<div class="drop_cursor"></div>');
+        target_canvas.prepend(drop_cursor);
+        drag_target.addClass("drag_indication");
         // console.log('start_drag');
         current_position = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu

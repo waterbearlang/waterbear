@@ -198,7 +198,7 @@ window.getTweet = Local.prototype.getTweet;
 
 /**
      'example':{
-        type:'example',
+        //type:'example',
         htmltype:'number',
         targets: 'any,number,int',
         defaulthtml: '<select><option>true</option><option>false</option></select>',
@@ -209,38 +209,73 @@ window.vartypes = {
     'number':{
         htmltype:'number',
         targets: 'any,number',
-        defaulthtml: ''
+        defaulthtml: '',
+        filters: ['number']
     },
     'array':{
-        targets: 'any,array'
+        targets: 'any,array',
+        filters: ['varname'] //candidate for block only
     },
     'object':{
-        targets: 'any,object'
+        targets: 'any,object',
+        filters: ['varname'] //candidate for block only
     },
     'function':{
-        targets: 'any,function'
+        targets: 'any,function',
+        filters: ['varname'] //candidate for block only
     },
     'color':{
         targets: 'any,color'
     },
     'int':{
         htmltype:'number',
-        targets: 'any,number,int'
+        targets: 'any,number,int',
+        filters: ['int']
     },
     'float':{
         htmltype:'number',
-        targets: 'any,number,int'
+        targets: 'any,number,int',
+        filters: ['float']
     },
     'boolean':{
         htmltype:'select',
         defaulthtml: '<select><option>true</option><option>false</option></select>',
-        targets: 'any,boolean'
+        targets: 'any,boolean',
+        filters: 'BLOCKONLY'
     },
     'string':{
-        targets: 'any,string'
+        targets: 'any,string',
+        filters: ['string']
     },
     'any':{
         targets: 'any'
+    },
+    'varname':{ //This should be used in the context, create new var named ______
+        targets: '', //This is a bit limiting ...
+        filters: ['varname'] 
+    }
+};
+
+window.varfilters = {
+    'varname':{
+        legalChars: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$',
+        legalStartChars: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$', //Can't start with a number
+        reservedKeywords: 'break case catch continue debugger default delete do else finally for function if in instanceof new return switch this throw try typeof var void while with'
+    },
+    'float':{
+        legalChars: '0123456789',
+        onlyOne: '. -' // only one dot, and only one -
+    },
+    'int':{
+        legalChars: '0123456789',
+        onlyOne: '-' // only one - (Minus Sign)
+    },
+    'string':{
+        disallow: '\' \"'
+    },
+    'number':{
+        legalChars: '0123456789',
+        onlyOne: '. -' // only one dot, and only one -
     }
 };
 
@@ -294,7 +329,7 @@ var menus = {
             script: 'setTimeout(function(){[[next]]},1000*{{1}});'
         },
         {
-            label: 'repeat [number:10]', 
+            label: 'repeat [int:10]', 
             containers: 1, 
             script: 'range({{1}}).forEach(function(idx, item){local.index = idx; local.last_var = item;[[1]]});'
         },
@@ -304,11 +339,11 @@ var menus = {
             type: 'number'
         },
         {
-            label: 'broadcast [string:ack] message', 
+            label: 'broadcast [varname:ack] message', 
             script: '$(".stage").trigger({{1}});'
         },
         {
-            label: 'when I receive [string:ack] message', 
+            label: 'when I receive [varname:ack] message', 
             trigger: true, 
             script: '$(".stage").bind({{1}}, function(){[[next]]});'
         },
@@ -344,30 +379,30 @@ var menus = {
             script: 'local.last_var = [];'
         },
         {
-            label: 'new array named [string]',
+            label: 'new array named [varname]',
             script: 'local.set("array", {{1}}, []);'
         },
         {
-            label: 'new array named [string] with array [array]',
+            label: 'new array named [varname] with array [array]',
             script: 'local.set("array", {{1}}, {{2}});'
         },
         {
-            label: 'array named [string]',
+            label: 'array named [varname]',
             script: 'local.get("array", {{1}})',
             type: 'array'
         },
         {
-            label: 'array [string] item [number:0]',
+            label: 'array [varname] item [number:0]',
             script: 'local.get("array", {{1}})[{{2}}]',
             type: 'any'
         },
         {
-            label: 'array [string] join with [string:, ]',
+            label: 'array [varname] join with [string:, ]',
             script: 'local.get("array", {{1}}).join({{2}})',
             type: 'string'
         },
         {
-            label: 'array [string] append [any]',
+            label: 'array [varname] append [any]',
             script: 'local.get("array", {{1}}).push({{2}});'
         },
         {
@@ -375,37 +410,37 @@ var menus = {
             script: 'local.last_var.push({{1}});'
         },
         {
-            label: 'array [string] length',
+            label: 'array [varname] length',
             script: 'local.get({{1}}).length',
             type: 'number'
         },
         {
-            label: 'array [string] remove item [number:0]',
+            label: 'array [varname] remove item [number:0]',
             script: 'local.get("array", {{1}}).splice({{1}}, 1)[0]',
             type: 'any'
         },
         {
-            label: 'array [string] pop',
+            label: 'array [varname] pop',
             script: 'local.get("array", {{1}}).pop()',
             type: 'any'
         },
         {
-            label: 'array [string] shift',
+            label: 'array [varname] shift',
             script: 'local.get("array", {{1}}).shift()',
             type: 'any'
         },
         {   
-            label: 'array [string] reverse',
+            label: 'array [varname] reverse',
             script: 'local.get("array", {{1}}).reverse()',
             type: 'array'
         },
         {
-            label: 'array [string] concat [array]',
+            label: 'array [varname] concat [array]',
             script: 'local.get("array", {{1}}).concat({{2}});',
             type: 'array'
         },
         {
-            label: 'array [string] for each',
+            label: 'array [varname] for each',
             script: '$.each(local.get("array", {{1}}), function(idx, item){local.index = idx; local.last_var = item; [[1]] });',
             containers: 1
         }
@@ -416,51 +451,51 @@ var menus = {
             script: 'local.last_var = {};'
         },
         {
-            label: 'new object named [string]',
+            label: 'new object named [varname]',
             script: 'local.set("object", {{1}}, {});'
         },
         {
-            label: 'object key [string] = value [any]',
+            label: 'object key [varname] = value [any]',
             script: 'local.last_var[{{1}}] = {{2}};'
         },
         {
-            label: 'object named [string] key [string] = value [any]',
+            label: 'object named [varname] key [varname] = value [any]',
             script: 'local.get("object", {{1}})[{{2}}] = {{3}};'
         }
     ], false),
     functions: menu('Functions', [
         {
-            label: 'function named [string] with [choice:arity] arguments returning [choice:rettypes]',
-            create: 'function',
+            label: 'function named [varname] with [choice:arity] arguments returning [choice:rettypes]',
+            create: 'function'
         }
     ], false),
     strings: menu('Strings', [
         {
-            label: 'string named [string] = [string]',
+            label: 'string named [varname] = [string]',
             script: 'local.set("string", {{1}}, {{2}});'
         },
         {
-            label: 'string [string] split on [string]',
+            label: 'string [varname] split on [string]',
             script: '{{1}}.split({{2}})',
             type: 'array'
         },
         {
-            label: 'string [string] character at [number:0]',
+            label: 'string [varname] character at [number:0]',
             script: 'local.get("string", {{1}}[{{2}}]',
             type: 'string'
         },
         {
-            label: 'string [string] length',
+            label: 'string [varname] length',
             script: 'local.get("string", {{1}}.length',
             type: 'number'
         },
         {
-            label: 'string [string] indexOf [string]',
+            label: 'string [varname] indexOf [string]',
             script: 'local.get("string", {{1}}.indexOf({{2}})',
             type: 'number'
         },
         {
-            label: 'string [string] replace [string] with [string]',
+            label: 'string [varname] replace [string] with [string]',
             script: 'local.get("string", {{1}}.replace({{2}}, {{3}})',
             type: 'string'
         },
@@ -485,7 +520,7 @@ var menus = {
     sensing: menu('Sensing', [
         {
             label: 'ask [string:What\'s your name?] and wait',
-            script: 'local.answer = prompt({{1}});'
+            script: 'local.answer = prompt({{1}});' //I feel like this should be a value block
         },
         {
             label: 'answer', 
@@ -600,7 +635,8 @@ var menus = {
         },
         {
             label: 'join [string:hello] with [string:world]', 
-            'type': 'string', script: "({{1}} + {{2}})"},
+            'type': 'string', 
+            script: "({{1}} + {{2}})"},
         {
             label: 'letter [number:1] of [string:world]', 
             'type': 'string', 
@@ -679,7 +715,7 @@ var menus = {
         {
             label: 'pi',
             script: 'Math.PI;',
-            type: 'number'
+            'type': 'number'
         }
     ]),
     shapes: menu('Shapes', [
@@ -780,7 +816,8 @@ var menus = {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
             script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});' 
         },
-        {label: 'font family [string:Helvetica]',
+        {
+            label: 'font family [string:Helvetica]',
             script: 'local.last_var.attr("font-family", {{1}});'
         },
         {
@@ -906,7 +943,7 @@ var menus = {
             script: 'local.last_var.stop()'
         }
     ]),
-        animation: menu('Twitter', [
+        twitter: menu('Twitter', [
         {
             label: 'get tweet for [string]',
             containers: 1,

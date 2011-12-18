@@ -274,7 +274,7 @@ function Label(value){
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
    
-   value = value.replace(/\[([a-zA-Z]*)\]$/g,  function(a, type){
+   value = value.replace(/\[([a-zA-Z]*)\]/g,  function(a, type){
 
 	// a is the whole string    [int]
 	// type is the first match   int

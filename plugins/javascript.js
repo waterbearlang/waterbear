@@ -18,9 +18,16 @@ yepnope({
     ],
     complete: setup
 });
-
+var parentTrigger = false;
 jQuery.fn.extend({
   extract_script: function(){
+      console.log(this);
+      if(this.is(".trigger")){
+          parentTrigger = true;
+      }
+      if(!parentTrigger)
+          return;
+          
       if (this.length === 0) return '';
       if (this.is(':input')){
           if (this.parent().is('.string') || this.parent().is('.color')){
@@ -31,6 +38,7 @@ jQuery.fn.extend({
       }
       if (this.is('.empty')) return '/* do nothing */';
       return this.map(function(){
+          console.log("here");
           var self = $(this);
           var script = self.data('script');
           if (!script) return null;
@@ -54,6 +62,7 @@ jQuery.fn.extend({
               script = script.replace(/\[\[\d\]\]/g, blksf);
           }
           next = self.next_block().extract_script();
+          parentTrigger = false;
           if (script.indexOf('[[next]]') > -1){
               script = script.replace('[[next]]', next);
           }else{
@@ -62,7 +71,7 @@ jQuery.fn.extend({
               }
           }
           return script;
-      }).get().join('');
+      }).get().join('');  
   },
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
@@ -70,7 +79,7 @@ jQuery.fn.extend({
       return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
   },
   pretty_script: function(){
-      return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
+      return js_beautify(this.map(function(){return $(this).extract_script();}).get().join(''));
   },
   write_script: function(view){
       view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
@@ -730,7 +739,7 @@ var menus = {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
             script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});' 
         },
-        {   label: 'font family [string:Helvetica]',
+        {label: 'font family [string:Helvetica]',
             script: 'local.last_var.attr("font-family", {{1}});'
         },
         {

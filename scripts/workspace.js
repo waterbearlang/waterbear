@@ -263,4 +263,86 @@ function menu(title, specs, show){
 }
 window.menu = menu;
 
+
+
+//live processing
+    $('.scripts_workspace .socket input').live('keypress', function(e){
+        var target = e.currentTarget;
+        var pv = target.value; //previous value
+        var jt = String.fromCharCode(e.keyCode); //character just typed
+        var tos = $(target).parent().attr('class').replace("socket","").trim(); //type of socket
+        
+        var filters = vartypes[tos]['filters']; //@FIXME array
+        if(filters == 'BLOCKONLY'){// I think that this is what martyn means with can't take a literal
+            //Generate error tip here
+            console.log("Sorry this socket only accepts "+tos+" value blocks");
+            return false;
+        }
+        if(typeof filters == "undefined"){
+            console.log("No filters defined");
+            return true; //allow the char to be typed as not filter is imposed
+        }
+
+        for(i=0; i<filters.length; i++){
+            filter = filters[i];
+            var legalStartChars = varfilters[filter]['legalStartChars'];
+            var legalChars = varfilters[filter]['legalChars'];
+            var disallow = varfilters[filter]['disallow'];
+            var onlyOne = varfilters[filter]['onlyOne'];
+
+
+            if(typeof legalChars !== "undefined"){
+                if(typeof legalStartChars == "undefined"){
+                    legalStartChars = legalChars;
+                }
+                if(legalChars.indexOf(jt) < 0){//if the character isn't legal
+                    //Generate error tip here
+                    console.log("The character typed is illegal");
+                    return false;
+                }
+                if(pv.length < 1){//If its the first char typed
+                    if(legalStartChars.indexOf(jt) < 0){//if the character isn't legal
+                        //Generate error tip here
+                        console.log("The input can't start with that character");
+                        return false;
+                    }
+                }
+            }
+            if(typeof disallow !== "undefined"){
+                if(disallow.indexOf(jt) > -1){//if the character isn't legal
+                    //Generate error tip here
+                    console.log("Sorry that charracter isn't allowed here");
+                    return false;
+                }
+            }
+            //check only one
+            if(typeof onlyOne !== "undefined"){
+                if(onlyOne.indexOf(jt) > -1){ //is a character of limitation
+                    if(pv.indexOf(jt) > -1){
+                        console.log("Sorry you can only use one of those");
+                        return false;
+                    }
+                }
+            }
+            
+        }
+        console.log("Character Accepted");
+        return true;
+    });
+    $('.scripts_workspace .socket input').live('keyup', function(e){
+        var target = e.currentTarget;
+        var pv = target.value; //previous value
+        if(e.keyCode == 8){ //backspace
+            if(pv.length < 1){
+                console.log("Fields can't be left blank");
+            }                
+        }
+    });
+    //@fixme Should run validation agin when the user clicks on the script text button
+    //@fixme Copy/paste gets arround this
+    //@fixme doesn't check whats already there
+    // Seems like the above three could be fixed with a more general form of this function.
+    
+
+
 })(jQuery);

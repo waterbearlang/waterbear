@@ -74,22 +74,15 @@
         // fix target?
         return event;
     }
-    
+
     function get_potential_drop_targets(){
-        switch(drag_target.block_type()){
-            case 'step': return step_targets();
-            case 'number': return socket_targets2('any,number');
-            case 'array': return socket_targets2('any,array');
-            case 'object': return socket_targets2('any,object');
-            case 'function': return socket_targets2('any,function');
-            case 'color': return socket_targets2('any,color');
-            case 'int': return socket_targets2('any,number,int'); 
-            case 'float': return socket_targets2('any,number,float'); 
-            case 'boolean': return socket_targets2('any,boolean');
-            case 'string': return socket_targets2('any,string');
-            case 'any': return socket_targets2('any');
-            default: return $();
-        }
+	btype = drag_target.block_type();
+	if(btype == 'step')
+	    return step_targets();
+	else if(vartypes[btype]){
+	    return socket_targets2(vartypes[btype].targets);
+	}else
+	    return $();
     }
     
     function step_targets(){
@@ -158,18 +151,17 @@
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
         if (drag_target.parent().is('.socket')){
-            var classes = drag_target.parent().attr('class');
-
-            classes = classes.replace("socket","").trim();
-            // console.log(classes);
-            if(classes == "boolean"){           
-                drag_target.parent().append(
-                    '<select><option>true</option><option>false</option></select>');
-            }else{
-                if(!classes || classes=="string"){
-                    classes = '\"text\"';
+	    type = drag_target.block_type();
+	    if(vartypes[type].defaulthtml){
+		drag_target.parent().append(vartypes[type].defaulthtml);
+	    }
+	    else{
+		if(vartypes[type].htmltype)
+		    type = vartypes[type].htmltype;
+                if(!type || type=="string"){
+                    type = '\"text\"';
                 }
-                drag_target.parent().append('<input type="'+classes+'"/>');
+                drag_target.parent().append('<input type="'+type+'"/>');
             }
         }
         drag_target.css('position', 'absolute');

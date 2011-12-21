@@ -881,4 +881,6 @@ var demos = [
 ];
 populate_demos_dialog(demos);
 load_current_scripts();
+$('.scripts_workspace').trigger('init');
+console.log("Done");
 }

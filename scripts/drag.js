@@ -267,6 +267,7 @@
             drop_cursor.remove();
             drop_cursor = null;
             drag_target.css({position: 'relative', top: 0, left: 0, display: 'block'});
+            $('.scripts_workspace').trigger('add');
         }else{
             if (cloned){
                 console.log('remove cloned block');

@@ -84,21 +84,22 @@ $.fn.extend({
             klass: this.data('klass'),
             label: this.data('label'),
             script: this.data('script'),
+            subContainerLabels: this.data('subContainerLabels'),
             containers: this.data('containers')
         };
         // FIXME: Move specific type handling to raphael_demo.js
-        if (this.is('.trigger')){ desc.trigger = true; }
-        if (this.is('.number')){ desc['type'] = 'number'; }
-        if (this.is('.float')){desc['type'] = 'float'; }
-        if (this.is('.int')){desc['type'] == 'int';}
-        if (this.is('.string')){ desc['type'] = 'string'; }
-        if (this.is('.comment')){ desc['type'] = 'string'; }
-        if (this.is('.any')){ desc['type'] = 'any';}
-        if (this.is('.array')){ desc['type'] = 'array';}
-        if (this.is('.object')){ desc['type'] = 'object';}
-        if (this.is('.function')){ desc['type'] = 'function';}
-        if (this.is('.boolean')){ desc['type'] = 'boolean'; }
-        if (this.is('.color')){ desc['type'] = 'color'; }
+        if (this.is('.trigger')){desc.trigger = true;}
+        if (this.is('.number')){desc['type'] = 'number';}
+        if (this.is('.float')){desc['type'] = 'float';}
+        if (this.is('.int')){desc['type'] = 'int';}
+        if (this.is('.string')){desc['type'] = 'string';}
+        if (this.is('.comment')){desc['type'] = 'string';}
+        if (this.is('.any')){desc['type'] = 'any';}
+        if (this.is('.array')){desc['type'] = 'array';}
+        if (this.is('.object')){desc['type'] = 'object';}
+        if (this.is('.function')){desc['type'] = 'function';}
+        if (this.is('.boolean')){desc['type'] = 'boolean';}
+        if (this.is('.color')){desc['type'] = 'color';}
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -129,10 +130,12 @@ function Block(options){
         trigger: false, // This is the start of a handler
         flap: true, // something can come before
         containers: 0,  // Something cannot be inside
+        subContainerLabels: [],
         label: 'Step', // label is its own mini-language
         type: null
     };
     $.extend(opts, options);
+    console.log(opts['subContainerLabels']);
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
     }
@@ -152,6 +155,24 @@ function Block(options){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
     }
+    if(opts.containers > 0){
+        wrapper.addClass('containerBlock'); //This might not be necicary
+    }
+    if(opts.containers > 1){
+        wrapper.data('subContainerLabels', opts['subContainerLabels']);
+    }
+    for(i=0; i<opts.containers; i++){
+        ContainerLabel='';
+        if(opts.containers > 1){
+            if(i != (opts.containers-1)){
+                ContainerLabel='<span class="blockhead"><span class="label">'+wrapper.data('subContainerLabels')[i]+'</span></span>';
+            }
+        }
+        block.append('</b><span class="contained"><i class="slot"></i></span>'+ContainerLabel);
+    }
+    if (opts.containers){
+        block.find('> .blockhead > .label').prepend('<span class="disclosure open">▼</span>');
+    }
     if (opts.trigger){
         wrapper.addClass('trigger');
         block.append('<b class="trigger"></b>');
@@ -159,12 +180,10 @@ function Block(options){
         block.append('<b class="flap"></b>');
         wrapper.addClass('step');
     }
-    for (var i = 0; i < opts.containers; i++){
-        block.append('</b><span class="contained"><i class="slot"></i></span>');
-    }
-    if (opts.containers){
-        block.find('> .blockhead > .label').prepend('<span class="disclosure open">▼</span>');
-    }
+//    for (var i = 0; i < opts.containers; i++){
+//        block.append('</b><span class="contained"><i class="slot"></i></span>');
+//    }
+    
     wrapper.data('containers', opts.containers);
     if (opts.slot){
         wrapper.append('<span class="next"><i class="slot"></i></span>');
@@ -207,14 +226,22 @@ function Block(options){
 $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
     var self = $(event.target);
     if (self.is('.open')){
-        self.text('►').closest('.block').find('> .contained').hide();
+        //self.text('►').closest('.block').find('> .contained').hide();
+        self.text('►');
+        getContained(self).css('padding-bottom',0).children().hide();
     }else{
-        self.text('▼').closest('.block').find('> .contained').show();
+        //self.text('▼').closest('.block').find('> .contained').show();
+        self.text('▼');
+        getContained(self).css('padding-bottom',10).children().show();
     }
     self.toggleClass('open closed');
 });
+function getContained(s){
+    if(s.closest('.blockhead').next().is('.contained'))
+        return s.closest('.blockhead').next('.contained');
+    return s.closest('.blockhead').next().next();
+}
 
-        
 function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
     return '<span class="string ' + listname + ' autosocket"><select>' + 

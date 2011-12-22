@@ -274,8 +274,9 @@ var menus = {
             script: 'if({{1}}){[[1]]}'
         },
         {
-            label: 'if [boolean] else', 
+            label: 'if [boolean]', 
             containers: 2,
+            subContainerLabels: ['else'],
             script: 'if({{1}}){[[1]]}else{[[2]]}'
         },
         {

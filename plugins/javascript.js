@@ -246,6 +246,7 @@ var menus = {
         {
             label: 'repeat [number:10]', 
             containers: 1, 
+            slot: false,
             script: 'range({{1}}).forEach(function(idx, item){local.index = idx; local.last_var = item;[[1]]});'
         },
         {
@@ -264,8 +265,7 @@ var menus = {
         },
         {
             label: 'forever if [boolean:false]', 
-            containers: 1, 
-            slot: false, 
+            containers: 1,  
             script: 'while({{1}}){[[1]]}'
         },
         {
@@ -280,6 +280,7 @@ var menus = {
         },
         {
             label: 'repeat until [boolean]', 
+            containers: 1, 
             script: 'while(!({{1}})){[[1]]}'
         },
         {

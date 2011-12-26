@@ -135,7 +135,7 @@ function Block(options){
         type: null
     };
     $.extend(opts, options);
-    console.log(opts['subContainerLabels']);
+    
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
     }
@@ -165,7 +165,7 @@ function Block(options){
         ContainerLabel='';
         if(opts.containers > 1){
             if(i != (opts.containers-1)){
-                ContainerLabel='<span class="blockhead"><span class="label">'+wrapper.data('subContainerLabels')[i]+'</span></span>';
+                ContainerLabel='<span class="blockhead"><span class="label">'+Label(wrapper.data('subContainerLabels')[i])+'</span></span>';
             }
         }
         block.append('</b><span class="contained"><i class="slot"></i></span>'+ContainerLabel);

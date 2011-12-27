@@ -97,8 +97,57 @@ function save_named_scripts(){
             scripts: scripts_as_object()
         });
         reset_and_close_save_dialog();
-    }
+    }else	
+        alert("You must enter a name");
 }
+
+function export_named_scripts(){
+    console.log("here");
+    $('#exp h2').html('Exported Code');
+    $('#exp small').html('Copy Exported Code below');	
+    var title = $('#script_name').val();	
+    var description = $('#script_description').val();
+    var date = Date.now();
+    if (title){
+	var exp = JSON.stringify({
+	    title: title,
+	    description: description,
+	    date: date,
+	    scripts: scripts_as_object()
+	});
+	console.log("EXP: "+exp);
+	reset_and_close_save_dialog();
+	$('#exp').bPopup();
+	$('#exp textarea').html(exp);
+	$('#exp .done').bind('click',function(){
+	    $('#exp').bPopup().close();
+	    $('#exp .done').unbind('click');
+	});
+    }
+    else
+	alert("You must enter a name");
+}
+	
+function restore_from_export(){
+    reset_and_close_restore_dialog();
+    $('#exp h2').html('Paste Exported Code below');
+    $('#exp small').html('Paste Exported Code below');
+    $('#exp').bPopup();
+
+    $('#exp .done').click(function(){
+	$('#exp .done').unbind('click');
+	var script = $('#exp textarea').val();
+	console.log(script);
+	$('#exp').bPopup().close();
+	clear_scripts();
+
+	var ps = JSON.parse(script);
+	console.log(ps.scripts);
+
+	load_scripts_from_object(ps.scripts);	
+    });	
+}
+
 
 function reset_and_close_save_dialog(){
     $('#script_name').val('');
@@ -173,11 +222,13 @@ function toggle_description(event){
 }
 
 $('#save_dialog .save').click(save_named_scripts);
+$('#save_dialog .export').click(export_named_scripts);
 $('#save_dialog .cancel').click(reset_and_close_save_dialog);
-$('.save_scripts').click(function(){ $('#save_dialog').bPopup(); });
+$('.save_scripts').click(function(){$('#save_dialog').bPopup();});
 
 $('.restore_scripts').click( populate_and_show_restore_dialog );
 $('#restore_dialog .cancel').click(reset_and_close_restore_dialog);
+$('#restore_dialog .exp').click(restore_from_export);
 $('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
                     .delegate('.show_description', 'click', toggle_description)
                     .delegate('.delete', 'click', delete_named_scripts);
@@ -185,7 +236,7 @@ $('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
 $('#demos_dialog').delegate('.load', 'click', restore_demo_scripts)
                   .delegate('.show_description', 'click', toggle_description);
 $('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
-$('.demo_scripts').click(function(){$('#demos_dialog').bPopup(); });
+$('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
 $('.layout_blocks').click(layout_blocks);
 
 function layout_blocks(){

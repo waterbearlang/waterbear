@@ -59,8 +59,8 @@ function clear_scripts(event, force){
 }
 $('.clear_scripts').click(clear_scripts);
 
-$('.goto_script').click(function(){$(document).scrollLeft(0);});
-$('.goto_stage').click(function(){$(document).scrollLeft(100000);});
+$('.goto_script').click(function(){$('.block_menu')[0].scrollIntoView();});
+$('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
 
 // Load and Save Section
 
@@ -75,7 +75,7 @@ function scripts_as_object(){
 
 function save_current_scripts(){
     show_workspace();
-    $(document).scrollLeft(0);
+    $('.block_menu')[0].scrollIntoView();
     localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
 }
 $(window).unload(save_current_scripts);

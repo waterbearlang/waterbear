@@ -246,6 +246,7 @@ var menus = {
         {
             label: 'repeat [number:10]', 
             containers: 1, 
+            slot: false,
             script: 'range({{1}}).forEach(function(idx, item){local.index = idx; local.last_var = item;[[1]]});'
         },
         {
@@ -264,8 +265,7 @@ var menus = {
         },
         {
             label: 'forever if [boolean:false]', 
-            containers: 1, 
-            slot: false, 
+            containers: 1,  
             script: 'while({{1}}){[[1]]}'
         },
         {
@@ -274,12 +274,14 @@ var menus = {
             script: 'if({{1}}){[[1]]}'
         },
         {
-            label: 'if [boolean] else', 
+            label: 'if [boolean]', 
             containers: 2,
+            subContainerLabels: ['else'],
             script: 'if({{1}}){[[1]]}else{[[2]]}'
         },
         {
             label: 'repeat until [boolean]', 
+            containers: 1, 
             script: 'while(!({{1}})){[[1]]}'
         },
         {
@@ -881,4 +883,6 @@ var demos = [
 ];
 populate_demos_dialog(demos);
 load_current_scripts();
+$('.scripts_workspace').trigger('init');
+console.log("Done");
 }

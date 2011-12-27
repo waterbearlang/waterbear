@@ -45,21 +45,50 @@
   -moz-border-radius-topleft: 25px;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
-  padding-top: 15px;
+  padding-top: 10px;
 }
 
 .blockhead{
   font-family: Georgia;
   font-size: 12px;
   white-space: nowrap;
-  padding: 7px 20px;
+  padding: 5px 20px;
   padding-bottom: 6px;
   margin: 0px;
+  display: block;
+  
+  padding: 3px 20px;
+  padding-bottom: 5px;
+}
+.trigger .blockhead{
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .value > .block > .blockhead{
     padding: 3px 10px 3px 10px;
     margin: 1px;
+}
+
+/* For some reason this causes the blocks to slowly loose their color*/
+.block .blockhead{
+    overflow-y: hidden;
+}
+.blockhead.not(:first-child)
+{
+    padding: 5px 0 5px 10px;
+    margin-top: 0;
+    position: relative;
+    display: block;
+}
+
+.containerBlock > .blockhead{
+    padding: 5px 20px;
+    padding-bottom: 6px;
+}
+
+.containerBlock > span.block {
+    padding-bottom: 11px;
 }
 
 .socket {
@@ -112,7 +141,7 @@
   position: relative;
   padding-top: 1px;
   margin-left: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   padding-bottom: 10px;
   overflow: visible;
   -webkit-border-top-left-radius: 10px;
@@ -167,15 +196,57 @@
     outline: blue ridge thick;
 }
 
+/*This class is added to the block that is bieng moved when it is aligned to snap in*/
 .drag_active{
-    background-color: green;
+/*    background-color: green;*/
+/*    A box shadow might look nice here ?*/
 }
 
+/*This class is added to the block that is moving*/
 .drag_indication{
     opacity: 0.75;
 }
 
-.drop_active{
+/*This class is added to the block receiving the block bieng dragged.*/
+.socket.drop_active{
     background-color: yellow;
 }
+.slot.drop_active{
+    background-color: yellow;
+}
+.slot.drop_active:before {
+    content: "";
+    background: red;
+    width: 10px;
+    height: 10px;
+    height: 21px;
+    width: 56px;
+    position: absolute;
+    top: 5px;
+    left: -17px;
+    content: "";
+    display: block;
+    z-index: 0;
+    background: yellow;
+
+    -moz-box-shadow: 0px 2px 20px yellow;
+    -webkit-box-shadow: 0px 2px 20px yellow;
+    box-shadow: 0px 2px 20px yellow;
+
+    -webkit-border-bottom-right-radius: 25px;
+    -webkit-border-bottom-left-radius: 25px;
+    -moz-border-radius-bottomright: 25px;
+    -moz-border-radius-bottomleft: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+span.socket select, span.autosocket select{
+    margin: 0;
+}
+
+.contained:last-child {
+    margin-bottom: 10px;
+}
+
 

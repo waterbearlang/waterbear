@@ -78,18 +78,19 @@
             <button class="cancel">Cancel</button>
         </div>
     </div>
-      <div class="hidden dialog"id="exp">
+    <div class="hidden dialog"id="exp">
 	  <h2>Exported Code</h2>
 	  <small>Copy this into a text document to save for your records. More info in the <em>Need Help?</em> tab</small>
 	  <br/><br/>
 	  <textarea></textarea>
 	  <button class="done">Done</button>	
       </div>
-    <script src="lib/jquery-1.5.1.min.js"></script>
+    <script src="lib/jquery-1.7.1.min.js"></script>
     <script src="lib/jquery.hotkeys.js"></script>
     <script src="lib/jquery.querystring.js"></script>
     <script src="lib/yepnope.1.0.2-min.js"></script>
     <script src="lib/jquery.bpopup-0.5.1.min.js"></script>
+    <script src="lib/jquery.autoGrowInput.js"></script>
     <script src="lib/json2.js"></script><!-- Make this conditional -->
     <script src="scripts/drag.js"></script>
     <script src="scripts/blocks.js"></script>
@@ -97,13 +98,23 @@
     <script src="scripts/workspace.js"></script>
     <script>
         var q = $.parseQuery();
-        yepnope([{
-            test: q.plugin === 'javascript',
-            yep: 'plugins/javascript.js'
-        },{
-            test: q.plugin === 'arduino',
-            yep: 'plugins/arduino.js'
-        }]);
+        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 
+            window.location = "./";//If they don't have the plugin part of the query string lets send them back home.
+        var testRes = ({
+            "javascript" : "plugins/javascript.js",
+            "arduino" : "plugins/adruino.js"
+        })[ q.plugin ];
+        
+        yepnope({
+            test : testRes,
+            yep : testRes,
+            complete : function () {
+                if(! testRes ){
+                    window.location = "./";
+                    alert('Sorry the plugin: \"'+q.plugin+'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
+                }
+            }
+        });
     </script>
   </body>
 </html>

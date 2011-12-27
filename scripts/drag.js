@@ -41,6 +41,8 @@
     // TODO: update this whenever we switch to a new workspace
     var target_canvas = $('.workspace:visible .scripts_workspace');
     
+    var snap_dist = 25; //In pixels
+    
     function reset(){
         drag_target = null;
         potential_drop_targets = $();
@@ -122,10 +124,7 @@
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){
-            drop_cursor = $('<div class="drop_cursor"></div>');
-            target_canvas.prepend(drop_cursor);
-            drag_target = target;
-            drag_target.addClass("drag_indication");
+            drag_target = target; 
             start_position = target.offset();
             if (! target.parent().is('.scripts_workspace')){
                 start_parent = target.parent();
@@ -142,6 +141,9 @@
         // called on mousemove or touchmove if not already dragging
         if (!blend(event)) {return undefined;}
         if (!drag_target) {return undefined;}
+        drop_cursor = $('<div class="drop_cursor"></div>');
+        target_canvas.prepend(drop_cursor);
+        drag_target.addClass("drag_indication");
         // console.log('start_drag');
         current_position = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
@@ -267,6 +269,7 @@
             drop_cursor.remove();
             drop_cursor = null;
             drag_target.css({position: 'relative', top: 0, left: 0, display: 'block'});
+            $('.scripts_workspace').trigger('add');
         }else{
             if (cloned){
                 console.log('remove cloned block');
@@ -293,6 +296,10 @@
         if (drag_placeholder){
             drag_placeholder.remove();
             drag_placeholder = null;
+        }
+        if (drop_cursor){
+            drop_cursor.remove();
+            drop_cursor = null;
         }
     }
     
@@ -341,6 +348,13 @@
                 drop_area = area;
                 // console.log('found potential match');
             }
+	    else if(drag_rect && elem){
+		val = dist(drag_rect["left"], drag_rect["top"], elem["left"], elem["top"]);
+		if(val < snap_dist){ 
+		    drop_idx = idx;
+		    drop_area = area;
+		}
+	    }
         });
         if (drop_target && drop_target.length){
             drop_target.removeClass('drop_active');
@@ -371,6 +385,10 @@
     // Utility methods
     function mag(p1, p2){
         return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
+    }
+    //I didn't really need to rewrite the above, but I was tired and Couldn't get it to work. Sill can't :(
+    function dist(p1, p2, m1, m2){
+        return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));	
     }
     
     function rect_str(r){

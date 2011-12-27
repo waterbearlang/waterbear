@@ -11,6 +11,7 @@ function accordion(event){
     }
     $('.select.selected').removeClass('selected').siblings('.option').slideUp('slow');
     self.addClass('selected').siblings('.option').slideDown('slow');
+    $('.block_menu').trigger('open', self);
 }
 $('.block_menu').delegate('.select', 'click', accordion);
 

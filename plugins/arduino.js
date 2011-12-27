@@ -40,7 +40,7 @@ window.update_scripts_view = function(){
 }
 
 function run_scripts(event){
-    $(document).scrollLeft(10000);
+    $(document.body).scrollLeft(10000);
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
     $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
 }

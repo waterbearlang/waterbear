@@ -89,13 +89,23 @@
     <script src="scripts/workspace.js"></script>
     <script>
         var q = $.parseQuery();
-        yepnope([{
-            test: q.plugin === 'javascript',
-            yep: 'plugins/javascript.js'
-        },{
-            test: q.plugin === 'arduino',
-            yep: 'plugins/arduino.js'
-        }]);
+        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 
+            window.location = "./";//If they don't have the plugin part of the query string lets send them back home.
+        var testRes = ({
+            "javascript" : "plugins/javascript.js",
+            "arduino" : "plugins/adruino.js"
+        })[ q.plugin ];
+        
+        yepnope({
+            test : testRes,
+            yep : testRes,
+            complete : function () {
+                if(! testRes ){
+                    window.location = "./";
+                    alert('Sorry the plugin: \"'+q.plugin+'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
+                }
+            }
+        });
     </script>
   </body>
 </html>

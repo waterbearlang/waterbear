@@ -227,7 +227,7 @@ var menus = {
         {
             label: 'when [choice:keys] key pressed', 
             trigger: true, 
-            script: '$(document).bind("keydown", {{1}}, function(){[[next]]return false;});'
+            script: '$(document).bind("keydown", {{1}}, function(){[[next]]; return false;});'
         },
         {
             label: 'every 1/[number:30] of a second', 

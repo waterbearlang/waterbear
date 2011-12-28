@@ -67,7 +67,7 @@ jQuery.fn.extend({
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.pretty_script();
-      return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
+      return 'var global = new Global();(function($){var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
   },
   pretty_script: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
@@ -227,7 +227,7 @@ var menus = {
         {
             label: 'when [choice:keys] key pressed', 
             trigger: true, 
-            script: '$(document).bind("keydown", {{1}}, function(){[[next]]return false;});'
+            script: '$(document).bind("keydown", {{1}}, function(){[[next]]; return false;});'
         },
         {
             label: 'every 1/[number:30] of a second', 

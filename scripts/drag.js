@@ -130,7 +130,7 @@
                 start_parent = target.parent();
             }
         }else{
-            console.log('no target in init_drag');
+            //console.log('no target in init_drag');
             drag_target = null;
         }
         return false;
@@ -237,7 +237,7 @@
             drop_target.removeClass('drop_active');
             if (drag_target.block_type() === 'step'){
                 // Drag a step to snap to a step
-                console.log('snapping a step togther')
+                // console.log('snapping a step togther')
                 drop_target.parent().append(drag_target);
                 drag_target.css({
                     position: 'relative',
@@ -247,7 +247,7 @@
                 });
             }else{
                 // Insert a value block into a socket
-                console.log('Inserting a value into a socket');
+                // console.log('Inserting a value into a socket');
                 drop_target.find('input, select').remove();
                 drop_target.append(drag_target);
                 drag_target.css({
@@ -259,11 +259,11 @@
             }
         }else if ($('.block_menu').cursor_over()){
             // delete block if dragged back to menu
-            console.log('deleting a block');
+            // console.log('deleting a block');
             drag_target.remove();
         }else if (drag_target.overlap(target_canvas)){
             // generally dragged to canvas, position it there
-            console.log('Drop onto canvas');
+            // console.log('Drop onto canvas');
 //            var curr_pos = drag_target.offset();
             drop_cursor.before(drag_target);
             drop_cursor.remove();
@@ -272,10 +272,10 @@
             $('.scripts_workspace').trigger('add');
         }else{
             if (cloned){
-                console.log('remove cloned block');
+                // console.log('remove cloned block');
                 drag_target.remove();
             }else{
-                console.log('put block back where we found it');
+                // console.log('put block back where we found it');
                 if (start_parent){
                     if (start_parent.is('.socket')){
                         start_parent.children('input').remove();
@@ -305,7 +305,7 @@
     
     function position_drop_cursor(){
         var self, top, middle, bottom, x = drag_target.position().top;
-        console.log('cursor: %s', x);
+        // console.log('cursor: %s', x);
         target_canvas.prepend(drop_cursor);
         drop_cursor.show();
         target_canvas.children('.wrapper').each(function(idx){

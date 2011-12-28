@@ -55,6 +55,7 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 
 * Dethe Elza (https://github.com/dethe)
 * Martyn Eggleton (https://github.com/stretchyboy)
+* Blake Bourque (https://github.com/TechplexEngineer)
 * Chistopher de Beer (http://github.com/christopherdebeer)
 * Atul Varma (http://github.com/toolness/)
 

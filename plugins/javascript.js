@@ -21,12 +21,9 @@ yepnope({
 var parentTrigger = false;
 jQuery.fn.extend({
   extract_script: function(){
-      console.log(this);
-      if(this.is(".trigger")){
-          parentTrigger = true;
-      }
-      if(!parentTrigger)
-          return;
+	if(this.parent().is(".scripts_workspace"))
+	    if(!this.is(".trigger"))
+		return '\n\n /*not attached to a trigger*/ \n';
           
       if (this.length === 0) return '';
       if (this.is(':input')){

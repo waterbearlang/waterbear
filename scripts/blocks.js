@@ -78,7 +78,7 @@ $.fn.extend({
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
-        if (this.is('.value')){desc['type'] = this.data('type');
+        if (this.is('.value')){desc['type'] = this.data('type')};
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -248,11 +248,9 @@ function Label(value){
     // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[boolean:(true|false)\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
     value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
-    value = value.replace(/\[color\]/g, '<span class="value color socket" data-type="color"><input type="color"></span>');
-    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="value color socket" data-type="color"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
-    value = value.replace(/\[(\w+):(-?\d*\.?\d+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    value = value.replace(/\[(\w+):(-?\d*\.?.+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[(\w+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
     return value;
 }

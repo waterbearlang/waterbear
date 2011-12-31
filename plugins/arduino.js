@@ -159,91 +159,79 @@ var menus = {
         {
             label: 'Setup - When program starts', 
             trigger: true, 
-            script: 'void setup()\n{\n[[next]]\n}\n'
+            script: 'void setup()\n{\n[[next]]\n}\n',
+            help: 'Trigger to start scripts when program starts'
         },
         {
             label: 'Main loop', 
             trigger: true, 
             containers: 1, 
             slot: false, 
-        
-            script: 'void loop()\n{\n[[1]]\n}\n'
+            script: 'void loop()\n{\n[[1]]\n}\n',
+            help: 'Trigger for main loop'
         },
         {
             label: 'Global Settings', 
             trigger: true, 
-            script: '/*Global Settings*/\n\n[[next]]\n\n'
+            script: '/*Global Settings*/\n\n[[next]]\n\n',
+            help: 'Trigger for blocks in global setup'
         },
-        /*{
-            label: 'Comment [string]', 
-            script: '//{{1}}\n'
-        },
-        {
-            label: 'Comment [comment] (not working)', 
-        */
-        //script: '/*{{1}}*/\n\n'
-        //},
-        
-        
-        /*{
-            label: 'every 1/[number:30] of a second', 
-            trigger: true, 
-            script: 'setInterval(function(){\n[[next]]},\n1000/{{1}}\n);'
-        },*/
-        
-        /* TODO : repeat , needs unquie id
-        {
-            label: 'repeat [int:10]', 
-            containers: 1, 
-            script: 'range({{1}}).forEach(function(){\n[[1]]\n});'
-        },*/
-        //unqie id?
+        //uniqe id?
         {
             label: 'broadcast [string:ack] message', 
             script: '{{1}}();'
+            help: 'Send a message to all listeners'
         },
         {
             label: 'when I receive [string:ack] message', 
             trigger: true, 
-            script: 'function {{1}}(){\n[[next]]\n}'
+            script: 'function {{1}}(){\n[[next]]\n}',
+            help: 'Trigger for blocks to run when message is received'
         },
         {
             label: 'forever if [boolean:false]', 
             containers: 1, 
             slot: false, 
-            script: 'while({{1}}){\n[[1]]\n}'
+            script: 'while({{1}}){\n[[1]]\n}',
+            help: 'loop until condition fails'
         },
         {
             label: 'if [boolean]', 
             containers: 1, 
-            script: 'if({{1}}){\n[[1]]\n}'
+            script: 'if({{1}}){\n[[1]]\n}',
+            help: 'only run blocks if condition is true'
         },
         {
             label: 'if [boolean]', 
             containers: 2, 
             subContainerLabels: ['else'],
-            script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}'
+            script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}',
+            help: 'run first set of blocks if condition is true, second set otherwise'
         },
         {
             label: 'repeat until [boolean]', 
-            script: 'while(!({{1}})){\n[[1]]\n}'
+            script: 'while(!({{1}})){\n[[1]]\n}',
+            help: 'loop until condition is true'
         }
     ], false),
     
     timing: menu('Timing', [
         {
             label: 'wait [int:1] secs', 
-            script: 'delay(1000*{{1}});'
+            script: 'delay(1000*{{1}});',
+            help: 'pause before running subsequent blocks'
         },
         {
             label: 'Milliseconds since program started', 
             'type': 'int', 
-            script: '(millis())'
+            script: '(millis())',
+            help: 'int value of time elapsed'
         },
         {
             label: 'Seconds since program started', 
             'type': 'int', 
-            script: '(int(millis()/1000))'
+            script: '(int(millis()/1000))',
+            help: 'int value of time elapsed'
         }
         
     ]),
@@ -253,40 +241,31 @@ var menus = {
         {
             label: 'Digital Pin [choice:digitalpins]', 
             'type': 'int', 
-            script: ' {{1}} '
+            script: ' {{1}} ',
+            help: 'int value of a given pin'
         },
         {
             label: 'Set digital pin  [string:0] to [choice:inoutput]', 
-            script: 'pinMode({{1}}, {{2}});'
+            script: 'pinMode({{1}}, {{2}});',
+            help: 'set given pin mode'
         },
         
         {
           label: 'Input from digital pin [string:0]', 
             'type': 'boolean', 
-            script: '(digitalRead({{1}}) == HIGH)'
+            script: '(digitalRead({{1}}) == HIGH)',
+            help: 'boolean value of digital pin'
         },
-        /*
-        {
-            label: 'Pin HIGH [choice:digitalpins]', 
-            'type': 'boolean', 
-            script: '(digitalRead({{1}}) == HIGH)'
-        },*/
-        
-        /*{
-            label: 'circle with radius [number:0]', 
-            script: 'local.shape = global.paper.circle(0, 0, {{1}});'
-        }*/
-        
         {
           label: 'Digital Pin [string:0] outputs [choice:highlow]', 
-          script: 'digitalWrite({{1}}, {{2}});'
+          script: 'digitalWrite({{1}}, {{2}});',
+          help: 'Write a value to given pin'
         },
         
         {
           label: 'Digital Pin [string:0] output high [boolean]', 
           script: 'if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n'
         },
-        
         {
             label: 'Set analog reference [choice:analogrefs]', 
             script: 'analogReference({{1}});'
@@ -312,68 +291,8 @@ var menus = {
         
         {
           label: 'PWM [string:0] outputs [int:255]', 
-          script: 'anologWrite({{1}}, {{2}});'
+          script: 'analogWrite({{1}}, {{2}});'
         }
-        /*,
-        
-        {
-            label: 'ask [string:What\'s your name?] and wait',
-            script: 'local.answer = prompt("{{1}}");'
-        },
-        {
-            label: 'answer', 
-            'type': 'string', 
-            script: 'local.answer'
-        },
-        {
-            label: 'mouse x', 
-            'type': 'number', 
-            script: 'global.mouse_x'
-        },
-        {
-            label: 'mouse y', 
-            'type': 'number', 
-            script: 'global.mouse_y'
-        },
-        {
-            label: 'mouse down', 
-            'type': 'boolean', 
-            script: 'global.mouse_down'
-        },
-        {
-            label: 'key [choice:keys] pressed?', 
-            'type': 'boolean', 
-            script: '$(document).bind("keydown", {{1}}, function(){\n[[1]]\n});'
-        },
-        {
-            label: 'stage width', 
-            'type': 'number', 
-            script: 'global.stage_width'
-        },
-        {
-            label: 'stage height', 
-            'type': 'number', 
-            script: 'global.stage_height'
-        },
-        {
-            label: 'center x', 
-            'type': 'number', 
-            script: 'global.stage_center_x'
-        },
-        {
-            label: 'center y', 
-            'type': 'number', 
-            script: 'global.stage_center_y'
-        },
-        {
-            label: 'reset timer', 
-            script: 'global.timer.reset()'
-        },
-        {
-            label: 'timer', 
-            'type': 'number', 
-            script: 'global.timer.value()'
-        }*/
     ]),
     
     variables: menu('Variables', [
@@ -381,10 +300,6 @@ var menus = {
           label:'Create [string:var] set to [string]',
           script: "String {{1}} = '{{2}}';"
         },
-        /*{
-          label:'Create constant [string:var] set to [string:value]',
-          script: "const String {{1}} = '{{2}}';"
-        },*/
         {
           label:'[string:var] = [string]',
           script: "{{1}} = '{{2}}';"
@@ -399,11 +314,6 @@ var menus = {
           label:'Create [string:var] set to [int:0]',
           script: "int {{1}} = {{2}}'"
         },
-        
-        /*{
-          label:'Create constant [string:var] set to [number:0]',
-          script: "const int {{1}} = {{2}};"
-        },*/
         {
           label:'[string:var] = [int:0]',
           script: "{{1}} = {{2}};"
@@ -418,11 +328,6 @@ var menus = {
           label:'Create [string:var] set to [float:0.0]',
           script: "float {{1}} = {{2}}"
         },
-        
-        /*{
-          label:'Create constant [string:var] set to [number:0]',
-          script: "const float {{1}} = {{2}};"
-        },*/
         {
           label:'[string:var] = [float:0.0]',
           script: "{{1}} = {{2}};"
@@ -432,17 +337,10 @@ var menus = {
           type : 'float',
           script: "{{1}}"
         },
-        
-        
-        
         {
           label:'Create [string:var] set to [boolean:false]',
           script: "int {{1}} = {{2}};"
         },
-        /*{
-          label:'Create constant [string:var] set to [boolean:false]',
-          script: "const int {{1}} = {{2}};"
-        },*/
         {
           label:'[string:var] = [boolean:false]',
           script: "{{1}} = {{2}};"
@@ -452,9 +350,6 @@ var menus = {
           type : 'boolean',
           script: "{{1}}"
         }
-        
-        
-        
       ]),
     operators: menu('Operators', [
         {
@@ -482,12 +377,10 @@ var menus = {
             'type': 'number', 
             script: "(random({{1}}, {{2}}))"
         },
-        
         {
             label: 'set seed for random numbers to [number:1]', 
             script: "(randomSeed({{1}}))"
         },
-        
         {
             label: '[number:0] < [number:0]', 
             'type': 'boolean', 
@@ -519,19 +412,6 @@ var menus = {
             'type': 'boolean', 
             script: "(! {{1}})"
         },
-        /*{
-            label: 'join [string:hello] with [string:world]', 
-            'type': 'string', script: "({{1}} + {{2}})"},
-        {
-            label: 'letter [number:1] of [string:world]', 
-            'type': 'string', 
-            script: "{{2}}[{{1}}]"
-        },
-        {
-            label: 'length of [string:world]', 
-            'type': 'number', 
-            script: "({{1}}.length)"
-        },*/
         {
             label: '[number:0] mod [number:0]', 
             'type': 'number', 
@@ -548,28 +428,6 @@ var menus = {
             'type': 'number', 
             script: "(abs({{1}}))"
         },
-        /*
-        {
-            label: 'arccosine degrees of [number:10]', 
-            'type': 'number', 
-            script: 'rad2deg(Math.acos({{1}}))'
-        },
-        {
-            label: 'arcsine degrees of [number:10]', 
-            'type': 'number', 
-            script: 'rad2deg(Math.asin({{1}}))'
-        },
-        {
-            label: 'arctangent degrees of [number:10]', 
-            'type': 'number', 
-            script: 'rad2deg(Math.atan({{1}}))'
-        },
-        {
-            label: 'ceiling of [number:10]', 
-            'type': 'number', 
-            script: 'Math.ceil({{1}})'
-        },
-        */
         {
             label: 'cosine of [number:10] degrees', 
             'type': 'float', 
@@ -631,18 +489,6 @@ var menus = {
           label: 'Send [any:Message]', 
           script: "Serial.print({{1}});"
         },
-        
-/*        {
-          label: 'Send [number:0] as a line', 
-          script: "Serial.println({{1}});"
-        },
-        
-        {
-          label: 'Send [boolean:true] as a line', 
-          script: "Serial.println({{1}});"
-        },
-  */      
-        
         {
           label: 'Message Value', 
           type: 'string',

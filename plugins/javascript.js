@@ -220,654 +220,793 @@ var menus = {
     control: menu('Control', [
         {
             label: 'when program runs', 
-            trigger: true, 
+            trigger: true,
             script: 'function _start(){[[next]]}_start();',
             help: 'this trigger will run its scripts once when the program starts'
-            },
+        },
         {
             label: 'when [choice:keys] key pressed', 
             trigger: true, 
-            script: '$(document).bind("keydown", {{1}}, function(){[[next]]; return false;});'
+            script: '$(document).bind("keydown", {{1}}, function(){[[next]]; return false;});',
+            help: 'this trigger will run the attached blocks every time this key is pressed'
         },
         {
-            label: 'every 1/[number:30] of a second', 
-            trigger: true, 
-            script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[next]]},1000/{{1}})})();'
+            label: 'repeat [number:30] times a second',
+            trigger: true,
+            script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[next]]},1000/{{1}})})();',
+            help: 'this trigger will run the attached blocks periodically'
         },
         {
             label: 'count',
             script: 'local.count',
-            type: 'number'
+            type: 'number',
+            help: 'this block can only be used within a repeat block to get the number of iterations'
         },            
         {
             label: 'wait [number:1] secs', 
-            script: 'setTimeout(function(){[[next]]},1000*{{1}});'
+            script: 'setTimeout(function(){[[next]]},1000*{{1}});',
+            help: 'pause before running the following blocks'
         },
         {
             label: 'repeat [number:10]', 
             containers: 1, 
             slot: false,
-            script: 'range({{1}}).forEach(function(idx, item){local.index = idx; local.last_var = item;[[1]]});'
-        },
-        {
-            label: 'loop index',
-            script: 'local.index',
-            type: 'number'
+            script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
+            help: 'repeat the contained blocks so many times'
         },
         {
             label: 'broadcast [string:ack] message', 
-            script: '$(".stage").trigger({{1}});'
+            script: '$(".stage").trigger({{1}});',
+            help: 'send this message to any listeners'
         },
         {
             label: 'when I receive [string:ack] message', 
             trigger: true, 
-            script: '$(".stage").bind({{1}}, function(){[[next]]});'
+            script: '$(".stage").bind({{1}}, function(){[[next]]});',
+            help: 'add a listener for the given message, run these blocks when it is received'
         },
         {
             label: 'forever if [boolean:false]', 
             containers: 1,  
-            script: 'while({{1}}){[[1]]}'
+            script: 'while({{1}}){[[1]]}',
+            help: 'repeat until the condition is false'
         },
         {
             label: 'if [boolean]', 
             containers: 1, 
-            script: 'if({{1}}){[[1]]}'
+            script: 'if({{1}}){[[1]]}',
+            help: 'run the following blocks only if the condition is true'
         },
         {
             label: 'if [boolean]', 
             containers: 2,
             subContainerLabels: ['else'],
-            script: 'if({{1}}){[[1]]}else{[[2]]}'
+            script: 'if({{1}}){[[1]]}else{[[2]]}',
+            help: 'run the first set of blocks if the condition is true, otherwise run the second set'
         },
         {
             label: 'repeat until [boolean]', 
             containers: 1, 
-            script: 'while(!({{1}})){[[1]]}'
+            script: 'while(!({{1}})){[[1]]}',
+            help: 'repeat forever until condition is true'
         },
         {
             label: 'current object',
             script: 'local.last_var',
-            type: 'any'
+            type: 'any',
+            help: 'use the last object created by another block'
         }
     ], false),
     array: menu('Arrays', [
         {
             label: 'new array',
-            script: 'local.last_var = [];'
+            script: 'local.last_var = [];',
+            help: 'Create an empty array'
         },
         {
             label: 'new array named [string]',
-            script: 'local.set("array", {{1}}, []);'
+            script: 'local.set("array", {{1}}, []);',
+            help: 'create an empty array accessed by name'
         },
         {
             label: 'new array named [string] with array [array]',
-            script: 'local.set("array", {{1}}, {{2}});'
+            script: 'local.set("array", {{1}}, {{2}});',
+            help: 'create a new array with the contents of another array'
         },
         {
             label: 'array named [string]',
             script: 'local.get("array", {{1}})',
-            type: 'array'
+            type: 'array',
+            help: 'retrieve a named array'
         },
         {
             label: 'array [string] item [number:0]',
             script: 'local.get("array", {{1}})[{{2}}]',
-            type: 'any'
+            type: 'any',
+            help: 'get an item from an index in a named array'
         },
         {
             label: 'array [string] join with [string:, ]',
             script: 'local.get("array", {{1}}).join({{2}})',
-            type: 'string'
+            type: 'string',
+            help: 'join items of a named array into a string, each item separated by given string'
         },
         {
             label: 'array [string] append [any]',
-            script: 'local.get("array", {{1}}).push({{2}});'
+            script: 'local.get("array", {{1}}).push({{2}});',
+            help: 'add any object to a named array'
         },
         {
             label: 'array append [any]',
-            script: 'local.last_var.push({{1}});'
+            script: 'local.last_var.push({{1}});',
+            help: 'add any object to the current array'
         },
         {
             label: 'array [string] length',
             script: 'local.get({{1}}).length',
-            type: 'number'
+            type: 'number',
+            help: 'get the length of a named array'
         },
         {
             label: 'array [string] remove item [number:0]',
             script: 'local.get("array", {{1}}).splice({{1}}, 1)[0]',
-            type: 'any'
+            type: 'any',
+            help: 'remove item at index from named array'
         },
         {
             label: 'array [string] pop',
             script: 'local.get("array", {{1}}).pop()',
-            type: 'any'
+            type: 'any',
+            help: 'remove and return the last item from a named array'
         },
         {
             label: 'array [string] shift',
             script: 'local.get("array", {{1}}).shift()',
-            type: 'any'
+            type: 'any',
+            help: 'remove and return the first item from a named array'
         },
         {   
             label: 'array [string] reverse',
             script: 'local.get("array", {{1}}).reverse()',
-            type: 'array'
+            type: 'array',
+            help: 'reverse a named array in place'
         },
         {
             label: 'array [string] concat [array]',
             script: 'local.get("array", {{1}}).concat({{2}});',
-            type: 'array'
+            type: 'array',
+            help: 'add all the items from one array to a named array'
         },
         {
             label: 'array [string] for each',
             script: '$.each(local.get("array", {{1}}), function(idx, item){local.index = idx; local.last_var = item; [[1]] });',
-            containers: 1
+            containers: 1,
+            help: 'run the blocks with each item of a named array'
         }
     ], false),
     objects: menu('Objects', [
         {
             label: 'new object',
-            script: 'local.last_var = {};'
+            script: 'local.last_var = {};',
+            help: 'create a new, empty object'
         },
         {
             label: 'new object named [string]',
-            script: 'local.set("object", {{1}}, {});'
+            script: 'local.set("object", {{1}}, {});',
+            help: 'create a new, empty, named object'
         },
         {
             label: 'object key [string] = value [any]',
-            script: 'local.last_var[{{1}}] = {{2}};'
+            script: 'local.last_var[{{1}}] = {{2}};',
+            help: 'set the key/value of the current object'
         },
         {
             label: 'object named [string] key [string] = value [any]',
-            script: 'local.get("object", {{1}})[{{2}}] = {{3}};'
-        }
-    ], false),
-    functions: menu('Functions', [
+            script: 'local.get("object", {{1}})[{{2}}] = {{3}};',
+            help: 'set the key/value of a named object'
+        },
         {
-            label: 'function named [string] with [choice:arity] arguments returning [choice:rettypes]',
-            create: 'function',
+            label: 'object value at key [string]',
+            script: 'local.last_var[{{1}}]',
+            type: 'any',
+            help: 'return the value of the key in the current object'
+        },
+        {
+            label: 'object [string] value at key [string]',
+            script: 'local.get("object", {{1}})[{{2}}]',
+            type: 'any',
+            help: 'return the value of the key in the named object'
         }
     ], false),
     strings: menu('Strings', [
         {
             label: 'string named [string] = [string]',
-            script: 'local.set("string", {{1}}, {{2}});'
+            script: 'local.set("string", {{1}}, {{2}});',
+            help: 'A named string with the given value'
         },
         {
             label: 'string [string] split on [string]',
             script: '{{1}}.split({{2}})',
-            type: 'array'
+            type: 'array',
+            help: 'create an array by splitting the named string on the given string'
         },
         {
             label: 'string [string] character at [number:0]',
             script: 'local.get("string", {{1}}[{{2}}]',
-            type: 'string'
+            type: 'string',
+            help: 'get the single character string at the given index of named string'
         },
         {
             label: 'string [string] length',
             script: 'local.get("string", {{1}}.length',
-            type: 'number'
+            type: 'number',
+            help: 'get the length of named string'
         },
         {
             label: 'string [string] indexOf [string]',
             script: 'local.get("string", {{1}}.indexOf({{2}})',
-            type: 'number'
+            type: 'number',
+            help: 'get the index of the substring within the named string'
         },
         {
             label: 'string [string] replace [string] with [string]',
             script: 'local.get("string", {{1}}.replace({{2}}, {{3}})',
-            type: 'string'
+            type: 'string',
+            help: 'get a new string by replacing a substring with a new string'
         },
         {
             label: 'to string [any]',
             script: '{{1}}.toString()',
-            type: 'string'
+            type: 'string',
+            help: 'convert any object to a string'
         },
         {
             label: 'comment [string]',
-            script: '// {{1}};\n'
+            script: '// {{1}};\n',
+            help: 'this is a comment and will not be run by the program'
+        },
+        {
+            label: 'alert [string]',
+            script: 'window.alert({{1}})',
+            help: 'pop up an alert window with string'
         },
         {
             label: 'console log [any]',
-            script: 'console.log({{1}})'
+            script: 'console.log({{1}})',
+            help: 'Send any object as a message to the console'
         },
         {
             label: 'console log format [string] arguments [array]',
-            script: 'var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);'
+            script: 'var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);',
+            help: 'send a message to the console with a format string and multiple objects'
         }
     ], false),
     sensing: menu('Sensing', [
         {
             label: 'ask [string:What\'s your name?] and wait',
-            script: 'local.answer = prompt({{1}});'
+            script: 'local.answer = prompt({{1}});',
+            help: 'Prompt the user for information'
         },
         {
             label: 'answer', 
             'type': 'string', 
-            script: 'local.answer'
+            script: 'local.answer',
+            help: 'A block that is only valid after prompting the user for information'
         },
         {
             label: 'mouse x', 
             'type': 'number', 
-            script: 'global.mouse_x'
+            script: 'global.mouse_x',
+            help: 'The current horizontal mouse position'
         },
         {
             label: 'mouse y', 
             'type': 'number', 
-            script: 'global.mouse_y'
+            script: 'global.mouse_y',
+            help: 'the current vertical mouse position'
         },
         {
             label: 'mouse down', 
             'type': 'boolean', 
-            script: 'global.mouse_down'
+            script: 'global.mouse_down',
+            help: 'true if the mouse is down, false otherwise'
         },
         {
             label: 'key [choice:keys] pressed?', 
             'type': 'boolean', 
-            script: '$(document).bind("keydown", {{1}}, function(){[[1]]});'
+            script: '$(document).bind("keydown", {{1}}, function(){[[1]]});',
+            help: 'is the given key down when this block is run?'
         },
         {
             label: 'stage width', 
             'type': 'number', 
-            script: 'global.stage_width'
+            script: 'global.stage_width',
+            help: 'width of the stage where scripts are run. This may change if the browser window changes'
         },
         {
             label: 'stage height', 
             'type': 'number', 
-            script: 'global.stage_height'
+            script: 'global.stage_height',
+            help: 'height of the stage where scripts are run. This may change if the browser window changes.'
         },
         {
             label: 'center x', 
             'type': 'number', 
-            script: 'global.stage_center_x'
+            script: 'global.stage_center_x',
+            help: 'horizontal center of the stage'
         },
         {
             label: 'center y', 
             'type': 'number', 
-            script: 'global.stage_center_y'
+            script: 'global.stage_center_y',
+            help: 'vertical center of the stage'
         },
         {
             label: 'reset timer', 
-            script: 'global.timer.reset()'
+            script: 'global.timer.reset()',
+            help: 'set the global timer back to zero'
         },
         {
             label: 'timer', 
             'type': 'number', 
-            script: 'global.timer.value()'
+            script: 'global.timer.value()',
+            help: 'seconds since the script began running'
         }
     ]),
     operators: menu('Operators', [
         {
-            label: '[number:0] + [number:0]', 
+            label: '[number:0] ➕ [number:0]', 
             'type': 'number', 
-            script: "({{1}} + {{2}})"
+            script: "({{1}} + {{2}})",
+            help: 'sum of the two operands'
         },
         {
-            label: '[number:0] - [number:0]', 
+            label: '[number:0] ➖ [number:0]', 
             'type': 'number', 
-            script: "({{1}} - {{2}})"
+            script: "({{1}} - {{2}})",
+            help: 'difference of the two operands'
         },
         {
-            label: '[number:0] * [number:0]', 
+            label: '[number:0] ✖ [number:0]', 
             'type': 'number', 
-            script: "({{1}} * {{2}})"
+            script: "({{1}} * {{2}})",
+            help: 'product of the two operands'
         },
         {
-            label: '[number:0] / [number:0]',
+            label: '[number:0] ➗ [number:0]',
             'type': 'number', 
-            script: "({{1}} / {{2}})"
+            script: "({{1}} / {{2}})",
+            help: 'quotient of the two operands'
         },
         {
             label: 'pick random [number:1] to [number:10]', 
             'type': 'number', 
-            script: "randint({{1}}, {{2}})"
+            script: "randint({{1}}, {{2}})",
+            help: 'random number between two numbers (inclusive)'
         },
         {
-            label: '[number:0] < [number:0]', 
+            label: '[number:0] ❮ [number:0]', 
             'type': 'boolean', 
-            script: "({{1}} < {{2}})"
+            script: "({{1}} < {{2}})",
+            help: 'first operand is less than second operand'
         },
         {
             label: '[number:0] = [number:0]', 
             'type': 'boolean', 
-            script: "({{1}} == {{2}})"
+            script: "({{1}} === {{2}})",
+            help: 'two operands are equal'
         },
         {
-            label: '[number:0] > [number:0]', 
+            label: '[number:0] ❯ [number:0]', 
             'type': 'boolean', 
-            script: "({{1}} > {{2}})"
+            script: "({{1}} > {{2}})",
+            help: 'first operand is greater than second operand'
         },
         {
             label: '[boolean] and [boolean]', 
             'type': 'boolean', 
-            script: "({{1}} && {{2}})"
+            script: "({{1}} && {{2}})",
+            help: 'both operands are true'
         },
         {
             label: '[boolean] or [boolean]', 
             'type': 'boolean', 
-            script: "({{1}} || {{2}})"
+            script: "({{1}} || {{2}})",
+            help: 'either or both operands are true'
+        },
+        {
+            label: '[boolean] xor [boolean]',
+            'type': 'boolean',
+            script: "({{1}} ? !{{2}} : {{2}})",
+            help: 'either, but not both, operands are true'
         },
         {
             label: 'not [boolean]', 
             'type': 'boolean', 
-            script: "(! {{1}})"
+            script: "(! {{1}})",
+            help: 'operand is false',
         },
         {
-            label: 'join [string:hello] with [string:world]', 
-            'type': 'string', script: "({{1}} + {{2}})"},
-        {
-            label: 'letter [number:1] of [string:world]', 
+            label: 'concatenate [string:hello] with [string:world]', 
             'type': 'string', 
-            script: "{{2}}[{{1}}]"
-        },
-        {
-            label: 'length of [string:world]', 
-            'type': 'number', 
-            script: "({{1}}.length)"
+            script: "({{1}} + {{2}})",
+            help: 'returns a string by joining together two strings'
         },
         {
             label: '[number:0] mod [number:0]', 
             'type': 'number', 
-            script: "({{1}} % {{2}})"
+            script: "({{1}} % {{2}})",
+            help: 'modulus of a number is the remainder after whole number division'
         },
         {
             label: 'round [number:0]', 
             'type': 'number', 
-            script: "Math.round({{1}})"
+            script: "Math.round({{1}})",
+            help: 'rounds to the nearest whole number'
         },
         {
             label: 'absolute of [number:10]', 
             'type': 'number', 
-            script: "Math.abs({{2}})"
+            script: "Math.abs({{2}})",
+            help: 'converts a negative number to positive, leaves positive alone'
         },
         {
             label: 'arccosine degrees of [number:10]', 
             'type': 'number', 
-            script: 'rad2deg(Math.acos({{1}}))'
+            script: 'rad2deg(Math.acos({{1}}))',
+            help: 'inverse of cosine'
         },
         {
             label: 'arcsine degrees of [number:10]', 
             'type': 'number', 
-            script: 'rad2deg(Math.asin({{1}}))'
+            script: 'rad2deg(Math.asin({{1}}))',
+            help: 'inverse of sine'
         },
         {
             label: 'arctangent degrees of [number:10]', 
             'type': 'number', 
-            script: 'rad2deg(Math.atan({{1}}))'
+            script: 'rad2deg(Math.atan({{1}}))',
+            help: 'inverse of tangent'
         },
         {
             label: 'ceiling of [number:10]', 
             'type': 'number', 
-            script: 'Math.ceil({{1}})'
+            script: 'Math.ceil({{1}})',
+            help: 'rounds up to nearest whole number'
         },
         {
             label: 'cosine of [number:10] degrees', 
             'type': 'number', 
-            script: 'Math.cos(deg2rad({{1}}))'
+            script: 'Math.cos(deg2rad({{1}}))',
+            help: 'ratio of the length of the adjacent side to the length of the hypotenuse'
         },
         {
             label: 'sine of [number:10] degrees', 
             'type': 'number', 
-            script: 'Math.sin(deg2rad({{1}}))'
+            script: 'Math.sin(deg2rad({{1}}))',
+            help: 'ratio of the length of the opposite side to the length of the hypotenuse'
         },
         {
             label: 'tangent of [number:10] degrees', 
             'type': 'number', 
-            script: 'Math.tan(deg2rad({{1}}))'
+            script: 'Math.tan(deg2rad({{1}}))',
+            help: 'ratio of the length of the opposite side to the length of the adjacent side'
         },
         {
             label: '[number:10] to the power of [number:2]', 
             'type': 'number', 
-            script: 'Math.pow({{1}}, {{2}})'
-        },
-        {
-            label: 'round [number:10]', 
-            'type': 'number', 
-            script: 'Math.round({{1}})'
+            script: 'Math.pow({{1}}, {{2}})',
+            help: 'multiply a number by itself the given number of times'
         },
         {
             label: 'square root of [number:10]', 
             'type': 'number', 
-            script: 'Math.sqrt({{1}})'
+            script: 'Math.sqrt({{1}})',
+            help: 'the square root is the same as taking the to the power of 1/2'
         },
         {
             label: 'pi',
             script: 'Math.PI;',
-            type: 'number'
+            type: 'number',
+            help: "pi is the ratio of a circle's circumference to its diameter"
+        },
+        {
+            label: 'tau',
+            script: 'Math.PI * 2',
+            type: 'number',
+            help: 'tau is 2 times pi, a generally more useful number'
         }
     ]),
     shapes: menu('Shapes', [
         {
             label: 'circle with radius [number:0]', 
-            script: 'local.last_var = global.paper.circle(0, 0, {{1}});'
+            script: 'local.last_var = global.paper.circle(0, 0, {{1}});',
+            help: 'draws a circle, you will need to move it into the desired position'
         },
         {
             label: 'rect with width [number:0] and height [number:0]', 
-            script: 'local.last_var = global.paper.rect(0, 0, {{1}}, {{2}});'
+            script: 'local.last_var = global.paper.rect(0, 0, {{1}}, {{2}});',
+            help: 'draws a rectangle at the origin'
         },
         {
             label: 'rounded rect with width [number:0] height [number:0] and radius [number:0]', 
-            script: 'local.last_var = global.paper.rect(0, 0, {{1}}, {{2}}, {{3}});'
+            script: 'local.last_var = global.paper.rect(0, 0, {{1}}, {{2}}, {{3}});',
+            help: 'draws a rounded rectangle at the origin'
         },
         {
             label: 'ellipse x radius [number:0] y radius [number:0]', 
-            script: 'local.last_var = global.paper.ellipse(0, 0, {{1}}, {{2}});'
+            script: 'local.last_var = global.paper.ellipse(0, 0, {{1}}, {{2}});',
+            help: 'draws an ellipse at the origin'
         },
         {
             label: 'arc at radius [number:100] from [number:0] degrees to [number:30] degrees',
-            script: 'local.last_var = global.paper.arcslice({{1}}, {{2}}, {{3}});'
+            script: 'local.last_var = global.paper.arcslice({{1}}, {{2}}, {{3}});',
+            help: 'draws an arc at the origin'
         },
         {
             label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', 
-            script: 'local.last_var = global.paper.imageWithNaturalHeight({{1}});'
+            script: 'local.last_var = global.paper.imageWithNaturalHeight({{1}});',
+            help: 'draws an image at the origin'
         },
         {
             label: 'name shape: [string:shape1]', 
-            script: 'local.last_var_references[{{1}}] = local.last_var;'
+            script: 'local.last_var_references[{{1}}] = local.last_var;',
+            help: 'names the current shape to retrieve later'
         },
         {
             label: 'refer to shape [string:shape1]', 
-            script: 'local.last_var = local.last_var_references[{{1}}];'
+            script: 'local.last_var = local.last_var_references[{{1}}];',
+            help: 'makes a named shape the current shape'
         },
         {
             label: 'with shape [string:shape1] do', 
             containers: 1, 
-            script: 'local.oldshape = local.last_var;local.last_var = local.last_var_references[{{1}}];[[1]]local.last_var = local.oldshape;'
+            script: 'local.oldshape = local.last_var;local.last_var = local.last_var_references[{{1}}];[[1]]local.last_var = local.oldshape;',
+            help: 'makes a named shape the current shape for the contained blocks'
         },
         {
             label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', 
-            script: 'local.last_var.attr("clip-rect", "{{1}},{{2}},{{3}},{{4}}");'
+            script: 'local.last_var.attr("clip-rect", "{{1}},{{2}},{{3}},{{4}}");',
+            help: 'make a clipping rect that cuts off other drawing commands'
         },
         {
             label: 'fill color [color:#FFFFFF]', 
-            script: 'local.last_var.attr("fill", {{1}});'
+            script: 'local.last_var.attr("fill", {{1}});',
+            help: 'change the fill color for the current shape'
         },
         {
             label: 'stroke color [color:#000000]', 
-            script: 'local.last_var.attr("stroke", {{1}});'
+            script: 'local.last_var.attr("stroke", {{1}});',
+            help: 'change the stroke color for the current shape'
         },
         {
             label: 'fill transparent', 
-            script: 'local.last_var.attr("fill", "transparent");'
+            script: 'local.last_var.attr("fill", "transparent");',
+            help: 'make the current shape fill transparent'
         },
         {
             label: 'stroke transparent', 
-            script: 'local.last_var.attr("stroke", "transparent");'
+            script: 'local.last_var.attr("stroke", "transparent");',
+            help: 'make the current shape stroke transparent'
         },
         {
             label: 'stroke linecap [choice:linecap]', 
-            script: 'local.last_var.attr("stroke-linecap", {{1}});'
+            script: 'local.last_var.attr("stroke-linecap", {{1}});',
+            help: 'change the linecap style of the current shape'
         },
         {
             label: 'stroke linejoin [choice:linejoin]', 
-            script: 'local.last_var.attr("stroke-linejoin", {{1}});'
+            script: 'local.last_var.attr("stroke-linejoin", {{1}});',
+            help: 'change the linejoin style of the current shape'
         },
         {
             label: 'stroke opacity [number:100]%', 
-            script: 'local.last_var.attr("stroke-opacity", {{1}}+"%");'
+            script: 'local.last_var.attr("stroke-opacity", {{1}}+"%");',
+            help: 'change the opacity of the current shape stroke'
         },
         {
             label: 'stroke width [number:1]', 
-            script: 'local.last_var.attr("stroke-width", {{1}});'
+            script: 'local.last_var.attr("stroke-width", {{1}});',
+            help: 'change the line width of the current shape stroke'
         },
         {
             label: 'rotate [number:5] degrees', 
-            script: 'local.last_var.attr("rotate", local.last_var.attr("rotate") + {{1}});'
+            script: 'local.last_var.attr("rotate", local.last_var.attr("rotate") + {{1}});',
+            help: 'rotate the current shape around its origin by the given amount'
         },
         {
             label: 'rotate [number:5] degrees around x [number:0] y [number:0]', 
-            script: 'local.last_var.rotate(angle(local.last_var) + {{1}}, {{2}}, {{3}});'
+            script: 'local.last_var.rotate(angle(local.last_var) + {{1}}, {{2}}, {{3}});',
+            help: 'rotate the current shape around an aribtrary point by the given amount'
         },
         {
             label: 'clone', 
-            script: 'local.last_var = local.last_var.clone()'
+            script: 'local.last_var = local.last_var.clone()',
+            help: 'create a copy of the current shape, which becomes the new current shape'
         },
         {
             label: 'fill opacity [number:100]%', 
-            script: 'local.last_var.attr("fill-opacity", {{1}}+"%")'
+            script: 'local.last_var.attr("fill-opacity", {{1}}+"%")',
+            help: 'change the opacity of the current shape fill'
         },
         {
-            label: 'href [string:http://waterbearlang.com]', 
-            script: 'local.last_var.attr("href", {{1}})'
+            label: 'link to [string:http://waterbearlang.com]', 
+            script: 'local.last_var.attr("href", {{1}})',
+            help: 'make the current shape a link to the given URL'
         },
         {
             label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
-            script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});' 
+            script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});',
+            help: 'write the string at the given coordinates'
         },
         {   label: 'font family [string:Helvetica]',
-            script: 'local.last_var.attr("font-family", {{1}});'
+            script: 'local.last_var.attr("font-family", {{1}});',
+            help: 'change the font for the current text object',
         },
         {
             label: 'font size [number:12]',
-            script: 'local.last_var.attr("font-size", {{1}});'
+            script: 'local.last_var.attr("font-size", {{1}});',
+            help: 'change the font size for the current text object'
         },
         {
             label: 'font weight [choice:fontweight]',
-            script: 'local.last_var.attr("font-weight", {{1}});'
+            script: 'local.last_var.attr("font-weight", {{1}});',
+            help: 'change the font weight for the current text object'
         }
     ]),
     text: menu('Sketchy', [
         {
             label: 'sketchy rect with width [number:50] and height [number:50]', 
-            script: 'local.last_var = global.paper.sk_rect(0,0, {{1}},{{2}});'
+            script: 'local.last_var = global.paper.sk_rect(0,0, {{1}},{{2}});',
+            help: 'draw a sketchy rect at the origin'
         },
         {
             label: 'sketchy ellipse with width [number:50] and height [number:50]', 
-            script: 'local.last_var = global.paper.sk_ellipse(0,0, {{1}}, {{2}});'
+            script: 'local.last_var = global.paper.sk_ellipse(0,0, {{1}}, {{2}});',
+            help: 'draw a sketchy ellipse at the origin'
         },
         {
             label: 'sketchy line from x1 [number:10] y1 [number:10] to x2 [number:40] y2 [number:40]', 
-            script: 'local.last_var = global.paper.sk_line({{1}}, {{2}}, {{3}}, {{4}});'
+            script: 'local.last_var = global.paper.sk_line({{1}}, {{2}}, {{3}}, {{4}});',
+            help: 'draw a sketchy line between two points'
         }
     ]),
     transform: menu('Transform', [
         {
             label: 'clear canvas', 
-            script: 'global.paper.clear();'
+            script: 'global.paper.clear();',
+            help: 'clear the canvas of all drawing'
         },
         {
             label: 'hide', 
-            script: 'local.last_var.hide();'
+            script: 'local.last_var.hide();',
+            help: 'hide the current object'
         },
         {
             label: 'show', 
-            script: 'local.last_var.show();'
+            script: 'local.last_var.show();',
+            help: 'show the current object'
         },
         {
             label: 'rotate by [number:0]', 
-            script: 'local.last_var.rotate({{1}}, false);'
+            script: 'local.last_var.rotate({{1}}, false);',
+            help: 'rotate the current object'
         },
         {
             label: 'rotate to [number:0]', 
-            script: 'local.last_var.rotate({{1}}, true);'
+            script: 'local.last_var.rotate({{1}}, true);',
+            help: 'rotate the current object to the given angle around its own center'
         },
         {
             label: 'rotate to [number:0] around x: [number:0] y: [number:0]', 
-            script: 'local.last_var.rotate({{1}}, {{2}}, {{3}}, true);'
+            script: 'local.last_var.rotate({{1}}, {{2}}, {{3}}, true);',
+            help: 'rotate the current object to the given angle around an arbitrary point'
         },
         {
             label: 'translate by x: [number:0] y: [number:0]', 
-            script: 'local.last_var.translate({{1}}, {{2}});'
+            script: 'local.last_var.translate({{1}}, {{2}});',
+            help: 'move the current object by the given distances'
         },
         {
             label: 'position at x [number:0] y [number:0]', 
-            script: 'local.last_var.attr({x: {{1}}, y: {{2}}, cx: {{1}}, cy: {{2}} });'
+            script: 'local.last_var.attr({x: {{1}}, y: {{2}}, cx: {{1}}, cy: {{2}} });',
+            help: 'move the current object to the given coordinates'
         },
         {
             label: 'size width [number:100] height [number:100]', 
-            script: 'local.last_var.attr({width: {{1}}, height: {{2}} })'
+            script: 'local.last_var.attr({width: {{1}}, height: {{2}} })',
+            help: 'change the current object to the given size'
         },
         {
             label: 'scale by [number:0]', 
-            script: 'local.last_var.scale({{1}}, {{2}});'
+            script: 'local.last_var.scale({{1}}, {{2}});',
+            help: 'resize the current object by the given scale'
         },
         {
             label: 'scaled by [number:0] centered at x: [number:0] y: [number:0]', 
-            script: 'local.last_var.scale({{1}}, {{2}}, {{3}}, {{4}});'
+            script: 'local.last_var.scale({{1}}, {{2}}, {{3}}, {{4}});',
+            help: 'resize the current object with scaling centered at an arbitrary point'
         },
         {
             label: 'to front', 
-            script: 'local.last_var.toFront();'
+            script: 'local.last_var.toFront();',
+            help: 'move the current shape to the foreground'
         },
         {
             label: 'to back', 
-            script: 'local.last_var.toBack();'
+            script: 'local.last_var.toBack();',
+            help: 'move the current shape to the background'
         }
     ]),
     animation: menu('Animation', [
         {
             label: 'position x [number:10] y [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({translation: "{{1}}, {{2}}"}, {{3}}, {{4}});'
+            script: 'local.last_var.animate({translation: "{{1}}, {{2}}"}, {{3}}, {{4}});',
+            help: 'change the position of the current shape over time'
         },
         {
             label: 'opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({opacity: {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({opacity: {{1}} }, {{2}}, {{3}});',
+            help: 'change the opacity of the current shape over time'
         },
         {
             label: 'fill color [color:#00FF00] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({fill: {{1}}}, {{2}}, {{3}});'
+            script: 'local.last_var.animate({fill: {{1}}}, {{2}}, {{3}});',
+            help: 'change the fill color of the current shape over time'
         },
         {
             label: 'fill opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({"fill-opacity": {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({"fill-opacity": {{1}} }, {{2}}, {{3}});',
+            help: 'change the fill opacity of the current shape over time'
         },
         {
             label: 'stroke color [color:#FF0000] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({stroke: {{1}}}, {{2}}, {{3}});'
+            script: 'local.last_var.animate({stroke: {{1}}}, {{2}}, {{3}});',
+            help: 'change the stroke color of the current shape over time'
         },
         {
             label: 'stroke opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({"stroke-opacity": {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({"stroke-opacity": {{1}} }, {{2}}, {{3}});',
+            help: 'change the stroke opacity of the current shape over time'
         },
         {
             label: 'width [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({width: {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({width: {{1}} }, {{2}}, {{3}});',
+            help: 'change the width of the current shape over time'
         },
         {
             label: 'height [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({height: {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({height: {{1}} }, {{2}}, {{3}});',
+            help: 'change the height of the current shape over time'
         },
         {
             label: 'radius [number:25] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({r: {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({r: {{1}} }, {{2}}, {{3}});',
+            help: 'change the radius of the current shape over time'
         },
         {
             label: 'rotation [number:15] degrees over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({rotation: {{1}} }, {{2}}, {{3}});'
+            script: 'local.last_var.animate({rotation: {{1}} }, {{2}}, {{3}});',
+            help: 'change the rotation of the current shape over time'
         },
         {
             label: 'stop animations',
-            script: 'local.last_var.stop()'
+            script: 'local.last_var.stop()',
+            help: 'cancels all animations'
         }
     ]),
         animation: menu('Twitter', [
         {
             label: 'get tweet for [string]',
             containers: 1,
-            script: 'local.getTweet({{1}}, function(tweet){local.lastTweet = tweet;[[1]]});'
+            script: 'local.getTweet({{1}}, function(tweet){local.lastTweet = tweet;[[1]]});',
+            help: 'asynchronous call to get the last tweet of the named account'
         },
         {
             label: 'last tweet',
             type: 'string',
-            script: '+local.lastTweet+'
+            script: '+local.lastTweet+',
+            help: 'last tweet which came back from asynch get tweet call'
         }
     ])
 };

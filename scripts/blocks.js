@@ -21,9 +21,7 @@ $.extend($.fn,{
       return this.closest('.wrapper').long_name();
   },
   block_type: function(){
-      if (this.is('.trigger')) return 'trigger';
-      if (this.is('.value')) return this.data('type');
-      return 'unknown';
+      return this.data('type');
   },
   parent_block: function(){
       var p = this.closest('.wrapper').parent();
@@ -133,9 +131,10 @@ function Block(options){
     if (opts['type']){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
+        wrapper.data('type', opts['type']);
     }
     if(opts.containers > 0){
-        wrapper.addClass('containerBlock'); //This might not be necicary
+        wrapper.addClass('containerBlock'); //This might not be necessary
     }
     if(opts.containers > 1){
         wrapper.data('subContainerLabels', opts['subContainerLabels']);
@@ -154,10 +153,12 @@ function Block(options){
     }
     if (opts.trigger){
         wrapper.addClass('trigger');
+        wrapper.data('type', 'trigger');
         block.append('<b class="trigger"></b>');
     }else if(opts.flap){
         block.append('<b class="flap"></b>');
         wrapper.addClass('step');
+        wrapper.data('type', 'step');
     }
     
     wrapper.data('containers', opts.containers);
@@ -250,8 +251,9 @@ function Label(value){
     value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
-    value = value.replace(/\[(\w+):(-?\d*\.?.+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
-    value = value.replace(/\[(\w+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
+    // match selector [^\[\]:] should match any character except '[', ']', and ':'
+    value = value.replace(/\[([^\[\]\:]+):([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
     return value;
 }
 

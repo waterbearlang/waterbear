@@ -52,7 +52,7 @@ body {
     position: absolute;
     left: 15%;
     bottom: 0px;
-    width: 35%;
+    width: 34.8%;
     height: 95%;
     background-color: #FFF;
     border: 1px solid #CCC;
@@ -79,17 +79,18 @@ body {
 .tab_bar{
     position: absolute;
     left: 15%;
-    bottom: 95%;
-    width: 35%;
+    top: 6px;
+    width: 34.8%;
+    z-index: 15;
 }
 
 .tab_bar2{
     position: absolute;
-    right: 0%;
-    bottom: 95%;
+    right: -0.1%;
+    top: 30px;
     width: 50%;
+    z-index: 15;
 }
-
 .chrome_tab{
     float: left;
     margin-right: 5px;
@@ -120,8 +121,8 @@ body {
     position: absolute;
     height: 95%;
     right: 0px;
-    width: 50%;
-    bottom: 0px;
+    width: 49.8%;
+    bottom: -20px;
     background-color: #FFF;
     border: 1px solid #CCC;
 }

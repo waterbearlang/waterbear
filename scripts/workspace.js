@@ -11,9 +11,9 @@ function accordion(event){
     }
     $('.select.selected').removeClass('selected').siblings('.option').slideUp('slow');
     self.addClass('selected').siblings('.option').slideDown('slow');
-    $('.block_menu').trigger('open', self);
+    $('#block_menu').trigger('open', self);
 }
-$('.block_menu').delegate('.select', 'click', accordion);
+$('#block_menu').delegate('.select', 'click', accordion);
 
 
 function test_block(block){
@@ -34,7 +34,7 @@ function test_block(block){
 }
 
 function test(){
-    var blocks = $('.block_menu .wrapper');
+    var blocks = $('#block_menu .wrapper');
     var total = blocks.length;
     var success = 0;
     var fail = 0;
@@ -59,7 +59,7 @@ function clear_scripts(event, force){
 }
 $('.clear_scripts').click(clear_scripts);
 
-$('.goto_script').click(function(){$('.block_menu')[0].scrollIntoView();});
+$('.goto_script').click(function(){$('#block_menu')[0].scrollIntoView();});
 $('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
 
 // Load and Save Section
@@ -75,7 +75,7 @@ function scripts_as_object(){
 
 function save_current_scripts(){
     show_workspace();
-    $('.block_menu')[0].scrollIntoView();
+    $('#block_menu')[0].scrollIntoView();
     localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
 }
 $(window).unload(save_current_scripts);
@@ -305,7 +305,7 @@ function menu(title, specs, show){
         spec.klass = klass;
         options.append(Block(spec));
     });
-    $('.block_menu').append(body);
+    $('#block_menu').append(body);
     if (show){
         select.addClass('selected');
     }else{

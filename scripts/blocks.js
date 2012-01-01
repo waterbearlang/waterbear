@@ -43,6 +43,9 @@ $.extend($.fn,{
   socket_blocks: function(){
       return this.find('> .block > .blockhead > .label').children('.socket, .autosocket').children('input, select, .wrapper');
   },
+  local_blocks: function(){
+    return this.find('> .block > .locals > .wrapper');
+  },
   next_block: function(){
       return this.find('> .next > .wrapper');
   },
@@ -107,6 +110,7 @@ function Block(options){
         trigger: false, // This is the start of a handler
         flap: true, // something can come before
         containers: 0,  // Something cannot be inside
+        locals: [],
         subContainerLabels: [],
         label: 'Step', // label is its own mini-language
         type: null
@@ -159,6 +163,16 @@ function Block(options){
         block.append('<b class="flap"></b>');
         wrapper.addClass('step');
         wrapper.data('type', 'step');
+    }
+    if (opts.locals.length){
+        var locals_container = $('<div class="locals block_menu"></div>');
+        $.each(opts.locals, function(idx, value){
+            if ($.isPlainObject(value)){
+                console.log('adding local: %s', value.label);
+                locals_container.append(Block(value));
+            }
+        });
+        block.append(locals_container);
     }
     
     wrapper.data('containers', opts.containers);

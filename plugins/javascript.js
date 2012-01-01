@@ -5,6 +5,8 @@
  *
  */
 
+
+// Pre-load dependencies
 yepnope({
     load: [ 'plugins/javascript.css',
             'lib/raphael-1.3.1-min.js',
@@ -19,6 +21,7 @@ yepnope({
     complete: setup
 });
 
+// Add some utilities
 jQuery.fn.extend({
   extract_script: function(){
       if (this.length === 0) return '';
@@ -219,8 +222,8 @@ window.choice_lists = {
 var menus = {
     control: menu('Control', [
         {
-            label: 'when program runs', 
-            trigger: true,
+            label: 'when program runs',
+            trigger: true, 
             script: 'function _start(){[[next]]}_start();',
             help: 'this trigger will run its scripts once when the program starts'
         },
@@ -233,6 +236,13 @@ var menus = {
         {
             label: 'repeat [number:30] times a second',
             trigger: true,
+            locals: [
+                {
+                    label: 'count',
+                    script: 'local.count',
+                    type: 'number'
+                }
+            ],
             script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[next]]},1000/{{1}})})();',
             help: 'this trigger will run the attached blocks periodically'
         },
@@ -296,7 +306,7 @@ var menus = {
             type: 'any',
             help: 'use the last object created by another block'
         }
-    ], false),
+    ], true),
     array: menu('Arrays', [
         {
             label: 'new array',

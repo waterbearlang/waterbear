@@ -21,20 +21,7 @@ $.extend($.fn,{
       return this.closest('.wrapper').long_name();
   },
   block_type: function(){
-      // FIXME: Move all type-specific functionality to plugins
-      if (this.is('.trigger')) return 'trigger';
-      if (this.is('.step')) return 'step';
-      if (this.is('.number')) return 'number';
-      if (this.is('.boolean')) return 'boolean';
-      if (this.is('.string')) return 'string';
-      if (this.is('.float')) return 'float';
-      if (this.is('.int')) return 'int';
-      if (this.is('.array')) return 'array';
-      if (this.is('.object')) return 'object';
-      if (this.is('.function')) return 'function';
-      if (this.is('.any')) return 'any';
-      if (this.is('.comment')) return 'comment';
-      return 'unknown';
+      return this.data('type');
   },
   parent_block: function(){
       var p = this.closest('.wrapper').parent();
@@ -89,17 +76,7 @@ $.fn.extend({
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
-        if (this.is('.number')){desc['type'] = 'number';}
-        if (this.is('.float')){desc['type'] = 'float';}
-        if (this.is('.int')){desc['type'] = 'int';}
-        if (this.is('.string')){desc['type'] = 'string';}
-        if (this.is('.comment')){desc['type'] = 'string';}
-        if (this.is('.any')){desc['type'] = 'any';}
-        if (this.is('.array')){desc['type'] = 'array';}
-        if (this.is('.object')){desc['type'] = 'object';}
-        if (this.is('.function')){desc['type'] = 'function';}
-        if (this.is('.boolean')){desc['type'] = 'boolean';}
-        if (this.is('.color')){desc['type'] = 'color';}
+        if (this.is('.value')){desc['type'] = this.data('type')};
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -154,9 +131,10 @@ function Block(options){
     if (opts['type']){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
+        wrapper.data('type', opts['type']);
     }
     if(opts.containers > 0){
-        wrapper.addClass('containerBlock'); //This might not be necicary
+        wrapper.addClass('containerBlock'); //This might not be necessary
     }
     if(opts.containers > 1){
         wrapper.data('subContainerLabels', opts['subContainerLabels']);
@@ -175,14 +153,13 @@ function Block(options){
     }
     if (opts.trigger){
         wrapper.addClass('trigger');
+        wrapper.data('type', 'trigger');
         block.append('<b class="trigger"></b>');
     }else if(opts.flap){
         block.append('<b class="flap"></b>');
         wrapper.addClass('step');
+        wrapper.data('type', 'step');
     }
-//    for (var i = 0; i < opts.containers; i++){
-//        block.append('</b><span class="contained"><i class="slot"></i></span>');
-//    }
     
     wrapper.data('containers', opts.containers);
     if (opts.slot){
@@ -226,11 +203,9 @@ function Block(options){
 $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
     var self = $(event.target);
     if (self.is('.open')){
-        //self.text('►').closest('.block').find('> .contained').hide();
         self.text('►');
         getContained(self).css('padding-bottom',0).children().hide();
     }else{
-        //self.text('▼').closest('.block').find('> .contained').show();
         self.text('▼');
         getContained(self).css('padding-bottom',10).children().show();
     }
@@ -244,7 +219,7 @@ function getContained(s){
 
 function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
-    return '<span class="string ' + listname + ' autosocket"><select>' + 
+    return '<span class="value string ' + listname + ' autosocket" data-type="string"><select>' + 
         list.map(function(item){
             if (item === default_opt){
                 return '<option selected>' + item + '</option>';
@@ -269,30 +244,16 @@ function Label(value){
     // [string] => an empty string socket
     // [string:default] => a string socket with a default value
     // [choice:options] => a fixed set of options, listed in options parameter function
+    // etc…
     
     // FIXME: Move specific type handling to raphael_demo.js
-    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<span class="number socket"><input type="number" value="$1"></span>');
-    value = value.replace(/\[number\]/g, '<span class="number socket"><input type="number"></span>');
-    value = value.replace(/\[float:(-?\d*\.?\d+)\]/g, '<span class="float socket"><input type="number" value="$1"></span>');
-    value = value.replace(/\[float\]/g, '<span class="float socket"><input type="number"></span>');
-    value = value.replace(/\[int:(-?\d*)\]/g, '<span class="int socket"><input type="number" value="$1"></span>');
-    value = value.replace(/\[int\]/g, '<span class="int socket"><input type="number"></span>');
-    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
-    value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
-    value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
-    value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
-    value = value.replace(/\[array:(.+?)\]/g, '<span class="array socket"><input value="$1"></span>');
-    value = value.replace(/\[array\]/g, '<span class="array socket"><input></span>');
-    value = value.replace(/\[object:(.+?)\]/g, '<span class="object socket"><input value="$1"></span>');
-    value = value.replace(/\[object\]/g, '<span class="object socket"><input></span>');
-    value = value.replace(/\[function:(.+?)\]/g, '<span class="function socket"><input value="$1"></span>');
-    value = value.replace(/\[function]/g, '<span class="function socket"><input></span>');
-    value = value.replace(/\[any:(.+?)\]/g, '<span class="any socket"><input value="$1"></span>');
-    value = value.replace(/\[any\]/g, '<span class="any socket"><input></span>');
-    value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
-    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
+    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
+    value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+    // match selector [^\[\]:] should match any character except '[', ']', and ':'
+    value = value.replace(/\[([^\[\]\:]+):([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
     return value;
 }
 

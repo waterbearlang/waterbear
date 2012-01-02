@@ -78,8 +78,10 @@
     }
     
     function get_potential_drop_targets(){
+        console.log('drag target: %s', drag_target.block_type());
         switch(drag_target.block_type()){
             case 'step': return step_targets();
+            case 'container': return step_targets();
             case 'number': return socket_targets2('any,number');
             case 'array': return socket_targets2('any,array');
             case 'object': return socket_targets2('any,object');

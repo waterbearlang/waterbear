@@ -98,37 +98,37 @@ function save_named_scripts(){
             scripts: scripts_as_object()
         });
         reset_and_close_save_dialog();
-    }else	
+    }else   
         alert("You must enter a name");
 }
 
 function export_named_scripts(){
     console.log("here");
     $('#exp h2').html('Exported Code');
-    $('#exp small').html('Copy Exported Code below');	
-    var title = $('#script_name').val();	
+    $('#exp small').html('Copy Exported Code below');   
+    var title = $('#script_name').val();    
     var description = $('#script_description').val();
     var date = Date.now();
     if (title){
-	var exp = JSON.stringify({
-	    title: title,
-	    description: description,
-	    date: date,
-	    scripts: scripts_as_object()
-	});
-	console.log("EXP: "+exp);
-	reset_and_close_save_dialog();
-	$('#exp').bPopup();
-	$('#exp textarea').html(exp);
-	$('#exp .done').bind('click',function(){
-	    $('#exp').bPopup().close();
-	    $('#exp .done').unbind('click');
-	});
+    var exp = JSON.stringify({
+        title: title,
+        description: description,
+        date: date,
+        scripts: scripts_as_object()
+    });
+    console.log("EXP: "+exp);
+    reset_and_close_save_dialog();
+    $('#exp').bPopup();
+    $('#exp textarea').html(exp);
+    $('#exp .done').bind('click',function(){
+        $('#exp').bPopup().close();
+        $('#exp .done').unbind('click');
+    });
     }
     else
-	alert("You must enter a name");
+    alert("You must enter a name");
 }
-	
+    
 function restore_from_export(){
     reset_and_close_restore_dialog();
     $('#exp h2').html('Paste Exported Code below');
@@ -136,17 +136,17 @@ function restore_from_export(){
     $('#exp').bPopup();
 
     $('#exp .done').click(function(){
-	$('#exp .done').unbind('click');
-	var script = $('#exp textarea').val();
-	console.log(script);
-	$('#exp').bPopup().close();
-	clear_scripts();
+    $('#exp .done').unbind('click');
+    var script = $('#exp textarea').val();
+    console.log(script);
+    $('#exp').bPopup().close();
+    clear_scripts();
 
-	var ps = JSON.parse(script);
-	console.log(ps.scripts);
+    var ps = JSON.parse(script);
+    console.log(ps.scripts);
 
-	load_scripts_from_object(ps.scripts);	
-    });	
+    load_scripts_from_object(ps.scripts);   
+    }); 
 }
 
 

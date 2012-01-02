@@ -25,10 +25,7 @@ $.extend($.fn,{
   },
   parent_block: function(){
       var p = this.closest('.wrapper').parent();
-      if (p.is('.next, .contained')){
-          return p.closest('.wrapper');
-      }
-      return null;
+      return p.closest('.contained').closest('.wrapper');
   },
   child_blocks: function(){
       return this.find('> .block > .contained').map(function(){

@@ -316,118 +316,131 @@ var menus = {
             }
         },
         {
-            label: 'new array named [string]',
-            script: 'local.set("array", {{1}}, []);',
-            help: 'create an empty array accessed by name'
+            label: 'new array with array [array]',
+            script: 'local.array = {{2}}.slice();',
+            help: 'create a new array with the contents of another array',
+            returns: {
+                label: 'array',
+                script: 'local.array',
+                type: 'array'
+            }
         },
         {
-            label: 'new array named [string] with array [array]',
-            script: 'local.set("array", {{1}}, {{2}});',
-            help: 'create a new array with the contents of another array'
-        },
-        {
-            label: 'array named [string]',
-            script: 'local.get("array", {{1}})',
-            type: 'array',
-            help: 'retrieve a named array'
-        },
-        {
-            label: 'array [string] item [number:0]',
-            script: 'local.get("array", {{1}})[{{2}}]',
+            label: 'array [array] item [number:0]',
+            script: '{{1}}[{{2}}]',
             type: 'any',
-            help: 'get an item from an index in a named array'
+            help: 'get an item from an index in the array'
         },
         {
-            label: 'array [string] join with [string:, ]',
-            script: 'local.get("array", {{1}}).join({{2}})',
+            label: 'array [array] join with [string:, ]',
+            script: '{{1}}.join({{2}})',
             type: 'string',
-            help: 'join items of a named array into a string, each item separated by given string'
+            help: 'join items of an array into a string, each item separated by given string'
         },
         {
-            label: 'array [string] append [any]',
-            script: 'local.get("array", {{1}}).push({{2}});',
-            help: 'add any object to a named array'
+            label: 'array [array] append [any]',
+            script: '{{1}}.push({{2}});',
+            help: 'add any object to an array'
         },
         {
-            label: 'array append [any]',
-            script: 'local.last_var.push({{1}});',
-            help: 'add any object to the current array'
-        },
-        {
-            label: 'array [string] length',
-            script: 'local.get({{1}}).length',
+            label: 'array [array] length',
+            script: '{{1}}.length',
             type: 'number',
-            help: 'get the length of a named array'
+            help: 'get the length of an array'
         },
         {
-            label: 'array [string] remove item [number:0]',
-            script: 'local.get("array", {{1}}).splice({{1}}, 1)[0]',
+            label: 'array [array] remove item [number:0]',
+            script: '{{1}}.splice({{2}}, 1)[0]',
             type: 'any',
-            help: 'remove item at index from named array'
+            help: 'remove item at index from an array'
         },
         {
-            label: 'array [string] pop',
-            script: 'local.get("array", {{1}}).pop()',
+            label: 'array [array] pop',
+            script: '{{1}}.pop()',
             type: 'any',
-            help: 'remove and return the last item from a named array'
+            help: 'remove and return the last item from an array'
         },
         {
-            label: 'array [string] shift',
-            script: 'local.get("array", {{1}}).shift()',
+            label: 'array [array] shift',
+            script: '{{1}}.shift()',
             type: 'any',
-            help: 'remove and return the first item from a named array'
+            help: 'remove and return the first item from an array'
         },
         {   
-            label: 'array [string] reverse',
-            script: 'local.get("array", {{1}}).reverse()',
+            label: 'array [array] reversed',
+            script: '{{1}}.slice().reverse()',
             type: 'array',
-            help: 'reverse a named array in place'
+            help: 'reverse a copy of array'
         },
         {
-            label: 'array [string] concat [array]',
-            script: 'local.get("array", {{1}}).concat({{2}});',
+            label: 'array [array] concat [array]',
+            script: '{{1}}.concat({{2}});',
             type: 'array',
-            help: 'add all the items from one array to a named array'
+            help: 'a new array formed by joining the arrays'
         },
         {
-            label: 'array [string] for each',
-            script: '$.each(local.get("array", {{1}}), function(idx, item){local.index = idx; local.last_var = item; [[1]] });',
+            label: 'array [array] for each',
+            script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
             containers: 1,
+            locals: [
+                {
+                    label: 'index',
+                    script: 'local.index',
+                    help: 'index of current item in array',
+                    type: 'number'
+                },
+                {
+                    label: 'item',
+                    script: 'local.item',
+                    help: 'the current item in the iteration',
+                    type: 'any'
+                }
+            ],
             help: 'run the blocks with each item of a named array'
         }
     ], false),
     objects: menu('Objects', [
         {
             label: 'new object',
-            script: 'local.last_var = {};',
+            script: 'local.object = {};',
+            returns: {
+                label: 'object',
+                script: 'local.object',
+                type: 'object'
+            },
             help: 'create a new, empty object'
         },
         {
-            label: 'new object named [string]',
-            script: 'local.set("object", {{1}}, {});',
-            help: 'create a new, empty, named object'
+            label: 'object [object] key [string] = value [any]',
+            script: '{{1}}[{{2}}] = {{3}};',
+            help: 'set the key/value of an object'
         },
         {
-            label: 'object key [string] = value [any]',
-            script: 'local.last_var[{{1}}] = {{2}};',
-            help: 'set the key/value of the current object'
-        },
-        {
-            label: 'object named [string] key [string] = value [any]',
-            script: 'local.get("object", {{1}})[{{2}}] = {{3}};',
-            help: 'set the key/value of a named object'
-        },
-        {
-            label: 'object value at key [string]',
-            script: 'local.last_var[{{1}}]',
+            label: 'object [object] value at key [string]',
+            script: '{{1}}[{{2}}]',
             type: 'any',
-            help: 'return the value of the key in the current object'
+            help: 'return the value of the key in an object'
         },
         {
-            label: 'object [string] value at key [string]',
-            script: 'local.get("object", {{1}})[{{2}}]',
-            type: 'any',
-            help: 'return the value of the key in the named object'
+            label: 'object [object] for each',
+            script: '$.each({{1}}, function(key, item){local.key = key; local.item = item; [[1]] });',
+            containers: 1,
+            locals: [
+                {
+                    label: 'key',
+                    script: 'local.key',
+                    help: 'key of current item in object',
+                    type: 'string'
+                },
+                {
+                    label: 'item',
+                    script: 'local.item',
+                    help: 'the current item in the iteration',
+                    type: 'any'
+                }
+            ],
+            help: 'run the blocks with each item of a named array'
+            
         }
     ], false),
     strings: menu('Strings', [

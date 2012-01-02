@@ -152,11 +152,13 @@ function Block(options, scope){
     if (opts.locals.length){
         $.each(opts.locals, function(idx, value){
             if ($.isPlainObject(value)){
+                value.klass = opts.klass;
                 wrapper.addLocalBlock(Block(value, wrapper));
             }
         });
     }
     if (opts.returns){
+        opts.returns.klass = opts.klass;
         var returnBlock = Block(opts.returns);
         wrapper.bind('add_to_script', function(e){
             // remove from DOM if already place elsewhere

@@ -159,500 +159,375 @@ var menus = {
         {
             label: 'Setup - When program starts', 
             trigger: true, 
-            script: 'void setup()\n{\n[[next]]\n}\n'
+            script: 'void setup()\n{\n[[next]]\n}\n',
+            help: 'Start scripts when program starts'
         },
         {
             label: 'Main loop', 
             trigger: true, 
             containers: 1, 
             slot: false, 
-        
-            script: 'void loop()\n{\n[[1]]\n}\n'
+            script: 'void loop()\n{\n[[1]]\n}\n',
+            help: 'Trigger for main loop'
         },
         {
             label: 'Global Settings', 
             trigger: true, 
-            script: '/*Global Settings*/\n\n[[next]]\n\n'
+            script: '/*Global Settings*/\n\n[[next]]\n\n',
+            help: 'Trigger for blocks in global setup'
         },
-        /*{
-            label: 'Comment [string]', 
-            script: '//{{1}}\n'
-        },
-        {
-            label: 'Comment [comment] (not working)', 
-        */
-        //script: '/*{{1}}*/\n\n'
-        //},
-        
-        
-        /*{
-            label: 'every 1/[number:30] of a second', 
-            trigger: true, 
-            script: 'setInterval(function(){\n[[next]]},\n1000/{{1}}\n);'
-        },*/
-        
-        /* TODO : repeat , needs unquie id
-        {
-            label: 'repeat [int:10]', 
-            containers: 1, 
-            script: 'range({{1}}).forEach(function(){\n[[1]]\n});'
-        },*/
-        //unqie id?
+        //uniqe id?
         {
             label: 'broadcast [string:ack] message', 
-            script: '{{1}}();'
+            script: '{{1}}();',
+            help: 'Send a message to all listeners'
         },
         {
             label: 'when I receive [string:ack] message', 
             trigger: true, 
-            script: 'function {{1}}(){\n[[next]]\n}'
+            script: 'function {{1}}(){\n[[next]]\n}',
+            help: 'Trigger for blocks to run when message is received'
         },
         {
             label: 'forever if [boolean:false]', 
             containers: 1, 
             slot: false, 
-            script: 'while({{1}}){\n[[1]]\n}'
+            script: 'while({{1}}){\n[[1]]\n}',
+            help: 'loop until condition fails'
         },
         {
             label: 'if [boolean]', 
             containers: 1, 
-            script: 'if({{1}}){\n[[1]]\n}'
+            script: 'if({{1}}){\n[[1]]\n}',
+            help: 'only run blocks if condition is true'
         },
         {
             label: 'if [boolean]', 
             containers: 2, 
             subContainerLabels: ['else'],
-            script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}'
+            script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}',
+            help: 'run first set of blocks if condition is true, second set otherwise'
         },
         {
             label: 'repeat until [boolean]', 
-            script: 'while(!({{1}})){\n[[1]]\n}'
+            script: 'while(!({{1}})){\n[[1]]\n}',
+            help: 'loop until condition is true'
         }
     ], false),
     
     timing: menu('Timing', [
         {
             label: 'wait [int:1] secs', 
-            script: 'delay(1000*{{1}});'
+            script: 'delay(1000*{{1}});',
+            help: 'pause before running subsequent blocks'
         },
         {
             label: 'Milliseconds since program started', 
             'type': 'int', 
-            script: '(millis())'
+            script: '(millis())',
+            help: 'int value of time elapsed'
         },
         {
             label: 'Seconds since program started', 
             'type': 'int', 
-            script: '(int(millis()/1000))'
+            script: '(int(millis()/1000))',
+            help: 'int value of time elapsed'
         }
         
     ]),
     
     io: menu('IO', [
-        
         {
             label: 'Digital Pin [choice:digitalpins]', 
             'type': 'int', 
-            script: ' {{1}} '
+            script: ' {{1}} ',
+            help: 'int value of a given pin'
         },
         {
             label: 'Set digital pin  [string:0] to [choice:inoutput]', 
-            script: 'pinMode({{1}}, {{2}});'
+            script: 'pinMode({{1}}, {{2}});',
+            help: 'set given pin mode'
         },
-        
         {
-          label: 'Input from digital pin [string:0]', 
+          	label: 'Input from digital pin [string:0]', 
             'type': 'boolean', 
-            script: '(digitalRead({{1}}) == HIGH)'
+            script: '(digitalRead({{1}}) == HIGH)',
+            help: 'boolean value of digital pin'
         },
-        /*
         {
-            label: 'Pin HIGH [choice:digitalpins]', 
-            'type': 'boolean', 
-            script: '(digitalRead({{1}}) == HIGH)'
-        },*/
-        
-        /*{
-            label: 'circle with radius [number:0]', 
-            script: 'local.shape = global.paper.circle(0, 0, {{1}});'
-        }*/
-        
-        {
-          label: 'Digital Pin [string:0] outputs [choice:highlow]', 
-          script: 'digitalWrite({{1}}, {{2}});'
+          	label: 'Digital Pin [string:0] outputs [choice:highlow]', 
+          	script: 'digitalWrite({{1}}, {{2}});',
+          	help: 'Write a value to given pin'
         },
-        
         {
-          label: 'Digital Pin [string:0] output high [boolean]', 
-          script: 'if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n'
+          	label: 'Digital Pin [string:0] output high [boolean]', 
+          	script: 'if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n',
+          	help: 'Write a value to given pin'
         },
-        
         {
             label: 'Set analog reference [choice:analogrefs]', 
-            script: 'analogReference({{1}});'
+            script: 'analogReference({{1}});',
+            help: 'What should analog valuse be compared to'
         },
-        
         {
             label: 'Analog Pin [choice:analoginpins]', 
             'type': 'string', 
-            script: ' {{1}} '
+            script: ' {{1}} ',
+            help: 'Names of analog pins'
         },
-        
         {
-          label: 'Analog Input [string:0]', 
+          	label: 'Analog Input [string:0]', 
             'type': 'int', 
-            script: '(analogRead({{1}}))'
+            script: '(analogRead({{1}}))',
+            help: 'Get the value of an analog pin'
         },
-        
         {
             label: 'PWM Pin [choice:pwmpins]', 
             'type': 'int', 
-            script: ' {{1}} '
+            script: ' {{1}} ',
+            help: 'Names of pwm pins'
         },
-        
         {
-          label: 'PWM [string:0] outputs [int:255]', 
-          script: 'anologWrite({{1}}, {{2}});'
+          	label: 'PWM [string:0] outputs [int:255]', 
+          	script: 'analogWrite({{1}}, {{2}});',
+          	help: 'Set value of a pwm pin'
         }
-        /*,
-        
-        {
-            label: 'ask [string:What\'s your name?] and wait',
-            script: 'local.answer = prompt("{{1}}");'
-        },
-        {
-            label: 'answer', 
-            'type': 'string', 
-            script: 'local.answer'
-        },
-        {
-            label: 'mouse x', 
-            'type': 'number', 
-            script: 'global.mouse_x'
-        },
-        {
-            label: 'mouse y', 
-            'type': 'number', 
-            script: 'global.mouse_y'
-        },
-        {
-            label: 'mouse down', 
-            'type': 'boolean', 
-            script: 'global.mouse_down'
-        },
-        {
-            label: 'key [choice:keys] pressed?', 
-            'type': 'boolean', 
-            script: '$(document).bind("keydown", {{1}}, function(){\n[[1]]\n});'
-        },
-        {
-            label: 'stage width', 
-            'type': 'number', 
-            script: 'global.stage_width'
-        },
-        {
-            label: 'stage height', 
-            'type': 'number', 
-            script: 'global.stage_height'
-        },
-        {
-            label: 'center x', 
-            'type': 'number', 
-            script: 'global.stage_center_x'
-        },
-        {
-            label: 'center y', 
-            'type': 'number', 
-            script: 'global.stage_center_y'
-        },
-        {
-            label: 'reset timer', 
-            script: 'global.timer.reset()'
-        },
-        {
-            label: 'timer', 
-            'type': 'number', 
-            script: 'global.timer.value()'
-        }*/
     ]),
     
     variables: menu('Variables', [
         {
-          label:'Create [string:var] set to [string]',
-          script: "String {{1}} = '{{2}}';"
-        },
-        /*{
-          label:'Create constant [string:var] set to [string:value]',
-          script: "const String {{1}} = '{{2}}';"
-        },*/
-        {
-          label:'[string:var] = [string]',
-          script: "{{1}} = '{{2}}';"
+          	label:'Create [string:var] set to [string]',
+          	script: "String {{1}} = '{{2}}';",
+          	help: 'Create a string variable'
         },
         {
-          label:'value of [string:var]',
-          type : 'string',
-          script: "{{1}}"
-        },
-        
-        {
-          label:'Create [string:var] set to [int:0]',
-          script: "int {{1}} = {{2}}'"
-        },
-        
-        /*{
-          label:'Create constant [string:var] set to [number:0]',
-          script: "const int {{1}} = {{2}};"
-        },*/
-        {
-          label:'[string:var] = [int:0]',
-          script: "{{1}} = {{2}};"
+          	label:'[string:var] = [string]',
+          	script: "{{1}} = '{{2}}';",
+          	help: 'Change the value of an already created string variable'
         },
         {
-          label:'value of [string:var]',
-          type : 'int',
-          script: "{{1}}"
+          	label:'value of [string:var]',
+          	type : 'string',
+          	script: "{{1}}",
+          	help: 'Get the value of a string variable'
+        },
+        {
+          	label:'Create [string:var] set to [int:0]',
+          	script: "int {{1}} = {{2}}'",
+          	help: 'Create an integer variable'
+        },
+        {
+          	label:'[string:var] = [int:0]',
+          	script: "{{1}} = {{2}};",
+          	help: 'Change the value of an already created integer variable'
+        },
+        {
+          	label:'value of [string:var]',
+          	type : 'int',
+          	script: "{{1}}",
+          	help: 'Get the value of an integer variable'
         },
         
         {
-          label:'Create [string:var] set to [float:0.0]',
-          script: "float {{1}} = {{2}}"
-        },
-        
-        /*{
-          label:'Create constant [string:var] set to [number:0]',
-          script: "const float {{1}} = {{2}};"
-        },*/
-        {
-          label:'[string:var] = [float:0.0]',
-          script: "{{1}} = {{2}};"
+          	label:'Create [string:var] set to [float:0.0]',
+          	script: "float {{1}} = {{2}}",
+          	help: 'Create a decimal variable'
         },
         {
-          label:'value of [string:var]',
-          type : 'float',
-          script: "{{1}}"
-        },
-        
-        
-        
-        {
-          label:'Create [string:var] set to [boolean:false]',
-          script: "int {{1}} = {{2}};"
-        },
-        /*{
-          label:'Create constant [string:var] set to [boolean:false]',
-          script: "const int {{1}} = {{2}};"
-        },*/
-        {
-          label:'[string:var] = [boolean:false]',
-          script: "{{1}} = {{2}};"
+          	label:'[string:var] = [float:0.0]',
+          	script: "{{1}} = {{2}};",
+          	help: 'Change the value of an already created deciaml variable'
         },
         {
-          label:'value of [string:var]',
-          type : 'boolean',
-          script: "{{1}}"
+          	label:'value of [string:var]',
+          	type : 'float',
+          	script: "{{1}}",
+          	help: 'Get the value of a decimal variable'
+        },
+        {
+         	label:'Create [string:var] set to [boolean:false]',
+         	script: "int {{1}} = {{2}};",
+          	help: 'Create a new true or false variable'
+        },
+        {
+          	label:'[string:var] = [boolean:false]',
+         	script: "{{1}} = {{2}};",
+          	help: 'Change the value of an already created true or false variable'
+        },
+        {
+          	label:'value of [string:var]',
+          	type : 'boolean',
+          	script: "{{1}}",
+          	help: 'Get the value of a true or false variable'
         }
-        
-        
-        
       ]),
     operators: menu('Operators', [
         {
             label: '[number:0] + [number:0]', 
             'type': 'number', 
-            script: "({{1}} + {{2}})"
+            script: "({{1}} + {{2}})",
+            help: 'Add two numbers'
         },
         {
             label: '[number:0] - [number:0]', 
             'type': 'number', 
-            script: "({{1}} - {{2}})"
+            script: "({{1}} - {{2}})",
+            help: 'Subtract two numbers'
         },
         {
             label: '[number:0] * [number:0]', 
             'type': 'number', 
-            script: "({{1}} * {{2}})"
+            script: "({{1}} * {{2}})",
+            help: 'Multiply two numbers'
         },
         {
             label: '[number:0] / [number:0]',
             'type': 'number', 
-            script: "({{1}} / {{2}})"
+            script: "({{1}} / {{2}})",
+            help: 'Divide two numbers'
         },
         {
             label: 'pick random [number:1] to [number:10]', 
             'type': 'number', 
-            script: "(random({{1}}, {{2}}))"
+            script: "(random({{1}}, {{2}}))",
+            help: 'Generate a random number between two other numbers'
         },
-        
         {
             label: 'set seed for random numbers to [number:1]', 
-            script: "(randomSeed({{1}}))"
+            script: "(randomSeed({{1}}))",
+            help: ''
         },
-        
         {
             label: '[number:0] < [number:0]', 
             'type': 'boolean', 
-            script: "({{1}} < {{2}})"
+            script: "({{1}} < {{2}})",
+            help: 'Check if one number is less than another'
         },
         {
             label: '[number:0] = [number:0]', 
             'type': 'boolean', 
-            script: "({{1}} == {{2}})"
+            script: "({{1}} == {{2}})",
+            help: 'Check if one number is equal to another'
         },
         
         {
             label: '[number:0] > [number:0]', 
             'type': 'boolean', 
-            script: "({{1}} > {{2}})"
+            script: "({{1}} > {{2}})",
+            help: 'Check if one number is greater than another'
         },
         {
             label: '[boolean] and [boolean]', 
             'type': 'boolean', 
-            script: "({{1}} && {{2}})"
+            script: "({{1}} && {{2}})",
+            help: 'Check if both are true'
         },
         {
             label: '[boolean] or [boolean]', 
             'type': 'boolean', 
-            script: "({{1}} || {{2}})"
+            script: "({{1}} || {{2}})",
+            help: 'Check if one is true'
         },
         {
             label: 'not [boolean]', 
             'type': 'boolean', 
-            script: "(! {{1}})"
+            script: "(! {{1}})",
+            help: 'Not true is false and Not false is true'
         },
-        /*{
-            label: 'join [string:hello] with [string:world]', 
-            'type': 'string', script: "({{1}} + {{2}})"},
-        {
-            label: 'letter [number:1] of [string:world]', 
-            'type': 'string', 
-            script: "{{2}}[{{1}}]"
-        },
-        {
-            label: 'length of [string:world]', 
-            'type': 'number', 
-            script: "({{1}}.length)"
-        },*/
         {
             label: '[number:0] mod [number:0]', 
             'type': 'number', 
-            script: "({{1}} % {{2}})"
+            script: "({{1}} % {{2}})",
+            help: 'Gives the remainder from the division of these two number'
         },
         
         {
             label: 'round [number:0]', 
             'type': 'int', 
-            script: "(int({{1}}))"
+            script: "(int({{1}}))",
+            help: 'Gives the whole number, without the decimal part'
         },
         {
             label: 'absolute of [number:10]', 
             'type': 'number', 
-            script: "(abs({{1}}))"
+            script: "(abs({{1}}))",
+            help: 'Gives the positive of the number'
         },
-        /*
-        {
-            label: 'arccosine degrees of [number:10]', 
-            'type': 'number', 
-            script: 'rad2deg(Math.acos({{1}}))'
-        },
-        {
-            label: 'arcsine degrees of [number:10]', 
-            'type': 'number', 
-            script: 'rad2deg(Math.asin({{1}}))'
-        },
-        {
-            label: 'arctangent degrees of [number:10]', 
-            'type': 'number', 
-            script: 'rad2deg(Math.atan({{1}}))'
-        },
-        {
-            label: 'ceiling of [number:10]', 
-            'type': 'number', 
-            script: 'Math.ceil({{1}})'
-        },
-        */
         {
             label: 'cosine of [number:10] degrees', 
             'type': 'float', 
-            script: '(cos((180 / {{1}})/ 3.14159))'
+            script: '(cos((180 / {{1}})/ 3.14159))',
+            help: 'Gives the cosine of the angle'
         },
         {
             label: 'sine of [number:10] degrees', 
             'type': 'float', 
-            script: '(sin((180 / {{1}})/ 3.14159))'
+            script: '(sin((180 / {{1}})/ 3.14159))',
+            help: 'Gives the sine of the angle'
         },
         {
             label: 'tangent of [number:10] degrees', 
             'type': 'float', 
-            script: '(tan((180 / {{1}})/ 3.14159))'
+            script: '(tan((180 / {{1}})/ 3.14159))',
+            help: 'Gives the tangent of the angle given'
         },
         {
             label: '[number:10] to the power of [number:2]', 
             'type': 'number', 
-            script: '(pow({{1}}, {{2}}))'
-        },
-        {
-            label: 'round [number:10]', 
-            'type': 'int', 
-            script: '(int({{1}}))'
+            script: '(pow({{1}}, {{2}}))',
+            help: 'Gives the first number multiplied by itself the second number of times'
         },
         {
             label: 'square root of [number:10]', 
             'type': 'float', 
-            script: '(sqrt({{1}}))'
+            script: '(sqrt({{1}}))',
+            help: 'Gives the two numbers that if multiplied will be equal to the number input'
         },
         {
             label: '[number:10] as string', 
             'type': 'string', 
-            script: '{{1}}'
+            script: '{{1}}',
+            help: 'Allows you to use a numeric result as a string'
         },
         {
-          label: 'Map [number] from Analog in to Analog out',
-          type: 'number',
-          script: 'map({{1}}, 0, 1023, 0, 255)'
+          	label: 'Map [number] from Analog in to Analog out',
+          	type: 'number',
+          	script: 'map({{1}}, 0, 1023, 0, 255)',
+          	help: ''
         },
         {
-          label: 'Map [number] from [number:0]-[number:1023] to [number:0]-[number:255] ',
-          type: 'number',
-          script: 'map({{1}}, 0, 1023, 0, 255)'
+          	label: 'Map [number] from [number:0]-[number:1023] to [number:0]-[number:255] ',
+          	type: 'number',
+          	script: 'map({{1}}, 0, 1023, 0, 255)',
+            help: ''
         }
     ]),
     serial: menu('Serial', [
         {
-          label: 'Setup serial communication at [choice:baud]', 
-          script: "Serial.begin({{1}});"
+          	label: 'Setup serial communication at [choice:baud]', 
+          	script: "Serial.begin({{1}});",
+            help: 'Eanble serial communications at a chosen speed'
         },
-        
         {
-          label: 'Send [any:Message] as a line', 
-          script: "Serial.println({{1}});"
+          	label: 'Send [any:Message] as a line', 
+          	script: "Serial.println({{1}});",
+            help: 'Send a message over the serial connection followed by a line return'
         },
-        
         {
-          label: 'Send [any:Message]', 
-          script: "Serial.print({{1}});"
+          	label: 'Send [any:Message]', 
+          	script: "Serial.print({{1}});",
+            help: 'Send a message over the serial connection'
         },
-        
-/*        {
-          label: 'Send [number:0] as a line', 
-          script: "Serial.println({{1}});"
-        },
-        
         {
-          label: 'Send [boolean:true] as a line', 
-          script: "Serial.println({{1}});"
+          	label: 'Message Value', 
+          	type: 'string',
+          	script: "Serial.read()",
+          	help: 'Read a message from the serial connection'
         },
-  */      
-        
         {
-          label: 'Message Value', 
-          type: 'string',
-          script: "Serial.read()"
-        },
-        
-        
-        {
-          label: 'End serial communication', 
-            script: "Serial.end();"
+          	label: 'End serial communication', 
+            script: "Serial.end();",
+          	help: 'Disable serial communications'
         }
     ])
 

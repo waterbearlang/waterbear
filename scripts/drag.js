@@ -247,6 +247,7 @@
                     top: 0,
                     display: 'inline-block'
                 });
+                drag_target.trigger('add_to_script');
             }else{
                 // Insert a value block into a socket
                 // console.log('Inserting a value into a socket');
@@ -258,11 +259,13 @@
                     top: 0,
                     display: 'inline-block'
                 });
+                drag_target.trigger('add_to_script');
             }
         }else if ($('.block_menu').cursor_over()){
             // delete block if dragged back to menu
             // console.log('deleting a block');
             drag_target.remove();
+            drag_target.trigger('delete_block');
         }else if (drag_target.overlap(target_canvas)){
             // generally dragged to canvas, position it there
             // console.log('Drop onto canvas');
@@ -271,6 +274,7 @@
             drop_cursor.remove();
             drop_cursor = null;
             drag_target.css({position: 'relative', top: 0, left: 0, display: 'block'});
+            drag_target.trigger('add_to_workspace');
             $('.scripts_workspace').trigger('add');
         }else{
             if (cloned){

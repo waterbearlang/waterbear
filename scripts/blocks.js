@@ -25,7 +25,7 @@ $.extend($.fn,{
   },
   parent_block: function(){
       var p = this.closest('.wrapper').parent();
-      if (p.is('.next')){
+      if (p.is('.next, .contained')){
           return p.closest('.wrapper');
       }
       return null;
@@ -51,6 +51,17 @@ $.extend($.fn,{
   },
   moveTo: function(x,y){
       return this.css({left: x + 'px', top: y + 'px'});
+  },
+  addLocalBlock: function(block){
+    window.parent_block = this;
+    var head = this.find('> .block > .blockhead');
+    var locals = head.find('.locals');
+    if (!locals.length){
+        locals = $('<div class="locals block_menu"></div>');
+        head.find('.label').after(locals);
+    }
+    locals.append(block);
+    return this;
   },
   addSocketHelp: function(){
     var self = $(this);
@@ -87,7 +98,7 @@ $.fn.extend({
     }
 });
 
-function Block(options){
+function Block(options, scope){
     // Options include:
     //
     // Menu blocks subset:
@@ -111,6 +122,7 @@ function Block(options){
         flap: true, // something can come before
         containers: 0,  // Something cannot be inside
         locals: [],
+        returns: false,
         subContainerLabels: [],
         label: 'Step', // label is its own mini-language
         type: null
@@ -125,6 +137,9 @@ function Block(options){
         opts.flap = false;
     }
     var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
+    if (scope){
+        wrapper.data('scope', scope);
+    }
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
     var block = wrapper.children();
@@ -136,6 +151,25 @@ function Block(options){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
         wrapper.data('type', opts['type']);
+    }
+    if (opts.locals.length){
+        $.each(opts.locals, function(idx, value){
+            if ($.isPlainObject(value)){
+                wrapper.addLocalBlock(Block(value, wrapper));
+            }
+        });
+    }
+    if (opts.returns){
+        var returnBlock = Block(opts.returns);
+        wrapper.bind('add_to_script', function(e){
+            // remove from DOM if already place elsewhere
+            returnBlock.detach();
+            $(e.target).parent_block().addLocalBlock(returnBlock);
+        });
+        wrapper.bind('delete_block add_to_workspace', function(e){
+            // FIXME: We should delte returnBlock on delete_block to avoid leaking memory
+            returnBlock.detach();
+        });
     }
     if(opts.containers > 0){
         wrapper.addClass('containerBlock'); //This might not be necessary
@@ -163,16 +197,6 @@ function Block(options){
         block.append('<b class="flap"></b>');
         wrapper.addClass('step');
         wrapper.data('type', 'step');
-    }
-    if (opts.locals.length){
-        var locals_container = $('<div class="locals block_menu"></div>');
-        $.each(opts.locals, function(idx, value){
-            if ($.isPlainObject(value)){
-                console.log('adding local: %s', value.label);
-                locals_container.append(Block(value));
-            }
-        });
-        block.append(locals_container);
     }
     
     wrapper.data('containers', opts.containers);

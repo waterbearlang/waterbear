@@ -258,7 +258,7 @@ var menus = {
             containers: 1, 
             slot: false,
             script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
-            help: 'repeat the contained blocks so many times'
+            help: 'repeat the contained blocks so many times',
             locals: [
                 {
                     label: 'loop index',

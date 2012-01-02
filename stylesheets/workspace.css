@@ -301,4 +301,8 @@ html, body {
     overflow: hidden;
 }
 
-
+/* Lists of scripts to scroll. Used in demo & restore dialog*/
+.scrollList{
+    max-height: 300px;
+    overflow-y:scroll;
+}

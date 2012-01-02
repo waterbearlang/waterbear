@@ -236,6 +236,8 @@ var menus = {
         {
             label: 'repeat [number:30] times a second',
             trigger: true,
+            slot: false,
+            containers: 1,
             locals: [
                 {
                     label: 'count',
@@ -247,12 +249,6 @@ var menus = {
             help: 'this trigger will run the attached blocks periodically'
         },
         {
-            label: 'count',
-            script: 'local.count',
-            type: 'number',
-            help: 'this block can only be used within a repeat block to get the number of iterations'
-        },            
-        {
             label: 'wait [number:1] secs', 
             script: 'setTimeout(function(){[[next]]},1000*{{1}});',
             help: 'pause before running the following blocks'
@@ -263,6 +259,13 @@ var menus = {
             slot: false,
             script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
             help: 'repeat the contained blocks so many times'
+            locals: [
+                {
+                    label: 'loop index',
+                    script: 'local.index',
+                    type: 'number'
+                }
+            ]
         },
         {
             label: 'broadcast [string:ack] message', 
@@ -299,19 +302,18 @@ var menus = {
             containers: 1, 
             script: 'while(!({{1}})){[[1]]}',
             help: 'repeat forever until condition is true'
-        },
-        {
-            label: 'current object',
-            script: 'local.last_var',
-            type: 'any',
-            help: 'use the last object created by another block'
         }
     ], true),
     array: menu('Arrays', [
         {
             label: 'new array',
-            script: 'local.last_var = [];',
-            help: 'Create an empty array'
+            script: 'local.array = [];',
+            help: 'Create an empty array',
+            returns: {
+                label: 'array',
+                script: 'local.array',
+                type: 'array'
+            }
         },
         {
             label: 'new array named [string]',

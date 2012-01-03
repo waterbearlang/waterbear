@@ -445,11 +445,6 @@ var menus = {
     ], false),
     strings: menu('Strings', [
         {
-            label: 'string named [string] = [string]',
-            script: 'local.set("string", {{1}}, {{2}});',
-            help: 'A named string with the given value'
-        },
-        {
             label: 'string [string] split on [string]',
             script: '{{1}}.split({{2}})',
             type: 'array',

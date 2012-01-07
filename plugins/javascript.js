@@ -739,19 +739,34 @@ var menus = {
     ]),
     shapes: menu('Shapes', [
         {
-            label: 'circle with radius [number:0]', 
-            script: 'local.last_var = global.paper.circle(0, 0, {{1}});',
-            help: 'draws a circle, you will need to move it into the desired position'
+            label: 'circle## with radius [number:0] at position x [number:0] y [number:0]',
+            script: 'local.shape## = global.paper.circle({{2}}, {{3}}, {{1}});',
+            returns: {
+                label: 'circle##',
+                script: 'local.shape##',
+                type: 'path'
+            },
+            help: 'draws a circle'
         },
         {
-            label: 'rect with width [number:0] and height [number:0]', 
-            script: 'local.last_var = global.paper.rect(0, 0, {{1}}, {{2}});',
-            help: 'draws a rectangle at the origin'
+            label: 'rect with width [number:0] and height [number:0] at position x [number:0] y [number:0]', 
+            script: 'local.shape## = global.paper.rect({{3}}, {{4}}, {{1}}, {{2}});',
+            returns: {
+                label: 'rect',
+                script: 'local.shape##',
+                type: 'path'
+            },
+            help: 'draws a rectangle'
         },
         {
-            label: 'rounded rect with width [number:0] height [number:0] and radius [number:0]', 
-            script: 'local.last_var = global.paper.rect(0, 0, {{1}}, {{2}}, {{3}});',
-            help: 'draws a rounded rectangle at the origin'
+            label: 'rounded rect with width [number:0] height [number:0] and radius [number:0] at position x [number:0] y [number:0]', 
+            script: 'local.shape = global.paper.rect({{4}}, {{5}}, {{1}}, {{2}}, {{3}});',
+            returns: {
+                label: 'rounded rect',
+                script: 'local.shape',
+                type: 'path'
+            },
+            help: 'draws a rounded rectangle'
         },
         {
             label: 'ellipse x radius [number:0] y radius [number:0]', 
@@ -759,9 +774,14 @@ var menus = {
             help: 'draws an ellipse at the origin'
         },
         {
-            label: 'arc at radius [number:100] from [number:0] degrees to [number:30] degrees',
-            script: 'local.last_var = global.paper.arcslice({{1}}, {{2}}, {{3}});',
-            help: 'draws an arc at the origin'
+            label: 'arc at radius [number:100] from [number:0] degrees to [number:30] degrees centered at x [number:0] y [number:0]',
+            script: 'local.shape = global.paper.arcslice({{1}}, {{2}}, {{3}});',
+            returns: {
+                label: 'arc',
+                script: 'local.shape',
+                type: 'path'
+            },
+            help: 'draws an arc around a circle at the given coordinates'
         },
         {
             label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', 

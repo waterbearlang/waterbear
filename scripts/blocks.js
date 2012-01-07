@@ -17,6 +17,18 @@ $.extend($.fn,{
     });
     return '[' + names.join(', ') + ']';
   },
+  id: function(_id){
+    if (_id){
+        this.data('_id', _id);
+        if (this.data('script').indexOf('##') > -1){
+            this.data('script', this.data('script').replace('##', '_' + _id));
+            this.data('label', this.data('label').replace('##', '_' + _id));
+            this.find('> .block > .blockhead > .label').html('<span class="label">' + Label(this.data('label')) + '</span>');
+        }
+    }else{
+        return this.data('_id');
+    }
+  },
   info: function(){
       return this.closest('.wrapper').long_name();
   },
@@ -159,14 +171,26 @@ function Block(options, scope){
     }
     if (opts.returns){
         opts.returns.klass = opts.klass;
-        var returnBlock = Block(opts.returns);
         wrapper.bind('add_to_script', function(e){
             // remove from DOM if already place elsewhere
-            returnBlock.detach();
-            $(e.target).parent_block().addLocalBlock(returnBlock);
+            var self = $(e.target);
+            if (self.data('returnBlock')){
+                self.data('returnBlock').detach();
+            }else{
+                self.data('returnBlock', Block(opts.returns));
+            }
+            var returnBlock = self.data('returnBlock');
+            if (! self.id()){
+                Block.nextId++;
+                self.id(Block.nextId);
+                returnBlock.id(Block.nextId);
+            }
+            console.log('return block: %o', returnBlock);
+            console.log('parent block: %o', self.parent_block());
+            self.parent_block().addLocalBlock(returnBlock);
         });
         wrapper.bind('delete_block add_to_workspace', function(e){
-            // FIXME: We should delte returnBlock on delete_block to avoid leaking memory
+            // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
             returnBlock.detach();
         });
     }
@@ -236,6 +260,7 @@ function Block(options, scope){
     // add update handlers
     return wrapper;
 }
+Block.nextId = 0;
 
 $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
     var self = $(event.target);
@@ -291,6 +316,8 @@ function Label(value){
     // match selector [^\[\]:] should match any character except '[', ']', and ':'
     value = value.replace(/\[([^\[\]\:]+):([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
+    value = value.replace('##', '');
     return value;
 }
+
 

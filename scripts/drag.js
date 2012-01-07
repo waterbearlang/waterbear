@@ -78,7 +78,7 @@
     }
     
     function get_potential_drop_targets(){
-        console.log('drag target: %s', drag_target.block_type());
+//         console.log('drag target: %s', drag_target.block_type());
         switch(drag_target.block_type()){
             case 'step': return step_targets();
             case 'container': return step_targets();
@@ -264,8 +264,8 @@
         }else if ($('.block_menu').cursor_over()){
             // delete block if dragged back to menu
             // console.log('deleting a block');
+            drag_target.trigger('delete_block')
             drag_target.remove();
-            drag_target.trigger('delete_block');
         }else if (drag_target.overlap(target_canvas)){
             // generally dragged to canvas, position it there
             // console.log('Drop onto canvas');

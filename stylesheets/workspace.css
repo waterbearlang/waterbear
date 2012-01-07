@@ -56,14 +56,15 @@ body {
     height: 95%;
     background-color: #FFF;
     border: 1px solid #CCC;
+    overflow-x: hidden;
+    overflow-y: auto; 
 }
 
 .scripts_workspace, .scripts_text_view {
-    min-width: 100%;
+    min-width: 50%;
     min-height: 100%;
     position: relative;
     display: none;
-    overflow: auto;
     padding: 15px;
 }
 
@@ -302,4 +303,8 @@ html, body {
     overflow: hidden;
 }
 
-
+/* Lists of scripts to scroll. Used in demo & restore dialog*/
+.scrollList{
+    max-height: 300px;
+    overflow-y:scroll;
+}

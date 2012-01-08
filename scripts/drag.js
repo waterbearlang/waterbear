@@ -259,7 +259,7 @@
                     top: 0,
                     display: 'inline-block'
                 });
-                drag_target.trigger('add_to_script');
+                drag_target.trigger('add_to_socket');
             }
         }else if ($('.block_menu').cursor_over()){
             // delete block if dragged back to menu

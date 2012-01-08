@@ -306,22 +306,22 @@ var menus = {
     ], true),
     array: menu('Arrays', [
         {
-            label: 'new array',
-            script: 'local.array = [];',
+            label: 'new array##',
+            script: 'local.array## = [];',
             help: 'Create an empty array',
             returns: {
-                label: 'array',
-                script: 'local.array',
+                label: 'array##',
+                script: 'local.array##',
                 type: 'array'
             }
         },
         {
-            label: 'new array with array [array]',
-            script: 'local.array = {{2}}.slice();',
+            label: 'new array with array## [array]',
+            script: 'local.array## = {{2}}.slice();',
             help: 'create a new array with the contents of another array',
             returns: {
-                label: 'array',
-                script: 'local.array',
+                label: 'array##',
+                script: 'local.array##',
                 type: 'array'
             }
         },
@@ -401,11 +401,11 @@ var menus = {
     ], false),
     objects: menu('Objects', [
         {
-            label: 'new object',
-            script: 'local.object = {};',
+            label: 'new object##',
+            script: 'local.object## = {};',
             returns: {
-                label: 'object',
-                script: 'local.object',
+                label: 'object##',
+                script: 'local.object##',
                 type: 'object'
             },
             help: 'create a new, empty object'
@@ -749,165 +749,184 @@ var menus = {
             help: 'draws a circle'
         },
         {
-            label: 'rect with width [number:0] and height [number:0] at position x [number:0] y [number:0]', 
+            label: 'rect## with width [number:0] and height [number:0] at position x [number:0] y [number:0]', 
             script: 'local.shape## = global.paper.rect({{3}}, {{4}}, {{1}}, {{2}});',
             returns: {
-                label: 'rect',
+                label: 'rect##',
                 script: 'local.shape##',
                 type: 'path'
             },
             help: 'draws a rectangle'
         },
         {
-            label: 'rounded rect with width [number:0] height [number:0] and radius [number:0] at position x [number:0] y [number:0]', 
-            script: 'local.shape = global.paper.rect({{4}}, {{5}}, {{1}}, {{2}}, {{3}});',
+            label: 'rounded rect## with width [number:0] height [number:0] and radius [number:0] at position x [number:0] y [number:0]', 
+            script: 'local.shape## = global.paper.rect({{4}}, {{5}}, {{1}}, {{2}}, {{3}});',
             returns: {
-                label: 'rounded rect',
-                script: 'local.shape',
+                label: 'rounded rect##',
+                script: 'local.shape##',
                 type: 'path'
             },
             help: 'draws a rounded rectangle'
         },
         {
-            label: 'ellipse x radius [number:0] y radius [number:0]', 
-            script: 'local.last_var = global.paper.ellipse(0, 0, {{1}}, {{2}});',
-            help: 'draws an ellipse at the origin'
+            label: 'ellipse## x radius [number:0] y radius [number:0] at position x [number:0] y [number:0]', 
+            script: 'local.shape## = global.paper.ellipse({{3}}, {{4}}, {{1}}, {{2}});',
+            returns: {
+                label: 'ellipse##',
+                script: 'local.shape##',
+                type: 'path'
+            },
+            help: 'draws an ellipse'
         },
         {
-            label: 'arc at radius [number:100] from [number:0] degrees to [number:30] degrees centered at x [number:0] y [number:0]',
-            script: 'local.shape = global.paper.arcslice({{1}}, {{2}}, {{3}});',
+            label: 'arc## at radius [number:100] from [number:0] degrees to [number:30] degrees centered at x [number:0] y [number:0]',
+            script: 'local.shape## = global.paper.arcslice({{1}}, {{2}}, {{3}});',
             returns: {
-                label: 'arc',
-                script: 'local.shape',
+                label: 'arc##',
+                script: 'local.shape##',
                 type: 'path'
             },
             help: 'draws an arc around a circle at the given coordinates'
         },
         {
-            label: 'image src: [string:http://waterbearlang.com/images/waterbear.png]', 
-            script: 'local.last_var = global.paper.imageWithNaturalHeight({{1}});',
+            label: 'image## src: [string:http://waterbearlang.com/images/waterbear.png]', 
+            script: 'local.shape## = global.paper.imageWithNaturalHeight({{1}});',
+            returns: {
+                label: 'image##',
+                script: 'local.shape##',
+                type: 'path'
+            },
             help: 'draws an image at the origin'
         },
         {
-            label: 'name shape: [string:shape1]', 
-            script: 'local.last_var_references[{{1}}] = local.last_var;',
-            help: 'names the current shape to retrieve later'
-        },
-        {
-            label: 'refer to shape [string:shape1]', 
-            script: 'local.last_var = local.last_var_references[{{1}}];',
-            help: 'makes a named shape the current shape'
-        },
-        {
-            label: 'with shape [string:shape1] do', 
-            containers: 1, 
-            script: 'local.oldshape = local.last_var;local.last_var = local.last_var_references[{{1}}];[[1]]local.last_var = local.oldshape;',
-            help: 'makes a named shape the current shape for the contained blocks'
-        },
-        {
-            label: 'clip rect x [number:0] y [number:0] width [number:50] height [number:50]', 
-            script: 'local.last_var.attr("clip-rect", "{{1}},{{2}},{{3}},{{4}}");',
+            label: 'clip shape [path] to rect x [number:0] y [number:0] width [number:50] height [number:50]', 
+            script: '{{1}}.last_var.attr("clip-rect", "{{2}},{{3}},{{4}},{{5}}");',
             help: 'make a clipping rect that cuts off other drawing commands'
         },
         {
-            label: 'fill color [color:#FFFFFF]', 
-            script: 'local.last_var.attr("fill", {{1}});',
-            help: 'change the fill color for the current shape'
+            label: 'shape [path] fill color [color:#FFFFFF]', 
+            script: '{{1}}.attr("fill", {{2}});',
+            help: 'change the fill color for the shape'
         },
         {
-            label: 'stroke color [color:#000000]', 
-            script: 'local.last_var.attr("stroke", {{1}});',
-            help: 'change the stroke color for the current shape'
+            label: 'shape [path] stroke color [color:#000000]', 
+            script: '{{1}}.attr("stroke", {{2}});',
+            help: 'change the stroke color for the shape'
         },
         {
-            label: 'fill transparent', 
-            script: 'local.last_var.attr("fill", "transparent");',
-            help: 'make the current shape fill transparent'
+            label: 'shape [path] fill transparent', 
+            script: '{{1}}.attr("fill", "transparent");',
+            help: 'make the shape fill transparent'
         },
         {
-            label: 'stroke transparent', 
-            script: 'local.last_var.attr("stroke", "transparent");',
+            label: 'shape [path] stroke transparent', 
+            script: '{{1}}.attr("stroke", "transparent");',
             help: 'make the current shape stroke transparent'
         },
         {
-            label: 'stroke linecap [choice:linecap]', 
-            script: 'local.last_var.attr("stroke-linecap", {{1}});',
+            label: 'shape [path] stroke linecap [choice:linecap]', 
+            script: '{{1}}.attr("stroke-linecap", {{2}});',
             help: 'change the linecap style of the current shape'
         },
         {
-            label: 'stroke linejoin [choice:linejoin]', 
-            script: 'local.last_var.attr("stroke-linejoin", {{1}});',
-            help: 'change the linejoin style of the current shape'
+            label: 'shape [path] stroke linejoin [choice:linejoin]', 
+            script: '{{1}}.attr("stroke-linejoin", {{2}});',
+            help: 'change the linejoin style of the shape'
         },
         {
-            label: 'stroke opacity [number:100]%', 
-            script: 'local.last_var.attr("stroke-opacity", {{1}}+"%");',
-            help: 'change the opacity of the current shape stroke'
+            label: 'shape [path] stroke opacity [number:100]%', 
+            script: '{{1}}.attr("stroke-opacity", {{2}}+"%");',
+            help: 'change the opacity of the shape stroke'
         },
         {
-            label: 'stroke width [number:1]', 
-            script: 'local.last_var.attr("stroke-width", {{1}});',
-            help: 'change the line width of the current shape stroke'
+            label: 'shape [path] stroke width [number:1]', 
+            script: '{{1}}.attr("stroke-width", {{2}});',
+            help: 'change the line width of the shape stroke'
         },
         {
-            label: 'rotate [number:5] degrees', 
-            script: 'local.last_var.attr("rotate", local.last_var.attr("rotate") + {{1}});',
+            label: 'shape [path] rotate [number:5] degrees', 
+            script: '{{1}}.attr("rotate", {{1}}.attr("rotate") + {{2}});',
             help: 'rotate the current shape around its origin by the given amount'
         },
         {
-            label: 'rotate [number:5] degrees around x [number:0] y [number:0]', 
-            script: 'local.last_var.rotate(angle(local.last_var) + {{1}}, {{2}}, {{3}});',
-            help: 'rotate the current shape around an aribtrary point by the given amount'
+            label: 'shape [path] rotate [number:5] degrees around x [number:0] y [number:0]', 
+            script: '{{1}}.rotate(angle({{1}}) + {{2}}, {{3}}, {{4}});',
+            help: 'rotate the shape around an aribtrary point by the given amount'
         },
         {
-            label: 'clone', 
-            script: 'local.last_var = local.last_var.clone()',
-            help: 'create a copy of the current shape, which becomes the new current shape'
+            label: 'shape [path] clone shape##', 
+            script: 'local.shape## = {{1}}.clone()',
+            returns: {
+                label: 'shape##',
+                script: 'local.shape##',
+                type: 'path'
+            },
+            help: 'create a copy of the shape'
         },
         {
-            label: 'fill opacity [number:100]%', 
-            script: 'local.last_var.attr("fill-opacity", {{1}}+"%")',
-            help: 'change the opacity of the current shape fill'
+            label: 'shape [path] fill opacity [number:100]%', 
+            script: '{{1}}.attr("fill-opacity", {{2}}+"%")',
+            help: 'change the opacity of the shape fill'
         },
         {
-            label: 'link to [string:http://waterbearlang.com]', 
-            script: 'local.last_var.attr("href", {{1}})',
-            help: 'make the current shape a link to the given URL'
+            label: 'shape [path] link to [string:http://waterbearlang.com]', 
+            script: '{{1}}.attr("href", {{2}})',
+            help: 'make the shape a link to the given URL'
         },
         {
-            label: 'text [string:Hello World] at x: [number:0] y: [number:0]', 
-            script: 'local.last_var = global.paper.text({{2}}, {{3}}, {{1}});',
+            label: 'text## [string:Hello World] at x: [number:0] y: [number:0]', 
+            script: 'local.shape## = global.paper.text({{2}}, {{3}}, {{1}});',
+            returns: {
+                label: 'text##',
+                script: 'local.shape##',
+                type: 'path'
+            },
             help: 'write the string at the given coordinates'
         },
-        {   label: 'font family [string:Helvetica]',
-            script: 'local.last_var.attr("font-family", {{1}});',
-            help: 'change the font for the current text object',
+        {   label: 'shape [path] font family [string:Helvetica]',
+            script: '{{1}}.attr("font-family", {{2}});',
+            help: 'change the font for the text object',
         },
         {
-            label: 'font size [number:12]',
-            script: 'local.last_var.attr("font-size", {{1}});',
-            help: 'change the font size for the current text object'
+            label: 'shape [path] font size [number:12]',
+            script: '{{1}}.attr("font-size", {{2}});',
+            help: 'change the font size for the text object'
         },
         {
-            label: 'font weight [choice:fontweight]',
-            script: 'local.last_var.attr("font-weight", {{1}});',
-            help: 'change the font weight for the current text object'
+            label: 'shape [path] font weight [choice:fontweight]',
+            script: '{[1}}.attr("font-weight", {{2}});',
+            help: 'change the font weight for the text object'
         }
     ]),
     text: menu('Sketchy', [
         {
-            label: 'sketchy rect with width [number:50] and height [number:50]', 
-            script: 'local.last_var = global.paper.sk_rect(0,0, {{1}},{{2}});',
-            help: 'draw a sketchy rect at the origin'
+            label: 'sketchy rect## with width [number:50] and height [number:50] at position x [number:0] y [number:0]', 
+            script: 'local.shape## = global.paper.sk_rect({{3}},{{4}}, {{1}},{{2}});',
+            returns: {
+                label: 'sketchy rect##',
+                script: 'local.shape##',
+                type: 'path'
+            },
+            help: 'draw a sketchy rect'
         },
         {
-            label: 'sketchy ellipse with width [number:50] and height [number:50]', 
-            script: 'local.last_var = global.paper.sk_ellipse(0,0, {{1}}, {{2}});',
-            help: 'draw a sketchy ellipse at the origin'
+            label: 'sketchy ellipse## with width [number:50] and height [number:50] at position x [number:0], y [number:0]', 
+            script: 'local.shape## = global.paper.sk_ellipse({{3}},{{4}}, {{1}}, {{2}});',
+            returns: {
+                label: 'sketchy ellipse##',
+                script: 'local.shape##',
+                type: 'path'
+            },
+            help: 'draw a sketchy ellipse'
         },
         {
-            label: 'sketchy line from x1 [number:10] y1 [number:10] to x2 [number:40] y2 [number:40]', 
-            script: 'local.last_var = global.paper.sk_line({{1}}, {{2}}, {{3}}, {{4}});',
+            label: 'sketchy line## from x1 [number:10] y1 [number:10] to x2 [number:40] y2 [number:40]', 
+            script: 'local.shape## = global.paper.sk_line({{1}}, {{2}}, {{3}}, {{4}});',
+            returns: {
+                label: 'sketchy line##',
+                script: 'local.shape##',
+                type: 'path'
+            },
             help: 'draw a sketchy line between two points'
         }
     ]),
@@ -918,120 +937,120 @@ var menus = {
             help: 'clear the canvas of all drawing'
         },
         {
-            label: 'hide', 
-            script: 'local.last_var.hide();',
-            help: 'hide the current object'
+            label: 'shape [path] hide', 
+            script: '{{1}}.hide();',
+            help: 'hide the object'
         },
         {
-            label: 'show', 
-            script: 'local.last_var.show();',
-            help: 'show the current object'
+            label: 'shape [path] show', 
+            script: '{{1}}.show();',
+            help: 'show the object'
         },
         {
-            label: 'rotate by [number:0]', 
-            script: 'local.last_var.rotate({{1}}, false);',
-            help: 'rotate the current object'
+            label: 'shape [path] rotate by [number:0] degrees', 
+            script: '{{1}}.rotate({{2}}, false);',
+            help: 'rotate the object'
         },
         {
-            label: 'rotate to [number:0]', 
-            script: 'local.last_var.rotate({{1}}, true);',
-            help: 'rotate the current object to the given angle around its own center'
+            label: 'shape [path] rotate to [number:0] degrees', 
+            script: '{{1}.rotate({{2}}, true);',
+            help: 'rotate the object to the given angle around its own center'
         },
         {
-            label: 'rotate to [number:0] around x: [number:0] y: [number:0]', 
-            script: 'local.last_var.rotate({{1}}, {{2}}, {{3}}, true);',
+            label: 'shape [path] rotate to [number:0] around x: [number:0] y: [number:0]', 
+            script: '{{1}}.rotate({{2}}, {{3}}, {{4}}, true);',
             help: 'rotate the current object to the given angle around an arbitrary point'
         },
         {
-            label: 'translate by x: [number:0] y: [number:0]', 
-            script: 'local.last_var.translate({{1}}, {{2}});',
-            help: 'move the current object by the given distances'
+            label: 'shape [path] translate by x: [number:0] y: [number:0]', 
+            script: '{{1}}.translate({{2}}, {{3}});',
+            help: 'move the object by the given distances'
         },
         {
-            label: 'position at x [number:0] y [number:0]', 
-            script: 'local.last_var.attr({x: {{1}}, y: {{2}}, cx: {{1}}, cy: {{2}} });',
-            help: 'move the current object to the given coordinates'
+            label: 'shape [path] position at x [number:0] y [number:0]', 
+            script: '{{1}}.attr({x: {{2}}, y: {{3}}, cx: {{2}}, cy: {{3}} });',
+            help: 'move the object to the given coordinates'
         },
         {
-            label: 'size width [number:100] height [number:100]', 
-            script: 'local.last_var.attr({width: {{1}}, height: {{2}} })',
-            help: 'change the current object to the given size'
+            label: 'shape [path] size width [number:100] height [number:100]', 
+            script: '{{1}}.attr({width: {{2}}, height: {{3}} })',
+            help: 'change the object to the given size'
         },
         {
-            label: 'scale by [number:0]', 
-            script: 'local.last_var.scale({{1}}, {{2}});',
-            help: 'resize the current object by the given scale'
+            label: 'shape [path] scale by [number:0]', 
+            script: '{{1}}.scale({{2}}, {{3}});',
+            help: 'resize the object by the given scale'
         },
         {
-            label: 'scaled by [number:0] centered at x: [number:0] y: [number:0]', 
-            script: 'local.last_var.scale({{1}}, {{2}}, {{3}}, {{4}});',
-            help: 'resize the current object with scaling centered at an arbitrary point'
+            label: 'shape [path] scaled by [number:0] centered at x: [number:0] y: [number:0]', 
+            script: '{{1}}.scale({{2}}, {{3}}, {{4}}, {{5}});',
+            help: 'resize the object with scaling centered at an arbitrary point'
         },
         {
-            label: 'to front', 
-            script: 'local.last_var.toFront();',
-            help: 'move the current shape to the foreground'
+            label: 'shape [path] to front', 
+            script: '{{1}}.toFront();',
+            help: 'move the shape to the foreground'
         },
         {
-            label: 'to back', 
-            script: 'local.last_var.toBack();',
-            help: 'move the current shape to the background'
+            label: 'shape [path] to back', 
+            script: '{{1}}.toBack();',
+            help: 'move the shape to the background'
         }
     ]),
     animation: menu('Animation', [
         {
-            label: 'position x [number:10] y [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({translation: "{{1}}, {{2}}"}, {{3}}, {{4}});',
-            help: 'change the position of the current shape over time'
+            label: 'shape [path] position x [number:10] y [number:10] over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({translation: "{{2}}, {{3}}"}, {{4}}, {{5}});',
+            help: 'change the position of the shape over time'
         },
         {
-            label: 'opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({opacity: {{1}} }, {{2}}, {{3}});',
+            label: 'shape [path] opacity [number:50]% over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({opacity: {{2}} }, {{3}}, {{4}});',
             help: 'change the opacity of the current shape over time'
         },
         {
-            label: 'fill color [color:#00FF00] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({fill: {{1}}}, {{2}}, {{3}});',
-            help: 'change the fill color of the current shape over time'
+            label: 'shape [path] fill color [color:#00FF00] over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({fill: {{2}}}, {{3}}, {{4}});',
+            help: 'change the fill color of the shape over time'
         },
         {
-            label: 'fill opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({"fill-opacity": {{1}} }, {{2}}, {{3}});',
-            help: 'change the fill opacity of the current shape over time'
+            label: 'shape [path] fill opacity [number:50]% over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({"fill-opacity": {{2}} }, {{3}}, {{4}});',
+            help: 'change the fill opacity of the shape over time'
         },
         {
-            label: 'stroke color [color:#FF0000] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({stroke: {{1}}}, {{2}}, {{3}});',
-            help: 'change the stroke color of the current shape over time'
+            label: 'shape [path] stroke color [color:#FF0000] over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({stroke: {{2}}}, {{3}}, {{4}});',
+            help: 'change the stroke color of the shape over time'
         },
         {
-            label: 'stroke opacity [number:50]% over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({"stroke-opacity": {{1}} }, {{2}}, {{3}});',
-            help: 'change the stroke opacity of the current shape over time'
+            label: 'shape [path] stroke opacity [number:50]% over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({"stroke-opacity": {{2}} }, {{3}}, {{4}});',
+            help: 'change the stroke opacity of the shape over time'
         },
         {
-            label: 'width [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({width: {{1}} }, {{2}}, {{3}});',
-            help: 'change the width of the current shape over time'
+            label: 'shape [path] width [number:10] over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({width: {{2}} }, {{3}}, {{4}});',
+            help: 'change the width of the shape over time'
         },
         {
-            label: 'height [number:10] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({height: {{1}} }, {{2}}, {{3}});',
-            help: 'change the height of the current shape over time'
+            label: 'shape [path] height [number:10] over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({height: {{2}} }, {{3}}, {{4}});',
+            help: 'change the height of the shape over time'
         },
         {
-            label: 'radius [number:25] over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({r: {{1}} }, {{2}}, {{3}});',
-            help: 'change the radius of the current shape over time'
+            label: 'shape [path] radius [number:25] over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({r: {{2}} }, {{3}}, {{4}});',
+            help: 'change the radius of the shape over time'
         },
         {
-            label: 'rotation [number:15] degrees over [number:500] ms with [choice:easing]',
-            script: 'local.last_var.animate({rotation: {{1}} }, {{2}}, {{3}});',
-            help: 'change the rotation of the current shape over time'
+            label: 'shape [path] rotation [number:15] degrees over [number:500] ms with [choice:easing]',
+            script: '{{1}}.animate({rotation: {{2}} }, {{3}}, {{4}});',
+            help: 'change the rotation of the shape over time'
         },
         {
-            label: 'stop animations',
-            script: 'local.last_var.stop()',
+            label: 'shape [path] stop animations',
+            script: '{{1}}.stop()',
             help: 'cancels all animations'
         }
     ]),
@@ -1039,14 +1058,13 @@ var menus = {
         {
             label: 'get tweet for [string]',
             containers: 1,
-            script: 'local.getTweet({{1}}, function(tweet){local.lastTweet = tweet;[[1]]});',
+            script: 'local.getTweet({{1}}, function(tweet){local.tweet## = tweet;[[1]]});',
+            returns: {
+                label: 'last tweet##',
+                script: 'local.tweet## || "waiting…"',
+                type: 'string'
+            },
             help: 'asynchronous call to get the last tweet of the named account'
-        },
-        {
-            label: 'last tweet',
-            type: 'string',
-            script: '+local.lastTweet+',
-            help: 'last tweet which came back from asynch get tweet call'
         }
     ])
 };

@@ -185,8 +185,8 @@ function Block(options, scope){
                 self.id(Block.nextId);
                 returnBlock.id(Block.nextId);
             }
-            console.log('return block: %o', returnBlock);
-            console.log('parent block: %o', self.parent_block());
+//             console.log('return block: %o', returnBlock);
+//             console.log('parent block: %o', self.parent_block());
             self.parent_block().addLocalBlock(returnBlock);
         });
         wrapper.bind('delete_block add_to_workspace', function(e){

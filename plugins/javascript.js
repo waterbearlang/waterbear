@@ -47,16 +47,18 @@ jQuery.fn.extend({
                   // console.log('index: %d, expression: %s', idx, exprs[idx]);
                   return exprs[idx];
               };
-              // console.log('before: %s', script);
+              //console.log('before: %s', script);
               script = script.replace(/\{\{\d\}\}/g, exprf);
-              // console.log('after: %s', script);
+              //console.log('after: %s', script);
           }
           if (blks.length){
               function blksf(match, offset, s){
                   var idx = parseInt(match.slice(2,-2), 10) - 1;
                   return blks[idx];
               }
+              console.log('child before: %s', script);
               script = script.replace(/\[\[\d\]\]/g, blksf);
+              console.log('child after: %s', script);   
           }
           next = self.next_block().extract_script();
           if (script.indexOf('[[next]]') > -1){
@@ -211,7 +213,7 @@ window.choice_lists = {
     linejoin: ['round', 'bevel', 'mitre'],
     arity: ['0', '1', '2', '3', 'array', 'object'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'any'],
-    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any', 'this'],
+    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
 };
@@ -462,25 +464,25 @@ var menus = {
         },
         {
             label: 'string [string] character at [number:0]',
-            script: 'local.get("string", {{1}}[{{2}}]',
+            script: '{{1}}[{{2}}]',
             type: 'string',
             help: 'get the single character string at the given index of named string'
         },
         {
             label: 'string [string] length',
-            script: 'local.get("string", {{1}}.length',
+            script: '{{1}}.length',
             type: 'number',
             help: 'get the length of named string'
         },
         {
             label: 'string [string] indexOf [string]',
-            script: 'local.get("string", {{1}}.indexOf({{2}})',
+            script: '{{1}}.indexOf({{2}})',
             type: 'number',
             help: 'get the index of the substring within the named string'
         },
         {
             label: 'string [string] replace [string] with [string]',
-            script: 'local.get("string", {{1}}.replace({{2}}, {{3}})',
+            script: '{{1}}.replace({{2}}, {{3}})',
             type: 'string',
             help: 'get a new string by replacing a substring with a new string'
         },
@@ -515,13 +517,12 @@ var menus = {
         {
             label: 'ask [string:What\'s your name?] and wait',
             script: 'local.answer = prompt({{1}});',
+            returns: {
+                label: 'answer',
+                type: 'string',
+                script: 'local.answer'
+            },
             help: 'Prompt the user for information'
-        },
-        {
-            label: 'answer', 
-            'type': 'string', 
-            script: 'local.answer',
-            help: 'A block that is only valid after prompting the user for information'
         },
         {
             label: 'mouse x', 

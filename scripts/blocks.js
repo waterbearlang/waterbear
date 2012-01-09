@@ -100,6 +100,7 @@ $.fn.extend({
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
         if (this.is('.value')){desc['type'] = this.data('type')};
+        if (this.data('returns')){ desc.returns = this.data('returns')};
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -140,6 +141,7 @@ function Block(options, scope){
     
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
+        opts.slot = false; // can't have both slot and trigger
     }
     if (opts['type']){
         opts.slot = false; // values nest, but do not follow
@@ -252,6 +254,8 @@ function Block(options, scope){
             if ($.isPlainObject(value)){
                 var child = Block(value);
                 block.find('> .contained').eq(idx).append(child);
+                child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
+                child.trigger('add_to_script');
             }
         });
     }
@@ -259,6 +263,8 @@ function Block(options, scope){
         if ($.isPlainObject(opts.next)){
             var child = Block(opts.next);
             wrapper.find('> .next').append(child);
+            child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
+            child.trigger('add_to_script');
         }
     }
     // add update handlers
@@ -285,7 +291,7 @@ function getContained(s){
 
 function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
-    return '<span class="value string ' + listname + ' autosocket" data-type="string"><select>' + 
+    return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' + 
         list.map(function(item){
             if (item === default_opt){
                 return '<option selected>' + item + '</option>';
@@ -317,8 +323,8 @@ function Label(value){
     value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
-    // match selector [^\[\]:] should match any character except '[', ']', and ':'
-    value = value.replace(/\[([^\[\]\:]+):([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    // match selector [^\[\]] should match any character except '[', ']', and ':'
+    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
     value = value.replace('##', '');
     return value;

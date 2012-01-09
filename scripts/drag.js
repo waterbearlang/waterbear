@@ -91,6 +91,7 @@
             case 'float': return socket_targets2('any,number,float'); 
             case 'boolean': return socket_targets2('any,boolean');
             case 'string': return socket_targets2('any,string');
+            case 'shape': return socket_targets2('any,shape');
             case 'any': return socket_targets2('any');
             default: return $();
         }

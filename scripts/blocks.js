@@ -170,29 +170,33 @@ function Block(options, scope){
         });
     }
     if (opts.returns){
+        wrapper.data('returns', opts.returns);
         opts.returns.klass = opts.klass;
-        wrapper.bind('add_to_script', function(e){
-            // remove from DOM if already place elsewhere
-            var self = $(e.target);
-            if (self.data('returnBlock')){
-                self.data('returnBlock').detach();
-            }else{
-                self.data('returnBlock', Block(opts.returns));
-            }
-            var returnBlock = self.data('returnBlock');
-            if (! self.id()){
-                Block.nextId++;
-                self.id(Block.nextId);
-                returnBlock.id(Block.nextId);
-            }
-//             console.log('return block: %o', returnBlock);
-//             console.log('parent block: %o', self.parent_block());
-            self.parent_block().addLocalBlock(returnBlock);
-        });
-        wrapper.bind('delete_block add_to_workspace', function(e){
-            // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
-            returnBlock.detach();
-        });
+        if (opts.returns){
+            wrapper.bind('add_to_script', function(e){
+                // remove from DOM if already place elsewhere
+                var self = $(e.target),
+                    returns = self.data('returns');
+                if (!returns) return false;
+                if (self.data('returnBlock')){
+                    self.data('returnBlock').detach();
+                }else{
+                    self.data('returnBlock', Block(returns));
+                }
+                var returnBlock = self.data('returnBlock');
+                if (! self.id()){
+                    Block.nextId++;
+                    self.id(Block.nextId);
+                    returnBlock.id(Block.nextId);
+                }
+                self.parent_block().addLocalBlock(returnBlock);
+                return false;
+            });
+            wrapper.bind('delete_block add_to_workspace', function(e){
+                // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
+                returnBlock.detach();
+            });
+        }
     }
     if(opts.containers > 0){
         wrapper.addClass('containerBlock'); //This might not be necessary

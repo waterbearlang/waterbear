@@ -255,6 +255,9 @@ function load_scripts_from_object(blocks){
         var block = Block(value);
         workspace.append(block);
         block.css({position: 'relative', left: 0, top: 0, display: 'block'});
+        block.trigger('add_to_workspace');
+        $('.scripts_workspace').trigger('add');
+
     });
 }
 

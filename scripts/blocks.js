@@ -19,11 +19,14 @@ $.extend($.fn,{
   },
   id: function(_id){
     if (_id){
-        this.data('_id', _id);
-        if (this.data('script').indexOf('##') > -1){
-            this.data('script', this.data('script').replace('##', '_' + _id));
-            this.data('label', this.data('label').replace('##', '_' + _id));
-            this.find('> .block > .blockhead > .label').html('<span class="label">' + Label(this.data('label')) + '</span>');
+        if (!this.data('_id')){
+            this.data('_id', _id);
+            if (this.data('script').indexOf('##') > -1){
+                this.data('script', this.data('script').replace('##', '_' + _id));
+                this.data('label', this.data('label').replace('##', '_' + _id));
+                // console.log('wrapping "%s" with <label>', this.data('label'));
+                this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
+            }
         }
     }else{
         return this.data('_id');
@@ -147,6 +150,7 @@ function Block(options, scope){
         opts.slot = false; // values nest, but do not follow
         opts.flap = false;
     }
+    // console.log('wrapping "%s" with label, non-id path', opts.label);
     var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
     if (scope){
         wrapper.data('scope', scope);

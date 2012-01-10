@@ -56,9 +56,9 @@ jQuery.fn.extend({
                   var idx = parseInt(match.slice(2,-2), 10) - 1;
                   return blks[idx];
               }
-              console.log('child before: %s', script);
+              // console.log('child before: %s', script);
               script = script.replace(/\[\[\d\]\]/g, blksf);
-              console.log('child after: %s', script);   
+              // console.log('child after: %s', script);   
           }
           next = self.next_block().extract_script();
           if (script.indexOf('[[next]]') > -1){
@@ -329,7 +329,7 @@ var menus = {
         },
         {
             label: 'new array with array## [array]',
-            script: 'local.array## = {{2}}.slice();',
+            script: 'local.array## = {{1}}.slice();',
             help: 'create a new array with the contents of another array',
             returns: {
                 label: 'array##',

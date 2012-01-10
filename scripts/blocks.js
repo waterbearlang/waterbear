@@ -95,15 +95,19 @@ $.fn.extend({
         }
         var desc = {
             klass: this.data('klass'),
-            label: this.data('label'),
-            script: this.data('script'),
+            label: this.data('label').replace('##', this.id()),
+            script: this.data('script').replace('##', this.id()),
             subContainerLabels: this.data('subContainerLabels'),
             containers: this.data('containers')
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
         if (this.is('.value')){desc['type'] = this.data('type')};
-        if (this.data('returns')){ desc.returns = this.data('returns')};
+        if (this.data('returns')){ 
+            desc.returns = this.data('returns');
+            desc.returns.script = desc.returns.script.replace('##', this.id());
+            desc.returns.label = desc.returns.label.replace('##', this.id());
+        };
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -185,8 +189,10 @@ function Block(options, scope){
                     returns = self.data('returns');
                 if (!returns) return false;
                 if (self.data('returnBlock')){
+                    console.log('return block exists');
                     self.data('returnBlock').detach();
                 }else{
+                    console.log('return block created: %s', returns.label);
                     self.data('returnBlock', Block(returns));
                 }
                 var returnBlock = self.data('returnBlock');
@@ -196,14 +202,18 @@ function Block(options, scope){
                     returnBlock.id(Block.nextId);
                 }
                 self.parent_block().addLocalBlock(returnBlock);
+                //self.child_blocks().each(function(block){ block.trigger('add_to_script'); });
+                self.next_block().trigger('add_to_script');
                 return false;
             });
             wrapper.bind('delete_block add_to_workspace', function(e){
                 // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
-                var returnBlock = $(e.target).data('returnBlock');
+                var self = $(e.target),
+                    returnBlock = self.data('returnBlock');
                 if (returnBlock){
                     returnBlock.detach();
                 }
+                self.next_block().trigger('delete_block');
             });
         }
     }

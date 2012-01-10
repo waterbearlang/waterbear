@@ -200,7 +200,10 @@ function Block(options, scope){
             });
             wrapper.bind('delete_block add_to_workspace', function(e){
                 // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
-                returnBlock.detach();
+                var returnBlock = $(e.target).data('returnBlock');
+                if (returnBlock){
+                    returnBlock.detach();
+                }
             });
         }
     }

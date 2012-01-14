@@ -5,10 +5,10 @@
  *
  */
 
+
+// Pre-load dependencies
 yepnope({
     load: [ 'plugins/canvas.css',
-            'lib/raphael-1.3.1-min.js',
-            'lib/colorwheel.js',
             'lib/beautify.js',
             'lib/highlight.js',
             'lib/highlight-javascript.js',
@@ -17,6 +17,7 @@ yepnope({
     complete: setup
 });
 
+// Add some utilities
 jQuery.fn.extend({
   extract_script: function(){
       if (this.length === 0) return '';
@@ -42,14 +43,18 @@ jQuery.fn.extend({
                   // console.log('index: %d, expression: %s', idx, exprs[idx]);
                   return exprs[idx];
               };
+              //console.log('before: %s', script);
               script = script.replace(/\{\{\d\}\}/g, exprf);
+              //console.log('after: %s', script);
           }
           if (blks.length){
               function blksf(match, offset, s){
                   var idx = parseInt(match.slice(2,-2), 10) - 1;
                   return blks[idx];
               }
+              // console.log('child before: %s', script);
               script = script.replace(/\[\[\d\]\]/g, blksf);
+              // console.log('child after: %s', script);   
           }
           next = self.next_block().extract_script();
           if (script.indexOf('[[next]]') > -1){
@@ -82,22 +87,17 @@ function setup(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
     
 function showColorPicker(){
-    var self = $(this);
-    cw.input(this);
-    cw.onchange(function(){
-        var color = self.val();
-        self.css({color: color, 'background-color': color});
-    });
-    $('#color_popup').bPopup({modalColor: 'transparent'});
+    console.log('Add a non-Raphael color picker');
 }
-$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
+//$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
 $(document).ready(function(){
-
+//     window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
 });
 
 
 window.update_scripts_view = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+    //console.log('found %s scripts to view', blocks.length);
     var view = $('.workspace:visible .scripts_text_view');
     blocks.write_script(view);
 }
@@ -112,7 +112,6 @@ $('.run_scripts').click(run_scripts);
 // End UI section
 
 
-
 // expose these globally so the Block/Label methods can find them
 window.choice_lists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
@@ -124,7 +123,7 @@ window.choice_lists = {
     linejoin: ['round', 'bevel', 'mitre'],
     arity: ['0', '1', '2', '3', 'array', 'object'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'any'],
-    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any', 'this'],
+    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
 };
@@ -138,50 +137,55 @@ window.choice_lists = {
 var menus = {
     control: menu('Control', [
         {
-            label: 'when program runs', 
+            label: 'when program runs',
             trigger: true,
-            script: 'function _start(){[[next]]}_start();',
+            slot: false,
+            containers: 1,
+            script: 'function _start(){[[1]]}_start();',
             help: 'this trigger will run its scripts once when the program starts'
         },
         {
             label: 'when [choice:keys] key pressed', 
-            trigger: true, 
-            script: '$(document).bind("keydown", {{1}}, function(){[[next]]; return false;});',
+            trigger: true,
+            slot: false,
+            containers: 1,
+            script: '$(document).bind("keydown", {{1}}, function(){[[1]]; return false;});',
             help: 'this trigger will run the attached blocks every time this key is pressed'
         },
         {
             label: 'repeat [number:30] times a second',
             trigger: true,
-            script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[next]]},1000/{{1}})})();',
+            slot: false,
+            containers: 1,
+            locals: [
+                {
+                    label: 'count',
+                    script: 'local.count',
+                    type: 'number'
+                }
+            ],
+            script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[1]]},1000/{{1}})})();',
             help: 'this trigger will run the attached blocks periodically'
         },
         {
-            label: 'count',
-            script: 'local.count',
-            type: 'number',
-            help: 'this block can only be used within a repeat block to get the number of iterations'
-        },            
-        {
-            label: 'wait [number:1] secs', 
-            script: 'setTimeout(function(){[[next]]},1000*{{1}});',
+            label: 'wait [number:1] secs',
+            containers: 1,
+            script: 'setTimeout(function(){[[1]]},1000*{{1}});',
             help: 'pause before running the following blocks'
         },
         {
             label: 'repeat [number:10]', 
             containers: 1, 
             slot: false,
-            script: 'range({{1}}).forEach(function(idx, item){local.idx = idx; local.last_var = item;[[1]]});',
-            help: 'repeat the contained blocks so many times'
-        },
-        {
-            label: 'for index in range [number:0]',
-            script: 'for (var i = 0; i < {{1}}; i++){ local.idx = i; [[1]]; }',
-            containers: 1
-        },
-        {
-            label: 'index',
-            script: 'local.idx',
-            type: 'number'
+            script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
+            help: 'repeat the contained blocks so many times',
+            locals: [
+                {
+                    label: 'loop index',
+                    script: 'local.index',
+                    type: 'number'
+                }
+            ]
         },
         {
             label: 'broadcast [string:ack] message', 
@@ -190,8 +194,10 @@ var menus = {
         },
         {
             label: 'when I receive [string:ack] message', 
-            trigger: true, 
-            script: '$(".stage").bind({{1}}, function(){[[next]]});',
+            trigger: true,
+            slot: false,
+            containers: 1,
+            script: '$(".stage").bind({{1}}, function(){[[1]]});',
             help: 'add a listener for the given message, run these blocks when it is received'
         },
         {
@@ -218,141 +224,148 @@ var menus = {
             containers: 1, 
             script: 'while(!({{1}})){[[1]]}',
             help: 'repeat forever until condition is true'
-        },
-        {
-            label: 'current object',
-            script: 'local.last_var',
-            type: 'any',
-            help: 'use the last object created by another block'
         }
-    ], false),
+    ], true),
     array: menu('Arrays', [
         {
-            label: 'new array',
-            script: 'local.last_var = [];',
-            help: 'Create an empty array'
+            label: 'new array##',
+            script: 'local.array## = [];',
+            help: 'Create an empty array',
+            returns: {
+                label: 'array##',
+                script: 'local.array##',
+                type: 'array'
+            }
         },
         {
-            label: 'new array named [string]',
-            script: 'local.set("array", {{1}}, []);',
-            help: 'create an empty array accessed by name'
+            label: 'new array with array## [array]',
+            script: 'local.array## = {{1}}.slice();',
+            help: 'create a new array with the contents of another array',
+            returns: {
+                label: 'array##',
+                script: 'local.array##',
+                type: 'array'
+            }
         },
         {
-            label: 'new array named [string] with array [array]',
-            script: 'local.set("array", {{1}}, {{2}});',
-            help: 'create a new array with the contents of another array'
-        },
-        {
-            label: 'array named [string]',
-            script: 'local.get("array", {{1}})',
-            type: 'array',
-            help: 'retrieve a named array'
-        },
-        {
-            label: 'array [string] item [number:0]',
-            script: 'local.get("array", {{1}})[{{2}}]',
+            label: 'array [array] item [number:0]',
+            script: '{{1}}[{{2}}]',
             type: 'any',
-            help: 'get an item from an index in a named array'
+            help: 'get an item from an index in the array'
         },
         {
-            label: 'array [string] join with [string:, ]',
-            script: 'local.get("array", {{1}}).join({{2}})',
+            label: 'array [array] join with [string:, ]',
+            script: '{{1}}.join({{2}})',
             type: 'string',
-            help: 'join items of a named array into a string, each item separated by given string'
+            help: 'join items of an array into a string, each item separated by given string'
         },
         {
-            label: 'array [string] append [any]',
-            script: 'local.get("array", {{1}}).push({{2}});',
-            help: 'add any object to a named array'
+            label: 'array [array] append [any]',
+            script: '{{1}}.push({{2}});',
+            help: 'add any object to an array'
         },
         {
-            label: 'array append [any]',
-            script: 'local.last_var.push({{1}});',
-            help: 'add any object to the current array'
-        },
-        {
-            label: 'array [string] length',
-            script: 'local.get({{1}}).length',
+            label: 'array [array] length',
+            script: '{{1}}.length',
             type: 'number',
-            help: 'get the length of a named array'
+            help: 'get the length of an array'
         },
         {
-            label: 'array [string] remove item [number:0]',
-            script: 'local.get("array", {{1}}).splice({{1}}, 1)[0]',
+            label: 'array [array] remove item [number:0]',
+            script: '{{1}}.splice({{2}}, 1)[0]',
             type: 'any',
-            help: 'remove item at index from named array'
+            help: 'remove item at index from an array'
         },
         {
-            label: 'array [string] pop',
-            script: 'local.get("array", {{1}}).pop()',
+            label: 'array [array] pop',
+            script: '{{1}}.pop()',
             type: 'any',
-            help: 'remove and return the last item from a named array'
+            help: 'remove and return the last item from an array'
         },
         {
-            label: 'array [string] shift',
-            script: 'local.get("array", {{1}}).shift()',
+            label: 'array [array] shift',
+            script: '{{1}}.shift()',
             type: 'any',
-            help: 'remove and return the first item from a named array'
+            help: 'remove and return the first item from an array'
         },
         {   
-            label: 'array [string] reverse',
-            script: 'local.get("array", {{1}}).reverse()',
+            label: 'array [array] reversed',
+            script: '{{1}}.slice().reverse()',
             type: 'array',
-            help: 'reverse a named array in place'
+            help: 'reverse a copy of array'
         },
         {
-            label: 'array [string] concat [array]',
-            script: 'local.get("array", {{1}}).concat({{2}});',
+            label: 'array [array] concat [array]',
+            script: '{{1}}.concat({{2}});',
             type: 'array',
-            help: 'add all the items from one array to a named array'
+            help: 'a new array formed by joining the arrays'
         },
         {
-            label: 'array [string] for each',
-            script: '$.each(local.get("array", {{1}}), function(idx, item){local.index = idx; local.last_var = item; [[1]] });',
+            label: 'array [array] for each',
+            script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
             containers: 1,
+            locals: [
+                {
+                    label: 'index',
+                    script: 'local.index',
+                    help: 'index of current item in array',
+                    type: 'number'
+                },
+                {
+                    label: 'item',
+                    script: 'local.item',
+                    help: 'the current item in the iteration',
+                    type: 'any'
+                }
+            ],
             help: 'run the blocks with each item of a named array'
         }
     ], false),
     objects: menu('Objects', [
         {
-            label: 'new object',
-            script: 'local.last_var = {};',
+            label: 'new object##',
+            script: 'local.object## = {};',
+            returns: {
+                label: 'object##',
+                script: 'local.object##',
+                type: 'object'
+            },
             help: 'create a new, empty object'
         },
         {
-            label: 'new object named [string]',
-            script: 'local.set("object", {{1}}, {});',
-            help: 'create a new, empty, named object'
+            label: 'object [object] key [string] = value [any]',
+            script: '{{1}}[{{2}}] = {{3}};',
+            help: 'set the key/value of an object'
         },
         {
-            label: 'object key [string] = value [any]',
-            script: 'local.last_var[{{1}}] = {{2}};',
-            help: 'set the key/value of the current object'
-        },
-        {
-            label: 'object named [string] key [string] = value [any]',
-            script: 'local.get("object", {{1}})[{{2}}] = {{3}};',
-            help: 'set the key/value of a named object'
-        },
-        {
-            label: 'object value at key [string]',
-            script: 'local.last_var[{{1}}]',
+            label: 'object [object] value at key [string]',
+            script: '{{1}}[{{2}}]',
             type: 'any',
-            help: 'return the value of the key in the current object'
+            help: 'return the value of the key in an object'
         },
         {
-            label: 'object [string] value at key [string]',
-            script: 'local.get("object", {{1}})[{{2}}]',
-            type: 'any',
-            help: 'return the value of the key in the named object'
+            label: 'object [object] for each',
+            script: '$.each({{1}}, function(key, item){local.key = key; local.item = item; [[1]] });',
+            containers: 1,
+            locals: [
+                {
+                    label: 'key',
+                    script: 'local.key',
+                    help: 'key of current item in object',
+                    type: 'string'
+                },
+                {
+                    label: 'item',
+                    script: 'local.item',
+                    help: 'the current item in the iteration',
+                    type: 'any'
+                }
+            ],
+            help: 'run the blocks with each item of a named array'
+            
         }
     ], false),
     strings: menu('Strings', [
-        {
-            label: 'string named [string] = [string]',
-            script: 'local.set("string", {{1}}, {{2}});',
-            help: 'A named string with the given value'
-        },
         {
             label: 'string [string] split on [string]',
             script: '{{1}}.split({{2}})',
@@ -361,25 +374,25 @@ var menus = {
         },
         {
             label: 'string [string] character at [number:0]',
-            script: 'local.get("string", {{1}}[{{2}}]',
+            script: '{{1}}[{{2}}]',
             type: 'string',
             help: 'get the single character string at the given index of named string'
         },
         {
             label: 'string [string] length',
-            script: 'local.get("string", {{1}}.length',
+            script: '{{1}}.length',
             type: 'number',
             help: 'get the length of named string'
         },
         {
             label: 'string [string] indexOf [string]',
-            script: 'local.get("string", {{1}}.indexOf({{2}})',
+            script: '{{1}}.indexOf({{2}})',
             type: 'number',
             help: 'get the index of the substring within the named string'
         },
         {
             label: 'string [string] replace [string] with [string]',
-            script: 'local.get("string", {{1}}.replace({{2}}, {{3}})',
+            script: '{{1}}.replace({{2}}, {{3}})',
             type: 'string',
             help: 'get a new string by replacing a substring with a new string'
         },
@@ -414,13 +427,12 @@ var menus = {
         {
             label: 'ask [string:What\'s your name?] and wait',
             script: 'local.answer = prompt({{1}});',
+            returns: {
+                label: 'answer',
+                type: 'string',
+                script: 'local.answer'
+            },
             help: 'Prompt the user for information'
-        },
-        {
-            label: 'answer', 
-            'type': 'string', 
-            script: 'local.answer',
-            help: 'A block that is only valid after prompting the user for information'
         },
         {
             label: 'mouse x', 
@@ -656,52 +668,52 @@ var menus = {
         {
             label: 'with path',
             containers: 1,
-            script: 'local.ctx.beginPath();[[1]];local.ctx.closePath()',
+            script: 'local.ctx.beginPath();[[1]];local.ctx.closePath();',
             help: 'create a path, run the contained steps, close the path'
         },
         {
             label: 'stroke',
-            script: 'local.ctx.stroke()',
+            script: 'local.ctx.stroke();',
             help: 'stroke...'
         },
         {
             label: 'fill',
-            script: 'local.ctx.fill()',
+            script: 'local.ctx.fill();',
             help: 'fill...'
         },
         {
             label: 'clear rect x [number:0] y [number:0] width [number:10] height [number:10]', 
-            script: 'local.ctx.clearRect({{1}},{{2}},{{3}},{{4}})',
+            script: 'local.ctx.clearRect({{1}},{{2}},{{3}},{{4}});',
             help: 'clear...'
         },
         {
             label: 'fill rect x [number:0] y [number:0] width [number:10] height [number:10]', 
-            script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}})',
+            script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});',
             help: 'fill...'
         },
         {
             label: 'stroke rect x [number:0] y [number:0] width [number:10] height [number:10]', 
-            script: 'local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}}',
+            script: 'local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}};',
             help: 'stroke...'
         },
         {
             label: 'fill and stroke rect x [number:0] y [number:0] width [number:10] height [number:10]',
-            script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}})',
+            script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});',
             help: 'fill and stroke...'
         },
         {
             label: 'move to x [number:0] y [number:0]',
-            script: 'local.ctx.moveTo({{1}},{{2}})',
+            script: 'local.ctx.moveTo({{1}},{{2}});',
             help: 'move to...'
         },
         {
             label: 'line to x [number:0] y [number:0]',
-            script: 'local.ctx.lineTo({{1}},{{2}})',
+            script: 'local.ctx.lineTo({{1}},{{2}});',
             help: 'line to...'
         },
         {
             label: 'rect x [number:0] y [number:0] width [number:10] height [number:10]',
-            script: 'local.ctx.rect({{1}},{{2}},{{3}},{{4}})',
+            script: 'local.ctx.rect({{1}},{{2}},{{3}},{{4}});',
             help: 'rect...'
         },
         {
@@ -713,9 +725,7 @@ var menus = {
             label: 'stroke color [color:#000]',
             script: 'local.ctx.strokeStyle = {{1}};',
             help: 'stroke color...'
-        }
-    ]),
-    transform: menu('Transform', [
+        },
         {
             label: 'scale x [number:1.0] y [number:1.0]', 
             script: 'local.ctx.scale({{1}},{{2}});',
@@ -728,7 +738,7 @@ var menus = {
         },
         {
             label: 'translate by x [number:0] y [number:0]', 
-            script: 'local.ctx.translate({{1}},{{2}})',
+            script: 'local.ctx.translate({{1}},{{2}});',
             help: 'translate...'
         }
     ])

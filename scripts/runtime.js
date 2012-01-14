@@ -57,7 +57,8 @@ function Global(){
     this.timer = new Timer();
     this.subscribe_mouse_events();
     var stage = $('.stage');
-    this.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());
+    // move this to raphael plugin
+//    this.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());
     this.mouse_x = -1;
     this.mouse_y = -1;
     this.stage_width = stage.outerWidth();

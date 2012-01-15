@@ -1,5 +1,10 @@
 
-
+window.DEBUG = false;
+window.debug = function debug(){
+    if (window.DEBUG){
+        console.log.apply(console, arguments);
+    }
+}
 
 $.selected_block = function(){
     return $('.scripts_workspace .selected');
@@ -270,12 +275,19 @@ function Block(options, scope){
         wrapper.append('<span class="next"><i class="slot"></i></span>');
     }
     if (opts.sockets){
+        debug('sockets: %o', opts.sockets);
         $.each(opts.sockets, function(idx, value){
+            debug('trying to add a value to a socket');
             if ($.isPlainObject(value)){
+                debug('value is plain object');
                 var child = Block(value);
+                debug('new value block: %o', child);
+                debug('sockets found: %s', block.find('> .blockhead > .label > .socket').eq(idx).length);
                 block.find('> .blockhead > .label > .socket').eq(idx).empty().append(child);
             }else{ // presumably a string
-                var socket = block.find('> .blockhead > .label > .socket :input, > .blockhead > .label > .autosocket select').eq(idx);
+                debug('value is %s of type %s', value, typeof value);
+                var socket = block.find('> .blockhead > .label > .socket, > .blockhead > .label > .autosocket').eq(idx).find(':input, select');
+                debug('sockets found: %s', socket.length);
                 socket.val(value);
                 if (socket.attr('type') === 'color'){
                     socket.css({color: value, 'background-color': value});

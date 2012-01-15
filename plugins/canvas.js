@@ -176,7 +176,6 @@ var menus = {
         {
             label: 'repeat [number:10]', 
             containers: 1, 
-            slot: false,
             script: 'for (local.index## = 0; local.index## < {{1}}; local.index##++){[[1]]};',
             help: 'repeat the contained blocks so many times',
             locals: [

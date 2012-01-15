@@ -71,7 +71,7 @@ jQuery.fn.extend({
       // wrap the top-level script to prevent leaking into globals
       var script = this.pretty_script();
       var retval = 'var global = new Global();(function($){var local = new Local();try{local.canvas = $("<canvas width=\\"" + global.stage_width + "\\" height=\\"" + global.stage_height + "\\"></canvas>").appendTo(".stage");local.ctx = local.canvas[0].getContext("2d");' + script + '}catch(e){alert(e);}})(jQuery);';
-      console.log(retval);
+      //console.log(retval);
       return retval;
   },
   pretty_script: function(){
@@ -159,12 +159,12 @@ var menus = {
             containers: 1,
             locals: [
                 {
-                    label: 'count',
-                    script: 'local.count',
+                    label: 'count##',
+                    script: 'local.count##',
                     type: 'number'
                 }
             ],
-            script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[1]]},1000/{{1}})})();',
+            script: '(function(){var count## = 0; setInterval(function(){count##++; local.count## = count##;[[1]]},1000/{{1}})})();',
             help: 'this trigger will run the attached blocks periodically'
         },
         {
@@ -177,12 +177,12 @@ var menus = {
             label: 'repeat [number:10]', 
             containers: 1, 
             slot: false,
-            script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
+            script: 'for (local.index## = 0; local.index## < {{1}}; local.index##++){[[1]]};',
             help: 'repeat the contained blocks so many times',
             locals: [
                 {
-                    label: 'loop index',
-                    script: 'local.index',
+                    label: 'loop index##',
+                    script: 'local.index##',
                     type: 'number'
                 }
             ]
@@ -409,12 +409,12 @@ var menus = {
         },
         {
             label: 'alert [string]',
-            script: 'window.alert({{1}})',
+            script: 'window.alert({{1}});',
             help: 'pop up an alert window with string'
         },
         {
             label: 'console log [any]',
-            script: 'console.log({{1}})',
+            script: 'console.log({{1}});',
             help: 'Send any object as a message to the console'
         },
         {
@@ -484,7 +484,7 @@ var menus = {
         },
         {
             label: 'reset timer', 
-            script: 'global.timer.reset()',
+            script: 'global.timer.reset();',
             help: 'set the global timer back to zero'
         },
         {

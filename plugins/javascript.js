@@ -194,7 +194,7 @@ Local.prototype.getTweet = function(name, callback){
         },
         error: function(XHR, textStatus, errorThrown){
             callback(textStatus);
-            console.log('getTweet error %s: %s', textStatus, errorThrown);
+            // console.log('getTweet error %s: %s', textStatus, errorThrown);
         }
     });
 };

@@ -125,7 +125,8 @@ window.choice_lists = {
     types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'any'],
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
-    fontweight: ['normal', 'bold', 'inherit']
+    fontweight: ['normal', 'bold', 'inherit'],
+    globalCompositeOperators: ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor']
 };
 
 // Hints for building blocks
@@ -715,16 +716,74 @@ var menus = {
             script: 'local.ctx.rect({{1}},{{2}},{{3}},{{4}});',
             help: 'rect...'
         },
+        // Colour and Styles
+        {
+            label: 'stroke color [color:#000]',
+            script: 'local.ctx.strokeStyle = {{1}};',
+            help: 'stroke color...'
+        },
         {
             label: 'fill color [color:#000]',
             script: 'local.ctx.fillStyle = {{1}};',
             help: 'fill color...'
         },
         {
-            label: 'stroke color [color:#000]',
+            label: 'stroke gradient [gradient]',
             script: 'local.ctx.strokeStyle = {{1}};',
-            help: 'stroke color...'
+            help: 'replaces stroke color or stroke pattern with gradient'
         },
+        {
+            label: 'fill gradient [gradient]',
+            script: 'local.ctx.fillStyle = {{1}};',
+            help: 'replaces fill color or fill pattern with gradient'
+        },
+        {
+            label: 'stroke pattern [pattern]',
+            script: 'local.ctx.strokeStyle = {{1}};',
+            help: 'replaces stroke color or stroke gradient with pattern'
+        },
+        {
+            label: 'fill pattern [pattern]',
+            script: 'local.ctx.fillStyle = {{1}};',
+            help: 'replaces fill color or fill gradient with pattern'
+        },
+        {
+            label: 'create radial gradient from x1 [number:0] y1 [number:0] radius1 [number:0] to x2 [number:0] y2 [number:0] radius2 [number:0]',
+            script: 'local.gradient## = local.ctx.createRadialGradient({{1}},{{2}},{{3}},{{4}},{{5}},{{6}});',
+            help: 'create a radial gradient in the cone described by two circles',
+            returns: {
+                label: 'radial gradient##',
+                script: 'local.gradient##',
+                type: 'gradient'
+            }
+        },
+        {
+            label: 'create linear gradient from x1 [number:0] y1 [number:0] to x2 [number:0] y2 [number:0]',
+            script: 'local.gradient## = local.ctx.createLinearGradient({{1}},{{2}},{{3}},{{4}});',
+            help: 'create a linear gradient between two points',
+            returns: {
+                label: 'linear gradient##',
+                script: 'local.linear.gradient##',
+                type: 'gradient'
+            }
+        },
+        {
+            label: 'add color stop to gradient [gradient] at offset [number:0.5] with color [color:#F00]',
+            script: '{{1}}.addColorStop({{2}}, {{3}}',
+            help: 'creates an additional color stop, offset must be between 0.0 and 1.0',
+        },
+        // Compositing
+        {
+            label: 'global alpha [number:1.0]',
+            script: 'local.ctx.globalAlpha = {{1}};',
+            help: 'set the global alpha'
+        },
+        {
+            label: 'global composite operator [choice:globalCompositeOperators]',
+            script: 'local.ctx.globalCompositOperator = {{1}};',
+            help: 'set the global composite operator'
+        },
+        // Transforms
         {
             label: 'scale x [number:1.0] y [number:1.0]', 
             script: 'local.ctx.scale({{1}},{{2}});',
@@ -739,6 +798,16 @@ var menus = {
             label: 'translate by x [number:0] y [number:0]', 
             script: 'local.ctx.translate({{1}},{{2}});',
             help: 'translate...'
+        },
+        {
+            label: 'transform by 6-matrix [array]',
+            script: 'if ({{1}}.length !== 6){alert("Array must have 6 numbers"); return false;}local.ctx.transform.apply(local.ctx, {{1}});',
+            help: 'transform by an arbitrary matrix [a,b,c,d,e,f]'
+        },
+        {
+            label: 'set transform to 6-matrix [array]',
+            script: 'if ({{1}}.length !== 6){alert("Array must have 6 numbers"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});',
+            help: 'set transform to an arbitrary array [a,b,c,d,e,f]'
         }
     ])
 };

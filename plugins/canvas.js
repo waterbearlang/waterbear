@@ -119,6 +119,8 @@ window.choice_lists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown', 
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
+    unit: ['px', 'em', '%', 'pt'],
+    align: ['start', 'end', 'left', 'right', 'center'],
     linecap: ['round', 'butt', 'square'],
     linejoin: ['round', 'bevel', 'mitre'],
     arity: ['0', '1', '2', '3', 'array', 'object'],
@@ -126,7 +128,8 @@ window.choice_lists = {
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit'],
-    globalCompositeOperators: ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor']
+    globalCompositeOperators: ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'],
+    repetition: ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
 };
 
 // Hints for building blocks
@@ -666,12 +669,6 @@ var menus = {
             help: 'save the current state, run the contained steps, then restore the saved state'
         },
         {
-            label: 'with path',
-            containers: 1,
-            script: 'local.ctx.beginPath();[[1]];local.ctx.closePath();',
-            help: 'create a path, run the contained steps, close the path'
-        },
-        {
             label: 'stroke',
             script: 'local.ctx.stroke();',
             help: 'stroke...'
@@ -701,6 +698,13 @@ var menus = {
             script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});',
             help: 'fill and stroke...'
         },
+        // Path API
+        {
+            label: 'with path',
+            containers: 1,
+            script: 'local.ctx.beginPath();[[1]];local.ctx.closePath();',
+            help: 'create a path, run the contained steps, close the path'
+        },
         {
             label: 'move to x [number:0] y [number:0]',
             script: 'local.ctx.moveTo({{1}},{{2}});',
@@ -712,9 +716,40 @@ var menus = {
             help: 'line to...'
         },
         {
+            label: 'quadraditic curve to x [number:0] y [number:0] with control point x [number:0] y [number:0]',
+            script: 'local.ctx.quadraticCurveTo({{3}}, {{4}}, {{1}}, {{2}});',
+            help: 'quad curve to ...'
+        },
+        {
+            label: 'bezier curve to x [number:0] y [number:0] with control points x1 [number:0] y1 [number:0] and x2 [number:0] y2 [number:0]',
+            script: 'local.ctx.bezierCurveTo({{3}},{{4}},{{5}},{{6}},{{1}},{{2}});',
+            help: 'bezier curve to...'
+        },
+        {
+            label: 'arc to x1 [number:0] y1 [number:0] x2 [number:0] y2 [number:0] radius [number:1.0]',
+            script: 'local.ctx.arcTo({{1}},{{2}},{{3}},{{4}},{{5}});',
+            help: 'I wish I understood this well enough to explain it better'
+        },
+        {
+            label: 'arc with origin x [number:0] y [number:0] radius [number:1] start angle [number:0] deg, end angle [number:45] deg [boolean:true]',
+            script: 'local.ctx.arc({{1}},{{2}},{{3}},{{4}},{{5}});',
+            help: 'arc...'
+        },
+        {
             label: 'rect x [number:0] y [number:0] width [number:10] height [number:10]',
             script: 'local.ctx.rect({{1}},{{2}},{{3}},{{4}});',
             help: 'rect...'
+        },
+        {
+            label: 'clip',
+            script: 'local.ctx.clip();',
+            help: 'adds current path to the clip area'
+        },
+        {
+            label: 'is point x [number:0] y [number:0] in path?',
+            script: 'local.ctx.isPointInPath({{1}},{{2}})',
+            type: 'boolean',
+            help: 'test a point against the current path'
         },
         // Colour and Styles
         {
@@ -772,6 +807,45 @@ var menus = {
             script: '{{1}}.addColorStop({{2}}, {{3}}',
             help: 'creates an additional color stop, offset must be between 0.0 and 1.0',
         },
+        {
+            label: 'create pattern## from image [image] repeats [choice:repetition]',
+            script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+            help: 'create a pattern with the given html image',
+            returns: {
+                label: 'pattern##',
+                script: 'local.pattern##',
+                type: 'pattern'
+            }
+        },
+        {
+            label: 'create pattern## from canvas [canvas] repeats [choice:repetition]',
+            script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+            help: 'create a pattern with the given html canvas',
+            returns: {
+                label: 'pattern##',
+                script: 'local.pattern##',
+                type: 'pattern'
+            }
+        },
+        {
+            label: 'create pattern## from video [video] repeats [choice:repetion]',
+            script: 'local.pattern##',
+            help: 'create a pattern with the given html video',
+            returns: {
+                label: 'pattern##',
+                script: 'local.pattern##',
+                type: 'pattern'
+            }
+        },
+        // Text
+        {
+            label: 'font [number:10] [choice:unit] [string:sans-serif]',
+            script: 'local.ctx.font = {{1}}+{{2}}+" "+{{3}};',
+            help: 'set the current font'
+        },
+        {
+            label: 'text align [choice:align]',
+        },
         // Compositing
         {
             label: 'global alpha [number:1.0]',
@@ -808,6 +882,44 @@ var menus = {
             label: 'set transform to 6-matrix [array]',
             script: 'if ({{1}}.length !== 6){alert("Array must have 6 numbers"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});',
             help: 'set transform to an arbitrary array [a,b,c,d,e,f]'
+        },
+        // Line caps/joins
+        
+        {
+            label: 'line width [number:1]',
+            script: 'local.ctx.lineWidth = {{1}};',
+            help: 'set line width'
+        },
+        {
+            label: 'line cap [choice:linecap]',
+            script: 'local.ctx.lineCap = {{1}};',
+            help: 'set line cap'
+        },
+        {
+            label: 'line join [choice:linejoin]',
+            script: 'local.ctx.lineJoin = {{1}};',
+            help: 'set line join'
+        },
+        {
+            label: 'mitre limit [number:10]',
+            script: 'local.ctx.mitreLimit = {{1}};',
+            help: 'set mitre limit'
+        },
+        // Shadows
+        {
+            label: 'shadow offset x [number:0] y [number:0]',
+            script: 'local.ctx.shadowOffsetX = {{1}}; local.ctx.shadowOffsetY = {{2}}',
+            help: 'set the offsets for shadow'
+        },
+        {
+            label: 'shadow blur [number:0]',
+            script: 'local.ctx.shadowBlur = {{1}}',
+            help: 'set the shadow blur radius'
+        },
+        {
+            label: 'shadow color [color]',
+            script: 'local.ctx.shadowColor = {{1}}',
+            help: 'set the shadow color'
         }
     ])
 };

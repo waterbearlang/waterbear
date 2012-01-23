@@ -121,15 +121,16 @@ window.choice_lists = {
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
     unit: ['px', 'em', '%', 'pt'],
     align: ['start', 'end', 'left', 'right', 'center'],
+    baseline: ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'],
     linecap: ['round', 'butt', 'square'],
     linejoin: ['round', 'bevel', 'mitre'],
     arity: ['0', '1', '2', '3', 'array', 'object'],
-    types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'any'],
-    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'any'],
+    types: ['string', 'number', 'boolean', 'array', 'object', 'function','color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'any'],
+    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'color', 'image', 'shape', 'point', 'size', 'rect', 'image', 'gradient', 'pattern', 'imagedata','any'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit'],
     globalCompositeOperators: ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'],
-    repetition: ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
+    repetition: ['repeat', 'repeat-x', 'repeat-y', 'no-repeat']
 };
 
 // Hints for building blocks
@@ -227,7 +228,158 @@ var menus = {
             containers: 1, 
             script: 'while(!({{1}})){[[1]]}',
             help: 'repeat forever until condition is true'
-        }
+        },
+        {
+            label: 'variable string## [string]',
+            script: 'local.string## = {{1}};',
+            returns: {
+                label: 'string##',
+                script: 'local.string##',
+                type: 'string'
+            },
+            help: 'create a reference to re-use the string'
+        },
+        {
+            label: 'variable number## [number]',
+            script: 'local.number## = {{1}};',
+            returns: {
+                label: 'number##',
+                script: 'local.number##',
+                type: 'number'
+            },
+            help: 'create a reference to re-use the number'
+        },
+        {
+            label: 'variable boolean## [boolean]',
+            script: 'local.boolean## = {{1}};',
+            returns: {
+                label: 'boolean##',
+                script: 'local.boolean##',
+                type: 'boolean'
+            },
+            help: 'create a reference to re-use the boolean'
+        },
+        {
+            label: 'variable array## [array]',
+            script: 'local.array## = {{1}};',
+            returns: {
+                label: 'array##',
+                script: 'local.array## = {{1}}',
+                type: 'array'
+            },
+            help: 'create a reference to re-use the array'
+        },
+        {
+            label: 'variable object## [object]',
+            script: 'local.object## = {{1}};',
+            returns: {
+                label: 'object##',
+                script: 'local.object##',
+                type: 'object'
+            },
+            help: 'create a reference to re-use the object'
+        },
+        {
+            label: 'variable color## [color]',
+            script: 'local.color## = {{1}};',
+            returns: {
+                label: 'color##',
+                script: 'local.color##',
+                type: 'color'
+            },
+            help: 'create a reference to re-use the color'
+        },
+        {
+            label: 'variable image## [image]',
+            script: 'local.image## = {{1}};',
+            returns: {
+                label: 'image##',
+                script: 'local.image##',
+                type: 'image'
+            },
+            help: 'create a reference to re-use the image'
+        },
+        // 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'any'
+        {
+            label: 'variable shape## [shape]',
+            script: 'local.shape## = {{1}};',
+            returns: {
+                label: 'shape##',
+                script: 'local.shape##',
+                type: 'shape'
+            },
+            help: 'create a reference to re-use the shape'
+        },
+        {
+            label: 'variable point## [point]',
+            script: 'local.point## = {{1}};',
+            returns: {
+                label: 'point##',
+                script: 'local.point##',
+                type: 'point'
+            },
+            help: 'create a reference to re-use the point'
+        },
+        {
+            label: 'variable size## [size]',
+            script: 'local.size## = {{1}};',
+            returns: {
+                label: 'size##',
+                script: 'local.size##',
+                type: 'size'
+            },
+            help: 'create a reference to re-use the size'
+        },
+        {
+            label: 'variable rect## [rect]',
+            script: 'local.rect## = {{1}};',
+            returns: {
+                label: 'rect##',
+                script: 'local.rect##',
+                type: 'rect'
+            },
+            help: 'create a reference to re-use the rect'
+        },
+        {
+            label: 'variable gradient## [gradient]',
+            script: 'local.gradient## = {{1}};',
+            returns: {
+                label: 'gradient##',
+                script: 'local.gradient##',
+                type: 'gradient'
+            },
+            help: 'create a reference to re-use the gradient'
+        },
+        {
+            label: 'variable pattern## [pattern]',
+            script: 'local.pattern## = {{1}};',
+            returns: {
+                label: 'pattern##',
+                script: 'local.pattern##',
+                type: 'pattern'
+            },
+            help: 'create a reference to re-use the pattern'
+        },
+        {
+            label: 'variable imagedata## [imagedata]',
+            script: 'local.imagedata## = {{1}};',
+            returns: {
+                label: 'imagedata##',
+                script: 'local.imagedata##',
+                type: 'imagedata'
+            },
+            help: 'create a reference to re-use the imagedata'
+        },
+        {
+            label: 'variable any## [any]',
+            script: 'local.any## = {{1}};',
+            returns: {
+                label: 'any##',
+                script: 'local.any##',
+                type: 'any'
+            },
+            help: 'create a reference to re-use the any'
+        },
     ], true),
     array: menu('Arrays', [
         {
@@ -429,9 +581,9 @@ var menus = {
     sensing: menu('Sensing', [
         {
             label: 'ask [string:What\'s your name?] and wait',
-            script: 'local.answer = prompt({{1}});',
+            script: 'local.answer## = prompt({{1}});',
             returns: {
-                label: 'answer',
+                label: 'answer##',
                 type: 'string',
                 script: 'local.answer'
             },
@@ -679,23 +831,23 @@ var menus = {
             help: 'fill...'
         },
         {
-            label: 'clear rect x [number:0] y [number:0] width [number:10] height [number:10]', 
-            script: 'local.ctx.clearRect({{1}},{{2}},{{3}},{{4}});',
+            label: 'clear rect [rect]', 
+            script: 'local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             help: 'clear...'
         },
         {
-            label: 'fill rect x [number:0] y [number:0] width [number:10] height [number:10]', 
-            script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});',
+            label: 'fill rect [rect]', 
+            script: 'local.ctx.fillRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             help: 'fill...'
         },
         {
-            label: 'stroke rect x [number:0] y [number:0] width [number:10] height [number:10]', 
-            script: 'local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}};',
+            label: 'stroke rect [rect]', 
+            script: 'local.ctx.strokeRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             help: 'stroke...'
         },
         {
             label: 'fill and stroke rect x [number:0] y [number:0] width [number:10] height [number:10]',
-            script: 'local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});',
+            script: 'local.ctx.fillRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);local.ctx.strokeRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             help: 'fill and stroke...'
         },
         // Path API
@@ -706,38 +858,38 @@ var menus = {
             help: 'create a path, run the contained steps, close the path'
         },
         {
-            label: 'move to x [number:0] y [number:0]',
-            script: 'local.ctx.moveTo({{1}},{{2}});',
+            label: 'move to point [point]',
+            script: 'local.ctx.moveTo({{1}}.x,{{1}}.y);',
             help: 'move to...'
         },
         {
-            label: 'line to x [number:0] y [number:0]',
-            script: 'local.ctx.lineTo({{1}},{{2}});',
+            label: 'line to point [point]',
+            script: 'local.ctx.lineTo({{1}}.x,{{1}}.y);',
             help: 'line to...'
         },
         {
-            label: 'quadraditic curve to x [number:0] y [number:0] with control point x [number:0] y [number:0]',
-            script: 'local.ctx.quadraticCurveTo({{3}}, {{4}}, {{1}}, {{2}});',
+            label: 'quadraditic curve to point [point] with control point [point]',
+            script: 'local.ctx.quadraticCurveTo({{2}}.x, {{2}}.y, {{1}}.x, {{1}}.y);',
             help: 'quad curve to ...'
         },
         {
-            label: 'bezier curve to x [number:0] y [number:0] with control points x1 [number:0] y1 [number:0] and x2 [number:0] y2 [number:0]',
-            script: 'local.ctx.bezierCurveTo({{3}},{{4}},{{5}},{{6}},{{1}},{{2}});',
+            label: 'bezier curve to point [point] with control points [point] and [point]',
+            script: 'local.ctx.bezierCurveTo({{2}}.x,{{2}}.y,{{3}}.x,{{3}}.y,{{1}}.x,{{1}}.y);',
             help: 'bezier curve to...'
         },
         {
-            label: 'arc to x1 [number:0] y1 [number:0] x2 [number:0] y2 [number:0] radius [number:1.0]',
-            script: 'local.ctx.arcTo({{1}},{{2}},{{3}},{{4}},{{5}});',
+            label: 'arc to point1 [point] point1 [point] with radius [number:1.0]',
+            script: 'local.ctx.arcTo({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y,{{3}});',
             help: 'I wish I understood this well enough to explain it better'
         },
         {
-            label: 'arc with origin x [number:0] y [number:0] radius [number:1] start angle [number:0] deg, end angle [number:45] deg [boolean:true]',
-            script: 'local.ctx.arc({{1}},{{2}},{{3}},{{4}},{{5}});',
-            help: 'arc...'
+            label: 'arc with origin [point] radius [number:1] start angle [number:0] deg, end angle [number:45] deg [boolean:true]',
+            script: 'local.ctx.arc({{1}}.x,{{1}}.y,{{2}},deg2rad({{3}}),deg2rad({{4}}),{{5}});',
+            help: 'arc...'  
         },
         {
-            label: 'rect x [number:0] y [number:0] width [number:10] height [number:10]',
-            script: 'local.ctx.rect({{1}},{{2}},{{3}},{{4}});',
+            label: 'rect [rect]',
+            script: 'local.ctx.rect({{1}},{{1}},{{1}},{{1}});',
             help: 'rect...'
         },
         {
@@ -746,8 +898,8 @@ var menus = {
             help: 'adds current path to the clip area'
         },
         {
-            label: 'is point x [number:0] y [number:0] in path?',
-            script: 'local.ctx.isPointInPath({{1}},{{2}})',
+            label: 'is point [point] in path?',
+            script: 'local.ctx.isPointInPath({{1}}.x,{{1}}.y)',
             type: 'boolean',
             help: 'test a point against the current path'
         },
@@ -783,8 +935,8 @@ var menus = {
             help: 'replaces fill color or fill gradient with pattern'
         },
         {
-            label: 'create radial gradient from x1 [number:0] y1 [number:0] radius1 [number:0] to x2 [number:0] y2 [number:0] radius2 [number:0]',
-            script: 'local.gradient## = local.ctx.createRadialGradient({{1}},{{2}},{{3}},{{4}},{{5}},{{6}});',
+            label: 'create radial gradient from point1 [point] radius1 [number:0] to point2 [point] radius2 [number:0]',
+            script: 'local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});',
             help: 'create a radial gradient in the cone described by two circles',
             returns: {
                 label: 'radial gradient##',
@@ -793,8 +945,8 @@ var menus = {
             }
         },
         {
-            label: 'create linear gradient from x1 [number:0] y1 [number:0] to x2 [number:0] y2 [number:0]',
-            script: 'local.gradient## = local.ctx.createLinearGradient({{1}},{{2}},{{3}},{{4}});',
+            label: 'create linear gradient from point1 [point] to point2 [point]',
+            script: 'local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);',
             help: 'create a linear gradient between two points',
             returns: {
                 label: 'linear gradient##',
@@ -817,26 +969,26 @@ var menus = {
                 type: 'pattern'
             }
         },
-        {
-            label: 'create pattern## from canvas [canvas] repeats [choice:repetition]',
-            script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
-            help: 'create a pattern with the given html canvas',
-            returns: {
-                label: 'pattern##',
-                script: 'local.pattern##',
-                type: 'pattern'
-            }
-        },
-        {
-            label: 'create pattern## from video [video] repeats [choice:repetion]',
-            script: 'local.pattern##',
-            help: 'create a pattern with the given html video',
-            returns: {
-                label: 'pattern##',
-                script: 'local.pattern##',
-                type: 'pattern'
-            }
-        },
+//         {
+//             label: 'create pattern## from canvas [canvas] repeats [choice:repetition]',
+//             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+//             help: 'create a pattern with the given html canvas',
+//             returns: {
+//                 label: 'pattern##',
+//                 script: 'local.pattern##',
+//                 type: 'pattern'
+//             }
+//         },
+//         {
+//             label: 'create pattern## from video [video] repeats [choice:repetition]',
+//             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+//             help: 'create a pattern with the given html video',
+//             returns: {
+//                 label: 'pattern##',
+//                 script: 'local.pattern##',
+//                 type: 'pattern'
+//             }
+//         },
         // Text
         {
             label: 'font [number:10] [choice:unit] [string:sans-serif]',
@@ -845,6 +997,140 @@ var menus = {
         },
         {
             label: 'text align [choice:align]',
+            script: 'local.ctx.textAlign = {{1}};',
+            help: 'how should the text align?'
+        },
+        {
+            label: 'text baseline [choice:baseline]',
+            script: 'local.ctx.textBaseline = {{1}};',
+            help: 'set the text baseline'
+        },
+        {
+            label: 'fill text [string] x [number:0] y [number:0]',
+            script: 'local.ctx.fillText({{1}},{{2}},{{3}});',
+            help: 'basic text operation'
+        },
+        {
+            label: 'fill text [string] x [number:0] y [number:0] max width [number:10]',
+            script: 'local.ctx.fillText({{1}},{{2}},{{3}},{{4}});',
+            help: 'basic text operation with optional max width'
+        },
+        {
+            label: 'stroke text [string] x [number:0] y [number:0]',
+            script: 'local.ctx.strokeText({{1}},{{2}},{{3}});',
+            help: 'outline the text'
+        },
+        {
+            label: 'stroke text [string] x [number:0] y [number:0] max width [number:10]',
+            script: 'local.ctx.strokeText({{1}},{{2}},{{3}},{{4}});',
+            help: 'outline the text with optional max width'
+        },
+        {
+            label: 'text [string] width',
+            script: 'local.ctx.measureText({{1}}).width',
+            type: 'number'
+        },
+        // Drawing Images
+        {
+            label: 'draw image [image] at point [point]',
+            script: 'local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y',
+            help: 'draw the HTML &lt;img&gt; into the canvas without resizing'
+        },
+        {
+            label: 'draw image [image] in rect [rect]',
+            script: 'local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y,{{2}}.w,{{2}}.h);',
+            help: 'draw the HTML &lt;img&gt; into the canvas sized to the given dimension'
+        },
+        {
+            label: 'draw a rect [rect] from image [image] to rect [rect]',
+            script: 'local.ctx.drawImage({{2}},{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h,{{3}}.x,{{3}}.y,{{3}}.w,{{3}}.h);',
+            help: 'draw a rect extracted from image into a rect specified on the canvas'
+        },
+//         {
+//             label: 'draw canvas [canvas] x [number:0] y [number:0]',
+//             script: 'local.ctx.drawImage({{1}},{{2}},{{3}}',
+//             help: 'draw the HTML &lt;canvas&gt; into the canvas without resizing'
+//         },
+//         {
+//             label: 'draw canvas [canvas] x [number:0] y [number:0] width [number:10] height [number:10]',
+//             script: 'local.ctx.drawImage({{1}},{{2}},{{3}},{{4}},{{5}});',
+//             help: 'draw the HTML &lt;canvas&gt; into the canvas sized to the given dimension'
+//         },
+//         {
+//             label: 'draw a rect [rect] from canvas [canvas] to rect [rect]',
+//             script: 'local.ctx.drawImage({{2}},{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h,{{3}}.x,{{3}}.y,{{3}}.w,{{3}}.h);',
+//             help: 'draw a rect extracted from canvas into a rect specified on the canvas'
+//         },
+//         {
+//             label: 'draw video [video] x [number:0] y [number:0]',
+//             script: 'local.ctx.drawImage({{1}},{{2}},{{3}}',
+//             help: 'draw the HTML &lt;video&gt; into the canvas without resizing'
+//         },
+//         {
+//             label: 'draw video [video] x [number:0] y [number:0] width [number:10] height [number:10]',
+//             script: 'local.ctx.drawImage({{1}},{{2}},{{3}},{{4}},{{5}});',
+//             help: 'draw the HTML &lt;video&gt; into the canvas sized to the given dimension'
+//         },
+//         {
+//             label: 'draw a rect [rect] from video [video] to rect [rect]',
+//             script: 'local.ctx.drawImage({{2}},{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h,{{3}}.x,{{3}}.y,{{3}}.w,{{3}}.h);',
+//             help: 'draw a rect extracted from video into a rect specified on the canvas'
+//         },
+        // Pixel Manipulation
+        {
+            label: 'create ImageData## with size [size]',
+            script: 'local.imageData## = local.ctx.createImageData({{1}}.w,{{1}}.h);',
+            returns: {
+                label: 'imageData##',
+                script: 'local.imageData##',
+                type: 'imagedata'
+            },
+            help: 'initialize a new imageData with the specified dimensions'
+        },
+        {
+            label: 'createImageData## from imageData [imageData]',
+            script: 'local.imageData## = local.ctx.createImageData({{1}});',
+            returns: {
+                label: 'imageData##',
+                script: 'local.imageData##',
+                type: 'imagedata'
+            },
+            help: 'initialized a new imageData the same size as an existing imageData'
+        },
+        {
+            label: 'get imageData## for rect [rect]',
+            script: 'local.imageData## = local.ctx.getImageData({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
+            returns: {
+                label: 'imageData##',
+                script: 'local.imageData##',
+                type: 'imagedata'
+            },
+            help: 'returns the image data from the specified rectangle'
+        },
+        {
+            label: 'draw imageData [imagedata] at point [point]',
+            script: 'local.ctx.putImageData({{1}},{{2}}.x,{{2}}.y);',
+            help: 'draw the given image data into the canvas at the given coordinates'
+        },
+        {
+            label: 'draw a rect [rect] from imageData [imagedata] at point [point]',
+            script: 'local.ctx.putImageData({{2}},{{3}}.x,{{3}}.y,{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
+            help: 'draw the given image data into the canvas from the given rect to the given position'
+        },
+        {
+            label: 'imageData [imagedata] width',
+            script: '{{1}}.width',
+            type: 'number'
+        },
+        {
+            label: 'imageData [imagedata] height',
+            script: '{{1}}.height',
+            type: 'number'
+        },
+        {
+            label: 'imageData [imagedata] as array',
+            script: '{{1}}.data',
+            type: 'array'
         },
         // Compositing
         {
@@ -920,6 +1206,135 @@ var menus = {
             label: 'shadow color [color]',
             script: 'local.ctx.shadowColor = {{1}}',
             help: 'set the shadow color'
+        },
+    ]),
+    point: menu('Point', [
+        {
+            label: 'point at x [number:0] y [number:0]',
+            script: '{x: {{1}}, y: {{2}}',
+            type: 'point'
+        },
+        {
+            label: 'point from array [array]',
+            script: '{x: {{1}}[0], y: {{1}}[1]}',
+            type: 'point'
+        },
+        {
+            label: 'point [point] x',
+            script: '{{1}}.x',
+            type: 'number'
+        },
+        {
+            label: 'point [point] y',
+            script: '{{1}}.y',
+            type: 'number'
+        },
+        {
+            label: 'point [point] as array',
+            script: '[{{1}}.x, {{1}}.y]',
+            type: 'array'
+        },
+    ]),
+    size: menu('Size', [
+        {
+            label: 'size with width [number:10] height [number:10]',
+            script: '{w: {{1}}, h: {{1}}',
+            type: 'size'
+        },
+        {
+            label: 'size from array [array]',
+            script: '{w: {{1}}[0], h: {{1}}[1]',
+            type: 'size'
+        },
+        {
+            label: 'size [size] width',
+            script: '{{1}}.w',
+            type: 'number'
+        },
+        {
+            label: 'size [size] height',
+            script: '{{1}}.h',
+            type: 'number'
+        },
+        {
+            label: 'size [size] as array',
+            script: '[{{1}}.w, {{1}}.h]',
+            type: 'array'
+        },
+    ]),
+    rect: menu('Rect', [
+        {
+            label: 'rect at x [number:0] y [number:0] with width [number:10] height [number:10]',
+            script: '{x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}} }',
+            type: 'rect'
+        },
+        {
+            label: 'rect at point [point] with size [size]',
+            script: '{x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h}',
+            type: 'rect'
+        },
+        {
+            label: 'rect from array [array]',
+            script: '{x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] };',
+            type: 'rect'
+        },
+        {
+            label: 'rect [rect] position',
+            script: '{x: {{1}}.x, y: {{1}}.y}',
+            type: 'point'
+        },
+        {
+            label: 'rect [rect] size',
+            script: '{w: {{1}}.w, h: {{1}}.h}',
+            type: 'size'
+        },
+        {
+            label: 'rect [rect] as array',
+            script: '[{{1}}.x, {{1}}.y, {{1}}.w, {{1}}.h]',
+            type: 'array'
+        },
+        {
+            label: 'rect [rect] x',
+            script: '{{1}}.x',
+            type: 'number'
+        },
+        {
+            label: 'rect [rect] y',
+            script: '{{1}}.y',
+            type: 'number'
+        },
+        {
+            label: 'rect [rect] width',
+            script: '{{1}}.w',
+            type: 'number'
+        },
+        {
+            label: 'rect [rect] height',
+            script: '{{1}}.h',
+            type: 'number'
+        },
+    ]),
+    image: menu('Image', [
+        // TODO: Change this to a container : when loaded, that fires on image load
+        {
+            label: 'image from url [string]',
+            script: '(function(){var img = new Image(); img.src="{{1}}";return img;})()',
+            type: 'image'
+        },
+        {
+            label: 'image [image] width',
+            script: '{{1}}.width',
+            type: 'number'
+        },
+        {
+            label: 'image [image] height',
+            script: '{{1}}.height',
+            type: 'number'
+        },
+        {
+            label: 'image [image] url',
+            script: '{{1}}.width',
+            type: 'string'
         }
     ])
 };

@@ -836,6 +836,21 @@ var menus = {
             help: 'clear...'
         },
         {
+            label: 'fill circle at point [point] with radius [number:10]',
+            script: 'local.ctx.beginPath();local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);local.ctx.closePath();ctx.fill();',
+            help: 'circle...'
+        },
+        {
+            label: 'stroke circle at point [point] with radius [number:10]',
+            script: 'local.ctx.beginPath();local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);local.ctx.closePath();ctx.stroke();',
+            help: 'circle...'
+        },
+        {
+            label: 'stroke and fill circle at point [point] with radius [number:10]',
+            script: 'local.ctx.beginPath();local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);local.ctx.closePath();ctx.fill();ctx.stroke()',
+            help: 'circle...'
+        },
+        {
             label: 'fill rect [rect]', 
             script: 'local.ctx.fillRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             help: 'fill...'
@@ -891,6 +906,11 @@ var menus = {
             label: 'rect [rect]',
             script: 'local.ctx.rect({{1}},{{1}},{{1}},{{1}});',
             help: 'rect...'
+        },
+        {
+            label: 'circle at point [point] with radius [number:10]',
+            script: 'local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);',
+            help: 'circle...'
         },
         {
             label: 'clip',

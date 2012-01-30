@@ -1,10 +1,7 @@
 /* block and border colours for different groups of blocks */
 
-.motion{ border-color: hsl(225,65%,83%); }
-.motion > .block{ background-color: hsl(225, 65%, 93%); }
-
-.looks{ border-color: hsl(264,62%,79%); }
-.looks > .block{ background-color: hsl(264,62%,89%); }
+.control{ border-color: hsl(44, 81%, 49%); }
+.control > .block{ background-color: hsl(44, 81%, 85%); }
 
 .arrays{ border-color: hsl(195, 65%, 79%); }
 .arrays > .block{ background-color: hsl(195, 62%, 89%); }
@@ -12,23 +9,8 @@
 .objects{ border-color: hsl(75, 90%, 66%); }
 .objects > .block { background-color: hsl(75, 90%, 76%); }
 
-.functions{ border-color: hsl(300, 90%, 66%); }
-.functions > .block {background-color: hsl(300, 90%, 76%); }
-
 .strings{ border-color: hsl(240, 65%, 83%); }
 .strings > .block {background-color: hsl(240, 65%, 93%); }
-
-.functions{ border-color: hsl(25, 100%, 63%); }
-.functions > .block { background-color: hsl(25, 100%, 83%); }
-
-.transform{ border-color: hsl(296, 65%, 57%); }
-.transform > .block{ background-color: hsl(296, 65%, 77%); }
-
-.sketchy{ border-color: hsl(15,100%,63%); }
-.sketchy > .block{ background-color: hsl(15,100%,83%); }
-
-.control{ border-color: hsl(44, 81%, 49%); }
-.control > .block{ background-color: hsl(44, 81%, 85%); }
 
 .sensing{ border-color: hsl(200,98%,56%); }
 .sensing > .block{ background-color: hsl(200,98%,76%); }
@@ -39,11 +21,31 @@
 .canvas{ border-color: #e66a22; }
 .canvas > .block{ background-color: #e66a22; }
 
-.animation{ border-color: hsl(150, 65%, 79%); }
-.animation > .block {background-color: hsl(150, 62%, 89%); }
+.point{ border-color: hsl(90, 65%, 79%); }
+.point > .block {background-color: hsl(90, 62%, 89%); }
 
-.twitter{ border-color: hsl(90, 65%, 79%); }
-.twitter > .block {background-color: hsl(90, 62%, 89%); }
+.size{ border-color: hsl(15,100%,63%); }
+.size > .block{ background-color: hsl(15,100%,83%); }
+
+.rect{ border-color: hsl(150, 65%, 79%); }
+.rect > .block {background-color: hsl(150, 62%, 89%); }
+
+.image{ border-color: hsl(296, 65%, 57%); }
+.image > .block{ background-color: hsl(296, 65%, 77%); }
+
+.gradient{ border-color: hsl(225,65%,83%); }
+.gradient > .block{ background-color: hsl(225, 65%, 93%); }
+
+.pattern{ border-color: hsl(25, 100%, 63%); }
+.pattern > .block { background-color: hsl(25, 100%, 83%); }
+
+/* 
+.looks{ border-color: hsl(264,62%,79%); }
+.looks > .block{ background-color: hsl(264,62%,89%); }
+
+.functions{ border-color: hsl(300, 90%, 66%); }
+.functions > .block {background-color: hsl(300, 90%, 76%); }
+ */
 
 /* Border colours for type values and sockets */
 
@@ -51,5 +53,4 @@
 .number{ border-color: blue; }
 .color{ border-color: yellow; }
 .string{ border-color: green; }
-/*.string input{ min-width: 10em; }*/
 .any{ border-color: gray; }

@@ -22,8 +22,9 @@ $.extend($.fn,{
         if (!this.data('_id')){
             this.data('_id', _id);
             if (this.data('script').indexOf('##') > -1){
-                this.data('script', this.data('script').replace('##', '_' + _id));
-                this.data('label', this.data('label').replace('##', '_' + _id));
+                var patt = new RegExp('##','gm');
+                this.data('script', this.data('script').replace(patt, '_' + _id));
+                this.data('label', this.data('label').replace(patt, '_' + _id));
                 // console.log('wrapping "%s" with <label>', this.data('label'));
                 this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
             }
@@ -93,20 +94,23 @@ $.fn.extend({
         if (this.is(':input')){
             return this.val();
         }
+        var patt = new RegExp('##','gm');
+        
         var desc = {
             klass: this.data('klass'),
-            label: this.data('label').replace('##', this.id()),
-            script: this.data('script').replace('##', this.id()),
+            label: this.data('label').replace(patt, this.id()),
+            script: this.data('script').replace(patt, this.id()),
             subContainerLabels: this.data('subContainerLabels'),
             containers: this.data('containers')
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
         if (this.is('.value')){desc['type'] = this.data('type')};
+        
         if (this.data('returns')){ 
             desc.returns = this.data('returns');
-            desc.returns.script = desc.returns.script.replace('##', this.id());
-            desc.returns.label = desc.returns.label.replace('##', this.id());
+            desc.returns.script = desc.returns.script.replace(patt, this.id());
+            desc.returns.label = desc.returns.label.replace(patt, this.id());
         };
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
@@ -343,7 +347,8 @@ function Label(value){
     // match selector [^\[\]] should match any character except '[', ']', and ':'
     value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
-    value = value.replace('##', '');
+    var patt = new RegExp('##','gm');
+    value = value.replace(patt, '');
     return value;
 }
 

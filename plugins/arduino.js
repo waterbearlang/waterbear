@@ -14,6 +14,7 @@ window.choice_lists = {
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),*/
     highlow: ['HIGH', 'LOW'],
     inoutput: ['INPUT', 'OUTPUT'],
+    onoff: ['ON', 'OFF'],
     logic: ['true', 'false'],
     digitalpins: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,'A0','A1','A2','A3','A4','A5'],
     analoginpins: ['A0','A1','A2','A3','A4','A5'],
@@ -37,7 +38,7 @@ window.update_scripts_view = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     var view = $('.workspace:visible .scripts_text_view');
     blocks.write_script(view);
-}
+};
 
 function run_scripts(event){
     $('.stage')[0].scrollIntoView();
@@ -236,59 +237,81 @@ var menus = {
         
     ]),
     
-    io: menu('IO', [
+    io: menu('Electronic Interface', [
         {
-            label: 'Digital Pin [choice:digitalpins]', 
-            'type': 'int', 
-            script: ' {{1}} ',
-            help: 'int value of a given pin'
+            label: 'Create digital_output## on Pin [choice:digitalpins]', 
+            script: 'digital_output## = "{{1}}"; pinMode(digital_output##, OUTPUT);',
+            help: 'Create a named pin set to output',
+            returns: {
+                label: 'digital_output##',
+                script: 'digital_output##',
+                type: 'string'
+            }
         },
+        /*
         {
-            label: 'Set digital pin  [string:0] to [choice:inoutput]', 
-            script: 'pinMode({{1}}, {{2}});',
-            help: 'set given pin mode'
-        },
-        {
-          	label: 'Input from digital pin [string:0]', 
-            'type': 'boolean', 
-            script: '(digitalRead({{1}}) == HIGH)',
-            help: 'boolean value of digital pin'
-        },
-        {
-          	label: 'Digital Pin [string:0] outputs [choice:highlow]', 
+          	label: 'Set Digital Pin [string] [choice:highlow]', 
           	script: 'digitalWrite({{1}}, {{2}});',
           	help: 'Write a value to given pin'
         },
+        */
         {
-          	label: 'Digital Pin [string:0] output high [boolean]', 
+          	label: 'Digital Pin [string] ON if [boolean]', 
           	script: 'if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n',
-          	help: 'Write a value to given pin'
+          	help: 'Write a boolean value to given pin'
         },
+        
         {
-            label: 'Set analog reference [choice:analogrefs]', 
-            script: 'analogReference({{1}});',
-            help: 'What should analog valuse be compared to'
+            label: 'Create digital_input## on Pin [choice:digitalpins]', 
+            script: 'digital_input## = "{{1}}"; pinMode(digital_input##, INPUT);',
+            help: 'Create a named pin set to input',
+            returns: {
+                label: 'digital_input##',
+                script: 'digital_input##',
+                type: 'string'
+            }
         },
+        
         {
-            label: 'Analog Pin [choice:analoginpins]', 
-            'type': 'string', 
-            script: ' {{1}} ',
-            help: 'Names of analog pins'
+            label: 'Digital Pin [string]', 
+            //label: 'Is Pin [string] HIGH', 
+            'type': 'boolean', 
+            script: '(digitalRead({{1}}) == HIGH)',
+            help: 'Is the digital input pin ON'
         },
+        
+        
         {
-          	label: 'Analog Input [string:0]', 
+            label: 'Create analog_input## on Pin [choice:analoginpins]', 
+            script: 'analog_input## = "{{1}}"; pinMode(analog_input##, INPUT);',
+            help: 'Create a named pin set to input',
+            returns: {
+                label: 'analog_input##',
+                script: 'analog_input##',
+                type: 'string'
+            }
+        },
+        
+        {
+            label: 'Analog Pin [string]', 
             'type': 'int', 
             script: '(analogRead({{1}}))',
-            help: 'Get the value of an analog pin'
+            help: 'Value of analog pin'
         },
+        
         {
-            label: 'PWM Pin [choice:pwmpins]', 
-            'type': 'int', 
-            script: ' {{1}} ',
-            help: 'Names of pwm pins'
+            label: 'Create analog_output## on Pin [choice:pwmpins]', 
+            script: 'analog_output## = "{{1}}"; pinMode(analog_output##, OUTPUT);',
+            help: 'Create a named pin set to output',
+            returns: {
+                label: 'analog_output##',
+                script: 'analog_output##',
+                type: 'string'
+            }
         },
+        
         {
-          	label: 'PWM [string:0] outputs [int:255]', 
+          	label: 'Analog [string] outputs [int:255]', 
           	script: 'analogWrite({{1}}, {{2}});',
           	help: 'Set value of a pwm pin'
         }

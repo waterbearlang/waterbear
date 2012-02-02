@@ -1,5 +1,10 @@
 
-
+window.DEBUG = false;
+window.debug = function debug(){
+    if (window.DEBUG){
+        console.log.apply(console, arguments);
+    }
+}
 
 $.selected_block = function(){
     return $('.scripts_workspace .selected');
@@ -21,11 +26,9 @@ $.extend($.fn,{
     if (_id){
         if (!this.data('_id')){
             this.data('_id', _id);
-            if (this.data('script').indexOf('##') > -1){
-                var patt = new RegExp('##','gm');
-                this.data('script', this.data('script').replace(patt, '_' + _id));
-                this.data('label', this.data('label').replace(patt, '_' + _id));
-                // console.log('wrapping "%s" with <label>', this.data('label'));
+            if (this.data('script') && this.data('script').indexOf('##') > -1){
+                this.data('script', this.data('script').replace(/##/gm, '_' + _id));
+                this.data('label', this.data('label').replace(/##/gm, '_' + _id));
                 this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
             }
         }
@@ -57,7 +60,7 @@ $.extend($.fn,{
       return this.find('> .block > .blockhead > .label').children('.socket, .autosocket').children('input, select, .wrapper');
   },
   local_blocks: function(){
-    return this.find('> .block > .locals > .wrapper');
+    return this.find('> .block > .blockhead .locals .wrapper');
   },
   next_block: function(){
       return this.find('> .next > .wrapper');
@@ -98,20 +101,27 @@ $.fn.extend({
         
         var desc = {
             klass: this.data('klass'),
-            label: this.data('label').replace(patt, this.id()),
-            script: this.data('script').replace(patt, this.id()),
+            label: this.data('label').replace(/##/gm, '_' + this.id()),
+            script: this.data('script').replace(/##/gm, '_' + this.id()),
             subContainerLabels: this.data('subContainerLabels'),
             containers: this.data('containers')
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
         if (this.is('.value')){desc['type'] = this.data('type')};
-        
+        if (this.data('locals')){
+            var self = this;
+            desc.locals = this.data('locals');
+            desc.locals.forEach(function(local){
+                local.script = local.script.replace(/##/g, '_' + self.id());
+                local.label = local.label.replace(/##/g, '_' + self.id());
+            });
+        }
         if (this.data('returns')){ 
             desc.returns = this.data('returns');
-            desc.returns.script = desc.returns.script.replace(patt, this.id());
-            desc.returns.label = desc.returns.label.replace(patt, this.id());
-        };
+            desc.returns.script = desc.returns.script.replace(/##/g, '_' + this.id());
+            desc.returns.label = desc.returns.label.replace(/##/g, '_' + this.id());
+        }
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -165,6 +175,14 @@ function Block(options, scope){
     }
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
+    wrapper.data('returns', opts.returns);
+    wrapper.data('script', opts.script);
+    wrapper.data('locals', opts.locals);
+    wrapper.data('type', opts['type']);
+    wrapper.data('containers', opts.containers);
+    if(opts.containers > 1){
+        wrapper.data('subContainerLabels', opts['subContainerLabels']);
+    }
     var block = wrapper.children();
     block.find('.socket').addSocketHelp();
     if (opts['help']){
@@ -173,7 +191,6 @@ function Block(options, scope){
     if (opts['type']){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
-        wrapper.data('type', opts['type']);
     }
     if (opts.locals.length){
         $.each(opts.locals, function(idx, value){
@@ -182,50 +199,57 @@ function Block(options, scope){
                 wrapper.addLocalBlock(Block(value, wrapper));
             }
         });
+        wrapper.bind('add_to_script, add_to_workspace', function(e){
+            var self = $(e.target),
+                locals = self.data('locals');
+            if (!(locals && locals.length)) return false;
+            if (! self.id()){
+                Block.nextId++;
+                self.id(Block.nextId);
+                self.local_blocks().each(function(idx, local){
+                    $(local).id(Block.nextId); 
+                });
+            }
+            return false;
+        });
     }
     if (opts.returns){
-        wrapper.data('returns', opts.returns);
         opts.returns.klass = opts.klass;
-        if (opts.returns){
-            wrapper.bind('add_to_script', function(e){
-                // remove from DOM if already place elsewhere
-                var self = $(e.target),
-                    returns = self.data('returns');
-                if (!returns) return false;
-                if (self.data('returnBlock')){
-                    console.log('return block exists');
-                    self.data('returnBlock').detach();
-                }else{
-                    console.log('return block created: %s', returns.label);
-                    self.data('returnBlock', Block(returns));
-                }
-                var returnBlock = self.data('returnBlock');
-                if (! self.id()){
-                    Block.nextId++;
-                    self.id(Block.nextId);
-                    returnBlock.id(Block.nextId);
-                }
-                self.parent_block().addLocalBlock(returnBlock);
-                //self.child_blocks().each(function(block){ block.trigger('add_to_script'); });
-                self.next_block().trigger('add_to_script');
-                return false;
-            });
-            wrapper.bind('delete_block add_to_workspace', function(e){
-                // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
-                var self = $(e.target),
-                    returnBlock = self.data('returnBlock');
-                if (returnBlock){
-                    returnBlock.detach();
-                }
-                self.next_block().trigger('delete_block');
-            });
-        }
+        wrapper.bind('add_to_script', function(e){
+            // remove from DOM if already place elsewhere
+            var self = $(e.target),
+                returns = self.data('returns');
+            if (!returns) return false;
+            if (self.data('returnBlock')){
+                // console.log('return block exists');
+                self.data('returnBlock').detach();
+            }else{
+                // console.log('return block created: %s', returns.label);
+                self.data('returnBlock', Block(returns));
+            }
+            var returnBlock = self.data('returnBlock');
+            if (! self.id()){
+                Block.nextId++;
+                self.id(Block.nextId);
+                returnBlock.id(Block.nextId);
+            }
+            self.parent_block().addLocalBlock(returnBlock);
+            //self.child_blocks().each(function(block){ block.trigger('add_to_script'); });
+            self.next_block().trigger('add_to_script');
+            return false;
+        });
+        wrapper.bind('delete_block add_to_workspace', function(e){
+            // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
+            var self = $(e.target),
+                returnBlock = self.data('returnBlock');
+            if (returnBlock){
+                returnBlock.detach();
+            }
+            self.next_block().trigger('delete_block');
+        });
     }
     if(opts.containers > 0){
         wrapper.addClass('containerBlock'); //This might not be necessary
-    }
-    if(opts.containers > 1){
-        wrapper.data('subContainerLabels', opts['subContainerLabels']);
     }
     for(i=0; i<opts.containers; i++){
         ContainerLabel='';
@@ -249,20 +273,23 @@ function Block(options, scope){
         wrapper.data('type', 'step');
     }
     
-    wrapper.data('containers', opts.containers);
     if (opts.slot){
         wrapper.append('<span class="next"><i class="slot"></i></span>');
     }
-    if (opts.script){
-        wrapper.data('script', opts.script);
-    }
     if (opts.sockets){
+        debug('sockets: %o', opts.sockets);
         $.each(opts.sockets, function(idx, value){
+            debug('trying to add a value to a socket');
             if ($.isPlainObject(value)){
+                debug('value is plain object');
                 var child = Block(value);
+                debug('new value block: %o', child);
+                debug('sockets found: %s', block.find('> .blockhead > .label > .socket').eq(idx).length);
                 block.find('> .blockhead > .label > .socket').eq(idx).empty().append(child);
             }else{ // presumably a string
-                var socket = block.find('> .blockhead > .label > .socket :input, > .blockhead > .label > .autosocket select').eq(idx);
+                debug('value is %s of type %s', value, typeof value);
+                var socket = block.find('> .blockhead > .label > .socket, > .blockhead > .label > .autosocket').eq(idx).find(':input, select');
+                debug('sockets found: %s', socket.length);
                 socket.val(value);
                 if (socket.attr('type') === 'color'){
                     socket.css({color: value, 'background-color': value});
@@ -340,15 +367,14 @@ function Label(value){
     // etc…
     
     // FIXME: Move specific type handling to raphael_demo.js
-    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
-    value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+    value = value.replace(/\[boolean:(true|false)\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
+    value = value.replace(/\[boolean\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/gm, choice_func);
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/gm, choice_func);
     // match selector [^\[\]] should match any character except '[', ']', and ':'
-    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
-    value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
-    var patt = new RegExp('##','gm');
-    value = value.replace(patt, '');
+    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    value = value.replace(/\[([^\[\]:]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
+    value = value.replace(/##/gm, '');
     return value;
 }
 

@@ -6,8 +6,8 @@
 .timing{ border-color: hsl(264,62%,79%); }
 .timing > .block{ background-color: hsl(264,62%,89%); }
 
-.io{ border-color: hsl(296, 65%, 57%); }
-.io > .block{ background-color: hsl(296, 65%, 77%); }
+.interface{ border-color: hsl(296, 65%, 57%); }
+.interface > .block{ background-color: hsl(296, 65%, 77%); }
 
 .variables{ border-color: hsl(15,100%,63%); }
 .variables > .block{ background-color: hsl(15,100%,83%); }

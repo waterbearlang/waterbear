@@ -82,18 +82,10 @@
         switch(drag_target.block_type()){
             case 'step': return step_targets();
             case 'container': return step_targets();
-            case 'number': return socket_targets2('any,number');
-            case 'array': return socket_targets2('any,array');
-            case 'object': return socket_targets2('any,object');
-            case 'function': return socket_targets2('any,function');
-            case 'color': return socket_targets2('any,color');
-            case 'int': return socket_targets2('any,number,int'); 
-            case 'float': return socket_targets2('any,number,float'); 
-            case 'boolean': return socket_targets2('any,boolean');
-            case 'string': return socket_targets2('any,string');
-            case 'shape': return socket_targets2('any,shape');
+            case 'int': 
+            case 'float': return socket_targets2(['any', 'number', drag_target.block_type()].join(','));
             case 'any': return socket_targets2('any');
-            default: return $();
+            default: return socket_targets2(['any', drag_target.block_type()].join(','));
         }
     }
     

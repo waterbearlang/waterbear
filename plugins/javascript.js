@@ -74,7 +74,7 @@ jQuery.fn.extend({
   wrap_script: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.pretty_script();
-      return 'var global = new Global();(function($){var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
+      return 'var global = new Global();(function($){var stage = $(".stage");global.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
   },
   pretty_script: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
@@ -194,7 +194,7 @@ Local.prototype.getTweet = function(name, callback){
         },
         error: function(XHR, textStatus, errorThrown){
             callback(textStatus);
-            console.log('getTweet error %s: %s', textStatus, errorThrown);
+            // console.log('getTweet error %s: %s', textStatus, errorThrown);
         }
     });
 };
@@ -856,13 +856,13 @@ var menus = {
         },
         {
             label: 'shape [shape] rotate [number:5] degrees', 
-            script: '{{1}}.attr("rotate", {{1}}.attr("rotate") + {{2}});',
+            script: '{{1}}.rotate({{2}});',
             help: 'rotate the current shape around its origin by the given amount'
         },
         {
             label: 'shape [shape] rotate [number:5] degrees around x [number:0] y [number:0]', 
-            script: '{{1}}.rotate(angle({{1}}) + {{2}}, {{3}}, {{4}});',
-            help: 'rotate the shape around an aribtrary point by the given amount'
+            script: '{{1}}.rotate({{2}}, {{3}}, {{4}});',
+            help: 'rotate the shape around an arbitrary point by the given amount'
         },
         {
             label: 'shape [shape] clone shape##', 

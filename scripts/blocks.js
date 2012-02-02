@@ -27,8 +27,8 @@ $.extend($.fn,{
         if (!this.data('_id')){
             this.data('_id', _id);
             if (this.data('script') && this.data('script').indexOf('##') > -1){
-                this.data('script', this.data('script').replace(/##/g, '_' + _id));
-                this.data('label', this.data('label').replace(/##/g, '_' + _id));
+                this.data('script', this.data('script').replace(/##/gm, '_' + _id));
+                this.data('label', this.data('label').replace(/##/gm, '_' + _id));
                 this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
             }
         }
@@ -97,10 +97,12 @@ $.fn.extend({
         if (this.is(':input')){
             return this.val();
         }
+        var patt = new RegExp('##','gm');
+        
         var desc = {
             klass: this.data('klass'),
-            label: this.data('label').replace(/##/g, '_' + this.id()),
-            script: this.data('script').replace(/##/g, '_' + this.id()),
+            label: this.data('label').replace(/##/gm, '_' + this.id()),
+            script: this.data('script').replace(/##/gm, '_' + this.id()),
             subContainerLabels: this.data('subContainerLabels'),
             containers: this.data('containers')
         };
@@ -365,14 +367,14 @@ function Label(value){
     // etc…
     
     // FIXME: Move specific type handling to raphael_demo.js
-    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
-    value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+    value = value.replace(/\[boolean:(true|false)\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
+    value = value.replace(/\[boolean\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/gm, choice_func);
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/gm, choice_func);
     // match selector [^\[\]] should match any character except '[', ']', and ':'
-    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
-    value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
-    value = value.replace(/##/g, '');
+    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    value = value.replace(/\[([^\[\]:]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
+    value = value.replace(/##/gm, '');
     return value;
 }
 

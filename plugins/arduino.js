@@ -114,7 +114,7 @@ function test_block(block){
 }
 
 function test(){
-    var blocks = $('.block_menu .wrapper');
+    var blocks = $('#block_menu .wrapper');
     var total = blocks.length;
     var success = 0;
     var fail = 0;

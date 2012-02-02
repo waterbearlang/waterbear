@@ -12,6 +12,26 @@
   position: relative;
 }
 
+.locals{
+    display: block;
+    background-color: white;
+    width: auto;
+    position: relative;
+    padding: 1px 3px 1px;
+    margin: 5px 10px;
+    overflow: auto;
+    height: auto;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border-color: inherit;
+}
+
+.locals > .wrapper{
+    float: left;
+    margin: 5px;
+}
+
 .label {
   cursor: pointer;
   -moz-user-select: none;

@@ -17,6 +17,21 @@ $.extend($.fn,{
     });
     return '[' + names.join(', ') + ']';
   },
+  id: function(_id){
+    if (_id){
+        if (!this.data('_id')){
+            this.data('_id', _id);
+            if (this.data('script').indexOf('##') > -1){
+                this.data('script', this.data('script').replace('##', '_' + _id));
+                this.data('label', this.data('label').replace('##', '_' + _id));
+                // console.log('wrapping "%s" with <label>', this.data('label'));
+                this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
+            }
+        }
+    }else{
+        return this.data('_id');
+    }
+  },
   info: function(){
       return this.closest('.wrapper').long_name();
   },
@@ -25,10 +40,7 @@ $.extend($.fn,{
   },
   parent_block: function(){
       var p = this.closest('.wrapper').parent();
-      if (p.is('.next')){
-          return p.closest('.wrapper');
-      }
-      return null;
+      return p.closest('.contained').closest('.wrapper');
   },
   child_blocks: function(){
       return this.find('> .block > .contained').map(function(){
@@ -43,11 +55,25 @@ $.extend($.fn,{
   socket_blocks: function(){
       return this.find('> .block > .blockhead > .label').children('.socket, .autosocket').children('input, select, .wrapper');
   },
+  local_blocks: function(){
+    return this.find('> .block > .locals > .wrapper');
+  },
   next_block: function(){
       return this.find('> .next > .wrapper');
   },
   moveTo: function(x,y){
       return this.css({left: x + 'px', top: y + 'px'});
+  },
+  addLocalBlock: function(block){
+    window.parent_block = this;
+    var head = this.find('> .block > .blockhead');
+    var locals = head.find('.locals');
+    if (!locals.length){
+        locals = $('<div class="locals block_menu"></div>');
+        head.find('.label').after(locals);
+    }
+    locals.append(block);
+    return this;
   },
   addSocketHelp: function(){
     var self = $(this);
@@ -69,14 +95,19 @@ $.fn.extend({
         }
         var desc = {
             klass: this.data('klass'),
-            label: this.data('label'),
-            script: this.data('script'),
+            label: this.data('label').replace('##', this.id()),
+            script: this.data('script').replace('##', this.id()),
             subContainerLabels: this.data('subContainerLabels'),
             containers: this.data('containers')
         };
         // FIXME: Move specific type handling to raphael_demo.js
         if (this.is('.trigger')){desc.trigger = true;}
         if (this.is('.value')){desc['type'] = this.data('type')};
+        if (this.data('returns')){ 
+            desc.returns = this.data('returns');
+            desc.returns.script = desc.returns.script.replace('##', this.id());
+            desc.returns.label = desc.returns.label.replace('##', this.id());
+        };
         desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
         desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
         desc.next = this.next_block().block_description();
@@ -84,7 +115,7 @@ $.fn.extend({
     }
 });
 
-function Block(options){
+function Block(options, scope){
     // Options include:
     //
     // Menu blocks subset:
@@ -107,6 +138,8 @@ function Block(options){
         trigger: false, // This is the start of a handler
         flap: true, // something can come before
         containers: 0,  // Something cannot be inside
+        locals: [],
+        returns: false,
         subContainerLabels: [],
         label: 'Step', // label is its own mini-language
         type: null
@@ -115,12 +148,17 @@ function Block(options){
     
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
+        opts.slot = false; // can't have both slot and trigger
     }
     if (opts['type']){
         opts.slot = false; // values nest, but do not follow
         opts.flap = false;
     }
+    // console.log('wrapping "%s" with label, non-id path', opts.label);
     var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
+    if (scope){
+        wrapper.data('scope', scope);
+    }
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
     var block = wrapper.children();
@@ -132,6 +170,52 @@ function Block(options){
         block.addClass(opts['type']);
         wrapper.addClass('value').addClass(opts['type']);
         wrapper.data('type', opts['type']);
+    }
+    if (opts.locals.length){
+        $.each(opts.locals, function(idx, value){
+            if ($.isPlainObject(value)){
+                value.klass = opts.klass;
+                wrapper.addLocalBlock(Block(value, wrapper));
+            }
+        });
+    }
+    if (opts.returns){
+        wrapper.data('returns', opts.returns);
+        opts.returns.klass = opts.klass;
+        if (opts.returns){
+            wrapper.bind('add_to_script', function(e){
+                // remove from DOM if already place elsewhere
+                var self = $(e.target),
+                    returns = self.data('returns');
+                if (!returns) return false;
+                if (self.data('returnBlock')){
+                    console.log('return block exists');
+                    self.data('returnBlock').detach();
+                }else{
+                    console.log('return block created: %s', returns.label);
+                    self.data('returnBlock', Block(returns));
+                }
+                var returnBlock = self.data('returnBlock');
+                if (! self.id()){
+                    Block.nextId++;
+                    self.id(Block.nextId);
+                    returnBlock.id(Block.nextId);
+                }
+                self.parent_block().addLocalBlock(returnBlock);
+                //self.child_blocks().each(function(block){ block.trigger('add_to_script'); });
+                self.next_block().trigger('add_to_script');
+                return false;
+            });
+            wrapper.bind('delete_block add_to_workspace', function(e){
+                // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
+                var self = $(e.target),
+                    returnBlock = self.data('returnBlock');
+                if (returnBlock){
+                    returnBlock.detach();
+                }
+                self.next_block().trigger('delete_block');
+            });
+        }
     }
     if(opts.containers > 0){
         wrapper.addClass('containerBlock'); //This might not be necessary
@@ -187,6 +271,8 @@ function Block(options){
             if ($.isPlainObject(value)){
                 var child = Block(value);
                 block.find('> .contained').eq(idx).append(child);
+                child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
+                child.trigger('add_to_script');
             }
         });
     }
@@ -194,11 +280,14 @@ function Block(options){
         if ($.isPlainObject(opts.next)){
             var child = Block(opts.next);
             wrapper.find('> .next').append(child);
+            child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
+            child.trigger('add_to_script');
         }
     }
     // add update handlers
     return wrapper;
 }
+Block.nextId = 0;
 
 $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
     var self = $(event.target);
@@ -219,7 +308,7 @@ function getContained(s){
 
 function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
-    return '<span class="value string ' + listname + ' autosocket" data-type="string"><select>' + 
+    return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' + 
         list.map(function(item){
             if (item === default_opt){
                 return '<option selected>' + item + '</option>';
@@ -251,9 +340,11 @@ function Label(value){
     value = value.replace(/\[boolean\]/g, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
     value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
     value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
-    // match selector [^\[\]:] should match any character except '[', ']', and ':'
-    value = value.replace(/\[([^\[\]\:]+):([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
+    // match selector [^\[\]] should match any character except '[', ']', and ':'
+    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/g, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
+    value = value.replace('##', '');
     return value;
 }
+
 

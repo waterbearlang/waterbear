@@ -128,7 +128,7 @@ body {
     border: 1px solid #CCC;
 }
 
-.block_menu{
+#block_menu{
     position: absolute;
     width: 15%;
     height: 100%;
@@ -137,7 +137,7 @@ body {
     overflow: auto;
 }
 
-.block_menu .select{
+#block_menu .select{
     padding: 3px 10px;
     margin-bottom: 1px;
     font-weight: bold;
@@ -147,7 +147,7 @@ body {
     cursor: pointer;
 }
 
-.block_menu .selected{
+#block_menu .selected{
     color: #000;
     background-color: #EEE;
 }

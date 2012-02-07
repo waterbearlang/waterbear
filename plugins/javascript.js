@@ -586,25 +586,25 @@ var menus = {
     ]),
     operators: menu('Operators', [
         {
-            label: '[number:0] ➕ [number:0]', 
+            label: '[number:0] + [number:0]', 
             'type': 'number', 
             script: "({{1}} + {{2}})",
             help: 'sum of the two operands'
         },
         {
-            label: '[number:0] ➖ [number:0]', 
+            label: '[number:0] - [number:0]', 
             'type': 'number', 
             script: "({{1}} - {{2}})",
             help: 'difference of the two operands'
         },
         {
-            label: '[number:0] ✖ [number:0]', 
+            label: '[number:0] * [number:0]', 
             'type': 'number', 
             script: "({{1}} * {{2}})",
             help: 'product of the two operands'
         },
         {
-            label: '[number:0] ➗ [number:0]',
+            label: '[number:0] / [number:0]',
             'type': 'number', 
             script: "({{1}} / {{2}})",
             help: 'quotient of the two operands'
@@ -616,7 +616,7 @@ var menus = {
             help: 'random number between two numbers (inclusive)'
         },
         {
-            label: '[number:0] ❮ [number:0]', 
+            label: '[number:0] < [number:0]', 
             'type': 'boolean', 
             script: "({{1}} < {{2}})",
             help: 'first operand is less than second operand'
@@ -628,7 +628,7 @@ var menus = {
             help: 'two operands are equal'
         },
         {
-            label: '[number:0] ❯ [number:0]', 
+            label: '[number:0] > [number:0]', 
             'type': 'boolean', 
             script: "({{1}} > {{2}})",
             help: 'first operand is greater than second operand'
@@ -1083,11 +1083,7 @@ var menus = {
 var demos = [
     {title: 'Rotating Squares',
      description: 'Just a simple animation test',
-     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[next]]}_start();","containers":0,"trigger":true,"sockets":[],"contained":[],"next":{"klass":"control","label":"repeat [number:10]","script":"range({{1}}).forEach(function(){[[1]]});","containers":1,"sockets":["10"],"contained":[{"klass":"shapes","label":"rect with width [number:0] and height [number:0]","script":"local.last_var = global.paper.rect(0, 0, {{1}}, {{2}});","containers":0,"sockets":["25","25"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.last_var.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","sockets":["1",{"klass":"sensing","label":"stage width","script":"global.stage_width","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""},{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","sockets":["1",{"klass":"sensing","label":"stage height","script":"global.stage_height","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"animation","label":"rotation [number:15] degrees over [number:500] ms with [choice:easing]","script":"local.last_var.animate({rotation: {{1}} }, {{2}}, \"{{3}}\");","containers":0,"sockets":["360","5000",">"],"contained":[],"next":""}}}],"next":""}}]},
-    {title: 'Solipong',
-    description: 'Pong Solitaire, work in progress',
-    scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[next]]}_start();","containers":0,"trigger":true,"sockets":[],"contained":[],"next":{"klass":"shapes","label":"arc at radius [number:100] from [number:0] degrees to [number:30] degrees","script":"local.last_var = global.paper.arcslice({{1}}, {{2}}, {{3}});","containers":0,"sockets":["100","0","30"],"contained":[],"next":{"klass":"shapes","label":"stroke linecap [choice:linecap]","script":"local.last_var.attr(\"stroke-linecap\", \"{{1}}\");","containers":0,"sockets":["round"],"contained":[],"next":{"klass":"shapes","label":"stroke width [number:1]","script":"local.last_var.attr(\"stroke-width\", {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.last_var.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.last_var_references[\"{{1}}\"] = local.last_var;","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"circle with radius [number:0]","script":"local.last_var = global.paper.circle(0, 0, {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"shapes","label":"fill color [color:#FFFFFF]","script":"local.last_var.attr(\"fill\", \"{{1}}\");","containers":0,"sockets":["#545ca5"],"contained":[],"next":{"klass":"shapes","label":"stroke transparent","script":"local.last_var.attr(\"stroke\", \"transparent\");","containers":0,"sockets":[],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.last_var.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.last_var_references[\"{{1}}\"] = local.last_var;","containers":0,"sockets":["ball"],"contained":[],"next":""}}}}}}}}}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){[[next]]return false;});","containers":0,"trigger":true,"sockets":["right"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.last_var = local.last_var_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.last_var.rotate(angle(local.last_var) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){[[next]]return false;});","containers":0,"trigger":true,"sockets":["left"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.last_var = local.last_var_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.last_var.rotate(angle(local.last_var) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["-5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}}]
-    }
+     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[1]]}_start();","containers":1,"trigger":true,"locals":[],"sockets":[],"contained":[{"klass":"control","label":"repeat [number:10]","script":"range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});","containers":1,"locals":[{"label":"loop index","script":"local.index","type":"number","klass":"control"}],"sockets":["10"],"contained":[{"klass":"shapes","label":"rect_1 with width [number:0] and height [number:0] at position x [number:0] y [number:0]","script":"local.shape_1 = global.paper.rect({{3}}, {{4}}, {{1}}, {{2}});","containers":0,"locals":[],"returns":{"label":"rect_1","script":"local.shape_1","type":"shape","klass":"shapes"},"sockets":["40","40",{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","locals":[],"sockets":["1",{"klass":"sensing","label":"stage width","script":"global.stage_width","containers":0,"type":"number","locals":[],"sockets":[],"contained":[],"next":""}],"contained":[],"next":""},{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","locals":[],"sockets":["1",{"klass":"sensing","label":"stage height","script":"global.stage_height","containers":0,"type":"number","locals":[],"sockets":[],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"animation","label":"shape [shape] rotation [number:15] degrees over [number:500] ms with [choice:easing]","script":"{{1}}.animate({rotation: {{2}} }, {{3}}, {{4}});","containers":0,"locals":[],"sockets":[{"klass":"shapes","label":"rect_1","script":"local.shape_1","containers":0,"type":"shape","locals":[],"sockets":[],"contained":[],"next":""},"360","2000",">"],"contained":[],"next":""}}],"next":""}],"next":""}]}    
 ];
 populate_demos_dialog(demos);
 load_current_scripts();

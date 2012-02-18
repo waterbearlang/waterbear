@@ -162,7 +162,7 @@ function Block(options, scope){
     
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
-        opts.slot = false; // can't have both slot and trigger
+//        opts.slot = false; // can't have both slot and trigger -- really? they do in the Glossary.
     }
     if (opts['type']){
         opts.slot = false; // values nest, but do not follow

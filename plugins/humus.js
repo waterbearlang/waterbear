@@ -194,9 +194,9 @@ var menus = {
             help: 'define a new function'
         },
         {
-            label: 'define behavior## as',
+            label: 'define behavior## on [pattern] as',
             containers: 1,
-            script: 'LET behavior## = [[1]]\n',
+            script: 'LET behavior## = \\({{1}}).[\n[[1]]]\n\n',
             returns: {
                 label: 'behavior##',
                 script: 'behavior##',
@@ -205,9 +205,9 @@ var menus = {
             help: 'define an actor behavior'
         },
         {
-            label: 'define behavior##([pattern]) as',
+            label: 'define behavior##([pattern]) on [pattern] as',
             containers: 1,
-            script: 'LET behavior##({{1}}) = [[1]]',
+            script: 'LET behavior##({{1}}) = \\({{2}}).[\n[[1]]]\n\n',
             returns: {
                 label: 'behavior##',
                 script: 'behavior##',
@@ -251,7 +251,7 @@ var menus = {
             help: 'send a message to an actor'
         },
         {
-            label: 'create actor## with [expression]',
+            label: 'create actor## with [expression] behavior',
             script: 'CREATE actor## WITH {{1}}\n',
             returns: {
                 label: 'actor##',
@@ -261,9 +261,9 @@ var menus = {
             help: 'create an actor with an initial behavior'
         },
         {
-            label: 'create actor## with behavior',
+            label: 'create actor## with behavior on [pattern] to',
             containers: 1,
-            script: 'CREATE actor## WITH [[1]]',
+            script: 'CREATE actor## WITH \\({{1}}).[\n[[1]]]\n',
             returns: {
                 label: 'actor##',
                 script: 'actor##',
@@ -271,6 +271,7 @@ var menus = {
             },
             help: 'create an actor with an initial behavior'
         },
+		/*
         {
             label: 'react to [pattern] by performing',
             containers: 1,
@@ -278,7 +279,6 @@ var menus = {
             script: '\\({{1}}).[\n[[1]]]\n',
             help: 'actor behavior on message receipt'
         },
-		/*
         {
             label: 'react to [pattern] with',
             script: '\\({{1}}).[\n[[next]]]\n',
@@ -310,9 +310,9 @@ var menus = {
             help: 'set behavior for subsequent messages'
         },
         {
-            label: 'change behavior to',
+            label: 'change behavior on [pattern] to',
             containers: 1,
-            script: 'BECOME [[1]]',
+            script: 'BECOME \\({{1}}).[\n[[1]]]\n',
             help: 'set behavior for subsequent messages'
         },
         {
@@ -365,6 +365,12 @@ var menus = {
             script: '_',
             type: 'pattern',
             help: 'match without binding'
+        },
+        {
+			label: 'symbol [string:name]', 
+			script: "#{{1}}",
+            type: 'pattern',
+			help: 'symbolic value'
         },
         {
             label: 'value of [expression]',
@@ -440,14 +446,14 @@ var menus = {
         },
         {
 			label: 'symbol [string:name]', 
-			type: 'expression', 
 			script: "#{{1}}",
+			type: 'expression', 
 			help: 'symbolic value'
         },
         {
 			label: 'number [number:0]', 
-			type: 'expression', 
 			script: "({{1}})",
+			type: 'expression', 
 			help: 'numeric value'
         },
         {

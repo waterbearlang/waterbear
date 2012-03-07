@@ -149,6 +149,7 @@ function Block(options, scope){
     var opts = {
         klass: 'control',
         slot: true, // Something can come after
+        position: 'any', // main, loop
         trigger: false, // This is the start of a handler
         flap: true, // something can come before
         containers: 0,  // Something cannot be inside
@@ -175,6 +176,7 @@ function Block(options, scope){
     }
     wrapper.data('label', opts.label);
     wrapper.data('klass', opts.klass);
+    wrapper.data('position', opts.position);
     wrapper.data('returns', opts.returns);
     wrapper.data('script', opts.script);
     wrapper.data('locals', opts.locals);

@@ -1,13 +1,40 @@
 Note for improving block description langauge
 
 1. What is needed to define a block for a plugin?
-2. What is needed to save a block (drop values that match defaults, drop help, etc.);
+  * Script
+  * Dependencies (language, etc.)
+  * Arguments
+  * Type
+  * Return value
+2. What is needed to save a block (drop values that match defaults, drop help, etc.)?
+  * Simpler is better
+  * Can it be pure JSON or coffeescript? Something even lighter?
 3. What are the defaults?
+  * Don't store defaults into serialized blocks
 4. How do we store things like scripts and help?
+  * Each block doesn't need these, just the definition block
+  * Can definition blocks be written in Waterbear?
 5. What are the events in the lifecycle of a block?
+  * Start drag from menu
+  * Drag over workspace
+  * Drag over object (sprite, image, etc.)
+  * Drag over socket
+  * Drag over block
 6. How can we give blocks identifiers
+  * Dragging several copies of a return value should only be references to it
+7. What are the types of blocks that we want (above and beyond what we have)
+  * Trigger
+  * Step
+  * Container
+  * Value
+  * Form
+  * Patch
+8. How can we improve blocks and the code around them?
+  * Simpler HTML and dragging
+  * Simpler code loading and generation
+9. How can we separate blocks from IDE, allow them to be configurable (esp. colours)
 
-Important bits
+Important bits (currently)
 
 block_description (blocks.js)
 Block (blocks.js)

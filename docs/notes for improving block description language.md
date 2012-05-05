@@ -29,6 +29,7 @@ Note for improving block description langauge
   * Value
   * Form
   * Patch
+  * Function
 8. How can we improve blocks and the code around them?
   * Simpler HTML and dragging
   * Simpler code loading and generation

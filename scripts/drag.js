@@ -112,14 +112,15 @@
         
     function init_drag(event){
         // Called on mousedown or touchstart, we haven't started dragging yet
-        // TODO: Don't start drag on a text input
+        // DONE: Don't start drag on a text input or select using :input jquery selector
         if (!blend(event)) {return undefined;}
         var eT = $(event.target);
-        if (eT.is(':input') && ! eT.contained_by($('.block_menu'))) {return undefined;}
+        if ((eT.is(':input') || eT.is('option') || eT.is('.disclosure')) && ! eT.contained_by($('.block_menu'))) {return undefined;}
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){
-            drag_target = target; 
+            drag_target = target;
+            //drag_target.addClass("drag_indication");
             start_position = target.offset();
             if (! target.parent().is('.scripts_workspace')){
                 start_parent = target.parent();

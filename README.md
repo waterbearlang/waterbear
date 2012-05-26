@@ -59,6 +59,10 @@ The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOT
 * Chistopher de Beer (http://github.com/christopherdebeer)
 * Atul Varma (http://github.com/toolness/)
 
+## TODO
+
+* Set up a waterbear presence on StackOverflow
+
 ## License
 
 Copyright 2011 Dethe Elza

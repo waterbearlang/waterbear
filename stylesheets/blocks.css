@@ -107,7 +107,7 @@
     padding-bottom: 6px;
 }
 
-.containerBlock > span.block {
+.containerBlock > .block {
     padding-bottom: 11px;
 }
 
@@ -261,7 +261,7 @@
     border-bottom-left-radius: 25px;
 }
 
-span.socket select, span.autosocket select{
+.socket select, .autosocket select{
     margin: 0;
 }
 

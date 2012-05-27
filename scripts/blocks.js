@@ -1,5 +1,17 @@
 Block.nextId = 0;
 
+var templates = {};
+var compiled_templates = {};
+_.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+};
+['step', 'context', 'eventhandler', 'expression'].forEach(function(type){
+    compiled_templates[type] = _.template($('#' + type + '_template').text());
+    templates[type] = function (opts){
+        return $(compiled_templates[type]({opts: opts}));
+    };
+});
+
 $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
     var self = $(event.target);
     if (self.is('.open')){
@@ -48,7 +60,7 @@ function Label(value){
     // [string:default] => a string socket with a default value
     // [choice:options] => a fixed set of options, listed in options parameter function
     // etc…
-    
+
     // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[boolean:(true|false)\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
     value = value.replace(/\[boolean\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
@@ -61,73 +73,66 @@ function Label(value){
     return value;
 }
 
-
+var models = [];
 function EventHandler(options, scope){
     var opts = {
-        klass: 'control',
-        slot: true, // Something can come after
-        position: 'any', // main, loop
-        trigger: true, // This is the start of a handler
-        flap: false, // something can come before
-        containers: 0,  // Something cannot be inside
+        group: 'control',
         locals: [],
+        containers: [],
         returns: false,
-        subContainerLabels: [],
-        label: 'Step', // label is its own mini-language
-        type: null,
+        type: null
     };
     $.extend(opts, options);
+    //window.opts = opts;
+    var block = templates.eventhandler(opts);
+    opts.view = block;
+    block.data('model', opts);
+    models.push(opts);
+    return  block;
 }
 
 function Expression(options, scope){
     var opts = {
-        klass: 'control',
-        slot: false, 
-        position: 'any', // main, loop
-        trigger: false, // This is the start of a handler
-        flap: false, // expressions nest, but do not follow
-        containers: 0,  // Something cannot be inside
-        locals: [],
-        returns: false,
+        group: 'control',
+        returns: {type: 'int', label: 'int##'},
         subContainerLabels: [],
-        label: 'Step', // label is its own mini-language
-        type: null
+        label: 'Step' // label is its own mini-language
     };
     $.extend(opts, options);
+    var block = templates.expression(opts);
+    opts.view = block;
+    block.data('model', opts);
+    models.push(opts);
+    return  block;
 }
 
 function Context(options, scope){
     var opts = {
-        klass: 'control',
-        slot: true, // Something can come after
-        position: 'any', // main, loop
-        trigger: true, // This is the start of a handler
-        flap: false, // something can come before
-        containers: 0,  // Something cannot be inside
+        group: 'control',
+        containers: [],  // Something cannot be inside
         locals: [],
-        returns: false,
-        subContainerLabels: [],
-        label: 'Step', // label is its own mini-language
-        type: null,
+        returns: false
     };
     $.extend(opts, options);
+    var block = templates.context(opts);
+    opts.view = block;
+    block.data('model', opts);
+    models.push(opts);
+    return  block;
 }
 
 function Step(options, scope){
     var opts = {
-        klass: 'control',
-        slot: true, // Something can come after
-        position: 'any', // main, loop
-        trigger: true, // This is the start of a handler
-        flap: false, // something can come before
-        containers: 0,  // Something cannot be inside
-        locals: [],
+        group: 'control',
         returns: false,
-        subContainerLabels: [],
-        label: 'Step', // label is its own mini-language
-        type: null,
+        label: 'Step' // label is its own mini-language
     };
     $.extend(opts, options);
+    var block = templates.step(opts);
+    opts.view = block;
+    block.data('model', opts);
+    models.push(opts);
+    return  block;
 }
 
 function Block(options, scope){
@@ -147,12 +152,25 @@ function Block(options, scope){
     // sockets: array of values or value blocks
     // contained: array of contained blocks
     // next: block that follows this block
+    
+    console.log('Block: %s', options.label);
 
     if (options.trigger){
-        return Trigger(options, scope);
+        console.log('building an event handler');
+        return EventHandler(options, scope);
     }else if (options.type){
+        console.log('building an expression');
         return Expression(options, scope);
+    }else if (options.containers){
+        console.log('building a context');
+        return Context(options, scope);
+    }else{
+        console.log('building a step');
+        return Step(options, scope);
     }
+}
+    
+function old_Block(){
     
     // console.log('wrapping "%s" with label, non-id path', opts.label);
     var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');

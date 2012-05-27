@@ -12,12 +12,49 @@
     <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
     <!--script src="/lib/modernizr-1.6.min.js"></script-->
     <script type="text/html" id="step_template">
+        <div class="wrapper step {{opts.group}}">
+            <div class="block">
+                <p>{{Label(opts.label)}}</p>
+                <b class="flap"></b>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
     </script>
-    <script type="text/html" id="container_template">
+    <script type="text/html" id="context_template">
+        <div class="wrapper step {{opts.group}}">
+            <div class="block">
+                <p>{{Label(opts.label)}}</p>
+                <b class="flap"></b>
+                <div class="contained">
+                    <i class="slot"></i>
+                </div>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
     </script>
-    <script type="text/html" id="value_template">
+    <script type="text/html" id="expression_template">
+        <div class="wrapper value {{opts.type}} {{opts.group}}">
+            <div class="block">
+                <p>{{Label(opts.label)}}</p>
+            </div>
+        </div>
     </script>
-    <script type="text/html" id="trigger_template">
+    <script type="text/html" id="eventhandler_template">
+        <div class="wrapper trigger {{opts.group}}">
+            <div class="block">
+                <p>
+                    {{Label(opts.label)}}
+                </p>
+            </div>
+            <b class="trigger"></b>
+            <div class="contained">
+                <i class="slot"></i>
+            </div>
+        </div>
     </script>
   </head>   
   <body>
@@ -95,6 +132,7 @@
       <button class="done">Done</button>    
       </div>
     <script src="lib/jquery-1.7.1.min.js"></script>
+    <script src="lib/underscore-min.js"></script>
     <script src="lib/jquery.hotkeys.js"></script>
     <script src="lib/jquery.querystring.js"></script>
     <script src="lib/yepnope.1.0.2-min.js"></script>
@@ -103,6 +141,10 @@
     <script src="lib/json2.js"></script><!-- Make this conditional -->
     <script src="scripts/drag.js"></script>
     <script src="scripts/blocks.js"></script>
+    <script src="scripts/debug.js"></script>
+    <script src="scripts/jquery.blocks.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/utils.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
     <script>

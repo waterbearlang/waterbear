@@ -107,13 +107,13 @@ $(document).ready(function(){
 
 // Provide the arc of a circle, given the radius and the angles to start and stop at
 Raphael.fn.arcslice = function(radius, fromangle, toangle){
-       var x1 = Math.cos(deg2rad(fromangle)) * radius, 
-           y1 = Math.sin(deg2rad(fromangle)) * radius,
-           x2 = Math.cos(deg2rad(toangle)) * radius, 
-           y2 = Math.sin(deg2rad(toangle)) * radius;
-        var arc = this.path();
-        arc.moveTo(x1, y1).arcTo(radius, radius, 0, 1, x2,y2, rad2deg(toangle - fromangle));
-        return arc;
+   var x1 = Math.cos(deg2rad(fromangle)) * radius, 
+       y1 = Math.sin(deg2rad(fromangle)) * radius,
+       x2 = Math.cos(deg2rad(toangle)) * radius, 
+       y2 = Math.sin(deg2rad(toangle)) * radius;
+    var arc = this.path();
+    arc.moveTo(x1, y1).arcTo(radius, radius, 0, 1, x2,y2, rad2deg(toangle - fromangle));
+    return arc;
 };
 
 Raphael.fn.regularPolygon = function(cx,cy,radius, sides, pointsOnly){

@@ -101,8 +101,10 @@ As an alternative, or supplement, to colors/shapes, perhaps add an icon to block
 
 * 3rd party drag / touch library
 * More powerful color library with no dependency on Raphael
-* Coffeescript / underscore / backbone / less
+* Coffeescript
 * Library for gists
+* Backbone (implies underscore, jquery)
+* Less/Sass
 
 ## Core of waterbear in 4 files ##
 
@@ -150,6 +152,19 @@ The workspace has all the primitive UI for the IDE, serialization and deserializ
 * Game lib for animation, sprites
 * Immediate-style programming (see changes in view as code changes)
 * A saturday-morning style cartoon show produced with Waterbear where kids can access all the scripts and assets to remix the cartoon each week and make their own.
+* Make blocks more skinnable
+
+## Goals and uses for waterbear
+
+* Pedagogy: teaching / learning programming
+* View source for visual programming
+* Debugging (see the structure)
+* Refactoring (group into blocks and move them around)
+* Making programming friendly for non-programmers
+* Saturday morning cartoon show
+* Easy to write single-use or demo language, evolve languages from demo to demo
+* Easy to embed scripts into web pages and ebooks
+
 
 For Waterbear presentation: a dinosaur animation using dialogue from Serenity
 

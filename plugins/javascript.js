@@ -227,26 +227,23 @@ window.choice_lists = {
 var menus = {
     control: menu('Control', [
         {
-            label: 'when program runs',
             trigger: true,
             slot: false,
-            containers: 1,
+            contained: [{label: 'when program runs'}],
             script: 'function _start(){[[1]]}_start();',
             help: 'this trigger will run its scripts once when the program starts'
         },
         {
-            label: 'when [choice:keys] key pressed', 
             trigger: true,
             slot: false,
-            containers: 1,
+            contained: [{label: 'when [choice:keys] key pressed'}],
             script: '$(document).bind("keydown", {{1}}, function(){[[1]]; return false;});',
             help: 'this trigger will run the attached blocks every time this key is pressed'
         },
-        {
-            label: 'repeat [number:30] times a second',
+        {            
             trigger: true,
             slot: false,
-            containers: 1,
+            contained: [{label: 'repeat [number:30] times a second'}],
             locals: [
                 {
                     label: 'count',
@@ -258,14 +255,12 @@ var menus = {
             help: 'this trigger will run the attached blocks periodically'
         },
         {
-            label: 'wait [number:1] secs',
-            containers: 1,
+            contained: [{label: 'wait [number:1] secs'}],
             script: 'setTimeout(function(){[[1]]},1000*{{1}});',
             help: 'pause before running the following blocks'
         },
-        {
-            label: 'repeat [number:10]', 
-            containers: 1, 
+        { 
+            contained: [{label: 'repeat [number:10]'}], 
             slot: false,
             script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
             help: 'repeat the contained blocks so many times',
@@ -283,35 +278,30 @@ var menus = {
             help: 'send this message to any listeners'
         },
         {
-            label: 'when I receive [string:ack] message', 
             trigger: true,
             slot: false,
-            containers: 1,
+            contained: [{label: 'when I receive [string:ack] message'}],
             script: '$(".stage").bind({{1}}, function(){[[1]]});',
             help: 'add a listener for the given message, run these blocks when it is received'
         },
-        {
-            label: 'forever if [boolean:false]', 
-            containers: 1,  
+        { 
+            contained: [{label: 'forever if [boolean:false]'}],  
             script: 'while({{1}}){[[1]]}',
             help: 'repeat until the condition is false'
         },
         {
-            label: 'if [boolean]', 
-            containers: 1, 
+            contained: [{label: 'if [boolean]'}], 
             script: 'if({{1}}){[[1]]}',
             help: 'run the following blocks only if the condition is true'
         },
         {
             label: 'if [boolean]', 
-            containers: 2,
-            subContainerLabels: ['else'],
+            contained: [{label: 'if [boolean]'}, {label: 'else'}],
             script: 'if({{1}}){[[1]]}else{[[2]]}',
             help: 'run the first set of blocks if the condition is true, otherwise run the second set'
         },
         {
-            label: 'repeat until [boolean]', 
-            containers: 1, 
+            contained: [{label: 'repeat until [boolean]'}], 
             script: 'while(!({{1}})){[[1]]}',
             help: 'repeat forever until condition is true'
         }
@@ -391,9 +381,8 @@ var menus = {
             help: 'a new array formed by joining the arrays'
         },
         {
-            label: 'array [array] for each',
             script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
-            containers: 1,
+            contained: [{label: 'array [array] for each'}],
             locals: [
                 {
                     label: 'index',
@@ -434,9 +423,8 @@ var menus = {
             help: 'return the value of the key in an object'
         },
         {
-            label: 'object [object] for each',
             script: '$.each({{1}}, function(key, item){local.key = key; local.item = item; [[1]] });',
-            containers: 1,
+            contained: [{label: 'object [object] for each'}],
             locals: [
                 {
                     label: 'key',
@@ -1067,8 +1055,7 @@ var menus = {
     ]),
         animation: menu('Twitter', [
         {
-            label: 'get tweet for [string]',
-            containers: 1,
+            contained: [{label: 'get tweet for [string]'}],
             script: 'local.getTweet({{1}}, function(tweet){local.tweet## = tweet;[[1]]});',
             returns: {
                 label: 'last tweet##',
@@ -1080,15 +1067,10 @@ var menus = {
     ])
 };
 
-var demos = [
-    {title: 'Rotating Squares',
-     description: 'Just a simple animation test',
-     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[1]]}_start();","containers":1,"trigger":true,"locals":[],"sockets":[],"contained":[{"klass":"control","label":"repeat [number:10]","script":"range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});","containers":1,"locals":[{"label":"loop index","script":"local.index","type":"number","klass":"control"}],"sockets":["10"],"contained":[{"klass":"shapes","label":"rect_1 with width [number:0] and height [number:0] at position x [number:0] y [number:0]","script":"local.shape_1 = global.paper.rect({{3}}, {{4}}, {{1}}, {{2}});","containers":0,"locals":[],"returns":{"label":"rect_1","script":"local.shape_1","type":"shape","klass":"shapes"},"sockets":["40","40",{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","locals":[],"sockets":["1",{"klass":"sensing","label":"stage width","script":"global.stage_width","containers":0,"type":"number","locals":[],"sockets":[],"contained":[],"next":""}],"contained":[],"next":""},{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","locals":[],"sockets":["1",{"klass":"sensing","label":"stage height","script":"global.stage_height","containers":0,"type":"number","locals":[],"sockets":[],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"animation","label":"shape [shape] rotation [number:15] degrees over [number:500] ms with [choice:easing]","script":"{{1}}.animate({rotation: {{2}} }, {{3}}, {{4}});","containers":0,"locals":[],"sockets":[{"klass":"shapes","label":"rect_1","script":"local.shape_1","containers":0,"type":"shape","locals":[],"sockets":[],"contained":[],"next":""},"360","2000",">"],"contained":[],"next":""}}],"next":""}],"next":""}]}    
-];
+var demos = [];
 populate_demos_dialog(demos);
 load_current_scripts();
 $('.scripts_workspace').trigger('init');
-console.log("Done");
 
 $('.socket input').live('click',function(){
     $(this).focus();

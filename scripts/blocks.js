@@ -6,9 +6,10 @@ _.templateSettings = {
     interpolate: /\{\{(.+?)\}\}/g
 };
 ['step', 'context', 'eventhandler', 'expression'].forEach(function(type){
-    compiled_templates[type] = _.template($('#' + type + '_template').text());
+    compiled_templates[type] = Mustache.compile($('#' + type + '_template').text());
     templates[type] = function (opts){
-        return $(compiled_templates[type]({opts: opts}));
+        window.opts = opts;
+        return $(compiled_templates[type](opts));
     };
 });
 
@@ -45,7 +46,7 @@ function choice_func(s, listname, default_opt){
             
 
 
-function Label(value){
+function Label(value, disclosure){
     // Recognize special values in the label string and replace them with 
     // appropriate markup. Some values are dynamic and based on the objects currently
     // in the environment
@@ -70,7 +71,11 @@ function Label(value){
     value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
     value = value.replace(/##/gm, '');
-    return value;
+    if (disclosure){
+        return '<div class="value"><span class="disclosure open">▼</span>' + value + '</div>';
+    }else{
+        return '<div class="value">' + value + '</div>';
+    }
 }
 
 var models = [];
@@ -78,12 +83,16 @@ function EventHandler(options, scope){
     var opts = {
         group: 'control',
         locals: [],
-        containers: [],
+        contained: [],
         returns: false,
         type: null
     };
     $.extend(opts, options);
     //window.opts = opts;
+    for (var i = 0; i < opts.contained.length; i++){
+        var container = opts.contained[i];
+        container.label = Label(container.label, true);
+    }
     var block = templates.eventhandler(opts);
     opts.view = block;
     block.data('model', opts);
@@ -99,6 +108,7 @@ function Expression(options, scope){
         label: 'Step' // label is its own mini-language
     };
     $.extend(opts, options);
+    opts.label = Label(opts.label);
     var block = templates.expression(opts);
     opts.view = block;
     block.data('model', opts);
@@ -109,11 +119,15 @@ function Expression(options, scope){
 function Context(options, scope){
     var opts = {
         group: 'control',
-        containers: [],  // Something cannot be inside
+        contained: [],  // Something cannot be inside
         locals: [],
         returns: false
     };
     $.extend(opts, options);
+    for (var i = 0; i < opts.contained.length; i++){
+        var container = opts.contained[i];
+        container.label = Label(container.label, true);
+    }
     var block = templates.context(opts);
     opts.view = block;
     block.data('model', opts);
@@ -128,6 +142,7 @@ function Step(options, scope){
         label: 'Step' // label is its own mini-language
     };
     $.extend(opts, options);
+    opts.label = Label(opts.label);
     var block = templates.step(opts);
     opts.view = block;
     block.data('model', opts);
@@ -161,7 +176,7 @@ function Block(options, scope){
     }else if (options.type){
         console.log('building an expression');
         return Expression(options, scope);
-    }else if (options.containers){
+    }else if (options.contained){
         console.log('building a context');
         return Context(options, scope);
     }else{

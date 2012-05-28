@@ -249,20 +249,16 @@ window.show_workspace = function(){
 // Build the Blocks menu, this is a public method
 
 function menu(title, specs, show){
-    console.log('building menu %s', title);
     var group = title.toLowerCase();
     var body = $('<section class="submenu"></section>');
     var select = $('<h3 class="select">' + title + '</h3>').appendTo(body);
     var options = $('<div class="option"></div>').appendTo(body);
-    console.log('%s specs', specs.length);
     specs.forEach(function(spec, idx){
         spec.group = group;
-        var block = Block(spec);
-        console.log('menu block: %o', block);
+        var block = $(Block(spec));
         options.append(block);
     });
     $('#block_menu').append(body);
-    console.log('appended menu');
     if (show){
         select.addClass('selected');
     }else{

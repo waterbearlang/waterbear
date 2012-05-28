@@ -35,22 +35,22 @@
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
 (function($){
-    var drag_target, potential_drop_targets, drop_target, drop_rects, start_position, timer, cloned, dragging, current_position, distance, start_parent, drop_cursor, drag_placeholder;
-    window.is_touch = window.hasOwnProperty('ontouchstart') && true;
-    var drag_timeout = 20;
+    var dragTarget, potential_dropTargets, dropTarget, drop_rects, start_position, timer, cloned, dragging, currentPosition, distance, start_parent, drop_cursor, drag_placeholder;
+    window.isTouch = window.hasOwnProperty('ontouchstart') && true;
+    var dragTimeout = 20;
     // TODO: update this whenever we switch to a new workspace
     var target_canvas = $('.workspace:visible .scripts_workspace');
     
     var snap_dist = 25; //In pixels
     
     function reset(){
-        drag_target = null;
-        potential_drop_targets = $();
+        dragTarget = null;
+        potential_dropTargets = $();
         drop_rects = [];
-        drop_target = $();
+        dropTarget = $();
         start_position = null;
         start_parent = null;
-        current_position = null;
+        currentPosition = null;
         timer = null;
         dragging = false;
         cloned = false;
@@ -59,7 +59,7 @@
     reset();
     
     function blend(event){
-        if (is_touch){
+        if (isTouch){
             if (event.originalEvent.touches.length > 1){
                 // console.log('blend fails, too many touches');
                 return false;
@@ -77,15 +77,15 @@
         return event;
     }
     
-    function get_potential_drop_targets(){
-//         console.log('drag target: %s', drag_target.block_type());
-        switch(drag_target.block_type()){
+    function get_potential_dropTargets(){
+//         console.log('drag target: %s', dragTarget.block_type());
+        switch(dragTarget.block_type()){
             case 'step': return step_targets();
             case 'container': return step_targets();
             case 'int': 
-            case 'float': return socket_targets2(['any', 'number', drag_target.block_type()].join(','));
+            case 'float': return socket_targets2(['any', 'number', dragTarget.block_type()].join(','));
             case 'any': return socket_targets2('any');
-            default: return socket_targets2(['any', drag_target.block_type()].join(','));
+            default: return socket_targets2(['any', dragTarget.block_type()].join(','));
         }
     }
     
@@ -119,14 +119,14 @@
         // console.log('init_drag');
         var target = eT.closest('.wrapper');
         if (target.length){
-            drag_target = target; 
+            dragTarget = target; 
             start_position = target.offset();
             if (! target.parent().is('.scripts_workspace')){
                 start_parent = target.parent();
             }
         }else{
             //console.log('no target in init_drag');
-            drag_target = null;
+            dragTarget = null;
         }
         return false;
     }
@@ -135,17 +135,17 @@
         // console.log('trying to start drag');
         // called on mousemove or touchmove if not already dragging
         if (!blend(event)) {return undefined;}
-        if (!drag_target) {return undefined;}
+        if (!dragTarget) {return undefined;}
         drop_cursor = $('<div class="drop_cursor"></div>');
         target_canvas.prepend(drop_cursor);
-        drag_target.addClass("drag_indication");
+        dragTarget.addClass("drag_indication");
         // console.log('start_drag');
-        current_position = {left: event.pageX, top: event.pageY};
+        currentPosition = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
-        if (drag_target.is('.block_menu .wrapper')){
-            drag_target.removeClass('drag_indication');
-            drag_target = drag_target.clone(true);
-            drag_target.addClass('drag_indication');
+        if (dragTarget.is('.block_menu .wrapper')){
+            dragTarget.removeClass('drag_indication');
+            dragTarget = dragTarget.clone(true);
+            dragTarget.addClass('drag_indication');
             cloned = true;
         }
         dragging = true;
@@ -154,63 +154,63 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
-        if (drag_target.parent().is('.socket')){
-            var classes = drag_target.parent().attr('class');
+        if (dragTarget.parent().is('.socket')){
+            var classes = dragTarget.parent().attr('class');
 
             classes = classes.replace("socket","").trim();
             // console.log(classes);
             if(classes == "boolean"){           
-                drag_target.parent().append(
+                dragTarget.parent().append(
                     '<select><option>true</option><option>false</option></select>');
             }else{
                 if(!classes || classes=="string"){
                     classes = '\"text\"';
                 }
-                drag_target.parent().append('<input type="'+classes+'"/>');
+                dragTarget.parent().append('<input type="'+classes+'"/>');
             }
         }
-        drag_target.css('position', 'absolute');
-        if (drag_target.is('.scripts_workspace .wrapper')){
+        dragTarget.css('position', 'absolute');
+        if (dragTarget.is('.scripts_workspace .wrapper')){
             drag_placeholder = $('<div class="drag_placeholder"></div>');
-            drag_placeholder.height(drag_target.outerHeight());
-            drag_target.before(drag_placeholder);
+            drag_placeholder.height(dragTarget.outerHeight());
+            dragTarget.before(drag_placeholder);
         }
-        $('.content').append(drag_target);
-        drag_target.offset(start_position);
-        potential_drop_targets = get_potential_drop_targets();
-        // console.log('%s potential drop targets', potential_drop_targets.length);
-        // console.log('drop targets: [%s]', $.map(potential_drop_targets, function(elem, idx){
+        $('.content').append(dragTarget);
+        dragTarget.offset(start_position);
+        potential_dropTargets = get_potential_dropTargets();
+        // console.log('%s potential drop targets', potential_dropTargets.length);
+        // console.log('drop targets: [%s]', $.map(potential_dropTargets, function(elem, idx){
         //     return $(elem).long_name();
         // }).join(', '));
-        drop_rects = $.map(potential_drop_targets, function(elem, idx){
+        drop_rects = $.map(potential_dropTargets, function(elem, idx){
             return $(elem).rect();
         });
         // console.log('%s drop_rects', drop_rects.length);
         // console.log('drop rects: %o', drop_rects);
 
         // start timer for drag events
-        timer = setTimeout(hit_test, drag_timeout);
+        timer = setTimeout(hitTest, dragTimeout);
         return false;
     }
     
     function drag(event){
         // console.log('trying to drag, honestly');
         if (!blend(event)) {return undefined;}
-        if (!drag_target) {return undefined;}
-        if (!current_position) {start_drag(event);}
+        if (!dragTarget) {return undefined;}
+        if (!currentPosition) {start_drag(event);}
         event.preventDefault();
         // update the variables, distance, button pressed
         var next_position = {left: event.pageX, top: event.pageY};
-        var dX = next_position.left - current_position.left;
-        var dY = next_position.top - current_position.top;
-        var curr_pos = drag_target.offset();
-        drag_target.offset({left: curr_pos.left + dX, top: curr_pos.top + dY});
-        current_position = next_position;
+        var dX = next_position.left - currentPosition.left;
+        var dY = next_position.top - currentPosition.top;
+        var curr_pos = dragTarget.offset();
+        dragTarget.offset({left: curr_pos.left + dX, top: curr_pos.top + dY});
+        currentPosition = next_position;
         return false;
     }
     
-    function end_drag(end){
-        // console.log('end_drag');
+    function endDrag(end){
+        // console.log('endDrag');
         clearTimeout(timer);
         timer = null;
         if (!dragging) {return undefined;}
@@ -226,69 +226,69 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        drag_target.removeClass('drag_active');
-        drag_target.removeClass("drag_indication");
-        if (drop_target && drop_target.length){
-            drop_target.removeClass('drop_active');
-            if (drag_target.block_type() === 'step'){
+        dragTarget.removeClass('drag_active');
+        dragTarget.removeClass("drag_indication");
+        if (dropTarget && dropTarget.length){
+            dropTarget.removeClass('drop_active');
+            if (dragTarget.block_type() === 'step'){
                 // Drag a step to snap to a step
                 // console.log('snapping a step togther')
-                drop_target.parent().append(drag_target);
-                drag_target.css({
+                dropTarget.parent().append(dragTarget);
+                dragTarget.css({
                     position: 'relative',
                     left: 0,
                     top: 0,
                     display: 'inline-block'
                 });
-                drag_target.trigger('add_to_script');
+                dragTarget.trigger('add_to_script');
             }else{
                 // Insert a value block into a socket
                 // console.log('Inserting a value into a socket');
-                drop_target.find('input, select').remove();
-                drop_target.append(drag_target);
-                drag_target.css({
+                dropTarget.find('input, select').remove();
+                dropTarget.append(dragTarget);
+                dragTarget.css({
                     position: 'relative',
                     left: 0,
                     top: 0,
                     display: 'inline-block'
                 });
-                drag_target.trigger('add_to_socket');
+                dragTarget.trigger('add_to_socket');
             }
-        }else if ($('.block_menu').cursor_over()){
+        }else if ($('.block_menu').cursorOver()){
             // delete block if dragged back to menu
             // console.log('deleting a block');
-            drag_target.trigger('delete_block')
-            drag_target.remove();
-        }else if (drag_target.overlap(target_canvas)){
+            dragTarget.trigger('delete_block')
+            dragTarget.remove();
+        }else if (dragTarget.overlap(target_canvas)){
             // generally dragged to canvas, position it there
             // console.log('Drop onto canvas');
-//            var curr_pos = drag_target.offset();
-            drop_cursor.before(drag_target);
+//            var curr_pos = dragTarget.offset();
+            drop_cursor.before(dragTarget);
             drop_cursor.remove();
             drop_cursor = null;
-            drag_target.css({position: 'relative', top: 0, left: 0, display: 'block'});
-            drag_target.trigger('add_to_workspace');
+            dragTarget.css({position: 'relative', top: 0, left: 0, display: 'block'});
+            dragTarget.trigger('add_to_workspace');
             $('.scripts_workspace').trigger('add');
         }else{
             if (cloned){
                 // console.log('remove cloned block');
-                drag_target.remove();
+                dragTarget.remove();
             }else{
                 // console.log('put block back where we found it');
                 if (start_parent){
                     if (start_parent.is('.socket')){
                         start_parent.children('input').remove();
                     }
-                    start_parent.append(drag_target);
-                    drag_target.css({
+                    start_parent.append(dragTarget);
+                    dragTarget.css({
                         position: 'relative',
                         top: 0,
                         left: 0,
                         display: 'inline-block'
                     });
                 }else{
-                    target_canvas.append(drag_target);
-                    drag_target.offset(start_position);
+                    target_canvas.append(dragTarget);
+                    dragTarget.offset(start_position);
                 }
             }
         }
@@ -303,7 +303,7 @@
     }
     
     function position_drop_cursor(){
-        var self, top, middle, bottom, x = drag_target.position().top;
+        var self, top, middle, bottom, x = dragTarget.position().top;
         // console.log('cursor: %s', x);
         target_canvas.prepend(drop_cursor);
         drop_cursor.show();
@@ -321,64 +321,64 @@
         });
     }
         
-    function hit_test(){
+    function hitTest(){
         // test the dragging rect(s) against the target rect(s)
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
-        if (!drag_target) {return;}
-        var drop_idx = -1;
-        var drop_area = 0;
-        var drag_type = drag_target.block_type();
-        var drag_target_flap = drag_target.children('.block');
-        switch(drag_type){
+        if (!dragTarget) {return;}
+        var dropIndex = -1;
+        var dropArea = 0;
+        var dragType = dragTarget.block_type();
+        var dragTargetFlap = dragTarget.children('.block');
+        switch(dragType){
             case 'trigger':
-                setTimeout(hit_test, drag_timeout);
+                setTimeout(hitTest, dragTimeout);
                 return position_drop_cursor(); // no flap
-            case 'step': drag_target_flap = drag_target_flap.children('.flap');
+            case 'step': dragTargetFlap = dragTargetFlap.children('.flap');
         }
-        var drag_rect = drag_target_flap.rect();
-        // console.log('drag_rect: %s', rect_str(drag_rect));
+        var dragRect = dragTargetFlap.rect();
+        // console.log('dragRect: %s', rectToString(dragRect));
         var area = 0;
         $.each(drop_rects, function(idx, elem){
-            area = overlap(drag_rect, elem);
-            // console.log('match vs. %s: %s', rect_str(elem), area);
-            if (area > drop_area){
-                drop_idx = idx;
-                drop_area = area;
+            area = overlap(dragRect, elem);
+            // console.log('match vs. %s: %s', rectToString(elem), area);
+            if (area > dropArea){
+                dropIndex = idx;
+                dropArea = area;
                 // console.log('found potential match');
             }
-        else if(drag_rect && elem){
-        val = dist(drag_rect["left"], drag_rect["top"], elem["left"], elem["top"]);
+        else if(dragRect && elem){
+        val = dist(dragRect["left"], dragRect["top"], elem["left"], elem["top"]);
         if(val < snap_dist){ 
-            drop_idx = idx;
-            drop_area = area;
+            dropIndex = idx;
+            dropArea = area;
         }
         }
         });
-        if (drop_target && drop_target.length){
-            drop_target.removeClass('drop_active');
+        if (dropTarget && dropTarget.length){
+            dropTarget.removeClass('drop_active');
         }
-        if (drop_idx > -1){
-            drop_target = potential_drop_targets.eq(drop_idx).addClass('drop_active');
-            drag_target.addClass('drag_active');
+        if (dropIndex > -1){
+            dropTarget = potential_dropTargets.eq(dropIndex).addClass('drop_active');
+            dragTarget.addClass('drag_active');
             drop_cursor.hide();
         }else{
-            drag_target.removeClass('drag_active');
+            dragTarget.removeClass('drag_active');
             position_drop_cursor();
-            drop_target = null;
+            dropTarget = null;
         }
-        timer = setTimeout(hit_test, drag_timeout);
+        timer = setTimeout(hitTest, dragTimeout);
     }
     
     // Initialize event handlers
-    if (is_touch){
+    if (isTouch){
         $('.scripts_workspace, .block_menu').delegate('.block', 'touchstart', init_drag);
         $('.content').live('touchmove', drag);
-        $('.content').live('touchend', end_drag);
+        $('.content').live('touchend', endDrag);
     }else{
         $('.scripts_workspace, .block_menu').delegate('.block', 'mousedown', init_drag);
         $('.content').live('mousemove', drag);
-        $('.content').live('mouseup', end_drag);
+        $('.content').live('mouseup', endDrag);
     }
     
     // Utility methods
@@ -390,8 +390,8 @@
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));  
     }
     
-    function rect_str(r){
-        return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', center_x = ' + r.center_x + ', center_y = ' + r.center_y + '>'; 
+    function rectToString(r){
+        return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', centerX = ' + r.centerX + ', centerY = ' + r.centerY + '>'; 
     }
     
     function overlap(r1, r2){ // determine area of overlap between two rects
@@ -405,8 +405,8 @@
     
     // jQuery extensions
     $.fn.extend({
-        rect_str: function(){
-            return rect_str(this.rect());
+        rectToString: function(){
+            return rectToString(this.rect());
         },
         rect: function(){
             var pos = this.offset();
@@ -418,8 +418,8 @@
                     height: height,
                     right: pos.left + width,
                     bottom: pos.top + height,
-                    center_x: pos.left + width/2,
-                    center_y: pos.top + height/2
+                    centerX: pos.left + width/2,
+                    centerY: pos.top + height/2
             };
         },
         overlap: function(target){
@@ -432,10 +432,10 @@
           var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
           return this.overlap(target) >= targetArea;  
         },
-        cursor_over: function(){
+        cursorOver: function(){
             var rect = this.rect();
-            return current_position.left >= rect.left && current_position.left <= rect.right &&
-                   current_position.top >= rect.top && current_position.top <= rect.bottom;
+            return currentPosition.left >= rect.left && currentPosition.left <= rect.right &&
+                   currentPosition.top >= rect.top && currentPosition.top <= rect.bottom;
         }
     });
     

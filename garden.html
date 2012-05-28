@@ -38,6 +38,11 @@
                 {{#contained}}
                     <div class="blockhead">
                         {{{label}}}
+                        <div class="locals block_menu">
+                            {{#locals}}
+                                {{{.}}}
+                            {{/locals}}
+                        </div>
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
@@ -56,6 +61,11 @@
                 {{#contained}}
                     <div class="blockhead">
                         {{{label}}}
+                        <div class="locals block_menu">
+                            {{#locals}}
+                                {{{.}}}
+                            {{/locals}}
+                        </div>
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
@@ -144,7 +154,6 @@
       <button class="done">Done</button>    
       </div>
     <script src="lib/jquery-1.7.1.min.js"></script>
-    <script src="lib/underscore-min.js"></script>
     <script src="lib/jquery.hotkeys.js"></script>
     <script src="lib/jquery.querystring.js"></script>
     <script src="lib/yepnope.1.0.2-min.js"></script>

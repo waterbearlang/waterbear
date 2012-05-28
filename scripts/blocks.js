@@ -1,15 +1,14 @@
+
+
 Block.nextId = 0;
 
 var templates = {};
-var compiled_templates = {};
-_.templateSettings = {
-    interpolate: /\{\{(.+?)\}\}/g
-};
+var compiledTemplates = {};
 ['step', 'context', 'eventhandler', 'expression'].forEach(function(type){
-    compiled_templates[type] = Mustache.compile($('#' + type + '_template').text());
+    compiledTemplates[type] = Mustache.compile($('#' + type + '_template').text());
     templates[type] = function (opts){
         window.opts = opts;
-        return $(compiled_templates[type](opts));
+        return compiledTemplates[type](opts);
     };
 });
 
@@ -31,7 +30,7 @@ function getContained(s){
     return s.closest('.blockhead').next().next();
 }
 
-function choice_func(s, listname, default_opt){
+function choiceFunction(s, listname, default_opt){
     var list = choice_lists[listname];
     return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' + 
         list.map(function(item){
@@ -65,8 +64,8 @@ function Label(value, disclosure){
     // FIXME: Move specific type handling to raphael_demo.js
     value = value.replace(/\[boolean:(true|false)\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
     value = value.replace(/\[boolean\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/gm, choice_func);
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/gm, choice_func);
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/gm, choiceFunction);
+    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/gm, choiceFunction);
     // match selector [^\[\]] should match any character except '[', ']', and ':'
     value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
@@ -79,109 +78,112 @@ function Label(value, disclosure){
 }
 
 var models = [];
-function EventHandler(options, scope){
+
+function Step(options, scope){
     var opts = {
-        group: 'control',
-        locals: [],
-        contained: [],
-        returns: false,
-        type: null
+        returns: false
     };
     $.extend(opts, options);
-    //window.opts = opts;
-    for (var i = 0; i < opts.contained.length; i++){
-        var container = opts.contained[i];
-        container.label = Label(container.label, true);
-    }
-    var block = templates.eventhandler(opts);
-    opts.view = block;
-    block.data('model', opts);
+    opts.label = Label(opts.label);
+    opts.view = templates.step(opts);
     models.push(opts);
-    return  block;
+    return  opts.view;
 }
 
 function Expression(options, scope){
     var opts = {
-        group: 'control',
-        returns: {type: 'int', label: 'int##'},
-        subContainerLabels: [],
-        label: 'Step' // label is its own mini-language
+        returns: {type: 'int', label: 'int##'}
     };
     $.extend(opts, options);
     opts.label = Label(opts.label);
-    var block = templates.expression(opts);
-    opts.view = block;
-    block.data('model', opts);
+    opts.view = templates.expression(opts);
     models.push(opts);
-    return  block;
+    return  opts.view;
 }
 
 function Context(options, scope){
     var opts = {
-        group: 'control',
-        contained: [],  // Something cannot be inside
-        locals: [],
-        returns: false
+        contained: [],
+        locals: []
     };
     $.extend(opts, options);
     for (var i = 0; i < opts.contained.length; i++){
         var container = opts.contained[i];
         container.label = Label(container.label, true);
     }
-    var block = templates.context(opts);
-    opts.view = block;
-    block.data('model', opts);
+    if (opts.locals){
+        for (var j = 0; j < opts.locals.length; j++){
+            opts.locals[j] = Expression(opts.locals[j]);
+        }
+    }
+    opts.view = templates.context(opts);
     models.push(opts);
-    return  block;
+    return  opts.view;
 }
 
-function Step(options, scope){
+function EventHandler(options, scope){
     var opts = {
-        group: 'control',
-        returns: false,
-        label: 'Step' // label is its own mini-language
+        locals: [],
+        contained: []
     };
     $.extend(opts, options);
-    opts.label = Label(opts.label);
-    var block = templates.step(opts);
-    opts.view = block;
-    block.data('model', opts);
+    for (var i = 0; i < opts.contained.length; i++){
+        var container = opts.contained[i];
+        container.label = Label(container.label, true);
+    }
+    if (opts.locals){
+        for (var j = 0; j < opts.locals.length; j++){
+            opts.locals[j] = Block(opts.locals[j]);
+        }
+    }
+    opts.view = templates.eventhandler(opts);
     models.push(opts);
-    return  block;
+    return  opts.view;
 }
 
-function Block(options, scope){
-    // Options include:
-    //
-    // Menu blocks subset:
-    //
-    // label: required (yes, there are required options, deal with it)
-    // klass: [control] (for styling)
-    // trigger: [false] (is this a trigger?)
-    // containers: [0] (how many sub-scripts does this hold?)
-    // slot: [true] (can scripts follow this block in sequence?)
-    // type: string, number, color, or boolean if this is a value block
-    // 
-    // Script block additions:
-    // 
-    // sockets: array of values or value blocks
-    // contained: array of contained blocks
-    // next: block that follows this block
-    
-    console.log('Block: %s', options.label);
+function assertStep(options){
+    if (options.type){
+        alert('Error: expression "' + options.label + '" treated as a step');
+    }
+    if (options.contained){
+        alert('Error: context "' + options.contained[0].label + '" treated as a step');
+    }
+}
 
-    if (options.trigger){
-        console.log('building an event handler');
-        return EventHandler(options, scope);
-    }else if (options.type){
-        console.log('building an expression');
-        return Expression(options, scope);
-    }else if (options.contained){
-        console.log('building a context');
-        return Context(options, scope);
-    }else{
-        console.log('building a step');
-        return Step(options, scope);
+function assertExpression(options){
+    if (! options.type){
+        alert('Error: step "' + options.label + '" treated as an expression');
+    }
+    if (options.contained){
+        alert('Error: context "' + options.contained[0].label + '" treated as an expression');
+    }
+}
+
+function assertContext(options){
+    if (! options.contained){
+        alert('Error: block "' + options.label + '" treated as a context');
+    }
+}
+
+
+
+function Block(options, scope){
+    switch(options.blocktype){
+        case 'step':
+            assertStep(options);
+            return Step(options, scope);
+        case 'expression':
+            assertExpression(options);
+            return Expression(options, scope);
+        case 'context':
+            assertContext(options);
+            return Context(options, scope);
+        case 'eventhandler':
+            assertContext(options);
+            return EventHandler(options, scope);
+        default:
+            alert('Warning: unsupported block type: ' + options.blocktype);
+            console.log('Unsupported blocktype: %o', options);
     }
 }
     

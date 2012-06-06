@@ -101,24 +101,32 @@
         var q = $.parseQuery();
         if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 
             window.location = "./";//If they don't have the plugin part of the query string lets send them back home.
-        var testRes = ({
+
+        var libs = {
             "javascript" : "plugins/javascript.js",
             "arduino" : "plugins/arduino.js",
             "canvas" : "plugins/canvas.js",
             "crafty" : "plugins/crafty.js",
             "gamequery" : "plugins/gamequery.js"
-        })[ q.plugin ];
+        };
+
+        // load all modules separated by |
+        q = q['plugin'].split('|');
+        $.each( q , function( a, name ) {
+
+          var plugin = libs[ name ];
         
-        yepnope({
-            test : testRes,
-            yep : testRes,
-            complete : function () {
-                if(! testRes ){
-                    window.location = "./";
-                    alert('Sorry the plugin: \"'+q.plugin+'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
-                }
-            }
-        });
+          yepnope({
+              test : plugin,
+              yep : plugin,
+              complete : function () {
+                  if(! plugin ){
+                      window.location = "./";
+                      alert('Sorry the plugin: \"'+ name +'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
+                  }
+              }
+          });
+        } );
     </script>
   </body>
 </html>

@@ -141,31 +141,68 @@ window.choice_lists = {
 // Value blocks can nest, so don't end them with semi-colons (i.e., if there is a "type" specified).
 //
 //
+
+var kissa = 0;
+
+fb = {};
+
 var menus = {
   animation: menu('Facebook', [
         {
             label: 'get tweet for [string]',
             containers: 1,
-            script: 'local.getTweet({{1}}, function(tweet){local.tweet## = tweet;[[1]]});',
+            script: 'kissa = {{1}}; window.alert({{1}});',
             returns: {
                 label: 'last tweet##',
-                script: 'local.tweet## || "waiting…"',
+                script: 'kissa',
                 type: 'string'
             },
             help: 'asynchronous call to get the last tweet of the named account'
+        } , {
+	     label: 'Login to Facebook',
+             script: 'fb._login()'
+        } , {
+            label: 'My FB friends',
+            script: 'console.log("Daa");',
+            returns: {
+                label: 'Matti',
+                script: 'Matti',
+                type: 'string'
+            }
         }
     ])
 };
 
-var demos = [
-    {title: 'Rotating Squares',
-     description: 'Just a simple animation test',
-     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[1]]}_start();","containers":1,"trigger":true,"locals":[],"sockets":[],"contained":[{"klass":"control","label":"repeat [number:10]","script":"range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});","containers":1,"locals":[{"label":"loop index","script":"local.index","type":"number","klass":"control"}],"sockets":["10"],"contained":[{"klass":"shapes","label":"rect_1 with width [number:0] and height [number:0] at position x [number:0] y [number:0]","script":"local.shape_1 = global.paper.rect({{3}}, {{4}}, {{1}}, {{2}});","containers":0,"locals":[],"returns":{"label":"rect_1","script":"local.shape_1","type":"shape","klass":"shapes"},"sockets":["40","40",{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","locals":[],"sockets":["1",{"klass":"sensing","label":"stage width","script":"global.stage_width","containers":0,"type":"number","locals":[],"sockets":[],"contained":[],"next":""}],"contained":[],"next":""},{"klass":"operators","label":"pick random [number:1] to [number:10]","script":"randint({{1}}, {{2}})","containers":0,"type":"number","locals":[],"sockets":["1",{"klass":"sensing","label":"stage height","script":"global.stage_height","containers":0,"type":"number","locals":[],"sockets":[],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"animation","label":"shape [shape] rotation [number:15] degrees over [number:500] ms with [choice:easing]","script":"{{1}}.animate({rotation: {{2}} }, {{3}}, {{4}});","containers":0,"locals":[],"sockets":[{"klass":"shapes","label":"rect_1","script":"local.shape_1","containers":0,"type":"shape","locals":[],"sockets":[],"contained":[],"next":""},"360","2000",">"],"contained":[],"next":""}}],"next":""}],"next":""}]}    
-];
-populate_demos_dialog(demos);
+fb._login = function() {
+   FB.login( $.noop , { scope : 'user_about_me,user_photos' } );
+}
+
+// LOAD FB API
+$('body').append( $('<div>' , { id: 'fb-root' , style : 'display: none' } ) );
+
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '466738416673020', // App ID
+      // channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+
 load_current_scripts();
 $('.scripts_workspace').trigger('init');
-console.log("Done");
 
 $('.socket input').live('click',function(){
     $(this).focus();

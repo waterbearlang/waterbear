@@ -142,40 +142,38 @@ window.choice_lists = {
 //
 //
 
-var kissa = 0;
-
-fb = {};
+var fb = {};
+fb._permissions = 'user_about_me,user_photos,publish_stream';
 
 var menus = {
   animation: menu('Facebook', [
-        {
-            label: 'get tweet for [string]',
-            containers: 1,
-            script: 'kissa = {{1}}; window.alert({{1}});',
-            returns: {
-                label: 'last tweet##',
-                script: 'kissa',
-                type: 'string'
-            },
-            help: 'asynchronous call to get the last tweet of the named account'
-        } , {
+       {
 	     label: 'Login to Facebook',
-             script: 'fb._login()'
+             containers: 1,
+             script: "FB.login( function(){ FB.api('/me/feed', $.noop ); [[1]] } , { scope : '" + _fb._permissions + "' } );"
         } , {
-            label: 'My FB friends',
-            script: 'console.log("Daa");',
-            returns: {
-                label: 'Matti',
-                script: 'Matti',
-                type: 'string'
-            }
-        }
+            label: 'share [string]',
+            script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
+        } , {
+            label: 'my friends',  
+            script: 'fb.friends.data',
+            type: 'array'
+        } , {
+	     label: 'me', script: 'fb.me', type: 'object'
+	} , {
+	     label: 'name of [object]',
+             script: '{{1}}.name', type: 'string'
+	} , {
+	      label: 'image of [object]', script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"', type: 'string'
+	}
     ])
 };
 
-fb._login = function() {
-   FB.login( $.noop , { scope : 'user_about_me,user_photos' } );
+fb._init = function {
+   FB.api("/me/friends", function( data ) { fb.friends = data; fb._count++; } );
+   FB.api("/me", function( data ) { fb.me = data; fb._count++; } );
 }
+
 
 // LOAD FB API
 $('body').append( $('<div>' , { id: 'fb-root' , style : 'display: none' } ) );
@@ -188,8 +186,8 @@ window.fbAsyncInit = function() {
       cookie     : true, // enable cookies to allow the server to access the session
       xfbml      : true  // parse XFBML
     });
-
-    // Additional initialization code here
+    // load FB
+    FB.login( fb._init , { scope : fb._permissions } );    
   };
 
   // Load the SDK Asynchronously

@@ -1,24 +1,14 @@
-/* 
- *    JAVASCRIPT PLUGIN
- * 
- *    Support for writing Javascript using Waterbear
- *
- */
-
-
-// Pre-load dependencies
-yepnope({
-    load: [ 'plugins/javascript.css',
-            'lib/raphael-1.3.1-min.js',
-            'lib/raphael-path.js',
-            'lib/sketchy.js',
-            'lib/colorwheel.js',
-            'lib/beautify.js',
-            'lib/highlight.js',
-            'lib/highlight-javascript.js',
-            'lib/highlight-github.css'
-    ],
-    complete: setup
+yepnope({ load: [
+    'plugins/javascript.css',
+    'lib/raphael-1.3.1-min.js',
+    'lib/raphael-path.js',
+    'lib/sketchy.js',
+    'lib/colorwheel.js',
+    'lib/beautify.js',
+    'lib/highlight.js',
+    'lib/highlight-javascript.js',
+    'lib/highlight-github.css'
+], complete: setup
 });
 
 // Add some utilities
@@ -142,36 +132,42 @@ window.choice_lists = {
 //
 //
 
+// initialize empty object for fb data
 var fb = {};
+fb.me = {};
+
+// what user permissions should be requrested
 fb._permissions = 'user_about_me,user_photos,publish_stream';
 
 var menus = {
-  animation: menu('Facebook', [
-       {
-	     label: 'Login to Facebook',
-             containers: 1,
-             script: "FB.login( function(){ FB.api('/me/feed', $.noop ); [[1]] } , { scope : '" + _fb._permissions + "' } );"
-        } , {
-            label: 'share [string]',
-            script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
-        } , {
-            label: 'my friends',  
-            script: 'fb.friends.data',
-            type: 'array'
-        } , {
-	     label: 'me', script: 'fb.me', type: 'object'
-	} , {
-	     label: 'name of [object]',
-             script: '{{1}}.name', type: 'string'
-	} , {
-	      label: 'image of [object]', script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"', type: 'string'
-	}
-    ])
+  facebook : menu('Facebook', [
+    {
+      label: 'share [string]',
+      script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
+    } , {
+      label: 'my friends',  
+      script: 'fb.friends.data',
+      type: 'array'
+    } , {
+	    label: 'me',
+      script: 'fb.me',
+      type: 'object'
+	  } , {
+      label: 'name of [object]',
+      script: '{{1}}.name',
+      type: 'string'
+	   } , {
+      label: 'image of [object]',
+      script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"',
+      type: 'string'
+	   }
+    ] ) 
 };
 
-fb._init = function {
-   FB.api("/me/friends", function( data ) { fb.friends = data; fb._count++; } );
-   FB.api("/me", function( data ) { fb.me = data; fb._count++; } );
+fb._init = function() {
+   FB.api("/me/friends", function( data ) { fb.friends = data; } );
+   FB.api("/me", function( data ) { fb.me = data; } );
+   FB.api("/me/feed/", function( data ) { console.log(data); } );
 }
 
 
@@ -179,25 +175,25 @@ fb._init = function {
 $('body').append( $('<div>' , { id: 'fb-root' , style : 'display: none' } ) );
 
 window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '466738416673020', // App ID
-      // channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
-      status     : true, // check login status
-      cookie     : true, // enable cookies to allow the server to access the session
-      xfbml      : true  // parse XFBML
-    });
-    // load FB
-    FB.login( fb._init , { scope : fb._permissions } );    
-  };
+  FB.init( {
+    appId      : '466738416673020', // App ID
+    // channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : false  // parse XFBML
+  } );
+  // load FB
+  FB.login( fb._init , { scope : fb._permissions } );    
+};
 
-  // Load the SDK Asynchronously
-  (function(d){
-     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     ref.parentNode.insertBefore(js, ref);
-   }(document));
+// Load the SDK Asynchronously
+(function(d){
+  var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement('script'); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js";
+  ref.parentNode.insertBefore(js, ref);
+}(document));
 
 load_current_scripts();
 $('.scripts_workspace').trigger('init');

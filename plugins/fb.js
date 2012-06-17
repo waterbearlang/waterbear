@@ -1,4 +1,4 @@
-/*global yepnope, FB */
+/*global yepnope, FB, menu */
 
 yepnope(
     {
@@ -7,37 +7,38 @@ yepnope(
     }
 );
 
-function setup() {
-    // initialize empty object for fb data
-    var fb = {}
-    fb.me = {};
+function setup() { console.log("FB setup"); }
 
-    // what user permissions should be requrested
-    fb._permissions = 'user_about_me,user_photos,publish_stream';
+// initialize empty object for fb data
+var fb = {}
+fb.me = {};
 
-    var menus = {
-      facebook : menu('Facebook', [
-      {
-      label: 'share [string]',
-      script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
-    } , {
-      label: 'my friends',  
-      script: 'fb.friends.data',
-      type: 'array'
-    } , {
-	    label: 'me',
-      script: 'fb.me',
-      type: 'object'
-	  } , {
-      label: 'name of [object]',
-      script: '{{1}}.name',
-      type: 'string'
-	   } , {
-      label: 'image of [object]',
-      script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"',
-      type: 'string'
-	   }
-    ] ) 
+// what user permissions should be requrested
+fb._permissions = 'user_about_me,user_photos,publish_stream';
+
+var menus = {
+    facebook : menu('Facebook', [
+        {
+            label: 'share [string]',
+            script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
+        }, {
+            label: 'my friends', 
+            script: 'fb.friends.data',
+            type: 'array'
+        }, {
+	          label: 'me',
+            script: 'fb.me',
+            type: 'object'
+	      }, {
+            label: 'name of [object]',
+            script: '{{1}}.name',
+            type: 'string'
+	      }, {
+            label: 'image of [object]',
+            script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"',
+            type: 'string'
+	      }
+    ])
 };
 
 fb._init = function() {
@@ -77,5 +78,3 @@ $('.socket input').live('click',function(){
     $(this).focus();
     $(this).select();
 });
-
-}

@@ -1,14 +1,20 @@
-yepnope({ load: [
-    'lib/raphael-1.3.1-min.js',
-    'lib/raphael-path.js',
-    'lib/sketchy.js',
-    'lib/colorwheel.js',
-    'lib/beautify.js',
-    'lib/highlight.js',
-    'lib/highlight-javascript.js',
-    'lib/highlight-github.css'
-], complete: setup
-});
+/*global yepnope, jQuery */
+
+yepnope(
+    {
+        load: [
+            'lib/raphael-1.3.1-min.js',
+            'lib/raphael-path.js',
+            'lib/sketchy.js',
+            'lib/colorwheel.js',
+            'lib/beautify.js',
+            'lib/highlight.js',
+            'lib/highlight-javascript.js',
+            'lib/highlight-github.css'
+        ],
+        complete: setup
+    }
+);
 
 // Add some utilities
 jQuery.fn.extend({

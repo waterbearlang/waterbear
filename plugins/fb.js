@@ -1,19 +1,23 @@
-yepnope({ load: [
-    'plugins/javascript.css'
-], complete: setup
-     });
+/*global yepnope, FB */
+
+yepnope(
+    {
+        load: ['plugins/javascript.css'],
+        complete: setup
+    }
+);
 
 function setup() {
-// initialize empty object for fb data
-var fb = {};
-fb.me = {};
+    // initialize empty object for fb data
+    var fb = {}
+    fb.me = {};
 
-// what user permissions should be requrested
-fb._permissions = 'user_about_me,user_photos,publish_stream';
+    // what user permissions should be requrested
+    fb._permissions = 'user_about_me,user_photos,publish_stream';
 
-var menus = {
-  facebook : menu('Facebook', [
-    {
+    var menus = {
+      facebook : menu('Facebook', [
+      {
       label: 'share [string]',
       script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
     } , {
@@ -37,8 +41,8 @@ var menus = {
 };
 
 fb._init = function() {
-   FB.api("/me/friends", function( data ) { fb.friends = data; } );
-   FB.api("/me", function( data ) { fb.me = data; } );
+        FB.api("/me/friends", function (data) { fb.friends = data; });
+        FB.api("/me", function (data) { fb.me = data; });
 }
 
 

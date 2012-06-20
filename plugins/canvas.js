@@ -1364,6 +1364,7 @@ var demos = [
 populate_demos_dialog(demos);
 load_current_scripts();
 $('.scripts_workspace').trigger('init');
+$('#block_menu').accordion({ autoHeight: false });
 console.log("Done");
 
 $('.socket input').live('click',function(){

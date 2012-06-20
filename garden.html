@@ -15,17 +15,7 @@
   <body>
     <div class="content">
         <div id="block_menu" class="block_menu">
-            <section class="submenu">
-                <h3 class="select">About Waterbear</h3>
-                <div class="option" style="display:none;">
-                    <img src="images/waterbear.png" alt="waterbear icon"/>
-                    <p>Demo: <a href="http://waterbearlang.com/">waterbearlang.com</a></p>
-                    <p>Source and info: <a href="http://github.com/waterbearlang/waterbear">github.com/waterbearlang/waterbear</a></p>
-                    <p>Follow on twitter: <a href="http://twitter.com/waterbearlang">@waterbearlang</a></p>
-                    <p>Discuss Waterbear on the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a></p>
-                    <p>Waterbear image via: <a href="http://commons.wikimedia.org/wiki/File:Waterbear.jpg">commons.wikimedia.org</a>
-                </div>
-            </section>
+            
         </div>
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
@@ -97,6 +87,7 @@
     <script src="scripts/blocks.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
+	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script>
         var q = $.parseQuery();
         if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 

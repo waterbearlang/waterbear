@@ -5,7 +5,7 @@
     <title>Waterbear: Code Garden</title>
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
-	<link href="lib/css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+	<link href="lib/css/custom-theme/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
@@ -24,10 +24,8 @@
             <button class="run_scripts">Run</button>
             <button class="goto_stage">Show Stage</button>
             <button class="clear_scripts">Clear Scripts</button>
-            <button class="demo_scripts">Demos</button>
             <button class="save_scripts">Save</button>
             <button class="restore_scripts">Restore</button>
-            <button class="layout_blocks">Layout</button>
         </div>
         <div class="tab_bar2">
             <button class="goto_script">Back to Script</button>
@@ -102,7 +100,8 @@
             "gamequery" : "plugins/gamequery.js",
             "fb" : "plugins/fb.js",
             "accelerometer" : "plugins/accelerometer.js",
-            "base": "plugins/base.js"
+            "base": "plugins/base.js",
+ 	    "geo": "plugins/geolocation.js"
         };
 
         // load all modules separated by |
@@ -122,11 +121,18 @@
               }
           });
         } );
+		$(":button").button();
+		$('.save_scripts').css({width: '8%'});
+		$('.restore_scripts').css({width: '10%'});
+		$('.clear_scripts').css({width: '18%'});
+		$('.goto_stage').css({width: '18%'});
+		$('.run_scripts').css({width: '7%'});
+		$(":button").css({height: '2%'});
 
 // TODO: FIXME as real solution
 
 setTimeout( function(){ console.log("Ihq"); $('#block_menu').accordion({ autoHeight: false }); }, 10000 );
-		
+
     </script>
   </body>
 </html>

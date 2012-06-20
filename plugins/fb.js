@@ -22,7 +22,7 @@ var menus = {
             label: 'share [string]',
             script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
         }, {
-            label: 'my friends', 
+            label: 'all my friends', 
             script: 'fb.friends.data',
             type: 'array'
         }, {

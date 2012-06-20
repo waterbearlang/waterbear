@@ -26,7 +26,7 @@ var menus = {
             script: 'fb.friends.data',
             type: 'array'
         }, {
-	          label: 'me',
+	    label: 'me',
             script: 'fb.me',
             type: 'object'
 	      }, {
@@ -35,8 +35,8 @@ var menus = {
             type: 'string'
 	      }, {
             label: 'image of [object]',
-            script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"',
-            type: 'string'
+            script: '(function(){var img = new Image(); img.src="https://graph.facebook.com/" + {{1}}.id + "/picture"; return img;})',
+            type: 'image'
 	      }
     ])
 };

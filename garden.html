@@ -5,6 +5,7 @@
     <title>Waterbear: Code Garden</title>
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
+	<link href="lib/css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
@@ -115,12 +116,17 @@
               yep : plugin,
               complete : function () {
                   if(! plugin ){
-                      window.location = "./";
+                      // window.location = "./";
                       alert('Sorry the plugin: \"'+ name +'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
                   }
               }
           });
         } );
+
+// TODO: FIXME as real solution
+
+setTimeout( function(){ console.log("Ihq"); $('#block_menu').accordion({ autoHeight: false }); }, 10000 );
+		
     </script>
   </body>
 </html>

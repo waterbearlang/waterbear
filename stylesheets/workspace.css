@@ -129,7 +129,7 @@ body {
 }
 
 #block_menu{
-    position: absolute;
+position: absolute;
     width: 15%;
     height: 100%;
     left: 0px;
@@ -140,16 +140,11 @@ body {
 #block_menu .select{
     padding: 3px 10px;
     margin-bottom: 1px;
-    font-weight: bold;
-    color: #333;
-    background-color: #CCC;
-    border: 1px solid #333;
     cursor: pointer;
 }
 
 #block_menu .selected{
-    color: #000;
-    background-color: #EEE;
+    
 }
 
 .option{

@@ -6,7 +6,7 @@ yepnope(
     }
 );
 
-function setup() {
+function setup() {}
 
     var menus = {
       accelerometer : menu('Accelerometer', [
@@ -34,7 +34,7 @@ function setup() {
     ] )
     } 
     console.log("menu tuli");
-};
+
 
 function getTilt(){
 

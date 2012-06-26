@@ -5,7 +5,6 @@
     <title>Waterbear: Code Garden</title>
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
-	<link href="lib/css/custom-theme/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
@@ -86,53 +85,38 @@
     <script src="scripts/blocks.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
-	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="plugins/plugins.js"></script>
     <script>
-        var q = $.parseQuery();
-        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 
-            window.location = "./";//If they don't have the plugin part of the query string lets send them back home.
 
-        var libs = {
-            "javascript" : "plugins/javascript.js",
-            "arduino" : "plugins/arduino.js",
-            "canvas" : "plugins/canvas.js",
-            "crafty" : "plugins/crafty.js",
-            "gamequery" : "plugins/gamequery.js",
-            "fb" : "plugins/fb.js",
-            "accelerometer" : "plugins/accelerometer.js",
-            "base": "plugins/base.js",
- 	    "geo": "plugins/geolocation.js"
-        };
+        var q = $.parseQuery();
+
+         // if they don't have the plugin part of the query string lets send them back home.
+        if(!q.plugin || q.plugin == "undefined" || q.plugin == null)  {
+            window.location = "./";
+        }
 
         // load all modules separated by |
         q = q['plugin'].split('|');
+
+        // always load base and finish no matter what
+        q.unshift('first');
+        q.push('last');
+
         $.each( q , function( a, name ) {
 
-          var plugin = libs[ name ];
+          var plugin = plugins[ name ];
         
           yepnope({
               test : plugin,
               yep : plugin,
               complete : function () {
                   if(! plugin ){
-                      // window.location = "./";
-                      alert('Sorry the plugin: \"'+ name +'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
+                      alert('Sorry the plugin: \"'+ name +'\" does not exist.');
                   }
               }
           });
         } );
-		$(":button").button();
-		$('.save_scripts').css({width: '8%'});
-		$('.restore_scripts').css({width: '10%'});
-		$('.clear_scripts').css({width: '18%'});
-		$('.goto_stage').css({width: '18%'});
-		$('.run_scripts').css({width: '7%'});
-		$(":button").css({height: '2%'});
-		$('.scripts_text_view_tab').hide();
-
-// TODO: FIXME as real solution
-
-setTimeout( function(){ console.log("Ihq"); $('#block_menu').accordion({ autoHeight: false }); }, 10000 );
+    </script>
 
     </script>
   </body>

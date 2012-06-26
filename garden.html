@@ -100,9 +100,11 @@
     <script src="plugins/plugins.js"></script>
     <script>
         var q = $.parseQuery();
-        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 
+        // if they don't have the plugin part of the query string lets send them back home.
+        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) {
             window.location = "./";
-            //if they don't have the plugin part of the query string lets send them back home.
+            return;
+	}
 
         // load all modules separated by |
         q = q['plugin'].split('|');

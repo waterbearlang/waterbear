@@ -98,7 +98,7 @@ $.fn.extend({
             return this.val();
         }
         var patt = new RegExp('##','gm');
-        
+
         var desc = {
             klass: this.data('klass'),
             label: this.data('label').replace(/##/gm, '_' + this.id()),
@@ -117,7 +117,7 @@ $.fn.extend({
                 local.label = local.label.replace(/##/g, '_' + self.id());
             });
         }
-        if (this.data('returns')){ 
+        if (this.data('returns')){
             desc.returns = this.data('returns');
             desc.returns.script = desc.returns.script.replace(/##/g, '_' + this.id());
             desc.returns.label = desc.returns.label.replace(/##/g, '_' + this.id());
@@ -140,9 +140,9 @@ function Block(options, scope){
     // containers: [0] (how many sub-scripts does this hold?)
     // slot: [true] (can scripts follow this block in sequence?)
     // type: string, number, color, or boolean if this is a value block
-    // 
+    //
     // Script block additions:
-    // 
+    //
     // sockets: array of values or value blocks
     // contained: array of contained blocks
     // next: block that follows this block
@@ -160,7 +160,7 @@ function Block(options, scope){
         type: null
     };
     $.extend(opts, options);
-    
+
     if (opts.trigger){
         opts.flap = false; // can't have both flap and trigger
         opts.slot = false; // can't have both slot and trigger
@@ -209,7 +209,7 @@ function Block(options, scope){
                 Block.nextId++;
                 self.id(Block.nextId);
                 self.local_blocks().each(function(idx, local){
-                    $(local).id(Block.nextId); 
+                    $(local).id(Block.nextId);
                 });
             }
             return false;
@@ -274,7 +274,7 @@ function Block(options, scope){
         wrapper.addClass('step');
         wrapper.data('type', 'step');
     }
-    
+
     if (opts.slot){
         wrapper.append('<span class="next"><i class="slot"></i></span>');
     }
@@ -341,7 +341,7 @@ function getContained(s){
 
 function choice_func(s, listname, default_opt){
     var list = choice_lists[listname];
-    return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' + 
+    return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' +
         list.map(function(item){
             if (item === default_opt){
                 return '<option selected>' + item + '</option>';
@@ -351,33 +351,77 @@ function choice_func(s, listname, default_opt){
         }).join('') +
         '</select></span>';
 }
-            
+
 function Label(value){
-    // Recognize special values in the label string and replace them with 
-    // appropriate markup. Some values are dynamic and based on the objects currently
-    // in the environment
-    //
-    // values include:
-    //
-    // [number] => an empty number socket
-    // [number:default] => a number socket with a default value
-    // [boolean] => an empty boolean socket
-    // [boolean:default] => a boolean with a default value
-    // [string] => an empty string socket
-    // [string:default] => a string socket with a default value
-    // [choice:options] => a fixed set of options, listed in options parameter function
-    // etc…
-    
-    // FIXME: Move specific type handling to raphael_demo.js
-    value = value.replace(/\[boolean:(true|false)\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option selected>false</option></select></span>');
-    value = value.replace(/\[boolean\]/gm, '<span class="value boolean socket" data-type="boolean"><select><option>true</option><option>false</option></select></span>');
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/gm, choice_func);
-    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/gm, choice_func);
-    // match selector [^\[\]] should match any character except '[', ']', and ':'
-    value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
-    value = value.replace(/\[([^\[\]:]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
-    value = value.replace(/##/gm, '');
-    return value;
+	// Recognize special values in the label string and replace them with
+	// appropriate markup. Some values are dynamic and based on the objects currently
+	// in the environment
+	//
+	// values include:
+	//
+	// [number] => an empty number socket
+	// [number:default] => a number socket with a default value
+	// [boolean] => an empty boolean socket
+	// [boolean:default] => a boolean with a default value
+	// [string] => an empty string socket
+	// [string:default] => a string socket with a default value
+	// [choice:options] => a fixed set of options, listed in options parameter function
+
+	// FIXME: Move specific type handling to raphael_demo.js
+	// FIXME: type-specific
+	//    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<span class="number socket"><input type="number" value="$1"></span>');
+	//    value = value.replace(/\[number\]/g, '<span class="number socket"><input type="number"></span>');
+	//    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
+	//    value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
+	//    value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
+	//    value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
+	//    value = value.replace(/\[any:(.+?)\]/g, '<span class="any socket"><input value="$1"></span>');
+	//    value = value.replace(/\[any\]/g, '<span class="any socket"><input></span>');
+	//    value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
+	//    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
+	//    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
+	//    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+	//    return value;
+
+	value = value.replace(/\[bool:(true|false)\]/g, '<span class="bool socket" title="boolean"><select><option>true</option><option selected>false</option></select></span>');
+	value = value.replace(/\[bool\]/g,  '<span class="bool socket" title="boolean"><select><option>true</option><option>false</option></select></span>');
+
+	value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
+	value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+
+	function repl(sclass, val){
+		var type = "";
+		var data = ""; //Used later
+
+		//Lets add this attribute su users in supported browsers get the little arrows
+		if(sclass == 'int' || sclass == 'decimal' || sclass == 'integer')
+			type = 'type="number"';
+
+		if(val == undefined)
+			return '<span class="'+sclass+' socket" title="'+sclass+'"><input  '+type+' '+data+'/></span>';
+		return  '<span class="'+sclass+' socket" title="'+sclass+'"><input value="'+val+'" '+type+' '+data+'/></span>';
+	}
+
+	value = value.replace(/\[([a-zA-Z]*)\]$/g,function(a,b,c){
+		//console.log(" a: "+a+" b: "+b+" c: "+c);
+		// a is the whole string [int:10]
+		// b is the first match  int
+		// c is where it was found
+
+		return repl(b, undefined);
+
+	});
+	value = value.replace(/\[([a-zA-Z]*)\:(.*?)\]/g, function(a, b, c){
+		//console.log(" a "+a+" b "+b+" c "+c+" d "+d+" e "+e+" f "+f+" g "+g);
+		// a is the whole string [int:10]
+		// b is the first match  int
+		// c is the second match 10
+		// d is string that comes after
+		return repl(b, c);
+	});
+
+	return value;
+
 }
 
 

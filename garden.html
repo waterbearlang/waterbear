@@ -97,28 +97,36 @@
     <script src="scripts/blocks.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
+    <script src="plugins/plugins.js"></script>
     <script>
         var q = $.parseQuery();
-        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) 
-            window.location = "./";//If they don't have the plugin part of the query string lets send them back home.
-        var testRes = ({
-            "javascript" : "plugins/javascript.js",
-            "arduino" : "plugins/arduino.js",
-            "canvas" : "plugins/canvas.js",
-            "crafty" : "plugins/crafty.js",
-            "gamequery" : "plugins/gamequery.js"
-        })[ q.plugin ];
+        // if they don't have the plugin part of the query string lets send them back home.
+        if(!q.plugin || q.plugin == "undefined" || q.plugin == null) {
+            window.location = "./";
+            return;
+	}
+
+        // load all modules separated by |
+        q = q['plugin'].split('|');
+
+        // always load base and finish no matter what
+        q.unshift('first');
+        q.push('last');
+
+        $.each( q , function( a, name ) {
+
+          var plugin = plugins[ name ];
         
-        yepnope({
-            test : testRes,
-            yep : testRes,
-            complete : function () {
-                if(! testRes ){
-                    window.location = "./";
-                    alert('Sorry the plugin: \"'+q.plugin+'\" does not exist. \n\n We\'ll rediect you back to the main page to choose one that is available.');
-                }
-            }
-        });
+          yepnope({
+              test : plugin,
+              yep : plugin,
+              complete : function () {
+                  if(! plugin ){
+                      alert('Sorry the plugin: \"'+ name +'\" does not exist.');
+                  }
+              }
+          });
+        } );
     </script>
   </body>
 </html>

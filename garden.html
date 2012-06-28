@@ -5,6 +5,7 @@
     <title>Waterbear: Code Garden</title>
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
+	<link href="lib/css/custom-theme2/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
@@ -15,28 +16,15 @@
   <body>
     <div class="content">
         <div id="block_menu" class="block_menu">
-            <section class="submenu">
-                <h3 class="select">About Waterbear</h3>
-                <div class="option" style="display:none;">
-                    <img src="images/waterbear.png" alt="waterbear icon"/>
-                    <p>Demo: <a href="http://waterbearlang.com/">waterbearlang.com</a></p>
-                    <p>Source and info: <a href="http://github.com/waterbearlang/waterbear">github.com/waterbearlang/waterbear</a></p>
-                    <p>Follow on twitter: <a href="http://twitter.com/waterbearlang">@waterbearlang</a></p>
-                    <p>Discuss Waterbear on the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a></p>
-                    <p>Waterbear image via: <a href="http://commons.wikimedia.org/wiki/File:Waterbear.jpg">commons.wikimedia.org</a>
-                </div>
-            </section>
+            
         </div>
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
             <div class="scripts_text_view_tab chrome_tab">Script Text</div>
             <button class="run_scripts">Run</button>
-            <button class="goto_stage">Show Stage</button>
-            <button class="clear_scripts">Clear Scripts</button>
-            <button class="demo_scripts">Demos</button>
+            <button class="clear_scripts">Clear</button>
             <button class="save_scripts">Save</button>
             <button class="restore_scripts">Restore</button>
-            <button class="layout_blocks">Layout</button>
         </div>
         <div class="tab_bar2">
             <button class="goto_script">Back to Script</button>
@@ -98,12 +86,22 @@
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
     <script src="plugins/plugins.js"></script>
+	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script>
+	
+		// buttonize
+        $(":button").button();
+        $(":button").css({width: "14%"});
+
+        // remove support texts
+        $('.scripts_text_view_tab').hide();
+        $('.chrome_tab').hide();
+	
         var q = $.parseQuery();
         // if they don't have the plugin part of the query string lets send them back home.
         if(!q.plugin || q.plugin == "undefined" || q.plugin == null) {
             window.location = "./";
-            return;
+            // return;
 	}
 
         // load all modules separated by |

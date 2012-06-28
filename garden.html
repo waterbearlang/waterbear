@@ -16,7 +16,7 @@
   <body>
     <div class="content">
         <div id="block_menu" class="block_menu">
-            
+            <span id="block_menu_load">Loading...</span>
         </div>
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
@@ -102,7 +102,7 @@
         if(!q.plugin || q.plugin == "undefined" || q.plugin == null) {
             window.location = "./";
             // return;
-	}
+	   }
 
         // load all modules separated by |
         q = q['plugin'].split('|');

@@ -10,5 +10,6 @@ yepnope(
 function setup(){
     console.log('All done?');
 	$('#block_menu').accordion({ autoHeight: false,  collapsible: true });
+    $('#block_menu_load').remove();
     $('#block_menu').show();
 };

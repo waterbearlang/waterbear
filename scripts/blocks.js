@@ -160,8 +160,13 @@ function assertExpression(options){
 }
 
 function assertContext(options){
+    if (options.containers){
+        alert('Error: context with containers vs. contained');
+        console.log('Error context: %o', options);
+    }
     if (! options.contained){
         alert('Error: block "' + options.label + '" treated as a context');
+        console.log('Error context: %o', options);
     }
 }
 

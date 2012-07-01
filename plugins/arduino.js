@@ -3,99 +3,20 @@ yepnope({
 });
 
 (function(){
-    // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-    
+
 // expose these globally so the Block/Label methods can find them
-window.choice_lists = {
-    /*keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
-        .split('').concat(['up', 'down', 'left', 'right',
-        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
-        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown', 
-        'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),*/
-    highlow: ['HIGH', 'LOW'],
-    inoutput: ['INPUT', 'OUTPUT'],
-    onoff: ['ON', 'OFF'],
-    logic: ['true', 'false'],
-    digitalpins: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,'A0','A1','A2','A3','A4','A5'],
-    analoginpins: ['A0','A1','A2','A3','A4','A5'],
-    pwmpins: [3, 5, 6, 9, 10, 11],
-    baud:[9600, 300, 1200, 2400, 4800, 14400, 19200, 28800, 38400, 57600, 115200],
-    analogrefs:['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL']
-};
+window.choice_lists['highlow'] = ['HIGH', 'LOW'];
+window.choice_lists['inoutput'] = ['INPUT', 'OUTPUT'];
+window.choice_lists['onoff'] = ['ON', 'OFF'];
+window.choice_lists['logic'] = ['true', 'false'];
+window.choice_lists['digitalpins'] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,'A0','A1','A2','A3','A4','A5'];
+window.choice_lists['analoginpins'] = ['A0','A1','A2','A3','A4','A5'];
+window.choice_lists['baud'] = [9600, 300, 1200, 2400, 4800, 14400, 19200, 28800, 38400, 57600, 115200];
+window.choice_lists['analogrefs'] = ['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL'];
 
 window.set_defaultscript = function(script){
     window.defaultscript = script; 
 };
-
-window.load_defaultscript = function(script){
-    if (typeof window.defaultscript != 'undefined'){
-        //console.log("window.defaultscript =", window.defaultscript);
-        load_scripts_from_object(window.defaultscript);
-    }
-};
-
-window.update_scripts_view = function(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    var view = $('.workspace:visible .scripts_text_view');
-    blocks.write_script(view);
-};
-
-function run_scripts(event){
-    $('.stage')[0].scrollIntoView();
-    var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
-}
-$('.run_scripts').click(run_scripts);
-
-jQuery.fn.extend({
-  extract_script: function(){
-      if (this.length === 0) {return '';}
-      if (this.is(':input')) {return this.val();}
-      if (this.is('.empty')) {return '// do nothing';}
-      return this.map(function(){
-          var self = $(this);
-          var script = self.data('script');
-          if (!script) {return null;}
-          var exprs = $.map(self.socket_blocks(), function(elem, idx){return $(elem).extract_script();});
-          var blks = $.map(self.child_blocks(), function(elem, idx){return $(elem).extract_script();});
-          if (exprs.length){
-              // console.log('expressions: %o', exprs);
-              var exprf = function(match, offset, s){
-                  // console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
-                  var idx = parseInt(match.slice(2,-2), 10) - 1;
-                  // console.log('index: %d, expression: %s', idx, exprs[idx]);
-                  return exprs[idx];
-              };
-              script = script.replace(/\{\{\d\}\}/g, exprf);
-          }
-          if (blks.length){
-              var blksf = function(match, offset, s){
-                  var idx = parseInt(match.slice(2,-2), 10) - 1;
-                  return blks[idx];
-              };
-              script = script.replace(/\[\[\d\]\]/g, blksf);
-          }
-          next = self.next_block().extract_script();
-          if (script.indexOf('[[next]]') > -1){
-              script = script.replace('[[next]]', next);
-          }else{
-              if (self.is('.step, .trigger')){
-                  script = script + '\n' + next;
-              }
-          }
-          return script;
-      }).get().join('\n\n');
-  },
-  wrap_script: function(){
-      // wrap the top-level script to prevent leaking into globals
-      var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
-      //return 'var global = new Global();\n(function($){\nvar local = new Local();\n' + script + '\n})(jQuery);';
-      return script;
-  },
-  write_script: function(view){
-      view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');
-  }
-});
 
 function test_block(block){
     var name = block.data('klass') + ': ' + block.data('label');

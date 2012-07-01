@@ -308,13 +308,13 @@ function menu(title, specs, show){
         spec.klass = klass;
         options.append(Block(spec));
     });
-    $('#block_menu').append(body.children());
+    $('#block_menu').append(body);
     if (show){
         select.addClass('selected');
     }else{
         options.hide();
     }
-    return body.children();
+    return body;
 }
 window.menu = menu;
 

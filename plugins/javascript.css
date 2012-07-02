@@ -21,12 +21,6 @@
 .functions{ border-color: hsl(25, 100%, 63%); }
 .functions > .block { background-color: hsl(25, 100%, 83%); }
 
-.transform{ border-color: hsl(296, 65%, 57%); }
-.transform > .block{ background-color: hsl(296, 65%, 77%); }
-
-.sketchy{ border-color: hsl(15,100%,63%); }
-.sketchy > .block{ background-color: hsl(15,100%,83%); }
-
 .control{ border-color: hsl(44, 81%, 49%); }
 .control > .block{ background-color: hsl(44, 81%, 85%); }
 
@@ -36,20 +30,9 @@
 .operators{ border-color: hsl(93,90%,66%); }
 .operators > .block{ background-color: hsl(93,90%,76%); }
 
-.shapes{ border-color: #e66a22; }
-.shapes > .block{ background-color: #e66a22; }
-
-.animation{ border-color: hsl(150, 65%, 79%); }
-.animation > .block {background-color: hsl(150, 62%, 89%); }
-
-.twitter{ border-color: hsl(90, 65%, 79%); }
-.twitter > .block {background-color: hsl(90, 62%, 89%); }
-
 /* Border colours for type values and sockets */
 
 .boolean{ border-color: red; }
 .number{ border-color: blue; }
-.color{ border-color: yellow; }
 .string{ border-color: green; }
-.path{ border-color: purple; }
 .any{ border-color: gray; }

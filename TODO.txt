@@ -1,0 +1,8 @@
+# Needed to do for the rethinking branch
+
+* Convert the Arduino blocks to use new style block definitions
+* Move scripts out of blocks on block definition load
+* Serialization, including version and plugins
+* Separate plugins into javascript, canvas, raphael, gamequery (others?)
+* New dragging library? (now, while dragging is broken) 
+* gist library

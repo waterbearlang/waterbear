@@ -3,6 +3,9 @@
 * Convert the Arduino blocks to use new style block definitions
 * Move scripts out of blocks on block definition load
 * Serialization, including version and plugins
-* Separate plugins into javascript, canvas, raphael, gamequery (others?)
-* New dragging library? (now, while dragging is broken) 
+* New dragging library?
 * gist library
+* Split up plugins (still to go: sketchy, canvas, gamequery, processing)
+* UI for selecting plugins
+* Test on iPad
+

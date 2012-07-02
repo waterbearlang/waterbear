@@ -1,4 +1,16 @@
-function setup(){
+// Pre-load dependencies
+yepnope({
+    load: [ 'plugins/raphael.css',
+            'lib/raphael-1.3.1-min.js',
+            'lib/raphael-path.js',
+            'lib/sketchy.js',
+            'lib/colorwheel.js'
+    ],
+    complete: raphael_setup
+});
+
+
+function raphael_setup(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
 
 function showColorPicker(){
@@ -475,3 +487,5 @@ var menus = {
         }
     ])
 };
+
+}

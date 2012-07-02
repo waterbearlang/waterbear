@@ -8,6 +8,9 @@ var plugins = {
     "canvas" : "plugins/canvas.js",
     "twitter": "plugins/twitter.js",
     "raphael": "plugins/raphael.js",
+    "sketchy": "plugins/sketchy.js",
     "crafty" : "plugins/crafty.js",
-    "gamequery" : "plugins/gamequery.js"
+    "gamequery" : "plugins/gamequery.js",
+    "processing": "plugins/processing.js",
+    "three": "plugins/three.js"
 };

@@ -9,16 +9,12 @@
 // Pre-load dependencies
 yepnope({
     load: [ 'plugins/javascript.css',
-            'lib/raphael-1.3.1-min.js',
-            'lib/raphael-path.js',
-            'lib/sketchy.js',
-            'lib/colorwheel.js',
             'lib/beautify.js',
             'lib/highlight.js',
             'lib/highlight-javascript.js',
             'lib/highlight-github.css'
     ],
-    complete: setup
+    complete: javascript_setup
 });
 
 // Add some utilities
@@ -85,82 +81,8 @@ jQuery.fn.extend({
   }
 });
 
-function setup(){
+function javascript_setup(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-
-function showColorPicker(){
-    var self = $(this);
-    cw.input(this);
-    cw.onchange(function(){
-        var color = self.val();
-        self.css({color: color, 'background-color': color});
-    });
-    $('#color_popup').bPopup({modalColor: 'transparent'});
-}
-$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
-$(document).ready(function(){
-    window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
-});
-
-    
-// Raphael Extensions (making life easier on our script templates)
-
-// Provide the arc of a circle, given the radius and the angles to start and stop at
-Raphael.fn.arcslice = function(radius, fromangle, toangle){
-   var x1 = Math.cos(deg2rad(fromangle)) * radius, 
-       y1 = Math.sin(deg2rad(fromangle)) * radius,
-       x2 = Math.cos(deg2rad(toangle)) * radius, 
-       y2 = Math.sin(deg2rad(toangle)) * radius;
-    var arc = this.path();
-    arc.moveTo(x1, y1).arcTo(radius, radius, 0, 1, x2,y2, rad2deg(toangle - fromangle));
-    return arc;
-};
-
-Raphael.fn.regularPolygon = function(cx,cy,radius, sides, pointsOnly){
-    var angle = 0;
-    var theta = Math.PI * 2 / sides;
-    var x = Math.cos(0) * radius + cx;
-    var y = Math.sin(0) * radius + cy;
-    if (pointsOnly){
-        var points = [[x,y]];
-    }else{
-        var path = this.path();
-        path.moveTo(x,y);
-    }
-    for (var i = 1; i < sides; i++){
-        x = Math.cos(theta * i) * radius + cx;
-        y = Math.sin(theta * i) * radius + cy;
-        if (pointsOnly){
-            points.push([x,y]);
-        }else{
-            path.lineTo(x,y);
-        }
-    }
-    if (pointsOnly){
-        return points;
-    }else{
-        path.andClose();
-        return path;
-    }
-};
-
-Raphael.fn.imageWithNaturalHeight = function(url){
-    var img = this.image(url, 0, 0, 0, 0);
-    function getWidthAndHeight() {
-        img.attr({width: this.width, height: this.height});
-        return true;
-    }
-    function loadFailure() {
-        console.log("'" + this.name + "' failed to load.");
-        return true;
-    }
-    var myImage = new Image();
-    myImage.name = url;
-    myImage.onload = getWidthAndHeight;
-    myImage.onerror = loadFailure;
-    myImage.src = "http://waterbearlang.com/images/waterbear.png";
-    return img;
-};
 
 
 window.update_scripts_view = function(){
@@ -284,8 +206,189 @@ menu('Control', [
         contained: [{label: 'repeat until [boolean]'}], 
         script: 'while(!({{1}})){[[1]]}',
         help: 'repeat forever until condition is true'
-    }
-], true);
+    },
+    {
+        blocktype: 'step',
+        label: 'variable string## [string]',
+        script: 'local.string## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'string##',
+            script: 'local.string##',
+            type: 'string'
+        },
+        help: 'create a reference to re-use the string'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable number## [number]',
+        script: 'local.number## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'number##',
+            script: 'local.number##',
+            type: 'number'
+        },
+        help: 'create a reference to re-use the number'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable boolean## [boolean]',
+        script: 'local.boolean## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'boolean##',
+            script: 'local.boolean##',
+            type: 'boolean'
+        },
+        help: 'create a reference to re-use the boolean'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable array## [array]',
+        script: 'local.array## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'array##',
+            script: 'local.array## = {{1}}',
+            type: 'array'
+        },
+        help: 'create a reference to re-use the array'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable object## [object]',
+        script: 'local.object## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'object##',
+            script: 'local.object##',
+            type: 'object'
+        },
+        help: 'create a reference to re-use the object'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable color## [color]',
+        script: 'local.color## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'color##',
+            script: 'local.color##',
+            type: 'color'
+        },
+        help: 'create a reference to re-use the color'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable image## [image]',
+        script: 'local.image## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'image##',
+            script: 'local.image##',
+            type: 'image'
+        },
+        help: 'create a reference to re-use the image'
+    },
+    // 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'any'
+    {
+        blocktype: 'step',
+        label: 'variable shape## [shape]',
+        script: 'local.shape## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'shape##',
+            script: 'local.shape##',
+            type: 'shape'
+        },
+        help: 'create a reference to re-use the shape'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable point## [point]',
+        script: 'local.point## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'point##',
+            script: 'local.point##',
+            type: 'point'
+        },
+        help: 'create a reference to re-use the point'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable size## [size]',
+        script: 'local.size## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'size##',
+            script: 'local.size##',
+            type: 'size'
+        },
+        help: 'create a reference to re-use the size'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable rect## [rect]',
+        script: 'local.rect## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'rect##',
+            script: 'local.rect##',
+            type: 'rect'
+        },
+        help: 'create a reference to re-use the rect'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable gradient## [gradient]',
+        script: 'local.gradient## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'gradient##',
+            script: 'local.gradient##',
+            type: 'gradient'
+        },
+        help: 'create a reference to re-use the gradient'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable pattern## [pattern]',
+        script: 'local.pattern## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'pattern##',
+            script: 'local.pattern##',
+            type: 'pattern'
+        },
+        help: 'create a reference to re-use the pattern'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable imagedata## [imagedata]',
+        script: 'local.imagedata## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'imagedata##',
+            script: 'local.imagedata##',
+            type: 'imagedata'
+        },
+        help: 'create a reference to re-use the imagedata'
+    },
+    {
+        blocktype: 'step',
+        label: 'variable any## [any]',
+        script: 'local.any## = {{1}};',
+        returns: {
+            blocktype: 'expression',
+            label: 'any##',
+            script: 'local.any##',
+            type: 'any'
+        },
+        help: 'create a reference to re-use the any'
+    },
+], false);
 
 menu('Arrays', [
     {
@@ -376,8 +479,8 @@ menu('Arrays', [
     },
     {
         blocktype: 'context',
-        script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
         contained: [{label: 'array [array] for each'}],
+        script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
         locals: [
             {
                 blocktype: 'expression',
@@ -397,7 +500,6 @@ menu('Arrays', [
         help: 'run the blocks with each item of a named array'
     }
 ], false);
-
 
 menu('Objects', [
     {
@@ -427,8 +529,8 @@ menu('Objects', [
     },
     {
         blocktype: 'context',
+        contained: [{label: 'for each item in [object] do'}],
         script: '$.each({{1}}, function(key, item){local.key = key; local.item = item; [[1]] });',
-        contained: [{label: 'object [object] for each'}],
         locals: [
             {
                 blocktype: 'expression',
@@ -445,7 +547,7 @@ menu('Objects', [
                 type: 'any'
             }
         ],
-        help: 'run the blocks with each item of a named array'
+        help: 'run the blocks with each item of a object'
         
     }
 ], false);
@@ -502,13 +604,13 @@ menu('Strings', [
     {
         blocktype: 'step',
         label: 'alert [string]',
-        script: 'window.alert({{1}})',
+        script: 'window.alert({{1}});',
         help: 'pop up an alert window with string'
     },
     {
         blocktype: 'step',
         label: 'console log [any]',
-        script: 'console.log({{1}})',
+        script: 'console.log({{1}});',
         help: 'Send any object as a message to the console'
     },
     {
@@ -523,10 +625,10 @@ menu('Sensing', [
     {
         blocktype: 'step',
         label: 'ask [string:What\'s your name?] and wait',
-        script: 'local.answer = prompt({{1}});',
+        script: 'local.answer## = prompt({{1}});',
         returns: {
             blocktype: 'expression',
-            label: 'answer',
+            label: 'answer##',
             type: 'string',
             script: 'local.answer'
         },
@@ -591,7 +693,7 @@ menu('Sensing', [
     {
         blocktype: 'step',
         label: 'reset timer', 
-        script: 'global.timer.reset()',
+        script: 'global.timer.reset();',
         help: 'set the global timer back to zero'
     },
     {
@@ -647,7 +749,7 @@ menu('Operators', [
         help: 'first operand is less than second operand'
     },
     {
-        blocktype: 'expression',
+        blocktype: 'expression',    
         label: '[number:0] = [number:0]', 
         type: 'boolean', 
         script: "({{1}} === {{2}})",

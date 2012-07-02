@@ -85,8 +85,9 @@ function Step(options, scope){
     };
     $.extend(opts, options);
     opts.label = Label(opts.label);
-    opts.view = templates.step(opts);
-    models.push(opts);
+    opts.view = $(templates.step(opts));
+    opts.view.data('model', opts);
+    // models.push(opts);
     return  opts.view;
 }
 
@@ -96,8 +97,9 @@ function Expression(options, scope){
     };
     $.extend(opts, options);
     opts.label = Label(opts.label);
-    opts.view = templates.expression(opts);
-    models.push(opts);
+    opts.view = $(templates.expression(opts));
+    opts.view.data('model', opts);
+    // models.push(opts);
     return  opts.view;
 }
 
@@ -116,8 +118,9 @@ function Context(options, scope){
             opts.locals[j] = Expression(opts.locals[j]);
         }
     }
-    opts.view = templates.context(opts);
-    models.push(opts);
+    opts.view = $(templates.context(opts));
+    //models.push(opts);
+    opts.view.data('model', opts);
     return  opts.view;
 }
 
@@ -136,8 +139,9 @@ function EventHandler(options, scope){
             opts.locals[j] = Block(opts.locals[j]);
         }
     }
-    opts.view = templates.eventhandler(opts);
-    models.push(opts);
+    opts.view = $(templates.eventhandler(opts));
+    // models.push(opts);
+    opts.view.data('model', opts);
     return  opts.view;
 }
 
@@ -234,7 +238,7 @@ function old_Block(){
                 Block.nextId++;
                 self.id(Block.nextId);
                 self.local_blocks().each(function(idx, local){
-                    $(local).id(Block.nextId); 
+                    $(local).id(Block.nextId);
                 });
             }
             return false;
@@ -299,7 +303,7 @@ function old_Block(){
         wrapper.addClass('step');
         wrapper.data('type', 'step');
     }
-    
+
     if (opts.slot){
         wrapper.append('<span class="next"><i class="slot"></i></span>');
     }
@@ -338,5 +342,4 @@ function old_Block(){
     // add update handlers
     return wrapper;
 }
-
 

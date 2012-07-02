@@ -255,7 +255,7 @@ function menu(title, specs, show){
     var options = $('<div class="option"></div>').appendTo(body);
     specs.forEach(function(spec, idx){
         spec.group = group;
-        var block = $(Block(spec));
+        var block = Block(spec);
         options.append(block);
     });
     $('#block_menu').append(body);

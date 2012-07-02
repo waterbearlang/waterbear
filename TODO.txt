@@ -1,5 +1,6 @@
 # Needed to do for the rethinking branch
 
+* Why are control blocks showing [object Object] in the block menu? (probably because views are getting prematurely converted to jquery objects)
 * Convert the Arduino blocks to use new style block definitions
 * Move scripts out of blocks on block definition load
 * Serialization, including version and plugins

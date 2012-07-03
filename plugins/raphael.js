@@ -12,6 +12,14 @@ yepnope({
 
 function raphael_setup(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
+    
+jQuery.fn.extend({
+    wrap_script: function(){
+        // wrap the top-level script to prevent leaking into globals
+        var script = this.pretty_script();
+        return 'var global = new Global();(function($){var stage = $(".stage");global.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
+    }
+});
 
 function showColorPicker(){
     var self = $(this);

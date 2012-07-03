@@ -242,8 +242,6 @@
             if (blockType(dragTarget) === 'step' || blockType(dragTarget) === 'context'){
                 // Drag a step to snap to a step
                 // console.log('snapping a step togther')
-                console.log('dropTarget: %o', dropTarget);
-                console.log('parent: %o', dropTarget.parent());
                 dropTarget.parent().append(dragTarget);
                 dragTarget.css({
                     position: 'relative',

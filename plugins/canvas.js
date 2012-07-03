@@ -39,6 +39,7 @@ $.extend(choice_lists, {
     globalCompositeOperators: ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'],
     repetition: ['repeat', 'repeat-x', 'repeat-y', 'no-repeat']
 };
+
 choice_lists.types = choice_lists.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 choice_lists.rettypes = choice_lists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 

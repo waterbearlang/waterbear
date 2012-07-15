@@ -113,14 +113,14 @@ function Context(options, scope){
         var container = opts.contained[i];
         container.label = Label(container.label, true);
     }
+    opts.view = $(templates.context(opts));
+    opts.view.data('model', opts);
     if (opts.locals){
         for (var j = 0; j < opts.locals.length; j++){
             opts.locals[j] = Expression(opts.locals[j]);
+            opts.view.find('.locals').append(opts.locals[j]);
         }
     }
-    opts.view = $(templates.context(opts));
-    //models.push(opts);
-    opts.view.data('model', opts);
     return  opts.view;
 }
 
@@ -134,14 +134,14 @@ function EventHandler(options, scope){
         var container = opts.contained[i];
         container.label = Label(container.label, true);
     }
+    opts.view = $(templates.eventhandler(opts));
+    opts.view.data('model', opts);
     if (opts.locals){
         for (var j = 0; j < opts.locals.length; j++){
             opts.locals[j] = Block(opts.locals[j]);
+            opts.view.find('.locals').append(opts.locals[j]);
         }
     }
-    opts.view = $(templates.eventhandler(opts));
-    // models.push(opts);
-    opts.view.data('model', opts);
     return  opts.view;
 }
 
@@ -195,151 +195,5 @@ function Block(options, scope){
             console.log('Unsupported blocktype: %o', options);
     }
 }
-    
-function old_Block(){
-    
-    // console.log('wrapping "%s" with label, non-id path', opts.label);
-    var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
-    if (scope){
-        wrapper.data('scope', scope);
-    }
-    wrapper.data('label', opts.label);
-    wrapper.data('klass', opts.klass);
-    wrapper.data('position', opts.position);
-    wrapper.data('returns', opts.returns);
-    wrapper.data('script', opts.script);
-    wrapper.data('locals', opts.locals);
-    wrapper.data('type', opts['type']);
-    wrapper.data('containers', opts.containers);
-    if(opts.containers > 1){
-        wrapper.data('subContainerLabels', opts['subContainerLabels']);
-    }
-    var block = wrapper.children();
-    block.find('.socket').addSocketHelp();
-    if (opts['help']){
-        block.attr('title', opts['help']);
-    }
-    if (opts['type']){
-        block.addClass(opts['type']);
-        wrapper.addClass('value').addClass(opts['type']);
-    }
-    if (opts.locals.length){
-        $.each(opts.locals, function(idx, value){
-            if ($.isPlainObject(value)){
-                value.klass = opts.klass;
-                wrapper.addLocalBlock(Block(value, wrapper));
-            }
-        });
-        wrapper.bind('add_to_script, add_to_workspace', function(e){
-            var self = $(e.target),
-                locals = self.data('locals');
-            if (!(locals && locals.length)) return false;
-            if (! self.id()){
-                Block.nextId++;
-                self.id(Block.nextId);
-                self.local_blocks().each(function(idx, local){
-                    $(local).id(Block.nextId);
-                });
-            }
-            return false;
-        });
-    }
-    if (opts.returns){
-        opts.returns.klass = opts.klass;
-        wrapper.bind('add_to_script', function(e){
-            // remove from DOM if already place elsewhere
-            var self = $(e.target),
-                returns = self.data('returns');
-            if (!returns) return false;
-            if (self.data('returnBlock')){
-                // console.log('return block exists');
-                self.data('returnBlock').detach();
-            }else{
-                // console.log('return block created: %s', returns.label);
-                self.data('returnBlock', Block(returns));
-            }
-            var returnBlock = self.data('returnBlock');
-            if (! self.id()){
-                Block.nextId++;
-                self.id(Block.nextId);
-                returnBlock.id(Block.nextId);
-            }
-            self.parent_block().addLocalBlock(returnBlock);
-            //self.child_blocks().each(function(block){ block.trigger('add_to_script'); });
-            self.next_block().trigger('add_to_script');
-            return false;
-        });
-        wrapper.bind('delete_block add_to_workspace', function(e){
-            // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
-            var self = $(e.target),
-                returnBlock = self.data('returnBlock');
-            if (returnBlock){
-                returnBlock.detach();
-            }
-            self.next_block().trigger('delete_block');
-        });
-    }
-    if(opts.containers > 0){
-        wrapper.addClass('containerBlock'); //This might not be necessary
-    }
-    for(i=0; i<opts.containers; i++){
-        ContainerLabel='';
-        if(opts.containers > 1){
-            if(i != (opts.containers-1)){
-                ContainerLabel='<span class="blockhead"><span class="label">'+Label(wrapper.data('subContainerLabels')[i])+'</span></span>';
-            }
-        }
-        block.append('</b><span class="contained"><i class="slot"></i></span>'+ContainerLabel);
-    }
-    if (opts.containers){
-        block.find('> .blockhead > .label').prepend('<span class="disclosure open">▼</span>');
-    }
-    if (opts.trigger){
-        wrapper.addClass('trigger');
-        wrapper.data('type', 'trigger');
-        block.append('<b class="trigger"></b>');
-    }else if(opts.flap){
-        block.append('<b class="flap"></b>');
-        wrapper.addClass('step');
-        wrapper.data('type', 'step');
-    }
 
-    if (opts.slot){
-        wrapper.append('<span class="next"><i class="slot"></i></span>');
-    }
-    if (opts.sockets){
-        $.each(opts.sockets, function(idx, value){
-            if ($.isPlainObject(value)){
-                var child = Block(value);
-                block.find('> .blockhead > .label > .socket').eq(idx).empty().append(child);
-            }else{ // presumably a string
-                var socket = block.find('> .blockhead > .label > .socket, > .blockhead > .label > .autosocket').eq(idx).find(':input, select');
-                socket.val(value);
-                if (socket.attr('type') === 'color'){
-                    socket.css({color: value, 'background-color': value});
-                }
-            }
-        });
-    }
-    if (opts.contained){
-        $.each(opts.contained, function(idx, value){
-            if ($.isPlainObject(value)){
-                var child = Block(value);
-                block.find('> .contained').eq(idx).append(child);
-                child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
-                child.trigger('add_to_script');
-            }
-        });
-    }
-    if (opts.next){
-        if ($.isPlainObject(opts.next)){
-            var child = Block(opts.next);
-            wrapper.find('> .next').append(child);
-            child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
-            child.trigger('add_to_script');
-        }
-    }
-    // add update handlers
-    return wrapper;
-}
 

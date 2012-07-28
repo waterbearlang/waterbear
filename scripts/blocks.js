@@ -174,9 +174,25 @@ function assertContext(options){
     }
 }
 
+function Signature(options){
+    var type = options.blocktype;
+    var label = options.label || options.contained.map(function(sub){ return sub.label; }).join('|');
+    return type + ':' +  label;
+}
+
+var scripts = {};
+function registerScript(options){
+    options.signature = Signature(options);
+    if (scripts[options.signature]){
+        console.log('Warning: overwriting existing scripts for %s', options.signature);
+    }
+    scripts[options.signature] = options.script;
+    delete options.script;
+}
 
 
 function Block(options, scope){
+    registerScript(options);
     switch(options.blocktype){
         case 'step':
             assertStep(options);

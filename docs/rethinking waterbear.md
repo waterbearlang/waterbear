@@ -135,7 +135,7 @@ The workspace has all the primitive UI for the IDE, serialization and deserializ
 
 ## Next Steps ##
 
-* Convert blocks from JQuery to HTML templates
+* √ Convert blocks from JQuery to HTML templates
 * Convert block data/methods to backbone models
 * Use events pervasively
 * Convert core to Coffeescript/Less

@@ -143,7 +143,6 @@ menu('Control', [
     },
     {
         blocktype: 'context',
-        label: 'if [boolean]', 
         contained: [{label: 'if [boolean]'}, {label: 'else'}],
         script: 'if({{1}}){[[1]]}else{[[2]]}',
         help: 'run the first set of blocks if the condition is true, otherwise run the second set'

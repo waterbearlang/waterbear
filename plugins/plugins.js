@@ -12,5 +12,6 @@ var plugins = {
     "crafty" : "plugins/crafty.js",
     "gamequery" : "plugins/gamequery.js",
     "processing": "plugins/processing.js",
-    "three": "plugins/three.js"
+    "three": "plugins/three.js",
+    "waterbear": "plugins/waterbear.js"
 };

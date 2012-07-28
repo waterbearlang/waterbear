@@ -84,6 +84,7 @@ $.extend($.fn, {
         $(this).attr('title', desc);
     },
     extract_script: function() {
+        console.log('extract script for %s blocks', this.length);
         if (this.length === 0) return '';
         if (this.is(':input')) {
             if (this.parent().is('.string') || this.parent().is('.color')) {
@@ -95,7 +96,7 @@ $.extend($.fn, {
         if (this.is('.empty')) return '/* do nothing */';
         return this.map(function() {
             var self = $(this);
-            var script = self.data('script');
+            var script = scripts[self.data('model').signature];
             if (!script) {
                 return null;
             }

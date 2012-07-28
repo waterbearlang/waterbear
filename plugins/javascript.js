@@ -19,13 +19,20 @@ yepnope({
 
 // Add some utilities
 jQuery.fn.extend({
-  pretty_script: function(){
+    pretty_script: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
-  },
-  write_script: function(view){
+    },
+    write_script: function(view){
       view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
-  }
+    },
+    wrap_script: function(){
+        // wrap the top-level script to prevent leaking into globals
+        var script = this.pretty_script();
+        var retval = 'var global = new Global();(function($){var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
+        //console.log(retval);
+        return retval;
+    }
 });
 
 function javascript_setup(){

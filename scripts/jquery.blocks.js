@@ -49,7 +49,7 @@ $.extend($.fn, {
         });
     },
     socket_blocks: function() {
-        return this.find('> .block > .blockhead > .label').children('.socket, .autosocket').children('input, select, .wrapper');
+        return this.find('> .block > .blockhead > .value').children('.socket, .autosocket').children('input, select, .wrapper');
     },
     local_blocks: function() {
         return this.find('> .block > .blockhead .locals .wrapper');
@@ -84,7 +84,6 @@ $.extend($.fn, {
         $(this).attr('title', desc);
     },
     extract_script: function() {
-        console.log('extract script for %s blocks', this.length);
         if (this.length === 0) return '';
         if (this.is(':input')) {
             if (this.parent().is('.string') || this.parent().is('.color')) {
@@ -103,9 +102,11 @@ $.extend($.fn, {
             var exprs = $.map(self.socket_blocks(), function(elem, idx) {
                 return $(elem).extract_script();
             });
+            console.log('script exprs: %s', exprs.length);
             var blks = $.map(self.child_blocks(), function(elem, idx) {
                 return $(elem).extract_script();
             });
+            console.log('children %s', blks.length);
             if (exprs.length) {
                 // console.log('expressions: %o', exprs);
 
@@ -127,6 +128,7 @@ $.extend($.fn, {
                 script = script.replace(/\[\[\d\]\]/g, blksf);
             }
             next = self.next_block().extract_script();
+            console.log('next: %s', !!next);
             if (script.indexOf('[[next]]') > -1) {
                 script = script.replace('[[next]]', next);
             } else {

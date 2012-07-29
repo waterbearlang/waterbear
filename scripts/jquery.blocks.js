@@ -15,24 +15,32 @@ $.extend($.fn, {
         return '[' + names.join(', ') + ']';
     },
     id: function(_id) {
+        var model = this.data('model');
         if (_id) {
-            if (!this.data('_id')) {
-                this.data('_id', _id);
-                if (this.data('script') && this.data('script').indexOf('##') > -1) {
-                    this.data('script', this.data('script').replace(/##/gm, '_' + _id));
-                    this.data('label', this.data('label').replace(/##/gm, '_' + _id));
-                    this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
+            if (!model.id) {
+                model.id = _id;
+                if (model.script && model.script.indexOf('##') > -1) {
+                    model.script =  model.script.replace(/##/gm, '_' + _id);
+                    if (model.label){
+                        model.label = model.label.replace(/##/gm, '_' + _id);
+                    }else if (model.contains){
+                        model.contained.forEach(function(contained){
+                            contained.label = contained.label.replace(/##/gm, '_', + _id);
+                        });
+                    }
+                    this.find('> .block > .blockhead > .label').html(Label(model.label));
                 }
             }
+            return this;
         } else {
-            return this.data('_id');
+            return model.id;
         }
     },
     info: function() {
         return this.closest('.wrapper').long_name();
     },
     block_type: function() {
-        return this.data('type');
+        return this.data('model').blockType;
     },
     parent_block: function() {
         var p = this.closest('.wrapper').parent();
@@ -102,11 +110,9 @@ $.extend($.fn, {
             var exprs = $.map(self.socket_blocks(), function(elem, idx) {
                 return $(elem).extract_script();
             });
-            console.log('script exprs: %s', exprs.length);
             var blks = $.map(self.child_blocks(), function(elem, idx) {
                 return $(elem).extract_script();
             });
-            console.log('children %s', blks.length);
             if (exprs.length) {
                 // console.log('expressions: %o', exprs);
 
@@ -128,7 +134,6 @@ $.extend($.fn, {
                 script = script.replace(/\[\[\d\]\]/g, blksf);
             }
             next = self.next_block().extract_script();
-            console.log('next: %s', !!next);
             if (script.indexOf('[[next]]') > -1) {
                 script = script.replace('[[next]]', next);
             } else {
@@ -139,6 +144,10 @@ $.extend($.fn, {
             return script;
         }).get().join('');
     },
+    serialize: function(){
+    },
+    deserialize: function(){
+    },
     block_description: function() {
         if (this.length < 1) return '';
         if (this.is('.empty')) return '';
@@ -147,40 +156,63 @@ $.extend($.fn, {
         }
         var patt = new RegExp('##', 'gm');
 
+        var model = this.data('model');
         var desc = {
-            klass: this.data('klass'),
-            label: this.data('label').replace(/##/gm, '_' + this.id()),
-            script: this.data('script').replace(/##/gm, '_' + this.id()),
-            subContainerLabels: this.data('subContainerLabels'),
-            containers: this.data('containers')
+            blocktype: model.blocktype,
+            group: model.group,
+            signature: model.signature,
+            id: model.id
         };
-        // FIXME: Move specific type handling to raphael_demo.js
-        if (this.is('.trigger')) {
-            desc.trigger = true;
+        // var old_desc = {
+        //     klass: this.data('klass'),
+        //     label: this.data('label').replace(/##/gm, '_' + this.id()),
+        //     script: this.data('script').replace(/##/gm, '_' + this.id()),
+        //     subContainerLabels: this.data('subContainerLabels'),
+        //     containers: this.data('containers')
+        // };
+        // FIXME: Move specific type handling to specific plugins
+        // NEW: uses model
+        // model.blocktype (eventhandler, context, step, expression)
+        // model.label (Model will have label OR contained labels)
+        // model.contained [ label ]
+        // model.group (control, operators, etc.)
+        // model.help (string)
+        // model.locals [(model)]
+        // model.returns (model)
+        // model.signature (unique string for each menu block)
+        // model.id (unique string for each script block)
+        // model.view (jquery)
+        if (model.label){
+            desc.label = model.label;
+        }else if(model.contained){
+            desc.contained = model.contained;
         }
-        if (this.is('.value')) {
-            desc['type'] = this.data('type')
-        };
-        if (this.data('locals')) {
+        if (model.locals) {
             var self = this;
-            desc.locals = this.data('locals');
-            desc.locals.forEach(function(local) {
-                local.script = local.script.replace(/##/g, '_' + self.id());
-                local.label = local.label.replace(/##/g, '_' + self.id());
+            desc.locals = model.locals.map(function(local) {
+                return {
+                    blocktype: local.blocktype,
+                    type: local.type,
+                    script: local.script.replace(/##/g, '_' + self.id()),
+                    label: local.label.replace(/##/g, '_' + self.id())
+                };
             });
         }
-        if (this.data('returns')) {
-            desc.returns = this.data('returns');
-            desc.returns.script = desc.returns.script.replace(/##/g, '_' + this.id());
-            desc.returns.label = desc.returns.label.replace(/##/g, '_' + this.id());
+        if (model.returns) {
+            desc.returns = {
+                blocktype: model.returns.blocktype,
+                type: model.returns.type,
+                script: model.returns.script.replace(/##/g, '_' + this.id()),
+                label: model.returns.label.replace(/##/g, '_' + this.id())
+            };
         }
-        desc.sockets = this.socket_blocks().map(function() {
+        model.sockets = this.socket_blocks().map(function() {
             return $(this).block_description();
         }).get();
-        desc.contained = this.child_blocks().map(function() {
+        model.contained = this.child_blocks().map(function() {
             return $(this).block_description();
         }).get();
-        desc.next = this.next_block().block_description();
+        model.next = this.next_block().block_description();
         return desc;
     }
 });

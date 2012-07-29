@@ -6,9 +6,8 @@ var templates = {};
 var compiledTemplates = {};
 ['step', 'context', 'eventhandler', 'expression'].forEach(function(type){
     compiledTemplates[type] = Mustache.compile($('#' + type + '_template').text());
-    templates[type] = function (opts){
-        window.opts = opts;
-        return compiledTemplates[type](opts);
+    templates[type] = function (values){
+        return compiledTemplates[type](values);
     };
 });
 
@@ -31,6 +30,7 @@ function getContained(s){
 }
 
 function choiceFunction(s, listname, default_opt){
+    // TODO: Convert this to a template
     var list = choice_lists[listname];
     return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' + 
         list.map(function(item){
@@ -46,6 +46,8 @@ function choiceFunction(s, listname, default_opt){
 
 
 function Label(value, disclosure){
+    // TODO: Convert this to a template
+    //
     // Recognize special values in the label string and replace them with 
     // appropriate markup. Some values are dynamic and based on the objects currently
     // in the environment
@@ -79,136 +81,137 @@ function Label(value, disclosure){
 
 var models = [];
 
-function Step(options, scope){
-    var opts = {
+function Step(mod, scope){
+    var model = {
         returns: false
     };
-    $.extend(opts, options);
-    opts.label = Label(opts.label);
-    opts.view = $(templates.step(opts));
-    opts.view.data('model', opts);
-    // models.push(opts);
-    return  opts.view;
+    $.extend(model, mod);
+    model.label = Label(model.label);
+    model.view = $(templates.step(model));
+    model.view.data('model', model);
+    // models.push(model);
+    return  model.view;
 }
 
-function Expression(options, scope){
-    var opts = {
+function Expression(mod, scope){
+    var model = {
         returns: {type: 'int', label: 'int##'}
     };
-    $.extend(opts, options);
-    opts.label = Label(opts.label);
-    opts.view = $(templates.expression(opts));
-    opts.view.data('model', opts);
-    // models.push(opts);
-    return  opts.view;
+    $.extend(model, mod);
+    model.label = Label(model.label);
+    model.view = $(templates.expression(model));
+    model.view.data('model', model);
+    // models.push(model);
+    return  model.view;
 }
 
-function Context(options, scope){
-    var opts = {
+function Context(mod, scope){
+    var model = {
         contained: [],
         locals: []
     };
-    $.extend(opts, options);
-    for (var i = 0; i < opts.contained.length; i++){
-        var container = opts.contained[i];
+    $.extend(model, mod);
+    for (var i = 0; i < model.contained.length; i++){
+        var container = model.contained[i];
         container.label = Label(container.label, true);
     }
-    opts.view = $(templates.context(opts));
-    opts.view.data('model', opts);
-    if (opts.locals){
-        for (var j = 0; j < opts.locals.length; j++){
-            opts.locals[j] = Expression(opts.locals[j]);
-            opts.view.find('.locals').append(opts.locals[j]);
+    model.view = $(templates.context(model));
+    model.view.data('model', model);
+    if (model.locals){
+        for (var j = 0; j < model.locals.length; j++){
+            var local = Expression(model.locals[j]);
+            model.locals[j] = local.data('model');
+            model.view.find('.locals').append(local);
         }
     }
-    return  opts.view;
+    return  model.view;
 }
 
-function EventHandler(options, scope){
-    var opts = {
+function EventHandler(mod, scope){
+    var model = {
         locals: [],
         contained: []
     };
-    $.extend(opts, options);
-    for (var i = 0; i < opts.contained.length; i++){
-        var container = opts.contained[i];
+    $.extend(model, mod);
+    for (var i = 0; i < model.contained.length; i++){
+        var container = model.contained[i];
         container.label = Label(container.label, true);
     }
-    opts.view = $(templates.eventhandler(opts));
-    opts.view.data('model', opts);
-    if (opts.locals){
-        for (var j = 0; j < opts.locals.length; j++){
-            opts.locals[j] = Block(opts.locals[j]);
-            opts.view.find('.locals').append(opts.locals[j]);
+    model.view = $(templates.eventhandler(model));
+    model.view.data('model', model);
+    if (model.locals){
+        for (var j = 0; j < model.locals.length; j++){
+            var local = Expression(model.locals[j]);
+            model.locals[j] = local.data('model');
+            model.view.find('.locals').append(local);
         }
     }
-    return  opts.view;
+    return  model.view;
 }
 
-function assertStep(options){
-    if (options.type){
-        alert('Error: expression "' + options.label + '" treated as a step');
+function assertStep(model){
+    if (model.type){
+        alert('Error: expression "' + model.label + '" treated as a step');
     }
-    if (options.contained){
-        alert('Error: context "' + options.contained[0].label + '" treated as a step');
-    }
-}
-
-function assertExpression(options){
-    if (! options.type){
-        alert('Error: step "' + options.label + '" treated as an expression');
-    }
-    if (options.contained){
-        alert('Error: context "' + options.contained[0].label + '" treated as an expression');
+    if (model.contained){
+        alert('Error: context "' + model.contained[0].label + '" treated as a step');
     }
 }
 
-function assertContext(options){
-    if (options.containers){
+function assertExpression(model){
+    if (! model.type){
+        alert('Error: step "' + model.label + '" treated as an expression');
+    }
+    if (model.contained){
+        alert('Error: context "' + model.contained[0].label + '" treated as an expression');
+    }
+}
+
+function assertContext(model){
+    if (model.containers){
         alert('Error: context with containers vs. contained');
-        console.log('Error context: %o', options);
+        console.log('Error context: %o', model);
     }
-    if (! options.contained){
-        alert('Error: block "' + options.label + '" treated as a context');
-        console.log('Error context: %o', options);
+    if (! model.contained){
+        alert('Error: block "' + model.label + '" treated as a context');
+        console.log('Error context: %o', model);
     }
 }
 
-function Signature(options){
-    var type = options.blocktype;
-    var label = options.label || options.contained.map(function(sub){ return sub.label; }).join('|');
+function Signature(model){
+    var type = model.blocktype;
+    var label = model.label || model.contained.map(function(sub){ return sub.label; }).join('|');
     return type + ':' +  label;
 }
 
 var scripts = {};
-function registerScript(options){
-    options.signature = Signature(options);
-    if (scripts[options.signature]){
-        console.log('Warning: overwriting existing scripts for %s', options.signature);
+function registerScript(model){
+    model.signature = Signature(model);
+    if (scripts[model.signature]){
+        console.log('Warning: overwriting existing scripts for %s', model.signature);
     }
-    scripts[options.signature] = options.script;
-    delete options.script;
+    scripts[model.signature] = model.script;
+    delete model.script;
 }
 
-
-function Block(options, scope){
-    registerScript(options);
-    switch(options.blocktype){
+function Block(model, scope){
+    registerScript(model);
+    switch(model.blocktype){
         case 'step':
-            assertStep(options);
-            return Step(options, scope);
+            assertStep(model);
+            return Step(model, scope);
         case 'expression':
-            assertExpression(options);
-            return Expression(options, scope);
+            assertExpression(model);
+            return Expression(model, scope);
         case 'context':
-            assertContext(options);
-            return Context(options, scope);
+            assertContext(model);
+            return Context(model, scope);
         case 'eventhandler':
-            assertContext(options);
-            return EventHandler(options, scope);
+            assertContext(model);
+            return EventHandler(model, scope);
         default:
-            alert('Warning: unsupported block type: ' + options.blocktype);
-            console.log('Unsupported blocktype: %o', options);
+            alert('Warning: unsupported block type: ' + model.blocktype);
+            console.log('Unsupported blocktype: %o', model);
     }
 }
 

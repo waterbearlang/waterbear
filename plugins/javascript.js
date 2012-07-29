@@ -44,7 +44,7 @@ window.update_scripts_view = function(){
     //console.log('found %s scripts to view', blocks.length);
     var view = $('.workspace:visible .scripts_text_view');
     blocks.write_script(view);
-}
+};
 
 function run_scripts(event){
     $('.stage')[0].scrollIntoView();
@@ -95,12 +95,12 @@ menu('Control', [
         locals: [
             {
                 blocktype: 'expression',
-                label: 'count',
-                script: 'local.count',
+                label: 'count##',
+                script: 'local.count##',
                 type: 'number'
             }
         ],
-        script: '(function(){var count = 0; setInterval(function(){count++; local.count = count;[[1]]},1000/{{1}})})();',
+        script: '(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();',
         help: 'this trigger will run the attached blocks periodically'
     },
     {
@@ -112,14 +112,13 @@ menu('Control', [
     {
         blocktype: 'context',
         contained: [{label: 'repeat [number:10]'}], 
-        slot: false,
-        script: 'range({{1}}).forEach(function(idx, item){local.count = idx; local.last_var = item;[[1]]});',
+        script: 'range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});',
         help: 'repeat the contained blocks so many times',
         locals: [
             {
                 blocktype: 'expression',
-                label: 'loop index',
-                script: 'local.index',
+                label: 'count##',
+                script: 'local.count##',
                 type: 'number'
             }
         ]

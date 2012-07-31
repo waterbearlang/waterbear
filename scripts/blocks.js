@@ -45,7 +45,7 @@ function choiceFunction(s, listname, default_opt){
             
 
 
-function Label(value, disclosure){
+function label(value, disclosure){
     // TODO: Convert this to a template
     //
     // Recognize special values in the label string and replace them with 
@@ -79,75 +79,37 @@ function Label(value, disclosure){
     }
 }
 
-var models = [];
-
-function Step(mod, scope){
-    var model = {
-        returns: false
-    };
-    $.extend(model, mod);
-    model.label = Label(model.label);
-    model.view = $(templates.step(model));
-    model.view.data('model', model);
-    // models.push(model);
-    return  model.view;
+function Step(spec, scope){
+    assertStep(spec);
+    this.returns = false;
+    this.init(spec);
 }
+Step.prototype = new Block();
+Step.prototype.constructor = Step;
 
-function Expression(mod, scope){
-    var model = {
-        returns: {type: 'int', label: 'int##'}
-    };
-    $.extend(model, mod);
-    model.label = Label(model.label);
-    model.view = $(templates.expression(model));
-    model.view.data('model', model);
-    // models.push(model);
-    return  model.view;
+function Expression(spec, scope){
+    assertExpression(spec);
+    this.returns = {type: 'int', label: 'int##'};
+    this.init(spec);
 }
+Expression.prototype = new Block();
+Expression.prototype.constructor = Expression;
 
-function Context(mod, scope){
-    var model = {
-        contained: [],
-        locals: []
-    };
-    $.extend(model, mod);
-    for (var i = 0; i < model.contained.length; i++){
-        var container = model.contained[i];
-        container.label = Label(container.label, true);
-    }
-    model.view = $(templates.context(model));
-    model.view.data('model', model);
-    if (model.locals){
-        for (var j = 0; j < model.locals.length; j++){
-            var local = Expression(model.locals[j]);
-            model.locals[j] = local.data('model');
-            model.view.find('.locals').append(local);
-        }
-    }
-    return  model.view;
+function Context(spec, scope){
+    assertContext(spec);
+    this.locals = false;
+    this.init(spec);
 }
+Context.prototype = new Block();
+Context.prototype.constructor = Context;
 
-function EventHandler(mod, scope){
-    var model = {
-        locals: [],
-        contained: []
-    };
-    $.extend(model, mod);
-    for (var i = 0; i < model.contained.length; i++){
-        var container = model.contained[i];
-        container.label = Label(container.label, true);
-    }
-    model.view = $(templates.eventhandler(model));
-    model.view.data('model', model);
-    if (model.locals){
-        for (var j = 0; j < model.locals.length; j++){
-            var local = Expression(model.locals[j]);
-            model.locals[j] = local.data('model');
-            model.view.find('.locals').append(local);
-        }
-    }
-    return  model.view;
+function EventHandler(spec, scope){
+    assertContext(spec);
+    this.locals = false;
+    this.init(spec);
 }
+EventHandler.prototype = new Block();
+EventHandler.prototype.constructor = EventHandler;
 
 function assertStep(model){
     if (model.type){
@@ -178,7 +140,7 @@ function assertContext(model){
     }
 }
 
-function Signature(model){
+function signature(model){
     var type = model.blocktype;
     var label = model.label || model.contained.map(function(sub){ return sub.label; }).join('|');
     return type + ':' +  label;
@@ -186,7 +148,6 @@ function Signature(model){
 
 var scripts = {};
 function registerScript(model){
-    model.signature = Signature(model);
     if (scripts[model.signature]){
         console.log('Warning: overwriting existing scripts for %s', model.signature);
     }
@@ -194,25 +155,54 @@ function registerScript(model){
     delete model.script;
 }
 
-function Block(model, scope){
-    registerScript(model);
-    switch(model.blocktype){
+function Block(spec, scope){
+    // If called as constructor, return empty example
+    if (this instanceof Block) return this;
+    // If called as function, demux to the correct constructor
+    switch(spec.blocktype){
         case 'step':
-            assertStep(model);
-            return Step(model, scope);
+            return new Step(spec, scope);
         case 'expression':
-            assertExpression(model);
-            return Expression(model, scope);
+            return new Expression(spec, scope);
         case 'context':
-            assertContext(model);
-            return Context(model, scope);
+            return new Context(spec, scope);
         case 'eventhandler':
-            assertContext(model);
-            return EventHandler(model, scope);
+            return new EventHandler(spec, scope);
         default:
             alert('Warning: unsupported block type: ' + model.blocktype);
             console.log('Unsupported blocktype: %o', model);
+            return null;
     }
 }
 
+Block.prototype.init = function(spec){
+    $.extend(this, spec);
+    this.signature = signature(this);
+    registerScript(this);
+    if (this.label){
+        this.label = label(this.label);
+    }else{
+        this.contained.forEach(function(contained){
+            contained.label = label(contained.label);
+        });
+    }
+    if (this.locals){
+        this.locals = this.locals.map(function(spec){
+            return new Expression(spec);
+        });
+    }
+    this.template = templates[this.blocktype];
+};
+
+Block.prototype.view = function(){
+    var view = $(this.template(this));
+    view.data('model', this);
+    if (this.locals){
+        var localContainer = view.find('.locals');
+        this.locals.forEach(function(local){
+            localContainer.append(local.view());
+        });
+    }
+    return view;
+};
 

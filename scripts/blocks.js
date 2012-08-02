@@ -13,21 +13,18 @@ var compiledTemplates = {};
 
 $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
     var self = $(event.target);
+    var view = self.closest('.wrapper');
     if (self.is('.open')){
         self.text('►');
-        getContained(self).css('padding-bottom',0).children().hide();
+        view.find('.locals > .wrapper').hide();
+        view.find('.contained').css('padding-bottom', 0).children().hide();
     }else{
         self.text('▼');
-        getContained(self).css('padding-bottom',10).children().show();
+        view.find('.locals > .wrapper').show();
+        view.find('.contained').css('padding-bottom', 10).children().show();
     }
     self.toggleClass('open closed');
 });
-
-function getContained(s){
-    if(s.closest('.blockhead').next().is('.contained'))
-        return s.closest('.blockhead').next('.contained');
-    return s.closest('.blockhead').next().next();
-}
 
 function choiceFunction(s, listname, default_opt){
     // TODO: Convert this to a template
@@ -182,8 +179,8 @@ Block.prototype.init = function(spec){
     if (this.label){
         this.label = label(this.label);
     }else{
-        this.contained.forEach(function(contained){
-            contained.label = label(contained.label);
+        this.contained.forEach(function(contained, idx){
+            contained.label = label(contained.label, !idx);
         });
     }
     if (this.locals){
@@ -206,3 +203,32 @@ Block.prototype.view = function(){
     return view;
 };
 
+Block.prototype.addToScript = function(view, evt){
+    console.log('adding view to script, override for contexts');
+};
+
+Block.prototype.addToWorkspace = function(view, evt){
+    console.log('adding view to workspace, override for contexts');
+};
+
+Block.prototype.addToSocket = function(view, evt){
+    console.log('adding view to socket, override for expressions');
+};
+
+Block.prototype.deleteBlock = function(view, evt){
+    console.log('removing block, delete all sub-blocks');
+};
+
+$('.wrapper')
+    .on('add_to_script', function(evt){
+        this.data('model').addToScript(this, evt);
+    })
+    .on('add_to_workspace', function(evt){
+        this.data('model').addToWorkspace(this, evt);
+    })
+    .on('delete_block', function(evt){
+        this.data('model').deleteBlock(this, evt);
+    })
+    .on('add_to_socket', function(evt){
+        this.data('model').addToSocket(this, evt);
+    });

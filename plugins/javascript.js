@@ -858,4 +858,7 @@ $('.socket input').live('click',function(){
     $(this).focus();
     $(this).select();
 });
+
+console.log('javascript plugin ready');
+
 }

@@ -38,9 +38,9 @@ $.extend(choice_lists, {
     fontweight: ['normal', 'bold', 'inherit'],
     globalCompositeOperators: ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'],
     repetition: ['repeat', 'repeat-x', 'repeat-y', 'no-repeat']
-};
+});
 
-choice_lists.types = choice_lists.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+choice_lists.types = choice_lists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 choice_lists.rettypes = choice_lists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 
 jQuery.fn.extend({
@@ -253,7 +253,7 @@ jQuery.fn.extend({
             blocktype: 'step',
             label: 'add color stop to gradient [gradient] at offset [number:0.5] with color [color:#F00]',
             script: '{{1}}.addColorStop({{2}}, {{3}}',
-            help: 'creates an additional color stop, offset must be between 0.0 and 1.0',
+            help: 'creates an additional color stop, offset must be between 0.0 and 1.0'
         },
         {
             blocktype: 'step',
@@ -536,7 +536,7 @@ jQuery.fn.extend({
             label: 'shadow color [color]',
             script: 'local.ctx.shadowColor = {{1}}',
             help: 'set the shadow color'
-        },
+        }
     ]);
     
     // POINT Menu
@@ -570,7 +570,7 @@ jQuery.fn.extend({
             label: 'point [point] as array',
             script: '[{{1}}.x, {{1}}.y]',
             type: 'array'
-        },
+        }
     ]);
     
     // SIZE Menu
@@ -604,7 +604,7 @@ jQuery.fn.extend({
             label: 'size [size] as array',
             script: '[{{1}}.w, {{1}}.h]',
             type: 'array'
-        },
+        }
     ]);
     
     // RECT Menu
@@ -668,7 +668,7 @@ jQuery.fn.extend({
             label: 'rect [rect] height',
             script: '{{1}}.h',
             type: 'number'
-        },
+        }
     ]);
     
     // IMAGE Menu
@@ -700,4 +700,5 @@ jQuery.fn.extend({
         }
     ]); 
 
+    console.log('canvas plugin ready');
 }  // end of canvas_setup()

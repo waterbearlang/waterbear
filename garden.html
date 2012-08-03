@@ -191,6 +191,11 @@
                   if(! plugin ){
                       alert('Sorry the plugin: \"'+ name +'\" does not exist.');
                   }
+               	  $('#block_menu').accordion({
+                      autoHeight: false,
+                      collapsible: true,
+                      header: '> section > h3'
+                  });
                   $('#block_menu_load').remove();
                   $('#block_menu').show();
 

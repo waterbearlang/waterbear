@@ -154,7 +154,6 @@
     <script src="scripts/timer.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
-    <!--script src="plugins/plugins.js"></script-->
 	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script>
 	
@@ -162,10 +161,6 @@
         $(":button").button();
         $(":button").css({width: "14%"});
 
-        // remove support texts
-        $('.scripts_text_view_tab').hide();
-        $('.chrome_tab').hide();
-	
         var q = $.parseQuery();
         // if they don't have the plugin part of the query string lets send them back home.
         if(!q.plugin || q.plugin == "undefined" || q.plugin == null) {
@@ -178,18 +173,13 @@
             return 'plugins/' + name + '.js';
         });
 
-        // always load base and finish no matter what
-        //q.unshift('first');
-        //q.push('last');
-
       yepnope({
           test : plugins.length,
           yep : plugins,
           callback: function(url, result, key){
-              console.log('loaded %s', url);
+              //console.log('loaded %s', url);
           },
           complete : function () {
-              console.log('setting up accordion');
            	  $('#block_menu').accordion({
                   autoHeight: false,
                   collapsible: true,

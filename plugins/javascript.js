@@ -842,6 +842,4 @@ $('.socket input').live('click',function(){
     $(this).select();
 });
 
-console.log('javascript plugin ready');
-
 })();

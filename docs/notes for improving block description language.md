@@ -39,7 +39,7 @@ Important bits (currently)
 
 block_description (blocks.js)
 Block (blocks.js)
-load_scripts_from_object (workspace.js)
+loadScriptsFromObject (workspace.js)
 
 
 Definition:

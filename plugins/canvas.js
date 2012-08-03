@@ -43,7 +43,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 
 jQuery.fn.extend({
     wrapScript: function(){
-        // wrap the top-level script to prevent leaking into globals
+        // over-ride javascript plugin to add canvas to globals
         var script = this.prettyScript();
         var retval = 'var global = new Global();(function($){var local = new Local();try{local.canvas = $("<canvas width=\\"" + global.stage_width + "\\" height=\\"" + global.stage_height + "\\"></canvas>").appendTo(".stage");local.ctx = local.canvas[0].getContext("2d");' + script + '}catch(e){alert(e);}})(jQuery);';
         //console.log(retval);
@@ -697,6 +697,4 @@ jQuery.fn.extend({
             type: 'string'
         }
     ]); 
-
-    console.log('canvas plugin ready');
 })();

@@ -145,7 +145,7 @@ function restore_from_export(){
     var ps = JSON.parse(script);
     console.log(ps.scripts);
 
-    load_scripts_from_object(ps.scripts);   
+    loadScriptsFromObject(ps.scripts);   
     }); 
 }
 
@@ -199,13 +199,13 @@ window.populateDemosDialog = populateDemosDialog; // expose this as a public met
 
 function restore_named_scripts(event){
     clearScripts();
-    load_scripts_from_object($(this).closest('li').data('scripts'));
+    loadScriptsFromObject($(this).closest('li').data('scripts'));
     reset_and_close_restore_dialog();
 }
 
 function restore_demo_scripts(event){
     clearScripts();
-    load_scripts_from_object($(this).closest('li').data('scripts'));
+    loadScriptsFromObject($(this).closest('li').data('scripts'));
     $('#demos_dialog').bPopup().close();
 }
 
@@ -248,14 +248,15 @@ function layout_blocks(){
     });
 }
 
-function load_scripts_from_object(blocks){
+function loadScriptsFromObject(blocks){
     var workspace = $('.workspace:visible .scripts_workspace');
     $.each(blocks, function(idx, value){
         console.log('restoring block %s', idx);
         var block = Block(value);
-        workspace.append(block);
-        block.css({position: 'relative', left: 0, top: 0, display: 'block'});
-        block.trigger('add_to_workspace');
+        var view = block.view();
+        workspace.append(view);
+        view.css({position: 'relative', left: 0, top: 0, display: 'block'});
+        view.trigger('add_to_workspace');
         $('.scripts_workspace').trigger('add');
 
     });
@@ -266,7 +267,7 @@ window.loadCurrentScripts = function(){
         var blocks = JSON.parse(localStorage['__current_scripts']);
         if (blocks.length){
             console.log('restoring %s blocks', blocks.length);
-            load_scripts_from_object(blocks);
+            loadScriptsFromObject(blocks);
         }
     }
 }

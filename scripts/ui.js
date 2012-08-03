@@ -2,20 +2,19 @@
 
 // UI Chrome Section
 
-function accordion(event){
-    // console.log('accordion');
-    var self = $(this);
-    if (self.hasClass('selected')){
-        self.removeClass('selected').siblings('.option').slideUp('slow');
-        return;
-    }
-    $('.select.selected').removeClass('selected').siblings('.option').slideUp('slow');
-    self.addClass('selected').siblings('.option').slideDown('slow');
-    $('#block_menu').trigger('open', self);
-}
-$('#block_menu').delegate('.select', 'click', accordion);
+// function accordion(event){
+//     // console.log('accordion');
+//     var self = $(this);
+//     if (self.hasClass('selected')){
+//         self.removeClass('selected').siblings('.option').slideUp('slow');
+//         return;
+//     }
+//     $('.select.selected').removeClass('selected').siblings('.option').slideUp('slow');
+//     self.addClass('selected').siblings('.option').slideDown('slow');
+//     $('#block_menu').trigger('open', self);
+// }
+//$('#block_menu').delegate('.select', 'click', accordion);
 
-})(jQuery);
 
 function tab_select(event){
     var self = $(this);
@@ -32,10 +31,27 @@ function tab_select(event){
 $('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
 
 // Expose this to dragging and saving functionality
-window.show_workspace = function(){
+function showWorkspace(){
     $('.workspace:visible .scripts_text_view').hide();
     $('.workspace:visible .scripts_workspace').show();
 }
+window.showWorkspace = showWorkspace;
+
+function updateScriptsView(){
+    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+    //console.log('found %s scripts to view', blocks.length);
+    var view = $('.workspace:visible .scripts_text_view');
+    blocks.writeScript(view);
+}
+window.updateScriptsView = updateScriptsView;
+
+function runScripts(event){
+    $('.stage')[0].scrollIntoView();
+    var blocks = $('.workspace:visible .scripts_workspace > .trigger');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
+}
+$('.runScripts').click(runScripts);
+
 
 
 // Build the Blocks menu, this is a public method
@@ -57,3 +73,7 @@ function menu(title, specs, show){
     }
     return body;
 }
+window.menu = menu;
+
+})(jQuery);
+

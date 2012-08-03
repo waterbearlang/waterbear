@@ -1,11 +1,11 @@
 // Pre-load dependencies
+(function(){
+
 yepnope({
     load: [ 'plugins/twitter.css'
-    ],
-    complete: twitter_setup
+    ]
 });
 
-function twitter_setup(){
     Local.prototype.getTweet = function(name, callback){
         var jsonTwitterFeed = "https://twitter.com/statuses/user_timeline/" + name + ".json";
         $.ajax({
@@ -39,4 +39,4 @@ function twitter_setup(){
         }
     ]);
 
-}
+})();

@@ -51,13 +51,13 @@ function test(){
 }
 window.test = test;
 
-function clear_scripts(event, force){
+function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace:visible > *').empty();
         $('.stage').replaceWith('<div class="stage"></div>');
     }
 }
-$('.clear_scripts').click(clear_scripts);
+$('.clearScripts').click(clearScripts);
 
 $('.goto_script').click(function(){$('#block_menu')[0].scrollIntoView();});
 $('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
@@ -74,7 +74,7 @@ function scripts_as_object(){
 }
 
 function save_current_scripts(){
-    show_workspace();
+    showWorkspace();
     $('#block_menu')[0].scrollIntoView();
     localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
 }
@@ -140,7 +140,7 @@ function restore_from_export(){
     var script = $('#exp textarea').val();
     console.log(script);
     $('#exp').bPopup().close();
-    clear_scripts();
+    clearScripts();
 
     var ps = JSON.parse(script);
     console.log(ps.scripts);
@@ -198,13 +198,13 @@ window.populateDemosDialog = populateDemosDialog; // expose this as a public met
 
 
 function restore_named_scripts(event){
-    clear_scripts();
+    clearScripts();
     load_scripts_from_object($(this).closest('li').data('scripts'));
     reset_and_close_restore_dialog();
 }
 
 function restore_demo_scripts(event){
-    clear_scripts();
+    clearScripts();
     load_scripts_from_object($(this).closest('li').data('scripts'));
     $('#demos_dialog').bPopup().close();
 }
@@ -290,32 +290,26 @@ function tab_select(event){
 }
 $('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
 
-// Expose this to draggging and saving functionality
-window.show_workspace = function(){
-    $('.workspace:visible .scripts_text_view').hide();
-    $('.workspace:visible .scripts_workspace').show();
-}
-
 
 // Build the Blocks menu, this is a public method
 
-function menu(title, specs, show){
-    var klass = title.toLowerCase();
-    var body = $('<section class="submenu"></section>');
-    var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
-    var options = $('<div class="option"></div>').appendTo(body);
-    specs.forEach(function(spec, idx){
-        spec.klass = klass;
-        options.append(Block(spec));
-    });
-    $('#block_menu').append(body);
-    if (show){
-        select.addClass('selected');
-    }else{
-        options.hide();
-    }
-    return body;
-}
-window.menu = menu;
+// function menu(title, specs, show){
+//     var klass = title.toLowerCase();
+//     var body = $('<section class="submenu"></section>');
+//     var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
+//     var options = $('<div class="option"></div>').appendTo(body);
+//     specs.forEach(function(spec, idx){
+//         spec.klass = klass;
+//         options.append(Block(spec));
+//     });
+//     $('#block_menu').append(body);
+//     if (show){
+//         select.addClass('selected');
+//     }else{
+//         options.hide();
+//     }
+//     return body;
+// }
+// window.menu = menu;
 
 })(jQuery);

@@ -5,7 +5,7 @@
  *
  */
 
-
+(function(){
 // Pre-load dependencies
 yepnope({
     load: [ 'plugins/gamequery.css',
@@ -15,8 +15,7 @@ yepnope({
             'lib/highlight.js',
             'lib/highlight-javascript.js',
             'lib/highlight-github.css'
-    ],
-    complete: setup
+    ]
 });
 
 // Add some utilities
@@ -109,31 +108,6 @@ jQuery.fn.extend({
   }
 });
 
-function setup(){
-    // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-    
-function showColorPicker(){
-    console.log('Add a non-Raphael color picker');
-}
-//$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
-$(document).ready(function(){
-//     window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
-});
-
-
-window.updateScriptsView = function(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    //console.log('found %s scripts to view', blocks.length);
-    var view = $('.workspace:visible .scripts_text_view');
-    blocks.writeScript(view);
-}
-
-function runScripts(event){
-    $('.stage')[0].scrollIntoView();
-    var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
-}
-$('.runScripts').click(runScripts);
 
 // End UI section
 
@@ -1058,4 +1032,5 @@ $('.socket input').live('click',function(){
     $(this).focus();
     $(this).select();
 });
-}
+
+})();

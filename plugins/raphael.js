@@ -1,3 +1,5 @@
+(function(){
+
 // Pre-load dependencies
 yepnope({
     load: [ 'plugins/raphael.css',
@@ -5,14 +7,10 @@ yepnope({
             'lib/raphael-path.js',
             'lib/sketchy.js',
             'lib/colorwheel.js'
-    ],
-    complete: raphael_setup
+    ]
 });
 
 
-function raphael_setup(){
-    // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-    
 jQuery.fn.extend({
     wrapScript: function(){
         // wrap the top-level script to prevent leaking into globals
@@ -103,7 +101,7 @@ $.extend(choiceLists, {
     linejoin: ['round', 'bevel', 'mitre'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
-};
+});
 choiceLists.types = choiceLists.types.concat(['color', 'image', 'shape']);
 choiceLists.rettypes = choiceLists.rettype.concat(['color', 'image', 'shape']);
 
@@ -293,7 +291,7 @@ var menus = {
             blocktype: 'step',
             label: 'shape [shape] font family [string:Helvetica]',
             script: '{{1}}.attr("font-family", {{2}});',
-            help: 'change the font for the text object',
+            help: 'change the font for the text object'
         },
         {
             blocktype: 'step',
@@ -496,4 +494,4 @@ var menus = {
     ])
 };
 
-}
+})();

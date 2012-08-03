@@ -1,8 +1,10 @@
+(function(){
+
+
 yepnope({
     load: 'plugins/arduino.css'
 });
 
-(function(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
 
     // remove UI we don't use (Maybe JS plugin should *add* this?)
@@ -26,11 +28,11 @@ window.choiceLists = {
     analogrefs:['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL']
 };
 
-window.set_defaultscript = function(script){
+window.setDefaultScript = function(script){
     window.defaultscript = script; 
 };
 
-window.load_defaultscript = function(script){
+window.loadDefaultScript = function(script){
     if (typeof window.defaultscript != 'undefined'){
         //console.log("window.defaultscript =", window.defaultscript);
         load_scripts_from_object(window.defaultscript);
@@ -54,20 +56,20 @@ jQuery.fn.extend({
   }
 });
 
-function clear_scripts(event, force){
+function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace:visible > *').empty();
         $('.stage').replaceWith('<div class="stage"></div>');
     }
 }
 
-function clear_scripts_default(event, force){
-  clear_scripts(event, force);
-  load_defaultscript();  
+function clearScriptsDefault(event, force){
+  clearScripts(event, force);
+  loadDefaultScript();  
 }
 
 
-$('.clear_scripts').click(clear_scripts_default);
+$('.clearScripts').click(clearScriptsDefault);
 
 
     menu('Control', [
@@ -523,7 +525,7 @@ $('.clear_scripts').click(clear_scripts_default);
 
 
 var defaultscript=[{"klass":"control","label":"Global Settings","script":"/*Global Settings*/\u000a\u000a[[next]]\u000a\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":""},{"klass":"control","label":"Setup - When program starts","script":"void setup()\u000a{\u000a[[next]]\u000a}\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":""},{"klass":"control","label":"Main loop","script":"void loop()\u000a{\u000a[[1]]\u000a}\u000a","containers":1,"trigger":true,"sockets":[],"contained":[""],"next":""}];
-set_defaultscript(defaultscript);
+setDefaultScript(defaultscript);
 
 var demos = [
     {

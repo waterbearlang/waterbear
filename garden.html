@@ -85,7 +85,7 @@
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
             <div class="scripts_text_view_tab chrome_tab">Script Text</div>
             <button class="runScripts">Run</button>
-            <button class="clear_scripts">Clear</button>
+            <button class="clearScripts">Clear</button>
             <button class="save_scripts">Save</button>
             <button class="restore_scripts">Restore</button>
         </div>
@@ -154,7 +154,7 @@
     <script src="scripts/timer.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
-    <script src="plugins/plugins.js"></script>
+    <!--script src="plugins/plugins.js"></script-->
 	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script>
 	
@@ -174,35 +174,32 @@
 	   }
 
         // load all modules separated by |
-        q = q['plugin'].split('|');
+        var plugins = q['plugin'].split('|').map(function(name){
+            return 'plugins/' + name + '.js';
+        });
 
         // always load base and finish no matter what
         //q.unshift('first');
         //q.push('last');
 
-        $.each( q , function( a, name ) {
+      yepnope({
+          test : plugins.length,
+          yep : plugins,
+          callback: function(url, result, key){
+              console.log('loaded %s', url);
+          },
+          complete : function () {
+              console.log('setting up accordion');
+           	  $('#block_menu').accordion({
+                  autoHeight: false,
+                  collapsible: true,
+                  header: '> section > h3'
+              });
+              $('#block_menu_load').remove();
+              $('#block_menu').show();
 
-          var plugin = plugins[ name ];
-        
-          yepnope({
-              test : plugin,
-              yep : plugin,
-              complete : function () {
-                  if(! plugin ){
-                      alert('Sorry the plugin: \"'+ name +'\" does not exist.');
-                  }
-                  console.log('setting up accordion');
-               	  $('#block_menu').accordion({
-                      autoHeight: false,
-                      collapsible: true,
-                      header: '> section > h3'
-                  });
-                  $('#block_menu_load').remove();
-                  $('#block_menu').show();
-
-              }
-          });
-        } );
+          }
+      });
     </script>
   </body>
 </html>

@@ -5,6 +5,8 @@
  *
  */
 
+(function(){
+
 
 // Pre-load dependencies
 yepnope({
@@ -33,24 +35,6 @@ jQuery.fn.extend({
         return retval;
     }
 });
-
-function javascriptSetup(){
-    // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-
-
-window.updateScriptsView = function(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    //console.log('found %s scripts to view', blocks.length);
-    var view = $('.workspace:visible .scripts_text_view');
-    blocks.writeScript(view);
-};
-
-function runScripts(event){
-    $('.stage')[0].scrollIntoView();
-    var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
-}
-$('.runScripts').click(runScripts);
 
 // End UI section
 
@@ -848,7 +832,6 @@ menu('Operators', [
     }
 ]);
 
-javascriptSetup();
 var demos = [];
 populateDemosDialog(demos);
 loadCurrentScripts();
@@ -861,4 +844,4 @@ $('.socket input').live('click',function(){
 
 console.log('javascript plugin ready');
 
-}
+})();

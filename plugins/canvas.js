@@ -5,17 +5,15 @@
  *
  */
 
+(function(){
+
 
 // Pre-load dependencies
 yepnope({
     load: [ 'plugins/canvas.css'
-    ],
-    complete: canvas_setup
+    ]
 });
 
-function canvas_setup(){
-    // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-    
 function showColorPicker(){
     console.log('Add a non-Raphael color picker');
 }
@@ -701,4 +699,4 @@ jQuery.fn.extend({
     ]); 
 
     console.log('canvas plugin ready');
-}  // end of canvas_setup()
+})();

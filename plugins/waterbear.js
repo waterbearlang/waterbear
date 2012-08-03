@@ -19,11 +19,11 @@ yepnope({
 
 // Add some utilities
 jQuery.fn.extend({
-  pretty_script: function(){
+  prettyScript: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
   },
-  write_script: function(view){
-      view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
+  writeScript: function(view){
+      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
   }
 });
@@ -32,24 +32,24 @@ function javascript_setup(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
 
 
-window.update_scripts_view = function(){
+window.updateScriptsView = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     //console.log('found %s scripts to view', blocks.length);
     var view = $('.workspace:visible .scripts_text_view');
-    blocks.write_script(view);
+    blocks.writeScript(view);
 }
 
-function run_scripts(event){
+function runScripts(event){
     $('.stage')[0].scrollIntoView();
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
-$('.run_scripts').click(run_scripts);
+$('.runScripts').click(runScripts);
 
 // End UI section
 
 // expose these globally so the Block/Label methods can find them
-window.choice_lists = {
+window.choiceLists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
@@ -118,8 +118,8 @@ menu('Sensing', [
 ]);
 
 var demos = [];
-populate_demos_dialog(demos);
-load_current_scripts();
+populateDemosDialog(demos);
+loadCurrentScripts();
 $('.scripts_workspace').trigger('init');
 
 $('.socket input').live('click',function(){

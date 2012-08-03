@@ -4,7 +4,7 @@
 function test_block(block){
     var name = block.data('klass') + ': ' + block.data('label');
     try{
-        eval(block.wrap_script());
+        eval(block.wrapScript());
         // console.log('passed: %s', name);
         return true;
     }catch(e){

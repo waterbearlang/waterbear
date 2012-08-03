@@ -14,9 +14,9 @@ function raphael_setup(){
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
     
 jQuery.fn.extend({
-    wrap_script: function(){
+    wrapScript: function(){
         // wrap the top-level script to prevent leaking into globals
-        var script = this.pretty_script();
+        var script = this.prettyScript();
         return 'var global = new Global();(function($){var stage = $(".stage");global.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
     }
 });
@@ -98,14 +98,14 @@ Raphael.fn.imageWithNaturalHeight = function(url){
 
 
 // expose these globally so the Block/Label methods can find them
-$.extend(choice_lists, {
+$.extend(choiceLists, {
     linecap: ['round', 'butt', 'square'],
     linejoin: ['round', 'bevel', 'mitre'],
     easing: ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'],
     fontweight: ['normal', 'bold', 'inherit']
 };
-choice_lists.types = choice_lists.types.concat(['color', 'image', 'shape']);
-choice_lists.rettypes = choice_lists.rettype.concat(['color', 'image', 'shape']);
+choiceLists.types = choiceLists.types.concat(['color', 'image', 'shape']);
+choiceLists.rettypes = choiceLists.rettype.concat(['color', 'image', 'shape']);
 
 // Hints for building blocks
 //

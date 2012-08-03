@@ -66,16 +66,16 @@ jQuery.fn.extend({
           return script;
       }).get().join('');
   },
-  wrap_script: function(){
+  wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
-      var script = this.pretty_script();
+      var script = this.prettyScript();
       return 'var global = new Global();(function($){var stage = $(".stage");global.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
   },
-  pretty_script: function(){
+  prettyScript: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
   },
-  write_script: function(view){
-      view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
+  writeScript: function(view){
+      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
   }
 });
@@ -97,19 +97,19 @@ $(document).ready(function(){
     window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
 });
 
-window.update_scripts_view = function(){
+window.updateScriptsView = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     //console.log('found %s scripts to view', blocks.length);
     var view = $('.workspace:visible .scripts_text_view');
-    blocks.write_script(view);
+    blocks.writeScript(view);
 }
 
-function run_scripts(event){
+function runScripts(event){
     $('.stage')[0].scrollIntoView();
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
-$('.run_scripts').click(run_scripts);
+$('.runScripts').click(runScripts);
 
 }
 
@@ -117,7 +117,7 @@ $('.run_scripts').click(run_scripts);
 
 
 // expose these globally so the Block/Label methods can find them
-window.choice_lists = {
+window.choiceLists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 

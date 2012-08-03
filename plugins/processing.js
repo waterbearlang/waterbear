@@ -64,16 +64,16 @@ jQuery.fn.extend({
           return script;
       }).get().join('');
   },
-  wrap_script: function(){
+  wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
-      var script = this.pretty_script();
+      var script = this.prettyScript();
       return 'var global = new Global();(function($){var local = new Local();' + script + '})(jQuery);';
   },
-  pretty_script: function(){
+  prettyScript: function(){
       return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
   },
-  write_script: function(view){
-      view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
+  writeScript: function(view){
+      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
   }
 });
@@ -156,18 +156,18 @@ Raphael.fn.imageWithNaturalHeight = function(url){
 };
 
 
-window.update_scripts_view = function(){
+window.updateScriptsView = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     var view = $('.workspace:visible .scripts_text_view');
-    blocks.write_script(view);
+    blocks.writeScript(view);
 }
 
-function run_scripts(event){
+function runScripts(event){
     $('.stage')[0].scrollIntoView();
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
-$('.run_scripts').click(run_scripts);
+$('.runScripts').click(runScripts);
 
 // End UI section
 
@@ -195,7 +195,7 @@ window.getTweet = Local.prototype.getTweet;
 
 
 // expose these globally so the Block/Label methods can find them
-window.choice_lists = {
+window.choiceLists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
@@ -720,6 +720,6 @@ var demos = [
     scripts: [{"klass":"control","label":"when program runs","script":"function _start(){[[next]]}_start();","containers":0,"trigger":true,"sockets":[],"contained":[],"next":{"klass":"shapes","label":"arc at radius [number:100] from [number:0] degrees to [number:30] degrees","script":"local.shape = global.paper.arcslice({{1}}, {{2}}, {{3}});","containers":0,"sockets":["100","0","30"],"contained":[],"next":{"klass":"shapes","label":"stroke linecap [choice:linecap]","script":"local.shape.attr(\"stroke-linecap\", \"{{1}}\");","containers":0,"sockets":["round"],"contained":[],"next":{"klass":"shapes","label":"stroke width [number:1]","script":"local.shape.attr(\"stroke-width\", {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.shape_references[\"{{1}}\"] = local.shape;","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"circle with radius [number:0]","script":"local.shape = global.paper.circle(0, 0, {{1}});","containers":0,"sockets":["5"],"contained":[],"next":{"klass":"shapes","label":"fill color [color:#FFFFFF]","script":"local.shape.attr(\"fill\", \"{{1}}\");","containers":0,"sockets":["#545ca5"],"contained":[],"next":{"klass":"shapes","label":"stroke transparent","script":"local.shape.attr(\"stroke\", \"transparent\");","containers":0,"sockets":[],"contained":[],"next":{"klass":"transform","label":"position at x [number:0] y [number:0]","script":"local.shape.attr(\"translation\", \"\"+{{1}} +\",\" + {{2}});","containers":0,"sockets":[{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":{"klass":"shapes","label":"name shape: [string:shape1]","script":"local.shape_references[\"{{1}}\"] = local.shape;","containers":0,"sockets":["ball"],"contained":[],"next":""}}}}}}}}}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){[[next]]return false;});","containers":0,"trigger":true,"sockets":["right"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.shape = local.shape_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}},{"klass":"control","label":"when [choice:keys] key pressed","script":"$(document).bind(\"keydown\", \"{{1}}\", function(){[[next]]return false;});","containers":0,"trigger":true,"sockets":["left"],"contained":[],"next":{"klass":"shapes","label":"refer to shape [string:shape1]","script":"local.shape = local.shape_references[\"{{1}}\"];","containers":0,"sockets":["paddle"],"contained":[],"next":{"klass":"shapes","label":"rotate [number:5] degrees around x [number:0] y [number:0]","script":"local.shape.rotate(angle(local.shape) + {{1}}, {{2}}, {{3}});","containers":0,"sockets":["-5",{"klass":"sensing","label":"center x","script":"global.stage_center_x","containers":0,"type":"number","sockets":[],"contained":[],"next":""},{"klass":"sensing","label":"center y","script":"global.stage_center_y","containers":0,"type":"number","sockets":[],"contained":[],"next":""}],"contained":[],"next":""}}}]
     }
 ];
-populate_demos_dialog(demos);
+populateDemosDialog(demos);
 
 }

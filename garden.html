@@ -84,7 +84,7 @@
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
             <div class="scripts_text_view_tab chrome_tab">Script Text</div>
-            <button class="run_scripts">Run</button>
+            <button class="runScripts">Run</button>
             <button class="clear_scripts">Clear</button>
             <button class="save_scripts">Save</button>
             <button class="restore_scripts">Restore</button>
@@ -92,7 +92,7 @@
         <div class="tab_bar2">
             <button class="goto_script">Back to Script</button>
             <button class="clear_canvas">Clear Stage</button>
-            <button class="run_scripts">Run</button>
+            <button class="runScripts">Run</button>
         </div>
         <div class="workspace">
             <div class="scripts_workspace"></div>
@@ -191,6 +191,7 @@
                   if(! plugin ){
                       alert('Sorry the plugin: \"'+ name +'\" does not exist.');
                   }
+                  console.log('setting up accordion');
                	  $('#block_menu').accordion({
                       autoHeight: false,
                       collapsible: true,

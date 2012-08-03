@@ -28,7 +28,7 @@ $(document).ready(function(){
 
 
 // expose these globally so the Block/Label methods can find them
-$.extend(choice_lists, {
+$.extend(choiceLists, {
     unit: ['px', 'em', '%', 'pt'],
     align: ['start', 'end', 'left', 'right', 'center'],
     baseline: ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'],
@@ -40,13 +40,13 @@ $.extend(choice_lists, {
     repetition: ['repeat', 'repeat-x', 'repeat-y', 'no-repeat']
 });
 
-choice_lists.types = choice_lists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
-choice_lists.rettypes = choice_lists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+choiceLists.types = choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 
 jQuery.fn.extend({
-    wrap_script: function(){
+    wrapScript: function(){
         // wrap the top-level script to prevent leaking into globals
-        var script = this.pretty_script();
+        var script = this.prettyScript();
         var retval = 'var global = new Global();(function($){var local = new Local();try{local.canvas = $("<canvas width=\\"" + global.stage_width + "\\" height=\\"" + global.stage_height + "\\"></canvas>").appendTo(".stage");local.ctx = local.canvas[0].getContext("2d");' + script + '}catch(e){alert(e);}})(jQuery);';
         //console.log(retval);
         return retval;

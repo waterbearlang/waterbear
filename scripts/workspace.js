@@ -1,5 +1,56 @@
 (function($){
 
+// UI Chrome Section
+
+function accordion(event){
+    // console.log('accordion');
+    var self = $(this);
+    if (self.hasClass('selected')){
+        self.removeClass('selected').siblings('.option').slideUp('slow');
+        return;
+    }
+    $('.select.selected').removeClass('selected').siblings('.option').slideUp('slow');
+    self.addClass('selected').siblings('.option').slideDown('slow');
+    $('#block_menu').trigger('open', self);
+}
+$('#block_menu').delegate('.select', 'click', accordion);
+
+
+function test_block(block){
+    var name = block.data('klass') + ': ' + block.data('label');
+    try{
+        eval(block.wrapScript());
+        // console.log('passed: %s', name);
+        return true;
+    }catch(e){
+        if (e.name === 'SyntaxError'){
+            console.error('failed: %s, %o', name, e);
+            return false;
+        }else{
+            // console.warn('passed with error: %s, %o', name, e);
+            return true;
+        }
+    }
+}
+
+function test(){
+    var blocks = $('#block_menu .wrapper');
+    var total = blocks.length;
+    var success = 0;
+    var fail = 0;
+    console.log('running %d tests', total);
+    blocks.each(function(idx, elem){
+        setTimeout(function(){
+            // console.log('running test %d', idx);
+            test_block($(elem)) ? success++ : fail++;
+            if( success + fail === total){
+                console.log('Ran %d tests, %d successes, %s failures', total, success, fail);
+            }
+        }, 10);
+    });
+}
+window.test = test;
+
 function clear_scripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace:visible > *').empty();
@@ -36,7 +87,7 @@ function save_named_scripts(){
     var date = Date.now();
     if (title){
         if (localStorage[title]){
-            if (!confirm('A script with that title exists. Overwrite?')){
+            if (!confirm('A script with that title exist. Overwrite?')){
                 return;
             }
         }
@@ -130,7 +181,7 @@ function populate_and_show_restore_dialog(){
     $('#restore_dialog').bPopup();
 }
 
-function populate_demos_dialog(demos){
+function populateDemosDialog(demos){
     var list = $('#demo_list');
     var idx, value, key, script_li;
     $.each(demos, function(){
@@ -143,7 +194,7 @@ function populate_demos_dialog(demos){
         list.append(script_li);
     });
 }
-window.populate_demos_dialog = populate_demos_dialog; // expose this as a public method
+window.populateDemosDialog = populateDemosDialog; // expose this as a public method
 
 
 function restore_named_scripts(event){
@@ -210,7 +261,7 @@ function load_scripts_from_object(blocks){
     });
 }
 
-window.load_current_scripts = function(){
+window.loadCurrentScripts = function(){
     if (localStorage.__current_scripts){
         var blocks = JSON.parse(localStorage['__current_scripts']);
         if (blocks.length){
@@ -219,6 +270,52 @@ window.load_current_scripts = function(){
         }
     }
 }
-// $(document).ready(load_current_scripts);
+// $(document).ready(loadCurrentScripts);
+
+// Tab UI
+
+// UI Section
+
+function tab_select(event){
+    var self = $(this);
+    $('.tab_bar .selected').removeClass('selected');
+    self.addClass('selected');
+    $('.workspace:visible > div:visible').hide();
+    if (self.is('.scripts_workspace_tab')){
+        $('.workspace:visible .scripts_workspace').show();
+    }else if (self.is('.scripts_text_view_tab')){
+        $('.workspace:visible .scripts_text_view').show();
+        updateScriptsView();
+    }
+}
+$('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
+
+// Expose this to draggging and saving functionality
+window.show_workspace = function(){
+    $('.workspace:visible .scripts_text_view').hide();
+    $('.workspace:visible .scripts_workspace').show();
+}
+
+
+// Build the Blocks menu, this is a public method
+
+function menu(title, specs, show){
+    var klass = title.toLowerCase();
+    var body = $('<section class="submenu"></section>');
+    var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
+    var options = $('<div class="option"></div>').appendTo(body);
+    specs.forEach(function(spec, idx){
+        spec.klass = klass;
+        options.append(Block(spec));
+    });
+    $('#block_menu').append(body);
+    if (show){
+        select.addClass('selected');
+    }else{
+        options.hide();
+    }
+    return body;
+}
+window.menu = menu;
 
 })(jQuery);

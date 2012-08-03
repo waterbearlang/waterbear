@@ -28,7 +28,7 @@ $('.scripts_workspace').delegate('.disclosure', 'click', function(event){
 
 function choiceFunction(s, listname, default_opt){
     // TODO: Convert this to a template
-    var list = choice_lists[listname];
+    var list = choiceLists[listname];
     return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' + 
         list.map(function(item){
             if (item === default_opt){

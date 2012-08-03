@@ -6,10 +6,10 @@ yepnope({
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
 
     // remove UI we don't use (Maybe JS plugin should *add* this?)
-    $('.goto_stage, .run_scripts, .tab_bar_2, .stage').remove();
+    $('.goto_stage, .runScripts, .tab_bar_2, .stage').remove();
     
 // expose these globally so the Block/Label methods can find them
-window.choice_lists = {
+window.choiceLists = {
     /*keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
@@ -37,20 +37,20 @@ window.load_defaultscript = function(script){
     }
 };
 
-window.update_scripts_view = function(){
+window.updateScriptsView = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     var view = $('.workspace:visible .scripts_text_view');
-    blocks.write_script(view);
+    blocks.writeScript(view);
 };
 
 jQuery.fn.extend({
-  wrap_script: function(){
+  wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
       var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
       return script;
   },
-  write_script: function(view){
-      view.html('<code><pre class="script_view">' + this.wrap_script() +  '</pre></code>');
+  writeScript: function(view){
+      view.html('<code><pre class="script_view">' + this.wrapScript() +  '</pre></code>');
   }
 });
 
@@ -532,6 +532,6 @@ var demos = [
       scripts:[{"klass":"control","label":"Global Settings","script":"/*Global Settings*/\u000a\u000a[[next]]\u000a\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":{"klass":"variables","label":"Create [string:var] set to [string]","script":"String {{1}} = '{{2}}';","containers":0,"sockets":["analogInPin","0"],"contained":[],"next":{"klass":"variables","label":"Create [string:var] set to [string]","script":"String {{1}} = '{{2}}';","containers":0,"sockets":["analogOutPin","9"],"contained":[],"next":{"klass":"variables","label":"Create [string:var] set to [int:0]","script":"int {{1}} = {{2}}'","containers":0,"sockets":["sensorValue","0"],"contained":[],"next":{"klass":"variables","label":"Create [string:var] set to [int:0]","script":"int {{1}} = {{2}}'","containers":0,"sockets":["outputValue","0"],"contained":[],"next":""}}}}},{"klass":"control","label":"Setup - When program starts","script":"void setup()\u000a{\u000a[[next]]\u000a}\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":{"klass":"serial","label":"Setup serial communication at [choice:baud]","script":"Serial.begin({{1}});","containers":0,"sockets":["9600"],"contained":[],"next":""}},{"klass":"control","label":"Main loop","script":"void loop()\u000a{\u000a[[1]]\u000a}\u000a","containers":1,"trigger":true,"sockets":[],"contained":[{"klass":"variables","label":"[string:var] = [int:0]","script":"{{1}} = {{2}};","containers":0,"sockets":["sensorValue",{"klass":"io","label":"Analog Input [string:0]","script":"(analogRead({{1}}))","containers":0,"type":"int","sockets":[{"klass":"variables","label":"value of [string:var]","script":"{{1}}","containers":0,"type":"string","sockets":["analogInPin"],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"variables","label":"[string:var] = [int:0]","script":"{{1}} = {{2}};","containers":0,"sockets":["outputValue",{"klass":"operators","label":"round [number:10]","script":"(int({{1}}))","containers":0,"type":"int","sockets":[{"klass":"operators","label":"Map [number] from Analog in to Analog out","script":"map({{1}}, 0, 1023, 0, 255)","containers":0,"type":"number","sockets":[{"klass":"variables","label":"value of [string:var]","script":"{{1}}","containers":0,"type":"int","sockets":["sensorValue"],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":""}],"contained":[],"next":{"klass":"serial","label":"Send [any:Message] as a line","script":"Serial.println({{1}});","containers":0,"sockets":[{"klass":"variables","label":"value of [string:var]","script":"{{1}}","containers":0,"type":"int","sockets":["outputValue"],"contained":[],"next":""}],"contained":[],"next":""}}}],"next":""}]
     }
 ];
-populate_demos_dialog(demos);
+populateDemosDialog(demos);
 
 })();

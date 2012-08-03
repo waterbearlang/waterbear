@@ -26,7 +26,7 @@ function tab_select(event){
         $('.workspace:visible .scripts_workspace').show();
     }else if (self.is('.scripts_text_view_tab')){
         $('.workspace:visible .scripts_text_view').show();
-        update_scripts_view();
+        updateScriptsView();
     }
 }
 $('.tab_bar').delegate('.chrome_tab', 'click', tab_select);

@@ -78,9 +78,9 @@ jQuery.fn.extend({
     }
     return '';
   },
-  wrap_script: function(){
+  wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
-      var script = this.pretty_script();
+      var script = this.prettyScript();
       //var retval = 'try{' + script + '}catch(e){alert(e);};';
 
       var retval = 'try{' + script + '}catch(e){alert(e);};';
@@ -88,7 +88,7 @@ jQuery.fn.extend({
       //console.log(retval);
       return retval;
   },
-  pretty_script: function(){
+  prettyScript: function(){
       var structured = $(this).structured_script();
       return js_beautify(structured);
       //return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
@@ -103,8 +103,8 @@ jQuery.fn.extend({
       return structured;
   },
   
-  write_script: function(view){
-      view.html('<pre class="language-javascript">' + this.pretty_script() + '</pre>');
+  writeScript: function(view){
+      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
   }
 });
@@ -121,25 +121,25 @@ $(document).ready(function(){
 });
 
 
-window.update_scripts_view = function(){
+window.updateScriptsView = function(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
     //console.log('found %s scripts to view', blocks.length);
     var view = $('.workspace:visible .scripts_text_view');
-    blocks.write_script(view);
+    blocks.writeScript(view);
 }
 
-function run_scripts(event){
+function runScripts(event){
     $('.stage')[0].scrollIntoView();
     var blocks = $('.workspace:visible .scripts_workspace > .trigger');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrap_script() + '</script></div>');
+    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
-$('.run_scripts').click(run_scripts);
+$('.runScripts').click(runScripts);
 
 // End UI section
 
 
 // expose these globally so the Block/Label methods can find them
-window.choice_lists = {
+window.choiceLists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
@@ -1049,8 +1049,8 @@ var menus = {
 
 var demos = [
 ];
-populate_demos_dialog(demos);
-load_current_scripts();
+populateDemosDialog(demos);
+loadCurrentScripts();
 $('.scripts_workspace').trigger('init');
 console.log("Done");
 

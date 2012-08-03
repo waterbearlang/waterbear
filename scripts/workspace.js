@@ -1,55 +1,5 @@
 (function($){
 
-// UI Chrome Section
-
-function accordion(event){
-    // console.log('accordion');
-    var self = $(this);
-    if (self.hasClass('selected')){
-        self.removeClass('selected').siblings('.option').slideUp('slow');
-        return;
-    }
-    $('.select.selected').removeClass('selected').siblings('.option').slideUp('slow');
-    self.addClass('selected').siblings('.option').slideDown('slow');
-    $('#block_menu').trigger('open', self);
-}
-$('#block_menu').delegate('.select', 'click', accordion);
-
-
-function test_block(block){
-    var name = block.data('klass') + ': ' + block.data('label');
-    try{
-        eval(block.wrapScript());
-        // console.log('passed: %s', name);
-        return true;
-    }catch(e){
-        if (e.name === 'SyntaxError'){
-            console.error('failed: %s, %o', name, e);
-            return false;
-        }else{
-            // console.warn('passed with error: %s, %o', name, e);
-            return true;
-        }
-    }
-}
-
-function test(){
-    var blocks = $('#block_menu .wrapper');
-    var total = blocks.length;
-    var success = 0;
-    var fail = 0;
-    console.log('running %d tests', total);
-    blocks.each(function(idx, elem){
-        setTimeout(function(){
-            // console.log('running test %d', idx);
-            test_block($(elem)) ? success++ : fail++;
-            if( success + fail === total){
-                console.log('Ran %d tests, %d successes, %s failures', total, success, fail);
-            }
-        }, 10);
-    });
-}
-window.test = test;
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
@@ -81,7 +31,7 @@ function save_current_scripts(){
 $(window).unload(save_current_scripts);
 
 
-function save_named_scripts(){
+function saveNamedScripts(){
     var title = $('#script_name').val();
     var description = $('#script_description').val();
     var date = Date.now();
@@ -97,12 +47,12 @@ function save_named_scripts(){
             date: date,
             scripts: scripts_as_object()
         });
-        reset_and_close_save_dialog();
+        resetAndCloseSaveDialog();
     }else   
         alert("You must enter a name");
 }
 
-function export_named_scripts(){
+function exportNamedScripts(){
     console.log("here");
     $('#exp h2').html('Exported Code');
     $('#exp small').html('Copy Exported Code below');   
@@ -117,7 +67,7 @@ function export_named_scripts(){
         scripts: scripts_as_object()
     });
     console.log("EXP: "+exp);
-    reset_and_close_save_dialog();
+    resetAndCloseSaveDialog();
     $('#exp').bPopup();
     $('#exp textarea').html(exp);
     $('#exp .done').bind('click',function(){
@@ -130,7 +80,7 @@ function export_named_scripts(){
 }
     
 function restore_from_export(){
-    reset_and_close_restore_dialog();
+    resetAndCloseRestoreDialog();
     $('#exp h2').html('Paste Exported Code below');
     $('#exp small').html('Paste Exported Code below');
     $('#exp').bPopup();
@@ -150,18 +100,18 @@ function restore_from_export(){
 }
 
 
-function reset_and_close_save_dialog(){
+function resetAndCloseSaveDialog(){
     $('#script_name').val('');
     $('#script_description').val('');
     $('#save_dialog').bPopup().close();
 }
 
-function reset_and_close_restore_dialog(){
+function resetAndCloseRestoreDialog(){
     $('#script_list').empty();
     $('#restore_dialog').bPopup().close();
 }
 
-function populate_and_show_restore_dialog(){
+function populateAndShowRestoreDialog(){
     var list = $('#script_list');
     var script_obj;
     var idx, value, key, script_li;
@@ -197,19 +147,19 @@ function populateDemosDialog(demos){
 window.populateDemosDialog = populateDemosDialog; // expose this as a public method
 
 
-function restore_named_scripts(event){
+function restoreNamedScripts(event){
     clearScripts();
     loadScriptsFromObject($(this).closest('li').data('scripts'));
-    reset_and_close_restore_dialog();
+    resetAndCloseRestoreDialog();
 }
 
-function restore_demo_scripts(event){
+function restoreDemoScripts(event){
     clearScripts();
     loadScriptsFromObject($(this).closest('li').data('scripts'));
     $('#demos_dialog').bPopup().close();
 }
 
-function delete_named_scripts(event){
+function deleteNamedScripts(event){
     if (confirm('Are you sure you want to delete this script?')){
         var title = $(this).siblings('.title').text();
         $(this).parent().remove();
@@ -218,35 +168,26 @@ function delete_named_scripts(event){
     }
 }
 
-function toggle_description(event){
+function toggleDescription(event){
     $(this).siblings('.description').toggleClass('hidden');
 }
 
-$('#save_dialog .save').click(save_named_scripts);
-$('#save_dialog .export').click(export_named_scripts);
-$('#save_dialog .cancel').click(reset_and_close_save_dialog);
+$('#save_dialog .save').click(saveNamedScripts);
+$('#save_dialog .export').click(exportNamedScripts);
+$('#save_dialog .cancel').click(resetAndCloseSaveDialog);
 $('.save_scripts').click(function(){$('#save_dialog').bPopup();});
 
-$('.restore_scripts').click( populate_and_show_restore_dialog );
-$('#restore_dialog .cancel').click(reset_and_close_restore_dialog);
+$('.restore_scripts').click( populateAndShowRestoreDialog );
+$('#restore_dialog .cancel').click(resetAndCloseRestoreDialog);
 $('#restore_dialog .exp').click(restore_from_export);
-$('#restore_dialog').delegate('.restore', 'click', restore_named_scripts)
-                    .delegate('.show_description', 'click', toggle_description)
-                    .delegate('.delete', 'click', delete_named_scripts);
+$('#restore_dialog').delegate('.restore', 'click', restoreNamedScripts)
+                    .delegate('.show_description', 'click', toggleDescription)
+                    .delegate('.delete', 'click', deleteNamedScripts);
                     
-$('#demos_dialog').delegate('.load', 'click', restore_demo_scripts)
-                  .delegate('.show_description', 'click', toggle_description);
+$('#demos_dialog').delegate('.load', 'click', restoreDemoScripts)
+                  .delegate('.show_description', 'click', toggleDescription);
 $('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
 $('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
-$('.layout_blocks').click(layout_blocks);
-
-function layout_blocks(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    blocks.each(function(idx){
-        var stagger = (idx + 1) * 30;
-        $(this).css({position:'absolute', left: stagger, top: stagger});
-    });
-}
 
 function loadScriptsFromObject(blocks){
     var workspace = $('.workspace:visible .scripts_workspace');
@@ -273,44 +214,8 @@ window.loadCurrentScripts = function(){
 }
 // $(document).ready(loadCurrentScripts);
 
-// Tab UI
-
-// UI Section
-
-function tab_select(event){
-    var self = $(this);
-    $('.tab_bar .selected').removeClass('selected');
-    self.addClass('selected');
-    $('.workspace:visible > div:visible').hide();
-    if (self.is('.scripts_workspace_tab')){
-        $('.workspace:visible .scripts_workspace').show();
-    }else if (self.is('.scripts_text_view_tab')){
-        $('.workspace:visible .scripts_text_view').show();
-        updateScriptsView();
-    }
-}
-$('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
 
 
-// Build the Blocks menu, this is a public method
 
-// function menu(title, specs, show){
-//     var klass = title.toLowerCase();
-//     var body = $('<section class="submenu"></section>');
-//     var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
-//     var options = $('<div class="option"></div>').appendTo(body);
-//     specs.forEach(function(spec, idx){
-//         spec.klass = klass;
-//         options.append(Block(spec));
-//     });
-//     $('#block_menu').append(body);
-//     if (show){
-//         select.addClass('selected');
-//     }else{
-//         options.hide();
-//     }
-//     return body;
-// }
-// window.menu = menu;
 
 })(jQuery);

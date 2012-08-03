@@ -16,7 +16,7 @@
 //$('#block_menu').delegate('.select', 'click', accordion);
 
 
-function tab_select(event){
+function tabSelect(event){
     var self = $(this);
     $('.tab_bar .selected').removeClass('selected');
     self.addClass('selected');
@@ -28,7 +28,7 @@ function tab_select(event){
         updateScriptsView();
     }
 }
-$('.tab_bar').delegate('.chrome_tab', 'click', tab_select);
+$('.tab_bar').delegate('.chrome_tab', 'click', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){

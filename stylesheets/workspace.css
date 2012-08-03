@@ -185,10 +185,6 @@ body {
     font-size: .8em;
     color: #515151;
 }
-/* This function isn't really needed with the left align system. */
-.layout_blocks{
-    display: none;
-}
 
 /* Save/Restore Dialogs */
 

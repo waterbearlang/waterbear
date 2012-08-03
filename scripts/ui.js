@@ -59,7 +59,7 @@ $('.runScripts').click(runScripts);
 function menu(title, specs, show){
     var group = title.toLowerCase();
     var body = $('<section class="submenu"></section>');
-    var select = $('<h3 class="select">' + title + '</h3>').appendTo(body);
+    var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
     var options = $('<div class="option"></div>').appendTo(body);
     specs.forEach(function(spec, idx){
         spec.group = group;

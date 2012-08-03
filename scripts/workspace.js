@@ -36,7 +36,7 @@ function save_named_scripts(){
     var date = Date.now();
     if (title){
         if (localStorage[title]){
-            if (!confirm('A script with that title exist. Overwrite?')){
+            if (!confirm('A script with that title exists. Overwrite?')){
                 return;
             }
         }

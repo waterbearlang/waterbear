@@ -43,7 +43,7 @@ $('.runScripts').click(runScripts);
 // Build the Blocks menu, this is a public method
 
 function menu(title, specs, show){
-    var group = title.toLowerCase();
+    var group = title.toLowerCase().split(/\s+/).join('');
     var body = $('<section class="submenu"></section>');
     var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
     var options = $('<div class="option"></div>').appendTo(body);

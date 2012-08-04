@@ -2,7 +2,22 @@
 
 We have enough experience with waterbear now to be able to step back and take a look at what is working and what needs improvement. It's time to explore potentially radical changes before things get set in stone.
 
-There are several types of blocks and more potential types of blocks
+## Update 2012-08-04
+
+If we allow event handlers to be declared in another context, there is really no difference between an event handler and any other context.
+
+If contexts can be collapsed, and steps can be expanded, there is little difference between a context and a step.
+
+If steps that return values can be used in place of expressions, and expressions can be used as steps, there is little difference between a step and an expression (unless the step doesn't return a value).
+
+If you can open up any block for editing, one way to create new template blocks would be to clone an existing template block and modify it. So, blocks that can return values should be switchable between context and expression, but should it be implicit (drag over a socket and the block type changes) or explicit (a switch on each block). Should editing / cloning be handled by a special application mode or demi-mode, by a block halo, or by another switch? Adding a bunch of controls to each block might work passably on the desktop, but would be troublesome on a tablet. Maybe double click (or double-tap) could bring up a menu: clone, edit, expand/collapse, copy (instance), copy (instance and children), paste (insert after), cancel.
+
+Should block editing be done in a modal?
+
+Should editing a template block, when triggered from an instance (script block), change the instance's template to be that block?
+
+
+## There are several types of blocks and more potential types of blocks
 
 Current blocks:
 

@@ -1,8 +1,10 @@
 # Needed to do for the rethinking branch
 
 * Fix locals/returns (rebind add_to_script, add_to_workspace, add_to_socket, delete_block events)
+* Context blocks should only have one .locals (else, new block)
 * Serialization, including version and plugins, ids for contained items
 * Deserialization: rebuild view from serialized version
+* Rename locals
 * Split up plugins (still to go: sketchy, canvas, gamequery, processing)
 * gist library
 * UI for selecting plugins

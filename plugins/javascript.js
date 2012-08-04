@@ -45,7 +45,7 @@ window.choiceLists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown', 
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-    arity: ['0', '1', '2', '3', 'array', 'object'],
+    blocktypes: ['step', 'expression', 'context', 'eventhandler'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
 };
@@ -324,6 +324,19 @@ menu('Control', [
         help: 'create a reference to re-use the any'
     },
 ], false);
+
+menu('User Defined', [
+    {
+        blocktype: 'context',
+        contained: [
+            {label: 'New [blocktype:step] with arguments:'},
+            {label: 'And body returning [any]'}
+        ],
+        script: 'var block## = newBlockHandler([{{1}}],[{{2}}])',
+        help: 'Create a new block for re-use',
+        returns: 'block'
+    }
+]);
 
 menu('Arrays', [
     {

@@ -169,7 +169,11 @@ function Block(spec, scope){
     }
 }
 
-Block.nextId = 0;
+Block._nextId = 0;
+Block.newId = function(){
+    Block._nextId++;
+    return Block._nextId;
+};
 
 Block.prototype.init = function(spec){
     $.extend(this, spec);
@@ -189,7 +193,11 @@ Block.prototype.init = function(spec){
         });
     }
     if (this.returns && !this.returns.signature){
-        this.returns = Block(this.returns);
+        if (this.returns === 'block'){
+            // special user-defined block handler
+        }else{
+            this.returns = Block(this.returns);
+        }
     }
     this.template = templates[this.blocktype];
 };
@@ -214,27 +222,46 @@ Block.prototype.deleteViews = function(){
     this._allViews = [];
 };
 
-Block.prototype.generateId = function(view){
-    if (!(this.locals && this.locals.length)) return false;
-    if (! view.id()){
-        Block.nextId++;
-        this.id = Block.nextId;
-        view.id(Block.nextId);
-        view.local_blocks().each(function(idx, local){
-            $(local).id(Block.nextId);
+Block.prototype.setId = function(id){
+    this.id = id;
+    this._allViews.forEach(function(view){
+        view.id(id);
+    });
+    if (this.label){
+        // set label
+    }else{
+        // set contained labels
+    }
+    // FIXME: set id in scripts too?
+    if (this.returns && this.returns.signature){
+        this.returns.setId(id);
+    }
+    if (this.locals.length){
+        this.locals.forEach(function(local){
+            local.setId(id);
         });
     }
-    return false;
+};
+
+Block.prototype.generateId = function(view){
+    if (!((this.locals && this.locals.length) || (this.returns && this.returns.signature))) return;
+    if (this.id){
+        this.setId(Block.newId());
+    }
 };
 
 Block.prototype.addLocalsToParentContext = function(view){
     // on addToScript
     if (!this.returns) return;
+    if (this.returns === 'block'){
+        // special metablock handler
+        return;
+    }
     // remove from DOM if already place elsewhere
     this.returns.deleteViews();
     var returnView = this.returns.view();
     if (!this.id){
-        console.log('Error: Model must have an id by now');
+        console.error('Model must have an id by now');
     }
     returnView.id(this.id);
     view.parent_block().addLocalBlock(returnView);
@@ -242,16 +269,18 @@ Block.prototype.addLocalsToParentContext = function(view){
 };
 
 Block.prototype.removeLocalsFromParent = function(){
-    if (!this.returns) return;
+    if (!(this.returns && this.returns.signature)) return;
     this.returns.deleteViews();
 };
 
 Block.prototype.addToScript = function(view, evt){
+    console.log('addToScript');
     this.generateId(view);
     this.addLocalsToParentContext(view);
 };
 
 Block.prototype.addToWorkspace = function(view, evt){
+    console.log('addToWorkspace');
     this.generateId(view);
     this.removeLocalsFromParent();
 };
@@ -261,6 +290,13 @@ Block.prototype.addToSocket = function(view, evt){
 
 Block.prototype.deleteBlock = function(view, evt){
     this.removeLocalsFromParent();
+};
+
+function newBlockHandler(blocktype, args, body, returns){
+    console.log('blocktype: %s', blocktype);
+    console.log('%s args: %o', args.length, args);
+    console.log('body: %o', body);
+    console.log('returns: %s', returns);
 };
 
 $('.scripts_workspace')

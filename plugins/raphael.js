@@ -28,7 +28,7 @@ function showColorPicker(){
     });
     $('#color_popup').bPopup({modalColor: 'transparent'});
 }
-$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
+$('.workspace:visible .scripts_workspace').on('click', 'input[type=color]', showColorPicker);
 $(document).ready(function(){
     window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
 });

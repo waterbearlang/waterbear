@@ -266,7 +266,7 @@
         }else if ($('.block_menu').cursorOver()){
             // delete block if dragged back to menu
             // console.log('deleting a block');
-            dragTarget.trigger('delete_block')
+            dragTarget.trigger('delete_block');
             dragTarget.remove();
         }else if (dragTarget.overlap(targetCanvas)){
             // generally dragged to canvas, position it there
@@ -318,7 +318,7 @@
         dropCursor.show();
         targetCanvas.children('.wrapper').each(function(idx){
             self = $(this);
-            top = self.position().top
+            top = self.position().top;
             bottom = top + self.outerHeight();
             middle = (bottom - top) / 2 + top;
             if (x < middle){
@@ -381,11 +381,11 @@
     
     // Initialize event handlers
     if (isTouch){
-        $('.scripts_workspace, .block_menu').delegate('.block', 'touchstart', initDrag);
+        $('.scripts_workspace, .block_menu').on('touchstart', '.block', initDrag);
         $('.content').live('touchmove', drag);
         $('.content').live('touchend', endDrag);
     }else{
-        $('.scripts_workspace, .block_menu').delegate('.block', 'mousedown', initDrag);
+        $('.scripts_workspace, .block_menu').on('mousedown', '.block', initDrag);
         $('.content').live('mousemove', drag);
         $('.content').live('mouseup', endDrag);
     }

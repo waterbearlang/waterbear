@@ -245,6 +245,7 @@ var menus = {
             label: 'variable string## [string]',
             script: 'local.string## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'string##',
                 script: 'local.string##',
                 type: 'string'
@@ -255,6 +256,7 @@ var menus = {
             label: 'variable number## [number]',
             script: 'local.number## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'number##',
                 script: 'local.number##',
                 type: 'number'
@@ -265,6 +267,7 @@ var menus = {
             label: 'variable boolean## [boolean]',
             script: 'local.boolean## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'boolean##',
                 script: 'local.boolean##',
                 type: 'boolean'
@@ -275,6 +278,7 @@ var menus = {
             label: 'variable array## [array]',
             script: 'local.array## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'array##',
                 script: 'local.array## = {{1}}',
                 type: 'array'
@@ -285,6 +289,7 @@ var menus = {
             label: 'variable object## [object]',
             script: 'local.object## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'object##',
                 script: 'local.object##',
                 type: 'object'
@@ -295,6 +300,7 @@ var menus = {
             label: 'variable color## [color]',
             script: 'local.color## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'color##',
                 script: 'local.color##',
                 type: 'color'
@@ -306,6 +312,7 @@ var menus = {
             label: 'variable image## [image]',
             script: 'local.image## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'image##',
                 script: 'local.image##',
                 type: 'image'
@@ -317,6 +324,7 @@ var menus = {
             label: 'variable shape## [shape]',
             script: 'local.shape## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'shape##',
                 script: 'local.shape##',
                 type: 'shape'
@@ -327,6 +335,7 @@ var menus = {
             label: 'variable point## [point]',
             script: 'local.point## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'point##',
                 script: 'local.point##',
                 type: 'point'
@@ -337,6 +346,7 @@ var menus = {
             label: 'variable size## [size]',
             script: 'local.size## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'size##',
                 script: 'local.size##',
                 type: 'size'
@@ -347,6 +357,7 @@ var menus = {
             label: 'variable rect## [rect]',
             script: 'local.rect## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'rect##',
                 script: 'local.rect##',
                 type: 'rect'
@@ -357,6 +368,7 @@ var menus = {
             label: 'variable gradient## [gradient]',
             script: 'local.gradient## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'gradient##',
                 script: 'local.gradient##',
                 type: 'gradient'
@@ -367,6 +379,7 @@ var menus = {
             label: 'variable pattern## [pattern]',
             script: 'local.pattern## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'pattern##',
                 script: 'local.pattern##',
                 type: 'pattern'
@@ -377,6 +390,7 @@ var menus = {
             label: 'variable imagedata## [imagedata]',
             script: 'local.imagedata## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'imagedata##',
                 script: 'local.imagedata##',
                 type: 'imagedata'
@@ -387,6 +401,7 @@ var menus = {
             label: 'variable any## [any]',
             script: 'local.any## = {{1}};',
             returns: {
+                blocktype: 'expression',
                 label: 'any##',
                 script: 'local.any##',
                 type: 'any'
@@ -401,6 +416,7 @@ var menus = {
             script: 'local.array## = [];',
             help: 'Create an empty array',
             returns: {
+                blocktype: 'expression',
                 label: 'array##',
                 script: 'local.array##',
                 type: 'array'
@@ -411,6 +427,7 @@ var menus = {
             script: 'local.array## = {{1}}.slice();',
             help: 'create a new array with the contents of another array',
             returns: {
+                blocktype: 'expression',
                 label: 'array##',
                 script: 'local.array##',
                 type: 'array'
@@ -495,6 +512,7 @@ var menus = {
             label: 'new object##',
             script: 'local.object## = {};',
             returns: {
+                blocktype: 'expression',
                 label: 'object##',
                 script: 'local.object##',
                 type: 'object'
@@ -598,6 +616,7 @@ var menus = {
             label: 'ask [string:What\'s your name?] and wait',
             script: 'local.answer## = prompt({{1}});',
             returns: {
+                blocktype: 'expression',
                 label: 'answer##',
                 type: 'string',
                 script: 'local.answer'
@@ -838,6 +857,7 @@ var menus = {
             script: 'var image## = new $.gameQuery.Animation({imageURL: {{1}}});',
             //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
             returns: {
+                blocktype: 'expression',
                 label: 'image##',
                 script: 'image##',
                 type: 'image'
@@ -850,6 +870,7 @@ var menus = {
           script: 'var animation## = new $.gameQuery.Animation({imageURL: {{1}}, numberOfFrame: {{2}}, delta:{{3}}, rate: (1000 / {{4}}), type: $.gameQuery.ANIMATION_HORIZONTAL });',
             //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
             returns: {
+                blocktype: 'expression',
                 label: 'animation##',
                 script: 'animation##',
                 type: 'image'
@@ -863,6 +884,7 @@ var menus = {
           script: 'var animation## = new $.gameQuery.Animation({imageURL: "./images/xeon-walking.png", numberOfFrame: 4, delta:68, rate: (1000 / 30), type: $.gameQuery.ANIMATION_HORIZONTAL });',
             //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
             returns: {
+                blocktype: 'expression',
                 label: 'animation##',
                 script: 'animation##',
                 type: 'image'
@@ -882,6 +904,7 @@ var menus = {
           label: 'new sprite## based on [image] height [number:32] width [number:32] x [number:0] y [number:0]',
             script: '$.playground.addSprite("sprite##",{animation: {{1}}, height:{{2}}, width: {{3}}, posx: {{4}},posy:{{5}}});',
             returns: {
+                blocktype: 'expression',
                 label: 'sprite##',
                 script: 'sprite##',
                 type: 'sprite'

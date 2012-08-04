@@ -14,7 +14,7 @@ function tabSelect(event){
         updateScriptsView();
     }
 }
-$('.tab_bar').delegate('.chrome_tab', 'click', tabSelect);
+$('.tab_bar').on('click', '.chrome_tab', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){

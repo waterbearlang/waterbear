@@ -18,7 +18,7 @@ function showColorPicker(){
     console.log('Add a non-Raphael color picker');
 }
 
-//$('.workspace:visible .scripts_workspace').delegate('input[type=color]', 'click', showColorPicker);
+//$('.workspace:visible .scripts_workspace').on('click', 'input[type=color]', showColorPicker);
 
 $(document).ready(function(){
 //     window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
@@ -231,6 +231,7 @@ jQuery.fn.extend({
             script: 'local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});',
             help: 'create a radial gradient in the cone described by two circles',
             returns: {
+                blocktype: 'expression',
                 label: 'radial gradient##',
                 script: 'local.gradient##',
                 type: 'gradient'
@@ -242,6 +243,7 @@ jQuery.fn.extend({
             script: 'local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);',
             help: 'create a linear gradient between two points',
             returns: {
+                blocktype: 'expression',
                 label: 'linear gradient##',
                 script: 'local.linear.gradient##',
                 type: 'gradient'
@@ -259,6 +261,7 @@ jQuery.fn.extend({
             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
             help: 'create a pattern with the given html image',
             returns: {
+                blocktype: 'expression',
                 label: 'pattern##',
                 script: 'local.pattern##',
                 type: 'pattern'
@@ -269,6 +272,7 @@ jQuery.fn.extend({
 //             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
 //             help: 'create a pattern with the given html canvas',
 //             returns: {
+//                 blocktype: 'expression',
 //                 label: 'pattern##',
 //                 script: 'local.pattern##',
 //                 type: 'pattern'
@@ -279,6 +283,7 @@ jQuery.fn.extend({
 //             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
 //             help: 'create a pattern with the given html video',
 //             returns: {
+//                 blocktype: 'expression',
 //                 label: 'pattern##',
 //                 script: 'local.pattern##',
 //                 type: 'pattern'
@@ -388,6 +393,7 @@ jQuery.fn.extend({
             label: 'create ImageData## with size [size]',
             script: 'local.imageData## = local.ctx.createImageData({{1}}.w,{{1}}.h);',
             returns: {
+                blocktype: 'expression',
                 label: 'imageData##',
                 script: 'local.imageData##',
                 type: 'imagedata'
@@ -399,6 +405,7 @@ jQuery.fn.extend({
             label: 'createImageData## from imageData [imageData]',
             script: 'local.imageData## = local.ctx.createImageData({{1}});',
             returns: {
+                blocktype: 'expression',
                 label: 'imageData##',
                 script: 'local.imageData##',
                 type: 'imagedata'
@@ -410,6 +417,7 @@ jQuery.fn.extend({
             label: 'get imageData## for rect [rect]',
             script: 'local.imageData## = local.ctx.getImageData({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             returns: {
+                blocktype: 'expression',
                 label: 'imageData##',
                 script: 'local.imageData##',
                 type: 'imagedata'

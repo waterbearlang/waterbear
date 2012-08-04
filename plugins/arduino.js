@@ -162,6 +162,7 @@ $('.clearScripts').click(clearScriptsDefault);
             script: 'digital_output## = "{{1}}"; pinMode(digital_output##, OUTPUT);',
             help: 'Create a named pin set to output',
             returns: {
+                blocktype: 'expression',
                 label: 'digital_output##',
                 script: 'digital_output##',
                 type: 'string'
@@ -188,6 +189,7 @@ $('.clearScripts').click(clearScriptsDefault);
             script: 'digital_input## = "{{1}}"; pinMode(digital_input##, INPUT);',
             help: 'Create a named pin set to input',
             returns: {
+                blocktype: 'expression',
                 label: 'digital_input##',
                 script: 'digital_input##',
                 type: 'string'
@@ -210,6 +212,7 @@ $('.clearScripts').click(clearScriptsDefault);
             script: 'analog_input## = "{{1}}"; pinMode(analog_input##, INPUT);',
             help: 'Create a named pin set to input',
             returns: {
+                blocktype: 'expression',
                 label: 'analog_input##',
                 script: 'analog_input##',
                 type: 'string'
@@ -230,6 +233,7 @@ $('.clearScripts').click(clearScriptsDefault);
             script: 'analog_output## = "{{1}}"; pinMode(analog_output##, OUTPUT);',
             help: 'Create a named pin set to output',
             returns: {
+                blocktype: 'expression',
                 label: 'analog_output##',
                 script: 'analog_output##',
                 type: 'string'

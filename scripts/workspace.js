@@ -180,12 +180,12 @@ $('.save_scripts').click(function(){$('#save_dialog').bPopup();});
 $('.restore_scripts').click( populateAndShowRestoreDialog );
 $('#restore_dialog .cancel').click(resetAndCloseRestoreDialog);
 $('#restore_dialog .exp').click(restore_from_export);
-$('#restore_dialog').delegate('.restore', 'click', restoreNamedScripts)
-                    .delegate('.show_description', 'click', toggleDescription)
-                    .delegate('.delete', 'click', deleteNamedScripts);
+$('#restore_dialog').on('click', '.restore', restoreNamedScripts)
+                    .on('click', '.show_description', toggleDescription)
+                    .on('click', '.delete', deleteNamedScripts);
                     
-$('#demos_dialog').delegate('.load', 'click', restoreDemoScripts)
-                  .delegate('.show_description', 'click', toggleDescription);
+$('#demos_dialog').on('click', '.load', restoreDemoScripts)
+                  .on('click', '.show_description', toggleDescription);
 $('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
 $('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
 

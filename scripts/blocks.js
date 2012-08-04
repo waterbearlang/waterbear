@@ -1,7 +1,5 @@
 
 
-Block.nextId = 0;
-
 var templates = {};
 var compiledTemplates = {};
 ['step', 'context', 'eventhandler', 'expression'].forEach(function(type){
@@ -11,7 +9,7 @@ var compiledTemplates = {};
     };
 });
 
-$('.scripts_workspace').delegate('.disclosure', 'click', function(event){
+$('.scripts_workspace').on('click', '.disclosure', function(event){
     var self = $(event.target);
     var view = self.closest('.wrapper');
     if (self.is('.open')){
@@ -86,7 +84,6 @@ Step.prototype.constructor = Step;
 
 function Expression(spec, scope){
     assertExpression(spec);
-    this.returns = {type: 'int', label: 'int##'};
     this.init(spec);
 }
 Expression.prototype = new Block();
@@ -172,9 +169,12 @@ function Block(spec, scope){
     }
 }
 
+Block.nextId = 0;
+
 Block.prototype.init = function(spec){
     $.extend(this, spec);
     this.signature = signature(this);
+    this._allViews = [];
     registerScript(this);
     if (this.label){
         this.label = label(this.label);
@@ -188,6 +188,9 @@ Block.prototype.init = function(spec){
             return new Expression(spec);
         });
     }
+    if (this.returns && !this.returns.signature){
+        this.returns = Block(this.returns);
+    }
     this.template = templates[this.blocktype];
 };
 
@@ -200,35 +203,84 @@ Block.prototype.view = function(){
             localContainer.append(local.view());
         });
     }
+    this._allViews.push(view);
     return view;
 };
 
+Block.prototype.deleteViews = function(){
+    this._allViews.forEach(function(view){
+        view.remove();
+    });
+    this._allViews = [];
+};
+
+Block.prototype.generateId = function(view){
+    if (!(this.locals && this.locals.length)) return false;
+    if (! view.id()){
+        Block.nextId++;
+        this.id = Block.nextId;
+        view.id(Block.nextId);
+        view.local_blocks().each(function(idx, local){
+            $(local).id(Block.nextId);
+        });
+    }
+    return false;
+};
+
+Block.prototype.addLocalsToParentContext = function(view){
+    // on addToScript
+    if (!this.returns) return;
+    // remove from DOM if already place elsewhere
+    this.returns.deleteViews();
+    var returnView = this.returns.view();
+    if (!this.id){
+        console.log('Error: Model must have an id by now');
+    }
+    returnView.id(this.id);
+    view.parent_block().addLocalBlock(returnView);
+    view.next_block().trigger('add_to_script');
+};
+
+Block.prototype.removeLocalsFromParent = function(){
+    if (!this.returns) return;
+    this.returns.deleteViews();
+};
+
 Block.prototype.addToScript = function(view, evt){
-    console.log('adding view to script, override for contexts');
+    this.generateId(view);
+    this.addLocalsToParentContext(view);
 };
 
 Block.prototype.addToWorkspace = function(view, evt){
-    console.log('adding view to workspace, override for contexts');
+    this.generateId(view);
+    this.removeLocalsFromParent();
 };
 
 Block.prototype.addToSocket = function(view, evt){
-    console.log('adding view to socket, override for expressions');
 };
 
 Block.prototype.deleteBlock = function(view, evt){
-    console.log('removing block, delete all sub-blocks');
+    this.removeLocalsFromParent();
 };
 
-$('.wrapper')
-    .on('add_to_script', function(evt){
-        this.data('model').addToScript(this, evt);
+$('.scripts_workspace')
+    .on('add_to_script', '.wrapper', function(evt){
+        var view = $(this);
+        view.data('model').addToScript(view, evt);
+        return false;
     })
-    .on('add_to_workspace', function(evt){
-        this.data('model').addToWorkspace(this, evt);
+    .on('add_to_workspace', '.wrapper', function(evt){
+        var view = $(this);
+        view.data('model').addToWorkspace(view, evt);
+        return false;
     })
-    .on('delete_block', function(evt){
-        this.data('model').deleteBlock(this, evt);
+    .on('delete_block', '.wrapper', function(evt){
+        var view = $(this);
+        view.data('model').deleteBlock(view, evt);
+        return false;
     })
-    .on('add_to_socket', function(evt){
-        this.data('model').addToSocket(this, evt);
+    .on('add_to_socket', '.wrapper', function(evt){
+        var view = $(this);
+        view.data('model').addToSocket(view, evt);
+        return false;
     });

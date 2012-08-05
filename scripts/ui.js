@@ -75,16 +75,34 @@ function cancelCommand(key, opt){
 $.contextMenu({
     selector: '.block',
     items: {
-        clone: {'name': 'Clone', callback: cloneCommand},
-        edit: {'name': 'Edit', callback: editCommand},
+        clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
+        edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
         expand: {'name': 'Expand', callback: expandCommand},
         collapse: {'name': 'Collapse', callback: collapseCommand},
-        copy: {'name': 'Copy block', callback: copyBlockCommand},
+        copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
         copyAll: {'name': 'Copy subscript', callback: copySubscriptCommand},
-        paste: {'name': 'Paste', callback: pasteCommand},
+        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
         cancel: {'name': 'Cancel', callback: cancelCommand}
     }
 });
+
+// TODO: add event handler to enable/disable, hide/show items based on state of block
+
+// Handle Context menu for touch devices:
+// Test drawn from modernizr
+
+function is_touch_device() {
+  return !!('ontouchstart' in window);
+}
+
+if (is_touch_device()){
+    $('.block').tappable({
+        callback: function(){
+            this.contextMenu();
+        },
+        touchDelay: 150
+    });
+}
 
 
 

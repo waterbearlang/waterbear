@@ -38,6 +38,54 @@ function runScripts(event){
 }
 $('.runScripts').click(runScripts);
 
+// Context Menu
+
+function cloneCommand(key, opt){
+    console.log('cloneCommand(%s, %o)', key, opt);
+}
+
+function editCommand(key, opt){
+    console.log('editCommand(%s, %o)', key, opt);
+}
+
+function expandCommand(key, opt){
+    console.log('expandCommand(%s, %o)', key, opt);
+}
+
+function collapseCommand(key, opt){
+    console.log('collapseCommand(%s, %o)', key, opt);
+}
+
+function copyBlockCommand(key, opt){
+    console.log('copyBlockCommand(%s, %o)', key, opt);
+}
+
+function copySubscriptCommand(key, opt){
+    console.log('copySubscriptCommand(%s, %o)', key, opt);
+}
+
+function pasteCommand(key, opt){
+    console.log('pasteCommand(%s, %o)', key, opt);
+}
+
+function cancelCommand(key, opt){
+    console.log('cancelCommand(%s, %o)', key, opt);
+}
+
+$.contextMenu({
+    selector: '.block',
+    items: {
+        clone: {'name': 'Clone', callback: cloneCommand},
+        edit: {'name': 'Edit', callback: editCommand},
+        expand: {'name': 'Expand', callback: expandCommand},
+        collapse: {'name': 'Collapse', callback: collapseCommand},
+        copy: {'name': 'Copy block', callback: copyBlockCommand},
+        copyAll: {'name': 'Copy subscript', callback: copySubscriptCommand},
+        paste: {'name': 'Paste', callback: pasteCommand},
+        cancel: {'name': 'Cancel', callback: cancelCommand}
+    }
+});
+
 
 
 // Build the Blocks menu, this is a public method

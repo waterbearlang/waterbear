@@ -3,9 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>Waterbear: Code Garden</title>
+    <!-- Stylesheets for third-party libraries -->
+	<link href="lib/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+	<link href="lib/jquery.contextMenu.css" rel="stylesheet" />
+	<!-- Stylesheets for waterbear implementation -->
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
-	<link href="lib/css/custom-theme2/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+    
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
@@ -137,7 +141,8 @@
       <textarea></textarea>
       <button class="done">Done</button>    
       </div>
-    <script src="lib/jquery-1.7.1.min.js"></script>
+      <!-- Third-party libraries -->
+    <script src="lib/jquery-1.7.2.min.js"></script>
     <script src="lib/jquery.hotkeys.js"></script>
     <script src="lib/jquery.querystring.js"></script>
     <script src="lib/yepnope.1.0.2-min.js"></script>
@@ -145,6 +150,10 @@
     <script src="lib/jquery.autoGrowInput.js"></script>
     <script src="lib/mustache.js"></script>
     <script src="lib/json2.js"></script><!-- Make this conditional -->
+	<script src="lib/jquery-ui-1.8.21.custom.min.js"></script>
+	<script src="lib/jquery.contextMenu.js"></script>
+	<script src="lib/jquery.tappable.js"></script>
+	<!-- Waterbear implementation libraries -->
     <script src="scripts/drag.js"></script>
     <script src="scripts/blocks.js"></script>
     <script src="scripts/debug.js"></script>
@@ -154,7 +163,6 @@
     <script src="scripts/timer.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
-	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script>
 	
 		// buttonize

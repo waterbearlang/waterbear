@@ -137,7 +137,7 @@
             //console.log('no target in initDrag');
             dragTarget = null;
         }
-        return false;
+        return true;
     }
     
     function startDrag(event){

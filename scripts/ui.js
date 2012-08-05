@@ -96,7 +96,9 @@ function is_touch_device() {
 }
 
 if (is_touch_device()){
-    $('.block').tappable({
+    $.tappable({
+        container: '.blockmenu, .workspace',
+        selector: '.block',
         callback: function(){
             console.log('long tap detected');
             console.log(this);

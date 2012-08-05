@@ -98,6 +98,8 @@ function is_touch_device() {
 if (is_touch_device()){
     $('.block').tappable({
         callback: function(){
+            console.log('long tap detected');
+            console.log(this);
             this.contextMenu();
         },
         touchDelay: 150

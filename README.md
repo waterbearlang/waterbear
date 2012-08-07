@@ -16,9 +16,33 @@ Waterbear is pre-alpha software, very raw, and in constant flux right now.
 
 ## Installation
 
-Waterbear is pure Javascript. The only external dependencies are on jQuery (currently 1.5.1) and Modernizr (1.6). Some Waterbear block sets may have further dependencies, on Processing.js, Raphael.js, or Crafty.js (for instance).
+Waterbear is pure Javascript. No server-side component is needed.
 
-Update: Have removed Modernizr dependency, but added dependencies on bPopup (http://dinbror.dk/blog/bPopup/) and Colorwheel (http://jweir.github.com/colorwheel/). Have also regressed Raphael to an earlier version to avoid bugs in the current version.
+## Dependencies:
+
+* jQuery
+* jQuery UI
+* json2
+* mustache
+* yepnope
+* prefixfree
+
+### jQuery Plugins
+
+* autoGrowInput
+* bPopup
+* hotkeys
+* querystring
+
+### Code formatting
+
+* beautify
+* highlight
+
+### To work around lack of support for context menus:
+
+* http://aanandprasad.com/articles/jquery-tappable/
+* http://medialize.github.com/jQuery-contextMenu/
 
 ## Demo
 

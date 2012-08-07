@@ -62,7 +62,7 @@ jQuery.fn.extend({
     menu('Canvas', [
         {
             blocktype: 'context',
-            contained: [{label: 'with local state'}],
+            labels: ['with local state'],
             script: 'local.ctx.save();[[1]];local.ctx.restore();',
             help: 'save the current state, run the contained steps, then restore the saved state'
         },
@@ -123,7 +123,7 @@ jQuery.fn.extend({
         // Path API
         {
             blocktype: 'context',
-            contained: [{label: 'with path'}],
+            labels: ['with path'],
             script: 'local.ctx.beginPath();[[1]];local.ctx.closePath();',
             help: 'create a path, run the contained steps, close the path'
         },

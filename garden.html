@@ -20,7 +20,9 @@
         <div class="wrapper step {{group}}">
             <div class="block" title="{{help}}">
                 <div class="blockhead">
-                    <div class="value">{{{label}}}</div>
+                    {{#labels}}
+                        <div class="value">{{{.}}}</div>
+                    {{/labels}}
                 </div>
                 <b class="flap"></b>
             </div>
@@ -32,7 +34,9 @@
     <script type="text/html" id="expression_template">
         <div class="wrapper value {{type}} {{group}}">
             <div class="block">
-                <div class="value"><p>{{{label}}}</p></div>
+                {{#labels}}
+                    <div class="value"><p>{{{.}}}</p></div>
+                {{/labels}}
             </div>
         </div>
     </script>
@@ -40,17 +44,20 @@
         <div class="wrapper step containerBlock {{group}}">
             <div class="block" title="{{help}}">
                 <b class="flap"></b>
-                {{#contained}}
+                {{#labels}}
                     <div class="blockhead">
-                        {{#attachLocals}}
-                        <div class="value"><span class="disclosure open">▼</span>{{{label}}}</div>
-                            <div class="locals block_menu"></div>
-                        {{/attachLocals}}
+                        <div class="value">
+                            {{#attachLocals}}
+                                <span class="disclosure open">▼</span>
+                            {{/attachLocals}}
+                            {{{.}}}
+                        </div>
+                        <div class="locals block_menu"></div>
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
                     </div>
-                {{/contained}}
+                {{/labels}}
             </div>
             <div class="next">
                 <i class="slot"></i>
@@ -61,17 +68,20 @@
         <div class="wrapper trigger containerBlock {{group}}">
             <div class="block" title="{{help}}">
                 <b class="trigger"></b>
-                {{#contained}}
+                {{#labels}}
                     <div class="blockhead">
-                        {{#attachLocals}}
-                        <div class="value"><span class="disclosure open">▼</span>{{{label}}}</div>
-                            <div class="locals block_menu"></div>
-                        {{/attachLocals}}
+                        <div class="value">
+                            {{#attachLocals}}
+                                <span class="disclosure open">▼</span>
+                            {{/attachLocals}}
+                            {{{.}}}
+                        </div>
+                        <div class="locals block_menu"></div>
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
                     </div>
-                {{/contained}}
+                {{/labels}}
             </div>
         </div>
     </script>
@@ -190,11 +200,6 @@
               //console.log('loaded %s', url);
           },
           complete : function () {
-           	  $('#block_menu').accordion({
-                  autoHeight: false,
-                  collapsible: true,
-                  header: '> section > h3'
-              });
               $('#block_menu_load').remove();
               $('#block_menu').show();
 

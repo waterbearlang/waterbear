@@ -32,13 +32,6 @@ window.choiceLists = {
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
 };
 
-// Hints for building blocks
-//
-//
-// Value blocks can nest, so don't end them with semi-colons (i.e., if there is a "type" specified).
-//
-//
-
 // MENUS
 
 menu('Control', [

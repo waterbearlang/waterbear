@@ -111,24 +111,27 @@ if (is_touch_device()){
 
 
 // Build the Blocks menu, this is a public method
-
 function menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
-    var body = $('<section class="submenu"></section>');
-    var select = $('<h3><a href="#">' + title + '</a></h3>').appendTo(body);
-    var options = $('<div class="option"></div>').appendTo(body);
+    var submenu = $('.submenu.' + group);
+    if (!submenu.length){
+        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu ' + group + '"></div>');
+        $('#block_menu').append(body);
+        submenu = $('.submenu.' + group);
+        // This is dumb, but jQuery UI accordion widget doesn't support adding sections at runtime
+    }
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        options.append(Block(spec).view());
+        submenu.append(Block(spec).view());
     });
-    $('#block_menu').append(body);
-    if (show){
-        select.addClass('selected');
-    }else{
-        options.hide();
-    }
-    return body;
+    var state = $("#block_menu").accordion( "option", "active" );
+    console.log('state: %s, show: %s', state, !!show);
+    $('#block_menu').accordion('destroy').accordion({
+        autoHeight: false,
+        collapsible: true,
+        active: show ? 'h3.' + group : state
+    });
 }
 window.menu = menu;
 

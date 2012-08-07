@@ -103,19 +103,13 @@ EventHandler.prototype.constructor = EventHandler;
 
 function assertStep(model){
     if (model.type){
-        alert('Error: expression "' + model.label + '" treated as a step');
-    }
-    if (model.contained){
-        alert('Error: context "' + model.contained[0].label + '" treated as a step');
+        alert('Error: expression "' + model.signature + '" treated as a step');
     }
 }
 
 function assertExpression(model){
     if (! model.type){
-        alert('Error: step "' + model.label + '" treated as an expression');
-    }
-    if (model.contained){
-        alert('Error: context "' + model.contained[0].label + '" treated as an expression');
+        alert('Error: step "' + model.signature + '" treated as an expression');
     }
 }
 
@@ -124,27 +118,10 @@ function assertContext(model){
         alert('Error: context with containers vs. contained');
         console.log('Error context: %o', model);
     }
-    if (! model.contained){
-        alert('Error: block "' + model.label + '" treated as a context');
-        console.log('Error context: %o', model);
-    }
 }
 
 function signature(model){
-    var type = model.blocktype;
-    var label = model.label || model.contained.map(function(sub){ return sub.label; }).join('|');
-    return type + ':' +  label;
-}
-
-var scripts = {};
-function registerScript(model){
-    if (model.isLocal) return; // we build these scripts dynamically anyway
-    if (!model.isTemplateBlock) return; // only register blocks in the menu
-    if (scripts[model.signature]){
-        console.log('Warning: overwriting existing scripts for %s', model.signature);
-    }
-    scripts[model.signature] = model.script;
-    delete model.script;
+    return model.blocktype + model.spec.labels.map(function(sub){ return sub.label; }).join('|');
 }
 
 function Block(spec, scope){
@@ -173,33 +150,44 @@ Block.newId = function(){
     return Block._nextId;
 };
 
+Block.scripts = {};
+Block.registerScript = function(model){
+    if (model.isLocal) return; // we build these scripts dynamically anyway
+    if (!model.isTemplateBlock) return; // only register blocks in the menu
+    if (Block.scripts[model.signature]){
+        console.log('Warning: overwriting existing scripts for %s', model.signature);
+    }
+    Block.scripts[model.signature] = model.script;
+    delete model.script;
+}
+
 Block.prototype.init = function(spec){
     var self = this;
+    // normalize labels to a list
+    if (spec.label){
+        spec.labels = [spec.label];
+        delete spec.label;
+    }
     $.extend(this, spec);
-    if (! (this.id || this.isTemplateBlock){
+    this.spec = spec; // save unmodified description
+    if (! (this.id || this.isTemplateBlock)){
         this.id = Block.newId();
     }
     this.signature = signature(this);
     this._allViews = [];
-    registerScript(this);
-    if (this.label){
-        this._label = this.label;
-        this.label = label(this._label, self.id);
-    }else{
-        this._contained = this.contained;
-        this.contained.forEach(function(contained, idx){
-            contained.label = label(contained.label, self.id);
-        });
-        this.contained[0].attachLocals = true;
-    }
+    this.script = this.script.replace(/##/g, '_' + self.id);
+    Block.registerScript(this);
+    this.labels = this.labels.map(function(labelspec, idx){
+        return label(labelspec, self.id);
+    });
+    this.labels[0] = attachLocals(this.labels[0]);
     if (this.locals){
-        this._locals = this.locals;
-        this._locals.forEach(function(spec){
+        this.spec.locals.forEach(function(spec){
             spec.isTemplateBlock = true;
             spec.isLocal = true;
             spec.id = self.id;
         });
-        this.locals = this._locals.map(function(spec){
+        this.locals = this.spec.locals.map(function(spec){
             return Block(spec);
         });
     }
@@ -216,6 +204,13 @@ Block.prototype.init = function(spec){
     }
     this.template = templates[this.blocktype];
 };
+
+function attachLocals(theString){
+    return {
+        toString: function(){ return theString; },
+        attachLocals: true
+    };
+}
 
 Block.prototype.view = function(){
     var view = $(this.template(this));

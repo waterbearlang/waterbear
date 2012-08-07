@@ -53,28 +53,36 @@ window.choiceLists = {
 // Hints for building blocks
 //
 //
-// Value blocks can nest, so don't end them with semi-colons (i.e., if there is a "type" specified).
+// Expression blocks can nest, so don't end their scripts with semi-colons (i.e., if there is a "type" specified).
 //
 //
 
 // MENUS
 
+// Special menus used at runtime
+
+menu('Globals', []);
+menu('Recent Blocks', []);
+menu('Favourite Blocks', []);
+
+// Javascript core blocks
+
 menu('Control', [
     {
         blocktype: 'eventhandler',
-        contained: [{label: 'when program runs'}],
+        labels: ['when program runs'],
         script: 'function _start(){[[1]]}_start();',
         help: 'this trigger will run its scripts once when the program starts'
     },
     {
         blocktype: 'eventhandler',
-        contained: [{label: 'when [choice:keys] key pressed'}],
+        labels: ['when [choice:keys] key pressed'],
         script: '$(document).bind("keydown", {{1}}, function(){[[1]]; return false;});',
         help: 'this trigger will run the attached blocks every time this key is pressed'
     },
     {            
         blocktype: 'eventhandler',
-        contained: [{label: 'repeat [number:30] times a second'}],
+        labels: ['repeat [number:30] times a second'],
         locals: [
             {
                 blocktype: 'expression',
@@ -88,13 +96,13 @@ menu('Control', [
     },
     {
         blocktype: 'context',
-        contained: [{label: 'wait [number:1] secs'}],
+        labels: ['wait [number:1] secs'],
         script: 'setTimeout(function(){[[1]]},1000*{{1}});',
         help: 'pause before running the following blocks'
     },
     {
         blocktype: 'context',
-        contained: [{label: 'repeat [number:10]'}], 
+        label: 'repeat [number:10]', 
         script: 'range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});',
         help: 'repeat the contained blocks so many times',
         locals: [
@@ -114,31 +122,31 @@ menu('Control', [
     },
     {
         blocktype: 'eventhandler',
-        contained: [{label: 'when I receive [string:ack] message'}],
+        labels: ['when I receive [string:ack] message'],
         script: '$(".stage").bind({{1}}, function(){[[1]]});',
         help: 'add a listener for the given message, run these blocks when it is received'
     },
     {
         blocktype: 'context',
-        contained: [{label: 'forever if [boolean:false]'}],  
+        labels: ['forever if [boolean:false]'],  
         script: 'while({{1}}){[[1]]}',
         help: 'repeat until the condition is false'
     },
     {
         blocktype: 'context',
-        contained: [{label: 'if [boolean]'}], 
+        labels: ['if [boolean]'], 
         script: 'if({{1}}){[[1]]}',
         help: 'run the following blocks only if the condition is true'
     },
     {
         blocktype: 'context',
-        contained: [{label: 'if [boolean]'}, {label: 'else'}],
+        labels: ['if [boolean]', 'else'],
         script: 'if({{1}}){[[1]]}else{[[2]]}',
         help: 'run the first set of blocks if the condition is true, otherwise run the second set'
     },
     {
         blocktype: 'context',
-        contained: [{label: 'repeat until [boolean]'}], 
+        labels: ['repeat until [boolean]'], 
         script: 'while(!({{1}})){[[1]]}',
         help: 'repeat forever until condition is true'
     },
@@ -322,15 +330,15 @@ menu('Control', [
             type: 'any'
         },
         help: 'create a reference to re-use the any'
-    },
-], false);
+    }
+], true);
 
 menu('User Defined', [
     {
         blocktype: 'context',
-        contained: [
-            {label: 'New [choice:blocktype] with arguments:'},
-            {label: 'And body returning [any]'}
+        labels: [
+            'New [choice:blocktypes] with arguments:',
+            'And body returning [any]'
         ],
         script: 'var block## = newBlockHandler([{{1}}],[{{2}}])',
         help: 'Create a new block for re-use',
@@ -338,16 +346,13 @@ menu('User Defined', [
     },
     {
         blocktype: 'context',
-        contained: [
-            {label: 'New [choice:blocktypes] with arg1 [choice:types]'}
-        ],
+        labels: ['New [choice:blocktypes] with arg1 [choice:types]'],
         script: 'alert("implement me");',
         help: 'Create a new block for re-use'
     },
     {
         blocktype: 'context',
-        contained: [
-            {label: 'New [choice:blocktypes] with arg1 [choice:types] returns [choice:rettypes]'}
+        labels: ['New [choice:blocktypes] with arg1 [choice:types] returns [choice:rettypes]'],
         script: '',
         help: ''
     }
@@ -442,7 +447,7 @@ menu('Arrays', [
     },
     {
         blocktype: 'context',
-        contained: [{label: 'array [array] for each'}],
+        labels: ['array [array] for each'],
         script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
         locals: [
             {
@@ -492,7 +497,7 @@ menu('Objects', [
     },
     {
         blocktype: 'context',
-        contained: [{label: 'for each item in [object] do'}],
+        labels: ['for each item in [object] do'],
         script: '$.each({{1}}, function(key, item){local.key = key; local.item = item; [[1]] });',
         locals: [
             {
@@ -751,7 +756,7 @@ menu('Operators', [
         label: 'not [boolean]', 
         type: 'boolean', 
         script: "(! {{1}})",
-        help: 'operand is false',
+        help: 'operand is false'
     },
     {
         blocktype: 'expression',

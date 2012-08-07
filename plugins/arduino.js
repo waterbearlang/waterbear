@@ -75,19 +75,19 @@ $('.clearScripts').click(clearScriptsDefault);
     menu('Control', [
         {
             blocktype: 'eventhandler',
-            contained: [{label: 'Setup - When program starts'}], 
+            labels: ['Setup - When program starts'], 
             script: 'void setup()\n{\n[[1]]\n}\n',
             help: 'Start scripts when program starts'
         },
         {
             blocktype: 'eventhandler',
-            contained: [{label: 'Main loop'}], 
+            labels: ['Main loop'], 
             script: 'void loop()\n{\n[[1]]\n}\n',
             help: 'Trigger for main loop'
         },
         {
             blocktype: 'eventhandler',
-            contained: [{label: 'Global Settings'}], 
+            labels: ['Global Settings'], 
             script: '/*Global Settings*/\n\n[[1]]\n\n',
             help: 'Trigger for blocks in global setup'
         },
@@ -100,31 +100,31 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'eventhandler',
-            contained: [{label: 'when I receive [string:ack] message'}], 
+            labels: ['when I receive [string:ack] message'], 
             script: 'function {{1}}(){\n[[next]]\n}',
             help: 'Trigger for blocks to run when message is received'
         },
         {
             blocktype: 'context',
-            contained: [{label: 'forever if [boolean:false]'}], 
+            labels: ['forever if [boolean:false]'], 
             script: 'while({{1}}){\n[[1]]\n}',
             help: 'loop until condition fails'
         },
         {
             blocktype: 'context',
-            contained: [{label: 'if [boolean]'}], 
+            labels: ['if [boolean]'], 
             script: 'if({{1}}){\n[[1]]\n}',
             help: 'only run blocks if condition is true'
         },
         {
             blocktype: 'context',
-            contained: [{label: 'if [boolean]'}, {label: 'else'}], 
+            labels: ['if [boolean]', 'else'], 
             script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}',
             help: 'run first set of blocks if condition is true, second set otherwise'
         },
         {
             blocktype: 'context',
-            contained: [{label: 'repeat until [boolean]'}],
+            labels: ['repeat until [boolean]'],
             script: 'while(!({{1}})){\n[[1]]\n}',
             help: 'loop until condition is true'
         }

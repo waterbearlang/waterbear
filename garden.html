@@ -20,7 +20,7 @@
         <div class="wrapper step {{group}}">
             <div class="block" title="{{help}}">
                 <div class="blockhead">
-                    {{{label}}}
+                    <div class="value">{{{label}}}</div>
                 </div>
                 <b class="flap"></b>
             </div>
@@ -32,7 +32,7 @@
     <script type="text/html" id="expression_template">
         <div class="wrapper value {{type}} {{group}}">
             <div class="block">
-                <p>{{{label}}}</p>
+                <div class="value"><p>{{{label}}}</p></div>
             </div>
         </div>
     </script>
@@ -42,9 +42,10 @@
                 <b class="flap"></b>
                 {{#contained}}
                     <div class="blockhead">
-                        {{{label}}}
-                        <div class="locals block_menu">
-                        </div>
+                        {{#attachLocals}}
+                        <div class="value"><span class="disclosure open">▼</span>{{{label}}}</div>
+                            <div class="locals block_menu"></div>
+                        {{/attachLocals}}
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
@@ -62,9 +63,10 @@
                 <b class="trigger"></b>
                 {{#contained}}
                     <div class="blockhead">
-                        {{{label}}}
-                        <div class="locals block_menu">
-                        </div>
+                        {{#attachLocals}}
+                        <div class="value"><span class="disclosure open">▼</span>{{{label}}}</div>
+                            <div class="locals block_menu"></div>
+                        {{/attachLocals}}
                     </div>
                     <div class="contained">
                         <i class="slot"></i>

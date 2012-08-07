@@ -40,7 +40,7 @@ function choiceFunction(s, listname, default_opt){
             
 
 
-function label(value, disclosure){
+function label(value, id){
     // TODO: Convert this to a template
     //
     // Recognize special values in the label string and replace them with 
@@ -66,12 +66,8 @@ function label(value, disclosure){
     // match selector [^\[\]] should match any character except '[', ']', and ':'
     value = value.replace(/\[([^\[\]\:]+):([^\[\]]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1" value="$2"></span>');
     value = value.replace(/\[([^\[\]:]+)\]/gm, '<span class="value $1 socket" data-type="$1"><input type="$1"></span>');
-    value = value.replace(/##/gm, '');
-    if (disclosure){
-        return '<div class="value"><span class="disclosure open">▼</span>' + value + '</div>';
-    }else{
-        return '<div class="value">' + value + '</div>';
-    }
+    value = value.replace(/##/gm, id || '');
+    return value;
 }
 
 function Step(spec, scope){
@@ -142,6 +138,8 @@ function signature(model){
 
 var scripts = {};
 function registerScript(model){
+    if (model.isLocal) return; // we build these scripts dynamically anyway
+    if (!model.isTemplateBlock) return; // only register blocks in the menu
     if (scripts[model.signature]){
         console.log('Warning: overwriting existing scripts for %s', model.signature);
     }
@@ -176,27 +174,44 @@ Block.newId = function(){
 };
 
 Block.prototype.init = function(spec){
+    var self = this;
     $.extend(this, spec);
+    if (! (this.id || this.isTemplateBlock){
+        this.id = Block.newId();
+    }
     this.signature = signature(this);
     this._allViews = [];
     registerScript(this);
     if (this.label){
-        this.label = label(this.label);
+        this._label = this.label;
+        this.label = label(this._label, self.id);
     }else{
+        this._contained = this.contained;
         this.contained.forEach(function(contained, idx){
-            contained.label = label(contained.label, !idx);
+            contained.label = label(contained.label, self.id);
         });
+        this.contained[0].attachLocals = true;
     }
     if (this.locals){
-        this.locals = this.locals.map(function(spec){
-            return new Expression(spec);
+        this._locals = this.locals;
+        this._locals.forEach(function(spec){
+            spec.isTemplateBlock = true;
+            spec.isLocal = true;
+            spec.id = self.id;
+        });
+        this.locals = this._locals.map(function(spec){
+            return Block(spec);
         });
     }
-    if (this.returns && !this.returns.signature){
+    if (this.returns){
+        this._returns = this.returns;
         if (this.returns === 'block'){
             // special user-defined block handler
         }else{
-            this.returns = Block(this.returns);
+            this._returns.isTemplateBlock = true;
+            this._returns.isLocal = true;
+            this._returns.id = self.id;
+            this.returns = Block(this._returns);
         }
     }
     this.template = templates[this.blocktype];
@@ -220,34 +235,6 @@ Block.prototype.deleteViews = function(){
         view.remove();
     });
     this._allViews = [];
-};
-
-Block.prototype.setId = function(id){
-    this.id = id;
-    this._allViews.forEach(function(view){
-        view.id(id);
-    });
-    if (this.label){
-        // set label
-    }else{
-        // set contained labels
-    }
-    // FIXME: set id in scripts too?
-    if (this.returns && this.returns.signature){
-        this.returns.setId(id);
-    }
-    if (this.locals.length){
-        this.locals.forEach(function(local){
-            local.setId(id);
-        });
-    }
-};
-
-Block.prototype.generateId = function(view){
-    if (!((this.locals && this.locals.length) || (this.returns && this.returns.signature))) return;
-    if (this.id){
-        this.setId(Block.newId());
-    }
 };
 
 Block.prototype.addLocalsToParentContext = function(view){
@@ -275,13 +262,11 @@ Block.prototype.removeLocalsFromParent = function(){
 
 Block.prototype.addToScript = function(view, evt){
     console.log('addToScript');
-    this.generateId(view);
     this.addLocalsToParentContext(view);
 };
 
 Block.prototype.addToWorkspace = function(view, evt){
     console.log('addToWorkspace');
-    this.generateId(view);
     this.removeLocalsFromParent();
 };
 

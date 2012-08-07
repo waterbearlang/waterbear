@@ -329,12 +329,27 @@ menu('User Defined', [
     {
         blocktype: 'context',
         contained: [
-            {label: 'New [blocktype:step] with arguments:'},
+            {label: 'New [choice:blocktype] with arguments:'},
             {label: 'And body returning [any]'}
         ],
         script: 'var block## = newBlockHandler([{{1}}],[{{2}}])',
         help: 'Create a new block for re-use',
         returns: 'block'
+    },
+    {
+        blocktype: 'context',
+        contained: [
+            {label: 'New [choice:blocktypes] with arg1 [choice:types]'}
+        ],
+        script: 'alert("implement me");',
+        help: 'Create a new block for re-use'
+    },
+    {
+        blocktype: 'context',
+        contained: [
+            {label: 'New [choice:blocktypes] with arg1 [choice:types] returns [choice:rettypes]'}
+        script: '',
+        help: ''
     }
 ]);
 

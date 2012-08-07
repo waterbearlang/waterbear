@@ -182,13 +182,13 @@ $.extend($.fn, {
         // model.signature (unique string for each menu block)
         // model.id (unique string for each script block)
         // model.view (jquery)
+        var self = this;
         if (model.label){
             desc.label = model.label;
         }else if(model.contained){
             desc.contained = model.contained;
         }
         if (model.locals) {
-            var self = this;
             desc.locals = model.locals.map(function(local) {
                 return {
                     blocktype: local.blocktype,
@@ -198,13 +198,18 @@ $.extend($.fn, {
                 };
             });
         }
-        if (model.returns) {
-            desc.returns = {
-                blocktype: model.returns.blocktype,
-                type: model.returns.type,
-                script: model.returns.script.replace(/##/g, '_' + this.id()),
-                label: model.returns.label.replace(/##/g, '_' + this.id())
-            };
+        if (model._returns) {
+            desc.returns = model._returns;
+            if (des.returns !== 'block'){
+                desc.returns.script = desc.returns.script.replace(/##/g, '_' + self.id());
+                if (desc.returns.label){
+                    desc.returns.label = desc.returns.label.replace(/##/g, '_', + self.id());
+                }else{
+                    desc.returns.contained = desc.returns.contained.map(function(child){
+                        return child.label.replace(/##/g, '_', + self.id());
+                    });
+                }
+            }
         }
         model.sockets = this.socket_blocks().map(function() {
             return $(this).block_description();

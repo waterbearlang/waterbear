@@ -119,6 +119,7 @@ function menu(title, specs, show){
     var options = $('<div class="option"></div>').appendTo(body);
     specs.forEach(function(spec, idx){
         spec.group = group;
+        spec.isTemplateBlock = true;
         options.append(Block(spec).view());
     });
     $('#block_menu').append(body);

@@ -121,7 +121,7 @@ function assertContext(model){
 }
 
 function signature(model){
-    return model.blocktype + model.spec.labels.map(function(sub){ return sub.label; }).join('|');
+    return model.blocktype + model.spec.labels.join('|');
 }
 
 function Block(spec, scope){

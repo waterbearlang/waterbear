@@ -126,7 +126,6 @@ function menu(title, specs, show){
         submenu.append(Block(spec).view());
     });
     var state = $("#block_menu").accordion( "option", "active" );
-    console.log('state: %s, show: %s', state, !!show);
     $('#block_menu').accordion('destroy').accordion({
         autoHeight: false,
         collapsible: true,

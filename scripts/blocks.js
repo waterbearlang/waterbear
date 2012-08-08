@@ -14,12 +14,12 @@ $('.scripts_workspace').on('click', '.disclosure', function(event){
     var view = self.closest('.wrapper');
     if (self.is('.open')){
         self.text('►');
-        view.find('.locals > .wrapper').hide();
-        view.find('.contained').css('padding-bottom', 0).children().hide();
+        view.find('.locals').hide();
+        view.find('.contained').hide();
     }else{
         self.text('▼');
-        view.find('.locals > .wrapper').show();
-        view.find('.contained').css('padding-bottom', 10).children().show();
+        view.find('.locals').show();
+        view.find('.contained').show();
     }
     self.toggleClass('open closed');
 });
@@ -205,6 +205,15 @@ Block.prototype.init = function(spec){
     this.template = templates[this.blocktype];
 };
 
+Block.prototype.cloneScript = function(){
+    var spec = $.extend({}, this.spec, {
+       isLocal: false,
+       isTemplateBlock: false,
+       templateBlock: this
+    });
+    return Block(spec);
+}
+
 function attachLocals(theString){
     return {
         toString: function(){ return theString; },
@@ -245,7 +254,7 @@ Block.prototype.addLocalsToParentContext = function(view){
     if (!this.id){
         console.error('Model must have an id by now');
     }
-    returnView.id(this.id);
+//    returnView.id(this.id);
     view.parent_block().addLocalBlock(returnView);
     view.next_block().trigger('add_to_script');
 };

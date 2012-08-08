@@ -153,7 +153,7 @@
         // target = clone target if in menu
         if (dragTarget.is('.block_menu .wrapper')){
             dragTarget.removeClass('drag_indication');
-            dragTarget = dragTarget.clone(true);
+            dragTarget = dragTarget.data('model').cloneScript().view();
             dragTarget.addClass('drag_indication');
             cloned = true;
         }

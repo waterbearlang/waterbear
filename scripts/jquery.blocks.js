@@ -14,31 +14,6 @@ $.extend($.fn, {
         });
         return '[' + names.join(', ') + ']';
     },
-    id: function(_id) {
-        var model = this.data('model');
-        if (_id) {
-            if (!model.id) {
-                model.id = _id;
-                if (model.script && model.script.indexOf('##') > -1) {
-                    model.script =  model.script.replace(/##/gm, '_' + _id);
-                    if (model.label){
-                        model.label = model.label.replace(/##/gm, '_' + _id);
-                    }else if (model.contains){
-                        model.contained.forEach(function(contained){
-                            contained.label = contained.label.replace(/##/gm, '_', + _id);
-                        });
-                    }
-                    this.find('> .block > .blockhead > .label').html(Label(model.label));
-                }
-            }
-            return this;
-        } else {
-            return model.id;
-        }
-    },
-    info: function() {
-        return this.closest('.wrapper').long_name();
-    },
     block_type: function() {
         return this.data('model').blockType;
     },
@@ -103,7 +78,7 @@ $.extend($.fn, {
         if (this.is('.empty')) return '/* do nothing */';
         return this.map(function() {
             var self = $(this);
-            var script = scripts[self.data('model').signature];
+            var script = Block.scripts[self.data('model').signature];
             if (!script) {
                 return null;
             }
@@ -200,7 +175,7 @@ $.extend($.fn, {
         }
         if (model._returns) {
             desc.returns = model._returns;
-            if (des.returns !== 'block'){
+            if (desc.returns !== 'block'){
                 desc.returns.script = desc.returns.script.replace(/##/g, '_' + self.id());
                 if (desc.returns.label){
                     desc.returns.label = desc.returns.label.replace(/##/g, '_', + self.id());

@@ -259,6 +259,17 @@ Block.prototype.addLocalsToParentContext = function(view){
     view.next_block().trigger('add_to_script');
 };
 
+Block.prototype.addGlobals = function(view){
+    if (!this.returns) return;
+    if (this.returns === 'block'){
+        // special metablock handler
+        return;
+    }
+    // remove from DOM if already in place elsewhere
+    this.returns.deleteViews();
+    $('.submenu.globals').append(this.returns.view());
+};
+
 Block.prototype.removeLocalsFromParent = function(){
     if (!(this.returns && this.returns.signature)) return;
     this.returns.deleteViews();
@@ -267,11 +278,13 @@ Block.prototype.removeLocalsFromParent = function(){
 Block.prototype.addToScript = function(view, evt){
     console.log('addToScript');
     this.addLocalsToParentContext(view);
+    view.next_block().trigger('add_to_script');
 };
 
 Block.prototype.addToWorkspace = function(view, evt){
     console.log('addToWorkspace');
-    this.removeLocalsFromParent();
+    this.addGlobals(view);
+    view.next_block().trigger('add_to_workspace');
 };
 
 Block.prototype.addToSocket = function(view, evt){

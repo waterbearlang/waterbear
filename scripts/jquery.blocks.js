@@ -46,8 +46,10 @@ $.extend($.fn, {
             top: y + 'px'
         });
     },
+    addGlobalBlock: function(block){
+        $('.submenu.globals').append(block);
+    },
     addLocalBlock: function(block) {
-        window.parent_block = this;
         var head = this.find('> .block > .blockhead');
         var locals = head.find('.locals');
         if (!locals.length) {

@@ -21,7 +21,9 @@ yepnope({
 // Add some utilities
 jQuery.fn.extend({
     prettyScript: function(){
-      return js_beautify(this.map(function(){ return $(this).extract_script();}).get().join(''));
+        return js_beautify(this.map(function(){ 
+            return $(this).extract_script();
+        }).get().join(''));
     },
     writeScript: function(view){
       view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
@@ -598,7 +600,7 @@ menu('Sensing', [
             blocktype: 'expression',
             label: 'answer##',
             type: 'string',
-            script: 'local.answer'
+            script: 'local.answer##'
         },
         help: 'Prompt the user for information'
     },

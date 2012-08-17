@@ -80,7 +80,7 @@ $.extend($.fn, {
         if (this.is('.empty')) return '/* do nothing */';
         return this.map(function() {
             var self = $(this);
-            var script = Block.scripts[self.data('model').signature];
+            var script = Block.registry[self.data('model').signature].script;
             if (!script) {
                 return null;
             }
@@ -120,81 +120,6 @@ $.extend($.fn, {
             }
             return script;
         }).get().join('');
-    },
-    serialize: function(){
-    },
-    deserialize: function(){
-    },
-    block_description: function() {
-        if (this.length < 1) return '';
-        if (this.is('.empty')) return '';
-        if (this.is(':input')) {
-            return this.val();
-        }
-        var patt = new RegExp('##', 'gm');
-
-        var model = this.data('model');
-        var desc = {
-            blocktype: model.blocktype,
-            group: model.group,
-            signature: model.signature,
-            id: model.id
-        };
-        // var old_desc = {
-        //     klass: this.data('klass'),
-        //     label: this.data('label').replace(/##/gm, '_' + this.id()),
-        //     script: this.data('script').replace(/##/gm, '_' + this.id()),
-        //     subContainerLabels: this.data('subContainerLabels'),
-        //     containers: this.data('containers')
-        // };
-        // FIXME: Move specific type handling to specific plugins
-        // NEW: uses model
-        // model.blocktype (eventhandler, context, step, expression)
-        // model.label (Model will have label OR contained labels)
-        // model.contained [ label ]
-        // model.group (control, operators, etc.)
-        // model.help (string)
-        // model.locals [(model)]
-        // model.returns (model)
-        // model.signature (unique string for each menu block)
-        // model.id (unique string for each script block)
-        // model.view (jquery)
-        var self = this;
-        if (model.label){
-            desc.label = model.label;
-        }else if(model.contained){
-            desc.contained = model.contained;
-        }
-        if (model.locals) {
-            desc.locals = model.locals.map(function(local) {
-                return {
-                    blocktype: local.blocktype,
-                    type: local.type,
-                    script: local.script.replace(/##/g, '_' + self.id()),
-                    label: local.label.replace(/##/g, '_' + self.id())
-                };
-            });
-        }
-        if (model._returns) {
-            desc.returns = model._returns;
-            if (desc.returns !== 'block'){
-                desc.returns.script = desc.returns.script.replace(/##/g, '_' + self.id());
-                if (desc.returns.label){
-                    desc.returns.label = desc.returns.label.replace(/##/g, '_', + self.id());
-                }else{
-                    desc.returns.contained = desc.returns.contained.map(function(child){
-                        return child.label.replace(/##/g, '_', + self.id());
-                    });
-                }
-            }
-        }
-        model.sockets = this.socket_blocks().map(function() {
-            return $(this).block_description();
-        }).get();
-        model.contained = this.child_blocks().map(function() {
-            return $(this).block_description();
-        }).get();
-        model.next = this.next_block().block_description();
-        return desc;
     }
+        
 });

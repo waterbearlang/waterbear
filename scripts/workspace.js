@@ -14,21 +14,13 @@ $('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
 
 // Load and Save Section
 
-function scripts_as_object(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    if (blocks.length){
-        return blocks.map(function(){return $(this).block_description();}).get();
-    }else{
-        return [];
-    }   
-}
 
-function save_current_scripts(){
+function saveCurrentScripts(){
     showWorkspace();
     $('#block_menu')[0].scrollIntoView();
-    localStorage['__current_scripts'] = JSON.stringify(scripts_as_object());
+    localStorage['__current_scripts'] = Block.serialize();
 }
-$(window).unload(save_current_scripts);
+$(window).unload(saveCurrentScripts);
 
 
 function saveNamedScripts(){
@@ -45,7 +37,7 @@ function saveNamedScripts(){
             title: title,
             description: description,
             date: date,
-            scripts: scripts_as_object()
+            scripts: Block.scriptsToObject()
         });
         resetAndCloseSaveDialog();
     }else   
@@ -64,7 +56,7 @@ function exportNamedScripts(){
         title: title,
         description: description,
         date: date,
-        scripts: scripts_as_object()
+        scripts: Block.scriptsToObject()
     });
     console.log("EXP: "+exp);
     resetAndCloseSaveDialog();
@@ -189,30 +181,32 @@ $('#demos_dialog').on('click', '.load', restoreDemoScripts)
 $('#demos_dialog .cancel').click(function(){$('#demos_dialog').bPopup().close();});
 $('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
 
-function loadScriptsFromObject(blocks){
+function loadScriptsFromObject(fileObject){
     var workspace = $('.workspace:visible .scripts_workspace');
-    $.each(blocks, function(idx, value){
-        console.log('restoring block %s', idx);
-        var block = Block(value);
-        var view = block.view();
-        workspace.append(view);
-        view.css({position: 'relative', left: 0, top: 0, display: 'block'});
-        view.trigger('add_to_workspace');
-        $('.scripts_workspace').trigger('add');
-
+    console.log('loading scripts from object: %o', fileObject);
+    console.log('file format version: %s', fileObject.waterbearVersion);
+    console.log('plugins: %o', fileObject.plugins);
+    fileObject.scripts.forEach(function(script){
+        console.log('restoring workspace %s', script.workspace);
+        script.blocks.forEach(function(spec){
+            var block = Block(spec);
+            var view = block.view();
+            workspace.append(view);
+            view.trigger('add_to_workspace');
+            workspace.trigger('add');
+        });
     });
 }
 
 window.loadCurrentScripts = function(){
     if (localStorage.__current_scripts){
-        var blocks = JSON.parse(localStorage['__current_scripts']);
-        if (blocks.length){
-            console.log('restoring %s blocks', blocks.length);
-            loadScriptsFromObject(blocks);
+        var fileObject = JSON.parse(localStorage['__current_scripts']);
+        if (fileObject){
+            loadScriptsFromObject(fileObject);
         }
     }
-}
-// $(document).ready(loadCurrentScripts);
+};
+//$(document).ready(loadCurrentScripts);
 
 
 

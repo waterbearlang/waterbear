@@ -54,7 +54,9 @@
                             {{/attachLocals}}
                             {{{.}}}
                         </div>
-                        <div class="locals block_menu"></div>
+                        {{#attachLocals}}
+                            <div class="locals block_menu"></div>
+                        {{/attachLocals}}
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
@@ -78,7 +80,9 @@
                             {{/attachLocals}}
                             {{{.}}}
                         </div>
-                        <div class="locals block_menu"></div>
+                        {{#attachLocals}}
+                            <div class="locals block_menu"></div>
+                        {{/attachLocals}}
                     </div>
                     <div class="contained">
                         <i class="slot"></i>
@@ -113,7 +117,7 @@
             <button class="runScripts">Run</button>
         </div>
         <div class="workspace">
-            <div class="scripts_workspace"></div>
+            <div class="scripts_workspace" data-name="default"></div>
             <div class="scripts_text_view"></div>
         </div>
         <div class="stage"></div>
@@ -176,6 +180,7 @@
     <script src="scripts/timer.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
+    <script src="scripts/serialization-1.0.js"></script>
     <script>
 	
 		// buttonize
@@ -191,6 +196,7 @@
 
         // load all modules separated by |
         var plugins = q['plugin'].split('|').map(function(name){
+            Block.registerPlugin(name);
             return 'plugins/' + name + '.js';
         });
 
@@ -203,7 +209,7 @@
           complete : function () {
               $('#block_menu_load').remove();
               $('#block_menu').show();
-
+              loadCurrentScripts();
           }
       });
     </script>

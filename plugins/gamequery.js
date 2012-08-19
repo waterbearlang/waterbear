@@ -1047,7 +1047,6 @@ var menus = {
 var demos = [
 ];
 populateDemosDialog(demos);
-loadCurrentScripts();
 $('.scripts_workspace').trigger('init');
 console.log("Done");
 

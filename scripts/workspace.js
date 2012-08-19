@@ -206,7 +206,6 @@ window.loadCurrentScripts = function(){
         }
     }
 };
-//$(document).ready(loadCurrentScripts);
 
 
 

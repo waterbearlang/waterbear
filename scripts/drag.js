@@ -249,19 +249,20 @@
                     top: 0,
                     display: 'inline-block'
                 });
-                dragTarget.trigger('add_to_script');
+                dragTarget.trigger('add_to_script', {dropTarget: dropTarget});
             }else{
                 // Insert a value block into a socket
                 // console.log('Inserting a value into a socket');
                 dropTarget.find('input, select').remove();
                 dropTarget.append(dragTarget);
+                // FIXME: Put this into the .css sheet
                 dragTarget.css({
                     position: 'relative',
                     left: 0,
                     top: 0,
                     display: 'inline-block'
                 });
-                dragTarget.trigger('add_to_socket');
+                dragTarget.trigger('add_to_socket', {dropTarget: dropTarget});
             }
         }else if ($('.block_menu').cursorOver()){
             // delete block if dragged back to menu

@@ -21,6 +21,9 @@ $.extend($.fn, {
         var p = this.closest('.wrapper').parent();
         return p.closest('.contained').closest('.wrapper');
     },
+    context_block: function(){
+        return this.closest('.context');
+    },
     child_blocks: function() {
         return this.find('> .block > .contained').map(function() {
             var kids = $(this).children('.wrapper');

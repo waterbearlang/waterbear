@@ -111,10 +111,6 @@ function Value(textValue){
     }
 }
 
-Value.prototype.serialize = function(){
-    // Implement me and make sure I round-trip back into the block model
-};
-
 Value.prototype.addBlock = function(blockModel){
     this.literal = false;
     this.value = blockModel;
@@ -360,8 +356,19 @@ Block.prototype.addLocalsToParentContext = function(view){
         console.error('Model must have an id by now');
     }
 //    returnView.id(this.id);
-    view.parent_block().addLocalBlock(returnView);
-    view.next_block().trigger('add_to_script');
+    var context = view.context_block();
+    if (context.length){
+        context.addLocalBlock(returnView);
+        if (this.next){
+            this.next.addLocalsToParentContext();
+        }
+    }else{
+        this.addGlobals();
+        if (this.next){
+            this.next.addGlobals();
+        }
+    }
+    // make sure subsequent blocks also add their locals
 };
 
 Block.prototype.addGlobals = function(view){
@@ -380,22 +387,39 @@ Block.prototype.removeLocalsFromParent = function(){
     this.returns.deleteViews();
 };
 
-Block.prototype.addToScript = function(view, evt){
+Block.prototype.addToScript = function(view, evt, params){
     console.log('addToScript');
     this.addLocalsToParentContext(view);
-    view.next_block().trigger('add_to_script');
+    // add to parent blocks model
+    var parentBlock = params.dropTarget.closest('.wrapper').data('model');
+    var ctx = params.dropTarget.parent().attr('class'); // contained vs. next
+    if (ctx === 'next'){
+        parentBlock.next = this;
+    }else{
+        var idx = params.dropTarget.closest('.block').find('> .contained').index(params.dropTarget.parent());
+        parentBlock.contained[idx] = this;
+    }
 };
 
-Block.prototype.addToWorkspace = function(view, evt){
+Block.prototype.addToWorkspace = function(view, evt, params){
     console.log('addToWorkspace');
     this.addGlobals(view);
     view.next_block().trigger('add_to_workspace');
 };
 
-Block.prototype.addToSocket = function(view, evt){
+Block.prototype.addToSocket = function(view, evt, params){
+    console.log('addToSocket(%o, %o, %o)', view, evt, params);
+    // which socket?
+    var idx = params.dropTarget.index();
+    var idx = params.dropTarget.parent().find('> .socket, > .autosocket').index(params.dropTarget);
+    console.log('socket index: %s', idx);
+    // add block to value
+    var parentBlock = params.dropTarget.closest('.wrapper').data('model');
+    parentBlock.values[idx].addBlock(this);
+    // update view (currently happens elsewhere)
 };
 
-Block.prototype.deleteBlock = function(view, evt){
+Block.prototype.deleteBlock = function(view, evt, params){
     this.removeLocalsFromParent();
 };
 
@@ -407,23 +431,23 @@ function newBlockHandler(blocktype, args, body, returns){
 };
 
 $('.scripts_workspace')
-    .on('add_to_script', '.wrapper', function(evt){
+    .on('add_to_script', '.wrapper', function(evt, params){
         var view = $(this);
-        view.data('model').addToScript(view, evt);
+        view.data('model').addToScript(view, evt, params);
         return false;
     })
-    .on('add_to_workspace', '.wrapper', function(evt){
+    .on('add_to_workspace', '.wrapper', function(evt, params){
         var view = $(this);
-        view.data('model').addToWorkspace(view, evt);
+        view.data('model').addToWorkspace(view, evt, params);
         return false;
     })
-    .on('delete_block', '.wrapper', function(evt){
+    .on('delete_block', '.wrapper', function(evt, params){
         var view = $(this);
-        view.data('model').deleteBlock(view, evt);
+        view.data('model').deleteBlock(view, evt, params);
         return false;
     })
-    .on('add_to_socket', '.wrapper', function(evt){
+    .on('add_to_socket', '.wrapper', function(evt, params){
         var view = $(this);
-        view.data('model').addToSocket(view, evt);
+        view.data('model').addToSocket(view, evt, params);
         return false;
     });

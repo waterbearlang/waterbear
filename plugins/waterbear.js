@@ -84,7 +84,6 @@ menu('Sensing', [
 
 var demos = [];
 populateDemosDialog(demos);
-loadCurrentScripts();
 $('.scripts_workspace').trigger('init');
 
 $('.socket input').live('click',function(){

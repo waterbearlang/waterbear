@@ -102,12 +102,12 @@
     display: block;
 }
 
-.containerBlock > .blockhead{
+.context > .blockhead{
     padding: 5px 20px;
     padding-bottom: 6px;
 }
 
-.containerBlock > .block {
+.context > .block {
     padding-bottom: 11px;
 }
 

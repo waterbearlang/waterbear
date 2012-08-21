@@ -185,7 +185,7 @@ function loadScriptsFromObject(fileObject){
     var workspace = $('.workspace:visible .scripts_workspace');
     console.log('loading scripts from object: %o', fileObject);
     console.log('file format version: %s', fileObject.waterbearVersion);
-    console.log('plugins: %o', fileObject.plugins);
+    // FIXME: Make sure we have the appropriate plugins loaded
     fileObject.scripts.forEach(function(script){
         console.log('restoring workspace %s', script.workspace);
         script.blocks.forEach(function(spec){

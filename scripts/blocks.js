@@ -302,8 +302,31 @@ Block.prototype.init = function(spec){
 };
 
 Block.prototype.initInstance = function(){
-    this.contained = [];
-    this.next = null;
+    if (this.spec.contained && this.spec.contained.length){
+        this.contained = this.spec.contained.map(function(spec){
+            return Block(spec);
+        });
+    }else{
+        this.contained = [];
+    }
+    if (this.spec.next){
+        this.next = Block(this.spec.next);
+    }else{
+        this.next = null;
+    }
+    if (this.spec.values && this.spec.values.length){
+        this.values = this.spec.values.map(function(value){
+            var val = new Value(value.type);
+            if (value.value.signature){
+                val.addBlock(Block(value.value));
+            }else{
+                val.value = value.value;
+            }
+            return val;
+        });
+    }else{
+        this.values = [];
+    }
 };
 
 Block.prototype.cloneScript = function(){
@@ -325,11 +348,22 @@ function attachLocals(theString){
 Block.prototype.view = function(){
     var view = $(this.template(this));
     view.data('model', this);
-    if (this.locals && !this.isTemplateBlock){
-        var localContainer = view.find('.locals');
-        this.locals.forEach(function(local){
-            localContainer.append(local.view());
+    if (!this.isTemplateBlock){
+        if (this.locals){
+            var localContainer = view.find('.locals');
+            this.locals.forEach(function(local){
+                localContainer.append(local.view());
+            });
+        }
+        this.contained.forEach(function(contained){
+            view.find('> .contained').append(contained.view());
         });
+        this.values.forEach(function(value, idx){
+            view.find('> .socket').eq(idx).append(value.view());
+        });
+        if (this.next){
+            view.find('> .next').append(this.next.view());
+        }
     }
     this._allViews.push(view);
     return view;
@@ -404,16 +438,18 @@ Block.prototype.addToScript = function(view, evt, params){
 Block.prototype.addToWorkspace = function(view, evt, params){
     console.log('addToWorkspace');
     this.addGlobals(view);
-    view.next_block().trigger('add_to_workspace');
+    if (this.next){
+        this.next.addToWorkspace();
+    }
 };
 
 Block.prototype.addToSocket = function(view, evt, params){
     console.log('addToSocket(%o, %o, %o)', view, evt, params);
     // which socket?
-    var idx = params.dropTarget.index();
     var idx = params.dropTarget.parent().find('> .socket, > .autosocket').index(params.dropTarget);
     console.log('socket index: %s', idx);
     // add block to value
+    window.dropTarget = params.dropTarget;
     var parentBlock = params.dropTarget.closest('.wrapper').data('model');
     parentBlock.values[idx].addBlock(this);
     // update view (currently happens elsewhere)

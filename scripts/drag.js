@@ -287,7 +287,7 @@
                 // console.log('put block back where we found it');
                 if (startParent){
                     if (startParent.is('.socket')){
-                        startParent.children('input').remove();
+                        startParent.children('input').hide();
                     }
                     startParent.append(dragTarget);
                     dragTarget.css({

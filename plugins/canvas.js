@@ -15,7 +15,7 @@ yepnope({
 });
 
 function showColorPicker(){
-    console.log('Add a non-Raphael color picker');
+    console.debug('Add a non-Raphael color picker');
 }
 
 //$('.workspace:visible .scripts_workspace').on('click', 'input[type=color]', showColorPicker);
@@ -46,7 +46,6 @@ jQuery.fn.extend({
         // over-ride javascript plugin to add canvas to globals
         var script = this.prettyScript();
         var retval = 'var global = new Global();(function($){var local = new Local();try{local.canvas = $("<canvas width=\\"" + global.stage_width + "\\" height=\\"" + global.stage_height + "\\"></canvas>").appendTo(".stage");local.ctx = local.canvas[0].getContext("2d");' + script + '}catch(e){alert(e);}})(jQuery);';
-        //console.log(retval);
         return retval;
     }
 });

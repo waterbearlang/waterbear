@@ -19,7 +19,7 @@ yepnope({
             },
             error: function(XHR, textStatus, errorThrown){
                 callback(textStatus);
-                // console.log('getTweet error %s: %s', textStatus, errorThrown);
+                console.error('getTweet error %s: %s', textStatus, errorThrown);
             }
         });
     };

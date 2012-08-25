@@ -34,7 +34,6 @@ window.setDefaultScript = function(script){
 
 window.loadDefaultScript = function(script){
     if (typeof window.defaultscript != 'undefined'){
-        //console.log("window.defaultscript =", window.defaultscript);
         loadScriptsFromObject(window.defaultscript);
     }
 };

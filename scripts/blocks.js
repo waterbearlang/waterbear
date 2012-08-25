@@ -191,7 +191,7 @@ function assertExpression(model){
 function assertContext(model){
     if (model.containers){
         alert('Error: context with containers vs. contained');
-        console.log('Error context: %o', model);
+        console.error('Context: %o', model);
     }
 }
 
@@ -226,8 +226,7 @@ function Block(spec, scope){
         case 'eventhandler':
             return new EventHandler(spec, scope);
         default:
-            alert('Warning: unsupported block type: ' + model.blocktype);
-            console.log('Unsupported blocktype: %o', model);
+            console.warn('Unsupported blocktype: %o', model);
             return null;
     }
 }
@@ -243,7 +242,7 @@ Block.registerBlock = function(model){
     if (model.isLocal) return; // we build these scripts dynamically anyway
     if (!model.isTemplateBlock) return; // only register blocks in the menu
     if (Block.registry[model.signature]){
-        console.log('Warning: overwriting existing scripts for %s', model.signature);
+        console.('Warning: overwriting existing scripts for %s', model.signature);
     }
     Block.registry[model.signature] = model;
 };
@@ -422,7 +421,7 @@ Block.prototype.removeLocalsFromParent = function(){
 };
 
 Block.prototype.addToScript = function(view, evt, params){
-    console.log('addToScript');
+    console.trace('addToScript');
     this.addLocalsToParentContext(view);
     // add to parent blocks model
     var parentBlock = params.dropTarget.closest('.wrapper').data('model');
@@ -436,7 +435,7 @@ Block.prototype.addToScript = function(view, evt, params){
 };
 
 Block.prototype.addToWorkspace = function(view, evt, params){
-    console.log('addToWorkspace');
+    console.trace('addToWorkspace');
     this.addGlobals(view);
     if (this.next){
         this.next.addToWorkspace();
@@ -444,10 +443,10 @@ Block.prototype.addToWorkspace = function(view, evt, params){
 };
 
 Block.prototype.addToSocket = function(view, evt, params){
-    console.log('addToSocket(%o, %o, %o)', view, evt, params);
+    console.trace('addToSocket(%o, %o, %o)', view, evt, params);
     // which socket?
     var idx = params.dropTarget.parent().find('> .socket, > .autosocket').index(params.dropTarget);
-    console.log('socket index: %s', idx);
+    console.trace('socket index: %s', idx);
     // add block to value
     window.dropTarget = params.dropTarget;
     var parentBlock = params.dropTarget.closest('.wrapper').data('model');
@@ -460,10 +459,10 @@ Block.prototype.deleteBlock = function(view, evt, params){
 };
 
 function newBlockHandler(blocktype, args, body, returns){
-    console.log('blocktype: %s', blocktype);
-    console.log('%s args: %o', args.length, args);
-    console.log('body: %o', body);
-    console.log('returns: %s', returns);
+    console.trace('blocktype: %s', blocktype);
+    console.trace('%s args: %o', args.length, args);
+    console.trace('body: %o', body);
+    console.trace('returns: %s', returns);
 };
 
 $('.scripts_workspace')

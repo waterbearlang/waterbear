@@ -33,7 +33,6 @@ jQuery.fn.extend({
         // wrap the top-level script to prevent leaking into globals
         var script = this.prettyScript();
         var retval = 'var global = new Global();(function($){var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
-        //console.log(retval);
         return retval;
     }
 });

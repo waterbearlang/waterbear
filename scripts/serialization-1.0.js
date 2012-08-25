@@ -43,9 +43,9 @@ Block.registerPlugin = function(name){
 
 Block.prototype.serialize = function(){
     var serialized = {signature: this.signature};
-    console.log('serializing %s', this.signature);
+    console.trace('serializing %s', this.signature);
     if (this.values && this.values.length){
-        console.log('with %s values', this.values.length);
+        console.trace('with %s values', this.values.length);
         serialized.values = this.values.map(function(value){
             if (value.serialize){
                 return value.serialize();
@@ -54,13 +54,13 @@ Block.prototype.serialize = function(){
         });
     }
     if (this.contained && this.contained.length){
-        console.log('with %s contained', this.contained.length);
+        console.trace('with %s contained', this.contained.length);
         serialized.contained = this.contained.map(function(child){
             return child.serialize();
         });
     }
     if (this.next){
-        console.log('with next');
+        console.trace('with next');
         serialized.next = this.next.serialize();
     }
     return serialized;
@@ -69,13 +69,13 @@ Block.prototype.serialize = function(){
 Value.prototype.serialize = function(){
     // Implement me and make sure I round-trip back into the block model
     if (this.value && this.value.serialize){
-        console.log('serializing block value');
+        console.trace('serializing block value');
         return {
             type: this.type,
             value: this.value.serialize()
         };
     }else{
-        console.log('serializing raw value');
+        console.trace('serializing raw value');
         return {
             type: this.type,
             value: this.value

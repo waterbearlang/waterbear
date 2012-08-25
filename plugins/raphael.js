@@ -82,7 +82,7 @@ Raphael.fn.imageWithNaturalHeight = function(url){
         return true;
     }
     function loadFailure() {
-        console.log("'" + this.name + "' failed to load.");
+        console.error("'" + this.name + "' failed to load.");
         return true;
     }
     var myImage = new Image();

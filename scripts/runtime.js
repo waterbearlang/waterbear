@@ -18,7 +18,7 @@ Local.prototype.set = function(type, name, value){
         this[type] = {};
     }
     if (this[type][name] !== undefined){
-        console.log('Warning: overwriting %s named %s', type, name);
+        console.warn('Overwriting %s named %s', type, name);
     }
     this[type][name] = value;
     this.last_var = value;
@@ -27,11 +27,11 @@ Local.prototype.set = function(type, name, value){
 
 Local.prototype.get = function(type, name){
     if (this[type] === undefined){
-        console.log('Cannot remove %s from unknown type %s', name, type);
+        console.error('Cannot remove %s from unknown type %s', name, type);
         return undefined;
     }
     if (this[type][name] === undefined){
-        console.log('No %s named %s to remove', type, name);
+        console.error('No %s named %s to remove', type, name);
         return undefined;
     }
     return this[type][name];
@@ -39,11 +39,11 @@ Local.prototype.get = function(type, name){
 
 Local.prototype.delete = function(type, name){
     if (this[type] === undefined){
-        console.log('Cannot remove %s from unknown type %s', name, type);
+        console.error('Cannot remove %s from unknown type %s', name, type);
         return undefined;
     }
     if (this[type][name] === undefined){
-        console.log('No %s named %s to remove', type, name);
+        console.error('No %s named %s to remove', type, name);
         return undefined;
     }
     var value = this[type][name];

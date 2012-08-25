@@ -45,7 +45,6 @@ function saveNamedScripts(){
 }
 
 function exportNamedScripts(){
-    console.log("here");
     $('#exp h2').html('Exported Code');
     $('#exp small').html('Copy Exported Code below');   
     var title = $('#script_name').val();    
@@ -58,7 +57,7 @@ function exportNamedScripts(){
         date: date,
         scripts: Block.scriptsToObject()
     });
-    console.log("EXP: "+exp);
+    console.trace("EXP: "+exp);
     resetAndCloseSaveDialog();
     $('#exp').bPopup();
     $('#exp textarea').html(exp);
@@ -80,12 +79,12 @@ function restore_from_export(){
     $('#exp .done').click(function(){
     $('#exp .done').unbind('click');
     var script = $('#exp textarea').val();
-    console.log(script);
+    console.trace(script);
     $('#exp').bPopup().close();
     clearScripts();
 
     var ps = JSON.parse(script);
-    console.log(ps.scripts);
+    console.trace(ps.scripts);
 
     loadScriptsFromObject(ps.scripts);   
     }); 
@@ -155,7 +154,7 @@ function deleteNamedScripts(event){
     if (confirm('Are you sure you want to delete this script?')){
         var title = $(this).siblings('.title').text();
         $(this).parent().remove();
-        console.log('remove %s', title);
+        console.trace('remove %s', title);
         localStorage.removeItem(title);
     }
 }
@@ -183,11 +182,11 @@ $('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
 
 function loadScriptsFromObject(fileObject){
     var workspace = $('.workspace:visible .scripts_workspace');
-    console.log('loading scripts from object: %o', fileObject);
-    console.log('file format version: %s', fileObject.waterbearVersion);
+    console.trace('loading scripts from object: %o', fileObject);
+    console.trace('file format version: %s', fileObject.waterbearVersion);
     // FIXME: Make sure we have the appropriate plugins loaded
     fileObject.scripts.forEach(function(script){
-        console.log('restoring workspace %s', script.workspace);
+        console.trace('restoring workspace %s', script.workspace);
         script.blocks.forEach(function(spec){
             var block = Block(spec);
             var view = block.view();

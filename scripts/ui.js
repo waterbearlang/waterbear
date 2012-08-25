@@ -25,7 +25,6 @@ window.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    //console.log('found %s scripts to view', blocks.length);
     var view = $('.workspace:visible .scripts_text_view');
     blocks.writeScript(view);
 }
@@ -41,35 +40,35 @@ $('.runScripts').click(runScripts);
 // Context Menu
 
 function cloneCommand(key, opt){
-    console.log('cloneCommand(%s, %o)', key, opt);
+    console.trace('cloneCommand(%s, %o)', key, opt);
 }
 
 function editCommand(key, opt){
-    console.log('editCommand(%s, %o)', key, opt);
+    console.trace('editCommand(%s, %o)', key, opt);
 }
 
 function expandCommand(key, opt){
-    console.log('expandCommand(%s, %o)', key, opt);
+    console.trace('expandCommand(%s, %o)', key, opt);
 }
 
 function collapseCommand(key, opt){
-    console.log('collapseCommand(%s, %o)', key, opt);
+    console.trace('collapseCommand(%s, %o)', key, opt);
 }
 
 function copyBlockCommand(key, opt){
-    console.log('copyBlockCommand(%s, %o)', key, opt);
+    console.trace('copyBlockCommand(%s, %o)', key, opt);
 }
 
 function copySubscriptCommand(key, opt){
-    console.log('copySubscriptCommand(%s, %o)', key, opt);
+    console.trace('copySubscriptCommand(%s, %o)', key, opt);
 }
 
 function pasteCommand(key, opt){
-    console.log('pasteCommand(%s, %o)', key, opt);
+    console.trace('pasteCommand(%s, %o)', key, opt);
 }
 
 function cancelCommand(key, opt){
-    console.log('cancelCommand(%s, %o)', key, opt);
+    console.trace('cancelCommand(%s, %o)', key, opt);
 }
 
 $.contextMenu({
@@ -100,8 +99,8 @@ if (is_touch_device()){
         container: '.blockmenu, .workspace',
         selector: '.block',
         callback: function(){
-            console.log('long tap detected');
-            console.log(this);
+            console.trace('long tap detected');
+            console.trace(this);
             this.contextMenu();
         },
         touchDelay: 150

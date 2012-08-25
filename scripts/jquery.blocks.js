@@ -94,13 +94,10 @@ $.extend($.fn, {
                 return $(elem).extract_script();
             });
             if (exprs.length) {
-                // console.log('expressions: %o', exprs);
 
 
                 function exprf(match, offset, s) {
-                    // console.log('%d args: <%s>, <%s>, <%s>', arguments.length, match, offset, s);
                     var idx = parseInt(match.slice(2, -2), 10) - 1;
-                    // console.log('index: %d, expression: %s', idx, exprs[idx]);
                     return exprs[idx];
                 };
                 script = script.replace(/\{\{\d\}\}/g, exprf);
@@ -110,7 +107,6 @@ $.extend($.fn, {
                     var idx = parseInt(match.slice(2, -2), 10) - 1;
                     return blks[idx];
                 }
-                // console.log('child before: %s', script);
                 script = script.replace(/\[\[\d\]\]/g, blksf);
             }
             next = self.next_block().extract_script();

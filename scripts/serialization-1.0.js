@@ -4,7 +4,6 @@
 //
 
 // TODO:
-// * Remove default values from signature
 // * Add timestamp
 // * Allow name/description for scripts
 // * Add version of script, automatically generated
@@ -43,9 +42,9 @@ Block.registerPlugin = function(name){
 
 Block.prototype.serialize = function(){
     var serialized = {signature: this.signature};
-    console.trace('serializing %s', this.signature);
+    console.info('serializing %s', this.signature);
     if (this.values && this.values.length){
-        console.trace('with %s values', this.values.length);
+        console.info('with %s values', this.values.length);
         serialized.values = this.values.map(function(value){
             if (value.serialize){
                 return value.serialize();
@@ -54,13 +53,13 @@ Block.prototype.serialize = function(){
         });
     }
     if (this.contained && this.contained.length){
-        console.trace('with %s contained', this.contained.length);
+        console.info('with %s contained', this.contained.length);
         serialized.contained = this.contained.map(function(child){
             return child.serialize();
         });
     }
     if (this.next){
-        console.trace('with next');
+        console.info('with next');
         serialized.next = this.next.serialize();
     }
     return serialized;
@@ -69,13 +68,13 @@ Block.prototype.serialize = function(){
 Value.prototype.serialize = function(){
     // Implement me and make sure I round-trip back into the block model
     if (this.value && this.value.serialize){
-        console.trace('serializing block value');
+        console.info('serializing block value');
         return {
             type: this.type,
             value: this.value.serialize()
         };
     }else{
-        console.trace('serializing raw value');
+        console.info('serializing raw value');
         return {
             type: this.type,
             value: this.value

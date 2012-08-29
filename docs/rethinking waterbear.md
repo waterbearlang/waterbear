@@ -2,6 +2,36 @@
 
 We have enough experience with waterbear now to be able to step back and take a look at what is working and what needs improvement. It's time to explore potentially radical changes before things get set in stone.
 
+## Update 2012-08-27
+
+Events needed for blocks:
+
+* Add next
+* Remove next
+* Add to context X
+* Remove from context X
+* Add to expression slot X
+* Remove from expression slot X
+* Add to workspace [foo]
+* Remove from workspace [foo]
+* Change expression literal from [foo] to [bar]
+* Move from [expression socket X or workspace foo] to [expression socket Y or workspace bar]
+* Move from [next | context X | workspace foo] to [next | context Y | workspace bar]
+* Cut [block]
+* Cut [block and children]
+* Copy [block]
+* Copy [block and children]
+* Paste [block]
+* Paste [block and children]
+* Add block to [expression socket X | next | context X | workspace foo]
+* Delete block from [expression socket X | next | context X | workspace foo]
+* Clone block
+* Edit block template
+* Expand block (do we need to support persistence or undo/redo for these?)
+* Collapse block
+* Select block
+* Start move
+
 ## Update 2012-08-04
 
 If we allow event handlers to be declared in another context, there is really no difference between an event handler and any other context.

@@ -35,7 +35,7 @@
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
 (function($){
-    var dragTarget, potentialDropTargets, dropTarget, dropRects, startPosition, timer, cloned, dragging, currentPosition, distance, startParent, dropCursor, dragPlaceholder;
+    var dragTarget, potentialDropTargets, dropTarget, dropRects, startPosition, timer, cloned, dragging, currentPosition, distance, dropCursor, dragPlaceholder;
     window.isTouch = window.hasOwnProperty('ontouchstart') && true;
     var dragTimeout = 20;
     // TODO: update this whenever we switch to a new workspace
@@ -58,7 +58,6 @@
         dropRects = [];
         dropTarget = $();
         startPosition = null;
-        startParent = null;
         currentPosition = null;
         timer = null;
         dragging = false;
@@ -125,11 +124,11 @@
         if ((eT.is(':input') || eT.is('option') || eT.is('.disclosure')) && ! eT.containedBy($('.block_menu'))) {return undefined;}
         var target = eT.closest('.wrapper');
         if (target.length){
-            dragTarget = target; 
+            dragTarget = target;
             //dragTarget.addClass("drag_indication");
             startPosition = target.offset();
             if (! target.parent().is('.scripts_workspace')){
-                startParent = target.parent();
+                target.data('startParent', target.parent());
             }
         }else{
             dragTarget = null;
@@ -144,11 +143,12 @@
         dropCursor = $('<div class="dropCursor"></div>');
         targetCanvas.prepend(dropCursor);
         dragTarget.addClass("drag_indication");
+        var model = dragTarget.data('model');
         currentPosition = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
-        if (dragTarget.is('.block_menu .wrapper')){
+        if (model.isTemplateBlock){
             dragTarget.removeClass('drag_indication');
-            dragTarget = dragTarget.data('model').cloneScript().view();
+            dragTarget = model.cloneScript().view();
             dragTarget.addClass('drag_indication');
             cloned = true;
         }
@@ -159,6 +159,8 @@
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
         if (dragTarget.parent().is('.socket')){
+            // var holder = dragTarget.data('startParent');
+            // var idx = holder.parent().find('> .socket, > .autosocket').index(holder);
             var classes = dragTarget.parent().attr('class');
 
             classes = classes.replace("socket","").trim();
@@ -209,12 +211,12 @@
         clearTimeout(timer);
         timer = null;
         if (!dragging) {return undefined;}
-        handle_drop();
+        handleDrop();
         reset();
         return false;
     }
     
-    function handle_drop(){
+    function handleDrop(){
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -250,6 +252,7 @@
             }
         }else if ($('.block_menu').cursorOver()){
             // delete block if dragged back to menu
+            console.log('triggering delete_block');
             dragTarget.trigger('delete_block');
             dragTarget.remove();
         }else if (dragTarget.overlap(targetCanvas)){
@@ -265,6 +268,7 @@
             if (cloned){
                 dragTarget.remove();
             }else{
+                var startParent = dragTarget.data('startParent');
                 if (startParent){
                     if (startParent.is('.socket')){
                         startParent.children('input').hide();
@@ -276,6 +280,7 @@
                         left: 0,
                         display: 'inline-block'
                     });
+                    dragTarget.removeData('startParent');
                 }else{
                     targetCanvas.append(dragTarget);
                     dragTarget.offset(startPosition);

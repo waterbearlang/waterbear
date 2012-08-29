@@ -51,18 +51,43 @@ Block.prototype.parseLabel = function(textLabel){
 
     // FIXME: Move specific type handling to plugins
     var self = this;
-    textLabel = textLabel.replace(/##/, '');
+    try{
+        textLabel = textLabel.replace(/##/, '');
+    }catch(e){
+        console.error('Failed in textlabel.replace: %o', e);
+    }
 
     this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
     var htmlLabel = textLabel;
-    if (!this.values && this.valueSlots.length){
-        this.values = this.valueSlots.map(function(slot){ return new Value(slot);});
+    try{
+        if (!this.values && this.valueSlots.length){
+            this.values = this.valueSlots.map(function(slot){ return new Value(slot);});
+        }
+    }catch(e){
+        console.error('Failed in this.valueSlots.map: %o', e);
     }
-    this.valueSlots.forEach(function(slot, idx){
-        htmlLabel = htmlLabel.replace(slot, self.values[idx].view());
-    });
+    try{
+        this.valueSlots.forEach(function(slot, idx){
+            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
+            // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
+            var value = self.values[idx];
+            console.log('test and convert value: %o', value);
+            if (!value.view){
+                value = new Value(value);
+            }
+            console.log('converted value : %o', value);
+            console.debug('"' + htmlLabel + '".replace(' + slot + ', ' +  value.view() + ')');
+            htmlLabel = htmlLabel.replace(slot, value.view());
+        });
+    }catch(e){
+        // console.error('Failed in this.valueSlots.forEach: %o', e);
+        console.debug(htmlLabel.replace);
+        console.debug('self: %o', self);
+        console.debug(self.values, idx);
+        console.debug(self.values[idx]);
+        console.debug(self.values[idx].view);
+    }
     return htmlLabel;
-
 };
 
 var defaultValue = {
@@ -76,38 +101,49 @@ var defaultValue = {
 };
 
 function Value(textValue){
-    var parts = textValue.slice(1,-1).split(':');
-    this.type = parts[0];
-    if (this.type === 'choice'){
-        this.choiceName = parts[1];
-        this.choiceList = choiceLists[this.choiceName];
-        if (parts.length === 3){
-            this.value = parts[2];
+    if ($.isPlainObject(textValue)){
+        $.extend(this, textValue);
+        if (textValue.value.signature){
+            console.debug('block value: %s', textValue.value.signature);
+            this.addBlock(Block(value.value));
         }else{
-            this.value = this.choiceList[0];
+            console.debug('literal value: %s', textValue.value);
+            this.literal = true;
         }
     }else{
-        if (parts.length === 1){
-            this.value = defaultValue[this.type];
-            if (this.value && this.value.apply){
-                this.value = this.value();
+        var parts = textValue.slice(1,-1).split(':');
+        this.type = parts[0];
+        if (this.type === 'choice'){
+            this.choiceName = parts[1];
+            this.choiceList = choiceLists[this.choiceName];
+            if (parts.length === 3){
+                this.value = parts[2];
+            }else{
+                this.value = this.choiceList[0];
             }
         }else{
-            this.value = parts[1];
-            if (this.type.match(/number|float|double/)){
-                this.value = parseFloat(this.value);
-            }else if (this.type.match(/int|long/)){
-                this.value = parseInt(this.value, 10);
-            }else if (this.type.match(/boolean|bool/)){
-                this.value = !! this.value === 'true';
-                this.choiceName = 'boolean';
-                this.choiceList = [true,false];
+            if (parts.length === 1){
+                this.value = defaultValue[this.type];
+                if (this.value && this.value.apply){
+                    this.value = this.value();
+                }
+            }else{
+                this.value = parts[1];
+                if (this.type.match(/number|float|double/)){
+                    this.value = parseFloat(this.value);
+                }else if (this.type.match(/int|long/)){
+                    this.value = parseInt(this.value, 10);
+                }else if (this.type.match(/boolean|bool/)){
+                    this.value = !! this.value === 'true';
+                    this.choiceName = 'boolean';
+                    this.choiceList = [true,false];
+                }
             }
         }
-    }
-    if (this.value !== undefined){
-        this.defaultValue = this.value; // for when expressions are removed
-        this.literal = true;
+        if (this.value !== undefined){
+            this.defaultValue = this.value; // for when expressions are removed
+            this.literal = true;
+        }
     }
 }
 
@@ -161,6 +197,7 @@ Expression.prototype = new Block();
 Expression.prototype.constructor = Expression;
 
 function Context(spec, scope){
+    this.debug('creating context');
     assertContext(spec);
     this.locals = false;
     this.init(spec);
@@ -195,8 +232,23 @@ function assertContext(model){
     }
 }
 
+function noDefaultValues(match, spec){
+    // remove default values, if any, from labels
+    var parts = spec.split(':');
+    var val;
+    if (parts[0] === 'choice'){
+        val = 'choice:' +  parts[1];
+    }else{
+        val = parts[0];
+    }
+    return '[' + val + ']';
+}
+
 function signature(model){
-    return model.blocktype + ': ' + model.spec.labels.join(', ');
+    var sig = model.blocktype + ': ' + model.spec.labels.map(function(label){
+            return label.replace(/\[(.*?)\]/g, noDefaultValues);
+        }).join(', ');
+    return sig;
 }
 
 function Block(spec, scope){
@@ -214,6 +266,7 @@ function Block(spec, scope){
             throw new Exception('Cannot find a block to restore this from');
         }
         spec = $.extend({}, template.spec, instance, spec);
+        console.debug('deserializing %o', spec);
     }
     // If called as function, demux to the correct constructor
     switch(spec.blocktype){
@@ -242,11 +295,16 @@ Block.registerBlock = function(model){
     if (model.isLocal) return; // we build these scripts dynamically anyway
     if (!model.isTemplateBlock) return; // only register blocks in the menu
     if (Block.registry[model.signature]){
-        console.('Warning: overwriting existing scripts for %s', model.signature);
+        console.warn('Overwriting existing scripts for %s', model.signature);
     }
     Block.registry[model.signature] = model;
 };
 
+
+Block.prototype.debug = function(){
+    if (this.isTemplateBlock) return;
+    console.debug.apply(console, arguments);
+}
 
 Block.prototype.init = function(spec){
     var self = this;
@@ -256,6 +314,7 @@ Block.prototype.init = function(spec){
         delete spec.label;
     }
     $.extend(this, spec);
+    this.debug('initializing instance');
     this.spec = spec; // save unmodified description
     if (! (this.id || this.isTemplateBlock)){
         this.id = Block.newId();
@@ -267,40 +326,43 @@ Block.prototype.init = function(spec){
     this._allViews = [];
     this.script = this.script.replace(/##/g, '_' + self.id);
     Block.registerBlock(this);
+    self.debug('are my labels parsed already? %s', this.labels[0][0]);
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
     });
-    if (!this.isTemplateBlock){
-        this.labels[0] = attachLocals(this.labels[0]);
-        if (this.locals){
-            this.spec.locals.forEach(function(spec){
-                spec.isTemplateBlock = true;
-                spec.isLocal = true;
-                spec.id = self.id;
-            });
-            this.locals = this.spec.locals.map(function(spec){
-                return Block(spec);
-            });
-        }
-        if (this.returns){
-            this._returns = this.returns;
-            if (this.returns === 'block'){
-                // special user-defined block handler
-            }else{
-                this._returns.isTemplateBlock = true;
-                this._returns.isLocal = true;
-                this._returns.id = self.id;
-                this.returns = Block(this._returns);
-            }
-        }
-    }
+    self.debug('initialize template block');
+    self.debug('do I already have a template? %s', !!this.template);
     this.template = templates[this.blocktype];
+    self.debug('initialize instance');
     if (!this.isTemplateBlock){
         this.initInstance();
     }
 };
 
 Block.prototype.initInstance = function(){
+    console.log('initInstance %o', this);
+    this.labels[0] = attachLocals(this.labels[0]);
+    if (this.locals){
+        this.spec.locals.forEach(function(spec){
+            spec.isTemplateBlock = true;
+            spec.isLocal = true;
+            spec.id = self.id;
+        });
+        this.locals = this.spec.locals.map(function(spec){
+            return Block(spec);
+        });
+    }
+    if (this.returns){
+        this._returns = this.returns;
+        if (this.returns === 'block'){
+            // special user-defined block handler
+        }else{
+            this._returns.isTemplateBlock = true;
+            this._returns.isLocal = true;
+            this._returns.id = self.id;
+            this.returns = Block(this._returns);
+        }
+    }
     if (this.spec.contained && this.spec.contained.length){
         this.contained = this.spec.contained.map(function(spec){
             return Block(spec);
@@ -313,17 +375,18 @@ Block.prototype.initInstance = function(){
     }else{
         this.next = null;
     }
+    console.log('this.values: %o', this.values);
+    console.log('this.spec.values: %o', this.spec.values);
     if (this.spec.values && this.spec.values.length){
+        console.debug('deserializing values');
         this.values = this.spec.values.map(function(value){
-            var val = new Value(value.type);
-            if (value.value.signature){
-                val.addBlock(Block(value.value));
-            }else{
-                val.value = value.value;
-            }
-            return val;
+            return new Value(value);
         });
+    }else if (this.values && this.values.length){
+        console.log('we already have values, thank you: %o', this.values);
+        // do nothing
     }else{
+        console.log('values: %o', this.values);
         this.values = [];
     }
 };
@@ -345,6 +408,9 @@ function attachLocals(theString){
 }
 
 Block.prototype.view = function(){
+    if (!this.isTemplateBlock){
+        console.debug('view()');
+    }
     var view = $(this.template(this));
     view.data('model', this);
     if (!this.isTemplateBlock){
@@ -355,10 +421,10 @@ Block.prototype.view = function(){
             });
         }
         this.contained.forEach(function(contained){
-            view.find('> .contained').append(contained.view());
+            view.find('> .block > .contained').append(contained.view());
         });
         this.values.forEach(function(value, idx){
-            view.find('> .socket').eq(idx).append(value.view());
+            view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
         });
         if (this.next){
             view.find('> .next').append(this.next.view());
@@ -368,8 +434,13 @@ Block.prototype.view = function(){
     return view;
 };
 
+Block.prototype.removeChild = function(block, container){
+    console.log('remove this block from %o', container);
+};
+
 Block.prototype.deleteViews = function(){
     this._allViews.forEach(function(view){
+        view.parent().closest('.wrapper').data('model').removeChild(this, view.parent());
         view.remove();
     });
     this._allViews = [];
@@ -421,7 +492,7 @@ Block.prototype.removeLocalsFromParent = function(){
 };
 
 Block.prototype.addToScript = function(view, evt, params){
-    console.trace('addToScript');
+    console.info('addToScript');
     this.addLocalsToParentContext(view);
     // add to parent blocks model
     var parentBlock = params.dropTarget.closest('.wrapper').data('model');
@@ -435,7 +506,7 @@ Block.prototype.addToScript = function(view, evt, params){
 };
 
 Block.prototype.addToWorkspace = function(view, evt, params){
-    console.trace('addToWorkspace');
+    console.info('addToWorkspace');
     this.addGlobals(view);
     if (this.next){
         this.next.addToWorkspace();
@@ -443,26 +514,57 @@ Block.prototype.addToWorkspace = function(view, evt, params){
 };
 
 Block.prototype.addToSocket = function(view, evt, params){
-    console.trace('addToSocket(%o, %o, %o)', view, evt, params);
+    console.info('addToSocket(%o, %o, %o)', view, evt, params);
     // which socket?
     var idx = params.dropTarget.parent().find('> .socket, > .autosocket').index(params.dropTarget);
-    console.trace('socket index: %s', idx);
     // add block to value
     window.dropTarget = params.dropTarget;
-    var parentBlock = params.dropTarget.closest('.wrapper').data('model');
-    parentBlock.values[idx].addBlock(this);
-    // update view (currently happens elsewhere)
+    var parentModel = params.dropTarget.closest('.wrapper').data('model');
+    parentModel.values[idx].addBlock(this);
+    // FIXME: update view (currently happens elsewhere)
 };
 
 Block.prototype.deleteBlock = function(view, evt, params){
+    console.info('deleteBlock(%o, %o, %o)', view, evt, params);
+    var holder = view.data('startParent');
+    var parentModel = holder.closest('.wrapper').data('model');
+    var idx;
+    if (holder.is('.socket, .autosocket')){
+        idx = holder.parent().find('> .socket, > .autosocket').index(holder);
+        console.debug('removing from expression socket %s', idx);
+        var value = parentModel.values[idx];
+        value.value = value.defaultValue;
+        value.literal = true;
+    }else if (holder.is('.next')){
+        console.debug('removing from next');
+        parentModel.next = null;
+    }else if (holder.is('.contained')){
+        idx = holder.closest('.block').find('> .contained').index(holder);
+        console.debug('removing from contained %s', idx);
+        console.debug('container before: %o', parentModel);
+        console.debug('contained before: %o', parentModel.contained);
+        delete parentModel.contained[idx];
+        var len = parentModel.contained.length;
+        for (var i = len; len > 0; len--){
+            if (parentModel.contained[i-1] !== undefined) break;
+            parentModel.contained.length--;
+        }
+        console.debug('container after: %o', parentModel);
+        console.debug('contained after: %o', parentModel.contained);
+    }else if ( holder.is('.scripts_workspace')){
+        var idx = holder.find('> .wrapper').index(view);
+        console.debug('removing from workspace %s, position %s', holder.attr('class'), idx);
+    }else{
+        console.error('What are we removing this from? %o', params.dropTarget);
+    }
     this.removeLocalsFromParent();
 };
 
 function newBlockHandler(blocktype, args, body, returns){
-    console.trace('blocktype: %s', blocktype);
-    console.trace('%s args: %o', args.length, args);
-    console.trace('body: %o', body);
-    console.trace('returns: %s', returns);
+    console.info('blocktype: %s', blocktype);
+    console.info('%s args: %o', args.length, args);
+    console.info('body: %o', body);
+    console.info('returns: %s', returns);
 };
 
 $('.scripts_workspace')
@@ -476,13 +578,14 @@ $('.scripts_workspace')
         view.data('model').addToWorkspace(view, evt, params);
         return false;
     })
-    .on('delete_block', '.wrapper', function(evt, params){
-        var view = $(this);
-        view.data('model').deleteBlock(view, evt, params);
-        return false;
-    })
     .on('add_to_socket', '.wrapper', function(evt, params){
         var view = $(this);
         view.data('model').addToSocket(view, evt, params);
         return false;
     });
+    
+$('body').on('delete_block', '.wrapper', function(evt, params){
+    var view = $(this);
+    view.data('model').deleteBlock(view, evt, params);
+    return false;
+});

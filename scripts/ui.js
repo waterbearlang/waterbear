@@ -40,35 +40,35 @@ $('.runScripts').click(runScripts);
 // Context Menu
 
 function cloneCommand(key, opt){
-    console.trace('cloneCommand(%s, %o)', key, opt);
+    console.info('cloneCommand(%s, %o)', key, opt);
 }
 
 function editCommand(key, opt){
-    console.trace('editCommand(%s, %o)', key, opt);
+    console.info('editCommand(%s, %o)', key, opt);
 }
 
 function expandCommand(key, opt){
-    console.trace('expandCommand(%s, %o)', key, opt);
+    console.info('expandCommand(%s, %o)', key, opt);
 }
 
 function collapseCommand(key, opt){
-    console.trace('collapseCommand(%s, %o)', key, opt);
+    console.info('collapseCommand(%s, %o)', key, opt);
 }
 
 function copyBlockCommand(key, opt){
-    console.trace('copyBlockCommand(%s, %o)', key, opt);
+    console.info('copyBlockCommand(%s, %o)', key, opt);
 }
 
 function copySubscriptCommand(key, opt){
-    console.trace('copySubscriptCommand(%s, %o)', key, opt);
+    console.info('copySubscriptCommand(%s, %o)', key, opt);
 }
 
 function pasteCommand(key, opt){
-    console.trace('pasteCommand(%s, %o)', key, opt);
+    console.info('pasteCommand(%s, %o)', key, opt);
 }
 
 function cancelCommand(key, opt){
-    console.trace('cancelCommand(%s, %o)', key, opt);
+    console.info('cancelCommand(%s, %o)', key, opt);
 }
 
 $.contextMenu({
@@ -99,8 +99,8 @@ if (is_touch_device()){
         container: '.blockmenu, .workspace',
         selector: '.block',
         callback: function(){
-            console.trace('long tap detected');
-            console.trace(this);
+            console.info('long tap detected');
+            console.info(this);
             this.contextMenu();
         },
         touchDelay: 150

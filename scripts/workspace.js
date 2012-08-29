@@ -8,7 +8,6 @@ function clearScripts(event, force){
     }
 }
 $('.clearScripts').click(clearScripts);
-
 $('.goto_script').click(function(){$('#block_menu')[0].scrollIntoView();});
 $('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
 
@@ -57,7 +56,7 @@ function exportNamedScripts(){
         date: date,
         scripts: Block.scriptsToObject()
     });
-    console.trace("EXP: "+exp);
+    console.info("EXP: "+exp);
     resetAndCloseSaveDialog();
     $('#exp').bPopup();
     $('#exp textarea').html(exp);
@@ -79,12 +78,12 @@ function restore_from_export(){
     $('#exp .done').click(function(){
     $('#exp .done').unbind('click');
     var script = $('#exp textarea').val();
-    console.trace(script);
+    console.info(script);
     $('#exp').bPopup().close();
     clearScripts();
 
     var ps = JSON.parse(script);
-    console.trace(ps.scripts);
+    console.info(ps.scripts);
 
     loadScriptsFromObject(ps.scripts);   
     }); 
@@ -154,7 +153,7 @@ function deleteNamedScripts(event){
     if (confirm('Are you sure you want to delete this script?')){
         var title = $(this).siblings('.title').text();
         $(this).parent().remove();
-        console.trace('remove %s', title);
+        console.info('remove %s', title);
         localStorage.removeItem(title);
     }
 }
@@ -182,11 +181,11 @@ $('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
 
 function loadScriptsFromObject(fileObject){
     var workspace = $('.workspace:visible .scripts_workspace');
-    console.trace('loading scripts from object: %o', fileObject);
-    console.trace('file format version: %s', fileObject.waterbearVersion);
+    console.info('loading scripts from object: %o', fileObject);
+    console.info('file format version: %s', fileObject.waterbearVersion);
     // FIXME: Make sure we have the appropriate plugins loaded
     fileObject.scripts.forEach(function(script){
-        console.trace('restoring workspace %s', script.workspace);
+        console.info('restoring workspace %s', script.workspace);
         script.blocks.forEach(function(spec){
             var block = Block(spec);
             var view = block.view();

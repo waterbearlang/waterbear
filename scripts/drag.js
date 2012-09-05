@@ -107,6 +107,7 @@
     This method could have its setting be held in an array and 
     so might be better for config*/
     function socketTargets2(types){
+        /* I (dethe) don't even understand what this does */
         var typeArray = types.split(',');
         var res = $();
         for(var i = 0 ; i< typeArray.length ; i++)
@@ -158,11 +159,38 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
-        if (dragTarget.parent().is('.socket')){
+        var dragParent = dragTarget.parent();
+        if (dragParent.hasClass('contained')){
+            dragParent.closest('.wrapper').trigger(
+                'drag_from_context', 
+                {
+                    dragParent: dragParent,
+                    dragTarget: dragTarget,
+                    parentIndex: dragParent.data('index')
+                }
+            );
+        }else if (dragParent.hasClass('socket')){
+            dragParent.closest('.wrapper').trigger(
+                'drag_from_expression',
+                {
+                    dragParent: dragParent,
+                    dragTarget: dragTarget,
+                    parentIndex: dragParent.data('index')
+                }
+            );
+        }else if (dragParent.hasClass('next')){
+            dragParent.closest('.wrapper').trigger(
+                'drag_from_sequence',
+                {
+                    dragParent: dragParent,
+                    dragTarget: dragTarget
+                }
+            );
+        }
+        if (dragParent.hasClass('socket')){
             // var holder = dragTarget.data('startParent');
             // var idx = holder.parent().find('> .socket, > .autosocket').index(holder);
-            var classes = dragTarget.parent().attr('class');
-
+            var classes = dragParent.attr('class');
             classes = classes.replace("socket","").trim();
             if(classes == "boolean"){           
                 dragTarget.parent().append(
@@ -230,24 +258,13 @@
             if (blockType(dragTarget) === 'step' || blockType(dragTarget) === 'context'){
                 // Drag a step to snap to a step
                 dropTarget.parent().append(dragTarget);
-                dragTarget.css({
-                    position: 'relative',
-                    left: 0,
-                    top: 0,
-                    display: 'inline-block'
-                });
+                dragTarget.removeAttr('style');
                 dragTarget.trigger('add_to_script', {dropTarget: dropTarget});
             }else{
                 // Insert a value block into a socket
                 dropTarget.find('input, select').remove();
                 dropTarget.append(dragTarget);
-                // FIXME: Put this into the .css sheet
-                dragTarget.css({
-                    position: 'relative',
-                    left: 0,
-                    top: 0,
-                    display: 'inline-block'
-                });
+                dragTarget.removeAttr('style');
                 dragTarget.trigger('add_to_socket', {dropTarget: dropTarget});
             }
         }else if ($('.block_menu').cursorOver()){
@@ -256,12 +273,10 @@
             dragTarget.trigger('delete_block');
             dragTarget.remove();
         }else if (dragTarget.overlap(targetCanvas)){
-            // generally dragged to canvas, position it there
-//            var currPos = dragTarget.offset();
             dropCursor.before(dragTarget);
             dropCursor.remove();
             dropCursor = null;
-            dragTarget.css({position: 'relative', top: 0, left: 0, display: 'block'});
+            dragTarget.removeAttr('style');
             dragTarget.trigger('add_to_workspace');
             $('.scripts_workspace').trigger('add');
         }else{
@@ -274,12 +289,7 @@
                         startParent.children('input').hide();
                     }
                     startParent.append(dragTarget);
-                    dragTarget.css({
-                        position: 'relative',
-                        top: 0,
-                        left: 0,
-                        display: 'inline-block'
-                    });
+                    dragTarget.removeAttr('style');
                     dragTarget.removeData('startParent');
                 }else{
                     targetCanvas.append(dragTarget);
@@ -339,7 +349,7 @@
                 dropArea = area;
             }
         else if(dragRect && elem){
-        val = dist(dragRect["left"], dragRect["top"], elem["left"], elem["top"]);
+        val = dist(dragRect.left, dragRect.top, elem.left, elem.top);
         if(val < snapDist){ 
             dropIndex = idx;
             dropArea = area;

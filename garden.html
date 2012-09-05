@@ -36,9 +36,11 @@
     <script type="text/html" id="expression_template">
         <div class="wrapper value {{type}} {{group}}">
             <div class="block">
-                {{#labels}}
-                    <div class="value"><p>{{{.}}}</p></div>
-                {{/labels}}
+                <div class="blockhead">
+                    {{#labels}}
+                        <div class="value">{{{.}}}</div>
+                    {{/labels}}
+                </div>
             </div>
         </div>
     </script>
@@ -171,6 +173,7 @@
 	<script src="lib/jquery-ui-1.8.21.custom.min.js"></script>
 	<script src="lib/jquery.contextMenu.js"></script>
 	<script src="lib/jquery.tappable.js"></script>
+	<script src="lib/chai.js"></script> <!-- assertion library -->
 	<!-- Waterbear implementation libraries -->
     <script src="scripts/drag.js"></script>
     <script src="scripts/blocks.js"></script>

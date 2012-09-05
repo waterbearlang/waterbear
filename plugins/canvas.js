@@ -15,7 +15,7 @@ yepnope({
 });
 
 function showColorPicker(){
-    console.debug('Add a non-Raphael color picker');
+    console.log('Add a non-Raphael color picker');
 }
 
 //$('.workspace:visible .scripts_workspace').on('click', 'input[type=color]', showColorPicker);

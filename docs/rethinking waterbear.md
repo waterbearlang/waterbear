@@ -2,6 +2,14 @@
 
 We have enough experience with waterbear now to be able to step back and take a look at what is working and what needs improvement. It's time to explore potentially radical changes before things get set in stone.
 
+## Update 2012-08-30
+
+For better detection of which slot/socket/next the block is being added or removed from, put its index into a data attribute on creation, pass that around during events.
+
+How can Waterbear be more testable?
+
+How can Waterbear block scripts (defined in the block definition json) be mult-line and generally more powerful?
+
 ## Update 2012-08-27
 
 Events needed for blocks:

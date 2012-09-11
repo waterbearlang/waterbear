@@ -17,7 +17,7 @@ $('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
 function saveCurrentScripts(){
     showWorkspace();
     $('#block_menu')[0].scrollIntoView();
-    localStorage['__current_scripts'] = Block.serialize();
+    localStorage.__current_scripts = Block.serialize();
 }
 $(window).unload(saveCurrentScripts);
 
@@ -36,7 +36,7 @@ function saveNamedScripts(){
             title: title,
             description: description,
             date: date,
-            scripts: Block.scriptsToObject()
+            scripts: Block.scriptsToObject('.scripts_workspace')
         });
         resetAndCloseSaveDialog();
     }else   
@@ -54,7 +54,7 @@ function exportNamedScripts(){
         title: title,
         description: description,
         date: date,
-        scripts: Block.scriptsToObject()
+        scripts: Block.scriptsToObject('.scripts_workspace')
     });
     console.info("EXP: "+exp);
     resetAndCloseSaveDialog();
@@ -183,22 +183,20 @@ function loadScriptsFromObject(fileObject){
     var workspace = $('.workspace:visible .scripts_workspace');
     console.info('loading scripts from object: %o', fileObject);
     console.info('file format version: %s', fileObject.waterbearVersion);
+    console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
-    fileObject.scripts.forEach(function(script){
-        console.info('restoring workspace %s', script.workspace);
-        script.blocks.forEach(function(spec){
-            var block = Block(spec);
-            var view = block.view();
-            workspace.append(view);
-            view.trigger('add_to_workspace');
-            workspace.trigger('add');
-        });
+    fileObject.blocks.forEach(function(spec){
+        var block = Block(spec);
+        var view = block.view();
+        workspace.append(view);
+        view.trigger('add_to_workspace');
+        workspace.trigger('add');
     });
 }
 
 window.loadCurrentScripts = function(){
     if (localStorage.__current_scripts){
-        var fileObject = JSON.parse(localStorage['__current_scripts']);
+        var fileObject = JSON.parse(localStorage.__current_scripts);
         if (fileObject){
             loadScriptsFromObject(fileObject);
         }

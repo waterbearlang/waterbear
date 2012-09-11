@@ -259,7 +259,12 @@
                 // Drag a step to snap to a step
                 dropTarget.parent().append(dragTarget);
                 dragTarget.removeAttr('style');
-                dragTarget.trigger('add_to_script', {dropTarget: dropTarget});
+                if (dragTarget.parent().hasClass('next')){
+                    dragTarget.trigger('add_to_sequence', {dropTarget: dropTarget});
+                }else{
+                    dragTarget.trigger('add_to_context', {dropTarget: dropTarget, parentIndex: dropTarget.parent().data('index')
+                    });
+                }
             }else{
                 // Insert a value block into a socket
                 dropTarget.find('input, select').remove();

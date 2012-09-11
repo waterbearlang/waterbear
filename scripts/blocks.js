@@ -330,6 +330,9 @@ Block.prototype.init = function(spec){
 
 Block.prototype.initInstance = function(){
     var self = this;
+    if (this.id){
+        //Block._nextId = Math.max(Block._nextId, this.id + 1);
+    }
     this.labels[0] = attachLocals(this.labels[0]);
     if (this.locals){
         this.spec.locals.forEach(function(spec){
@@ -491,19 +494,21 @@ Block.prototype.removeLocalsFromParent = function(){
     this.returns.deleteViews();
 };
 
-Block.prototype.addToScript = function(view, evt, params){
+Block.prototype.addToSequence = function(view, evt, params){
     this.addLocalsToParentContext(view);
     // add to parent blocks model
-    var parentBlock = params.dropTarget.closest('.wrapper').data('model');
-    var ctx = params.dropTarget.parent().attr('class'); // contained vs. next
-    if (ctx === 'next'){
-        parentBlock.next = this;
-    }else{
-        var idx = params.dropTarget.closest('.block').find('> .contained').index(params.dropTarget.parent());
-        parentBlock.contained[idx] = this;
-    }
+    var parentModel = params.dropTarget.closest('.wrapper').data('model');
+    console.log('Add to sequence params: %o', params);
+    parentModel.next = this;
 };
 
+Block.prototype.addToContext = function(view, evt, params){
+    this.addLocalsToParentContext(view);
+    // add to parent blocks model
+    var parentModel = params.dropTarget.closest('.wrapper').data('model');
+    console.log('Add to context params: %o', params);
+    parentModel.contained[params.parentIndex] = this;
+};
 Block.prototype.addToWorkspace = function(view, evt, params){
     this.addGlobals(view);
     if (this.next){
@@ -515,7 +520,6 @@ Block.prototype.addToSocket = function(view, evt, params){
     // which socket?
     var idx = params.dropTarget.parent().find('> .socket, > .autosocket').index(params.dropTarget);
     // add block to value
-    window.dropTarget = params.dropTarget;
     var parentModel = params.dropTarget.closest('.wrapper').data('model');
     parentModel.values[idx].addBlock(this);
     // FIXME: update view (currently happens elsewhere)
@@ -534,9 +538,14 @@ function newBlockHandler(blocktype, args, body, returns){
 }
 
 $('.scripts_workspace')
-    .on('add_to_script', '.wrapper', function(evt, params){
+    .on('add_to_sequence', '.wrapper', function(evt, params){
         var view = $(this);
-        view.data('model').addToScript(view, evt, params);
+        view.data('model').addToSequence(view, evt, params);
+        return false;
+    })
+    .on('add_to_context', '.wrapper', function(evt, params){
+        var view = $(this);
+        view.data('model').addToContext(view, evt, params);
         return false;
     })
     .on('add_to_workspace', '.wrapper', function(evt, params){

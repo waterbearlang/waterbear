@@ -19,6 +19,7 @@ Block.serialize = function(){
 };
 
 Block.scriptsToObject = function(workspace){
+	if (!workspace) workspace = '.scripts_workspace'; // make a default for debugging convience
     console.log('workspace selector: %s', workspace);
     console.log('workspaces found: %s', $(workspace).length);
     return {

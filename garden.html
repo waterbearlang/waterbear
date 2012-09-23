@@ -23,7 +23,7 @@
             <div class="block" title="{{help}}">
                 <div class="blockhead">
                     {{#labels}}
-                        <div class="value">{{{.}}}</div>
+                        <div class="label">{{{.}}}</div>
                     {{/labels}}
                 </div>
                 <b class="flap"></b>
@@ -38,7 +38,7 @@
             <div class="block">
                 <div class="blockhead">
                     {{#labels}}
-                        <div class="value">{{{.}}}</div>
+                        <div class="label">{{{.}}}</div>
                     {{/labels}}
                 </div>
             </div>
@@ -50,7 +50,7 @@
                 <b class="flap"></b>
                 {{#labels}}
                     <div class="blockhead">
-                        <div class="value">
+                        <div class="label">
                             {{#attachLocals}}
                                 <span class="disclosure open">▼</span>
                             {{/attachLocals}}
@@ -76,11 +76,11 @@
                 <b class="trigger"></b>
                 {{#labels}}
                     <div class="blockhead">
-                        <div class="value">
+                        <div class="label">
                             {{#attachLocals}}
-                                <span class="disclosure open">▼</span>
+                                {{{.}}}
                             {{/attachLocals}}
-                            {{{.}}}
+                            <div class="values_placeholder"></div>
                         </div>
                         {{#attachLocals}}
                             <div class="locals block_menu"></div>

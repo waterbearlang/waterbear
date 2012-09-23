@@ -58,23 +58,25 @@ Block.prototype.parseLabel = function(textLabel){
     }
 
     this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
-    var htmlLabel = textLabel;
+    var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
+    var label = $(htmlLabel);
     try{
         if (!this.values && this.valueSlots.length){
-            this.values = this.valueSlots.map(function(slot){ return new Value(slot);});
+            this.values = this.valueSlots.map(function(slot, idx){ return new Value(slot, idx);});
         }
     }catch(e){
         console.error('Failed in this.valueSlots.map: %o', e);
     }
     try{
-        this.valueSlots.forEach(function(slot, idx){
+        label.find('.valuslot').each(function(idx, slot){
             // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
             // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
             var value = self.values[idx];
             if (!value.view){
-                value = new Value(value);
+                value = new Value(value, idx);
+                self.value[idx] = value;
             }
-            htmlLabel = htmlLabel.replace(slot, value.view());
+            slot.replaceWith(value.view());
         });
     }catch(e){
         // console.error('Failed in this.valueSlots.forEach: %o', e);
@@ -84,7 +86,7 @@ Block.prototype.parseLabel = function(textLabel){
         // console.log(self.values[idx]);
         // console.log(self.values[idx].view);
     }
-    return htmlLabel;
+    return label;
 };
 
 var defaultValue = {
@@ -97,11 +99,15 @@ var defaultValue = {
     'color': 'rgb(0,0,0)'
 };
 
-function Value(textValue){
+function Value(textValue, index){
+    assert.isNumber(index, 'Values must know their place');
+    this.index = index;
     if ($.isPlainObject(textValue)){
         $.extend(this, textValue);
         if (textValue.value.signature){
-            this.addBlock(Block(value.value));
+            var block = Block(textValue.value);
+            assert.isObject(block, 'Value blocks must be objects');
+            this.addBlock(block);
         }else{
             this.literal = true;
         }
@@ -153,18 +159,20 @@ Value.prototype.removeBlock = function(blockModel){
 };
 
 Value.prototype.view = function(){
-    if (! this.literal && this.value){ return this.value.view().html(); }
+    if (this._view) return this._view;
+    if (! this.literal && this.value){ return this.value.view(); }
     if (this.choiceName){
-        return this.choiceView(this.choiceName, this.choiceList);
+        this._view =  this.choiceView(this.choiceName, this.choiceList);
     }else if (this.value !== undefined){
-        return '<span class="value ' + this.type + ' socket" data-type="' + this.type + '"><input type="' + this.type + '" value="' + this.value + '"></span>';
+        this._view = '<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + this.type + '" value="' + this.value + '"></span>';
     }else{
-        return '<span class="value ' + this.type + ' socket" data-type="' + this.type + '"><input type="' + this.type + '"></span>';
+        this._view = '<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + this.type + '"></span>';
     }
+    return this._view;
 };
 
 Value.prototype.choiceView = function(){
-    return '<span class="value string ' + this.choiceName + ' autosocket" data-type="  "><select>' + 
+    return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' + 
         this.choiceList.map(function(item){
             if (item === this.value){
                 return '<option selected>' + item + '</option>';
@@ -172,8 +180,21 @@ Value.prototype.choiceView = function(){
                 return '<option>' + item + '</option>';
             }
         }).join('') +
-        '</select></span>';
+        '</select></span>');
 };
+
+Value.prototype.update = function(newValue){
+    switch(this.type){
+        case 'number': this.value = parseFloat(newValue); break;
+        case 'boolean': this.value = newValue === 'true'; break;
+        case 'string': this.value = newValue; break;
+        case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break; 
+        case 'datetime': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
+        case 'time': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
+        case 'int': this.value = parseInteger(newValue); break;
+        case 'float': this.value = parseInteger(newValue); break;
+    }
+}
 
 
 function Step(spec, scope){
@@ -251,6 +272,7 @@ function Block(spec, scope){
     // if called while de-serializing, get the parent spec
     if (spec.signature){
         var template = Block.registry[spec.signature];
+        assert.isObject(template, 'We fail to find a template block, has it been initialized yet?');
         var instance = {
             isLocal: false,
             isTemplateBlock: false,
@@ -311,12 +333,11 @@ Block.prototype.init = function(spec){
     if (! (this.id || this.isTemplateBlock)){
         this.id = Block.newId();
     }
-    if (this.isLocal) console.log('this local id: %s', this.id);
+    // if (this.isLocal) console.log('this local id: %s', this.id);
     this.labels = this.labels.map(function(labelspec){
         return labelspec.replace(/##/g, self.id ? '_' + self.id : '');
     });
     this.signature = signature(this);
-    this._allViews = [];
     this.script = this.script.replace(/##/g, '_' + self.id);
     Block.registerBlock(this);
     this.labels = this.labels.map(function(labelspec){
@@ -334,6 +355,7 @@ Block.prototype.initInstance = function(){
         //Block._nextId = Math.max(Block._nextId, this.id + 1);
     }
     this.labels[0] = attachLocals(this.labels[0]);
+//    var valuesPlaceholders = view.find('> .block > .blockhead > .label:eq(0) > .values_placeholder');
     if (this.locals){
         this.spec.locals.forEach(function(spec){
             if (spec === null){
@@ -347,7 +369,9 @@ Block.prototype.initInstance = function(){
             if (spec === null){
                 return spec;
             }
-            return Block(spec);
+            var block = Block(spec);
+            assert.isObject(block, 'Blocks must be objects');
+            return block;
         });
     }
     if (this.returns){
@@ -359,12 +383,15 @@ Block.prototype.initInstance = function(){
             this._returns.isLocal = true;
             this._returns.id = self.id;
             this.returns = Block(this._returns);
+            assert.isObject(this.returns, 'Returns blocks must be objects');
         }
     }
     if (this.spec.contained && this.spec.contained.length){
         this.contained = this.spec.contained.map(function(spec){
             if (spec === null) return spec;
-            return Block(spec);
+            var block = Block(spec);
+            assert.isObject(block, 'Contained blocks must be blocks');
+            return block;
         });
     }else{
         this.contained = [];
@@ -375,14 +402,17 @@ Block.prototype.initInstance = function(){
         this.next = null;
     }
     if (this.spec.values && this.spec.values.length){
-        this.values = this.spec.values.map(function(value){
-            return new Value(value);
+        this.values = this.spec.values.map(function(value, idx){
+            var val = new Value(value, idx);
+            assert.isObject(val, 'Values must be objects');
+            return val;
         });
     }else if (this.values && this.values.length){
         // do nothing
     }else{
         this.values = [];
     }
+    
 };
 
 Block.prototype.cloneScript = function(){
@@ -390,6 +420,14 @@ Block.prototype.cloneScript = function(){
        isLocal: false,
        isTemplateBlock: false,
        templateBlock: this
+    });
+    return Block(spec);
+};
+
+Block.prototype.cloneTemplate = function(){
+    var spec = $.extend({}, this.spec, {
+        isLocal: false,
+        isTemplateBlock: true
     });
     return Block(spec);
 };
@@ -402,6 +440,9 @@ function attachLocals(theString){
 }
 
 Block.prototype.view = function(){
+    if (this._view){
+        return this._view;
+    }
     var self = this;
     if (!this.isTemplateBlock){
     }
@@ -433,20 +474,12 @@ Block.prototype.view = function(){
             this.next.addLocalsToParentContext(view);
         }
     }
-    this._allViews.push(view);
+    this._view = view;
     return view;
 };
 
 Block.prototype.removeChild = function(block, container){
     // console.log('remove this block from %o', container);
-};
-
-Block.prototype.deleteViews = function(){
-    this._allViews.forEach(function(view){
-        // view.parent().closest('.wrapper').data('model').removeChild(this, view.parent());
-        view.remove();
-    });
-    this._allViews = [];
 };
 
 Block.prototype.addLocalsToParentContext = function(view){
@@ -457,7 +490,6 @@ Block.prototype.addLocalsToParentContext = function(view){
         return;
     }
     // remove from DOM if already place elsewhere
-    this.returns.deleteViews();
     var returnView = this.returns.view();
     if (!this.id){
         console.error('Model must have an id by now');
@@ -485,13 +517,12 @@ Block.prototype.addGlobals = function(view){
         return;
     }
     // remove from DOM if already in place elsewhere
-    this.returns.deleteViews();
     $('.submenu.globals').append(this.returns.view());
 };
 
 Block.prototype.removeLocalsFromParent = function(){
     if (!(this.returns && this.returns.signature)) return;
-    this.returns.deleteViews();
+    model.view().remove();
 };
 
 Block.prototype.addToSequence = function(view, evt, params){
@@ -515,19 +546,22 @@ Block.prototype.addToWorkspace = function(view, evt, params){
         this.next.addToWorkspace();
     }
 };
+Block.prototype.setValue = function(index, type, newValue){
+    console.log('set value %s to %s', index, newValue);
+    this.values[index].update(newValue);
+}
 
 Block.prototype.addToSocket = function(view, evt, params){
-    // which socket?
-    var idx = params.dropTarget.parent().find('> .socket, > .autosocket').index(params.dropTarget);
     // add block to value
+    console.log('add value block to socket');
     var parentModel = params.dropTarget.closest('.wrapper').data('model');
-    parentModel.values[idx].addBlock(this);
+    parentModel.values[params.parentIndex].addBlock(this);
     // FIXME: update view (currently happens elsewhere)
 };
 
 Block.prototype.deleteBlock = function(view, evt, params){
     var model = view.data('model');
-    model.deleteViews();
+    model.view().remove();
 };
 
 function newBlockHandler(blocktype, args, body, returns){
@@ -560,8 +594,10 @@ $('.scripts_workspace')
     })
     .on('drag_from_expression', '.wrapper', function(evt, params){
         var parentModel = params.dragParent.closest('.wrapper').data('model');
-        var value = parentModel.values[idx];
+        var value = parentModel.values[params.parentIndex];
         value.value = value.defaultValue;
+        assert(params.dragParent.children('input').length > 0, "No input found, where can it be?")
+        params.dragParent.children('input').val(value.defaultValue);
         value.literal = true;
     })
     .on('drag_from_context', '.wrapper', function(evt, params){
@@ -573,7 +609,14 @@ $('.scripts_workspace')
         var parentModel = params.dragParent.closest('.wrapper').data('model');
         parentModel.next.removeLocalsFromParent();
         parentModel.next = null;
-    });
+    })
+    .on('change', '.socket input, .autosocket select', function(evt){
+        var input = $(evt.target);
+        var socket = input.parent();
+        var socketIndex = socket.data('index');
+        var parentModel = socket.closest('.wrapper').data('model');
+        parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
+    })
     
 $('body').on('delete_block', '.wrapper', function(evt, params){
     var view = $(this);

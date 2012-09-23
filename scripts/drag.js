@@ -199,7 +199,7 @@
                 if(!classes || classes=="string"){
                     classes = '\"text\"';
                 }
-                dragTarget.parent().append('<input type="'+classes+'"/>');
+                dragTarget.parent().children('input').show();
             }
         }
         dragTarget.css('position', 'absolute');
@@ -267,10 +267,10 @@
                 }
             }else{
                 // Insert a value block into a socket
-                dropTarget.find('input, select').remove();
+                dropTarget.children('input, select').hide(); // FIXME: Move to block.js
                 dropTarget.append(dragTarget);
                 dragTarget.removeAttr('style');
-                dragTarget.trigger('add_to_socket', {dropTarget: dropTarget});
+                dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
             }
         }else if ($('.block_menu').cursorOver()){
             // delete block if dragged back to menu

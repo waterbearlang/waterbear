@@ -7,5 +7,6 @@ var plugins = {
     "arduino" : "plugins/arduino.js",
     "canvas" : "plugins/canvas.js",
     "crafty" : "plugins/crafty.js",
-    "gamequery" : "plugins/gamequery.js"
+    "gamequery" : "plugins/gamequery.js",
+    "location" : "plugins/geolocation.js"
 };

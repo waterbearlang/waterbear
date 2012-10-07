@@ -1,14 +1,5 @@
 
 
-var templates = {};
-var compiledTemplates = {};
-['step', 'context', 'eventhandler', 'expression'].forEach(function(type){
-    compiledTemplates[type] = Mustache.compile($('#' + type + '_template').text());
-    templates[type] = function (values){
-        return compiledTemplates[type](values);
-    };
-});
-
 $('.scripts_workspace').on('click', '.disclosure', function(event){
     var self = $(event.target);
     var view = self.closest('.wrapper');
@@ -59,16 +50,18 @@ Block.prototype.parseLabel = function(textLabel){
 
     this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
     var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
-    var label = $(htmlLabel);
+    var label = $('<span class="label">' + htmlLabel + '</label>');
     try{
         if (!this.values && this.valueSlots.length){
-            this.values = this.valueSlots.map(function(slot, idx){ return new Value(slot, idx);});
+            this.values = this.valueSlots.map(function(slot, idx){return new Value(slot, idx);});
         }
     }catch(e){
         console.error('Failed in this.valueSlots.map: %o', e);
     }
     try{
-        label.find('.valuslot').each(function(idx, slot){
+		// console.log('label: %o, slots: %o', label, label.find('.valueslot').length);
+        label.find('.valueslot').each(function(idx, slotdom){
+			var slot = $(slotdom);
             // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
             // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
             var value = self.values[idx];
@@ -79,7 +72,7 @@ Block.prototype.parseLabel = function(textLabel){
             slot.replaceWith(value.view());
         });
     }catch(e){
-        // console.error('Failed in this.valueSlots.forEach: %o', e);
+        console.error('Failed in this.valueSlots.forEach: %o', e);
         // console.log(htmlLabel.replace);
         // console.log('self: %o', self);
         // console.log(self.values, idx);
@@ -101,6 +94,7 @@ var defaultValue = {
 
 function Value(textValue, index){
     assert.isNumber(index, 'Values must know their place');
+	assert(textValue.length > 0, 'textValue must contain text');
     this.index = index;
     if ($.isPlainObject(textValue)){
         $.extend(this, textValue);
@@ -164,9 +158,9 @@ Value.prototype.view = function(){
     if (this.choiceName){
         this._view =  this.choiceView(this.choiceName, this.choiceList);
     }else if (this.value !== undefined){
-        this._view = '<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + this.type + '" value="' + this.value + '"></span>';
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + this.type + '" value="' + this.value + '"></span>');
     }else{
-        this._view = '<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + this.type + '"></span>';
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + this.type + '"></span>');
     }
     return this._view;
 };
@@ -334,16 +328,25 @@ Block.prototype.init = function(spec){
         this.id = Block.newId();
     }
     // if (this.isLocal) console.log('this local id: %s', this.id);
+	if (debug){
+		console.log('initializing labels from inherited labels: %o', this.labels);
+	}
     this.labels = this.labels.map(function(labelspec){
         return labelspec.replace(/##/g, self.id ? '_' + self.id : '');
     });
     this.signature = signature(this);
     this.script = this.script.replace(/##/g, '_' + self.id);
     Block.registerBlock(this);
+	if (debug){
+		console.log('parsing labels');
+	}
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
     });
-    this.template = templates[this.blocktype];
+	if(debug){
+		console.log('labels after parse: %o', this.labels);
+	}
+    this.template = template(this.blocktype);
     if (!this.isTemplateBlock){
         this.initInstance();
     }
@@ -355,7 +358,6 @@ Block.prototype.initInstance = function(){
         //Block._nextId = Math.max(Block._nextId, this.id + 1);
     }
     this.labels[0] = attachLocals(this.labels[0]);
-//    var valuesPlaceholders = view.find('> .block > .blockhead > .label:eq(0) > .values_placeholder');
     if (this.locals){
         this.spec.locals.forEach(function(spec){
             if (spec === null){
@@ -421,7 +423,11 @@ Block.prototype.cloneScript = function(){
        isTemplateBlock: false,
        templateBlock: this
     });
-    return Block(spec);
+    var clone = Block(spec);
+	if (debug){
+		console.log('block labels: %s', clone.labels[0].toString());
+	}
+	return clone;
 };
 
 Block.prototype.cloneTemplate = function(){
@@ -432,11 +438,9 @@ Block.prototype.cloneTemplate = function(){
     return Block(spec);
 };
 
-function attachLocals(theString){
-    return {
-        toString: function(){ return theString; },
-        attachLocals: true
-    };
+function attachLocals(node){
+	node.attachLocals = true; // this should probably be data, c'est la vie
+	return node;
 }
 
 Block.prototype.view = function(){
@@ -446,7 +450,7 @@ Block.prototype.view = function(){
     var self = this;
     if (!this.isTemplateBlock){
     }
-    var view = $(this.template(this));
+    var view = this.template(this);
     view.data('model', this);
     if (!this.isTemplateBlock){
         if (this.locals){

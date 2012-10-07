@@ -16,4 +16,9 @@ function setup(){
     });
     $('#block_menu_load').remove();
     $('#block_menu').show();
+
+    $('.goto_script').click( function() {
+        // shut down execution
+        $('body').trigger('waterbear_close');
+    } );
 };

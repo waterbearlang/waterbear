@@ -123,6 +123,12 @@
               complete : function () {
                   if(! plugin ){
                       alert('Sorry the plugin: \"'+ name +'\" does not exist.');
+					  
+					  //If the user tries to load a plugin that is invalid, 
+					  //and there are no other valid plugins. Send them back to home.
+					  if(q.length <= 1) {
+						  window.location = "./";
+					  }
                   }
               }
           });

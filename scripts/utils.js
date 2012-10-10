@@ -2,6 +2,44 @@
 
 var DEGREE = Math.PI / 180;
 
+window.debug = false;
+
+function h(node){
+	if (node.nodeType){
+		return node.outerHTML;
+	}
+	if (node.jquery){
+		if (node.length === 1){
+			return 'jq' + node[0].outerHTML;
+		}
+		return 'jq' + JSON.stringify(node.get().map(function(x){return x.outerHTML}));
+	}
+	if (node.length && node[0].jquery){
+		print ('Do you really mean to have a list of jquery objects?');
+		return node.map(function(x){return h(x);});
+	}
+	return node;
+}
+
+function c(node){
+	return j(node.data('context'));
+}
+	
+function j(obj){
+	try{
+		return JSON.stringify(h(obj));
+	}catch(e){
+		print('cannot stringify %o', obj);
+		return 'cannot stringify ' + obj;
+	}
+}
+
+function print(){
+	if (debug){
+		console.log.apply(console, arguments);
+	}
+}
+
 function rad2deg(rad){
     return rad / DEGREE;
 }

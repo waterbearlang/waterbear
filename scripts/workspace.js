@@ -181,7 +181,6 @@ $('.demo_scripts').click(function(){$('#demos_dialog').bPopup();});
 
 function loadScriptsFromObject(fileObject){
     var workspace = $('.workspace:visible .scripts_workspace');
-    console.info('loading scripts from object: %o', fileObject);
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
@@ -191,7 +190,6 @@ function loadScriptsFromObject(fileObject){
         var view = block.view();
 		assert.isString(view.jquery, 'Views must be jQuery objects');
         workspace.append(view);
-		console.log('one block view added')
         view.trigger('add_to_workspace');
         workspace.trigger('add');
     });

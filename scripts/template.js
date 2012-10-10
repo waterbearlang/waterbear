@@ -6,33 +6,7 @@
 // data-replace="variable" // variable.view() or variable.view or variable
 
 
-// Dammit, I need all the find() methods to be depth-first and to skip the inner
-// versions if the outer versions have already run (especially data-if)
-
 (function(){
-	
-	window.debug = false;
-	function print(){
-		if (debug){
-			console.log.apply(console, arguments);
-		}
-	}
-	
-	function h(node){
-		if (node.length){
-			return node[0].outerHTML;
-		}else{
-			return '';
-		}
-	}
-	
-	function j(obj){
-		try{
-			return JSON.stringify(obj);
-		}catch(e){
-			return 'cannot stringify ' + obj;
-		}
-	}
 	
 	// fn should return the node walked. If it is replaced in place, return the new node.
 	function walk(node, fn){
@@ -43,9 +17,10 @@
 		var oldContext = node.data('context'); // maintain contexts as a stack
 		node = fn(node);
 		if (!node.length){
+			print('node replaced, backtracking');
 			node = previous;
-		} if (oldContext){
-			node.data('context', oldContext);
+		// } if (oldContext){
+		// 	node.data('context', oldContext);
 		}
 		var child = node.children().first();
 		while(child.length){
@@ -78,20 +53,21 @@ function Template(opts){
 
 Template.prototype.render = function(model){
 	var tmpl = this.tmpl.clone();
+	// Wrap everything in a container div so all nodes are parented, helpful for replaced nodes
+	var wrapper = $('<div></div>').append(tmpl);
 //	print('model: %s', j(model));
 	tmpl.data('context', model);
-	walk(tmpl, renderNode);
-	return tmpl;
+	return walk(wrapper, renderNode).children();
 }
 
 function renderNode(node){
-//	print('start render %s', h(node));
+	print('start render %s', h(node));
 	var hasParent = node.parent().length;
 	if (!node.data('context')){
 		var context = node.parent().data('context');
-		// if (!context){
-		// 	print('node %s has no context', h(node));
-		// }
+		if (!context){
+			print('node %s has no context', h(node));
+		}
 		node.data('context', context);
 	}
 	node = renderFor(node);
@@ -99,17 +75,19 @@ function renderNode(node){
 	node = renderClasses(node);
 	node = renderTitle(node);
 	node = renderReplace(node);
-//	print('end render: %s', h(node));
+	print('end render: %s', h(node));
 	return node;
 }
 
 function renderClasses(node){
 	var newClasses = node.data('classes');
 	if (newClasses){
+		print('\tbefore renderClasses: %s', h(node));
 		newClasses.split(/\s/).forEach(function(key){
 			node.addClass(namedValue(node.data('context'), key));
 		});
 		node.removeAttr('data-classes');
+		print('\tafter renderClasses: %s', h(node));
 	}
 	return node;
 }
@@ -150,28 +128,27 @@ function renderFor(node){
 		var listname = test[2];
 		var eachname = test[1];
 		node.removeAttr('data-for');
-		var values = $();
 		var context = node.data('context');
-		var tmpl = new Template({jquery: node});
 		var list = namedValue(context, listname);
 		print('list %s: %s (from context: %o)', listname, j(list), context);
 		if (list.jquery){
 			list = list.get();
 		}
+		var lastnode = node;
 		list.forEach(function(value, idx){
-			// print('\t\trendering for #%s %s = %s', idx, eachname, j(value));
 			var local_context = $.extend({}, context); // start with a shallow copy of context
 			local_context[eachname] = value;
-			// print('\n\nlocal_context: %s', j(local_context));
-			var renderedValue = tmpl.render(local_context);
-			values = values.add(renderedValue);
+			var clone = node.clone();
+			clone.data('context', local_context);
+			lastnode.after(clone);
+			print ('\t\t%s should be followed by %s', c(lastnode), c(clone));
+			print ('\t\t%s *is* followed by %s', c(lastnode), c(lastnode.next()));
+			lastnode = clone;
 		});
-		node.replaceWith(values);
-		if (values.length){
-			return values.eq(0);
-		}else{
-			return $();
-		}
+		var retval = node.next();
+		node.remove();
+		print('rendered %s nodes, returning %s', list.length, c(retval));
+		return retval;
 	}
 	return node;
 };
@@ -180,7 +157,7 @@ function renderReplace(node){
 	var replaceKey = node.data('replace');
 	if (replaceKey){
 		print('renderReplace(%s, %s)', h(node), j(node.data('context')));
-		node.removeAttr('data-replace')
+		//node.removeAttr('data-replace')
 		print('\tbefore replace: %o', h(node));
 		node.replaceWith(namedValue(node.data('context'), replaceKey));
 		return $();

@@ -11,7 +11,9 @@
 var assert = chai.assert,
     Template = function(str){ return new template.Template({html: str}); };
 
-assert.hequal = function(jq, h){assert.equal(jq[0].outerHTML, h);}
+assert.hequal = function(jq, h){
+	assert.equal(jq.get().map(function(d){return d.outerHTML}).join(''), h);
+}
 
 suite('Template', function(){
 
@@ -41,13 +43,7 @@ suite('Template', function(){
 			assert.hequal(Template('<div data-if="foo">Hello</div>').render({foo: true}), '<div>Hello</div>');
 		});
 		test('Simple for loop', function(){
-			// debug = true;
-			// try{
 			assert.hequal(Template('<div><span data-for="bar in bars"><span data-replace="bar"></span></span></div').render({bars: ['sand', 'chocolate', 'gold']}), '<div><span>sand</span><span>chocolate</span><span>gold</span></div>');
-		// }catch(e){
-		// 	debug = false;
-		// 	throw(e);
-		// }
 		});
 		test('Add attributes', function(){
 			assert.hequal(Template('<div><span class="prisoner" data-classes="name rank serialnumber"></span></div>').render({name: 'Dashiell', rank: 'Corporal', serialnumber: 's2324343'}), '<div><span class="prisoner Dashiell Corporal s2324343"></span></div>');
@@ -66,6 +62,15 @@ suite('Template', function(){
 		});
 		test('Replace with jQuery nodes in a loop', function(){
 			assert.hequal(Template('<div><span data-for="label in labels"><span data-replace="label"></span></span></div>').render({labels: $('<div><p>Ham</p><p>Eggs</p><p>Spam</p></div>').find('p')}), '<div><span><p>Ham</p></span><span><p>Eggs</p></span><span><p>Spam</p></span></div>');
+		});
+		test('replace in loop', function(){
+			assert.hequal(Template('<div><span data-for="label in labels"><span data-replace="label"></span></span></div>').render({labels: ['one', 'two', 'three']}), '<div><span>one</span><span>two</span><span>three</span></div>');
+		});
+		test('add classes in loop', function(){
+			assert.hequal(Template('<div data-for="label in labels"><span data-classes="label"></span></div>').render({labels: ['one', 'two', 'three']}), '<div><span class="one"></span></div><div><span class="two"></span></div><div><span class="three"></span></div>');
+		});
+		test('replace multiple elements with the same value', function(){
+			assert.hequal(Template('<div data-for="label in labels"><span data-classes="label"><b data-replace="label"></b>//<i data-replace="label"></i></span></div>').render({labels: ['one', 'two', 'three']}), '<div><span class="one">one//one</span></div><div><span class="two">two//two</span></div><div><span class="three">three//three</span></div>', true);
 		});
 	});
 	

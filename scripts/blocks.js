@@ -452,17 +452,7 @@ Block.prototype.code = function(){
 	_code = _code.replace(/\{\{\d\}\}/g, replace_values);
 	_code = _code.replace(/\[\[\d\]\]/g, replace_values);
 	if (this.next){
-		if (_code.indexOf('[[next]]') > -1){
-			// Place next block in the code explicitly
-			// NOTE: Using [[next]] is deprecated, please make the block an explicit context
-			// and use contained. Next blocks should ONLY be used for sequential blocks
-			_code = _code.replace('[[next]]', this.next.code());
-		}else{
-			// default to having next block follow this one
-			_code = _code + this.next.code();
-		}
-	}else{
-		console.log('block has no next block');
+		_code = _code + this.next.code();
 	}
 	return _code;
 }

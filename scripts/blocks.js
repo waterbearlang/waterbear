@@ -1,5 +1,7 @@
 
-
+//
+// Handler for the hide/show triangle on context and eventhandler blocks
+//
 $('.scripts_workspace').on('click', '.disclosure', function(event){
     var self = $(event.target);
     var view = self.closest('.wrapper');
@@ -15,79 +17,10 @@ $('.scripts_workspace').on('click', '.disclosure', function(event){
     self.toggleClass('open closed');
 });
             
-Block.prototype.addValue = function(value){
-    if (!this.values){
-        this.values = [];
-    }
-    this.values.push(value);
-};
-
-Block.prototype.parseLabel = function(textLabel){
-    // Recognize special values in the label string and replace them with 
-    // appropriate markup. Some values are dynamic and based on the objects currently
-    // in the environment
-    //
-    // values include:
-    //
-    // [number] => an empty number socket
-    // [number:default] => a number socket with a default value
-    // [boolean] => an empty boolean socket
-    // [boolean:default] => a boolean with a default value
-    // [string] => an empty string socket
-    // [string:default] => a string socket with a default value
-    // [choice:options] => a fixed set of options, listed in options parameter function
-    // [choice:options:default] => choice list with a default besides the first item
-    // etc…
-
-    // FIXME: Move specific type handling to plugins
-    var self = this;
-    try{
-        textLabel = textLabel.replace(/##/, '');
-    }catch(e){
-        console.error('Failed in textlabel.replace: %o', e);
-    }
-
-    this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
-    var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
-    var label = $('<span class="label">' + htmlLabel + '</label>');
-    try{
-        if (!this.values && this.valueSlots.length){
-            this.values = this.valueSlots.map(function(slot, idx){return new Value(slot, idx);});
-        }
-    }catch(e){
-        console.error('Failed in this.valueSlots.map: %o', e);
-    }
-		print('label: %s, slots: %s', h(label), label.find('.valueslot').length);
-        label.find('.valueslot').each(function fillSlots(idx, slotdom){
-		    // try{
-				print('value slot idx: %s, slotdom: %s', idx, slotdom);
-				var slot = $(slotdom);
-	            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
-	            // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
-	            var value = self.values[idx];
-	            if (!value.view){
-					print('converting raw value object into type Value');
-	                value = new Value(value, idx);
-					print('received new value: %o', value);
-	                self.values[idx] = value;
-					print('set value[%s] to %o', idx, value);
-	            }
-				print('here I am!');
-				print('replacing slot value with new view: %o', value.view());
-				print('')
-	            slot.replaceWith(value.view());
-		    // }catch(e){
-		        // console.error('Failed in this.valueSlots.each: %o', e);
-		        // print(htmlLabel.replace);
-		        // print('self: %o', self);
-		        // print(self.values, idx);
-		        // print(self.values[idx]);
-		        // print('value has view: %s', self.values[idx].view);
-		    // }
-        });
-    return label;
-};
-
+//
+// Value objects get defaults depending on their type. These are the defaults for
+// primitive values when the plugin does not over-ride the default.
+//
 var defaultValue = {
     'number': 0,
     'boolean': false,
@@ -98,6 +31,10 @@ var defaultValue = {
     'color': 'rgb(0,0,0)'
 };
 
+//
+// Blocks which take parameters store those parameters as Value objects, which may hold primitive
+// values such as numbers or strings, or may be Expression blocks. 
+//
 function Value(textValue, index){
     assert.isNumber(index, 'Values must know their place');
     this.index = index;
@@ -435,6 +372,79 @@ Block.prototype.initInstance = function(){
         this.values = [];
     }
     
+};
+
+Block.prototype.addValue = function(value){
+    if (!this.values){
+        this.values = [];
+    }
+    this.values.push(value);
+};
+
+Block.prototype.parseLabel = function(textLabel){
+    // Recognize special values in the label string and replace them with 
+    // appropriate markup. Some values are dynamic and based on the objects currently
+    // in the environment
+    //
+    // values include:
+    //
+    // [number] => an empty number socket
+    // [number:default] => a number socket with a default value
+    // [boolean] => an empty boolean socket
+    // [boolean:default] => a boolean with a default value
+    // [string] => an empty string socket
+    // [string:default] => a string socket with a default value
+    // [choice:options] => a fixed set of options, listed in options parameter function
+    // [choice:options:default] => choice list with a default besides the first item
+    // etc…
+
+    // FIXME: Move specific type handling to plugins
+    var self = this;
+    try{
+        textLabel = textLabel.replace(/##/, '');
+    }catch(e){
+        console.error('Failed in textlabel.replace: %o', e);
+    }
+
+    this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
+    var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
+    var label = $('<span class="label">' + htmlLabel + '</label>');
+    try{
+        if (!this.values && this.valueSlots.length){
+            this.values = this.valueSlots.map(function(slot, idx){return new Value(slot, idx);});
+        }
+    }catch(e){
+        console.error('Failed in this.valueSlots.map: %o', e);
+    }
+		print('label: %s, slots: %s', h(label), label.find('.valueslot').length);
+        label.find('.valueslot').each(function fillSlots(idx, slotdom){
+		    // try{
+				print('value slot idx: %s, slotdom: %s', idx, slotdom);
+				var slot = $(slotdom);
+	            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
+	            // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
+	            var value = self.values[idx];
+	            if (!value.view){
+					print('converting raw value object into type Value');
+	                value = new Value(value, idx);
+					print('received new value: %o', value);
+	                self.values[idx] = value;
+					print('set value[%s] to %o', idx, value);
+	            }
+				print('here I am!');
+				print('replacing slot value with new view: %o', value.view());
+				print('')
+	            slot.replaceWith(value.view());
+		    // }catch(e){
+		        // console.error('Failed in this.valueSlots.each: %o', e);
+		        // print(htmlLabel.replace);
+		        // print('self: %o', self);
+		        // print(self.values, idx);
+		        // print(self.values[idx]);
+		        // print('value has view: %s', self.values[idx].view);
+		    // }
+        });
+    return label;
 };
 
 Block.prototype.code = function(){

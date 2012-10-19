@@ -86,37 +86,57 @@ jQuery.fn.extend({
         {
             blocktype: 'step',
             label: 'fill circle at point [point] with radius [number:10]',
-            script: 'local.ctx.beginPath();local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);local.ctx.closePath();ctx.fill();',
+            script: 'var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();',
             help: 'circle...'
         },
+		{
+			blocktype: 'step',
+			label: 'fill circle at point [point] with radius [number:10] and color [color]',
+			script: 'var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();'
+		},
         {
             blocktype: 'step',
             label: 'stroke circle at point [point] with radius [number:10]',
-            script: 'local.ctx.beginPath();local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);local.ctx.closePath();ctx.stroke();',
+            script: 'var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();',
             help: 'circle...'
         },
+		{
+			blocktype: 'step',
+			label: 'stroke circle at point [point] with radius [number:10] and color [color]',
+			script: 'var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.strokeStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();local.ctx.restore();'
+		},
         {
             blocktype: 'step',
             label: 'stroke and fill circle at point [point] with radius [number:10]',
-            script: 'local.ctx.beginPath();local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);local.ctx.closePath();ctx.fill();ctx.stroke()',
+            script: 'var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();',
             help: 'circle...'
         },
         {
             blocktype: 'step',
             label: 'fill rect [rect]', 
-            script: 'local.ctx.fillRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
+            script: 'var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);',
             help: 'fill...'
         },
+		{
+			blocktype: 'step',
+			label: 'fill rect [rect] with color [color]',
+			script: 'var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();'
+		},
+		{
+			blocktype: 'step',
+			label: 'stroke rect [rect] with color [color]',
+			script: 'var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();'
+		},
         {
             blocktype: 'step',
             label: 'stroke rect [rect]', 
-            script: 'local.ctx.strokeRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
+            script: 'var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);',
             help: 'stroke...'
         },
         {
             blocktype: 'step',
             label: 'fill and stroke rect x [number:0] y [number:0] width [number:10] height [number:10]',
-            script: 'local.ctx.fillRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);local.ctx.strokeRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
+            script: 'var local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});',
             help: 'fill and stroke...'
         },
         // Path API
@@ -200,6 +220,27 @@ jQuery.fn.extend({
             script: 'local.ctx.fillStyle = {{1}};',
             help: 'fill color...'
         },
+		{
+			blocktype: 'expression',
+			label: 'color with red [number:0] green [number:0] blue [number:0]',
+			script: '"rgb({{1}},{{2}}{{3}})"',
+			type: 'color',
+			help: 'returns a color'
+		},
+		{
+			blocktype: 'expression',
+			type: 'color',
+			label: 'color with hue [number:0] saturation [number:0] brightness [number:0]]',
+			script: '"hsb({{1}}, {{2}}, {{3}})"',
+			help: 'returns a color'
+		},
+		{
+			blocktype: 'expression',
+			type: 'color',
+			label: 'random color',
+			script: '"rgb(" + randint(0,255) + "," + randint(0,255) + "," + randint(0,255) + ")"',
+			help: 'returns a random color'
+		},
         {
             blocktype: 'step',
             label: 'stroke gradient [gradient]',
@@ -554,10 +595,18 @@ jQuery.fn.extend({
         },
         {
             blocktype: 'expression',
+			type: 'point',
             label: 'point from array [array]',
             script: '{x: {{1}}[0], y: {{1}}[1]}',
             type: 'point'
         },
+		{
+			blocktype: 'expression',
+			type: 'point',
+			label: 'random point',
+			script: '{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}',
+			help: 'returns a point at a random location on the stage'
+		},
         {
             blocktype: 'expression',
             label: 'point [point] x',

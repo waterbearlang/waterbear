@@ -659,6 +659,20 @@ menu('Sensing', [
         script: 'global.stage_center_y',
         help: 'vertical center of the stage'
     },
+	{
+		blocktype: 'expression',
+		label: 'random x',
+		type: 'number',
+		script: 'randint(0,global.stage_width)',
+		help: 'return a number between 0 and the stage width'
+	},
+	{
+		blocktype: 'expression',
+		label: 'random y',
+		type: 'number',
+		script: 'randint(0, global.stage_height)',
+		help: 'return a number between 0 and the stage height'
+	},
     {
         blocktype: 'step',
         label: 'reset timer', 

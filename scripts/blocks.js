@@ -190,6 +190,7 @@ function assertStep(model){
 
 function assertExpression(model){
     if (! model.type){
+		throw new Error('Bite me');
         alert('Error: step "' + model.signature + '" treated as an expression');
     }
 }

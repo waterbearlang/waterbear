@@ -537,6 +537,14 @@ Block.prototype.removeChild = function(block, container){
     // print('remove this block from %o', container);
 };
 
+Block.prototype.addLocalBlock = function(block){
+    var locals = this.view().find('> .block > .blockhead > .locals');
+    if (!locals.length) {
+        throw new Error('no locals found');
+    }
+    locals.append(block.view());
+}
+
 Block.prototype.addLocalsToParentContext = function(view){
     // on addToScript
     if (!this.returns) return;
@@ -544,15 +552,12 @@ Block.prototype.addLocalsToParentContext = function(view){
         // special metablock handler
         return;
     }
-    // remove from DOM if already place elsewhere
-    var returnView = this.returns.view();
     if (!this.id){
-        console.error('Model must have an id by now');
+        throw new Error('Model must have an id by now');
     }
-//    returnView.id(this.id);
-    var context = view.context_block();
-    if (context.length){
-        context.addLocalBlock(returnView);
+    var context = view.closest('.context').data('model');
+    if (context){
+        context.addLocalBlock(this.returns);
         if (this.next){
             this.next.addLocalsToParentContext();
         }
@@ -562,7 +567,6 @@ Block.prototype.addLocalsToParentContext = function(view){
             this.next.addGlobals();
         }
     }
-    // make sure subsequent blocks also add their locals
 };
 
 Block.prototype.addGlobals = function(view){
@@ -577,7 +581,7 @@ Block.prototype.addGlobals = function(view){
 
 Block.prototype.removeLocalsFromParent = function(){
     if (!(this.returns && this.returns.signature)) return;
-    model.view().remove();
+    this.view().remove();
 };
 
 Block.prototype.addToSequence = function(view, evt, params){
@@ -647,22 +651,34 @@ $('.scripts_workspace')
         view.data('model').addToSocket(view, evt, params);
         return false;
     })
-    .on('drag_from_expression', '.wrapper', function(evt, params){
-        var parentModel = params.dragParent.closest('.wrapper').data('model');
-        var value = parentModel.values[params.parentIndex];
+    .on('removeExpression', '.wrapper', function(evt, params){
+        console.log('remove expression');
+        var parentModel = $(this).data('model');
+        var value = parentModel.values[params.expressionIndex];
         value.value = value.defaultValue;
-        assert(params.dragParent.children('input').length > 0, "No input found, where can it be?")
-        params.dragParent.children('input').val(value.defaultValue);
         value.literal = true;
+        // Fix up the view
+        if(params.socket.hasClass('boolean')){           
+            params.socket.parent().append(
+                '<select><option>true</option><option>false</option></select>');
+        }else{
+            params.socket.parent().children('input').show();
+        }
     })
-    .on('drag_from_context', '.wrapper', function(evt, params){
-        var parentModel = params.dragParent.closest('.wrapper').data('model');
-        parentModel.contained[params.parentIndex].removeLocalsFromParent();
-        parentModel.contained[params.parentIndex] = null;
+    .on('removeChildStep', '.wrapper', function(evt, params){
+        console.log('remove child step');
+        var parentModel = $(this).data('model');
+        if (parentModel.contained[params.childIndex].returns){
+            parentModel.contained[params.childIndex].returns.removeLocalsFromParent();
+        }
+        parentModel.contained[params.childIndex] = null;
     })
-    .on('drag_from_sequence', '.wrapper', function(evt, params){
-        var parentModel = params.dragParent.closest('.wrapper').data('model');
-        parentModel.next.removeLocalsFromParent();
+    .on('removeNextStep', '.wrapper', function(evt, params){
+        console.log('remove next step (sorry Steve)');
+        var parentModel = $(this).data('model');
+        if (parentModel.next.returns){
+            parentModel.next.returns.removeLocalsFromParent();
+        }
         parentModel.next = null;
     })
     .on('change', '.socket input, .autosocket select', function(evt){
@@ -678,3 +694,37 @@ $('body').on('delete_block', '.wrapper', function(evt, params){
     view.data('model').deleteBlock(view, evt, params);
     return false;
 });
+
+function removeFromScriptEvent(view){
+    var parent = view.parent();
+    var parentView = parent.closest('.wrapper');
+    if (parent.hasClass('contained')){
+        parentView.trigger(
+            'removeChildStep', 
+            {
+                target: view,
+                childIndex: parent.data('index')
+            }
+        );
+    }else if (parent.hasClass('socket')){
+        parentView.trigger(
+            'removeExpression',
+            {
+                target: view,
+                socket: parent,
+                expressionIndex: parent.data('index')
+            }
+        );
+        assert(parent.children('input').length > 0, "No input found, where can it be?")
+        parent.children('input').val(value.defaultValue);
+        
+    }else if (parent.hasClass('next')){
+        parentView.trigger(
+            'removeNextStep',
+            {
+                target: view
+            }
+        );
+    }
+    
+}

@@ -159,49 +159,9 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
-        var dragParent = dragTarget.parent();
-        if (dragParent.hasClass('contained')){
-            dragParent.closest('.wrapper').trigger(
-                'drag_from_context', 
-                {
-                    dragParent: dragParent,
-                    dragTarget: dragTarget,
-                    parentIndex: dragParent.data('index')
-                }
-            );
-        }else if (dragParent.hasClass('socket')){
-            dragParent.closest('.wrapper').trigger(
-                'drag_from_expression',
-                {
-                    dragParent: dragParent,
-                    dragTarget: dragTarget,
-                    parentIndex: dragParent.data('index')
-                }
-            );
-        }else if (dragParent.hasClass('next')){
-            dragParent.closest('.wrapper').trigger(
-                'drag_from_sequence',
-                {
-                    dragParent: dragParent,
-                    dragTarget: dragTarget
-                }
-            );
-        }
-        if (dragParent.hasClass('socket')){
-            // var holder = dragTarget.data('startParent');
-            // var idx = holder.parent().find('> .socket, > .autosocket').index(holder);
-            var classes = dragParent.attr('class');
-            classes = classes.replace("socket","").trim();
-            if(classes == "boolean"){           
-                dragTarget.parent().append(
-                    '<select><option>true</option><option>false</option></select>');
-            }else{
-                if(!classes || classes=="string"){
-                    classes = '\"text\"';
-                }
-                dragTarget.parent().children('input').show();
-            }
-        }
+        console.log('[1] model: %s', dragTarget.data('model'));
+        removeFromScriptEvent(dragTarget);
+        console.log('[2] model: %s', dragTarget.data('model'));
         dragTarget.css('position', 'absolute');
         if (dragTarget.is('.scripts_workspace .wrapper')){
             dragPlaceholder = $('<div class="dragPlaceholder"></div>');
@@ -209,6 +169,7 @@
             dragTarget.before(dragPlaceholder);
         }
         $('.content').append(dragTarget);
+        console.log('[3] model: %s', dragTarget.data('model'));
         dragTarget.offset(startPosition);
         potentialDropTargets = getPotentialDropTargets();
         dropRects = $.map(potentialDropTargets, function(elem, idx){

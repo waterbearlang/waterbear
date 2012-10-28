@@ -38,6 +38,10 @@ function runScripts(event){
 $('.runScripts').click(runScripts);
 
 // Context Menu
+//
+// 'this' is the object matching the selector
+// key is the key in the items object
+// opt is the context menu object itself
 
 function cloneCommand(key, opt){
     console.info('cloneCommand(%s, %o)', key, opt);
@@ -53,6 +57,14 @@ function expandCommand(key, opt){
 
 function collapseCommand(key, opt){
     console.info('collapseCommand(%s, %o)', key, opt);
+}
+
+function cutBlockCommand(key, opt){
+    console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
+    var view = this.closest('.wrapper');
+    // Remove it programatically, and trigger the right events:
+    removeFromScriptEvent(view);
+    view.remove();
 }
 
 function copyBlockCommand(key, opt){
@@ -71,18 +83,29 @@ function cancelCommand(key, opt){
     console.info('cancelCommand(%s, %o)', key, opt);
 }
 
+var pasteboard = null;
+
 $.contextMenu({
     selector: '.block',
     items: {
-        clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
-        edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
-        expand: {'name': 'Expand', callback: expandCommand},
-        collapse: {'name': 'Collapse', callback: collapseCommand},
+        //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
+        //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
+        //expand: {'name': 'Expand', callback: expandCommand},
+        //collapse: {'name': 'Collapse', callback: collapseCommand},
+        cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
         copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
-        copyAll: {'name': 'Copy subscript', callback: copySubscriptCommand},
-        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
+        copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
+        //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
         cancel: {'name': 'Cancel', callback: cancelCommand}
     }
+});
+
+$.contextMenu({
+   selector: '.scripts_workspace, .value > input, .contained',
+   items: {
+       paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
+       cancel: {'name': 'Cancel', callback: cancelCommand}
+   } 
 });
 
 // TODO: add event handler to enable/disable, hide/show items based on state of block

@@ -12,6 +12,10 @@
     <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
     <script src="lib/prefixfree.min.js"></script>
     <!--script src="/lib/modernizr-1.6.min.js"></script-->
+
+    <script type="text/javascript" src='./lib/jquery-1.7.1.min.js'></script>
+    <script type="text/javascript" src='./plugins/plugins.js'></script>
+
   </head>
   <body>
     <div class="content">
@@ -52,9 +56,9 @@
             </blockquote>
             <navigation>
                 <h2>Play with Waterbear</h2>
-                <p><a href="garden.html?plugin=canvas">Javascript + Canvas Playground</a></p>
-                <p><a href="garden.html?plugin=javascript">Javascript + Raphael Playground</a></p>
-                <p><a href="garden.html?plugin=arduino">Arduino Playground</a></p>
+                <p>Select modules you want to check out and press go</p>
+                <div id='modules'></div>
+                <p><button id='modules_select'>Go</button></p>
                 <h2>Waterbear Community</h2>
                 <p>Follow <a href="https://twitter.com/waterbearlang">@Waterbearlang</a> on Twitter</p>
                 <p>Discuss Waterbear on the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a></p>
@@ -80,5 +84,26 @@
             </aside>
         </div>
     </div>
+
+
+    <script type="text/javascript">
+        // load plugins info
+        $.each( plugins, function(name, js) {
+            var i = $('<input>', { id : "module_" + name, type: 'checkbox', value: name } );
+            $('#modules').append( i );
+            var l = $('<label>', { for : "module_" + name, html: name } );
+            $('#modules').append( l );
+        } );
+
+        $('#modules_select').on('click', function() {
+            var modules = [];
+            $.each( $('#modules > input:checked'), function() {
+                modules.push( $(this).val() );
+            } );
+            var path = modules.join('|');
+            window.location.href = window.location.href + 'garden.html?plugin=' + path;
+        } );
+    </script>
+
   </body>
 </html>

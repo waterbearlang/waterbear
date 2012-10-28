@@ -110,6 +110,8 @@
         q = q['plugin'].split('|');
 
         // always load base and finish no matter what
+        plugins["first"] = "plugins/init.js";
+        plugins["last"] = "plugins/finish.js";
         q.unshift('first');
         q.push('last');
 

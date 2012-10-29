@@ -62,6 +62,7 @@ function collapseCommand(key, opt){
 function cutBlockCommand(key, opt){
     console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
     var view = this.closest('.wrapper');
+    pasteboard = view.data('model');
     // Remove it programatically, and trigger the right events:
     removeFromScriptEvent(view);
     view.remove();
@@ -69,14 +70,39 @@ function cutBlockCommand(key, opt){
 
 function copyBlockCommand(key, opt){
     console.info('copyBlockCommand(%s, %o)', key, opt);
+    pasteboard = this.closest('.wrapper').data('model').clone();
 }
 
 function copySubscriptCommand(key, opt){
     console.info('copySubscriptCommand(%s, %o)', key, opt);
+    pasteboard = this.closest('.wrapper').data('model').clone(true);
 }
 
 function pasteCommand(key, opt){
     console.info('pasteCommand(%s, %o)', key, opt);
+    if (pasteboard){
+        this.append(pasteboard.view());
+        addToScriptEvent(this, pasteboard.view());
+    }
+}
+
+function pasteExpressionCommand(key, opt){
+    console.info('pasteExpressionCommand(%s, %o)', key, opt);
+    if (pasteboard && pasteboard.blocktype === 'expression'){
+        this.hide();
+        pasteCommand.call(this.parent(), key, opt);
+    }
+}
+
+function pasteStepCommand(key, opt){
+    console.info('pasteStepCommand(%s, %o)', key, opt);
+    if (pasteboard && pasteboard.blocktype !== 'expression'){
+        if (this.find('> .wrapper').length){
+            console.log('already has a child element');
+        }else{
+            pasteCommand.call(this, key, opt);
+        }
+    }
 }
 
 function cancelCommand(key, opt){
@@ -85,28 +111,45 @@ function cancelCommand(key, opt){
 
 var pasteboard = null;
 
-$.contextMenu({
-    selector: '.block',
-    items: {
-        //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
-        //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
-        //expand: {'name': 'Expand', callback: expandCommand},
-        //collapse: {'name': 'Collapse', callback: collapseCommand},
-        cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
-        copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
-        copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
-        //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-        cancel: {'name': 'Cancel', callback: cancelCommand}
-    }
-});
-
-$.contextMenu({
-   selector: '.scripts_workspace, .value > input, .contained',
-   items: {
-       paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-       cancel: {'name': 'Cancel', callback: cancelCommand}
-   } 
-});
+// $.contextMenu({
+//     selector: '.scripts_workspace .block',
+//     items: {
+//         //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
+//         //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
+//         //expand: {'name': 'Expand', callback: expandCommand},
+//         //collapse: {'name': 'Collapse', callback: collapseCommand},
+//         cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
+//         copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
+//         copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
+//         //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
+//         cancel: {'name': 'Cancel', callback: cancelCommand}
+//     }
+// });
+// 
+// $.contextMenu({
+//    selector: '.scripts_workspace',
+//    items: {
+//        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
+//        cancel: {'name': 'Cancel', callback: cancelCommand}
+//    } 
+// });
+// 
+// $.contextMenu({
+//     selector: '.scripts_workspace .value > input',
+//     items: {
+//         paste: {'name': 'Paste', icon: 'paste', callback: pasteExpressionCommand},
+//         cancel: {'name': 'Cancel', callback: cancelCommand}
+//     }
+// });
+// 
+// $.contextMenu({
+//     selector: '.scripts_workspace .contained',
+//     items: {
+//         paste: {'name': 'Paste', icon: 'paste', callback: pasteStepCommand},
+//         cancel: {'name': 'Cancel', callback: cancelCommand}
+//     }
+// });
+// 
 
 // TODO: add event handler to enable/disable, hide/show items based on state of block
 

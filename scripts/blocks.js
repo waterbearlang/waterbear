@@ -469,6 +469,7 @@ Block.prototype.code = function(){
 }
 
 Block.prototype.cloneScript = function(){
+    // Copy a template model (in the menu) to a script model (in the script workspace)
     var spec = $.extend({}, this.spec, {
        isLocal: false,
        isTemplateBlock: false,
@@ -479,13 +480,28 @@ Block.prototype.cloneScript = function(){
 	return clone;
 };
 
-Block.prototype.cloneTemplate = function(){
-    var spec = $.extend({}, this.spec, {
-        isLocal: false,
-        isTemplateBlock: true
-    });
+Block.prototype.clone = function(deep){
+    // Clone a script block. If deep is true, clone values and contained blocks
+    // Do not clone next blocks, this is for supporting copy and paste
+    var spec = this.toJSON();
+    if (!deep){
+        spec.contained = [];
+        spec.values = this.values.map(function(v){return {
+            type: this.type, 
+            value:  v.literal ? v.value : v.defaultValue
+        }});
+    }
     return Block(spec);
-};
+}
+
+// Not used, delete?
+// Block.prototype.cloneTemplate = function(){
+//     var spec = $.extend({}, this.spec, {
+//         isLocal: false,
+//         isTemplateBlock: true
+//     });
+//     return Block(spec);
+// };
 
 function attachLocals(node){
 	node.attachLocals = true; // this should probably be data, c'est la vie
@@ -497,37 +513,35 @@ Block.prototype.view = function(){
         return this._view;
     }
     var self = this;
-    if (!this.isTemplateBlock){
-    }
-    var view = this.template(this);
+    var view = this._view = this.template(this);
     view.data('model', this);
-    if (!this.isTemplateBlock){
-        if (this.locals){
-            var localContainer = view.find('.locals');
-            this.locals.forEach(function(local){
-                localContainer.append(local.view());
-            });
-        }
-        view.find('> .block > .contained').each(function(idx){
-            $(this).data('index', idx);
-        });
-        this.contained.forEach(function(contained, idx){
-            if (contained === null) return;
-            view.find('> .block > .contained').eq(idx).append(contained.view());
-            contained.addLocalsToParentContext(view);
-        });
-        view.find('> .block > .blockhead > .value > .socket').each(function(idx){
-            $(this).data('index', idx);
-        });
-        this.values.forEach(function(value, idx){
-            view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
-        });
-        if (this.next){
-            view.find('> .next').append(this.next.view());
-            this.next.addLocalsToParentContext(view);
-        }
+    if (this.isTemplateBlock){
+        return view;
     }
-    this._view = view;
+    if (this.locals){
+        var localContainer = view.find('.locals');
+        this.locals.forEach(function(local){
+            localContainer.append(local.view());
+        });
+    }
+    view.find('> .block > .contained').each(function(idx){
+        $(this).data('index', idx);
+    });
+    this.contained.forEach(function(contained, idx){
+        if (contained === null) return;
+        view.find('> .block > .contained').eq(idx).append(contained.view());
+        contained.addLocalsToParentContext();
+    });
+    view.find('> .block > .blockhead > .value > .socket').each(function(idx){
+        $(this).data('index', idx);
+    });
+    this.values.forEach(function(value, idx){
+        view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
+    });
+    if (this.next){
+        view.find('> .next').append(this.next.view());
+        this.next.addLocalsToParentContext(true);
+    }
     return view;
 };
 
@@ -545,7 +559,7 @@ Block.prototype.addLocalBlock = function(block){
     locals.append(block.view());
 }
 
-Block.prototype.addLocalsToParentContext = function(view){
+Block.prototype.addLocalsToParentContext = function(isNext){
     // on addToScript
     if (!this.returns) return;
     if (this.returns === 'block'){
@@ -555,11 +569,14 @@ Block.prototype.addLocalsToParentContext = function(view){
     if (!this.id){
         throw new Error('Model must have an id by now');
     }
-    var context = view.closest('.context').data('model');
+    var context = this.view().closest('.context').data('model');
+    if (context && isNext){
+        context = this.view().closest('.context').parent().closest('.context').data('model')    ;
+    }
     if (context){
         context.addLocalBlock(this.returns);
         if (this.next){
-            this.next.addLocalsToParentContext();
+            this.next.addLocalsToParentContext(isNext);
         }
     }else{
         this.addGlobals();
@@ -569,7 +586,7 @@ Block.prototype.addLocalsToParentContext = function(view){
     }
 };
 
-Block.prototype.addGlobals = function(view){
+Block.prototype.addGlobals = function(){
     if (!this.returns) return;
     if (this.returns === 'block'){
         // special metablock handler
@@ -581,26 +598,28 @@ Block.prototype.addGlobals = function(view){
 
 Block.prototype.removeLocalsFromParent = function(){
     if (!(this.returns && this.returns.signature)) return;
-    this.view().remove();
+    this.returns.view().remove();
 };
 
-Block.prototype.addToSequence = function(view, evt, params){
-    this.addLocalsToParentContext(view);
-    // add to parent blocks model
-    var parentModel = params.dropTarget.closest('.wrapper').data('model');
-    print('Add to sequence params: %o', params);
-    parentModel.next = this;
-};
+Block.prototype.addNext = function(step){
+    console.log('addNext(%o)', step);
+    if (this.next){
+        throw new Error('Cannot add a next step where a next step already exists');
+    }
+    step.addLocalsToParentContext(true);
+    this.next = step;
+}
 
-Block.prototype.addToContext = function(view, evt, params){
-    this.addLocalsToParentContext(view);
-    // add to parent blocks model
-    var parentModel = params.dropTarget.closest('.wrapper').data('model');
-    print('Add to context params: %o', params);
-    parentModel.contained[params.parentIndex] = this;
+Block.prototype.addStep = function(step, stepIndex){
+    console.log('addStep(%o, %s)', step, stepIndex);
+    if (this.contained[stepIndex]){
+        throw new Error('Cannot add a step where a step exists already');
+    }
+    step.addLocalsToParentContext();
+    this.contained[stepIndex] = step;
 };
-Block.prototype.addToWorkspace = function(view, evt, params){
-    this.addGlobals(view);
+Block.prototype.addToWorkspace = function(){
+    this.addGlobals(this.view());
     if (this.next){
         this.next.addToWorkspace();
     }
@@ -610,11 +629,10 @@ Block.prototype.setValue = function(index, type, newValue){
     this.values[index].update(newValue);
 }
 
-Block.prototype.addToSocket = function(view, evt, params){
+Block.prototype.addExpression = function(expression, expressionIndex){
     // add block to value
-    print('add value block to socket');
-    var parentModel = params.dropTarget.closest('.wrapper').data('model');
-    parentModel.values[params.parentIndex].addBlock(this);
+    // print('add value block to socket');
+    this.values[expressionIndex].addBlock(expression);
     // FIXME: update view (currently happens elsewhere)
 };
 
@@ -631,63 +649,37 @@ function newBlockHandler(blocktype, args, body, returns){
 }
 
 $('.scripts_workspace')
-    .on('add_to_sequence', '.wrapper', function(evt, params){
-        var view = $(this);
-        view.data('model').addToSequence(view, evt, params);
-        return false;
-    })
-    .on('add_to_context', '.wrapper', function(evt, params){
-        var view = $(this);
-        view.data('model').addToContext(view, evt, params);
-        return false;
-    })
-    .on('add_to_workspace', '.wrapper', function(evt, params){
-        var view = $(this);
-        view.data('model').addToWorkspace(view, evt, params);
-        return false;
-    })
-    .on('add_to_socket', '.wrapper', function(evt, params){
-        var view = $(this);
-        view.data('model').addToSocket(view, evt, params);
-        return false;
-    })
-    .on('removeExpression', '.wrapper', function(evt, params){
-        console.log('remove expression');
-        var parentModel = $(this).data('model');
-        var value = parentModel.values[params.expressionIndex];
-        value.value = value.defaultValue;
-        value.literal = true;
-        // Fix up the view
-        if(params.socket.hasClass('boolean')){           
-            params.socket.parent().append(
-                '<select><option>true</option><option>false</option></select>');
-        }else{
-            params.socket.parent().children('input').show();
-        }
-    })
-    .on('removeChildStep', '.wrapper', function(evt, params){
-        console.log('remove child step');
-        var parentModel = $(this).data('model');
-        if (parentModel.contained[params.childIndex].returns){
-            parentModel.contained[params.childIndex].returns.removeLocalsFromParent();
-        }
-        parentModel.contained[params.childIndex] = null;
-    })
-    .on('removeNextStep', '.wrapper', function(evt, params){
-        console.log('remove next step (sorry Steve)');
-        var parentModel = $(this).data('model');
-        if (parentModel.next.returns){
-            parentModel.next.returns.removeLocalsFromParent();
-        }
-        parentModel.next = null;
-    })
+    // .on('add_to_workspace', '.wrapper', function(evt, params){
+    //     var view = $(this);
+    //     view.data('model').addToWorkspace(view, evt, params);
+    //     return false;
+    // })
     .on('change', '.socket input, .autosocket select', function(evt){
         var input = $(evt.target);
         var socket = input.parent();
         var socketIndex = socket.data('index');
         var parentModel = socket.closest('.wrapper').data('model');
         parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
-    })
+    });
+
+Block.prototype.removeExpresssion = function(expression, expressionIndex){
+    console.log('remove expression');
+    var value = this.values[expressionIndex];
+    value.value = value.defaultValue;
+    value.literal = true;
+};
+
+Block.prototype.removeContainedStep = function(step, stepIndex){
+    console.log('remove child step');
+    this.contained[stepIndex].removeLocalsFromParent();
+    this.contained[stepIndex] = null;
+};
+
+Block.prototype.removeNextStep = function(step){
+    console.log('remove next step (sorry Steve)');
+    this.next.removeLocalsFromParent(true);
+    this.next = null;
+};
     
 $('body').on('delete_block', '.wrapper', function(evt, params){
     var view = $(this);
@@ -697,34 +689,50 @@ $('body').on('delete_block', '.wrapper', function(evt, params){
 
 function removeFromScriptEvent(view){
     var parent = view.parent();
+    var model = view.data('model');
     var parentView = parent.closest('.wrapper');
+    var parentModel = parentView.data('model');
+    model.removeLocalsFromParent();
     if (parent.hasClass('contained')){
-        parentView.trigger(
-            'removeChildStep', 
-            {
-                target: view,
-                childIndex: parent.data('index')
-            }
-        );
+        parentModel.removeContainedStep( model, parent.data('index'));
     }else if (parent.hasClass('socket')){
-        parentView.trigger(
-            'removeExpression',
-            {
-                target: view,
-                socket: parent,
-                expressionIndex: parent.data('index')
-            }
-        );
+        parentModel.removeExpression(model, parent.data('index'));
         assert(parent.children('input').length > 0, "No input found, where can it be?")
+        if(parent.hasClass('boolean')){           
+            params.socket.parent().append(
+                '<select><option>true</option><option>false</option></select>');
+        }else{
+            params.socket.parent().children('input').show();
+        }
         parent.children('input').val(value.defaultValue);
-        
     }else if (parent.hasClass('next')){
-        parentView.trigger(
-            'removeNextStep',
-            {
-                target: view
-            }
-        );
+        parentModel.removeNextStep(model);
     }
-    
+}
+
+function addToScriptEvent(container, view){
+    // Converts from DOM/jQuery action to model action
+    console.log('addToScriptEvent %o, %o', container, view);
+    var model = view.data('model');
+    if (!model){
+        console.log('unable to retrieve model for view %o', view);
+        throw new Error('unable to retrieve model');
+    }
+    if (container.is('.slot') || container.is('input')){
+        container = container.parent();
+    }
+    if (container.is('.scripts_workspace')){
+        model.addGlobals();
+    }else{
+        var parentModel = view.parent().closest('.wrapper').data('model');
+        if (view.is('.value')){
+            parentModel.addExpression(model, container.data('index'));
+        }else{
+            if (container.hasClass('next')){
+                parentModel.addNext(model);
+            }else{
+                parentModel.addStep(model, container.data('index'));
+            }
+        }
+    }
 }

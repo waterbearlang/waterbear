@@ -220,18 +220,14 @@
                 // Drag a step to snap to a step
                 dropTarget.parent().append(dragTarget);
                 dragTarget.removeAttr('style');
-                if (dragTarget.parent().hasClass('next')){
-                    dragTarget.trigger('add_to_sequence', {dropTarget: dropTarget});
-                }else{
-                    dragTarget.trigger('add_to_context', {dropTarget: dropTarget, parentIndex: dropTarget.parent().data('index')
-                    });
-                }
+                addToScriptEvent(dropTarget, dragTarget);
             }else{
                 // Insert a value block into a socket
                 dropTarget.children('input, select').hide(); // FIXME: Move to block.js
                 dropTarget.append(dragTarget);
                 dragTarget.removeAttr('style');
-                dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
+                addToScriptEvent(dropTarget, dragTarget);
+                // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
             }
         }else if ($('.block_menu').cursorOver()){
             // delete block if dragged back to menu
@@ -243,8 +239,7 @@
             dropCursor.remove();
             dropCursor = null;
             dragTarget.removeAttr('style');
-            dragTarget.trigger('add_to_workspace');
-            $('.scripts_workspace').trigger('add');
+            addToScriptEvent(targetCanvas, dragTarget);
         }else{
             if (cloned){
                 dragTarget.remove();

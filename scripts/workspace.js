@@ -190,8 +190,7 @@ function loadScriptsFromObject(fileObject){
         var view = block.view();
 		assert.isString(view.jquery, 'Views must be jQuery objects');
         workspace.append(view);
-        view.trigger('add_to_workspace');
-        workspace.trigger('add');
+        addToScriptEvent(workspace, view);
     });
 }
 

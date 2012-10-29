@@ -335,30 +335,30 @@ menu('Control', [
     }
 ], true);
 
-menu('User Defined', [
-    {
-        blocktype: 'context',
-        labels: [
-            'New [choice:blocktypes] with arguments:',
-            'And body returning [any]'
-        ],
-        script: 'var block## = newBlockHandler([{{1}}],[{{2}}])',
-        help: 'Create a new block for re-use',
-        returns: 'block'
-    },
-    {
-        blocktype: 'context',
-        labels: ['New [choice:blocktypes] with arg1 [choice:types]'],
-        script: 'alert("implement me");',
-        help: 'Create a new block for re-use'
-    },
-    {
-        blocktype: 'context',
-        labels: ['New [choice:blocktypes] with arg1 [choice:types] returns [choice:rettypes]'],
-        script: '',
-        help: ''
-    }
-]);
+// menu('User Defined', [
+//     {
+//         blocktype: 'context',
+//         labels: [
+//             'New [choice:blocktypes] with arguments:',
+//             'And body returning [any]'
+//         ],
+//         script: 'var block## = newBlockHandler([{{1}}],[{{2}}])',
+//         help: 'Create a new block for re-use',
+//         returns: 'block'
+//     },
+//     {
+//         blocktype: 'context',
+//         labels: ['New [choice:blocktypes] with arg1 [choice:types]'],
+//         script: 'alert("implement me");',
+//         help: 'Create a new block for re-use'
+//     },
+//     {
+//         blocktype: 'context',
+//         labels: ['New [choice:blocktypes] with arg1 [choice:types] returns [choice:rettypes]'],
+//         script: '',
+//         help: ''
+//     }
+// ]);
 
 menu('Arrays', [
     {

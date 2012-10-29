@@ -63,8 +63,9 @@ window.choiceLists = {
 // Special menus used at runtime
 
 menu('Globals', []);
-menu('Recent Blocks', []);
-menu('Favourite Blocks', []);
+// Temporarily disable these until I can get time to implement them properly
+// menu('Recent Blocks', []);
+// menu('Favourite Blocks', []);
 
 // Javascript core blocks
 

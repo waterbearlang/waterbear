@@ -107,26 +107,29 @@ if (is_touch_device()){
     });
 }
 
-
-
-// Build the Blocks menu, this is a public method
-function menu(title, specs, show){
-    var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = $('.submenu.' + group);
-    if (!submenu.length){
-        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu ' + group + '"></div>');
-        $('#block_menu').append(body);
-        submenu = $('.submenu.' + group);
-        // This is dumb, but jQuery UI accordion widget doesn't support adding sections at runtime
-    }
-    specs.forEach(function(spec, idx){
-        spec.group = group;
-        spec.isTemplateBlock = true;
-        submenu.append(Block(spec).view());
-    });
-
-}
-window.menu = menu;
+//THe namespace function should be namespaced because bootstrap also has a menu function.
+var wb = {
+	// Build the Blocks menu, this is a public method
+	"menu": function (title, specs, show){
+		var group = title.toLowerCase().split(/\s+/).join('_'); //add words with underscores
+	
+		var button = $("<button type=\"button\" class=\"btn btn-mini\" data-name=\""+group+"\">"+title+"</button>");
+		$("#block_menu .menu").append(button); //append buttons here
+	
+		var innerMenu = $("#block_menu .sb-inner"); //append blocks here
+		
+		var section = $("<div class=\"group "+group+"\"><div class=\"block_header "+group+"\">"+title+"</div></div>");
+		
+		specs.forEach(function(spec, idx){
+			spec.group = group;
+			spec.isTemplateBlock = true;
+			section.append(Block(spec).view());
+		});
+		
+		innerMenu.append(section);
+	}
+	};
+window.menu = wb.menu;
 
 })(jQuery);
 

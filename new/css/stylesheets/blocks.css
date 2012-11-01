@@ -1,0 +1,275 @@
+/* Styles for steps and containers */
+.wrapper, .socket, .autosocket{
+  display: inline-block;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+.scripts_workspace > .wrapper{
+  margin-bottom: 15px;
+}
+
+.socket {
+  position: relative;
+}
+
+.locals{
+    display: block;
+    background-color: white;
+    width: auto;
+    position: relative;
+    padding: 1px 3px 1px;
+    margin: 5px 10px;
+    overflow: auto;
+    height: auto;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border-color: inherit;
+}
+
+.locals > .wrapper{
+    float: left;
+    margin: 5px;
+}
+
+.label {
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.block {
+  position: relative;
+  display: inline-block;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  padding-bottom: 1px;
+  border-color: inherit;
+  border-width: 2px;
+  border-style: solid;
+  white-space: nowrap; 
+  cursor: pointer;
+}
+
+.value .block{
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.trigger > .block{
+  -webkit-border-top-right-radius: 25px;
+  -webkit-border-top-left-radius: 25px;
+  -moz-border-radius-topright: 25px;
+  -moz-border-radius-topleft: 25px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  padding-top: 10px;
+}
+
+.blockhead{
+  font-family: Georgia;
+  font-size: 12px;
+  white-space: nowrap;
+  margin: 0;
+  display: block;
+  padding: 3px 20px;
+  padding-bottom: 5px;
+}
+.trigger .blockhead{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.value > .block > .blockhead{
+    padding: 3px 10px 3px 10px;
+    margin: 1px;
+}
+
+/* For some reason this causes the blocks to slowly lose their color*/
+.block .blockhead{
+    overflow-y: hidden;
+}
+
+.blockhead.not(:first-child)
+{
+    padding: 5px 0 5px 10px;
+    margin-top: 0;
+    position: relative;
+    display: block;
+}
+
+.context > .blockhead{
+    padding: 5px 20px;
+    padding-bottom: 6px;
+}
+
+.context > .block {
+    padding-bottom: 11px;
+}
+
+.socket {
+  padding: 0;
+  margin: 0;
+}
+
+.value > .block{
+    border: 1px solid white;
+}
+
+
+.slot, .flap {
+  display: block;
+  left: 0;
+  margin: 0;
+  margin-left: 20px;
+  margin-right: auto;
+  width: 16px;
+  height: 5px;
+  -webkit-border-top-right-radius: 4px;
+  -webkit-border-top-left-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -moz-border-radius-topleft: 4px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border-width: 2px 2px 0 2px;
+  border-style: solid;
+  border-color: inherit;
+}
+
+.flap {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  background-color: inherit;
+}
+
+.slot {
+    top: -7px;
+    position: absolute;
+    background-color: #FFF;
+    width: 20px;
+}
+
+
+.contained {
+  display: block;
+  background-color: white;
+  position: relative;
+  padding-top: 1px;
+  margin-left: 10px;
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  overflow: visible;
+  -webkit-border-top-left-radius: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-width: 2px 0 2px 2px;
+  border-style: solid;
+  border-color: inherit;
+  right: -2px;
+}
+
+
+.next {
+  position: relative;
+  display: block;
+  background-color: transparent;
+  border-color: inherit;
+  width: 100%;
+  overflow: visible; 
+}
+
+.block input {
+  margin-left: 5px;
+  width: 3em;
+  margin-right: 5px;
+  border: 0;
+  padding: 0;
+  height: 16px;
+  background-color: white;
+  margin-bottom: 0;
+	margin-top: 0;
+}
+
+.block .blockhead{
+    overflow-y: hidden;
+}
+
+
+.socket{
+    border-width: 2px 0;
+    border-style: solid;
+}
+
+.value.wrapper{
+    border-width: 0 2px;
+    border-style: solid;
+}
+
+
+.selected > .block{
+    outline: blue ridge thick;
+}
+
+/*This class is added to the block that is bieng moved when it is aligned to snap in*/
+.drag_active{
+/*    background-color: green;*/
+/*    A box shadow might look nice here ?*/
+}
+
+/*This class is added to the block that is moving*/
+.drag_indication{
+    opacity: 0.75;
+}
+
+/*This class is added to the block receiving the block bieng dragged.*/
+.socket.drop_active{
+    background-color: yellow;
+}
+.slot.drop_active{
+    background-color: yellow;
+}
+.slot.drop_active:before {
+    height: 21px;
+    width: 56px;
+    position: absolute;
+    top: 5px;
+    left: -17px;
+    content: "";
+    display: block;
+    z-index: 0;
+    background: yellow;
+
+    -moz-box-shadow: 0 2px 20px yellow;
+    -webkit-box-shadow: 0 2px 20px yellow;
+    box-shadow: 0 2px 20px yellow;
+
+    -webkit-border-bottom-right-radius: 25px;
+    -webkit-border-bottom-left-radius: 25px;
+    -moz-border-radius-bottomright: 25px;
+    -moz-border-radius-bottomleft: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.socket select, .autosocket select{
+    margin: 0;
+}
+
+.contained:last-child {
+    margin-bottom: 10px;
+}
+
+.scripts_workspace > .wrapper{
+    display: block;
+}
+
+

@@ -1,0 +1,77 @@
+body{
+    font-family: 'ColwellRegular';
+    font-size: 1.2em;
+    line-height: 1.6em;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: 'TriniganFGRegular';
+    font-weight: normal;
+}
+
+h1{ font-size: 300%; }
+h2{ font-size: 200%; }
+h3{ font-size: 150%; }
+h4{ font-size: 120%; }
+h5{ font-size: 100%; }
+
+
+.content{
+    width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main{
+    width: 620px;
+    float: left;
+}
+
+.extras{
+    width: 300px;
+    padding: 20px;
+    float: right;
+    background-image: linear-gradient(left, #CCC, #FFF);
+}
+
+.mascot{
+    width: 300px;
+    height: 385px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.scratchmascot{
+    width: 140px;
+    height: 140px;
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.tardigrade{
+    width: 300px;
+    height: 200px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.promotejs{
+    width: 180px;
+    height: 150px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.extras blockquote{
+    margin: 0;
+    padding: 0;
+}
+
+.attribution{
+    text-align: right;
+    font-style: italic;
+}

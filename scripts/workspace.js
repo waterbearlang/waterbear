@@ -36,7 +36,7 @@ function saveNamedScripts(){
             title: title,
             description: description,
             date: date,
-            scripts: Block.scriptsToObject('.scripts_workspace')
+            scripts: Block.serialize()
         });
         resetAndCloseSaveDialog();
     }else   
@@ -203,6 +203,27 @@ window.loadCurrentScripts = function(){
     }
 };
 
+
+// Allow saved scripts to be dropped in
+$('.scripts_workspace').on('drop', getFiles);
+
+function getFiles(evt){
+    evt = evt.originalEvent;
+    evt.preventDefault();
+    var files = evt.dataTransfer.files;
+    if ( files.length > 0 ){
+        // we only support dropping one file for now
+        var file = files[0];
+        if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+        var reader = new FileReader();
+        reader.readAsText( file );
+        reader.onload = function (evt){
+            clearScripts(null, true);
+            var saved = JSON.parse(evt.target.result);
+            loadScriptsFromObject(saved.scripts);
+        };
+    }
+}
 
 
 

@@ -174,7 +174,6 @@ if (is_touch_device()){
 }
 
 
-
 // Build the Blocks menu, this is a public method
 function menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');

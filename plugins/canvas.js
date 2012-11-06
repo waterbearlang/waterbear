@@ -382,7 +382,7 @@ jQuery.fn.extend({
         {
             blocktype: 'step',
             label: 'draw image [image] at point [point]',
-            script: 'local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y',
+            script: 'var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);',
             help: 'draw the HTML &lt;img&gt; into the canvas without resizing'
         },
         {
@@ -590,7 +590,7 @@ jQuery.fn.extend({
         {
             blocktype: 'expression',
             label: 'point at x [number:0] y [number:0]',
-            script: '{x: {{1}}, y: {{2}}',
+            script: '{x: {{1}}, y: {{2}} }',
             type: 'point'
         },
         {

@@ -43,6 +43,17 @@ function saveNamedScripts(){
         alert("You must enter a name");
 }
 
+function scriptsToString(title, description){
+    if (!title){ title = ''; }
+    if (!description){ description = ''; }
+    return JSON.stringify({
+        title: title,
+        description: description,
+        date: Date.now(),
+        scripts: Block.scriptsToObject('.scripts_workspace')
+    });
+}
+
 function exportNamedScripts(){
     $('#exp h2').html('Exported Code');
     $('#exp small').html('Copy Exported Code below');   
@@ -50,13 +61,7 @@ function exportNamedScripts(){
     var description = $('#script_description').val();
     var date = Date.now();
     if (title){
-    var exp = JSON.stringify({
-        title: title,
-        description: description,
-        date: date,
-        scripts: Block.scriptsToObject('.scripts_workspace')
-    });
-    console.info("EXP: "+exp);
+    var exp = scriptsToString();
     resetAndCloseSaveDialog();
     $('#exp').bPopup();
     $('#exp textarea').html(exp);
@@ -162,10 +167,28 @@ function toggleDescription(event){
     $(this).siblings('.description').toggleClass('hidden');
 }
 
+function createDownloadUrl(evt){
+    var URL = window.webkitURL || window.URL;
+    var file = new Blob([scriptsToString()], {type: 'text/json'});
+    var reader = new FileReader();
+    var a = document.createElement('a');
+    reader.onloadend = function(){
+        a.href = reader.result;
+        a.download = 'script.json';
+        console.log('setting href to %s', reader.result);
+        document.body.appendChild(a);
+        a.click();
+    };
+    reader.readAsDataURL(file);
+    evt.preventDefault();
+}
+
 $('#save_dialog .save').click(saveNamedScripts);
 $('#save_dialog .export').click(exportNamedScripts);
 $('#save_dialog .cancel').click(resetAndCloseSaveDialog);
-$('.save_scripts').click(function(){$('#save_dialog').bPopup();});
+//$('.save_scripts').click(function(){$('#save_dialog').bPopup();});
+
+$('.save_scripts').on('click', createDownloadUrl);
 
 $('.restore_scripts').click( populateAndShowRestoreDialog );
 $('#restore_dialog .cancel').click(resetAndCloseRestoreDialog);

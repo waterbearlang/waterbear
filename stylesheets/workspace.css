@@ -43,8 +43,9 @@ body {
     height: 100%;
 }
 
-.tab_bar button{
+.tab_bar button, .tab_bar a{
     float: right;
+    width: 14%;
 }
 
 

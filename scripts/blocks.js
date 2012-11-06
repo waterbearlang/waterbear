@@ -662,7 +662,7 @@ $('.scripts_workspace')
         parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
     });
 
-Block.prototype.removeExpresssion = function(expression, expressionIndex){
+Block.prototype.removeExpression = function(expression, expressionIndex){
     console.log('remove expression');
     var value = this.values[expressionIndex];
     value.value = value.defaultValue;
@@ -699,10 +699,10 @@ function removeFromScriptEvent(view){
         parentModel.removeExpression(model, parent.data('index'));
         assert(parent.children('input').length > 0, "No input found, where can it be?")
         if(parent.hasClass('boolean')){           
-            params.socket.parent().append(
+            parent.append(
                 '<select><option>true</option><option>false</option></select>');
         }else{
-            params.socket.parent().children('input').show();
+            parent.children('input').show();
         }
         parent.children('input').val(value.defaultValue);
     }else if (parent.hasClass('next')){

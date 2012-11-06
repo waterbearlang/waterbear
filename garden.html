@@ -96,15 +96,15 @@
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
             <div class="scripts_text_view_tab chrome_tab">Script Text</div>
-            <button class="runScripts">Run</button>
-            <button class="clearScripts">Clear</button>
-            <button class="save_scripts">Save</button>
-            <button class="restore_scripts">Restore</button>
+            <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
+            <button class="clearScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear</span></button>
+            <button class="save_scripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Save</span></button>
+            <button class="restore_scripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Restore</span></button>
         </div>
         <div class="tab_bar2">
-            <button class="goto_script">Back to Script</button>
-            <button class="clear_canvas">Clear Stage</button>
-            <button class="runScripts">Run</button>
+            <button class="goto_script ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Back to Script</span></button>
+            <button class="clear_canvas ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear Stage</span></button>
+            <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
         </div>
         <div class="workspace">
             <div class="scripts_workspace" data-name="default"></div>
@@ -175,10 +175,6 @@
     <script src="scripts/serialization-1.0.js"></script>
     <script>
 	
-		// buttonize
-        $(":button").button();
-        $(":button").css({width: "14%"});
-
         var q = $.parseQuery();
         // if they don't have the plugin part of the query string lets send them back home.
         if(!q.plugin || q.plugin == "undefined" || q.plugin == null) {

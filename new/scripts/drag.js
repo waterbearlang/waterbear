@@ -35,6 +35,7 @@
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
 (function($){
+	console.log("Drag.js");
     var dragTarget, potentialDropTargets, dropTarget, dropRects, startPosition, timer, cloned, dragging, currentPosition, distance, dropCursor, dragPlaceholder;
     window.isTouch = window.hasOwnProperty('ontouchstart') && true;
     var dragTimeout = 20;
@@ -118,12 +119,20 @@
     }
         
     function initDrag(event){
+			console.log("Init Drag");
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        if (!blend(event)) {return undefined;}
+        if (!blend(event)) {
+					console.log("Not blend");
+					return undefined;
+				}
         var eT = $(event.target);
-        if ((eT.is(':input') || eT.is('option') || eT.is('.disclosure')) && ! eT.containedBy($('.block_menu'))) {return undefined;}
+        if ((eT.is(':input') || eT.is('option') || eT.is('.disclosure')) && ! eT.containedBy($('.block_menu'))) {
+					console.log("undef");
+					return undefined;
+				}
         var target = eT.closest('.wrapper');
+				console.log("target: ", target);
         if (target.length){
             dragTarget = target;
             //dragTarget.addClass("drag_indication");
@@ -134,6 +143,7 @@
         }else{
             dragTarget = null;
         }
+				console.log("Done Init");
         return true;
     }
     

@@ -10,9 +10,11 @@
         <!-- @TODO Move to bottom -->
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="lib/jquery.scrollTo-1.4.3.1-min.js"></script>
+				
 
-        <!-- Le styles -->
-        <link href="css/bootstrap.css" rel="stylesheet"/>
+        <!-- Le styles -->		
+				<link rel="stylesheet/less" type="text/css" href="stylesheets/bootstrap/bootstrap.less">
+				<script type="text/javascript" src="lib/less-1.3.1.min.js"></script>
 
         <style type="text/css">
             body {
@@ -21,7 +23,7 @@
             }
         </style>
         <!-- the bootstrap responsive include must come bleow the body padding to override the padding when resizing to a smaller screen. -->
-        <link href="css/bootstrap-responsive.css" rel="stylesheet"/>
+ <!--       <link href="css/bootstrap-responsive.css" rel="stylesheet"/>-->
         <style>
             .sidebar-nav {
                 padding: 9px 0;
@@ -161,7 +163,7 @@
         <div class="label">
         </div>
     </script>
-	<link href="css/stylesheets/blocks.css" rel="stylesheet" />
+	<link href="stylesheets/blocks.css" rel="stylesheet" />
     </head>
 
     <body>
@@ -242,7 +244,7 @@
         </div>
 
         <div class="container-fluid">
-            <div class="row-fluid" data-note="Main Content Area">
+            <div class="row-fluid content" data-note="Main Content Area">
                 <div id="block_menu" class="span3" data-note="Side Block Bar">
 					<div id="block_menu_loading" style="display:block; visibility: visible;">
 						Loading Blocks ...
@@ -287,12 +289,12 @@
                                 var name = $(this).data("name").toLowerCase();
                                 console.log("Scrolling to: "+name); //@note: Spaces converted to underscores
                                 //find the place in the block Menu that corresponds to the name of the button clicked
-                                $(".sb-outer").scrollTo($(".sb-inner div."+name));
+                                $(".sb-outer").scrollTo($(".block_menu div."+name));
                             });
                         });
                     </script>
 
-                    <div class="menu" style="padding:5px 5px 0 5px; border: 1px solid rgb(221, 221, 221);">
+                    <div class="menu" style="padding:5px 5px 0 5px; border: 1px solid rgb(221, 221, 221); max-height: 200px; overflow-y: auto">
 						<!--
                         <button type="button" class="btn btn-mini" data-name="Control">Control</button>
                         <button type="button" class="btn btn-mini" data-name="Movement">Movement</button>
@@ -313,8 +315,8 @@
                             border: 1px solid #ccc;
                         }
                     </style>
-                    <div class="sb-outer" id="blocks" style="height:900px; overflow-y: auto; border: 1px solid rgb(221, 221, 221); margin-top:-1px;">
-                        <div class="sb-inner" style="height:1800px; ">
+                    <div class="sb-outer" id="blocks" style="height:900px; overflow-y: auto; overflow-x: hidden; border: 1px solid rgb(221, 221, 221); margin-top:-1px;">
+                        <div class="block_menu" style="height:1800px; ">
 							
 							<!--<div class="group control">
 								<div class="block_header Control">Control</div>
@@ -368,55 +370,67 @@
                 </div><!--/Side Block Bar-->
 
                 <div class="span9">
-                    <div class="tab-bar">
-                        <ul class="nav nav-tabs twist">
-                            <li class="active">
-                                <a href="javascript:;">
-                                    <button class="close" type="button">×</button> File 1
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <button class="close" type="button">×</button> File 2
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <button class="close" type="button">×</button> File 3
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                    <style>
-                        .workarea>div{
-                            display: none;
-                        }
-                        .visible {
-                            display: block;
-                        }
-                    </style>
-                    <div id="workarea" class="workarea">
-                        <div class="workspace_1 visible">
-                            Workspace 1
-                        </div>
-                        <div class="workspace_2">
-                            Workspace 2
-                        </div>
-                        <div class="workspace_3">
-                            Workspace 3
-                        </div>
-                        <div class="workspace_4">
-                            Workspace 4
-                        </div>
-                    </div>
-
+									<div class="tab-bar">
+										<ul class="nav nav-tabs twist">
+											<li class="active">
+												<a href="javascript:;">
+													<button class="close" type="button">×</button> Default
+												</a>
+											</li>
+											<li>
+												<a href="javascript:;">
+													<button class="close" type="button">×</button> Alternate
+												</a>
+											</li>
+											<li>
+												<a href="javascript:;">
+													<button class="close" type="button">×</button> File 3
+												</a>
+											</li>
+															
+										</ul>
+									</div>
+									<style>
+											.workarea {
+												overflow: auto;
+											}
+											.workspace {
+												height: 100%;
+												width: 100%;
+											}
+											.scripts_workspace {
+												width: 100%;
+												height:350%;
+											}
+											/* The scripts_text_view starts hidden*/
+											.scripts_text_view {
+												display:none;
+											}
+									</style>
+									<div id="workarea" class="workarea">
+										
+										<div class="workspace"  data-name="default">
+											<div class="scripts_workspace"></div>
+											<div class="scripts_text_view"></div>
+										</div>
+										
+										<div class="workspace"  data-name="alternate" style="display:none">
+											<div class="scripts_workspace"></div>
+											<div class="scripts_text_view"></div>
+										</div>
+										
+										<div class="workspace"  data-name="file_3" style="display:none">
+											<div class="scripts_workspace"></div>
+											<div class="scripts_text_view"></div>
+										</div>
+									</div>
+											
                 </div><!--/span-->
 
 
             </div><!--/row <Main Content Area>-->
 
-			<!-- ********** Modals  ********** -->
+			<!-- ================= Modals  ================= -->
 			<!-- 
 			Modal Rules of thumb:
 			1. All modals need at least one way to close them ( x or close button) both preferred
@@ -610,7 +624,7 @@
                 </div><!-- /.modal-footer-->
             </div>
 
-            <footer>
+            <footer style="display:none">
                 <hr class="end">
                 <a href="#credits" data-toggle="modal">The Waterbear Project</a>
             </footer>
@@ -637,7 +651,7 @@
             });
         </script>
 
-		<!-- Third-party libraries -->
+		<!-- Third-party libraries for Waterbear -->
 		<!--<script src="lib/jquery-1.7.2.min.js"></script>-->
 		<script src="lib/jquery.hotkeys.js">									//what is this used for?</script>						
 		<script src="lib/jquery.querystring.js">								//This is used to parse out the plugins</script>
@@ -665,6 +679,7 @@
 		<!--<script src=lib/jquery.scrollTo-1.4.3.1-min.js"></script>-->
 
 		<script>
+			//Query string parser and Plugin loader
 			var q = $.parseQuery();
 			var name = 'plugins';
 			// if they don't have the plugin part of the query string lets send them back home.
@@ -688,14 +703,13 @@
 					//It appears there is no way to see if a file successfully loaded. That is a bummer.
 				},
 				complete : function () {
-					$('#block_menu_load').remove();
-					//$('#block_menu').show();
+					console.log("complete");
+					$('#block_menu_loading').remove();
 					//Show the block menu, on complete
 					$('#block_menu>div').show().css("visibility", "visible");
 					loadCurrentScripts();
 				}
 			});
 		</script>
-
     </body>
 </html>

@@ -116,7 +116,7 @@ var wb = {
 		var button = $("<button type=\"button\" class=\"btn btn-mini\" data-name=\""+group+"\">"+title+"</button>");
 		$("#block_menu .menu").append(button); //append buttons here
 	
-		var innerMenu = $("#block_menu .sb-inner"); //append blocks here
+		var innerMenu = $("#block_menu .block_menu"); //append blocks here
 		
 		var section = $("<div class=\"group "+group+"\"><div class=\"block_header "+group+"\">"+title+"</div></div>");
 		

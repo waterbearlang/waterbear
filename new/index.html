@@ -8,7 +8,8 @@
         <meta name="author" content="Dethe Elza">
 
         <!-- Le styles -->
-        <link href="css/bootstrap.css" rel="stylesheet"/>
+        <link rel="stylesheet/less" type="text/css" href="stylesheets/bootstrap/bootstrap.less">
+				<script type="text/javascript" src="lib/less-1.3.1.min.js"></script>
 
         <style type="text/css">
             body {
@@ -17,7 +18,8 @@
             }
         </style>
         <!-- the bootstrap responsive include must come bleow the body padding to override the padding when resizing to a smaller screen. -->
-        <link href="css/bootstrap-responsive.css" rel="stylesheet"/>
+        <!--<link href="css/bootstrap-responsive.css" rel="stylesheet"/>-->
+				
         <style>
             .sidebar-nav {
                 padding: 9px 0;
@@ -179,15 +181,14 @@
 
                             <li class="nav-header">Friends of Waterbear</li>
                             <li><p>Forks and other projects based on Waterbear</p></li>
-                            <li><ul>
+                            <li>
+															<ul>
                                     <li><a href="http://stretch.deedah.org/waterbear/">Stretchyboy</a> has blocks for Arduino</li>
                                     <li><a href="http://easyj.team2648.com/">Team2648</a> has blocks for the WPI robotics API</li>
                                     <li><a href="http://scriptastic.greenbush.us/">ScripTastic</a> has blocks for Opensim</li>
                                     <li><a href="http://waterbearlang.com/">Waterbear</a> the original waterbear has blocks for Javascript, Raphael.js, Arduino, and more</li>
-                                </ul></li>
-
-
-
+                                </ul>
+														</li>
                         </ul>
                     </div><!--/.well -->
                 </div><!--/Side Nav Bar-->
@@ -250,8 +251,8 @@
                     <h3 id="pluginsLabel">Choose your environment to get started:</h3>
                 </div><!-- /.modal-header-->
                 <div class="modal-body">
-					<div class="alert hidden alert-error">
-						<button type="button" class="close" data-dismiss="alert">×</button>
+					<div class="alert hide alert-error plugin_selection_error">
+						<button type="button" class="close" >×</button> <!--data-dismiss="alert" -->
 						<strong>Warning!</strong> You must select at least one plugin.
 					</div>
 					<form class="language">
@@ -352,8 +353,10 @@
 								if(plugins.length <= 0)
 								{
 									//alert("You must choose at least one plugin.");	
-									$(".alert").alert();
-									$(".alert").removeClass("hidden").addClass("in");
+									$(".plugin_selection_error.alert>.close").click(function(){
+										$(this).parent().hide();
+									});
+									$(".plugin_selection_error.alert").show().addClass("in");
 								}
 								else // chop off the last pipe symbol, and send the user to the IDE
 								{

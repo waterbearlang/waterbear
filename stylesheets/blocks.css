@@ -2,6 +2,8 @@
 .wrapper, .socket, .autosocket{
   display: inline-block;
   position: relative;
+  left: 0;
+  top: 0;
 }
 
 .scripts_workspace > .wrapper{
@@ -36,6 +38,7 @@
   cursor: pointer;
   -moz-user-select: none;
   -webkit-user-select: none;
+  user-select: none;
 }
 
 .block {
@@ -53,9 +56,9 @@
 }
 
 .value .block{
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-  border-radius: 0px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 
 .trigger > .block{
@@ -72,11 +75,8 @@
   font-family: Georgia;
   font-size: 12px;
   white-space: nowrap;
-  padding: 5px 20px;
-  padding-bottom: 6px;
-  margin: 0px;
+  margin: 0;
   display: block;
-  
   padding: 3px 20px;
   padding-bottom: 5px;
 }
@@ -90,10 +90,11 @@
     margin: 1px;
 }
 
-/* For some reason this causes the blocks to slowly loose their color*/
+/* For some reason this causes the blocks to slowly lose their color*/
 .block .blockhead{
     overflow-y: hidden;
 }
+
 .blockhead.not(:first-child)
 {
     padding: 5px 0 5px 10px;
@@ -102,18 +103,18 @@
     display: block;
 }
 
-.containerBlock > .blockhead{
+.context > .blockhead{
     padding: 5px 20px;
     padding-bottom: 6px;
 }
 
-.containerBlock > span.block {
+.context > .block {
     padding-bottom: 11px;
 }
 
 .socket {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 .value > .block{
@@ -123,8 +124,8 @@
 
 .slot, .flap {
   display: block;
-  left: 0px;
-  margin: 0px;
+  left: 0;
+  margin: 0;
   margin-left: 20px;
   margin-right: auto;
   width: 16px;
@@ -135,7 +136,7 @@
   -moz-border-radius-topleft: 4px;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-  border-width: 2px 2px 0px 2px;
+  border-width: 2px 2px 0 2px;
   border-style: solid;
   border-color: inherit;
 }
@@ -143,7 +144,7 @@
 .flap {
   position: absolute;
   top: -7px;
-  left: 0px;
+  left: 0;
   background-color: inherit;
 }
 
@@ -161,7 +162,7 @@
   position: relative;
   padding-top: 1px;
   margin-left: 10px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   padding-bottom: 10px;
   overflow: visible;
   -webkit-border-top-left-radius: 10px;
@@ -170,7 +171,7 @@
   -moz-border-radius-bottomleft: 10px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  border-width: 2px 0px 2px 2px;
+  border-width: 2px 0 2px 2px;
   border-style: solid;
   border-color: inherit;
   right: -2px;
@@ -190,8 +191,8 @@
   margin-left: 5px;
   width: 3em;
   margin-right: 5px;
-  border: 0px;
-  padding: 0px;
+  border: 0;
+  padding: 0;
   height: 16px;
   background-color: white;
 }
@@ -202,12 +203,12 @@
 
 
 .socket{
-    border-width: 2px 0px;
+    border-width: 2px 0;
     border-style: solid;
 }
 
 .value.wrapper{
-    border-width: 0px 2px;
+    border-width: 0 2px;
     border-style: solid;
 }
 
@@ -235,10 +236,6 @@
     background-color: yellow;
 }
 .slot.drop_active:before {
-    content: "";
-    background: red;
-    width: 10px;
-    height: 10px;
     height: 21px;
     width: 56px;
     position: absolute;
@@ -249,9 +246,9 @@
     z-index: 0;
     background: yellow;
 
-    -moz-box-shadow: 0px 2px 20px yellow;
-    -webkit-box-shadow: 0px 2px 20px yellow;
-    box-shadow: 0px 2px 20px yellow;
+    -moz-box-shadow: 0 2px 20px yellow;
+    -webkit-box-shadow: 0 2px 20px yellow;
+    box-shadow: 0 2px 20px yellow;
 
     -webkit-border-bottom-right-radius: 25px;
     -webkit-border-bottom-left-radius: 25px;
@@ -261,12 +258,16 @@
     border-bottom-left-radius: 25px;
 }
 
-span.socket select, span.autosocket select{
+.socket select, .autosocket select{
     margin: 0;
 }
 
 .contained:last-child {
     margin-bottom: 10px;
+}
+
+.scripts_workspace > .wrapper{
+    display: block;
 }
 
 

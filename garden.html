@@ -3,16 +3,89 @@
   <head>
     <meta charset="utf-8" />
     <title>Waterbear: Code Garden</title>
+    <!-- Stylesheets for third-party libraries -->
+	<link href="lib/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+	<link href="lib/jquery.contextMenu.css" rel="stylesheet" />
+	<!-- Stylesheets for waterbear implementation -->
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
-	<link href="lib/css/custom-theme2/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+    
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
     <!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
     <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
     <!--script src="/lib/modernizr-1.6.min.js"></script-->
-  </head>
+
+    <!-- Templates for the various block types: -->
+    <script type="text/html" id="step_template">
+        <div class="wrapper step" data-classes="group">
+            <div class="block" data-title="help">
+                <div class="blockhead">
+                    <div class="label" data-for="label in labels">
+						<span data-replace="label"></span>
+					</div>
+                </div>
+                <b class="flap"></b>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="expression_template">
+        <div class="wrapper value" data-classes="type group">
+            <div class="block">
+                <div class="blockhead">
+                    <div class="label" data-for="label in labels">
+						<span data-replace="label"></span>
+					</div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="context_template">
+        <div class="wrapper step context" data-classes="group">
+            <div class="block" data-title="help">
+                <b class="flap"></b>
+                <div class="blockhead" data-for="label in labels">
+                    <div class="label">
+                        <span class="disclosure open">▼</span>
+                        <span data-replace="label"></span>
+                    </div>
+                    <div class="locals block_menu"></div>
+                </div>
+                <div class="contained">
+                    <i class="slot"></i>
+                </div>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="eventhandler_template">
+        <div class="wrapper trigger context" data-classes="group">
+            <div class="block" data-title="help">
+                <b class="trigger"></b>
+                <div class="blockhead" data-for="label in labels">
+	                <div class="label">
+	                    <span class="disclosure open">▼</span>
+	                    <span data-replace="label"></span>
+	                </div>
+	                <div class="locals block_menu"></div>
+	                </div>
+                <div class="contained">
+                    <i class="slot"></i>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="label_template">
+        <div class="label">
+        </div>
+    </script>
+  </head>   
   <body>
     <div class="content">
         <div id="block_menu_load" class="block_menu">
@@ -23,18 +96,18 @@
         <div class="tab_bar">
             <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
             <div class="scripts_text_view_tab chrome_tab">Script Text</div>
-            <button class="run_scripts">Run</button>
-            <button class="clear_scripts">Clear</button>
-            <button class="save_scripts">Save</button>
-            <button class="restore_scripts">Restore</button>
+            <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
+            <button class="clearScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear</span></button>
+            <button class="save_scripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Save</span></button>
+            <button class="restore_scripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Restore</span></button>
         </div>
         <div class="tab_bar2">
-            <button class="goto_script">Back to Script</button>
-            <button class="clear_canvas">Clear Stage</button>
-            <button class="run_scripts">Run</button>
+            <button class="goto_script ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Back to Script</span></button>
+            <button class="clear_canvas ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear Stage</span></button>
+            <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
         </div>
         <div class="workspace">
-            <div class="scripts_workspace"></div>
+            <div class="scripts_workspace" data-name="default"></div>
             <div class="scripts_text_view"></div>
         </div>
         <div class="stage"></div>
@@ -76,28 +149,31 @@
       <textarea></textarea>
       <button class="done">Done</button>    
       </div>
-    <script src="lib/jquery-1.7.1.min.js"></script>
+      <!-- Third-party libraries -->
+    <script src="lib/jquery-1.7.2.min.js"></script>
     <script src="lib/jquery.hotkeys.js"></script>
     <script src="lib/jquery.querystring.js"></script>
-    <script src="lib/yepnope.1.0.2-min.js"></script>
+    <script src="lib/yepnope.1.5.4-min.js"></script>
     <script src="lib/jquery.bpopup-0.5.1.min.js"></script>
     <script src="lib/jquery.autoGrowInput.js"></script>
     <script src="lib/json2.js"></script><!-- Make this conditional -->
+	<script src="lib/jquery-ui-1.8.21.custom.min.js"></script>
+	<script src="lib/jquery.contextMenu.js"></script>
+	<script src="lib/jquery.tappable.js"></script>
+	<script src="lib/chai.js"></script> <!-- assertion library -->
+	<script>window.assert = chai.assert;</script>
+	<!-- Waterbear implementation libraries -->
+	<script src="scripts/template.js"></script>
     <script src="scripts/drag.js"></script>
     <script src="scripts/blocks.js"></script>
+    <script src="scripts/jquery.blocks.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/timer.js"></script>
     <script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
     <script src="scripts/workspace.js"></script>
-    <script src="plugins/plugins.js"></script>
-	<script src="lib/js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="scripts/serialization-1.0.js"></script>
     <script>
-	
-		// buttonize
-        $(":button").button();
-        $(":button").css({width: "14%"});
-
-        // remove support texts
-        $('.scripts_text_view_tab').hide();
-        $('.chrome_tab').hide();
 	
         var q = $.parseQuery();
         // if they don't have the plugin part of the query string lets send them back home.
@@ -107,34 +183,23 @@
 	   }
 
         // load all modules separated by |
-        q = q['plugin'].split('|');
+        var plugins = q['plugin'].split('|').map(function(name){
+            Block.registerPlugin(name);
+            return 'plugins/' + name + '.js';
+        });
 
-        // always load base and finish no matter what
-        plugins["first"] = "plugins/init.js";
-        plugins["last"] = "plugins/finish.js";
-        q.unshift('first');
-        q.push('last');
-
-        $.each( q , function( a, name ) {
-
-          var plugin = plugins[ name ];
-        
-          yepnope({
-              test : plugin,
-              yep : plugin,
-              complete : function () {
-                  if(! plugin ){
-                      alert('Sorry the plugin: \"'+ name +'\" does not exist.');
-					  
-					  //If the user tries to load a plugin that is invalid, 
-					  //and there are no other valid plugins. Send them back to home.
-					  if(q.length <= 1) {
-						  window.location = "./";
-					  }
-                  }
-              }
-          });
-        } );
+      yepnope({
+          test : plugins.length,
+          yep : plugins,
+          callback: function(url, result, key){
+              //console.log('loaded %s', url);
+          },
+          complete : function () {
+              $('#block_menu_load').remove();
+              $('#block_menu').show();
+              loadCurrentScripts();
+          }
+      });
     </script>
   </body>
 </html>

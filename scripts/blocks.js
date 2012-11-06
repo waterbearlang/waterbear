@@ -1,427 +1,738 @@
 
-window.DEBUG = false;
-window.debug = function debug(){
-    if (window.DEBUG){
-        console.log.apply(console, arguments);
-    }
-}
-
-$.selected_block = function(){
-    return $('.scripts_workspace .selected');
-};
-
-$.extend($.fn,{
-  long_name: function() {
-    var names;
-    names = [];
-    this.each(function(idx,e) {
-      var parts = [e.tagName.toLowerCase()];
-      e.id ? parts.push('#' + e.id) : null;
-      e.className ? parts.push('.' + e.className.split(/\s/).join('.')) : null;
-      return names.push(parts.join(''));
-    });
-    return '[' + names.join(', ') + ']';
-  },
-  id: function(_id){
-    if (_id){
-        if (!this.data('_id')){
-            this.data('_id', _id);
-            if (this.data('script') && this.data('script').indexOf('##') > -1){
-                this.data('script', this.data('script').replace(/##/gm, '_' + _id));
-                this.data('label', this.data('label').replace(/##/gm, '_' + _id));
-                this.find('> .block > .blockhead > .label').html(Label(this.data('label')));
-            }
-        }
-    }else{
-        return this.data('_id');
-    }
-  },
-  info: function(){
-      return this.closest('.wrapper').long_name();
-  },
-  block_type: function(){
-      return this.data('type');
-  },
-  parent_block: function(){
-      var p = this.closest('.wrapper').parent();
-      return p.closest('.contained').closest('.wrapper');
-  },
-  child_blocks: function(){
-      return this.find('> .block > .contained').map(function(){
-          var kids = $(this).children('.wrapper');
-          if (kids.length){
-              return kids;
-          }else{
-              return $('<span class="empty"></span>');
-          }
-      });
-  },
-  socket_blocks: function(){
-      return this.find('> .block > .blockhead > .label').children('.socket, .autosocket').children('input, select, .wrapper');
-  },
-  local_blocks: function(){
-    return this.find('> .block > .blockhead .locals .wrapper');
-  },
-  next_block: function(){
-      return this.find('> .next > .wrapper');
-  },
-  moveTo: function(x,y){
-      return this.css({left: x + 'px', top: y + 'px'});
-  },
-  addLocalBlock: function(block){
-    window.parent_block = this;
-    var head = this.find('> .block > .blockhead');
-    var locals = head.find('.locals');
-    if (!locals.length){
-        locals = $('<div class="locals block_menu"></div>');
-        head.find('.label').after(locals);
-    }
-    locals.append(block);
-    return this;
-  },
-  addSocketHelp: function(){
-    var self = $(this);
-    var type = self.block_type();
-    var desc = 'this is a ' + type + ' socket. You can type in a value or drag in a matching value block';
-    if(type === 'any'){
-        desc = 'this is a socket that can take any type. Strings must be quoted.';
-    }
-    $(this).attr('title', desc);
-  }
-});
-
-$.fn.extend({
-    block_description: function(){
-        if (this.length < 1) return '';
-        if (this.is('.empty')) return '';
-        if (this.is(':input')){
-            return this.val();
-        }
-        var patt = new RegExp('##','gm');
-
-        var desc = {
-            klass: this.data('klass'),
-            label: this.data('label').replace(/##/gm, '_' + this.id()),
-            script: this.data('script').replace(/##/gm, '_' + this.id()),
-            subContainerLabels: this.data('subContainerLabels'),
-            containers: this.data('containers')
-        };
-        // FIXME: Move specific type handling to raphael_demo.js
-        if (this.is('.trigger')){desc.trigger = true;}
-        if (this.is('.value')){desc['type'] = this.data('type')};
-        if (this.data('locals')){
-            var self = this;
-            desc.locals = this.data('locals');
-            desc.locals.forEach(function(local){
-                local.script = local.script.replace(/##/g, '_' + self.id());
-                local.label = local.label.replace(/##/g, '_' + self.id());
-            });
-        }
-        if (this.data('returns')){
-            desc.returns = this.data('returns');
-            desc.returns.script = desc.returns.script.replace(/##/g, '_' + this.id());
-            desc.returns.label = desc.returns.label.replace(/##/g, '_' + this.id());
-        }
-        desc.sockets = this.socket_blocks().map(function(){return $(this).block_description();}).get();
-        desc.contained = this.child_blocks().map(function(){return $(this).block_description();}).get();
-        desc.next = this.next_block().block_description();
-        return desc;
-    }
-});
-
-function Block(options, scope){
-    // Options include:
-    //
-    // Menu blocks subset:
-    //
-    // label: required (yes, there are required options, deal with it)
-    // klass: [control] (for styling)
-    // trigger: [false] (is this a trigger?)
-    // containers: [0] (how many sub-scripts does this hold?)
-    // slot: [true] (can scripts follow this block in sequence?)
-    // type: string, number, color, or boolean if this is a value block
-    //
-    // Script block additions:
-    //
-    // sockets: array of values or value blocks
-    // contained: array of contained blocks
-    // next: block that follows this block
-    var opts = {
-        klass: 'control',
-        slot: true, // Something can come after
-        position: 'any', // main, loop
-        trigger: false, // This is the start of a handler
-        flap: true, // something can come before
-        containers: 0,  // Something cannot be inside
-        locals: [],
-        returns: false,
-        subContainerLabels: [],
-        label: 'Step', // label is its own mini-language
-        type: null
-    };
-    $.extend(opts, options);
-
-    if (opts.trigger){
-        opts.flap = false; // can't have both flap and trigger
-        opts.slot = false; // can't have both slot and trigger
-    }
-    if (opts['type']){
-        opts.slot = false; // values nest, but do not follow
-        opts.flap = false;
-    }
-    // console.log('wrapping "%s" with label, non-id path', opts.label);
-    var wrapper = $('<span class="wrapper ' + opts.klass + '"><span class="block"><span class="blockhead"><span class="label">' + Label(opts.label) + '</span></span></span></span>');
-    if (scope){
-        wrapper.data('scope', scope);
-    }
-    wrapper.data('label', opts.label);
-    wrapper.data('klass', opts.klass);
-    wrapper.data('position', opts.position);
-    wrapper.data('returns', opts.returns);
-    wrapper.data('script', opts.script);
-    wrapper.data('locals', opts.locals);
-    wrapper.data('type', opts['type']);
-    wrapper.data('containers', opts.containers);
-    if(opts.containers > 1){
-        wrapper.data('subContainerLabels', opts['subContainerLabels']);
-    }
-    var block = wrapper.children();
-    block.find('.socket').addSocketHelp();
-    if (opts['help']){
-        block.attr('title', opts['help']);
-    }
-    if (opts['type']){
-        block.addClass(opts['type']);
-        wrapper.addClass('value').addClass(opts['type']);
-    }
-    if (opts.locals.length){
-        $.each(opts.locals, function(idx, value){
-            if ($.isPlainObject(value)){
-                value.klass = opts.klass;
-                wrapper.addLocalBlock(Block(value, wrapper));
-            }
-        });
-        wrapper.bind('add_to_script, add_to_workspace', function(e){
-            var self = $(e.target),
-                locals = self.data('locals');
-            if (!(locals && locals.length)) return false;
-            if (! self.id()){
-                Block.nextId++;
-                self.id(Block.nextId);
-                self.local_blocks().each(function(idx, local){
-                    $(local).id(Block.nextId);
-                });
-            }
-            return false;
-        });
-    }
-    if (opts.returns){
-        opts.returns.klass = opts.klass;
-        wrapper.bind('add_to_script', function(e){
-            // remove from DOM if already place elsewhere
-            var self = $(e.target),
-                returns = self.data('returns');
-            if (!returns) return false;
-            if (self.data('returnBlock')){
-                // console.log('return block exists');
-                self.data('returnBlock').detach();
-            }else{
-                // console.log('return block created: %s', returns.label);
-                self.data('returnBlock', Block(returns));
-            }
-            var returnBlock = self.data('returnBlock');
-            if (! self.id()){
-                Block.nextId++;
-                self.id(Block.nextId);
-                returnBlock.id(Block.nextId);
-            }
-            self.parent_block().addLocalBlock(returnBlock);
-            //self.child_blocks().each(function(block){ block.trigger('add_to_script'); });
-            self.next_block().trigger('add_to_script');
-            return false;
-        });
-        wrapper.bind('delete_block add_to_workspace', function(e){
-            // FIXME: We should delete returnBlock on delete_block to avoid leaking memory
-            var self = $(e.target),
-                returnBlock = self.data('returnBlock');
-            if (returnBlock){
-                returnBlock.detach();
-            }
-            self.next_block().trigger('delete_block');
-        });
-    }
-    if(opts.containers > 0){
-        wrapper.addClass('containerBlock'); //This might not be necessary
-    }
-    for(i=0; i<opts.containers; i++){
-        ContainerLabel='';
-        if(opts.containers > 1){
-            if(i != (opts.containers-1)){
-                ContainerLabel='<span class="blockhead"><span class="label">'+Label(wrapper.data('subContainerLabels')[i])+'</span></span>';
-            }
-        }
-        block.append('</b><span class="contained"><i class="slot"></i></span>'+ContainerLabel);
-    }
-    if (opts.containers){
-        block.find('> .blockhead > .label').prepend('<span class="disclosure open">▼</span>');
-    }
-    if (opts.trigger){
-        wrapper.addClass('trigger');
-        wrapper.data('type', 'trigger');
-        block.append('<b class="trigger"></b>');
-    }else if(opts.flap){
-        block.append('<b class="flap"></b>');
-        wrapper.addClass('step');
-        wrapper.data('type', 'step');
-    }
-
-    if (opts.slot){
-        wrapper.append('<span class="next"><i class="slot"></i></span>');
-    }
-    if (opts.sockets){
-        debug('sockets: %o', opts.sockets);
-        $.each(opts.sockets, function(idx, value){
-            debug('trying to add a value to a socket');
-            if ($.isPlainObject(value)){
-                debug('value is plain object');
-                var child = Block(value);
-                debug('new value block: %o', child);
-                debug('sockets found: %s', block.find('> .blockhead > .label > .socket').eq(idx).length);
-                block.find('> .blockhead > .label > .socket').eq(idx).empty().append(child);
-            }else{ // presumably a string
-                debug('value is %s of type %s', value, typeof value);
-                var socket = block.find('> .blockhead > .label > .socket, > .blockhead > .label > .autosocket').eq(idx).find(':input, select');
-                debug('sockets found: %s', socket.length);
-                socket.val(value);
-                if (socket.attr('type') === 'color'){
-                    socket.css({color: value, 'background-color': value});
-                }
-            }
-        });
-    }
-    if (opts.contained){
-        $.each(opts.contained, function(idx, value){
-            if ($.isPlainObject(value)){
-                var child = Block(value);
-                block.find('> .contained').eq(idx).append(child);
-                child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
-                child.trigger('add_to_script');
-            }
-        });
-    }
-    if (opts.next){
-        if ($.isPlainObject(opts.next)){
-            var child = Block(opts.next);
-            wrapper.find('> .next').append(child);
-            child.css({position: 'relative', top: 0, left: 0, display: 'inline-block'});
-            child.trigger('add_to_script');
-        }
-    }
-    // add update handlers
-    return wrapper;
-}
-Block.nextId = 0;
-
-$('.scripts_workspace').delegate('.disclosure', 'click', function(event){
+//
+// Handler for the hide/show triangle on context and eventhandler blocks
+//
+$('.scripts_workspace').on('click', '.disclosure', function(event){
     var self = $(event.target);
+    var view = self.closest('.wrapper');
     if (self.is('.open')){
         self.text('►');
-        getContained(self).css('padding-bottom',0).children().hide();
+        view.find('.locals').hide();
+        view.find('.contained').hide();
     }else{
         self.text('▼');
-        getContained(self).css('padding-bottom',10).children().show();
+        view.find('.locals').show();
+        view.find('.contained').show();
     }
     self.toggleClass('open closed');
 });
-function getContained(s){
-    if(s.closest('.blockhead').next().is('.contained'))
-        return s.closest('.blockhead').next('.contained');
-    return s.closest('.blockhead').next().next();
+            
+//
+// Value objects get defaults depending on their type. These are the defaults for
+// primitive values when the plugin does not over-ride the default.
+//
+var defaultValue = {
+    'number': 0,
+    'boolean': false,
+    'string': '',
+    'date': function(){ return new Date().toISOString().split('T')[0]; },
+    'time': function(){ return new Date().toISOString().split('T')[1].split('.')[0] + 'Z'; },
+    'datetime': function(){ return new Date().toISOString(); },
+    'color': 'rgb(0,0,0)'
+};
+
+//
+// Blocks which take parameters store those parameters as Value objects, which may hold primitive
+// values such as numbers or strings, or may be Expression blocks. 
+//
+function Value(textValue, index){
+    assert.isNumber(index, 'Values must know their place');
+    this.index = index;
+    if ($.isPlainObject(textValue)){
+		print('initializing Value with object: %o', textValue);
+        $.extend(this, textValue);
+        if (textValue.value.signature){
+            var block = Block(textValue.value);
+            assert.isObject(block, 'Value blocks must be objects');
+            this.addBlock(block);
+        }else{
+            this.literal = true;
+        }
+    }else{
+		print('initializing Value with text: %o', textValue);
+		assert(textValue.length > 0, 'textValue must contain text');
+        var parts = textValue.slice(1,-1).split(':');
+        this.type = parts[0];
+        if (this.type === 'choice'){
+            this.choiceName = parts[1];
+            this.choiceList = choiceLists[this.choiceName];
+            if (parts.length === 3){
+                this.value = parts[2];
+            }else{
+                this.value = this.choiceList[0];
+            }
+        }else{
+            if (parts.length === 1){
+                this.value = defaultValue[this.type];
+                if (this.value && this.value.apply){
+                    this.value = this.value();
+                }
+            }else{
+                this.value = parts[1];
+                if (this.type.match(/number|float|double/)){
+                    this.value = parseFloat(this.value);
+                }else if (this.type.match(/int|long/)){
+                    this.value = parseInt(this.value, 10);
+                }else if (this.type.match(/boolean|bool/)){
+                    this.value = !!(this.value === 'true');
+                    this.choiceName = 'boolean';
+                    this.choiceList = [true,false];
+                }
+            }
+        }
+        if (this.value !== undefined){
+            this.defaultValue = this.value; // for when expressions are removed
+            this.literal = true;
+        }
+    }
 }
 
-function choice_func(s, listname, default_opt){
-    var list = choice_lists[listname];
-    return '<span class="value string ' + listname + ' autosocket" data-type="  "><select>' +
-        list.map(function(item){
-            if (item === default_opt){
+Value.prototype.code = function(){
+	if (this.literal){
+		return this.value;
+	}else{
+		return this.value.code();
+	}
+}
+
+Value.prototype.addBlock = function(blockModel){
+    this.literal = false;
+    this.value = blockModel;
+};
+
+Value.prototype.removeBlock = function(blockModel){
+    this.literal = true;
+    this.value = this.defaultValue;
+};
+
+Value.prototype.view = function(){
+	print('building view for %o, has cached view: %s', j(this), !!this._view);
+    if (this._view) return this._view;
+	print('we do not have a cached view');
+    if (! this.literal && this.value){ return this.value.view(); }
+	print('we do not have a block value');
+    if (this.choiceName){
+		print('return choice view');
+        this._view =  this.choiceView(this.choiceName, this.choiceList);
+    }else if (this.value !== undefined){
+		print('return type/index/value %o/%o/%o', this.type, this.index, this.value);
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + this.type + '" value="' + this.value + '"></span>');
+    }else{
+		print('return undefined value');
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + this.type + '"></span>');
+    }
+	print('return cached value: %o', h(this._view));
+    return this._view;
+};
+
+Value.prototype.choiceView = function(){
+    return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' + 
+        this.choiceList.map(function(item){
+            if (item === this.value){
                 return '<option selected>' + item + '</option>';
             }else{
                 return '<option>' + item + '</option>';
             }
         }).join('') +
-        '</select></span>';
+        '</select></span>');
+};
+
+Value.prototype.update = function(newValue){
+    switch(this.type){
+        case 'number': this.value = parseFloat(newValue); break;
+        case 'boolean': this.value = newValue === 'true'; break;
+        case 'string': this.value = newValue; break;
+        case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break; 
+        case 'datetime': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
+        case 'time': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
+        case 'int': this.value = parseInteger(newValue); break;
+        case 'float': this.value = parseInteger(newValue); break;
+    }
 }
 
-function Label(value){
-	// Recognize special values in the label string and replace them with
-	// appropriate markup. Some values are dynamic and based on the objects currently
-	// in the environment
-	//
-	// values include:
-	//
-	// [number] => an empty number socket
-	// [number:default] => a number socket with a default value
-	// [boolean] => an empty boolean socket
-	// [boolean:default] => a boolean with a default value
-	// [string] => an empty string socket
-	// [string:default] => a string socket with a default value
-	// [choice:options] => a fixed set of options, listed in options parameter function
 
-	// FIXME: Move specific type handling to raphael_demo.js
-	// FIXME: type-specific
-	//    value = value.replace(/\[number:(-?\d*\.?\d+)\]/g, '<span class="number socket"><input type="number" value="$1"></span>');
-	//    value = value.replace(/\[number\]/g, '<span class="number socket"><input type="number"></span>');
-	//    value = value.replace(/\[boolean:(true|false)\]/g, '<span class="boolean socket"><select><option>true</option><option selected>false</option></select></span>');
-	//    value = value.replace(/\[boolean\]/g, '<span class="boolean socket"><select><option>true</option><option>false</option></select></span>');
-	//    value = value.replace(/\[string:(.+?)\]/g, '<span class="string socket"><input value="$1"></span>');
-	//    value = value.replace(/\[string\]/g, '<span class="string socket"><input></span>');
-	//    value = value.replace(/\[any:(.+?)\]/g, '<span class="any socket"><input value="$1"></span>');
-	//    value = value.replace(/\[any\]/g, '<span class="any socket"><input></span>');
-	//    value = value.replace(/\[color\]/g, '<span class="color socket"><input type="color"></span>');
-	//    value = value.replace(/\[color:(#[01234567890ABCDEF]{6})\]/g, '<span class="color socket"><input type="color" value="$1" style="color:$1;background-color:$1;"></span>');
-	//    value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
-	//    value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
-	//    return value;
+function Step(spec, scope){
+    assertStep(spec);
+    this.returns = false;
+    this.init(spec);
+}
+Step.prototype = new Block();
+Step.prototype.constructor = Step;
 
-	value = value.replace(/\[bool:(true|false)\]/g, '<span class="bool socket" title="boolean"><select><option>true</option><option selected>false</option></select></span>');
-	value = value.replace(/\[bool\]/g,  '<span class="bool socket" title="boolean"><select><option>true</option><option>false</option></select></span>');
+function Expression(spec, scope){
+    assertExpression(spec);
+    this.init(spec);
+}
+Expression.prototype = new Block();
+Expression.prototype.constructor = Expression;
 
-	value = value.replace(/(?:\[choice\:)(\w+)(?:\:)(\w+)(?:\])/g, choice_func);
-	value = value.replace(/(?:\[choice\:)(\w+)(?:\])/g, choice_func);
+function Context(spec, scope){
+    assertContext(spec);
+    this.locals = false;
+    this.init(spec);
+}
+Context.prototype = new Block();
+Context.prototype.constructor = Context;
 
-	function repl(sclass, val){
-		var type = "";
-		var data = ""; //Used later
+function EventHandler(spec, scope){
+    assertContext(spec);
+    this.locals = false;
+    this.init(spec);
+}
+EventHandler.prototype = new Block();
+EventHandler.prototype.constructor = EventHandler;
 
-		//Lets add this attribute su users in supported browsers get the little arrows
-		if(sclass == 'int' || sclass == 'decimal' || sclass == 'integer')
-			type = 'type="number"';
+function assertStep(model){
+    if (model.type){
+        alert('Error: expression "' + model.signature + '" treated as a step');
+    }
+}
 
-		if(val == undefined)
-			return '<span class="'+sclass+' socket" title="'+sclass+'"><input  '+type+' '+data+'/></span>';
-		return  '<span class="'+sclass+' socket" title="'+sclass+'"><input value="'+val+'" '+type+' '+data+'/></span>';
+function assertExpression(model){
+    if (! model.type){
+		throw new Error('Bite me');
+        alert('Error: step "' + model.signature + '" treated as an expression');
+    }
+}
+
+function assertContext(model){
+    if (model.containers){
+        alert('Error: context with containers vs. contained');
+        console.error('Context: %o', model);
+    }
+}
+
+function noDefaultValues(match, spec){
+    // remove default values, if any, from labels
+    var parts = spec.split(':');
+    var val;
+    if (parts[0] === 'choice'){
+        val = 'choice:' +  parts[1];
+    }else{
+        val = parts[0];
+    }
+    return '[' + val + ']';
+}
+
+function signature(model){
+    var sig = model.blocktype + ': ' + model.spec.labels.map(function(label){
+            return label.replace(/\[(.*?)\]/g, noDefaultValues);
+        }).join(', ');
+    return sig;
+}
+
+function Block(spec, scope){
+    // If called as constructor, return empty example
+    if (this instanceof Block) return this;
+    // if called while de-serializing, get the parent spec
+    if (spec.signature){
+        var template = Block.registry[spec.signature];
+        assert.isObject(template, 'We fail to find a template block, has it been initialized yet?');
+        var instance = {
+            isLocal: false,
+            isTemplateBlock: false,
+            templateBlock: template
+        };
+        if (!template){
+            throw new Exception('Cannot find a block to restore this from');
+        }
+        spec = $.extend({}, template.spec, instance, spec);
+    }
+    // If called as function, demux to the correct constructor
+    switch(spec.blocktype){
+        case 'step':
+            return new Step(spec, scope);
+        case 'expression':
+            return new Expression(spec, scope);
+        case 'context':
+            return new Context(spec, scope);
+        case 'eventhandler':
+            return new EventHandler(spec, scope);
+        default:
+            console.warn('Unsupported blocktype: %o', model);
+            return null;
+    }
+}
+
+Block._nextId = 0;
+Block.newId = function(){
+    Block._nextId++;
+    return Block._nextId;
+};
+
+Block.registry = {};
+Block.registerBlock = function(model){
+    if (model.isLocal) return; // we build these scripts dynamically anyway
+    if (!model.isTemplateBlock) return; // only register blocks in the menu
+    if (Block.registry[model.signature]){
+        console.warn('Overwriting existing scripts for %s', model.signature);
+    }
+    Block.registry[model.signature] = model;
+};
+
+
+Block.prototype.debug = function(){
+    if (this.isTemplateBlock) return;
+    print.apply(console, arguments);
+};
+
+Block.prototype.init = function(spec){
+    var self = this;
+    // normalize labels to a list
+    if (spec.label){
+        spec.labels = [spec.label];
+        delete spec.label;
+    }
+    $.extend(this, spec);
+    this.spec = spec; // save unmodified description
+    if (! (this.id || this.isTemplateBlock)){
+        this.id = Block.newId();
+    }
+    // if (this.isLocal) print('this local id: %s', this.id);
+	print('initializing labels from inherited labels: %s', this.labels.map(h));
+	this.labels = this.labels.map(function(labelspec){
+        return labelspec.replace(/##/g, self.id ? '_' + self.id : '');
+    });
+    this.signature = signature(this);
+    this.script = this.script.replace(/##/g, '_' + self.id);
+    Block.registerBlock(this);
+	print('parsing labels');
+    this.labels = this.labels.map(function(labelspec){
+        return self.parseLabel(labelspec);
+    });
+	print('labels after parse: %s', h(this.labels));
+    this.template = template(this.blocktype);
+    if (!this.isTemplateBlock){
+        this.initInstance();
+    }
+};
+
+Block.prototype.initInstance = function(){
+    var self = this;
+    if (this.id){
+        //Block._nextId = Math.max(Block._nextId, this.id + 1);
+    }
+    this.labels[0] = attachLocals(this.labels[0]);
+    if (this.locals){
+        this.spec.locals.forEach(function(spec){
+            if (spec === null){
+                return spec;
+            }
+            spec.isTemplateBlock = true;
+            spec.isLocal = true;
+            spec.id = self.id;
+        });
+        this.locals = this.spec.locals.map(function(spec){
+            if (spec === null){
+                return spec;
+            }
+            var block = Block(spec);
+            assert.isObject(block, 'Blocks must be objects');
+            return block;
+        });
+    }
+    if (this.returns){
+        this._returns = this.returns;
+        if (this.returns === 'block'){
+            // special user-defined block handler
+        }else{
+            this._returns.isTemplateBlock = true;
+            this._returns.isLocal = true;
+            this._returns.id = self.id;
+            this.returns = Block(this._returns);
+            assert.isObject(this.returns, 'Returns blocks must be objects');
+        }
+    }
+    if (this.spec.contained && this.spec.contained.length){
+        this.contained = this.spec.contained.map(function(spec){
+            if (spec === null) return spec;
+            var block = Block(spec);
+            assert.isObject(block, 'Contained blocks must be blocks');
+            return block;
+        });
+    }else{
+        this.contained = [];
+    }
+    if (this.spec.next){
+        this.next = Block(this.spec.next);
+    }else{
+        this.next = null;
+    }
+    if (this.spec.values && this.spec.values.length){
+        this.values = this.spec.values.map(function(value, idx){
+			if (value instanceof Value){
+				return value;
+			}
+            var val = new Value(value, idx);
+            assert.isObject(val, 'Values must be objects');
+            return val;
+        });
+    }else if (this.values && this.values.length){
+        // do nothing
+    }else{
+        this.values = [];
+    }
+    
+};
+
+Block.prototype.addValue = function(value){
+    if (!this.values){
+        this.values = [];
+    }
+    this.values.push(value);
+};
+
+Block.prototype.parseLabel = function(textLabel){
+    // Recognize special values in the label string and replace them with 
+    // appropriate markup. Some values are dynamic and based on the objects currently
+    // in the environment
+    //
+    // values include:
+    //
+    // [number] => an empty number socket
+    // [number:default] => a number socket with a default value
+    // [boolean] => an empty boolean socket
+    // [boolean:default] => a boolean with a default value
+    // [string] => an empty string socket
+    // [string:default] => a string socket with a default value
+    // [choice:options] => a fixed set of options, listed in options parameter function
+    // [choice:options:default] => choice list with a default besides the first item
+    // etc…
+
+    // FIXME: Move specific type handling to plugins
+    var self = this;
+    try{
+        textLabel = textLabel.replace(/##/, '');
+    }catch(e){
+        console.error('Failed in textlabel.replace: %o', e);
+    }
+
+    this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
+    var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
+    var label = $('<span class="label">' + htmlLabel + '</label>');
+    try{
+        if (!this.values && this.valueSlots.length){
+            this.values = this.valueSlots.map(function(slot, idx){return new Value(slot, idx);});
+        }
+    }catch(e){
+        console.error('Failed in this.valueSlots.map: %o', e);
+    }
+		print('label: %s, slots: %s', h(label), label.find('.valueslot').length);
+        label.find('.valueslot').each(function fillSlots(idx, slotdom){
+		    // try{
+				print('value slot idx: %s, slotdom: %s', idx, slotdom);
+				var slot = $(slotdom);
+	            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
+	            // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
+	            var value = self.values[idx];
+	            if (!value.view){
+					print('converting raw value object into type Value');
+	                value = new Value(value, idx);
+					print('received new value: %o', value);
+	                self.values[idx] = value;
+					print('set value[%s] to %o', idx, value);
+	            }
+				print('here I am!');
+				print('replacing slot value with new view: %o', value.view());
+				print('')
+	            slot.replaceWith(value.view());
+		    // }catch(e){
+		        // console.error('Failed in this.valueSlots.each: %o', e);
+		        // print(htmlLabel.replace);
+		        // print('self: %o', self);
+		        // print(self.values, idx);
+		        // print(self.values[idx]);
+		        // print('value has view: %s', self.values[idx].view);
+		    // }
+        });
+    return label;
+};
+
+Block.prototype.code = function(){
+	// extract code from script, values, contained, and next
+	var self = this;
+	var _code = this.script;
+	function replace_values(match, offset, s){
+        var idx = parseInt(match.slice(2, -2), 10) - 1;
+		if (match[0] === '{'){
+			return self.values[idx] ? self.values[idx].code() : match;
+		}else{
+			return self.contained[idx] ? self.contained[idx].code() : match;
+		}
 	}
-
-	value = value.replace(/\[([a-zA-Z]*)\]$/g,function(a,b,c){
-		//console.log(" a: "+a+" b: "+b+" c: "+c);
-		// a is the whole string [int:10]
-		// b is the first match  int
-		// c is where it was found
-
-		return repl(b, undefined);
-
-	});
-	value = value.replace(/\[([a-zA-Z]*)\:(.*?)\]/g, function(a, b, c){
-		//console.log(" a "+a+" b "+b+" c "+c+" d "+d+" e "+e+" f "+f+" g "+g);
-		// a is the whole string [int:10]
-		// b is the first match  int
-		// c is the second match 10
-		// d is string that comes after
-		return repl(b, c);
-	});
-
-	return value;
-
+	_code = _code.replace(/\{\{\d\}\}/g, replace_values);
+	_code = _code.replace(/\[\[\d\]\]/g, replace_values);
+	if (this.next){
+		_code = _code + this.next.code();
+	}
+	return _code;
 }
 
+Block.prototype.cloneScript = function(){
+    // Copy a template model (in the menu) to a script model (in the script workspace)
+    var spec = $.extend({}, this.spec, {
+       isLocal: false,
+       isTemplateBlock: false,
+       templateBlock: this
+    });
+    var clone = Block(spec);
+	print('block labels: %s', clone.labels[0].toString());
+	return clone;
+};
 
+Block.prototype.clone = function(deep){
+    // Clone a script block. If deep is true, clone values and contained blocks
+    // Do not clone next blocks, this is for supporting copy and paste
+    var spec = this.toJSON();
+    if (!deep){
+        spec.contained = [];
+        spec.values = this.values.map(function(v){return {
+            type: this.type, 
+            value:  v.literal ? v.value : v.defaultValue
+        }});
+    }
+    return Block(spec);
+}
+
+// Not used, delete?
+// Block.prototype.cloneTemplate = function(){
+//     var spec = $.extend({}, this.spec, {
+//         isLocal: false,
+//         isTemplateBlock: true
+//     });
+//     return Block(spec);
+// };
+
+function attachLocals(node){
+	node.attachLocals = true; // this should probably be data, c'est la vie
+	return node;
+}
+
+Block.prototype.view = function(){
+    if (this._view){
+        return this._view;
+    }
+    var self = this;
+    var view = this._view = this.template(this);
+    view.data('model', this);
+    if (this.isTemplateBlock){
+        return view;
+    }
+    if (this.locals){
+        var localContainer = view.find('.locals');
+        this.locals.forEach(function(local){
+            localContainer.append(local.view());
+        });
+    }
+    view.find('> .block > .contained').each(function(idx){
+        $(this).data('index', idx);
+    });
+    this.contained.forEach(function(contained, idx){
+        if (contained === null) return;
+        view.find('> .block > .contained').eq(idx).append(contained.view());
+        contained.addLocalsToParentContext();
+    });
+    view.find('> .block > .blockhead > .value > .socket').each(function(idx){
+        $(this).data('index', idx);
+    });
+    this.values.forEach(function(value, idx){
+        view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
+    });
+    if (this.next){
+        view.find('> .next').append(this.next.view());
+        this.next.addLocalsToParentContext(true);
+    }
+    return view;
+};
+
+// EVENT HANDLERS
+
+Block.prototype.removeChild = function(block, container){
+    // print('remove this block from %o', container);
+};
+
+Block.prototype.addLocalBlock = function(block){
+    var locals = this.view().find('> .block > .blockhead > .locals');
+    if (!locals.length) {
+        throw new Error('no locals found');
+    }
+    locals.append(block.view());
+}
+
+Block.prototype.addLocalsToParentContext = function(isNext){
+    // on addToScript
+    if (!this.returns) return;
+    if (this.returns === 'block'){
+        // special metablock handler
+        return;
+    }
+    if (!this.id){
+        throw new Error('Model must have an id by now');
+    }
+    var context = this.view().closest('.context').data('model');
+    if (context && isNext){
+        context = this.view().closest('.context').parent().closest('.context').data('model')    ;
+    }
+    if (context){
+        context.addLocalBlock(this.returns);
+        if (this.next){
+            this.next.addLocalsToParentContext(isNext);
+        }
+    }else{
+        this.addGlobals();
+        if (this.next){
+            this.next.addGlobals();
+        }
+    }
+};
+
+Block.prototype.addGlobals = function(){
+    if (!this.returns) return;
+    if (this.returns === 'block'){
+        // special metablock handler
+        return;
+    }
+    // remove from DOM if already in place elsewhere
+    $('.submenu.globals').append(this.returns.view());
+};
+
+Block.prototype.removeLocalsFromParent = function(){
+    if (!(this.returns && this.returns.signature)) return;
+    this.returns.view().remove();
+};
+
+Block.prototype.addNext = function(step){
+    console.log('addNext(%o)', step);
+    if (this.next){
+        throw new Error('Cannot add a next step where a next step already exists');
+    }
+    step.addLocalsToParentContext(true);
+    this.next = step;
+}
+
+Block.prototype.addStep = function(step, stepIndex){
+    console.log('addStep(%o, %s)', step, stepIndex);
+    if (this.contained[stepIndex]){
+        throw new Error('Cannot add a step where a step exists already');
+    }
+    step.addLocalsToParentContext();
+    this.contained[stepIndex] = step;
+};
+Block.prototype.addToWorkspace = function(){
+    this.addGlobals(this.view());
+    if (this.next){
+        this.next.addToWorkspace();
+    }
+};
+Block.prototype.setValue = function(index, type, newValue){
+    print('set value %s to %s', index, newValue);
+    this.values[index].update(newValue);
+}
+
+Block.prototype.addExpression = function(expression, expressionIndex){
+    // add block to value
+    // print('add value block to socket');
+    this.values[expressionIndex].addBlock(expression);
+    // FIXME: update view (currently happens elsewhere)
+};
+
+Block.prototype.deleteBlock = function(view, evt, params){
+    var model = view.data('model');
+    model.view().remove();
+};
+
+function newBlockHandler(blocktype, args, body, returns){
+    console.info('blocktype: %s', blocktype);
+    console.info('%s args: %o', args.length, args);
+    console.info('body: %o', body);
+    console.info('returns: %s', returns);
+}
+
+$('.scripts_workspace')
+    // .on('add_to_workspace', '.wrapper', function(evt, params){
+    //     var view = $(this);
+    //     view.data('model').addToWorkspace(view, evt, params);
+    //     return false;
+    // })
+    .on('change', '.socket input, .autosocket select', function(evt){
+        var input = $(evt.target);
+        var socket = input.parent();
+        var socketIndex = socket.data('index');
+        var parentModel = socket.closest('.wrapper').data('model');
+        parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
+    });
+
+Block.prototype.removeExpression = function(expression, expressionIndex){
+    console.log('remove expression');
+    var value = this.values[expressionIndex];
+    value.value = value.defaultValue;
+    value.literal = true;
+};
+
+Block.prototype.removeContainedStep = function(step, stepIndex){
+    console.log('remove child step');
+    this.contained[stepIndex].removeLocalsFromParent();
+    this.contained[stepIndex] = null;
+};
+
+Block.prototype.removeNextStep = function(step){
+    console.log('remove next step (sorry Steve)');
+    this.next.removeLocalsFromParent(true);
+    this.next = null;
+};
+    
+$('body').on('delete_block', '.wrapper', function(evt, params){
+    var view = $(this);
+    view.data('model').deleteBlock(view, evt, params);
+    return false;
+});
+
+function removeFromScriptEvent(view){
+    var parent = view.parent();
+    var model = view.data('model');
+    var parentView = parent.closest('.wrapper');
+    var parentModel = parentView.data('model');
+    model.removeLocalsFromParent();
+    if (parent.hasClass('contained')){
+        parentModel.removeContainedStep( model, parent.data('index'));
+    }else if (parent.hasClass('socket')){
+        parentModel.removeExpression(model, parent.data('index'));
+        assert(parent.children('input').length > 0, "No input found, where can it be?")
+        if(parent.hasClass('boolean')){           
+            parent.append(
+                '<select><option>true</option><option>false</option></select>');
+        }else{
+            parent.children('input').show();
+        }
+        parent.children('input').val(value.defaultValue);
+    }else if (parent.hasClass('next')){
+        parentModel.removeNextStep(model);
+    }
+}
+
+function addToScriptEvent(container, view){
+    // Converts from DOM/jQuery action to model action
+    console.log('addToScriptEvent %o, %o', container, view);
+    var model = view.data('model');
+    if (!model){
+        console.log('unable to retrieve model for view %o', view);
+        throw new Error('unable to retrieve model');
+    }
+    if (container.is('.slot') || container.is('input')){
+        container = container.parent();
+    }
+    if (container.is('.scripts_workspace')){
+        model.addGlobals();
+    }else{
+        var parentModel = view.parent().closest('.wrapper').data('model');
+        if (view.is('.value')){
+            parentModel.addExpression(model, container.data('index'));
+        }else{
+            if (container.hasClass('next')){
+                parentModel.addNext(model);
+            }else{
+                parentModel.addStep(model, container.data('index'));
+            }
+        }
+    }
+}

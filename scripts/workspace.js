@@ -169,13 +169,13 @@ function toggleDescription(event){
 
 function createDownloadUrl(evt){
     var URL = window.webkitURL || window.URL;
-    var file = new Blob([scriptsToString()], {type: 'text/json'});
+    var file = new Blob([scriptsToString()], {type: 'application/json'});
     var reader = new FileReader();
     var a = document.createElement('a');
     reader.onloadend = function(){
         a.href = reader.result;
         a.download = 'script.json';
-        console.log('setting href to %s', reader.result);
+        a.target = '_blank';
         document.body.appendChild(a);
         a.click();
     };
@@ -228,10 +228,19 @@ window.loadCurrentScripts = function(){
 
 
 // Allow saved scripts to be dropped in
-$('.scripts_workspace').on('drop', getFiles);
+var workspace = $('.scripts_workspace:visible')[0];
+workspace.addEventListener('drop', getFiles, false);
+workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+
+function handleDragover(evt){
+    // Stop Mozilla from grabbing the file prematurely
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy';
+}
 
 function getFiles(evt){
-    evt = evt.originalEvent;
+    evt.stopPropagation();
     evt.preventDefault();
     var files = evt.dataTransfer.files;
     if ( files.length > 0 ){

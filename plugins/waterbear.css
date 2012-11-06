@@ -6,9 +6,6 @@
 .looks{ border-color: hsl(264,62%,79%); }
 .looks > .block{ background-color: hsl(264,62%,89%); }
 
-.userdefined{ border-color: hsl(156, 90%, 66%); }
-.userdefined > .block { background-color: hsl(156, 85%, 70%); }
-
 .arrays{ border-color: hsl(195, 65%, 79%); }
 .arrays > .block{ background-color: hsl(195, 62%, 89%); }
 

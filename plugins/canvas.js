@@ -1,7 +1,7 @@
 /* 
- *    JAVASCRIPT PLUGIN
+ *    Canvas Plugin
  * 
- *    Support for writing Javascript using Waterbear
+ *    Support for using <canvas> from Waterbear
  *
  */
 
@@ -12,16 +12,6 @@
 yepnope({
     load: [ 'plugins/canvas.css'
     ]
-});
-
-function showColorPicker(){
-    console.log('Add a non-Raphael color picker');
-}
-
-//$('.workspace:visible .scripts_workspace').on('click', 'input[type=color]', showColorPicker);
-
-$(document).ready(function(){
-//     window.cw = Raphael.colorwheel($('#color_contents')[0], 300, 180);
 });
 
 

@@ -1,7 +1,7 @@
 /* block and border colours for different groups of blocks */
 
-.motion{ border-color: hsl(225,65%,83%); }
-.motion > .block{ background-color: hsl(225, 65%, 93%); }
+.variables{ border-color: hsl(2264,65%,83%); }
+.variables > .block{ background-color: hsl(264, 65%, 93%); }
 
 .looks{ border-color: hsl(264,62%,79%); }
 .looks > .block{ background-color: hsl(264,62%,89%); }

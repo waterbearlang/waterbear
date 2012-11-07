@@ -105,21 +105,34 @@ Value.prototype.removeBlock = function(blockModel){
     this.value = this.defaultValue;
 };
 
+function getInputType(testType){
+    if (['color', 'date', 'datetime', 'time', 'email', 'month', 'number', 'tel', 'text', 'url', 'week'].indexOf(testType) > -1){
+        return testType;
+    }
+    if (['float', 'double', 'int', 'long'].indexOf(testType) > -1){
+        return 'number';
+    }
+    return 'text';
+}
+
 Value.prototype.view = function(){
 	print('building view for %o, has cached view: %s', j(this), !!this._view);
     if (this._view) return this._view;
 	print('we do not have a cached view');
     if (! this.literal && this.value){ return this.value.view(); }
 	print('we do not have a block value');
+    var inputType;
     if (this.choiceName){
 		print('return choice view');
         this._view =  this.choiceView(this.choiceName, this.choiceList);
     }else if (this.value !== undefined){
+        inputType = getInputType(this.type);
 		print('return type/index/value %o/%o/%o', this.type, this.index, this.value);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + this.type + '" value="' + this.value + '"></span>');
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + inputType + '" value="' + this.value + '"></span>');
     }else{
 		print('return undefined value');
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + this.type + '"></span>');
+        inputType = getInputType(this.type);
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"></span>');
     }
 	print('return cached value: %o', h(this._view));
     return this._view;
@@ -141,7 +154,7 @@ Value.prototype.update = function(newValue){
     switch(this.type){
         case 'number': this.value = parseFloat(newValue); break;
         case 'boolean': this.value = newValue === 'true'; break;
-        case 'string': this.value = newValue; break;
+        case 'string': this.value = '"' + newValue + '"'; break;
         case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break; 
         case 'datetime': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
         case 'time': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
@@ -190,6 +203,7 @@ function assertStep(model){
 
 function assertExpression(model){
     if (! model.type){
+        console.log('Error: step "' + model.signature + '" treated as an expression');
 		throw new Error('Bite me');
         alert('Error: step "' + model.signature + '" treated as an expression');
     }
@@ -218,6 +232,9 @@ function signature(model){
     var sig = model.blocktype + ': ' + model.spec.labels.map(function(label){
             return label.replace(/\[(.*?)\]/g, noDefaultValues);
         }).join(', ');
+        if (model.isLocal && model.id){
+            sig = sig.replace(/##/g, '_' + model.id);
+        }
     return sig;
 }
 
@@ -227,7 +244,7 @@ function Block(spec, scope){
     // if called while de-serializing, get the parent spec
     if (spec.signature){
         var template = Block.registry[spec.signature];
-        assert.isObject(template, 'We fail to find a template block, has it been initialized yet?');
+        assert.isObject(template, 'We fail to find a template block for ' + spec.signature + ', has it been initialized yet?');
         var instance = {
             isLocal: false,
             isTemplateBlock: false,
@@ -262,7 +279,6 @@ Block.newId = function(){
 
 Block.registry = {};
 Block.registerBlock = function(model){
-    if (model.isLocal) return; // we build these scripts dynamically anyway
     if (!model.isTemplateBlock) return; // only register blocks in the menu
     if (Block.registry[model.signature]){
         console.warn('Overwriting existing scripts for %s', model.signature);
@@ -289,14 +305,25 @@ Block.prototype.init = function(spec){
         this.id = Block.newId();
     }
     // if (this.isLocal) print('this local id: %s', this.id);
-	print('initializing labels from inherited labels: %s', this.labels.map(h));
+    try{
+        print('initializing labels from inherited labels: %s', this.labels.map(h));
+    }catch(e){
+        console.log('Error with labels: %o', this.labels);
+    }
 	this.labels = this.labels.map(function(labelspec){
         return labelspec.replace(/##/g, self.id ? '_' + self.id : '');
     });
-    this.signature = signature(this);
+    if (!this.signature){
+        this.signature = signature(this);
+    }else{
+        console.log('signature is %s', this.signature);
+    }
+    if (this.isLocal){
+        this.signature = this.signature.replace(/##/g, '_' + self.id);
+    }
     this.script = this.script.replace(/##/g, '_' + self.id);
     Block.registerBlock(this);
-	print('parsing labels');
+    print('parsing labels');
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
     });
@@ -473,9 +500,11 @@ Block.prototype.cloneScript = function(){
     var spec = $.extend({}, this.spec, {
        isLocal: false,
        isTemplateBlock: false,
-       templateBlock: this
+       templateBlock: this,
+       signature: this.signature
     });
     var clone = Block(spec);
+    console.log('cloning %s', spec.signature);
 	print('block labels: %s', clone.labels[0].toString());
 	return clone;
 };
@@ -593,6 +622,7 @@ Block.prototype.addGlobals = function(){
         return;
     }
     // remove from DOM if already in place elsewhere
+    console.log('adding globals: %o, %o', this.returns, this.returns.view());
     $('.submenu.globals').append(this.returns.view());
 };
 
@@ -704,6 +734,7 @@ function removeFromScriptEvent(view){
         }else{
             parent.children('input').show();
         }
+        // Why is val an actual value rather than a method?
         parent.children('input').val(value.defaultValue);
     }else if (parent.hasClass('next')){
         parentModel.removeNextStep(model);

@@ -151,7 +151,10 @@ menu('Control', [
         labels: ['repeat until [boolean]'], 
         script: 'while(!({{1}})){[[1]]}',
         help: 'repeat forever until condition is true'
-    },
+    }
+]);
+
+menu('Variables', [
     {
         blocktype: 'step',
         label: 'variable string## [string]',

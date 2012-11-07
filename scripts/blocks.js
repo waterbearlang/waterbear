@@ -41,6 +41,9 @@ function Value(textValue, index){
     if ($.isPlainObject(textValue)){
 		print('initializing Value with object: %o', textValue);
         $.extend(this, textValue);
+        if (this.choiceName){
+            this.choiceList = choiceLists[this.choiceName];
+        }
         if (textValue.value.signature){
             var block = Block(textValue.value);
             assert.isObject(block, 'Value blocks must be objects');
@@ -315,8 +318,6 @@ Block.prototype.init = function(spec){
     });
     if (!this.signature){
         this.signature = signature(this);
-    }else{
-        console.log('signature is %s', this.signature);
     }
     if (this.isLocal){
         this.signature = this.signature.replace(/##/g, '_' + self.id);

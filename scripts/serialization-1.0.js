@@ -52,7 +52,7 @@ function exists(list){
 }
 
 Block.prototype.toJSON = function(){
-    var serialized = {signature: this.signature};
+    var serialized = {signature: this.signature, blocktype: this.blocktype};
     // console.info('serializing %s', this.signature);
     if (exists(this.values)){
         // console.info('with %s values', this.values.length);
@@ -81,19 +81,24 @@ Block.prototype.toJSON = function(){
 
 Value.prototype.toJSON = function(){
     // Implement me and make sure I round-trip back into the block model
-    if (this.value && this.value.serialize){
+    var struct;
+    if (this.value && this.value.toJSON){
         // console.info('serializing block value');
-        return {
+        struct = {
             type: this.type,
             value: this.value.toJSON()
         };
     }else{
         // console.info('serializing raw value');
-        return {
+        struct = {
             type: this.type,
             value: this.value
         };
+        if (this.choiceName){
+            struct.choiceName = this.choiceName;
+        }
     }
+    return struct;
 };
 
 

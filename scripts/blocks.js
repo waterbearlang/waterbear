@@ -92,6 +92,9 @@ function Value(textValue, index){
 
 Value.prototype.code = function(){
 	if (this.literal){
+        if (this.value.substring){ // is it a string?
+            return '"' + this.value + '"';
+        }
 		return this.value;
 	}else{
 		return this.value.code();
@@ -157,12 +160,13 @@ Value.prototype.update = function(newValue){
     switch(this.type){
         case 'number': this.value = parseFloat(newValue); break;
         case 'boolean': this.value = newValue === 'true'; break;
-        case 'string': this.value = '"' + newValue + '"'; break;
+        case 'string': this.value = newValue; break;
         case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break; 
         case 'datetime': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
         case 'time': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
         case 'int': this.value = parseInteger(newValue); break;
         case 'float': this.value = parseInteger(newValue); break;
+        default: this.value = newValue; break;
     }
 }
 
@@ -505,7 +509,6 @@ Block.prototype.cloneScript = function(){
        signature: this.signature
     });
     var clone = Block(spec);
-    console.log('cloning %s', spec.signature);
 	print('block labels: %s', clone.labels[0].toString());
 	return clone;
 };
@@ -623,7 +626,6 @@ Block.prototype.addGlobals = function(){
         return;
     }
     // remove from DOM if already in place elsewhere
-    console.log('adding globals: %o, %o', this.returns, this.returns.view());
     $('.submenu.globals').append(this.returns.view());
 };
 
@@ -633,7 +635,6 @@ Block.prototype.removeLocalsFromParent = function(){
 };
 
 Block.prototype.addNext = function(step){
-    console.log('addNext(%o)', step);
     if (this.next){
         throw new Error('Cannot add a next step where a next step already exists');
     }
@@ -642,7 +643,6 @@ Block.prototype.addNext = function(step){
 }
 
 Block.prototype.addStep = function(step, stepIndex){
-    console.log('addStep(%o, %s)', step, stepIndex);
     if (this.contained[stepIndex]){
         throw new Error('Cannot add a step where a step exists already');
     }

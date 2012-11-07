@@ -344,7 +344,7 @@ Block.prototype.initInstance = function(){
     if (this.id){
         //Block._nextId = Math.max(Block._nextId, this.id + 1);
     }
-    this.labels[0] = attachLocals(this.labels[0]);
+    this.labels[0].attachLocals = true;
     if (this.locals){
         this.spec.locals.forEach(function(spec){
             if (spec === null){
@@ -557,12 +557,12 @@ Block.prototype.view = function(){
             localContainer.append(local.view());
         });
     }
-    view.find('> .block > .contained').each(function(idx){
+    view.find('> .block > .blockhead > .contained').each(function(idx){
         $(this).data('index', idx);
     });
     this.contained.forEach(function(contained, idx){
         if (contained === null) return;
-        view.find('> .block > .contained').eq(idx).append(contained.view());
+        view.find('> .block > .blockhead > .contained').eq(idx).append(contained.view());
         contained.addLocalsToParentContext();
     });
     view.find('> .block > .blockhead > .value > .socket').each(function(idx){

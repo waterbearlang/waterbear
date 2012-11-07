@@ -50,13 +50,13 @@
                 <b class="flap"></b>
                 <div class="blockhead" data-for="label in labels">
                     <div class="label">
-                        <span class="disclosure open">▼</span>
+                        <span class="disclosure open" data-if="label.attachLocals">▼</span>
                         <span data-replace="label"></span>
                     </div>
-                    <div class="locals block_menu"></div>
-                </div>
-                <div class="contained">
-                    <i class="slot"></i>
+                    <div class="locals block_menu" data-if="label.attachLocals"></div>
+                    <div class="contained">
+                        <i class="slot"></i>
+                    </div>
                 </div>
             </div>
             <div class="next">
@@ -70,13 +70,13 @@
                 <b class="trigger"></b>
                 <div class="blockhead" data-for="label in labels">
 	                <div class="label">
-	                    <span class="disclosure open">▼</span>
+	                    <span class="disclosure open" data-if="label.attachLocals">▼</span>
 	                    <span data-replace="label"></span>
 	                </div>
-	                <div class="locals block_menu"></div>
-	                </div>
-                <div class="contained">
-                    <i class="slot"></i>
+	                <div class="locals block_menu" data-if="label.attachLocals"></div>
+                    <div class="contained">
+                        <i class="slot"></i>
+                    </div>
                 </div>
             </div>
         </div>

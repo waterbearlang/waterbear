@@ -169,6 +169,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set string variable [string] to [string]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal string'
+    },
+    {
+        blocktype: 'step',
         label: 'variable number## [number]',
         script: 'local.number## = {{1}};',
         returns: {
@@ -178,6 +184,12 @@ menu('Variables', [
             type: 'number'
         },
         help: 'create a reference to re-use the number'
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [number] to [number]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal number'
     },
     {
         blocktype: 'step',
@@ -193,6 +205,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [boolean] to [boolean]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal boolean'
+    },
+    {
+        blocktype: 'step',
         label: 'variable array## [array]',
         script: 'local.array## = {{1}};',
         returns: {
@@ -202,6 +220,12 @@ menu('Variables', [
             type: 'array'
         },
         help: 'create a reference to re-use the array'
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [array] to [array]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal array'
     },
     {
         blocktype: 'step',
@@ -217,6 +241,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [object] to [object]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal object'
+    },
+    {
+        blocktype: 'step',
         label: 'variable color## [color]',
         script: 'local.color## = {{1}};',
         returns: {
@@ -229,6 +259,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [color] to [color]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal color'
+    },
+    {
+        blocktype: 'step',
         label: 'variable image## [image]',
         script: 'local.image## = {{1}};',
         returns: {
@@ -238,6 +274,12 @@ menu('Variables', [
             type: 'image'
         },
         help: 'create a reference to re-use the image'
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [image] to [image]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal image'
     },
     // 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'any'
     {
@@ -254,6 +296,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [shape] to [shape]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal shape'
+    },
+    {
+        blocktype: 'step',
         label: 'variable point## [point]',
         script: 'local.point## = {{1}};',
         returns: {
@@ -263,6 +311,12 @@ menu('Variables', [
             type: 'point'
         },
         help: 'create a reference to re-use the point'
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [point] to [point]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal point'
     },
     {
         blocktype: 'step',
@@ -278,6 +332,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [size] to [size]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal size'
+    },
+    {
+        blocktype: 'step',
         label: 'variable rect## [rect]',
         script: 'local.rect## = {{1}};',
         returns: {
@@ -287,6 +347,12 @@ menu('Variables', [
             type: 'rect'
         },
         help: 'create a reference to re-use the rect'
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [rect] to [rect]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal rect'
     },
     {
         blocktype: 'step',
@@ -302,6 +368,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [gradient] to [gradient]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal gradient'
+    },
+    {
+        blocktype: 'step',
         label: 'variable pattern## [pattern]',
         script: 'local.pattern## = {{1}};',
         returns: {
@@ -311,6 +383,12 @@ menu('Variables', [
             type: 'pattern'
         },
         help: 'create a reference to re-use the pattern'
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [pattern] to [pattern]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal pattern'
     },
     {
         blocktype: 'step',
@@ -326,6 +404,12 @@ menu('Variables', [
     },
     {
         blocktype: 'step',
+        label: 'set variable [imagedata] to [imagedata]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal imagedata'
+    },
+    {
+        blocktype: 'step',
         label: 'variable any## [any]',
         script: 'local.any## = {{1}};',
         returns: {
@@ -335,7 +419,13 @@ menu('Variables', [
             type: 'any'
         },
         help: 'create a reference to re-use the any'
-    }
+    },
+    {
+        blocktype: 'step',
+        label: 'set variable [any] to [any]',
+        script: '{{1}} = {{2}};',
+        help: 'first argument must be a variable, not a literal any (ha ha)'
+    },
 ], true);
 
 // menu('User Defined', [

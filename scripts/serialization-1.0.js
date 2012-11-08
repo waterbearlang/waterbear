@@ -52,7 +52,11 @@ function exists(list){
 }
 
 Block.prototype.toJSON = function(){
-    var serialized = {signature: this.signature, blocktype: this.blocktype};
+    var serialized = {
+        signature: this.signature, 
+        blocktype: this.blocktype,
+        id: this.id // yes, this will become problematic later
+    };
     // console.info('serializing %s', this.signature);
     if (exists(this.values)){
         // console.info('with %s values', this.values.length);

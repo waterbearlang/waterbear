@@ -93,7 +93,7 @@ menu('Control', [
                 type: 'number'
             }
         ],
-        script: '(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();',
+        script: 'local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();',
         help: 'this trigger will run the attached blocks periodically'
     },
     {

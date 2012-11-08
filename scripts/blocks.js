@@ -92,7 +92,7 @@ function Value(textValue, index){
 
 Value.prototype.code = function(){
 	if (this.literal){
-        if (this.value.substring){ // is it a string?
+        if (this.value && this.value.substring){ // is it a string?
             return '"' + this.value + '"';
         }
 		return this.value;
@@ -507,8 +507,10 @@ Block.prototype.cloneScript = function(){
        isLocal: false,
        isTemplateBlock: false,
        templateBlock: this,
+       id: this.id,
        signature: this.signature
     });
+    console.log('cloneScript: model: %o, spec: %o', this, spec);
     var clone = Block(spec);
 	print('block labels: %s', clone.labels[0].toString());
 	return clone;

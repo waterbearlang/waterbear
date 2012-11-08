@@ -622,7 +622,7 @@ jQuery.fn.extend({
         {
             blocktype: 'expression',
             label: 'size with width [number:10] height [number:10]',
-            script: '{w: {{1}}, h: {{1}}',
+            script: '{w: {{1}}, h: {{2}} }',
             type: 'size'
         },
         {

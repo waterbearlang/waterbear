@@ -119,13 +119,13 @@ menu('Control', [
     {
         blocktype: 'step',
         label: 'broadcast [string:ack] message', 
-        script: '$(".stage").trigger("{{1}}");',
+        script: '$(".stage").trigger({{1}});',
         help: 'send this message to any listeners'
     },
     {
         blocktype: 'eventhandler',
         labels: ['when I receive [string:ack] message'],
-        script: '$(".stage").bind("{{1}}", function(){[[1]]});',
+        script: '$(".stage").bind({{1}}, function(){[[1]]});',
         help: 'add a listener for the given message, run these blocks when it is received'
     },
     {
@@ -722,7 +722,7 @@ menu('Sensing', [
         blocktype: 'expression',
         label: 'key [choice:keys] pressed?', 
         type: 'boolean', 
-        script: '$(document).bind("keydown", {{1}}, function(){[[1]]});',
+        script: 'global.isKeyDown({{1}})',
         help: 'is the given key down when this block is run?'
     },
     {

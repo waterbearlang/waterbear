@@ -44,7 +44,7 @@ function Value(textValue, index){
         if (this.choiceName){
             this.choiceList = choiceLists[this.choiceName];
         }
-        if (textValue.value.signature){
+        if (textValue.value && textValue.value.signature){
             var block = Block(textValue.value);
             assert.isObject(block, 'Value blocks must be objects');
             this.addBlock(block);
@@ -123,7 +123,6 @@ function getInputType(testType){
 
 Value.prototype.view = function(){
 	print('building view for %o, has cached view: %s', j(this), !!this._view);
-    if (this._view) return this._view;
 	print('we do not have a cached view');
     if (! this.literal && this.value){ return this.value.view(); }
 	print('we do not have a block value');
@@ -455,8 +454,8 @@ Block.prototype.parseLabel = function(textLabel){
 				print('value slot idx: %s, slotdom: %s', idx, slotdom);
 				var slot = $(slotdom);
 	            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
-	            // FIXME (2): When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
 	            var value = self.values[idx];
+	            // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
 	            if (!value.view){
 					print('converting raw value object into type Value');
 	                value = new Value(value, idx);
@@ -467,7 +466,9 @@ Block.prototype.parseLabel = function(textLabel){
 				print('here I am!');
 				print('replacing slot value with new view: %o', value.view());
 				print('')
-	            slot.replaceWith(value.view());
+                var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + getInputType(value) + '" + style="display:none"></input></span>');
+                input.append(value.view());
+	            slot.replaceWith(input);
 		    // }catch(e){
 		        // console.error('Failed in this.valueSlots.each: %o', e);
 		        // print(htmlLabel.replace);
@@ -543,6 +544,10 @@ function attachLocals(node){
 
 Block.prototype.view = function(){
     if (this._view){
+        if (!this._view.data('model')){
+            console.log('belatedly setting model %o on view %o', this, this._view);
+            this._view.data('model', this);
+        }
         return this._view;
     }
     var self = this;
@@ -727,7 +732,8 @@ function removeFromScriptEvent(view){
     if (parent.hasClass('contained')){
         parentModel.removeContainedStep( model, parent.data('index'));
     }else if (parent.hasClass('socket')){
-        parentModel.removeExpression(model, parent.data('index'));
+        var exprIndex = parent.data('index');
+        parentModel.removeExpression(model, exprIndex);
         assert(parent.children('input').length > 0, "No input found, where can it be?")
         if(parent.hasClass('boolean')){           
             parent.append(
@@ -736,7 +742,7 @@ function removeFromScriptEvent(view){
             parent.children('input').show();
         }
         // Why is val an actual value rather than a method?
-        parent.children('input').val(value.defaultValue);
+        parent.children('input').val(parentModel.values[exprIndex].defaultValue);
     }else if (parent.hasClass('next')){
         parentModel.removeNextStep(model);
     }
@@ -744,7 +750,7 @@ function removeFromScriptEvent(view){
 
 function addToScriptEvent(container, view){
     // Converts from DOM/jQuery action to model action
-    console.log('addToScriptEvent %o, %o', container, view);
+    // console.log('addToScriptEvent %o, %o', container, view);
     var model = view.data('model');
     if (!model){
         console.log('unable to retrieve model for view %o', view);

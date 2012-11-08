@@ -53,7 +53,9 @@ Local.prototype.delete = function(type, name){
 
 function Global(){
     this.timer = new Timer();
-    this.subscribe_mouse_events();
+    this.subscribeMouseEvents();
+    this.subscribeKeyboardEvents();
+    this.keys = {};
     var stage = $('.stage');
     // move this to raphael plugin
 //    this.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());
@@ -66,11 +68,32 @@ function Global(){
     this.mouse_down = false;
 };
 
-Global.prototype.subscribe_mouse_events = function(){
+Global.prototype.subscribeMouseEvents = function(){
     var self = this;
     $('.stage').mousedown(function(evt){self.mouse_down = true;})
                .mousemove(function(evt){self.mouse_x = evt.offset_x;
                                         self.mouse_y = evt.offset_y;});
     $(document.body).mouseup(function(evt){self.mouse_down = false;});
+};
+
+Global.prototype.keyForEvent = function(evt){
+    if ($.hotkeys.specialKeys[evt.keyCode]){
+        return $.hotkeys.specialKeys[evt.keyCode]
+    }else{
+        return String.fromCharCode( evt.which ).toLowerCase();
+    }
+}
+
+Global.prototype.isKeyDown = function(key){
+    return this.keys[key];
+}
+
+Global.prototype.subscribeKeyboardEvents = function(){
+    var self = this;
+    $('.stage').keydown(function(evt){
+        this.keys[this.keyForEvent(evt)] = true;
+    }).keyup(function(evt){
+        this.keys[this.keyForEvent(evt)] = false;
+    })
 };
 

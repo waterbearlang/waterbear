@@ -310,6 +310,11 @@ Block.prototype.init = function(spec){
     if (! (this.id || this.isTemplateBlock)){
         this.id = Block.newId();
     }
+    if (this.help){
+        this.tooltip = this.group + ' ' + this.id + ': ' + this.help;
+    }else{
+        this.tooltip = this.group + ' ' + this.id;
+    }
     // if (this.isLocal) print('this local id: %s', this.id);
     try{
         print('initializing labels from inherited labels: %s', this.labels.map(h));

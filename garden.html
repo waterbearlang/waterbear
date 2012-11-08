@@ -20,7 +20,7 @@
     <!-- Templates for the various block types: -->
     <script type="text/html" id="step_template">
         <div class="wrapper step" data-classes="group">
-            <div class="block" data-title="help">
+            <div class="block" data-title="tooltip">
                 <div class="blockhead">
                     <div class="label" data-for="label in labels">
 						<span data-replace="label"></span>
@@ -35,7 +35,7 @@
     </script>
     <script type="text/html" id="expression_template">
         <div class="wrapper value" data-classes="type group">
-            <div class="block">
+            <div class="block" data-title="tooltip">
                 <div class="blockhead">
                     <div class="label" data-for="label in labels">
 						<span data-replace="label"></span>
@@ -46,7 +46,7 @@
     </script>
     <script type="text/html" id="context_template">
         <div class="wrapper step context" data-classes="group">
-            <div class="block" data-title="help">
+            <div class="block" data-title="tooltip">
                 <b class="flap"></b>
                 <div class="blockhead" data-for="label in labels">
                     <div class="label">
@@ -66,7 +66,7 @@
     </script>
     <script type="text/html" id="eventhandler_template">
         <div class="wrapper trigger context" data-classes="group">
-            <div class="block" data-title="help">
+            <div class="block" data-title="tooltip">
                 <b class="trigger"></b>
                 <div class="blockhead" data-for="label in labels">
 	                <div class="label">

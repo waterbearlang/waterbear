@@ -30,7 +30,6 @@ window.RectSprite = RectSprite;
 RectSprite.prototype.draw = function(ctx){
     ctx.save();
     ctx.fillStyle = this.color;
-    console.log('filling rect <%s,%s,%s,%s> with %s', this.x, this.y, this.w, this.h, this.color);
     ctx.fillRect(this.x, this.y, this.w, this.h);
     ctx.restore();
 }
@@ -96,6 +95,33 @@ menu('Sprite', [
         label: 'move [sprite] to [point]',
         script: '(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})',
         help: 'move a sprite absolutely'
+    },
+    {
+        blocktype: 'expression',
+        label: 'sprite [sprite] left',
+        script: '{{1}}.x',
+        help: 'get x (left) position of sprite',
+        type: 'number'
+    },
+    {
+        blocktype: 'expression',
+        label: 'sprite [sprite] right',
+        script: '{{1}}.x + {{1}}.w',
+        help: 'get x+w (right) position of sprite',
+        type: 'number'
+    },
+    {
+        blocktype: 'expression',
+        label: 'sprite [sprite] top',
+        script: '{{1}}.y',
+        help: 'get y (top) position of sprite',
+        type: 'number'
+    },
+    {
+        blocktype: 'expression',
+        label: 'sprite [sprite] bottom',
+        script: '{{1}}.y + {{1}}.h',
+        type: 'number'
     }
 ]);
 

@@ -24,7 +24,7 @@ function RectSprite(size,pos,color){
     this.h = size.h;
     this.collisionRect = this;
     this.color = color;
-}
+};
 window.RectSprite = RectSprite;
 
 RectSprite.prototype.draw = function(ctx){
@@ -32,7 +32,7 @@ RectSprite.prototype.draw = function(ctx){
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.w, this.h);
     ctx.restore();
-}
+};
 
 RectSprite.prototype.collides = function(sprite){
     var self = this.collisionRect;
@@ -42,7 +42,11 @@ RectSprite.prototype.collides = function(sprite){
     if (self.x > (that.x + that.w)) return false;
     if (self.y > (that.y + that.h)) return false;
     return true;
-}
+};
+
+RectSprite.prototype.toString = function(){
+    return '<RectSprite ' + this.x + ' ' + this.y + ' ' + this.w + ' ' +  this.h + ' ' + this.color + '>';
+};
 
 
 // Sprite Menu

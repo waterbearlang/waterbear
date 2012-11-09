@@ -681,6 +681,13 @@ menu('Strings', [
         label: 'console log format [string] arguments [array]',
         script: 'var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);',
         help: 'send a message to the console with a format string and multiple objects'
+    },
+    {
+        blocktype: 'expression',
+        label: 'global keys object',
+        script: 'global.keys',
+        help: 'for debugging',
+        type: 'object'
     }
 ], false);
 

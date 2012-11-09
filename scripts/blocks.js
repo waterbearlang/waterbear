@@ -92,12 +92,17 @@ function Value(textValue, index){
 
 Value.prototype.code = function(){
 	if (this.literal){
-        if (this.value && this.value.substring){ // is it a string?
+        if (this.value && this.value.substring && this.type !== 'any'){ // is it a string?
             return '"' + this.value + '"';
         }
 		return this.value;
 	}else{
-		return this.value.code();
+        try{
+            return this.value.code();
+        }catch(e){
+            console.log('What happened to code? %o', this);
+            throw e;
+        }
 	}
 }
 
@@ -144,9 +149,10 @@ Value.prototype.view = function(){
 };
 
 Value.prototype.choiceView = function(){
+    var self = this;
     return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' + 
         this.choiceList.map(function(item){
-            if (item === this.value){
+            if (item === self.value){
                 return '<option selected>' + item + '</option>';
             }else{
                 return '<option>' + item + '</option>';

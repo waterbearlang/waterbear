@@ -78,7 +78,7 @@ Global.prototype.subscribeMouseEvents = function(){
 
 Global.prototype.keyForEvent = function(evt){
     if ($.hotkeys.specialKeys[evt.keyCode]){
-        return $.hotkeys.specialKeys[evt.keyCode]
+        return $.hotkeys.specialKeys[evt.keyCode];
     }else{
         return String.fromCharCode( evt.which ).toLowerCase();
     }
@@ -90,10 +90,10 @@ Global.prototype.isKeyDown = function(key){
 
 Global.prototype.subscribeKeyboardEvents = function(){
     var self = this;
-    $('.stage').keydown(function(evt){
-        this.keys[this.keyForEvent(evt)] = true;
+    $(document.body).keydown(function(evt){
+        self.keys[self.keyForEvent(evt)] = true;
     }).keyup(function(evt){
-        this.keys[this.keyForEvent(evt)] = false;
+        self.keys[self.keyForEvent(evt)] = false;
     })
 };
 

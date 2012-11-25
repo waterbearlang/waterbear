@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Waterbear: Block programming for all</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Waterbear is a toolkit for creating draggable snappable blocks similar to MIT's Scratch enviornment.">
+        <meta name="author" content="Dethe Elza">
+
+        <!-- Le styles -->
+        <link rel="stylesheet/less" type="text/css" href="stylesheets/bootstrap/bootstrap.less">
+				<script type="text/javascript" src="lib/less-1.3.1.min.js"></script>
+
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <!-- the bootstrap responsive include must come bleow the body padding to override the padding when resizing to a smaller screen. -->
+        <!--<link href="css/bootstrap-responsive.css" rel="stylesheet"/>-->
+				
+        <style>
+            .sidebar-nav {
+                padding: 9px 0;
+                /* this removes the superfluous space in the navbar (came with template) */
+            }
+            .nav-header {
+                font-size: 16px;
+                text-transform: none;
+                color: black;
+                /* this modifies the look of the headings */
+            }
+            .nav.nav-list>li {
+                padding-left: 15px;
+                /* this tabbs in items in the sidebar nav */
+            }
+            .span4.item {
+                margin-left: 0;
+                /* this makes items look properly when they line wrap */
+            }
+            .promotejs {
+                padding: 5px;
+                /* the promote js graphic seems to lack its own padding.*/
+            }
+            .modal-body {
+                max-height: 410px;
+                /* this makes the scroll bar go away for the about block*/
+            }
+            /*Taken from: http://stackoverflow.com/questions/9842533/vertical-alignment-of-bootstrap-modal-on-mobiles
+            */
+            /* @note: Less
+            @media (max-width: 767px) {
+                    .modal {
+                            top: 20px;
+                            // negative left margin to position horizontally.
+                            margin: 0 0 0 -280px;
+                            // already in modals.less, just copied for clarification:
+                                    left: 50%;
+                            position: fixed;
+                    }
+            }*/
+            /*@media (max-width:767px){.modal{top:20px;margin:0 0 0 -280px;left:50%;position:fixed;}}*/
+        </style>
+
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- fav and touch icons (Not in use)-->
+        <link rel="shortcut icon" href="ico/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="index.html">Waterbear</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="#about" data-toggle="modal">About</a></li>
+                            <li><a href="#credits" data-toggle="modal">Credits</a></li>
+                        </ul>
+                        <div class="pull-right">
+                            <!--Logged in as <a href="#" class="navbar-link">Username</a> -->
+                            <!--<a href="" title="Settings"><img src="img/gear.png" style="width: 40px;"/></a>-->
+                        </div>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid" data-note="Main Content Area">
+
+                <div class="span9">
+                    <div class="hero-unit">
+                        <img src="img/waterbear_steampunk_alpha.png" style="float: left; width: 195px; margin: -35px 15px 0 -25px;"/>
+                        <h1 style="font-size: 50px;">The Waterbear Welcomes You!</h1>
+                        <p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming.</p>
+                        <p>
+                            <a class="btn btn-primary btn-large" href="#about" data-toggle="modal" title="Learn more about the Waterbear Project">Learn more &raquo;</a>
+                            <a class="btn btn-success btn-large" href="#plugins" data-toggle="modal" title="Choose your plugins, and start using them">Choose your environment &raquo;</a>
+                        </p>
+
+                    </div>
+                    <h2>Play with Waterbear:</h2>
+                    <div class="row-fluid">
+
+                        <div class="span4 item">
+                            <h3>Javascript + Canvas</h3>
+                            <p>Using Javascript and Canvas create games, interactive art and so much more... </p>
+                            <p><a class="btn" href="ide.html?plugins=javascript|canvas">Get Started &raquo;</a></p>
+                        </div><!--/item-->
+
+                        <div class="span4 item">
+                            <h3>Javascript + Raphael</h3>
+                            <p>Using Javascript and Raphael create stunning graphics and intricate designs. </p>
+                            <p><a class="btn" href="ide.html?plugins=javascript|raphael">Get Started &raquo;</a></p>
+                        </div><!--/item-->
+
+                        <div class="span4 item">
+                            <h3>Arduino</h3>
+                            <p>Get a jumpstart writing code for your Arduino device!</p>
+                            <p><a class="btn" href="ide.html?plugins=arduino">Get Started &raquo;</a></p>
+                        </div><!--/item-->
+                    </div><!--/row-->
+                    <div class="row-fluid">
+                        <div class="span4 item">
+                            <h3>FRC Java</h3>
+                            <p>Get a jumpstart writing code for your <a href="http://www.usfirst.org/frc" target="_blank">FRC Robot</a> in Java. </p>
+                            <p><a class="btn" href="ide.html?plugins=frcjava">Get Started &raquo;</a></p>
+                        </div><!--/item-->
+
+                        <div class="span4 item">
+                            <h3>LSL</h3>
+                            <p>Make your 3D creations interactive with great scripts for <a href="http://secondlife.com/" target="_blank">SecondLife</a> and <a href="http://opensimulator.org/" target="_blank">Opensim</a> Virtual Worlds.</p>
+                            <p><a class="btn" href="ide.html?plugins=lsl">Get Started &raquo;</a></p>
+                        </div><!--/item-->
+                    </div><!--/row-->
+
+
+
+                </div><!--/span-->
+
+                <div class="span3" data-note="Side Nav Bar">
+                    <div class="well sidebar-nav">
+                        <blockquote>
+                            <p>“It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self-critical?”</p><p>
+                            </p><p class="attribution">—Alan Perlis</p>
+                        </blockquote>
+                        <ul class="nav-list nav">
+
+                            <li class="nav-header">The Waterbear Community</li>
+                            <!--<li class="divider"></li>
+                            <li class="active"><a href="#">Link</a></li>-->
+                            <li><p>Follow <a href="https://twitter.com/waterbearlang">@Waterbearlang</a> on Twitter</p></li>
+                            <li><p>Discuss Waterbear on the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a></p></li>
+                            <li><p>Fork <a href="http://github.com/waterbearlang/waterbear/">Waterbear on Github</a></p></li>
+                            <li>
+                                <p>Featured pages from the <a href="https://github.com/waterbearlang/waterbear/wiki/_pages">Wiki</a>:</p>
+                                <ul>
+                                    <li><a href="https://github.com/waterbearlang/waterbear/wiki/Glossary">Waterbear glossary</a></li>
+                                    <li><a href="https://github.com/waterbearlang/waterbear/wiki/How-to-Contribute">How to Contribute</a></li>
+                                    <li><a href="https://github.com/waterbearlang/waterbear/wiki/Why-Blocks%3F">Why Blocks?</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-header">Friends of Waterbear</li>
+                            <li><p>Forks and other projects based on Waterbear</p></li>
+                            <li>
+															<ul>
+                                    <li><a href="http://stretch.deedah.org/waterbear/">Stretchyboy</a> has blocks for Arduino</li>
+                                    <li><a href="http://easyj.team2648.com/">Team2648</a> has blocks for the WPI robotics API</li>
+                                    <li><a href="http://scriptastic.greenbush.us/">ScripTastic</a> has blocks for Opensim</li>
+                                    <li><a href="http://waterbearlang.com/">Waterbear</a> the original waterbear has blocks for Javascript, Raphael.js, Arduino, and more</li>
+                                </ul>
+														</li>
+                        </ul>
+                    </div><!--/.well -->
+                </div><!--/Side Nav Bar-->
+            </div><!--/row <Main Content Area>-->
+
+
+            <div id="about" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="aboutLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="aboutLabel">About The Waterbear Project</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    <img class="scratchmascot pull-left" alt="Waterbear Example" src="img/waterblocks.png" />
+                    <p>Waterbear is a toolkit for creating drag-and-drop programming languages, with some example languages you can play around with and learn from. The goal is to make it easy to wrap other existing languages with Waterbear blocks to create draggable, snappable syntaxes for them.</p>
+                    <p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming. Waterbear is good for kids, artists, and anyone who would like to make their computer do something new without having to become a "programmer" (although it could lead to that).</p>
+
+                    <p>
+                        <a href="http://scratch.mit.edu">
+                            <img class="scratchmascot pull-right" alt="Scratch mascot" src="img/scratchcat.png" />
+                        </a>Waterbear's blocks are heavily inspired by MIT's <a href="http://scratch.mit.edu/">Scratch</a> language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad.
+                    </p>
+
+                    <p>
+                        <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" title="JavaScript Function constructor">
+                            <img class="promotejs pull-left" src="http://static.jsconf.us/promotejsh.gif" alt="JavaScript Function constructor"/>
+                        </a>Waterbear's system of draggable, snappable blocks are built using clean HTML5, CSS3, and Javascript. The Javascript playground for Waterbear allows you to create Waterbear scripts, see the Javascript it will generate, and run it right in the browser.
+                    </p>
+
+                    <p>Waterbear is pre-alpha software, very raw, and in constant flux right now.</p>
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+            <div id="credits" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="creditsLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="creditsLabel">Credits</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    <ul>
+                        <li><a href="http://livingcode.org/">Dethe Elza</a> founded the project and named it (blame him!)</li>
+                        <li>Dethe's kids, for helping test so many programming environments and great critics (and for the Waterbear mascot image above)</li>
+                        <li><a href="http://stretchyboy.co.uk/">Martyn Eggleton</a>, for the <a href="http://www.arduino.cc/">Arduino</a> blocks, good brainstorming, and using Waterbear to teach programming</li>
+                        <li><a href="http://www.techwizworld.net/">Blake Bourque</a>, for Java blocks, troubleshooting, documentation and code contributions</li>
+                        <li>Christopher de Beer, for suggestions and bug fixes</li>
+                        <li>Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real</li>
+                        <li>Everyone who worked on <a href="http://scratch.mit.edu/">Scratch</a>, the primary source of inspiration for this project</li>
+                    </ul>
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+            <div id="plugins" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="pluginsLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="pluginsLabel">Choose your environment to get started:</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+					<div class="alert hide alert-error plugin_selection_error">
+						<button type="button" class="close" >×</button> <!--data-dismiss="alert" -->
+						<strong>Warning!</strong> You must select at least one plugin.
+					</div>
+					<form class="language">
+						<style>
+							.language .header{                          
+								margin: 2px;
+								padding: 2px 5px;
+
+								background:#ddd;
+								border: 1px solid #ccc;
+
+								/* Let's make the header a bit thicker*/
+								line-height: 25px;
+							}
+							.language input {
+								margin: 0 0 3px 0;
+								/* make the radio button centered on the line with the langugage name*/
+							}
+							.language ul {
+								list-style-type:none;
+							}
+							.language li input[type="checkbox"] {
+								margin-right: 5px;
+							}
+							.language .header h4,
+							.language .header p{
+								display: inline-block;
+								margin: 0;
+								padding: 0;
+							}
+						</style>
+						<div class="language arduino">
+							<div class="header">
+								<input type="radio" name="language" value="arduino"/> 
+								<h4>Arduino</h4>
+								<p class="hidden">Short Description</p>
+							</div>
+						</div>
+						<div class="language javascript">
+							<div class="header">
+								<input type="radio" name="language" value="javascript"/> 
+								<h4>Javascript</h4>
+								<p class="hidden">Short Description</p>
+							</div>
+							<ul>
+								<li><input type="checkbox" name="variation" value="Canvas"/>Canvas<small> - Short Description</small></li>
+								<li><input type="checkbox" name="variation" value="Raphael"/>Raphael<small> - Short Description</small></li>
+							</ul>
+						</div>
+						<div class="language java">
+							<div class="header">
+								<input type="radio" name="language" value="java"/> 
+								<h4>Java</h4>
+								<p class="hidden">Short Description</p>
+							</div>
+							<ul>
+								<li><input type="checkbox" name="variation" value="ossl"/>FRC Java WPI Robotics Library<small> - Short Description</small></li>
+							</ul>
+						</div>
+						<div class="language lsl">
+							<div class="header">
+								<input type="radio" name="language" value="lsl"/> 
+								<h4>LSL</h4>
+								<p>Linden Scripting Language</p>
+							</div>
+							<ul>
+								<li><input type="checkbox" name="variation" value="ossl"/>OSSL<small> - Open Sim Scripting Language</small></li>
+								<li><input type="checkbox" name="variation" value="assl"/>ASSL<small> - Aurora Sim Scripting Language</small></li>
+							</ul>
+						</div>
+						
+					</form>
+
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+
+                    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function(e){
+							$('.language input').change(function() {
+								
+								//set the parent radio button when a checkbox in the group is checked
+								$(this).parent().parent().siblings('div.header').find('input:radio').attr("checked", true);
+								
+								var $localchecks = $(this).parent('li').parent('ul').children('li').find('input');
+								// uncheck all checkboxes except the ones in the current language div
+								$('.modal-body .language input:checkbox').not($localchecks).attr("checked", false);
+							});
+							
+							$('.go_btn').click(function(){
+								var plugins = "";
+								$("form.language input:checked").each(function(){
+									plugins += $(this).val()+"|";
+								});
+								
+								//no plugins selected
+								if(plugins.length <= 0)
+								{
+									//alert("You must choose at least one plugin.");	
+									$(".plugin_selection_error.alert>.close").click(function(){
+										$(this).parent().hide();
+									});
+									$(".plugin_selection_error.alert").show().addClass("in");
+								}
+								else // chop off the last pipe symbol, and send the user to the IDE
+								{
+									plugins = plugins.substring(0, plugins.length-1);
+									window.location = "ide.html?plugins="+plugins;
+								}
+							});
+							
+                        });
+                    </script>
+                    <button class="btn btn-success go_btn">Go</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+            <hr>
+
+            <footer>
+                <a href="#credits" data-toggle="modal">The Waterbear Project</a>
+            </footer>
+
+        </div><!--/.fluid-container-->
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="lib/bootstrap.js"></script>
+
+        <script>
+            /*$('#about').modal({
+                        backdrop: true,
+                        keyboard: true,
+                        show: false
+                }).css({
+                        width: '800px',
+                        'margin-left': function () {
+                                return -($(this).width() / 2);
+                        }
+                });*/
+        </script>
+
+
+    </body>
+</html>

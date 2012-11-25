@@ -1,0 +1,30 @@
+/** Technology & Libraries Used **
+
+Name:		jQueryScrollTo
+Version:	1.4.3.1
+URL:		http://flesler.blogspot.com/2007/10/jqueryscrollto.html
+Purpose:	Allows for jump-to buttons in the block menu of the IDE
+Notes:		ScrollTo seems broken on mobile devices
+
+Name:		Bootstrap
+Version:	2.1.1
+URL:		http://twitter.github.com/bootstrap/
+Purpose:	Fantastic Styling and some basic javascript for UI (jQuery based)
+Notes:	
+
+Name:		jQuery
+version:	1.7.2
+URL:		http://jquery.com/
+Purpose:	Fantastic 
+Notes:		Need to check what version the backend code is using, and update
+			ide.html to match.
+
+
+
+
+//** Format:
+Name:	
+Version:
+URL:	
+Purpose:
+Notes:	

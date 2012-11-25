@@ -1,0 +1,41 @@
+/* block and border colours for different groups of blocks */
+
+.motion{ border-color: hsl(225,65%,83%); }
+.motion > .block{ background-color: hsl(225, 65%, 93%); }
+
+.looks{ border-color: hsl(264,62%,79%); }
+.looks > .block{ background-color: hsl(264,62%,89%); }
+
+.userdefined{ border-color: hsl(156, 90%, 66%); }
+.userdefined > .block { background-color: hsl(156, 85%, 70%); }
+
+.arrays{ border-color: hsl(195, 65%, 79%); }
+.arrays > .block{ background-color: hsl(195, 62%, 89%); }
+
+.objects{ border-color: hsl(75, 90%, 66%); }
+.objects > .block { background-color: hsl(75, 90%, 76%); }
+
+.functions{ border-color: hsl(300, 90%, 66%); }
+.functions > .block {background-color: hsl(300, 90%, 76%); }
+
+.strings{ border-color: hsl(240, 65%, 83%); }
+.strings > .block {background-color: hsl(240, 65%, 93%); }
+
+.functions{ border-color: hsl(25, 100%, 63%); }
+.functions > .block { background-color: hsl(25, 100%, 83%); }
+
+.control{ border-color: hsl(44, 81%, 49%); }
+.control > .block{ background-color: hsl(44, 81%, 85%); }
+
+.sensing{ border-color: hsl(200,98%,56%); }
+.sensing > .block{ background-color: hsl(200,98%,76%); }
+
+.operators{ border-color: hsl(93,90%,66%); }
+.operators > .block{ background-color: hsl(93,90%,76%); }
+
+/* Border colours for type values and sockets */
+
+.boolean{ border-color: red; }
+.number{ border-color: blue; }
+.string{ border-color: green; }
+.any{ border-color: gray; }

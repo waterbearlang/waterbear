@@ -189,12 +189,7 @@ function menu(title, specs, show){
         spec.isTemplateBlock = true;
         submenu.append(Block(spec).view());
     });
-    var state = $("#block_menu").accordion( "option", "active" );
-    $('#block_menu').accordion('destroy').accordion({
-        autoHeight: false,
-        collapsible: true,
-        active: show ? 'h3.' + group : state
-    });
+
 }
 window.menu = menu;
 

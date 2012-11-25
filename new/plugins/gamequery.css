@@ -1,0 +1,56 @@
+/* block and border colours for different groups of blocks */
+
+.control{ border-color: hsl(44, 81%, 49%); }
+.control > .block{ background-color: hsl(44, 81%, 85%); }
+
+.arrays{ border-color: hsl(195, 65%, 79%); }
+.arrays > .block{ background-color: hsl(195, 62%, 89%); }
+
+.objects{ border-color: hsl(75, 90%, 66%); }
+.objects > .block { background-color: hsl(75, 90%, 76%); }
+
+.strings{ border-color: hsl(240, 65%, 83%); }
+.strings > .block {background-color: hsl(240, 65%, 93%); }
+
+.sensing{ border-color: hsl(200,98%,56%); }
+.sensing > .block{ background-color: hsl(200,98%,76%); }
+
+.operators{ border-color: hsl(93,90%,66%); }
+.operators > .block{ background-color: hsl(93,90%,76%); }
+
+.sprites{ border-color: #e66a22; }
+.sprites > .block{ background-color: #e66a22; }
+
+.point{ border-color: hsl(90, 65%, 79%); }
+.point > .block {background-color: hsl(90, 62%, 89%); }
+
+.size{ border-color: hsl(15,100%,63%); }
+.size > .block{ background-color: hsl(15,100%,83%); }
+
+.rect{ border-color: hsl(150, 65%, 79%); }
+.rect > .block {background-color: hsl(150, 62%, 89%); }
+
+.image{ border-color: hsl(296, 65%, 57%); }
+.image > .block{ background-color: hsl(296, 65%, 77%); }
+
+.gradient{ border-color: hsl(225,65%,83%); }
+.gradient > .block{ background-color: hsl(225, 65%, 93%); }
+
+.pattern{ border-color: hsl(25, 100%, 63%); }
+.pattern > .block { background-color: hsl(25, 100%, 83%); }
+
+/* 
+.looks{ border-color: hsl(264,62%,79%); }
+.looks > .block{ background-color: hsl(264,62%,89%); }
+
+.functions{ border-color: hsl(300, 90%, 66%); }
+.functions > .block {background-color: hsl(300, 90%, 76%); }
+ */
+
+/* Border colours for type values and sockets */
+
+.boolean{ border-color: red; }
+.number{ border-color: blue; }
+.color{ border-color: yellow; }
+.string{ border-color: green; }
+.any{ border-color: gray; }

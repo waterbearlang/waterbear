@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Waterbear: Block programming for all</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Waterbear is a toolkit for creating draggable snappable blocks similar to MIT's Scratch enviornment.">
+        <meta name="author" content="Dethe Elza">
+
+        <!-- @TODO Move to bottom -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="lib/jquery.scrollTo-1.4.3.1-min.js"></script>
+				
+
+        <!-- Le styles -->		
+				<link rel="stylesheet/less" type="text/css" href="stylesheets/bootstrap/bootstrap.less">
+				<script type="text/javascript" src="lib/less-1.3.1.min.js"></script>
+
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <!-- the bootstrap responsive include must come bleow the body padding to override the padding when resizing to a smaller screen. -->
+ <!--       <link href="css/bootstrap-responsive.css" rel="stylesheet"/>-->
+        <style>
+            .sidebar-nav {
+                padding: 9px 0;
+                /* this removes the superfluous space in the navbar (came with template) */
+            }
+
+            .nav-header {
+                font-size: 16px;
+                text-transform: none;
+                color: black;
+                padding: 3px 10px;
+                /* this modifies the look of the headings in the block menu*/
+            }
+
+            .span4.item {
+                margin-left: 0;
+                /* this makes items look properly when they line wrap */
+            }
+            .promotejs {
+                padding: 5px;
+                /* the promote js graphic seems to lack its own padding.*/
+            }
+            .modal-body {
+                max-height: 410px;
+                /* this makes the scroll bar go away for the about block*/
+            }
+
+            .nav-tabs > li .close {
+                /* this fixes the close button on the tab bar */
+                margin: -2px 0 0 10px;
+                /*font-size: 18px;  use font-size to control the size of the x*/
+            }
+
+            /* Workarea */
+
+            ul.twist {
+                margin-bottom: -1px;
+                /* this brings the work area flush up against the tabbar*/
+            }
+            .workarea {
+                border: 1px solid rgb(221, 221, 221);
+                padding: 5px;
+                /* border and padding to the workare (bleow the tabbar)*/
+            }
+
+            .nav-tabs > li > a {
+                border-color: #EEE #EEE #DDD;
+                /* this shows a faded otuline around non-active tabs*/
+            }
+
+			/*We only want to hide the contents, display:none would cause thelayout to shift*/
+            #block_menu>div{
+                visibility: hidden;
+
+            }
+
+        </style>
+
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- fav and touch icons (Not in use)-->
+        <link rel="shortcut icon" href="ico/favicon.ico">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+		
+		<!-- Templates for the various block types: -->
+    <script type="text/html" id="step_template">
+        <div class="wrapper step" data-classes="group">
+            <div class="block" data-title="help">
+                <div class="blockhead">
+                    <div class="label" data-for="label in labels">
+						<span data-replace="label"></span>
+					</div>
+                </div>
+                <b class="flap"></b>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="expression_template">
+        <div class="wrapper value" data-classes="type group">
+            <div class="block">
+                <div class="blockhead">
+                    <div class="label" data-for="label in labels">
+						<span data-replace="label"></span>
+					</div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="context_template">
+        <div class="wrapper step context" data-classes="group">
+            <div class="block" data-title="help">
+                <b class="flap"></b>
+                <div class="blockhead" data-for="label in labels">
+                    <div class="label">
+                        <span class="disclosure open" data-if="attachLocals">▼</span>
+                        <span data-replace="label"></span>
+                    </div>
+                    <div class="locals block_menu" data-if="attachLocals"></div>
+                </div>
+                <div class="contained">
+                    <i class="slot"></i>
+                </div>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="eventhandler_template">
+        <div class="wrapper trigger context" data-classes="group">
+            <div class="block" data-title="help">
+                <b class="trigger"></b>
+                <div class="blockhead" data-for="label in labels">
+	                <div class="label">
+	                    <span class="disclosure open" data-if="attachLocals">▼</span>
+	                    <span data-replace="label"></span>
+	                </div>
+	                <div class="locals block_menu" data-if="attachLocals"></div>
+	                </div>
+                <div class="contained">
+                    <i class="slot"></i>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/html" id="label_template">
+        <div class="label">
+        </div>
+    </script>
+	<link href="stylesheets/blocks.css" rel="stylesheet" />
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="index.html">Waterbear</a>
+                    <!--<div class="nav-collapse collapse">  this makes the navbar items collapse. THe problem is that dropdowns are always expanded in the collapsed version.-->
+                    <ul class="nav">
+                        <li>
+                            <a href="#trash" style="padding: 5px;" data-toggle="modal">
+                                <img src="img/recycle-no_lid.png" style="width: 25px;" title="Drag blocks back to the menu to delete them."/>
+                            </a>
+                        </li>
+                        <!-- @NOTE: The .. after the name of the option is included when that option opens a new modal window.-->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">File <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+								<li><a href="#new" data-toggle="modal">New</a></li> <!--This will open a new workspace, is a modal needed? -->
+                                <li><a href="#save" data-toggle="modal">Save</a></li> <!-- @note if the project has already been saved, don't open the save modal on press of the save button. Just show success alert-->
+                                <li><a href="#save" data-toggle="modal">Save as..</a></li>
+                                <li><a href="#open" data-toggle="modal">Open..</a></li>
+                                <li><a href="#demos" data-toggle="modal">Demos..</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#run" data-toggle="modal">Run..</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#import" data-toggle="modal">Import..</a></li>
+                                <li><a href="#export" data-toggle="modal">Export..</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#help" data-toggle="modal">Help..</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Undo</a></li>
+                                <li><a href="#">Redo</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Copy</a></li>
+                                <li><a href="#">Cut</a></li>
+                                <li><a href="#">Paste</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#settings" data-toggle="modal">Preferences..</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">View <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Always Show Tabs [ ]</a></li>
+                                <li><a href="#">Hide/Unhide Block Menu</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        <li>
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn btn-primary active" title="Toggle to blocks view">Blocks</button>
+                                <button type="button" class="btn btn-success" title="Toggle to code view">Code</button>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="pull-right">
+                        <!--Logged in as <a href="#" class="navbar-link">Username</a> -->
+                        <a href="#help" title="Help" data-toggle="modal"><img src="img/help.png" style="width: 30px;"/></a>
+                        <a href="#save" title="Save" data-toggle="modal"><img src="img/save.png" style="width: 30px;"/></a>
+                        <a href="index.html" title="Home"><img src="img/home.png" style="width: 35px; margin-top: -3px;"/></a>
+                        <a href="#settings" title="Settings" data-toggle="modal"><img src="img/gear.png" style="width: 40px;"/></a>
+
+                    </div>
+                    <!--</div>/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid content" data-note="Main Content Area">
+                <div id="block_menu" class="span3" data-note="Side Block Bar">
+					<div id="block_menu_loading" style="display:block; visibility: visible;">
+						Loading Blocks ...
+					</div>
+                    <style>
+                        .menu>button {
+                            margin-bottom: 5px;
+                        }
+                        .menu {
+                            text-align: center;
+                        }
+                    </style>
+                    <script>
+                        $(window).load(function(){
+                            $(document).ready(function() {
+
+                                /**
+                                 * Resize a jquery element to fill to the bottom of the window
+                                 */
+                                function res(blk, mod) {
+                                    var wh = $(window).height();				//get the total height
+                                    var bt = $(blk).offset().top;				//git where the current block starts
+                                    bh = wh - bt;								//calculate the difference
+
+                                    $(blk).height(bh + mod);					//set the height, add in a modifier.
+                                }
+
+                                $(window).resize(function() {
+                                    $('#blocks, #workarea').each(function(idx, item){
+                                        res(item,-110); //@fixme 110 is a magic number. We need a way to calculate the height from the bottom.
+                                    });
+                                }).resize();
+                                //@FIXME: Something funny is going on, the bottoms of the #blocks and #workarea are not equal. Grr.
+                            });
+                        });
+
+                    </script>
+                    <script>
+                        $(document).ready(function(){
+                            $('.menu button').live("click", function(e){
+                                //console.log($(this).data(name)); //get the name from the data attribute of the button clicked
+                                var name = $(this).data("name").toLowerCase();
+                                console.log("Scrolling to: "+name); //@note: Spaces converted to underscores
+                                //find the place in the block Menu that corresponds to the name of the button clicked
+                                $(".sb-outer").scrollTo($(".block_menu div."+name));
+                            });
+                        });
+                    </script>
+
+                    <div class="menu" style="padding:5px 5px 0 5px; border: 1px solid rgb(221, 221, 221); max-height: 200px; overflow-y: auto">
+						<!--
+                        <button type="button" class="btn btn-mini" data-name="Control">Control</button>
+                        <button type="button" class="btn btn-mini" data-name="Movement">Movement</button>
+                        <button type="button" class="btn btn-mini" data-name="Human_Interface_Devices">Human Interface Devices</button>
+                        <button type="button" class="btn btn-mini" data-name="Digital_In">Digital In</button>
+                        <button type="button" class="btn btn-mini" data-name="Analog_In">Analog In</button>
+                        <button type="button" class="btn btn-mini" data-name="Operators">Operators</button>
+                        <button type="button" class="btn btn-mini" data-name="Variables">Variables</button>
+                        <button type="button" class="btn btn-mini" data-name="Timing">Timing</button>
+                        <button type="button" class="btn btn-mini" data-name="Gyro">Gyro</button>
+	  -->
+                    </div>
+                    <style>
+                        .block_header{
+                            margin: 2px;
+                            padding: 2px;
+                            background:#ddd;
+                            border: 1px solid #ccc;
+                        }
+                    </style>
+                    <div class="sb-outer" id="blocks" style="height:900px; overflow-y: auto; overflow-x: hidden; border: 1px solid rgb(221, 221, 221); margin-top:-1px;">
+                        <div class="block_menu" style="height:1800px; ">
+							
+							<!--<div class="group control">
+								<div class="block_header Control">Control</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Movement">Movement</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Human_Interface_Devices">Human Interface Devices</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Digital_In">Digital In</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Analog_In">Analog In</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Operators">Operators</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Variables">Variables</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Timing">Timing</div>
+								blocks go here
+								<br/><br/><br/><br/>
+							</div>
+							<div class="group control">
+								<div class="block_header Gyro">Gyro</div>
+							</div>-->
+                        </div>
+                    </div>
+
+
+
+
+                </div><!--/Side Block Bar-->
+
+                <div class="span9">
+									<div class="tab-bar">
+										<ul class="nav nav-tabs twist">
+											<li class="active">
+												<a href="javascript:;">
+													<button class="close" type="button">×</button> Default
+												</a>
+											</li>
+											<li>
+												<a href="javascript:;">
+													<button class="close" type="button">×</button> Alternate
+												</a>
+											</li>
+											<li>
+												<a href="javascript:;">
+													<button class="close" type="button">×</button> File 3
+												</a>
+											</li>
+															
+										</ul>
+									</div>
+									<style>
+											.workarea {
+												overflow: auto;
+											}
+											.workspace {
+												height: 100%;
+												width: 100%;
+											}
+											.scripts_workspace {
+												width: 100%;
+												height:350%;
+											}
+											/* The scripts_text_view starts hidden*/
+											.scripts_text_view {
+												display:none;
+											}
+									</style>
+									<div id="workarea" class="workarea">
+										
+										<div class="workspace"  data-name="default">
+											<div class="scripts_workspace"></div>
+											<div class="scripts_text_view"></div>
+										</div>
+										
+										<div class="workspace"  data-name="alternate" style="display:none">
+											<div class="scripts_workspace"></div>
+											<div class="scripts_text_view"></div>
+										</div>
+										
+										<div class="workspace"  data-name="file_3" style="display:none">
+											<div class="scripts_workspace"></div>
+											<div class="scripts_text_view"></div>
+										</div>
+									</div>
+											
+                </div><!--/span-->
+
+
+            </div><!--/row <Main Content Area>-->
+
+			<!-- ================= Modals  ================= -->
+			<!-- 
+			Modal Rules of thumb:
+			1. All modals need at least one way to close them ( x or close button) both preferred
+			2. The action the user will most likely want should be at the bottom right of the modal
+			-->
+
+            <div id="about" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="aboutLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="aboutLabel">About The Waterbear Project</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    <img class="scratchmascot pull-left" alt="Waterbear Example" src="img/waterblocks.png" />
+                    <p>Waterbear is a toolkit for creating drag-and-drop programming languages, with some example languages you can play around with and learn from. The goal is to make it easy to wrap other existing languages with Waterbear blocks to create draggable, snappable syntaxes for them.</p>
+                    <p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming. Waterbear is good for kids, artists, and anyone who would like to make their computer do something new without having to become a "programmer" (although it could lead to that).</p>
+
+                    <p>
+                        <a href="http://scratch.mit.edu">
+                            <img class="scratchmascot pull-right" alt="Scratch mascot" src="img/scratchcat.png" />
+                        </a>Waterbear's blocks are heavily inspired by MIT's <a href="http://scratch.mit.edu/">Scratch</a> language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad.
+                    </p>
+
+                    <p>
+                        <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" title="JavaScript Function constructor">
+                            <img class="promotejs pull-left" src="http://static.jsconf.us/promotejsh.gif" alt="JavaScript Function constructor"/>
+                        </a>Waterbear's system of draggable, snappable blocks are built using clean HTML5, CSS3, and Javascript. The Javascript playground for Waterbear allows you to create Waterbear scripts, see the Javascript it will generate, and run it right in the browser.
+                    </p>
+
+                    <p>Waterbear is pre-alpha software, very raw, and in constant flux right now.</p>
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+            <div id="credits" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="creditsLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="creditsLabel">Credits</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    <ul>
+                        <li><a href="http://livingcode.org/">Dethe Elza</a> founded the project and named it (blame him!)</li>
+                        <li>Dethe's kids, for helping test so many programming environments and great critics (and for the Waterbear mascot image above)</li>
+                        <li><a href="http://stretchyboy.co.uk/">Martyn Eggleton</a>, for the <a href="http://www.arduino.cc/">Arduino</a> blocks, good brainstorming, and using Waterbear to teach programming</li>
+                        <li><a href="http://www.techwizworld.net/">Blake Bourque</a>, for Java blocks, troubleshooting, documentation and code contributions</li>
+                        <li>Christopher de Beer, for suggestions and bug fixes</li>
+                        <li>Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real</li>
+                        <li>Everyone who worked on <a href="http://scratch.mit.edu/">Scratch</a>, the primary source of inspiration for this project</li>
+                    </ul>
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="help" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="helpLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="helpLabel">Help</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    Help
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal">I still need help!</button>
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="save" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="saveLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="saveLabel">Save</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+					<form>
+						<label>Script Name:</label>
+						<input type="text" class="span3" placeholder="Script Name…">
+						<label>Script Description:</label>
+						<textarea class="script_description span5" placeholder="Optional Description"></textarea>
+					</form>
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success" data-dismiss="modal">Save</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="settings" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="settingsLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="settingsLabel">Settings</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    None Yet!
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal">Save</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="demos" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="demosLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="demosLabel">Choose a demo to load:</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    None Yet!
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal">Laod</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="open" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="openLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="openLabel">Choose a project to open:</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    None Yet!
+					<br>
+					Should we allow gist URLS?
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal">Open</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="import" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="importLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="importLabel">Import:</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    load file from computer?
+					<br>
+					just accept copy/paste?
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal">Import</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="export" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="exportLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="exportLabel">Export:</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    save file to computer? (Compile zip archive)
+					<br>
+					textarea
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal">Export</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="run" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="runLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="runLabel">Export:</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    Can the run be done in a modal.
+					<br>
+					Martyn and I agree that we need some sort of output area for compilation/communication messages
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+			<div id="trash" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="trashLabel" aria-hidden="false">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="trashLabel">Recently deleted blocks</h3>
+                </div><!-- /.modal-header-->
+                <div class="modal-body">
+                    List of deleted blocs.
+                </div><!-- /.modal-body-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal">Close</button>
+                </div><!-- /.modal-footer-->
+            </div>
+
+            <footer style="display:none">
+                <hr class="end">
+                <a href="#credits" data-toggle="modal">The Waterbear Project</a>
+            </footer>
+
+        </div><!--/.fluid-container-->
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+
+        <script src="lib/bootstrap.js"></script>
+
+        <script>
+            //Allow for a wider modal for the about information
+            $('#about').modal({
+                backdrop: true,
+                keyboard: true,
+                show: false
+            }).css({
+                width: '800px',
+                'margin-left': function () {
+                    return -($(this).width() / 2);
+                }
+            });
+        </script>
+
+		<!-- Third-party libraries for Waterbear -->
+		<!--<script src="lib/jquery-1.7.2.min.js"></script>-->
+		<script src="lib/jquery.hotkeys.js">									//what is this used for?</script>						
+		<script src="lib/jquery.querystring.js">								//This is used to parse out the plugins</script>
+		<script src="lib/yepnope.1.5.4-min.js"></script>
+		<!--<script src="lib/jquery.bpopup-0.5.1.min.js"></script>-->
+		<script src="lib/jquery.autoGrowInput.js"></script>
+		<script src="lib/json2.js"></script><!-- Make this conditional -->
+		<!--<script src="lib/jquery-ui-1.8.21.custom.min.js"></script>-->
+		<script src="lib/jquery.contextMenu.js">								//Right click menu</script>
+		<script src="lib/jquery.tappable.js">									//Is this for modal conpadibility of context menu?</script>
+		<script src="lib/chai.js"></script> <!-- assertion library -->
+		<script>window.assert = chai.assert;</script>
+		<!-- Waterbear implementation libraries -->
+		<script src="scripts/template.js"></script>
+		<script src="scripts/drag.js"></script>
+		<script src="scripts/blocks.js"></script>
+		<script src="scripts/jquery.blocks.js"></script>
+		<script src="scripts/ui.js"></script>
+		<script src="scripts/utils.js"></script>
+		<script src="scripts/timer.js"></script>
+		<script src="scripts/runtime.js"></script> <!-- Should this be moved to language? -->
+		<script src="scripts/workspace.js"></script>
+		<script src="scripts/serialization-1.0.js"></script>
+		
+		<!--<script src=lib/jquery.scrollTo-1.4.3.1-min.js"></script>-->
+
+		<script>
+			//Query string parser and Plugin loader
+			var q = $.parseQuery();
+			var name = 'plugins';
+			// if they don't have the plugin part of the query string lets send them back home.
+			if(!q[name] || q[name] == "undefined" || q[name] == null) {
+				//window.location = "./";
+				// return;
+			}
+
+			// load all modules separated by |
+			var plugins = q[name].split('|').map(function(name){
+				Block.registerPlugin(name);										//What does this do?
+				return 'plugins/' + name + '.js';
+			});
+
+			yepnope({
+				test : plugins.length,//make sure there are plugins
+				yep : plugins,
+				callback: function(url, result, key){
+					//console.log(url, result, key);
+					//console.log('loaded %s', url);
+					//It appears there is no way to see if a file successfully loaded. That is a bummer.
+				},
+				complete : function () {
+					console.log("complete");
+					$('#block_menu_loading').remove();
+					//Show the block menu, on complete
+					$('#block_menu>div').show().css("visibility", "visible");
+					loadCurrentScripts();
+				}
+			});
+		</script>
+    </body>
+</html>

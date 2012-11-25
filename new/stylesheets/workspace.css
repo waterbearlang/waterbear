@@ -1,0 +1,303 @@
+/* YUI Reset, adapted */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
+    margin:0;
+    padding:0;
+}
+img { 
+    border:0;
+}
+caption,cite,code,em,strong,th {
+    font-style:normal;
+    font-weight:normal;
+}
+ol,ul {
+    list-style:none;
+}
+caption,th {
+    text-align:left;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-size:100%;
+    font-weight:normal;
+}
+q:before,q:after {
+    content:'';
+}
+abbr,acronym { 
+    border:0;
+}
+ 
+/* Scratch Layout Styles */
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: #FFF;
+}
+
+.content{
+    position: relative;
+    width: 200%;
+    height: 100%;
+}
+
+.tab_bar button{
+    float: right;
+}
+
+
+.workspace {
+    position: absolute;
+    left: 15%;
+    bottom: 0px;
+    width: 34.8%;
+    height: 95%;
+    background-color: #FFF;
+    overflow-x: hidden;
+    overflow-y: auto; 
+}
+
+.scripts_workspace, .scripts_text_view {
+    min-width: 50%;
+    min-height: 100%;
+    position: relative;
+    display: none;
+    padding: 15px;
+}
+
+.scripts_workspace {
+    display: block;
+}
+
+.drop_cursor {
+    height: 1px;
+    border-bottom: 1px solid #CCC;
+}
+
+.tab_bar{
+    position: absolute;
+    left: 15%;
+    width: 34.8%;
+    z-index: 15;
+}
+
+.tab_bar2{
+    position: absolute;
+    right: -0.1%;
+    top: 30px;
+    width: 50%;
+    z-index: 15;
+}
+.chrome_tab{
+    float: left;
+    margin-right: 5px;
+    position: relative;
+    bottom: -2px;
+    border: 1px solid #666;
+    border-bottom: 0px;
+    -webkit-border-top-right-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-topleft: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    width: 24%;
+    background-color: #999;
+    color: #333;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.chrome_tab.selected{
+    background-color: #FFF;
+    color: #000;
+    border-color: #333;
+}
+
+.stage {
+    position: absolute;
+    height: 95%;
+    right: 0px;
+    width: 49.8%;
+    bottom: -20px;
+    background-color: #FFF;
+}
+
+#block_menu{
+    position: absolute;
+    width: 15%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    overflow: auto;
+}
+
+#block_menu .select{
+    padding: 3px 10px;
+    margin-bottom: 1px;
+    font-weight: bold;
+    color: #333;
+    background-color: #CCC;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+
+#block_menu .selected{
+    color: #000;
+    background-color: #EEE;
+}
+
+.option{
+    position: relative;
+    overflow: hidden;
+    padding: 15px;
+}
+
+.option input {
+  cursor: pointer;
+}
+
+.submenu .wrapper {
+    margin-bottom: 20px;
+    margin-right: 35px;
+    float: left;
+}
+
+.hidden{
+    display: none;
+}
+
+#color_popup{
+    background-color: green;
+    padding: 5px 10px 15px 10px;
+}
+
+#color_contents{
+    width: 300px;
+    height: 300px;
+    background-color: blue;
+}
+
+/*Description of saves*/
+.description{
+    font-size: .8em;
+    color: #515151;
+}
+
+/* Save/Restore Dialogs */
+
+.dialog{
+    background-color: #CCC;
+    font-family: Helvetica;
+    padding: 1em;
+    border: 0px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.dialog h2{
+    font-size: 200%;
+    font-weight: bold;
+    text-align: center;
+}
+
+.dialog input{
+    font-size: 180%;
+    margin-bottom: 1em;
+    width: 99%;
+    border: 0px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    padding-left: 10px;
+}
+
+.dialog textarea{
+    width: 100%;
+    height: 5em;
+    font-size: 150%;
+}
+
+.dialog ul{
+    min-width: 400px;
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+}
+
+.dialog button{
+    font-size: 120%;
+    float: right;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-left: 1em;
+    background-color: #4D736D;
+    color: white;
+    margin-left: 1em;
+    border: 0px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: .5em;
+}
+
+.dialog .action{
+    margin-left: .2em;
+    font-size: 90%;
+}
+
+.dialog li{
+    display: block;
+    clear: both;
+    margin-bottom: .5em
+}
+
+.dialog .timestamp{
+    clear: both;
+    font-size: 80%;
+    color: #666;
+    margin-top: 1.5em;
+}
+
+.dialog button.delete, button.cancel {
+    background-color: #854D53; /*This is a redish color*/
+    margin-top: .5em;
+}
+/* These additions should only change the appearance of the tabs*/
+
+
+.chrome_tab {
+    margin-left: 5px;
+    position: relative;
+    border: 1px solid #666;
+    border-bottom: 0px;
+    cursor: pointer;
+    width: 15%;
+    background-color: #999;
+    color: #F2F2F2;
+    z-index: 1;
+    padding: 5px;
+    margin-bottom: 4px;
+}
+
+.chrome_tab.selected {
+    background-color: #4D736D;
+    color: white;
+    border-color: #333;
+    font-weight: bold;
+}
+
+ /* This last one might be a bit contreversial but I think that users shouldn't 
+ need to realize that the stage is just off to the right of the workspace. This
+ will also make it easier for others to diable the stage with just a css rule*/
+html, body {
+    overflow: hidden;
+}
+
+/* Lists of scripts to scroll. Used in demo & restore dialog*/
+.scrollList{
+    max-height: 300px;
+    overflow-y:scroll;
+}

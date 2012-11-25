@@ -1,0 +1,59 @@
+# Proposal for plugins.js
+
+From the water team we got a plugins/plugins.js file with contents similar to the following:
+
+var plugins = {
+    // initalizer and finisher
+    "first" : "plugins/init.js",
+    "last" : "plugins/finish.js",
+    // application code
+    "javascript" : "plugins/javascript.js",
+    "arduino" : "plugins/arduino.js",
+    "canvas" : "plugins/canvas.js",
+    "crafty" : "plugins/crafty.js",
+    "gamequery" : "plugins/gamequery.js"
+};
+
+I'd like to propose that plugin writers specify a sort of package.json in this file of a format similar to the following:
+var languages = {
+	"Javascript" : "A web programming language" //Short description of language
+};
+var plugins = {
+    // initalizer and finisher
+    "first" : "plugins/init.js",
+    "last" : "plugins/finish.js",
+    // application code
+    "javascript" : {
+					"name": "Javascript",
+					"version": "v.1",
+					"author": "Dethe",
+					"contributors": [ 
+						{
+						  "name": "Dethe",
+						  "email": "Dethe@livingincode.com"
+						} 
+					  ],
+					"language": "javascript",
+					"description": " ",
+					"shortDesc":  " ",
+					"location": "plugins/javascript.js",
+					"settings": "plugins/javascript.settings.html",
+					"help": "plugins/javascript.help.html"
+					},
+    "arduino" : "plugins/arduino.js",
+    "canvas" : "plugins/canvas.js",
+    "crafty" : "plugins/crafty.js",
+    "gamequery" : "plugins/gamequery.js"
+};
+
+Directory Structure Proposed change:
+
+plugins/
+	- javascript/
+		- plugin.js
+		- style.css
+		- help.html
+		- settings.html
+
+
+//Somehow I'd like to include the ability to set some of waterbear's settings from a plugin. For example the ability to switch between code and blocks, not sure why Team Water hid those buttons.

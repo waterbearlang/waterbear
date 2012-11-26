@@ -72,8 +72,21 @@ function loadScriptsFromObject(fileObject){
     });
 }
 
-window.loadCurrentScripts = function(){
-    if (localStorage.__current_scripts){
+function loadScriptsFromGist(gist){
+	var keys = Object.keys(gist.data.files);
+	var file = gist.data.files[keys[0]].content;
+	loadScriptsFromObject(JSON.parse(file).scripts);
+}
+
+window.loadCurrentScripts = function(queryParsed){
+	if (queryParsed.gist){
+		$.ajax({
+			url: 'https://api.github.com/gists/' + queryParsed.gist,
+			type: 'GET',
+			dataType: 'jsonp',
+			success: loadScriptsFromGist
+		});
+	}else if (localStorage.__current_scripts){
         var fileObject = JSON.parse(localStorage.__current_scripts);
         if (fileObject){
             loadScriptsFromObject(fileObject);

@@ -33,7 +33,8 @@ window.updateScriptsView = updateScriptsView;
 function runScripts(event){
     $('.stage')[0].scrollIntoView();
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
+	$('.stageframe')[0].contentWindow.postMessage(blocks.wrapScript(), '*');
+    // $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
 $('.runScripts').click(runScripts);
 

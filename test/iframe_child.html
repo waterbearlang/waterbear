@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>iFrame Canvas</title>
+	<style>
+	html,body{ height: 100%;}
+	</style>
+</head>
+
+<body id="home">
+	<svg id="stage" width="100%" height="100%">
+	</svg>
+	<script>
+	window.addEventListener('message', receiveMessage, false);
+	var stage = document.getElementById('stage');
+	function randint(max){
+		return Math.ceil(Math.random() * (max + 1) - 1);
+	}
+	function randx(){
+		return '' + randint(500);
+	}
+	function randy(){
+		return '' + randint(300);
+	}
+	function randradius(){
+		return '' + (randint(30) + 20);
+	}
+	function randcolor(){
+		return 'rgb(' + randint(255) + ', ' + randint(255) + ', ' + randint(255) + ')';
+	}
+	function elem(name, attr){
+		var e = document.createElementNS('http://www.w3.org/2000/svg', 'svg:' + name);
+		var attrNames = Object.keys(attr);
+		attrNames.forEach(function(key){
+			e.setAttribute(key, attr[key]);
+		});
+		return e;
+	}
+	function circle(){
+		stage.appendChild(elem('circle', {
+			cx: randx(),
+			cy: randy(),
+			r: randradius(),
+			fill: randcolor()
+		}));
+	}
+	function rect(){
+		stage.appendChild(elem('rect',{
+			x: randx(),
+			y: randy(),
+			width: randradius(),
+			height: randradius(),
+			fill: randcolor()
+		}));
+	}
+	function receiveMessage(evt){
+		console.log('message received: %s', evt);
+		switch(evt.data){
+			case 'circle': circle(); break;
+			case 'rect': rect(); break;
+		}
+		window.parent.postMessage('I made a ' + evt.data + ' all by myself!', '*');
+	}
+	</script>
+</body>
+</html>

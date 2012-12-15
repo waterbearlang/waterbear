@@ -1,4 +1,5 @@
 // Timer utility
+// Fixme: use newer timing method using requestAnimationFrame()
 
 function Timer(){
     this.time = 0;

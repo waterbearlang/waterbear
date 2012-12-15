@@ -56,24 +56,29 @@ function Global(){
     this.subscribeMouseEvents();
     this.subscribeKeyboardEvents();
     this.keys = {};
-    var stage = $('.stage');
-    // move this to raphael plugin
-//    this.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());
+    this.stage = document.querySelector('.stage');
     this.mouse_x = -1;
     this.mouse_y = -1;
-    this.stage_width = stage.outerWidth();
-    this.stage_height = stage.outerHeight();
+    this.stage_width = this.stage.clientWidth; // clientWidth, offsetWidth, scrollWidth?
+    this.stage_height = this.stage.clientHeight;
     this.stage_center_x = this.stage_width / 2;
     this.stage_center_y = this.stage_height / 2;
     this.mouse_down = false;
 };
 
+
 Global.prototype.subscribeMouseEvents = function(){
     var self = this;
-    $('.stage').mousedown(function(evt){self.mouse_down = true;})
-               .mousemove(function(evt){self.mouse_x = evt.offset_x;
-                                        self.mouse_y = evt.offset_y;});
-    $(document.body).mouseup(function(evt){self.mouse_down = false;});
+    this.stage.addEventListener('mousedown', function(evt){
+		self.mouse_down = true;
+	}, false);
+    this.stage.addEventListener('mousemove', function(evt){
+		self.mouse_x = evt.offset_x;
+        self.mouse_y = evt.offset_y;
+	}, false);
+    document.body.addEventListener('mouseup', function(evt){
+		self.mouse_down = false;
+	}, false);
 };
 
 Global.prototype.keyForEvent = function(evt){

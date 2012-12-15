@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>iFrame Test</title>
+</head>
+
+<body id="home">
+
+	<h1>iframe test</h1>
+	<iframe id="testframe" width="500" height="300" src="//logan.waterbearlang.com/test_iframe.html"></iframe>
+	<button onclick="circle()">Circle</button>
+	<button onclick="rect()">Rect</button>
+
+	<script>
+	var canvas = document.getElementById('testframe').contentWindow;
+	canvas.addEventListener('message', logmessage, false);
+	function logmessage(evt){
+		console.log(evt.data);
+	}
+	function circle(){
+		canvas.postMessage('circle', '*');
+	}
+	function rect(){
+		canvas.postMessage('rect', '*');
+	}
+	</script>
+</body>
+</html>

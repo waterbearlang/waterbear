@@ -33,9 +33,15 @@ window.updateScriptsView = updateScriptsView;
 function runScripts(event){
     $('.stage')[0].scrollIntoView();
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
+	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: blocks.wrapScript() }), '*');
+    // $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
 $('.runScripts').click(runScripts);
+
+function clearStage(event){
+	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
+}
+$('.clear_canvas').click(clearStage);
 
 // Context Menu
 //

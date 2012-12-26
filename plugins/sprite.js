@@ -17,37 +17,6 @@ yepnope({
 choiceLists.types = choiceLists.types.concat(['sprite']);
 choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
 
-function RectSprite(size,pos,color){
-    this.x = pos.x;
-    this.y = pos.y;
-    this.w = size.w;
-    this.h = size.h;
-    this.collisionRect = this;
-    this.color = color;
-};
-window.RectSprite = RectSprite;
-
-RectSprite.prototype.draw = function(ctx){
-    ctx.save();
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-    ctx.restore();
-};
-
-RectSprite.prototype.collides = function(sprite){
-    var self = this.collisionRect;
-    var that = sprite.collisionRect;
-    if ((self.x + self.w) < that.x) return false;
-    if ((self.y + self.h) < that.y) return false;
-    if (self.x > (that.x + that.w)) return false;
-    if (self.y > (that.y + that.h)) return false;
-    return true;
-};
-
-RectSprite.prototype.toString = function(){
-    return '<RectSprite ' + this.x + ' ' + this.y + ' ' + this.w + ' ' +  this.h + ' ' + this.color + '>';
-};
-
 
 // Sprite Menu
 menu('Sprite', [
@@ -127,6 +96,9 @@ menu('Sprite', [
         script: '{{1}}.y + {{1}}.h',
         type: 'number'
     }
+]);
+
+menu('MovingSprite', [
 ]);
 
 })();

@@ -316,6 +316,9 @@ Block.prototype.init = function(spec){
     if (! (this.id || this.isTemplateBlock)){
         this.id = Block.newId();
     }
+	if (this.isTemplateBlock && !this.id){ // local template blocks have ids
+		this.id = '';
+	}
     if (this.help){
         this.tooltip = this.group + ' ' + this.id + ': ' + this.help;
     }else{
@@ -381,6 +384,7 @@ Block.prototype.initInstance = function(){
             this._returns.isTemplateBlock = true;
             this._returns.isLocal = true;
             this._returns.id = self.id;
+			this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]);
             this.returns = Block(this._returns);
             assert.isObject(this.returns, 'Returns blocks must be objects');
         }
@@ -612,6 +616,7 @@ Block.prototype.addLocalBlock = function(block){
 
 Block.prototype.addLocalsToParentContext = function(isNext){
     // on addToScript
+	console.log('addLocalsToParentContext %o', this);
     if (!this.returns) return;
     if (this.returns === 'block'){
         // special metablock handler
@@ -621,7 +626,7 @@ Block.prototype.addLocalsToParentContext = function(isNext){
         throw new Error('Model must have an id by now');
     }
     var context = this.view().closest('.context').data('model');
-    if (context && isNext){
+    if (context && typeof context === 'Step'){
         context = this.view().closest('.context').parent().closest('.context').data('model')    ;
     }
     if (context){

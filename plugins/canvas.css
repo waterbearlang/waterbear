@@ -21,6 +21,9 @@
 .canvas{ border-color: #e66a22; }
 .canvas > .block{ background-color: #e66a22; }
 
+.colors{ border-color: #e77a33; }
+.colors > .block{ background-color: #e77a33; }
+
 .point{ border-color: hsl(90, 65%, 79%); }
 .point > .block {background-color: hsl(90, 62%, 89%); }
 

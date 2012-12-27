@@ -197,128 +197,6 @@ jQuery.fn.extend({
             type: 'boolean',
             help: 'test a point against the current path'
         },
-        // Colour and Styles
-        {
-            blocktype: 'step',
-            label: 'stroke color [color:#000]',
-            script: 'local.ctx.strokeStyle = {{1}};',
-            help: 'stroke color...'
-        },
-        {
-            blocktype: 'step',
-            label: 'fill color [color:#000]',
-            script: 'local.ctx.fillStyle = {{1}};',
-            help: 'fill color...'
-        },
-		{
-			blocktype: 'expression',
-			label: 'color with red [number:0] green [number:0] blue [number:0]',
-			script: '"rgb({{1}},{{2}}{{3}})"',
-			type: 'color',
-			help: 'returns a color'
-		},
-		{
-			blocktype: 'expression',
-			type: 'color',
-			label: 'color with hue [number:0] saturation [number:0] brightness [number:0]]',
-			script: '"hsb({{1}}, {{2}}, {{3}})"',
-			help: 'returns a color'
-		},
-		{
-			blocktype: 'expression',
-			type: 'color',
-			label: 'random color',
-			script: '"rgb(" + randint(0,255) + "," + randint(0,255) + "," + randint(0,255) + ")"',
-			help: 'returns a random color'
-		},
-        {
-            blocktype: 'step',
-            label: 'stroke gradient [gradient]',
-            script: 'local.ctx.strokeStyle = {{1}};',
-            help: 'replaces stroke color or stroke pattern with gradient'
-        },
-        {
-            blocktype: 'step',
-            label: 'fill gradient [gradient]',
-            script: 'local.ctx.fillStyle = {{1}};',
-            help: 'replaces fill color or fill pattern with gradient'
-        },
-        {
-            blocktype: 'step',
-            label: 'stroke pattern [pattern]',
-            script: 'local.ctx.strokeStyle = {{1}};',
-            help: 'replaces stroke color or stroke gradient with pattern'
-        },
-        {
-            blocktype: 'step',
-            label: 'fill pattern [pattern]',
-            script: 'local.ctx.fillStyle = {{1}};',
-            help: 'replaces fill color or fill gradient with pattern'
-        },
-        {
-            blocktype: 'step',
-            label: 'create radial gradient from point1 [point] radius1 [number:0] to point2 [point] radius2 [number:0]',
-            script: 'local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});',
-            help: 'create a radial gradient in the cone described by two circles',
-            returns: {
-                blocktype: 'expression',
-                label: 'radial gradient##',
-                script: 'local.gradient##',
-                type: 'gradient'
-            }
-        },
-        {
-            blocktype: 'step',
-            label: 'create linear gradient from point1 [point] to point2 [point]',
-            script: 'local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);',
-            help: 'create a linear gradient between two points',
-            returns: {
-                blocktype: 'expression',
-                label: 'linear gradient##',
-                script: 'local.linear.gradient##',
-                type: 'gradient'
-            }
-        },
-        {
-            blocktype: 'step',
-            label: 'add color stop to gradient [gradient] at offset [number:0.5] with color [color:#F00]',
-            script: '{{1}}.addColorStop({{2}}, {{3}}',
-            help: 'creates an additional color stop, offset must be between 0.0 and 1.0'
-        },
-        {
-            blocktype: 'step',
-            label: 'create pattern## from image [image] repeats [choice:repetition]',
-            script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
-            help: 'create a pattern with the given html image',
-            returns: {
-                blocktype: 'expression',
-                label: 'pattern##',
-                script: 'local.pattern##',
-                type: 'pattern'
-            }
-        },
-//         {
-//             label: 'create pattern## from canvas [canvas] repeats [choice:repetition]',
-//             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
-//             help: 'create a pattern with the given html canvas',
-//             returns: {
-//                 blocktype: 'expression',
-//                 label: 'pattern##',
-//                 script: 'local.pattern##',
-//                 type: 'pattern'
-//             }
-//         },
-//         {
-//             label: 'create pattern## from video [video] repeats [choice:repetition]',
-//             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
-//             help: 'create a pattern with the given html video',
-//             returns: {
-//                 blocktype: 'expression',
-//                 label: 'pattern##',
-//                 script: 'local.pattern##',
-//                 type: 'pattern'
-//             }
-//         },
         // Text
         {
             blocktype: 'step',
@@ -574,6 +452,139 @@ jQuery.fn.extend({
             help: 'set the shadow color'
         }
     ]);
+	
+	// COLORS Menu
+	menu('Colors', [
+        // Colour and Styles
+        {
+            blocktype: 'step',
+            label: 'stroke color [color:#000]',
+            script: 'local.ctx.strokeStyle = {{1}};',
+            help: 'stroke color...'
+        },
+        {
+            blocktype: 'step',
+            label: 'fill color [color:#000]',
+            script: 'local.ctx.fillStyle = {{1}};',
+            help: 'fill color...'
+        },
+		{
+			blocktype: 'expression',
+			label: 'color with red [number:0] green [number:0] blue [number:0]',
+			script: '"rgb({{1}},{{2}}{{3}})"',
+			type: 'color',
+			help: 'returns a color'
+		},
+		{
+			blocktype: 'expression',
+			label: 'color with red [number:0] green [number:0] blue [number:0] alpha [number:0]',
+			script: '"rgba({{1}},{{2}},{{3}},{{4}})"',
+			type: 'color',
+			help: 'returns a semi-opaque color'
+		},
+		{
+			blocktype: 'expression',
+			type: 'color',
+			label: 'color with hue [number:0] saturation [number:0] brightness [number:0]]',
+			script: '"hsb({{1}}, {{2}}, {{3}})"',
+			help: 'returns a color'
+		},
+		{
+			blocktype: 'expression',
+			type: 'color',
+			label: 'random color',
+			script: '"rgb(" + randint(0,255) + "," + randint(0,255) + "," + randint(0,255) + ")"',
+			help: 'returns a random color'
+		},
+        {
+            blocktype: 'step',
+            label: 'stroke gradient [gradient]',
+            script: 'local.ctx.strokeStyle = {{1}};',
+            help: 'replaces stroke color or stroke pattern with gradient'
+        },
+        {
+            blocktype: 'step',
+            label: 'fill gradient [gradient]',
+            script: 'local.ctx.fillStyle = {{1}};',
+            help: 'replaces fill color or fill pattern with gradient'
+        },
+        {
+            blocktype: 'step',
+            label: 'stroke pattern [pattern]',
+            script: 'local.ctx.strokeStyle = {{1}};',
+            help: 'replaces stroke color or stroke gradient with pattern'
+        },
+        {
+            blocktype: 'step',
+            label: 'fill pattern [pattern]',
+            script: 'local.ctx.fillStyle = {{1}};',
+            help: 'replaces fill color or fill gradient with pattern'
+        },
+        {
+            blocktype: 'step',
+            label: 'create radial gradient from point1 [point] radius1 [number:0] to point2 [point] radius2 [number:0]',
+            script: 'local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});',
+            help: 'create a radial gradient in the cone described by two circles',
+            returns: {
+                blocktype: 'expression',
+                label: 'radial gradient##',
+                script: 'local.gradient##',
+                type: 'gradient'
+            }
+        },
+        {
+            blocktype: 'step',
+            label: 'create linear gradient from point1 [point] to point2 [point]',
+            script: 'local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);',
+            help: 'create a linear gradient between two points',
+            returns: {
+                blocktype: 'expression',
+                label: 'linear gradient##',
+                script: 'local.linear.gradient##',
+                type: 'gradient'
+            }
+        },
+        {
+            blocktype: 'step',
+            label: 'add color stop to gradient [gradient] at offset [number:0.5] with color [color:#F00]',
+            script: '{{1}}.addColorStop({{2}}, {{3}}',
+            help: 'creates an additional color stop, offset must be between 0.0 and 1.0'
+        },
+        {
+            blocktype: 'step',
+            label: 'create pattern## from image [image] repeats [choice:repetition]',
+            script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+            help: 'create a pattern with the given html image',
+            returns: {
+                blocktype: 'expression',
+                label: 'pattern##',
+                script: 'local.pattern##',
+                type: 'pattern'
+            }
+        },
+//         {
+//             label: 'create pattern## from canvas [canvas] repeats [choice:repetition]',
+//             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+//             help: 'create a pattern with the given html canvas',
+//             returns: {
+//                 blocktype: 'expression',
+//                 label: 'pattern##',
+//                 script: 'local.pattern##',
+//                 type: 'pattern'
+//             }
+//         },
+//         {
+//             label: 'create pattern## from video [video] repeats [choice:repetition]',
+//             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
+//             help: 'create a pattern with the given html video',
+//             returns: {
+//                 blocktype: 'expression',
+//                 label: 'pattern##',
+//                 script: 'local.pattern##',
+//                 type: 'pattern'
+//             }
+//         },
+	]);
     
     // POINT Menu
     menu('Point', [

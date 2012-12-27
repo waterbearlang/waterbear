@@ -119,13 +119,13 @@ menu('Control', [
     {
         blocktype: 'step',
         label: 'broadcast [string:ack] message', 
-        script: '$(".stage").trigger({{1}});',
+        script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}));',
         help: 'send this message to any listeners'
     },
     {
         blocktype: 'eventhandler',
         labels: ['when I receive [string:ack] message'],
-        script: '$(".stage").bind({{1}}, function(){[[1]]});',
+        script: 'global.stage.addEventListener("wb_" + {{1}}, function(){[[1]]});',
         help: 'add a listener for the given message, run these blocks when it is received'
     },
     {
@@ -543,7 +543,7 @@ menu('Arrays', [
     {
         blocktype: 'context',
         labels: ['array [array] for each'],
-        script: '$.each({{1}}, function(idx, item){local.index = idx; local.item = item; [[1]] });',
+        script: '{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });',
         locals: [
             {
                 blocktype: 'expression',
@@ -593,7 +593,7 @@ menu('Objects', [
     {
         blocktype: 'context',
         labels: ['for each item in [object] do'],
-        script: '$.each({{1}}, function(key, item){local.key = key; local.item = item; [[1]] });',
+        script: 'Object.keys({{1}}).forEach(function(key){local.key = key; local.item = {{1}}[key]; [[1]] });',
         locals: [
             {
                 blocktype: 'expression',
@@ -899,7 +899,7 @@ menu('Operators', [
         blocktype: 'expression',
         label: 'absolute of [number:10]', 
         type: 'number', 
-        script: "Math.abs({{2}})",
+        script: "Math.abs({{1}})",
         help: 'converts a negative number to positive, leaves positive alone'
     },
     {

@@ -20,8 +20,8 @@ Waterbear is pure Javascript. No server-side component is needed.
 
 ## Demos
 
-* http://localbear.com/garden.html?plugin=javascript|canvas|sprite&gist=4142529 (Simple) Draw random circles
-* 
+* http://waterbearlang.com/garden.html?plugin=javascript|canvas|sprite&gist=4142529 (Simple) Draw random circles
+* http://waterbearlang.com/garden.html?plugin=javascript|canvas|sprite&gist=4385862 (Medium) Bouncing rectangles with trails
 
 ## Dependencies:
 

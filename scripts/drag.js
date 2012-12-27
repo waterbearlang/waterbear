@@ -90,7 +90,7 @@
             case 'context': return stepTargets();
             case 'int': 
             case 'float': return socketTargets2(['any', 'number', blockType(dragTarget)].join(','));
-            case 'any': return socketTargets2('any');
+            case 'any': return anyTargets();
             default: return socketTargets2(['any', dragTarget.block_type()].join(','));
         }
     }
@@ -102,6 +102,10 @@
     function socketTargets(type){
         return targetCanvas.find('.socket.' + type + ':not(:has(.value))');
     }
+	
+	function anyTargets(){
+		return targetCanvas.find('.socket:not(:has(.value))');
+	}
     
     /*a slower but more flexible way of doing the socket targets
     This method could have its setting be held in an array and 

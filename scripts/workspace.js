@@ -74,7 +74,17 @@ function loadScriptsFromObject(fileObject){
 
 function loadScriptsFromGist(gist){
 	var keys = Object.keys(gist.data.files);
-	var file = gist.data.files[keys[0]].content;
+	var file;
+	keys.forEach(function(key){
+		if (/.*\.json/.test(key)){
+			// it's a json file
+			file = gist.data.files[key].content;
+		}
+	});
+	if (!file){
+		console.log('no json file found in gist: %o', gist);
+		return;
+	}
 	loadScriptsFromObject(JSON.parse(file).scripts);
 }
 

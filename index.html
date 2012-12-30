@@ -12,10 +12,6 @@
     <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
     <script src="lib/prefixfree.min.js"></script>
     <!--script src="/lib/modernizr-1.6.min.js"></script-->
-
-    <script type="text/javascript" src='./lib/jquery-1.7.1.min.js'></script>
-    <script type="text/javascript" src='./plugins/plugins.js'></script>
-
   </head>
   <body>
     <div class="content">
@@ -87,26 +83,5 @@
             </aside>
         </div>
     </div>
-
-
-    <script type="text/javascript">
-        // load plugins info
-        $.each( plugins, function(name, js) {
-            var i = $('<input>', { id : "module_" + name, type: 'checkbox', value: name } );
-            $('#modules').append( i );
-            var l = $('<label>', { for : "module_" + name, html: name } );
-            $('#modules').append( l );
-        } );
-
-        $('#modules_select').on('click', function() {
-            var modules = [];
-            $.each( $('#modules > input:checked'), function() {
-                modules.push( $(this).val() );
-            } );
-            var path = modules.join('|');
-            window.location.href = window.location.href + 'garden.html?plugin=' + path;
-        } );
-    </script>
-
   </body>
 </html>

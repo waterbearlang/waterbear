@@ -56,8 +56,7 @@ body {
     width: 34.8%;
     height: 95%;
     background-color: #FFF;
-    overflow-x: hidden;
-    overflow-y: auto; 
+	overflow: scroll;
 }
 
 .scripts_workspace, .scripts_text_view {

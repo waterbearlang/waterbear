@@ -714,6 +714,7 @@ $('.scripts_workspace')
         var socketIndex = socket.data('index');
         var parentModel = socket.closest('.wrapper').data('model');
         parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
+		$('.scripts_workspace:visible').trigger('scriptmodified');
     });
 
 Block.prototype.removeExpression = function(expression, expressionIndex){
@@ -764,6 +765,8 @@ function removeFromScriptEvent(view){
     }else if (parent.hasClass('next')){
         parentModel.removeNextStep(model);
     }
+	$('.scripts_workspace:visible').trigger('scriptmodified');
+	
 }
 
 function addToScriptEvent(container, view){
@@ -791,4 +794,18 @@ function addToScriptEvent(container, view){
             }
         }
     }
+	$('.scripts_workspace:visible').trigger('scriptmodified');
 }
+
+$(document.body).on('scriptloaded', function(evt){
+	$('.scripts_workspace:visible').on('scriptmodified', function(evt){
+		if (wb.queryParams.gist){
+			delete wb.queryParams.gist;
+			var prev = location.href;
+			history.pushState(null, null, wb.queryParamsToUrl(wb.queryParams));
+			window.addEventListener('popstate', function(e){
+				location.reload(prev);
+			});
+		}
+	});
+});

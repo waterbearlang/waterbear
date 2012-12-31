@@ -1,4 +1,44 @@
 (function($){
+	
+	window.wb = {};
+	
+	// Source: http://stackoverflow.com/a/13984429
+	wb.urlToQueryParams = function(url){
+	    var qparams = {},
+	        parts = (url||'').split('?'),
+	        qparts, qpart,
+	        i=0;
+
+	    if(parts.length <= 1 ){
+	        return qparams;
+	    }else{
+	        qparts = parts[1].split('&');
+	        for(i in qparts){
+
+	            qpart = qparts[i].split('=');
+	            qparams[decodeURIComponent(qpart[0])] = 
+	                           decodeURIComponent(qpart[1] || '');
+	        }
+	    }
+
+	    return qparams;
+	};
+	
+	wb.queryParamsToUrl = function(params){
+		var base = location.href.split('?')[0];
+		var keys = Object.keys(params);
+		var parts = [];
+		keys.forEach(function(key){
+			if (Array.isArray(params[key])){
+				params[key].forEach(function(value){
+					parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+				});
+			}else{
+				parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+			}
+		});
+		return base + '?' + parts.join('&');
+	}
 
 
 function clearScripts(event, force){
@@ -86,9 +126,10 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file).scripts);
+	$(document.body).trigger('scriptloaded');
 }
 
-window.loadCurrentScripts = function(queryParsed){
+wb.loadCurrentScripts = function(queryParsed){
 	if (queryParsed.gist){
 		$.ajax({
 			url: 'https://api.github.com/gists/' + queryParsed.gist,
@@ -111,7 +152,7 @@ workspace.addEventListener('drop', getFiles, false);
 workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
 
 function handleDragover(evt){
-    // Stop Mozilla from grabbing the file prematurely
+    // Stop Firefox from grabbing the file prematurely
     evt.stopPropagation();
     evt.preventDefault();
     evt.dataTransfer.dropEffect = 'copy';

@@ -4,17 +4,16 @@
 
 function tabSelect(event){
     var self = $(this);
-    $('.tab_bar .selected').removeClass('selected');
+    $('.tabbar .selected').removeClass('selected');
     self.addClass('selected');
-    $('.workspace:visible > div:visible').hide();
     if (self.is('.scripts_workspace_tab')){
-        $('.workspace:visible .scripts_workspace').show();
+		$('.workspace:visible').attr('class', 'workspace blockview');
     }else if (self.is('.scripts_text_view_tab')){
-        $('.workspace:visible .scripts_text_view').show();
+		$('.workspace:visible').attr('class', 'workspace textview');
         updateScriptsView();
     }
 }
-$('.tab_bar').on('click', '.chrome_tab', tabSelect);
+$('.tabbar').on('click', '.chrome_tab', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){
@@ -31,7 +30,8 @@ function updateScriptsView(){
 window.updateScriptsView = updateScriptsView;
 
 function runScripts(event){
-    $('.stage')[0].scrollIntoView();
+	$('.content.editor').css('display', 'none');
+	$('.content.result').css('display', 'block');
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
 	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: blocks.wrapScript() }), '*');
     // $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
@@ -179,9 +179,19 @@ if (is_touch_device()){
     });
 }
 
+var menu_built = false;
 
 // Build the Blocks menu, this is a public method
 function menu(title, specs, show){
+	switch(wb.view){
+		case 'result': return run_menu(title, specs, show);
+		case 'blocks': return blocks_menu(title, specs, show);
+		case 'editor': return edit_menu(title, specs, show);
+		default: return edit_menu(title, specs, show);
+	}
+}
+
+function edit_menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = $('.submenu.' + group);
     if (!submenu.length){

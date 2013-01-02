@@ -43,13 +43,18 @@
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace:visible > *').empty();
-        $('.stage').replaceWith('<div class="stage"></div>');
+        $('.workspace:visible > .scripts_workspace').empty();
+		$('.workspace:visible > .scripts_text_view').empty();
     }
 }
 $('.clearScripts').click(clearScripts);
-$('.goto_script').click(function(){$('#block_menu')[0].scrollIntoView();});
-$('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
+$('.goto_script').click(function(){
+	document.body.className = 'editor';
+});
+	
+$('.goto_stage').click(function(){
+	document.body.className = 'result';
+});
 
 // Load and Save Section
 
@@ -97,7 +102,7 @@ $('.save_scripts').on('click', createDownloadUrl);
 $('.restore_scripts').on('click', comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = $('.workspace:visible .scripts_workspace');
+    var workspace = $('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
@@ -147,7 +152,7 @@ wb.loadCurrentScripts = function(queryParsed){
 
 
 // Allow saved scripts to be dropped in
-var workspace = $('.scripts_workspace:visible')[0];
+var workspace = $('.scripts_workspace')[0];
 workspace.addEventListener('drop', getFiles, false);
 workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
 

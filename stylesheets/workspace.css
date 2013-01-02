@@ -2,6 +2,7 @@
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
     margin:0;
     padding:0;
+	box-sizing: border-box;
 }
 img { 
     border:0;
@@ -39,99 +40,89 @@ body {
 
 .content{
     position: relative;
-    width: 200%;
+    width: 100%;
     height: 100%;
+	display: none;
 }
 
-.tab_bar button, .tab_bar a{
-    float: right;
-    width: 14%;
+body.editor .editor{
+	display: block;
 }
 
+body.blocks .editor{
+	display: block;
+}
+
+body.result .result{
+	display: block;
+}
 
 .workspace {
-    position: absolute;
-    left: 15%;
-    bottom: 0px;
-    width: 34.8%;
-    height: 95%;
-    background-color: #FFF;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-top: 36px;
+    padding-left: 15%;
+    width: 100%;
+    height: 100%;
 	overflow: scroll;
+	pointer-events: none;
+}
+
+.workspace *{
+	pointer-events: auto;
+}
+
+body.blocks .workspace{
+	padding-left: 0;
+}
+
+.menubar, .tabbar{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 36px;
+	padding-left: 36px;
+	padding-right: 36px;
+}
+
+.tabbar{
+	position: relative;
+	float: left;
 }
 
 .scripts_workspace, .scripts_text_view {
-    min-width: 50%;
+	float: left;
+    min-width: 100%;
     min-height: 100%;
     position: relative;
     display: none;
     padding: 15px;
+	paddding-top: 0;
 }
 
-.scripts_workspace {
-    display: block;
+.workspace.blockview .scripts_workspace{
+	display: block;
 }
 
-.drop_cursor {
-    height: 1px;
-    border-bottom: 1px solid #CCC;
-}
-
-.tab_bar{
-    position: absolute;
-    left: 15%;
-    width: 34.8%;
-    z-index: 15;
-}
-
-.tab_bar2{
-    position: absolute;
-    right: -0.1%;
-    top: 30px;
-    width: 50%;
-    z-index: 15;
-}
-.chrome_tab{
-    float: left;
-    margin-right: 5px;
-    position: relative;
-    bottom: -2px;
-    border: 1px solid #666;
-    border-bottom: 0px;
-    -webkit-border-top-right-radius: 4px;
-    -webkit-border-top-left-radius: 4px;
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    width: 24%;
-    background-color: #999;
-    color: #333;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.chrome_tab.selected{
-    background-color: #FFF;
-    color: #000;
-    border-color: #333;
-}
-
-.stage {
-    position: absolute;
-    height: 95%;
-    right: 0px;
-    width: 49.8%;
-    bottom: -20px;
-    background-color: #FFF;
+.workspace.textview .scripts_text_view{
+	display: block;
 }
 
 #block_menu{
-    position: absolute;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-top: 36px;
     width: 15%;
     height: 100%;
-    left: 0px;
-    top: 0px;
     overflow: auto;
+	display: none;
+}
+
+body.editor #block_menu{
+	display: block;
 }
 
 #block_menu .select{
@@ -165,6 +156,51 @@ body {
     float: left;
 }
 
+.drop_cursor {
+    height: 1px;
+    border-bottom: 1px solid #CCC;
+}
+
+.chrome_tab{
+    float: left;
+    margin-right: 5px;
+    position: relative;
+    bottom: -2px;
+    border: 1px solid #666;
+    border-bottom: 0px;
+    -webkit-border-top-right-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-topleft: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    width: 24%;
+    background-color: #999;
+    color: #333;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.chrome_tab.selected{
+    background-color: #FFF;
+    color: #000;
+    border-color: #333;
+}
+
+.stage {
+    position: absolute;
+	padding-top: 36px;
+	height: 100%;
+	width: 100%;
+    left: 0;
+    top: 0;
+	pointer-events: none;
+}
+.stage *{
+	pointer-events: auto;
+}
+
+
 .hidden{
     display: none;
 }
@@ -180,7 +216,7 @@ body {
     background-color: blue;
 }
 
-/*Description of saves*/
+/* Description of saves */
 .description{
     font-size: .8em;
     color: #515151;

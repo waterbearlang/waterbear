@@ -17,8 +17,7 @@ $('.tabbar').on('click', '.chrome_tab', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){
-    $('.workspace:visible .scripts_text_view').hide();
-    $('.workspace:visible .scripts_workspace').show();
+    $('.workspace:visible').attr('class', 'workspace blockview');
 }
 window.showWorkspace = showWorkspace;
 
@@ -30,11 +29,9 @@ function updateScriptsView(){
 window.updateScriptsView = updateScriptsView;
 
 function runScripts(event){
-	$('.content.editor').css('display', 'none');
-	$('.content.result').css('display', 'block');
+	document.body.className = 'result';
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
 	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: blocks.wrapScript() }), '*');
-    // $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
 }
 $('.runScripts').click(runScripts);
 

@@ -49,10 +49,12 @@ function clearScripts(event, force){
 }
 $('.clearScripts').click(clearScripts);
 $('.goto_script').click(function(){
+	console.log('going to edit view');
 	document.body.className = 'editor';
 });
 	
 $('.goto_stage').click(function(){
+	console.log('going to result view');
 	document.body.className = 'result';
 });
 

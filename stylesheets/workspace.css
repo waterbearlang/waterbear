@@ -45,14 +45,17 @@ body {
 	display: none;
 }
 
-body.editor .editor{
+body.editor .editor, body.blocks .editor{
 	display: block;
 }
 
-body.blocks .editor{
-	display: block;
+body.editor .result, body.blocks .result{
+	display: none;
 }
 
+body.result .editor{
+	display: none;
+}
 body.result .result{
 	display: block;
 }
@@ -99,7 +102,7 @@ body.blocks .workspace{
     position: relative;
     display: none;
     padding: 15px;
-	paddding-top: 0;
+	padding-top: 0;
 }
 
 .workspace.blockview .scripts_workspace{

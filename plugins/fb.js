@@ -15,7 +15,7 @@ fb.me = {};
 fb._permissions = 'user_about_me,user_photos,publish_stream';
 
 var menus = {
-  facebook: menu('Facebook', [{
+  facebook: wb.menu('Facebook', [{
     label: 'share [string]',
     script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
   }, {

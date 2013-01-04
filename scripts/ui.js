@@ -28,12 +28,16 @@ function updateScriptsView(){
 }
 window.updateScriptsView = updateScriptsView;
 
-function runScripts(event){
+function runCurrentScripts(event){
 	document.body.className = 'result';
     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: blocks.wrapScript() }), '*');
+	wb.runScript( blocks.prettyScript() );
 }
-$('.runScripts').click(runScripts);
+$('.runScripts').click(runCurrentScripts);
+
+wb.runScript = function(script){
+	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
+}
 
 function clearStage(event){
 	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
@@ -177,18 +181,27 @@ if (is_touch_device()){
 }
 
 var menu_built = false;
+var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
-function menu(title, specs, show){
+wb.menu = function(title, specs, show){
 	switch(wb.view){
 		case 'result': return run_menu(title, specs, show);
-		case 'blocks': return blocks_menu(title, specs, show);
+		case 'blocks': return edit_menu(title, specs, show);
 		case 'editor': return edit_menu(title, specs, show);
 		default: return edit_menu(title, specs, show);
 	}
+};
+
+function run_menu(title, specs, show){
+	if (menu_built){
+		return edit_menu(title, specs, show);
+	}
+	saved_menus.push([title, specs, show]);
 }
 
 function edit_menu(title, specs, show){
+	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = $('.submenu.' + group);
     if (!submenu.length){
@@ -209,7 +222,6 @@ function edit_menu(title, specs, show){
         active: show ? 'h3.' + group : state
     });
 }
-window.menu = menu;
 
 })(jQuery);
 

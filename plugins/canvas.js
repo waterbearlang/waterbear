@@ -31,14 +31,6 @@ $.extend(choiceLists, {
 choiceLists.types = choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 
-jQuery.fn.extend({
-    wrapScript: function(){
-        // over-ride javascript plugin to add canvas to globals
-        var script = this.prettyScript();
-        var retval = 'var global = new Global();(function(){var local = new Local(); try{local.canvas = document.createElement("canvas"); local.canvas.setAttribute("width", global.stage_width); local.canvas.setAttribute("height", global.stage_height); global.stage.appendChild(local.canvas); local.ctx = local.canvas.getContext("2d");' + script + '}catch(e){alert(e);}})();';
-        return retval;
-    }
-});
 
 // Hints for building blocks
 //
@@ -48,7 +40,7 @@ jQuery.fn.extend({
 //
 
     // CANVAS Menu
-    menu('Canvas', [
+    wb.menu('Canvas', [
         {
             blocktype: 'context',
             labels: ['with local state'],
@@ -454,7 +446,7 @@ jQuery.fn.extend({
     ]);
 	
 	// COLORS Menu
-	menu('Colors', [
+	wb.menu('Colors', [
         // Colour and Styles
         {
             blocktype: 'step',
@@ -587,7 +579,7 @@ jQuery.fn.extend({
 	]);
     
     // POINT Menu
-    menu('Point', [
+    wb.menu('Point', [
         {
             blocktype: 'expression',
             label: 'point at x [number:0] y [number:0]',
@@ -629,7 +621,7 @@ jQuery.fn.extend({
     ]);
     
     // SIZE Menu
-    menu('Size', [
+    wb.menu('Size', [
         {
             blocktype: 'expression',
             label: 'size with width [number:10] height [number:10]',
@@ -663,7 +655,7 @@ jQuery.fn.extend({
     ]);
     
     // RECT Menu
-    menu('Rect', [
+    wb.menu('Rect', [
         {
             blocktype: 'expression',
             label: 'rect at x [number:0] y [number:0] with width [number:10] height [number:10]',
@@ -727,7 +719,7 @@ jQuery.fn.extend({
     ]);
     
     // IMAGE Menu
-    menu('Image', [
+    wb.menu('Image', [
         // TODO: Change this to a container : when loaded, that fires on image load
         {
             blocktype: 'expression',

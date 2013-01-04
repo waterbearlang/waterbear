@@ -11,14 +11,6 @@ yepnope({
 });
 
 
-jQuery.fn.extend({
-    wrapScript: function(){
-        // wrap the top-level script to prevent leaking into globals
-        var script = this.prettyScript();
-        return 'var global = new Global();(function($){var stage = $(".stage");global.paper = Raphael(stage.get(0), stage.outerWidth(), stage.outerHeight());var local = new Local();try{' + script + '}catch(e){alert(e);}})(jQuery);';
-    }
-});
-
 function showColorPicker(){
     var self = $(this);
     cw.input(this);
@@ -112,7 +104,7 @@ choiceLists.rettypes = choiceLists.rettype.concat(['color', 'image', 'shape']);
 //
 //
 var menus = {
-    shapes: menu('Shapes', [
+    shapes: wb.menu('Shapes', [
         {
             blocktype: 'step',
             label: 'circle## with radius [number:0] at position x [number:0] y [number:0]',
@@ -306,7 +298,7 @@ var menus = {
             help: 'change the font weight for the text object'
         }
     ]),
-    text: menu('Sketchy', [
+    text: wb.menu('Sketchy', [
         {
             blocktype: 'step',
             label: 'sketchy rect## with width [number:50] and height [number:50] at position x [number:0] y [number:0]', 
@@ -344,7 +336,7 @@ var menus = {
             help: 'draw a sketchy line between two points'
         }
     ]),
-    transform: menu('Transform', [
+    transform: wb.menu('Transform', [
         {
             blocktype: 'step',
             label: 'clear canvas', 
@@ -424,7 +416,7 @@ var menus = {
             help: 'move the shape to the background'
         }
     ]),
-    animation: menu('Animation', [
+    animation: wb.menu('Animation', [
         {
             blocktype: 'step',
             label: 'shape [shape] position x [number:10] y [number:10] over [number:500] ms with [choice:easing]',

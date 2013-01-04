@@ -22,15 +22,6 @@ jQuery.fn.extend({
     }
     return '';
   },
-  wrapScript: function(){
-      // wrap the top-level script to prevent leaking into globals
-      var script = this.prettyScript();
-      //var retval = 'try{' + script + '}catch(e){alert(e);};';
-
-      var retval = 'try{' + script + '}catch(e){alert(e);};';
-
-      return retval;
-  },
   prettyScript: function(){
       var structured = $(this).structured_script();
       return js_beautify(structured);
@@ -49,7 +40,7 @@ jQuery.fn.extend({
 
 // End UI section
 
-menu('Sprites', [
+wb.menu('Sprites', [
     {
         label: 'new image##  [image]',
         script: 'var image## = new $.gameQuery.Animation({imageURL: {{1}}});',

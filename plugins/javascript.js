@@ -28,12 +28,6 @@ jQuery.fn.extend({
     writeScript: function(view){
       view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
       hljs.highlightBlock(view.children()[0]);
-    },
-    wrapScript: function(){
-        // wrap the top-level script to prevent leaking into globals
-        var script = this.prettyScript();
-        var retval = 'var global = new Global();(function(){var local = new Local();try{' + script + '}catch(e){alert(e);}})();';
-        return retval;
     }
 });
 
@@ -62,14 +56,14 @@ window.choiceLists = {
 
 // Special menus used at runtime
 
-menu('Globals', []);
+wb.menu('Globals', []);
 // Temporarily disable these until I can get time to implement them properly
-// menu('Recent Blocks', []);
-// menu('Favourite Blocks', []);
+// wb.menu('Recent Blocks', []);
+// wb.menu('Favourite Blocks', []);
 
 // Javascript core blocks
 
-menu('Control', [
+wb.menu('Control', [
     {
         blocktype: 'eventhandler',
         labels: ['when program runs'],
@@ -154,7 +148,7 @@ menu('Control', [
     }
 ]);
 
-menu('Variables', [
+wb.menu('Variables', [
     {
         blocktype: 'step',
         label: 'variable string## [string]',
@@ -428,7 +422,7 @@ menu('Variables', [
     },
 ], true);
 
-// menu('User Defined', [
+// wb.menu('User Defined', [
 //     {
 //         blocktype: 'context',
 //         labels: [
@@ -453,7 +447,7 @@ menu('Variables', [
 //     }
 // ]);
 
-menu('Arrays', [
+wb.menu('Arrays', [
     {
         blocktype: 'step',
         label: 'new array##',
@@ -564,7 +558,7 @@ menu('Arrays', [
     }
 ], false);
 
-menu('Objects', [
+wb.menu('Objects', [
     {
         blocktype: 'step',
         label: 'new object##',
@@ -615,7 +609,7 @@ menu('Objects', [
     }
 ], false);
 
-menu('Strings', [
+wb.menu('Strings', [
     {
         blocktype: 'expression',
         label: 'string [string] split on [string]',
@@ -691,7 +685,7 @@ menu('Strings', [
     }
 ], false);
 
-menu('Sensing', [
+wb.menu('Sensing', [
     {
         blocktype: 'step',
         label: 'ask [string:What\'s your name?] and wait',
@@ -789,7 +783,7 @@ menu('Sensing', [
     }
 ]);
 
-menu('Operators', [
+wb.menu('Operators', [
     {
         blocktype: 'expression',
         label: '[number:0] + [number:0]', 

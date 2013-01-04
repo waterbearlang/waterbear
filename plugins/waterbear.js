@@ -34,7 +34,7 @@ window.choiceLists = {
 
 // MENUS
 
-menu('Control', [
+wb.menu('Control', [
     {
         blocktype: 'eventhandler',
         contained: [{label: 'Waterbear'}],
@@ -43,7 +43,7 @@ menu('Control', [
     }
 ], true);
 
-menu('Arrays', [
+wb.menu('Arrays', [
     {
         blocktype: 'step',
         label: 'for the [string] of [boolean]',
@@ -53,7 +53,7 @@ menu('Arrays', [
 ], false);
 
 
-menu('Objects', [
+wb.menu('Objects', [
     {
         blocktype: 'step',
         label: 'programming',
@@ -62,7 +62,7 @@ menu('Objects', [
     }
 ], false);
 
-menu('Strings', [
+wb.menu('Strings', [
     {
         blocktype: 'expression',
         label: 'fun',
@@ -72,7 +72,7 @@ menu('Strings', [
     }
 ], false);
 
-menu('Sensing', [
+wb.menu('Sensing', [
     {
         blocktype: 'expression',
         label: 'it', 

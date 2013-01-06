@@ -797,6 +797,11 @@ function addToScriptEvent(container, view){
 	$('.scripts_workspace').trigger('scriptmodified');
 }
 
+$('.scripts_workspace').on('dblclick', '.locals .label', function(evt){
+	console.log('got double click');
+	return false;
+});
+
 $(document.body).on('scriptloaded', function(evt){
 	$('.scripts_workspace').on('scriptmodified', function(evt){
 		if (wb.queryParams.gist){

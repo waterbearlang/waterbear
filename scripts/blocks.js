@@ -616,7 +616,7 @@ Block.prototype.addLocalBlock = function(block){
 
 Block.prototype.addLocalsToParentContext = function(isNext){
     // on addToScript
-	console.log('addLocalsToParentContext %o', this);
+	// console.log('addLocalsToParentContext %o', this);
     if (!this.returns) return;
     if (this.returns === 'block'){
         // special metablock handler

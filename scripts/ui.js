@@ -29,13 +29,18 @@ function updateScriptsView(){
 window.updateScriptsView = updateScriptsView;
 
 function runCurrentScripts(event){
-	document.body.className = 'result';
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-	wb.runScript( blocks.prettyScript() );
+	if (document.body.className === 'result' && wb.script){
+		wb.runScript(wb.script);
+	}else{
+	    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+		document.body.className = 'result';
+		wb.runScript( blocks.prettyScript() );
+	}
 }
 $('.runScripts').click(runCurrentScripts);
 
 wb.runScript = function(script){
+	wb.script = script;
 	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
 }
 
@@ -198,6 +203,15 @@ function run_menu(title, specs, show){
 		return edit_menu(title, specs, show);
 	}
 	saved_menus.push([title, specs, show]);
+}
+
+wb.buildDelayedMenus = function(){
+	if (!menu_built && saved_menus.length){
+		saved_menus.forEach(function(m){
+			edit_menu(m[0], m[1], m[2]);
+		});
+		saved_menus = [];
+	}
 }
 
 function edit_menu(title, specs, show){

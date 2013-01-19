@@ -801,6 +801,7 @@ $('.scripts_workspace').on('dblclick', '.locals .label', function(evt){
 	console.log('got double click');
 	var model = $(evt.target).closest('.wrapper').data('model');
 	console.log('model: %o', model);
+	// FIND ALL INSTANCES
 	return false;
 });
 

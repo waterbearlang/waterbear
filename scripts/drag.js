@@ -10,9 +10,9 @@
 // Drag any block to anywhere that is not the block menu or on a canvas: undo the drag
 
 // Drag Pseudocode
-// 
+//
 // Mouse Dragging:
-// 
+//
 // 1. On mousedown, test for potential drag target
 // 2. On mousemove, if mousedown and target, start dragging
 //     a) test for potential drop targets, remember them for hit testing
@@ -23,10 +23,10 @@
 // 3. On mouseup, if dragging, stop
 //     a) test for drop, handle if necessary
 //     b) clean up temporary elements, remove or move back if not dropping
-//     
-//     
+//
+//
 // Touch dragging
-// 
+//
 // 1. On touchmove, test for potential drag target, start dragging
 //     a..d as above
 // 2. On touchend, if dragging, stop
@@ -39,10 +39,10 @@
     window.isTouch = window.hasOwnProperty('ontouchstart') && true;
     var dragTimeout = 20;
     // TODO: update this whenever we switch to a new workspace
-    var targetCanvas = $('.workspace:visible .scripts_workspace');
-    
+    var targetCanvas = $('.workspace .scripts_workspace').eq(0);
+
     var snapDist = 25; //In pixels
-    
+
     function blockType(block){
         var model = block.data('model');
         if (model.blocktype === 'expression'){
@@ -51,7 +51,7 @@
             return model.blocktype;
         }
     }
-    
+
     function reset(){
         dragTarget = null;
         potentialDropTargets = $();
@@ -63,9 +63,9 @@
         dragging = false;
         cloned = false;
     }
-    
+
     reset();
-    
+
     function blend(event){
         if (isTouch){
             if (event.originalEvent.touches.length > 1){
@@ -76,39 +76,39 @@
             event.pageX = touch.pageX;
             event.pageY = touch.pageY;
         }else{
-            if (event.which !== 1){ // left mouse button 
+            if (event.which !== 1){ // left mouse button
                 return false;
             }
         }
         // fix target?
         return event;
     }
-    
+
     function getPotentialDropTargets(){
         switch(blockType(dragTarget)){
             case 'step': return stepTargets();
             case 'context': return stepTargets();
-            case 'int': 
+            case 'int':
             case 'float': return socketTargets2(['any', 'number', blockType(dragTarget)].join(','));
             case 'any': return anyTargets();
             default: return socketTargets2(['any', dragTarget.block_type()].join(','));
         }
     }
-    
+
     function stepTargets(){
         return targetCanvas.find('.slot:only-child');
     }
-    
+
     function socketTargets(type){
         return targetCanvas.find('.socket.' + type + ':not(:has(.value))');
     }
-	
+
 	function anyTargets(){
 		return targetCanvas.find('.socket:not(:has(.value))');
 	}
-    
+
     /*a slower but more flexible way of doing the socket targets
-    This method could have its setting be held in an array and 
+    This method could have its setting be held in an array and
     so might be better for config*/
     function socketTargets2(types){
         /* I (dethe) don't even understand what this does */
@@ -120,7 +120,7 @@
         }
         return res;
     }
-        
+
     function initDrag(event){
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
@@ -140,7 +140,7 @@
         }
         return true;
     }
-    
+
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!blend(event)) {return undefined;}
@@ -172,7 +172,7 @@
             dragPlaceholder.height(dragTarget.outerHeight());
             dragTarget.before(dragPlaceholder);
         }
-        $('.content').append(dragTarget);
+        $('.content.editor').append(dragTarget);
         // console.log('[3] model: %s', dragTarget.data('model'));
         dragTarget.offset(startPosition);
         potentialDropTargets = getPotentialDropTargets();
@@ -184,7 +184,7 @@
         timer = setTimeout(hitTest, dragTimeout);
         return false;
     }
-    
+
     function drag(event){
         if (!blend(event)) {return undefined;}
         if (!dragTarget) {return undefined;}
@@ -199,7 +199,7 @@
         currentPosition = nextPosition;
         return false;
     }
-    
+
     function endDrag(end){
         clearTimeout(timer);
         timer = null;
@@ -208,7 +208,7 @@
         reset();
         return false;
     }
-    
+
     function handleDrop(){
         // TODO:
            // is it over the menu
@@ -271,7 +271,7 @@
             dropCursor = null;
         }
     }
-    
+
     function positionDropCursor(){
         var self, top, middle, bottom, x = dragTarget.position().top;
         targetCanvas.prepend(dropCursor);
@@ -289,7 +289,7 @@
             }
         });
     }
-        
+
     function hitTest(){
         // test the dragging rect(s) against the target rect(s)
         // test all of the left borders first, then the top, right, bottom
@@ -315,7 +315,7 @@
             }
         else if(dragRect && elem){
         val = dist(dragRect.left, dragRect.top, elem.left, elem.top);
-        if(val < snapDist){ 
+        if(val < snapDist){
             dropIndex = idx;
             dropArea = area;
         }
@@ -335,7 +335,7 @@
         }
         timer = setTimeout(hitTest, dragTimeout);
     }
-    
+
     // Initialize event handlers
     if (isTouch){
         $('.scripts_workspace, .block_menu').on('touchstart', '.block', initDrag);
@@ -346,20 +346,20 @@
         $('.content').live('mousemove', drag);
         $('.content').live('mouseup', endDrag);
     }
-    
+
     // Utility methods
     function mag(p1, p2){
         return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     }
     //I didn't really need to rewrite the above, but I was tired and Couldn't get it to work. Sill can't :(
     function dist(p1, p2, m1, m2){
-        return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));  
+        return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
     }
-    
+
     function rectToString(r){
-        return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', centerX = ' + r.centerX + ', centerY = ' + r.centerY + '>'; 
+        return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', centerX = ' + r.centerX + ', centerY = ' + r.centerY + '>';
     }
-    
+
     function overlap(r1, r2){ // determine area of overlap between two rects
         if (r1.left > r2.right){ return 0; }
         if (r1.right < r2.left){ return 0; }
@@ -368,7 +368,7 @@
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
     }
-    
+
     // jQuery extensions
     $.fn.extend({
         rectToString: function(){
@@ -396,7 +396,7 @@
         },
         containedBy: function(target){
           var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
-          return this.overlap(target) >= targetArea;  
+          return this.overlap(target) >= targetArea;
         },
         cursorOver: function(){
             var rect = this.rect();
@@ -404,5 +404,5 @@
                    currentPosition.top >= rect.top && currentPosition.top <= rect.bottom;
         }
     });
-    
+
 })(jQuery);

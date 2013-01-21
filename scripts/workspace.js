@@ -1,55 +1,23 @@
 (function($){
 	
-	window.wb = {};
-	
-	// Source: http://stackoverflow.com/a/13984429
-	wb.urlToQueryParams = function(url){
-	    var qparams = {},
-	        parts = (url||'').split('?'),
-	        qparts, qpart,
-	        i=0;
-
-	    if(parts.length <= 1 ){
-	        return qparams;
-	    }else{
-	        qparts = parts[1].split('&');
-	        for(i in qparts){
-
-	            qpart = qparts[i].split('=');
-	            qparams[decodeURIComponent(qpart[0])] = 
-	                           decodeURIComponent(qpart[1] || '');
-	        }
-	    }
-
-	    return qparams;
-	};
-	
-	wb.queryParamsToUrl = function(params){
-		var base = location.href.split('?')[0];
-		var keys = Object.keys(params);
-		var parts = [];
-		keys.forEach(function(key){
-			if (Array.isArray(params[key])){
-				params[key].forEach(function(value){
-					parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
-				});
-			}else{
-				parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
-			}
-		});
-		return base + '?' + parts.join('&');
-	}
 
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace:visible > *').empty();
-        $('.stage').replaceWith('<div class="stage"></div>');
+        $('.workspace:visible > .scripts_workspace').empty();
+		$('.workspace:visible > .scripts_text_view').empty();
     }
 }
 $('.clearScripts').click(clearScripts);
-$('.goto_script').click(function(){$('#block_menu')[0].scrollIntoView();});
-$('.goto_stage').click(function(){$('.stage')[0].scrollIntoView();});
+$('.editScript').click(function(){
+	document.body.className = 'editor';
+	wb.buildDelayedMenus();
+	wb.loadCurrentScripts(wb.queryParams);
+});
+	
+$('.goto_stage').click(function(){
+	document.body.className = 'result';
+});
 
 // Load and Save Section
 
@@ -97,7 +65,7 @@ $('.save_scripts').on('click', createDownloadUrl);
 $('.restore_scripts').on('click', comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = $('.workspace:visible .scripts_workspace');
+    var workspace = $('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
@@ -129,6 +97,25 @@ function loadScriptsFromGist(gist){
 	$(document.body).trigger('scriptloaded');
 }
 
+function runScriptFromGist(gist){
+	console.log('running script from gist');
+	var keys = Object.keys(gist.data.files);
+	var file;
+	keys.forEach(function(key){
+		if (/.*\.js$/.test(key)){
+			// it's a javascript file
+			console.log('found javascript file: %s', key);
+			file = gist.data.files[key].content;
+		}
+	});
+	if (!file){
+		console.log('no javascript file found in gist: %o', gist);
+		return;
+	}
+	wb.runScript(file);
+}
+
+
 wb.loadCurrentScripts = function(queryParsed){
 	if (queryParsed.gist){
 		$.ajax({
@@ -145,9 +132,25 @@ wb.loadCurrentScripts = function(queryParsed){
     }
 };
 
+wb.runCurrentScripts = function(queryParsed){
+	if (queryParsed.gist){
+		$.ajax({
+			url: 'https://api.github.com/gists/' + queryParsed.gist,
+			type: 'GET',
+			dataType: 'jsonp',
+			success: runScriptFromGist
+		});
+	}else if (localStorage.__current_scripts_js){
+		var fileObject = localStorage.__current_scripts_js;
+		if (fileObject){
+			wb.runScript(fileObject);
+		}
+	}
+}
+
 
 // Allow saved scripts to be dropped in
-var workspace = $('.scripts_workspace:visible')[0];
+var workspace = $('.scripts_workspace')[0];
 workspace.addEventListener('drop', getFiles, false);
 workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
 

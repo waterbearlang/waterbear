@@ -19,7 +19,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
 
 
 // Sprite Menu
-menu('Sprite', [
+wb.menu('Sprite', [
     {
         blocktype: 'step',
         label: 'clear stage to color [color]',
@@ -98,7 +98,7 @@ menu('Sprite', [
     }
 ]);
 
-menu('MovingSprite', [
+wb.menu('MovingSprite', [
 ]);
 
 })();

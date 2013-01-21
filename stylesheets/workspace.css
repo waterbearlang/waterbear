@@ -1,42 +1,20 @@
-/* YUI Reset, adapted */
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
-    margin:0;
-    padding:0;
-	box-sizing: border-box;
-}
-img { 
-    border:0;
-}
-caption,cite,code,em,strong,th {
-    font-style:normal;
-    font-weight:normal;
-}
-ol,ul {
-    list-style:none;
-}
-caption,th {
-    text-align:left;
-}
-h1,h2,h3,h4,h5,h6 {
-    font-size:100%;
-    font-weight:normal;
-}
-q:before,q:after {
-    content:'';
-}
-abbr,acronym { 
-    border:0;
-}
- 
-/* Scratch Layout Styles */
-
-html, body {
+html, body{
     height: 100%;
-}
-
-body {
+    overflow: hidden;
     background-color: #FFF;
 }
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+img {
+    border:0;
+}
+
+/* Scratch-ish Layout Styles */
 
 .content{
     position: relative;
@@ -61,14 +39,9 @@ body.result .result{
 }
 
 .workspace {
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding-top: 36px;
-    padding-left: 15%;
-    width: 100%;
+    width: calc(100% - 300px);
     height: 100%;
-	overflow: scroll;
+	overflow: hidden;
 	pointer-events: none;
 }
 
@@ -81,28 +54,18 @@ body.blocks .workspace{
 }
 
 .menubar, .tabbar{
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
 	height: 36px;
 	padding-left: 36px;
 	padding-right: 36px;
 }
 
-.tabbar{
-	position: relative;
-	float: left;
-}
-
 .scripts_workspace, .scripts_text_view {
-	float: left;
-    min-width: 100%;
-    min-height: 100%;
-    position: relative;
+    width: 100%;
+    height: 100%;
     display: none;
     padding: 15px;
 	padding-top: 0;
+    overflow: scroll;
 }
 
 .workspace.blockview .scripts_workspace{
@@ -114,11 +77,8 @@ body.blocks .workspace{
 }
 
 #block_menu{
-	position: absolute;
-	left: 0;
-	top: 0;
-	padding-top: 36px;
-    width: 15%;
+    float: left;
+    width: 300px;
     height: 100%;
     overflow: auto;
 	display: none;
@@ -326,13 +286,6 @@ body.editor #block_menu{
     color: white;
     border-color: #333;
     font-weight: bold;
-}
-
- /* This last one might be a bit contreversial but I think that users shouldn't 
- need to realize that the stage is just off to the right of the workspace. This
- will also make it easier for others to diable the stage with just a css rule*/
-html, body {
-    overflow: hidden;
 }
 
 /* Lists of scripts to scroll. Used in demo & restore dialog*/

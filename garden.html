@@ -9,7 +9,7 @@
 	<!-- Stylesheets for waterbear implementation -->
     <link href="stylesheets/workspace.css" rel="stylesheet" />
     <link href="stylesheets/blocks.css" rel="stylesheet" />
-    
+
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="height=device-height, initial-scale=1.0" />
@@ -85,7 +85,7 @@
         <div class="label">
         </div>
     </script>
-  </head>   
+  </head>
   <body>
       <div id="block_menu_load" class="block_menu">
           Loading...
@@ -97,6 +97,7 @@
             <button class="clearScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear Script</span></button>
             <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
 		</div>
+        <div id="block_menu" class="block_menu"></div>
         <div class="workspace blockview">
 	        <div class="tabbar">
 	            <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
@@ -105,7 +106,6 @@
             <div class="scripts_workspace" data-name="default"></div>
             <div class="scripts_text_view"></div>
         </div>
-        <div id="block_menu" class="block_menu"></div>
 	</div>
 	<div class="content result">
         <div class="menubar">
@@ -131,7 +131,7 @@
 	<!-- Waterbear implementation libraries -->
 	<script>
     	var wb = {};
-		
+
 		// Source: http://stackoverflow.com/a/13984429
 		wb.urlToQueryParams = function(url){
 		    var qparams = {},
@@ -146,14 +146,14 @@
 		        for(i in qparts){
 
 		            qpart = qparts[i].split('=');
-		            qparams[decodeURIComponent(qpart[0])] = 
+		            qparams[decodeURIComponent(qpart[0])] =
 		                           decodeURIComponent(qpart[1] || '');
 		        }
 		    }
 
 		    return qparams;
 		};
-	
+
 		wb.queryParamsToUrl = function(params){
 			var base = location.href.split('?')[0];
 			var keys = Object.keys(params);
@@ -169,7 +169,7 @@
 			});
 			return base + '?' + parts.join('&');
 		}
-		
+
 	    var q = wb.urlToQueryParams(location.href);
 		wb.queryParams = q;
 		wb.view = wb.queryParams.view || 'editor';
@@ -223,7 +223,7 @@
 					  document.body.className = 'editor';
 					  wb.loadCurrentScripts(q);
 					  break;
-				  
+
 			  }
           }
       });

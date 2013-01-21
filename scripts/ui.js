@@ -4,22 +4,20 @@
 
 function tabSelect(event){
     var self = $(this);
-    $('.tab_bar .selected').removeClass('selected');
+    $('.tabbar .selected').removeClass('selected');
     self.addClass('selected');
-    $('.workspace:visible > div:visible').hide();
     if (self.is('.scripts_workspace_tab')){
-        $('.workspace:visible .scripts_workspace').show();
+		$('.workspace:visible').attr('class', 'workspace blockview');
     }else if (self.is('.scripts_text_view_tab')){
-        $('.workspace:visible .scripts_text_view').show();
+		$('.workspace:visible').attr('class', 'workspace textview');
         updateScriptsView();
     }
 }
-$('.tab_bar').on('click', '.chrome_tab', tabSelect);
+$('.tabbar').on('click', '.chrome_tab', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){
-    $('.workspace:visible .scripts_text_view').hide();
-    $('.workspace:visible .scripts_workspace').show();
+    $('.workspace:visible').attr('class', 'workspace blockview');
 }
 window.showWorkspace = showWorkspace;
 
@@ -30,13 +28,21 @@ function updateScriptsView(){
 }
 window.updateScriptsView = updateScriptsView;
 
-function runScripts(event){
-    $('.stage')[0].scrollIntoView();
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: blocks.wrapScript() }), '*');
-    // $('.stage').replaceWith('<div class="stage"><script>' + blocks.wrapScript() + '</script></div>');
+function runCurrentScripts(event){
+	if (document.body.className === 'result' && wb.script){
+		wb.runScript(wb.script);
+	}else{
+	    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+		document.body.className = 'result';
+		wb.runScript( blocks.prettyScript() );
+	}
 }
-$('.runScripts').click(runScripts);
+$('.runScripts').click(runCurrentScripts);
+
+wb.runScript = function(script){
+	wb.script = script;
+	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
+}
 
 function clearStage(event){
 	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
@@ -179,9 +185,37 @@ if (is_touch_device()){
     });
 }
 
+var menu_built = false;
+var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
-function menu(title, specs, show){
+wb.menu = function(title, specs, show){
+	switch(wb.view){
+		case 'result': return run_menu(title, specs, show);
+		case 'blocks': return edit_menu(title, specs, show);
+		case 'editor': return edit_menu(title, specs, show);
+		default: return edit_menu(title, specs, show);
+	}
+};
+
+function run_menu(title, specs, show){
+	if (menu_built){
+		return edit_menu(title, specs, show);
+	}
+	saved_menus.push([title, specs, show]);
+}
+
+wb.buildDelayedMenus = function(){
+	if (!menu_built && saved_menus.length){
+		saved_menus.forEach(function(m){
+			edit_menu(m[0], m[1], m[2]);
+		});
+		saved_menus = [];
+	}
+}
+
+function edit_menu(title, specs, show){
+	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = $('.submenu.' + group);
     if (!submenu.length){
@@ -202,7 +236,6 @@ function menu(title, specs, show){
         active: show ? 'h3.' + group : state
     });
 }
-window.menu = menu;
 
 })(jQuery);
 

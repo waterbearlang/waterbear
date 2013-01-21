@@ -1,137 +1,91 @@
-/* YUI Reset, adapted */
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
-    margin:0;
-    padding:0;
-}
-img { 
-    border:0;
-}
-caption,cite,code,em,strong,th {
-    font-style:normal;
-    font-weight:normal;
-}
-ol,ul {
-    list-style:none;
-}
-caption,th {
-    text-align:left;
-}
-h1,h2,h3,h4,h5,h6 {
-    font-size:100%;
-    font-weight:normal;
-}
-q:before,q:after {
-    content:'';
-}
-abbr,acronym { 
-    border:0;
-}
- 
-/* Scratch Layout Styles */
-
-html, body {
+html, body{
     height: 100%;
-}
-
-body {
+    overflow: hidden;
     background-color: #FFF;
 }
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+img {
+    border:0;
+}
+
+/* Scratch-ish Layout Styles */
 
 .content{
     position: relative;
-    width: 200%;
+    width: 100%;
     height: 100%;
+	display: none;
 }
 
-.tab_bar button, .tab_bar a{
-    float: right;
-    width: 14%;
+body.editor .editor, body.blocks .editor{
+	display: block;
 }
 
+body.editor .result, body.blocks .result{
+	display: none;
+}
+
+body.result .editor{
+	display: none;
+}
+body.result .result{
+	display: block;
+}
 
 .workspace {
-    position: absolute;
-    left: 15%;
-    bottom: 0px;
-    width: 34.8%;
-    height: 95%;
-    background-color: #FFF;
-	overflow: scroll;
+    width: calc(100% - 300px);
+    height: 100%;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.workspace *{
+	pointer-events: auto;
+}
+
+body.blocks .workspace{
+	padding-left: 0;
+}
+
+.menubar, .tabbar{
+	height: 36px;
+	padding-left: 36px;
+	padding-right: 36px;
 }
 
 .scripts_workspace, .scripts_text_view {
-    min-width: 50%;
-    min-height: 100%;
-    position: relative;
+    width: 100%;
+    height: 100%;
     display: none;
     padding: 15px;
+	padding-top: 0;
+    overflow: scroll;
 }
 
-.scripts_workspace {
-    display: block;
+.workspace.blockview .scripts_workspace{
+	display: block;
 }
 
-.drop_cursor {
-    height: 1px;
-    border-bottom: 1px solid #CCC;
-}
-
-.tab_bar{
-    position: absolute;
-    left: 15%;
-    width: 34.8%;
-    z-index: 15;
-}
-
-.tab_bar2{
-    position: absolute;
-    right: -0.1%;
-    top: 30px;
-    width: 50%;
-    z-index: 15;
-}
-.chrome_tab{
-    float: left;
-    margin-right: 5px;
-    position: relative;
-    bottom: -2px;
-    border: 1px solid #666;
-    border-bottom: 0px;
-    -webkit-border-top-right-radius: 4px;
-    -webkit-border-top-left-radius: 4px;
-    -moz-border-radius-topright: 4px;
-    -moz-border-radius-topleft: 4px;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    width: 24%;
-    background-color: #999;
-    color: #333;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.chrome_tab.selected{
-    background-color: #FFF;
-    color: #000;
-    border-color: #333;
-}
-
-.stage {
-    position: absolute;
-    height: 95%;
-    right: 0px;
-    width: 49.8%;
-    bottom: -20px;
-    background-color: #FFF;
+.workspace.textview .scripts_text_view{
+	display: block;
 }
 
 #block_menu{
-    position: absolute;
-    width: 15%;
+    float: left;
+    width: 300px;
     height: 100%;
-    left: 0px;
-    top: 0px;
     overflow: auto;
+	display: none;
+}
+
+body.editor #block_menu{
+	display: block;
 }
 
 #block_menu .select{
@@ -165,6 +119,51 @@ body {
     float: left;
 }
 
+.drop_cursor {
+    height: 1px;
+    border-bottom: 1px solid #CCC;
+}
+
+.chrome_tab{
+    float: left;
+    margin-right: 5px;
+    position: relative;
+    bottom: -2px;
+    border: 1px solid #666;
+    border-bottom: 0px;
+    -webkit-border-top-right-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-topleft: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    width: 24%;
+    background-color: #999;
+    color: #333;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.chrome_tab.selected{
+    background-color: #FFF;
+    color: #000;
+    border-color: #333;
+}
+
+.stage {
+    position: absolute;
+	padding-top: 36px;
+	height: 100%;
+	width: 100%;
+    left: 0;
+    top: 0;
+	pointer-events: none;
+}
+.stage *{
+	pointer-events: auto;
+}
+
+
 .hidden{
     display: none;
 }
@@ -180,7 +179,7 @@ body {
     background-color: blue;
 }
 
-/*Description of saves*/
+/* Description of saves */
 .description{
     font-size: .8em;
     color: #515151;
@@ -287,13 +286,6 @@ body {
     color: white;
     border-color: #333;
     font-weight: bold;
-}
-
- /* This last one might be a bit contreversial but I think that users shouldn't 
- need to realize that the stage is just off to the right of the workspace. This
- will also make it easier for others to diable the stage with just a css rule*/
-html, body {
-    overflow: hidden;
 }
 
 /* Lists of scripts to scroll. Used in demo & restore dialog*/

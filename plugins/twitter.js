@@ -24,7 +24,7 @@ yepnope({
         });
     };
 
-    menu('Twitter', [
+    wb.menu('Twitter', [
         {
             blocktype: 'eventhandler',
             contained: [{label: 'get tweet for [string]'}],

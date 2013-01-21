@@ -8,7 +8,7 @@ yepnope({
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
 
     // remove UI we don't use (Maybe JS plugin should *add* this?)
-    $('.goto_stage, .runScripts, .tab_bar_2, .stage').remove();
+    $('.goto_stage, .runScripts, .result').remove();
     
 // expose these globally so the Block/Label methods can find them
 window.choiceLists = {
@@ -71,7 +71,7 @@ function clearScriptsDefault(event, force){
 $('.clearScripts').click(clearScriptsDefault);
 
 
-    menu('Control', [
+    wb.menu('Control', [
         {
             blocktype: 'eventhandler',
             labels: ['Setup - When program starts'], 
@@ -130,7 +130,7 @@ $('.clearScripts').click(clearScriptsDefault);
     ], false);
     
     
-    menu('Timing', [
+    wb.menu('Timing', [
         {
             blocktype: 'step',
             label: 'wait [int:1] secs', 
@@ -154,7 +154,7 @@ $('.clearScripts').click(clearScriptsDefault);
         
     ]);
     
-    menu('Electronic Interface', [
+    wb.menu('Electronic Interface', [
         {
             blocktype: 'step',
             label: 'Create digital_output## on Pin [choice:digitalpins]', 
@@ -247,7 +247,7 @@ $('.clearScripts').click(clearScriptsDefault);
         }
     ]);
     
-    menu('Variables', [
+    wb.menu('Variables', [
         {
             blocktype: 'step',
           	label:'Create [string:var] set to [string]',
@@ -327,7 +327,7 @@ $('.clearScripts').click(clearScriptsDefault);
         }
       ]);
       
-    menu('Operators', [
+    wb.menu('Operators', [
         {
             blocktype: 'expression',
             label: '[number:0] + [number:0]', 
@@ -492,7 +492,7 @@ $('.clearScripts').click(clearScriptsDefault);
         }
     ]);
     
-    menu('Serial', [
+    wb.menu('Serial', [
         {
             blocktype: 'step',
           	label: 'Setup serial communication at [choice:baud]', 

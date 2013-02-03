@@ -392,6 +392,7 @@ Block.prototype.initInstance = function(){
             this._returns.isTemplateBlock = true;
             this._returns.isLocal = true;
             this._returns.group = this.group;
+            this._returns.id = this.id;
             this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]).replace('##', self.id);
             this.returns = Block(this._returns);
             assert.isObject(this.returns, 'Returns blocks must be objects');
@@ -813,7 +814,7 @@ function addToScriptEvent(container, view){
 	$('.scripts_workspace').trigger('scriptmodified');
 }
 
-$('.content').on('dblclick', '.locals .label', function(evt){
+$('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
     var label = $(evt.target);
 	var model = label.closest('.wrapper').data('model');
     var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
@@ -824,7 +825,7 @@ $('.content').on('dblclick', '.locals .label', function(evt){
 	return false;
 });
 
-$('.content').on('keypress', '.locals .label_input', function(evt){
+$('.content').on('keypress', '.locals .label_input, .globals .label_input', function(evt){
     if (evt.which === 13){
         var labelInput = $(evt.target);
         var labelText = labelInput.val();
@@ -832,7 +833,7 @@ $('.content').on('keypress', '.locals .label_input', function(evt){
         labelInput.prev().show();
         labelInput.remove();
         if (labelText.length){
-            var instances = $('.content .wrapper[data-id=' + model.id + ']');
+            var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
             instances.each(function(){
                 $(this).data('model').changeLabel(labelText);
             });

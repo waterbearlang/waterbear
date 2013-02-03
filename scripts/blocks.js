@@ -284,12 +284,25 @@ function Block(spec, scope){
 }
 
 Block._nextId = 0;
+
 Block.newId = function(){
     Block._nextId++;
+    console.log('returning new id: %s', Block._nextId);
     return Block._nextId;
 };
 
+Block.registerId = function(id){
+    id = parseInt(id);
+    // if (id < Block._nextId){
+    //     console.log('Warning: registering id %s that may already have been used (next: %s)', id, Block._nextId);
+    // }else{
+    //     console.log('Registered id %s', id);
+    // }
+    Block._nextId = Math.max(id, Block._nextId);
+}
+
 Block.registry = {};
+
 Block.registerBlock = function(model){
     if (!model.isTemplateBlock) return; // only register blocks in the menu
     if (Block.registry[model.signature]){
@@ -313,15 +326,19 @@ Block.prototype.init = function(spec){
     }
     $.extend(this, spec);
     this.spec = spec; // save unmodified description
-    if (! (this.id || this.isTemplateBlock)){
-        this.id = Block.newId();
+    if (this.id){
+        Block.registerId(this.id);
+    }else{
+        if (this.isTemplateBlock){
+            if (this.isLocal){
+                this.id = Block.newId(); // templates only get ids if they are locals (or returns, which have their origin's id)
+            }else{
+                this.id = '';
+            }
+        }else{
+            this.id = Block.newId();
+        }
     }
-    if (this.isTemplateBlock && this.isLocal){
-        this.id = Block.newId();
-    }
-	if (this.isTemplateBlock && !this.id){ // local template blocks have ids
-		this.id = '';
-	}
     if (!this.group){
         console.log('no group? %o', this);
     }
@@ -386,7 +403,6 @@ Block.prototype.initInstance = function(){
         });
     }
     if (this.returns){
-        console.log('begin init for returns');
         this._returns = this.returns;
         if (this.returns === 'block'){
             // special user-defined block handler
@@ -826,6 +842,8 @@ function addToScriptEvent(container, view){
 $('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
     var label = $(evt.target);
 	var model = label.closest('.wrapper').data('model');
+    // Rather than use jquery to find instances, should origin model keep track of all instances?
+    // How would that survive serialization/reification?
     var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
     var input = $('<input class="label_input" value="' + label.text() + '" />');
     label.after(input).hide();

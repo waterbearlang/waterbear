@@ -373,11 +373,13 @@ Block.prototype.initInstance = function(){
             spec.isLocal = true;
             spec.id = self.id;
         });
-        this.locals = this.spec.locals.map(function(spec){
+        this.locals = this.spec.locals.map(function(spec, idx){
             if (spec === null){
                 return spec;
             }
             spec.group = self.group;
+            spec.localOrigin = this;
+            spec.localIndex = idx;
             var block = Block(spec);
             assert.isObject(block, 'Blocks must be objects');
             return block;
@@ -392,6 +394,7 @@ Block.prototype.initInstance = function(){
             this._returns.isTemplateBlock = true;
             this._returns.isLocal = true;
             this._returns.group = this.group;
+            this._returns.returnOrigin = this;
             this._returns.id = this.id;
             this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]).replace('##', self.id);
             this.returns = Block(this._returns);
@@ -615,6 +618,12 @@ Block.prototype.view = function(){
 Block.prototype.changeLabel = function(labelText){
     this._view.find('> .block > .blockhead > .label').text(labelText);
     this.spec.labels[0] = labelText;
+    if (this.returnOrigin){
+        this.returnOrigin.returns.spec.labels[0] = labelText;
+    }
+    if (this.localOrigin){
+        this.localOrigin.locals.spec.labels[this.localIndex] = labelText;
+    }
 };
 
 // EVENT HANDLERS

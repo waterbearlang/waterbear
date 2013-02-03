@@ -16,7 +16,7 @@ $('.scripts_workspace').on('click', '.disclosure', function(event){
     }
     self.toggleClass('open closed');
 });
-            
+
 //
 // Value objects get defaults depending on their type. These are the defaults for
 // primitive values when the plugin does not over-ride the default.
@@ -33,7 +33,7 @@ var defaultValue = {
 
 //
 // Blocks which take parameters store those parameters as Value objects, which may hold primitive
-// values such as numbers or strings, or may be Expression blocks. 
+// values such as numbers or strings, or may be Expression blocks.
 //
 function Value(textValue, index){
     assert.isNumber(index, 'Values must know their place');
@@ -150,7 +150,7 @@ Value.prototype.view = function(){
 
 Value.prototype.choiceView = function(){
     var self = this;
-    return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' + 
+    return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' +
         this.choiceList.map(function(item){
             if (item === self.value){
                 return '<option selected>' + item + '</option>';
@@ -166,7 +166,7 @@ Value.prototype.update = function(newValue){
         case 'number': this.value = parseFloat(newValue); break;
         case 'boolean': this.value = newValue === 'true'; break;
         case 'string': this.value = newValue; break;
-        case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break; 
+        case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
         case 'datetime': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
         case 'time': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
         case 'int': this.value = parseInteger(newValue); break;
@@ -316,9 +316,15 @@ Block.prototype.init = function(spec){
     if (! (this.id || this.isTemplateBlock)){
         this.id = Block.newId();
     }
+    if (this.isTemplateBlock && this.isLocal){
+        this.id = Block.newId();
+    }
 	if (this.isTemplateBlock && !this.id){ // local template blocks have ids
 		this.id = '';
 	}
+    if (!this.group){
+        console.log('no group? %o', this);
+    }
     if (this.help){
         this.tooltip = this.group + ' ' + this.id + ': ' + this.help;
     }else{
@@ -371,20 +377,22 @@ Block.prototype.initInstance = function(){
             if (spec === null){
                 return spec;
             }
+            spec.group = self.group;
             var block = Block(spec);
             assert.isObject(block, 'Blocks must be objects');
             return block;
         });
     }
     if (this.returns){
+        console.log('begin init for returns');
         this._returns = this.returns;
         if (this.returns === 'block'){
             // special user-defined block handler
         }else{
             this._returns.isTemplateBlock = true;
             this._returns.isLocal = true;
-            this._returns.id = self.id;
-			this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]);
+            this._returns.group = this.group;
+            this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]).replace('##', self.id);
             this.returns = Block(this._returns);
             assert.isObject(this.returns, 'Returns blocks must be objects');
         }
@@ -418,7 +426,7 @@ Block.prototype.initInstance = function(){
     }else{
         this.values = [];
     }
-    
+
 };
 
 Block.prototype.addValue = function(value){
@@ -429,7 +437,7 @@ Block.prototype.addValue = function(value){
 };
 
 Block.prototype.parseLabel = function(textLabel){
-    // Recognize special values in the label string and replace them with 
+    // Recognize special values in the label string and replace them with
     // appropriate markup. Some values are dynamic and based on the objects currently
     // in the environment
     //
@@ -538,7 +546,7 @@ Block.prototype.clone = function(deep){
     if (!deep){
         spec.contained = [];
         spec.values = this.values.map(function(v){return {
-            type: this.type, 
+            type: this.type,
             value:  v.literal ? v.value : v.defaultValue
         }});
     }
@@ -597,7 +605,15 @@ Block.prototype.view = function(){
         view.find('> .next').append(this.next.view());
         this.next.addLocalsToParentContext(true);
     }
+    if (this.id){
+        view.attr('data-id', this.id);
+    }
     return view;
+};
+
+Block.prototype.changeLabel = function(labelText){
+    this._view.find('> .block > .blockhead > .label').text(labelText);
+    this.spec.labels[0] = labelText;
 };
 
 // EVENT HANDLERS
@@ -735,7 +751,7 @@ Block.prototype.removeNextStep = function(step){
     this.next.removeLocalsFromParent(true);
     this.next = null;
 };
-    
+
 $('body').on('delete_block', '.wrapper', function(evt, params){
     var view = $(this);
     view.data('model').deleteBlock(view, evt, params);
@@ -754,7 +770,7 @@ function removeFromScriptEvent(view){
         var exprIndex = parent.data('index');
         parentModel.removeExpression(model, exprIndex);
         assert(parent.children('input').length > 0, "No input found, where can it be?")
-        if(parent.hasClass('boolean')){           
+        if(parent.hasClass('boolean')){
             parent.append(
                 '<select><option>true</option><option>false</option></select>');
         }else{
@@ -766,7 +782,7 @@ function removeFromScriptEvent(view){
         parentModel.removeNextStep(model);
     }
 	$('.scripts_workspace').trigger('scriptmodified');
-	
+
 }
 
 function addToScriptEvent(container, view){
@@ -797,12 +813,33 @@ function addToScriptEvent(container, view){
 	$('.scripts_workspace').trigger('scriptmodified');
 }
 
-$('.scripts_workspace').on('dblclick', '.locals .label', function(evt){
-	console.log('got double click');
-	var model = $(evt.target).closest('.wrapper').data('model');
-	console.log('model: %o', model);
-	// FIND ALL INSTANCES
+$('.content').on('dblclick', '.locals .label', function(evt){
+    var label = $(evt.target);
+	var model = label.closest('.wrapper').data('model');
+    var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
+    var input = $('<input class="label_input" value="' + label.text() + '" />');
+    label.after(input).hide();
+    input.select();
+    // FIND ALL INSTANCES
 	return false;
+});
+
+$('.content').on('keypress', '.locals .label_input', function(evt){
+    if (evt.which === 13){
+        var labelInput = $(evt.target);
+        var labelText = labelInput.val();
+        var model = labelInput.closest('.wrapper').data('model');
+        labelInput.prev().show();
+        labelInput.remove();
+        if (labelText.length){
+            var instances = $('.content .wrapper[data-id=' + model.id + ']');
+            instances.each(function(){
+                $(this).data('model').changeLabel(labelText);
+            });
+            model.changeLabel(labelText);
+        }
+        return false;
+    }
 });
 
 $(document.body).on('scriptloaded', function(evt){

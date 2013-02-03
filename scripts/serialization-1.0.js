@@ -53,8 +53,9 @@ function exists(list){
 
 Block.prototype.toJSON = function(){
     var serialized = {
-        signature: this.signature, 
+        signature: this.signature,
         blocktype: this.blocktype,
+        labels: this.spec.labels,
         id: this.id // yes, this will become problematic later
     };
     // console.info('serializing %s', this.signature);

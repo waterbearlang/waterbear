@@ -59,6 +59,12 @@ Block.prototype.toJSON = function(){
         id: this.id // yes, this will become problematic later
     };
     // console.info('serializing %s', this.signature);
+    if (this.customReturns){
+        serialized.customReturns = this.customReturns;
+    }
+    if (this.customLocals){
+        serialized.customLocals = this.customLocals;
+    }
     if (exists(this.values)){
         // console.info('with %s values', this.values.length);
         serialized.values = this.values.map(function(value){

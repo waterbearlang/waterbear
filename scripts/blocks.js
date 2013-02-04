@@ -324,8 +324,26 @@ Block.prototype.init = function(spec){
         spec.labels = [spec.label];
         delete spec.label;
     }
-    $.extend(this, spec);
+    $.extend(true, this, spec);
     this.spec = spec; // save unmodified description
+    if (this.customReturns){
+        if (this.spec.returns.label){
+            this.spec.returns.label = this.customReturns;
+        }else{
+            this.spec.returns.labels[0] = this.customReturns;
+        }
+    }
+    if (this.customLocals){
+        this.customLocals.forEach(function(name, idx){
+            var _local = this.spec.locals[idx];
+            if (_local.label){
+                _local.label = name;
+            }else{
+                _local.labels[0] = name;
+            }
+        });
+        this.spec.locals = this.customLocals;
+    }
     if (this.id){
         Block.registerId(this.id);
     }else{
@@ -635,10 +653,27 @@ Block.prototype.changeLabel = function(labelText){
     this._view.find('> .block > .blockhead > .label').text(labelText);
     this.spec.labels[0] = labelText;
     if (this.returnOrigin){
-        this.returnOrigin.returns.spec.labels[0] = labelText;
+        // console.log('setting returnOrigin returns label: %o', this.returnOrigin);
+        if (this.returnOrigin.spec.returns.label){
+            this.returnOrigin.spec.returns.label = labelText;
+        }else{
+            this.returnOrigin.spec.returns.labels[0] = labelText;
+        }
+        this.returnOrigin.customReturns = labelText;
     }
     if (this.localOrigin){
-        this.localOrigin.locals.spec.labels[this.localIndex] = labelText;
+        var locals = this.localOrigin.spec.locals;
+        if (locals[this.localIndex].label){
+            locals[this.localIndex].label = labelText;
+        }else{
+            locals[this.localIndex].labels[0] = labelText;
+        }
+        if (!this.localOrigin.customLocals){
+            this.localOrigin.customLocals = locals.map(function(loc){
+                return loc.label || loc.labels[0];
+            });
+        }
+        this.localOrigin.customLocals[this.localIndex] = labelText;
     }
 };
 

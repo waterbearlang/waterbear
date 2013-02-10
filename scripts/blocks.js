@@ -395,7 +395,7 @@ Block.prototype.initInstance = function(){
                 return spec;
             }
             spec.group = self.group;
-            spec.localOrigin = this;
+            spec.localOrigin = self;
             spec.localIndex = idx;
             if (self.customLocals){
                 if (spec.label){

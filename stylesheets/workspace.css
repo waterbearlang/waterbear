@@ -61,11 +61,16 @@ body.blocks .workspace{
 
 .scripts_workspace, .scripts_text_view {
     width: 100%;
-    height: 100%;
+    height: 80%;
     display: none;
     padding: 15px;
 	padding-top: 0;
     overflow: scroll;
+}
+
+.scripts_workspace{
+    padding-top: 30px;
+    padding-bottom: 100px;
 }
 
 .workspace.blockview .scripts_workspace{

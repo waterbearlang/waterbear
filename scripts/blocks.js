@@ -326,24 +326,6 @@ Block.prototype.init = function(spec){
     }
     $.extend(true, this, spec);
     this.spec = spec; // save unmodified description
-    if (this.customReturns){
-        if (this.spec.returns.label){
-            this.spec.returns.label = this.customReturns;
-        }else{
-            this.spec.returns.labels[0] = this.customReturns;
-        }
-    }
-    if (this.customLocals){
-        this.customLocals.forEach(function(name, idx){
-            var _local = this.spec.locals[idx];
-            if (_local.label){
-                _local.label = name;
-            }else{
-                _local.labels[0] = name;
-            }
-        });
-        this.spec.locals = this.customLocals;
-    }
     if (this.id){
         Block.registerId(this.id);
     }else{
@@ -415,6 +397,13 @@ Block.prototype.initInstance = function(){
             spec.group = self.group;
             spec.localOrigin = this;
             spec.localIndex = idx;
+            if (self.customLocals){
+                if (spec.label){
+                    spec.label = self.customLocals[idx];
+                }else{
+                    spec.labels[0] = self.customLocals[idx];
+                }
+            }
             var block = Block(spec);
             assert.isObject(block, 'Blocks must be objects');
             return block;
@@ -430,6 +419,13 @@ Block.prototype.initInstance = function(){
             this._returns.group = this.group;
             this._returns.returnOrigin = this;
             this._returns.id = this.id;
+            if (self.customReturns){
+                if (this._returns.label){
+                    this._returns.label = self.customReturns;
+                }else{
+                    this._returns.labels[0] = self.customReturns;
+                }
+            }
             this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]).replace('##', self.id);
             this.returns = Block(this._returns);
             assert.isObject(this.returns, 'Returns blocks must be objects');

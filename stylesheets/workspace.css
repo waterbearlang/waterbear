@@ -124,7 +124,7 @@ body.editor #block_menu{
     float: left;
 }
 
-.drop_cursor {
+.dropCursor {
     height: 1px;
     border-bottom: 1px solid #CCC;
 }

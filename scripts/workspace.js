@@ -1,11 +1,12 @@
 (function($){
-	
+
 
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace:visible > .scripts_workspace').empty();
 		$('.workspace:visible > .scripts_text_view').empty();
+        $('.submenu.globals').empty();
     }
 }
 $('.clearScripts').click(clearScripts);
@@ -14,7 +15,7 @@ $('.editScript').click(function(){
 	wb.buildDelayedMenus();
 	wb.loadCurrentScripts(wb.queryParams);
 });
-	
+
 $('.goto_stage').click(function(){
 	document.body.className = 'result';
 });

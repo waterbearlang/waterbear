@@ -31,6 +31,64 @@ var defaultValue = {
     'color': 'rgb(0,0,0)'
 };
 
+function Deferred(parent, type, idx, spec){
+    this.parent = parent;
+    this.type = type;
+    this.idx = idx;
+    this.spec = spec;
+}
+
+Deferred.prototype.resolve = function(){
+    var block = Block(this.spec);
+    if (block){
+        switch(this.type){
+            case 'value':
+                this.parent.addBlock(block, this.idx);
+                return true;
+            case 'child':
+                this.parent.contained[this.idx] = block;
+                return true;
+            case 'next':
+                this.parent.addNext(block);
+                return true;
+            default:
+                console.log('Error: we should never get here');
+                return false;
+        }
+    }else{
+        console.log('Deferred.resolve() failed: %o', this);
+        return false;
+    }
+}
+Deferred._allDeferreds = [];
+Deferred.add = function(parent, type, idx, spec){
+    Deferred._allDeferreds.push(new Deferred(parent, type, idx, spec));
+};
+Deferred.resolve = function(){
+    var total = Deferred._allDeferreds.length;
+    var count = 0;
+    if (total){
+        console.log('trying to resolve %s Deferreds', total);
+    }
+    while(Deferred._allDeferreds.length){
+        count++;
+        var deferred = Deferred._allDeferreds.shift();
+        if (!deferred.resolve()){
+            Deferred._allDeferreds.push(deferred);
+        }else{
+            console.log('resolved!');
+        }
+        if (count > total){
+            if (total === Deferred._allDeferreds.length){
+                console.log('Something is wrong, no deferreds (%s left) are resolving', total);
+                break;
+            }
+            total = Deferred._allDeferreds.length;
+            count = 0;
+        }
+    }
+};
+
 //
 // Blocks which take parameters store those parameters as Value objects, which may hold primitive
 // values such as numbers or strings, or may be Expression blocks.
@@ -46,8 +104,12 @@ function Value(textValue, index){
         }
         if (textValue.value && textValue.value.signature){
             var block = Block(textValue.value);
-            assert.isObject(block, 'Value blocks must be objects');
-            this.addBlock(block);
+            if (block){
+                this.addBlock(block);
+            }else{
+                Deferred.add(this, 'value', null, textValue.value);
+            }
+            // assert.isObject(block, 'Value blocks must be objects');
         }else{
             this.literal = true;
         }
@@ -256,7 +318,11 @@ function Block(spec, scope){
     // if called while de-serializing, get the parent spec
     if (spec.signature){
         var template = Block.registry[spec.signature];
-        assert.isObject(template, 'We fail to find a template block for ' + spec.signature + ', has it been initialized yet?');
+        if (!template){
+            console.log('Failed to find template model with signature %s', spec.signature);
+            return null; // let Deferred handle it
+        }
+        // assert.isObject(template, 'We fail to find a template block for ' + spec.signature + ', has it been initialized yet?');
         var instance = {
             isLocal: false,
             isTemplateBlock: false,
@@ -305,6 +371,9 @@ Block.registry = {};
 
 Block.registerBlock = function(model){
     if (!model.isTemplateBlock) return; // only register blocks in the menu
+    if (model.isLocal){
+        console.log('registering model %s', model.signature);
+    }
     if (Block.registry[model.signature]){
         console.warn('Overwriting existing scripts for %s', model.signature);
     }
@@ -405,7 +474,7 @@ Block.prototype.initInstance = function(){
                 }
             }
             var block = Block(spec);
-            assert.isObject(block, 'Blocks must be objects');
+            // assert.isObject(block, 'Blocks must be objects');
             return block;
         });
     }
@@ -431,20 +500,26 @@ Block.prototype.initInstance = function(){
             assert.isObject(this.returns, 'Returns blocks must be objects');
         }
     }
+    if (this.spec.next){
+        this.next = Block(this.spec.next);
+        if (!this.next){
+            Deferred.add(this, 'next', null, this.spec.next);
+        }
+    }else{
+        this.next = null;
+    }
     if (this.spec.contained && this.spec.contained.length){
-        this.contained = this.spec.contained.map(function(spec){
+        this.contained = this.spec.contained.map(function(spec, idx){
             if (spec === null) return spec;
             var block = Block(spec);
-            assert.isObject(block, 'Contained blocks must be blocks');
+            if (!block){
+                Deferred.add(self, 'child', idx, spec);
+            }
+            // assert.isObject(block, 'Contained blocks must be blocks');
             return block;
         });
     }else{
         this.contained = [];
-    }
-    if (this.spec.next){
-        this.next = Block(this.spec.next);
-    }else{
-        this.next = null;
     }
     if (this.spec.values && this.spec.values.length){
         this.values = this.spec.values.map(function(value, idx){

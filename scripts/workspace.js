@@ -71,14 +71,17 @@ function loadScriptsFromObject(fileObject){
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
 	if (!fileObject) return;
-    fileObject.blocks.forEach(function(spec){
-        var block = Block(spec);
-		assert.isObject(block, 'Blocks must be objects');
+    var blocks = fileObject.blocks.map(function(spec){
+        return Block(spec);
+    });
+    Deferred.resolve();
+    blocks.forEach(function(block){
         var view = block.view();
 		assert.isString(view.jquery, 'Views must be jQuery objects');
         workspace.append(view);
         addToScriptEvent(workspace, view);
     });
+    wb.loaded = true;
 }
 
 function loadScriptsFromGist(gist){
@@ -117,7 +120,10 @@ function runScriptFromGist(gist){
 }
 
 
+wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
+    if (wb.loaded) return;
+    console.log('loading current scripts');
 	if (queryParsed.gist){
 		$.ajax({
 			url: 'https://api.github.com/gists/' + queryParsed.gist,

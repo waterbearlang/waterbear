@@ -1,6 +1,6 @@
-/* 
+/*
  *    Canvas Plugin
- * 
+ *
  *    Support for using <canvas> from Waterbear
  *
  */
@@ -61,7 +61,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
         },
         {
             blocktype: 'step',
-            label: 'clear rect [rect]', 
+            label: 'clear rect [rect]',
             script: 'local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
             help: 'clear...'
         },
@@ -95,7 +95,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
         },
         {
             blocktype: 'step',
-            label: 'fill rect [rect]', 
+            label: 'fill rect [rect]',
             script: 'var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);',
             help: 'fill...'
         },
@@ -111,7 +111,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 		},
         {
             blocktype: 'step',
-            label: 'stroke rect [rect]', 
+            label: 'stroke rect [rect]',
             script: 'var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);',
             help: 'stroke...'
         },
@@ -162,7 +162,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             blocktype: 'step',
             label: 'arc with origin [point] radius [number:1] start angle [number:0] deg, end angle [number:45] deg [boolean:true]',
             script: 'local.ctx.arc({{1}}.x,{{1}}.y,{{2}},deg2rad({{3}}),deg2rad({{4}}),{{5}});',
-            help: 'arc...'  
+            help: 'arc...'
         },
         {
             blocktype: 'step',
@@ -370,19 +370,19 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
         // Transforms
         {
             blocktype: 'step',
-            label: 'scale x [number:1.0] y [number:1.0]', 
+            label: 'scale x [number:1.0] y [number:1.0]',
             script: 'local.ctx.scale({{1}},{{2}});',
             help: 'change the scale of subsequent drawing'
         },
         {
             blocktype: 'step',
-            label: 'rotate by [number:0] degrees', 
+            label: 'rotate by [number:0] degrees',
             script: 'local.ctx.rotate(deg2rad({{1}}));',
             help: 'rotate...'
         },
         {
             blocktype: 'step',
-            label: 'translate by x [number:0] y [number:0]', 
+            label: 'translate by x [number:0] y [number:0]',
             script: 'local.ctx.translate({{1}},{{2}});',
             help: 'translate...'
         },
@@ -399,7 +399,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             help: 'set transform to an arbitrary array [a,b,c,d,e,f]'
         },
         // Line caps/joins
-        
+
         {
             blocktype: 'step',
             label: 'line width [number:1]',
@@ -444,7 +444,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             help: 'set the shadow color'
         }
     ]);
-	
+
 	// COLORS Menu
 	wb.menu('Colors', [
         // Colour and Styles
@@ -463,7 +463,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 		{
 			blocktype: 'expression',
 			label: 'color with red [number:0] green [number:0] blue [number:0]',
-			script: '"rgb({{1}},{{2}}{{3}})"',
+			script: '"rgb({{1}},{{2}},{{3}})"',
 			type: 'color',
 			help: 'returns a color'
 		},
@@ -577,21 +577,22 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 //             }
 //         },
 	]);
-    
+
     // POINT Menu
     wb.menu('Point', [
         {
             blocktype: 'expression',
             label: 'point at x [number:0] y [number:0]',
             script: '{x: {{1}}, y: {{2}} }',
-            type: 'point'
+            type: 'point',
+            help: 'create a new point'
         },
         {
             blocktype: 'expression',
 			type: 'point',
             label: 'point from array [array]',
             script: '{x: {{1}}[0], y: {{1}}[1]}',
-            type: 'point'
+            help: 'convert array to point'
         },
 		{
 			blocktype: 'expression',
@@ -604,22 +605,25 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             blocktype: 'expression',
             label: 'point [point] x',
             script: '{{1}}.x',
-            type: 'number'
+            type: 'number',
+            help: 'get the x value of a point'
         },
         {
             blocktype: 'expression',
             label: 'point [point] y',
             script: '{{1}}.y',
-            type: 'number'
+            type: 'number',
+            help: 'get the y value of a point'
         },
         {
             blocktype: 'expression',
             label: 'point [point] as array',
             script: '[{{1}}.x, {{1}}.y]',
-            type: 'array'
+            type: 'array',
+            help: 'convert a point to an array'
         }
     ]);
-    
+
     // SIZE Menu
     wb.menu('Size', [
         {
@@ -653,7 +657,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             type: 'array'
         }
     ]);
-    
+
     // RECT Menu
     wb.menu('Rect', [
         {
@@ -717,7 +721,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             type: 'number'
         }
     ]);
-    
+
     // IMAGE Menu
     wb.menu('Image', [
         // TODO: Change this to a container : when loaded, that fires on image load
@@ -745,5 +749,5 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             script: '{{1}}.width',
             type: 'string'
         }
-    ]); 
+    ]);
 })();

@@ -1,6 +1,6 @@
-/* 
+/*
  *    Sprite Plugin
- * 
+ *
  *    Support for building games using Waterbear
  *
  */
@@ -34,7 +34,7 @@ wb.menu('Sprite', [
     },
     {
         blocktype: 'step',
-        label: '[size] rectangle sprite at [position] with color [color]',
+        label: 'rectangle sprite [size] big at [point] with color [color]',
         script: 'local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});',
         returns: {
             blocktype: 'expression',

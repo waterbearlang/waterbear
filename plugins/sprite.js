@@ -34,7 +34,7 @@ wb.menu('Sprite', [
     },
     {
         blocktype: 'step',
-        label: 'rectangle sprite [size] big at [point] with color [color]',
+        label: 'rectangle sprite## [size] big at [point] with color [color]',
         script: 'local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});',
         returns: {
             blocktype: 'expression',

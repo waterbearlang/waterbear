@@ -1,6 +1,6 @@
-/* 
+/*
  *    JAVASCRIPT PLUGIN
- * 
+ *
  *    Support for writing Javascript using Waterbear
  *
  */
@@ -21,7 +21,7 @@ yepnope({
 // Add some utilities
 jQuery.fn.extend({
     prettyScript: function(){
-        return js_beautify(this.map(function(){ 
+        return js_beautify(this.map(function(){
             return $(this).extract_script();
         }).get().join(''));
     },
@@ -37,8 +37,8 @@ jQuery.fn.extend({
 window.choiceLists = {
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
-        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
-        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown', 
+        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
+        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
     blocktypes: ['step', 'expression', 'context', 'eventhandler'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
@@ -76,7 +76,7 @@ wb.menu('Control', [
         script: '$(document).bind("keydown", {{1}}, function(){[[1]]; return false;});',
         help: 'this trigger will run the attached blocks every time this key is pressed'
     },
-    {            
+    {
         blocktype: 'eventhandler',
         labels: ['repeat [number:30] times a second'],
         locals: [
@@ -98,7 +98,7 @@ wb.menu('Control', [
     },
     {
         blocktype: 'context',
-        label: 'repeat [number:10]', 
+        label: 'repeat [number:10]',
         script: 'range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});',
         help: 'repeat the contained blocks so many times',
         locals: [
@@ -112,9 +112,15 @@ wb.menu('Control', [
     },
     {
         blocktype: 'step',
-        label: 'broadcast [string:ack] message', 
+        label: 'broadcast [string:ack] message',
         script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}));',
         help: 'send this message to any listeners'
+    },
+    {
+        blocktype: 'step',
+        label: 'broadcast [string:ping] message with data [any]',
+        script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}, {detail: {{2}}}));',
+        help: 'send this message with an object argument to any listeners'
     },
     {
         blocktype: 'eventhandler',
@@ -123,14 +129,28 @@ wb.menu('Control', [
         help: 'add a listener for the given message, run these blocks when it is received'
     },
     {
+        blocktype: 'eventhandler',
+        labels: ['when I receive [string:ping] message with data'],
+        script: 'global.stage.addEventListener("wb_" + {{1}}, function(event){local.data##=event.detail;[[1]]});',
+        locals: [
+            {
+                blocktype: 'expression',
+                label: 'data##',
+                script: 'local.data##',
+                type: 'any'
+            }
+        ],
+        help: 'add a listener for the given message which receives data, run these blocks when it is received'
+    },
+    {
         blocktype: 'context',
-        labels: ['forever if [boolean:false]'],  
+        labels: ['forever if [boolean:false]'],
         script: 'while({{1}}){[[1]]}',
         help: 'repeat until the condition is false'
     },
     {
         blocktype: 'context',
-        labels: ['if [boolean]'], 
+        labels: ['if [boolean]'],
         script: 'if({{1}}){[[1]]}',
         help: 'run the following blocks only if the condition is true'
     },
@@ -142,7 +162,7 @@ wb.menu('Control', [
     },
     {
         blocktype: 'context',
-        labels: ['repeat until [boolean]'], 
+        labels: ['repeat until [boolean]'],
         script: 'while(!({{1}})){[[1]]}',
         help: 'repeat forever until condition is true'
     }
@@ -520,7 +540,7 @@ wb.menu('Arrays', [
         type: 'any',
         help: 'remove and return the first item from an array'
     },
-    {   
+    {
         blocktype: 'expression',
         label: 'array [array] reversed',
         script: '{{1}}.slice().reverse()',
@@ -605,7 +625,7 @@ wb.menu('Objects', [
             }
         ],
         help: 'run the blocks with each item of a object'
-        
+
     }
 ], false);
 
@@ -700,57 +720,57 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
-        label: 'mouse x', 
-        type: 'number', 
+        label: 'mouse x',
+        type: 'number',
         script: 'global.mouse_x',
         help: 'The current horizontal mouse position'
     },
     {
         blocktype: 'expression',
-        label: 'mouse y', 
-        type: 'number', 
+        label: 'mouse y',
+        type: 'number',
         script: 'global.mouse_y',
         help: 'the current vertical mouse position'
     },
     {
         blocktype: 'expression',
-        label: 'mouse down', 
-        type: 'boolean', 
+        label: 'mouse down',
+        type: 'boolean',
         script: 'global.mouse_down',
         help: 'true if the mouse is down, false otherwise'
     },
     {
         blocktype: 'expression',
-        label: 'key [choice:keys] pressed?', 
-        type: 'boolean', 
+        label: 'key [choice:keys] pressed?',
+        type: 'boolean',
         script: 'global.isKeyDown({{1}})',
         help: 'is the given key down when this block is run?'
     },
     {
         blocktype: 'expression',
-        label: 'stage width', 
-        type: 'number', 
+        label: 'stage width',
+        type: 'number',
         script: 'global.stage_width',
         help: 'width of the stage where scripts are run. This may change if the browser window changes'
     },
     {
         blocktype: 'expression',
-        label: 'stage height', 
-        type: 'number', 
+        label: 'stage height',
+        type: 'number',
         script: 'global.stage_height',
         help: 'height of the stage where scripts are run. This may change if the browser window changes.'
     },
     {
         blocktype: 'expression',
-        label: 'center x', 
-        type: 'number', 
+        label: 'center x',
+        type: 'number',
         script: 'global.stage_center_x',
         help: 'horizontal center of the stage'
     },
     {
         blocktype: 'expression',
-        label: 'center y', 
-        type: 'number', 
+        label: 'center y',
+        type: 'number',
         script: 'global.stage_center_y',
         help: 'vertical center of the stage'
     },
@@ -770,14 +790,14 @@ wb.menu('Sensing', [
 	},
     {
         blocktype: 'step',
-        label: 'reset timer', 
+        label: 'reset timer',
         script: 'global.timer.reset();',
         help: 'set the global timer back to zero'
     },
     {
         blocktype: 'expression',
-        label: 'timer', 
-        type: 'number', 
+        label: 'timer',
+        type: 'number',
         script: 'global.timer.value()',
         help: 'seconds since the script began running'
     }
@@ -786,71 +806,71 @@ wb.menu('Sensing', [
 wb.menu('Operators', [
     {
         blocktype: 'expression',
-        label: '[number:0] + [number:0]', 
-        type: 'number', 
+        label: '[number:0] + [number:0]',
+        type: 'number',
         script: "({{1}} + {{2}})",
         help: 'sum of the two operands'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] - [number:0]', 
-        type: 'number', 
+        label: '[number:0] - [number:0]',
+        type: 'number',
         script: "({{1}} - {{2}})",
         help: 'difference of the two operands'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] * [number:0]', 
-        type: 'number', 
+        label: '[number:0] * [number:0]',
+        type: 'number',
         script: "({{1}} * {{2}})",
         help: 'product of the two operands'
     },
     {
         blocktype: 'expression',
         label: '[number:0] / [number:0]',
-        type: 'number', 
+        type: 'number',
         script: "({{1}} / {{2}})",
         help: 'quotient of the two operands'
     },
     {
         blocktype: 'expression',
-        label: 'pick random [number:1] to [number:10]', 
-        type: 'number', 
+        label: 'pick random [number:1] to [number:10]',
+        type: 'number',
         script: "randint({{1}}, {{2}})",
         help: 'random number between two numbers (inclusive)'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] < [number:0]', 
-        type: 'boolean', 
+        label: '[number:0] < [number:0]',
+        type: 'boolean',
         script: "({{1}} < {{2}})",
         help: 'first operand is less than second operand'
     },
     {
-        blocktype: 'expression',    
-        label: '[number:0] = [number:0]', 
-        type: 'boolean', 
+        blocktype: 'expression',
+        label: '[number:0] = [number:0]',
+        type: 'boolean',
         script: "({{1}} === {{2}})",
         help: 'two operands are equal'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] > [number:0]', 
-        type: 'boolean', 
+        label: '[number:0] > [number:0]',
+        type: 'boolean',
         script: "({{1}} > {{2}})",
         help: 'first operand is greater than second operand'
     },
     {
         blocktype: 'expression',
-        label: '[boolean] and [boolean]', 
-        type: 'boolean', 
+        label: '[boolean] and [boolean]',
+        type: 'boolean',
         script: "({{1}} && {{2}})",
         help: 'both operands are true'
     },
     {
         blocktype: 'expression',
-        label: '[boolean] or [boolean]', 
-        type: 'boolean', 
+        label: '[boolean] or [boolean]',
+        type: 'boolean',
         script: "({{1}} || {{2}})",
         help: 'either or both operands are true'
     },
@@ -863,99 +883,99 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
-        label: 'not [boolean]', 
-        type: 'boolean', 
+        label: 'not [boolean]',
+        type: 'boolean',
         script: "(! {{1}})",
         help: 'operand is false'
     },
     {
         blocktype: 'expression',
-        label: 'concatenate [string:hello] with [string:world]', 
-        type: 'string', 
+        label: 'concatenate [string:hello] with [string:world]',
+        type: 'string',
         script: "({{1}} + {{2}})",
         help: 'returns a string by joining together two strings'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] mod [number:0]', 
-        type: 'number', 
+        label: '[number:0] mod [number:0]',
+        type: 'number',
         script: "({{1}} % {{2}})",
         help: 'modulus of a number is the remainder after whole number division'
     },
     {
         blocktype: 'expression',
-        label: 'round [number:0]', 
-        type: 'number', 
+        label: 'round [number:0]',
+        type: 'number',
         script: "Math.round({{1}})",
         help: 'rounds to the nearest whole number'
     },
     {
         blocktype: 'expression',
-        label: 'absolute of [number:10]', 
-        type: 'number', 
+        label: 'absolute of [number:10]',
+        type: 'number',
         script: "Math.abs({{1}})",
         help: 'converts a negative number to positive, leaves positive alone'
     },
     {
         blocktype: 'expression',
-        label: 'arccosine degrees of [number:10]', 
-        type: 'number', 
+        label: 'arccosine degrees of [number:10]',
+        type: 'number',
         script: 'rad2deg(Math.acos({{1}}))',
         help: 'inverse of cosine'
     },
     {
         blocktype: 'expression',
-        label: 'arcsine degrees of [number:10]', 
-        type: 'number', 
+        label: 'arcsine degrees of [number:10]',
+        type: 'number',
         script: 'rad2deg(Math.asin({{1}}))',
         help: 'inverse of sine'
     },
     {
         blocktype: 'expression',
-        label: 'arctangent degrees of [number:10]', 
-        type: 'number', 
+        label: 'arctangent degrees of [number:10]',
+        type: 'number',
         script: 'rad2deg(Math.atan({{1}}))',
         help: 'inverse of tangent'
     },
     {
         blocktype: 'expression',
-        label: 'ceiling of [number:10]', 
-        type: 'number', 
+        label: 'ceiling of [number:10]',
+        type: 'number',
         script: 'Math.ceil({{1}})',
         help: 'rounds up to nearest whole number'
     },
     {
         blocktype: 'expression',
-        label: 'cosine of [number:10] degrees', 
-        type: 'number', 
+        label: 'cosine of [number:10] degrees',
+        type: 'number',
         script: 'Math.cos(deg2rad({{1}}))',
         help: 'ratio of the length of the adjacent side to the length of the hypotenuse'
     },
     {
         blocktype: 'expression',
-        label: 'sine of [number:10] degrees', 
-        type: 'number', 
+        label: 'sine of [number:10] degrees',
+        type: 'number',
         script: 'Math.sin(deg2rad({{1}}))',
         help: 'ratio of the length of the opposite side to the length of the hypotenuse'
     },
     {
         blocktype: 'expression',
-        label: 'tangent of [number:10] degrees', 
-        type: 'number', 
+        label: 'tangent of [number:10] degrees',
+        type: 'number',
         script: 'Math.tan(deg2rad({{1}}))',
         help: 'ratio of the length of the opposite side to the length of the adjacent side'
     },
     {
         blocktype: 'expression',
-        label: '[number:10] to the power of [number:2]', 
-        type: 'number', 
+        label: '[number:10] to the power of [number:2]',
+        type: 'number',
         script: 'Math.pow({{1}}, {{2}})',
         help: 'multiply a number by itself the given number of times'
     },
     {
         blocktype: 'expression',
-        label: 'square root of [number:10]', 
-        type: 'number', 
+        label: 'square root of [number:10]',
+        type: 'number',
         script: 'Math.sqrt({{1}})',
         help: 'the square root is the same as taking the to the power of 1/2'
     },

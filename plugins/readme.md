@@ -8,11 +8,7 @@ This plugin does not attempt to provide every possible construct in Javascript, 
 
 ### canvas.js
 
-One of two (mutually incompatible) graphics extensions for Javascript that is currently being provided, with the goal that before going into beta we will choose one to "bless" as the default and standard. The canvas library is built over the native &lt;canvas&gt; tag (as the Processing library is) and has a state-based model which can be tricky for users to understand and use.
-
-### raphael.js
-
-Raphael is the alternative graphics extension we provide for Javascript, which is built on top of SVG and provides a more object-oriented model of graphics, with support built-in for events, animation, hit-testing, etc. (Not all of this is currently exposed by blocks).
+The graphics extensions for Javascript that is currently being provided. The canvas library is built over the native &lt;canvas&gt; tag (as the Processing library is) and has a state-based model which can be tricky for users to understand and use, which we attempt to help with in Waterbear.
 
 ### twitter.js
 

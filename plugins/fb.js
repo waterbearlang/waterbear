@@ -11,39 +11,47 @@ function setup() {}
 var fb = {}
 fb.me = {};
 
-// what user permissions should be requrested
+// what user permissions should be requested
 fb._permissions = 'user_about_me,user_photos,publish_stream';
 
 var menus = {
   facebook: wb.menu('Facebook', [{
-    label: 'share [string]',
+    blocktype: 'step',
+    labels: ['share [string]'],
     script: 'FB.api("/me/feed/", "post", { message : {{1}} }, $.noop );'
   }, {
-    label: 'all my friends',
+    blocktype: 'expression',
+    labels: ['all my friends'],
     script: 'fb.friends.data',
     type: 'array'
   }, {
-    label: 'me',
+    blocktype: 'expression',
+    labels: ['me'],
     script: 'fb.me',
     type: 'object'
   }, {
-    label: 'name of [any]',
+    blocktype: 'expression',
+    labels: ['name of [any]'],
     script: '{{1}}.name',
     type: 'string'
   }, {
-    label: 'image of [any]',
+    blocktype: 'expression',
+    labels: ['image of [any]'],
     script: '(function(){var img = new Image(); img.src="https://graph.facebook.com/" + {{1}}.id + "/picture"; return img;})',
     type: 'image'
   }, {
-    label: 'images url of [any]',
+    blocktype: 'expression',
+    labels: ['images url of [any]'],
     type: 'string',
     script: '"https://graph.facebook.com/" + {{1}}.id + "/picture"'
   }, {
-    label: 'friend with name like [string]',
+    blocktype: 'expression',
+    labels: ['friend with name like [string]'],
     script: '(function(){var correct = {id: "", name: ""}; $.each( fb.friends.data , function(i, user) { if( user.name.indexOf( {{1}} ) != -1 ) correct = user; } ); return correct;})()',
     type: 'object'
   }, {
-    label: 'checkin at [location]',
+    blocktype: 'step',
+    labels: ['checkin at [location]'],
     script: 'FB.api( "/search", { "type" : "place", "center" : "{{1}}.latitude,{{1}}.longitude", "distance": "1000" }, function(r){ FB.api("/me/feed/", "post", { place : r.data[0].id }, $.noop ); } );'
   }])
 };
@@ -67,6 +75,7 @@ if(fb._appId == '') {
 
 
 // LOAD FB API
+// FIXME: Move all runtime code to iframerunner project
 $('body').append($('<div>', {
   id: 'fb-root',
   style: 'display: none'

@@ -6,6 +6,7 @@ yepnope({
     ]
 });
 
+    // FIXME: Move runtime code to iframerunner project
     Local.prototype.getTweet = function(name, callback){
         var jsonTwitterFeed = "https://twitter.com/statuses/user_timeline/" + name + ".json";
         $.ajax({
@@ -14,8 +15,8 @@ yepnope({
             data: 'count=1',
             success: function(data, textStatus, jqXHR){
                 $.each(data, function(idx,value){
-                    callback(value.text);                
-                });            
+                    callback(value.text);
+                });
             },
             error: function(XHR, textStatus, errorThrown){
                 callback(textStatus);

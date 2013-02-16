@@ -13,7 +13,6 @@
 
 (function(){
 
-
 Block.serialize = function(){
     return JSON.stringify(Block.scriptsToObject('.scripts_workspace'));
 };

@@ -390,8 +390,7 @@ Block.prototype.init = function(spec){
     var self = this;
     // normalize labels to a list
     if (spec.label){
-        spec.labels = [spec.label];
-        delete spec.label;
+        throw new Error('Scripts must use labels: not label:');
     }
     $.extend(true, this, spec);
     this.spec = spec; // save unmodified description
@@ -467,11 +466,7 @@ Block.prototype.initInstance = function(){
             spec.localOrigin = self;
             spec.localIndex = idx;
             if (self.customLocals){
-                if (spec.label){
-                    spec.label = self.customLocals[idx];
-                }else{
-                    spec.labels[0] = self.customLocals[idx];
-                }
+                spec.labels[0] = self.customLocals[idx];
             }
             var block = Block(spec);
             // assert.isObject(block, 'Blocks must be objects');
@@ -489,13 +484,9 @@ Block.prototype.initInstance = function(){
             this._returns.returnOrigin = this;
             this._returns.id = this.id;
             if (self.customReturns){
-                if (this._returns.label){
-                    this._returns.label = self.customReturns;
-                }else{
-                    this._returns.labels[0] = self.customReturns;
-                }
+                this._returns.labels[0] = self.customReturns;
             }
-            this._returns.help = 'value of ' + (this._returns.label || this._returns.labels[0]).replace('##', self.id);
+            this._returns.help = 'value of ' + this._returns.labels[0].replace('##', self.id);
             this.returns = Block(this._returns);
             assert.isObject(this.returns, 'Returns blocks must be objects');
         }
@@ -725,23 +716,15 @@ Block.prototype.changeLabel = function(labelText){
     this.spec.labels[0] = labelText;
     if (this.returnOrigin){
         // console.log('setting returnOrigin returns label: %o', this.returnOrigin);
-        if (this.returnOrigin.spec.returns.label){
-            this.returnOrigin.spec.returns.label = labelText;
-        }else{
-            this.returnOrigin.spec.returns.labels[0] = labelText;
-        }
+        this.returnOrigin.spec.returns.labels[0] = labelText;
         this.returnOrigin.customReturns = labelText;
     }
     if (this.localOrigin){
         var locals = this.localOrigin.spec.locals;
-        if (locals[this.localIndex].label){
-            locals[this.localIndex].label = labelText;
-        }else{
-            locals[this.localIndex].labels[0] = labelText;
-        }
+        locals[this.localIndex].labels[0] = labelText;
         if (!this.localOrigin.customLocals){
             this.localOrigin.customLocals = locals.map(function(loc){
-                return loc.label || loc.labels[0];
+                return loc.labels[0];
             });
         }
         this.localOrigin.customLocals[this.localIndex] = labelText;

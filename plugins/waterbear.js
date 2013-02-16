@@ -1,6 +1,6 @@
-/* 
+/*
  *    JAVASCRIPT PLUGIN
- * 
+ *
  *    Support for writing Javascript using Waterbear
  *
  */
@@ -9,35 +9,19 @@
 
 // Pre-load dependencies
 yepnope({
-    load: [ 'plugins/javascript.css',
-            'lib/beautify.js',
-            'lib/highlight.js',
-            'lib/highlight-javascript.js',
-            'lib/highlight-github.css'
+    load: [
+        'plugins/javascript.css'
     ]
 });
 
 
-// End UI section
-
-// expose these globally so the Block/Label methods can find them
-window.choiceLists = {
-    keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
-        .split('').concat(['up', 'down', 'left', 'right',
-        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt', 
-        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown', 
-        'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-    arity: ['0', '1', '2', '3', 'array', 'object'],
-    types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
-    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
-};
 
 // MENUS
 
 wb.menu('Control', [
     {
         blocktype: 'eventhandler',
-        contained: [{label: 'Waterbear'}],
+        labels: ['Waterbear'],
         script: 'function _start(){[[1]]}_start();',
         help: 'this trigger will run its scripts once when the program starts'
     }
@@ -46,7 +30,7 @@ wb.menu('Control', [
 wb.menu('Arrays', [
     {
         blocktype: 'step',
-        label: 'for the [string] of [boolean]',
+        labels: ['for the [string] of [boolean]'],
         script: '',
         help: ''
     }
@@ -56,7 +40,7 @@ wb.menu('Arrays', [
 wb.menu('Objects', [
     {
         blocktype: 'step',
-        label: 'programming',
+        labels: ['programming'],
         script: 'local.object## = {};',
         help: 'create a new, empty object'
     }
@@ -65,7 +49,7 @@ wb.menu('Objects', [
 wb.menu('Strings', [
     {
         blocktype: 'expression',
-        label: 'fun',
+        labels: ['fun'],
         script: '{{1}}.split({{2}})',
         type: 'string',
         help: 'create an array by splitting the named string on the given string'
@@ -75,17 +59,11 @@ wb.menu('Strings', [
 wb.menu('Sensing', [
     {
         blocktype: 'expression',
-        label: 'it', 
+        labels: ['it'],
         type: 'boolean',
         script: 'global.mouse_x',
         help: 'The current horizontal mouse position'
     }
 ]);
 
-$('.scripts_workspace').trigger('init');
-
-$('.socket input').live('click',function(){
-    $(this).focus();
-    $(this).select();
-});
 })();

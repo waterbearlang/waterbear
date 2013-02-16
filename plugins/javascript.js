@@ -82,7 +82,7 @@ wb.menu('Control', [
         locals: [
             {
                 blocktype: 'expression',
-                label: 'count##',
+                labels: ['count##'],
                 script: 'local.count##',
                 type: 'number'
             }
@@ -98,13 +98,13 @@ wb.menu('Control', [
     },
     {
         blocktype: 'context',
-        label: 'repeat [number:10]',
+        labels: ['repeat [number:10]'],
         script: 'range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});',
         help: 'repeat the contained blocks so many times',
         locals: [
             {
                 blocktype: 'expression',
-                label: 'count##',
+                labels: ['count##'],
                 script: 'local.count##',
                 type: 'number'
             }
@@ -112,13 +112,13 @@ wb.menu('Control', [
     },
     {
         blocktype: 'step',
-        label: 'broadcast [string:ack] message',
+        labels: ['broadcast [string:ack] message'],
         script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}));',
         help: 'send this message to any listeners'
     },
     {
         blocktype: 'step',
-        label: 'broadcast [string:ping] message with data [any]',
+        labels: ['broadcast [string:ping] message with data [any]'],
         script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}, {detail: {{2}}}));',
         help: 'send this message with an object argument to any listeners'
     },
@@ -135,7 +135,7 @@ wb.menu('Control', [
         locals: [
             {
                 blocktype: 'expression',
-                label: 'data##',
+                labels: ['data##'],
                 script: 'local.data##',
                 type: 'any'
             }
@@ -166,16 +166,16 @@ wb.menu('Control', [
         script: 'while(!({{1}})){[[1]]}',
         help: 'repeat forever until condition is true'
     }
-]);
+], true);
 
 wb.menu('Variables', [
     {
         blocktype: 'step',
-        label: 'variable string## [string]',
+        labels: ['variable string## [string]'],
         script: 'local.string## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'string##',
+            labels: ['string##'],
             script: 'local.string##',
             type: 'string'
         },
@@ -183,17 +183,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set string variable [string] to [string]',
+        labels: ['set string variable [string] to [string]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal string'
     },
     {
         blocktype: 'step',
-        label: 'variable number## [number]',
+        labels: ['variable number## [number]'],
         script: 'local.number## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'number##',
+            labels: ['number##'],
             script: 'local.number##',
             type: 'number'
         },
@@ -201,17 +201,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [number] to [number]',
+        labels: ['set variable [number] to [number]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal number'
     },
     {
         blocktype: 'step',
-        label: 'variable boolean## [boolean]',
+        labels: ['variable boolean## [boolean]'],
         script: 'local.boolean## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'boolean##',
+            labels: ['boolean##'],
             script: 'local.boolean##',
             type: 'boolean'
         },
@@ -219,17 +219,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [boolean] to [boolean]',
+        labels: ['set variable [boolean] to [boolean]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal boolean'
     },
     {
         blocktype: 'step',
-        label: 'variable array## [array]',
+        labels: ['variable array## [array]'],
         script: 'local.array## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'array##',
+            labels: ['array##'],
             script: 'local.array## = {{1}}',
             type: 'array'
         },
@@ -237,17 +237,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [array] to [array]',
+        labels: ['set variable [array] to [array]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal array'
     },
     {
         blocktype: 'step',
-        label: 'variable object## [object]',
+        labels: ['variable object## [object]'],
         script: 'local.object## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'object##',
+            labels: ['object##'],
             script: 'local.object##',
             type: 'object'
         },
@@ -255,17 +255,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [object] to [object]',
+        labels: ['set variable [object] to [object]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal object'
     },
     {
         blocktype: 'step',
-        label: 'variable color## [color]',
+        labels: ['variable color## [color]'],
         script: 'local.color## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'color##',
+            labels: ['color##'],
             script: 'local.color##',
             type: 'color'
         },
@@ -273,17 +273,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [color] to [color]',
+        labels: ['set variable [color] to [color]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal color'
     },
     {
         blocktype: 'step',
-        label: 'variable image## [image]',
+        labels: ['variable image## [image]'],
         script: 'local.image## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'image##',
+            labels: ['image##'],
             script: 'local.image##',
             type: 'image'
         },
@@ -291,18 +291,18 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [image] to [image]',
+        labels: ['set variable [image] to [image]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal image'
     },
     // 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'any'
     {
         blocktype: 'step',
-        label: 'variable shape## [shape]',
+        labels: ['variable shape## [shape]'],
         script: 'local.shape## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'shape##',
+            labels: ['shape##'],
             script: 'local.shape##',
             type: 'shape'
         },
@@ -310,17 +310,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [shape] to [shape]',
+        labels: ['set variable [shape] to [shape]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal shape'
     },
     {
         blocktype: 'step',
-        label: 'variable point## [point]',
+        labels: ['variable point## [point]'],
         script: 'local.point## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'point##',
+            labels: ['point##'],
             script: 'local.point##',
             type: 'point'
         },
@@ -328,17 +328,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [point] to [point]',
+        labels: ['set variable [point] to [point]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal point'
     },
     {
         blocktype: 'step',
-        label: 'variable size## [size]',
+        labels: ['variable size## [size]'],
         script: 'local.size## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'size##',
+            labels: ['size##'],
             script: 'local.size##',
             type: 'size'
         },
@@ -346,17 +346,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [size] to [size]',
+        labels: ['set variable [size] to [size]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal size'
     },
     {
         blocktype: 'step',
-        label: 'variable rect## [rect]',
+        labels: ['variable rect## [rect]'],
         script: 'local.rect## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'rect##',
+            labels: ['rect##'],
             script: 'local.rect##',
             type: 'rect'
         },
@@ -364,17 +364,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [rect] to [rect]',
+        labels: ['set variable [rect] to [rect]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal rect'
     },
     {
         blocktype: 'step',
-        label: 'variable gradient## [gradient]',
+        labels: ['variable gradient## [gradient]'],
         script: 'local.gradient## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'gradient##',
+            labels: ['gradient##'],
             script: 'local.gradient##',
             type: 'gradient'
         },
@@ -382,17 +382,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [gradient] to [gradient]',
+        labels: ['set variable [gradient] to [gradient]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal gradient'
     },
     {
         blocktype: 'step',
-        label: 'variable pattern## [pattern]',
+        labels: ['variable pattern## [pattern]'],
         script: 'local.pattern## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'pattern##',
+            labels: ['pattern##'],
             script: 'local.pattern##',
             type: 'pattern'
         },
@@ -400,17 +400,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [pattern] to [pattern]',
+        labels: ['set variable [pattern] to [pattern]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal pattern'
     },
     {
         blocktype: 'step',
-        label: 'variable imagedata## [imagedata]',
+        labels: ['variable imagedata## [imagedata]'],
         script: 'local.imagedata## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'imagedata##',
+            labels: ['imagedata##'],
             script: 'local.imagedata##',
             type: 'imagedata'
         },
@@ -418,17 +418,17 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [imagedata] to [imagedata]',
+        labels: ['set variable [imagedata] to [imagedata]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal imagedata'
     },
     {
         blocktype: 'step',
-        label: 'variable any## [any]',
+        labels: ['variable any## [any]'],
         script: 'local.any## = {{1}};',
         returns: {
             blocktype: 'expression',
-            label: 'any##',
+            labels: ['any##'],
             script: 'local.any##',
             type: 'any'
         },
@@ -436,11 +436,11 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
-        label: 'set variable [any] to [any]',
+        labels: ['set variable [any] to [any]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal any (ha ha)'
     },
-], true);
+]);
 
 // wb.menu('User Defined', [
 //     {
@@ -470,86 +470,86 @@ wb.menu('Variables', [
 wb.menu('Arrays', [
     {
         blocktype: 'step',
-        label: 'new array##',
+        labels: ['new array##'],
         script: 'local.array## = [];',
         help: 'Create an empty array',
         returns: {
             blocktype: 'expression',
-            label: 'array##',
+            labels: ['array##'],
             script: 'local.array##',
             type: 'array'
         }
     },
     {
         blocktype: 'step',
-        label: 'new array with array## [array]',
+        labels: ['new array with array## [array]'],
         script: 'local.array## = {{1}}.slice();',
         help: 'create a new array with the contents of another array',
         returns: {
             blocktype: 'expression',
-            label: 'array##',
+            labels: ['array##'],
             script: 'local.array##',
             type: 'array'
         }
     },
     {
         blocktype: 'expression',
-        label: 'array [array] item [number:0]',
+        labels: ['array [array] item [number:0]'],
         script: '{{1}}[{{2}}]',
         type: 'any',
         help: 'get an item from an index in the array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] join with [string:, ]',
+        labels: ['array [array] join with [string:, ]'],
         script: '{{1}}.join({{2}})',
         type: 'string',
         help: 'join items of an array into a string, each item separated by given string'
     },
     {
         blocktype: 'step',
-        label: 'array [array] append [any]',
+        labels: ['array [array] append [any]'],
         script: '{{1}}.push({{2}});',
         help: 'add any object to an array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] length',
+        labels: ['array [array] length'],
         script: '{{1}}.length',
         type: 'number',
         help: 'get the length of an array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] remove item [number:0]',
+        labels: ['array [array] remove item [number:0]'],
         script: '{{1}}.splice({{2}}, 1)[0]',
         type: 'any',
         help: 'remove item at index from an array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] pop',
+        labels: ['array [array] pop'],
         script: '{{1}}.pop()',
         type: 'any',
         help: 'remove and return the last item from an array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] shift',
+        labels: ['array [array] shift'],
         script: '{{1}}.shift()',
         type: 'any',
         help: 'remove and return the first item from an array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] reversed',
+        labels: ['array [array] reversed'],
         script: '{{1}}.slice().reverse()',
         type: 'array',
         help: 'reverse a copy of array'
     },
     {
         blocktype: 'expression',
-        label: 'array [array] concat [array]',
+        labels: ['array [array] concat [array]'],
         script: '{{1}}.concat({{2}});',
         type: 'array',
         help: 'a new array formed by joining the arrays'
@@ -561,14 +561,14 @@ wb.menu('Arrays', [
         locals: [
             {
                 blocktype: 'expression',
-                label: 'index',
+                labels: ['index'],
                 script: 'local.index',
                 help: 'index of current item in array',
                 type: 'number'
             },
             {
                 blocktype: 'expression',
-                label: 'item',
+                labels: ['item'],
                 script: 'local.item',
                 help: 'the current item in the iteration',
                 type: 'any'
@@ -581,11 +581,11 @@ wb.menu('Arrays', [
 wb.menu('Objects', [
     {
         blocktype: 'step',
-        label: 'new object##',
+        labels: ['new object##'],
         script: 'local.object## = {};',
         returns: {
             blocktype: 'expression',
-            label: 'object##',
+            labels: ['object##'],
             script: 'local.object##',
             type: 'object'
         },
@@ -593,13 +593,13 @@ wb.menu('Objects', [
     },
     {
         blocktype: 'step',
-        label: 'object [object] key [string] = value [any]',
+        labels: ['object [object] key [string] = value [any]'],
         script: '{{1}}[{{2}}] = {{3}};',
         help: 'set the key/value of an object'
     },
     {
         blocktype: 'expression',
-        label: 'object [object] value at key [string]',
+        labels: ['object [object] value at key [string]'],
         script: '{{1}}[{{2}}]',
         type: 'any',
         help: 'return the value of the key in an object'
@@ -611,14 +611,14 @@ wb.menu('Objects', [
         locals: [
             {
                 blocktype: 'expression',
-                label: 'key',
+                labels: ['key'],
                 script: 'local.key',
                 help: 'key of current item in object',
                 type: 'string'
             },
             {
                 blocktype: 'expression',
-                label: 'item',
+                labels: ['item'],
                 script: 'local.item',
                 help: 'the current item in the iteration',
                 type: 'any'
@@ -632,73 +632,73 @@ wb.menu('Objects', [
 wb.menu('Strings', [
     {
         blocktype: 'expression',
-        label: 'string [string] split on [string]',
+        labels: ['string [string] split on [string]'],
         script: '{{1}}.split({{2}})',
         type: 'array',
         help: 'create an array by splitting the named string on the given string'
     },
     {
         blocktype: 'expression',
-        label: 'string [string] character at [number:0]',
+        labels: ['string [string] character at [number:0]'],
         script: '{{1}}[{{2}}]',
         type: 'string',
         help: 'get the single character string at the given index of named string'
     },
     {
         blocktype: 'expression',
-        label: 'string [string] length',
+        labels: ['string [string] length'],
         script: '{{1}}.length',
         type: 'number',
         help: 'get the length of named string'
     },
     {
         blocktype: 'expression',
-        label: 'string [string] indexOf [string]',
+        labels: ['string [string] indexOf [string]'],
         script: '{{1}}.indexOf({{2}})',
         type: 'number',
         help: 'get the index of the substring within the named string'
     },
     {
         blocktype: 'expression',
-        label: 'string [string] replace [string] with [string]',
+        labels: ['string [string] replace [string] with [string]'],
         script: '{{1}}.replace({{2}}, {{3}})',
         type: 'string',
         help: 'get a new string by replacing a substring with a new string'
     },
     {
         blocktype: 'expression',
-        label: 'to string [any]',
+        labels: ['to string [any]'],
         script: '{{1}}.toString()',
         type: 'string',
         help: 'convert any object to a string'
     },
     {
         blocktype: 'step',
-        label: 'comment [string]',
+        labels: ['comment [string]'],
         script: '// {{1}};\n',
         help: 'this is a comment and will not be run by the program'
     },
     {
         blocktype: 'step',
-        label: 'alert [string]',
+        labels: ['alert [string]'],
         script: 'window.alert({{1}});',
         help: 'pop up an alert window with string'
     },
     {
         blocktype: 'step',
-        label: 'console log [any]',
+        labels: ['console log [any]'],
         script: 'console.log({{1}});',
         help: 'Send any object as a message to the console'
     },
     {
         blocktype: 'step',
-        label: 'console log format [string] arguments [array]',
+        labels: ['console log format [string] arguments [array]'],
         script: 'var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);',
         help: 'send a message to the console with a format string and multiple objects'
     },
     {
         blocktype: 'expression',
-        label: 'global keys object',
+        labels: ['global keys object'],
         script: 'global.keys',
         help: 'for debugging',
         type: 'object'
@@ -708,11 +708,11 @@ wb.menu('Strings', [
 wb.menu('Sensing', [
     {
         blocktype: 'step',
-        label: 'ask [string:What\'s your name?] and wait',
+        labels: ['ask [string:What\'s your name?] and wait'],
         script: 'local.answer## = prompt({{1}});',
         returns: {
             blocktype: 'expression',
-            label: 'answer##',
+            labels: ['answer##'],
             type: 'string',
             script: 'local.answer##'
         },
@@ -720,83 +720,83 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
-        label: 'mouse x',
+        labels: ['mouse x'],
         type: 'number',
         script: 'global.mouse_x',
         help: 'The current horizontal mouse position'
     },
     {
         blocktype: 'expression',
-        label: 'mouse y',
+        labels: ['mouse y'],
         type: 'number',
         script: 'global.mouse_y',
         help: 'the current vertical mouse position'
     },
     {
         blocktype: 'expression',
-        label: 'mouse down',
+        labels: ['mouse down'],
         type: 'boolean',
         script: 'global.mouse_down',
         help: 'true if the mouse is down, false otherwise'
     },
     {
         blocktype: 'expression',
-        label: 'key [choice:keys] pressed?',
+        labels: ['key [choice:keys] pressed?'],
         type: 'boolean',
         script: 'global.isKeyDown({{1}})',
         help: 'is the given key down when this block is run?'
     },
     {
         blocktype: 'expression',
-        label: 'stage width',
+        labels: ['stage width'],
         type: 'number',
         script: 'global.stage_width',
         help: 'width of the stage where scripts are run. This may change if the browser window changes'
     },
     {
         blocktype: 'expression',
-        label: 'stage height',
+        labels: ['stage height'],
         type: 'number',
         script: 'global.stage_height',
         help: 'height of the stage where scripts are run. This may change if the browser window changes.'
     },
     {
         blocktype: 'expression',
-        label: 'center x',
+        labels: ['center x'],
         type: 'number',
         script: 'global.stage_center_x',
         help: 'horizontal center of the stage'
     },
     {
         blocktype: 'expression',
-        label: 'center y',
+        labels: ['center y'],
         type: 'number',
         script: 'global.stage_center_y',
         help: 'vertical center of the stage'
     },
 	{
 		blocktype: 'expression',
-		label: 'random x',
+		labels: ['random x'],
 		type: 'number',
 		script: 'randint(0,global.stage_width)',
 		help: 'return a number between 0 and the stage width'
 	},
 	{
 		blocktype: 'expression',
-		label: 'random y',
+		labels: ['random y'],
 		type: 'number',
 		script: 'randint(0, global.stage_height)',
 		help: 'return a number between 0 and the stage height'
 	},
     {
         blocktype: 'step',
-        label: 'reset timer',
+        labels: ['reset timer'],
         script: 'global.timer.reset();',
         help: 'set the global timer back to zero'
     },
     {
         blocktype: 'expression',
-        label: 'timer',
+        labels: ['timer'],
         type: 'number',
         script: 'global.timer.value()',
         help: 'seconds since the script began running'
@@ -806,189 +806,189 @@ wb.menu('Sensing', [
 wb.menu('Operators', [
     {
         blocktype: 'expression',
-        label: '[number:0] + [number:0]',
+        labels: ['[number:0] + [number:0]'],
         type: 'number',
         script: "({{1}} + {{2}})",
         help: 'sum of the two operands'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] - [number:0]',
+        labels: ['[number:0] - [number:0]'],
         type: 'number',
         script: "({{1}} - {{2}})",
         help: 'difference of the two operands'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] * [number:0]',
+        labels: ['[number:0] * [number:0]'],
         type: 'number',
         script: "({{1}} * {{2}})",
         help: 'product of the two operands'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] / [number:0]',
+        labels: ['[number:0] / [number:0]'],
         type: 'number',
         script: "({{1}} / {{2}})",
         help: 'quotient of the two operands'
     },
     {
         blocktype: 'expression',
-        label: 'pick random [number:1] to [number:10]',
+        labels: ['pick random [number:1] to [number:10]'],
         type: 'number',
         script: "randint({{1}}, {{2}})",
         help: 'random number between two numbers (inclusive)'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] < [number:0]',
+        labels: ['[number:0] < [number:0]'],
         type: 'boolean',
         script: "({{1}} < {{2}})",
         help: 'first operand is less than second operand'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] = [number:0]',
+        labels: ['[number:0] = [number:0]'],
         type: 'boolean',
         script: "({{1}} === {{2}})",
         help: 'two operands are equal'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] > [number:0]',
+        labels: ['[number:0] > [number:0]'],
         type: 'boolean',
         script: "({{1}} > {{2}})",
         help: 'first operand is greater than second operand'
     },
     {
         blocktype: 'expression',
-        label: '[boolean] and [boolean]',
+        labels: ['[boolean] and [boolean]'],
         type: 'boolean',
         script: "({{1}} && {{2}})",
         help: 'both operands are true'
     },
     {
         blocktype: 'expression',
-        label: '[boolean] or [boolean]',
+        labels: ['[boolean] or [boolean]'],
         type: 'boolean',
         script: "({{1}} || {{2}})",
         help: 'either or both operands are true'
     },
     {
         blocktype: 'expression',
-        label: '[boolean] xor [boolean]',
+        labels: ['[boolean] xor [boolean]'],
         type: 'boolean',
         script: "({{1}} ? !{{2}} : {{2}})",
         help: 'either, but not both, operands are true'
     },
     {
         blocktype: 'expression',
-        label: 'not [boolean]',
+        labels: ['not [boolean]'],
         type: 'boolean',
         script: "(! {{1}})",
         help: 'operand is false'
     },
     {
         blocktype: 'expression',
-        label: 'concatenate [string:hello] with [string:world]',
+        labels: ['concatenate [string:hello] with [string:world]'],
         type: 'string',
         script: "({{1}} + {{2}})",
         help: 'returns a string by joining together two strings'
     },
     {
         blocktype: 'expression',
-        label: '[number:0] mod [number:0]',
+        labels: ['[number:0] mod [number:0]'],
         type: 'number',
         script: "({{1}} % {{2}})",
         help: 'modulus of a number is the remainder after whole number division'
     },
     {
         blocktype: 'expression',
-        label: 'round [number:0]',
+        labels: ['round [number:0]'],
         type: 'number',
         script: "Math.round({{1}})",
         help: 'rounds to the nearest whole number'
     },
     {
         blocktype: 'expression',
-        label: 'absolute of [number:10]',
+        labels: ['absolute of [number:10]'],
         type: 'number',
         script: "Math.abs({{1}})",
         help: 'converts a negative number to positive, leaves positive alone'
     },
     {
         blocktype: 'expression',
-        label: 'arccosine degrees of [number:10]',
+        labels: ['arccosine degrees of [number:10]'],
         type: 'number',
         script: 'rad2deg(Math.acos({{1}}))',
         help: 'inverse of cosine'
     },
     {
         blocktype: 'expression',
-        label: 'arcsine degrees of [number:10]',
+        labels: ['arcsine degrees of [number:10]'],
         type: 'number',
         script: 'rad2deg(Math.asin({{1}}))',
         help: 'inverse of sine'
     },
     {
         blocktype: 'expression',
-        label: 'arctangent degrees of [number:10]',
+        labels: ['arctangent degrees of [number:10]'],
         type: 'number',
         script: 'rad2deg(Math.atan({{1}}))',
         help: 'inverse of tangent'
     },
     {
         blocktype: 'expression',
-        label: 'ceiling of [number:10]',
+        labels: ['ceiling of [number:10]'],
         type: 'number',
         script: 'Math.ceil({{1}})',
         help: 'rounds up to nearest whole number'
     },
     {
         blocktype: 'expression',
-        label: 'cosine of [number:10] degrees',
+        labels: ['cosine of [number:10] degrees'],
         type: 'number',
         script: 'Math.cos(deg2rad({{1}}))',
         help: 'ratio of the length of the adjacent side to the length of the hypotenuse'
     },
     {
         blocktype: 'expression',
-        label: 'sine of [number:10] degrees',
+        labels: ['sine of [number:10] degrees'],
         type: 'number',
         script: 'Math.sin(deg2rad({{1}}))',
         help: 'ratio of the length of the opposite side to the length of the hypotenuse'
     },
     {
         blocktype: 'expression',
-        label: 'tangent of [number:10] degrees',
+        labels: ['tangent of [number:10] degrees'],
         type: 'number',
         script: 'Math.tan(deg2rad({{1}}))',
         help: 'ratio of the length of the opposite side to the length of the adjacent side'
     },
     {
         blocktype: 'expression',
-        label: '[number:10] to the power of [number:2]',
+        labels: ['[number:10] to the power of [number:2]'],
         type: 'number',
         script: 'Math.pow({{1}}, {{2}})',
         help: 'multiply a number by itself the given number of times'
     },
     {
         blocktype: 'expression',
-        label: 'square root of [number:10]',
+        labels: ['square root of [number:10]'],
         type: 'number',
         script: 'Math.sqrt({{1}})',
         help: 'the square root is the same as taking the to the power of 1/2'
     },
     {
         blocktype: 'expression',
-        label: 'pi',
+        labels: ['pi'],
         script: 'Math.PI;',
         type: 'number',
         help: "pi is the ratio of a circle's circumference to its diameter"
     },
     {
         blocktype: 'expression',
-        label: 'tau',
+        labels: ['tau'],
         script: 'Math.PI * 2',
         type: 'number',
         help: 'tau is 2 times pi, a generally more useful number'

@@ -4,11 +4,11 @@
 * √ Context blocks should only have one .locals (else, new block)
 * √ Serialization, including version and plugins, ids for contained items
 * √ Deserialization: rebuild view from serialized version
-* Rename locals
+* √ Rename locals
 * √ Split up plugins
 * gist library
 * UI for selecting plugins
-* embedding
+* √ embedding
 * x New dragging library?
 
 ## Serialization:

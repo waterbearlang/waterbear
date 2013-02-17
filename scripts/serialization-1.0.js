@@ -57,12 +57,6 @@ Block.prototype.toJSON = function(){
         labels: this.spec.labels,
         id: this.id
     };
-    if (this.seqnum){
-        serialized.seqnum = this.seqnum;
-    }
-    if (this.scriptParent){
-        serialized.scriptParent = this.scriptParent;
-    }
     // console.info('serializing %s', this.signature);
     if (this.customReturns){
         serialized.customReturns = this.customReturns;

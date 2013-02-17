@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-var uuid = require('./uuid').uuid; // asynch uuid
 var fs = require('fs');
 
 var filenames = process.argv.slice(2); // 0 is node, and 1 is script name

@@ -1,81 +1,4 @@
-
-//
-// Handler for the hide/show triangle on context and eventhandler blocks
-//
-$('.scripts_workspace').on('click', '.disclosure', function(event){
-    var self = $(event.target);
-    var view = self.closest('.wrapper');
-    if (self.is('.open')){
-        self.text('►');
-        view.find('.locals').hide();
-        view.find('.contained').hide();
-    }else{
-        self.text('▼');
-        view.find('.locals').show();
-        view.find('.contained').show();
-    }
-    self.toggleClass('open closed');
-});
-
-
-function Deferred(parent, type, idx, spec){
-    this.parent = parent;
-    this.type = type;
-    this.idx = idx;
-    this.spec = spec;
-}
-
-Deferred.prototype.resolve = function(){
-    var block = Block(this.spec);
-    if (block){
-        switch(this.type){
-            case 'value':
-                this.parent.addBlock(block, this.idx);
-                return true;
-            case 'child':
-                this.parent.contained[this.idx] = block;
-                return true;
-            case 'next':
-                this.parent.addNext(block);
-                return true;
-            default:
-                console.log('Error: we should never get here');
-                return false;
-        }
-    }else{
-        console.log('Deferred.resolve() failed: %o', this);
-        return false;
-    }
-}
-Deferred._allDeferreds = [];
-Deferred.add = function(parent, type, idx, spec){
-    Deferred._allDeferreds.push(new Deferred(parent, type, idx, spec));
-};
-Deferred.resolve = function(){
-    var total = Deferred._allDeferreds.length;
-    var count = 0;
-    if (total){
-        console.log('trying to resolve %s Deferreds', total);
-    }
-    while(Deferred._allDeferreds.length){
-        count++;
-        var deferred = Deferred._allDeferreds.shift();
-        if (!deferred.resolve()){
-            Deferred._allDeferreds.push(deferred);
-        }else{
-            console.log('resolved!');
-        }
-        if (count > total){
-            if (total === Deferred._allDeferreds.length){
-                console.log('Something is wrong, no deferreds (%s left) are resolving', total);
-                break;
-            }
-            total = Deferred._allDeferreds.length;
-            count = 0;
-        }
-    }
-};
-
+// Constructors and models for Blocks
 
 
 function Step(spec, scope){
@@ -111,15 +34,15 @@ EventHandler.prototype.constructor = EventHandler;
 
 function assertStep(model){
     if (model.type){
-        alert('Error: expression "' + model.signature + '" treated as a step');
+        alert('Error: expression "' + model.id + '" treated as a step');
     }
 }
 
 function assertExpression(model){
     if (! model.type){
-        console.log('Error: step "' + model.signature + '" treated as an expression');
+        console.log('Error: step "' + model.id + '" treated as an expression');
 		throw new Error('Bite me');
-        alert('Error: step "' + model.signature + '" treated as an expression');
+        alert('Error: step "' + model.id + '" treated as an expression');
     }
 }
 
@@ -130,49 +53,9 @@ function assertContext(model){
     }
 }
 
-function noDefaultValues(match, spec){
-    // remove default values, if any, from labels
-    var parts = spec.split(':');
-    var val;
-    if (parts[0] === 'choice'){
-        val = 'choice:' +  parts[1];
-    }else{
-        val = parts[0];
-    }
-    return '[' + val + ']';
-}
-
-function signature(model){
-    var sig = model.blocktype + ': ' + model.spec.labels.map(function(label){
-            return label.replace(/\[(.*?)\]/g, noDefaultValues);
-        }).join(', ');
-        if (model.isLocal && model.id){
-            sig = sig.replace(/##/g, '_' + model.id);
-        }
-    return sig;
-}
-
 function Block(spec, scope){
     // If called as constructor, return empty example
     if (this instanceof Block) return this;
-    // if called while de-serializing, get the parent spec
-    if (spec.signature){
-        var template = Block.registry[spec.signature];
-        if (!template){
-            console.log('Failed to find template model with signature %s', spec.signature);
-            return null; // let Deferred handle it
-        }
-        // assert.isObject(template, 'We fail to find a template block for ' + spec.signature + ', has it been initialized yet?');
-        var instance = {
-            isLocal: false,
-            isTemplateBlock: false,
-            templateBlock: template
-        };
-        if (!template){
-            throw new Exception('Cannot find a block to restore this from');
-        }
-        spec = $.extend({}, template.spec, instance, spec);
-    }
     // If called as function, demux to the correct constructor
     switch(spec.blocktype){
         case 'step':
@@ -189,41 +72,27 @@ function Block(spec, scope){
     }
 }
 
-Block._nextId = 0;
+Block._nextSeqNum = 0;
 
-Block.newId = function(){
-    Block._nextId++;
-    console.log('returning new id: %s', Block._nextId);
-    return Block._nextId;
+Block.newSeqNum = function(){
+    // FIXME: keep registry of sequence numbers by name?
+    Block._nextSeqNum++;
+    return Block._nextSeqNum;
 };
 
-Block.registerId = function(id){
-    id = parseInt(id);
-    // if (id < Block._nextId){
-    //     console.log('Warning: registering id %s that may already have been used (next: %s)', id, Block._nextId);
-    // }else{
-    //     console.log('Registered id %s', id);
-    // }
-    Block._nextId = Math.max(id, Block._nextId);
+Block.registerSeqNum = function(seqNum){
+    seqNum = parseInt(seqNum);
+    Block._seqNum = Math.max(id, Block._seqNum);
 }
 
 Block.registry = {};
 
 Block.registerBlock = function(model){
-    if (!model.isTemplateBlock) return; // only register blocks in the menu
-    if (model.isLocal){
-        console.log('registering model %s', model.signature);
+    if (!model.script) return; // only register blocks in the menu
+    if (Block.registry[model.id]){
+        console.warn('Overwriting existing scripts for %s', model.id);
     }
-    if (Block.registry[model.signature]){
-        console.warn('Overwriting existing scripts for %s', model.signature);
-    }
-    Block.registry[model.signature] = model;
-};
-
-
-Block.prototype.debug = function(){
-    if (this.isTemplateBlock) return;
-    print.apply(console, arguments);
+    Block.registry[model.id] = model;
 };
 
 Block.prototype.init = function(spec){
@@ -255,28 +124,14 @@ Block.prototype.init = function(spec){
     }else{
         this.tooltip = this.group + ' ' + this.id;
     }
-    // if (this.isLocal) print('this local id: %s', this.id);
-    try{
-        print('initializing labels from inherited labels: %s', this.labels.map(h));
-    }catch(e){
-        console.log('Error with labels: %o', this.labels);
-    }
 	this.labels = this.labels.map(function(labelspec){
         return labelspec.replace(/##/g, self.id ? '_' + self.id : '');
     });
-    if (!this.signature){
-        this.signature = signature(this);
-    }
-    if (this.isLocal){
-        this.signature = this.signature.replace(/##/g, '_' + self.id);
-    }
     this.script = this.script.replace(/##/g, '_' + self.id);
     Block.registerBlock(this);
-    print('parsing labels');
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
     });
-	print('labels after parse: %s', h(this.labels));
     this.template = template(this.blocktype);
     if (!this.isTemplateBlock){
         this.initInstance();
@@ -357,7 +212,7 @@ Block.prototype.initInstance = function(){
 			if (value instanceof Value){
 				return value;
 			}
-            var val = new Value(value, idx);
+            var val = new wb.Value(value, idx);
             assert.isObject(val, 'Values must be objects');
             return val;
         });
@@ -406,40 +261,23 @@ Block.prototype.parseLabel = function(textLabel){
     var label = $('<span class="label">' + htmlLabel + '</label>');
     try{
         if (!this.values && this.valueSlots.length){
-            this.values = this.valueSlots.map(function(slot, idx){return new Value(slot, idx);});
+            this.values = this.valueSlots.map(function(slot, idx){return new wb.Value(slot, idx);});
         }
     }catch(e){
         console.error('Failed in this.valueSlots.map: %o', e);
     }
-		print('label: %s, slots: %s', h(label), label.find('.valueslot').length);
         label.find('.valueslot').each(function fillSlots(idx, slotdom){
-		    // try{
-				print('value slot idx: %s, slotdom: %s', idx, slotdom);
-				var slot = $(slotdom);
-	            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
-	            var value = self.values[idx];
-	            // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
-	            if (!value.view){
-					print('converting raw value object into type Value');
-	                value = new Value(value, idx);
-					print('received new value: %o', value);
-	                self.values[idx] = value;
-					print('set value[%s] to %o', idx, value);
-	            }
-				print('here I am!');
-				print('replacing slot value with new view: %o', value.view());
-				print('')
-                var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + getInputType(value) + '" + style="display:none"></input></span>');
-                input.append(value.view());
-	            slot.replaceWith(input);
-		    // }catch(e){
-		        // console.error('Failed in this.valueSlots.each: %o', e);
-		        // print(htmlLabel.replace);
-		        // print('self: %o', self);
-		        // print(self.values, idx);
-		        // print(self.values[idx]);
-		        // print('value has view: %s', self.values[idx].view);
-		    // }
+			var slot = $(slotdom);
+            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
+            var value = self.values[idx];
+            // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
+            if (!value.view){
+                value = new wb.Value(value, idx);
+                self.values[idx] = value;
+            }
+            var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + getInputType(value) + '" + style="display:none"></input></span>');
+            input.append(value.view());
+            slot.replaceWith(input);
         });
     return label;
 };
@@ -475,7 +313,6 @@ Block.prototype.cloneScript = function(){
     });
     console.log('cloneScript: model: %o, spec: %o', this, spec);
     var clone = Block(spec);
-	print('block labels: %s', clone.labels[0].toString());
 	return clone;
 };
 
@@ -492,15 +329,6 @@ Block.prototype.clone = function(deep){
     }
     return Block(spec);
 }
-
-// Not used, delete?
-// Block.prototype.cloneTemplate = function(){
-//     var spec = $.extend({}, this.spec, {
-//         isLocal: false,
-//         isTemplateBlock: true
-//     });
-//     return Block(spec);
-// };
 
 function attachLocals(node){
 	node.attachLocals = true; // this should probably be data, c'est la vie
@@ -574,7 +402,7 @@ Block.prototype.changeLabel = function(labelText){
 // EVENT HANDLERS
 
 Block.prototype.removeChild = function(block, container){
-    // print('remove this block from %o', container);
+    // remove this block from container
 };
 
 Block.prototype.addLocalBlock = function(block){
@@ -650,13 +478,11 @@ Block.prototype.addToWorkspace = function(){
     }
 };
 Block.prototype.setValue = function(index, type, newValue){
-    print('set value %s to %s', index, newValue);
     this.values[index].update(newValue);
 }
 
 Block.prototype.addExpression = function(expression, expressionIndex){
     // add block to value
-    // print('add value block to socket');
     this.values[expressionIndex].addBlock(expression);
     // FIXME: update view (currently happens elsewhere)
 };
@@ -811,3 +637,22 @@ $(document.body).on('scriptloaded', function(evt){
 		}
 	});
 });
+
+//
+// Handler for the hide/show triangle on context and eventhandler blocks
+//
+$('.scripts_workspace').on('click', '.disclosure', function(event){
+    var self = $(event.target);
+    var view = self.closest('.wrapper');
+    if (self.is('.open')){
+        self.text('►');
+        view.find('.locals').hide();
+        view.find('.contained').hide();
+    }else{
+        self.text('▼');
+        view.find('.locals').show();
+        view.find('.contained').show();
+    }
+    self.toggleClass('open closed');
+});
+

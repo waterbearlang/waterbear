@@ -7,6 +7,8 @@
 // Value objects get defaults depending on their type. These are the defaults for
 // primitive values when the plugin does not over-ride the default.
 //
+
+(function(wb){
 var defaultValue = {
     'number': 0,
     'boolean': false,
@@ -160,3 +162,6 @@ Value.prototype.update = function(newValue){
         default: this.value = newValue; break;
     }
 }
+
+wb.Value = Value;
+})(wb);

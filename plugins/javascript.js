@@ -66,18 +66,21 @@ wb.menu('Globals', []);
 wb.menu('Control', [
     {
         blocktype: 'eventhandler',
+        id: '1cf8132a-4996-47db-b482-4e336200e3ca',
         labels: ['when program runs'],
         script: 'function _start(){[[1]]}_start();',
         help: 'this trigger will run its scripts once when the program starts'
     },
     {
         blocktype: 'eventhandler',
+        id: 'f4a604cd-f0b5-4133-9f91-4e1abe48fb6a',
         labels: ['when [choice:keys] key pressed'],
         script: '$(document).bind("keydown", {{1}}, function(){[[1]]; return false;});',
         help: 'this trigger will run the attached blocks every time this key is pressed'
     },
     {
         blocktype: 'eventhandler',
+        id: 'cfea9087-3d7c-46ad-aa41-579bba2f4709',
         labels: ['repeat [number:30] times a second'],
         locals: [
             {
@@ -92,12 +95,14 @@ wb.menu('Control', [
     },
     {
         blocktype: 'context',
+        id: '66b33236-c9ce-4b6c-9b69-e8c4fdadbf52',
         labels: ['wait [number:1] secs'],
         script: 'setTimeout(function(){[[1]]},1000*{{1}});',
         help: 'pause before running the following blocks'
     },
     {
         blocktype: 'context',
+        id: 'aa146082-9a9c-4ae7-a409-a89e84dc113a',
         labels: ['repeat [number:10]'],
         script: 'range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});',
         help: 'repeat the contained blocks so many times',
@@ -112,24 +117,28 @@ wb.menu('Control', [
     },
     {
         blocktype: 'step',
+        id: 'b7079d91-f76d-41cc-a6aa-43fc2749429c',
         labels: ['broadcast [string:ack] message'],
         script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}));',
         help: 'send this message to any listeners'
     },
     {
         blocktype: 'step',
+        id: 'd175bd7d-c7fd-4465-8b1f-c82687f35577',
         labels: ['broadcast [string:ping] message with data [any]'],
         script: 'global.stage.dispatchEvent(new CustomEvent("wb_" + {{1}}, {detail: {{2}}}));',
         help: 'send this message with an object argument to any listeners'
     },
     {
         blocktype: 'eventhandler',
+        id: '3931a20c-f510-45e4-83d2-4005983d5cae',
         labels: ['when I receive [string:ack] message'],
         script: 'global.stage.addEventListener("wb_" + {{1}}, function(){[[1]]});',
         help: 'add a listener for the given message, run these blocks when it is received'
     },
     {
         blocktype: 'eventhandler',
+        id: 'a0496339-c405-4d1c-8185-9bc211bf5a56',
         labels: ['when I receive [string:ping] message with data'],
         script: 'global.stage.addEventListener("wb_" + {{1}}, function(event){local.data##=event.detail;[[1]]});',
         locals: [
@@ -144,24 +153,28 @@ wb.menu('Control', [
     },
     {
         blocktype: 'context',
+        id: 'b1e43170-800a-4e9b-af82-0ed5c62c47a0',
         labels: ['forever if [boolean:false]'],
         script: 'while({{1}}){[[1]]}',
         help: 'repeat until the condition is false'
     },
     {
         blocktype: 'context',
+        id: '20ba3e08-74c0-428e-b612-53545de63ce0',
         labels: ['if [boolean]'],
         script: 'if({{1}}){[[1]]}',
         help: 'run the following blocks only if the condition is true'
     },
     {
         blocktype: 'context',
+        id: '6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4',
         labels: ['if [boolean]', 'else'],
         script: 'if({{1}}){[[1]]}else{[[2]]}',
         help: 'run the first set of blocks if the condition is true, otherwise run the second set'
     },
     {
         blocktype: 'context',
+        id: '5a09e58a-4f45-4fa8-af98-84de735d0fc8',
         labels: ['repeat until [boolean]'],
         script: 'while(!({{1}})){[[1]]}',
         help: 'repeat forever until condition is true'
@@ -171,6 +184,7 @@ wb.menu('Control', [
 wb.menu('Variables', [
     {
         blocktype: 'step',
+        id: '8a95bbaf-a881-4771-973e-5c29582eb32c',
         labels: ['variable string## [string]'],
         script: 'local.string## = {{1}};',
         returns: {
@@ -183,12 +197,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '2f5cde0f-da92-4ba5-946c-038a3d53f08a',
         labels: ['set string variable [string] to [string]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal string'
     },
     {
         blocktype: 'step',
+        id: 'd10b5b49-5273-4e5b-b433-ccaf0e29914c',
         labels: ['variable number## [number]'],
         script: 'local.number## = {{1}};',
         returns: {
@@ -201,12 +217,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '7e31ba12-1953-48a8-891f-7cfbea8e817d',
         labels: ['set variable [number] to [number]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal number'
     },
     {
         blocktype: 'step',
+        id: 'abf69c86-540f-4fb8-98a6-8d12fe7fdd32',
         labels: ['variable boolean## [boolean]'],
         script: 'local.boolean## = {{1}};',
         returns: {
@@ -219,12 +237,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: 'c0626e6d-d765-4aea-aa59-a5c756f07462',
         labels: ['set variable [boolean] to [boolean]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal boolean'
     },
     {
         blocktype: 'step',
+        id: '5dc586d7-869f-4af1-894d-b890ee0cebe5',
         labels: ['variable array## [array]'],
         script: 'local.array## = {{1}};',
         returns: {
@@ -237,12 +257,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '7c47b351-54f3-45fd-843f-c23a095f4df4',
         labels: ['set variable [array] to [array]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal array'
     },
     {
         blocktype: 'step',
+        id: '1a72fd0b-43e4-425e-950b-754d3e4373d2',
         labels: ['variable object## [object]'],
         script: 'local.object## = {{1}};',
         returns: {
@@ -255,12 +277,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: 'c89a22fc-a5e0-4d44-a283-716cf3702000',
         labels: ['set variable [object] to [object]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal object'
     },
     {
         blocktype: 'step',
+        id: '1237a4d3-c976-4e09-9245-3540b6b4acb2',
         labels: ['variable color## [color]'],
         script: 'local.color## = {{1}};',
         returns: {
@@ -273,12 +297,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: 'b614a285-0650-40f6-8e0f-2c105108e0bf',
         labels: ['set variable [color] to [color]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal color'
     },
     {
         blocktype: 'step',
+        id: 'b4e1e7d5-4ae6-4c8d-814e-2cc10562d1a5',
         labels: ['variable image## [image]'],
         script: 'local.image## = {{1}};',
         returns: {
@@ -291,6 +317,7 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: 'cc09b0b6-3cae-438b-9504-86eff4b04fed',
         labels: ['set variable [image] to [image]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal image'
@@ -298,6 +325,7 @@ wb.menu('Variables', [
     // 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'any'
     {
         blocktype: 'step',
+        id: 'a5cc0f76-e038-41b5-9315-c64ac7390bbf',
         labels: ['variable shape## [shape]'],
         script: 'local.shape## = {{1}};',
         returns: {
@@ -310,12 +338,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '9f0aff58-436b-4343-be0d-63b972852988',
         labels: ['set variable [shape] to [shape]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal shape'
     },
     {
         blocktype: 'step',
+        id: '2712a05f-ad94-4744-b148-54e40494fda2',
         labels: ['variable point## [point]'],
         script: 'local.point## = {{1}};',
         returns: {
@@ -328,12 +358,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '675e87be-bda7-4e86-aff3-178bd1a190a7',
         labels: ['set variable [point] to [point]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal point'
     },
     {
         blocktype: 'step',
+        id: '62a7315f-8c85-4791-8577-0e3941ede18f',
         labels: ['variable size## [size]'],
         script: 'local.size## = {{1}};',
         returns: {
@@ -346,12 +378,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '17be189f-d362-4094-a010-a4cc285476b7',
         labels: ['set variable [size] to [size]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal size'
     },
     {
         blocktype: 'step',
+        id: '0996b64c-bdbe-46c1-99ce-ac900fe198c7',
         labels: ['variable rect## [rect]'],
         script: 'local.rect## = {{1}};',
         returns: {
@@ -364,12 +398,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '9d95d6c0-5804-4763-a18f-e4bb9002f07f',
         labels: ['set variable [rect] to [rect]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal rect'
     },
     {
         blocktype: 'step',
+        id: '03643740-69f0-4348-87a3-4c2f9a7262a6',
         labels: ['variable gradient## [gradient]'],
         script: 'local.gradient## = {{1}};',
         returns: {
@@ -382,12 +418,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '12a09f20-39d4-4214-982f-99a062068bac',
         labels: ['set variable [gradient] to [gradient]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal gradient'
     },
     {
         blocktype: 'step',
+        id: '227a0249-ff0d-4bc9-a254-457a0861f105',
         labels: ['variable pattern## [pattern]'],
         script: 'local.pattern## = {{1}};',
         returns: {
@@ -400,12 +438,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: '6c978b64-8cff-4940-be2d-7c75b244b8c1',
         labels: ['set variable [pattern] to [pattern]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal pattern'
     },
     {
         blocktype: 'step',
+        id: '6098e4f7-8469-4002-92e3-1971806a4bea',
         labels: ['variable imagedata## [imagedata]'],
         script: 'local.imagedata## = {{1}};',
         returns: {
@@ -418,12 +458,14 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: 'cda09559-8a62-4b40-bf11-e0fb264a4041',
         labels: ['set variable [imagedata] to [imagedata]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal imagedata'
     },
     {
         blocktype: 'step',
+        id: '079b2b89-41c2-4d00-8e21-bcb86574bf80',
         labels: ['variable any## [any]'],
         script: 'local.any## = {{1}};',
         returns: {
@@ -436,6 +478,7 @@ wb.menu('Variables', [
     },
     {
         blocktype: 'step',
+        id: 'b4036693-8645-4852-a4de-9e96565f9aec',
         labels: ['set variable [any] to [any]'],
         script: '{{1}} = {{2}};',
         help: 'first argument must be a variable, not a literal any (ha ha)'
@@ -445,6 +488,7 @@ wb.menu('Variables', [
 // wb.menu('User Defined', [
 //     {
 //         blocktype: 'context',
+//         id: '180ec0db-5723-4e74-8740-3488cfa9aa8e',
 //         labels: [
 //             'New [choice:blocktypes] with arguments:',
 //             'And body returning [any]'
@@ -455,12 +499,14 @@ wb.menu('Variables', [
 //     },
 //     {
 //         blocktype: 'context',
+//         id: '3f44e23a-66f7-4acf-9b1a-1e498e842c06',
 //         labels: ['New [choice:blocktypes] with arg1 [choice:types]'],
 //         script: 'alert("implement me");',
 //         help: 'Create a new block for re-use'
 //     },
 //     {
 //         blocktype: 'context',
+//         id: '870c6588-3a0b-4073-89c2-4726c3544658',
 //         labels: ['New [choice:blocktypes] with arg1 [choice:types] returns [choice:rettypes]'],
 //         script: '',
 //         help: ''
@@ -470,6 +516,7 @@ wb.menu('Variables', [
 wb.menu('Arrays', [
     {
         blocktype: 'step',
+        id: 'e6a297e9-1255-4701-91d8-80548489ee9a',
         labels: ['new array##'],
         script: 'local.array## = [];',
         help: 'Create an empty array',
@@ -482,6 +529,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'step',
+        id: '83d67170-4ba7-45ac-95ae-bb2f314c3ae0',
         labels: ['new array with array## [array]'],
         script: 'local.array## = {{1}}.slice();',
         help: 'create a new array with the contents of another array',
@@ -494,6 +542,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: '3e56f9c1-29b9-4d0c-99bd-05ccabfa29c2',
         labels: ['array [array] item [number:0]'],
         script: '{{1}}[{{2}}]',
         type: 'any',
@@ -501,6 +550,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: '5b1cc330-b9b1-4062-b8d4-e5032c7a5776',
         labels: ['array [array] join with [string:, ]'],
         script: '{{1}}.join({{2}})',
         type: 'string',
@@ -508,12 +558,14 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'step',
+        id: '3fab2b88-430a-401e-88b2-2703d614780a',
         labels: ['array [array] append [any]'],
         script: '{{1}}.push({{2}});',
         help: 'add any object to an array'
     },
     {
         blocktype: 'expression',
+        id: 'bf3ed213-4435-4152-bb2c-573ce1721036',
         labels: ['array [array] length'],
         script: '{{1}}.length',
         type: 'number',
@@ -521,6 +573,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: 'f4870f0f-1dbb-4bc7-b8e3-3a00af613689',
         labels: ['array [array] remove item [number:0]'],
         script: '{{1}}.splice({{2}}, 1)[0]',
         type: 'any',
@@ -528,6 +581,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: 'e137e1a3-fe66-4d15-ae2a-596050acb6a7',
         labels: ['array [array] pop'],
         script: '{{1}}.pop()',
         type: 'any',
@@ -535,6 +589,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: '00685267-c279-4fc1-bdbd-a07742a76b1e',
         labels: ['array [array] shift'],
         script: '{{1}}.shift()',
         type: 'any',
@@ -542,6 +597,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: 'b4f115d3-fc52-4d75-a363-5119de21e97c',
         labels: ['array [array] reversed'],
         script: '{{1}}.slice().reverse()',
         type: 'array',
@@ -549,6 +605,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'expression',
+        id: '0931d219-707c-41dd-92e6-b1a7c2a0f6b3',
         labels: ['array [array] concat [array]'],
         script: '{{1}}.concat({{2}});',
         type: 'array',
@@ -556,6 +613,7 @@ wb.menu('Arrays', [
     },
     {
         blocktype: 'context',
+        id: '9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21',
         labels: ['array [array] for each'],
         script: '{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });',
         locals: [
@@ -581,6 +639,7 @@ wb.menu('Arrays', [
 wb.menu('Objects', [
     {
         blocktype: 'step',
+        id: '26ee5e5c-5405-453f-8941-26ac6ea009ec',
         labels: ['new object##'],
         script: 'local.object## = {};',
         returns: {
@@ -593,12 +652,14 @@ wb.menu('Objects', [
     },
     {
         blocktype: 'step',
+        id: 'ee86bcd0-10e3-499f-9a81-6738374c0c1f',
         labels: ['object [object] key [string] = value [any]'],
         script: '{{1}}[{{2}}] = {{3}};',
         help: 'set the key/value of an object'
     },
     {
         blocktype: 'expression',
+        id: '7ca6df56-7c25-4c8c-98ef-8dfef90eff36',
         labels: ['object [object] value at key [string]'],
         script: '{{1}}[{{2}}]',
         type: 'any',
@@ -606,6 +667,7 @@ wb.menu('Objects', [
     },
     {
         blocktype: 'context',
+        id: '322da80d-d8e2-4261-bab7-6ff0ae89e5f4',
         labels: ['for each item in [object] do'],
         script: 'Object.keys({{1}}).forEach(function(key){local.key = key; local.item = {{1}}[key]; [[1]] });',
         locals: [
@@ -632,6 +694,7 @@ wb.menu('Objects', [
 wb.menu('Strings', [
     {
         blocktype: 'expression',
+        id: 'cdf5fa88-0d87-45d1-bf02-9ee4ec4c5565',
         labels: ['string [string] split on [string]'],
         script: '{{1}}.split({{2}})',
         type: 'array',
@@ -639,6 +702,7 @@ wb.menu('Strings', [
     },
     {
         blocktype: 'expression',
+        id: 'e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb',
         labels: ['string [string] character at [number:0]'],
         script: '{{1}}[{{2}}]',
         type: 'string',
@@ -646,6 +710,7 @@ wb.menu('Strings', [
     },
     {
         blocktype: 'expression',
+        id: 'c1eda8ae-b77c-4f5f-9b9f-c11b65235765',
         labels: ['string [string] length'],
         script: '{{1}}.length',
         type: 'number',
@@ -653,6 +718,7 @@ wb.menu('Strings', [
     },
     {
         blocktype: 'expression',
+        id: 'cc005f19-e1b9-4f74-8fd0-91faccedd370',
         labels: ['string [string] indexOf [string]'],
         script: '{{1}}.indexOf({{2}})',
         type: 'number',
@@ -660,6 +726,7 @@ wb.menu('Strings', [
     },
     {
         blocktype: 'expression',
+        id: '8b536c13-4c56-471e-83ac-cf8648602df4',
         labels: ['string [string] replace [string] with [string]'],
         script: '{{1}}.replace({{2}}, {{3}})',
         type: 'string',
@@ -667,6 +734,7 @@ wb.menu('Strings', [
     },
     {
         blocktype: 'expression',
+        id: '8eaacf8a-18eb-4f21-a1ab-a356326f7eae',
         labels: ['to string [any]'],
         script: '{{1}}.toString()',
         type: 'string',
@@ -674,30 +742,35 @@ wb.menu('Strings', [
     },
     {
         blocktype: 'step',
+        id: '48bb8639-0092-4384-b5a0-3a772699dea9',
         labels: ['comment [string]'],
         script: '// {{1}};\n',
         help: 'this is a comment and will not be run by the program'
     },
     {
         blocktype: 'step',
+        id: '2f178d61-e619-47d0-b9cf-fcb52625c2a3',
         labels: ['alert [string]'],
         script: 'window.alert({{1}});',
         help: 'pop up an alert window with string'
     },
     {
         blocktype: 'step',
+        id: '8496b7af-129f-48eb-b15b-8803b7617493',
         labels: ['console log [any]'],
         script: 'console.log({{1}});',
         help: 'Send any object as a message to the console'
     },
     {
         blocktype: 'step',
+        id: '8bfaf131-d169-4cf4-afe4-1d7f02a55341',
         labels: ['console log format [string] arguments [array]'],
         script: 'var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);',
         help: 'send a message to the console with a format string and multiple objects'
     },
     {
         blocktype: 'expression',
+        id: '06ddcfee-76b7-4be4-856d-44cda3fb109b',
         labels: ['global keys object'],
         script: 'global.keys',
         help: 'for debugging',
@@ -708,6 +781,7 @@ wb.menu('Strings', [
 wb.menu('Sensing', [
     {
         blocktype: 'step',
+        id: '916c79df-40f1-4280-a093-6d9dfe54d87e',
         labels: ['ask [string:What\'s your name?] and wait'],
         script: 'local.answer## = prompt({{1}});',
         returns: {
@@ -720,6 +794,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: '2504cc6a-0053-4acc-8594-a00fa8a078cb',
         labels: ['mouse x'],
         type: 'number',
         script: 'global.mouse_x',
@@ -727,6 +802,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: '80600e66-f99e-4270-8c32-a2bb8d1dafe0',
         labels: ['mouse y'],
         type: 'number',
         script: 'global.mouse_y',
@@ -734,6 +810,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: 'ce1026a0-9acf-4d8f-a7c0-0759115af1ca',
         labels: ['mouse down'],
         type: 'boolean',
         script: 'global.mouse_down',
@@ -741,6 +818,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: '4321cef6-6365-4885-9a3c-1fd0db2b4eab',
         labels: ['key [choice:keys] pressed?'],
         type: 'boolean',
         script: 'global.isKeyDown({{1}})',
@@ -748,6 +826,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: '048218dd-0b8d-4bc9-b310-480e93232665',
         labels: ['stage width'],
         type: 'number',
         script: 'global.stage_width',
@@ -755,6 +834,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: '6f9031c6-579b-4e24-b5d1-f648aab6e0aa',
         labels: ['stage height'],
         type: 'number',
         script: 'global.stage_height',
@@ -762,6 +842,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: 'f85d3bfd-b58c-458f-b4a9-68538302aa12',
         labels: ['center x'],
         type: 'number',
         script: 'global.stage_center_x',
@@ -769,6 +850,7 @@ wb.menu('Sensing', [
     },
     {
         blocktype: 'expression',
+        id: '083bee4f-ee36-4a35-98df-587ed586d623',
         labels: ['center y'],
         type: 'number',
         script: 'global.stage_center_y',
@@ -776,6 +858,7 @@ wb.menu('Sensing', [
     },
 	{
 		blocktype: 'expression',
+        id: '76184edb-ac2c-4809-899d-7b105776ba12',
 		labels: ['random x'],
 		type: 'number',
 		script: 'randint(0,global.stage_width)',
@@ -783,6 +866,7 @@ wb.menu('Sensing', [
 	},
 	{
 		blocktype: 'expression',
+        id: '8e749092-327d-4921-a50e-c87acefe7102',
 		labels: ['random y'],
 		type: 'number',
 		script: 'randint(0, global.stage_height)',
@@ -790,12 +874,14 @@ wb.menu('Sensing', [
 	},
     {
         blocktype: 'step',
+        id: '6b924f28-9bba-4257-a80b-2f2a591128a5',
         labels: ['reset timer'],
         script: 'global.timer.reset();',
         help: 'set the global timer back to zero'
     },
     {
         blocktype: 'expression',
+        id: 'f04b0e0a-b591-4eaf-954d-dea412cbfd61',
         labels: ['timer'],
         type: 'number',
         script: 'global.timer.value()',
@@ -806,6 +892,7 @@ wb.menu('Sensing', [
 wb.menu('Operators', [
     {
         blocktype: 'expression',
+        id: '406d4e12-7dbd-4f94-9b0e-e2a66d960b3c',
         labels: ['[number:0] + [number:0]'],
         type: 'number',
         script: "({{1}} + {{2}})",
@@ -813,6 +900,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'd7082309-9f02-4cf9-bcd5-d0cac243bff9',
         labels: ['[number:0] - [number:0]'],
         type: 'number',
         script: "({{1}} - {{2}})",
@@ -820,6 +908,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'bd3879e6-e440-49cb-b10b-52d744846341',
         labels: ['[number:0] * [number:0]'],
         type: 'number',
         script: "({{1}} * {{2}})",
@@ -827,6 +916,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '7f51bf70-a48d-4fda-ab61-442a0766abc4',
         labels: ['[number:0] / [number:0]'],
         type: 'number',
         script: "({{1}} / {{2}})",
@@ -834,6 +924,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'a35fb291-e2fa-42bb-a5a6-2124bb33157d',
         labels: ['pick random [number:1] to [number:10]'],
         type: 'number',
         script: "randint({{1}}, {{2}})",
@@ -841,6 +932,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'd753757b-a7d4-4d84-99f1-cb9b8c7e62da',
         labels: ['[number:0] < [number:0]'],
         type: 'boolean',
         script: "({{1}} < {{2}})",
@@ -848,6 +940,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'e3a5ea20-3ca9-42cf-ac02-77ff06836a7e',
         labels: ['[number:0] = [number:0]'],
         type: 'boolean',
         script: "({{1}} === {{2}})",
@@ -855,6 +948,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '5a1f5f68-d74b-4154-b376-6a0200f585ed',
         labels: ['[number:0] > [number:0]'],
         type: 'boolean',
         script: "({{1}} > {{2}})",
@@ -862,6 +956,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '770756e8-3a10-4993-b02e-3d1333c98958',
         labels: ['[boolean] and [boolean]'],
         type: 'boolean',
         script: "({{1}} && {{2}})",
@@ -869,6 +964,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'a56c0d03-5c5c-4459-9aaf-cbbea6eb3abf',
         labels: ['[boolean] or [boolean]'],
         type: 'boolean',
         script: "({{1}} || {{2}})",
@@ -876,6 +972,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'cb9ddee8-5ee1-423b-9559-6d2cbb379b80',
         labels: ['[boolean] xor [boolean]'],
         type: 'boolean',
         script: "({{1}} ? !{{2}} : {{2}})",
@@ -883,6 +980,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '138a6840-37cc-4e2d-b44a-af32e673ba56',
         labels: ['not [boolean]'],
         type: 'boolean',
         script: "(! {{1}})",
@@ -890,6 +988,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'e1951d04-dc2f-459e-9d7a-4796f29169ea',
         labels: ['concatenate [string:hello] with [string:world]'],
         type: 'string',
         script: "({{1}} + {{2}})",
@@ -897,6 +996,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'a2647515-2f14-4d0f-84b1-a6e288823630',
         labels: ['[number:0] mod [number:0]'],
         type: 'number',
         script: "({{1}} % {{2}})",
@@ -904,6 +1004,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '4f7803c0-24b1-4a0c-a461-d46acfe9ab25',
         labels: ['round [number:0]'],
         type: 'number',
         script: "Math.round({{1}})",
@@ -911,6 +1012,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'c38383df-a765-422e-b215-7d1cfb7557a1',
         labels: ['absolute of [number:10]'],
         type: 'number',
         script: "Math.abs({{1}})",
@@ -918,6 +1020,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '9bf66bb0-c182-42e5-b3a7-cf10de26b08c',
         labels: ['arccosine degrees of [number:10]'],
         type: 'number',
         script: 'rad2deg(Math.acos({{1}}))',
@@ -925,6 +1028,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '92f79a75-e3f4-4fc7-8f17-bf586aef180b',
         labels: ['arcsine degrees of [number:10]'],
         type: 'number',
         script: 'rad2deg(Math.asin({{1}}))',
@@ -932,6 +1036,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '1f5ee069-148e-4e4a-a514-5179af86be15',
         labels: ['arctangent degrees of [number:10]'],
         type: 'number',
         script: 'rad2deg(Math.atan({{1}}))',
@@ -939,6 +1044,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '46bcac2d-eb76-417c-81af-cb894a54a86c',
         labels: ['ceiling of [number:10]'],
         type: 'number',
         script: 'Math.ceil({{1}})',
@@ -946,6 +1052,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'ce4bf2bc-a06a-47f4-ac05-df2213d087a5',
         labels: ['cosine of [number:10] degrees'],
         type: 'number',
         script: 'Math.cos(deg2rad({{1}}))',
@@ -953,6 +1060,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '1a8f6a28-14e9-4400-8e80-31217309ebc9',
         labels: ['sine of [number:10] degrees'],
         type: 'number',
         script: 'Math.sin(deg2rad({{1}}))',
@@ -960,6 +1068,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541',
         labels: ['tangent of [number:10] degrees'],
         type: 'number',
         script: 'Math.tan(deg2rad({{1}}))',
@@ -967,6 +1076,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '8a4a81d8-de25-46f0-b610-97d4f6fffbff',
         labels: ['[number:10] to the power of [number:2]'],
         type: 'number',
         script: 'Math.pow({{1}}, {{2}})',
@@ -974,6 +1084,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: '668798a3-f15e-4839-b4b3-da5db380aa5a',
         labels: ['square root of [number:10]'],
         type: 'number',
         script: 'Math.sqrt({{1}})',
@@ -981,6 +1092,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'a34c51d9-bfa0-49ad-8e7d-b653611836d3',
         labels: ['pi'],
         script: 'Math.PI;',
         type: 'number',
@@ -988,6 +1100,7 @@ wb.menu('Operators', [
     },
     {
         blocktype: 'expression',
+        id: 'da2c8203-bf80-4617-a762-92dd4d7bfa27',
         labels: ['tau'],
         script: 'Math.PI * 2',
         type: 'number',

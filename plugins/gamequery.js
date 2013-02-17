@@ -43,6 +43,7 @@ jQuery.fn.extend({
 wb.menu('Sprites', [
     {
         blocktype: 'step',
+        id: 'e6b196e9-c20e-4522-936c-4b71b2a7ec79',
         labels: ['new image##  [image]'],
         script: 'var image## = new $.gameQuery.Animation({imageURL: {{1}}});',
         //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
@@ -57,6 +58,7 @@ wb.menu('Sprites', [
 
     {
       blocktype: 'step',
+      id: '7033b782-8d88-4e7a-af90-83a5802bcea7',
       labels: ['new animation##  [image] frames [number:1] width of cell [number:32] fps [number:30] '],
       script: 'var animation## = new $.gameQuery.Animation({imageURL: {{1}}, numberOfFrame: {{2}}, delta:{{3}}, rate: (1000 / {{4}}), type: $.gameQuery.ANIMATION_HORIZONTAL });',
         //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
@@ -72,6 +74,7 @@ wb.menu('Sprites', [
 
     {
       blocktype: 'step',
+      id: '906e927b-d4ef-43dd-816e-6437c97fbdf9',
       labels: ['new animation##  of XEON running '],
       script: 'var animation## = new $.gameQuery.Animation({imageURL: "./images/xeon-walking.png", numberOfFrame: 4, delta:68, rate: (1000 / 30), type: $.gameQuery.ANIMATION_HORIZONTAL });',
         //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
@@ -86,6 +89,7 @@ wb.menu('Sprites', [
 
     {
       blocktype: 'step',
+      id: 'cf8eaf8b-687f-4823-97ce-e0de8253f624',
       labels: ['new sprite## based on [image] height [number:32] width [number:32] x [number:0] y [number:0]'],
         script: '$.playground.addSprite("sprite##",{animation: {{1}}, height:{{2}}, width: {{3}}, posx: {{4}},posy:{{5}}});',
         returns: {

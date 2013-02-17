@@ -74,18 +74,21 @@ $('.clearScripts').click(clearScriptsDefault);
     wb.menu('Control', [
         {
             blocktype: 'eventhandler',
+            id: '25339ea4-1bc2-4c66-bde8-c455b9a3d1cd',
             labels: ['Setup - When program starts'],
             script: 'void setup()\n{\n[[1]]\n}\n',
             help: 'Start scripts when program starts'
         },
         {
             blocktype: 'eventhandler',
+            id: 'fb958a3d-0372-4ab7-95c1-70dd9c454d19',
             labels: ['Main loop'],
             script: 'void loop()\n{\n[[1]]\n}\n',
             help: 'Trigger for main loop'
         },
         {
             blocktype: 'eventhandler',
+            id: '1e4b61cf-c4ce-4b08-9944-7ea1ebf54775',
             labels: ['Global Settings'],
             script: '/*Global Settings*/\n\n[[1]]\n\n',
             help: 'Trigger for blocks in global setup'
@@ -93,36 +96,42 @@ $('.clearScripts').click(clearScriptsDefault);
         //unique id?
         {
             blocktype: 'step',
+            id: 'b54a3daa-3dfa-4885-afc4-9592944296df',
             label: 'broadcast [string:ack] message',
             script: '{{1}}();',
             help: 'Send a message to all listeners'
         },
         {
             blocktype: 'eventhandler',
+            id: '64fd2a90-a689-4ffd-bd66-bc8c61775cd4',
             labels: ['when I receive [string:ack] message'],
             script: 'function {{1}}(){\n[[next]]\n}',
             help: 'Trigger for blocks to run when message is received'
         },
         {
             blocktype: 'context',
+            id: 'c79f205e-eab3-4ebd-9c72-2e6a54209593',
             labels: ['forever if [boolean:false]'],
             script: 'while({{1}}){\n[[1]]\n}',
             help: 'loop until condition fails'
         },
         {
             blocktype: 'context',
+            id: '0a313a7a-1187-4619-9819-fbfd7a32f6a6',
             labels: ['if [boolean]'],
             script: 'if({{1}}){\n[[1]]\n}',
             help: 'only run blocks if condition is true'
         },
         {
             blocktype: 'context',
+            id: 'dc724c8c-27b3-4c93-9420-050dd2466c43',
             labels: ['if [boolean]', 'else'],
             script: 'if({{1}}){\n[[1]]\n}else{\n[[2]]\n}',
             help: 'run first set of blocks if condition is true, second set otherwise'
         },
         {
             blocktype: 'context',
+            id: 'a11f426a-9a48-4e0f-83f5-cff4ec5b4154',
             labels: ['repeat until [boolean]'],
             script: 'while(!({{1}})){\n[[1]]\n}',
             help: 'loop until condition is true'
@@ -133,12 +142,14 @@ $('.clearScripts').click(clearScriptsDefault);
     wb.menu('Timing', [
         {
             blocktype: 'step',
+            id: '5f4a98ff-3a12-4f2d-8327-7c6a375c0192',
             labels: ['wait [int:1] secs'],
             script: 'delay(1000*{{1}});',
             help: 'pause before running subsequent blocks'
         },
         {
             blocktype: 'expression',
+            id: '937921ed-49f4-4915-ba39-be217ddb6175',
             labels: ['Milliseconds since program started'],
             type: 'int',
             script: '(millis())',
@@ -146,6 +157,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '7d4ab88b-7769-497a-8822-8f0cc92c81de',
             labels: ['Seconds since program started'],
             type: 'int',
             script: '(int(millis()/1000))',
@@ -157,6 +169,7 @@ $('.clearScripts').click(clearScriptsDefault);
     wb.menu('Electronic Interface', [
         {
             blocktype: 'step',
+            id: '451eda35-be10-498f-a714-4a32f3bcbe53',
             labels: ['Create digital_output## on Pin [choice:digitalpins]'],
             script: 'digital_output## = "{{1}}"; pinMode(digital_output##, OUTPUT);',
             help: 'Create a named pin set to output',
@@ -170,6 +183,7 @@ $('.clearScripts').click(clearScriptsDefault);
         /*
         {
             blocktype: 'step',
+            id: '028c3174-ab7c-4119-8fd1-72c82d05443f',
           	labels: ['Set Digital Pin [string] [choice:highlow]'],
           	script: 'digitalWrite({{1}}, {{2}});',
           	help: 'Write a value to given pin'
@@ -177,6 +191,7 @@ $('.clearScripts').click(clearScriptsDefault);
         */
         {
             blocktype: 'step',
+            id: 'd0a3d825-0d2d-4339-838f-b30d06441c23',
           	labels: ['Digital Pin [string] ON if [boolean]'],
           	script: 'if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n',
           	help: 'Write a boolean value to given pin'
@@ -184,6 +199,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'step',
+            id: 'ef757ca5-053d-4cfd-8ed4-9345cefef569',
             labels: ['Create digital_input## on Pin [choice:digitalpins]'],
             script: 'digital_input## = "{{1}}"; pinMode(digital_input##, INPUT);',
             help: 'Create a named pin set to input',
@@ -197,6 +213,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'expression',
+            id: '010020b8-4e76-4e56-9cd5-65541bf2dbc9',
             labels: ['Digital Pin [string]'],
             //label: 'Is Pin [string] HIGH',
             type: 'boolean',
@@ -207,12 +224,13 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'step',
+            id: '220caace-bd77-4e82-9f5d-0457a5bbfe9f',
             labels: ['Create analog_input## on Pin [choice:analoginpins]'],
             script: 'analog_input## = "{{1}}"; pinMode(analog_input##, INPUT);',
             help: 'Create a named pin set to input',
             returns: {
                 blocktype: 'expression',
-                labels: 'analog_input##'],
+                labels: ['analog_input##'],
                 script: 'analog_input##',
                 type: 'string'
             }
@@ -220,6 +238,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'expression',
+            id: '5b76796a-7fa9-4d56-b532-5194bf5db20f',
             labels: ['Analog Pin [string]'],
             type: 'int',
             script: '(analogRead({{1}}))',
@@ -228,6 +247,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'step',
+            id: '4fa77d69-30fb-4734-8697-5ed56ba67433',
             labels: ['Create analog_output## on Pin [choice:pwmpins]'],
             script: 'analog_output## = "{{1}}"; pinMode(analog_output##, OUTPUT);',
             help: 'Create a named pin set to output',
@@ -241,6 +261,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'step',
+            id: '4b29af90-96e0-4de9-a7d8-2c88a35e1f49',
           	labels: ['Analog [string] outputs [int:255]'],
           	script: 'analogWrite({{1}}, {{2}});',
           	help: 'Set value of a pwm pin'
@@ -250,18 +271,21 @@ $('.clearScripts').click(clearScriptsDefault);
     wb.menu('Variables', [
         {
             blocktype: 'step',
+            id: 'eda33e3e-c6de-4f62-b070-f5035737a241',
           	labels: ['Create [string:var] set to [string]'],
           	script: "String {{1}} = '{{2}}';",
           	help: 'Create a string variable'
         },
         {
             blocktype: 'step',
+            id: '3423bd33-6a55-4660-ba78-2304308b653d',
           	labels: ['[string:var] = [string]'],
           	script: "{{1}} = '{{2}}';",
           	help: 'Change the value of an already created string variable'
         },
         {
             blocktype: 'expression',
+            id: '076b71fc-23eb-485a-8002-7e84abe8b6cf',
           	labels: ['value of [string:var]'],
           	type : 'string',
           	script: "{{1}}",
@@ -269,18 +293,21 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'step',
+            id: '1236184b-2397-44b3-8c69-0b184e24ffd8',
           	labels: ['Create [string:var] set to [int:0]'],
           	script: "int {{1}} = {{2}}'",
           	help: 'Create an integer variable'
         },
         {
             blocktype: 'step',
+            id: '60a81c46-fd2e-4eb4-a828-00d201534baa',
           	labels: ['[string:var] = [int:0]'],
           	script: "{{1}} = {{2}};",
           	help: 'Change the value of an already created integer variable'
         },
         {
             blocktype: 'expression',
+            id: '06a44aae-31a8-4909-80b9-61151dc2d666',
           	labels: ['value of [string:var]'],
           	type : 'int',
           	script: "{{1}}",
@@ -289,18 +316,21 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'step',
+            id: '645f8dde-a050-4106-b436-57c9f2301b17',
           	labels: ['Create [string:var] set to [float:0.0]'],
           	script: "float {{1}} = {{2}}",
           	help: 'Create a decimal variable'
         },
         {
             blocktype: 'step',
+            id: 'f487db77-3f81-47ae-8fb5-478e24019c0b',
           	labels: ['[string:var] = [float:0.0]'],
           	script: "{{1}} = {{2}};",
           	help: 'Change the value of an already created deciaml variable'
         },
         {
             blocktype: 'expression',
+            id: '705a5ef3-c0b9-49f5-885d-f195c2f4c464',
           	labels: ['value of [string:var]'],
           	type : 'float',
           	script: "{{1}}",
@@ -308,18 +338,21 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'step',
+            id: 'c4ab9c5d-4493-429c-beb1-be9b411c0a7e',
          	labels: ['Create [string:var] set to [boolean:false]'],
          	script: "int {{1}} = {{2}};",
           	help: 'Create a new true or false variable'
         },
         {
             blocktype: 'step',
+            id: '027bbe7b-6b50-4d94-b447-9bca02ec513f',
           	labels: ['[string:var] = [boolean:false]'],
          	script: "{{1}} = {{2}};",
           	help: 'Change the value of an already created true or false variable'
         },
         {
             blocktype: 'expression',
+            id: 'a41881a2-7cce-4ee5-98f4-c8067e3d57a6',
           	labels: ['value of [string:var]'],
           	type : 'boolean',
           	script: "{{1}}",
@@ -330,6 +363,7 @@ $('.clearScripts').click(clearScriptsDefault);
     wb.menu('Operators', [
         {
             blocktype: 'expression',
+            id: 'cbb65aa7-b36c-4311-a479-f1776579dcd3',
             labels: ['[number:0] + [number:0]'],
             type: 'number',
             script: "({{1}} + {{2}})",
@@ -337,6 +371,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '594700d5-64c6-4b21-bc70-f3fbf6913a69',
             labels: ['[number:0] - [number:0]'],
             type: 'number',
             script: "({{1}} - {{2}})",
@@ -344,6 +379,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: 'afec758c-7ccc-4ee5-8d2c-f95160da83d4',
             labels: ['[number:0] * [number:0]'],
             type: 'number',
             script: "({{1}} * {{2}})",
@@ -351,6 +387,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '5cec08b8-eb58-4ef0-a73e-f5245d6859a2',
             labels: ['[number:0] / [number:0]'],
             type: 'number',
             script: "({{1}} / {{2}})",
@@ -358,6 +395,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '90a5d524-fa8a-4a52-a4df-0beb83d32c40',
             labels: ['pick random [number:1] to [number:10]'],
             type: 'number',
             script: "(random({{1}}, {{2}}))",
@@ -365,12 +403,14 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'step',
+            id: 'd35330ee-5b49-492b-b7dd-41c3fd1496d0',
             labels: ['set seed for random numbers to [number:1]'],
             script: "(randomSeed({{1}}))",
             help: ''
         },
         {
             blocktype: 'expression',
+            id: '7f047e8a-3a87-49f8-b9c7-daad742faa9d',
             labels: ['[number:0] < [number:0]'],
             type: 'boolean',
             script: "({{1}} < {{2}})",
@@ -378,6 +418,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: 'faddd68c-6c75-4908-9ee6-bccc246f9d89',
             labels: ['[number:0] = [number:0]'],
             type: 'boolean',
             script: "({{1}} == {{2}})",
@@ -386,6 +427,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'expression',
+            id: 'e4d81ccd-f9dc-4a0b-b41f-a5cd146a8c27',
             labels: ['[number:0] > [number:0]'],
             type: 'boolean',
             script: "({{1}} > {{2}})",
@@ -393,6 +435,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '03d1df81-c7de-40a0-a88f-95b732d19936',
             labels: ['[boolean] and [boolean]'],
             type: 'boolean',
             script: "({{1}} && {{2}})",
@@ -400,6 +443,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '482db566-b14b-4381-8135-1e29f8c4e7c3',
             labels: ['[boolean] or [boolean]'],
             type: 'boolean',
             script: "({{1}} || {{2}})",
@@ -407,6 +451,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '866a1181-e0ff-4ebc-88dd-55e2b70d7c52',
             labels: ['not [boolean]'],
             type: 'boolean',
             script: "(! {{1}})",
@@ -414,6 +459,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '8353c1f3-a1da-4d80-9bf9-0c9584c3896b',
             labels: ['[number:0] mod [number:0]'],
             type: 'number',
             script: "({{1}} % {{2}})",
@@ -422,6 +468,7 @@ $('.clearScripts').click(clearScriptsDefault);
 
         {
             blocktype: 'expression',
+            id: '1fde8b93-1306-4908-97c8-d628dd91eb4f',
             labels: ['round [number:0]'],
             type: 'int',
             script: "(int({{1}}))",
@@ -429,6 +476,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: 'b7634de4-69ed-492c-bc9a-16ac3bb5ca45',
             labels: ['absolute of [number:10]'],
             type: 'number',
             script: "(abs({{1}}))",
@@ -436,6 +484,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '20268318-b168-4519-a32a-10b94c264226',
             labels: ['cosine of [number:10] degrees'],
             type: 'float',
             script: '(cos((180 / {{1}})/ 3.14159))',
@@ -443,6 +492,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '86c2f303-861f-4ad7-a7de-3108637ce264',
             labels: ['sine of [number:10] degrees'],
             type: 'float',
             script: '(sin((180 / {{1}})/ 3.14159))',
@@ -450,6 +500,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '0e018648-0b45-4096-9052-e3080a47793a',
             labels: ['tangent of [number:10] degrees'],
             type: 'float',
             script: '(tan((180 / {{1}})/ 3.14159))',
@@ -457,6 +508,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '814444c5-f3f4-4412-975c-7284409f1f3d',
             labels: ['[number:10] to the power of [number:2]'],
             type: 'number',
             script: '(pow({{1}}, {{2}}))',
@@ -464,6 +516,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '1f4df24e-22ea-460e-87c5-4b0f92e233ce',
             labels: ['square root of [number:10]'],
             type: 'float',
             script: '(sqrt({{1}}))',
@@ -471,6 +524,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '18a0560d-beff-43da-8708-55398cc08d30',
             labels: ['[number:10] as string'],
             type: 'string',
             script: '{{1}}',
@@ -478,6 +532,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: 'e37dae6d-608f-43e9-9cd9-57ff03aba29d',
           	labels: ['Map [number] from Analog in to Analog out'],
           	type: 'number',
           	script: 'map({{1}}, 0, 1023, 0, 255)',
@@ -485,6 +540,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'expression',
+            id: '007bccc5-36b2-4ff8-a0bc-f80def66ff49',
           	labels: ['Map [number] from [number:0]-[number:1023] to [number:0]-[number:255]'],
           	type: 'number',
           	script: 'map({{1}}, 0, 1023, 0, 255)',
@@ -495,24 +551,28 @@ $('.clearScripts').click(clearScriptsDefault);
     wb.menu('Serial', [
         {
             blocktype: 'step',
+            id: '11c7b422-0549-403e-9f2e-e1db13964f1b',
           	labels: ['Setup serial communication at [choice:baud]'],
           	script: "Serial.begin({{1}});",
             help: 'Eanble serial communications at a chosen speed'
         },
         {
             blocktype: 'step',
+            id: '9ffc70c4-b0da-4d2c-a38a-f1ec2ec743ac',
           	labels: ['Send [any:Message] as a line'],
           	script: "Serial.println({{1}});",
             help: 'Send a message over the serial connection followed by a line return'
         },
         {
             blocktype: 'step',
+            id: '40fb939a-a393-4d26-8902-93ee78bd01b0',
           	labels: ['Send [any:Message]'],
           	script: "Serial.print({{1}});",
             help: 'Send a message over the serial connection'
         },
         {
             blocktype: 'expression',
+            id: 'a1630959-fc16-4ba8-af98-4724edc636b4',
           	labels: ['Message Value'],
           	type: 'string',
           	script: "Serial.read()",
@@ -520,6 +580,7 @@ $('.clearScripts').click(clearScriptsDefault);
         },
         {
             blocktype: 'step',
+            id: '43618563-c8a3-4330-bfef-89469a797a90',
           	labels: ['End serial communication'],
             script: "Serial.end();",
           	help: 'Disable serial communications'

@@ -17,19 +17,6 @@ $('.scripts_workspace').on('click', '.disclosure', function(event){
     self.toggleClass('open closed');
 });
 
-//
-// Value objects get defaults depending on their type. These are the defaults for
-// primitive values when the plugin does not over-ride the default.
-//
-var defaultValue = {
-    'number': 0,
-    'boolean': false,
-    'string': '',
-    'date': function(){ return new Date().toISOString().split('T')[0]; },
-    'time': function(){ return new Date().toISOString().split('T')[1].split('.')[0] + 'Z'; },
-    'datetime': function(){ return new Date().toISOString(); },
-    'color': 'rgb(0,0,0)'
-};
 
 function Deferred(parent, type, idx, spec){
     this.parent = parent;

@@ -2,6 +2,21 @@
 // Blocks which take parameters store those parameters as Value objects, which may hold primitive
 // values such as numbers or strings, or may be Expression blocks.
 //
+
+//
+// Value objects get defaults depending on their type. These are the defaults for
+// primitive values when the plugin does not over-ride the default.
+//
+var defaultValue = {
+    'number': 0,
+    'boolean': false,
+    'string': '',
+    'date': function(){ return new Date().toISOString().split('T')[0]; },
+    'time': function(){ return new Date().toISOString().split('T')[1].split('.')[0] + 'Z'; },
+    'datetime': function(){ return new Date().toISOString(); },
+    'color': 'rgb(0,0,0)'
+};
+
 function Value(textValue, index){
     assert.isNumber(index, 'Values must know their place');
     this.index = index;

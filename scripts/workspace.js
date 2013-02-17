@@ -26,7 +26,7 @@ $('.goto_stage').click(function(){
 function saveCurrentScripts(){
     showWorkspace();
     $('#block_menu')[0].scrollIntoView();
-    localStorage.__current_scripts = Block.serialize();
+    localStorage.__current_scripts = wb.Block.serialize();
 }
 $(window).unload(saveCurrentScripts);
 
@@ -37,7 +37,7 @@ function scriptsToString(title, description){
         title: title,
         description: description,
         date: Date.now(),
-        scripts: Block.scriptsToObject('.scripts_workspace')
+        scripts: wb.Block.scriptsToObject('.scripts_workspace')
     });
 }
 
@@ -72,9 +72,8 @@ function loadScriptsFromObject(fileObject){
     // FIXME: Make sure we have the appropriate plugins loaded
 	if (!fileObject) return;
     var blocks = fileObject.blocks.map(function(spec){
-        return Block(spec);
+        return wb.Block(spec);
     });
-    Deferred.resolve();
     blocks.forEach(function(block){
         var view = block.view();
 		assert.isString(view.jquery, 'Views must be jQuery objects');

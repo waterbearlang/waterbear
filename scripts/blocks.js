@@ -1,5 +1,6 @@
 // Constructors and models for Blocks
 
+(function(wb){
 
 function Step(spec, scope){
     assertStep(spec);
@@ -34,7 +35,7 @@ EventHandler.prototype.constructor = EventHandler;
 
 function assertStep(model){
     if (model.type){
-        alert('Error: expression "' + model.id + '" treated as a step');
+        alert('Error: expression "' + model.id+ '" treated as a step');
     }
 }
 
@@ -103,31 +104,31 @@ Block.prototype.init = function(spec){
     }
     $.extend(true, this, spec);
     this.spec = spec; // save unmodified description
-    if (this.id){
-        Block.registerId(this.id);
-    }else{
-        if (this.isTemplateBlock){
-            if (this.isLocal){
-                this.id = Block.newId(); // templates only get ids if they are locals (or returns, which have their origin's id)
-            }else{
-                this.id = '';
-            }
+    if (!this.id){
+        this.id = uuid();
+    }
+    Block.registerBlock(this);
+    if (this.isTemplateBlock){
+        if (this.isLocal){
+            this.seqNum = Block.newSeqNum(); // templates only get ids if they are locals (or returns, which have their origin's id)
         }else{
-            this.id = Block.newId();
+            this.seqNum = '';
         }
+    }else{
+        this.seqNum = Block.newSeqNum();
     }
     if (!this.group){
         console.log('no group? %o', this);
     }
     if (this.help){
-        this.tooltip = this.group + ' ' + this.id + ': ' + this.help;
+        this.tooltip = this.group + ' ' + this.seqNum + ': ' + this.help;
     }else{
-        this.tooltip = this.group + ' ' + this.id;
+        this.tooltip = this.group + ' ' + this.seqNum;
     }
 	this.labels = this.labels.map(function(labelspec){
-        return labelspec.replace(/##/g, self.id ? '_' + self.id : '');
+        return labelspec.replace(/##/g, self.seqNum ? '_' + self.seqNum : '');
     });
-    this.script = this.script.replace(/##/g, '_' + self.id);
+    this.script = this.script.replace(/##/g, '_' + self.seqNum);
     Block.registerBlock(this);
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
@@ -140,9 +141,6 @@ Block.prototype.init = function(spec){
 
 Block.prototype.initInstance = function(){
     var self = this;
-    if (this.id){
-        //Block._nextId = Math.max(Block._nextId, this.id + 1);
-    }
     this.labels[0].attachLocals = true;
     if (this.locals){
         this.spec.locals.forEach(function(spec){
@@ -151,7 +149,8 @@ Block.prototype.initInstance = function(){
             }
             spec.isTemplateBlock = true;
             spec.isLocal = true;
-            spec.id = self.id;
+            spec.scriptid = self.id;
+            spec.seqNum = self.seqNum;
         });
         this.locals = this.spec.locals.map(function(spec, idx){
             if (spec === null){
@@ -308,10 +307,9 @@ Block.prototype.cloneScript = function(){
        isLocal: false,
        isTemplateBlock: false,
        templateBlock: this,
-       id: this.id,
-       signature: this.signature
+       id: uuid(),
+       scriptid: this.id
     });
-    console.log('cloneScript: model: %o, spec: %o', this, spec);
     var clone = Block(spec);
 	return clone;
 };
@@ -452,7 +450,7 @@ Block.prototype.addGlobals = function(){
 };
 
 Block.prototype.removeLocalsFromParent = function(){
-    if (!(this.returns && this.returns.signature)) return;
+    if (!this.returns) return;
     this.returns.view().remove();
 };
 
@@ -655,4 +653,14 @@ $('.scripts_workspace').on('click', '.disclosure', function(event){
     }
     self.toggleClass('open closed');
 });
+
+// Export public interface to waterbear namespace
+
+wb.Block = Block;
+wb.Step = Step;
+wb.Context = Context;
+wb.EventHandler = EventHandler;
+wb.Expression = Expression;
+
+})(wb);
 

@@ -164,7 +164,7 @@
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
         // console.log('[1] model: %s', dragTarget.data('model'));
-        removeFromScriptEvent(dragTarget);
+        wb.removeFromScriptEvent(dragTarget);
         // console.log('[2] model: %s', dragTarget.data('model'));
         dragTarget.css('position', 'absolute');
         if (dragTarget.is('.scripts_workspace .wrapper')){
@@ -224,13 +224,13 @@
                 // Drag a step to snap to a step
                 dropTarget.parent().append(dragTarget);
                 dragTarget.removeAttr('style');
-                addToScriptEvent(dropTarget, dragTarget);
+                wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
                 // Insert a value block into a socket
                 dropTarget.children('input, select').hide(); // FIXME: Move to block.js
                 dropTarget.append(dragTarget);
                 dragTarget.removeAttr('style');
-                addToScriptEvent(dropTarget, dragTarget);
+                wb.addToScriptEvent(dropTarget, dragTarget);
                 // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
             }
         }else if ($('.block_menu').cursorOver()){
@@ -243,7 +243,7 @@
             dropCursor.remove();
             dropCursor = null;
             dragTarget.removeAttr('style');
-            addToScriptEvent(targetCanvas, dragTarget);
+            wb.addToScriptEvent(targetCanvas, dragTarget);
         }else{
             if (cloned){
                 dragTarget.remove();

@@ -137,15 +137,15 @@ var pasteboard = null;
 //         cancel: {'name': 'Cancel', callback: cancelCommand}
 //     }
 // });
-// 
+//
 // $.contextMenu({
 //    selector: '.scripts_workspace',
 //    items: {
 //        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
 //        cancel: {'name': 'Cancel', callback: cancelCommand}
-//    } 
+//    }
 // });
-// 
+//
 // $.contextMenu({
 //     selector: '.scripts_workspace .value > input',
 //     items: {
@@ -153,7 +153,7 @@ var pasteboard = null;
 //         cancel: {'name': 'Cancel', callback: cancelCommand}
 //     }
 // });
-// 
+//
 // $.contextMenu({
 //     selector: '.scripts_workspace .contained',
 //     items: {
@@ -161,7 +161,7 @@ var pasteboard = null;
 //         cancel: {'name': 'Cancel', callback: cancelCommand}
 //     }
 // });
-// 
+//
 
 // TODO: add event handler to enable/disable, hide/show items based on state of block
 
@@ -227,7 +227,7 @@ function edit_menu(title, specs, show){
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(Block(spec).view());
+        submenu.append(wb.Block(spec).view());
     });
     var state = $("#block_menu").accordion( "option", "active" );
     $('#block_menu').accordion('destroy').accordion({

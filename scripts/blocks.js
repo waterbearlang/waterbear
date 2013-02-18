@@ -129,7 +129,6 @@ Block.prototype.init = function(spec){
         return labelspec.replace(/##/g, self.seqNum ? '_' + self.seqNum : '');
     });
     this.script = this.script.replace(/##/g, '_' + self.seqNum);
-    Block.registerBlock(this);
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
     });
@@ -274,7 +273,7 @@ Block.prototype.parseLabel = function(textLabel){
                 value = new wb.Value(value, idx);
                 self.values[idx] = value;
             }
-            var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + getInputType(value) + '" + style="display:none"></input></span>');
+            var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + wb.getInputType(value) + '" + style="display:none"></input></span>');
             input.append(value.view());
             slot.replaceWith(input);
         });
@@ -661,6 +660,10 @@ wb.Step = Step;
 wb.Context = Context;
 wb.EventHandler = EventHandler;
 wb.Expression = Expression;
+
+// and event notifications
+wb.removeFromScriptEvent = removeFromScriptEvent;
+wb.addToScriptEvent = addToScriptEvent;
 
 })(wb);
 

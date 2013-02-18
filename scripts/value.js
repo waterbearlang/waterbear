@@ -164,4 +164,5 @@ Value.prototype.update = function(newValue){
 }
 
 wb.Value = Value;
+wb.getInputType = getInputType;
 })(wb);

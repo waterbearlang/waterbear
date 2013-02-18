@@ -14,7 +14,7 @@
 (function(wb){
 
 wb.Block.serialize = function(){
-    return JSON.stringify(Block.scriptsToObject('.scripts_workspace'));
+    return JSON.stringify(wb.Block.scriptsToObject('.scripts_workspace'));
 };
 
 wb.Block.scriptsToObject = function(workspace){

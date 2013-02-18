@@ -193,7 +193,6 @@
 
         // load all modules separated by |
         var plugins = q['plugin'].split('|').map(function(name){
-            Block.registerPlugin(name);
             return 'plugins/' + name + '.js';
         });
 

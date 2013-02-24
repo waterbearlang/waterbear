@@ -2,6 +2,8 @@
 
 (function(wb){
 
+// BLOCK SUBTYPES
+
 function Step(spec, scope){
     assertStep(spec);
     this.returns = false;
@@ -33,6 +35,11 @@ function EventHandler(spec, scope){
 EventHandler.prototype = new Block();
 EventHandler.prototype.constructor = EventHandler;
 
+// ASSERTIONS TO CONFIRM BLOCKS
+//
+// NOTE: These are overly simplistic, not really convinced they are useful now
+// they were mainly here when I was making heavy changes to the block definition format
+
 function assertStep(model){
     if (model.type){
         alert('Error: expression "' + model.id+ '" treated as a step');
@@ -53,6 +60,8 @@ function assertContext(model){
         console.error('Context: %o', model);
     }
 }
+
+// HERE is the main definition of Block and its methods
 
 function Block(spec, scope){
     // If called as constructor, return empty example
@@ -96,6 +105,10 @@ Block.registerBlock = function(model){
     Block.registry[model.id] = model;
 };
 
+Block.lookup = function(id){
+    return Block.registry[id];
+}
+
 Block.prototype.init = function(spec){
     var self = this;
     // normalize labels to a list
@@ -128,7 +141,6 @@ Block.prototype.init = function(spec){
 	this.labels = this.labels.map(function(labelspec){
         return labelspec.replace(/##/g, self.seqNum ? '_' + self.seqNum : '');
     });
-    this.script = this.script.replace(/##/g, '_' + self.seqNum);
     this.labels = this.labels.map(function(labelspec){
         return self.parseLabel(labelspec);
     });
@@ -179,7 +191,7 @@ Block.prototype.initInstance = function(){
             if (self.customReturns){
                 this._returns.labels[0] = self.customReturns;
             }
-            this._returns.help = 'value of ' + this._returns.labels[0].replace('##', self.id);
+            this._returns.help = 'value of ' + this._returns.labels[0].replace('##', self.seqNum);
             this.returns = Block(this._returns);
             assert.isObject(this.returns, 'Returns blocks must be objects');
         }
@@ -219,7 +231,6 @@ Block.prototype.initInstance = function(){
     }else{
         this.values = [];
     }
-
 };
 
 Block.prototype.addValue = function(value){
@@ -283,7 +294,7 @@ Block.prototype.parseLabel = function(textLabel){
 Block.prototype.code = function(){
 	// extract code from script, values, contained, and next
 	var self = this;
-	var _code = this.script;
+	var _code = Block.lookup[this.scriptid].script.replace(/##/g, '_' + self.seqNum);
 	function replace_values(match, offset, s){
         var idx = parseInt(match.slice(2, -2), 10) - 1;
 		if (match[0] === '{'){
@@ -372,6 +383,12 @@ Block.prototype.view = function(){
     }
     if (this.id){
         view.attr('data-id', this.id);
+    }
+    if (this.colllapsed){
+        view.toggleClass('open closed');
+        view.find('.disclosure').text('►');
+        view.find('.locals').hide();
+        view.find('.contained').hide();
     }
     return view;
 };
@@ -641,14 +658,17 @@ $(document.body).on('scriptloaded', function(evt){
 $('.scripts_workspace').on('click', '.disclosure', function(event){
     var self = $(event.target);
     var view = self.closest('.wrapper');
+    var model = view.data('model');
     if (self.is('.open')){
         self.text('►');
         view.find('.locals').hide();
         view.find('.contained').hide();
+        model.collapsed = true;
     }else{
         self.text('▼');
         view.find('.locals').show();
         view.find('.contained').show();
+        model.collapsed = false;
     }
     self.toggleClass('open closed');
 });

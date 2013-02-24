@@ -41,37 +41,38 @@ function exists(list){
 }
 
 wb.Block.prototype.toJSON = function(){
+    var self = this;
     var serialized = {
-        signature: this.signature,
-        blocktype: this.blocktype,
-        labels: this.spec.labels,
-        group: this.group,
-        id: this.id
+        signature: self.signature,
+        blocktype: self.blocktype,
+        labels: self.spec.labels,
+        group: self.group,
+        id: self.id
     };
-    if (this.name){
-        serialized.name = this.name;
+    if (self.name){
+        serialized.name = self.name;
     }
-    if (this.seqnum){
-        serialized.seqnum = this.seqnum;
+    if (self.seqnum){
+        serialized.seqnum = self.seqnum;
     }
-    if (this.scriptid){
-        serialized.scriptid = this.scriptid;
+    if (self.scriptid){
+        serialized.scriptid = self.scriptid;
     }
-    if (this.closed){
-        serialized.closed = this.closed; // persist open/closed state
+    if (self.collapsed){
+        serialized.collapsed = self.collapsed; // persist open/closed state
     }
-    if (exists(this.values)){
+    if (exists(self.values)){
         // console.info('with %s values', this.values.length);
-        serialized.values = this.values.map(function(value){
+        serialized.values = self.values.map(function(value){
             if (value && value.toJSON){
                 return value.toJSON();
             }
             return value;
         });
     }
-    if (exists(this.contained)){
+    if (exists(self.contained)){
         // console.info('with %s contained', this.contained.length);
-        serialized.contained = this.contained.map(function(children){
+        serialized.contained = self.contained.map(function(children){
             return children.map(function(child){
                 if (child && child.toJSON){
                     return child.toJSON();

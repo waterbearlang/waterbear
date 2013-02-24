@@ -168,9 +168,9 @@ wb.menu('Control', [
     {
         blocktype: 'context',
         id: '6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4',
-        labels: ['if [boolean]', 'else'],
-        script: 'if({{1}}){[[1]]}else{[[2]]}',
-        help: 'run the first set of blocks if the condition is true, otherwise run the second set'
+        labels: ['if not [boolean]'],
+        script: 'if( ! {{1}} ){ [[1]]} }',
+        help: 'run the  blocks if the condition is not true'
     },
     {
         blocktype: 'context',

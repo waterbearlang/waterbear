@@ -22,14 +22,11 @@
         <div class="wrapper step" data-classes="group">
             <div class="block" data-title="tooltip">
                 <div class="blockhead">
-                    <div class="label" data-for="label in labels">
+                    <div class="label">
 						<span data-replace="label"></span>
 					</div>
                 </div>
                 <b class="flap"></b>
-            </div>
-            <div class="next">
-                <i class="slot"></i>
             </div>
         </div>
     </script>
@@ -37,7 +34,7 @@
         <div class="wrapper value" data-classes="type group">
             <div class="block" data-title="tooltip">
                 <div class="blockhead">
-                    <div class="label" data-for="label in labels">
+                    <div class="label">
 						<span data-replace="label"></span>
 					</div>
                 </div>
@@ -48,19 +45,16 @@
         <div class="wrapper step context" data-classes="group">
             <div class="block" data-title="tooltip">
                 <b class="flap"></b>
-                <div class="blockhead" data-for="label in labels">
+                <div class="blockhead">
                     <div class="label">
-                        <span class="disclosure open" data-if="label.attachLocals">▼</span>
+                        <span class="disclosure open">▼</span>
                         <span data-replace="label"></span>
                     </div>
-                    <div class="locals block_menu" data-if="label.attachLocals"></div>
+                    <div class="locals block_menu"></div>
                     <div class="contained">
                         <i class="slot"></i>
                     </div>
                 </div>
-            </div>
-            <div class="next">
-                <i class="slot"></i>
             </div>
         </div>
     </script>
@@ -68,12 +62,12 @@
         <div class="wrapper trigger context" data-classes="group">
             <div class="block" data-title="tooltip">
                 <b class="trigger"></b>
-                <div class="blockhead" data-for="label in labels">
+                <div class="blockhead">
 	                <div class="label">
-	                    <span class="disclosure open" data-if="label.attachLocals">▼</span>
+	                    <span class="disclosure open">▼</span>
 	                    <span data-replace="label"></span>
 	                </div>
-	                <div class="locals block_menu" data-if="label.attachLocals"></div>
+	                <div class="locals block_menu"></div>
                     <div class="contained">
                         <i class="slot"></i>
                     </div>

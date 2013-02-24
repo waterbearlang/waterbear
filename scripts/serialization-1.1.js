@@ -45,7 +45,7 @@ wb.Block.prototype.toJSON = function(){
     var serialized = {
         signature: self.signature,
         blocktype: self.blocktype,
-        labels: self.spec.labels,
+        label: self.spec.label,
         group: self.group,
         id: self.id
     };

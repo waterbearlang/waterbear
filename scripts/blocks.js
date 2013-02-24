@@ -111,50 +111,45 @@ Block.lookup = function(id){
 
 Block.prototype.init = function(spec){
     var self = this;
-    // normalize labels to a list
-    if (spec.label){
-        throw new Error('Scripts must use labels: not label:');
+    // normalize label from a list
+    if (spec.labels){
+        spec.label = spec.labels[0];
+        delete spec.labels;
     }
-    $.extend(true, this, spec);
+    $.extend(true, self, spec);
     this.spec = spec; // save unmodified description
-    if (!this.id){
-        this.id = uuid();
+    if (!self.id){
+        self.id = uuid();
     }
-    Block.registerBlock(this);
-    if (this.isTemplateBlock){
-        if (this.isLocal){
-            this.seqNum = Block.newSeqNum(); // templates only get ids if they are locals (or returns, which have their origin's id)
+    Block.registerBlock(self);
+    if (self.isTemplateBlock){
+        if (self.isLocal){
+            self.seqNum = Block.newSeqNum(); // templates only get ids if they are locals (or returns, which have their origin's id)
         }else{
-            this.seqNum = '';
+            self.seqNum = '';
         }
     }else{
-        this.seqNum = Block.newSeqNum();
+        self.seqNum = Block.newSeqNum();
     }
-    if (!this.group){
-        console.log('no group? %o', this);
+    if (!self.group){
+        console.log('no group? %o', self);
     }
-    if (this.help){
-        this.tooltip = this.group + ' ' + this.seqNum + ': ' + this.help;
+    if (self.help){
+        self.tooltip = self.group + ' ' + self.seqNum + ': ' + self.help;
     }else{
-        this.tooltip = this.group + ' ' + this.seqNum;
+        self.tooltip = self.group + ' ' + self.seqNum;
     }
-	this.labels = this.labels.map(function(labelspec){
-        return labelspec.replace(/##/g, self.seqNum ? '_' + self.seqNum : '');
-    });
-    this.labels = this.labels.map(function(labelspec){
-        return self.parseLabel(labelspec);
-    });
-    this.template = template(this.blocktype);
-    if (!this.isTemplateBlock){
-        this.initInstance();
+    self.label = self.parseLabel(self.label.replace(/##/g, self.seqNum ? '_' + self.seqNum : ''));
+    self.template = template(self.blocktype);
+    if (!self.isTemplateBlock){
+        self.initInstance();
     }
 };
 
-Block.prototype.initInstance = function(){
+Block.prototype.initInstance = function initInstance(){
     var self = this;
-    this.labels[0].attachLocals = true;
-    if (this.locals){
-        this.spec.locals.forEach(function(spec){
+    if (self.locals){
+        self.spec.locals.forEach(function(spec){
             if (spec === null){
                 return spec;
             }
@@ -163,7 +158,7 @@ Block.prototype.initInstance = function(){
             spec.scriptid = self.id;
             spec.seqNum = self.seqNum;
         });
-        this.locals = this.spec.locals.map(function(spec, idx){
+        self.locals = self.spec.locals.map(function(spec, idx){
             if (spec === null){
                 return spec;
             }
@@ -171,52 +166,52 @@ Block.prototype.initInstance = function(){
             spec.localOrigin = self;
             spec.localIndex = idx;
             if (self.customLocals){
-                spec.labels[0] = self.customLocals[idx];
+                spec.label = self.customLocals[idx];
             }
             var block = Block(spec);
             // assert.isObject(block, 'Blocks must be objects');
             return block;
         });
     }
-    if (this.returns){
-        this._returns = this.returns;
-        if (this.returns === 'block'){
+    if (self.returns){
+        self._returns = self.returns;
+        if (self.returns === 'block'){
             // special user-defined block handler
         }else{
-            this._returns.isTemplateBlock = true;
-            this._returns.isLocal = true;
-            this._returns.group = this.group;
-            this._returns.returnOrigin = this;
-            this._returns.id = this.id;
+            self._returns.isTemplateBlock = true;
+            self._returns.isLocal = true;
+            self._returns.group = self.group;
+            self._returns.returnOrigin = self;
+            self._returns.id = self.id;
             if (self.customReturns){
-                this._returns.labels[0] = self.customReturns;
+                self._returns.label = self.customReturns;
             }
-            this._returns.help = 'value of ' + this._returns.labels[0].replace('##', self.seqNum);
-            this.returns = Block(this._returns);
-            assert.isObject(this.returns, 'Returns blocks must be objects');
+            self._returns.help = 'value of ' + self._returns.label.replace('##', self.seqNum);
+            self.returns = Block(self._returns);
+            assert.isObject(self.returns, 'Returns blocks must be objects');
         }
     }
-    if (this.spec.contained && this.spec.contained.length){
-        this.contained = this.spec.contained.map(function(spec, idx){
+    if (self.spec.contained && self.spec.contained.length){
+        self.contained = self.spec.contained.map(function(spec, idx){
             if (spec === null) return spec;
             return Block(spec);
         });
     }else{
-        this.contained = [];
+        self.contained = [];
     }
-    if (this.spec.values && this.spec.values.length){
-        this.values = this.spec.values.map(function(value, idx){
-			if (value instanceof Value){
+    if (self.spec.values && self.spec.values.length){
+        self.values = self.spec.values.map(function(value, idx){
+			if (value instanceof wb.Value){
 				return value;
 			}
             var val = new wb.Value(value, idx);
             assert.isObject(val, 'Values must be objects');
             return val;
         });
-    }else if (this.values && this.values.length){
+    }else if (self.values && self.values.length){
         // do nothing
     }else{
-        this.values = [];
+        self.values = [];
     }
 };
 
@@ -359,7 +354,7 @@ Block.prototype.view = function(){
     if (this.id){
         view.attr('data-id', this.id);
     }
-    if (this.colllapsed){
+    if (this.collapsed){
         view.toggleClass('open closed');
         view.find('.disclosure').text('►');
         view.find('.locals').hide();
@@ -370,18 +365,18 @@ Block.prototype.view = function(){
 
 Block.prototype.changeLabel = function(labelText){
     this._view.find('> .block > .blockhead > .label').text(labelText);
-    this.spec.labels[0] = labelText;
+    this.spec.label = labelText;
     if (this.returnOrigin){
         // console.log('setting returnOrigin returns label: %o', this.returnOrigin);
-        this.returnOrigin.spec.returns.labels[0] = labelText;
+        this.returnOrigin.spec.returns.label = labelText;
         this.returnOrigin.customReturns = labelText;
     }
     if (this.localOrigin){
         var locals = this.localOrigin.spec.locals;
-        locals[this.localIndex].labels[0] = labelText;
+        locals[this.localIndex].label = labelText;
         if (!this.localOrigin.customLocals){
             this.localOrigin.customLocals = locals.map(function(loc){
-                return loc.labels[0];
+                return loc.label;
             });
         }
         this.localOrigin.customLocals[this.localIndex] = labelText;

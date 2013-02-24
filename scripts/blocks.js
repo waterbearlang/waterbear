@@ -196,23 +196,10 @@ Block.prototype.initInstance = function(){
             assert.isObject(this.returns, 'Returns blocks must be objects');
         }
     }
-    if (this.spec.next){
-        this.next = Block(this.spec.next);
-        if (!this.next){
-            Deferred.add(this, 'next', null, this.spec.next);
-        }
-    }else{
-        this.next = null;
-    }
     if (this.spec.contained && this.spec.contained.length){
         this.contained = this.spec.contained.map(function(spec, idx){
             if (spec === null) return spec;
-            var block = Block(spec);
-            if (!block){
-                Deferred.add(self, 'child', idx, spec);
-            }
-            // assert.isObject(block, 'Contained blocks must be blocks');
-            return block;
+            return Block(spec);
         });
     }else{
         this.contained = [];
@@ -292,7 +279,7 @@ Block.prototype.parseLabel = function(textLabel){
 };
 
 Block.prototype.code = function(){
-	// extract code from script, values, contained, and next
+	// extract code from script, and recursively from  values and contained blocks
 	var self = this;
 	var _code = Block.lookup[this.scriptid].script.replace(/##/g, '_' + self.seqNum);
 	function replace_values(match, offset, s){
@@ -305,9 +292,6 @@ Block.prototype.code = function(){
 	}
 	_code = _code.replace(/\{\{\d\}\}/g, replace_values);
 	_code = _code.replace(/\[\[\d\]\]/g, replace_values);
-	if (this.next){
-		_code = _code + this.next.code();
-	}
 	return _code;
 }
 
@@ -326,7 +310,6 @@ Block.prototype.cloneScript = function(){
 
 Block.prototype.clone = function(deep){
     // Clone a script block. If deep is true, clone values and contained blocks
-    // Do not clone next blocks, this is for supporting copy and paste
     var spec = this.toJSON();
     if (!deep){
         spec.contained = [];
@@ -363,12 +346,8 @@ Block.prototype.view = function(){
             localContainer.append(local.view());
         });
     }
-    view.find('> .block > .blockhead > .contained').each(function(idx){
-        $(this).data('index', idx);
-    });
     this.contained.forEach(function(contained, idx){
-        if (contained === null) return;
-        view.find('> .block > .blockhead > .contained').eq(idx).append(contained.view());
+        view.find('> .block > .blockhead > .contained').append(contained.view());
         contained.addLocalsToParentContext();
     });
     view.find('> .block > .blockhead > .value > .socket').each(function(idx){
@@ -377,10 +356,6 @@ Block.prototype.view = function(){
     this.values.forEach(function(value, idx){
         view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
     });
-    if (this.next){
-        view.find('> .next').append(this.next.view());
-        this.next.addLocalsToParentContext(true);
-    }
     if (this.id){
         view.attr('data-id', this.id);
     }
@@ -444,14 +419,8 @@ Block.prototype.addLocalsToParentContext = function(isNext){
     }
     if (context){
         context.addLocalBlock(this.returns);
-        if (this.next){
-            this.next.addLocalsToParentContext(isNext);
-        }
     }else{
         this.addGlobals();
-        if (this.next){
-            this.next.addGlobals();
-        }
     }
 };
 
@@ -470,26 +439,12 @@ Block.prototype.removeLocalsFromParent = function(){
     this.returns.view().remove();
 };
 
-Block.prototype.addNext = function(step){
-    if (this.next){
-        throw new Error('Cannot add a next step where a next step already exists');
-    }
-    step.addLocalsToParentContext(true);
-    this.next = step;
-}
-
 Block.prototype.addStep = function(step, stepIndex){
-    if (this.contained[stepIndex]){
-        throw new Error('Cannot add a step where a step exists already');
-    }
+    this.contained.splice(stepIndex, 0, step);
     step.addLocalsToParentContext();
-    this.contained[stepIndex] = step;
 };
 Block.prototype.addToWorkspace = function(){
     this.addGlobals(this.view());
-    if (this.next){
-        this.next.addToWorkspace();
-    }
 };
 Block.prototype.setValue = function(index, type, newValue){
     this.values[index].update(newValue);
@@ -538,14 +493,9 @@ Block.prototype.removeExpression = function(expression, expressionIndex){
 Block.prototype.removeContainedStep = function(step, stepIndex){
     console.log('remove child step');
     this.contained[stepIndex].removeLocalsFromParent();
-    this.contained[stepIndex] = null;
+    this.contained.splice(stepIndex, 1);
 };
 
-Block.prototype.removeNextStep = function(step){
-    console.log('remove next step (sorry Steve)');
-    this.next.removeLocalsFromParent(true);
-    this.next = null;
-};
 
 $('body').on('delete_block', '.wrapper', function(evt, params){
     var view = $(this);
@@ -560,7 +510,7 @@ function removeFromScriptEvent(view){
     var parentModel = parentView.data('model');
     model.removeLocalsFromParent();
     if (parent.hasClass('contained')){
-        parentModel.removeContainedStep( model, parent.data('index'));
+        parentModel.removeContainedStep( model, parent.data('index')); // FIXME: need a better way to get index
     }else if (parent.hasClass('socket')){
         var exprIndex = parent.data('index');
         parentModel.removeExpression(model, exprIndex);
@@ -573,8 +523,6 @@ function removeFromScriptEvent(view){
         }
         // Why is val an actual value rather than a method?
         parent.children('input').val(parentModel.values[exprIndex].defaultValue);
-    }else if (parent.hasClass('next')){
-        parentModel.removeNextStep(model);
     }
 	$('.scripts_workspace').trigger('scriptmodified');
 
@@ -598,11 +546,7 @@ function addToScriptEvent(container, view){
         if (view.is('.value')){
             parentModel.addExpression(model, container.data('index'));
         }else{
-            if (container.hasClass('next')){
-                parentModel.addNext(model);
-            }else{
-                parentModel.addStep(model, container.data('index'));
-            }
+            parentModel.addStep(model, container.data('index'));
         }
     }
 	$('.scripts_workspace').trigger('scriptmodified');

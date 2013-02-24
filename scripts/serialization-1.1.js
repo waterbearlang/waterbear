@@ -72,13 +72,11 @@ wb.Block.prototype.toJSON = function(){
     }
     if (exists(self.contained)){
         // console.info('with %s contained', this.contained.length);
-        serialized.contained = self.contained.map(function(children){
-            return children.map(function(child){
-                if (child && child.toJSON){
-                    return child.toJSON();
-                }
-                return null;
-            });
+        serialized.contained = self.contained.map(function(child){
+            if (child && child.toJSON){
+                return child.toJSON();
+            }
+            return null;
         });
     }
     return serialized;

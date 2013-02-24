@@ -36,7 +36,7 @@
 
 (function($){
     var dragTarget, potentialDropTargets, dropTarget, dropRects, startPosition, timer, cloned, dragging, currentPosition, distance, dropCursor, dragPlaceholder;
-    window.isTouch = window.hasOwnProperty('ontouchstart') && true;
+    window.isTouch = ('ontouchstart' in window);
     var dragTimeout = 20;
     // TODO: update this whenever we switch to a new workspace
     var targetCanvas = $('.workspace .scripts_workspace').eq(0);

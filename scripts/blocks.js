@@ -276,7 +276,7 @@ Block.prototype.parseLabel = function(textLabel){
 Block.prototype.code = function(){
 	// extract code from script, and recursively from  values and contained blocks
 	var self = this;
-	var _code = Block.lookup[this.scriptid].script.replace(/##/g, '_' + self.seqNum);
+	var _code = Block.lookup(this.scriptid).script.replace(/##/g, '_' + self.seqNum);
 	function replace_values(match, offset, s){
         var idx = parseInt(match.slice(2, -2), 10) - 1;
 		if (match[0] === '{'){

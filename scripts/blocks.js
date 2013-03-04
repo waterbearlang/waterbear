@@ -97,8 +97,12 @@ Block.registerSeqNum = function(seqNum){
 
 Block.registry = {};
 
+Block.model = function(view){
+    view = closest(view, '.wrapper');
+    return Block.registry[view.dataset.id];
+}
+
 Block.registerBlock = function(model){
-    if (!model.script) return; // only register blocks in the menu
     if (Block.registry[model.id]){
         console.warn('Overwriting existing scripts for %s', model.id);
     }
@@ -523,27 +527,39 @@ function removeFromScriptEvent(view){
 
 }
 
-function addToScriptEvent(container, view){
+function addToScriptEvent(droptarget, view){
     // Converts from DOM/jQuery action to model action
     // console.log('addToScriptEvent %o, %o', container, view);
+    // FIXME: We need to add the view to the right model's view
+    // These are the cases that need to be handled:
+    // 1. Drop a block into another block as the first contained block
+    // 2. Drop a block on the script, not contained (global)
+    // 3. Drop a block in another block, following another step
+    // 4. Drop an expression block into a socket
+    var container;
     var model = view.data('model');
     if (!model){
         console.log('unable to retrieve model for view %o', view);
         throw new Error('unable to retrieve model');
     }
-    if (container.is('.slot') || container.is('input')){
-        container = container.parent();
+    if (droptarget.is('input')){
+        container = droptarget.parent();
+    }else if (droptarget.is('slot')){
+        container = droptarget.parent();
     }
-    if (container.is('.scripts_workspace')){
+    if (droptarget.is('.scripts_workspace')){
         model.addGlobals();
+    }else if (droptarget.is('.slot')){
+        var parentModel = droptarget.closest('.context').data('model');
     }else{
-        var parentModel = view.parent().closest('.wrapper').data('model');
+        var parentModel = droptarget.closest('.wrapper').data('model');
         if (view.is('.value')){
-            parentModel.addExpression(model, container.data('index'));
+            parentModel.addExpression(model, container.data('index')); // FIXME, this is not the way to get the index
         }else{
-            parentModel.addStep(model, container.data('index'));
+            parentModel.addStep(model, container.data('index')); // FIXME, this is not the way to get the index
         }
     }
+    // FIXME: Add view to parent's view
 	$('.scripts_workspace').trigger('scriptmodified');
 }
 

@@ -64,7 +64,7 @@
                 startParent = target.parentElement;
             }
             // Need index too, if it is a step
-            if (Event.matches(target, '.step, .trigger')){
+            if (Event.matches(target, '.step')){
                 startIndex = Event.indexOf(target);
             }
         }else{
@@ -84,7 +84,7 @@
         if (model.isTemplateBlock){
             dragTarget.removeClass('dragIndication');
             dragTarget = model.cloneScript().view();
-            dragTarget.addClass('dragIndication');
+            dragTarget.classList.add('dragIndication');
             cloned = true;
         }
         dragging = true;
@@ -93,21 +93,17 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
-        // console.log('[1] model: %s', dragTarget.data('model'));
         wb.removeFromScriptEvent(dragTarget);
-        // console.log('[2] model: %s', dragTarget.data('model'));
-        dragTarget.css('position', 'absolute');
-        if (dragTarget.is('.scripts_workspace .wrapper')){
-            dragPlaceholder = $('<div class="dragPlaceholder"></div>');
-            dragPlaceholder.height(dragTarget.outerHeight());
-            dragTarget.before(dragPlaceholder);
+        dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+        if (Event.match(dragTarget, '.scripts_workspace .step')){
+            dragPlaceholder.style.height = dragTarget.clientHeight; // WTF?
+            dragTarget.parentElement.insertBefore(dragPlaceholder, dragTarget);
         }
-        $('.content.editor').append(dragTarget);
-        // console.log('[3] model: %s', dragTarget.data('model'));
-        dragTarget.offset(startPosition);
+        document.querySelector('.content.editor').appendChild(dragTarget);
+        reposition(dragTarget, startPosition);
         potentialDropTargets = getPotentialDropTargets();
-        dropRects = $.map(potentialDropTargets, function(elem, idx){
-            return $(elem).rect();
+        dropRects = potentialDropTargets.map(function(elem, idx){
+            return rect(elem);
         });
 
         // start timer for drag events
@@ -125,7 +121,7 @@
         var dX = nextPosition.left - currentPosition.left;
         var dY = nextPosition.top - currentPosition.top;
         var currPos = rect(dragTarget);
-        dragTarget.offset({left: currPos.left + dX, top: currPos.top + dY});
+        reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
         currentPosition = nextPosition;
         return false;
     }
@@ -146,77 +142,78 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        dragTarget.removeClass('dragActive');
-        dragTarget.removeClass("dragIndication");
-        if (dropTarget && dropTarget.length){
-            dropTarget.removeClass('dropActive');
+        dragTarget.classList.remove('dragActive');
+        dragTarget.classList.remove('dragIndication');
+        if (dropTarget){
+            dropTarget.classList.remove('dropActive');
             if (blockType(dragTarget) === 'step' || blockType(dragTarget) === 'context'){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
-                dragTarget.removeAttr('style');
+                dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
                 // Insert a value block into a socket
-                dropTarget.children('input, select').hide(); // FIXME: Move to block.js
+                makeArray(dropTarget.querySelectorAll('> input, > select')).forEach(function(elem){
+                    elem.hide(); // FIXME: Move to block.js
+                });
                 // dropTarget.append(dragTarget);
-                dragTarget.removeAttr('style');
+                dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
                 // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
             }
-        }else if ($('#block_menu').cursorOver()){
+        }else if (cursorOver(document.querySelector('#block_menu'))){
             // delete block if dragged back to menu
             console.log('triggering delete_block');
-            dragTarget.trigger('delete_block');
-            dragTarget.remove();
-        }else if (dragTarget.overlap(targetCanvas)){
-            dropCursor.before(dragTarget);
-            dropCursor.remove();
-            dropCursor = null;
-            dragTarget.removeAttr('style');
+            Event.trigger(dragTarget, 'delete_block');
+            dragTarget.parentElement.removeChild(dragTarget);
+        }else if (overlap(dragTarget, targetCanvas)){
+            dragTarget.parentElement.insertBefore(dragTarget, dropCursor);
+            dragTarget.removeAttribute('style');
             wb.addToScriptEvent(targetCanvas, dragTarget);
         }else{
             if (cloned){
                 // remove cloned block (from menu)
-                dragTarget.remove();
+                dragTarget.parentElement.removeChild(dragTarget);
             }else{
                 // Put blocks back where we got them from
-                var startParent = dragTarget.data('startParent');
                 if (startParent){
-                    if (startParent.is('.socket')){
-                        startParent.children('input').hide();
+                    if (Event.match(startParent, '.socket')){
+                        makeArray(startParent.querySelectorAll('> input')).forEach(function(elem){
+                            elem.hide();
+                        });
                     }
-                    startParent.append(dragTarget); // FIXME: We'll need an index into the contained array
-                    dragTarget.removeAttr('style');
-                    dragTarget.removeData('startParent');
+                    startParent.appendChild(dragTarget); // FIXME: We'll need an index into the contained array
+                    dragTarget.removeAttribute('style');
+                    startParent = null;
                 }else{
-                    targetCanvas.append(dragTarget); // FIXME: We'll need an index into the canvas array
-                    dragTarget.offset(startPosition);
+                    targetCanvas.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
+                    reposition(dragTarget, startPosition);
                 }
             }
-        }
-        if (dragPlaceholder){
-            dragPlaceholder.remove();
-            dragPlaceholder = null;
         }
     }
 
     function positionDropCursor(){
-        var self, top, middle, bottom, x = dragTarget.position().top;
-        targetCanvas.prepend(dropCursor);
-        dropCursor.show();
-        targetCanvas.children('.wrapper').each(function(idx){
-            self = $(this);
-            top = self.position().top;
-            bottom = top + self.outerHeight();
-            middle = (bottom - top) / 2 + top;
-            if (x < middle){
-                self.before(dropCursor);
-                return false;
+        var position, middle, y = rect(dragTarget).top;
+        makeArray(targetCanvas.querySelectorAll('.step')).forEach(function(elem){
+            // FIXME: Convert to for() iteration to avoid going over every element
+            position = rect(elem);
+            if (y < position.top || y > position.bottom) return;
+            middle = position.top + (position.height / 2);
+            if (y < middle){
+                elem.parentElement.insertBefore(dropCursor, elem);
             }else{
-                self.after(dropCursor);
+                elem.parentElement.insertBefore(dropCursor, elem.nextSibling);
             }
         });
     }
+
+//
+//
+// LEFT OFF HERE, Pick up and continue
+//
+//
+
 
     function hitTest(){
         // test the dragging rect(s) against the target rect(s)
@@ -280,6 +277,18 @@
     // UTILITY FUNCTIONS
     //
     //
+
+    function makeArray(arrayLike){
+        return Array.prototype.slice.call(arrayLike);
+    }
+
+    function reposition(elem, position){
+        // put an absolutely positioned element in the right place
+        // May need to take into account offsets of container
+        elem.style.top = position.top;
+        elem.style.bottom = position.bottom;
+        console.log('if element looks wrong, fix it in reposition()');
+    }
 
     function mag(p1, p2){
         return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));

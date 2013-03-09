@@ -46,12 +46,14 @@ wb.menu('Sprites', [
         labels: ['new image##  [image]'],
         script: 'var image## = new $.gameQuery.Animation({imageURL: {{1}}});',
         //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
-        returns: {
-            blocktype: 'expression',
-            labels: ['image##'],
-            script: 'image##',
-            type: 'image'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['image##'],
+                script: 'image##',
+                type: 'image'
+            }
+        ],
         help: 'create a new image'
     },
 
@@ -60,12 +62,14 @@ wb.menu('Sprites', [
       labels: ['new animation##  [image] frames [number:1] width of cell [number:32] fps [number:30] '],
       script: 'var animation## = new $.gameQuery.Animation({imageURL: {{1}}, numberOfFrame: {{2}}, delta:{{3}}, rate: (1000 / {{4}}), type: $.gameQuery.ANIMATION_HORIZONTAL });',
         //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
-        returns: {
-            blocktype: 'expression',
-            labels: ['animation##'],
-            script: 'animation##',
-            type: 'image'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['animation##'],
+                script: 'animation##',
+                type: 'image'
+            }
+        ],
         help: 'create a new animation'
     },
 
@@ -75,12 +79,14 @@ wb.menu('Sprites', [
       labels: ['new animation##  of XEON running '],
       script: 'var animation## = new $.gameQuery.Animation({imageURL: "./images/xeon-walking.png", numberOfFrame: 4, delta:68, rate: (1000 / 30), type: $.gameQuery.ANIMATION_HORIZONTAL });',
         //script: 'local.sprite## = Gamequery.e().addComponent("2D, DOM");',
-        returns: {
-            blocktype: 'expression',
-            labels: ['animation##'],
-            script: 'animation##',
-            type: 'image'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['animation##'],
+                script: 'animation##',
+                type: 'image'
+            }
+        ],
         help: 'create a new of xeon running'
     },
 
@@ -88,12 +94,14 @@ wb.menu('Sprites', [
       blocktype: 'step',
       labels: ['new sprite## based on [image] height [number:32] width [number:32] x [number:0] y [number:0]'],
         script: '$.playground.addSprite("sprite##",{animation: {{1}}, height:{{2}}, width: {{3}}, posx: {{4}},posy:{{5}}});',
-        returns: {
-            blocktype: 'expression',
-            labels: ['sprite##'],
-            script: 'sprite##',
-            type: 'sprite'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['sprite##'],
+                script: 'sprite##',
+                type: 'sprite'
+            }
+        ],
         help: 'create a new sprite'
     },
 ]);

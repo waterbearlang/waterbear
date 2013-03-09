@@ -748,20 +748,16 @@ Block.prototype.addLocalBlock = function(block){
 Block.prototype.addLocalsToParentContext = function(isNext){
     // on addToScript
 	// console.log('addLocalsToParentContext %o', this);
-    if (!this.returns) return;
-    if (this.returns === 'block'){
-        // special metablock handler
-        return;
-    }
+    if (!this.locals) return;
+    if (!this.locals.length) return;
     if (!this.id){
         throw new Error('Model must have an id by now');
     }
     var context = this.view().closest('.context').data('model');
-    if (context && typeof context === 'Step'){
-        context = this.view().closest('.context').parent().closest('.context').data('model')    ;
-    }
     if (context){
-        context.addLocalBlock(this.returns);
+        this.locals.forEach(function(local){
+            context.addLocalBlock(local);
+        });
         if (this.next){
             this.next.addLocalsToParentContext(isNext);
         }
@@ -774,13 +770,12 @@ Block.prototype.addLocalsToParentContext = function(isNext){
 };
 
 Block.prototype.addGlobals = function(){
-    if (!this.returns) return;
-    if (this.returns === 'block'){
-        // special metablock handler
-        return;
-    }
+    if (!this.locals) return;
+    if (!this.locals.length) return;
     // remove from DOM if already in place elsewhere
-    $('.submenu.globals').append(this.returns.view());
+    this.locals.forEach(function(local){
+        $('.submenu.globals').append(local.view());
+    });
 };
 
 Block.prototype.removeLocalsFromParent = function(){
@@ -804,10 +799,7 @@ Block.prototype.addStep = function(step, stepIndex){
     this.contained[stepIndex] = step;
 };
 Block.prototype.addToWorkspace = function(){
-    this.addGlobals(this.view());
-    if (this.next){
-        this.next.addToWorkspace();
-    }
+    this.addLocalsToParentScope();
 };
 Block.prototype.setValue = function(index, type, newValue){
     print('set value %s to %s', index, newValue);
@@ -912,7 +904,7 @@ function addToScriptEvent(container, view){
         container = container.parent();
     }
     if (container.is('.scripts_workspace')){
-        model.addGlobals();
+        model.addLocalsToParentContext();
     }else{
         var parentModel = view.parent().closest('.wrapper').data('model');
         if (view.is('.value')){

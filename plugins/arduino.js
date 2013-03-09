@@ -160,12 +160,14 @@ $('.clearScripts').click(clearScriptsDefault);
             labels: ['Create digital_output## on Pin [choice:digitalpins]'],
             script: 'digital_output## = "{{1}}"; pinMode(digital_output##, OUTPUT);',
             help: 'Create a named pin set to output',
-            returns: {
-                blocktype: 'expression',
-                label: 'digital_output##',
-                script: 'digital_output##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'digital_output##',
+                    script: 'digital_output##',
+                    type: 'string'
+                }
+            ]
         },
         /*
         {
@@ -187,12 +189,14 @@ $('.clearScripts').click(clearScriptsDefault);
             labels: ['Create digital_input## on Pin [choice:digitalpins]'],
             script: 'digital_input## = "{{1}}"; pinMode(digital_input##, INPUT);',
             help: 'Create a named pin set to input',
-            returns: {
-                blocktype: 'expression',
-                labels: ['digital_input##'],
-                script: 'digital_input##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    labels: ['digital_input##'],
+                    script: 'digital_input##',
+                    type: 'string'
+                }
+            ]
         },
 
         {
@@ -210,12 +214,14 @@ $('.clearScripts').click(clearScriptsDefault);
             labels: ['Create analog_input## on Pin [choice:analoginpins]'],
             script: 'analog_input## = "{{1}}"; pinMode(analog_input##, INPUT);',
             help: 'Create a named pin set to input',
-            returns: {
-                blocktype: 'expression',
-                labels: 'analog_input##'],
-                script: 'analog_input##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    labels: 'analog_input##'],
+                    script: 'analog_input##',
+                    type: 'string'
+                }
+            ]
         },
 
         {
@@ -231,12 +237,14 @@ $('.clearScripts').click(clearScriptsDefault);
             labels: ['Create analog_output## on Pin [choice:pwmpins]'],
             script: 'analog_output## = "{{1}}"; pinMode(analog_output##, OUTPUT);',
             help: 'Create a named pin set to output',
-            returns: {
-                blocktype: 'expression',
-                labels: ['analog_output##'],
-                script: 'analog_output##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    labels: ['analog_output##'],
+                    script: 'analog_output##',
+                    type: 'string'
+                }
+            ]
         },
 
         {

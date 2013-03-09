@@ -407,38 +407,33 @@ Block.prototype.addLocalBlock = function(block){
 Block.prototype.addLocalsToParentContext = function(isNext){
     // on addToScript
 	// console.log('addLocalsToParentContext %o', this);
-    if (!this.returns) return;
-    if (this.returns === 'block'){
-        // special metablock handler
-        return;
-    }
+    if (!(this.locals && this.locals.length)) return;
     if (!this.id){
         throw new Error('Model must have an id by now');
     }
     var context = Block.model(this.view().closest('.context'));
-    if (context && typeof context === 'Step'){
-        context = Block.model(this.view().closest('.context').parent().closest('.context'))    ;
-    }
     if (context){
-        context.addLocalBlock(this.returns);
+        this.locals.forEach(function(local){
+            context.addLocalBlock(local);
+        });
     }else{
         this.addGlobals();
     }
 };
 
 Block.prototype.addGlobals = function(){
-    if (!this.returns) return;
-    if (this.returns === 'block'){
-        // special metablock handler
-        return;
-    }
+    if (!(this.locals && this.locals.length)) return;
     // remove from DOM if already in place elsewhere
-    $('.submenu.globals').append(this.returns.view());
+    this.locals.forEach(function(local){
+        $('.submenu.globals').append(local.view());
+    });
 };
 
 Block.prototype.removeLocalsFromParent = function(){
-    if (!this.returns) return;
-    this.returns.view().remove();
+    if (!(this.locals && this.locals.length)) return;
+    this.locals.forEach(function(local){
+        local.view().remove();
+    });
 };
 
 Block.prototype.addStep = function(step, stepIndex){
@@ -446,7 +441,7 @@ Block.prototype.addStep = function(step, stepIndex){
     step.addLocalsToParentContext();
 };
 Block.prototype.addToWorkspace = function(){
-    this.addGlobals(this.view());
+    this.addLocalsToParentScope();
 };
 Block.prototype.setValue = function(index, type, newValue){
     this.values[index].update(newValue);
@@ -554,7 +549,7 @@ function addToScriptEvent(droptarget, view){
         container = droptarget.parent();
     }
     if (droptarget.is('.scripts_workspace')){
-        model.addGlobals();
+        model.addLocalsToParentContext();
     }else if (droptarget.is('.slot')){
         var parentModel = Block.model(droptarget.closest('.context'));
     }else{

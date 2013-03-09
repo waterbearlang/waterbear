@@ -329,12 +329,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             id: '6c79800c-af02-48e1-b9cb-d043e8299f7a',
             label: 'create ImageData## with size [size]',
             script: 'local.imageData## = local.ctx.createImageData({{1}}.w,{{1}}.h);',
-            returns: {
-                blocktype: 'expression',
-                label: 'imageData##',
-                script: 'local.imageData##',
-                type: 'imagedata'
-            },
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'imageData##',
+                    script: 'local.imageData##',
+                    type: 'imagedata'
+                }
+            ],
             help: 'initialize a new imageData with the specified dimensions'
         },
         {
@@ -342,12 +344,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             id: '2137c296-1666-499c-871c-60226188f031',
             label: 'createImageData## from imageData [imageData]',
             script: 'local.imageData## = local.ctx.createImageData({{1}});',
-            returns: {
-                blocktype: 'expression',
-                label: 'imageData##',
-                script: 'local.imageData##',
-                type: 'imagedata'
-            },
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'imageData##',
+                    script: 'local.imageData##',
+                    type: 'imagedata'
+                }
+            ],
             help: 'initialized a new imageData the same size as an existing imageData'
         },
         {
@@ -355,12 +359,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             id: 'a2745268-a506-46b6-8d96-e4c275dd5584',
             label: 'get imageData## for rect [rect]',
             script: 'local.imageData## = local.ctx.getImageData({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);',
-            returns: {
-                blocktype: 'expression',
-                label: 'imageData##',
-                script: 'local.imageData##',
-                type: 'imagedata'
-            },
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'imageData##',
+                    script: 'local.imageData##',
+                    type: 'imagedata'
+                }
+            ],
             help: 'returns the image data from the specified rectangle'
         },
         {
@@ -586,12 +592,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             label: 'create radial gradient from point1 [point] radius1 [number:0] to point2 [point] radius2 [number:0]',
             script: 'local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});',
             help: 'create a radial gradient in the cone described by two circles',
-            returns: {
-                blocktype: 'expression',
-                label: 'radial gradient##',
-                script: 'local.gradient##',
-                type: 'gradient'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'radial gradient##',
+                    script: 'local.gradient##',
+                    type: 'gradient'
+                }
+            ]
         },
         {
             blocktype: 'step',
@@ -599,12 +607,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             label: 'create linear gradient from point1 [point] to point2 [point]',
             script: 'local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);',
             help: 'create a linear gradient between two points',
-            returns: {
-                blocktype: 'expression',
-                label: 'linear gradient##',
-                script: 'local.linear.gradient##',
-                type: 'gradient'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'linear gradient##',
+                    script: 'local.linear.gradient##',
+                    type: 'gradient'
+                }
+            ]
         },
         {
             blocktype: 'step',
@@ -619,12 +629,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
             label: 'create pattern## from image [image] repeats [choice:repetition]',
             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
             help: 'create a pattern with the given html image',
-            returns: {
-                blocktype: 'expression',
-                label: 'pattern##',
-                script: 'local.pattern##',
-                type: 'pattern'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'pattern##',
+                    script: 'local.pattern##',
+                    type: 'pattern'
+                }
+            ]
         },
 //         {
 //             blocktype: 'step',
@@ -632,12 +644,14 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 //             label: 'create pattern## from canvas [canvas] repeats [choice:repetition]',
 //             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
 //             help: 'create a pattern with the given html canvas',
-//             returns: {
-//                 blocktype: 'expression',
-//                 label: 'pattern##',
-//                 script: 'local.pattern##',
-//                 type: 'pattern'
-//             }
+//             locals: [
+//                 {
+//                     blocktype: 'expression',
+//                     label: 'pattern##',
+//                     script: 'local.pattern##',
+//                     type: 'pattern'
+//                 }
+//              ]
 //         },
 //         {
 //             blocktype: 'step',
@@ -645,11 +659,13 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 //             label: 'create pattern## from video [video] repeats [choice:repetition]',
 //             script: 'local.pattern## = local.ctx.createPattern({{1}}, {{2}});',
 //             help: 'create a pattern with the given html video',
-//             returns: {
-//                 blocktype: 'expression',
-//                 label: 'pattern##',
-//                 script: 'local.pattern##',
-//                 type: 'pattern'
+//             locals: [
+//                 {
+//                     blocktype: 'expression',
+//                     label: 'pattern##',
+//                     script: 'local.pattern##',
+//                     type: 'pattern'
+//                 }
 //             }
 //         },
 	]);
@@ -718,7 +734,7 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
         {
             blocktype: 'expression',
             id: '404cb2f4-abe5-4c3b-a9da-9b44050e012d',
-            labels:[ 'size from array [array]'],
+            label: 'size from array [array]',
             script: '{w: {{1}}[0], h: {{1}}[1]',
             type: 'size'
         },

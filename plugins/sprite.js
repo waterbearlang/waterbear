@@ -39,12 +39,14 @@ wb.menu('Sprite', [
         id: 'eb889480-c381-4cfa-a6ee-7c6928c08817',
         label: 'rectangle sprite## [size] big at [point] with color [color]',
         script: 'local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});',
-        returns: {
-            blocktype: 'expression',
-            label: 'sprite##',
-            script: 'local.sprite##',
-            type: 'sprite'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                label: 'sprite##',
+                script: 'local.sprite##',
+                type: 'sprite'
+            }
+        ],
         help: 'create a simple rectangle sprite'
     },
     {

@@ -173,12 +173,14 @@ $('.clearScripts').click(clearScriptsDefault);
             label: 'Create digital_output## on Pin [choice:digitalpins]',
             script: 'digital_output## = "{{1}}"; pinMode(digital_output##, OUTPUT);',
             help: 'Create a named pin set to output',
-            returns: {
-                blocktype: 'expression',
-                label: 'digital_output##',
-                script: 'digital_output##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'digital_output##',
+                    script: 'digital_output##',
+                    type: 'string'
+                }
+            ]
         },
         /*
         {
@@ -203,12 +205,14 @@ $('.clearScripts').click(clearScriptsDefault);
             label: 'Create digital_input## on Pin [choice:digitalpins]',
             script: 'digital_input## = "{{1}}"; pinMode(digital_input##, INPUT);',
             help: 'Create a named pin set to input',
-            returns: {
-                blocktype: 'expression',
-                label: 'digital_input##',
-                script: 'digital_input##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'digital_input##',
+                    script: 'digital_input##',
+                    type: 'string'
+                }
+            ]
         },
 
         {
@@ -228,12 +232,14 @@ $('.clearScripts').click(clearScriptsDefault);
             label: 'Create analog_input## on Pin [choice:analoginpins]',
             script: 'analog_input## = "{{1}}"; pinMode(analog_input##, INPUT);',
             help: 'Create a named pin set to input',
-            returns: {
-                blocktype: 'expression',
-                label: 'analog_input##',
-                script: 'analog_input##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'analog_input##',
+                    script: 'analog_input##',
+                    type: 'string'
+                }
+            ]
         },
 
         {
@@ -251,12 +257,14 @@ $('.clearScripts').click(clearScriptsDefault);
             label: 'Create analog_output## on Pin [choice:pwmpins]',
             script: 'analog_output## = "{{1}}"; pinMode(analog_output##, OUTPUT);',
             help: 'Create a named pin set to output',
-            returns: {
-                blocktype: 'expression',
-                label: 'analog_output##',
-                script: 'analog_output##',
-                type: 'string'
-            }
+            locals: [
+                {
+                    blocktype: 'expression',
+                    label: 'analog_output##',
+                    script: 'analog_output##',
+                    type: 'string'
+                }
+            ]
         },
 
         {
@@ -588,7 +596,7 @@ $('.clearScripts').click(clearScriptsDefault);
     ]);
 
 
-var defaultscript=[{"klass":"control","labels":["Global Settings"],"script":"/*Global Settings*/\u000a\u000a[[next]]\u000a\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":""},{"klass":"control","labels":["Setup - When program starts"],"script":"void setup()\u000a{\u000a[[next]]\u000a}\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":""},{"klass":"control","labels":["Main loop"],"script":"void loop()\u000a{\u000a[[1]]\u000a}\u000a","containers":1,"trigger":true,"sockets":[],"contained":[""],"next":""}];
+var defaultscript=[{"klass":"control","label":"Global Settings","script":"/*Global Settings*/\u000a\u000a[[next]]\u000a\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":""},{"klass":"control","label":"Setup - When program starts","script":"void setup()\u000a{\u000a[[next]]\u000a}\u000a","containers":0,"trigger":true,"sockets":[],"contained":[],"next":""},{"klass":"control","label":"Main loop","script":"void loop()\u000a{\u000a[[1]]\u000a}\u000a","containers":1,"trigger":true,"sockets":[],"contained":[""],"next":""}];
 setDefaultScript(defaultscript);
 
 

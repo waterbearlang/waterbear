@@ -36,12 +36,14 @@ wb.menu('Sprite', [
         blocktype: 'step',
         labels: ['rectangle sprite## [size] big at [point] with color [color]'],
         script: 'local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});',
-        returns: {
-            blocktype: 'expression',
-            labels: ['sprite##'],
-            script: 'local.sprite##',
-            type: 'sprite'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['sprite##'],
+                script: 'local.sprite##',
+                type: 'sprite'
+            }
+        ],
         help: 'create a simple rectangle sprite'
     },
     {

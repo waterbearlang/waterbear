@@ -173,12 +173,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable string## [string]'],
         script: 'local.string## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['string##'],
-            script: 'local.string##',
-            type: 'string'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['string##'],
+                script: 'local.string##',
+                type: 'string'
+            }
+        ],
         help: 'create a reference to re-use the string'
     },
     {
@@ -191,12 +193,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable number## [number]'],
         script: 'local.number## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['number##'],
-            script: 'local.number##',
-            type: 'number'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['number##'],
+                script: 'local.number##',
+                type: 'number'
+            }
+        ],
         help: 'create a reference to re-use the number'
     },
     {
@@ -209,12 +213,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable boolean## [boolean]'],
         script: 'local.boolean## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['boolean##'],
-            script: 'local.boolean##',
-            type: 'boolean'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['boolean##'],
+                script: 'local.boolean##',
+                type: 'boolean'
+            }
+        ],
         help: 'create a reference to re-use the boolean'
     },
     {
@@ -227,12 +233,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable array## [array]'],
         script: 'local.array## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['array##'],
-            script: 'local.array## = {{1}}',
-            type: 'array'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['array##'],
+                script: 'local.array## = {{1}}',
+                type: 'array'
+            }
+        ],
         help: 'create a reference to re-use the array'
     },
     {
@@ -245,12 +253,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable object## [object]'],
         script: 'local.object## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['object##'],
-            script: 'local.object##',
-            type: 'object'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['object##'],
+                script: 'local.object##',
+                type: 'object'
+            }
+        ],
         help: 'create a reference to re-use the object'
     },
     {
@@ -263,12 +273,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable color## [color]'],
         script: 'local.color## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['color##'],
-            script: 'local.color##',
-            type: 'color'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['color##'],
+                script: 'local.color##',
+                type: 'color'
+            }
+        ],
         help: 'create a reference to re-use the color'
     },
     {
@@ -281,12 +293,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable image## [image]'],
         script: 'local.image## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['image##'],
-            script: 'local.image##',
-            type: 'image'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['image##'],
+                script: 'local.image##',
+                type: 'image'
+            }
+        ],
         help: 'create a reference to re-use the image'
     },
     {
@@ -300,12 +314,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable shape## [shape]'],
         script: 'local.shape## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['shape##'],
-            script: 'local.shape##',
-            type: 'shape'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['shape##'],
+                script: 'local.shape##',
+                type: 'shape'
+            }
+        ],
         help: 'create a reference to re-use the shape'
     },
     {
@@ -318,12 +334,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable point## [point]'],
         script: 'local.point## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['point##'],
-            script: 'local.point##',
-            type: 'point'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['point##'],
+                script: 'local.point##',
+                type: 'point'
+            }
+        ],
         help: 'create a reference to re-use the point'
     },
     {
@@ -336,12 +354,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable size## [size]'],
         script: 'local.size## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['size##'],
-            script: 'local.size##',
-            type: 'size'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['size##'],
+                script: 'local.size##',
+                type: 'size'
+            }
+        ],
         help: 'create a reference to re-use the size'
     },
     {
@@ -354,12 +374,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable rect## [rect]'],
         script: 'local.rect## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['rect##'],
-            script: 'local.rect##',
-            type: 'rect'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['rect##'],
+                script: 'local.rect##',
+                type: 'rect'
+            }
+        ],
         help: 'create a reference to re-use the rect'
     },
     {
@@ -372,12 +394,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable gradient## [gradient]'],
         script: 'local.gradient## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['gradient##'],
-            script: 'local.gradient##',
-            type: 'gradient'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['gradient##'],
+                script: 'local.gradient##',
+                type: 'gradient'
+            }
+        ],
         help: 'create a reference to re-use the gradient'
     },
     {
@@ -390,12 +414,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable pattern## [pattern]'],
         script: 'local.pattern## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['pattern##'],
-            script: 'local.pattern##',
-            type: 'pattern'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['pattern##'],
+                script: 'local.pattern##',
+                type: 'pattern'
+            }
+        ],
         help: 'create a reference to re-use the pattern'
     },
     {
@@ -408,12 +434,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable imagedata## [imagedata]'],
         script: 'local.imagedata## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['imagedata##'],
-            script: 'local.imagedata##',
-            type: 'imagedata'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['imagedata##'],
+                script: 'local.imagedata##',
+                type: 'imagedata'
+            }
+        ],
         help: 'create a reference to re-use the imagedata'
     },
     {
@@ -426,12 +454,14 @@ wb.menu('Variables', [
         blocktype: 'step',
         labels: ['variable any## [any]'],
         script: 'local.any## = {{1}};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['any##'],
-            script: 'local.any##',
-            type: 'any'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['any##'],
+                script: 'local.any##',
+                type: 'any'
+            }
+        ],
         help: 'create a reference to re-use the any'
     },
     {
@@ -473,24 +503,28 @@ wb.menu('Arrays', [
         labels: ['new array##'],
         script: 'local.array## = [];',
         help: 'Create an empty array',
-        returns: {
-            blocktype: 'expression',
-            labels: ['array##'],
-            script: 'local.array##',
-            type: 'array'
-        }
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['array##'],
+                script: 'local.array##',
+                type: 'array'
+            }
+        ]
     },
     {
         blocktype: 'step',
         labels: ['new array with array## [array]'],
         script: 'local.array## = {{1}}.slice();',
         help: 'create a new array with the contents of another array',
-        returns: {
-            blocktype: 'expression',
-            labels: ['array##'],
-            script: 'local.array##',
-            type: 'array'
-        }
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['array##'],
+                script: 'local.array##',
+                type: 'array'
+            }
+        ]
     },
     {
         blocktype: 'expression',
@@ -583,12 +617,14 @@ wb.menu('Objects', [
         blocktype: 'step',
         labels: ['new object##'],
         script: 'local.object## = {};',
-        returns: {
-            blocktype: 'expression',
-            labels: ['object##'],
-            script: 'local.object##',
-            type: 'object'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['object##'],
+                script: 'local.object##',
+                type: 'object'
+            }
+        ],
         help: 'create a new, empty object'
     },
     {
@@ -710,12 +746,14 @@ wb.menu('Sensing', [
         blocktype: 'step',
         labels: ['ask [string:What\'s your name?] and wait'],
         script: 'local.answer## = prompt({{1}});',
-        returns: {
-            blocktype: 'expression',
-            labels: ['answer##'],
-            type: 'string',
-            script: 'local.answer##'
-        },
+        locals: [
+            {
+                blocktype: 'expression',
+                labels: ['answer##'],
+                type: 'string',
+                script: 'local.answer##'
+            }
+        ],
         help: 'Prompt the user for information'
     },
     {

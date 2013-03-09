@@ -4,48 +4,27 @@
 
 (function(global){
     "use strict";
-    var matchesSelector;
-    if (document.body.matches){
-        matchesSelector = function(elem, selector){ return elem.matches(selector); };
-    }else if(document.body.mozMatchesSelector){
-        matchesSelector = function(elem, selector){ return elem.mozMatchesSelector(selector); };
-    }else if (document.body.webkitMatchesSelector){
-        matchesSelector = function(elem, selector){ return elem.webkitMatchesSelector(selector); };
-    }else if (document.body.msMatchesSelector){
-        matchesSelector = function(elem, selector){ return elem.msMatchesSelector(selector); };
-    }else if(document.body.oMatchesSelector){
-        matchesSelector = function(elem, selector){ return elem.oMatchesSelector(selector); };
-    }
-
-    var  closest = function(elem, selector){
-        while(elem){
-            if (matchesSelector(elem, selector)){
-                return elem;
-            }
-            elem = elem.parentElement;
-        }
-        return null;
-    };
-
-    var indexOf = function(elem){
-        var idx = 0;
-        while(elem.previousSiblingElement){
-            elem = elem.previousSiblingElement;
-            idx++;
-        }
-        return idx;
-    }
 
     var on = function(elem, eventname, selector, handler){
+        if (typeof elem === 'string'){
+            return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
+                return on(e, eventname, selector, handler);
+            });
+        }
         if (!elem.tagName){ console.error('first argument must be element'); }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
-        if (typeof selector !== 'string'){ console.log('third argument must be selector'); }
+        if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.flog('fourth argument must be handler'); }
-        var listener = function(event){
-            if (matchesSelector(event.target, selector)){
-                handler(event);
-            }
-        };
+        var listener;
+        if (selector){
+            listener = function(event){
+                if (wb.matches(event.target, selector)){
+                    handler(event);
+                }
+            };
+        }else{
+            listener = handler;
+        }
         elem.addEventListener(eventname, listener);
         return listener;
     };
@@ -60,7 +39,7 @@
         if (typeof selector !== 'string'){ console.log('third argument must be selector'); }
         if (typeof handler !== 'function'){ console.flog('fourth argument must be handler'); }
         var listener = function(event){
-            if (matchesSelector(event.target, selector)){
+            if (wb.matches(event.target, selector)){
                 handler(event);
                 elem.removeEventListener(eventname, listener);
             }
@@ -103,9 +82,6 @@
         once: once,
         trigger: trigger,
         isTouch: isTouch,
-        blend: blend,
-        matches: matchesSelector,
-        closest: closest,
-        indexOf: indexOf
+        blend: blend
     };
 })(this);

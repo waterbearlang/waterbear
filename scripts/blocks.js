@@ -98,7 +98,10 @@ Block.registerSeqNum = function(seqNum){
 Block.registry = {};
 
 Block.model = function(view){
-    view = closest(view, '.wrapper');
+    if (view.jquery){
+        view = view[0];
+    }
+    view = wb.closest(view, '.wrapper');
     return Block.registry[view.dataset.id];
 }
 
@@ -327,15 +330,15 @@ function attachLocals(node){
 
 Block.prototype.view = function(){
     if (this._view){
-        if (!this._view.data('model')){
+        if (!this._view[0].dataset.id){
             console.log('belatedly setting model %o on view %o', this, this._view);
-            this._view.data('model', this);
+            this._view[0].dataset.id = this.id;
         }
         return this._view;
     }
     var self = this;
     var view = this._view = this.template(this);
-    view.data('model', this);
+    view[0].dataset.id = this.id;
     if (this.isTemplateBlock){
         return view;
     }
@@ -412,9 +415,9 @@ Block.prototype.addLocalsToParentContext = function(isNext){
     if (!this.id){
         throw new Error('Model must have an id by now');
     }
-    var context = this.view().closest('.context').data('model');
+    var context = Block.model(this.view().closest('.context'));
     if (context && typeof context === 'Step'){
-        context = this.view().closest('.context').parent().closest('.context').data('model')    ;
+        context = Block.model(this.view().closest('.context').parent().closest('.context'))    ;
     }
     if (context){
         context.addLocalBlock(this.returns);
@@ -456,7 +459,7 @@ Block.prototype.addExpression = function(expression, expressionIndex){
 };
 
 Block.prototype.deleteBlock = function(view, evt, params){
-    var model = view.data('model');
+    var model = Block.model(view);
     model.view().remove();
 };
 
@@ -470,14 +473,14 @@ function newBlockHandler(blocktype, args, body, returns){
 $('.scripts_workspace')
     // .on('add_to_workspace', '.wrapper', function(evt, params){
     //     var view = $(this);
-    //     view.data('model').addToWorkspace(view, evt, params);
+    //     Block.model(view).addToWorkspace(view, evt, params);
     //     return false;
     // })
     .on('change', '.socket input, .autosocket select', function(evt){
         var input = $(evt.target);
         var socket = input.parent();
         var socketIndex = socket.data('index');
-        var parentModel = socket.closest('.wrapper').data('model');
+        var parentModel = Block.model(socket.closest('.wrapper'));
         parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
 		$('.scripts_workspace').trigger('scriptmodified');
     });
@@ -498,15 +501,18 @@ Block.prototype.removeContainedStep = function(step, stepIndex){
 
 $('body').on('delete_block', '.wrapper', function(evt, params){
     var view = $(this);
-    view.data('model').deleteBlock(view, evt, params);
+    Block.model(view).deleteBlock(view, evt, params);
     return false;
 });
 
 function removeFromScriptEvent(view){
+    if (!view.jquery){
+        view = $(view);
+    }
     var parent = view.parent();
-    var model = view.data('model');
+    var model = Block.model(view);
     var parentView = parent.closest('.wrapper');
-    var parentModel = parentView.data('model');
+    var parentModel = Block.model(parentView);
     model.removeLocalsFromParent();
     if (parent.hasClass('contained')){
         parentModel.removeContainedStep( model, parent.data('index')); // FIXME: need a better way to get index
@@ -537,7 +543,7 @@ function addToScriptEvent(droptarget, view){
     // 3. Drop a block in another block, following another step
     // 4. Drop an expression block into a socket
     var container;
-    var model = view.data('model');
+    var model = Block.model(view);
     if (!model){
         console.log('unable to retrieve model for view %o', view);
         throw new Error('unable to retrieve model');
@@ -550,9 +556,9 @@ function addToScriptEvent(droptarget, view){
     if (droptarget.is('.scripts_workspace')){
         model.addGlobals();
     }else if (droptarget.is('.slot')){
-        var parentModel = droptarget.closest('.context').data('model');
+        var parentModel = Block.model(droptarget.closest('.context'));
     }else{
-        var parentModel = droptarget.closest('.wrapper').data('model');
+        var parentModel = Block.model(droptarget.closest('.wrapper'));
         if (view.is('.value')){
             parentModel.addExpression(model, container.data('index')); // FIXME, this is not the way to get the index
         }else{
@@ -565,7 +571,7 @@ function addToScriptEvent(droptarget, view){
 
 $('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
     var label = $(evt.target);
-	var model = label.closest('.wrapper').data('model');
+	var model = Block.model(label.closest('.wrapper'));
     // Rather than use jquery to find instances, should origin model keep track of all instances?
     // How would that survive serialization/reification?
     var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
@@ -580,13 +586,13 @@ $('.content').on('keypress', '.locals .label_input, .globals .label_input', func
     if (evt.which === 13){
         var labelInput = $(evt.target);
         var labelText = labelInput.val();
-        var model = labelInput.closest('.wrapper').data('model');
+        var model = Block.model(labelInput.closest('.wrapper'));
         labelInput.prev().show();
         labelInput.remove();
         if (labelText.length){
             var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
             instances.each(function(){
-                $(this).data('model').changeLabel(labelText);
+                Block.model(this).changeLabel(labelText);
             });
             model.changeLabel(labelText);
         }
@@ -613,7 +619,7 @@ $(document.body).on('scriptloaded', function(evt){
 $('.scripts_workspace').on('click', '.disclosure', function(event){
     var self = $(event.target);
     var view = self.closest('.wrapper');
-    var model = view.data('model');
+    var model = Block.model(view);
     if (self.is('.open')){
         self.text('►');
         view.find('.locals').hide();

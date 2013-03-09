@@ -74,7 +74,7 @@ function collapseCommand(key, opt){
 function cutBlockCommand(key, opt){
     console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
     var view = this.closest('.wrapper');
-    pasteboard = view.data('model');
+    pasteboard = Block.model(view);
     // Remove it programatically, and trigger the right events:
     removeFromScriptEvent(view);
     view.remove();
@@ -82,12 +82,12 @@ function cutBlockCommand(key, opt){
 
 function copyBlockCommand(key, opt){
     console.info('copyBlockCommand(%s, %o)', key, opt);
-    pasteboard = this.closest('.wrapper').data('model').clone();
+    pasteboard = Block.model(this.closest('.wrapper')).clone();
 }
 
 function copySubscriptCommand(key, opt){
     console.info('copySubscriptCommand(%s, %o)', key, opt);
-    pasteboard = this.closest('.wrapper').data('model').clone(true);
+    pasteboard = Block.model(this.closest('.wrapper')).clone(true);
 }
 
 function pasteCommand(key, opt){

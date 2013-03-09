@@ -61,6 +61,9 @@ wb.Block.prototype.toJSON = function(){
     if (self.collapsed){
         serialized.collapsed = self.collapsed; // persist open/closed state
     }
+    if (self.scope){
+        serialized.scope = self.scope;
+    }
     if (exists(self.values)){
         // console.info('with %s values', this.values.length);
         serialized.values = self.values.map(function(value){

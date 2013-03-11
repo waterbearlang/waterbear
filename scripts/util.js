@@ -12,9 +12,8 @@
     wb.reposition = function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
-        elem.style.top = position.top;
-        elem.style.bottom = position.bottom;
-        console.log('if element looks wrong, fix it in reposition()');
+        elem.style.top = position.top + 'px';
+        elem.style.left = position.left + 'px';
     };
 
     // wb.mag = function mag(p1, p2){
@@ -40,7 +39,7 @@
     };
 
     wb.overlap = function overlap(elem1, elem2){
-        return wb.overlapRect(rect(elem1), rect(elem2));
+        return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
     };
 
 
@@ -51,12 +50,6 @@
     wb.containedBy = function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
-    };
-
-    wb.cursorOver = function cursorOver(elem){
-        var rect = elem.getBoundingClientRect();
-        return currentPosition.left >= rect.left && currentPosition.left <= rect.right &&
-           currentPosition.top >= rect.top && currentPosition.top <= rect.bottom;
     };
 
     wb.closest = function closest(elem, selector){

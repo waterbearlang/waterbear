@@ -18,12 +18,19 @@
         var listener;
         if (selector){
             listener = function(event){
-                if (wb.matches(event.target, selector)){
+                blend(event); // normalize between touch and mouse events
+                if (!event.wbValid) return;
+                if (wb.matches(event.wbTarget, selector + ' *')){
+                    event.wbTarget = wb.closest(event.wbTarget, selector);
                     handler(event);
                 }
             };
         }else{
-            listener = handler;
+            listener = function(event){
+                blend(event);
+                if (!event.wbValid) return;
+                handler(event);
+            };
         }
         elem.addEventListener(eventname, listener);
         return listener;
@@ -34,23 +41,16 @@
     }
 
     var once = function(elem, eventname, selector, handler){
-        if (!elem.tagName){ console.error('first argument must be element'); }
-        if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
-        if (typeof selector !== 'string'){ console.log('third argument must be selector'); }
-        if (typeof handler !== 'function'){ console.flog('fourth argument must be handler'); }
-        var listener = function(event){
-            if (wb.matches(event.target, selector)){
-                handler(event);
-                elem.removeEventListener(eventname, listener);
-            }
+        var listener = function listener(event){
+            handler(event);
+            Event.off(elem, eventname, listener);
         };
-        elem.addEventListener(eventname, listener);
-        return listener;
+        return Event.on(elem, eventname, selector, listener);
     }
 
     var trigger = function(elem, eventname, data){
         var evt = new CustomEvent(eventname, {detail: data});
-        elem.dispatchEvent(event);
+        elem.dispatchEvent(evt);
     };
 
     // Are touch events supported?
@@ -60,16 +60,21 @@
     var blend = function(event){
         if (isTouch){
             if (event.touches.length > 1){
-                return false;
+                return event;
             }
             var touch = event.touches[0];
-            event.target = touch.target;
-            event.pageX = touch.pageX;
-            event.pageY = touch.pageY;
+            event.wbTarget = touch.target;
+            event.wbPageX = touch.pageX;
+            event.wbPageY = touch.pageY;
+            event.wbValid = true;
         }else{
             if (event.which !== 1){ // left mouse button
-                return false;
+                return event;
             }
+            event.wbTarget = event.target;
+            event.wbPageX = event.pageX;
+            event.wbPageY = event.pageY;
+            event.wbValid = true;
         }
         // fix target?
         return event;
@@ -81,7 +86,6 @@
         off: off,
         once: once,
         trigger: trigger,
-        isTouch: isTouch,
-        blend: blend
+        isTouch: isTouch
     };
 })(this);

@@ -229,6 +229,11 @@
     opacity: 0.75;
 }
 
+/* This class is added to all potential drop targets */
+.dropTarget{
+    outline: yellow ridge thick;
+}
+
 /*This class is added to the block receiving the block bieng dragged.*/
 .socket.dropActive{
     background-color: yellow;

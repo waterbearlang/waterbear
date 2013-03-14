@@ -349,15 +349,12 @@ Block.prototype.view = function(){
         });
     }
     this.contained.forEach(function(contained, idx){
-        view.find('> .block > .blockhead > .contained').append(contained.view());
+        Event.findChild(view, '.block', '.blockhead', '.contained').appendChild(contained.view()[0]);
         contained.addLocalsToParentContext();
     });
-    view.find('> .block > .blockhead > .value > .socket').each(function(idx){
-        $(this).data('index', idx);
-    });
-    this.values.forEach(function(value, idx){
-        view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
-    });
+    // this.values.forEach(function(value, idx){
+    //     view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
+    // });
     if (this.id){
         view.attr('data-id', this.id);
     }
@@ -543,21 +540,21 @@ function addToScriptEvent(droptarget, view){
         console.log('unable to retrieve model for view %o', view);
         throw new Error('unable to retrieve model');
     }
-    if (droptarget.is('input')){
-        container = droptarget.parent();
-    }else if (droptarget.is('slot')){
-        container = droptarget.parent();
+    if (wb.matches(droptarget, 'input')){
+        container = droptarget.parentElement;
+    }else if (wb.matches(droptarget, 'slot')){
+        container = droptarget.parentElement;
     }
-    if (droptarget.is('.scripts_workspace')){
+    if (wb.matches(droptarget, '.scripts_workspace')){
         model.addLocalsToParentContext();
-    }else if (droptarget.is('.slot')){
-        var parentModel = Block.model(droptarget.closest('.context'));
+    }else if (wb.matches(droptarget, '.slot')){
+        var parentModel = Block.model(wb.closest(droptarget, '.context'));
     }else{
-        var parentModel = Block.model(droptarget.closest('.wrapper'));
-        if (view.is('.value')){
-            parentModel.addExpression(model, container.data('index')); // FIXME, this is not the way to get the index
+        var parentModel = Block.model(wb.closest(droptarget, '.wrapper'));
+        if (wb.matches(view, '.value')){
+            parentModel.addExpression(model, container.dataset.index); // FIXME, this is not the way to get the index
         }else{
-            parentModel.addStep(model, container.data('index')); // FIXME, this is not the way to get the index
+            parentModel.addStep(model, container.dataset.index); // FIXME, this is not the way to get the index
         }
     }
     // FIXME: Add view to parent's view

@@ -33,6 +33,7 @@ function Value(textValue, index){
             if (block){
                 this.addBlock(block);
             }else{
+                // FIXME: I thought we got rid of Deferred?
                 Deferred.add(this, 'value', null, textValue.value);
             }
             // assert.isObject(block, 'Value blocks must be objects');

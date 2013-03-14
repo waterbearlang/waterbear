@@ -52,6 +52,7 @@
     var currentPosition;
     var scope;
     var workspace = document.querySelector('.scripts_workspace');
+    var potentialDropTargets;
 
     var dropCursor = document.querySelector('.dropCursor');
 
@@ -67,6 +68,7 @@
         cloned = false;
         scope = null;
     }
+    reset();
 
 
 
@@ -183,7 +185,7 @@
                 wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
                 // Insert a value block into a socket
-                wb.findAll(dropTarget, '> input, > select').forEach(function(elem){
+                wb.findChildren(dropTarget, 'input, select').forEach(function(elem){
                     elem.hide(); // FIXME: Move to block.js
                 });
                 // dropTarget.append(dragTarget);
@@ -197,7 +199,7 @@
             Event.trigger(dragTarget, 'delete_block');
             dragTarget.parentElement.removeChild(dragTarget);
         }else if (wb.overlap(dragTarget, workspace)){
-            dragTarget.parentElement.insertBefore(dragTarget, dropCursor);
+            dropCursor.parentElement.insertBefore(dragTarget, dropCursor);
             dragTarget.removeAttribute('style');
             wb.addToScriptEvent(workspace, dragTarget);
         }else{
@@ -208,7 +210,7 @@
                 // Put blocks back where we got them from
                 if (startParent){
                     if (wb.matches(startParent, '.socket')){
-                        wb.findAll(startParent, '> input').forEach(function(elem){
+                        wb.findChildren(startParent, 'input').forEach(function(elem){
                             elem.hide();
                         });
                     }
@@ -225,6 +227,31 @@
 
     function positionDropCursor(){
         var position, middle, y = wb.rect(dragTarget).top;
+        var dropTarget;
+        for (var tIdx = 0; tIdx < potentialDropTargets.length; tIdx++){
+            dropTarget = potentialDropTargets[tIdx];
+            if (wb.overlap(dragTarget, dropTarget)){
+                var siblings = wb.findChildren(dropTarget, '.step');
+                if (siblings.length){
+                    for (sIdx = 0; sIdx < siblings.length; sIdx++){
+                        var sibling = siblings[sIdx];
+                        position = wb.rect(sibling);
+                        if (y < position.top || y > position.bottom) continue;
+                        middle = position.top + (position.height / 2);
+                        if (y < middle){
+                            dropTarget.insertBefore(dropCursor, sibling);
+                            return;
+                        }else{
+                            dropTarget.insertBefore(dropCursor, sibling.nextSibling);
+                            return;
+                        }
+                    }
+                }else{
+                    dropTarget.appendChild(dropCursor);
+                    return;
+                }
+            }
+        }
         wb.findAll(workspace, '.step').forEach(function(elem){
             // FIXME: Convert to for() iteration to avoid going over every element
             position = wb.rect(elem);
@@ -243,7 +270,7 @@
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
         if (!dragTarget) {return;}
-        positionDropCursor();
+        positionDropCursor(); // <== Pick up here, send current position!
         setTimeout(hitTest, dragTimeout);
         return;
 
@@ -255,7 +282,6 @@
         switch(dragType){
             case 'eventhandler':
                 setTimeout(hitTest, dragTimeout);
-                return positionDropCursor(); // no flap
             case 'step': dragTargetFlap = dragTargetFlap.querySelector('> .flap');
         }
         var dragRect = wb.rect(dragTargetFlap);

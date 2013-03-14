@@ -79,6 +79,29 @@
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
+    wb.findChildren = function findChildren(elem, selector){
+        return wb.makeArray(elem.children).filter(function(item){
+            return wb.matches(item, selector);
+        });
+    };
+
+    wb.findChild = function(){
+        var args = wb.makeArray(arguments);
+        var elem = args.shift();
+        var children, selector;
+        while(args.length){
+            selector = args.shift();
+            children = wb.makeArray(elem.children);
+            for(var i = 0; i < children.length; i++){
+                if (wb.matches(children[i], selector)){
+                    elem = children[i];
+                    break;
+                }
+            }
+        }
+        return elem;
+    }
+
     if (document.body.matches){
         wb.matches = function matches(elem, selector){ return elem.matches(selector); };
     }else if(document.body.mozMatchesSelector){

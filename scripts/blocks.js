@@ -349,7 +349,7 @@ Block.prototype.view = function(){
         });
     }
     this.contained.forEach(function(contained, idx){
-        Event.findChild(view, '.block', '.blockhead', '.contained').appendChild(contained.view()[0]);
+        wb.findChild(view, '.block', '.blockhead', '.contained').appendChild(contained.view()[0]);
         contained.addLocalsToParentContext();
     });
     // this.values.forEach(function(value, idx){
@@ -427,6 +427,7 @@ Block.prototype.addGlobals = function(){
 };
 
 Block.prototype.removeLocalsFromParent = function(){
+    // this should work for globals as well
     if (!(this.locals && this.locals.length)) return;
     this.locals.forEach(function(local){
         local.view().remove();
@@ -434,7 +435,10 @@ Block.prototype.removeLocalsFromParent = function(){
 };
 
 Block.prototype.addStep = function(step, stepIndex){
+    console.log('before addStep: %s', this.contained.length);
+    console.log('step index: %s', stepIndex);
     this.contained.splice(stepIndex, 0, step);
+    console.log('after addStep: %s', this.contained.length);
     step.addLocalsToParentContext();
 };
 Block.prototype.addToWorkspace = function(){
@@ -484,10 +488,10 @@ Block.prototype.removeExpression = function(expression, expressionIndex){
     value.literal = true;
 };
 
-Block.prototype.removeContainedStep = function(step, stepIndex){
+Block.prototype.removeContainedStep = function(step){
     console.log('remove child step');
-    this.contained[stepIndex].removeLocalsFromParent();
-    this.contained.splice(stepIndex, 1);
+    step.removeLocalsFromParent();
+    this.contained.splice(this.contained.indexOf(step), 1);
 };
 
 
@@ -497,29 +501,30 @@ $('body').on('delete_block', '.wrapper', function(evt, params){
     return false;
 });
 
+
 function removeFromScriptEvent(view){
-    if (!view.jquery){
-        view = $(view);
-    }
-    var parent = view.parent();
+    var parent = view.parentElement;
     var model = Block.model(view);
-    var parentView = parent.closest('.wrapper');
-    var parentModel = Block.model(parentView);
-    model.removeLocalsFromParent();
-    if (parent.hasClass('contained')){
-        parentModel.removeContainedStep( model, parent.data('index')); // FIXME: need a better way to get index
-    }else if (parent.hasClass('socket')){
-        var exprIndex = parent.data('index');
-        parentModel.removeExpression(model, exprIndex);
-        assert(parent.children('input').length > 0, "No input found, where can it be?")
-        if(parent.hasClass('boolean')){
-            parent.append(
-                '<select><option>true</option><option>false</option></select>');
-        }else{
-            parent.children('input').show();
+    if (wb.matches(parent, '.scripts_workspace')){
+        model.removeLocalsFromParent();
+    }else{
+        var parentView = wb.closest(parent, '.wrapper');
+        var parentModel = Block.model(parentView);
+        model.removeLocalsFromParent();
+        if (parent.classList.contains('contained')){
+            parentModel.removeContainedStep( model );
+        }else if (parent.hasClass('socket')){
+            var exprIndex = parent.dataset.index;
+            parentModel.removeExpression(model, exprIndex);
+            assert(parent.children('input').length > 0, "No input found, where can it be?")
+            if(parent.classList.contains('boolean')){
+                parent.appendChild(wb.elem('select', null, [['option', null, 'true'], ['option', null, 'false']]));
+            }else{
+                parent.children('input').show();
+            }
+            // Why is val an actual value rather than a method?
+            parent.children('input').val(parentModel.values[exprIndex].defaultValue);
         }
-        // Why is val an actual value rather than a method?
-        parent.children('input').val(parentModel.values[exprIndex].defaultValue);
     }
 	$('.scripts_workspace').trigger('scriptmodified');
 
@@ -542,7 +547,7 @@ function addToScriptEvent(droptarget, view){
     }
     if (wb.matches(droptarget, 'input')){
         container = droptarget.parentElement;
-    }else if (wb.matches(droptarget, 'slot')){
+    }else if (wb.matches(droptarget, '.contained')){
         container = droptarget.parentElement;
     }
     if (wb.matches(droptarget, '.scripts_workspace')){
@@ -551,13 +556,17 @@ function addToScriptEvent(droptarget, view){
         var parentModel = Block.model(wb.closest(droptarget, '.context'));
     }else{
         var parentModel = Block.model(wb.closest(droptarget, '.wrapper'));
+    }
+    if (parentModel){
         if (wb.matches(view, '.value')){
             parentModel.addExpression(model, container.dataset.index); // FIXME, this is not the way to get the index
         }else{
-            parentModel.addStep(model, container.dataset.index); // FIXME, this is not the way to get the index
+            parentModel.addStep(model, wb.indexOf(view));
         }
+    }else{
+        // console.log('no parent model found for %o', droptarget);
     }
-    // FIXME: Add view to parent's view
+    // FIXME: Move adding view to parent's view from drag2.js to here
 	$('.scripts_workspace').trigger('scriptmodified');
 }
 

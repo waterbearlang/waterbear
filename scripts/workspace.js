@@ -66,7 +66,7 @@ $('.save_scripts').on('click', createDownloadUrl);
 $('.restore_scripts').on('click', comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = $('.workspace .scripts_workspace');
+    var workspace = document.querySelector('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
@@ -75,9 +75,8 @@ function loadScriptsFromObject(fileObject){
         return wb.Block(spec);
     });
     blocks.forEach(function(block){
-        var view = block.view();
-		assert.isString(view.jquery, 'Views must be jQuery objects');
-        workspace.append(view);
+        var view = block.view()[0]; // FIXME: strip jquery wrapper
+        workspace.appendChild(view);
         wb.addToScriptEvent(workspace, view);
     });
     wb.loaded = true;

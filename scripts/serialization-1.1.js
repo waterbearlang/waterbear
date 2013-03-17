@@ -1,4 +1,3 @@
-
 //
 //  Serialize all the blocks in every workspace
 //
@@ -25,7 +24,7 @@ wb.Block.scriptsToObject = function(workspace){
         "waterbearVersion": "1.1",
         "workspace": $(workspace).data('name'),
         "blocks": $(workspace).children('.wrapper').get().map(function(domBlock){
-            return $(domBlock).data('model').toJSON();
+            return  wb.Block.model(domBlock).toJSON();
         })
     };
 };

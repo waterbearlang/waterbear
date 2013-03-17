@@ -2,6 +2,8 @@
     //
     //
     // UTILITY FUNCTIONS
+    // 
+    // A bunch of these are to avoid needing jQuery just for simple things like matches(selector) and closest(selector)
     //
     //
 
@@ -87,7 +89,7 @@
 
     wb.findChild = function(){
         var args = wb.makeArray(arguments);
-        var elem = args.shift();
+        var elem = wb.elem(args.shift());
         var children, selector;
         while(args.length){
             selector = args.shift();
@@ -102,16 +104,52 @@
         return elem;
     }
 
+    wb.elem = function elem(name, attributes, children){
+        // name can be a jquery object, an element, or a string
+        // attributes can be null or undefined, or an object of key/values to set
+        // children can be text or an array. If an array, can contain strings or arrays of [name, attributes, children]
+        var e;
+        if (name.jquery){
+            e = name[0];
+        }else if(name.nodeType){
+            e = name;
+        }else{
+            // assumes name is a string
+            e = document.createElement(name);
+        }
+        if (attributes){
+            Object.keys(attributes).forEach(function(key){
+                e.setAttribute(key, attributes[key]);
+            });
+        }
+        if (children){
+            if (Array.isArray(children)){
+                children.forEach(function(child){
+                    if (Array.isArray(child)){
+                        e.appendChild(elem(child[0], child[1], child[2]));
+                    }else{
+                        // assumes child is a string
+                        e.appendChild(elem(child));
+                    }
+                });
+            }else{
+                // assumes children is a string
+                e.appendChild(document.createTextNode(children));
+            }
+        }
+        return e;
+    };
+
     if (document.body.matches){
-        wb.matches = function matches(elem, selector){ return elem.matches(selector); };
+        wb.matches = function matches(elem, selector){ return wb.elem(elem).matches(selector); };
     }else if(document.body.mozMatchesSelector){
-        wb.matches = function matches(elem, selector){ return elem.mozMatchesSelector(selector); };
+        wb.matches = function matches(elem, selector){ return wb.elem(elem).mozMatchesSelector(selector); };
     }else if (document.body.webkitMatchesSelector){
-        wb.matches = function matches(elem, selector){ return elem.webkitMatchesSelector(selector); };
+        wb.matches = function matches(elem, selector){ return wb.elem(elem).webkitMatchesSelector(selector); };
     }else if (document.body.msMatchesSelector){
-        wb.matches = function matches(elem, selector){ return elem.msMatchesSelector(selector); };
+        wb.matches = function matches(elem, selector){ return wb.elem(elem).msMatchesSelector(selector); };
     }else if(document.body.oMatchesSelector){
-        wb.matches = function matches(elem, selector){ return elem.oMatchesSelector(selector); };
+        wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
 
 

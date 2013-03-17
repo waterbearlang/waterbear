@@ -1,8 +1,8 @@
 (function(global){
 
-    // FIXME: Remove references to waterbear or jquery
+    // FIXME: Remove references to waterbear or jquery (jquery done!)
     // FIXME: Include mousetouch in garden
-    // FIXME: Refactor utilities for testing rectangles to its own library
+    // FIXME: Refactor utilities for testing rectangles to its own library (done)
 
 
 // Goals:
@@ -52,6 +52,7 @@
     var currentPosition;
     var scope;
     var workspace = document.querySelector('.scripts_workspace');
+    var blockMenu = document.querySelector('#block_menu');
     var potentialDropTargets;
 
     var dropCursor = document.querySelector('.dropCursor');
@@ -73,10 +74,14 @@
 
 
     function initDrag(event){
+        //console.log('initdrag %o', event.target);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
-        if (wb.matches(eT, 'input, select, option, .disclosure')  && !wb.matches(eT, '#block_menu *')) {return undefined;}
+        if (wb.matches(eT, 'input, select, option, .disclosure')  && !wb.matches(eT, '#block_menu *')) {
+            console.log('not a drag handle');
+            return undefined;
+        }
         var target = wb.closest(eT, '.wrapper');
         if (target){
             dragTarget = target;
@@ -90,6 +95,7 @@
                 startIndex = wb.indexOf(target);
             }
         }else{
+            console.log('not a valid drag target');
             dragTarget = null;
         }
         return true;
@@ -124,10 +130,10 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
-        if (wb.matches(dragTarget, '.scripts_workspace .step')){
-            dragPlaceholder.style.height = dragTarget.clientHeight + 'px';
-            dragTarget.parentElement.insertBefore(dragPlaceholder, dragTarget);
-        }
+//        if (wb.matches(dragTarget, '.scripts_workspace .step')){
+//            dragPlaceholder.style.height = dragTarget.clientHeight + 'px';
+//            dragTarget.parentElement.insertBefore(dragPlaceholder, dragTarget);
+//        }
         document.querySelector('.content.editor').appendChild(dragTarget);
         wb.reposition(dragTarget, startPosition);
         potentialDropTargets = getPotentialDropTargets(dragTarget, model);
@@ -176,11 +182,17 @@
         potentialDropTargets.forEach(function(elem){
             elem.classList.remove('dropTarget');
         });
-        if (dropTarget){
+        if (wb.overlap(dragTarget, blockMenu)){
+            // delete block if dragged back to menu
+            console.log('triggering delete_block');
+            Event.trigger(dragTarget, 'delete_block');
+            dragTarget.parentElement.removeChild(dragTarget);
+        }else if (wb.overlap(dragTarget, workspace)){
             dropTarget.classList.remove('dropActive');
-            if (blockType(dragTarget) === 'step' || blockType(dragTarget) === 'context'){
+            if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
+                dropTarget.insertBefore(dragTarget, dropCursor);
                 dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
@@ -193,15 +205,6 @@
                 wb.addToScriptEvent(dropTarget, dragTarget);
                 // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
             }
-        }else if (wb.overlap(dragTarget, document.querySelector('#block_menu'))){
-            // delete block if dragged back to menu
-            console.log('triggering delete_block');
-            Event.trigger(dragTarget, 'delete_block');
-            dragTarget.parentElement.removeChild(dragTarget);
-        }else if (wb.overlap(dragTarget, workspace)){
-            dropCursor.parentElement.insertBefore(dragTarget, dropCursor);
-            dragTarget.removeAttribute('style');
-            wb.addToScriptEvent(workspace, dragTarget);
         }else{
             if (cloned){
                 // remove cloned block (from menu)
@@ -227,7 +230,6 @@
 
     function positionDropCursor(){
         var position, middle, y = wb.rect(dragTarget).top;
-        var dropTarget;
         for (var tIdx = 0; tIdx < potentialDropTargets.length; tIdx++){
             dropTarget = potentialDropTargets[tIdx];
             if (wb.overlap(dragTarget, dropTarget)){
@@ -272,47 +274,6 @@
         if (!dragTarget) {return;}
         positionDropCursor(); // <== Pick up here, send current position!
         setTimeout(hitTest, dragTimeout);
-        return;
-
-        // Below is old code, not sure if it is relevant anymore
-        var dropIndex = -1;
-        var dropArea = 0;
-        var dragType = blockType(dragTarget);
-        var dragTargetFlap = dragTarget.querySelector('> .block');
-        switch(dragType){
-            case 'eventhandler':
-                setTimeout(hitTest, dragTimeout);
-            case 'step': dragTargetFlap = dragTargetFlap.querySelector('> .flap');
-        }
-        var dragRect = wb.rect(dragTargetFlap);
-        var area = 0;
-        dropRects.forEach(function(elem, idx){
-            area = wb.overlap(dragRect, elem);
-            if (area > dropArea){
-                dropIndex = idx;
-                dropArea = area;
-            }
-        else if(dragRect && elem){
-        val = wb.dist(dragRect.left, dragRect.top, elem.left, elem.top);
-        if(val < snapDist){
-            dropIndex = idx;
-            dropArea = area;
-        }
-        }
-        });
-        if (dropTarget && dropTarget.length){
-            dropTarget.classList.remove('dropActive');
-        }
-        if (dropIndex > -1){
-            dropTarget = potentialDropTargets.eq(dropIndex).classList.add('dropActive');
-            dragTarget.addClass('dragActive');
-            dropCursor.hide();
-        }else{
-            dragTarget.classList.remove('dragActive');
-            positionDropCursor();
-            dropTarget = null;
-        }
-        timer = setTimeout(hitTest, dragTimeout);
     }
 
     // Initialize event handlers
@@ -321,7 +282,7 @@
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
     }else{
-        Event.on('.script_workspace, .block_menu', 'mousedown', '.block', initDrag);
+        Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on('.content', 'mouseup', null, endDrag);
     }

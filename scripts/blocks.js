@@ -5,7 +5,6 @@
 // BLOCK SUBTYPES
 
 function Step(spec, scope){
-    assertStep(spec);
     this.returns = false;
     this.init(spec);
 }
@@ -13,14 +12,12 @@ Step.prototype = new Block();
 Step.prototype.constructor = Step;
 
 function Expression(spec, scope){
-    assertExpression(spec);
     this.init(spec);
 }
 Expression.prototype = new Block();
 Expression.prototype.constructor = Expression;
 
 function Context(spec, scope){
-    assertContext(spec);
     this.locals = false;
     this.init(spec);
 }
@@ -28,38 +25,11 @@ Context.prototype = new Block();
 Context.prototype.constructor = Context;
 
 function EventHandler(spec, scope){
-    assertContext(spec);
     this.locals = false;
     this.init(spec);
 }
 EventHandler.prototype = new Block();
 EventHandler.prototype.constructor = EventHandler;
-
-// ASSERTIONS TO CONFIRM BLOCKS
-//
-// NOTE: These are overly simplistic, not really convinced they are useful now
-// they were mainly here when I was making heavy changes to the block definition format
-
-function assertStep(model){
-    if (model.type){
-        alert('Error: expression "' + model.id+ '" treated as a step');
-    }
-}
-
-function assertExpression(model){
-    if (! model.type){
-        console.log('Error: step "' + model.id + '" treated as an expression');
-		throw new Error('Bite me');
-        alert('Error: step "' + model.id + '" treated as an expression');
-    }
-}
-
-function assertContext(model){
-    if (model.containers){
-        alert('Error: context with containers vs. contained');
-        console.error('Context: %o', model);
-    }
-}
 
 // HERE is the main definition of Block and its methods
 
@@ -401,7 +371,7 @@ Block.prototype.addLocalBlock = function(block){
     locals.append(block.view());
 }
 
-Block.prototype.addLocalsToParentContext = function(isNext){
+Block.prototype.addLocalsToParentContext = function(){
     // on addToScript
 	// console.log('addLocalsToParentContext %o', this);
     if (!(this.locals && this.locals.length)) return;

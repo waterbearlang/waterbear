@@ -48,20 +48,23 @@ wb.Block.prototype.toJSON = function(){
         group: self.group,
         id: self.id
     };
-    if (self.name){
-        serialized.name = self.name;
-    }
     if (self.seqnum){
         serialized.seqnum = self.seqnum;
+    }else{
+        console.warn('Block has no seqnum');
     }
     if (self.scriptid){
         serialized.scriptid = self.scriptid;
+    }else{
+        console.warn('Block has no scriptid');
     }
     if (self.collapsed){
         serialized.collapsed = self.collapsed; // persist open/closed state
     }
     if (self.scope){
         serialized.scope = self.scope;
+    }else{
+        console.warn('Block has no scope');
     }
     if (exists(self.values)){
         // console.info('with %s values', this.values.length);

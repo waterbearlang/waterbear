@@ -116,24 +116,24 @@ function getInputType(testType){
 }
 
 Value.prototype.view = function(){
-    print('building view for %o, has cached view: %s', j(this), !!this._view);
-    print('we do not have a cached view');
+    console.log('building view for %o, has cached view: %s', j(this), !!this._view);
+    console.log('we do not have a cached view');
     if (! this.literal && this.value){ return this.value.view(); }
-    print('we do not have a block value');
+    console.log('we do not have a block value');
     var inputType;
     if (this.choiceName){
-        print('return choice view');
+        console.log('return choice view');
         this._view =  this.choiceView(this.choiceName, this.choiceList);
     }else if (this.value !== undefined){
         inputType = getInputType(this.type);
-        print('return type/index/value %o/%o/%o', this.type, this.index, this.value);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + inputType + '" value="' + this.value + '"></span>');
+        console.log('return type/index/value %o/%o/%o', this.type, this.index, this.value);
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + inputType + '" value="' + this.value + '"/></span>');
     }else{
-        print('return undefined value');
+        console.log('return undefined value');
         inputType = getInputType(this.type);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"></span>');
+        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"/></span>');
     }
-    print('return cached value: %o', h(this._view));
+    console.log('return cached value: %o', h(this._view));
     return this._view;
 };
 

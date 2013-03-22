@@ -2,7 +2,7 @@
     //
     //
     // UTILITY FUNCTIONS
-    // 
+    //
     // A bunch of these are to avoid needing jQuery just for simple things like matches(selector) and closest(selector)
     //
     //
@@ -43,7 +43,6 @@
     wb.overlap = function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
     };
-
 
     wb.area = function area(elem){
         return elem.clientWidth * elem.clientHeight;

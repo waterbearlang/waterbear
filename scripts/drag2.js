@@ -54,6 +54,7 @@
     var workspace = document.querySelector('.scripts_workspace');
     var blockMenu = document.querySelector('#block_menu');
     var potentialDropTargets;
+    var selectedSocket;
 
     var dropCursor = document.querySelector('.dropCursor');
 
@@ -267,6 +268,12 @@
         });
     }
 
+    function selectSocket(event){
+        // FIXME: Add tests for type of socket, whether it is filled, etc.
+        event.wbTarget.classList.add('selected');
+        selectedSocket = event.wbTarget;
+    }
+
     function hitTest(){
         // test the dragging rect(s) against the target rect(s)
         // test all of the left borders first, then the top, right, bottom
@@ -281,10 +288,12 @@
         Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
+        Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
     }else{
         Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on('.content', 'mouseup', null, endDrag);
+        Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
     }
 
     function expressionDropTypes(expressionType){

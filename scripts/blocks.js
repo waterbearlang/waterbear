@@ -18,14 +18,14 @@ Expression.prototype = new Block();
 Expression.prototype.constructor = Expression;
 
 function Context(spec, scope){
-    this.locals = false;
+    this.locals = [];
     this.init(spec);
 }
 Context.prototype = new Block();
 Context.prototype.constructor = Context;
 
 function EventHandler(spec, scope){
-    this.locals = false;
+    this.locals = [];
     this.init(spec);
 }
 EventHandler.prototype = new Block();
@@ -125,7 +125,7 @@ Block.prototype.init = function(spec){
 
 Block.prototype.initInstance = function initInstance(){
     var self = this;
-    if (self.locals){
+    if (self.spec.locals){
         self.spec.locals.forEach(function(spec){
             if (spec === null){
                 return spec;
@@ -146,27 +146,9 @@ Block.prototype.initInstance = function initInstance(){
                 spec.label = self.customLocals[idx];
             }
             var block = Block(spec);
-            // assert.isObject(block, 'Blocks must be objects');
+            assert.isObject(block, 'Blocks must be objects');
             return block;
         });
-    }
-    if (self.returns){
-        self._returns = self.returns;
-        if (self.returns === 'block'){
-            // special user-defined block handler
-        }else{
-            self._returns.isTemplateBlock = true;
-            self._returns.isLocal = true;
-            self._returns.group = self.group;
-            self._returns.returnOrigin = self;
-            self._returns.id = self.id;
-            if (self.customReturns){
-                self._returns.label = self.customReturns;
-            }
-            self._returns.help = 'value of ' + self._returns.label.replace('##', self.seqNum);
-            self.returns = Block(self._returns);
-            assert.isObject(self.returns, 'Returns blocks must be objects');
-        }
     }
     if (self.spec.contained && self.spec.contained.length){
         self.contained = self.spec.contained.map(function(spec, idx){
@@ -178,9 +160,9 @@ Block.prototype.initInstance = function initInstance(){
     }
     if (self.spec.values && self.spec.values.length){
         self.values = self.spec.values.map(function(value, idx){
-			if (value instanceof wb.Value){
-				return value;
-			}
+            if (value instanceof wb.Value){
+                return value;
+            }
             var val = new wb.Value(value, idx);
             assert.isObject(val, 'Values must be objects');
             return val;
@@ -234,37 +216,37 @@ Block.prototype.parseLabel = function(textLabel){
     }catch(e){
         console.error('Failed in this.valueSlots.map: %o', e);
     }
-        label.find('.valueslot').each(function fillSlots(idx, slotdom){
-			var slot = $(slotdom);
-            // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
-            var value = self.values[idx];
-            // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
-            if (!value.view){
-                value = new wb.Value(value, idx);
-                self.values[idx] = value;
-            }
-            var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + wb.getInputType(value) + '" + style="display:none"></input></span>');
-            input.append(value.view());
-            slot.replaceWith(input);
-        });
+    label.find('.valueslot').each(function fillSlots(idx, slotdom){
+        var slot = $(slotdom);
+        // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
+        var value = self.values[idx];
+        // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
+        if (!value.view){
+            value = new wb.Value(value, idx);
+            self.values[idx] = value;
+        }slot.replaceWith(value.view());
+        // var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + wb.getInputType(value) + '"  style="display:none"></input></span>');
+        // input.append(value.view());
+        // slot.replaceWith(input);
+    });
     return label;
 };
 
 Block.prototype.code = function(){
-	// extract code from script, and recursively from  values and contained blocks
-	var self = this;
-	var _code = Block.lookup(this.scriptid).script.replace(/##/g, '_' + self.seqNum);
-	function replace_values(match, offset, s){
+    // extract code from script, and recursively from  values and contained blocks
+    var self = this;
+    var _code = Block.lookup(this.scriptid).script.replace(/##/g, '_' + self.seqNum);
+    function replace_values(match, offset, s){
         var idx = parseInt(match.slice(2, -2), 10) - 1;
-		if (match[0] === '{'){
-			return self.values[idx] ? self.values[idx].code() : match;
-		}else{
-			return self.contained[idx] ? self.contained[idx].code() : match;
-		}
-	}
-	_code = _code.replace(/\{\{\d\}\}/g, replace_values);
-	_code = _code.replace(/\[\[\d\]\]/g, replace_values);
-	return _code;
+        if (match[0] === '{'){
+            return self.values[idx] ? self.values[idx].code() : match;
+        }else{
+            return self.contained[idx] ? self.contained[idx].code() : match;
+        }
+    }
+    _code = _code.replace(/\{\{\d\}\}/g, replace_values);
+    _code = _code.replace(/\[\[\d\]\]/g, replace_values);
+    return _code;
 }
 
 Block.prototype.cloneScript = function(){
@@ -277,7 +259,7 @@ Block.prototype.cloneScript = function(){
        scriptid: this.id
     });
     var clone = Block(spec);
-	return clone;
+    return clone;
 };
 
 Block.prototype.clone = function(deep){
@@ -294,8 +276,8 @@ Block.prototype.clone = function(deep){
 }
 
 function attachLocals(node){
-	node.attachLocals = true; // this should probably be data, c'est la vie
-	return node;
+    node.attachLocals = true; // this should probably be data, c'est la vie
+    return node;
 }
 
 Block.prototype.view = function(){
@@ -368,12 +350,20 @@ Block.prototype.addLocalBlock = function(block){
     if (!locals.length) {
         throw new Error('no locals found');
     }
+    if (this.locals === undefined){
+        this.locals = [];
+    }
+    if (this.locals.indexOf(block) > -1){
+        // pass, we already have this one
+    }else{
+        this.locals.push(block);
+    }
     locals.append(block.view());
 }
 
 Block.prototype.addLocalsToParentContext = function(){
     // on addToScript
-	// console.log('addLocalsToParentContext %o', this);
+    // console.log('addLocalsToParentContext %o', this);
     if (!(this.locals && this.locals.length)) return;
     if (!this.id){
         throw new Error('Model must have an id by now');
@@ -405,10 +395,10 @@ Block.prototype.removeLocalsFromParent = function(){
 };
 
 Block.prototype.addStep = function(step, stepIndex){
-    console.log('before addStep: %s', this.contained.length);
-    console.log('step index: %s', stepIndex);
+    // console.log('before addStep: %s', this.contained.length);
+    // console.log('step index: %s', stepIndex);
     this.contained.splice(stepIndex, 0, step);
-    console.log('after addStep: %s', this.contained.length);
+    // console.log('after addStep: %s', this.contained.length);
     step.addLocalsToParentContext();
 };
 Block.prototype.addToWorkspace = function(){
@@ -448,18 +438,18 @@ $('.scripts_workspace')
         var socketIndex = socket.data('index');
         var parentModel = Block.model(socket.closest('.wrapper'));
         parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
-		$('.scripts_workspace').trigger('scriptmodified');
+        $('.scripts_workspace').trigger('scriptmodified');
     });
 
 Block.prototype.removeExpression = function(expression, expressionIndex){
-    console.log('remove expression');
+    // console.log('remove expression');
     var value = this.values[expressionIndex];
     value.value = value.defaultValue;
     value.literal = true;
 };
 
 Block.prototype.removeContainedStep = function(step){
-    console.log('remove child step');
+    // console.log('remove child step');
     step.removeLocalsFromParent();
     this.contained.splice(this.contained.indexOf(step), 1);
 };
@@ -496,7 +486,7 @@ function removeFromScriptEvent(view){
             parent.children('input').val(parentModel.values[exprIndex].defaultValue);
         }
     }
-	$('.scripts_workspace').trigger('scriptmodified');
+    $('.scripts_workspace').trigger('scriptmodified');
 
 }
 
@@ -515,21 +505,22 @@ function addToScriptEvent(droptarget, view){
         console.log('unable to retrieve model for view %o', view);
         throw new Error('unable to retrieve model');
     }
-    if (wb.matches(droptarget, 'input')){
+    if (wb.matches(droptarget, '.socket')){
         container = droptarget.parentElement;
     }else if (wb.matches(droptarget, '.contained')){
         container = droptarget.parentElement;
     }
     if (wb.matches(droptarget, '.scripts_workspace')){
         model.addLocalsToParentContext();
-    }else if (wb.matches(droptarget, '.slot')){
+    }else if (wb.matches(droptarget, '.contained')){
         var parentModel = Block.model(wb.closest(droptarget, '.context'));
     }else{
         var parentModel = Block.model(wb.closest(droptarget, '.wrapper'));
     }
     if (parentModel){
         if (wb.matches(view, '.value')){
-            parentModel.addExpression(model, container.dataset.index); // FIXME, this is not the way to get the index
+            console.log('adding %o to %o at index %s', model, parentModel, wb.indexOf(droptarget));
+            parentModel.addExpression(model, wb.indexOf(droptarget)); // FIXME, this is not the way to get the index
         }else{
             parentModel.addStep(model, wb.indexOf(view));
         }
@@ -537,12 +528,12 @@ function addToScriptEvent(droptarget, view){
         // console.log('no parent model found for %o', droptarget);
     }
     // FIXME: Move adding view to parent's view from drag2.js to here
-	$('.scripts_workspace').trigger('scriptmodified');
+    $('.scripts_workspace').trigger('scriptmodified');
 }
 
 $('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
     var label = $(evt.target);
-	var model = Block.model(label.closest('.wrapper'));
+    var model = Block.model(label.closest('.wrapper'));
     // Rather than use jquery to find instances, should origin model keep track of all instances?
     // How would that survive serialization/reification?
     var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
@@ -550,7 +541,7 @@ $('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
     label.after(input).hide();
     input.select();
     // FIND ALL INSTANCES
-	return false;
+    return false;
 });
 
 $('.content').on('keypress', '.locals .label_input, .globals .label_input', function(evt){
@@ -572,16 +563,16 @@ $('.content').on('keypress', '.locals .label_input, .globals .label_input', func
 });
 
 $(document.body).on('scriptloaded', function(evt){
-	$('.scripts_workspace').on('scriptmodified', function(evt){
-		if (wb.queryParams.gist){
-			delete wb.queryParams.gist;
-			var prev = location.href;
-			history.pushState(null, null, wb.queryParamsToUrl(wb.queryParams));
-			window.addEventListener('popstate', function(e){
-				location.reload(prev);
-			});
-		}
-	});
+    $('.scripts_workspace').on('scriptmodified', function(evt){
+        if (wb.queryParams.gist){
+            delete wb.queryParams.gist;
+            var prev = location.href;
+            history.pushState(null, null, wb.queryParamsToUrl(wb.queryParams));
+            window.addEventListener('popstate', function(e){
+                location.reload(prev);
+            });
+        }
+    });
 });
 
 //

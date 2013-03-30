@@ -18,6 +18,19 @@
         elem.style.left = position.left + 'px';
     };
 
+    wb.hide = function(elem){
+        // FIXME
+        elem.dataset.display = elem.style.display;
+        elem.style.display = 'none';
+    };
+
+    wb.show = function(elem){
+        if (elem.dataset.display !== undefined && elem.dataset.display !== null){
+            elem.style.display = elem.dataset.display;
+        }
+        elem.dataset.display = null;
+    };
+
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };
@@ -107,7 +120,7 @@
         // name can be a jquery object, an element, or a string
         // attributes can be null or undefined, or an object of key/values to set
         // children can be text or an array. If an array, can contain strings or arrays of [name, attributes, children]
-        var e;
+        var e, val;
         if (name.jquery){
             e = name[0];
         }else if(name.nodeType){
@@ -118,7 +131,14 @@
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
-                e.setAttribute(key, attributes[key]);
+                if (typeof attributes[key] === 'function'){
+                    val = attributes[key](attributes);
+                    if (val){
+                        e.setAttribute(key, attributes[key]);
+                    }
+                }else{
+                    e.setAttribute(key, attributes[key]);
+                }
             });
         }
         if (children){

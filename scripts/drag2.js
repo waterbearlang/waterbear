@@ -105,6 +105,9 @@
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (wb.matches(dragTarget, '.value')){
+            wb.hide(dropCursor);
+        }
         dragTarget.classList.add("dragIndication");
         var model = wb.Block.model(dragTarget);
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -197,14 +200,15 @@
                 dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
+                console.log('inserting a value in a socket');
                 // Insert a value block into a socket
                 wb.findChildren(dropTarget, 'input, select').forEach(function(elem){
-                    elem.hide(); // FIXME: Move to block.js
+                    wb.hide(elem); // FIXME: Move to block.js
                 });
-                // dropTarget.append(dragTarget);
+                dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
-                // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
+                Event.trigger(dragTarget, 'add_to_socket', {dropTarget: dropTarget, parentIndex: wb.indexOf(dropTarget)});
             }
         }else{
             if (cloned){
@@ -227,6 +231,19 @@
                 }
             }
         }
+    }
+
+    function positionExpressionDropCursor(){
+        if (!potentialDropTargets.length) return;
+        var targets = potentialDropTargets.map(function(target){
+            return [wb.overlap(dragTarget, target), target];
+        });
+        targets.sort().reverse();
+        if(dropTarget){
+            dropTarget.classList.remove('dropActive');
+        }
+        dropTarget = targets[0][1]; // should be the potential target with largest overlap
+        dropTarget.classList.add('dropActive');
     }
 
     function positionDropCursor(){
@@ -279,7 +296,11 @@
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
         if (!dragTarget) {return;}
-        positionDropCursor(); // <== Pick up here, send current position!
+        if (wb.matches(dragTarget, '.value')){
+            positionExpressionDropCursor();
+        }else{
+            positionDropCursor();
+        }
         setTimeout(hitTest, dragTimeout);
     }
 
@@ -307,7 +328,7 @@
     }
 
     function hasChildBlock(elem){
-        return !!elem.querySelector('.wrapper');
+        return !elem.querySelector('.wrapper');
     }
 
     function getPotentialDropTargets(view, model){
@@ -324,7 +345,7 @@
                 if (scope){
                     return wb.findAll(scope, selector).filter(hasChildBlock);
                 }else{
-                    return wb.findAll(workspace, selector).filter(hasChildBlock).concat([workspace]);
+                    return wb.findAll(workspace, selector).filter(hasChildBlock);
                 }
             case 'eventhandler':
                 return [workspace];

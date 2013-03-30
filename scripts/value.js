@@ -28,8 +28,8 @@ function Value(textValue, index){
         if (this.choiceName){
             this.choiceList = choiceLists[this.choiceName];
         }
-        if (textValue.value && textValue.value.signature){
-            var block = Block(textValue.value);
+        if (textValue.value && textValue.value.id){
+            var block = wb.Block(textValue.value);
             if (block){
                 this.addBlock(block);
             }else{
@@ -116,24 +116,24 @@ function getInputType(testType){
 }
 
 Value.prototype.view = function(){
-    console.log('building view for %o, has cached view: %s', j(this), !!this._view);
-    console.log('we do not have a cached view');
+    // console.log('building view for %o, has cached view: %s', j(this), !!this._view);
+    // console.log('we do not have a cached view');
     if (! this.literal && this.value){ return this.value.view(); }
-    console.log('we do not have a block value');
+    // console.log('we do not have a block value');
     var inputType;
     if (this.choiceName){
-        console.log('return choice view');
+        // console.log('return choice view');
         this._view =  this.choiceView(this.choiceName, this.choiceList);
     }else if (this.value !== undefined){
         inputType = getInputType(this.type);
-        console.log('return type/index/value %o/%o/%o', this.type, this.index, this.value);
+        // console.log('return type/index/value %o/%o/%o', this.type, this.index, this.value);
         this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + inputType + '" value="' + this.value + '"/></span>');
     }else{
-        console.log('return undefined value');
+        // console.log('return undefined value');
         inputType = getInputType(this.type);
         this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"/></span>');
     }
-    console.log('return cached value: %o', h(this._view));
+    // console.log('return cached value: %o', h(this._view));
     return this._view;
 };
 

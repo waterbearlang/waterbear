@@ -67,6 +67,10 @@
   border-radius: 0;
 }
 
+.wrapper.value{
+  display: inline-block;
+}
+
 .trigger > .block{
   -webkit-border-top-right-radius: 25px;
   -webkit-border-top-left-radius: 25px;
@@ -234,7 +238,7 @@
 }
 
 /*This class is added to the block receiving the block bieng dragged.*/
-.socket.dropActive{
+.socket.selected{
     background-color: yellow;
 }
 .slot.dropActive{

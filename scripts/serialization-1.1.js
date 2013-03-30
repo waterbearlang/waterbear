@@ -42,14 +42,13 @@ function exists(list){
 wb.Block.prototype.toJSON = function(){
     var self = this;
     var serialized = {
-        signature: self.signature,
         blocktype: self.blocktype,
         label: self.spec.label,
         group: self.group,
         id: self.id
     };
-    if (self.seqnum){
-        serialized.seqnum = self.seqnum;
+    if (self.seqNum){
+        serialized.seqNum = self.seqNum;
     }else{
         console.warn('Block has no seqnum');
     }
@@ -82,6 +81,14 @@ wb.Block.prototype.toJSON = function(){
                 return child.toJSON();
             }
             return null;
+        });
+    }
+    if (exists(self.locals)){
+        serialized.locals = self.locals.map(function(local){
+            if (local && local.toJSON){
+                return local.toJSON();
+            }
+            return local;
         });
     }
     return serialized;

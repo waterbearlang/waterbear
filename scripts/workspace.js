@@ -4,8 +4,8 @@
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace:visible > .scripts_workspace').empty();
-		$('.workspace:visible > .scripts_text_view').empty();
+        $('.workspace > .scripts_workspace').empty();
+		$('.workspace > .scripts_text_view').empty();
         $('.submenu.globals').empty();
     }
 }

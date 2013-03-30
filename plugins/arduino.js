@@ -39,8 +39,8 @@ window.loadDefaultScript = function(script){
 };
 
 window.updateScriptsView = function(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    var view = $('.workspace:visible .scripts_text_view');
+    var blocks = $('.workspace .scripts_workspace > .wrapper');
+    var view = $('.workspace .scripts_text_view');
     blocks.writeScript(view);
 };
 
@@ -57,7 +57,7 @@ jQuery.fn.extend({
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace:visible > *').empty();
+        $('.workspace > *').empty();
         $('.stage').replaceWith('<div class="stage"></div>');
     }
 }

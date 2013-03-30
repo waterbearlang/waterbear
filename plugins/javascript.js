@@ -19,17 +19,17 @@ yepnope({
 });
 
 // Add some utilities
-jQuery.fn.extend({
-    prettyScript: function(){
-        return js_beautify(this.map(function(){
-            return wb.Block.model(this).code();
-        }).get().join(''));
-    },
-    writeScript: function(view){
-      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
-      hljs.highlightBlock(view.children()[0]);
-    }
-});
+
+wb.prettyScript = function(elements){
+    return js_beautify(elements.map(function(elem){
+        return wb.Block.model(elem).code();
+    }).join(''));
+};
+
+wb.writeScript = function(elements, view){
+    view.innerHTML = '<pre class="language-javascript">' + wb.prettyScript(elements) + '</pre>';
+    hljs.highlightBlock(view.firstChild);
+};
 
 // End UI section
 

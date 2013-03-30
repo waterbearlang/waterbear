@@ -7,9 +7,9 @@ function tabSelect(event){
     $('.tabbar .selected').removeClass('selected');
     self.addClass('selected');
     if (self.is('.scripts_workspace_tab')){
-		$('.workspace:visible').attr('class', 'workspace blockview');
+		$('.workspace').attr('class', 'workspace blockview');
     }else if (self.is('.scripts_text_view_tab')){
-		$('.workspace:visible').attr('class', 'workspace textview');
+		$('.workspace').attr('class', 'workspace textview');
         updateScriptsView();
     }
 }
@@ -17,14 +17,14 @@ $('.tabbar').on('click', '.chrome_tab', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){
-    $('.workspace:visible').attr('class', 'workspace blockview');
+    $('.workspace').attr('class', 'workspace blockview');
 }
 window.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    var view = $('.workspace:visible .scripts_text_view');
-    blocks.writeScript(view);
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    wb.writeScript(blocks, view);
 }
 window.updateScriptsView = updateScriptsView;
 
@@ -32,9 +32,9 @@ function runCurrentScripts(event){
 	if (document.body.className === 'result' && wb.script){
 		wb.runScript(wb.script);
 	}else{
-	    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
 		document.body.className = 'result';
-		wb.runScript( blocks.prettyScript() );
+		wb.runScript( wb.prettyScript(blocks) );
 	}
 }
 $('.runScripts').click(runCurrentScripts);

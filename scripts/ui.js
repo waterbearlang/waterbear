@@ -7,9 +7,9 @@ function tabSelect(event){
     $('.tabbar .selected').removeClass('selected');
     self.addClass('selected');
     if (self.is('.scripts_workspace_tab')){
-		$('.workspace:visible').attr('class', 'workspace blockview');
+		$('.workspace').attr('class', 'workspace blockview');
     }else if (self.is('.scripts_text_view_tab')){
-		$('.workspace:visible').attr('class', 'workspace textview');
+		$('.workspace').attr('class', 'workspace textview');
         updateScriptsView();
     }
 }
@@ -17,14 +17,14 @@ $('.tabbar').on('click', '.chrome_tab', tabSelect);
 
 // Expose this to dragging and saving functionality
 function showWorkspace(){
-    $('.workspace:visible').attr('class', 'workspace blockview');
+    $('.workspace').attr('class', 'workspace blockview');
 }
 window.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
-    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-    var view = $('.workspace:visible .scripts_text_view');
-    blocks.writeScript(view);
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    wb.writeScript(blocks, view);
 }
 window.updateScriptsView = updateScriptsView;
 
@@ -32,9 +32,9 @@ function runCurrentScripts(event){
 	if (document.body.className === 'result' && wb.script){
 		wb.runScript(wb.script);
 	}else{
-	    var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
 		document.body.className = 'result';
-		wb.runScript( blocks.prettyScript() );
+		wb.runScript( wb.prettyScript(blocks) );
 	}
 }
 $('.runScripts').click(runCurrentScripts);
@@ -74,7 +74,7 @@ function collapseCommand(key, opt){
 function cutBlockCommand(key, opt){
     console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
     var view = this.closest('.wrapper');
-    pasteboard = view.data('model');
+    pasteboard = Block.model(view);
     // Remove it programatically, and trigger the right events:
     removeFromScriptEvent(view);
     view.remove();
@@ -82,12 +82,12 @@ function cutBlockCommand(key, opt){
 
 function copyBlockCommand(key, opt){
     console.info('copyBlockCommand(%s, %o)', key, opt);
-    pasteboard = this.closest('.wrapper').data('model').clone();
+    pasteboard = Block.model(this.closest('.wrapper')).clone();
 }
 
 function copySubscriptCommand(key, opt){
     console.info('copySubscriptCommand(%s, %o)', key, opt);
-    pasteboard = this.closest('.wrapper').data('model').clone(true);
+    pasteboard = Block.model(this.closest('.wrapper')).clone(true);
 }
 
 function pasteCommand(key, opt){
@@ -137,15 +137,15 @@ var pasteboard = null;
 //         cancel: {'name': 'Cancel', callback: cancelCommand}
 //     }
 // });
-// 
+//
 // $.contextMenu({
 //    selector: '.scripts_workspace',
 //    items: {
 //        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
 //        cancel: {'name': 'Cancel', callback: cancelCommand}
-//    } 
+//    }
 // });
-// 
+//
 // $.contextMenu({
 //     selector: '.scripts_workspace .value > input',
 //     items: {
@@ -153,7 +153,7 @@ var pasteboard = null;
 //         cancel: {'name': 'Cancel', callback: cancelCommand}
 //     }
 // });
-// 
+//
 // $.contextMenu({
 //     selector: '.scripts_workspace .contained',
 //     items: {
@@ -161,7 +161,7 @@ var pasteboard = null;
 //         cancel: {'name': 'Cancel', callback: cancelCommand}
 //     }
 // });
-// 
+//
 
 // TODO: add event handler to enable/disable, hide/show items based on state of block
 
@@ -227,7 +227,7 @@ function edit_menu(title, specs, show){
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(Block(spec).view());
+        submenu.append(wb.Block(spec).view());
     });
     var state = $("#block_menu").accordion( "option", "active" );
     $('#block_menu').accordion('destroy').accordion({

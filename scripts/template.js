@@ -7,7 +7,7 @@
 
 
 (function(){
-	
+
 	// fn should return the node walked. If it is replaced in place, return the new node.
 	function walk(node, fn){
 		var previous = node.prev();
@@ -156,11 +156,12 @@ function renderFor(node){
 function renderReplace(node){
 	var replaceKey = node.data('replace');
 	if (replaceKey){
-		print('renderReplace(%s, %s)', h(node), j(node.data('context')));
-		//node.removeAttr('data-replace')
-		print('\tbefore replace: %o', h(node));
-		node.replaceWith(namedValue(node.data('context'), replaceKey));
-		return $();
+		// console.log('renderReplace(%s, %s)', h(node), j(node.data('context')));
+		node.removeAttr('data-replace')
+		// console.log('\tbefore replace: %o', h(node));
+		var replacer = namedValue(node.data('context'), replaceKey);
+		node.replaceWith(replacer);
+		return replacer;
 	}
 	return node;
 };
@@ -187,11 +188,14 @@ function namedValue(context, name){
 		var v = context[name];
 		if (v.view){
 			try{
+				// console.log('calling view() on %o', v);
 				retVal = v.view();
 			}catch(e){
+				// console.log('returning view from %o', v);
 				retVal = v.view;
 			}
 		}else{
+			// console.log('%o is the value', v);
 			retVal = v;
 		}
 	}else{

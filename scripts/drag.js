@@ -145,8 +145,7 @@
         // called on mousemove or touchmove if not already dragging
         if (!blend(event)) {return undefined;}
         if (!dragTarget) {return undefined;}
-        dropCursor = $('<div class="dropCursor"></div>');
-        targetCanvas.prepend(dropCursor);
+        dropCursor = $('.dropCursor');
         dragTarget.addClass("drag_indication");
         var model = dragTarget.data('model');
         currentPosition = {left: event.pageX, top: event.pageY};
@@ -164,7 +163,7 @@
         // set last offset
         // TODO: handle detach better (generalize restoring sockets, put in language file)
         // console.log('[1] model: %s', dragTarget.data('model'));
-        removeFromScriptEvent(dragTarget);
+        wb.removeFromScriptEvent(dragTarget);
         // console.log('[2] model: %s', dragTarget.data('model'));
         dragTarget.css('position', 'absolute');
         if (dragTarget.is('.scripts_workspace .wrapper')){
@@ -222,15 +221,15 @@
             dropTarget.removeClass('drop_active');
             if (blockType(dragTarget) === 'step' || blockType(dragTarget) === 'context'){
                 // Drag a step to snap to a step
-                dropTarget.parent().append(dragTarget);
+                // dropTarget.parent().append(dragTarget);
                 dragTarget.removeAttr('style');
-                addToScriptEvent(dropTarget, dragTarget);
+                wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
                 // Insert a value block into a socket
                 dropTarget.children('input, select').hide(); // FIXME: Move to block.js
-                dropTarget.append(dragTarget);
+                // dropTarget.append(dragTarget);
                 dragTarget.removeAttr('style');
-                addToScriptEvent(dropTarget, dragTarget);
+                wb.addToScriptEvent(dropTarget, dragTarget);
                 // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
             }
         }else if ($('#block_menu').cursorOver()){
@@ -243,21 +242,23 @@
             dropCursor.remove();
             dropCursor = null;
             dragTarget.removeAttr('style');
-            addToScriptEvent(targetCanvas, dragTarget);
+            wb.addToScriptEvent(targetCanvas, dragTarget);
         }else{
             if (cloned){
+                // remove cloned block (from menu)
                 dragTarget.remove();
             }else{
+                // Put blocks back where we got them from
                 var startParent = dragTarget.data('startParent');
                 if (startParent){
                     if (startParent.is('.socket')){
                         startParent.children('input').hide();
                     }
-                    startParent.append(dragTarget);
+                    startParent.append(dragTarget); // FIXME: We'll need an index into the contained array
                     dragTarget.removeAttr('style');
                     dragTarget.removeData('startParent');
                 }else{
-                    targetCanvas.append(dragTarget);
+                    targetCanvas.append(dragTarget); // FIXME: We'll need an index into the canvas array
                     dragTarget.offset(startPosition);
                 }
             }
@@ -265,10 +266,6 @@
         if (dragPlaceholder){
             dragPlaceholder.remove();
             dragPlaceholder = null;
-        }
-        if (dropCursor){
-            dropCursor.remove();
-            dropCursor = null;
         }
     }
 
@@ -375,6 +372,7 @@
             return rectToString(this.rect());
         },
         rect: function(){
+            if (this.length !== 1) throw new Error('calling rect on ' + this.length + ' blocks is not defined');
             var pos = this.offset();
             var width = this.outerWidth();
             var height = this.outerHeight();

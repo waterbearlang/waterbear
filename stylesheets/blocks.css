@@ -1,6 +1,5 @@
 /* Styles for steps and containers */
 .wrapper, .socket, .autosocket{
-  display: inline-block;
   position: relative;
   left: 0;
   top: 0;
@@ -58,7 +57,7 @@
   border-color: inherit;
   border-width: 2px;
   border-style: solid;
-  white-space: nowrap; 
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -66,6 +65,10 @@
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+
+.wrapper.value{
+  display: inline-block;
 }
 
 .trigger > .block{
@@ -194,7 +197,7 @@
   background-color: transparent;
   border-color: inherit;
   width: 100%;
-  overflow: visible; 
+  overflow: visible;
 }
 
 .block input {
@@ -219,24 +222,29 @@
 }
 
 /*This class is added to the block that is bieng moved when it is aligned to snap in*/
-.drag_active{
+.dragActive{
 /*    background-color: green;*/
 /*    A box shadow might look nice here ?*/
 }
 
 /*This class is added to the block that is moving*/
-.drag_indication{
+.dragIndication{
     opacity: 0.75;
 }
 
+/* This class is added to all potential drop targets */
+.dropTarget{
+    outline: yellow ridge thick;
+}
+
 /*This class is added to the block receiving the block bieng dragged.*/
-.socket.drop_active{
+.socket.selected{
     background-color: yellow;
 }
-.slot.drop_active{
+.slot.dropActive{
     background-color: yellow;
 }
-.slot.drop_active:before {
+.slot.dropActive:before {
     height: 21px;
     width: 56px;
     position: absolute;

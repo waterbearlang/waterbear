@@ -22,7 +22,7 @@ yepnope({
 jQuery.fn.extend({
     prettyScript: function(){
         return js_beautify(this.map(function(){
-            return $(this).extract_script();
+            return wb.Block.model(this).code();
         }).get().join(''));
     },
     writeScript: function(view){

@@ -47,7 +47,7 @@ window.updateScriptsView = function(){
 jQuery.fn.extend({
   wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
-      var script = this.map(function(){return $(this).extract_script();}).get().join('\n\n');
+      var script = this.map(function(){return wb.Block.model(this).code();}).get().join('\n\n');
       return script;
   },
   writeScript: function(view){

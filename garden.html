@@ -22,7 +22,7 @@
         <div class="wrapper step" data-classes="group">
             <div class="block" data-title="tooltip">
                 <div class="blockhead">
-                    <div class="label" data-for="label in labels">
+                    <div class="label">
 						<span data-replace="label"></span>
 					</div>
                 </div>
@@ -31,13 +31,14 @@
             <div class="next">
                 <i class="slot"></i>
             </div>
+
         </div>
     </script>
     <script type="text/html" id="expression_template">
         <div class="wrapper value" data-classes="type group">
             <div class="block" data-title="tooltip">
                 <div class="blockhead">
-                    <div class="label" data-for="label in labels">
+                    <div class="label">
 						<span data-replace="label"></span>
 					</div>
                 </div>
@@ -48,12 +49,12 @@
         <div class="wrapper step context" data-classes="group">
             <div class="block" data-title="tooltip">
                 <b class="flap"></b>
-                <div class="blockhead" data-for="label in labels">
+                <div class="blockhead">
                     <div class="label">
-                        <span class="disclosure open" data-if="label.attachLocals">▼</span>
+                        <span class="disclosure open">▼</span>
                         <span data-replace="label"></span>
                     </div>
-                    <div class="locals block_menu" data-if="label.attachLocals"></div>
+                    <div class="locals block_menu"></div>
                     <div class="contained">
                         <i class="slot"></i>
                     </div>
@@ -65,24 +66,23 @@
         </div>
     </script>
     <script type="text/html" id="eventhandler_template">
-        <div class="wrapper trigger context" data-classes="group">
+        <div class="wrapper step context trigger" data-classes="group">
             <div class="block" data-title="tooltip">
                 <b class="trigger"></b>
-                <div class="blockhead" data-for="label in labels">
+                <div class="blockhead">
 	                <div class="label">
-	                    <span class="disclosure open" data-if="label.attachLocals">▼</span>
+	                    <span class="disclosure open">▼</span>
 	                    <span data-replace="label"></span>
 	                </div>
-	                <div class="locals block_menu" data-if="label.attachLocals"></div>
+	                <div class="locals block_menu"></div>
                     <div class="contained">
                         <i class="slot"></i>
                     </div>
                 </div>
             </div>
-        </div>
-    </script>
-    <script type="text/html" id="label_template">
-        <div class="label">
+            <div class="next">
+                <i class="slot"></i>
+            </div>
         </div>
     </script>
   </head>
@@ -103,7 +103,9 @@
 	            <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
 	            <div class="scripts_text_view_tab chrome_tab">Script Text</div>
 	        </div>
-            <div class="scripts_workspace" data-name="default"></div>
+            <div class="scripts_workspace" data-name="default">
+                <div class="dropCursor"></div>
+            </div>
             <div class="scripts_text_view"></div>
         </div>
 	</div>
@@ -180,18 +182,20 @@
 	    }
 	</script>
 	<script src="scripts/template.js"></script>
-    <script src="scripts/drag.js"></script>
+    <script src="scripts/util.js"></script>
+    <script src="scripts/events.js"></script>
+    <script src="scripts/drag2.js"></script>
+    <script src="scripts/uuid.js"></script>
+    <script src="scripts/value.js"></script>
     <script src="scripts/blocks.js"></script>
-    <script src="scripts/jquery.blocks.js"></script>
     <script src="scripts/ui.js"></script>
     <script src="scripts/debug.js"></script>
     <script src="scripts/workspace.js"></script>
-    <script src="scripts/serialization-1.0.js"></script>
+    <script src="scripts/serialization-1.1.js"></script>
     <script>
 
         // load all modules separated by |
         var plugins = q['plugin'].split('|').map(function(name){
-            Block.registerPlugin(name);
             return 'plugins/' + name + '.js';
         });
 

@@ -7,8 +7,8 @@ html, body{
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
     margin: 0;
     padding: 0;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+/*    -moz-box-sizing: border-box;
+    box-sizing: border-box; */
 }
 img {
     border:0;

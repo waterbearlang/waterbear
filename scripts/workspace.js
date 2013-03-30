@@ -4,8 +4,8 @@
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace:visible > .scripts_workspace').empty();
-		$('.workspace:visible > .scripts_text_view').empty();
+        $('.workspace > .scripts_workspace').empty();
+		$('.workspace > .scripts_text_view').empty();
         $('.submenu.globals').empty();
     }
 }
@@ -26,7 +26,7 @@ $('.goto_stage').click(function(){
 function saveCurrentScripts(){
     showWorkspace();
     $('#block_menu')[0].scrollIntoView();
-    localStorage.__current_scripts = Block.serialize();
+    localStorage.__current_scripts = wb.Block.serialize();
 }
 $(window).unload(saveCurrentScripts);
 
@@ -37,7 +37,7 @@ function scriptsToString(title, description){
         title: title,
         description: description,
         date: Date.now(),
-        scripts: Block.scriptsToObject('.scripts_workspace')
+        scripts: wb.Block.scriptsToObject('.scripts_workspace')
     });
 }
 
@@ -66,20 +66,18 @@ $('.save_scripts').on('click', createDownloadUrl);
 $('.restore_scripts').on('click', comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = $('.workspace .scripts_workspace');
+    var workspace = document.querySelector('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
 	if (!fileObject) return;
     var blocks = fileObject.blocks.map(function(spec){
-        return Block(spec);
+        return wb.Block(spec);
     });
-    Deferred.resolve();
     blocks.forEach(function(block){
-        var view = block.view();
-		assert.isString(view.jquery, 'Views must be jQuery objects');
-        workspace.append(view);
-        addToScriptEvent(workspace, view);
+        var view = block.view()[0]; // FIXME: strip jquery wrapper
+        workspace.appendChild(view);
+        wb.addToScriptEvent(workspace, view);
     });
     wb.loaded = true;
 }

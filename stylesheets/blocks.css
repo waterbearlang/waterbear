@@ -130,7 +130,8 @@
 }
 
 
-.slot, .flap {
+.step > .block:before, .contained:before, .step:after {
+  content: '';
   display: block;
   left: 0;
   margin: 0;
@@ -149,15 +150,22 @@
   border-color: inherit;
 }
 
-.flap {
+.step > .block:before {
   position: absolute;
   top: -7px;
   left: 0;
   background-color: inherit;
 }
 
-.slot {
+.contained:before {
     top: -7px;
+    position: absolute;
+    background-color: #FFF;
+    width: 20px;
+}
+
+.step:after{
+    bottom: 0;
     position: absolute;
     background-color: #FFF;
     width: 20px;

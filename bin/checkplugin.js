@@ -2,11 +2,11 @@
 
 var fs = require('fs');
 
-var filenames = process.argv.slice(2); // 0 is node, and 1 is script name
+// var filenames = process.argv.slice(2); // 0 is node, and 1 is script name
 
-filenames.forEach(function(filename){
-    fs.readFile(filename, 'utf8', checkfile(filename));
-});
+// filenames.forEach(function(filename){
+//     fs.readFile(filename, 'utf8', checkfile(filename));
+// });
 
 function doNothing(){return doNothing;}
 doNothing.trigger = doNothing;
@@ -42,13 +42,14 @@ global.wb.menu = function(title, specs, show){
         }
     });
     if (ok){
-        console.log('\t%s is OK', title);
+        console.log('\t%s is OK with %s blocks', title, specs.length);
     }
 };
 
 
 function checkfile(filename){
     return function(err, data){
+        var blocks = {};
         try{
             console.log('checking %s', filename);
             eval(data);
@@ -56,5 +57,19 @@ function checkfile(filename){
             console.log('error in %s', filename);
             console.log(e);
         }
+
     }
 }
+
+function findBlocks(filename, blocks){
+    var data = fs.readFileSync(filename, 'utf8');
+    global.wb.menu = function(title, specs, show){
+        specs.forEach(function(spec){
+            blocks[spec.id] = spec;
+        });
+    };
+    eval(data);
+}
+
+exports.findBlocks = findBlocks;
+

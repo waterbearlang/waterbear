@@ -29,7 +29,7 @@ yepnope({
         {
             blocktype: 'eventhandler',
             id: '467848f3-3493-439a-9228-d6f83007e886',
-            contained: [{label: 'get tweet for [string]'}],
+            label: 'get tweet for [string]',
             script: 'local.getTweet({{1}}, function(tweet){local.tweet## = tweet;[[1]]});',
             locals: [
                 {

@@ -33,12 +33,37 @@
     },
     {
         "blocktype": "expression",
+        "id": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+        "label": "[number:0] = [number:0]",
+        "type": "boolean",
+        "script": "({{1}} === {{2}})",
+        "help": "two operands are equal"
+    },
+    {
+        "blocktype": "expression",
+        "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
+        "label": "[number:0] < [number:0]",
+        "type": "boolean",
+        "script": "({{1}} < {{2}})",
+        "help": "first operand is less than second operand"
+    },
+
+    {
+        "blocktype": "expression",
+        "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
+        "label": "[number:0] > [number:0]",
+        "type": "boolean",
+        "script": "({{1}} > {{2}})",
+        "help": "first operand is greater than second operand"
+    },
+    {
+        "blocktype": "expression",
         "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
         "label": "pick random [number:1] to [number:10]",
         "type": "number",
         "script": "randint({{1}}, {{2}})",
         "help": "random number between two numbers (inclusive)"
-    }
+    },
     {
         "blocktype": "expression",
         "id": "a2647515-2f14-4d0f-84b1-a6e288823630",

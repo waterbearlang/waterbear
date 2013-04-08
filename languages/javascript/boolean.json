@@ -1,14 +1,6 @@
 [
     {
         "blocktype": "expression",
-        "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
-        "label": "[number:0] > [number:0]",
-        "type": "boolean",
-        "script": "({{1}} > {{2}})",
-        "help": "first operand is greater than second operand"
-    },
-    {
-        "blocktype": "expression",
         "id": "770756e8-3a10-4993-b02e-3d1333c98958",
         "label": "[boolean] and [boolean]",
         "type": "boolean",

@@ -78,7 +78,7 @@ function checkForMissingBlocks(oldblocks, newblocks){
         var oldblock = oldblocks[key];
         var newblock = newblocks[key];
         if (!newblock){
-            console.log('Block [%s] not found in any file', oldblock.label);
+            console.log('Block [%s] not found in any file', oldblock.label || oldblock.id);
         }
     });
 }

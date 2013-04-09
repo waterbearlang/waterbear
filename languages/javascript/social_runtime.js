@@ -1,8 +1,6 @@
 (function(){
 
-    // FIXME: move Ajax and other utils to runtime proper
-
-
+    // FIXME: move ajax and other utils to runtime proper
     var ajax = {
         jsonp: function(url, data, success, error){
             var callbackname = '_callback' + Math.round(Math.random() * 10000);

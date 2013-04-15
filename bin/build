@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+// I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
+var fs = require('fs');
+var path = require('path');
+
+var plugins = {
+    arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
+    javascript: ['array', 'boolean', 'canvas', 'color', 'control', 'image', 'javascript', 'math', 'matrix', 'object', 'path', 'point', 'rect', 'sensing', 'shape', 'size', 'social', 'sprite', 'string', 'text']
+};
+
+function clear(){
+    if (fs.existsSync('dist')){
+        var files = fs.readdirSync('dist');
+        files.forEach(function(filename){
+            fs.unlinkSync(path.join('dist', filename));
+        });
+    }else{
+        fs.mkdirSync('dist');
+    }
+};
+
+function concat(src, dest, files, ext, subdir, before, between, after){
+    before = before || '';
+    between = between || '';
+    after = after || '';
+    files.forEach(function(pathname){
+        if (subdir){
+            pathname = path.join(pathname, subdir);
+        }
+        var filenames = fs.readdirSync(path.join(src, pathname)).filter(function(filename){
+            return path.extname(filename) === ext;
+        });
+        if (filenames.length){
+            // just using the first filename for now
+            var contents = fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8');
+        }
+        fs.appendFileSync(dest, contents);
+    });
+}
+
+function build(){
+    clear();
+    Object.keys(plugins).forEach(function(key){
+        var files = plugins[key];
+        var src = path.join('languages', key);
+        var dest = path.join('dist', key);
+        // Build CSS
+        concat(src, dest + '.css', files, '.css');
+        // Build Waterbear support
+        concat(src, dest + '.js', files, '.js');
+        // Build Waterbear blocks
+        concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');wb.menu(', ');');
+        // Build runtime support
+        if (key === 'javascript'){
+            concat(src, dest + '_runtime.js', files, '.js', 'runtime');
+        }
+    });
+};
+
+build();

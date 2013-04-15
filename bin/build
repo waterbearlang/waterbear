@@ -20,9 +20,8 @@ function clear(){
     }
 };
 
-function concat(src, dest, files, ext, subdir, before, between, after){
+function concat(src, dest, files, ext, subdir, before, after){
     before = before || '';
-    between = between || '';
     after = after || '';
     files.forEach(function(pathname){
         if (subdir){
@@ -33,7 +32,7 @@ function concat(src, dest, files, ext, subdir, before, between, after){
         });
         if (filenames.length){
             // just using the first filename for now
-            var contents = fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8');
+            var contents = before + fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8') + after;
         }
         fs.appendFileSync(dest, contents);
     });
@@ -50,7 +49,7 @@ function build(){
         // Build Waterbear support
         concat(src, dest + '.js', files, '.js');
         // Build Waterbear blocks
-        concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');wb.menu(', ');');
+        concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
         // Build runtime support
         if (key === 'javascript'){
             concat(src, dest + '_runtime.js', files, '.js', 'runtime');

@@ -37,7 +37,7 @@ function getNewBlocks(){
     var blocks = {};
     blockdefs.forEach(function(p){
         try{
-           var blocklist = JSON.parse(fs.readFileSync(p, 'utf8'));
+           var blocklist = JSON.parse(fs.readFileSync(p, 'utf8')).blocks;
            try{
               checkDefs(blocklist, p, blocks);
            }catch(e){

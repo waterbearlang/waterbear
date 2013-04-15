@@ -1,179 +1,182 @@
-[
-    {
-        "blocktype": "expression",
-        "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
-        "label": "[number:0] + [number:0]",
-        "type": "number",
-        "script": "({{1}} + {{2}})",
-        "help": "sum of the two operands"
-    },
-    {
-        "blocktype": "expression",
-        "id": "d7082309-9f02-4cf9-bcd5-d0cac243bff9",
-        "label": "[number:0] - [number:0]",
-        "type": "number",
-        "script": "({{1}} - {{2}})",
-        "help": "difference of the two operands"
-    },
-    {
-        "blocktype": "expression",
-        "id": "bd3879e6-e440-49cb-b10b-52d744846341",
-        "label": "[number:0] * [number:0]",
-        "type": "number",
-        "script": "({{1}} * {{2}})",
-        "help": "product of the two operands"
-    },
-    {
-        "blocktype": "expression",
-        "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
-        "label": "[number:0] / [number:0]",
-        "type": "number",
-        "script": "({{1}} / {{2}})",
-        "help": "quotient of the two operands"
-    },
-    {
-        "blocktype": "expression",
-        "id": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
-        "label": "[number:0] = [number:0]",
-        "type": "boolean",
-        "script": "({{1}} === {{2}})",
-        "help": "two operands are equal"
-    },
-    {
-        "blocktype": "expression",
-        "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
-        "label": "[number:0] < [number:0]",
-        "type": "boolean",
-        "script": "({{1}} < {{2}})",
-        "help": "first operand is less than second operand"
-    },
+{
+    "name": "Math",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
+            "label": "[number:0] + [number:0]",
+            "type": "number",
+            "script": "({{1}} + {{2}})",
+            "help": "sum of the two operands"
+        },
+        {
+            "blocktype": "expression",
+            "id": "d7082309-9f02-4cf9-bcd5-d0cac243bff9",
+            "label": "[number:0] - [number:0]",
+            "type": "number",
+            "script": "({{1}} - {{2}})",
+            "help": "difference of the two operands"
+        },
+        {
+            "blocktype": "expression",
+            "id": "bd3879e6-e440-49cb-b10b-52d744846341",
+            "label": "[number:0] * [number:0]",
+            "type": "number",
+            "script": "({{1}} * {{2}})",
+            "help": "product of the two operands"
+        },
+        {
+            "blocktype": "expression",
+            "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+            "label": "[number:0] / [number:0]",
+            "type": "number",
+            "script": "({{1}} / {{2}})",
+            "help": "quotient of the two operands"
+        },
+        {
+            "blocktype": "expression",
+            "id": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+            "label": "[number:0] = [number:0]",
+            "type": "boolean",
+            "script": "({{1}} === {{2}})",
+            "help": "two operands are equal"
+        },
+        {
+            "blocktype": "expression",
+            "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
+            "label": "[number:0] < [number:0]",
+            "type": "boolean",
+            "script": "({{1}} < {{2}})",
+            "help": "first operand is less than second operand"
+        },
 
-    {
-        "blocktype": "expression",
-        "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
-        "label": "[number:0] > [number:0]",
-        "type": "boolean",
-        "script": "({{1}} > {{2}})",
-        "help": "first operand is greater than second operand"
-    },
-    {
-        "blocktype": "expression",
-        "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
-        "label": "pick random [number:1] to [number:10]",
-        "type": "number",
-        "script": "randint({{1}}, {{2}})",
-        "help": "random number between two numbers (inclusive)"
-    },
-    {
-        "blocktype": "expression",
-        "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
-        "label": "[number:0] mod [number:0]",
-        "type": "number",
-        "script": "({{1}} % {{2}})",
-        "help": "modulus of a number is the remainder after whole number division"
-    },
-    {
-        "blocktype": "expression",
-        "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
-        "label": "round [number:0]",
-        "type": "number",
-        "script": "Math.round({{1}})",
-        "help": "rounds to the nearest whole number"
-    },
-    {
-        "blocktype": "expression",
-        "id": "c38383df-a765-422e-b215-7d1cfb7557a1",
-        "label": "absolute of [number:10]",
-        "type": "number",
-        "script": "Math.abs({{1}})",
-        "help": "converts a negative number to positive, leaves positive alone"
-    },
-    {
-        "blocktype": "expression",
-        "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
-        "label": "arccosine degrees of [number:10]",
-        "type": "number",
-        "script": "rad2deg(Math.acos({{1}}))",
-        "help": "inverse of cosine"
-    },
-    {
-        "blocktype": "expression",
-        "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
-        "label": "arcsine degrees of [number:10]",
-        "type": "number",
-        "script": "rad2deg(Math.asin({{1}}))",
-        "help": "inverse of sine"
-    },
-    {
-        "blocktype": "expression",
-        "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
-        "label": "arctangent degrees of [number:10]",
-        "type": "number",
-        "script": "rad2deg(Math.atan({{1}}))",
-        "help": "inverse of tangent"
-    },
-    {
-        "blocktype": "expression",
-        "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
-        "label": "ceiling of [number:10]",
-        "type": "number",
-        "script": "Math.ceil({{1}})",
-        "help": "rounds up to nearest whole number"
-    },
-    {
-        "blocktype": "expression",
-        "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
-        "label": "cosine of [number:10] degrees",
-        "type": "number",
-        "script": "Math.cos(deg2rad({{1}}))",
-        "help": "ratio of the length of the adjacent side to the length of the hypotenuse"
-    },
-    {
-        "blocktype": "expression",
-        "id": "1a8f6a28-14e9-4400-8e80-31217309ebc9",
-        "label": "sine of [number:10] degrees",
-        "type": "number",
-        "script": "Math.sin(deg2rad({{1}}))",
-        "help": "ratio of the length of the opposite side to the length of the hypotenuse"
-    },
-    {
-        "blocktype": "expression",
-        "id": "fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541",
-        "label": "tangent of [number:10] degrees",
-        "type": "number",
-        "script": "Math.tan(deg2rad({{1}}))",
-        "help": "ratio of the length of the opposite side to the length of the adjacent side"
-    },
-    {
-        "blocktype": "expression",
-        "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
-        "label": "[number:10] to the power of [number:2]",
-        "type": "number",
-        "script": "Math.pow({{1}}, {{2}})",
-        "help": "multiply a number by itself the given number of times"
-    },
-    {
-        "blocktype": "expression",
-        "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
-        "label": "square root of [number:10]",
-        "type": "number",
-        "script": "Math.sqrt({{1}})",
-        "help": "the square root is the same as taking the to the power of 1/2"
-    },
-    {
-        "blocktype": "expression",
-        "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
-        "label": "pi",
-        "script": "Math.PI;",
-        "type": "number",
-        "help": "pi is the ratio of a circle's circumference to its diameter"
-    },
-    {
-        "blocktype": "expression",
-        "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
-        "label": "tau",
-        "script": "Math.PI * 2",
-        "type": "number",
-        "help": "tau is 2 times pi, a generally more useful number"
-    }
-]
+        {
+            "blocktype": "expression",
+            "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
+            "label": "[number:0] > [number:0]",
+            "type": "boolean",
+            "script": "({{1}} > {{2}})",
+            "help": "first operand is greater than second operand"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+            "label": "pick random [number:1] to [number:10]",
+            "type": "number",
+            "script": "randint({{1}}, {{2}})",
+            "help": "random number between two numbers (inclusive)"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
+            "label": "[number:0] mod [number:0]",
+            "type": "number",
+            "script": "({{1}} % {{2}})",
+            "help": "modulus of a number is the remainder after whole number division"
+        },
+        {
+            "blocktype": "expression",
+            "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
+            "label": "round [number:0]",
+            "type": "number",
+            "script": "Math.round({{1}})",
+            "help": "rounds to the nearest whole number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c38383df-a765-422e-b215-7d1cfb7557a1",
+            "label": "absolute of [number:10]",
+            "type": "number",
+            "script": "Math.abs({{1}})",
+            "help": "converts a negative number to positive, leaves positive alone"
+        },
+        {
+            "blocktype": "expression",
+            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "label": "arccosine degrees of [number:10]",
+            "type": "number",
+            "script": "rad2deg(Math.acos({{1}}))",
+            "help": "inverse of cosine"
+        },
+        {
+            "blocktype": "expression",
+            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "label": "arcsine degrees of [number:10]",
+            "type": "number",
+            "script": "rad2deg(Math.asin({{1}}))",
+            "help": "inverse of sine"
+        },
+        {
+            "blocktype": "expression",
+            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
+            "label": "arctangent degrees of [number:10]",
+            "type": "number",
+            "script": "rad2deg(Math.atan({{1}}))",
+            "help": "inverse of tangent"
+        },
+        {
+            "blocktype": "expression",
+            "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+            "label": "ceiling of [number:10]",
+            "type": "number",
+            "script": "Math.ceil({{1}})",
+            "help": "rounds up to nearest whole number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
+            "label": "cosine of [number:10] degrees",
+            "type": "number",
+            "script": "Math.cos(deg2rad({{1}}))",
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse"
+        },
+        {
+            "blocktype": "expression",
+            "id": "1a8f6a28-14e9-4400-8e80-31217309ebc9",
+            "label": "sine of [number:10] degrees",
+            "type": "number",
+            "script": "Math.sin(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse"
+        },
+        {
+            "blocktype": "expression",
+            "id": "fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541",
+            "label": "tangent of [number:10] degrees",
+            "type": "number",
+            "script": "Math.tan(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the adjacent side"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
+            "label": "[number:10] to the power of [number:2]",
+            "type": "number",
+            "script": "Math.pow({{1}}, {{2}})",
+            "help": "multiply a number by itself the given number of times"
+        },
+        {
+            "blocktype": "expression",
+            "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
+            "label": "square root of [number:10]",
+            "type": "number",
+            "script": "Math.sqrt({{1}})",
+            "help": "the square root is the same as taking the to the power of 1/2"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
+            "label": "pi",
+            "script": "Math.PI;",
+            "type": "number",
+            "help": "pi is the ratio of a circle's circumference to its diameter"
+        },
+        {
+            "blocktype": "expression",
+            "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
+            "label": "tau",
+            "script": "Math.PI * 2",
+            "type": "number",
+            "help": "tau is 2 times pi, a generally more useful number"
+        }
+    ]
+}

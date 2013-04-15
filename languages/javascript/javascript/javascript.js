@@ -7,17 +7,6 @@
 
 (function(){
 
-
-// Pre-load dependencies
-yepnope({
-    load: [ 'plugins/javascript.css',
-            'lib/beautify.js',
-            'lib/highlight.js',
-            'lib/highlight-javascript.js',
-            'lib/highlight-github.css'
-    ]
-});
-
 // Add some utilities
 
 wb.prettyScript = function(elements){

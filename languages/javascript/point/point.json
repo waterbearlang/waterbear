@@ -1,50 +1,53 @@
-[
-    {
-        "blocktype": "expression",
-        "id": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
-        "label": "point at x [number:0] y [number:0]",
-        "script": "{x: {{1}}, y: {{2}} }",
-        "type": "point",
-        "help": "create a new point"
-    },
-    {
-        "blocktype": "expression",
-        "id": "efe5e679-8336-4e5a-ade0-4bd930826096",
-        "type": "point",
-        "label": "point from array [array]",
-        "script": "{x: {{1}}[0], y: {{1}}[1]}",
-        "help": "convert array to point"
-    },
-    {
-        "blocktype": "expression",
-        "id": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-        "type": "point",
-        "label": "random point",
-        "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
-        "help": "returns a point at a random location on the stage"
-    },
-    {
-        "blocktype": "expression",
-        "id": "36f0eb56-9370-402d-83ef-99201a62c732",
-        "label": "point [point] x",
-        "script": "{{1}}.x",
-        "type": "number",
-        "help": "get the x value of a point"
-    },
-    {
-        "blocktype": "expression",
-        "id": "90b42cf3-185d-4556-b7e8-d9682c187425",
-        "label": "point [point] y",
-        "script": "{{1}}.y",
-        "type": "number",
-        "help": "get the y value of a point"
-    },
-    {
-        "blocktype": "expression",
-        "id": "743cba63-11d4-4a84-a3b6-a98480bdd731",
-        "label": "point [point] as array",
-        "script": "[{{1}}.x, {{1}}.y]",
-        "type": "array",
-        "help": "convert a point to an array"
-    }
-]
+{
+    "name": "Points",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+            "label": "point at x [number:0] y [number:0]",
+            "script": "{x: {{1}}, y: {{2}} }",
+            "type": "point",
+            "help": "create a new point"
+        },
+        {
+            "blocktype": "expression",
+            "id": "efe5e679-8336-4e5a-ade0-4bd930826096",
+            "type": "point",
+            "label": "point from array [array]",
+            "script": "{x: {{1}}[0], y: {{1}}[1]}",
+            "help": "convert array to point"
+        },
+        {
+            "blocktype": "expression",
+            "id": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+            "type": "point",
+            "label": "random point",
+            "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+            "help": "returns a point at a random location on the stage"
+        },
+        {
+            "blocktype": "expression",
+            "id": "36f0eb56-9370-402d-83ef-99201a62c732",
+            "label": "point [point] x",
+            "script": "{{1}}.x",
+            "type": "number",
+            "help": "get the x value of a point"
+        },
+        {
+            "blocktype": "expression",
+            "id": "90b42cf3-185d-4556-b7e8-d9682c187425",
+            "label": "point [point] y",
+            "script": "{{1}}.y",
+            "type": "number",
+            "help": "get the y value of a point"
+        },
+        {
+            "blocktype": "expression",
+            "id": "743cba63-11d4-4a84-a3b6-a98480bdd731",
+            "label": "point [point] as array",
+            "script": "[{{1}}.x, {{1}}.y]",
+            "type": "array",
+            "help": "convert a point to an array"
+        }
+    ]
+}

@@ -1,112 +1,115 @@
-[
-    {
-        "blocktype": "step",
-        "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-        "label": "ask [string:What's your name?] and wait",
-        "script": "local.answer## = prompt({{1}});",
-        "locals": [
-            {
-                "blocktype": "expression",
-                "label": "answer##",
-                "type": "string",
-                "script": "local.answer##"
-            }
-        ],
-        "help": "Prompt the user for information"
-    },
-    {
-        "blocktype": "expression",
-        "id": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
-        "label": "mouse x",
-        "type": "number",
-        "script": "global.mouse_x",
-        "help": "The current horizontal mouse position"
-    },
-    {
-        "blocktype": "expression",
-        "id": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
-        "label": "mouse y",
-        "type": "number",
-        "script": "global.mouse_y",
-        "help": "the current vertical mouse position"
-    },
-    {
-        "blocktype": "expression",
-        "id": "ce1026a0-9acf-4d8f-a7c0-0759115af1ca",
-        "label": "mouse down",
-        "type": "boolean",
-        "script": "global.mouse_down",
-        "help": "true if the mouse is down, false otherwise"
-    },
-    {
-        "blocktype": "expression",
-        "id": "4321cef6-6365-4885-9a3c-1fd0db2b4eab",
-        "label": "key [choice:keys] pressed?",
-        "type": "boolean",
-        "script": "global.isKeyDown({{1}})",
-        "help": "is the given key down when this block is run?"
-    },
-    {
-        "blocktype": "expression",
-        "id": "048218dd-0b8d-4bc9-b310-480e93232665",
-        "label": "stage width",
-        "type": "number",
-        "script": "global.stage_width",
-        "help": "width of the stage where scripts are run. This may change if the browser window changes"
-    },
-    {
-        "blocktype": "expression",
-        "id": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
-        "label": "stage height",
-        "type": "number",
-        "script": "global.stage_height",
-        "help": "height of the stage where scripts are run. This may change if the browser window changes."
-    },
-    {
-        "blocktype": "expression",
-        "id": "f85d3bfd-b58c-458f-b4a9-68538302aa12",
-        "label": "center x",
-        "type": "number",
-        "script": "global.stage_center_x",
-        "help": "horizontal center of the stage"
-    },
-    {
-        "blocktype": "expression",
-        "id": "083bee4f-ee36-4a35-98df-587ed586d623",
-        "label": "center y",
-        "type": "number",
-        "script": "global.stage_center_y",
-        "help": "vertical center of the stage"
-    },
-    {
-        "blocktype": "expression",
-        "id": "76184edb-ac2c-4809-899d-7b105776ba12",
-        "label": "random x",
-        "type": "number",
-        "script": "randint(0,global.stage_width)",
-        "help": "return a number between 0 and the stage width"
-    },
-    {
-        "blocktype": "expression",
-        "id": "8e749092-327d-4921-a50e-c87acefe7102",
-        "label": "random y",
-        "type": "number",
-        "script": "randint(0, global.stage_height)",
-        "help": "return a number between 0 and the stage height"
-    },
-    {
-        "blocktype": "step",
-        "id": "6b924f28-9bba-4257-a80b-2f2a591128a5",
-        "label": "reset timer",
-        "script": "global.timer.reset();",
-        "help": "set the global timer back to zero"
-    },
-    {
-        "blocktype": "expression",
-        "id": "f04b0e0a-b591-4eaf-954d-dea412cbfd61",
-        "label": "timer",
-        "type": "number",
-        "script": "global.timer.value()",
-        "help": "seconds since the script began running"
-    }
-]
+{
+    "name": "Sensing",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
+            "label": "ask [string:What's your name?] and wait",
+            "script": "local.answer## = prompt({{1}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "answer##",
+                    "type": "string",
+                    "script": "local.answer##"
+                }
+            ],
+            "help": "Prompt the user for information"
+        },
+        {
+            "blocktype": "expression",
+            "id": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
+            "label": "mouse x",
+            "type": "number",
+            "script": "global.mouse_x",
+            "help": "The current horizontal mouse position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
+            "label": "mouse y",
+            "type": "number",
+            "script": "global.mouse_y",
+            "help": "the current vertical mouse position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "ce1026a0-9acf-4d8f-a7c0-0759115af1ca",
+            "label": "mouse down",
+            "type": "boolean",
+            "script": "global.mouse_down",
+            "help": "true if the mouse is down, false otherwise"
+        },
+        {
+            "blocktype": "expression",
+            "id": "4321cef6-6365-4885-9a3c-1fd0db2b4eab",
+            "label": "key [choice:keys] pressed?",
+            "type": "boolean",
+            "script": "global.isKeyDown({{1}})",
+            "help": "is the given key down when this block is run?"
+        },
+        {
+            "blocktype": "expression",
+            "id": "048218dd-0b8d-4bc9-b310-480e93232665",
+            "label": "stage width",
+            "type": "number",
+            "script": "global.stage_width",
+            "help": "width of the stage where scripts are run. This may change if the browser window changes"
+        },
+        {
+            "blocktype": "expression",
+            "id": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
+            "label": "stage height",
+            "type": "number",
+            "script": "global.stage_height",
+            "help": "height of the stage where scripts are run. This may change if the browser window changes."
+        },
+        {
+            "blocktype": "expression",
+            "id": "f85d3bfd-b58c-458f-b4a9-68538302aa12",
+            "label": "center x",
+            "type": "number",
+            "script": "global.stage_center_x",
+            "help": "horizontal center of the stage"
+        },
+        {
+            "blocktype": "expression",
+            "id": "083bee4f-ee36-4a35-98df-587ed586d623",
+            "label": "center y",
+            "type": "number",
+            "script": "global.stage_center_y",
+            "help": "vertical center of the stage"
+        },
+        {
+            "blocktype": "expression",
+            "id": "76184edb-ac2c-4809-899d-7b105776ba12",
+            "label": "random x",
+            "type": "number",
+            "script": "randint(0,global.stage_width)",
+            "help": "return a number between 0 and the stage width"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8e749092-327d-4921-a50e-c87acefe7102",
+            "label": "random y",
+            "type": "number",
+            "script": "randint(0, global.stage_height)",
+            "help": "return a number between 0 and the stage height"
+        },
+        {
+            "blocktype": "step",
+            "id": "6b924f28-9bba-4257-a80b-2f2a591128a5",
+            "label": "reset timer",
+            "script": "global.timer.reset();",
+            "help": "set the global timer back to zero"
+        },
+        {
+            "blocktype": "expression",
+            "id": "f04b0e0a-b591-4eaf-954d-dea412cbfd61",
+            "label": "timer",
+            "type": "number",
+            "script": "global.timer.value()",
+            "help": "seconds since the script began running"
+        }
+    ]
+}

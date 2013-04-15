@@ -189,7 +189,9 @@ var menu_built = false;
 var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
-wb.menu = function(title, specs, show){
+wb.menu = function(blockspec){
+    var title = blockspec.name;
+    var specs = blockspec.blocks;
 	switch(wb.view){
 		case 'result': return run_menu(title, specs, show);
 		case 'blocks': return edit_menu(title, specs, show);

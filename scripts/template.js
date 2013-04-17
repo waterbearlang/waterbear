@@ -17,7 +17,7 @@
 		var oldContext = node.data('context'); // maintain contexts as a stack
 		node = fn(node);
 		if (!node.length){
-			print('node replaced, backtracking');
+			// print('node replaced, backtracking');
 			node = previous;
 		// } if (oldContext){
 		// 	node.data('context', oldContext);
@@ -61,12 +61,12 @@ Template.prototype.render = function(model){
 }
 
 function renderNode(node){
-	print('start render %s', h(node));
+	// print('start render %s', h(node));
 	var hasParent = node.parent().length;
 	if (!node.data('context')){
 		var context = node.parent().data('context');
 		if (!context){
-			print('node %s has no context', h(node));
+			// print('node %s has no context', h(node));
 		}
 		node.data('context', context);
 	}
@@ -75,19 +75,19 @@ function renderNode(node){
 	node = renderClasses(node);
 	node = renderTitle(node);
 	node = renderReplace(node);
-	print('end render: %s', h(node));
+	// print('end render: %s', h(node));
 	return node;
 }
 
 function renderClasses(node){
 	var newClasses = node.data('classes');
 	if (newClasses){
-		print('\tbefore renderClasses: %s', h(node));
+		// print('\tbefore renderClasses: %s', h(node));
 		newClasses.split(/\s/).forEach(function(key){
 			node.addClass(namedValue(node.data('context'), key));
 		});
 		node.removeAttr('data-classes');
-		print('\tafter renderClasses: %s', h(node));
+		// print('\tafter renderClasses: %s', h(node));
 	}
 	return node;
 }
@@ -130,7 +130,7 @@ function renderFor(node){
 		node.removeAttr('data-for');
 		var context = node.data('context');
 		var list = namedValue(context, listname);
-		print('list %s: %s (from context: %o)', listname, j(list), context);
+		// print('list %s: %s (from context: %o)', listname, j(list), context);
 		if (list.jquery){
 			list = list.get();
 		}
@@ -147,7 +147,7 @@ function renderFor(node){
 		});
 		var retval = node.next();
 		node.remove();
-		print('rendered %s nodes, returning %s', list.length, c(retval));
+		// print('rendered %s nodes, returning %s', list.length, c(retval));
 		return retval;
 	}
 	return node;

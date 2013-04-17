@@ -193,24 +193,24 @@ wb.menu = function(blockspec){
     var title = blockspec.name;
     var specs = blockspec.blocks;
 	switch(wb.view){
-		case 'result': return run_menu(title, specs, show);
-		case 'blocks': return edit_menu(title, specs, show);
-		case 'editor': return edit_menu(title, specs, show);
-		default: return edit_menu(title, specs, show);
+		case 'result': return run_menu(title, specs);
+		case 'blocks': return edit_menu(title, specs);
+		case 'editor': return edit_menu(title, specs);
+		default: return edit_menu(title, specs);
 	}
 };
 
-function run_menu(title, specs, show){
+function run_menu(title, specs){
 	if (menu_built){
-		return edit_menu(title, specs, show);
+		return edit_menu(title, specs);
 	}
-	saved_menus.push([title, specs, show]);
+	saved_menus.push([title, specs]);
 }
 
 wb.buildDelayedMenus = function(){
 	if (!menu_built && saved_menus.length){
 		saved_menus.forEach(function(m){
-			edit_menu(m[0], m[1], m[2]);
+			edit_menu(m[0], m[1]);
 		});
 		saved_menus = [];
 	}

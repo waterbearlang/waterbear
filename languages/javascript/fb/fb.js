@@ -1,12 +1,3 @@
-/*global yepnope, FB, menu */
-
-yepnope({
-  load: ['plugins/javascript.css'],
-  complete: setup
-});
-
-function setup() {}
-
 // initialize empty object for fb data
 var fb = {}
 fb.me = {};

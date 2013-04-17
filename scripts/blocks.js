@@ -146,7 +146,6 @@ Block.prototype.initInstance = function initInstance(){
                 spec.label = self.customLocals[idx];
             }
             var block = Block(spec);
-            assert.isObject(block, 'Blocks must be objects');
             return block;
         });
     }
@@ -164,7 +163,6 @@ Block.prototype.initInstance = function initInstance(){
                 return value;
             }
             var val = new wb.Value(value, idx);
-            assert.isObject(val, 'Values must be objects');
             return val;
         });
     }else if (self.values && self.values.length){
@@ -476,7 +474,6 @@ function removeFromScriptEvent(view){
         }else if (parent.hasClass('socket')){
             var exprIndex = parent.dataset.index;
             parentModel.removeExpression(model, exprIndex);
-            assert(parent.children('input').length > 0, "No input found, where can it be?")
             if(parent.classList.contains('boolean')){
                 parent.appendChild(wb.elem('select', null, [['option', null, 'true'], ['option', null, 'false']]));
             }else{

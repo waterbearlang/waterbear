@@ -22,7 +22,7 @@ function h(node){
 function c(node){
 	return j(node.data('context'));
 }
-	
+
 function j(obj){
 	try{
 		return JSON.stringify(h(obj));
@@ -41,18 +41,18 @@ function print(){
 
 /**
  * Enhanced Javascript logging and exception handler.
- * 
+ *
  * It is utterly annoying when DOM event handler exceptions fail
  * silently with Firebug. This package fixes this common problem.
  *
  * @copyright Copyright 2008 Twinapex Research
  *
  * @author Mikko Ohtamaa
- * 
+ *
  * @license 3-clause BSD
- * 
+ *
  * http://www.twinapex.com
- * 
+ *
  * http://blog.redinnovation.com/2008/08/19/catching-silent-javascript-exceptions-with-a-function-decorator/
  *
  */
@@ -64,17 +64,17 @@ twinapex.debug = {}
 
 /**
  * Print exception stack trace in human readable format into the console
- * 
+ *
  * @param {Exception} exc
  */
 twinapex.debug.printException = function(exc) {
-	
+
 	function print(msg) {
 		console.log(msg);
 	}
-	
+
 	print(exc);
-	
+
 	if (!exc.stack) {
 		print('no stacktrace available');
 		return;
@@ -94,7 +94,7 @@ twinapex.debug.printException = function(exc) {
 		toprint.push(chunks);
 	};
 	toprint.reverse();
-	
+
 	for (var i = 0; i < toprint.length; i++) {
 		print('  ' + toprint[i][1]);
 		print('    ' + toprint[i][0]);
@@ -110,23 +110,23 @@ twinapex.debug.printException = function(exc) {
  * The decorated function has preplaced try ... catch block which will not let
  * through any exceptions silently or without logging. Even though there is an
  * exception it is normally throw upwards in the stack after logging.
- * 
+ *
  *  <pre>
- *  
+ *
  *  // myFunction can be bind to many events and exceptions are logged always
- *  myfunction = function() 
+ *  myfunction = function()
  *     // crash here
  *     var i = foobar; // missing variable foobar
  *  });
  *  </pre>
- *  
+ *
  *  Then there are alternative usage examples:
- *  
+ *
  *  <pre>
- *  
- *  // Decorate function 
+ *
+ *  // Decorate function
  *  myfunction = twinapex.debug.manageExceptions(myfunction);
- *  
+ *
  *  // Bind with exception manager
  *  $document.clicker(twinapex.debug.manageExceptions(myfunction));
  *
@@ -136,7 +136,7 @@ twinapex.debug.printException = function(exc) {
  *	    twinapex.debug.manageExceptions(initHelpPopUpHandlers(document));
  *  });
  *  </pre>
- *  
+ *
  *
  * @param func: Javascript function reference
  */
@@ -166,11 +166,11 @@ if(typeof(console) == "undefined") {
     console.log = function(msg) {};
     console.info = function(msg) {};
     console.warn = function(msg) {};
-	
+
 	// TODO: Add IE Javascript console output
-	
+
 	// TODO: Add Opera console output
-	
+
 } else {
     // console.log provided by Firefox + Firebug
 }

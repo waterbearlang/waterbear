@@ -20,10 +20,9 @@ var defaultValue = {
 };
 
 function Value(textValue, index){
-    assert.isNumber(index, 'Values must know their place');
     this.index = index;
     if ($.isPlainObject(textValue)){
-        print('initializing Value with object: %o', textValue);
+        // print('initializing Value with object: %o', textValue);
         $.extend(this, textValue);
         if (this.choiceName){
             this.choiceList = choiceLists[this.choiceName];
@@ -36,13 +35,11 @@ function Value(textValue, index){
                 // FIXME: I thought we got rid of Deferred?
                 Deferred.add(this, 'value', null, textValue.value);
             }
-            // assert.isObject(block, 'Value blocks must be objects');
         }else{
             this.literal = true;
         }
     }else{
-        print('initializing Value with text: %o', textValue);
-        assert(textValue.length > 0, 'textValue must contain text');
+        // print('initializing Value with text: %o', textValue);
         var parts = textValue.slice(1,-1).split(':');
         this.type = parts[0];
         if (this.type === 'choice'){
@@ -133,7 +130,6 @@ Value.prototype.view = function(){
         inputType = getInputType(this.type);
         this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"/></span>');
     }
-    // console.log('return cached value: %o', h(this._view));
     return this._view;
 };
 
@@ -155,9 +151,9 @@ Value.prototype.update = function(newValue){
         case 'number': this.value = parseFloat(newValue); break;
         case 'boolean': this.value = newValue === 'true'; break;
         case 'string': this.value = newValue; break;
-        case 'date': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
-        case 'datetime': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
-        case 'time': assert.isString(newValue, 'expects an ISO8601 value');this.value = newValue; break;
+        case 'date': this.value = newValue; break;
+        case 'datetime': this.value = newValue; break;
+        case 'time': this.value = newValue; break;
         case 'int': this.value = parseInteger(newValue); break;
         case 'float': this.value = parseInteger(newValue); break;
         default: this.value = newValue; break;

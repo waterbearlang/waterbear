@@ -6,8 +6,21 @@ var path = require('path');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['array', 'boolean', 'canvas', 'color', 'control', 'image', 'javascript', 'math', 'matrix', 'object', 'path', 'point', 'rect', 'sensing', 'shape', 'size', 'social', 'sprite', 'string', 'text']
+    javascript: ['javascript', 'array', 'boolean', 'canvas', 'color', 'control', 'image', 'math', 'matrix', 'object', 'path', 'point', 'rect', 'sensing', 'shape', 'size', 'social', 'sprite', 'string', 'text']
 };
+
+var styles = {
+    arduino: ['lib/jquery-ui-1.8.21.custom.css', 'lib/jquery.contextMenu.css', 'stylesheets/workspace.css', 'stylesheets/blocks.css'],
+    javascript: ['lib/jquery-ui-1.8.21.custom.css', 'lib/jquery.contextMenu.css', 'stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
+}
+
+var scripts = ['queryparams', 'template', 'util', 'events', 'drag2', 'uuid', 'value', 'blocks', 'ui', 'workspace', 'serialization-1.1'];
+
+var libs = {
+    arduino: ['jquery-1.7.2.min', 'jquery.bpopup-0.5.1.min', 'jquery.autoGrowInput', 'jquery-ui-1.8.21.custom.min', 'jquery.contextMenu', 'jquery.tappable'],
+    javascript: ['jquery-1.7.2.min', 'jquery.bpopup-0.5.1.min', 'jquery.autoGrowInput', 'jquery-ui-1.8.21.custom.min', 'jquery.contextMenu', 'jquery.tappable', 'beautify', 'highlight', 'highlight-javascript']
+};
+
 
 function clear(){
     if (fs.existsSync('dist')){
@@ -19,6 +32,12 @@ function clear(){
         fs.mkdirSync('dist');
     }
 };
+
+function cat(src, dest){
+    fs.appendFileSync(dest, '\n/*begin ' + path.basename(src) + '*/\n');
+    fs.appendFileSync(dest, fs.readFileSync(src, 'utf8'));
+    fs.appendFileSync(dest, '\n/*end ' + path.basename(src) + '*/\n');
+}
 
 function concat(src, dest, files, ext, subdir, before, after){
     before = before || '';
@@ -33,17 +52,22 @@ function concat(src, dest, files, ext, subdir, before, after){
         if (filenames.length){
             // just using the first filename for now
             var contents = before + fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8') + after;
+            fs.appendFileSync(dest, '\n/*begin ' + filenames[0] + '*/\n');
+            fs.appendFileSync(dest, contents);
+            fs.appendFileSync(dest, '\n/*end ' + filenames[0] + '*/\n');
         }
-        fs.appendFileSync(dest, contents);
     });
 }
 
 function build(){
     clear();
-    Object.keys(plugins).forEach(function(key){
-        var files = plugins[key];
-        var src = path.join('languages', key);
-        var dest = path.join('dist', key);
+    Object.keys(plugins).forEach(function(lang){
+        var files = plugins[lang];
+        var src = path.join('languages', lang);
+        var dest = path.join('dist', lang);
+        libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
+        styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+        scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
         // Build CSS
         concat(src, dest + '.css', files, '.css');
         // Build Waterbear support
@@ -51,7 +75,7 @@ function build(){
         // Build Waterbear blocks
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
         // Build runtime support
-        if (key === 'javascript'){
+        if (lang === 'javascript'){
             concat(src, dest + '_runtime.js', files, '.js', 'runtime');
         }
     });

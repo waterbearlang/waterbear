@@ -78,6 +78,8 @@ function build(){
         if (lang === 'javascript'){
             concat(src, dest + '_runtime.js', files, '.js', 'runtime');
         }
+        // add launch to kick it all off
+        cat('scripts/launch.js', dest + '.js');
     });
 };
 

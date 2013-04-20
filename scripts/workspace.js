@@ -1,12 +1,9 @@
 (function($){
 
-
-
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace > .scripts_workspace').empty();
 		$('.workspace > .scripts_text_view').empty();
-        $('.submenu.globals').empty();
     }
 }
 $('.clearScripts').click(clearScripts);
@@ -155,9 +152,27 @@ wb.runCurrentScripts = function(queryParsed){
 
 
 // Allow saved scripts to be dropped in
-var workspace = $('.scripts_workspace')[0];
-workspace.addEventListener('drop', getFiles, false);
-workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+function createWorkspace(name){
+    var id = uuid();
+    var workspace = wb.Block({
+        group: 'scripts_workspace',
+        id: id,
+        scriptid: id,
+        blocktype: 'context',
+        label: name,
+        script: '[[1]]',
+        isTemplateBlock: false,
+        help: 'Drag your script blocks here'
+    }).view()[0];
+    workspace.addEventListener('drop', getFiles, false);
+    workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+    document.querySelector('.workspace').appendChild(workspace);
+    workspace.querySelector('.contained').appendChild(document.querySelector('.dropCursor'));
+    wb.initializeHandlers();
+    wb.Block.initializeSocketUpdates();
+    wb.Block.initializeDisclosures();
+}
+createWorkspace('Workspace');
 
 function handleDragover(evt){
     // Stop Firefox from grabbing the file prematurely
@@ -183,7 +198,6 @@ function getFiles(evt){
         };
     }
 }
-
 
 
 

@@ -22,7 +22,7 @@ function showWorkspace(){
 window.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
     var view = wb.find(document.body, '.workspace .scripts_text_view');
     wb.writeScript(blocks, view);
 }
@@ -32,7 +32,7 @@ function runCurrentScripts(event){
 	if (document.body.className === 'result' && wb.script){
 		wb.runScript(wb.script);
 	}else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
 		document.body.className = 'result';
 		wb.runScript( wb.prettyScript(blocks) );
 	}

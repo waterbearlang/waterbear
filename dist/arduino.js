@@ -2283,9 +2283,15 @@ window.template = template;
     };
 
     wb.closest = function closest(elem, selector){
+        if (elem.jquery){
+            elem = elem[0];
+        }
         while(elem){
             if (wb.matches(elem, selector)){
                 return elem;
+            }
+            if (!elem.parentElement){
+                throw new Error('Element has no parent, is it in the tree? %o', elem);
             }
             elem = elem.parentElement;
         }
@@ -2543,7 +2549,7 @@ window.template = template;
     var dragging;
     var currentPosition;
     var scope;
-    var workspace = document.querySelector('.scripts_workspace');
+    var workspace;
     var blockMenu = document.querySelector('#block_menu');
     var potentialDropTargets;
     var selectedSocket;
@@ -2567,7 +2573,6 @@ window.template = template;
 
 
     function initDrag(event){
-        //console.log('initdrag %o', event.target);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
@@ -2797,17 +2802,19 @@ window.template = template;
     }
 
     // Initialize event handlers
-    if (Event.isTouch){
-        Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
-        Event.on('.content', 'touchmove', null, drag);
-        Event.on('.content', 'touchend', null, endDrag);
-        Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
-    }else{
-        Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
-        Event.on('.content', 'mousemove', null, drag);
-        Event.on('.content', 'mouseup', null, endDrag);
-        Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-    }
+    wb.initializeHandlers = function(){
+        if (Event.isTouch){
+            Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchmove', null, drag);
+            Event.on('.content', 'touchend', null, endDrag);
+            Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
+        }else{
+            Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousemove', null, drag);
+            Event.on('.content', 'mouseup', null, endDrag);
+            Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
+        }
+    };
 
     function expressionDropTypes(expressionType){
         switch(expressionType){
@@ -2824,6 +2831,9 @@ window.template = template;
     }
 
     function getPotentialDropTargets(view, model){
+        if (!workspace){
+            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
+        }
         switch(model.blocktype){
             case 'step':
             case 'context':
@@ -3427,26 +3437,17 @@ Block.prototype.addLocalsToParentContext = function(){
     if (!this.id){
         throw new Error('Model must have an id by now');
     }
-    var context = Block.model(this.view().closest('.context'));
-    if (context){
+    var view = this.view();
+    var context = wb.closest(view, '.context');
+    var model = Block.model(context);
+    if (model){
         this.locals.forEach(function(local){
-            context.addLocalBlock(local);
+            model.addLocalBlock(local);
         });
-    }else{
-        this.addGlobals();
     }
 };
 
-Block.prototype.addGlobals = function(){
-    if (!(this.locals && this.locals.length)) return;
-    // remove from DOM if already in place elsewhere
-    this.locals.forEach(function(local){
-        $('.submenu.globals').append(local.view());
-    });
-};
-
 Block.prototype.removeLocalsFromParent = function(){
-    // this should work for globals as well
     if (!(this.locals && this.locals.length)) return;
     this.locals.forEach(function(local){
         local.view().remove();
@@ -3485,20 +3486,22 @@ function newBlockHandler(blocktype, args, body, returns){
     console.info('returns: %s', returns);
 }
 
-$('.scripts_workspace')
-    // .on('add_to_workspace', '.wrapper', function(evt, params){
-    //     var view = $(this);
-    //     Block.model(view).addToWorkspace(view, evt, params);
-    //     return false;
-    // })
-    .on('change', '.socket input, .autosocket select', function(evt){
-        var input = $(evt.target);
-        var socket = input.parent();
-        var socketIndex = socket.data('index');
-        var parentModel = Block.model(socket.closest('.wrapper'));
-        parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
-        $('.scripts_workspace').trigger('scriptmodified');
-    });
+Block.initializeSocketUpdates = function(){
+    $('.scripts_workspace')
+        // .on('add_to_workspace', '.wrapper', function(evt, params){
+        //     var view = $(this);
+        //     Block.model(view).addToWorkspace(view, evt, params);
+        //     return false;
+        // })
+        .on('change', '.socket input, .autosocket select', function(evt){
+            var input = $(evt.target);
+            var socket = input.parent();
+            var socketIndex = socket.data('index');
+            var parentModel = Block.model(socket.closest('.wrapper'));
+            parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
+            $('.scripts_workspace').trigger('scriptmodified');
+        });
+};
 
 Block.prototype.removeExpression = function(expression, expressionIndex){
     // console.log('remove expression');
@@ -3589,7 +3592,7 @@ function addToScriptEvent(droptarget, view){
     $('.scripts_workspace').trigger('scriptmodified');
 }
 
-$('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
+$('.content').on('dblclick', '.locals .label', function(evt){
     var label = $(evt.target);
     var model = Block.model(label.closest('.wrapper'));
     // Rather than use jquery to find instances, should origin model keep track of all instances?
@@ -3602,7 +3605,7 @@ $('.content').on('dblclick', '.locals .label, .globals .label', function(evt){
     return false;
 });
 
-$('.content').on('keypress', '.locals .label_input, .globals .label_input', function(evt){
+$('.content').on('keypress', '.locals .label_input', function(evt){
     if (evt.which === 13){
         var labelInput = $(evt.target);
         var labelText = labelInput.val();
@@ -3636,23 +3639,29 @@ $(document.body).on('scriptloaded', function(evt){
 //
 // Handler for the hide/show triangle on context and eventhandler blocks
 //
-$('.scripts_workspace').on('click', '.disclosure', function(event){
-    var self = $(event.target);
-    var view = self.closest('.wrapper');
-    var model = Block.model(view);
-    if (self.is('.open')){
-        self.text('►');
-        view.find('.locals').hide();
-        view.find('.contained').hide();
-        model.collapsed = true;
-    }else{
-        self.text('▼');
-        view.find('.locals').show();
-        view.find('.contained').show();
-        model.collapsed = false;
-    }
-    self.toggleClass('open closed');
-});
+Block.initializeDisclosures = function(){
+    $('.scripts_workspace').on('click', '.disclosure', function(event){
+        var self = $(event.target);
+        var view = self.closest('.wrapper');
+        var model = Block.model(view);
+        if (self.is('.open')){
+            self.text('►');
+            view.find('.locals').hide();
+            if (!view.hasClass('scripts_workspace')){
+                view.find('.contained').hide();
+            }
+            model.collapsed = true;
+        }else{
+            self.text('▼');
+            view.find('.locals').show();
+            if (!view.hasClass('scripts_workspace')){
+                view.find('.contained').show();
+            }
+            model.collapsed = false;
+        }
+        self.toggleClass('open closed');
+    });
+};
 
 // Export public interface to waterbear namespace
 
@@ -3696,7 +3705,7 @@ function showWorkspace(){
 window.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
     var view = wb.find(document.body, '.workspace .scripts_text_view');
     wb.writeScript(blocks, view);
 }
@@ -3706,7 +3715,7 @@ function runCurrentScripts(event){
 	if (document.body.className === 'result' && wb.script){
 		wb.runScript(wb.script);
 	}else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
 		document.body.className = 'result';
 		wb.runScript( wb.prettyScript(blocks) );
 	}
@@ -3921,13 +3930,10 @@ function edit_menu(title, specs, show){
 /*begin workspace.js*/
 (function($){
 
-
-
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace > .scripts_workspace').empty();
 		$('.workspace > .scripts_text_view').empty();
-        $('.submenu.globals').empty();
     }
 }
 $('.clearScripts').click(clearScripts);
@@ -4076,9 +4082,27 @@ wb.runCurrentScripts = function(queryParsed){
 
 
 // Allow saved scripts to be dropped in
-var workspace = $('.scripts_workspace')[0];
-workspace.addEventListener('drop', getFiles, false);
-workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+function createWorkspace(name){
+    var id = uuid();
+    var workspace = wb.Block({
+        group: 'scripts_workspace',
+        id: id,
+        scriptid: id,
+        blocktype: 'context',
+        label: name,
+        script: '[[1]]',
+        isTemplateBlock: false,
+        help: 'Drag your script blocks here'
+    }).view()[0];
+    workspace.addEventListener('drop', getFiles, false);
+    workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+    document.querySelector('.workspace').appendChild(workspace);
+    workspace.querySelector('.contained').appendChild(document.querySelector('.dropCursor'));
+    wb.initializeHandlers();
+    wb.Block.initializeSocketUpdates();
+    wb.Block.initializeDisclosures();
+}
+createWorkspace('Workspace');
 
 function handleDragover(evt){
     // Stop Firefox from grabbing the file prematurely
@@ -4104,7 +4128,6 @@ function getFiles(evt){
         };
     }
 }
-
 
 
 

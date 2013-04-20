@@ -1191,6 +1191,9 @@ body.editor #block_menu{
     width: 20px;
 }
 
+.trigger > .block:before{
+    content: none;
+}
 
 .contained {
   display: block;

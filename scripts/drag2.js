@@ -51,7 +51,7 @@
     var dragging;
     var currentPosition;
     var scope;
-    var workspace = document.querySelector('.scripts_workspace');
+    var workspace;
     var blockMenu = document.querySelector('#block_menu');
     var potentialDropTargets;
     var selectedSocket;
@@ -75,7 +75,6 @@
 
 
     function initDrag(event){
-        //console.log('initdrag %o', event.target);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
@@ -305,17 +304,19 @@
     }
 
     // Initialize event handlers
-    if (Event.isTouch){
-        Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
-        Event.on('.content', 'touchmove', null, drag);
-        Event.on('.content', 'touchend', null, endDrag);
-        Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
-    }else{
-        Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
-        Event.on('.content', 'mousemove', null, drag);
-        Event.on('.content', 'mouseup', null, endDrag);
-        Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-    }
+    wb.initializeHandlers = function(){
+        if (Event.isTouch){
+            Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchmove', null, drag);
+            Event.on('.content', 'touchend', null, endDrag);
+            Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
+        }else{
+            Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousemove', null, drag);
+            Event.on('.content', 'mouseup', null, endDrag);
+            Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
+        }
+    };
 
     function expressionDropTypes(expressionType){
         switch(expressionType){
@@ -332,6 +333,9 @@
     }
 
     function getPotentialDropTargets(view, model){
+        if (!workspace){
+            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
+        }
         switch(model.blocktype){
             case 'step':
             case 'context':

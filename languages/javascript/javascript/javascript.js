@@ -40,17 +40,9 @@ window.choiceLists = {
 //
 //
 
-// MENUS
-
-// Special menus used at runtime
-
-wb.menu({name: 'Globals', blocks: []});
 // Temporarily disable these until I can get time to implement them properly
 // wb.menu('Recent Blocks', []);
 // wb.menu('Favourite Blocks', []);
-
-// Javascript core blocks
-
 
 
 $('.scripts_workspace').trigger('init');

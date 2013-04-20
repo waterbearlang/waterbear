@@ -171,6 +171,9 @@
     width: 20px;
 }
 
+.trigger > .block:before{
+    content: none;
+}
 
 .contained {
   display: block;

@@ -1,12 +1,4 @@
-/*global yepnope, FB, menu */
-
-yepnope({
-  load: ['plugins/javascript.css'],
-  complete: setup
-});
-
-function setup() {}
-
+(function(){
 // initialize empty object for fb data
 var fb = {}
 fb.me = {};
@@ -55,7 +47,6 @@ window.fbAsyncInit = function() {
 };
 
 // Load the SDK Asynchronously
-(function(d) {
   var js, id = 'facebook-jssdk',
     ref = d.getElementsByTagName('script')[0];
   if(d.getElementById(id)) {

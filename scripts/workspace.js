@@ -2,7 +2,8 @@
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace > .scripts_workspace').empty();
+        $('.workspace > .scripts_workspace').remove();
+        createWorkspace('Workspace');
 		$('.workspace > .scripts_text_view').empty();
     }
 }
@@ -63,18 +64,24 @@ $('.save_scripts').on('click', createDownloadUrl);
 $('.restore_scripts').on('click', comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = document.querySelector('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
-	if (!fileObject) return;
+	if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(function(spec){
         return wb.Block(spec);
     });
+    if (!blocks.length){
+        return createWorkspace();
+    }
+    if (blocks.length > 1){
+        console.log('not really expecting multiple blocks here right now');
+    }
     blocks.forEach(function(block){
         var view = block.view()[0]; // FIXME: strip jquery wrapper
-        workspace.appendChild(view);
-        wb.addToScriptEvent(workspace, view);
+        wireUpWorkspace(view);
+        block.script = '[[1]]';
+        // wb.addToScriptEvent(workspace, view);
     });
     wb.loaded = true;
 }
@@ -164,15 +171,18 @@ function createWorkspace(name){
         isTemplateBlock: false,
         help: 'Drag your script blocks here'
     }).view()[0];
+    wireUpWorkspace(workspace);
+}
+
+function wireUpWorkspace(workspace){
     workspace.addEventListener('drop', getFiles, false);
     workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
     document.querySelector('.workspace').appendChild(workspace);
-    workspace.querySelector('.contained').appendChild(document.querySelector('.dropCursor'));
-    wb.initializeHandlers();
+    workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+    wb.initializeDragHandlers();
     wb.Block.initializeSocketUpdates();
     wb.Block.initializeDisclosures();
 }
-createWorkspace('Workspace');
 
 function handleDragover(evt){
     // Stop Firefox from grabbing the file prematurely

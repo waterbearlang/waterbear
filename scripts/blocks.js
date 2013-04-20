@@ -351,11 +351,6 @@ Block.prototype.addLocalBlock = function(block){
     if (this.locals === undefined){
         this.locals = [];
     }
-    if (this.locals.indexOf(block) > -1){
-        // pass, we already have this one
-    }else{
-        this.locals.push(block);
-    }
     locals.append(block.view());
 }
 

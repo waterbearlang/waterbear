@@ -56,7 +56,14 @@
     var potentialDropTargets;
     var selectedSocket;
 
-    var dropCursor = document.querySelector('.dropCursor');
+    var _dropCursor;
+
+    function dropCursor(){
+        if (!_dropCursor){
+            _dropCursor = document.querySelector('.dropCursor');
+        }
+        return _dropCursor;
+    }
 
     function reset(){
         dragTarget = null;
@@ -105,7 +112,7 @@
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
         if (wb.matches(dragTarget, '.value')){
-            wb.hide(dropCursor);
+            wb.hide(dropCursor());
         }
         dragTarget.classList.add("dragIndication");
         var model = wb.Block.model(dragTarget);
@@ -195,7 +202,7 @@
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
-                dropTarget.insertBefore(dragTarget, dropCursor);
+                dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
@@ -258,15 +265,15 @@
                         if (y < position.top || y > position.bottom) continue;
                         middle = position.top + (position.height / 2);
                         if (y < middle){
-                            dropTarget.insertBefore(dropCursor, sibling);
+                            dropTarget.insertBefore(dropCursor(), sibling);
                             return;
                         }else{
-                            dropTarget.insertBefore(dropCursor, sibling.nextSibling);
+                            dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
                             return;
                         }
                     }
                 }else{
-                    dropTarget.appendChild(dropCursor);
+                    dropTarget.appendChild(dropCursor());
                     return;
                 }
             }
@@ -277,9 +284,9 @@
             if (y < position.top || y > position.bottom) return;
             middle = position.top + (position.height / 2);
             if (y < middle){
-                elem.parentElement.insertBefore(dropCursor, elem);
+                elem.parentElement.insertBefore(dropCursor(), elem);
             }else{
-                elem.parentElement.insertBefore(dropCursor, elem.nextSibling);
+                elem.parentElement.insertBefore(dropCursor(), elem.nextSibling);
             }
         });
     }
@@ -304,14 +311,14 @@
     }
 
     // Initialize event handlers
-    wb.initializeHandlers = function(){
+    wb.initializeDragHandlers = function(){
         if (Event.isTouch){
-            Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
+            Event.on('.scripts_workspace .contained, .block_menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
+            Event.on('.scripts_workspace .contained, .block_menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on('.scripts_workspace', 'click', '.socket', selectSocket);

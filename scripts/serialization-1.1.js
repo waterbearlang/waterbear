@@ -18,14 +18,14 @@ wb.Block.serialize = function(){
 
 wb.Block.scriptsToObject = function(workspace){
 	if (!workspace) workspace = '.scripts_workspace'; // make a default for debugging convience
+    var workspaceDom = document.querySelector(workspace);
+    var workspaceModel = wb.Block.model(workspaceDom);
     // console.log('workspace selector: %s', workspace);
     // console.log('workspaces found: %s', $(workspace).length);
     return {
         "waterbearVersion": "1.1",
-        "workspace": $(workspace).data('name'),
-        "blocks": $(workspace).children('.wrapper').get().map(function(domBlock){
-            return  wb.Block.model(domBlock).toJSON();
-        })
+        "workspace": workspaceModel.spec.label,
+        "blocks": [workspaceModel.toJSON()]
     };
 };
 

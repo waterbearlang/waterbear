@@ -4377,7 +4377,14 @@ window.template = template;
     var potentialDropTargets;
     var selectedSocket;
 
-    var dropCursor = document.querySelector('.dropCursor');
+    var _dropCursor;
+
+    function dropCursor(){
+        if (!_dropCursor){
+            _dropCursor = document.querySelector('.dropCursor');
+        }
+        return _dropCursor;
+    }
 
     function reset(){
         dragTarget = null;
@@ -4426,7 +4433,7 @@ window.template = template;
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
         if (wb.matches(dragTarget, '.value')){
-            wb.hide(dropCursor);
+            wb.hide(dropCursor());
         }
         dragTarget.classList.add("dragIndication");
         var model = wb.Block.model(dragTarget);
@@ -4516,7 +4523,7 @@ window.template = template;
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
-                dropTarget.insertBefore(dragTarget, dropCursor);
+                dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
                 wb.addToScriptEvent(dropTarget, dragTarget);
             }else{
@@ -4579,15 +4586,15 @@ window.template = template;
                         if (y < position.top || y > position.bottom) continue;
                         middle = position.top + (position.height / 2);
                         if (y < middle){
-                            dropTarget.insertBefore(dropCursor, sibling);
+                            dropTarget.insertBefore(dropCursor(), sibling);
                             return;
                         }else{
-                            dropTarget.insertBefore(dropCursor, sibling.nextSibling);
+                            dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
                             return;
                         }
                     }
                 }else{
-                    dropTarget.appendChild(dropCursor);
+                    dropTarget.appendChild(dropCursor());
                     return;
                 }
             }
@@ -4598,9 +4605,9 @@ window.template = template;
             if (y < position.top || y > position.bottom) return;
             middle = position.top + (position.height / 2);
             if (y < middle){
-                elem.parentElement.insertBefore(dropCursor, elem);
+                elem.parentElement.insertBefore(dropCursor(), elem);
             }else{
-                elem.parentElement.insertBefore(dropCursor, elem.nextSibling);
+                elem.parentElement.insertBefore(dropCursor(), elem.nextSibling);
             }
         });
     }
@@ -4625,14 +4632,14 @@ window.template = template;
     }
 
     // Initialize event handlers
-    wb.initializeHandlers = function(){
+    wb.initializeDragHandlers = function(){
         if (Event.isTouch){
-            Event.on('.scripts_workspace, .block_menu', 'touchstart', '.block', initDrag);
+            Event.on('.scripts_workspace .contained, .block_menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace, .block_menu', 'mousedown', '.block', initDrag);
+            Event.on('.scripts_workspace .contained, .block_menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
@@ -5245,11 +5252,6 @@ Block.prototype.addLocalBlock = function(block){
     if (this.locals === undefined){
         this.locals = [];
     }
-    if (this.locals.indexOf(block) > -1){
-        // pass, we already have this one
-    }else{
-        this.locals.push(block);
-    }
     locals.append(block.view());
 }
 
@@ -5755,7 +5757,8 @@ function edit_menu(title, specs, show){
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace > .scripts_workspace').empty();
+        $('.workspace > .scripts_workspace').remove();
+        createWorkspace('Workspace');
 		$('.workspace > .scripts_text_view').empty();
     }
 }
@@ -5816,18 +5819,24 @@ $('.save_scripts').on('click', createDownloadUrl);
 $('.restore_scripts').on('click', comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = document.querySelector('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
     // FIXME: Make sure we have the appropriate plugins loaded
-	if (!fileObject) return;
+	if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(function(spec){
         return wb.Block(spec);
     });
+    if (!blocks.length){
+        return createWorkspace();
+    }
+    if (blocks.length > 1){
+        console.log('not really expecting multiple blocks here right now');
+    }
     blocks.forEach(function(block){
         var view = block.view()[0]; // FIXME: strip jquery wrapper
-        workspace.appendChild(view);
-        wb.addToScriptEvent(workspace, view);
+        wireUpWorkspace(view);
+        block.script = '[[1]]';
+        // wb.addToScriptEvent(workspace, view);
     });
     wb.loaded = true;
 }
@@ -5917,15 +5926,18 @@ function createWorkspace(name){
         isTemplateBlock: false,
         help: 'Drag your script blocks here'
     }).view()[0];
+    wireUpWorkspace(workspace);
+}
+
+function wireUpWorkspace(workspace){
     workspace.addEventListener('drop', getFiles, false);
     workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
     document.querySelector('.workspace').appendChild(workspace);
-    workspace.querySelector('.contained').appendChild(document.querySelector('.dropCursor'));
-    wb.initializeHandlers();
+    workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+    wb.initializeDragHandlers();
     wb.Block.initializeSocketUpdates();
     wb.Block.initializeDisclosures();
 }
-createWorkspace('Workspace');
 
 function handleDragover(evt){
     // Stop Firefox from grabbing the file prematurely
@@ -5979,14 +5991,14 @@ wb.Block.serialize = function(){
 
 wb.Block.scriptsToObject = function(workspace){
 	if (!workspace) workspace = '.scripts_workspace'; // make a default for debugging convience
+    var workspaceDom = document.querySelector(workspace);
+    var workspaceModel = wb.Block.model(workspaceDom);
     // console.log('workspace selector: %s', workspace);
     // console.log('workspaces found: %s', $(workspace).length);
     return {
         "waterbearVersion": "1.1",
-        "workspace": $(workspace).data('name'),
-        "blocks": $(workspace).children('.wrapper').get().map(function(domBlock){
-            return  wb.Block.model(domBlock).toJSON();
-        })
+        "workspace": workspaceModel.spec.label,
+        "blocks": [workspaceModel.toJSON()]
     };
 };
 

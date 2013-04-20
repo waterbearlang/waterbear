@@ -1,0 +1,4 @@
+.strings{ border-color: hsl(240, 65%, 83%); }
+.strings > .block, h3.strings {background-color: hsl(240, 65%, 93%); }
+
+.string{ border-color: green; }

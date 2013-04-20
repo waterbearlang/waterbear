@@ -1,0 +1,2 @@
+.shape, .shapes{ border-color: hsl(25, 100%, 63%); }
+.shapes > .block, h3.shapes { background-color: hsl(25, 100%, 83%); }

@@ -1,0 +1,3 @@
+.text{ border-color: hsl(93,90%,66%); }
+.text > .block, h3.text{ background-color: hsl(93,90%,76%); }
+

@@ -6,7 +6,7 @@ var path = require('path');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'array', 'boolean', 'canvas', 'color', 'control', 'image', 'math', 'matrix', 'object', 'path', 'point', 'rect', 'sensing', 'shape', 'size', 'social', 'sprite', 'string', 'text']
+    javascript: ['javascript', 'control', 'sprite', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', 'social', 'fb', 'text', 'matrix' ]
 };
 
 var styles = {

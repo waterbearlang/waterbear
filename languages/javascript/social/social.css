@@ -1,2 +1,2 @@
-.social{ border-color: hsl(90, 65%, 79%); }
-.social > .block {background-color: hsl(90, 62%, 89%); }
+.twitter{ border-color: hsl(90, 65%, 79%); }
+.twitter > .block, h3.twitter {background-color: hsl(90, 62%, 89%); }

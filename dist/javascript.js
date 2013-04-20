@@ -6155,6 +6155,25 @@ $('.socket input').live('click',function(){
 
 /*end javascript.js*/
 
+/*begin control.js*/
+
+/*end control.js*/
+
+/*begin sprite.js*/
+/*
+ *    Sprite Plugin
+ *
+ *    Support for building games using Waterbear
+ *
+ */
+
+
+choiceLists.types = choiceLists.types.concat(['sprite']);
+choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
+
+
+/*end sprite.js*/
+
 /*begin array.js*/
 
 /*end array.js*/
@@ -6193,10 +6212,6 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 
 /*end color.js*/
 
-/*begin control.js*/
-
-/*end control.js*/
-
 /*begin image.js*/
 
 /*end image.js*/
@@ -6205,13 +6220,13 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 
 /*end math.js*/
 
-/*begin matrix.js*/
-
-/*end matrix.js*/
-
 /*begin object.js*/
 
 /*end object.js*/
+
+/*begin string.js*/
+
+/*end string.js*/
 
 /*begin path.js*/
 
@@ -6241,28 +6256,239 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 
 /*end social.js*/
 
-/*begin sprite.js*/
-/*
- *    Sprite Plugin
- *
- *    Support for building games using Waterbear
- *
- */
+/*begin fb.js*/
 
-
-choiceLists.types = choiceLists.types.concat(['sprite']);
-choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
-
-
-/*end sprite.js*/
-
-/*begin string.js*/
-
-/*end string.js*/
+/*end fb.js*/
 
 /*begin text.js*/
 
 /*end text.js*/
+
+/*begin matrix.js*/
+
+/*end matrix.js*/
+
+/*begin control.json*/
+wb.menu({
+    "name": "Controls",
+    "blocks": [
+        {
+            "blocktype": "eventhandler",
+            "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
+            "label": "when program runs",
+            "script": "function _start(){[[1]]}_start();",
+            "help": "this trigger will run its scripts once when the program starts"
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+            "label": "when [choice:keys] key pressed",
+            "script": "$(document).bind(\"keydown\", {{1}}, function(){[[1]]; return false;});",
+            "help": "this trigger will run the attached blocks every time this key is pressed"
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+            "label": "repeat [number:30] times a second",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "count##",
+                    "script": "local.count##",
+                    "type": "number"
+                }
+            ],
+            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically"
+        },
+        {
+            "blocktype": "context",
+            "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
+            "label": "wait [number:1] secs",
+            "script": "setTimeout(function(){[[1]]},1000*{{1}});",
+            "help": "pause before running the following blocks"
+        },
+        {
+            "blocktype": "context",
+            "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+            "label": "repeat [number:10]",
+            "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+            "help": "repeat the contained blocks so many times",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "count##",
+                    "script": "local.count##",
+                    "type": "number"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
+            "label": "broadcast [string:ack] message",
+            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
+            "help": "send this message to any listeners"
+        },
+        {
+            "blocktype": "step",
+            "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+            "label": "broadcast [string:ping] message with data [any]",
+            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
+            "help": "send this message with an object argument to any listeners"
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
+            "label": "when I receive [string:ack] message",
+            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+            "help": "add a listener for the given message, run these blocks when it is received"
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
+            "label": "when I receive [string:ping] message with data",
+            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "data##",
+                    "script": "local.data##",
+                    "type": "any"
+                }
+            ],
+            "help": "add a listener for the given message which receives data, run these blocks when it is received"
+        },
+        {
+            "blocktype": "context",
+            "id": "b1e43170-800a-4e9b-af82-0ed5c62c47a0",
+            "label": "forever if [boolean:false]",
+            "script": "while({{1}}){[[1]]}",
+            "help": "repeat until the condition is false"
+        },
+        {
+            "blocktype": "context",
+            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
+            "label": "if [boolean]",
+            "script": "if({{1}}){[[1]]}",
+            "help": "run the following blocks only if the condition is true"
+        },
+        {
+            "blocktype": "context",
+            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
+            "label": "if not [boolean]",
+            "script": "if( ! {{1}} ){ [[1]]} }",
+            "help": "run the  blocks if the condition is not true"
+        },
+        {
+            "blocktype": "context",
+            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
+            "label": "repeat until [boolean]",
+            "script": "while(!({{1}})){[[1]]}",
+            "help": "repeat forever until condition is true"
+        }
+    ]
+}
+);
+/*end control.json*/
+
+/*begin sprite.json*/
+wb.menu({
+    "name": "Sprites",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
+            "label": "clear stage to color [color]",
+            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
+            "help": "clear the stage to a solid color"
+        },
+        {
+            "blocktype": "step",
+            "id": "9d6b3a43-8319-482e-b0f8-2ce0fe7c2f3a",
+            "label": "clear stage to image [image]",
+            "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
+            "help": "clear the stage to a background image"
+        },
+        {
+            "blocktype": "step",
+            "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
+            "label": "rectangle sprite## [size] big at [point] with color [color]",
+            "script": "local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "sprite##",
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple rectangle sprite"
+        },
+        {
+            "blocktype": "step",
+            "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
+            "label": "draw sprite [sprite]",
+            "script": "{{1}}.draw(local.ctx);",
+            "help": "draw the sprite at its current location"
+        },
+        {
+            "blocktype": "expression",
+            "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
+            "label": "sprite [sprite] collides with sprite [sprite]",
+            "script": "{{1}}.collides({{2}})",
+            "type": "boolean",
+            "help": "test for collision"
+        },
+        {
+            "blocktype": "step",
+            "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
+            "label": "move [sprite] by x [number] y [number]",
+            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}})",
+            "help": "move a sprite relatively"
+        },
+        {
+            "blocktype": "step",
+            "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
+            "label": "move [sprite] to [point]",
+            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})",
+            "help": "move a sprite absolutely"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a0c6d157-7fc7-4819-9b97-7b81d4c49a83",
+            "label": "sprite [sprite] left",
+            "script": "{{1}}.x",
+            "help": "get x (left) position of sprite",
+            "type": "number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "23b4ffd1-3812-4372-8873-8a1b3107bdac",
+            "label": "sprite [sprite] right",
+            "script": "{{1}}.x + {{1}}.w",
+            "help": "get x+w (right) position of sprite",
+            "type": "number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "898208b7-4d38-4c24-ba23-0b0443089435",
+            "label": "sprite [sprite] top",
+            "script": "{{1}}.y",
+            "help": "get y (top) position of sprite",
+            "type": "number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
+            "label": "sprite [sprite] bottom",
+            "script": "{{1}}.y + {{1}}.h",
+            "type": "number"
+        }
+    ]
+}
+);
+/*end sprite.json*/
 
 /*begin array.json*/
 wb.menu({
@@ -6687,130 +6913,6 @@ wb.menu({
 );
 /*end color.json*/
 
-/*begin control.json*/
-wb.menu({
-    "name": "Controls",
-    "blocks": [
-        {
-            "blocktype": "eventhandler",
-            "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
-            "label": "when program runs",
-            "script": "function _start(){[[1]]}_start();",
-            "help": "this trigger will run its scripts once when the program starts"
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
-            "label": "when [choice:keys] key pressed",
-            "script": "$(document).bind(\"keydown\", {{1}}, function(){[[1]]; return false;});",
-            "help": "this trigger will run the attached blocks every time this key is pressed"
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
-            "label": "repeat [number:30] times a second",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "label": "count##",
-                    "script": "local.count##",
-                    "type": "number"
-                }
-            ],
-            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
-            "help": "this trigger will run the attached blocks periodically"
-        },
-        {
-            "blocktype": "context",
-            "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
-            "label": "wait [number:1] secs",
-            "script": "setTimeout(function(){[[1]]},1000*{{1}});",
-            "help": "pause before running the following blocks"
-        },
-        {
-            "blocktype": "context",
-            "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
-            "label": "repeat [number:10]",
-            "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
-            "help": "repeat the contained blocks so many times",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "label": "count##",
-                    "script": "local.count##",
-                    "type": "number"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
-            "label": "broadcast [string:ack] message",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
-            "help": "send this message to any listeners"
-        },
-        {
-            "blocktype": "step",
-            "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
-            "label": "broadcast [string:ping] message with data [any]",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
-            "help": "send this message with an object argument to any listeners"
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
-            "label": "when I receive [string:ack] message",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
-            "help": "add a listener for the given message, run these blocks when it is received"
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
-            "label": "when I receive [string:ping] message with data",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "label": "data##",
-                    "script": "local.data##",
-                    "type": "any"
-                }
-            ],
-            "help": "add a listener for the given message which receives data, run these blocks when it is received"
-        },
-        {
-            "blocktype": "context",
-            "id": "b1e43170-800a-4e9b-af82-0ed5c62c47a0",
-            "label": "forever if [boolean:false]",
-            "script": "while({{1}}){[[1]]}",
-            "help": "repeat until the condition is false"
-        },
-        {
-            "blocktype": "context",
-            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
-            "label": "if [boolean]",
-            "script": "if({{1}}){[[1]]}",
-            "help": "run the following blocks only if the condition is true"
-        },
-        {
-            "blocktype": "context",
-            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
-            "label": "if not [boolean]",
-            "script": "if( ! {{1}} ){ [[1]]} }",
-            "help": "run the  blocks if the condition is not true"
-        },
-        {
-            "blocktype": "context",
-            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
-            "label": "repeat until [boolean]",
-            "script": "while(!({{1}})){[[1]]}",
-            "help": "repeat forever until condition is true"
-        }
-    ]
-}
-);
-/*end control.json*/
-
 /*begin image.json*/
 wb.menu({
     "name": "Images",
@@ -7135,29 +7237,6 @@ wb.menu({
 );
 /*end math.json*/
 
-/*begin matrix.json*/
-wb.menu({
-    "name": "Matrix",
-    "blocks": [
-        {
-            "blocktype": "step",
-            "id": "0f9e96f3-52d3-4ace-afdf-c598c1bd31ed",
-            "label": "transform by 6-matrix [array]",
-            "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
-            "help": "transform by an arbitrary matrix [a,b,c,d,e,f]"
-        },
-        {
-            "blocktype": "step",
-            "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
-            "label": "set transform to 6-matrix [array]",
-            "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
-            "help": "set transform to an arbitrary array [a,b,c,d,e,f]"
-        }
-    ]
-}
-);
-/*end matrix.json*/
-
 /*begin object.json*/
 wb.menu({
     "name": "Objects",
@@ -7219,6 +7298,107 @@ wb.menu({
 }
 );
 /*end object.json*/
+
+/*begin string.json*/
+wb.menu({
+    "name": "Strings",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "cdf5fa88-0d87-45d1-bf02-9ee4ec4c5565",
+            "label": "string [string] split on [string]",
+            "script": "{{1}}.split({{2}})",
+            "type": "array",
+            "help": "create an array by splitting the named string on the given string"
+        },
+        {
+            "blocktype": "expression",
+            "id": "e1951d04-dc2f-459e-9d7a-4796f29169ea",
+            "label": "concatenate [string:hello] with [string:world]",
+            "type": "string",
+            "script": "({{1}} + {{2}})",
+            "help": "returns a string by joining together two strings"
+        },
+        {
+            "blocktype": "expression",
+            "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
+            "label": "string [string] character at [number:0]",
+            "script": "{{1}}[{{2}}]",
+            "type": "string",
+            "help": "get the single character string at the given index of named string"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c1eda8ae-b77c-4f5f-9b9f-c11b65235765",
+            "label": "string [string] length",
+            "script": "{{1}}.length",
+            "type": "number",
+            "help": "get the length of named string"
+        },
+        {
+            "blocktype": "expression",
+            "id": "cc005f19-e1b9-4f74-8fd0-91faccedd370",
+            "label": "string [string] indexOf [string]",
+            "script": "{{1}}.indexOf({{2}})",
+            "type": "number",
+            "help": "get the index of the substring within the named string"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8b536c13-4c56-471e-83ac-cf8648602df4",
+            "label": "string [string] replace [string] with [string]",
+            "script": "{{1}}.replace({{2}}, {{3}})",
+            "type": "string",
+            "help": "get a new string by replacing a substring with a new string"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8eaacf8a-18eb-4f21-a1ab-a356326f7eae",
+            "label": "to string [any]",
+            "script": "{{1}}.toString()",
+            "type": "string",
+            "help": "convert any object to a string"
+        },
+        {
+            "blocktype": "step",
+            "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
+            "label": "comment [string]",
+            "script": "// {{1}};\n",
+            "help": "this is a comment and will not be run by the program"
+        },
+        {
+            "blocktype": "step",
+            "id": "2f178d61-e619-47d0-b9cf-fcb52625c2a3",
+            "label": "alert [string]",
+            "script": "window.alert({{1}});",
+            "help": "pop up an alert window with string"
+        },
+        {
+            "blocktype": "step",
+            "id": "8496b7af-129f-48eb-b15b-8803b7617493",
+            "label": "console log [any]",
+            "script": "console.log({{1}});",
+            "help": "Send any object as a message to the console"
+        },
+        {
+            "blocktype": "step",
+            "id": "8bfaf131-d169-4cf4-afe4-1d7f02a55341",
+            "label": "console log format [string] arguments [array]",
+            "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
+            "help": "send a message to the console with a format string and multiple objects"
+        },
+        {
+            "blocktype": "expression",
+            "id": "06ddcfee-76b7-4be4-856d-44cda3fb109b",
+            "label": "global keys object",
+            "script": "global.keys",
+            "help": "for debugging",
+            "type": "object"
+        }
+    ]
+}
+);
+/*end string.json*/
 
 /*begin path.json*/
 wb.menu({
@@ -7712,204 +7892,68 @@ wb.menu({
 );
 /*end social.json*/
 
-/*begin sprite.json*/
+/*begin fb.json*/
 wb.menu({
-    "name": "Sprites",
+    "name": "Facebook",
     "blocks": [
         {
             "blocktype": "step",
-            "id": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
-            "label": "clear stage to color [color]",
-            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
-            "help": "clear the stage to a solid color"
-        },
-        {
-            "blocktype": "step",
-            "id": "9d6b3a43-8319-482e-b0f8-2ce0fe7c2f3a",
-            "label": "clear stage to image [image]",
-            "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
-            "help": "clear the stage to a background image"
-        },
-        {
-            "blocktype": "step",
-            "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
-            "label": "rectangle sprite## [size] big at [point] with color [color]",
-            "script": "local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "label": "sprite##",
-                    "script": "local.sprite##",
-                    "type": "sprite"
-                }
-            ],
-            "help": "create a simple rectangle sprite"
-        },
-        {
-            "blocktype": "step",
-            "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
-            "label": "draw sprite [sprite]",
-            "script": "{{1}}.draw(local.ctx);",
-            "help": "draw the sprite at its current location"
+            "id": "4a2fd78c-4d0e-4c96-8ec3-52a96b2d6920",
+            "label": "share [string]",
+            "script": "FB.api(\"/me/feed/\", \"post\", { message : {{1}} }, $.noop );"
         },
         {
             "blocktype": "expression",
-            "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
-            "label": "sprite [sprite] collides with sprite [sprite]",
-            "script": "{{1}}.collides({{2}})",
-            "type": "boolean",
-            "help": "test for collision"
-        },
-        {
-            "blocktype": "step",
-            "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
-            "label": "move [sprite] by x [number] y [number]",
-            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}})",
-            "help": "move a sprite relatively"
-        },
-        {
-            "blocktype": "step",
-            "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "label": "move [sprite] to [point]",
-            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})",
-            "help": "move a sprite absolutely"
+            "id": "4f41013c-b053-439a-b284-769525f6df5d",
+            "label": "all my friends",
+            "script": "fb.friends.data",
+            "type": "array"
         },
         {
             "blocktype": "expression",
-            "id": "a0c6d157-7fc7-4819-9b97-7b81d4c49a83",
-            "label": "sprite [sprite] left",
-            "script": "{{1}}.x",
-            "help": "get x (left) position of sprite",
-            "type": "number"
-        },
-        {
-            "blocktype": "expression",
-            "id": "23b4ffd1-3812-4372-8873-8a1b3107bdac",
-            "label": "sprite [sprite] right",
-            "script": "{{1}}.x + {{1}}.w",
-            "help": "get x+w (right) position of sprite",
-            "type": "number"
-        },
-        {
-            "blocktype": "expression",
-            "id": "898208b7-4d38-4c24-ba23-0b0443089435",
-            "label": "sprite [sprite] top",
-            "script": "{{1}}.y",
-            "help": "get y (top) position of sprite",
-            "type": "number"
-        },
-        {
-            "blocktype": "expression",
-            "id": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
-            "label": "sprite [sprite] bottom",
-            "script": "{{1}}.y + {{1}}.h",
-            "type": "number"
-        }
-    ]
-}
-);
-/*end sprite.json*/
-
-/*begin string.json*/
-wb.menu({
-    "name": "Strings",
-    "blocks": [
-        {
-            "blocktype": "expression",
-            "id": "cdf5fa88-0d87-45d1-bf02-9ee4ec4c5565",
-            "label": "string [string] split on [string]",
-            "script": "{{1}}.split({{2}})",
-            "type": "array",
-            "help": "create an array by splitting the named string on the given string"
-        },
-        {
-            "blocktype": "expression",
-            "id": "e1951d04-dc2f-459e-9d7a-4796f29169ea",
-            "label": "concatenate [string:hello] with [string:world]",
-            "type": "string",
-            "script": "({{1}} + {{2}})",
-            "help": "returns a string by joining together two strings"
-        },
-        {
-            "blocktype": "expression",
-            "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
-            "label": "string [string] character at [number:0]",
-            "script": "{{1}}[{{2}}]",
-            "type": "string",
-            "help": "get the single character string at the given index of named string"
-        },
-        {
-            "blocktype": "expression",
-            "id": "c1eda8ae-b77c-4f5f-9b9f-c11b65235765",
-            "label": "string [string] length",
-            "script": "{{1}}.length",
-            "type": "number",
-            "help": "get the length of named string"
-        },
-        {
-            "blocktype": "expression",
-            "id": "cc005f19-e1b9-4f74-8fd0-91faccedd370",
-            "label": "string [string] indexOf [string]",
-            "script": "{{1}}.indexOf({{2}})",
-            "type": "number",
-            "help": "get the index of the substring within the named string"
-        },
-        {
-            "blocktype": "expression",
-            "id": "8b536c13-4c56-471e-83ac-cf8648602df4",
-            "label": "string [string] replace [string] with [string]",
-            "script": "{{1}}.replace({{2}}, {{3}})",
-            "type": "string",
-            "help": "get a new string by replacing a substring with a new string"
-        },
-        {
-            "blocktype": "expression",
-            "id": "8eaacf8a-18eb-4f21-a1ab-a356326f7eae",
-            "label": "to string [any]",
-            "script": "{{1}}.toString()",
-            "type": "string",
-            "help": "convert any object to a string"
-        },
-        {
-            "blocktype": "step",
-            "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
-            "label": "comment [string]",
-            "script": "// {{1}};\n",
-            "help": "this is a comment and will not be run by the program"
-        },
-        {
-            "blocktype": "step",
-            "id": "2f178d61-e619-47d0-b9cf-fcb52625c2a3",
-            "label": "alert [string]",
-            "script": "window.alert({{1}});",
-            "help": "pop up an alert window with string"
-        },
-        {
-            "blocktype": "step",
-            "id": "8496b7af-129f-48eb-b15b-8803b7617493",
-            "label": "console log [any]",
-            "script": "console.log({{1}});",
-            "help": "Send any object as a message to the console"
-        },
-        {
-            "blocktype": "step",
-            "id": "8bfaf131-d169-4cf4-afe4-1d7f02a55341",
-            "label": "console log format [string] arguments [array]",
-            "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
-            "help": "send a message to the console with a format string and multiple objects"
-        },
-        {
-            "blocktype": "expression",
-            "id": "06ddcfee-76b7-4be4-856d-44cda3fb109b",
-            "label": "global keys object",
-            "script": "global.keys",
-            "help": "for debugging",
+            "id": "9f987bdb-87f4-4cf7-aea7-6d282bc0276e",
+            "label": "me",
+            "script": "fb.me",
             "type": "object"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c290da4a-c84d-46ac-a6c8-20b367283ea1",
+            "label": "name of [any]",
+            "script": "{{1}}.name",
+            "type": "string"
+        },
+        {
+            "blocktype": "expression",
+            "id": "f0361c85-7ed9-4ecf-b5dc-c08da20034e1",
+            "label": "image of [any]",
+            "script": "(function(){var img = new Image(); img.src=\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"; return img;})",
+            "type": "image"
+        },
+        {
+            "blocktype": "expression",
+            "id": "6a4bbc09-5782-43b9-968b-4610c7664d29",
+            "label": "images url of [any]",
+            "type": "string",
+            "script": "\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\""
+        },
+        {
+            "blocktype": "expression",
+            "id": "ac41fb9e-c0c6-4e41-b190-87ba3fdb258d",
+            "label": "friend with name like [string]",
+            "script": "(function(){var correct = {id: \"\", name: \"\"}; $.each( fb.friends.data , function(i, user) { if( user.name.indexOf( {{1}} ) != -1 ) correct = user; } ); return correct;})()",
+            "type": "object"
+        },
+        {
+            "blocktype": "step",
+            "id": "cc6fa7cf-fa7e-47fc-b97a-27f5c83d8d4b",
+            "label": "checkin at [location]",
+            "script": "FB.api( \"/search\", { \"type\" : \"place\", \"center\" : \"{{1}}.latitude,{{1}}.longitude\", \"distance\": \"1000\" }, function(r){ FB.api(\"/me/feed/\", \"post\", { place : r.data[0].id }, $.noop ); } );"
         }
     ]
 }
 );
-/*end string.json*/
+/*end fb.json*/
 
 /*begin text.json*/
 wb.menu({
@@ -7975,6 +8019,29 @@ wb.menu({
 }
 );
 /*end text.json*/
+
+/*begin matrix.json*/
+wb.menu({
+    "name": "Matrix",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "0f9e96f3-52d3-4ace-afdf-c598c1bd31ed",
+            "label": "transform by 6-matrix [array]",
+            "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
+            "help": "transform by an arbitrary matrix [a,b,c,d,e,f]"
+        },
+        {
+            "blocktype": "step",
+            "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
+            "label": "set transform to 6-matrix [array]",
+            "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
+            "help": "set transform to an arbitrary array [a,b,c,d,e,f]"
+        }
+    ]
+}
+);
+/*end matrix.json*/
 
 /*begin launch.js*/
 switch(wb.view){

@@ -59,6 +59,7 @@
   border-style: solid;
   white-space: nowrap;
   cursor: pointer;
+  min-width: 75px;
 }
 
 .value .block{

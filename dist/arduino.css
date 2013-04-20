@@ -1272,6 +1272,8 @@ body.editor #block_menu{
 .socket.selected{
     background-color: yellow;
 }
+
+/* FIXME: We don't have slot elements anymore */
 .slot.dropActive{
     background-color: yellow;
 }
@@ -1304,6 +1306,30 @@ body.editor #block_menu{
 
 .scripts_workspace > .wrapper{
     display: block;
+}
+
+.wrapper.scripts_workspace{
+    width: 100%;
+    height: 100%
+    margin: 0px;
+}
+.scripts_workspace > .block{
+    background-color: rgba(215, 188, 243, 0.36);
+    width: 95%;
+    border: 0;
+}
+.scripts_workspace > .block:before{
+    content: none;
+}
+.scripts_workspace > .block > .contained{
+    border: 0;
+}
+.scripts_workspace > .block > .contained:before{
+    content: none;
+}
+.scripts_workspace > .block > .blockhead > .block_menu {
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 

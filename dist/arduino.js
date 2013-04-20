@@ -3377,7 +3377,7 @@ Block.prototype.view = function(){
         });
     }
     this.contained.forEach(function(contained, idx){
-        wb.findChild(view, '.block', '.blockhead', '.contained').appendChild(contained.view()[0]);
+        wb.findChild(view, '.block', '.contained').appendChild(contained.view()[0]);
         contained.addLocalsToParentContext();
     });
     // this.values.forEach(function(value, idx){

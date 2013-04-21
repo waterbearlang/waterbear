@@ -5755,6 +5755,8 @@ function edit_menu(title, specs, show){
 /*begin workspace.js*/
 (function($){
 
+var language = location.pathname.match(/\/(.*)\.html/)[1];
+
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace > .scripts_workspace').remove();
@@ -5779,7 +5781,7 @@ $('.goto_stage').click(function(){
 function saveCurrentScripts(){
     showWorkspace();
     $('#block_menu')[0].scrollIntoView();
-    localStorage.__current_scripts = wb.Block.serialize();
+    localStorage['__' + language + '_current_scripts'] = wb.Block.serialize();
 }
 $(window).unload(saveCurrentScripts);
 
@@ -5888,11 +5890,13 @@ wb.loadCurrentScripts = function(queryParsed){
 			dataType: 'jsonp',
 			success: loadScriptsFromGist
 		});
-	}else if (localStorage.__current_scripts){
-        var fileObject = JSON.parse(localStorage.__current_scripts);
+	}else if (localStorage['__' + language + '_current_scripts']){
+        var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
         if (fileObject){
             loadScriptsFromObject(fileObject);
         }
+    }else{
+        createWorkspace('Workspace');
     }
 };
 
@@ -5904,8 +5908,8 @@ wb.runCurrentScripts = function(queryParsed){
 			dataType: 'jsonp',
 			success: runScriptFromGist
 		});
-	}else if (localStorage.__current_scripts_js){
-		var fileObject = localStorage.__current_scripts_js;
+	}else if (localStorage['__' + language + '_current_scripts']){
+		var fileObject = localStorage['__' + language + '_current_scripts'];
 		if (fileObject){
 			wb.runScript(fileObject);
 		}

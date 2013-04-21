@@ -1,14 +1,6 @@
 (function(){
 
-
-yepnope({
-    load: 'plugins/arduino.css'
-});
-
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-
-    // remove UI we don't use (Maybe JS plugin should *add* this?)
-    $('.goto_stage, .runScripts, .result').remove();
 
 // expose these globally so the Block/Label methods can find them
 window.choiceLists = {
@@ -44,6 +36,14 @@ window.updateScriptsView = function(){
     blocks.writeScript(view);
 };
 
+wb.writeScript = function(elements, view){
+    var code = elements.map(function(elem){
+        return wb.Block.model(elem).code();
+    }).join('\n');
+    view.innerHTML = '<pre class="language-arduino">' + code + '</pre>';
+};
+
+
 jQuery.fn.extend({
   wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
@@ -58,7 +58,6 @@ jQuery.fn.extend({
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace > *').empty();
-        $('.stage').replaceWith('<div class="stage"></div>');
     }
 }
 

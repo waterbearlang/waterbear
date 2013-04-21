@@ -3875,7 +3875,7 @@ var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){
-    var title = blockspec.name;
+    var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
 	switch(wb.view){
 		case 'result': return run_menu(title, specs);
@@ -4277,15 +4277,7 @@ wb.Block.reify = function(serialized){
 /*begin arduino.js*/
 (function(){
 
-
-yepnope({
-    load: 'plugins/arduino.css'
-});
-
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
-
-    // remove UI we don't use (Maybe JS plugin should *add* this?)
-    $('.goto_stage, .runScripts, .result').remove();
 
 // expose these globally so the Block/Label methods can find them
 window.choiceLists = {
@@ -4321,6 +4313,14 @@ window.updateScriptsView = function(){
     blocks.writeScript(view);
 };
 
+wb.writeScript = function(elements, view){
+    var code = elements.map(function(elem){
+        return wb.Block.model(elem).code();
+    }).join('\n');
+    view.innerHTML = '<pre class="language-arduino">' + code + '</pre>';
+};
+
+
 jQuery.fn.extend({
   wrapScript: function(){
       // wrap the top-level script to prevent leaking into globals
@@ -4335,7 +4335,6 @@ jQuery.fn.extend({
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
         $('.workspace > *').empty();
-        $('.stage').replaceWith('<div class="stage"></div>');
     }
 }
 
@@ -4465,7 +4464,7 @@ wb.menu({
 /*begin digitalio.json*/
 wb.menu({
     "name": "Digital I/O",
-    "blocks":     [
+    "blocks": [
         {
             "blocktype": "step",
             "id": "451eda35-be10-498f-a714-4a32f3bcbe53",

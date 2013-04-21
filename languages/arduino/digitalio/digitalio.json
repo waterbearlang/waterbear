@@ -1,6 +1,6 @@
 {
     "name": "Digital I/O",
-    "blocks":     [
+    "blocks": [
         {
             "blocktype": "step",
             "id": "451eda35-be10-498f-a714-4a32f3bcbe53",

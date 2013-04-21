@@ -1,0 +1,3 @@
+.control, .controls{ border-color: hsl(44, 81%, 49%); }
+.controls > .block, h3.controls{ background-color: hsl(44, 81%, 85%); }
+

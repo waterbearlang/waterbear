@@ -1315,7 +1315,6 @@ body.editor #block_menu{
     margin: 0px;
 }
 .scripts_workspace > .block{
-    background-color: rgba(215, 188, 243, 0.36);
     width: 95%;
     border: 0;
 }

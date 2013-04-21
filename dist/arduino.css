@@ -1315,7 +1315,6 @@ body.editor #block_menu{
     margin: 0px;
 }
 .scripts_workspace > .block{
-    background-color: rgba(215, 188, 243, 0.36);
     width: 95%;
     border: 0;
 }
@@ -1339,30 +1338,15 @@ body.editor #block_menu{
 
 /*begin arduino.css*/
 /* block and border colours for different groups of blocks */
-
-.motion{ border-color: hsl(225,65%,83%); }
-.motion > .block{ background-color: hsl(225, 65%, 93%); }
-
-.timing{ border-color: hsl(264,62%,79%); }
-.timing > .block{ background-color: hsl(264,62%,89%); }
-
 .interface{ border-color: hsl(296, 65%, 57%); }
 .interface > .block{ background-color: hsl(296, 65%, 77%); }
 
 .variables{ border-color: hsl(15,100%,63%); }
 .variables > .block{ background-color: hsl(15,100%,83%); }
 
-.control{ border-color: hsl(44, 81%, 49%); }
-.control > .block{ background-color: hsl(44, 81%, 85%); }
-
 .sensing{ border-color: hsl(200,98%,56%); }
 .sensing > .block{ background-color: hsl(200,98%,76%); }
 
-.operators{ border-color: hsl(93,90%,66%); }
-.operators > .block{ background-color: hsl(93,90%,76%); }
-
-.serial{ border-color: #e66a22; }
-.serial > .block{ background-color: #e66a22; }
 
 .animation{ border-color: hsl(150, 65%, 79%); }
 .animation > .block {background-color: hsl(150, 62%, 89%); }
@@ -1372,10 +1356,6 @@ body.editor #block_menu{
 
 /* Border colours for type values and sockets */
 
-.boolean{ border-color: red; }
-.number{ border-color: blue; }
-.float{ border-color: blue; border-style: dotted !important; }
-.int{ border-color: blue; border-style: dashed !important; }
 .color{ border-color: yellow; }
 .string{ border-color: green; }
 .string input{ min-width: 10em; }
@@ -1384,29 +1364,51 @@ body.editor #block_menu{
 /*end arduino.css*/
 
 /*begin boolean.css*/
+.boolean > .block, h3.boolean { background-color: #FF4444; }
+.boolean{ border-color: red; }
 
 /*end boolean.css*/
 
 /*begin control.css*/
+.control, .controls{ border-color: hsl(44, 81%, 49%); }
+.controls > .block, h3.controls{ background-color: hsl(44, 81%, 85%); }
+
 
 /*end control.css*/
 
 /*begin digitalio.css*/
+.digitalio { border-color: hsl(225,65%,83%); }
+.digitalio > .block, h3.digitalio{ background-color: hsl(225, 65%, 93%); }
+
 
 /*end digitalio.css*/
 
 /*begin math.css*/
+.math{ border-color: hsl(93,90%,66%); }
+.math > .block, h3.math{ background-color: hsl(93,90%,76%); }
+.number{ border-color: blue; }
+.float{ border-color: blue; border-style: dotted !important; }
+.int{ border-color: blue; border-style: dashed !important; }
 
 /*end math.css*/
 
 /*begin serialio.css*/
+.serialio{ border-color: #e66a22; }
+.serialio > .block, h3.serialio{ background-color: #e66a22; }
+
 
 /*end serialio.css*/
 
 /*begin timing.css*/
+.timing{ border-color: hsl(264,62%,79%); }
+.timing > .block, h3.timing{ background-color: hsl(264,62%,89%); }
+
 
 /*end timing.css*/
 
 /*begin variables.css*/
+.variables{ border-color: hsl(15,100%,63%); }
+.variables > .block, h3.variables{ background-color: hsl(15,100%,83%); }
+
 
 /*end variables.css*/

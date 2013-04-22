@@ -1,0 +1,206 @@
+{
+    "name": "Controls",
+    "blocks": [
+        {
+            "blocktype": "eventhandler",
+            "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
+            "script": "function _start(){[[1]]}_start();",
+            "help": "this trigger will run its scripts once when the program starts",
+            "sockets": [
+                "when program runs"
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+            "script": "$(document).bind(\"keydown\", {{1}}, function(){[[1]]; return false;});",
+            "help": "this trigger will run the attached blocks every time this key is pressed",
+            "sockets": [
+                "when",
+                {
+                    "type": "choice",
+                    "options": "keys",
+                    "value": "choice"
+                },
+                "key pressed"
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "count##",
+                    "script": "local.count##",
+                    "type": "number"
+                }
+            ],
+            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                "repeat",
+                {
+                    "type": "number",
+                    "value": "30"
+                },
+                "times a second"
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
+            "script": "setTimeout(function(){[[1]]},1000*{{1}});",
+            "help": "pause before running the following blocks",
+            "sockets": [
+                "wait",
+                {
+                    "type": "number",
+                    "value": "1"
+                },
+                "secs"
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+            "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+            "help": "repeat the contained blocks so many times",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "count##",
+                    "script": "local.count##",
+                    "type": "number"
+                }
+            ],
+            "sockets": [
+                "repeat",
+                {
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
+            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
+            "help": "send this message to any listeners",
+            "sockets": [
+                "broadcast",
+                {
+                    "type": "string",
+                    "value": "ack"
+                },
+                "message"
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
+            "help": "send this message with an object argument to any listeners",
+            "sockets": [
+                "broadcast",
+                {
+                    "type": "string",
+                    "value": "ping"
+                },
+                "message with data",
+                {
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
+            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+            "help": "add a listener for the given message, run these blocks when it is received",
+            "sockets": [
+                "when I receive",
+                {
+                    "type": "string",
+                    "value": "ack"
+                },
+                "message"
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
+            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "label": "data##",
+                    "script": "local.data##",
+                    "type": "any"
+                }
+            ],
+            "help": "add a listener for the given message which receives data, run these blocks when it is received",
+            "sockets": [
+                "when I receive",
+                {
+                    "type": "string",
+                    "value": "ping"
+                },
+                "message with data"
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "b1e43170-800a-4e9b-af82-0ed5c62c47a0",
+            "script": "while({{1}}){[[1]]}",
+            "help": "repeat until the condition is false",
+            "sockets": [
+                "forever if",
+                {
+                    "type": "boolean",
+                    "value": "false"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
+            "script": "if({{1}}){[[1]]}",
+            "help": "run the following blocks only if the condition is true",
+            "sockets": [
+                "if",
+                {
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
+            "script": "if( ! {{1}} ){ [[1]]} }",
+            "help": "run the  blocks if the condition is not true",
+            "sockets": [
+                "if not",
+                {
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
+            "script": "while(!({{1}})){[[1]]}",
+            "help": "repeat forever until condition is true",
+            "sockets": [
+                "repeat until",
+                {
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        }
+    ]
+}

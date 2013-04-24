@@ -7,13 +7,13 @@
             "script": "{w: {{1}}, h: {{2}} }",
             "type": "size",
             "sockets": [
-                "size with width",
                 {
+                    "name": "size with width",
                     "type": "number",
                     "value": "10"
                 },
-                "height",
                 {
+                    "name": "height",
                     "type": "number",
                     "value": "10"
                 }
@@ -25,8 +25,8 @@
             "script": "{w: {{1}}[0], h: {{1}}[1]",
             "type": "size",
             "sockets": [
-                "size from array",
                 {
+                    "name": "size from array",
                     "type": "array",
                     "value": null
                 }
@@ -38,12 +38,14 @@
             "script": "{{1}}.w",
             "type": "number",
             "sockets": [
-                "size",
                 {
+                    "name": "size",
                     "type": "size",
                     "value": null
                 },
-                "width"
+                {
+                    "name": "width"
+                }
             ]
         },
         {
@@ -52,12 +54,14 @@
             "script": "{{1}}.h",
             "type": "number",
             "sockets": [
-                "size",
                 {
+                    "name": "size",
                     "type": "size",
                     "value": null
                 },
-                "height"
+                {
+                    "name": "height"
+                }
             ]
         },
         {
@@ -66,12 +70,14 @@
             "script": "[{{1}}.w, {{1}}.h]",
             "type": "array",
             "sockets": [
-                "size",
                 {
+                    "name": "size",
                     "type": "size",
                     "value": null
                 },
-                "as array"
+                {
+                    "name": "as array"
+                }
             ]
         }
     ]

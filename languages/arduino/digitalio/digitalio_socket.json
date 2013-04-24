@@ -15,8 +15,8 @@
                 }
             ],
             "sockets": [
-                "Create digital_output## on Pin",
                 {
+                    "name": "Create digital_output## on Pin",
                     "type": "choice",
                     "options": "digitalpins",
                     "value": "choice"
@@ -29,13 +29,13 @@
             "script": "if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n",
             "help": "Write a boolean value to given pin",
             "sockets": [
-                "Digital Pin",
                 {
+                    "name": "Digital Pin",
                     "type": "string",
                     "value": null
                 },
-                "ON if",
                 {
+                    "name": "ON if",
                     "type": "boolean",
                     "value": null
                 }
@@ -55,8 +55,8 @@
                 }
             ],
             "sockets": [
-                "Create digital_input## on Pin",
                 {
+                    "name": "Create digital_input## on Pin",
                     "type": "choice",
                     "options": "digitalpins",
                     "value": "choice"
@@ -70,8 +70,8 @@
             "script": "(digitalRead({{1}}) == HIGH)",
             "help": "Is the digital input pin ON",
             "sockets": [
-                "Digital Pin",
                 {
+                    "name": "Digital Pin",
                     "type": "string",
                     "value": null
                 }
@@ -91,8 +91,8 @@
                 }
             ],
             "sockets": [
-                "Create analog_input## on Pin",
                 {
+                    "name": "Create analog_input## on Pin",
                     "type": "choice",
                     "options": "analoginpins",
                     "value": "choice"
@@ -106,8 +106,8 @@
             "script": "(analogRead({{1}}))",
             "help": "Value of analog pin",
             "sockets": [
-                "Analog Pin",
                 {
+                    "name": "Analog Pin",
                     "type": "string",
                     "value": null
                 }
@@ -127,8 +127,8 @@
                 }
             ],
             "sockets": [
-                "Create analog_output## on Pin",
                 {
+                    "name": "Create analog_output## on Pin",
                     "type": "choice",
                     "options": "pwmpins",
                     "value": "choice"
@@ -141,13 +141,13 @@
             "script": "analogWrite({{1}}, {{2}});",
             "help": "Set value of a pwm pin",
             "sockets": [
-                "Analog",
                 {
+                    "name": "Analog",
                     "type": "string",
                     "value": null
                 },
-                "outputs",
                 {
+                    "name": "outputs",
                     "type": "int",
                     "value": "255"
                 }

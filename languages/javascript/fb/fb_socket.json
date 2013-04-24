@@ -6,8 +6,8 @@
             "id": "4a2fd78c-4d0e-4c96-8ec3-52a96b2d6920",
             "script": "FB.api(\"/me/feed/\", \"post\", { message : {{1}} }, $.noop );",
             "sockets": [
-                "share",
                 {
+                    "name": "share",
                     "type": "string",
                     "value": null
                 }
@@ -19,7 +19,9 @@
             "script": "fb.friends.data",
             "type": "array",
             "sockets": [
-                "all my friends"
+                {
+                    "name": "all my friends"
+                }
             ]
         },
         {
@@ -28,7 +30,9 @@
             "script": "fb.me",
             "type": "object",
             "sockets": [
-                "me"
+                {
+                    "name": "me"
+                }
             ]
         },
         {
@@ -37,8 +41,8 @@
             "script": "{{1}}.name",
             "type": "string",
             "sockets": [
-                "name of",
                 {
+                    "name": "name of",
                     "type": "any",
                     "value": null
                 }
@@ -50,8 +54,8 @@
             "script": "(function(){var img = new Image(); img.src=\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"; return img;})",
             "type": "image",
             "sockets": [
-                "image of",
                 {
+                    "name": "image of",
                     "type": "any",
                     "value": null
                 }
@@ -63,8 +67,8 @@
             "type": "string",
             "script": "\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"",
             "sockets": [
-                "images url of",
                 {
+                    "name": "images url of",
                     "type": "any",
                     "value": null
                 }
@@ -76,8 +80,8 @@
             "script": "(function(){var correct = {id: \"\", name: \"\"}; $.each( fb.friends.data , function(i, user) { if( user.name.indexOf( {{1}} ) != -1 ) correct = user; } ); return correct;})()",
             "type": "object",
             "sockets": [
-                "friend with name like",
                 {
+                    "name": "friend with name like",
                     "type": "string",
                     "value": null
                 }
@@ -88,8 +92,8 @@
             "id": "cc6fa7cf-fa7e-47fc-b97a-27f5c83d8d4b",
             "script": "FB.api( \"/search\", { \"type\" : \"place\", \"center\" : \"{{1}}.latitude,{{1}}.longitude\", \"distance\": \"1000\" }, function(r){ FB.api(\"/me/feed/\", \"post\", { place : r.data[0].id }, $.noop ); } );",
             "sockets": [
-                "checkin at",
                 {
+                    "name": "checkin at",
                     "type": "location",
                     "value": null
                 }

@@ -7,12 +7,14 @@
             "script": "delay(1000*{{1}});",
             "help": "pause before running subsequent blocks",
             "sockets": [
-                "wait",
                 {
+                    "name": "wait",
                     "type": "int",
                     "value": "1"
                 },
-                "secs"
+                {
+                    "name": "secs"
+                }
             ]
         },
         {
@@ -22,7 +24,9 @@
             "script": "(millis())",
             "help": "int value of time elapsed",
             "sockets": [
-                "Milliseconds since program started"
+                {
+                    "name": "Milliseconds since program started"
+                }
             ]
         },
         {
@@ -32,7 +36,9 @@
             "script": "(int(millis()/1000))",
             "help": "int value of time elapsed",
             "sockets": [
-                "Seconds since program started"
+                {
+                    "name": "Seconds since program started"
+                }
             ]
         }
     ]

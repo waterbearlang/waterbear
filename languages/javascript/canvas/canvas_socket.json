@@ -7,7 +7,9 @@
             "help": "save the current state, run the contained steps, then restore the saved state",
             "id": "9e514499-05a6-4b76-ad4b-1ea888181a8b",
             "sockets": [
-                "with local state"
+                {
+                    "name": "with local state"
+                }
             ]
         },
         {
@@ -16,7 +18,9 @@
             "help": "stroke...",
             "id": "99d5828c-ccdd-47db-9abe-f67a8c065fe6",
             "sockets": [
-                "stroke"
+                {
+                    "name": "stroke"
+                }
             ]
         },
         {
@@ -25,7 +29,9 @@
             "help": "fill...",
             "id": "d540bb5f-7711-4133-a631-53821daeb593",
             "sockets": [
-                "fill"
+                {
+                    "name": "fill"
+                }
             ]
         },
         {
@@ -34,8 +40,8 @@
             "script": "local.ctx.globalAlpha = {{1}};",
             "help": "set the global alpha",
             "sockets": [
-                "global alpha",
                 {
+                    "name": "global alpha",
                     "type": "number",
                     "value": "1.0"
                 }
@@ -47,8 +53,8 @@
             "script": "local.ctx.globalCompositOperator = {{1}};",
             "help": "set the global composite operator",
             "sockets": [
-                "global composite operator",
                 {
+                    "name": "global composite operator",
                     "type": "choice",
                     "options": "globalCompositeOperators",
                     "value": "choice"
@@ -61,13 +67,13 @@
             "script": "local.ctx.scale({{1}},{{2}});",
             "help": "change the scale of subsequent drawing",
             "sockets": [
-                "scale x",
                 {
+                    "name": "scale x",
                     "type": "number",
                     "value": "1.0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "1.0"
                 }
@@ -79,12 +85,14 @@
             "script": "local.ctx.rotate(deg2rad({{1}}));",
             "help": "rotate...",
             "sockets": [
-                "rotate by",
                 {
+                    "name": "rotate by",
                     "type": "number",
                     "value": "0"
                 },
-                "degrees"
+                {
+                    "name": "degrees"
+                }
             ]
         },
         {
@@ -93,13 +101,13 @@
             "script": "local.ctx.translate({{1}},{{2}});",
             "help": "translate...",
             "sockets": [
-                "translate by x",
                 {
+                    "name": "translate by x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 }
@@ -111,8 +119,8 @@
             "script": "local.ctx.lineWidth = {{1}};",
             "help": "set line width",
             "sockets": [
-                "line width",
                 {
+                    "name": "line width",
                     "type": "number",
                     "value": "1"
                 }
@@ -124,8 +132,8 @@
             "script": "local.ctx.lineCap = {{1}};",
             "help": "set line cap",
             "sockets": [
-                "line cap",
                 {
+                    "name": "line cap",
                     "type": "choice",
                     "options": "linecap",
                     "value": "choice"
@@ -138,8 +146,8 @@
             "script": "local.ctx.lineJoin = {{1}};",
             "help": "set line join",
             "sockets": [
-                "line join",
                 {
+                    "name": "line join",
                     "type": "choice",
                     "options": "linejoin",
                     "value": "choice"
@@ -152,8 +160,8 @@
             "script": "local.ctx.mitreLimit = {{1}};",
             "help": "set mitre limit",
             "sockets": [
-                "mitre limit",
                 {
+                    "name": "mitre limit",
                     "type": "number",
                     "value": "10"
                 }
@@ -165,13 +173,13 @@
             "script": "local.ctx.shadowOffsetX = {{1}}; local.ctx.shadowOffsetY = {{2}}",
             "help": "set the offsets for shadow",
             "sockets": [
-                "shadow offset x",
                 {
+                    "name": "shadow offset x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 }
@@ -183,8 +191,8 @@
             "script": "local.ctx.shadowBlur = {{1}}",
             "help": "set the shadow blur radius",
             "sockets": [
-                "shadow blur",
                 {
+                    "name": "shadow blur",
                     "type": "number",
                     "value": "0"
                 }

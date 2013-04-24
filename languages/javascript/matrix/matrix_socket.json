@@ -7,8 +7,8 @@
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
             "help": "transform by an arbitrary matrix [a,b,c,d,e,f]",
             "sockets": [
-                "transform by 6-matrix",
                 {
+                    "name": "transform by 6-matrix",
                     "type": "array",
                     "value": null
                 }
@@ -20,8 +20,8 @@
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
             "help": "set transform to an arbitrary array [a,b,c,d,e,f]",
             "sockets": [
-                "set transform to 6-matrix",
                 {
+                    "name": "set transform to 6-matrix",
                     "type": "array",
                     "value": null
                 }

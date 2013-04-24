@@ -7,7 +7,9 @@
             "script": "function _start(){[[1]]}_start();",
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
-                "when program runs"
+                {
+                    "name": "when program runs"
+                }
             ]
         },
         {
@@ -16,13 +18,15 @@
             "script": "$(document).bind(\"keydown\", {{1}}, function(){[[1]]; return false;});",
             "help": "this trigger will run the attached blocks every time this key is pressed",
             "sockets": [
-                "when",
                 {
+                    "name": "when",
                     "type": "choice",
                     "options": "keys",
                     "value": "choice"
                 },
-                "key pressed"
+                {
+                    "name": "key pressed"
+                }
             ]
         },
         {
@@ -39,12 +43,14 @@
             "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
-                "repeat",
                 {
+                    "name": "repeat",
                     "type": "number",
                     "value": "30"
                 },
-                "times a second"
+                {
+                    "name": "times a second"
+                }
             ]
         },
         {
@@ -53,12 +59,14 @@
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",
             "help": "pause before running the following blocks",
             "sockets": [
-                "wait",
                 {
+                    "name": "wait",
                     "type": "number",
                     "value": "1"
                 },
-                "secs"
+                {
+                    "name": "secs"
+                }
             ]
         },
         {
@@ -75,8 +83,8 @@
                 }
             ],
             "sockets": [
-                "repeat",
                 {
+                    "name": "repeat",
                     "type": "number",
                     "value": "10"
                 }
@@ -88,12 +96,14 @@
             "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
             "help": "send this message to any listeners",
             "sockets": [
-                "broadcast",
                 {
+                    "name": "broadcast",
                     "type": "string",
                     "value": "ack"
                 },
-                "message"
+                {
+                    "name": "message"
+                }
             ]
         },
         {
@@ -102,13 +112,13 @@
             "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
             "help": "send this message with an object argument to any listeners",
             "sockets": [
-                "broadcast",
                 {
+                    "name": "broadcast",
                     "type": "string",
                     "value": "ping"
                 },
-                "message with data",
                 {
+                    "name": "message with data",
                     "type": "any",
                     "value": null
                 }
@@ -120,12 +130,14 @@
             "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
             "help": "add a listener for the given message, run these blocks when it is received",
             "sockets": [
-                "when I receive",
                 {
+                    "name": "when I receive",
                     "type": "string",
                     "value": "ack"
                 },
-                "message"
+                {
+                    "name": "message"
+                }
             ]
         },
         {
@@ -142,12 +154,14 @@
             ],
             "help": "add a listener for the given message which receives data, run these blocks when it is received",
             "sockets": [
-                "when I receive",
                 {
+                    "name": "when I receive",
                     "type": "string",
                     "value": "ping"
                 },
-                "message with data"
+                {
+                    "name": "message with data"
+                }
             ]
         },
         {
@@ -156,8 +170,8 @@
             "script": "while({{1}}){[[1]]}",
             "help": "repeat until the condition is false",
             "sockets": [
-                "forever if",
                 {
+                    "name": "forever if",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -169,8 +183,8 @@
             "script": "if({{1}}){[[1]]}",
             "help": "run the following blocks only if the condition is true",
             "sockets": [
-                "if",
                 {
+                    "name": "if",
                     "type": "boolean",
                     "value": null
                 }
@@ -182,8 +196,8 @@
             "script": "if( ! {{1}} ){ [[1]]} }",
             "help": "run the  blocks if the condition is not true",
             "sockets": [
-                "if not",
                 {
+                    "name": "if not",
                     "type": "boolean",
                     "value": null
                 }
@@ -195,8 +209,8 @@
             "script": "while(!({{1}})){[[1]]}",
             "help": "repeat forever until condition is true",
             "sockets": [
-                "repeat until",
                 {
+                    "name": "repeat until",
                     "type": "boolean",
                     "value": null
                 }

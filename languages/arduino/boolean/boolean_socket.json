@@ -9,11 +9,12 @@
             "help": "Check if both are true",
             "sockets": [
                 {
+                    "name": "",
                     "type": "boolean",
                     "value": null
                 },
-                "and",
                 {
+                    "name": "and",
                     "type": "boolean",
                     "value": null
                 }
@@ -27,11 +28,12 @@
             "help": "Check if one is true",
             "sockets": [
                 {
+                    "name": "",
                     "type": "boolean",
                     "value": null
                 },
-                "or",
                 {
+                    "name": "or",
                     "type": "boolean",
                     "value": null
                 }
@@ -44,8 +46,8 @@
             "script": "(! {{1}})",
             "help": "Not true is false and Not false is true",
             "sockets": [
-                "not",
                 {
+                    "name": "not",
                     "type": "boolean",
                     "value": null
                 }

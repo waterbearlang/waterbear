@@ -7,7 +7,9 @@
             "script": "void setup()\n{\n[[1]]\n}\n",
             "help": "Start scripts when program starts",
             "sockets": [
-                "Setup - When program starts"
+                {
+                    "name": "Setup - When program starts"
+                }
             ]
         },
         {
@@ -16,7 +18,9 @@
             "script": "void loop()\n{\n[[1]]\n}\n",
             "help": "Trigger for main loop",
             "sockets": [
-                "Main loop"
+                {
+                    "name": "Main loop"
+                }
             ]
         },
         {
@@ -25,7 +29,9 @@
             "script": "/*Global Settings*/\n\n[[1]]\n\n",
             "help": "Trigger for blocks in global setup",
             "sockets": [
-                "Global Settings"
+                {
+                    "name": "Global Settings"
+                }
             ]
         },
         {
@@ -34,12 +40,14 @@
             "script": "{{1}}();",
             "help": "Send a message to all listeners",
             "sockets": [
-                "broadcast",
                 {
+                    "name": "broadcast",
                     "type": "string",
                     "value": "ack"
                 },
-                "message"
+                {
+                    "name": "message"
+                }
             ]
         },
         {
@@ -48,12 +56,14 @@
             "script": "function {{1}}(){\n[[next]]\n}",
             "help": "Trigger for blocks to run when message is received",
             "sockets": [
-                "when I receive",
                 {
+                    "name": "when I receive",
                     "type": "string",
                     "value": "ack"
                 },
-                "message"
+                {
+                    "name": "message"
+                }
             ]
         },
         {
@@ -62,8 +72,8 @@
             "script": "while({{1}}){\n[[1]]\n}",
             "help": "loop until condition fails",
             "sockets": [
-                "forever if",
                 {
+                    "name": "forever if",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -75,8 +85,8 @@
             "script": "if({{1}}){\n[[1]]\n}",
             "help": "only run blocks if condition is true",
             "sockets": [
-                "if",
                 {
+                    "name": "if",
                     "type": "boolean",
                     "value": null
                 }
@@ -88,8 +98,8 @@
             "script": "if(! {{1}} ){\n[[1]]\n}",
             "help": "run blocks if condition is not true",
             "sockets": [
-                "if not",
                 {
+                    "name": "if not",
                     "type": "boolean",
                     "value": null
                 }
@@ -101,8 +111,8 @@
             "script": "while(!({{1}})){\n[[1]]\n}",
             "help": "loop until condition is true",
             "sockets": [
-                "repeat until",
                 {
+                    "name": "repeat until",
                     "type": "boolean",
                     "value": null
                 }

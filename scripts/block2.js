@@ -100,8 +100,22 @@
         // type and default value are optional, but if you have one you must have the other
         // If the type is choice it must also have a choicename for the list of values
         // that can be found in the wb.choiceLists
-        //
-        // If a Socket only has text, it can be a string (maybe???)
+        var socket = elem('div', {
+            'class': 'socket',
+            'data-name': obj.name
+        },
+        [
+            ['label', {'class': 'name'}, [obj.name]]
+        ]);
+        if (obj.type){
+            socket.dataset.type = obj.type;
+            socket.appendChild(elem('div', {'class': 'contained'}, [Default(obj)]))
+        }
+    }
+
+    function Default(obj){
+        // return an input for input types (number, string, color, date)
+        // return a block for block types
     }
 
 

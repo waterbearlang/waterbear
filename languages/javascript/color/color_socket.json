@@ -7,8 +7,8 @@
             "script": "local.ctx.shadowColor = {{1}}",
             "help": "set the shadow color",
             "sockets": [
-                "shadow color",
                 {
+                    "name": "shadow color",
                     "type": "color",
                     "value": null
                 }
@@ -20,8 +20,8 @@
             "script": "local.ctx.strokeStyle = {{1}};",
             "help": "stroke color...",
             "sockets": [
-                "stroke color",
                 {
+                    "name": "stroke color",
                     "type": "color",
                     "value": "#000"
                 }
@@ -33,8 +33,8 @@
             "script": "local.ctx.fillStyle = {{1}};",
             "help": "fill color...",
             "sockets": [
-                "fill color",
                 {
+                    "name": "fill color",
                     "type": "color",
                     "value": "#000"
                 }
@@ -47,18 +47,18 @@
             "type": "color",
             "help": "returns a color",
             "sockets": [
-                "color with red",
                 {
+                    "name": "color with red",
                     "type": "number",
                     "value": "0"
                 },
-                "green",
                 {
+                    "name": "green",
                     "type": "number",
                     "value": "0"
                 },
-                "blue",
                 {
+                    "name": "blue",
                     "type": "number",
                     "value": "0"
                 }
@@ -71,23 +71,23 @@
             "type": "color",
             "help": "returns a semi-opaque color",
             "sockets": [
-                "color with red",
                 {
+                    "name": "color with red",
                     "type": "number",
                     "value": "0"
                 },
-                "green",
                 {
+                    "name": "green",
                     "type": "number",
                     "value": "0"
                 },
-                "blue",
                 {
+                    "name": "blue",
                     "type": "number",
                     "value": "0"
                 },
-                "alpha",
                 {
+                    "name": "alpha",
                     "type": "number",
                     "value": "0"
                 }
@@ -100,18 +100,18 @@
             "script": "\"hsb({{1}}, {{2}}, {{3}})\"",
             "help": "returns a color",
             "sockets": [
-                "color with hue",
                 {
+                    "name": "color with hue",
                     "type": "number",
                     "value": "0"
                 },
-                "saturation",
                 {
+                    "name": "saturation",
                     "type": "number",
                     "value": "0"
                 },
-                "brightness",
                 {
+                    "name": "brightness",
                     "type": "number",
                     "value": "0]"
                 }
@@ -124,7 +124,9 @@
             "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\"",
             "help": "returns a random color",
             "sockets": [
-                "random color"
+                {
+                    "name": "random color"
+                }
             ]
         },
         {
@@ -133,8 +135,8 @@
             "script": "local.ctx.strokeStyle = {{1}};",
             "help": "replaces stroke color or stroke pattern with gradient",
             "sockets": [
-                "stroke gradient",
                 {
+                    "name": "stroke gradient",
                     "type": "gradient",
                     "value": null
                 }
@@ -146,8 +148,8 @@
             "script": "local.ctx.fillStyle = {{1}};",
             "help": "replaces fill color or fill pattern with gradient",
             "sockets": [
-                "fill gradient",
                 {
+                    "name": "fill gradient",
                     "type": "gradient",
                     "value": null
                 }
@@ -159,8 +161,8 @@
             "script": "local.ctx.strokeStyle = {{1}};",
             "help": "replaces stroke color or stroke gradient with pattern",
             "sockets": [
-                "stroke pattern",
                 {
+                    "name": "stroke pattern",
                     "type": "pattern",
                     "value": null
                 }
@@ -172,8 +174,8 @@
             "script": "local.ctx.fillStyle = {{1}};",
             "help": "replaces fill color or fill gradient with pattern",
             "sockets": [
-                "fill pattern",
                 {
+                    "name": "fill pattern",
                     "type": "pattern",
                     "value": null
                 }
@@ -193,23 +195,23 @@
                 }
             ],
             "sockets": [
-                "create radial gradient from point1",
                 {
+                    "name": "create radial gradient from point1",
                     "type": "point",
                     "value": null
                 },
-                "radius1",
                 {
+                    "name": "radius1",
                     "type": "number",
                     "value": "0"
                 },
-                "to point2",
                 {
+                    "name": "to point2",
                     "type": "point",
                     "value": null
                 },
-                "radius2",
                 {
+                    "name": "radius2",
                     "type": "number",
                     "value": "0"
                 }
@@ -229,13 +231,13 @@
                 }
             ],
             "sockets": [
-                "create linear gradient from point1",
                 {
+                    "name": "create linear gradient from point1",
                     "type": "point",
                     "value": null
                 },
-                "to point2",
                 {
+                    "name": "to point2",
                     "type": "point",
                     "value": null
                 }
@@ -247,18 +249,18 @@
             "script": "{{1}}.addColorStop({{2}}, {{3}}",
             "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
             "sockets": [
-                "add color stop to gradient",
                 {
+                    "name": "add color stop to gradient",
                     "type": "gradient",
                     "value": null
                 },
-                "at offset",
                 {
+                    "name": "at offset",
                     "type": "number",
                     "value": "0.5"
                 },
-                "with color",
                 {
+                    "name": "with color",
                     "type": "color",
                     "value": "#F00"
                 }
@@ -278,13 +280,13 @@
                 }
             ],
             "sockets": [
-                "create pattern## from image",
                 {
+                    "name": "create pattern## from image",
                     "type": "image",
                     "value": null
                 },
-                "repeats",
                 {
+                    "name": "repeats",
                     "type": "choice",
                     "options": "repetition",
                     "value": "choice"

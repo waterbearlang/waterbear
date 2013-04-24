@@ -7,13 +7,13 @@
             "script": "String {{1}} = '{{2}}';",
             "help": "Create a string variable",
             "sockets": [
-                "Create",
                 {
+                    "name": "Create",
                     "type": "string",
                     "value": "var"
                 },
-                "set to",
                 {
+                    "name": "set to",
                     "type": "string",
                     "value": null
                 }
@@ -26,11 +26,12 @@
             "help": "Change the value of an already created string variable",
             "sockets": [
                 {
+                    "name": "",
                     "type": "string",
                     "value": "var"
                 },
-                "=",
                 {
+                    "name": "=",
                     "type": "string",
                     "value": null
                 }
@@ -43,8 +44,8 @@
             "script": "{{1}}",
             "help": "Get the value of a string variable",
             "sockets": [
-                "value of",
                 {
+                    "name": "value of",
                     "type": "string",
                     "value": "var"
                 }
@@ -56,13 +57,13 @@
             "script": "int {{1}} = {{2}}'",
             "help": "Create an integer variable",
             "sockets": [
-                "Create",
                 {
+                    "name": "Create",
                     "type": "string",
                     "value": "var"
                 },
-                "set to",
                 {
+                    "name": "set to",
                     "type": "int",
                     "value": "0"
                 }
@@ -75,11 +76,12 @@
             "help": "Change the value of an already created integer variable",
             "sockets": [
                 {
+                    "name": "",
                     "type": "string",
                     "value": "var"
                 },
-                "=",
                 {
+                    "name": "=",
                     "type": "int",
                     "value": "0"
                 }
@@ -92,8 +94,8 @@
             "script": "{{1}}",
             "help": "Get the value of an integer variable",
             "sockets": [
-                "value of",
                 {
+                    "name": "value of",
                     "type": "string",
                     "value": "var"
                 }
@@ -105,13 +107,13 @@
             "script": "float {{1}} = {{2}}",
             "help": "Create a decimal variable",
             "sockets": [
-                "Create",
                 {
+                    "name": "Create",
                     "type": "string",
                     "value": "var"
                 },
-                "set to",
                 {
+                    "name": "set to",
                     "type": "float",
                     "value": "0.0"
                 }
@@ -124,11 +126,12 @@
             "help": "Change the value of an already created deciaml variable",
             "sockets": [
                 {
+                    "name": "",
                     "type": "string",
                     "value": "var"
                 },
-                "=",
                 {
+                    "name": "=",
                     "type": "float",
                     "value": "0.0"
                 }
@@ -141,8 +144,8 @@
             "script": "{{1}}",
             "help": "Get the value of a decimal variable",
             "sockets": [
-                "value of",
                 {
+                    "name": "value of",
                     "type": "string",
                     "value": "var"
                 }
@@ -154,13 +157,13 @@
             "script": "int {{1}} = {{2}};",
             "help": "Create a new true or false variable",
             "sockets": [
-                "Create",
                 {
+                    "name": "Create",
                     "type": "string",
                     "value": "var"
                 },
-                "set to",
                 {
+                    "name": "set to",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -173,11 +176,12 @@
             "help": "Change the value of an already created true or false variable",
             "sockets": [
                 {
+                    "name": "",
                     "type": "string",
                     "value": "var"
                 },
-                "=",
                 {
+                    "name": "=",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -190,8 +194,8 @@
             "script": "{{1}}",
             "help": "Get the value of a true or false variable",
             "sockets": [
-                "value of",
                 {
+                    "name": "value of",
                     "type": "string",
                     "value": "var"
                 }

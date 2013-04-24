@@ -9,11 +9,12 @@
             "help": "sum of the two operands",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "+",
                 {
+                    "name": "+",
                     "type": "number",
                     "value": "0"
                 }
@@ -27,11 +28,12 @@
             "help": "difference of the two operands",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "-",
                 {
+                    "name": "-",
                     "type": "number",
                     "value": "0"
                 }
@@ -45,11 +47,12 @@
             "help": "product of the two operands",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "*",
                 {
+                    "name": "*",
                     "type": "number",
                     "value": "0"
                 }
@@ -63,11 +66,12 @@
             "help": "quotient of the two operands",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "/",
                 {
+                    "name": "/",
                     "type": "number",
                     "value": "0"
                 }
@@ -81,11 +85,12 @@
             "help": "two operands are equal",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "=",
                 {
+                    "name": "=",
                     "type": "number",
                     "value": "0"
                 }
@@ -99,11 +104,12 @@
             "help": "first operand is less than second operand",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "<",
                 {
+                    "name": "<",
                     "type": "number",
                     "value": "0"
                 }
@@ -117,11 +123,12 @@
             "help": "first operand is greater than second operand",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                ">",
                 {
+                    "name": ">",
                     "type": "number",
                     "value": "0"
                 }
@@ -134,13 +141,13 @@
             "script": "randint({{1}}, {{2}})",
             "help": "random number between two numbers (inclusive)",
             "sockets": [
-                "pick random",
                 {
+                    "name": "pick random",
                     "type": "number",
                     "value": "1"
                 },
-                "to",
                 {
+                    "name": "to",
                     "type": "number",
                     "value": "10"
                 }
@@ -154,11 +161,12 @@
             "help": "modulus of a number is the remainder after whole number division",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "0"
                 },
-                "mod",
                 {
+                    "name": "mod",
                     "type": "number",
                     "value": "0"
                 }
@@ -171,8 +179,8 @@
             "script": "Math.round({{1}})",
             "help": "rounds to the nearest whole number",
             "sockets": [
-                "round",
                 {
+                    "name": "round",
                     "type": "number",
                     "value": "0"
                 }
@@ -185,8 +193,8 @@
             "script": "Math.abs({{1}})",
             "help": "converts a negative number to positive, leaves positive alone",
             "sockets": [
-                "absolute of",
                 {
+                    "name": "absolute of",
                     "type": "number",
                     "value": "10"
                 }
@@ -199,8 +207,8 @@
             "script": "rad2deg(Math.acos({{1}}))",
             "help": "inverse of cosine",
             "sockets": [
-                "arccosine degrees of",
                 {
+                    "name": "arccosine degrees of",
                     "type": "number",
                     "value": "10"
                 }
@@ -213,8 +221,8 @@
             "script": "rad2deg(Math.asin({{1}}))",
             "help": "inverse of sine",
             "sockets": [
-                "arcsine degrees of",
                 {
+                    "name": "arcsine degrees of",
                     "type": "number",
                     "value": "10"
                 }
@@ -227,8 +235,8 @@
             "script": "rad2deg(Math.atan({{1}}))",
             "help": "inverse of tangent",
             "sockets": [
-                "arctangent degrees of",
                 {
+                    "name": "arctangent degrees of",
                     "type": "number",
                     "value": "10"
                 }
@@ -241,8 +249,8 @@
             "script": "Math.ceil({{1}})",
             "help": "rounds up to nearest whole number",
             "sockets": [
-                "ceiling of",
                 {
+                    "name": "ceiling of",
                     "type": "number",
                     "value": "10"
                 }
@@ -255,12 +263,14 @@
             "script": "Math.cos(deg2rad({{1}}))",
             "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
             "sockets": [
-                "cosine of",
                 {
+                    "name": "cosine of",
                     "type": "number",
                     "value": "10"
                 },
-                "degrees"
+                {
+                    "name": "degrees"
+                }
             ]
         },
         {
@@ -270,12 +280,14 @@
             "script": "Math.sin(deg2rad({{1}}))",
             "help": "ratio of the length of the opposite side to the length of the hypotenuse",
             "sockets": [
-                "sine of",
                 {
+                    "name": "sine of",
                     "type": "number",
                     "value": "10"
                 },
-                "degrees"
+                {
+                    "name": "degrees"
+                }
             ]
         },
         {
@@ -285,12 +297,14 @@
             "script": "Math.tan(deg2rad({{1}}))",
             "help": "ratio of the length of the opposite side to the length of the adjacent side",
             "sockets": [
-                "tangent of",
                 {
+                    "name": "tangent of",
                     "type": "number",
                     "value": "10"
                 },
-                "degrees"
+                {
+                    "name": "degrees"
+                }
             ]
         },
         {
@@ -301,11 +315,12 @@
             "help": "multiply a number by itself the given number of times",
             "sockets": [
                 {
+                    "name": "",
                     "type": "number",
                     "value": "10"
                 },
-                "to the power of",
                 {
+                    "name": "to the power of",
                     "type": "number",
                     "value": "2"
                 }
@@ -318,8 +333,8 @@
             "script": "Math.sqrt({{1}})",
             "help": "the square root is the same as taking the to the power of 1/2",
             "sockets": [
-                "square root of",
                 {
+                    "name": "square root of",
                     "type": "number",
                     "value": "10"
                 }
@@ -332,7 +347,9 @@
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
             "sockets": [
-                "pi"
+                {
+                    "name": "pi"
+                }
             ]
         },
         {
@@ -342,7 +359,9 @@
             "type": "number",
             "help": "tau is 2 times pi, a generally more useful number",
             "sockets": [
-                "tau"
+                {
+                    "name": "tau"
+                }
             ]
         }
     ]

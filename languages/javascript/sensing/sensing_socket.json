@@ -15,7 +15,9 @@
             ],
             "help": "Prompt the user for information",
             "sockets": [
-                "ask [string:What's your name?] and wait"
+                {
+                    "name": "ask [string:What's your name?] and wait"
+                }
             ]
         },
         {
@@ -25,7 +27,9 @@
             "script": "global.mouse_x",
             "help": "The current horizontal mouse position",
             "sockets": [
-                "mouse x"
+                {
+                    "name": "mouse x"
+                }
             ]
         },
         {
@@ -35,7 +39,9 @@
             "script": "global.mouse_y",
             "help": "the current vertical mouse position",
             "sockets": [
-                "mouse y"
+                {
+                    "name": "mouse y"
+                }
             ]
         },
         {
@@ -45,7 +51,9 @@
             "script": "global.mouse_down",
             "help": "true if the mouse is down, false otherwise",
             "sockets": [
-                "mouse down"
+                {
+                    "name": "mouse down"
+                }
             ]
         },
         {
@@ -55,13 +63,15 @@
             "script": "global.isKeyDown({{1}})",
             "help": "is the given key down when this block is run?",
             "sockets": [
-                "key",
                 {
+                    "name": "key",
                     "type": "choice",
                     "options": "keys",
                     "value": "choice"
                 },
-                "pressed?"
+                {
+                    "name": "pressed?"
+                }
             ]
         },
         {
@@ -71,7 +81,9 @@
             "script": "global.stage_width",
             "help": "width of the stage where scripts are run. This may change if the browser window changes",
             "sockets": [
-                "stage width"
+                {
+                    "name": "stage width"
+                }
             ]
         },
         {
@@ -81,7 +93,9 @@
             "script": "global.stage_height",
             "help": "height of the stage where scripts are run. This may change if the browser window changes.",
             "sockets": [
-                "stage height"
+                {
+                    "name": "stage height"
+                }
             ]
         },
         {
@@ -91,7 +105,9 @@
             "script": "global.stage_center_x",
             "help": "horizontal center of the stage",
             "sockets": [
-                "center x"
+                {
+                    "name": "center x"
+                }
             ]
         },
         {
@@ -101,7 +117,9 @@
             "script": "global.stage_center_y",
             "help": "vertical center of the stage",
             "sockets": [
-                "center y"
+                {
+                    "name": "center y"
+                }
             ]
         },
         {
@@ -111,7 +129,9 @@
             "script": "randint(0,global.stage_width)",
             "help": "return a number between 0 and the stage width",
             "sockets": [
-                "random x"
+                {
+                    "name": "random x"
+                }
             ]
         },
         {
@@ -121,7 +141,9 @@
             "script": "randint(0, global.stage_height)",
             "help": "return a number between 0 and the stage height",
             "sockets": [
-                "random y"
+                {
+                    "name": "random y"
+                }
             ]
         },
         {
@@ -130,7 +152,9 @@
             "script": "global.timer.reset();",
             "help": "set the global timer back to zero",
             "sockets": [
-                "reset timer"
+                {
+                    "name": "reset timer"
+                }
             ]
         },
         {
@@ -140,7 +164,9 @@
             "script": "global.timer.value()",
             "help": "seconds since the script began running",
             "sockets": [
-                "timer"
+                {
+                    "name": "timer"
+                }
             ]
         }
     ]

@@ -15,7 +15,9 @@
                 }
             ],
             "sockets": [
-                "new array##"
+                {
+                    "name": "new array##"
+                }
             ]
         },
         {
@@ -32,8 +34,8 @@
                 }
             ],
             "sockets": [
-                "new array with array##",
                 {
+                    "name": "new array with array##",
                     "type": "array",
                     "value": null
                 }
@@ -46,13 +48,13 @@
             "type": "any",
             "help": "get an item from an index in the array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "item",
                 {
+                    "name": "item",
                     "type": "number",
                     "value": "0"
                 }
@@ -65,12 +67,14 @@
             "type": "string",
             "help": "join items of an array into a string, each item separated by given string",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "join with [string:, ]"
+                {
+                    "name": "join with [string:, ]"
+                }
             ]
         },
         {
@@ -79,13 +83,13 @@
             "script": "{{1}}.push({{2}});",
             "help": "add any object to an array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "append",
                 {
+                    "name": "append",
                     "type": "any",
                     "value": null
                 }
@@ -98,12 +102,14 @@
             "type": "number",
             "help": "get the length of an array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "length"
+                {
+                    "name": "length"
+                }
             ]
         },
         {
@@ -113,13 +119,13 @@
             "type": "any",
             "help": "remove item at index from an array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "remove item",
                 {
+                    "name": "remove item",
                     "type": "number",
                     "value": "0"
                 }
@@ -132,12 +138,14 @@
             "type": "any",
             "help": "remove and return the last item from an array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "pop"
+                {
+                    "name": "pop"
+                }
             ]
         },
         {
@@ -147,12 +155,14 @@
             "type": "any",
             "help": "remove and return the first item from an array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "shift"
+                {
+                    "name": "shift"
+                }
             ]
         },
         {
@@ -162,12 +172,14 @@
             "type": "array",
             "help": "reverse a copy of array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "reversed"
+                {
+                    "name": "reversed"
+                }
             ]
         },
         {
@@ -177,13 +189,13 @@
             "type": "array",
             "help": "a new array formed by joining the arrays",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "concat",
                 {
+                    "name": "concat",
                     "type": "array",
                     "value": null
                 }
@@ -211,12 +223,14 @@
             ],
             "help": "run the blocks with each item of a named array",
             "sockets": [
-                "array",
                 {
+                    "name": "array",
                     "type": "array",
                     "value": null
                 },
-                "for each"
+                {
+                    "name": "for each"
+                }
             ]
         }
     ]

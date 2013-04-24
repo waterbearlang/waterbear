@@ -15,8 +15,8 @@
             ],
             "help": "asynchronous call to get the last tweet of the named account",
             "sockets": [
-                "get tweet for",
                 {
+                    "name": "get tweet for",
                     "type": "string",
                     "value": null
                 }

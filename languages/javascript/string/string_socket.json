@@ -8,13 +8,13 @@
             "type": "array",
             "help": "create an array by splitting the named string on the given string",
             "sockets": [
-                "string",
                 {
+                    "name": "string",
                     "type": "string",
                     "value": null
                 },
-                "split on",
                 {
+                    "name": "split on",
                     "type": "string",
                     "value": null
                 }
@@ -27,13 +27,13 @@
             "script": "({{1}} + {{2}})",
             "help": "returns a string by joining together two strings",
             "sockets": [
-                "concatenate",
                 {
+                    "name": "concatenate",
                     "type": "string",
                     "value": "hello"
                 },
-                "with",
                 {
+                    "name": "with",
                     "type": "string",
                     "value": "world"
                 }
@@ -46,13 +46,13 @@
             "type": "string",
             "help": "get the single character string at the given index of named string",
             "sockets": [
-                "string",
                 {
+                    "name": "string",
                     "type": "string",
                     "value": null
                 },
-                "character at",
                 {
+                    "name": "character at",
                     "type": "number",
                     "value": "0"
                 }
@@ -65,12 +65,14 @@
             "type": "number",
             "help": "get the length of named string",
             "sockets": [
-                "string",
                 {
+                    "name": "string",
                     "type": "string",
                     "value": null
                 },
-                "length"
+                {
+                    "name": "length"
+                }
             ]
         },
         {
@@ -80,13 +82,13 @@
             "type": "number",
             "help": "get the index of the substring within the named string",
             "sockets": [
-                "string",
                 {
+                    "name": "string",
                     "type": "string",
                     "value": null
                 },
-                "indexOf",
                 {
+                    "name": "indexOf",
                     "type": "string",
                     "value": null
                 }
@@ -99,18 +101,18 @@
             "type": "string",
             "help": "get a new string by replacing a substring with a new string",
             "sockets": [
-                "string",
                 {
+                    "name": "string",
                     "type": "string",
                     "value": null
                 },
-                "replace",
                 {
+                    "name": "replace",
                     "type": "string",
                     "value": null
                 },
-                "with",
                 {
+                    "name": "with",
                     "type": "string",
                     "value": null
                 }
@@ -123,8 +125,8 @@
             "type": "string",
             "help": "convert any object to a string",
             "sockets": [
-                "to string",
                 {
+                    "name": "to string",
                     "type": "any",
                     "value": null
                 }
@@ -136,8 +138,8 @@
             "script": "// {{1}};\n",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
-                "comment",
                 {
+                    "name": "comment",
                     "type": "string",
                     "value": null
                 }
@@ -149,8 +151,8 @@
             "script": "window.alert({{1}});",
             "help": "pop up an alert window with string",
             "sockets": [
-                "alert",
                 {
+                    "name": "alert",
                     "type": "string",
                     "value": null
                 }
@@ -162,8 +164,8 @@
             "script": "console.log({{1}});",
             "help": "Send any object as a message to the console",
             "sockets": [
-                "console log",
                 {
+                    "name": "console log",
                     "type": "any",
                     "value": null
                 }
@@ -175,13 +177,13 @@
             "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
             "help": "send a message to the console with a format string and multiple objects",
             "sockets": [
-                "console log format",
                 {
+                    "name": "console log format",
                     "type": "string",
                     "value": null
                 },
-                "arguments",
                 {
+                    "name": "arguments",
                     "type": "array",
                     "value": null
                 }
@@ -194,7 +196,9 @@
             "help": "for debugging",
             "type": "object",
             "sockets": [
-                "global keys object"
+                {
+                    "name": "global keys object"
+                }
             ]
         }
     ]

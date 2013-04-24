@@ -15,7 +15,9 @@
             ],
             "help": "create a new, empty object",
             "sockets": [
-                "new object##"
+                {
+                    "name": "new object##"
+                }
             ]
         },
         {
@@ -24,18 +26,18 @@
             "script": "{{1}}[{{2}}] = {{3}};",
             "help": "set the key/value of an object",
             "sockets": [
-                "object",
                 {
+                    "name": "object",
                     "type": "object",
                     "value": null
                 },
-                "key",
                 {
+                    "name": "key",
                     "type": "string",
                     "value": null
                 },
-                "= value",
                 {
+                    "name": "= value",
                     "type": "any",
                     "value": null
                 }
@@ -48,13 +50,13 @@
             "type": "any",
             "help": "return the value of the key in an object",
             "sockets": [
-                "object",
                 {
+                    "name": "object",
                     "type": "object",
                     "value": null
                 },
-                "value at key",
                 {
+                    "name": "value at key",
                     "type": "string",
                     "value": null
                 }
@@ -82,12 +84,14 @@
             ],
             "help": "run the blocks with each item of a object",
             "sockets": [
-                "for each item in",
                 {
+                    "name": "for each item in",
                     "type": "object",
                     "value": null
                 },
-                "do"
+                {
+                    "name": "do"
+                }
             ]
         }
     ]

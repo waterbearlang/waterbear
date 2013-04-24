@@ -7,8 +7,8 @@
             "script": "Serial.begin({{1}});",
             "help": "Eanble serial communications at a chosen speed",
             "sockets": [
-                "Setup serial communication at",
                 {
+                    "name": "Setup serial communication at",
                     "type": "choice",
                     "options": "baud",
                     "value": "choice"
@@ -21,12 +21,14 @@
             "script": "Serial.println({{1}});",
             "help": "Send a message over the serial connection followed by a line return",
             "sockets": [
-                "Send",
                 {
+                    "name": "Send",
                     "type": "any",
                     "value": "Message"
                 },
-                "as a line"
+                {
+                    "name": "as a line"
+                }
             ]
         },
         {
@@ -35,8 +37,8 @@
             "script": "Serial.print({{1}});",
             "help": "Send a message over the serial connection",
             "sockets": [
-                "Send",
                 {
+                    "name": "Send",
                     "type": "any",
                     "value": "Message"
                 }
@@ -49,7 +51,9 @@
             "script": "Serial.read()",
             "help": "Read a message from the serial connection",
             "sockets": [
-                "Message Value"
+                {
+                    "name": "Message Value"
+                }
             ]
         },
         {
@@ -58,7 +62,9 @@
             "script": "Serial.end();",
             "help": "Disable serial communications",
             "sockets": [
-                "End serial communication"
+                {
+                    "name": "End serial communication"
+                }
             ]
         }
     ]

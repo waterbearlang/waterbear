@@ -9,11 +9,12 @@
             "help": "both operands are true",
             "sockets": [
                 {
+                    "name": "",
                     "type": "boolean",
                     "value": null
                 },
-                "and",
                 {
+                    "name": "and",
                     "type": "boolean",
                     "value": null
                 }
@@ -27,11 +28,12 @@
             "help": "either or both operands are true",
             "sockets": [
                 {
+                    "name": "",
                     "type": "boolean",
                     "value": null
                 },
-                "or",
                 {
+                    "name": "or",
                     "type": "boolean",
                     "value": null
                 }
@@ -45,11 +47,12 @@
             "help": "either, but not both, operands are true",
             "sockets": [
                 {
+                    "name": "",
                     "type": "boolean",
                     "value": null
                 },
-                "xor",
                 {
+                    "name": "xor",
                     "type": "boolean",
                     "value": null
                 }
@@ -62,8 +65,8 @@
             "script": "(! {{1}})",
             "help": "operand is false",
             "sockets": [
-                "not",
                 {
+                    "name": "not",
                     "type": "boolean",
                     "value": null
                 }

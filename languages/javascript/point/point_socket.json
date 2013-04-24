@@ -8,13 +8,13 @@
             "type": "point",
             "help": "create a new point",
             "sockets": [
-                "point at x",
                 {
+                    "name": "point at x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 }
@@ -27,8 +27,8 @@
             "script": "{x: {{1}}[0], y: {{1}}[1]}",
             "help": "convert array to point",
             "sockets": [
-                "point from array",
                 {
+                    "name": "point from array",
                     "type": "array",
                     "value": null
                 }
@@ -41,7 +41,9 @@
             "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
             "help": "returns a point at a random location on the stage",
             "sockets": [
-                "random point"
+                {
+                    "name": "random point"
+                }
             ]
         },
         {
@@ -51,12 +53,14 @@
             "type": "number",
             "help": "get the x value of a point",
             "sockets": [
-                "point",
                 {
+                    "name": "point",
                     "type": "point",
                     "value": null
                 },
-                "x"
+                {
+                    "name": "x"
+                }
             ]
         },
         {
@@ -66,12 +70,14 @@
             "type": "number",
             "help": "get the y value of a point",
             "sockets": [
-                "point",
                 {
+                    "name": "point",
                     "type": "point",
                     "value": null
                 },
-                "y"
+                {
+                    "name": "y"
+                }
             ]
         },
         {
@@ -81,12 +87,14 @@
             "type": "array",
             "help": "convert a point to an array",
             "sockets": [
-                "point",
                 {
+                    "name": "point",
                     "type": "point",
                     "value": null
                 },
-                "as array"
+                {
+                    "name": "as array"
+                }
             ]
         }
     ]

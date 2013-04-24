@@ -7,13 +7,13 @@
             "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);",
             "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
             "sockets": [
-                "draw image",
                 {
+                    "name": "draw image",
                     "type": "image",
                     "value": null
                 },
-                "at point",
                 {
+                    "name": "at point",
                     "type": "point",
                     "value": null
                 }
@@ -25,13 +25,13 @@
             "script": "local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y,{{2}}.w,{{2}}.h);",
             "help": "draw the HTML &lt;img&gt; into the canvas sized to the given dimension",
             "sockets": [
-                "draw image",
                 {
+                    "name": "draw image",
                     "type": "image",
                     "value": null
                 },
-                "in rect",
                 {
+                    "name": "in rect",
                     "type": "rect",
                     "value": null
                 }
@@ -43,18 +43,18 @@
             "script": "local.ctx.drawImage({{2}},{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h,{{3}}.x,{{3}}.y,{{3}}.w,{{3}}.h);",
             "help": "draw a rect extracted from image into a rect specified on the canvas",
             "sockets": [
-                "draw a rect",
                 {
+                    "name": "draw a rect",
                     "type": "rect",
                     "value": null
                 },
-                "from image",
                 {
+                    "name": "from image",
                     "type": "image",
                     "value": null
                 },
-                "to rect",
                 {
+                    "name": "to rect",
                     "type": "rect",
                     "value": null
                 }
@@ -74,8 +74,8 @@
             ],
             "help": "initialize a new imageData with the specified dimensions",
             "sockets": [
-                "create ImageData## with size",
                 {
+                    "name": "create ImageData## with size",
                     "type": "size",
                     "value": null
                 }
@@ -95,8 +95,8 @@
             ],
             "help": "initialized a new imageData the same size as an existing imageData",
             "sockets": [
-                "createImageData## from imageData",
                 {
+                    "name": "createImageData## from imageData",
                     "type": "imageData",
                     "value": null
                 }
@@ -116,8 +116,8 @@
             ],
             "help": "returns the image data from the specified rectangle",
             "sockets": [
-                "get imageData## for rect",
                 {
+                    "name": "get imageData## for rect",
                     "type": "rect",
                     "value": null
                 }
@@ -129,13 +129,13 @@
             "script": "local.ctx.putImageData({{1}},{{2}}.x,{{2}}.y);",
             "help": "draw the given image data into the canvas at the given coordinates",
             "sockets": [
-                "draw imageData",
                 {
+                    "name": "draw imageData",
                     "type": "imagedata",
                     "value": null
                 },
-                "at point",
                 {
+                    "name": "at point",
                     "type": "point",
                     "value": null
                 }
@@ -147,18 +147,18 @@
             "script": "local.ctx.putImageData({{2}},{{3}}.x,{{3}}.y,{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
             "help": "draw the given image data into the canvas from the given rect to the given position",
             "sockets": [
-                "draw a rect",
                 {
+                    "name": "draw a rect",
                     "type": "rect",
                     "value": null
                 },
-                "from imageData",
                 {
+                    "name": "from imageData",
                     "type": "imagedata",
                     "value": null
                 },
-                "at point",
                 {
+                    "name": "at point",
                     "type": "point",
                     "value": null
                 }
@@ -170,12 +170,14 @@
             "script": "{{1}}.width",
             "type": "number",
             "sockets": [
-                "imageData",
                 {
+                    "name": "imageData",
                     "type": "imagedata",
                     "value": null
                 },
-                "width"
+                {
+                    "name": "width"
+                }
             ]
         },
         {
@@ -184,12 +186,14 @@
             "script": "{{1}}.height",
             "type": "number",
             "sockets": [
-                "imageData",
                 {
+                    "name": "imageData",
                     "type": "imagedata",
                     "value": null
                 },
-                "height"
+                {
+                    "name": "height"
+                }
             ]
         },
         {
@@ -198,12 +202,14 @@
             "script": "{{1}}.data",
             "type": "array",
             "sockets": [
-                "imageData",
                 {
+                    "name": "imageData",
                     "type": "imagedata",
                     "value": null
                 },
-                "as array"
+                {
+                    "name": "as array"
+                }
             ]
         },
         {
@@ -212,8 +218,8 @@
             "script": "(function(){var img = new Image(); img.src=\"{{1}}\";return img;})()",
             "type": "image",
             "sockets": [
-                "image from url",
                 {
+                    "name": "image from url",
                     "type": "string",
                     "value": null
                 }
@@ -225,12 +231,14 @@
             "script": "{{1}}.width",
             "type": "number",
             "sockets": [
-                "image",
                 {
+                    "name": "image",
                     "type": "image",
                     "value": null
                 },
-                "width"
+                {
+                    "name": "width"
+                }
             ]
         },
         {
@@ -239,12 +247,14 @@
             "script": "{{1}}.height",
             "type": "number",
             "sockets": [
-                "image",
                 {
+                    "name": "image",
                     "type": "image",
                     "value": null
                 },
-                "height"
+                {
+                    "name": "height"
+                }
             ]
         },
         {
@@ -253,12 +263,14 @@
             "script": "{{1}}.width",
             "type": "string",
             "sockets": [
-                "image",
                 {
+                    "name": "image",
                     "type": "image",
                     "value": null
                 },
-                "url"
+                {
+                    "name": "url"
+                }
             ]
         }
     ]

@@ -7,8 +7,8 @@
             "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
             "help": "clear the stage to a solid color",
             "sockets": [
-                "clear stage to color",
                 {
+                    "name": "clear stage to color",
                     "type": "color",
                     "value": null
                 }
@@ -20,8 +20,8 @@
             "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
             "help": "clear the stage to a background image",
             "sockets": [
-                "clear stage to image",
                 {
+                    "name": "clear stage to image",
                     "type": "image",
                     "value": null
                 }
@@ -41,18 +41,18 @@
             ],
             "help": "create a simple rectangle sprite",
             "sockets": [
-                "rectangle sprite##",
                 {
+                    "name": "rectangle sprite##",
                     "type": "size",
                     "value": null
                 },
-                "big at",
                 {
+                    "name": "big at",
                     "type": "point",
                     "value": null
                 },
-                "with color",
                 {
+                    "name": "with color",
                     "type": "color",
                     "value": null
                 }
@@ -64,8 +64,8 @@
             "script": "{{1}}.draw(local.ctx);",
             "help": "draw the sprite at its current location",
             "sockets": [
-                "draw sprite",
                 {
+                    "name": "draw sprite",
                     "type": "sprite",
                     "value": null
                 }
@@ -78,13 +78,13 @@
             "type": "boolean",
             "help": "test for collision",
             "sockets": [
-                "sprite",
                 {
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
                 },
-                "collides with sprite",
                 {
+                    "name": "collides with sprite",
                     "type": "sprite",
                     "value": null
                 }
@@ -96,18 +96,18 @@
             "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}})",
             "help": "move a sprite relatively",
             "sockets": [
-                "move",
                 {
+                    "name": "move",
                     "type": "sprite",
                     "value": null
                 },
-                "by x",
                 {
+                    "name": "by x",
                     "type": "number",
                     "value": null
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": null
                 }
@@ -119,13 +119,13 @@
             "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})",
             "help": "move a sprite absolutely",
             "sockets": [
-                "move",
                 {
+                    "name": "move",
                     "type": "sprite",
                     "value": null
                 },
-                "to",
                 {
+                    "name": "to",
                     "type": "point",
                     "value": null
                 }
@@ -138,12 +138,14 @@
             "help": "get x (left) position of sprite",
             "type": "number",
             "sockets": [
-                "sprite",
                 {
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
                 },
-                "left"
+                {
+                    "name": "left"
+                }
             ]
         },
         {
@@ -153,12 +155,14 @@
             "help": "get x+w (right) position of sprite",
             "type": "number",
             "sockets": [
-                "sprite",
                 {
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
                 },
-                "right"
+                {
+                    "name": "right"
+                }
             ]
         },
         {
@@ -168,12 +172,14 @@
             "help": "get y (top) position of sprite",
             "type": "number",
             "sockets": [
-                "sprite",
                 {
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
                 },
-                "top"
+                {
+                    "name": "top"
+                }
             ]
         },
         {
@@ -182,12 +188,14 @@
             "script": "{{1}}.y + {{1}}.h",
             "type": "number",
             "sockets": [
-                "sprite",
                 {
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
                 },
-                "bottom"
+                {
+                    "name": "bottom"
+                }
             ]
         }
     ]

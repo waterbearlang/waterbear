@@ -7,17 +7,19 @@
             "script": "local.ctx.font = {{1}}+{{2}}+\" \"+{{3}};",
             "help": "set the current font",
             "sockets": [
-                "font",
                 {
+                    "name": "font",
                     "type": "number",
                     "value": "10"
                 },
                 {
+                    "name": "",
                     "type": "choice",
                     "options": "unit",
                     "value": "choice"
                 },
                 {
+                    "name": "",
                     "type": "string",
                     "value": "sans-serif"
                 }
@@ -29,8 +31,8 @@
             "script": "local.ctx.textAlign = {{1}};",
             "help": "how should the text align?",
             "sockets": [
-                "text align",
                 {
+                    "name": "text align",
                     "type": "choice",
                     "options": "align",
                     "value": "choice"
@@ -43,8 +45,8 @@
             "script": "local.ctx.textBaseline = {{1}};",
             "help": "set the text baseline",
             "sockets": [
-                "text baseline",
                 {
+                    "name": "text baseline",
                     "type": "choice",
                     "options": "baseline",
                     "value": "choice"
@@ -57,18 +59,18 @@
             "script": "local.ctx.fillText({{1}},{{2}},{{3}});",
             "help": "basic text operation",
             "sockets": [
-                "fill text",
                 {
+                    "name": "fill text",
                     "type": "string",
                     "value": null
                 },
-                "x",
                 {
+                    "name": "x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 }
@@ -80,23 +82,23 @@
             "script": "local.ctx.fillText({{1}},{{2}},{{3}},{{4}});",
             "help": "basic text operation with optional max width",
             "sockets": [
-                "fill text",
                 {
+                    "name": "fill text",
                     "type": "string",
                     "value": null
                 },
-                "x",
                 {
+                    "name": "x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 },
-                "max width",
                 {
+                    "name": "max width",
                     "type": "number",
                     "value": "10"
                 }
@@ -108,18 +110,18 @@
             "script": "local.ctx.strokeText({{1}},{{2}},{{3}});",
             "help": "outline the text",
             "sockets": [
-                "stroke text",
                 {
+                    "name": "stroke text",
                     "type": "string",
                     "value": null
                 },
-                "x",
                 {
+                    "name": "x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 }
@@ -131,23 +133,23 @@
             "script": "local.ctx.strokeText({{1}},{{2}},{{3}},{{4}});",
             "help": "outline the text with optional max width",
             "sockets": [
-                "stroke text",
                 {
+                    "name": "stroke text",
                     "type": "string",
                     "value": null
                 },
-                "x",
                 {
+                    "name": "x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 },
-                "max width",
                 {
+                    "name": "max width",
                     "type": "number",
                     "value": "10"
                 }
@@ -159,12 +161,14 @@
             "script": "local.ctx.measureText({{1}}).width",
             "type": "number",
             "sockets": [
-                "text",
                 {
+                    "name": "text",
                     "type": "string",
                     "value": null
                 },
-                "width"
+                {
+                    "name": "width"
+                }
             ]
         }
     ]

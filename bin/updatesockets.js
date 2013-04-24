@@ -80,11 +80,8 @@ function parseLabel(textLabel){
     var currentString = '';
     parts.forEach(function(str){
         if (/^\[.+\]$/.test(str)){
-            if (currentString.length){
-                sockets.push(currentString);
-                currentString = '';
-            }
-            sockets.push(Socket(str));
+            sockets.push(Socket(currentString, str));
+            currentString = '';
         }else{
             if (currentString.length){
                 currentString = currentString + ' ' + str;
@@ -94,16 +91,20 @@ function parseLabel(textLabel){
         }
     });
     if (currentString.length){
-        sockets.push(currentString);
+        sockets.push(Socket(currentString));
     }
     return sockets;
 };
 
-function Socket(spec){
+function Socket(name, spec){
     // remove brackets
+    if (!spec){
+        return {name: name};
+    }
     spec = spec.slice(1,-1);
     var parts = spec.split(':');
     var socket = {
+        name: name,
         type: parts[0]
     }
     if (parts[0] === 'choice'){

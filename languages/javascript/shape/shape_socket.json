@@ -7,8 +7,8 @@
             "help": "clear...",
             "id": "3d714bd6-8d02-49cb-8e56-ece642b295ad",
             "sockets": [
-                "clear rect",
                 {
+                    "name": "clear rect",
                     "type": "rect",
                     "value": null
                 }
@@ -20,13 +20,13 @@
             "help": "circle...",
             "id": "3ae0e65c-1d1c-4976-8807-799b0408984b",
             "sockets": [
-                "fill circle at point",
                 {
+                    "name": "fill circle at point",
                     "type": "point",
                     "value": null
                 },
-                "with radius",
                 {
+                    "name": "with radius",
                     "type": "number",
                     "value": "10"
                 }
@@ -37,18 +37,18 @@
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
             "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
             "sockets": [
-                "fill circle at point",
                 {
+                    "name": "fill circle at point",
                     "type": "point",
                     "value": null
                 },
-                "with radius",
                 {
+                    "name": "with radius",
                     "type": "number",
                     "value": "10"
                 },
-                "and color",
                 {
+                    "name": "and color",
                     "type": "color",
                     "value": null
                 }
@@ -60,13 +60,13 @@
             "help": "circle...",
             "id": "79133274-d53f-4ef4-8b17-9259fe25fb87",
             "sockets": [
-                "stroke circle at point",
                 {
+                    "name": "stroke circle at point",
                     "type": "point",
                     "value": null
                 },
-                "with radius",
                 {
+                    "name": "with radius",
                     "type": "number",
                     "value": "10"
                 }
@@ -77,18 +77,18 @@
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.strokeStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();local.ctx.restore();",
             "id": "8a091a21-1fa9-49b6-a622-696c38556a2e",
             "sockets": [
-                "stroke circle at point",
                 {
+                    "name": "stroke circle at point",
                     "type": "point",
                     "value": null
                 },
-                "with radius",
                 {
+                    "name": "with radius",
                     "type": "number",
                     "value": "10"
                 },
-                "and color",
                 {
+                    "name": "and color",
                     "type": "color",
                     "value": null
                 }
@@ -100,13 +100,13 @@
             "help": "circle...",
             "id": "094fa424-8b6f-4759-a9bc-f4dbf289f697",
             "sockets": [
-                "stroke and fill circle at point",
                 {
+                    "name": "stroke and fill circle at point",
                     "type": "point",
                     "value": null
                 },
-                "with radius",
                 {
+                    "name": "with radius",
                     "type": "number",
                     "value": "10"
                 }
@@ -118,8 +118,8 @@
             "help": "fill...",
             "id": "bf909ec4-5387-4baf-ba43-f17df493f9bd",
             "sockets": [
-                "fill rect",
                 {
+                    "name": "fill rect",
                     "type": "rect",
                     "value": null
                 }
@@ -130,13 +130,13 @@
             "id": "7a342b2b-f169-4071-8771-34394cc07393",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
             "sockets": [
-                "fill rect",
                 {
+                    "name": "fill rect",
                     "type": "rect",
                     "value": null
                 },
-                "with color",
                 {
+                    "name": "with color",
                     "type": "color",
                     "value": null
                 }
@@ -147,13 +147,13 @@
             "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
             "sockets": [
-                "stroke rect",
                 {
+                    "name": "stroke rect",
                     "type": "rect",
                     "value": null
                 },
-                "with color",
                 {
+                    "name": "with color",
                     "type": "color",
                     "value": null
                 }
@@ -165,8 +165,8 @@
             "script": "var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);",
             "help": "stroke...",
             "sockets": [
-                "stroke rect",
                 {
+                    "name": "stroke rect",
                     "type": "rect",
                     "value": null
                 }
@@ -178,23 +178,23 @@
             "script": "var local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
             "help": "fill and stroke...",
             "sockets": [
-                "fill and stroke rect x",
                 {
+                    "name": "fill and stroke rect x",
                     "type": "number",
                     "value": "0"
                 },
-                "y",
                 {
+                    "name": "y",
                     "type": "number",
                     "value": "0"
                 },
-                "width",
                 {
+                    "name": "width",
                     "type": "number",
                     "value": "10"
                 },
-                "height",
                 {
+                    "name": "height",
                     "type": "number",
                     "value": "10"
                 }

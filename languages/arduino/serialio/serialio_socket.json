@@ -11,7 +11,7 @@
                     "name": "Setup serial communication at",
                     "type": "choice",
                     "options": "baud",
-                    "value": "choice"
+                    "default": "choice"
                 }
             ]
         },
@@ -24,7 +24,7 @@
                 {
                     "name": "Send",
                     "type": "any",
-                    "value": "Message"
+                    "default": "Message"
                 },
                 {
                     "name": "as a line"
@@ -40,7 +40,7 @@
                 {
                     "name": "Send",
                     "type": "any",
-                    "value": "Message"
+                    "default": "Message"
                 }
             ]
         },

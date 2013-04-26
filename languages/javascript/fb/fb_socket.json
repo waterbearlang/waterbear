@@ -9,7 +9,7 @@
                 {
                     "name": "share",
                     "type": "string",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -44,7 +44,7 @@
                 {
                     "name": "name of",
                     "type": "any",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -57,7 +57,7 @@
                 {
                     "name": "image of",
                     "type": "any",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -70,7 +70,7 @@
                 {
                     "name": "images url of",
                     "type": "any",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -83,7 +83,7 @@
                 {
                     "name": "friend with name like",
                     "type": "string",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -95,7 +95,7 @@
                 {
                     "name": "checkin at",
                     "type": "location",
-                    "value": null
+                    "default": null
                 }
             ]
         }

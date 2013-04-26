@@ -10,12 +10,12 @@
                 {
                     "name": "Create",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "set to",
                     "type": "string",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -28,12 +28,12 @@
                 {
                     "name": "",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "=",
                     "type": "string",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -47,7 +47,7 @@
                 {
                     "name": "value of",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 }
             ]
         },
@@ -60,12 +60,12 @@
                 {
                     "name": "Create",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "set to",
                     "type": "int",
-                    "value": "0"
+                    "default": "0"
                 }
             ]
         },
@@ -78,12 +78,12 @@
                 {
                     "name": "",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "=",
                     "type": "int",
-                    "value": "0"
+                    "default": "0"
                 }
             ]
         },
@@ -97,7 +97,7 @@
                 {
                     "name": "value of",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 }
             ]
         },
@@ -110,12 +110,12 @@
                 {
                     "name": "Create",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "set to",
                     "type": "float",
-                    "value": "0.0"
+                    "default": "0.0"
                 }
             ]
         },
@@ -128,12 +128,12 @@
                 {
                     "name": "",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "=",
                     "type": "float",
-                    "value": "0.0"
+                    "default": "0.0"
                 }
             ]
         },
@@ -147,7 +147,7 @@
                 {
                     "name": "value of",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 }
             ]
         },
@@ -160,12 +160,12 @@
                 {
                     "name": "Create",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "set to",
                     "type": "boolean",
-                    "value": "false"
+                    "default": "false"
                 }
             ]
         },
@@ -178,12 +178,12 @@
                 {
                     "name": "",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 },
                 {
                     "name": "=",
                     "type": "boolean",
-                    "value": "false"
+                    "default": "false"
                 }
             ]
         },
@@ -197,7 +197,7 @@
                 {
                     "name": "value of",
                     "type": "string",
-                    "value": "var"
+                    "default": "var"
                 }
             ]
         }

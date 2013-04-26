@@ -109,9 +109,9 @@ function Socket(name, spec){
     }
     if (parts[0] === 'choice'){
         socket.options = parts[1];
-        socket.value = parts[0] || null;
+        socket.default = parts[0] || null;
     }else{
-        socket.value = parts[1] || null;
+        socket.default = parts[1] || null;
     }
     return socket;
 }

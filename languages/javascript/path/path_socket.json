@@ -21,7 +21,7 @@
                 {
                     "name": "move to point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -34,7 +34,7 @@
                 {
                     "name": "line to point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -47,12 +47,12 @@
                 {
                     "name": "quadradic curve to point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with control point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -65,17 +65,17 @@
                 {
                     "name": "bezier curve to point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with control points",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "and",
                     "type": "point",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -88,17 +88,17 @@
                 {
                     "name": "arc to point1",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "point1",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "1.0"
+                    "default": "1.0"
                 }
             ]
         },
@@ -111,27 +111,27 @@
                 {
                     "name": "arc with origin",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "radius",
                     "type": "number",
-                    "value": "1"
+                    "default": "1"
                 },
                 {
                     "name": "start angle",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "deg, end angle",
                     "type": "number",
-                    "value": "45"
+                    "default": "45"
                 },
                 {
                     "name": "deg",
                     "type": "boolean",
-                    "value": "true"
+                    "default": "true"
                 }
             ]
         },
@@ -144,7 +144,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -157,12 +157,12 @@
                 {
                     "name": "circle at point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 }
             ]
         },
@@ -187,7 +187,7 @@
                 {
                     "name": "is point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "in path?"

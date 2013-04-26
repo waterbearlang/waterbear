@@ -29,17 +29,17 @@
                 {
                     "name": "object",
                     "type": "object",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "key",
                     "type": "string",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "= value",
                     "type": "any",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -53,12 +53,12 @@
                 {
                     "name": "object",
                     "type": "object",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "value at key",
                     "type": "string",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -87,7 +87,7 @@
                 {
                     "name": "for each item in",
                     "type": "object",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "do"

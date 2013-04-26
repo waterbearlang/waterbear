@@ -10,7 +10,7 @@
                 {
                     "name": "clear rect",
                     "type": "rect",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -23,12 +23,12 @@
                 {
                     "name": "fill circle at point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 }
             ]
         },
@@ -40,17 +40,17 @@
                 {
                     "name": "fill circle at point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 },
                 {
                     "name": "and color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -63,12 +63,12 @@
                 {
                     "name": "stroke circle at point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 }
             ]
         },
@@ -80,17 +80,17 @@
                 {
                     "name": "stroke circle at point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 },
                 {
                     "name": "and color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -103,12 +103,12 @@
                 {
                     "name": "stroke and fill circle at point",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 }
             ]
         },
@@ -121,7 +121,7 @@
                 {
                     "name": "fill rect",
                     "type": "rect",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -133,12 +133,12 @@
                 {
                     "name": "fill rect",
                     "type": "rect",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -150,12 +150,12 @@
                 {
                     "name": "stroke rect",
                     "type": "rect",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -168,7 +168,7 @@
                 {
                     "name": "stroke rect",
                     "type": "rect",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -181,22 +181,22 @@
                 {
                     "name": "fill and stroke rect x",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "width",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "default": "10"
                 }
             ]
         }

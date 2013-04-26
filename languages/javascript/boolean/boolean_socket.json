@@ -11,12 +11,12 @@
                 {
                     "name": "",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "and",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -30,12 +30,12 @@
                 {
                     "name": "",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "or",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -49,12 +49,12 @@
                 {
                     "name": "",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "xor",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -68,7 +68,7 @@
                 {
                     "name": "not",
                     "type": "boolean",
-                    "value": null
+                    "default": null
                 }
             ]
         }

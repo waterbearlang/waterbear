@@ -10,7 +10,7 @@
                 {
                     "name": "clear stage to color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -23,7 +23,7 @@
                 {
                     "name": "clear stage to image",
                     "type": "image",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -44,17 +44,17 @@
                 {
                     "name": "rectangle sprite##",
                     "type": "size",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "big at",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "with color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -67,7 +67,7 @@
                 {
                     "name": "draw sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -81,12 +81,12 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "collides with sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -99,17 +99,17 @@
                 {
                     "name": "move",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "by x",
                     "type": "number",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -122,12 +122,12 @@
                 {
                     "name": "move",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "to",
                     "type": "point",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -141,7 +141,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "left"
@@ -158,7 +158,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "right"
@@ -175,7 +175,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "top"
@@ -191,7 +191,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "bottom"

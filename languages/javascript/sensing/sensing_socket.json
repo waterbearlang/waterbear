@@ -67,7 +67,7 @@
                     "name": "key",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
+                    "default": "choice"
                 },
                 {
                     "name": "pressed?"

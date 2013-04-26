@@ -10,7 +10,7 @@
                 {
                     "name": "shadow color",
                     "type": "color",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -23,7 +23,7 @@
                 {
                     "name": "stroke color",
                     "type": "color",
-                    "value": "#000"
+                    "default": "#000"
                 }
             ]
         },
@@ -36,7 +36,7 @@
                 {
                     "name": "fill color",
                     "type": "color",
-                    "value": "#000"
+                    "default": "#000"
                 }
             ]
         },
@@ -50,17 +50,17 @@
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 }
             ]
         },
@@ -74,22 +74,22 @@
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "alpha",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 }
             ]
         },
@@ -103,17 +103,17 @@
                 {
                     "name": "color with hue",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "saturation",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "brightness",
                     "type": "number",
-                    "value": "0]"
+                    "default": "0]"
                 }
             ]
         },
@@ -138,7 +138,7 @@
                 {
                     "name": "stroke gradient",
                     "type": "gradient",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -151,7 +151,7 @@
                 {
                     "name": "fill gradient",
                     "type": "gradient",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -164,7 +164,7 @@
                 {
                     "name": "stroke pattern",
                     "type": "pattern",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -177,7 +177,7 @@
                 {
                     "name": "fill pattern",
                     "type": "pattern",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -198,22 +198,22 @@
                 {
                     "name": "create radial gradient from point1",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "radius1",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 },
                 {
                     "name": "to point2",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "radius2",
                     "type": "number",
-                    "value": "0"
+                    "default": "0"
                 }
             ]
         },
@@ -234,12 +234,12 @@
                 {
                     "name": "create linear gradient from point1",
                     "type": "point",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "to point2",
                     "type": "point",
-                    "value": null
+                    "default": null
                 }
             ]
         },
@@ -252,17 +252,17 @@
                 {
                     "name": "add color stop to gradient",
                     "type": "gradient",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "at offset",
                     "type": "number",
-                    "value": "0.5"
+                    "default": "0.5"
                 },
                 {
                     "name": "with color",
                     "type": "color",
-                    "value": "#F00"
+                    "default": "#F00"
                 }
             ]
         },
@@ -283,13 +283,13 @@
                 {
                     "name": "create pattern## from image",
                     "type": "image",
-                    "value": null
+                    "default": null
                 },
                 {
                     "name": "repeats",
                     "type": "choice",
                     "options": "repetition",
-                    "value": "choice"
+                    "default": "choice"
                 }
             ]
         }

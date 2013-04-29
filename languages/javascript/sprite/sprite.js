@@ -6,6 +6,6 @@
  */
 
 
-choiceLists.types = choiceLists.types.concat(['sprite']);
-choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
+wb.choiceLists.types.push('sprite');
+wb.choiceLists.rettypes.push('sprite');
 

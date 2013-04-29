@@ -154,7 +154,7 @@
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
-                        e.appendChild(elem(child));
+                        e.appendChild(document.createTextNode(child));
                     }
                 });
             }else{

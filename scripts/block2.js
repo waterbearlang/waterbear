@@ -19,19 +19,19 @@
 
     var newSeqNum = function(){
         _nextSeqNum++;
-    return _nextSeqNum;
-};
+        return _nextSeqNum;
+    };
 
     var registerSeqNum = function(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        seqNum = Math.max(parseInt(seqNum, 10), _seqNum);
+        seqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
     }
 
     var blockRegistry = {};
 
-    var registerBlock(blockdesc){
+    var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
         }else{
@@ -40,31 +40,22 @@
         if (! blockdesc.id){
             blockdesc.id = uuid();
         }
-        blockRegistry[blockdec.id] = blockdesc;
+        blockRegistry[blockdesc.id] = blockdesc;
     }
 
-    var getHelp(id){
-        return blockRegistry[id].help;
+    var getHelp = function(id){
+        return blockRegistry[id] ? blockRegistry[id].help : '';
     }
 
-    var getScript(id){
+    var getScript = function(id){
         return blockRegistry[id].script;
     }
 
-    var getSockets(id, instance){
-        return blockingRegistry[id].sockets.map(function(s,idx){
-            var custom = instance[idx];
-            if (custom.text && custom.text !== s.text){
-                return {
-                    text: custom.text,
-                    type: s.type,
-                    default: s.default
-                }
-            return s;
-        });
+    var getSockets = function(obj){
+        return blockRegistry[obj.scriptid || obj.id].sockets.map(Socket);
     }
 
-    function Block(obj){
+    var Block = function(obj){
         // FIXME:
         // Handle values coming from serialized (saved) blocks
         // Handle customized names (sockets)
@@ -82,20 +73,20 @@
                     }
                     return names.join(' ');
                 },
-                'data-blocktype': a.blocktype,
-                'id': a.id,
-                'data-scopeid': a.scopeid || 0,
-                'data-scriptid': a.scriptid,
-                'title': a.help || getHelp(a.scriptid)
+                'data-blocktype': obj.blocktype,
+                'id': obj.id,
+                'data-scopeid': obj.scopeid || 0,
+                'data-scriptid': obj.scriptid,
+                'title': obj.help || getHelp(obj.scriptid)
             },
             [
-                ['div', {'class': 'label'}, getSockets(a.scriptid, a.sockets).map(Socket)], // how to get values for restored classes?
-                ['div', {'class': 'contained'}, (a.contained || []).map(Block)]
+                ['div', {'class': 'label'}, getSockets(obj)], // how to get values for restored classes?
+                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
             ]
         );
     }
 
-    function Socket(obj){
+    var Socket = function(obj){
         // Sockets are described by text, type, and default value
         // type and default value are optional, but if you have one you must have the other
         // If the type is choice it must also have a choicename for the list of values
@@ -113,7 +104,7 @@
         }
     }
 
-    function Default(obj){
+    var Default = function(obj){
         // return an input for input types (number, string, color, date)
         // return a block for block types
         var value;
@@ -140,9 +131,11 @@
                 value = obj.value || '604-555-1212'; break;
             case 'email':
                 value = obj.value || 'waterbear@waterbearlang.com'; break;
+            case 'boolean':
+                obj.options = 'boolean';
             case 'choice':
                 var choice = elem('select');
-                choicelists[obj.options].forEach(function(opt){
+                wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
                     if (obj.default && obj.default === opt){
                         option.setAttribute('selected', 'selected');

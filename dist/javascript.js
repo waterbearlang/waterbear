@@ -3822,220 +3822,6 @@ hljs.LANGUAGES.javascript = {
 
 /*end queryparams.js*/
 
-/*begin template.js*/
-// jQuery-based templates
-//
-// context is current container
-// data-if="<condition>"
-// data-for="<variable> in <list>"
-// data-replace="variable" // variable.view() or variable.view or variable
-
-
-(function(){
-
-	// fn should return the node walked. If it is replaced in place, return the new node.
-	function walk(node, fn){
-		var previous = node.prev();
-		if (!previous.length){
-			previous = node.parent();
-		}
-		var oldContext = node.data('context'); // maintain contexts as a stack
-		node = fn(node);
-		if (!node.length){
-			// print('node replaced, backtracking');
-			node = previous;
-		// } if (oldContext){
-		// 	node.data('context', oldContext);
-		}
-		var child = node.children().first();
-		while(child.length){
-			child = walk(child, fn).next();
-		}
-		return node;
-	}
-
-function template(name){
-	if (!name || name === ''){
-		throw new Exception('You must pass a name to retrieve a template by name');
-	}
-	if (!template.templates[name]){
-		var tmpl = new Template({name: name});
-		template.templates[name] = function(model){return tmpl.render(model);};
-	}
-	return template.templates[name];
-}
-template.templates = {};
-
-function Template(opts){
-	if (opts.name){
-		this.tmpl = $($('#' + opts.name + '_template').text());
-	}else if(opts.html){
-		this.tmpl = $(opts.html);
-	}else if(opts.jquery){
-		this.tmpl = opts.jquery;
-	}
-}
-
-Template.prototype.render = function(model){
-	var tmpl = this.tmpl.clone();
-	// Wrap everything in a container div so all nodes are parented, helpful for replaced nodes
-	var wrapper = $('<div></div>').append(tmpl);
-//	print('model: %s', j(model));
-	tmpl.data('context', model);
-	return walk(wrapper, renderNode).children();
-}
-
-function renderNode(node){
-	// print('start render %s', h(node));
-	var hasParent = node.parent().length;
-	if (!node.data('context')){
-		var context = node.parent().data('context');
-		if (!context){
-			// print('node %s has no context', h(node));
-		}
-		node.data('context', context);
-	}
-	node = renderFor(node);
-	node = renderIf(node);
-	node = renderClasses(node);
-	node = renderTitle(node);
-	node = renderReplace(node);
-	// print('end render: %s', h(node));
-	return node;
-}
-
-function renderClasses(node){
-	var newClasses = node.data('classes');
-	if (newClasses){
-		// print('\tbefore renderClasses: %s', h(node));
-		newClasses.split(/\s/).forEach(function(key){
-			node.addClass(namedValue(node.data('context'), key));
-		});
-		node.removeAttr('data-classes');
-		// print('\tafter renderClasses: %s', h(node));
-	}
-	return node;
-}
-
-function renderTitle(node){
-	var titleKey = node.data('title');
-	if (titleKey){
-		node.attr('title', namedValue(node.data('context'), titleKey));
-		node.removeAttr('data-title');
-	}
-	return node;
-}
-
-function renderIf(node){
-	var ifKey = node.data('if');
-	if (ifKey){
-		// print('\tbefore if: %s', h(node));
-		var test = namedValue(node.data('context'), ifKey);
-		if (test){
-			node.removeAttr('data-if');
-			// print('\t\ttest %s=%s passed: %s', ifKey, test, h(node));
-			return node;
-		}else{
-			// print('\t\ttest %s=%s failed', ifKey, test);
-			node.remove();
-			return $();
-		}
-	}
-	return node;
-};
-
-
-function renderFor(node){
-	var forKey = node.data('for');
-	if (forKey){
-		// print('\tbefore for: %s', h(node));
-		var test = forKey.match(/(.+) in (.+)/);
-		var listname = test[2];
-		var eachname = test[1];
-		node.removeAttr('data-for');
-		var context = node.data('context');
-		var list = namedValue(context, listname);
-		// print('list %s: %s (from context: %o)', listname, j(list), context);
-		if (list.jquery){
-			list = list.get();
-		}
-		var lastnode = node;
-		list.forEach(function(value, idx){
-			var local_context = $.extend({}, context); // start with a shallow copy of context
-			local_context[eachname] = value;
-			var clone = node.clone();
-			clone.data('context', local_context);
-			lastnode.after(clone);
-			print ('\t\t%s should be followed by %s', c(lastnode), c(clone));
-			print ('\t\t%s *is* followed by %s', c(lastnode), c(lastnode.next()));
-			lastnode = clone;
-		});
-		var retval = node.next();
-		node.remove();
-		// print('rendered %s nodes, returning %s', list.length, c(retval));
-		return retval;
-	}
-	return node;
-};
-
-function renderReplace(node){
-	var replaceKey = node.data('replace');
-	if (replaceKey){
-		// console.log('renderReplace(%s, %s)', h(node), j(node.data('context')));
-		node.removeAttr('data-replace')
-		// console.log('\tbefore replace: %o', h(node));
-		var replacer = namedValue(node.data('context'), replaceKey);
-		node.replaceWith(replacer);
-		return replacer;
-	}
-	return node;
-};
-
-
-function first(path){
-	return path.split('.', 1);
-}
-
-function rest(path){
-	var arr = path.split('.');
-	arr.shift();
-	return arr.join('.');
-}
-
-function namedValue(context, name){
-	var retVal;
-	if(name === undefined) return '';
-	if (name.indexOf('.') > -1){
-		// recursively walk the object to get the value
-		return namedValue(namedValue(context, first(name)), rest(name));
-	}
-	else if (context[name]){
-		var v = context[name];
-		if (v.view){
-			try{
-				// console.log('calling view() on %o', v);
-				retVal = v.view();
-			}catch(e){
-				// console.log('returning view from %o', v);
-				retVal = v.view;
-			}
-		}else{
-			// console.log('%o is the value', v);
-			retVal = v;
-		}
-	}else{
-		retVal = '';
-	}
-	return retVal;
-}
-
-template.Template = Template;
-window.template = template;
-
-})();
-
-/*end template.js*/
-
 /*begin util.js*/
 (function(global){
     //
@@ -4193,7 +3979,7 @@ window.template = template;
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
-                        e.appendChild(elem(child));
+                        e.appendChild(document.createTextNode(child));
                     }
                 });
             }else{
@@ -4729,781 +4515,170 @@ function uuid(){
 
 /*end uuid.js*/
 
-/*begin value.js*/
+/*begin block2.js*/
+// Revised Block handling.
 //
-// Blocks which take parameters store those parameters as Value objects, which may hold primitive
-// values such as numbers or strings, or may be Expression blocks.
+// Nearly all the block is defined in the HTML and DOM
+// This file helps to initialize the block DOM, and provide
+// support routines
 //
-
-//
-// Value objects get defaults depending on their type. These are the defaults for
-// primitive values when the plugin does not over-ride the default.
-//
-
-(function(wb){
-var defaultValue = {
-    'number': 0,
-    'boolean': false,
-    'string': '',
-    'date': function(){ return new Date().toISOString().split('T')[0]; },
-    'time': function(){ return new Date().toISOString().split('T')[1].split('.')[0] + 'Z'; },
-    'datetime': function(){ return new Date().toISOString(); },
-    'color': 'rgb(0,0,0)'
-};
-
-function Value(textValue, index){
-    this.index = index;
-    if ($.isPlainObject(textValue)){
-        // print('initializing Value with object: %o', textValue);
-        $.extend(this, textValue);
-        if (this.choiceName){
-            this.choiceList = choiceLists[this.choiceName];
-        }
-        if (textValue.value && textValue.value.id){
-            var block = wb.Block(textValue.value);
-            if (block){
-                this.addBlock(block);
-            }else{
-                // FIXME: I thought we got rid of Deferred?
-                Deferred.add(this, 'value', null, textValue.value);
-            }
-        }else{
-            this.literal = true;
-        }
-    }else{
-        // print('initializing Value with text: %o', textValue);
-        var parts = textValue.slice(1,-1).split(':');
-        this.type = parts[0];
-        if (this.type === 'choice'){
-            this.choiceName = parts[1];
-            this.choiceList = choiceLists[this.choiceName];
-            if (parts.length === 3){
-                this.value = parts[2];
-            }else{
-                this.value = this.choiceList[0];
-            }
-        }else{
-            if (parts.length === 1){
-                this.value = defaultValue[this.type];
-                if (this.value && this.value.apply){
-                    this.value = this.value();
-                }
-            }else{
-                this.value = parts[1];
-                if (this.type.match(/number|float|double/)){
-                    this.value = parseFloat(this.value);
-                }else if (this.type.match(/int|long/)){
-                    this.value = parseInt(this.value, 10);
-                }else if (this.type.match(/boolean|bool/)){
-                    this.value = !!(this.value === 'true');
-                    this.choiceName = 'boolean';
-                    this.choiceList = [true,false];
-                }
-            }
-        }
-        if (this.value !== undefined){
-            this.defaultValue = this.value; // for when expressions are removed
-            this.literal = true;
-        }
-    }
-}
-
-Value.prototype.code = function(){
-    if (this.literal){
-        if (this.value && this.value.substring && this.type !== 'any'){ // is it a string?
-            return '"' + this.value + '"';
-        }
-        return this.value;
-    }else{
-        try{
-            return this.value.code();
-        }catch(e){
-            console.log('What happened to code? %o', this);
-            throw e;
-        }
-    }
-}
-
-Value.prototype.addBlock = function(blockModel){
-    this.literal = false;
-    this.value = blockModel;
-};
-
-Value.prototype.removeBlock = function(blockModel){
-    this.literal = true;
-    this.value = this.defaultValue;
-};
-
-function getInputType(testType){
-    if (['color', 'date', 'datetime', 'time', 'email', 'month', 'number', 'tel', 'text', 'url', 'week'].indexOf(testType) > -1){
-        return testType;
-    }
-    if (['float', 'double', 'int', 'long'].indexOf(testType) > -1){
-        return 'number';
-    }
-    return 'text';
-}
-
-Value.prototype.view = function(){
-    // console.log('building view for %o, has cached view: %s', j(this), !!this._view);
-    // console.log('we do not have a cached view');
-    if (! this.literal && this.value){ return this.value.view(); }
-    // console.log('we do not have a block value');
-    var inputType;
-    if (this.choiceName){
-        // console.log('return choice view');
-        this._view =  this.choiceView(this.choiceName, this.choiceList);
-    }else if (this.value !== undefined){
-        inputType = getInputType(this.type);
-        // console.log('return type/index/value %o/%o/%o', this.type, this.index, this.value);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + inputType + '" value="' + this.value + '"/></span>');
-    }else{
-        // console.log('return undefined value');
-        inputType = getInputType(this.type);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"/></span>');
-    }
-    return this._view;
-};
-
-Value.prototype.choiceView = function(){
-    var self = this;
-    return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' +
-        this.choiceList.map(function(item){
-            if (item === self.value){
-                return '<option selected>' + item + '</option>';
-            }else{
-                return '<option>' + item + '</option>';
-            }
-        }).join('') +
-        '</select></span>');
-};
-
-Value.prototype.update = function(newValue){
-    switch(this.type){
-        case 'number': this.value = parseFloat(newValue); break;
-        case 'boolean': this.value = newValue === 'true'; break;
-        case 'string': this.value = newValue; break;
-        case 'date': this.value = newValue; break;
-        case 'datetime': this.value = newValue; break;
-        case 'time': this.value = newValue; break;
-        case 'int': this.value = parseInteger(newValue); break;
-        case 'float': this.value = parseInteger(newValue); break;
-        default: this.value = newValue; break;
-    }
-}
-
-wb.Value = Value;
-wb.getInputType = getInputType;
-})(wb);
-
-/*end value.js*/
-
-/*begin blocks.js*/
-// Constructors and models for Blocks
+// Block(obj) -> Block element
+// scriptForId(scriptid) -> script template
+// nextSeqNum() -> int
+// registerSeqNum(int) make sure we don't re-use sequence numbers
+// Socket(json) -> Socket element
 
 (function(wb){
 
-// BLOCK SUBTYPES
+    var elem = wb.elem;
 
-function Step(spec, scope){
-    this.returns = false;
-    this.init(spec);
-}
-Step.prototype = new Block();
-Step.prototype.constructor = Step;
 
-function Expression(spec, scope){
-    this.init(spec);
-}
-Expression.prototype = new Block();
-Expression.prototype.constructor = Expression;
+    var _nextSeqNum = 0;
 
-function Context(spec, scope){
-    this.locals = [];
-    this.init(spec);
-}
-Context.prototype = new Block();
-Context.prototype.constructor = Context;
+    var newSeqNum = function(){
+        _nextSeqNum++;
+        return _nextSeqNum;
+    };
 
-function EventHandler(spec, scope){
-    this.locals = [];
-    this.init(spec);
-}
-EventHandler.prototype = new Block();
-EventHandler.prototype.constructor = EventHandler;
-
-// HERE is the main definition of Block and its methods
-
-function Block(spec, scope){
-    // If called as constructor, return empty example
-    if (this instanceof Block) return this;
-    // If called as function, demux to the correct constructor
-    switch(spec.blocktype){
-        case 'step':
-            return new Step(spec, scope);
-        case 'expression':
-            return new Expression(spec, scope);
-        case 'context':
-            return new Context(spec, scope);
-        case 'eventhandler':
-            return new EventHandler(spec, scope);
-        default:
-            console.warn('Unsupported blocktype: %o', model);
-            return null;
+    var registerSeqNum = function(seqNum){
+        // When reifying saved blocks, call this for each block to make sure we start new blocks
+        // that do not overlap with old ones.
+        if (!seqNum) return;
+        seqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
     }
-}
 
-Block._nextSeqNum = 0;
+    var blockRegistry = {};
 
-Block.newSeqNum = function(){
-    // FIXME: keep registry of sequence numbers by name?
-    Block._nextSeqNum++;
-    return Block._nextSeqNum;
-};
-
-Block.registerSeqNum = function(seqNum){
-    seqNum = parseInt(seqNum);
-    Block._seqNum = Math.max(id, Block._seqNum);
-}
-
-Block.registry = {};
-
-Block.model = function(view){
-    if (view.jquery){
-        view = view[0];
-    }
-    view = wb.closest(view, '.wrapper');
-    return Block.registry[view.dataset.id];
-}
-
-Block.registerBlock = function(model){
-    if (Block.registry[model.id]){
-        console.warn('Overwriting existing scripts for %s', model.id);
-    }
-    Block.registry[model.id] = model;
-};
-
-Block.lookup = function(id){
-    return Block.registry[id];
-}
-
-Block.prototype.init = function(spec){
-    var self = this;
-    // normalize label from a list
-    if (spec.labels){
-        spec.label = spec.labels[0];
-        delete spec.labels;
-    }
-    $.extend(true, self, spec);
-    this.spec = spec; // save unmodified description
-    if (!self.id){
-        self.id = uuid();
-    }
-    Block.registerBlock(self);
-    if (self.isTemplateBlock){
-        if (self.isLocal){
-            self.seqNum = Block.newSeqNum(); // templates only get ids if they are locals (or returns, which have their origin's id)
+    var registerBlock = function(blockdesc){
+        if (blockdesc.seqNum){
+            registerSeqNum(blockdesc.seqNum);
         }else{
-            self.seqNum = '';
+            blockdesc.seqNum = newSeqNum();
         }
-    }else{
-        self.seqNum = Block.newSeqNum();
-    }
-    if (!self.group){
-        console.log('no group? %o', self);
-    }
-    if (self.help){
-        self.tooltip = self.group + ' ' + self.seqNum + ': ' + self.help;
-    }else{
-        self.tooltip = self.group + ' ' + self.seqNum;
-    }
-    self.label = self.parseLabel(self.label.replace(/##/g, self.seqNum ? '_' + self.seqNum : ''));
-    self.template = template(self.blocktype);
-    if (!self.isTemplateBlock){
-        self.initInstance();
-    }
-};
-
-Block.prototype.initInstance = function initInstance(){
-    var self = this;
-    if (self.spec.locals){
-        self.spec.locals.forEach(function(spec){
-            if (spec === null){
-                return spec;
-            }
-            spec.isTemplateBlock = true;
-            spec.isLocal = true;
-            spec.scriptid = self.id;
-            spec.seqNum = self.seqNum;
-        });
-        self.locals = self.spec.locals.map(function(spec, idx){
-            if (spec === null){
-                return spec;
-            }
-            spec.group = self.group;
-            spec.localOrigin = self;
-            spec.localIndex = idx;
-            if (self.customLocals){
-                spec.label = self.customLocals[idx];
-            }
-            var block = Block(spec);
-            return block;
-        });
-    }
-    if (self.spec.contained && self.spec.contained.length){
-        self.contained = self.spec.contained.map(function(spec, idx){
-            if (spec === null) return spec;
-            return Block(spec);
-        });
-    }else{
-        self.contained = [];
-    }
-    if (self.spec.values && self.spec.values.length){
-        self.values = self.spec.values.map(function(value, idx){
-            if (value instanceof wb.Value){
-                return value;
-            }
-            var val = new wb.Value(value, idx);
-            return val;
-        });
-    }else if (self.values && self.values.length){
-        // do nothing
-    }else{
-        self.values = [];
-    }
-};
-
-Block.prototype.addValue = function(value){
-    if (!this.values){
-        this.values = [];
-    }
-    this.values.push(value);
-};
-
-Block.prototype.parseLabel = function(textLabel){
-    // Recognize special values in the label string and replace them with
-    // appropriate markup. Some values are dynamic and based on the objects currently
-    // in the environment
-    //
-    // values include:
-    //
-    // [number] => an empty number socket
-    // [number:default] => a number socket with a default value
-    // [boolean] => an empty boolean socket
-    // [boolean:default] => a boolean with a default value
-    // [string] => an empty string socket
-    // [string:default] => a string socket with a default value
-    // [choice:options] => a fixed set of options, listed in options parameter function
-    // [choice:options:default] => choice list with a default besides the first item
-    // etc…
-
-    // FIXME: Move specific type handling to plugins
-    var self = this;
-    try{
-        textLabel = textLabel.replace(/##/, '');
-    }catch(e){
-        console.error('Failed in textlabel.replace: %o', e);
-    }
-
-    this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
-    var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
-    var label = $('<span class="label">' + htmlLabel + '</label>');
-    try{
-        if (!this.values && this.valueSlots.length){
-            this.values = this.valueSlots.map(function(slot, idx){return new wb.Value(slot, idx);});
+        if (! blockdesc.id){
+            blockdesc.id = uuid();
         }
-    }catch(e){
-        console.error('Failed in this.valueSlots.map: %o', e);
+        blockRegistry[blockdesc.id] = blockdesc;
     }
-    label.find('.valueslot').each(function fillSlots(idx, slotdom){
-        var slot = $(slotdom);
-        // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
-        var value = self.values[idx];
-        // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
-        if (!value.view){
-            value = new wb.Value(value, idx);
-            self.values[idx] = value;
-        }slot.replaceWith(value.view());
-        // var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + wb.getInputType(value) + '"  style="display:none"></input></span>');
-        // input.append(value.view());
-        // slot.replaceWith(input);
-    });
-    return label;
-};
 
-Block.prototype.code = function(){
-    // extract code from script, and recursively from  values and contained blocks
-    var self = this;
-    var _code = Block.lookup(this.scriptid).script.replace(/##/g, '_' + self.seqNum);
-    function replace_values(match, offset, s){
-        var idx = parseInt(match.slice(2, -2), 10) - 1;
-        if (match[0] === '{'){
-            return self.values[idx] ? self.values[idx].code() : match;
-        }else{
-            return self.contained[idx] ? self.contained[idx].code() : match;
+    var getHelp = function(id){
+        return blockRegistry[id] ? blockRegistry[id].help : '';
+    }
+
+    var getScript = function(id){
+        return blockRegistry[id].script;
+    }
+
+    var getSockets = function(obj){
+        return blockRegistry[obj.scriptid || obj.id].sockets.map(Socket);
+    }
+
+    var Block = function(obj){
+        // FIXME:
+        // Handle values coming from serialized (saved) blocks
+        // Handle customized names (sockets)
+        registerBlock(obj);
+        return elem(
+            'div',
+            {
+                'class': function(a){
+                    var names = ['block', a.group, a.blocktype];
+                    if (a.blocktype === 'context'){
+                        names.push('step');
+                    }else if (a.blocktype === 'eventhandler'){
+                        names.push('step');
+                        names.push('context');
+                    }
+                    return names.join(' ');
+                },
+                'data-blocktype': obj.blocktype,
+                'id': obj.id,
+                'data-scopeid': obj.scopeid || 0,
+                'data-scriptid': obj.scriptid,
+                'title': obj.help || getHelp(obj.scriptid)
+            },
+            [
+                ['div', {'class': 'label'}, getSockets(obj)], // how to get values for restored classes?
+                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
+            ]
+        );
+    }
+
+    var Socket = function(obj){
+        // Sockets are described by text, type, and default value
+        // type and default value are optional, but if you have one you must have the other
+        // If the type is choice it must also have a choicename for the list of values
+        // that can be found in the wb.choiceLists
+        var socket = elem('div', {
+            'class': 'socket',
+            'data-name': obj.name
+        },
+        [
+            ['label', {'class': 'name'}, [obj.name]]
+        ]);
+        if (obj.type){
+            socket.dataset.type = obj.type;
+            socket.appendChild(elem('div', {'class': 'contained'}, [Default(obj)]))
         }
     }
-    _code = _code.replace(/\{\{\d\}\}/g, replace_values);
-    _code = _code.replace(/\[\[\d\]\]/g, replace_values);
-    return _code;
-}
 
-Block.prototype.cloneScript = function(){
-    // Copy a template model (in the menu) to a script model (in the script workspace)
-    var spec = $.extend({}, this.spec, {
-       isLocal: false,
-       isTemplateBlock: false,
-       templateBlock: this,
-       id: uuid(),
-       scriptid: this.id
-    });
-    var clone = Block(spec);
-    return clone;
-};
-
-Block.prototype.clone = function(deep){
-    // Clone a script block. If deep is true, clone values and contained blocks
-    var spec = this.toJSON();
-    if (!deep){
-        spec.contained = [];
-        spec.values = this.values.map(function(v){return {
-            type: this.type,
-            value:  v.literal ? v.value : v.defaultValue
-        }});
-    }
-    return Block(spec);
-}
-
-function attachLocals(node){
-    node.attachLocals = true; // this should probably be data, c'est la vie
-    return node;
-}
-
-Block.prototype.view = function(){
-    if (this._view){
-        if (!this._view[0].dataset.id){
-            console.log('belatedly setting model %o on view %o', this, this._view);
-            this._view[0].dataset.id = this.id;
+    var Default = function(obj){
+        // return an input for input types (number, string, color, date)
+        // return a block for block types
+        var value;
+        var type = obj.type;
+        if (type === 'int' || type === 'float'){
+            type = 'number';
         }
-        return this._view;
-    }
-    var self = this;
-    var view = this._view = this.template(this);
-    view[0].dataset.id = this.id;
-    if (this.isTemplateBlock){
-        return view;
-    }
-    if (this.locals){
-        var localContainer = view.find('.locals');
-        this.locals.forEach(function(local){
-            localContainer.append(local.view());
-        });
-    }
-    this.contained.forEach(function(contained, idx){
-        wb.findChild(view, '.block', '.contained').appendChild(contained.view()[0]);
-        contained.addLocalsToParentContext();
-    });
-    // this.values.forEach(function(value, idx){
-    //     view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
-    // });
-    if (this.id){
-        view.attr('data-id', this.id);
-    }
-    if (this.collapsed){
-        view.toggleClass('open closed');
-        view.find('.disclosure').text('►');
-        view.find('.locals').hide();
-        view.find('.contained').hide();
-    }
-    return view;
-};
-
-Block.prototype.changeLabel = function(labelText){
-    this._view.find('> .block > .blockhead > .label').text(labelText);
-    this.spec.label = labelText;
-    if (this.returnOrigin){
-        // console.log('setting returnOrigin returns label: %o', this.returnOrigin);
-        this.returnOrigin.spec.returns.label = labelText;
-        this.returnOrigin.customReturns = labelText;
-    }
-    if (this.localOrigin){
-        var locals = this.localOrigin.spec.locals;
-        locals[this.localIndex].label = labelText;
-        if (!this.localOrigin.customLocals){
-            this.localOrigin.customLocals = locals.map(function(loc){
-                return loc.label;
-            });
+        switch(type){
+            case 'number':
+                value = obj.value || 0; break;
+            case 'string':
+                value = obj.value || ''; break;
+            case 'color':
+                value = obj.value || '#000000'; break;
+            case 'date':
+                value = obj.value || new Date().toISOString().split('T')[0]; break;
+            case 'time':
+                value = obj.value || new Date().toISOString().split('T')[1]; break;
+            case 'datetime':
+                value = obj.value || new Date().toISOString(); break;
+            case 'url':
+                value = obj.value || 'http://waterbearlang.com'; break;
+            case 'phone':
+                value = obj.value || '604-555-1212'; break;
+            case 'email':
+                value = obj.value || 'waterbear@waterbearlang.com'; break;
+            case 'boolean':
+                obj.options = 'boolean';
+            case 'choice':
+                var choice = elem('select');
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    if (obj.default && obj.default === opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    choice.appendChild(option);
+                });
+                return choice;
+            default:
+                if (obj.default){
+                    return Block(obj.default);
+                }else{
+                    return null;
+                }
         }
-        this.localOrigin.customLocals[this.localIndex] = labelText;
+        return elem('input', {type: type, value: value});
     }
-};
-
-// EVENT HANDLERS
-
-Block.prototype.removeChild = function(block, container){
-    // remove this block from container
-};
-
-Block.prototype.addLocalBlock = function(block){
-    var locals = this.view().find('> .block > .blockhead > .locals');
-    if (!locals.length) {
-        throw new Error('no locals found');
-    }
-    if (this.locals === undefined){
-        this.locals = [];
-    }
-    locals.append(block.view());
-}
-
-Block.prototype.addLocalsToParentContext = function(){
-    // on addToScript
-    // console.log('addLocalsToParentContext %o', this);
-    if (!(this.locals && this.locals.length)) return;
-    if (!this.id){
-        throw new Error('Model must have an id by now');
-    }
-    var view = this.view();
-    var context = wb.closest(view, '.context');
-    var model = Block.model(context);
-    if (model){
-        this.locals.forEach(function(local){
-            model.addLocalBlock(local);
-        });
-    }
-};
-
-Block.prototype.removeLocalsFromParent = function(){
-    if (!(this.locals && this.locals.length)) return;
-    this.locals.forEach(function(local){
-        local.view().remove();
-    });
-};
-
-Block.prototype.addStep = function(step, stepIndex){
-    // console.log('before addStep: %s', this.contained.length);
-    // console.log('step index: %s', stepIndex);
-    this.contained.splice(stepIndex, 0, step);
-    // console.log('after addStep: %s', this.contained.length);
-    step.addLocalsToParentContext();
-};
-Block.prototype.addToWorkspace = function(){
-    this.addLocalsToParentScope();
-};
-Block.prototype.setValue = function(index, type, newValue){
-    this.values[index].update(newValue);
-}
-
-Block.prototype.addExpression = function(expression, expressionIndex){
-    // add block to value
-    this.values[expressionIndex].addBlock(expression);
-    // FIXME: update view (currently happens elsewhere)
-};
-
-Block.prototype.deleteBlock = function(view, evt, params){
-    var model = Block.model(view);
-    model.view().remove();
-};
-
-function newBlockHandler(blocktype, args, body, returns){
-    console.info('blocktype: %s', blocktype);
-    console.info('%s args: %o', args.length, args);
-    console.info('body: %o', body);
-    console.info('returns: %s', returns);
-}
-
-Block.initializeSocketUpdates = function(){
-    $('.scripts_workspace')
-        // .on('add_to_workspace', '.wrapper', function(evt, params){
-        //     var view = $(this);
-        //     Block.model(view).addToWorkspace(view, evt, params);
-        //     return false;
-        // })
-        .on('change', '.socket input, .autosocket select', function(evt){
-            var input = $(evt.target);
-            var socket = input.parent();
-            var socketIndex = socket.data('index');
-            var parentModel = Block.model(socket.closest('.wrapper'));
-            parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
-            $('.scripts_workspace').trigger('scriptmodified');
-        });
-};
-
-Block.prototype.removeExpression = function(expression, expressionIndex){
-    // console.log('remove expression');
-    var value = this.values[expressionIndex];
-    value.value = value.defaultValue;
-    value.literal = true;
-};
-
-Block.prototype.removeContainedStep = function(step){
-    // console.log('remove child step');
-    step.removeLocalsFromParent();
-    this.contained.splice(this.contained.indexOf(step), 1);
-};
 
 
-$('body').on('delete_block', '.wrapper', function(evt, params){
-    var view = $(this);
-    Block.model(view).deleteBlock(view, evt, params);
-    return false;
-});
-
-
-function removeFromScriptEvent(view){
-    var parent = view.parentElement;
-    var model = Block.model(view);
-    if (wb.matches(parent, '.scripts_workspace')){
-        model.removeLocalsFromParent();
-    }else{
-        var parentView = wb.closest(parent, '.wrapper');
-        var parentModel = Block.model(parentView);
-        model.removeLocalsFromParent();
-        if (parent.classList.contains('contained')){
-            parentModel.removeContainedStep( model );
-        }else if (parent.hasClass('socket')){
-            var exprIndex = parent.dataset.index;
-            parentModel.removeExpression(model, exprIndex);
-            if(parent.classList.contains('boolean')){
-                parent.appendChild(wb.elem('select', null, [['option', null, 'true'], ['option', null, 'false']]));
-            }else{
-                parent.children('input').show();
-            }
-            // Why is val an actual value rather than a method?
-            parent.children('input').val(parentModel.values[exprIndex].defaultValue);
-        }
-    }
-    $('.scripts_workspace').trigger('scriptmodified');
-
-}
-
-function addToScriptEvent(droptarget, view){
-    // Converts from DOM/jQuery action to model action
-    // console.log('addToScriptEvent %o, %o', container, view);
-    // FIXME: We need to add the view to the right model's view
-    // These are the cases that need to be handled:
-    // 1. Drop a block into another block as the first contained block
-    // 2. Drop a block on the script, not contained (global)
-    // 3. Drop a block in another block, following another step
-    // 4. Drop an expression block into a socket
-    var container;
-    var model = Block.model(view);
-    if (!model){
-        console.log('unable to retrieve model for view %o', view);
-        throw new Error('unable to retrieve model');
-    }
-    if (wb.matches(droptarget, '.socket')){
-        container = droptarget.parentElement;
-    }else if (wb.matches(droptarget, '.contained')){
-        container = droptarget.parentElement;
-    }
-    if (wb.matches(droptarget, '.scripts_workspace')){
-        model.addLocalsToParentContext();
-    }else if (wb.matches(droptarget, '.contained')){
-        var parentModel = Block.model(wb.closest(droptarget, '.context'));
-    }else{
-        var parentModel = Block.model(wb.closest(droptarget, '.wrapper'));
-    }
-    if (parentModel){
-        if (wb.matches(view, '.value')){
-            console.log('adding %o to %o at index %s', model, parentModel, wb.indexOf(droptarget));
-            parentModel.addExpression(model, wb.indexOf(droptarget)); // FIXME, this is not the way to get the index
-        }else{
-            parentModel.addStep(model, wb.indexOf(view));
-        }
-    }else{
-        // console.log('no parent model found for %o', droptarget);
-    }
-    // FIXME: Move adding view to parent's view from drag2.js to here
-    $('.scripts_workspace').trigger('scriptmodified');
-}
-
-$('.content').on('dblclick', '.locals .label', function(evt){
-    var label = $(evt.target);
-    var model = Block.model(label.closest('.wrapper'));
-    // Rather than use jquery to find instances, should origin model keep track of all instances?
-    // How would that survive serialization/reification?
-    var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
-    var input = $('<input class="label_input" value="' + label.text() + '" />');
-    label.after(input).hide();
-    input.select();
-    // FIND ALL INSTANCES
-    return false;
-});
-
-$('.content').on('keypress', '.locals .label_input', function(evt){
-    if (evt.which === 13){
-        var labelInput = $(evt.target);
-        var labelText = labelInput.val();
-        var model = Block.model(labelInput.closest('.wrapper'));
-        labelInput.prev().show();
-        labelInput.remove();
-        if (labelText.length){
-            var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
-            instances.each(function(){
-                Block.model(this).changeLabel(labelText);
-            });
-            model.changeLabel(labelText);
-        }
-        return false;
-    }
-});
-
-$(document.body).on('scriptloaded', function(evt){
-    $('.scripts_workspace').on('scriptmodified', function(evt){
-        if (wb.queryParams.gist){
-            delete wb.queryParams.gist;
-            var prev = location.href;
-            history.pushState(null, null, wb.queryParamsToUrl(wb.queryParams));
-            window.addEventListener('popstate', function(e){
-                location.reload(prev);
-            });
-        }
-    });
-});
-
-//
-// Handler for the hide/show triangle on context and eventhandler blocks
-//
-Block.initializeDisclosures = function(){
-    $('.scripts_workspace').on('click', '.disclosure', function(event){
-        var self = $(event.target);
-        var view = self.closest('.wrapper');
-        var model = Block.model(view);
-        if (self.is('.open')){
-            self.text('►');
-            view.find('.locals').hide();
-            if (!view.hasClass('scripts_workspace')){
-                view.find('.contained').hide();
-            }
-            model.collapsed = true;
-        }else{
-            self.text('▼');
-            view.find('.locals').show();
-            if (!view.hasClass('scripts_workspace')){
-                view.find('.contained').show();
-            }
-            model.collapsed = false;
-        }
-        self.toggleClass('open closed');
-    });
-};
-
-// Export public interface to waterbear namespace
-
-wb.Block = Block;
-wb.Step = Step;
-wb.Context = Context;
-wb.EventHandler = EventHandler;
-wb.Expression = Expression;
-
-// and event notifications
-wb.removeFromScriptEvent = removeFromScriptEvent;
-wb.addToScriptEvent = addToScriptEvent;
+    wb.Block = Block;
+    wb.registerSeqNum = registerSeqNum;
 
 })(wb);
 
 
-/*end blocks.js*/
+/*end block2.js*/
 
 /*begin ui.js*/
 (function($){
@@ -5737,7 +4912,7 @@ function edit_menu(title, specs, show){
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(wb.Block(spec).view());
+        submenu.append(wb.Block(spec));
     });
     var state = $("#block_menu").accordion( "option", "active" );
     $('#block_menu').accordion('destroy').accordion({
@@ -6071,27 +5246,27 @@ wb.Block.prototype.toJSON = function(){
     return serialized;
 };
 
-wb.Value.prototype.toJSON = function(){
-    // Implement me and make sure I round-trip back into the block model
-    var struct;
-    if (this.value && this.value.toJSON){
-        // console.info('serializing block value');
-        struct = {
-            type: this.type,
-            value: this.value.toJSON()
-        };
-    }else{
-        // console.info('serializing raw value');
-        struct = {
-            type: this.type,
-            value: this.value
-        };
-        if (this.choiceName){
-            struct.choiceName = this.choiceName;
-        }
-    }
-    return struct;
-};
+// wb.Value.prototype.toJSON = function(){
+//     // Implement me and make sure I round-trip back into the block model
+//     var struct;
+//     if (this.value && this.value.toJSON){
+//         // console.info('serializing block value');
+//         struct = {
+//             type: this.type,
+//             value: this.value.toJSON()
+//         };
+//     }else{
+//         // console.info('serializing raw value');
+//         struct = {
+//             type: this.type,
+//             value: this.value
+//         };
+//         if (this.choiceName){
+//             struct.choiceName = this.choiceName;
+//         }
+//     }
+//     return struct;
+// };
 
 
 wb.Block.reify = function(serialized){
@@ -6126,7 +5301,8 @@ wb.writeScript = function(elements, view){
 // End UI section
 
 // expose these globally so the Block/Label methods can find them
-window.choiceLists = {
+wb.choiceLists = {
+    boolean: ['true', 'false'],
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
@@ -6172,8 +5348,8 @@ $('.socket input').live('click',function(){
  */
 
 
-choiceLists.types = choiceLists.types.concat(['sprite']);
-choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
+wb.choiceLists.types.push('sprite');
+wb.choiceLists.rettypes.push('sprite');
 
 
 /*end sprite.js*/
@@ -6196,17 +5372,17 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['sprite']);
 
 
 // expose these globally so the Block/Label methods can find them
-choiceLists.unit = ['px', 'em', '%', 'pt'];
-choiceLists.align = ['start', 'end', 'left', 'right', 'center'];
-choiceLists.baseline = ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'];
-choiceLists.linecap = ['round', 'butt', 'square'];
-choiceLists.linejoin = ['round', 'bevel', 'mitre'];
-choiceLists.easing = ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'];
-choiceLists.fontweight = ['normal', 'bold', 'inherit'];
-choiceLists.globalCompositeOperators = ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'];
-choiceLists.repetition = ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
-choiceLists.types = choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
-choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+wb.choiceLists.unit = ['px', 'em', '%', 'pt'];
+wb.choiceLists.align = ['start', 'end', 'left', 'right', 'center'];
+wb.choiceLists.baseline = ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'];
+wb.choiceLists.linecap = ['round', 'butt', 'square'];
+wb.choiceLists.linejoin = ['round', 'bevel', 'mitre'];
+wb.choiceLists.easing = ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic'];
+wb.choiceLists.fontweight = ['normal', 'bold', 'inherit'];
+wb.choiceLists.globalCompositeOperators = ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'];
+wb.choiceLists.repetition = ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
+wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 
 
 
@@ -6272,28 +5448,41 @@ choiceLists.rettypes = choiceLists.rettypes.concat(['color', 'image', 'shape', '
 
 /*end matrix.js*/
 
-/*begin control.json*/
+/*begin control_socket.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
         {
             "blocktype": "eventhandler",
             "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
-            "label": "when program runs",
             "script": "function _start(){[[1]]}_start();",
-            "help": "this trigger will run its scripts once when the program starts"
+            "help": "this trigger will run its scripts once when the program starts",
+            "sockets": [
+                {
+                    "name": "when program runs"
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
-            "label": "when [choice:keys] key pressed",
             "script": "$(document).bind(\"keydown\", {{1}}, function(){[[1]]; return false;});",
-            "help": "this trigger will run the attached blocks every time this key is pressed"
+            "help": "this trigger will run the attached blocks every time this key is pressed",
+            "sockets": [
+                {
+                    "name": "when",
+                    "type": "choice",
+                    "options": "keys",
+                    "default": "choice"
+                },
+                {
+                    "name": "key pressed"
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
-            "label": "repeat [number:30] times a second",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -6303,19 +5492,37 @@ wb.menu({
                 }
             ],
             "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
-            "help": "this trigger will run the attached blocks periodically"
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "number",
+                    "default": "30"
+                },
+                {
+                    "name": "times a second"
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
-            "label": "wait [number:1] secs",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",
-            "help": "pause before running the following blocks"
+            "help": "pause before running the following blocks",
+            "sockets": [
+                {
+                    "name": "wait",
+                    "type": "number",
+                    "default": "1"
+                },
+                {
+                    "name": "secs"
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
-            "label": "repeat [number:10]",
             "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
             "help": "repeat the contained blocks so many times",
             "locals": [
@@ -6325,33 +5532,68 @@ wb.menu({
                     "script": "local.count##",
                     "type": "number"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "number",
+                    "default": "10"
+                }
             ]
         },
         {
             "blocktype": "step",
             "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
-            "label": "broadcast [string:ack] message",
             "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
-            "help": "send this message to any listeners"
+            "help": "send this message to any listeners",
+            "sockets": [
+                {
+                    "name": "broadcast",
+                    "type": "string",
+                    "default": "ack"
+                },
+                {
+                    "name": "message"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
-            "label": "broadcast [string:ping] message with data [any]",
             "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
-            "help": "send this message with an object argument to any listeners"
+            "help": "send this message with an object argument to any listeners",
+            "sockets": [
+                {
+                    "name": "broadcast",
+                    "type": "string",
+                    "default": "ping"
+                },
+                {
+                    "name": "message with data",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
-            "label": "when I receive [string:ack] message",
             "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
-            "help": "add a listener for the given message, run these blocks when it is received"
+            "help": "add a listener for the given message, run these blocks when it is received",
+            "sockets": [
+                {
+                    "name": "when I receive",
+                    "type": "string",
+                    "default": "ack"
+                },
+                {
+                    "name": "message"
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
-            "label": "when I receive [string:ping] message with data",
             "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
             "locals": [
                 {
@@ -6361,63 +5603,107 @@ wb.menu({
                     "type": "any"
                 }
             ],
-            "help": "add a listener for the given message which receives data, run these blocks when it is received"
+            "help": "add a listener for the given message which receives data, run these blocks when it is received",
+            "sockets": [
+                {
+                    "name": "when I receive",
+                    "type": "string",
+                    "default": "ping"
+                },
+                {
+                    "name": "message with data"
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "b1e43170-800a-4e9b-af82-0ed5c62c47a0",
-            "label": "forever if [boolean:false]",
             "script": "while({{1}}){[[1]]}",
-            "help": "repeat until the condition is false"
+            "help": "repeat until the condition is false",
+            "sockets": [
+                {
+                    "name": "forever if",
+                    "type": "boolean",
+                    "default": "false"
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
-            "label": "if [boolean]",
             "script": "if({{1}}){[[1]]}",
-            "help": "run the following blocks only if the condition is true"
+            "help": "run the following blocks only if the condition is true",
+            "sockets": [
+                {
+                    "name": "if",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
-            "label": "if not [boolean]",
             "script": "if( ! {{1}} ){ [[1]]} }",
-            "help": "run the  blocks if the condition is not true"
+            "help": "run the  blocks if the condition is not true",
+            "sockets": [
+                {
+                    "name": "if not",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
-            "label": "repeat until [boolean]",
             "script": "while(!({{1}})){[[1]]}",
-            "help": "repeat forever until condition is true"
+            "help": "repeat forever until condition is true",
+            "sockets": [
+                {
+                    "name": "repeat until",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end control.json*/
+});
+/*end control_socket.json*/
 
-/*begin sprite.json*/
+/*begin sprite_socket.json*/
 wb.menu({
     "name": "Sprites",
     "blocks": [
         {
             "blocktype": "step",
             "id": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
-            "label": "clear stage to color [color]",
             "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
-            "help": "clear the stage to a solid color"
+            "help": "clear the stage to a solid color",
+            "sockets": [
+                {
+                    "name": "clear stage to color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9d6b3a43-8319-482e-b0f8-2ce0fe7c2f3a",
-            "label": "clear stage to image [image]",
             "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
-            "help": "clear the stage to a background image"
+            "help": "clear the stage to a background image",
+            "sockets": [
+                {
+                    "name": "clear stage to image",
+                    "type": "image",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
-            "label": "rectangle sprite## [size] big at [point] with color [color]",
             "script": "local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});",
             "locals": [
                 {
@@ -6427,81 +5713,176 @@ wb.menu({
                     "type": "sprite"
                 }
             ],
-            "help": "create a simple rectangle sprite"
+            "help": "create a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "rectangle sprite##",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
-            "label": "draw sprite [sprite]",
             "script": "{{1}}.draw(local.ctx);",
-            "help": "draw the sprite at its current location"
+            "help": "draw the sprite at its current location",
+            "sockets": [
+                {
+                    "name": "draw sprite",
+                    "type": "sprite",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
-            "label": "sprite [sprite] collides with sprite [sprite]",
             "script": "{{1}}.collides({{2}})",
             "type": "boolean",
-            "help": "test for collision"
+            "help": "test for collision",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "collides with sprite",
+                    "type": "sprite",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
-            "label": "move [sprite] by x [number] y [number]",
             "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}})",
-            "help": "move a sprite relatively"
+            "help": "move a sprite relatively",
+            "sockets": [
+                {
+                    "name": "move",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "by x",
+                    "type": "number",
+                    "default": null
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "label": "move [sprite] to [point]",
             "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})",
-            "help": "move a sprite absolutely"
+            "help": "move a sprite absolutely",
+            "sockets": [
+                {
+                    "name": "move",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "to",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a0c6d157-7fc7-4819-9b97-7b81d4c49a83",
-            "label": "sprite [sprite] left",
             "script": "{{1}}.x",
             "help": "get x (left) position of sprite",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "left"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "23b4ffd1-3812-4372-8873-8a1b3107bdac",
-            "label": "sprite [sprite] right",
             "script": "{{1}}.x + {{1}}.w",
             "help": "get x+w (right) position of sprite",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "right"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "898208b7-4d38-4c24-ba23-0b0443089435",
-            "label": "sprite [sprite] top",
             "script": "{{1}}.y",
             "help": "get y (top) position of sprite",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "top"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
-            "label": "sprite [sprite] bottom",
             "script": "{{1}}.y + {{1}}.h",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "default": null
+                },
+                {
+                    "name": "bottom"
+                }
+            ]
         }
     ]
-}
-);
-/*end sprite.json*/
+});
+/*end sprite_socket.json*/
 
-/*begin array.json*/
+/*begin array_socket.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
         {
             "blocktype": "step",
             "id": "e6a297e9-1255-4701-91d8-80548489ee9a",
-            "label": "new array##",
             "script": "local.array## = [];",
             "help": "Create an empty array",
             "locals": [
@@ -6511,12 +5892,16 @@ wb.menu({
                     "script": "local.array##",
                     "type": "array"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "new array##"
+                }
             ]
         },
         {
             "blocktype": "step",
             "id": "83d67170-4ba7-45ac-95ae-bb2f314c3ae0",
-            "label": "new array with array## [array]",
             "script": "local.array## = {{1}}.slice();",
             "help": "create a new array with the contents of another array",
             "locals": [
@@ -6526,83 +5911,178 @@ wb.menu({
                     "script": "local.array##",
                     "type": "array"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "new array with array##",
+                    "type": "array",
+                    "default": null
+                }
             ]
         },
         {
             "blocktype": "expression",
             "id": "3e56f9c1-29b9-4d0c-99bd-05ccabfa29c2",
-            "label": "array [array] item [number:0]",
             "script": "{{1}}[{{2}}]",
             "type": "any",
-            "help": "get an item from an index in the array"
+            "help": "get an item from an index in the array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "item",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "5b1cc330-b9b1-4062-b8d4-e5032c7a5776",
-            "label": "array [array] join with [string:, ]",
             "script": "{{1}}.join({{2}})",
             "type": "string",
-            "help": "join items of an array into a string, each item separated by given string"
+            "help": "join items of an array into a string, each item separated by given string",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "join with [string:, ]"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "3fab2b88-430a-401e-88b2-2703d614780a",
-            "label": "array [array] append [any]",
             "script": "{{1}}.push({{2}});",
-            "help": "add any object to an array"
+            "help": "add any object to an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "append",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "bf3ed213-4435-4152-bb2c-573ce1721036",
-            "label": "array [array] length",
             "script": "{{1}}.length",
             "type": "number",
-            "help": "get the length of an array"
+            "help": "get the length of an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "length"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "f4870f0f-1dbb-4bc7-b8e3-3a00af613689",
-            "label": "array [array] remove item [number:0]",
             "script": "{{1}}.splice({{2}}, 1)[0]",
             "type": "any",
-            "help": "remove item at index from an array"
+            "help": "remove item at index from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "remove item",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e137e1a3-fe66-4d15-ae2a-596050acb6a7",
-            "label": "array [array] pop",
             "script": "{{1}}.pop()",
             "type": "any",
-            "help": "remove and return the last item from an array"
+            "help": "remove and return the last item from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "pop"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "00685267-c279-4fc1-bdbd-a07742a76b1e",
-            "label": "array [array] shift",
             "script": "{{1}}.shift()",
             "type": "any",
-            "help": "remove and return the first item from an array"
+            "help": "remove and return the first item from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "shift"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "b4f115d3-fc52-4d75-a363-5119de21e97c",
-            "label": "array [array] reversed",
             "script": "{{1}}.slice().reverse()",
             "type": "array",
-            "help": "reverse a copy of array"
+            "help": "reverse a copy of array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "reversed"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "0931d219-707c-41dd-92e6-b1a7c2a0f6b3",
-            "label": "array [array] concat [array]",
             "script": "{{1}}.concat({{2}});",
             "type": "array",
-            "help": "a new array formed by joining the arrays"
+            "help": "a new array formed by joining the arrays",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "concat",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
-            "label": "array [array] for each",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
             "locals": [
                 {
@@ -6620,250 +6100,493 @@ wb.menu({
                     "type": "any"
                 }
             ],
-            "help": "run the blocks with each item of a named array"
+            "help": "run the blocks with each item of a named array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "default": null
+                },
+                {
+                    "name": "for each"
+                }
+            ]
         }
     ]
-}
-);
-/*end array.json*/
+});
+/*end array_socket.json*/
 
-/*begin boolean.json*/
+/*begin boolean_socket.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "770756e8-3a10-4993-b02e-3d1333c98958",
-            "label": "[boolean] and [boolean]",
             "type": "boolean",
             "script": "({{1}} && {{2}})",
-            "help": "both operands are true"
+            "help": "both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "default": null
+                },
+                {
+                    "name": "and",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a56c0d03-5c5c-4459-9aaf-cbbea6eb3abf",
-            "label": "[boolean] or [boolean]",
             "type": "boolean",
             "script": "({{1}} || {{2}})",
-            "help": "either or both operands are true"
+            "help": "either or both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "default": null
+                },
+                {
+                    "name": "or",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "cb9ddee8-5ee1-423b-9559-6d2cbb379b80",
-            "label": "[boolean] xor [boolean]",
             "type": "boolean",
             "script": "({{1}} ? !{{2}} : {{2}})",
-            "help": "either, but not both, operands are true"
+            "help": "either, but not both, operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "default": null
+                },
+                {
+                    "name": "xor",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "138a6840-37cc-4e2d-b44a-af32e673ba56",
-            "label": "not [boolean]",
             "type": "boolean",
             "script": "(! {{1}})",
-            "help": "operand is false"
+            "help": "operand is false",
+            "sockets": [
+                {
+                    "name": "not",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end boolean.json*/
+});
+/*end boolean_socket.json*/
 
-/*begin canvas.json*/
+/*begin canvas_socket.json*/
 wb.menu({
     "name": "Canvas",
     "blocks": [
         {
             "blocktype": "context",
-            "label": "with local state",
             "script": "local.ctx.save();[[1]];local.ctx.restore();",
             "help": "save the current state, run the contained steps, then restore the saved state",
-            "id": "9e514499-05a6-4b76-ad4b-1ea888181a8b"
+            "id": "9e514499-05a6-4b76-ad4b-1ea888181a8b",
+            "sockets": [
+                {
+                    "name": "with local state"
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "stroke",
             "script": "local.ctx.stroke();",
             "help": "stroke...",
-            "id": "99d5828c-ccdd-47db-9abe-f67a8c065fe6"
+            "id": "99d5828c-ccdd-47db-9abe-f67a8c065fe6",
+            "sockets": [
+                {
+                    "name": "stroke"
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "fill",
             "script": "local.ctx.fill();",
             "help": "fill...",
-            "id": "d540bb5f-7711-4133-a631-53821daeb593"
+            "id": "d540bb5f-7711-4133-a631-53821daeb593",
+            "sockets": [
+                {
+                    "name": "fill"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "c7e2e322-921a-4a96-9c86-9dbbaf54eb53",
-            "label": "global alpha [number:1.0]",
             "script": "local.ctx.globalAlpha = {{1}};",
-            "help": "set the global alpha"
+            "help": "set the global alpha",
+            "sockets": [
+                {
+                    "name": "global alpha",
+                    "type": "number",
+                    "default": "1.0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "0237bbab-d62a-4ff9-afb8-4a64bc98dbc3",
-            "label": "global composite operator [choice:globalCompositeOperators]",
             "script": "local.ctx.globalCompositOperator = {{1}};",
-            "help": "set the global composite operator"
+            "help": "set the global composite operator",
+            "sockets": [
+                {
+                    "name": "global composite operator",
+                    "type": "choice",
+                    "options": "globalCompositeOperators",
+                    "default": "choice"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "96085392-9a2d-4857-85f1-af2af72cf800",
-            "label": "scale x [number:1.0] y [number:1.0]",
             "script": "local.ctx.scale({{1}},{{2}});",
-            "help": "change the scale of subsequent drawing"
+            "help": "change the scale of subsequent drawing",
+            "sockets": [
+                {
+                    "name": "scale x",
+                    "type": "number",
+                    "default": "1.0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "1.0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "5e6ce8f8-d5a2-454e-8e88-d5155fb0eef0",
-            "label": "rotate by [number:0] degrees",
             "script": "local.ctx.rotate(deg2rad({{1}}));",
-            "help": "rotate..."
+            "help": "rotate...",
+            "sockets": [
+                {
+                    "name": "rotate by",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "df0ffca8-dd43-45aa-8b9f-b7d588090cd5",
-            "label": "translate by x [number:0] y [number:0]",
             "script": "local.ctx.translate({{1}},{{2}});",
-            "help": "translate..."
+            "help": "translate...",
+            "sockets": [
+                {
+                    "name": "translate by x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "d297afc2-3941-4977-a6af-d7f4e222b467",
-            "label": "line width [number:1]",
             "script": "local.ctx.lineWidth = {{1}};",
-            "help": "set line width"
+            "help": "set line width",
+            "sockets": [
+                {
+                    "name": "line width",
+                    "type": "number",
+                    "default": "1"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "b538aadd-e90d-4d0d-bc12-95b7df9c2a61",
-            "label": "line cap [choice:linecap]",
             "script": "local.ctx.lineCap = {{1}};",
-            "help": "set line cap"
+            "help": "set line cap",
+            "sockets": [
+                {
+                    "name": "line cap",
+                    "type": "choice",
+                    "options": "linecap",
+                    "default": "choice"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "4b3f5315-295c-46d7-baf2-e791c707cf4f",
-            "label": "line join [choice:linejoin]",
             "script": "local.ctx.lineJoin = {{1}};",
-            "help": "set line join"
+            "help": "set line join",
+            "sockets": [
+                {
+                    "name": "line join",
+                    "type": "choice",
+                    "options": "linejoin",
+                    "default": "choice"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "c3aec6b2-ccb1-4e24-b00f-0736214f44c3",
-            "label": "mitre limit [number:10]",
             "script": "local.ctx.mitreLimit = {{1}};",
-            "help": "set mitre limit"
+            "help": "set mitre limit",
+            "sockets": [
+                {
+                    "name": "mitre limit",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "f28b6498-87f7-4b39-bf16-81644a2a1996",
-            "label": "shadow offset x [number:0] y [number:0]",
             "script": "local.ctx.shadowOffsetX = {{1}}; local.ctx.shadowOffsetY = {{2}}",
-            "help": "set the offsets for shadow"
+            "help": "set the offsets for shadow",
+            "sockets": [
+                {
+                    "name": "shadow offset x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "278b0b41-895c-4786-9c09-d745ae5501af",
-            "label": "shadow blur [number:0]",
             "script": "local.ctx.shadowBlur = {{1}}",
-            "help": "set the shadow blur radius"
+            "help": "set the shadow blur radius",
+            "sockets": [
+                {
+                    "name": "shadow blur",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         }
     ]
-}
-);
-/*end canvas.json*/
+});
+/*end canvas_socket.json*/
 
-/*begin color.json*/
+/*begin color_socket.json*/
 wb.menu({
     "name": "Color",
     "blocks": [
         {
             "blocktype": "step",
             "id": "01e39af1-679d-4b4d-b30e-a093a2687063",
-            "label": "shadow color [color]",
             "script": "local.ctx.shadowColor = {{1}}",
-            "help": "set the shadow color"
+            "help": "set the shadow color",
+            "sockets": [
+                {
+                    "name": "shadow color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9286b647-2c6f-4fbe-ae92-3d0062bc438f",
-            "label": "stroke color [color:#000]",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "stroke color..."
+            "help": "stroke color...",
+            "sockets": [
+                {
+                    "name": "stroke color",
+                    "type": "color",
+                    "default": "#000"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "6fe550a9-c630-4876-950c-f727de27b7ae",
-            "label": "fill color [color:#000]",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "fill color..."
+            "help": "fill color...",
+            "sockets": [
+                {
+                    "name": "fill color",
+                    "type": "color",
+                    "default": "#000"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "271c8b4c-b045-4ff9-8ad5-9608ea204b09",
-            "label": "color with red [number:0] green [number:0] blue [number:0]",
             "script": "\"rgb({{1}},{{2}},{{3}})\"",
             "type": "color",
-            "help": "returns a color"
+            "help": "returns a color",
+            "sockets": [
+                {
+                    "name": "color with red",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "green",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "blue",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "13236aef-cccd-42b3-a041-e26528174323",
-            "label": "color with red [number:0] green [number:0] blue [number:0] alpha [number:0]",
             "script": "\"rgba({{1}},{{2}},{{3}},{{4}})\"",
             "type": "color",
-            "help": "returns a semi-opaque color"
+            "help": "returns a semi-opaque color",
+            "sockets": [
+                {
+                    "name": "color with red",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "green",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "blue",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "alpha",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e9496816-4f7b-47d3-8c70-163df835230c",
             "type": "color",
-            "label": "color with hue [number:0] saturation [number:0] brightness [number:0]]",
             "script": "\"hsb({{1}}, {{2}}, {{3}})\"",
-            "help": "returns a color"
+            "help": "returns a color",
+            "sockets": [
+                {
+                    "name": "color with hue",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "saturation",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "brightness",
+                    "type": "number",
+                    "default": "0]"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
             "type": "color",
-            "label": "random color",
             "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\"",
-            "help": "returns a random color"
+            "help": "returns a random color",
+            "sockets": [
+                {
+                    "name": "random color"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "c2d8442b-c9eb-45bb-8ca6-69f2e6d4c7c7",
-            "label": "stroke gradient [gradient]",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "replaces stroke color or stroke pattern with gradient"
+            "help": "replaces stroke color or stroke pattern with gradient",
+            "sockets": [
+                {
+                    "name": "stroke gradient",
+                    "type": "gradient",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "b80bc4ea-7f07-4dd5-b2f9-d8f09e0aca55",
-            "label": "fill gradient [gradient]",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "replaces fill color or fill pattern with gradient"
+            "help": "replaces fill color or fill pattern with gradient",
+            "sockets": [
+                {
+                    "name": "fill gradient",
+                    "type": "gradient",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "7fd65106-276d-43f3-b433-5ce6b750d511",
-            "label": "stroke pattern [pattern]",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "replaces stroke color or stroke gradient with pattern"
+            "help": "replaces stroke color or stroke gradient with pattern",
+            "sockets": [
+                {
+                    "name": "stroke pattern",
+                    "type": "pattern",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9f54e5b1-f539-4005-bd8e-5b759e776bba",
-            "label": "fill pattern [pattern]",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "replaces fill color or fill gradient with pattern"
+            "help": "replaces fill color or fill gradient with pattern",
+            "sockets": [
+                {
+                    "name": "fill pattern",
+                    "type": "pattern",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "5caf94c7-f489-4423-a0c7-d1ad066c4dc7",
-            "label": "create radial gradient from point1 [point] radius1 [number:0] to point2 [point] radius2 [number:0]",
             "script": "local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});",
             "help": "create a radial gradient in the cone described by two circles",
             "locals": [
@@ -6873,12 +6596,33 @@ wb.menu({
                     "script": "local.gradient##",
                     "type": "gradient"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "create radial gradient from point1",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "radius1",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "to point2",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "radius2",
+                    "type": "number",
+                    "default": "0"
+                }
             ]
         },
         {
             "blocktype": "step",
             "id": "be35754d-da0e-4b26-b8f1-9a4f36e902c3",
-            "label": "create linear gradient from point1 [point] to point2 [point]",
             "script": "local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);",
             "help": "create a linear gradient between two points",
             "locals": [
@@ -6888,19 +6632,46 @@ wb.menu({
                     "script": "local.linear.gradient##",
                     "type": "gradient"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "create linear gradient from point1",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "to point2",
+                    "type": "point",
+                    "default": null
+                }
             ]
         },
         {
             "blocktype": "step",
             "id": "a0783aab-194c-4059-8f8e-4afd93ec1ca5",
-            "label": "add color stop to gradient [gradient] at offset [number:0.5] with color [color:#F00]",
             "script": "{{1}}.addColorStop({{2}}, {{3}}",
-            "help": "creates an additional color stop, offset must be between 0.0 and 1.0"
+            "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
+            "sockets": [
+                {
+                    "name": "add color stop to gradient",
+                    "type": "gradient",
+                    "default": null
+                },
+                {
+                    "name": "at offset",
+                    "type": "number",
+                    "default": "0.5"
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "default": "#F00"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "3a6b43b7-3392-4f0d-b2b7-c5e1dc0cf501",
-            "label": "create pattern## from image [image] repeats [choice:repetition]",
             "script": "local.pattern## = local.ctx.createPattern({{1}}, {{2}});",
             "help": "create a pattern with the given html image",
             "locals": [
@@ -6910,42 +6681,91 @@ wb.menu({
                     "script": "local.pattern##",
                     "type": "pattern"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "create pattern## from image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "repeats",
+                    "type": "choice",
+                    "options": "repetition",
+                    "default": "choice"
+                }
             ]
         }
     ]
-}
-);
-/*end color.json*/
+});
+/*end color_socket.json*/
 
-/*begin image.json*/
+/*begin image_socket.json*/
 wb.menu({
     "name": "Images",
     "blocks": [
         {
             "blocktype": "step",
             "id": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
-            "label": "draw image [image] at point [point]",
             "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);",
-            "help": "draw the HTML &lt;img&gt; into the canvas without resizing"
+            "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
+            "sockets": [
+                {
+                    "name": "draw image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "at point",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "da300b03-1d39-4865-ab99-beec07b53bb2",
-            "label": "draw image [image] in rect [rect]",
             "script": "local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y,{{2}}.w,{{2}}.h);",
-            "help": "draw the HTML &lt;img&gt; into the canvas sized to the given dimension"
+            "help": "draw the HTML &lt;img&gt; into the canvas sized to the given dimension",
+            "sockets": [
+                {
+                    "name": "draw image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "in rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "5514e085-970f-48c2-b6bf-a443488c3c07",
-            "label": "draw a rect [rect] from image [image] to rect [rect]",
             "script": "local.ctx.drawImage({{2}},{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h,{{3}}.x,{{3}}.y,{{3}}.w,{{3}}.h);",
-            "help": "draw a rect extracted from image into a rect specified on the canvas"
+            "help": "draw a rect extracted from image into a rect specified on the canvas",
+            "sockets": [
+                {
+                    "name": "draw a rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "from image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "to rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "6c79800c-af02-48e1-b9cb-d043e8299f7a",
-            "label": "create ImageData## with size [size]",
             "script": "local.imageData## = local.ctx.createImageData({{1}}.w,{{1}}.h);",
             "locals": [
                 {
@@ -6955,12 +6775,18 @@ wb.menu({
                     "type": "imagedata"
                 }
             ],
-            "help": "initialize a new imageData with the specified dimensions"
+            "help": "initialize a new imageData with the specified dimensions",
+            "sockets": [
+                {
+                    "name": "create ImageData## with size",
+                    "type": "size",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "2137c296-1666-499c-871c-60226188f031",
-            "label": "createImageData## from imageData [imageData]",
             "script": "local.imageData## = local.ctx.createImageData({{1}});",
             "locals": [
                 {
@@ -6970,12 +6796,18 @@ wb.menu({
                     "type": "imagedata"
                 }
             ],
-            "help": "initialized a new imageData the same size as an existing imageData"
+            "help": "initialized a new imageData the same size as an existing imageData",
+            "sockets": [
+                {
+                    "name": "createImageData## from imageData",
+                    "type": "imageData",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "a2745268-a506-46b6-8d96-e4c275dd5584",
-            "label": "get imageData## for rect [rect]",
             "script": "local.imageData## = local.ctx.getImageData({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
             "locals": [
                 {
@@ -6985,270 +6817,547 @@ wb.menu({
                     "type": "imagedata"
                 }
             ],
-            "help": "returns the image data from the specified rectangle"
+            "help": "returns the image data from the specified rectangle",
+            "sockets": [
+                {
+                    "name": "get imageData## for rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "207c93f2-d8c7-4b87-99bf-d79b61faafc2",
-            "label": "draw imageData [imagedata] at point [point]",
             "script": "local.ctx.putImageData({{1}},{{2}}.x,{{2}}.y);",
-            "help": "draw the given image data into the canvas at the given coordinates"
+            "help": "draw the given image data into the canvas at the given coordinates",
+            "sockets": [
+                {
+                    "name": "draw imageData",
+                    "type": "imagedata",
+                    "default": null
+                },
+                {
+                    "name": "at point",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "52ecfee7-005f-45ef-8c2a-df7b15dd974f",
-            "label": "draw a rect [rect] from imageData [imagedata] at point [point]",
             "script": "local.ctx.putImageData({{2}},{{3}}.x,{{3}}.y,{{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
-            "help": "draw the given image data into the canvas from the given rect to the given position"
+            "help": "draw the given image data into the canvas from the given rect to the given position",
+            "sockets": [
+                {
+                    "name": "draw a rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "from imageData",
+                    "type": "imagedata",
+                    "default": null
+                },
+                {
+                    "name": "at point",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "578ba232-d1c2-4354-993d-8538bbaf4de2",
-            "label": "imageData [imagedata] width",
             "script": "{{1}}.width",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "imageData",
+                    "type": "imagedata",
+                    "default": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "01bc0775-1a0b-4d0f-b009-786e18417703",
-            "label": "imageData [imagedata] height",
             "script": "{{1}}.height",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "imageData",
+                    "type": "imagedata",
+                    "default": null
+                },
+                {
+                    "name": "height"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "5e97eed9-acf7-45af-838e-fae9bf85921c",
-            "label": "imageData [imagedata] as array",
             "script": "{{1}}.data",
-            "type": "array"
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "imageData",
+                    "type": "imagedata",
+                    "default": null
+                },
+                {
+                    "name": "as array"
+                }
+            ]
         },
-       {
+        {
             "blocktype": "expression",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
-            "label": "image from url [string]",
             "script": "(function(){var img = new Image(); img.src=\"{{1}}\";return img;})()",
-            "type": "image"
+            "type": "image",
+            "sockets": [
+                {
+                    "name": "image from url",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a7e59ad2-47ab-4240-8801-5d66d8f57fc9",
-            "label": "image [image] width",
             "script": "{{1}}.width",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "d9c7d36e-d15f-48a9-9423-1a6497727221",
-            "label": "image [image] height",
             "script": "{{1}}.height",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "height"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8d90b1fa-2791-4381-add5-c3c5d238ac0d",
-            "label": "image [image] url",
             "script": "{{1}}.width",
-            "type": "string"
+            "type": "string",
+            "sockets": [
+                {
+                    "name": "image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "url"
+                }
+            ]
         }
     ]
-}
-);
-/*end image.json*/
+});
+/*end image_socket.json*/
 
-/*begin math.json*/
+/*begin math_socket.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
-            "label": "[number:0] + [number:0]",
             "type": "number",
             "script": "({{1}} + {{2}})",
-            "help": "sum of the two operands"
+            "help": "sum of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "+",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "d7082309-9f02-4cf9-bcd5-d0cac243bff9",
-            "label": "[number:0] - [number:0]",
             "type": "number",
             "script": "({{1}} - {{2}})",
-            "help": "difference of the two operands"
+            "help": "difference of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "-",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "bd3879e6-e440-49cb-b10b-52d744846341",
-            "label": "[number:0] * [number:0]",
             "type": "number",
             "script": "({{1}} * {{2}})",
-            "help": "product of the two operands"
+            "help": "product of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "*",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
-            "label": "[number:0] / [number:0]",
             "type": "number",
             "script": "({{1}} / {{2}})",
-            "help": "quotient of the two operands"
+            "help": "quotient of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "/",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
-            "label": "[number:0] = [number:0]",
             "type": "boolean",
             "script": "({{1}} === {{2}})",
-            "help": "two operands are equal"
+            "help": "two operands are equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "=",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
-            "label": "[number:0] < [number:0]",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
-            "help": "first operand is less than second operand"
+            "help": "first operand is less than second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "<",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
-
         {
             "blocktype": "expression",
             "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
-            "label": "[number:0] > [number:0]",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
-            "help": "first operand is greater than second operand"
+            "help": "first operand is greater than second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": ">",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
-            "label": "pick random [number:1] to [number:10]",
             "type": "number",
             "script": "randint({{1}}, {{2}})",
-            "help": "random number between two numbers (inclusive)"
+            "help": "random number between two numbers (inclusive)",
+            "sockets": [
+                {
+                    "name": "pick random",
+                    "type": "number",
+                    "default": "1"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
-            "label": "[number:0] mod [number:0]",
             "type": "number",
             "script": "({{1}} % {{2}})",
-            "help": "modulus of a number is the remainder after whole number division"
+            "help": "modulus of a number is the remainder after whole number division",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "mod",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
-            "label": "round [number:0]",
             "type": "number",
             "script": "Math.round({{1}})",
-            "help": "rounds to the nearest whole number"
+            "help": "rounds to the nearest whole number",
+            "sockets": [
+                {
+                    "name": "round",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "c38383df-a765-422e-b215-7d1cfb7557a1",
-            "label": "absolute of [number:10]",
             "type": "number",
             "script": "Math.abs({{1}})",
-            "help": "converts a negative number to positive, leaves positive alone"
+            "help": "converts a negative number to positive, leaves positive alone",
+            "sockets": [
+                {
+                    "name": "absolute of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
-            "label": "arccosine degrees of [number:10]",
             "type": "number",
             "script": "rad2deg(Math.acos({{1}}))",
-            "help": "inverse of cosine"
+            "help": "inverse of cosine",
+            "sockets": [
+                {
+                    "name": "arccosine degrees of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
-            "label": "arcsine degrees of [number:10]",
             "type": "number",
             "script": "rad2deg(Math.asin({{1}}))",
-            "help": "inverse of sine"
+            "help": "inverse of sine",
+            "sockets": [
+                {
+                    "name": "arcsine degrees of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
-            "label": "arctangent degrees of [number:10]",
             "type": "number",
             "script": "rad2deg(Math.atan({{1}}))",
-            "help": "inverse of tangent"
+            "help": "inverse of tangent",
+            "sockets": [
+                {
+                    "name": "arctangent degrees of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
-            "label": "ceiling of [number:10]",
             "type": "number",
             "script": "Math.ceil({{1}})",
-            "help": "rounds up to nearest whole number"
+            "help": "rounds up to nearest whole number",
+            "sockets": [
+                {
+                    "name": "ceiling of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
-            "label": "cosine of [number:10] degrees",
             "type": "number",
             "script": "Math.cos(deg2rad({{1}}))",
-            "help": "ratio of the length of the adjacent side to the length of the hypotenuse"
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "cosine of",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "1a8f6a28-14e9-4400-8e80-31217309ebc9",
-            "label": "sine of [number:10] degrees",
             "type": "number",
             "script": "Math.sin(deg2rad({{1}}))",
-            "help": "ratio of the length of the opposite side to the length of the hypotenuse"
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "sine of",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541",
-            "label": "tangent of [number:10] degrees",
             "type": "number",
             "script": "Math.tan(deg2rad({{1}}))",
-            "help": "ratio of the length of the opposite side to the length of the adjacent side"
+            "help": "ratio of the length of the opposite side to the length of the adjacent side",
+            "sockets": [
+                {
+                    "name": "tangent of",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
-            "label": "[number:10] to the power of [number:2]",
             "type": "number",
             "script": "Math.pow({{1}}, {{2}})",
-            "help": "multiply a number by itself the given number of times"
+            "help": "multiply a number by itself the given number of times",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "to the power of",
+                    "type": "number",
+                    "default": "2"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
-            "label": "square root of [number:10]",
             "type": "number",
             "script": "Math.sqrt({{1}})",
-            "help": "the square root is the same as taking the to the power of 1/2"
+            "help": "the square root is the same as taking the to the power of 1/2",
+            "sockets": [
+                {
+                    "name": "square root of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
-            "label": "pi",
             "script": "Math.PI;",
             "type": "number",
-            "help": "pi is the ratio of a circle's circumference to its diameter"
+            "help": "pi is the ratio of a circle's circumference to its diameter",
+            "sockets": [
+                {
+                    "name": "pi"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
-            "label": "tau",
             "script": "Math.PI * 2",
             "type": "number",
-            "help": "tau is 2 times pi, a generally more useful number"
+            "help": "tau is 2 times pi, a generally more useful number",
+            "sockets": [
+                {
+                    "name": "tau"
+                }
+            ]
         }
     ]
-}
-);
-/*end math.json*/
+});
+/*end math_socket.json*/
 
-/*begin object.json*/
+/*begin object_socket.json*/
 wb.menu({
     "name": "Objects",
     "blocks": [
         {
             "blocktype": "step",
             "id": "26ee5e5c-5405-453f-8941-26ac6ea009ec",
-            "label": "new object##",
             "script": "local.object## = {};",
             "locals": [
                 {
@@ -7258,27 +7367,58 @@ wb.menu({
                     "type": "object"
                 }
             ],
-            "help": "create a new, empty object"
+            "help": "create a new, empty object",
+            "sockets": [
+                {
+                    "name": "new object##"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "ee86bcd0-10e3-499f-9a81-6738374c0c1f",
-            "label": "object [object] key [string] = value [any]",
             "script": "{{1}}[{{2}}] = {{3}};",
-            "help": "set the key/value of an object"
+            "help": "set the key/value of an object",
+            "sockets": [
+                {
+                    "name": "object",
+                    "type": "object",
+                    "default": null
+                },
+                {
+                    "name": "key",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "= value",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7ca6df56-7c25-4c8c-98ef-8dfef90eff36",
-            "label": "object [object] value at key [string]",
             "script": "{{1}}[{{2}}]",
             "type": "any",
-            "help": "return the value of the key in an object"
+            "help": "return the value of the key in an object",
+            "sockets": [
+                {
+                    "name": "object",
+                    "type": "object",
+                    "default": null
+                },
+                {
+                    "name": "value at key",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "322da80d-d8e2-4261-bab7-6ff0ae89e5f4",
-            "label": "for each item in [object] do",
             "script": "Object.keys({{1}}).forEach(function(key){local.key = key; local.item = {{1}}[key]; [[1]] });",
             "locals": [
                 {
@@ -7296,345 +7436,721 @@ wb.menu({
                     "type": "any"
                 }
             ],
-            "help": "run the blocks with each item of a object"
+            "help": "run the blocks with each item of a object",
+            "sockets": [
+                {
+                    "name": "for each item in",
+                    "type": "object",
+                    "default": null
+                },
+                {
+                    "name": "do"
+                }
+            ]
         }
     ]
-}
-);
-/*end object.json*/
+});
+/*end object_socket.json*/
 
-/*begin string.json*/
+/*begin string_socket.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "cdf5fa88-0d87-45d1-bf02-9ee4ec4c5565",
-            "label": "string [string] split on [string]",
             "script": "{{1}}.split({{2}})",
             "type": "array",
-            "help": "create an array by splitting the named string on the given string"
+            "help": "create an array by splitting the named string on the given string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "split on",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e1951d04-dc2f-459e-9d7a-4796f29169ea",
-            "label": "concatenate [string:hello] with [string:world]",
             "type": "string",
             "script": "({{1}} + {{2}})",
-            "help": "returns a string by joining together two strings"
+            "help": "returns a string by joining together two strings",
+            "sockets": [
+                {
+                    "name": "concatenate",
+                    "type": "string",
+                    "default": "hello"
+                },
+                {
+                    "name": "with",
+                    "type": "string",
+                    "default": "world"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
-            "label": "string [string] character at [number:0]",
             "script": "{{1}}[{{2}}]",
             "type": "string",
-            "help": "get the single character string at the given index of named string"
+            "help": "get the single character string at the given index of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "character at",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "c1eda8ae-b77c-4f5f-9b9f-c11b65235765",
-            "label": "string [string] length",
             "script": "{{1}}.length",
             "type": "number",
-            "help": "get the length of named string"
+            "help": "get the length of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "length"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "cc005f19-e1b9-4f74-8fd0-91faccedd370",
-            "label": "string [string] indexOf [string]",
             "script": "{{1}}.indexOf({{2}})",
             "type": "number",
-            "help": "get the index of the substring within the named string"
+            "help": "get the index of the substring within the named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "indexOf",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8b536c13-4c56-471e-83ac-cf8648602df4",
-            "label": "string [string] replace [string] with [string]",
             "script": "{{1}}.replace({{2}}, {{3}})",
             "type": "string",
-            "help": "get a new string by replacing a substring with a new string"
+            "help": "get a new string by replacing a substring with a new string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "replace",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "with",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8eaacf8a-18eb-4f21-a1ab-a356326f7eae",
-            "label": "to string [any]",
             "script": "{{1}}.toString()",
             "type": "string",
-            "help": "convert any object to a string"
+            "help": "convert any object to a string",
+            "sockets": [
+                {
+                    "name": "to string",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
-            "label": "comment [string]",
             "script": "// {{1}};\n",
-            "help": "this is a comment and will not be run by the program"
+            "help": "this is a comment and will not be run by the program",
+            "sockets": [
+                {
+                    "name": "comment",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "2f178d61-e619-47d0-b9cf-fcb52625c2a3",
-            "label": "alert [string]",
             "script": "window.alert({{1}});",
-            "help": "pop up an alert window with string"
+            "help": "pop up an alert window with string",
+            "sockets": [
+                {
+                    "name": "alert",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "8496b7af-129f-48eb-b15b-8803b7617493",
-            "label": "console log [any]",
             "script": "console.log({{1}});",
-            "help": "Send any object as a message to the console"
+            "help": "Send any object as a message to the console",
+            "sockets": [
+                {
+                    "name": "console log",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "8bfaf131-d169-4cf4-afe4-1d7f02a55341",
-            "label": "console log format [string] arguments [array]",
             "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
-            "help": "send a message to the console with a format string and multiple objects"
+            "help": "send a message to the console with a format string and multiple objects",
+            "sockets": [
+                {
+                    "name": "console log format",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "arguments",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "06ddcfee-76b7-4be4-856d-44cda3fb109b",
-            "label": "global keys object",
             "script": "global.keys",
             "help": "for debugging",
-            "type": "object"
+            "type": "object",
+            "sockets": [
+                {
+                    "name": "global keys object"
+                }
+            ]
         }
     ]
-}
-);
-/*end string.json*/
+});
+/*end string_socket.json*/
 
-/*begin path.json*/
+/*begin path_socket.json*/
 wb.menu({
     "name": "Paths",
     "blocks": [
         {
             "blocktype": "context",
             "id": "5bd66c5d-1a66-4cbb-8984-a4361270c2c6",
-            "label": "with path",
             "script": "local.ctx.beginPath();[[1]];local.ctx.closePath();",
-            "help": "create a path, run the contained steps, close the path"
+            "help": "create a path, run the contained steps, close the path",
+            "sockets": [
+                {
+                    "name": "with path"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "f9c9328b-746c-468b-90fa-4d3da4cb1479",
-            "label": "move to point [point]",
             "script": "local.ctx.moveTo({{1}}.x,{{1}}.y);",
-            "help": "move to..."
+            "help": "move to...",
+            "sockets": [
+                {
+                    "name": "move to point",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "1dec1d26-282b-4d14-b943-6c06ebdd5ceb",
-            "label": "line to point [point]",
             "script": "local.ctx.lineTo({{1}}.x,{{1}}.y);",
-            "help": "line to..."
+            "help": "line to...",
+            "sockets": [
+                {
+                    "name": "line to point",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "e79ff085-fb9a-46cb-8e4f-f61c5563d73b",
-            "label": "quadradic curve to point [point] with control point [point]",
             "script": "local.ctx.quadraticCurveTo({{2}}.x, {{2}}.y, {{1}}.x, {{1}}.y);",
-            "help": "quad curve to ..."
+            "help": "quad curve to ...",
+            "sockets": [
+                {
+                    "name": "quadradic curve to point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with control point",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "f311980c-eb49-4e42-9e9b-a4bdf428d5b5",
-            "label": "bezier curve to point [point] with control points [point] and [point]",
             "script": "local.ctx.bezierCurveTo({{2}}.x,{{2}}.y,{{3}}.x,{{3}}.y,{{1}}.x,{{1}}.y);",
-            "help": "bezier curve to..."
+            "help": "bezier curve to...",
+            "sockets": [
+                {
+                    "name": "bezier curve to point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with control points",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "and",
+                    "type": "point",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "adf632ea-02e1-4087-8dfd-91e41ec520b1",
-            "label": "arc to point1 [point] point1 [point] with radius [number:1.0]",
             "script": "local.ctx.arcTo({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y,{{3}});",
-            "help": "I wish I understood this well enough to explain it better"
+            "help": "I wish I understood this well enough to explain it better",
+            "sockets": [
+                {
+                    "name": "arc to point1",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "point1",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "1.0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "5b46a44d-6974-4eb9-ac35-ba1ec5a79304",
-            "label": "arc with origin [point] radius [number:1] start angle [number:0] deg, end angle [number:45] deg [boolean:true]",
             "script": "local.ctx.arc({{1}}.x,{{1}}.y,{{2}},deg2rad({{3}}),deg2rad({{4}}),{{5}});",
-            "help": "arc..."
+            "help": "arc...",
+            "sockets": [
+                {
+                    "name": "arc with origin",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "radius",
+                    "type": "number",
+                    "default": "1"
+                },
+                {
+                    "name": "start angle",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "deg, end angle",
+                    "type": "number",
+                    "default": "45"
+                },
+                {
+                    "name": "deg",
+                    "type": "boolean",
+                    "default": "true"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "236e2fb4-3705-4465-9aa8-d7128e1f1c7f",
-            "label": "rect [rect]",
             "script": "local.ctx.rect({{1}},{{1}},{{1}},{{1}});",
-            "help": "rect..."
+            "help": "rect...",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "e4198722-951c-4dd9-8396-a70813478152",
-            "label": "circle at point [point] with radius [number:10]",
             "script": "local.ctx.arc({{1}}.x,{{1}}.y,{{2}},0,Math.PI*2,true);",
-            "help": "circle..."
+            "help": "circle...",
+            "sockets": [
+                {
+                    "name": "circle at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "db455432-c7dd-4cba-af80-1802e38446c2",
-            "label": "clip",
             "script": "local.ctx.clip();",
-            "help": "adds current path to the clip area"
+            "help": "adds current path to the clip area",
+            "sockets": [
+                {
+                    "name": "clip"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "5b0fd9a6-39e7-4a70-86f8-1e7dc1c7166f",
-            "label": "is point [point] in path?",
             "script": "local.ctx.isPointInPath({{1}}.x,{{1}}.y)",
             "type": "boolean",
-            "help": "test a point against the current path"
+            "help": "test a point against the current path",
+            "sockets": [
+                {
+                    "name": "is point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "in path?"
+                }
+            ]
         }
     ]
-}
-);
-/*end path.json*/
+});
+/*end path_socket.json*/
 
-/*begin point.json*/
+/*begin point_socket.json*/
 wb.menu({
     "name": "Points",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
-            "label": "point at x [number:0] y [number:0]",
             "script": "{x: {{1}}, y: {{2}} }",
             "type": "point",
-            "help": "create a new point"
+            "help": "create a new point",
+            "sockets": [
+                {
+                    "name": "point at x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "efe5e679-8336-4e5a-ade0-4bd930826096",
             "type": "point",
-            "label": "point from array [array]",
             "script": "{x: {{1}}[0], y: {{1}}[1]}",
-            "help": "convert array to point"
+            "help": "convert array to point",
+            "sockets": [
+                {
+                    "name": "point from array",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
             "type": "point",
-            "label": "random point",
             "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
-            "help": "returns a point at a random location on the stage"
+            "help": "returns a point at a random location on the stage",
+            "sockets": [
+                {
+                    "name": "random point"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "36f0eb56-9370-402d-83ef-99201a62c732",
-            "label": "point [point] x",
             "script": "{{1}}.x",
             "type": "number",
-            "help": "get the x value of a point"
+            "help": "get the x value of a point",
+            "sockets": [
+                {
+                    "name": "point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "x"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "90b42cf3-185d-4556-b7e8-d9682c187425",
-            "label": "point [point] y",
             "script": "{{1}}.y",
             "type": "number",
-            "help": "get the y value of a point"
+            "help": "get the y value of a point",
+            "sockets": [
+                {
+                    "name": "point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "y"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "743cba63-11d4-4a84-a3b6-a98480bdd731",
-            "label": "point [point] as array",
             "script": "[{{1}}.x, {{1}}.y]",
             "type": "array",
-            "help": "convert a point to an array"
+            "help": "convert a point to an array",
+            "sockets": [
+                {
+                    "name": "point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "as array"
+                }
+            ]
         }
     ]
-}
-);
-/*end point.json*/
+});
+/*end point_socket.json*/
 
-/*begin rect.json*/
+/*begin rect_socket.json*/
 wb.menu({
     "name": "Rects",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "67924ef4-71eb-4793-9599-d8605b14320a",
-            "label": "rect at x [number:0] y [number:0] with width [number:10] height [number:10]",
             "script": "{x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}} }",
-            "type": "rect"
+            "type": "rect",
+            "sockets": [
+                {
+                    "name": "rect at x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "with width",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "24b44fea-7be1-472a-a203-2a0d97515311",
-            "label": "rect at point [point] with size [size]",
             "script": "{x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h}",
-            "type": "rect"
+            "type": "rect",
+            "sockets": [
+                {
+                    "name": "rect at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with size",
+                    "type": "size",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "68c9cfd0-d06b-41ae-9eac-d762126f6bd7",
-            "label": "rect from array [array]",
             "script": "{x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] };",
-            "type": "rect"
+            "type": "rect",
+            "sockets": [
+                {
+                    "name": "rect from array",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "aed385a0-7439-4b36-ad3e-fd07c562523a",
-            "label": "rect [rect] position",
             "script": "{x: {{1}}.x, y: {{1}}.y}",
-            "type": "point"
+            "type": "point",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "position"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "453db037-c418-467b-8808-52d84c7a3273",
-            "label": "rect [rect] size",
             "script": "{w: {{1}}.w, h: {{1}}.h}",
-            "type": "size"
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "size"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "599f6375-e26e-414c-9740-fa9fcfc8ff00",
-            "label": "rect [rect] as array",
             "script": "[{{1}}.x, {{1}}.y, {{1}}.w, {{1}}.h]",
-            "type": "array"
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "as array"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "c95a1658-e1ec-4500-8766-abab8f67f865",
-            "label": "rect [rect] x",
             "script": "{{1}}.x",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "x"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7ee1fb57-7a16-4eff-9077-ade7fad60e86",
-            "label": "rect [rect] y",
             "script": "{{1}}.y",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "y"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "79df9d07-6894-45bc-bcc8-fc565e66df0c",
-            "label": "rect [rect] width",
             "script": "{{1}}.w",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8ae2a7ee-712d-4288-ac55-957a7e2b2b72",
-            "label": "rect [rect] height",
             "script": "{{1}}.h",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "height"
+                }
+            ]
         }
     ]
-}
-);
-/*end rect.json*/
+});
+/*end rect_socket.json*/
 
-/*begin sensing.json*/
+/*begin sensing_socket.json*/
 wb.menu({
     "name": "Sensing",
     "blocks": [
         {
             "blocktype": "step",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-            "label": "ask [string:What's your name?] and wait",
             "script": "local.answer## = prompt({{1}});",
             "locals": [
                 {
@@ -7644,242 +8160,467 @@ wb.menu({
                     "script": "local.answer##"
                 }
             ],
-            "help": "Prompt the user for information"
+            "help": "Prompt the user for information",
+            "sockets": [
+                {
+                    "name": "ask [string:What's your name?] and wait"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
-            "label": "mouse x",
             "type": "number",
             "script": "global.mouse_x",
-            "help": "The current horizontal mouse position"
+            "help": "The current horizontal mouse position",
+            "sockets": [
+                {
+                    "name": "mouse x"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
-            "label": "mouse y",
             "type": "number",
             "script": "global.mouse_y",
-            "help": "the current vertical mouse position"
+            "help": "the current vertical mouse position",
+            "sockets": [
+                {
+                    "name": "mouse y"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "ce1026a0-9acf-4d8f-a7c0-0759115af1ca",
-            "label": "mouse down",
             "type": "boolean",
             "script": "global.mouse_down",
-            "help": "true if the mouse is down, false otherwise"
+            "help": "true if the mouse is down, false otherwise",
+            "sockets": [
+                {
+                    "name": "mouse down"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "4321cef6-6365-4885-9a3c-1fd0db2b4eab",
-            "label": "key [choice:keys] pressed?",
             "type": "boolean",
             "script": "global.isKeyDown({{1}})",
-            "help": "is the given key down when this block is run?"
+            "help": "is the given key down when this block is run?",
+            "sockets": [
+                {
+                    "name": "key",
+                    "type": "choice",
+                    "options": "keys",
+                    "default": "choice"
+                },
+                {
+                    "name": "pressed?"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "048218dd-0b8d-4bc9-b310-480e93232665",
-            "label": "stage width",
             "type": "number",
             "script": "global.stage_width",
-            "help": "width of the stage where scripts are run. This may change if the browser window changes"
+            "help": "width of the stage where scripts are run. This may change if the browser window changes",
+            "sockets": [
+                {
+                    "name": "stage width"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
-            "label": "stage height",
             "type": "number",
             "script": "global.stage_height",
-            "help": "height of the stage where scripts are run. This may change if the browser window changes."
+            "help": "height of the stage where scripts are run. This may change if the browser window changes.",
+            "sockets": [
+                {
+                    "name": "stage height"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "f85d3bfd-b58c-458f-b4a9-68538302aa12",
-            "label": "center x",
             "type": "number",
             "script": "global.stage_center_x",
-            "help": "horizontal center of the stage"
+            "help": "horizontal center of the stage",
+            "sockets": [
+                {
+                    "name": "center x"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "083bee4f-ee36-4a35-98df-587ed586d623",
-            "label": "center y",
             "type": "number",
             "script": "global.stage_center_y",
-            "help": "vertical center of the stage"
+            "help": "vertical center of the stage",
+            "sockets": [
+                {
+                    "name": "center y"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "76184edb-ac2c-4809-899d-7b105776ba12",
-            "label": "random x",
             "type": "number",
             "script": "randint(0,global.stage_width)",
-            "help": "return a number between 0 and the stage width"
+            "help": "return a number between 0 and the stage width",
+            "sockets": [
+                {
+                    "name": "random x"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8e749092-327d-4921-a50e-c87acefe7102",
-            "label": "random y",
             "type": "number",
             "script": "randint(0, global.stage_height)",
-            "help": "return a number between 0 and the stage height"
+            "help": "return a number between 0 and the stage height",
+            "sockets": [
+                {
+                    "name": "random y"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "6b924f28-9bba-4257-a80b-2f2a591128a5",
-            "label": "reset timer",
             "script": "global.timer.reset();",
-            "help": "set the global timer back to zero"
+            "help": "set the global timer back to zero",
+            "sockets": [
+                {
+                    "name": "reset timer"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "f04b0e0a-b591-4eaf-954d-dea412cbfd61",
-            "label": "timer",
             "type": "number",
             "script": "global.timer.value()",
-            "help": "seconds since the script began running"
+            "help": "seconds since the script began running",
+            "sockets": [
+                {
+                    "name": "timer"
+                }
+            ]
         }
     ]
-}
-);
-/*end sensing.json*/
+});
+/*end sensing_socket.json*/
 
-/*begin shape.json*/
+/*begin shape_socket.json*/
 wb.menu({
     "name": "Shapes",
     "blocks": [
         {
             "blocktype": "step",
-            "label": "clear rect [rect]",
             "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
             "help": "clear...",
-            "id": "3d714bd6-8d02-49cb-8e56-ece642b295ad"
+            "id": "3d714bd6-8d02-49cb-8e56-ece642b295ad",
+            "sockets": [
+                {
+                    "name": "clear rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "fill circle at point [point] with radius [number:10]",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();",
             "help": "circle...",
-            "id": "3ae0e65c-1d1c-4976-8807-799b0408984b"
+            "id": "3ae0e65c-1d1c-4976-8807-799b0408984b",
+            "sockets": [
+                {
+                    "name": "fill circle at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "fill circle at point [point] with radius [number:10] and color [color]",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
-            "id": "e399d950-4d91-49aa-ac42-bfc58299633c"
+            "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
+            "sockets": [
+                {
+                    "name": "fill circle at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "and color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "stroke circle at point [point] with radius [number:10]",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
             "help": "circle...",
-            "id": "79133274-d53f-4ef4-8b17-9259fe25fb87"
+            "id": "79133274-d53f-4ef4-8b17-9259fe25fb87",
+            "sockets": [
+                {
+                    "name": "stroke circle at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "stroke circle at point [point] with radius [number:10] and color [color]",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.strokeStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();local.ctx.restore();",
-            "id": "8a091a21-1fa9-49b6-a622-696c38556a2e"
+            "id": "8a091a21-1fa9-49b6-a622-696c38556a2e",
+            "sockets": [
+                {
+                    "name": "stroke circle at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "and color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "stroke and fill circle at point [point] with radius [number:10]",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();",
             "help": "circle...",
-            "id": "094fa424-8b6f-4759-a9bc-f4dbf289f697"
+            "id": "094fa424-8b6f-4759-a9bc-f4dbf289f697",
+            "sockets": [
+                {
+                    "name": "stroke and fill circle at point",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
-            "label": "fill rect [rect]",
             "script": "var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);",
             "help": "fill...",
-            "id": "bf909ec4-5387-4baf-ba43-f17df493f9bd"
+            "id": "bf909ec4-5387-4baf-ba43-f17df493f9bd",
+            "sockets": [
+                {
+                    "name": "fill rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "7a342b2b-f169-4071-8771-34394cc07393",
-            "label": "fill rect [rect] with color [color]",
-            "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();"
+            "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "fill rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
-            "label": "stroke rect [rect] with color [color]",
-            "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();"
+            "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "stroke rect",
+                    "type": "rect",
+                    "default": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "b28a6aeb-bbad-4828-8ff1-2f846e556e1a",
-            "label": "stroke rect [rect]",
             "script": "var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);",
-            "help": "stroke..."
+            "help": "stroke...",
+            "sockets": [
+                {
+                    "name": "stroke rect",
+                    "type": "rect",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "ebe1b968-f117-468d-91cb-1e67c5776030",
-            "label": "fill and stroke rect x [number:0] y [number:0] width [number:10] height [number:10]",
             "script": "var local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
-            "help": "fill and stroke..."
+            "help": "fill and stroke...",
+            "sockets": [
+                {
+                    "name": "fill and stroke rect x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "width",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         }
     ]
-}
-);
-/*end shape.json*/
+});
+/*end shape_socket.json*/
 
-/*begin size.json*/
+/*begin size_socket.json*/
 wb.menu({
     "name": "Sizes",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
-            "label": "size with width [number:10] height [number:10]",
             "script": "{w: {{1}}, h: {{2}} }",
-            "type": "size"
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "size with width",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "404cb2f4-abe5-4c3b-a9da-9b44050e012d",
-            "label": "size from array [array]",
             "script": "{w: {{1}}[0], h: {{1}}[1]",
-            "type": "size"
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "size from array",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "33f2a3b7-5d87-4481-ad1c-f2970915db51",
-            "label": "size [size] width",
             "script": "{{1}}.w",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "2d449e0e-cb18-473f-a574-614320b7ba22",
-            "label": "size [size] height",
             "script": "{{1}}.h",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "height"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7ca31ad7-946a-4587-a5c8-d6b8879dc4e2",
-            "label": "size [size] as array",
             "script": "[{{1}}.w, {{1}}.h]",
-            "type": "array"
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "as array"
+                }
+            ]
         }
     ]
-}
-);
-/*end size.json*/
+});
+/*end size_socket.json*/
 
-/*begin social.json*/
+/*begin social_socket.json*/
 wb.menu({
     "name": "Twitter",
     "blocks": [
         {
             "blocktype": "eventhandler",
             "id": "467848f3-3493-439a-9228-d6f83007e886",
-            "label": "get tweet for [string]",
             "script": "local.getTweet({{1}}, function(tweet){local.tweet## = tweet;[[1]]});",
             "locals": [
                 {
@@ -7889,185 +8630,358 @@ wb.menu({
                     "type": "string"
                 }
             ],
-            "help": "asynchronous call to get the last tweet of the named account"
+            "help": "asynchronous call to get the last tweet of the named account",
+            "sockets": [
+                {
+                    "name": "get tweet for",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end social.json*/
+});
+/*end social_socket.json*/
 
-/*begin fb.json*/
+/*begin fb_socket.json*/
 wb.menu({
     "name": "Facebook",
     "blocks": [
         {
             "blocktype": "step",
             "id": "4a2fd78c-4d0e-4c96-8ec3-52a96b2d6920",
-            "label": "share [string]",
-            "script": "FB.api(\"/me/feed/\", \"post\", { message : {{1}} }, $.noop );"
+            "script": "FB.api(\"/me/feed/\", \"post\", { message : {{1}} }, $.noop );",
+            "sockets": [
+                {
+                    "name": "share",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "4f41013c-b053-439a-b284-769525f6df5d",
-            "label": "all my friends",
             "script": "fb.friends.data",
-            "type": "array"
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "all my friends"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "9f987bdb-87f4-4cf7-aea7-6d282bc0276e",
-            "label": "me",
             "script": "fb.me",
-            "type": "object"
+            "type": "object",
+            "sockets": [
+                {
+                    "name": "me"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "c290da4a-c84d-46ac-a6c8-20b367283ea1",
-            "label": "name of [any]",
             "script": "{{1}}.name",
-            "type": "string"
+            "type": "string",
+            "sockets": [
+                {
+                    "name": "name of",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "f0361c85-7ed9-4ecf-b5dc-c08da20034e1",
-            "label": "image of [any]",
             "script": "(function(){var img = new Image(); img.src=\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"; return img;})",
-            "type": "image"
+            "type": "image",
+            "sockets": [
+                {
+                    "name": "image of",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "6a4bbc09-5782-43b9-968b-4610c7664d29",
-            "label": "images url of [any]",
             "type": "string",
-            "script": "\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\""
+            "script": "\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"",
+            "sockets": [
+                {
+                    "name": "images url of",
+                    "type": "any",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "ac41fb9e-c0c6-4e41-b190-87ba3fdb258d",
-            "label": "friend with name like [string]",
             "script": "(function(){var correct = {id: \"\", name: \"\"}; $.each( fb.friends.data , function(i, user) { if( user.name.indexOf( {{1}} ) != -1 ) correct = user; } ); return correct;})()",
-            "type": "object"
+            "type": "object",
+            "sockets": [
+                {
+                    "name": "friend with name like",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "cc6fa7cf-fa7e-47fc-b97a-27f5c83d8d4b",
-            "label": "checkin at [location]",
-            "script": "FB.api( \"/search\", { \"type\" : \"place\", \"center\" : \"{{1}}.latitude,{{1}}.longitude\", \"distance\": \"1000\" }, function(r){ FB.api(\"/me/feed/\", \"post\", { place : r.data[0].id }, $.noop ); } );"
+            "script": "FB.api( \"/search\", { \"type\" : \"place\", \"center\" : \"{{1}}.latitude,{{1}}.longitude\", \"distance\": \"1000\" }, function(r){ FB.api(\"/me/feed/\", \"post\", { place : r.data[0].id }, $.noop ); } );",
+            "sockets": [
+                {
+                    "name": "checkin at",
+                    "type": "location",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end fb.json*/
+});
+/*end fb_socket.json*/
 
-/*begin text.json*/
+/*begin text_socket.json*/
 wb.menu({
     "name": "Text",
     "blocks": [
         {
             "blocktype": "step",
             "id": "d16df0dc-f90a-4e21-967d-f054956c8135",
-            "label": "font [number:10] [choice:unit] [string:sans-serif]",
             "script": "local.ctx.font = {{1}}+{{2}}+\" \"+{{3}};",
-            "help": "set the current font"
+            "help": "set the current font",
+            "sockets": [
+                {
+                    "name": "font",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "",
+                    "type": "choice",
+                    "options": "unit",
+                    "default": "choice"
+                },
+                {
+                    "name": "",
+                    "type": "string",
+                    "default": "sans-serif"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "7ea4ef80-8355-4987-8d3b-165367b97cc1",
-            "label": "text align [choice:align]",
             "script": "local.ctx.textAlign = {{1}};",
-            "help": "how should the text align?"
+            "help": "how should the text align?",
+            "sockets": [
+                {
+                    "name": "text align",
+                    "type": "choice",
+                    "options": "align",
+                    "default": "choice"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "46345cbf-e095-4b34-9d37-c9dcc22da7db",
-            "label": "text baseline [choice:baseline]",
             "script": "local.ctx.textBaseline = {{1}};",
-            "help": "set the text baseline"
+            "help": "set the text baseline",
+            "sockets": [
+                {
+                    "name": "text baseline",
+                    "type": "choice",
+                    "options": "baseline",
+                    "default": "choice"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9f3fb819-f8a9-4929-87c8-6c6742b4cb2d",
-            "label": "fill text [string] x [number:0] y [number:0]",
             "script": "local.ctx.fillText({{1}},{{2}},{{3}});",
-            "help": "basic text operation"
+            "help": "basic text operation",
+            "sockets": [
+                {
+                    "name": "fill text",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "742ee568-8a27-49d5-9dce-8b9151b30bef",
-            "label": "fill text [string] x [number:0] y [number:0] max width [number:10]",
             "script": "local.ctx.fillText({{1}},{{2}},{{3}},{{4}});",
-            "help": "basic text operation with optional max width"
+            "help": "basic text operation with optional max width",
+            "sockets": [
+                {
+                    "name": "fill text",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "max width",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "b9bfe426-3110-4b67-bc4e-5da48103e890",
-            "label": "stroke text [string] x [number:0] y [number:0]",
             "script": "local.ctx.strokeText({{1}},{{2}},{{3}});",
-            "help": "outline the text"
+            "help": "outline the text",
+            "sockets": [
+                {
+                    "name": "stroke text",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "6d03d273-8c5d-4059-b525-641ceb7ed662",
-            "label": "stroke text [string] x [number:0] y [number:0] max width [number:10]",
             "script": "local.ctx.strokeText({{1}},{{2}},{{3}},{{4}});",
-            "help": "outline the text with optional max width"
+            "help": "outline the text with optional max width",
+            "sockets": [
+                {
+                    "name": "stroke text",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "max width",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7edfa688-bdbb-491b-9011-4cb866b7dc2e",
-            "label": "text [string] width",
             "script": "local.ctx.measureText({{1}}).width",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "text",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
         }
     ]
-}
-);
-/*end text.json*/
+});
+/*end text_socket.json*/
 
-/*begin matrix.json*/
+/*begin matrix_socket.json*/
 wb.menu({
     "name": "Matrix",
     "blocks": [
         {
             "blocktype": "step",
             "id": "0f9e96f3-52d3-4ace-afdf-c598c1bd31ed",
-            "label": "transform by 6-matrix [array]",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
-            "help": "transform by an arbitrary matrix [a,b,c,d,e,f]"
+            "help": "transform by an arbitrary matrix [a,b,c,d,e,f]",
+            "sockets": [
+                {
+                    "name": "transform by 6-matrix",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
-            "label": "set transform to 6-matrix [array]",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
-            "help": "set transform to an arbitrary array [a,b,c,d,e,f]"
+            "help": "set transform to an arbitrary array [a,b,c,d,e,f]",
+            "sockets": [
+                {
+                    "name": "set transform to 6-matrix",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end matrix.json*/
+});
+/*end matrix_socket.json*/
 
 /*begin launch.js*/
 switch(wb.view){
     case 'editor':
         $('#block_menu_load').remove();
         document.body.className = 'editor';
-        wb.loadCurrentScripts(q);
+        //wb.loadCurrentScripts(q);
         break;
     case 'blocks':
         $('#block_menu_load').remove();
         document.body.className = 'blocks';
-        wb.loadCurrentScripts(q);
+        //wb.loadCurrentScripts(q);
         break;
     case 'result':
         $('#block_menu_load').remove();
         document.body.className = 'result';
-        wb.runCurrentScripts(q);
+        //wb.runCurrentScripts(q);
         break;
     default:
         $('#block_menu_load').remove();
         document.body.className = 'editor';
-        wb.loadCurrentScripts(q);
+        //wb.loadCurrentScripts(q);
         break;
 }
 

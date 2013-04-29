@@ -229,7 +229,7 @@ function edit_menu(title, specs, show){
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(wb.Block(spec).view());
+        submenu.append(wb.Block(spec));
     });
     var state = $("#block_menu").accordion( "option", "active" );
     $('#block_menu').accordion('destroy').accordion({

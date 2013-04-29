@@ -94,27 +94,27 @@ wb.Block.prototype.toJSON = function(){
     return serialized;
 };
 
-wb.Value.prototype.toJSON = function(){
-    // Implement me and make sure I round-trip back into the block model
-    var struct;
-    if (this.value && this.value.toJSON){
-        // console.info('serializing block value');
-        struct = {
-            type: this.type,
-            value: this.value.toJSON()
-        };
-    }else{
-        // console.info('serializing raw value');
-        struct = {
-            type: this.type,
-            value: this.value
-        };
-        if (this.choiceName){
-            struct.choiceName = this.choiceName;
-        }
-    }
-    return struct;
-};
+// wb.Value.prototype.toJSON = function(){
+//     // Implement me and make sure I round-trip back into the block model
+//     var struct;
+//     if (this.value && this.value.toJSON){
+//         // console.info('serializing block value');
+//         struct = {
+//             type: this.type,
+//             value: this.value.toJSON()
+//         };
+//     }else{
+//         // console.info('serializing raw value');
+//         struct = {
+//             type: this.type,
+//             value: this.value
+//         };
+//         if (this.choiceName){
+//             struct.choiceName = this.choiceName;
+//         }
+//     }
+//     return struct;
+// };
 
 
 wb.Block.reify = function(serialized){

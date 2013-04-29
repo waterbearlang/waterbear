@@ -9,6 +9,7 @@ window.choiceLists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),*/
+    boolean: ['true', 'false'],
     highlow: ['HIGH', 'LOW'],
     inoutput: ['INPUT', 'OUTPUT'],
     onoff: ['ON', 'OFF'],

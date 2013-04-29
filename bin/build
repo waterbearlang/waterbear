@@ -14,7 +14,7 @@ var styles = {
     javascript: ['lib/jquery-ui-1.8.21.custom.css', 'lib/jquery.contextMenu.css', 'stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
 }
 
-var scripts = ['queryparams', 'template', 'util', 'events', 'drag2', 'uuid', 'value', 'blocks', 'ui', 'workspace', 'serialization-1.1'];
+var scripts = ['queryparams', 'util', 'events', 'drag2', 'uuid', 'block2', 'ui', 'workspace', 'serialization-1.1'];
 
 var libs = {
     arduino: ['jquery-1.7.2.min', 'jquery.bpopup-0.5.1.min', 'jquery.autoGrowInput', 'jquery-ui-1.8.21.custom.min', 'jquery.contextMenu', 'jquery.tappable'],
@@ -39,6 +39,10 @@ function cat(src, dest){
     fs.appendFileSync(dest, '\n/*end ' + path.basename(src) + '*/\n');
 }
 
+function endswith(str, suffix){
+    return RegExp(suffix + '$').test(str);
+}
+
 function concat(src, dest, files, ext, subdir, before, after){
     before = before || '';
     after = after || '';
@@ -47,11 +51,16 @@ function concat(src, dest, files, ext, subdir, before, after){
             pathname = path.join(pathname, subdir);
         }
         var filenames = fs.readdirSync(path.join(src, pathname)).filter(function(filename){
-            return path.extname(filename) === ext;
+            return endswith(filename, ext);
         });
         if (filenames.length){
             // just using the first filename for now
-            var contents = before + fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8') + after;
+            try{
+                var contents = before + fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8') + after;
+            }catch(e){
+                console.log('Could not read %s: %s', path.join(src, pathname, filenames[0]), e.message);
+                return;
+            }
             fs.appendFileSync(dest, '\n/*begin ' + filenames[0] + '*/\n');
             fs.appendFileSync(dest, contents);
             fs.appendFileSync(dest, '\n/*end ' + filenames[0] + '*/\n');
@@ -73,7 +82,7 @@ function build(){
         // Build Waterbear support
         concat(src, dest + '.js', files, '.js');
         // Build Waterbear blocks
-        concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
+        concat(src, dest + '.js', files, '_socket.json', null, 'wb.menu(', ');');
         // Build runtime support
         if (lang === 'javascript'){
             concat(src, dest + '_runtime.js', files, '.js', 'runtime');

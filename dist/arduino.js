@@ -1999,220 +1999,6 @@ $.contextMenu.types = types;
 
 /*end queryparams.js*/
 
-/*begin template.js*/
-// jQuery-based templates
-//
-// context is current container
-// data-if="<condition>"
-// data-for="<variable> in <list>"
-// data-replace="variable" // variable.view() or variable.view or variable
-
-
-(function(){
-
-	// fn should return the node walked. If it is replaced in place, return the new node.
-	function walk(node, fn){
-		var previous = node.prev();
-		if (!previous.length){
-			previous = node.parent();
-		}
-		var oldContext = node.data('context'); // maintain contexts as a stack
-		node = fn(node);
-		if (!node.length){
-			// print('node replaced, backtracking');
-			node = previous;
-		// } if (oldContext){
-		// 	node.data('context', oldContext);
-		}
-		var child = node.children().first();
-		while(child.length){
-			child = walk(child, fn).next();
-		}
-		return node;
-	}
-
-function template(name){
-	if (!name || name === ''){
-		throw new Exception('You must pass a name to retrieve a template by name');
-	}
-	if (!template.templates[name]){
-		var tmpl = new Template({name: name});
-		template.templates[name] = function(model){return tmpl.render(model);};
-	}
-	return template.templates[name];
-}
-template.templates = {};
-
-function Template(opts){
-	if (opts.name){
-		this.tmpl = $($('#' + opts.name + '_template').text());
-	}else if(opts.html){
-		this.tmpl = $(opts.html);
-	}else if(opts.jquery){
-		this.tmpl = opts.jquery;
-	}
-}
-
-Template.prototype.render = function(model){
-	var tmpl = this.tmpl.clone();
-	// Wrap everything in a container div so all nodes are parented, helpful for replaced nodes
-	var wrapper = $('<div></div>').append(tmpl);
-//	print('model: %s', j(model));
-	tmpl.data('context', model);
-	return walk(wrapper, renderNode).children();
-}
-
-function renderNode(node){
-	// print('start render %s', h(node));
-	var hasParent = node.parent().length;
-	if (!node.data('context')){
-		var context = node.parent().data('context');
-		if (!context){
-			// print('node %s has no context', h(node));
-		}
-		node.data('context', context);
-	}
-	node = renderFor(node);
-	node = renderIf(node);
-	node = renderClasses(node);
-	node = renderTitle(node);
-	node = renderReplace(node);
-	// print('end render: %s', h(node));
-	return node;
-}
-
-function renderClasses(node){
-	var newClasses = node.data('classes');
-	if (newClasses){
-		// print('\tbefore renderClasses: %s', h(node));
-		newClasses.split(/\s/).forEach(function(key){
-			node.addClass(namedValue(node.data('context'), key));
-		});
-		node.removeAttr('data-classes');
-		// print('\tafter renderClasses: %s', h(node));
-	}
-	return node;
-}
-
-function renderTitle(node){
-	var titleKey = node.data('title');
-	if (titleKey){
-		node.attr('title', namedValue(node.data('context'), titleKey));
-		node.removeAttr('data-title');
-	}
-	return node;
-}
-
-function renderIf(node){
-	var ifKey = node.data('if');
-	if (ifKey){
-		// print('\tbefore if: %s', h(node));
-		var test = namedValue(node.data('context'), ifKey);
-		if (test){
-			node.removeAttr('data-if');
-			// print('\t\ttest %s=%s passed: %s', ifKey, test, h(node));
-			return node;
-		}else{
-			// print('\t\ttest %s=%s failed', ifKey, test);
-			node.remove();
-			return $();
-		}
-	}
-	return node;
-};
-
-
-function renderFor(node){
-	var forKey = node.data('for');
-	if (forKey){
-		// print('\tbefore for: %s', h(node));
-		var test = forKey.match(/(.+) in (.+)/);
-		var listname = test[2];
-		var eachname = test[1];
-		node.removeAttr('data-for');
-		var context = node.data('context');
-		var list = namedValue(context, listname);
-		// print('list %s: %s (from context: %o)', listname, j(list), context);
-		if (list.jquery){
-			list = list.get();
-		}
-		var lastnode = node;
-		list.forEach(function(value, idx){
-			var local_context = $.extend({}, context); // start with a shallow copy of context
-			local_context[eachname] = value;
-			var clone = node.clone();
-			clone.data('context', local_context);
-			lastnode.after(clone);
-			print ('\t\t%s should be followed by %s', c(lastnode), c(clone));
-			print ('\t\t%s *is* followed by %s', c(lastnode), c(lastnode.next()));
-			lastnode = clone;
-		});
-		var retval = node.next();
-		node.remove();
-		// print('rendered %s nodes, returning %s', list.length, c(retval));
-		return retval;
-	}
-	return node;
-};
-
-function renderReplace(node){
-	var replaceKey = node.data('replace');
-	if (replaceKey){
-		// console.log('renderReplace(%s, %s)', h(node), j(node.data('context')));
-		node.removeAttr('data-replace')
-		// console.log('\tbefore replace: %o', h(node));
-		var replacer = namedValue(node.data('context'), replaceKey);
-		node.replaceWith(replacer);
-		return replacer;
-	}
-	return node;
-};
-
-
-function first(path){
-	return path.split('.', 1);
-}
-
-function rest(path){
-	var arr = path.split('.');
-	arr.shift();
-	return arr.join('.');
-}
-
-function namedValue(context, name){
-	var retVal;
-	if(name === undefined) return '';
-	if (name.indexOf('.') > -1){
-		// recursively walk the object to get the value
-		return namedValue(namedValue(context, first(name)), rest(name));
-	}
-	else if (context[name]){
-		var v = context[name];
-		if (v.view){
-			try{
-				// console.log('calling view() on %o', v);
-				retVal = v.view();
-			}catch(e){
-				// console.log('returning view from %o', v);
-				retVal = v.view;
-			}
-		}else{
-			// console.log('%o is the value', v);
-			retVal = v;
-		}
-	}else{
-		retVal = '';
-	}
-	return retVal;
-}
-
-template.Template = Template;
-window.template = template;
-
-})();
-
-/*end template.js*/
-
 /*begin util.js*/
 (function(global){
     //
@@ -2370,7 +2156,7 @@ window.template = template;
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
-                        e.appendChild(elem(child));
+                        e.appendChild(document.createTextNode(child));
                     }
                 });
             }else{
@@ -2906,781 +2692,170 @@ function uuid(){
 
 /*end uuid.js*/
 
-/*begin value.js*/
+/*begin block2.js*/
+// Revised Block handling.
 //
-// Blocks which take parameters store those parameters as Value objects, which may hold primitive
-// values such as numbers or strings, or may be Expression blocks.
+// Nearly all the block is defined in the HTML and DOM
+// This file helps to initialize the block DOM, and provide
+// support routines
 //
-
-//
-// Value objects get defaults depending on their type. These are the defaults for
-// primitive values when the plugin does not over-ride the default.
-//
-
-(function(wb){
-var defaultValue = {
-    'number': 0,
-    'boolean': false,
-    'string': '',
-    'date': function(){ return new Date().toISOString().split('T')[0]; },
-    'time': function(){ return new Date().toISOString().split('T')[1].split('.')[0] + 'Z'; },
-    'datetime': function(){ return new Date().toISOString(); },
-    'color': 'rgb(0,0,0)'
-};
-
-function Value(textValue, index){
-    this.index = index;
-    if ($.isPlainObject(textValue)){
-        // print('initializing Value with object: %o', textValue);
-        $.extend(this, textValue);
-        if (this.choiceName){
-            this.choiceList = choiceLists[this.choiceName];
-        }
-        if (textValue.value && textValue.value.id){
-            var block = wb.Block(textValue.value);
-            if (block){
-                this.addBlock(block);
-            }else{
-                // FIXME: I thought we got rid of Deferred?
-                Deferred.add(this, 'value', null, textValue.value);
-            }
-        }else{
-            this.literal = true;
-        }
-    }else{
-        // print('initializing Value with text: %o', textValue);
-        var parts = textValue.slice(1,-1).split(':');
-        this.type = parts[0];
-        if (this.type === 'choice'){
-            this.choiceName = parts[1];
-            this.choiceList = choiceLists[this.choiceName];
-            if (parts.length === 3){
-                this.value = parts[2];
-            }else{
-                this.value = this.choiceList[0];
-            }
-        }else{
-            if (parts.length === 1){
-                this.value = defaultValue[this.type];
-                if (this.value && this.value.apply){
-                    this.value = this.value();
-                }
-            }else{
-                this.value = parts[1];
-                if (this.type.match(/number|float|double/)){
-                    this.value = parseFloat(this.value);
-                }else if (this.type.match(/int|long/)){
-                    this.value = parseInt(this.value, 10);
-                }else if (this.type.match(/boolean|bool/)){
-                    this.value = !!(this.value === 'true');
-                    this.choiceName = 'boolean';
-                    this.choiceList = [true,false];
-                }
-            }
-        }
-        if (this.value !== undefined){
-            this.defaultValue = this.value; // for when expressions are removed
-            this.literal = true;
-        }
-    }
-}
-
-Value.prototype.code = function(){
-    if (this.literal){
-        if (this.value && this.value.substring && this.type !== 'any'){ // is it a string?
-            return '"' + this.value + '"';
-        }
-        return this.value;
-    }else{
-        try{
-            return this.value.code();
-        }catch(e){
-            console.log('What happened to code? %o', this);
-            throw e;
-        }
-    }
-}
-
-Value.prototype.addBlock = function(blockModel){
-    this.literal = false;
-    this.value = blockModel;
-};
-
-Value.prototype.removeBlock = function(blockModel){
-    this.literal = true;
-    this.value = this.defaultValue;
-};
-
-function getInputType(testType){
-    if (['color', 'date', 'datetime', 'time', 'email', 'month', 'number', 'tel', 'text', 'url', 'week'].indexOf(testType) > -1){
-        return testType;
-    }
-    if (['float', 'double', 'int', 'long'].indexOf(testType) > -1){
-        return 'number';
-    }
-    return 'text';
-}
-
-Value.prototype.view = function(){
-    // console.log('building view for %o, has cached view: %s', j(this), !!this._view);
-    // console.log('we do not have a cached view');
-    if (! this.literal && this.value){ return this.value.view(); }
-    // console.log('we do not have a block value');
-    var inputType;
-    if (this.choiceName){
-        // console.log('return choice view');
-        this._view =  this.choiceView(this.choiceName, this.choiceList);
-    }else if (this.value !== undefined){
-        inputType = getInputType(this.type);
-        // console.log('return type/index/value %o/%o/%o', this.type, this.index, this.value);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index  + '"><input type="' + inputType + '" value="' + this.value + '"/></span>');
-    }else{
-        // console.log('return undefined value');
-        inputType = getInputType(this.type);
-        this._view = $('<span class="value ' + this.type + ' socket" data-type="' + this.type + '" data-index="' + this.index + '"><input type="' + inputType + '"/></span>');
-    }
-    return this._view;
-};
-
-Value.prototype.choiceView = function(){
-    var self = this;
-    return $('<span class="value string ' + this.choiceName + ' autosocket" data-type="  " + data-index="' + this.index + '"><select>' +
-        this.choiceList.map(function(item){
-            if (item === self.value){
-                return '<option selected>' + item + '</option>';
-            }else{
-                return '<option>' + item + '</option>';
-            }
-        }).join('') +
-        '</select></span>');
-};
-
-Value.prototype.update = function(newValue){
-    switch(this.type){
-        case 'number': this.value = parseFloat(newValue); break;
-        case 'boolean': this.value = newValue === 'true'; break;
-        case 'string': this.value = newValue; break;
-        case 'date': this.value = newValue; break;
-        case 'datetime': this.value = newValue; break;
-        case 'time': this.value = newValue; break;
-        case 'int': this.value = parseInteger(newValue); break;
-        case 'float': this.value = parseInteger(newValue); break;
-        default: this.value = newValue; break;
-    }
-}
-
-wb.Value = Value;
-wb.getInputType = getInputType;
-})(wb);
-
-/*end value.js*/
-
-/*begin blocks.js*/
-// Constructors and models for Blocks
+// Block(obj) -> Block element
+// scriptForId(scriptid) -> script template
+// nextSeqNum() -> int
+// registerSeqNum(int) make sure we don't re-use sequence numbers
+// Socket(json) -> Socket element
 
 (function(wb){
 
-// BLOCK SUBTYPES
+    var elem = wb.elem;
 
-function Step(spec, scope){
-    this.returns = false;
-    this.init(spec);
-}
-Step.prototype = new Block();
-Step.prototype.constructor = Step;
 
-function Expression(spec, scope){
-    this.init(spec);
-}
-Expression.prototype = new Block();
-Expression.prototype.constructor = Expression;
+    var _nextSeqNum = 0;
 
-function Context(spec, scope){
-    this.locals = [];
-    this.init(spec);
-}
-Context.prototype = new Block();
-Context.prototype.constructor = Context;
+    var newSeqNum = function(){
+        _nextSeqNum++;
+        return _nextSeqNum;
+    };
 
-function EventHandler(spec, scope){
-    this.locals = [];
-    this.init(spec);
-}
-EventHandler.prototype = new Block();
-EventHandler.prototype.constructor = EventHandler;
-
-// HERE is the main definition of Block and its methods
-
-function Block(spec, scope){
-    // If called as constructor, return empty example
-    if (this instanceof Block) return this;
-    // If called as function, demux to the correct constructor
-    switch(spec.blocktype){
-        case 'step':
-            return new Step(spec, scope);
-        case 'expression':
-            return new Expression(spec, scope);
-        case 'context':
-            return new Context(spec, scope);
-        case 'eventhandler':
-            return new EventHandler(spec, scope);
-        default:
-            console.warn('Unsupported blocktype: %o', model);
-            return null;
+    var registerSeqNum = function(seqNum){
+        // When reifying saved blocks, call this for each block to make sure we start new blocks
+        // that do not overlap with old ones.
+        if (!seqNum) return;
+        seqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
     }
-}
 
-Block._nextSeqNum = 0;
+    var blockRegistry = {};
 
-Block.newSeqNum = function(){
-    // FIXME: keep registry of sequence numbers by name?
-    Block._nextSeqNum++;
-    return Block._nextSeqNum;
-};
-
-Block.registerSeqNum = function(seqNum){
-    seqNum = parseInt(seqNum);
-    Block._seqNum = Math.max(id, Block._seqNum);
-}
-
-Block.registry = {};
-
-Block.model = function(view){
-    if (view.jquery){
-        view = view[0];
-    }
-    view = wb.closest(view, '.wrapper');
-    return Block.registry[view.dataset.id];
-}
-
-Block.registerBlock = function(model){
-    if (Block.registry[model.id]){
-        console.warn('Overwriting existing scripts for %s', model.id);
-    }
-    Block.registry[model.id] = model;
-};
-
-Block.lookup = function(id){
-    return Block.registry[id];
-}
-
-Block.prototype.init = function(spec){
-    var self = this;
-    // normalize label from a list
-    if (spec.labels){
-        spec.label = spec.labels[0];
-        delete spec.labels;
-    }
-    $.extend(true, self, spec);
-    this.spec = spec; // save unmodified description
-    if (!self.id){
-        self.id = uuid();
-    }
-    Block.registerBlock(self);
-    if (self.isTemplateBlock){
-        if (self.isLocal){
-            self.seqNum = Block.newSeqNum(); // templates only get ids if they are locals (or returns, which have their origin's id)
+    var registerBlock = function(blockdesc){
+        if (blockdesc.seqNum){
+            registerSeqNum(blockdesc.seqNum);
         }else{
-            self.seqNum = '';
+            blockdesc.seqNum = newSeqNum();
         }
-    }else{
-        self.seqNum = Block.newSeqNum();
-    }
-    if (!self.group){
-        console.log('no group? %o', self);
-    }
-    if (self.help){
-        self.tooltip = self.group + ' ' + self.seqNum + ': ' + self.help;
-    }else{
-        self.tooltip = self.group + ' ' + self.seqNum;
-    }
-    self.label = self.parseLabel(self.label.replace(/##/g, self.seqNum ? '_' + self.seqNum : ''));
-    self.template = template(self.blocktype);
-    if (!self.isTemplateBlock){
-        self.initInstance();
-    }
-};
-
-Block.prototype.initInstance = function initInstance(){
-    var self = this;
-    if (self.spec.locals){
-        self.spec.locals.forEach(function(spec){
-            if (spec === null){
-                return spec;
-            }
-            spec.isTemplateBlock = true;
-            spec.isLocal = true;
-            spec.scriptid = self.id;
-            spec.seqNum = self.seqNum;
-        });
-        self.locals = self.spec.locals.map(function(spec, idx){
-            if (spec === null){
-                return spec;
-            }
-            spec.group = self.group;
-            spec.localOrigin = self;
-            spec.localIndex = idx;
-            if (self.customLocals){
-                spec.label = self.customLocals[idx];
-            }
-            var block = Block(spec);
-            return block;
-        });
-    }
-    if (self.spec.contained && self.spec.contained.length){
-        self.contained = self.spec.contained.map(function(spec, idx){
-            if (spec === null) return spec;
-            return Block(spec);
-        });
-    }else{
-        self.contained = [];
-    }
-    if (self.spec.values && self.spec.values.length){
-        self.values = self.spec.values.map(function(value, idx){
-            if (value instanceof wb.Value){
-                return value;
-            }
-            var val = new wb.Value(value, idx);
-            return val;
-        });
-    }else if (self.values && self.values.length){
-        // do nothing
-    }else{
-        self.values = [];
-    }
-};
-
-Block.prototype.addValue = function(value){
-    if (!this.values){
-        this.values = [];
-    }
-    this.values.push(value);
-};
-
-Block.prototype.parseLabel = function(textLabel){
-    // Recognize special values in the label string and replace them with
-    // appropriate markup. Some values are dynamic and based on the objects currently
-    // in the environment
-    //
-    // values include:
-    //
-    // [number] => an empty number socket
-    // [number:default] => a number socket with a default value
-    // [boolean] => an empty boolean socket
-    // [boolean:default] => a boolean with a default value
-    // [string] => an empty string socket
-    // [string:default] => a string socket with a default value
-    // [choice:options] => a fixed set of options, listed in options parameter function
-    // [choice:options:default] => choice list with a default besides the first item
-    // etc…
-
-    // FIXME: Move specific type handling to plugins
-    var self = this;
-    try{
-        textLabel = textLabel.replace(/##/, '');
-    }catch(e){
-        console.error('Failed in textlabel.replace: %o', e);
-    }
-
-    this.valueSlots = textLabel.match(/\[.+?\]/g) || [];
-    var htmlLabel = textLabel.replace(/\[.+?\]/g, '<div class="valueslot"></div>');
-    var label = $('<span class="label">' + htmlLabel + '</label>');
-    try{
-        if (!this.values && this.valueSlots.length){
-            this.values = this.valueSlots.map(function(slot, idx){return new wb.Value(slot, idx);});
+        if (! blockdesc.id){
+            blockdesc.id = uuid();
         }
-    }catch(e){
-        console.error('Failed in this.valueSlots.map: %o', e);
+        blockRegistry[blockdesc.id] = blockdesc;
     }
-    label.find('.valueslot').each(function fillSlots(idx, slotdom){
-        var slot = $(slotdom);
-        // FIXME (1): This won't work if some of the slots have the same text (and they do) (unless it does work...)
-        var value = self.values[idx];
-        // When we're reserializing, values are still raw objects, not Value objects, so they don't have .view()
-        if (!value.view){
-            value = new wb.Value(value, idx);
-            self.values[idx] = value;
-        }slot.replaceWith(value.view());
-        // var input = $('<span class="socket value ' + value.type + '" data-type="' + value.type + '" data-index="' + idx + '"><input type="' + wb.getInputType(value) + '"  style="display:none"></input></span>');
-        // input.append(value.view());
-        // slot.replaceWith(input);
-    });
-    return label;
-};
 
-Block.prototype.code = function(){
-    // extract code from script, and recursively from  values and contained blocks
-    var self = this;
-    var _code = Block.lookup(this.scriptid).script.replace(/##/g, '_' + self.seqNum);
-    function replace_values(match, offset, s){
-        var idx = parseInt(match.slice(2, -2), 10) - 1;
-        if (match[0] === '{'){
-            return self.values[idx] ? self.values[idx].code() : match;
-        }else{
-            return self.contained[idx] ? self.contained[idx].code() : match;
+    var getHelp = function(id){
+        return blockRegistry[id] ? blockRegistry[id].help : '';
+    }
+
+    var getScript = function(id){
+        return blockRegistry[id].script;
+    }
+
+    var getSockets = function(obj){
+        return blockRegistry[obj.scriptid || obj.id].sockets.map(Socket);
+    }
+
+    var Block = function(obj){
+        // FIXME:
+        // Handle values coming from serialized (saved) blocks
+        // Handle customized names (sockets)
+        registerBlock(obj);
+        return elem(
+            'div',
+            {
+                'class': function(a){
+                    var names = ['block', a.group, a.blocktype];
+                    if (a.blocktype === 'context'){
+                        names.push('step');
+                    }else if (a.blocktype === 'eventhandler'){
+                        names.push('step');
+                        names.push('context');
+                    }
+                    return names.join(' ');
+                },
+                'data-blocktype': obj.blocktype,
+                'id': obj.id,
+                'data-scopeid': obj.scopeid || 0,
+                'data-scriptid': obj.scriptid,
+                'title': obj.help || getHelp(obj.scriptid)
+            },
+            [
+                ['div', {'class': 'label'}, getSockets(obj)], // how to get values for restored classes?
+                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
+            ]
+        );
+    }
+
+    var Socket = function(obj){
+        // Sockets are described by text, type, and default value
+        // type and default value are optional, but if you have one you must have the other
+        // If the type is choice it must also have a choicename for the list of values
+        // that can be found in the wb.choiceLists
+        var socket = elem('div', {
+            'class': 'socket',
+            'data-name': obj.name
+        },
+        [
+            ['label', {'class': 'name'}, [obj.name]]
+        ]);
+        if (obj.type){
+            socket.dataset.type = obj.type;
+            socket.appendChild(elem('div', {'class': 'contained'}, [Default(obj)]))
         }
     }
-    _code = _code.replace(/\{\{\d\}\}/g, replace_values);
-    _code = _code.replace(/\[\[\d\]\]/g, replace_values);
-    return _code;
-}
 
-Block.prototype.cloneScript = function(){
-    // Copy a template model (in the menu) to a script model (in the script workspace)
-    var spec = $.extend({}, this.spec, {
-       isLocal: false,
-       isTemplateBlock: false,
-       templateBlock: this,
-       id: uuid(),
-       scriptid: this.id
-    });
-    var clone = Block(spec);
-    return clone;
-};
-
-Block.prototype.clone = function(deep){
-    // Clone a script block. If deep is true, clone values and contained blocks
-    var spec = this.toJSON();
-    if (!deep){
-        spec.contained = [];
-        spec.values = this.values.map(function(v){return {
-            type: this.type,
-            value:  v.literal ? v.value : v.defaultValue
-        }});
-    }
-    return Block(spec);
-}
-
-function attachLocals(node){
-    node.attachLocals = true; // this should probably be data, c'est la vie
-    return node;
-}
-
-Block.prototype.view = function(){
-    if (this._view){
-        if (!this._view[0].dataset.id){
-            console.log('belatedly setting model %o on view %o', this, this._view);
-            this._view[0].dataset.id = this.id;
+    var Default = function(obj){
+        // return an input for input types (number, string, color, date)
+        // return a block for block types
+        var value;
+        var type = obj.type;
+        if (type === 'int' || type === 'float'){
+            type = 'number';
         }
-        return this._view;
-    }
-    var self = this;
-    var view = this._view = this.template(this);
-    view[0].dataset.id = this.id;
-    if (this.isTemplateBlock){
-        return view;
-    }
-    if (this.locals){
-        var localContainer = view.find('.locals');
-        this.locals.forEach(function(local){
-            localContainer.append(local.view());
-        });
-    }
-    this.contained.forEach(function(contained, idx){
-        wb.findChild(view, '.block', '.contained').appendChild(contained.view()[0]);
-        contained.addLocalsToParentContext();
-    });
-    // this.values.forEach(function(value, idx){
-    //     view.find('> .block > .blockhead > .label > .socket').eq(idx).append(value.view());
-    // });
-    if (this.id){
-        view.attr('data-id', this.id);
-    }
-    if (this.collapsed){
-        view.toggleClass('open closed');
-        view.find('.disclosure').text('►');
-        view.find('.locals').hide();
-        view.find('.contained').hide();
-    }
-    return view;
-};
-
-Block.prototype.changeLabel = function(labelText){
-    this._view.find('> .block > .blockhead > .label').text(labelText);
-    this.spec.label = labelText;
-    if (this.returnOrigin){
-        // console.log('setting returnOrigin returns label: %o', this.returnOrigin);
-        this.returnOrigin.spec.returns.label = labelText;
-        this.returnOrigin.customReturns = labelText;
-    }
-    if (this.localOrigin){
-        var locals = this.localOrigin.spec.locals;
-        locals[this.localIndex].label = labelText;
-        if (!this.localOrigin.customLocals){
-            this.localOrigin.customLocals = locals.map(function(loc){
-                return loc.label;
-            });
+        switch(type){
+            case 'number':
+                value = obj.value || 0; break;
+            case 'string':
+                value = obj.value || ''; break;
+            case 'color':
+                value = obj.value || '#000000'; break;
+            case 'date':
+                value = obj.value || new Date().toISOString().split('T')[0]; break;
+            case 'time':
+                value = obj.value || new Date().toISOString().split('T')[1]; break;
+            case 'datetime':
+                value = obj.value || new Date().toISOString(); break;
+            case 'url':
+                value = obj.value || 'http://waterbearlang.com'; break;
+            case 'phone':
+                value = obj.value || '604-555-1212'; break;
+            case 'email':
+                value = obj.value || 'waterbear@waterbearlang.com'; break;
+            case 'boolean':
+                obj.options = 'boolean';
+            case 'choice':
+                var choice = elem('select');
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    if (obj.default && obj.default === opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    choice.appendChild(option);
+                });
+                return choice;
+            default:
+                if (obj.default){
+                    return Block(obj.default);
+                }else{
+                    return null;
+                }
         }
-        this.localOrigin.customLocals[this.localIndex] = labelText;
+        return elem('input', {type: type, value: value});
     }
-};
-
-// EVENT HANDLERS
-
-Block.prototype.removeChild = function(block, container){
-    // remove this block from container
-};
-
-Block.prototype.addLocalBlock = function(block){
-    var locals = this.view().find('> .block > .blockhead > .locals');
-    if (!locals.length) {
-        throw new Error('no locals found');
-    }
-    if (this.locals === undefined){
-        this.locals = [];
-    }
-    locals.append(block.view());
-}
-
-Block.prototype.addLocalsToParentContext = function(){
-    // on addToScript
-    // console.log('addLocalsToParentContext %o', this);
-    if (!(this.locals && this.locals.length)) return;
-    if (!this.id){
-        throw new Error('Model must have an id by now');
-    }
-    var view = this.view();
-    var context = wb.closest(view, '.context');
-    var model = Block.model(context);
-    if (model){
-        this.locals.forEach(function(local){
-            model.addLocalBlock(local);
-        });
-    }
-};
-
-Block.prototype.removeLocalsFromParent = function(){
-    if (!(this.locals && this.locals.length)) return;
-    this.locals.forEach(function(local){
-        local.view().remove();
-    });
-};
-
-Block.prototype.addStep = function(step, stepIndex){
-    // console.log('before addStep: %s', this.contained.length);
-    // console.log('step index: %s', stepIndex);
-    this.contained.splice(stepIndex, 0, step);
-    // console.log('after addStep: %s', this.contained.length);
-    step.addLocalsToParentContext();
-};
-Block.prototype.addToWorkspace = function(){
-    this.addLocalsToParentScope();
-};
-Block.prototype.setValue = function(index, type, newValue){
-    this.values[index].update(newValue);
-}
-
-Block.prototype.addExpression = function(expression, expressionIndex){
-    // add block to value
-    this.values[expressionIndex].addBlock(expression);
-    // FIXME: update view (currently happens elsewhere)
-};
-
-Block.prototype.deleteBlock = function(view, evt, params){
-    var model = Block.model(view);
-    model.view().remove();
-};
-
-function newBlockHandler(blocktype, args, body, returns){
-    console.info('blocktype: %s', blocktype);
-    console.info('%s args: %o', args.length, args);
-    console.info('body: %o', body);
-    console.info('returns: %s', returns);
-}
-
-Block.initializeSocketUpdates = function(){
-    $('.scripts_workspace')
-        // .on('add_to_workspace', '.wrapper', function(evt, params){
-        //     var view = $(this);
-        //     Block.model(view).addToWorkspace(view, evt, params);
-        //     return false;
-        // })
-        .on('change', '.socket input, .autosocket select', function(evt){
-            var input = $(evt.target);
-            var socket = input.parent();
-            var socketIndex = socket.data('index');
-            var parentModel = Block.model(socket.closest('.wrapper'));
-            parentModel.setValue(socketIndex, input.attr('type') || 'text', input.val());
-            $('.scripts_workspace').trigger('scriptmodified');
-        });
-};
-
-Block.prototype.removeExpression = function(expression, expressionIndex){
-    // console.log('remove expression');
-    var value = this.values[expressionIndex];
-    value.value = value.defaultValue;
-    value.literal = true;
-};
-
-Block.prototype.removeContainedStep = function(step){
-    // console.log('remove child step');
-    step.removeLocalsFromParent();
-    this.contained.splice(this.contained.indexOf(step), 1);
-};
 
 
-$('body').on('delete_block', '.wrapper', function(evt, params){
-    var view = $(this);
-    Block.model(view).deleteBlock(view, evt, params);
-    return false;
-});
-
-
-function removeFromScriptEvent(view){
-    var parent = view.parentElement;
-    var model = Block.model(view);
-    if (wb.matches(parent, '.scripts_workspace')){
-        model.removeLocalsFromParent();
-    }else{
-        var parentView = wb.closest(parent, '.wrapper');
-        var parentModel = Block.model(parentView);
-        model.removeLocalsFromParent();
-        if (parent.classList.contains('contained')){
-            parentModel.removeContainedStep( model );
-        }else if (parent.hasClass('socket')){
-            var exprIndex = parent.dataset.index;
-            parentModel.removeExpression(model, exprIndex);
-            if(parent.classList.contains('boolean')){
-                parent.appendChild(wb.elem('select', null, [['option', null, 'true'], ['option', null, 'false']]));
-            }else{
-                parent.children('input').show();
-            }
-            // Why is val an actual value rather than a method?
-            parent.children('input').val(parentModel.values[exprIndex].defaultValue);
-        }
-    }
-    $('.scripts_workspace').trigger('scriptmodified');
-
-}
-
-function addToScriptEvent(droptarget, view){
-    // Converts from DOM/jQuery action to model action
-    // console.log('addToScriptEvent %o, %o', container, view);
-    // FIXME: We need to add the view to the right model's view
-    // These are the cases that need to be handled:
-    // 1. Drop a block into another block as the first contained block
-    // 2. Drop a block on the script, not contained (global)
-    // 3. Drop a block in another block, following another step
-    // 4. Drop an expression block into a socket
-    var container;
-    var model = Block.model(view);
-    if (!model){
-        console.log('unable to retrieve model for view %o', view);
-        throw new Error('unable to retrieve model');
-    }
-    if (wb.matches(droptarget, '.socket')){
-        container = droptarget.parentElement;
-    }else if (wb.matches(droptarget, '.contained')){
-        container = droptarget.parentElement;
-    }
-    if (wb.matches(droptarget, '.scripts_workspace')){
-        model.addLocalsToParentContext();
-    }else if (wb.matches(droptarget, '.contained')){
-        var parentModel = Block.model(wb.closest(droptarget, '.context'));
-    }else{
-        var parentModel = Block.model(wb.closest(droptarget, '.wrapper'));
-    }
-    if (parentModel){
-        if (wb.matches(view, '.value')){
-            console.log('adding %o to %o at index %s', model, parentModel, wb.indexOf(droptarget));
-            parentModel.addExpression(model, wb.indexOf(droptarget)); // FIXME, this is not the way to get the index
-        }else{
-            parentModel.addStep(model, wb.indexOf(view));
-        }
-    }else{
-        // console.log('no parent model found for %o', droptarget);
-    }
-    // FIXME: Move adding view to parent's view from drag2.js to here
-    $('.scripts_workspace').trigger('scriptmodified');
-}
-
-$('.content').on('dblclick', '.locals .label', function(evt){
-    var label = $(evt.target);
-    var model = Block.model(label.closest('.wrapper'));
-    // Rather than use jquery to find instances, should origin model keep track of all instances?
-    // How would that survive serialization/reification?
-    var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
-    var input = $('<input class="label_input" value="' + label.text() + '" />');
-    label.after(input).hide();
-    input.select();
-    // FIND ALL INSTANCES
-    return false;
-});
-
-$('.content').on('keypress', '.locals .label_input', function(evt){
-    if (evt.which === 13){
-        var labelInput = $(evt.target);
-        var labelText = labelInput.val();
-        var model = Block.model(labelInput.closest('.wrapper'));
-        labelInput.prev().show();
-        labelInput.remove();
-        if (labelText.length){
-            var instances = $('.content .value.wrapper[data-id=' + model.id + ']');
-            instances.each(function(){
-                Block.model(this).changeLabel(labelText);
-            });
-            model.changeLabel(labelText);
-        }
-        return false;
-    }
-});
-
-$(document.body).on('scriptloaded', function(evt){
-    $('.scripts_workspace').on('scriptmodified', function(evt){
-        if (wb.queryParams.gist){
-            delete wb.queryParams.gist;
-            var prev = location.href;
-            history.pushState(null, null, wb.queryParamsToUrl(wb.queryParams));
-            window.addEventListener('popstate', function(e){
-                location.reload(prev);
-            });
-        }
-    });
-});
-
-//
-// Handler for the hide/show triangle on context and eventhandler blocks
-//
-Block.initializeDisclosures = function(){
-    $('.scripts_workspace').on('click', '.disclosure', function(event){
-        var self = $(event.target);
-        var view = self.closest('.wrapper');
-        var model = Block.model(view);
-        if (self.is('.open')){
-            self.text('►');
-            view.find('.locals').hide();
-            if (!view.hasClass('scripts_workspace')){
-                view.find('.contained').hide();
-            }
-            model.collapsed = true;
-        }else{
-            self.text('▼');
-            view.find('.locals').show();
-            if (!view.hasClass('scripts_workspace')){
-                view.find('.contained').show();
-            }
-            model.collapsed = false;
-        }
-        self.toggleClass('open closed');
-    });
-};
-
-// Export public interface to waterbear namespace
-
-wb.Block = Block;
-wb.Step = Step;
-wb.Context = Context;
-wb.EventHandler = EventHandler;
-wb.Expression = Expression;
-
-// and event notifications
-wb.removeFromScriptEvent = removeFromScriptEvent;
-wb.addToScriptEvent = addToScriptEvent;
+    wb.Block = Block;
+    wb.registerSeqNum = registerSeqNum;
 
 })(wb);
 
 
-/*end blocks.js*/
+/*end block2.js*/
 
 /*begin ui.js*/
 (function($){
@@ -3914,7 +3089,7 @@ function edit_menu(title, specs, show){
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(wb.Block(spec).view());
+        submenu.append(wb.Block(spec));
     });
     var state = $("#block_menu").accordion( "option", "active" );
     $('#block_menu').accordion('destroy').accordion({
@@ -4248,27 +3423,27 @@ wb.Block.prototype.toJSON = function(){
     return serialized;
 };
 
-wb.Value.prototype.toJSON = function(){
-    // Implement me and make sure I round-trip back into the block model
-    var struct;
-    if (this.value && this.value.toJSON){
-        // console.info('serializing block value');
-        struct = {
-            type: this.type,
-            value: this.value.toJSON()
-        };
-    }else{
-        // console.info('serializing raw value');
-        struct = {
-            type: this.type,
-            value: this.value
-        };
-        if (this.choiceName){
-            struct.choiceName = this.choiceName;
-        }
-    }
-    return struct;
-};
+// wb.Value.prototype.toJSON = function(){
+//     // Implement me and make sure I round-trip back into the block model
+//     var struct;
+//     if (this.value && this.value.toJSON){
+//         // console.info('serializing block value');
+//         struct = {
+//             type: this.type,
+//             value: this.value.toJSON()
+//         };
+//     }else{
+//         // console.info('serializing raw value');
+//         struct = {
+//             type: this.type,
+//             value: this.value
+//         };
+//         if (this.choiceName){
+//             struct.choiceName = this.choiceName;
+//         }
+//     }
+//     return struct;
+// };
 
 
 wb.Block.reify = function(serialized){
@@ -4290,6 +3465,7 @@ window.choiceLists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),*/
+    boolean: ['true', 'false'],
     highlow: ['HIGH', 'LOW'],
     inoutput: ['INPUT', 'OUTPUT'],
     onoff: ['ON', 'OFF'],
@@ -4360,119 +3536,198 @@ setDefaultScript(defaultscript);
 
 /*end arduino.js*/
 
-/*begin boolean.json*/
+/*begin boolean_socket.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "03d1df81-c7de-40a0-a88f-95b732d19936",
-            "label": "[boolean] and [boolean]",
             "type": "boolean",
             "script": "({{1}} && {{2}})",
-            "help": "Check if both are true"
+            "help": "Check if both are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "default": null
+                },
+                {
+                    "name": "and",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "482db566-b14b-4381-8135-1e29f8c4e7c3",
-            "label": "[boolean] or [boolean]",
             "type": "boolean",
             "script": "({{1}} || {{2}})",
-            "help": "Check if one is true"
+            "help": "Check if one is true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "default": null
+                },
+                {
+                    "name": "or",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "866a1181-e0ff-4ebc-88dd-55e2b70d7c52",
-            "label": "not [boolean]",
             "type": "boolean",
             "script": "(! {{1}})",
-            "help": "Not true is false and Not false is true"
+            "help": "Not true is false and Not false is true",
+            "sockets": [
+                {
+                    "name": "not",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end boolean.json*/
+});
+/*end boolean_socket.json*/
 
-/*begin control.json*/
+/*begin control_socket.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
         {
             "blocktype": "eventhandler",
             "id": "25339ea4-1bc2-4c66-bde8-c455b9a3d1cd",
-            "label": "Setup - When program starts",
             "script": "void setup()\n{\n[[1]]\n}\n",
-            "help": "Start scripts when program starts"
+            "help": "Start scripts when program starts",
+            "sockets": [
+                {
+                    "name": "Setup - When program starts"
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "fb958a3d-0372-4ab7-95c1-70dd9c454d19",
-            "label": "Main loop",
             "script": "void loop()\n{\n[[1]]\n}\n",
-            "help": "Trigger for main loop"
+            "help": "Trigger for main loop",
+            "sockets": [
+                {
+                    "name": "Main loop"
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "1e4b61cf-c4ce-4b08-9944-7ea1ebf54775",
-            "label": "Global Settings",
             "script": "/*Global Settings*/\n\n[[1]]\n\n",
-            "help": "Trigger for blocks in global setup"
+            "help": "Trigger for blocks in global setup",
+            "sockets": [
+                {
+                    "name": "Global Settings"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "b54a3daa-3dfa-4885-afc4-9592944296df",
-            "label": "broadcast [string:ack] message",
             "script": "{{1}}();",
-            "help": "Send a message to all listeners"
+            "help": "Send a message to all listeners",
+            "sockets": [
+                {
+                    "name": "broadcast",
+                    "type": "string",
+                    "default": "ack"
+                },
+                {
+                    "name": "message"
+                }
+            ]
         },
         {
             "blocktype": "eventhandler",
             "id": "64fd2a90-a689-4ffd-bd66-bc8c61775cd4",
-            "label": "when I receive [string:ack] message",
             "script": "function {{1}}(){\n[[next]]\n}",
-            "help": "Trigger for blocks to run when message is received"
+            "help": "Trigger for blocks to run when message is received",
+            "sockets": [
+                {
+                    "name": "when I receive",
+                    "type": "string",
+                    "default": "ack"
+                },
+                {
+                    "name": "message"
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "c79f205e-eab3-4ebd-9c72-2e6a54209593",
-            "label": "forever if [boolean:false]",
             "script": "while({{1}}){\n[[1]]\n}",
-            "help": "loop until condition fails"
+            "help": "loop until condition fails",
+            "sockets": [
+                {
+                    "name": "forever if",
+                    "type": "boolean",
+                    "default": "false"
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "0a313a7a-1187-4619-9819-fbfd7a32f6a6",
-            "label": "if [boolean]",
             "script": "if({{1}}){\n[[1]]\n}",
-            "help": "only run blocks if condition is true"
+            "help": "only run blocks if condition is true",
+            "sockets": [
+                {
+                    "name": "if",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "dc724c8c-27b3-4c93-9420-050dd2466c43",
-            "label": "if not [boolean]",
             "script": "if(! {{1}} ){\n[[1]]\n}",
-            "help": "run blocks if condition is not true"
+            "help": "run blocks if condition is not true",
+            "sockets": [
+                {
+                    "name": "if not",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "context",
             "id": "a11f426a-9a48-4e0f-83f5-cff4ec5b4154",
-            "label": "repeat until [boolean]",
             "script": "while(!({{1}})){\n[[1]]\n}",
-            "help": "loop until condition is true"
+            "help": "loop until condition is true",
+            "sockets": [
+                {
+                    "name": "repeat until",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         }
     ]
-}
-);
-/*end control.json*/
+});
+/*end control_socket.json*/
 
-/*begin digitalio.json*/
+/*begin digitalio_socket.json*/
 wb.menu({
     "name": "Digital I/O",
     "blocks": [
         {
             "blocktype": "step",
             "id": "451eda35-be10-498f-a714-4a32f3bcbe53",
-            "label": "Create digital_output## on Pin [choice:digitalpins]",
             "script": "digital_output## = \"{{1}}\"; pinMode(digital_output##, OUTPUT);",
             "help": "Create a named pin set to output",
             "locals": [
@@ -4482,19 +3737,37 @@ wb.menu({
                     "script": "digital_output##",
                     "type": "string"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "Create digital_output## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "default": "choice"
+                }
             ]
         },
         {
             "blocktype": "step",
             "id": "d0a3d825-0d2d-4339-838f-b30d06441c23",
-            "label": "Digital Pin [string] ON if [boolean]",
             "script": "if({{2}} == HIGH)\n{\ndigitalWrite({{1}}, HIGH);\n}\nelse\n{\ndigitalWrite({{1}}, LOW);\n}\n",
-            "help": "Write a boolean value to given pin"
+            "help": "Write a boolean value to given pin",
+            "sockets": [
+                {
+                    "name": "Digital Pin",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "ON if",
+                    "type": "boolean",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "ef757ca5-053d-4cfd-8ed4-9345cefef569",
-            "label": "Create digital_input## on Pin [choice:digitalpins]",
             "script": "digital_input## = \"{{1}}\"; pinMode(digital_input##, INPUT);",
             "help": "Create a named pin set to input",
             "locals": [
@@ -4504,20 +3777,33 @@ wb.menu({
                     "script": "digital_input##",
                     "type": "string"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "Create digital_input## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "default": "choice"
+                }
             ]
         },
         {
             "blocktype": "expression",
             "id": "010020b8-4e76-4e56-9cd5-65541bf2dbc9",
-            "label": "Digital Pin [string]",
             "type": "boolean",
             "script": "(digitalRead({{1}}) == HIGH)",
-            "help": "Is the digital input pin ON"
+            "help": "Is the digital input pin ON",
+            "sockets": [
+                {
+                    "name": "Digital Pin",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "220caace-bd77-4e82-9f5d-0457a5bbfe9f",
-            "label": "Create analog_input## on Pin [choice:analoginpins]",
             "script": "analog_input## = \"{{1}}\"; pinMode(analog_input##, INPUT);",
             "help": "Create a named pin set to input",
             "locals": [
@@ -4527,20 +3813,33 @@ wb.menu({
                     "script": "analog_input##",
                     "type": "string"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "Create analog_input## on Pin",
+                    "type": "choice",
+                    "options": "analoginpins",
+                    "default": "choice"
+                }
             ]
         },
         {
             "blocktype": "expression",
             "id": "5b76796a-7fa9-4d56-b532-5194bf5db20f",
-            "label": "Analog Pin [string]",
             "type": "int",
             "script": "(analogRead({{1}}))",
-            "help": "Value of analog pin"
+            "help": "Value of analog pin",
+            "sockets": [
+                {
+                    "name": "Analog Pin",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "4fa77d69-30fb-4734-8697-5ed56ba67433",
-            "label": "Create analog_output## on Pin [choice:pwmpins]",
             "script": "analog_output## = \"{{1}}\"; pinMode(analog_output##, OUTPUT);",
             "help": "Create a named pin set to output",
             "locals": [
@@ -4550,383 +3849,751 @@ wb.menu({
                     "script": "analog_output##",
                     "type": "string"
                 }
+            ],
+            "sockets": [
+                {
+                    "name": "Create analog_output## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "default": "choice"
+                }
             ]
         },
         {
             "blocktype": "step",
             "id": "4b29af90-96e0-4de9-a7d8-2c88a35e1f49",
-            "label": "Analog [string] outputs [int:255]",
             "script": "analogWrite({{1}}, {{2}});",
-            "help": "Set value of a pwm pin"
+            "help": "Set value of a pwm pin",
+            "sockets": [
+                {
+                    "name": "Analog",
+                    "type": "string",
+                    "default": null
+                },
+                {
+                    "name": "outputs",
+                    "type": "int",
+                    "default": "255"
+                }
+            ]
         }
     ]
-}
-);
-/*end digitalio.json*/
+});
+/*end digitalio_socket.json*/
 
-/*begin math.json*/
+/*begin math_socket.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "cbb65aa7-b36c-4311-a479-f1776579dcd3",
-            "label": "[number:0] + [number:0]",
             "type": "number",
             "script": "({{1}} + {{2}})",
-            "help": "Add two numbers"
+            "help": "Add two numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "+",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "594700d5-64c6-4b21-bc70-f3fbf6913a69",
-            "label": "[number:0] - [number:0]",
             "type": "number",
             "script": "({{1}} - {{2}})",
-            "help": "Subtract two numbers"
+            "help": "Subtract two numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "-",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "afec758c-7ccc-4ee5-8d2c-f95160da83d4",
-            "label": "[number:0] * [number:0]",
             "type": "number",
             "script": "({{1}} * {{2}})",
-            "help": "Multiply two numbers"
+            "help": "Multiply two numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "*",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "5cec08b8-eb58-4ef0-a73e-f5245d6859a2",
-            "label": "[number:0] / [number:0]",
             "type": "number",
             "script": "({{1}} / {{2}})",
-            "help": "Divide two numbers"
+            "help": "Divide two numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "/",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "90a5d524-fa8a-4a52-a4df-0beb83d32c40",
-            "label": "pick random [number:1] to [number:10]",
             "type": "number",
             "script": "(random({{1}}, {{2}}))",
-            "help": "Generate a random number between two other numbers"
+            "help": "Generate a random number between two other numbers",
+            "sockets": [
+                {
+                    "name": "pick random",
+                    "type": "number",
+                    "default": "1"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "d35330ee-5b49-492b-b7dd-41c3fd1496d0",
-            "label": "set seed for random numbers to [number:1]",
             "script": "(randomSeed({{1}}))",
-            "help": ""
+            "help": "",
+            "sockets": [
+                {
+                    "name": "set seed for random numbers to",
+                    "type": "number",
+                    "default": "1"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7f047e8a-3a87-49f8-b9c7-daad742faa9d",
-            "label": "[number:0] < [number:0]",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
-            "help": "Check if one number is less than another"
+            "help": "Check if one number is less than another",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "<",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "faddd68c-6c75-4908-9ee6-bccc246f9d89",
-            "label": "[number:0] = [number:0]",
             "type": "boolean",
             "script": "({{1}} == {{2}})",
-            "help": "Check if one number is equal to another"
+            "help": "Check if one number is equal to another",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "=",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e4d81ccd-f9dc-4a0b-b41f-a5cd146a8c27",
-            "label": "[number:0] > [number:0]",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
-            "help": "Check if one number is greater than another"
+            "help": "Check if one number is greater than another",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": ">",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "8353c1f3-a1da-4d80-9bf9-0c9584c3896b",
-            "label": "[number:0] mod [number:0]",
             "type": "number",
             "script": "({{1}} % {{2}})",
-            "help": "Gives the remainder from the division of these two number"
+            "help": "Gives the remainder from the division of these two number",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "mod",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "1fde8b93-1306-4908-97c8-d628dd91eb4f",
-            "label": "round [number:0]",
             "type": "int",
             "script": "(int({{1}}))",
-            "help": "Gives the whole number, without the decimal part"
+            "help": "Gives the whole number, without the decimal part",
+            "sockets": [
+                {
+                    "name": "round",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "b7634de4-69ed-492c-bc9a-16ac3bb5ca45",
-            "label": "absolute of [number:10]",
             "type": "number",
             "script": "(abs({{1}}))",
-            "help": "Gives the positive of the number"
+            "help": "Gives the positive of the number",
+            "sockets": [
+                {
+                    "name": "absolute of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "20268318-b168-4519-a32a-10b94c264226",
-            "label": "cosine of [number:10] degrees",
             "type": "float",
             "script": "(cos((180 / {{1}})/ 3.14159))",
-            "help": "Gives the cosine of the angle"
+            "help": "Gives the cosine of the angle",
+            "sockets": [
+                {
+                    "name": "cosine of",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "86c2f303-861f-4ad7-a7de-3108637ce264",
-            "label": "sine of [number:10] degrees",
             "type": "float",
             "script": "(sin((180 / {{1}})/ 3.14159))",
-            "help": "Gives the sine of the angle"
+            "help": "Gives the sine of the angle",
+            "sockets": [
+                {
+                    "name": "sine of",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "0e018648-0b45-4096-9052-e3080a47793a",
-            "label": "tangent of [number:10] degrees",
             "type": "float",
             "script": "(tan((180 / {{1}})/ 3.14159))",
-            "help": "Gives the tangent of the angle given"
+            "help": "Gives the tangent of the angle given",
+            "sockets": [
+                {
+                    "name": "tangent of",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "814444c5-f3f4-4412-975c-7284409f1f3d",
-            "label": "[number:10] to the power of [number:2]",
             "type": "number",
             "script": "(pow({{1}}, {{2}}))",
-            "help": "Gives the first number multiplied by itself the second number of times"
+            "help": "Gives the first number multiplied by itself the second number of times",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "to the power of",
+                    "type": "number",
+                    "default": "2"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "1f4df24e-22ea-460e-87c5-4b0f92e233ce",
-            "label": "square root of [number:10]",
             "type": "float",
             "script": "(sqrt({{1}}))",
-            "help": "Gives the two numbers that if multiplied will be equal to the number input"
+            "help": "Gives the two numbers that if multiplied will be equal to the number input",
+            "sockets": [
+                {
+                    "name": "square root of",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "18a0560d-beff-43da-8708-55398cc08d30",
-            "label": "[number:10] as string",
             "type": "string",
             "script": "{{1}}",
-            "help": "Allows you to use a numeric result as a string"
+            "help": "Allows you to use a numeric result as a string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "as string"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e37dae6d-608f-43e9-9cd9-57ff03aba29d",
-            "label": "Map [number] from Analog in to Analog out",
             "type": "number",
             "script": "map({{1}}, 0, 1023, 0, 255)",
-            "help": ""
+            "help": "",
+            "sockets": [
+                {
+                    "name": "Map",
+                    "type": "number",
+                    "default": null
+                },
+                {
+                    "name": "from Analog in to Analog out"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "007bccc5-36b2-4ff8-a0bc-f80def66ff49",
-            "label": "Map [number] from [number:0]-[number:1023] to [number:0]-[number:255]",
             "type": "number",
             "script": "map({{1}}, 0, 1023, 0, 255)",
-            "help": ""
+            "help": "",
+            "sockets": [
+                {
+                    "name": "Map",
+                    "type": "number",
+                    "default": null
+                },
+                {
+                    "name": "from",
+                    "type": "number",
+                    "default": "0]-[number"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "default": "0]-[number"
+                }
+            ]
         }
     ]
-}
-);
-/*end math.json*/
+});
+/*end math_socket.json*/
 
-/*begin serialio.json*/
+/*begin serialio_socket.json*/
 wb.menu({
     "name": "Serial I/O",
     "blocks": [
         {
             "blocktype": "step",
             "id": "11c7b422-0549-403e-9f2e-e1db13964f1b",
-            "label": "Setup serial communication at [choice:baud]",
             "script": "Serial.begin({{1}});",
-            "help": "Eanble serial communications at a chosen speed"
+            "help": "Eanble serial communications at a chosen speed",
+            "sockets": [
+                {
+                    "name": "Setup serial communication at",
+                    "type": "choice",
+                    "options": "baud",
+                    "default": "choice"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9ffc70c4-b0da-4d2c-a38a-f1ec2ec743ac",
-            "label": "Send [any:Message] as a line",
             "script": "Serial.println({{1}});",
-            "help": "Send a message over the serial connection followed by a line return"
+            "help": "Send a message over the serial connection followed by a line return",
+            "sockets": [
+                {
+                    "name": "Send",
+                    "type": "any",
+                    "default": "Message"
+                },
+                {
+                    "name": "as a line"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "40fb939a-a393-4d26-8902-93ee78bd01b0",
-            "label": "Send [any:Message]",
             "script": "Serial.print({{1}});",
-            "help": "Send a message over the serial connection"
+            "help": "Send a message over the serial connection",
+            "sockets": [
+                {
+                    "name": "Send",
+                    "type": "any",
+                    "default": "Message"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a1630959-fc16-4ba8-af98-4724edc636b4",
-            "label": "Message Value",
             "type": "string",
             "script": "Serial.read()",
-            "help": "Read a message from the serial connection"
+            "help": "Read a message from the serial connection",
+            "sockets": [
+                {
+                    "name": "Message Value"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "43618563-c8a3-4330-bfef-89469a797a90",
-            "label": "End serial communication",
             "script": "Serial.end();",
-            "help": "Disable serial communications"
+            "help": "Disable serial communications",
+            "sockets": [
+                {
+                    "name": "End serial communication"
+                }
+            ]
         }
     ]
-}
-);
-/*end serialio.json*/
+});
+/*end serialio_socket.json*/
 
-/*begin timing.json*/
+/*begin timing_socket.json*/
 wb.menu({
     "name": "Timing",
     "blocks": [
         {
             "blocktype": "step",
             "id": "5f4a98ff-3a12-4f2d-8327-7c6a375c0192",
-            "label": "wait [int:1] secs",
             "script": "delay(1000*{{1}});",
-            "help": "pause before running subsequent blocks"
+            "help": "pause before running subsequent blocks",
+            "sockets": [
+                {
+                    "name": "wait",
+                    "type": "int",
+                    "default": "1"
+                },
+                {
+                    "name": "secs"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "937921ed-49f4-4915-ba39-be217ddb6175",
-            "label": "Milliseconds since program started",
             "type": "int",
             "script": "(millis())",
-            "help": "int value of time elapsed"
+            "help": "int value of time elapsed",
+            "sockets": [
+                {
+                    "name": "Milliseconds since program started"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7d4ab88b-7769-497a-8822-8f0cc92c81de",
-            "label": "Seconds since program started",
             "type": "int",
             "script": "(int(millis()/1000))",
-            "help": "int value of time elapsed"
+            "help": "int value of time elapsed",
+            "sockets": [
+                {
+                    "name": "Seconds since program started"
+                }
+            ]
         }
     ]
-}
-);
-/*end timing.json*/
+});
+/*end timing_socket.json*/
 
-/*begin variables.json*/
+/*begin variables_socket.json*/
 wb.menu({
     "name": "Variables",
     "blocks": [
         {
             "blocktype": "step",
             "id": "eda33e3e-c6de-4f62-b070-f5035737a241",
-            "label": "Create [string:var] set to [string]",
             "script": "String {{1}} = '{{2}}';",
-            "help": "Create a string variable"
+            "help": "Create a string variable",
+            "sockets": [
+                {
+                    "name": "Create",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "set to",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "3423bd33-6a55-4660-ba78-2304308b653d",
-            "label": "[string:var] = [string]",
             "script": "{{1}} = '{{2}}';",
-            "help": "Change the value of an already created string variable"
+            "help": "Change the value of an already created string variable",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "=",
+                    "type": "string",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "076b71fc-23eb-485a-8002-7e84abe8b6cf",
-            "label": "value of [string:var]",
             "type": "string",
             "script": "{{1}}",
-            "help": "Get the value of a string variable"
+            "help": "Get the value of a string variable",
+            "sockets": [
+                {
+                    "name": "value of",
+                    "type": "string",
+                    "default": "var"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "1236184b-2397-44b3-8c69-0b184e24ffd8",
-            "label": "Create [string:var] set to [int:0]",
             "script": "int {{1}} = {{2}}'",
-            "help": "Create an integer variable"
+            "help": "Create an integer variable",
+            "sockets": [
+                {
+                    "name": "Create",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "set to",
+                    "type": "int",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "60a81c46-fd2e-4eb4-a828-00d201534baa",
-            "label": "[string:var] = [int:0]",
             "script": "{{1}} = {{2}};",
-            "help": "Change the value of an already created integer variable"
+            "help": "Change the value of an already created integer variable",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "=",
+                    "type": "int",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "06a44aae-31a8-4909-80b9-61151dc2d666",
-            "label": "value of [string:var]",
             "type": "int",
             "script": "{{1}}",
-            "help": "Get the value of an integer variable"
+            "help": "Get the value of an integer variable",
+            "sockets": [
+                {
+                    "name": "value of",
+                    "type": "string",
+                    "default": "var"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "645f8dde-a050-4106-b436-57c9f2301b17",
-            "label": "Create [string:var] set to [float:0.0]",
             "script": "float {{1}} = {{2}}",
-            "help": "Create a decimal variable"
+            "help": "Create a decimal variable",
+            "sockets": [
+                {
+                    "name": "Create",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "set to",
+                    "type": "float",
+                    "default": "0.0"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "f487db77-3f81-47ae-8fb5-478e24019c0b",
-            "label": "[string:var] = [float:0.0]",
             "script": "{{1}} = {{2}};",
-            "help": "Change the value of an already created deciaml variable"
+            "help": "Change the value of an already created deciaml variable",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "=",
+                    "type": "float",
+                    "default": "0.0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "705a5ef3-c0b9-49f5-885d-f195c2f4c464",
-            "label": "value of [string:var]",
             "type": "float",
             "script": "{{1}}",
-            "help": "Get the value of a decimal variable"
+            "help": "Get the value of a decimal variable",
+            "sockets": [
+                {
+                    "name": "value of",
+                    "type": "string",
+                    "default": "var"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "c4ab9c5d-4493-429c-beb1-be9b411c0a7e",
-            "label": "Create [string:var] set to [boolean:false]",
             "script": "int {{1}} = {{2}};",
-            "help": "Create a new true or false variable"
+            "help": "Create a new true or false variable",
+            "sockets": [
+                {
+                    "name": "Create",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "set to",
+                    "type": "boolean",
+                    "default": "false"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "027bbe7b-6b50-4d94-b447-9bca02ec513f",
-            "label": "[string:var] = [boolean:false]",
             "script": "{{1}} = {{2}};",
-            "help": "Change the value of an already created true or false variable"
+            "help": "Change the value of an already created true or false variable",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "default": "var"
+                },
+                {
+                    "name": "=",
+                    "type": "boolean",
+                    "default": "false"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "a41881a2-7cce-4ee5-98f4-c8067e3d57a6",
-            "label": "value of [string:var]",
             "type": "boolean",
             "script": "{{1}}",
-            "help": "Get the value of a true or false variable"
+            "help": "Get the value of a true or false variable",
+            "sockets": [
+                {
+                    "name": "value of",
+                    "type": "string",
+                    "default": "var"
+                }
+            ]
         }
     ]
-}
-);
-/*end variables.json*/
+});
+/*end variables_socket.json*/
 
 /*begin launch.js*/
 switch(wb.view){
     case 'editor':
         $('#block_menu_load').remove();
         document.body.className = 'editor';
-        wb.loadCurrentScripts(q);
+        //wb.loadCurrentScripts(q);
         break;
     case 'blocks':
         $('#block_menu_load').remove();
         document.body.className = 'blocks';
-        wb.loadCurrentScripts(q);
+        //wb.loadCurrentScripts(q);
         break;
     case 'result':
         $('#block_menu_load').remove();
         document.body.className = 'result';
-        wb.runCurrentScripts(q);
+        //wb.runCurrentScripts(q);
         break;
     default:
         $('#block_menu_load').remove();
         document.body.className = 'editor';
-        wb.loadCurrentScripts(q);
+        //wb.loadCurrentScripts(q);
         break;
 }
 

@@ -22,7 +22,8 @@ wb.writeScript = function(elements, view){
 // End UI section
 
 // expose these globally so the Block/Label methods can find them
-window.choiceLists = {
+wb.choiceLists = {
+    boolean: ['true', 'false'],
     keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
         .split('').concat(['up', 'down', 'left', 'right',
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',

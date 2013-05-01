@@ -28,7 +28,7 @@ function saveCurrentScripts(){
     $('#block_menu')[0].scrollIntoView();
     localStorage['__' + language + '_current_scripts'] = wb.Block.serialize();
 }
-$(window).unload(saveCurrentScripts);
+//$(window).unload(saveCurrentScripts);
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }

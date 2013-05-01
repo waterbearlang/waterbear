@@ -2142,7 +2142,7 @@ $.contextMenu.types = types;
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
-                        e.setAttribute(key, attributes[key]);
+                        e.setAttribute(key, val);
                     }
                 }else{
                     e.setAttribute(key, attributes[key]);
@@ -2152,7 +2152,9 @@ $.contextMenu.types = types;
         if (children){
             if (Array.isArray(children)){
                 children.forEach(function(child){
-                    if (Array.isArray(child)){
+                    if (child.nodeName){
+                        e.appendChild(child);
+                    }else if (Array.isArray(child)){
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
@@ -2755,14 +2757,14 @@ function uuid(){
         // Handle values coming from serialized (saved) blocks
         // Handle customized names (sockets)
         registerBlock(obj);
-        return elem(
+        var block = elem(
             'div',
             {
-                'class': function(a){
-                    var names = ['block', a.group, a.blocktype];
-                    if (a.blocktype === 'context'){
+                'class': function(){
+                    var names = ['block', obj.group, obj.blocktype];
+                    if (obj.blocktype === 'context'){
                         names.push('step');
-                    }else if (a.blocktype === 'eventhandler'){
+                    }else if (obj.blocktype === 'eventhandler'){
                         names.push('step');
                         names.push('context');
                     }
@@ -2771,14 +2773,17 @@ function uuid(){
                 'data-blocktype': obj.blocktype,
                 'id': obj.id,
                 'data-scopeid': obj.scopeid || 0,
-                'data-scriptid': obj.scriptid,
-                'title': obj.help || getHelp(obj.scriptid)
+                'data-scriptid': obj.scriptid || obj.id,
+                'title': obj.help || getHelp(obj.scriptid || obj.id)
             },
             [
-                ['div', {'class': 'label'}, getSockets(obj)], // how to get values for restored classes?
-                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
+                ['div', {'class': 'label'}, getSockets(obj)] // how to get values for restored classes?
             ]
         );
+        if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
+            block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
+        }
+        return block;
     }
 
     var Socket = function(obj){
@@ -2786,17 +2791,20 @@ function uuid(){
         // type and default value are optional, but if you have one you must have the other
         // If the type is choice it must also have a choicename for the list of values
         // that can be found in the wb.choiceLists
-        var socket = elem('div', {
-            'class': 'socket',
-            'data-name': obj.name
-        },
-        [
-            ['label', {'class': 'name'}, [obj.name]]
-        ]);
+        var socket = elem('div',
+            {
+                'class': 'socket',
+                'data-name': obj.name
+            },
+            [
+                ['label', {'class': 'name'}, [obj.name]]
+            ]
+        );
         if (obj.type){
             socket.dataset.type = obj.type;
-            socket.appendChild(elem('div', {'class': 'contained'}, [Default(obj)]))
+            socket.appendChild(elem('div', {'class': 'holder'}, [Default(obj)]))
         }
+        return socket;
     }
 
     var Default = function(obj){
@@ -2808,6 +2816,8 @@ function uuid(){
             type = 'number';
         }
         switch(type){
+            case 'any':
+                value = obj.value || ''; break;
             case 'number':
                 value = obj.value || 0; break;
             case 'string':
@@ -2822,6 +2832,8 @@ function uuid(){
                 value = obj.value || new Date().toISOString(); break;
             case 'url':
                 value = obj.value || 'http://waterbearlang.com'; break;
+            case 'image':
+                value = obj.value || ''; break;
             case 'phone':
                 value = obj.value || '604-555-1212'; break;
             case 'email':
@@ -2842,7 +2854,7 @@ function uuid(){
                 if (obj.default){
                     return Block(obj.default);
                 }else{
-                    return null;
+                    value = obj.value || '';
                 }
         }
         return elem('input', {type: type, value: value});
@@ -3135,7 +3147,7 @@ function saveCurrentScripts(){
     $('#block_menu')[0].scrollIntoView();
     localStorage['__' + language + '_current_scripts'] = wb.Block.serialize();
 }
-$(window).unload(saveCurrentScripts);
+//$(window).unload(saveCurrentScripts);
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }

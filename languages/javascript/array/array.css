@@ -1,2 +1,2 @@
-.array, .arrays{ border-color: hsl(195, 65%, 79%); }
-.arrays > .block, h3.arrays{ background-color: hsl(195, 62%, 89%); }
+.arrays, .arrays .holder, .arrays .holder{ border-color: hsl(195, 65%, 79%); }
+.block.arrays, h3.arrays{ background-color: hsl(195, 62%, 89%); }

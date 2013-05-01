@@ -140,7 +140,7 @@
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
-                        e.setAttribute(key, attributes[key]);
+                        e.setAttribute(key, val);
                     }
                 }else{
                     e.setAttribute(key, attributes[key]);
@@ -150,7 +150,9 @@
         if (children){
             if (Array.isArray(children)){
                 children.forEach(function(child){
-                    if (Array.isArray(child)){
+                    if (child.nodeName){
+                        e.appendChild(child);
+                    }else if (Array.isArray(child)){
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string

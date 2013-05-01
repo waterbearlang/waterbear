@@ -1019,22 +1019,26 @@ body.editor #block_menu{
 
 /*begin blocks.css*/
 /* Styles for steps and containers */
-.wrapper, .socket, .autosocket{
+.block, .socket, .autosocket{
   position: relative;
-  left: 0;
-  top: 0;
 }
 
-.scripts_workspace > .wrapper{
+.scripts_workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }
 
-.socket {
+.holder {
+  display: inline-block;
   position: relative;
   padding: 0;
   margin: 0;
   border-width: 2px 0;
   border-style: solid;
+}
+
+.socket{
+  display: inline-block;
+  position: relative;
 }
 
 
@@ -1053,12 +1057,13 @@ body.editor #block_menu{
     border-color: inherit;
 }
 
-.locals > .wrapper{
+.locals > .block{
     float: left;
     margin: 5px;
 }
 
 .label {
+  display: block;
   cursor: pointer;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -1082,17 +1087,17 @@ body.editor #block_menu{
   min-width: 75px;
 }
 
-.value .block{
+.expression.block{
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
 }
 
-.wrapper.value{
+.block.expression{
   display: inline-block;
 }
 
-.trigger > .block{
+.block.eventhandler{
   -webkit-border-top-right-radius: 25px;
   -webkit-border-top-left-radius: 25px;
   -moz-border-radius-topright: 25px;
@@ -1102,34 +1107,34 @@ body.editor #block_menu{
   padding-top: 10px;
 }
 
-.blockhead{
+.label{
   font-family: Georgia;
   font-size: 12px;
   white-space: nowrap;
   margin: 0;
   display: block;
-  padding-top: 2px;
+  padding-top: 4px;
   padding-left: 5px;
-  padding-bottom: 0;
+  padding-bottom: 7px;
   border-width: 0;
   border-color: inherit;
 }
-.trigger .blockhead{
+.eventhandler .label{
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-.value > .block > .blockhead{
+.block.expression > .label{
     padding: 3px 10px 3px 10px;
     margin: 1px;
 }
 
 /* For some reason this causes the blocks to slowly lose their color*/
-.block .blockhead{
+.block .label{
 /*    overflow-y: hidden;
 */}
 
-.blockhead.not(:first-child)
+.label.not(:first-child)
 {
     padding: 5px 0 5px 10px;
     margin-top: 0;
@@ -1137,21 +1142,21 @@ body.editor #block_menu{
     display: block;
 }
 
-.context > .blockhead{
+.context > .label{
     padding: 5px 20px;
     padding-bottom: 6px;
 }
 
-.context > .block {
+.block.context {
     padding-bottom: 11px;
 }
 
-.value > .block{
+.block.expression{
     border: 1px solid white;
 }
 
 
-.step > .block:before, .contained:before, .step:after {
+.step:before, .contained:before, .step:after {
   content: '';
   display: block;
   left: 0;
@@ -1171,7 +1176,7 @@ body.editor #block_menu{
   border-color: inherit;
 }
 
-.step > .block:before {
+.step:before {
   position: absolute;
   top: -7px;
   left: 0;
@@ -1186,13 +1191,13 @@ body.editor #block_menu{
 }
 
 .step:after{
-    bottom: 0;
+    bottom: -2px;
     position: absolute;
     background-color: #FFF;
     width: 20px;
 }
 
-.trigger > .block:before{
+.eventhandler:before{
     content: none;
 }
 
@@ -1221,17 +1226,6 @@ body.editor #block_menu{
     margin-bottom: 10px;
 }
 
-
-
-.next {
-  position: relative;
-  display: block;
-  background-color: transparent;
-  border-color: inherit;
-  width: 100%;
-  overflow: visible;
-}
-
 .block input {
   margin-left: 5px;
   width: 3em;
@@ -1243,13 +1237,13 @@ body.editor #block_menu{
 }
 
 
-.value.wrapper{
+.expression.block{
     border-width: 0 2px;
     border-style: solid;
 }
 
 
-.selected > .block{
+.selected.block{
     outline: blue ridge thick;
 }
 
@@ -1275,59 +1269,37 @@ body.editor #block_menu{
 }
 
 /* FIXME: We don't have slot elements anymore */
-.slot.dropActive{
+.block.dropActive > .contained:before{
     background-color: yellow;
-}
-.slot.dropActive:before {
-    height: 21px;
-    width: 56px;
-    position: absolute;
-    top: 5px;
-    left: -17px;
-    content: "";
-    display: block;
-    z-index: 0;
-    background: yellow;
-
-    -moz-box-shadow: 0 2px 20px yellow;
-    -webkit-box-shadow: 0 2px 20px yellow;
-    box-shadow: 0 2px 20px yellow;
-
-    -webkit-border-bottom-right-radius: 25px;
-    -webkit-border-bottom-left-radius: 25px;
-    -moz-border-radius-bottomright: 25px;
-    -moz-border-radius-bottomleft: 25px;
-    border-bottom-right-radius: 25px;
-    border-bottom-left-radius: 25px;
 }
 
 .socket select, .autosocket select{
     margin: 0;
 }
 
-.scripts_workspace > .wrapper{
+.scripts_workspace > .block{
     display: block;
 }
 
-.wrapper.scripts_workspace{
+.block.scripts_workspace{
     width: 100%;
     height: 100%
     margin: 0px;
 }
-.scripts_workspace > .block{
+.block.scripts_workspace{
     width: 95%;
     border: 0;
 }
-.scripts_workspace > .block:before{
+.block.scripts_workspace:before{
     content: none;
 }
-.scripts_workspace > .block > .contained{
+.block.scripts_workspace > .contained{
     border: 0;
 }
-.scripts_workspace > .block > .contained:before{
+.block.scripts_workspace > .contained:before{
     content: none;
 }
-.scripts_workspace > .block > .blockhead > .block_menu {
+.block.scripts_workspace > .label > .block_menu {
     border: 1px solid black;
     border-radius: 5px;
 }

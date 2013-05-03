@@ -19,6 +19,9 @@
         if (selector){
             listener = function(event){
                 blend(event); // normalize between touch and mouse events
+                if (eventname === 'mousedown'){
+                    console.log(event);
+                }
                 if (!event.wbValid) return;
                 if (wb.matches(event.wbTarget, selector + ' *')){
                     event.wbTarget = wb.closest(event.wbTarget, selector);

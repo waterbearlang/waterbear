@@ -83,6 +83,9 @@
                 ['div', {'class': 'label'}, getSockets(obj)] // how to get values for restored classes?
             ]
         );
+        if (obj.type){
+            block.dataset.type = obj.type; // capture type of expression blocks
+        }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
             block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }

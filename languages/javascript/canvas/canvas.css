@@ -1,13 +1,19 @@
 /* block and border colours for different groups of blocks */
 
 
-.canvas{ border-color: #e66a22; }
-.canvas > .block, h3.canvas{ background-color: #e66a22; }
+.canvas, .canvas .holder{
+    border-color: #e66a22;
+    background-color: #e66a22;
+}
 
-.gradient{ border-color: hsl(225,65%,83%); }
-.gradient > .block{ background-color: hsl(225, 65%, 93%); }
+.gradient, .gradient .holder{
+    border-color: hsl(225,65%,83%);
+    background-color: hsl(225, 65%, 93%);
+}
 
-.pattern{ border-color: hsl(25, 100%, 63%); }
-.pattern > .block { background-color: hsl(25, 100%, 83%); }
+.pattern, .pattern .holder{
+    border-color: hsl(25, 100%, 63%);
+    background-color: hsl(25, 100%, 83%);
+}
 
 

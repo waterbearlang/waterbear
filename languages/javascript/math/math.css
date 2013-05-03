@@ -1,4 +1,9 @@
-.math{ border-color: hsl(264,62%,79%); }
-.math > .block, h3.math{ background-color: hsl(264,62%,89%); }
-.number{ border-color: blue; }
+.math, .math .holder{
+    border-color: hsl(264,62%,79%);
+    background-color: hsl(264,62%,89%);
+}
+
+.number, .number .holder{
+    border-color: blue;
+}
 

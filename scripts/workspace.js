@@ -83,7 +83,7 @@ function loadScriptsFromObject(fileObject){
         var view = block.view()[0]; // FIXME: strip jquery wrapper
         wireUpWorkspace(view);
         block.script = '[[1]]';
-        // wb.addToScriptEvent(workspace, view);
+        Event.trigger(view, 'addToScript', workspace);
     });
     wb.loaded = true;
 }
@@ -102,7 +102,7 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file).scripts);
-	$(document.body).trigger('scriptloaded');
+    Event.trigger(document.body, 'scriptLoaded');
 }
 
 function runScriptFromGist(gist){
@@ -170,13 +170,18 @@ function createWorkspace(name){
         id: id,
         scriptid: id,
         blocktype: 'context',
-        label: name,
+        sockets: [
+            {
+                name: name
+            }
+        ],
         script: '[[1]]',
         isTemplateBlock: false,
         help: 'Drag your script blocks here'
-    }).view()[0];
+    });
     wireUpWorkspace(workspace);
 }
+wb.createWorkspace = createWorkspace;
 
 function wireUpWorkspace(workspace){
     workspace.addEventListener('drop', getFiles, false);
@@ -184,8 +189,6 @@ function wireUpWorkspace(workspace){
     document.querySelector('.workspace').appendChild(workspace);
     workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
     wb.initializeDragHandlers();
-    wb.Block.initializeSocketUpdates();
-    wb.Block.initializeDisclosures();
 }
 
 function handleDragover(evt){

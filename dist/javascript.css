@@ -1446,30 +1446,41 @@ pre .tex .formula {
 /*end javascript.css*/
 
 /*begin control.css*/
-.controls, .control{ border-color: hsl(44, 81%, 49%); }
-.controls > .block, h3.controls{ background-color: hsl(44, 81%, 85%); }
+.controls, .controls .holder{
+    border-color: hsl(44, 81%, 49%);
+    background-color: hsl(44, 81%, 85%);
+}
 
 
 /*end control.css*/
 
 /*begin sprite.css*/
-.sprite, .sprites{ border-color: hsl(120, 81%, 49%); }
-.sprites > .block, h3.sprites{ background-color: hsl(120, 81%, 85%); }
+.sprites, .sprites .holder{
+    border-color: hsl(120, 81%, 49%);
+    background-color: hsl(120, 81%, 85%);
+}
 
-.movingsprite{ border-color: hsl(150, 81%, 49%); }
-.movingsprite > .block{ background-color: hsl(150, 81%, 85%);}
+.movingsprite, .movingsprite .holder{
+    border-color: hsl(150, 81%, 49%);
+    background-color: hsl(150, 81%, 85%);
+}
 
 /*end sprite.css*/
 
 /*begin array.css*/
-.arrays, .arrays .holder, .arrays .holder{ border-color: hsl(195, 65%, 79%); }
-.block.arrays, h3.arrays{ background-color: hsl(195, 62%, 89%); }
+.arrays, .arrays .holder{
+    border-color: hsl(195, 65%, 79%);
+    background-color: hsl(195, 62%, 89%);
+}
 
 /*end array.css*/
 
 /*begin boolean.css*/
-.boolean > .block, h3.boolean{ background-color: #FF4444;}
-.boolean{ border-color: red; }
+.boolean, .boolean .holder{
+    background-color: #FF4444;
+    border-color: red;
+}
+
 
 /*end boolean.css*/
 
@@ -1477,115 +1488,154 @@ pre .tex .formula {
 /* block and border colours for different groups of blocks */
 
 
-.canvas{ border-color: #e66a22; }
-.canvas > .block, h3.canvas{ background-color: #e66a22; }
+.canvas, .canvas .holder{
+    border-color: #e66a22;
+    background-color: #e66a22;
+}
 
-.gradient{ border-color: hsl(225,65%,83%); }
-.gradient > .block{ background-color: hsl(225, 65%, 93%); }
+.gradient, .gradient .holder{
+    border-color: hsl(225,65%,83%);
+    background-color: hsl(225, 65%, 93%);
+}
 
-.pattern{ border-color: hsl(25, 100%, 63%); }
-.pattern > .block { background-color: hsl(25, 100%, 83%); }
+.pattern, .pattern .holder{
+    border-color: hsl(25, 100%, 63%);
+    background-color: hsl(25, 100%, 83%);
+}
 
 
 
 /*end canvas.css*/
 
 /*begin color.css*/
-.color, .colors{ border-color: #e77a33; }
-.color > .block, h3.color{ background-color: #e77a33; }
+.color, .color .holder{
+    border-color: #e77a33;
+    background-color: #e77a33;
+}
 
 /*end color.css*/
 
 /*begin image.css*/
-.images > .block, h3.images{ background-color: hsl(296, 65%, 77%); }
-.image, .images{ border-color: hsl(296, 65%, 57%); }
+.images, .images .holder{
+    background-color: hsl(296, 65%, 77%);
+    border-color: hsl(296, 65%, 57%);
+}
 
 /*end image.css*/
 
 /*begin math.css*/
-.math{ border-color: hsl(264,62%,79%); }
-.math > .block, h3.math{ background-color: hsl(264,62%,89%); }
-.number{ border-color: blue; }
+.math, .math .holder{
+    border-color: hsl(264,62%,79%);
+    background-color: hsl(264,62%,89%);
+}
+
+.number, .number .holder{
+    border-color: blue;
+}
 
 
 /*end math.css*/
 
 /*begin object.css*/
-.object, .objects{ border-color: hsl(75, 90%, 66%); }
-.objects > .block, h3.objects { background-color: hsl(75, 90%, 76%); }
+.objects, .objects .holder{
+    border-color: hsl(75, 90%, 66%);
+    background-color: hsl(75, 90%, 76%);
+}
 
-.any{ border-color: gray; }
+.any, .any .holder{
+    border-color: gray;
+}
 
 /*end object.css*/
 
 /*begin string.css*/
-.strings{ border-color: hsl(240, 65%, 83%); }
-.strings > .block, h3.strings {background-color: hsl(240, 65%, 93%); }
-
-.string{ border-color: green; }
+.strings, .strings .holder{
+    border-color: hsl(240, 65%, 83%);
+    background-color: hsl(240, 65%, 93%);
+}
 
 /*end string.css*/
 
 /*begin path.css*/
-.paths, .path{ border-color: hsl(156, 90%, 66%); }
-.paths > .block, h3.paths { background-color: hsl(156, 85%, 70%); }
+.paths, .paths .holder{
+    border-color: hsl(156, 90%, 66%);
+    background-color: hsl(156, 85%, 70%);
+}
 
 /*end path.css*/
 
 /*begin point.css*/
-.point, .points{ border-color: hsl(90, 65%, 79%); }
-.points > .block, h2.points {background-color: hsl(90, 62%, 89%); }
+.points, .points .holder{
+    border-color: hsl(90, 65%, 79%);
+    background-color: hsl(90, 62%, 89%);
+}
 
 
 /*end point.css*/
 
 /*begin rect.css*/
-.rect, .rects{ border-color: hsl(150, 65%, 79%); }
-.rects > .block, h3.rects {background-color: hsl(150, 62%, 89%); }
+.rects, .rects .holder{
+    border-color: hsl(150, 65%, 79%);
+    background-color: hsl(150, 62%, 89%);
+}
 
 
 /*end rect.css*/
 
 /*begin sensing.css*/
-.sensing{ border-color: hsl(200,98%,56%); }
-.sensing > .block, h3.sensing{ background-color: hsl(200,98%,76%); }
+.sensing, .sensing .holder{
+    border-color: hsl(200,98%,56%);
+    background-color: hsl(200,98%,76%);
+}
 
 /*end sensing.css*/
 
 /*begin shape.css*/
-.shape, .shapes{ border-color: hsl(25, 100%, 63%); }
-.shapes > .block, h3.shapes { background-color: hsl(25, 100%, 83%); }
+.shapes, .shapes .holder{
+    border-color: hsl(25, 100%, 63%);
+    background-color: hsl(25, 100%, 83%);
+}
 
 /*end shape.css*/
 
 /*begin size.css*/
-.size, .sizes{ border-color: hsl(15,100%,63%); }
-.sizes > .block, h3.sizes{ background-color: hsl(15,100%,83%); }
+.sizes, .sizes .holder{
+    border-color: hsl(15,100%,63%);
+    background-color: hsl(15,100%,83%);
+}
 
 
 /*end size.css*/
 
 /*begin social.css*/
-.twitter{ border-color: hsl(90, 65%, 79%); }
-.twitter > .block, h3.twitter {background-color: hsl(90, 62%, 89%); }
+.twitter, .twitter .holder{
+    border-color: hsl(90, 65%, 79%);
+    background-color: hsl(90, 62%, 89%);
+}
 
 /*end social.css*/
 
 /*begin fb.css*/
-.facebook{ border-color: hsl(300, 90%, 66%); }
-.facebook > .block, h3.facebook {background-color: hsl(300, 90%, 76%); }
+.facebook, .facebook .holder{
+    border-color: hsl(300, 90%, 66%);
+    background-color: hsl(300, 90%, 76%);
+}
 
 /*end fb.css*/
 
 /*begin text.css*/
-.text{ border-color: hsl(93,90%,66%); }
-.text > .block, h3.text{ background-color: hsl(93,90%,76%); }
+.text, .text .holder{
+    border-color: hsl(93,90%,66%);
+    background-color: hsl(93,90%,76%);
+}
 
 
 /*end text.css*/
 
 /*begin matrix.css*/
-.matrix{ border-color: hsl(2264,65%,83%); }
-.matrix > .block, h3.matrix{ background-color: hsl(264, 65%, 93%); }
+.matrix, .matrix .holder{
+    border-color: hsl(2264,65%,83%);
+    background-color: hsl(264, 65%, 93%);
+}
 
 /*end matrix.css*/

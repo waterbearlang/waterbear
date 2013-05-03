@@ -89,9 +89,16 @@
             console.log('not a drag handle');
             return undefined;
         }
-        var target = wb.closest(eT, '.wrapper');
+        var target = wb.closest(eT, '.block');
         if (target){
+            console.log('got a drag target: %o', target);
             dragTarget = target;
+            if (target.parentElement.classList.contains('block-menu')){
+                target.dataset.isTemplateBlock = 'true';
+            }
+            if (target.parentElement.classList.contains('local')){
+                target.dataset.isLocal = 'true';
+            }
             //dragTarget.classList.add("dragIndication");
             startPosition = wb.rect(target);
             if (! wb.matches(target.parentElement, '.scripts_workspace')){
@@ -111,20 +118,19 @@
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
-        if (wb.matches(dragTarget, '.value')){
+        if (wb.matches(dragTarget, '.expression')){
             wb.hide(dropCursor());
         }
         dragTarget.classList.add("dragIndication");
-        var model = wb.Block.model(dragTarget);
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
         // target = clone target if in menu
-        if (model.isTemplateBlock){
+        // FIXME: Set different listeners on menu blocks than on the script area
+        if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
-            model = model.cloneScript();
-            dragTarget = model.view()[0];
+            dragTarget = dragTarget.cloneNode(true); // clones dataset and children, yay
             dragTarget.classList.add('dragIndication');
-            if (model.isLocal){
+            if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
             }else{
                 scope = null;
@@ -134,7 +140,9 @@
             showWorkspace();
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
-            wb.removeFromScriptEvent(dragTarget);
+            // FIXME: Need to handle this somewhere
+            // FIXME: Better name?
+            Event.trigger(dragTarget, 'removeFromScript');
         }
         dragging = true;
         // get position and append target to .content, adjust offsets
@@ -146,7 +154,7 @@
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
         wb.reposition(dragTarget, startPosition);
-        potentialDropTargets = getPotentialDropTargets(dragTarget, model);
+        potentialDropTargets = getPotentialDropTargets(dragTarget);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -194,8 +202,9 @@
         });
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
-            console.log('triggering delete_block');
-            Event.trigger(dragTarget, 'delete_block');
+            // FIXME: Handle this event
+            console.log('triggering deleteBlock');
+            Event.trigger(dragTarget, 'deleteBlock');
             dragTarget.parentElement.removeChild(dragTarget);
         }else if (wb.overlap(dragTarget, workspace)){
             dropTarget.classList.remove('dropActive');
@@ -204,7 +213,7 @@
                 // dropTarget.parent().append(dragTarget);
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
-                wb.addToScriptEvent(dropTarget, dragTarget);
+                Event.trigger(dragTarget, 'addToScript', dropTarget);
             }else{
                 console.log('inserting a value in a socket');
                 // Insert a value block into a socket
@@ -213,8 +222,7 @@
                 });
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
-                wb.addToScriptEvent(dropTarget, dragTarget);
-                Event.trigger(dragTarget, 'add_to_socket', {dropTarget: dropTarget, parentIndex: wb.indexOf(dropTarget)});
+                Event.trigger(dragTarget, 'addToScript', dropTarget);
             }
         }else{
             if (cloned){
@@ -302,13 +310,54 @@
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
         if (!dragTarget) {return;}
-        if (wb.matches(dragTarget, '.value')){
+        if (wb.matches(dragTarget, '.expression')){
             positionExpressionDropCursor();
         }else{
             positionDropCursor();
         }
         setTimeout(hitTest, dragTimeout);
     }
+
+    function expressionDropTypes(expressionType){
+        switch(expressionType){
+            case 'number': return ['.number', '.int', '.float', '.any'];
+            case 'int': return ['.number', '.int', '.float', '.any'];
+            case 'float': return ['.number', '.float', '.any'];
+            case 'any': return [];
+            default: return ['.' + expressionType, '.any'];
+        }
+    }
+
+    function hasChildBlock(elem){
+        return !elem.querySelector('.block');
+    }
+
+    function getPotentialDropTargets(view){
+        if (!workspace){
+            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
+        }
+        var blocktype = view.dataset.blocktype;
+        switch(blocktype){
+            case 'step':
+            case 'context':
+                if (scope){
+                    return wb.findAll(scope, '.contained');
+                }else{
+                    return wb.findAll(workspace, '.contained').concat([workspace]);
+                }
+            case 'expression':
+                var selector = '.socket' + expressionDropTypes(view.dataset.type).join(',.socket');
+                if (scope){
+                    return wb.findAll(scope, selector).filter(hasChildBlock);
+                }else{
+                    return wb.findAll(workspace, selector).filter(hasChildBlock);
+                }
+            case 'eventhandler':
+                return [workspace];
+            default:
+                throw new Error('Unrecognized blocktype: ' + blocktype);
+        }
+    };
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -322,46 +371,6 @@
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-        }
-    };
-
-    function expressionDropTypes(expressionType){
-        switch(expressionType){
-            case 'number': return ['.number', '.int', '.float', '.any'];
-            case 'int': return ['.number', '.int', '.float', '.any'];
-            case 'float': return ['.number', '.float', '.any'];
-            case 'any': return [];
-            default: return ['.' + expressionType, '.any'];
-        }
-    }
-
-    function hasChildBlock(elem){
-        return !elem.querySelector('.wrapper');
-    }
-
-    function getPotentialDropTargets(view, model){
-        if (!workspace){
-            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
-        }
-        switch(model.blocktype){
-            case 'step':
-            case 'context':
-                if (scope){
-                    return wb.findAll(scope, '.contained');
-                }else{
-                    return wb.findAll(workspace, '.contained').concat([workspace]);
-                }
-            case 'expression':
-                var selector = '.socket' + expressionDropTypes(model.type).join(',.socket');
-                if (scope){
-                    return wb.findAll(scope, selector).filter(hasChildBlock);
-                }else{
-                    return wb.findAll(workspace, selector).filter(hasChildBlock);
-                }
-            case 'eventhandler':
-                return [workspace];
-            default:
-                throw new Error('Unrecognized blocktype: ' + model.blocktype);
         }
     };
 

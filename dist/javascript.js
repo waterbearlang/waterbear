@@ -3831,6 +3831,8 @@ hljs.LANGUAGES.javascript = {
     // A bunch of these are to avoid needing jQuery just for simple things like matches(selector) and closest(selector)
     //
     //
+    // TODO
+    // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
     wb.makeArray = function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
@@ -3844,16 +3846,13 @@ hljs.LANGUAGES.javascript = {
     };
 
     wb.hide = function(elem){
-        // FIXME
         elem.dataset.display = elem.style.display;
         elem.style.display = 'none';
     };
 
     wb.show = function(elem){
-        if (elem.dataset.display !== undefined && elem.dataset.display !== null){
-            elem.style.display = elem.dataset.display;
-        }
-        elem.dataset.display = null;
+        elem.style.display = elem.dataset.display || 'block';
+        delete elem.dataset.display;
     };
 
     // wb.mag = function mag(p1, p2){
@@ -4033,6 +4032,9 @@ hljs.LANGUAGES.javascript = {
         if (selector){
             listener = function(event){
                 blend(event); // normalize between touch and mouse events
+                if (eventname === 'mousedown'){
+                    console.log(event);
+                }
                 if (!event.wbValid) return;
                 if (wb.matches(event.wbTarget, selector + ' *')){
                     event.wbTarget = wb.closest(event.wbTarget, selector);
@@ -4198,9 +4200,16 @@ hljs.LANGUAGES.javascript = {
             console.log('not a drag handle');
             return undefined;
         }
-        var target = wb.closest(eT, '.wrapper');
+        var target = wb.closest(eT, '.block');
         if (target){
+            console.log('got a drag target: %o', target);
             dragTarget = target;
+            if (target.parentElement.classList.contains('block-menu')){
+                target.dataset.isTemplateBlock = 'true';
+            }
+            if (target.parentElement.classList.contains('local')){
+                target.dataset.isLocal = 'true';
+            }
             //dragTarget.classList.add("dragIndication");
             startPosition = wb.rect(target);
             if (! wb.matches(target.parentElement, '.scripts_workspace')){
@@ -4220,20 +4229,19 @@ hljs.LANGUAGES.javascript = {
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
-        if (wb.matches(dragTarget, '.value')){
+        if (wb.matches(dragTarget, '.expression')){
             wb.hide(dropCursor());
         }
         dragTarget.classList.add("dragIndication");
-        var model = wb.Block.model(dragTarget);
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
         // target = clone target if in menu
-        if (model.isTemplateBlock){
+        // FIXME: Set different listeners on menu blocks than on the script area
+        if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
-            model = model.cloneScript();
-            dragTarget = model.view()[0];
+            dragTarget = dragTarget.cloneNode(true); // clones dataset and children, yay
             dragTarget.classList.add('dragIndication');
-            if (model.isLocal){
+            if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
             }else{
                 scope = null;
@@ -4243,7 +4251,9 @@ hljs.LANGUAGES.javascript = {
             showWorkspace();
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
-            wb.removeFromScriptEvent(dragTarget);
+            // FIXME: Need to handle this somewhere
+            // FIXME: Better name?
+            Event.trigger(dragTarget, 'removeFromScript');
         }
         dragging = true;
         // get position and append target to .content, adjust offsets
@@ -4255,7 +4265,7 @@ hljs.LANGUAGES.javascript = {
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
         wb.reposition(dragTarget, startPosition);
-        potentialDropTargets = getPotentialDropTargets(dragTarget, model);
+        potentialDropTargets = getPotentialDropTargets(dragTarget);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -4303,8 +4313,9 @@ hljs.LANGUAGES.javascript = {
         });
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
-            console.log('triggering delete_block');
-            Event.trigger(dragTarget, 'delete_block');
+            // FIXME: Handle this event
+            console.log('triggering deleteBlock');
+            Event.trigger(dragTarget, 'deleteBlock');
             dragTarget.parentElement.removeChild(dragTarget);
         }else if (wb.overlap(dragTarget, workspace)){
             dropTarget.classList.remove('dropActive');
@@ -4313,7 +4324,7 @@ hljs.LANGUAGES.javascript = {
                 // dropTarget.parent().append(dragTarget);
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
-                wb.addToScriptEvent(dropTarget, dragTarget);
+                Event.trigger(dragTarget, 'addToScript', dropTarget);
             }else{
                 console.log('inserting a value in a socket');
                 // Insert a value block into a socket
@@ -4322,8 +4333,7 @@ hljs.LANGUAGES.javascript = {
                 });
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
-                wb.addToScriptEvent(dropTarget, dragTarget);
-                Event.trigger(dragTarget, 'add_to_socket', {dropTarget: dropTarget, parentIndex: wb.indexOf(dropTarget)});
+                Event.trigger(dragTarget, 'addToScript', dropTarget);
             }
         }else{
             if (cloned){
@@ -4411,13 +4421,54 @@ hljs.LANGUAGES.javascript = {
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
         if (!dragTarget) {return;}
-        if (wb.matches(dragTarget, '.value')){
+        if (wb.matches(dragTarget, '.expression')){
             positionExpressionDropCursor();
         }else{
             positionDropCursor();
         }
         setTimeout(hitTest, dragTimeout);
     }
+
+    function expressionDropTypes(expressionType){
+        switch(expressionType){
+            case 'number': return ['.number', '.int', '.float', '.any'];
+            case 'int': return ['.number', '.int', '.float', '.any'];
+            case 'float': return ['.number', '.float', '.any'];
+            case 'any': return [];
+            default: return ['.' + expressionType, '.any'];
+        }
+    }
+
+    function hasChildBlock(elem){
+        return !elem.querySelector('.block');
+    }
+
+    function getPotentialDropTargets(view){
+        if (!workspace){
+            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
+        }
+        var blocktype = view.dataset.blocktype;
+        switch(blocktype){
+            case 'step':
+            case 'context':
+                if (scope){
+                    return wb.findAll(scope, '.contained');
+                }else{
+                    return wb.findAll(workspace, '.contained').concat([workspace]);
+                }
+            case 'expression':
+                var selector = '.socket' + expressionDropTypes(view.dataset.type).join(',.socket');
+                if (scope){
+                    return wb.findAll(scope, selector).filter(hasChildBlock);
+                }else{
+                    return wb.findAll(workspace, selector).filter(hasChildBlock);
+                }
+            case 'eventhandler':
+                return [workspace];
+            default:
+                throw new Error('Unrecognized blocktype: ' + blocktype);
+        }
+    };
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -4431,46 +4482,6 @@ hljs.LANGUAGES.javascript = {
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-        }
-    };
-
-    function expressionDropTypes(expressionType){
-        switch(expressionType){
-            case 'number': return ['.number', '.int', '.float', '.any'];
-            case 'int': return ['.number', '.int', '.float', '.any'];
-            case 'float': return ['.number', '.float', '.any'];
-            case 'any': return [];
-            default: return ['.' + expressionType, '.any'];
-        }
-    }
-
-    function hasChildBlock(elem){
-        return !elem.querySelector('.wrapper');
-    }
-
-    function getPotentialDropTargets(view, model){
-        if (!workspace){
-            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
-        }
-        switch(model.blocktype){
-            case 'step':
-            case 'context':
-                if (scope){
-                    return wb.findAll(scope, '.contained');
-                }else{
-                    return wb.findAll(workspace, '.contained').concat([workspace]);
-                }
-            case 'expression':
-                var selector = '.socket' + expressionDropTypes(model.type).join(',.socket');
-                if (scope){
-                    return wb.findAll(scope, selector).filter(hasChildBlock);
-                }else{
-                    return wb.findAll(workspace, selector).filter(hasChildBlock);
-                }
-            case 'eventhandler':
-                return [workspace];
-            default:
-                throw new Error('Unrecognized blocktype: ' + model.blocktype);
         }
     };
 
@@ -4603,6 +4614,9 @@ function uuid(){
                 ['div', {'class': 'label'}, getSockets(obj)] // how to get values for restored classes?
             ]
         );
+        if (obj.type){
+            block.dataset.type = obj.type; // capture type of expression blocks
+        }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
             block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }
@@ -4914,11 +4928,11 @@ wb.buildDelayedMenus = function(){
 function edit_menu(title, specs, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = $('.submenu.' + group);
+    var submenu = $('.' + group + '+ .submenu');
     if (!submenu.length){
-        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu ' + group + '"></div>');
+        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu block_menu"></div>');
         $('#block_menu').append(body);
-        submenu = $('.submenu.' + group);
+        submenu = $('.' + group + '+ .submenu');
         // This is dumb, but jQuery UI accordion widget doesn't support adding sections at runtime
     }
     specs.forEach(function(spec, idx){
@@ -5025,7 +5039,7 @@ function loadScriptsFromObject(fileObject){
         var view = block.view()[0]; // FIXME: strip jquery wrapper
         wireUpWorkspace(view);
         block.script = '[[1]]';
-        // wb.addToScriptEvent(workspace, view);
+        Event.trigger(view, 'addToScript', workspace);
     });
     wb.loaded = true;
 }
@@ -5044,7 +5058,7 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file).scripts);
-	$(document.body).trigger('scriptloaded');
+    Event.trigger(document.body, 'scriptLoaded');
 }
 
 function runScriptFromGist(gist){
@@ -5112,13 +5126,18 @@ function createWorkspace(name){
         id: id,
         scriptid: id,
         blocktype: 'context',
-        label: name,
+        sockets: [
+            {
+                name: name
+            }
+        ],
         script: '[[1]]',
         isTemplateBlock: false,
         help: 'Drag your script blocks here'
-    }).view()[0];
+    });
     wireUpWorkspace(workspace);
 }
+wb.createWorkspace = createWorkspace;
 
 function wireUpWorkspace(workspace){
     workspace.addEventListener('drop', getFiles, false);
@@ -5126,8 +5145,6 @@ function wireUpWorkspace(workspace){
     document.querySelector('.workspace').appendChild(workspace);
     workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
     wb.initializeDragHandlers();
-    wb.Block.initializeSocketUpdates();
-    wb.Block.initializeDisclosures();
 }
 
 function handleDragover(evt){
@@ -8979,21 +8996,29 @@ switch(wb.view){
         $('#block_menu_load').remove();
         document.body.className = 'editor';
         //wb.loadCurrentScripts(q);
+        // remove next line once load/save is working
+        wb.createWorkspace('Workspace');
         break;
     case 'blocks':
         $('#block_menu_load').remove();
         document.body.className = 'blocks';
         //wb.loadCurrentScripts(q);
+        // remove next line once load/save is working
+        wb.createWorkspace('Workspace');
         break;
     case 'result':
         $('#block_menu_load').remove();
         document.body.className = 'result';
         //wb.runCurrentScripts(q);
+        // remove next line once load/save is working
+        wb.createWorkspace('Workspace');
         break;
     default:
         $('#block_menu_load').remove();
         document.body.className = 'editor';
         //wb.loadCurrentScripts(q);
+        // remove next line once load/save is working
+        wb.createWorkspace('Workspace');
         break;
 }
 

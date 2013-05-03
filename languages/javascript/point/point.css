@@ -1,3 +1,5 @@
-.point, .points{ border-color: hsl(90, 65%, 79%); }
-.points > .block, h2.points {background-color: hsl(90, 62%, 89%); }
+.points, .points .holder{
+    border-color: hsl(90, 65%, 79%);
+    background-color: hsl(90, 62%, 89%);
+}
 

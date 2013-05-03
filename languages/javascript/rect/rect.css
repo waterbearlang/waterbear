@@ -1,3 +1,5 @@
-.rect, .rects{ border-color: hsl(150, 65%, 79%); }
-.rects > .block, h3.rects {background-color: hsl(150, 62%, 89%); }
+.rects, .rects .holder{
+    border-color: hsl(150, 65%, 79%);
+    background-color: hsl(150, 62%, 89%);
+}
 

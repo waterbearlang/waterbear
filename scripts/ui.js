@@ -219,11 +219,11 @@ wb.buildDelayedMenus = function(){
 function edit_menu(title, specs, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = $('.submenu.' + group);
+    var submenu = $('.' + group + '+ .submenu');
     if (!submenu.length){
-        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu ' + group + '"></div>');
+        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu block_menu"></div>');
         $('#block_menu').append(body);
-        submenu = $('.submenu.' + group);
+        submenu = $('.' + group + '+ .submenu');
         // This is dumb, but jQuery UI accordion widget doesn't support adding sections at runtime
     }
     specs.forEach(function(spec, idx){

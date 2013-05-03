@@ -1,4 +1,8 @@
-.object, .objects{ border-color: hsl(75, 90%, 66%); }
-.objects > .block, h3.objects { background-color: hsl(75, 90%, 76%); }
+.objects, .objects .holder{
+    border-color: hsl(75, 90%, 66%);
+    background-color: hsl(75, 90%, 76%);
+}
 
-.any{ border-color: gray; }
+.any, .any .holder{
+    border-color: gray;
+}

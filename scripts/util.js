@@ -6,6 +6,8 @@
     // A bunch of these are to avoid needing jQuery just for simple things like matches(selector) and closest(selector)
     //
     //
+    // TODO
+    // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
     wb.makeArray = function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
@@ -19,16 +21,13 @@
     };
 
     wb.hide = function(elem){
-        // FIXME
         elem.dataset.display = elem.style.display;
         elem.style.display = 'none';
     };
 
     wb.show = function(elem){
-        if (elem.dataset.display !== undefined && elem.dataset.display !== null){
-            elem.style.display = elem.dataset.display;
-        }
-        elem.dataset.display = null;
+        elem.style.display = elem.dataset.display || 'block';
+        delete elem.dataset.display;
     };
 
     // wb.mag = function mag(p1, p2){

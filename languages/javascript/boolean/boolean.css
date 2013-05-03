@@ -1,2 +1,5 @@
-.boolean > .block, h3.boolean{ background-color: #FF4444;}
-.boolean{ border-color: red; }
+.boolean, .boolean .holder{
+    background-color: #FF4444;
+    border-color: red;
+}
+

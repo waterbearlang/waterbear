@@ -1,3 +1,5 @@
-.size, .sizes{ border-color: hsl(15,100%,63%); }
-.sizes > .block, h3.sizes{ background-color: hsl(15,100%,83%); }
+.sizes, .sizes .holder{
+    border-color: hsl(15,100%,63%);
+    background-color: hsl(15,100%,83%);
+}
 

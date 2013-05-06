@@ -4,133 +4,304 @@
         {
             "blocktype": "step",
             "id": "01e39af1-679d-4b4d-b30e-a093a2687063",
-            "label": "shadow color [color]",
             "script": "local.ctx.shadowColor = {{1}}",
-            "help": "set the shadow color"
+            "help": "set the shadow color",
+            "sockets": [
+                {
+                    "name": "shadow color",
+                    "type": "color",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9286b647-2c6f-4fbe-ae92-3d0062bc438f",
-            "label": "stroke color [color:#000]",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "stroke color..."
+            "help": "stroke color...",
+            "sockets": [
+                {
+                    "name": "stroke color",
+                    "type": "color",
+                    "default": "#000"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "6fe550a9-c630-4876-950c-f727de27b7ae",
-            "label": "fill color [color:#000]",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "fill color..."
+            "help": "fill color...",
+            "sockets": [
+                {
+                    "name": "fill color",
+                    "type": "color",
+                    "default": "#000"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "271c8b4c-b045-4ff9-8ad5-9608ea204b09",
-            "label": "color with red [number:0] green [number:0] blue [number:0]",
             "script": "\"rgb({{1}},{{2}},{{3}})\"",
             "type": "color",
-            "help": "returns a color"
+            "help": "returns a color",
+            "sockets": [
+                {
+                    "name": "color with red",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "green",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "blue",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "13236aef-cccd-42b3-a041-e26528174323",
-            "label": "color with red [number:0] green [number:0] blue [number:0] alpha [number:0]",
             "script": "\"rgba({{1}},{{2}},{{3}},{{4}})\"",
             "type": "color",
-            "help": "returns a semi-opaque color"
+            "help": "returns a semi-opaque color",
+            "sockets": [
+                {
+                    "name": "color with red",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "green",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "blue",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "alpha",
+                    "type": "number",
+                    "default": "0"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "e9496816-4f7b-47d3-8c70-163df835230c",
             "type": "color",
-            "label": "color with hue [number:0] saturation [number:0] brightness [number:0]]",
             "script": "\"hsb({{1}}, {{2}}, {{3}})\"",
-            "help": "returns a color"
+            "help": "returns a color",
+            "sockets": [
+                {
+                    "name": "color with hue",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "saturation",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "brightness",
+                    "type": "number",
+                    "default": "0]"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
             "type": "color",
-            "label": "random color",
             "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\"",
-            "help": "returns a random color"
+            "help": "returns a random color",
+            "sockets": [
+                {
+                    "name": "random color"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "c2d8442b-c9eb-45bb-8ca6-69f2e6d4c7c7",
-            "label": "stroke gradient [gradient]",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "replaces stroke color or stroke pattern with gradient"
+            "help": "replaces stroke color or stroke pattern with gradient",
+            "sockets": [
+                {
+                    "name": "stroke gradient",
+                    "type": "gradient",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "b80bc4ea-7f07-4dd5-b2f9-d8f09e0aca55",
-            "label": "fill gradient [gradient]",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "replaces fill color or fill pattern with gradient"
+            "help": "replaces fill color or fill pattern with gradient",
+            "sockets": [
+                {
+                    "name": "fill gradient",
+                    "type": "gradient",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "7fd65106-276d-43f3-b433-5ce6b750d511",
-            "label": "stroke pattern [pattern]",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "replaces stroke color or stroke gradient with pattern"
+            "help": "replaces stroke color or stroke gradient with pattern",
+            "sockets": [
+                {
+                    "name": "stroke pattern",
+                    "type": "pattern",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "9f54e5b1-f539-4005-bd8e-5b759e776bba",
-            "label": "fill pattern [pattern]",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "replaces fill color or fill gradient with pattern"
+            "help": "replaces fill color or fill gradient with pattern",
+            "sockets": [
+                {
+                    "name": "fill pattern",
+                    "type": "pattern",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "5caf94c7-f489-4423-a0c7-d1ad066c4dc7",
-            "label": "create radial gradient from point1 [point] radius1 [number:0] to point2 [point] radius2 [number:0]",
             "script": "local.gradient## = local.ctx.createRadialGradient({{1}}.x,{{1}}.y,{{2}},{{3}}.x,{{3}}.y,{{4}});",
             "help": "create a radial gradient in the cone described by two circles",
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "radial gradient##",
+                    "sockets": [
+                        {
+                            "name": "radial gradient##"
+                        }
+                    ],
                     "script": "local.gradient##",
                     "type": "gradient"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "create radial gradient from point1",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "radius1",
+                    "type": "number",
+                    "default": "0"
+                },
+                {
+                    "name": "to point2",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "radius2",
+                    "type": "number",
+                    "default": "0"
                 }
             ]
         },
         {
             "blocktype": "step",
             "id": "be35754d-da0e-4b26-b8f1-9a4f36e902c3",
-            "label": "create linear gradient from point1 [point] to point2 [point]",
             "script": "local.gradient## = local.ctx.createLinearGradient({{1}}.x,{{1}}.y,{{2}}.x,{{2}}.y);",
             "help": "create a linear gradient between two points",
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "linear gradient##",
+                    "sockets": [
+                        {
+                            "linear gradient##"
+                        }
+                    ],
                     "script": "local.linear.gradient##",
                     "type": "gradient"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "create linear gradient from point1",
+                    "type": "point",
+                    "default": null
+                },
+                {
+                    "name": "to point2",
+                    "type": "point",
+                    "default": null
                 }
             ]
         },
         {
             "blocktype": "step",
             "id": "a0783aab-194c-4059-8f8e-4afd93ec1ca5",
-            "label": "add color stop to gradient [gradient] at offset [number:0.5] with color [color:#F00]",
             "script": "{{1}}.addColorStop({{2}}, {{3}}",
-            "help": "creates an additional color stop, offset must be between 0.0 and 1.0"
+            "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
+            "sockets": [
+                {
+                    "name": "add color stop to gradient",
+                    "type": "gradient",
+                    "default": null
+                },
+                {
+                    "name": "at offset",
+                    "type": "number",
+                    "default": "0.5"
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "default": "#F00"
+                }
+            ]
         },
         {
             "blocktype": "step",
             "id": "3a6b43b7-3392-4f0d-b2b7-c5e1dc0cf501",
-            "label": "create pattern## from image [image] repeats [choice:repetition]",
             "script": "local.pattern## = local.ctx.createPattern({{1}}, {{2}});",
             "help": "create a pattern with the given html image",
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "pattern##",
+                    "sockets": [
+                        {
+                            "name": "pattern##"
+                        }
+                    ],
                     "script": "local.pattern##",
                     "type": "pattern"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "create pattern## from image",
+                    "type": "image",
+                    "default": null
+                },
+                {
+                    "name": "repeats",
+                    "type": "choice",
+                    "options": "repetition",
+                    "default": "choice"
                 }
             ]
         }

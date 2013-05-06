@@ -4,37 +4,81 @@
         {
             "blocktype": "expression",
             "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
-            "label": "size with width [number:10] height [number:10]",
             "script": "{w: {{1}}, h: {{2}} }",
-            "type": "size"
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "size with width",
+                    "type": "number",
+                    "default": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "default": "10"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "404cb2f4-abe5-4c3b-a9da-9b44050e012d",
-            "label": "size from array [array]",
             "script": "{w: {{1}}[0], h: {{1}}[1]",
-            "type": "size"
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "size from array",
+                    "type": "array",
+                    "default": null
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "33f2a3b7-5d87-4481-ad1c-f2970915db51",
-            "label": "size [size] width",
             "script": "{{1}}.w",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "2d449e0e-cb18-473f-a574-614320b7ba22",
-            "label": "size [size] height",
             "script": "{{1}}.h",
-            "type": "number"
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "height"
+                }
+            ]
         },
         {
             "blocktype": "expression",
             "id": "7ca31ad7-946a-4587-a5c8-d6b8879dc4e2",
-            "label": "size [size] as array",
             "script": "[{{1}}.w, {{1}}.h]",
-            "type": "array"
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "default": null
+                },
+                {
+                    "name": "as array"
+                }
+            ]
         }
     ]
 }

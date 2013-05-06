@@ -9,7 +9,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "digital_output##",
+                    "sockets": [
+                        {
+                            "name": "digital_output##"
+                        }
+                    ],
                     "script": "digital_output##",
                     "type": "string"
                 }
@@ -49,7 +53,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "digital_input##",
+                    "sockets": [
+                        {
+                            "name": "digital_input##"
+                        }
+                    ],
                     "script": "digital_input##",
                     "type": "string"
                 }
@@ -85,7 +93,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "analog_input##",
+                    "sockets": [
+                        {
+                            "name": "analog_input##"
+                        }
+                    ],
                     "script": "analog_input##",
                     "type": "string"
                 }
@@ -121,7 +133,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "analog_output##",
+                    "sockets": [
+                        {
+                            "name": "analog_output##"
+                        }
+                    ],
                     "script": "analog_output##",
                     "type": "string"
                 }

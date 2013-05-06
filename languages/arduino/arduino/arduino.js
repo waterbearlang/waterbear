@@ -31,12 +31,6 @@ window.loadDefaultScript = function(script){
     }
 };
 
-window.updateScriptsView = function(){
-    var blocks = $('.workspace .scripts_workspace > .wrapper');
-    var view = $('.workspace .scripts_text_view');
-    blocks.writeScript(view);
-};
-
 wb.writeScript = function(elements, view){
     var code = elements.map(function(elem){
         return wb.Block.model(elem).code();
@@ -56,11 +50,6 @@ jQuery.fn.extend({
   }
 });
 
-function clearScripts(event, force){
-    if (force || confirm('Throw out the current script?')){
-        $('.workspace > *').empty();
-    }
-}
 
 function clearScriptsDefault(event, force){
   clearScripts(event, force);

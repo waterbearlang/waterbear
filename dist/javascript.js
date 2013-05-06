@@ -2077,7 +2077,7 @@ hljs.LANGUAGES.javascript = {
 
 /*end util.js*/
 
-/*begin events.js*/
+/*begin event.js*/
 // Add support for event delegation on top of normal DOM events
 // Minimal support for non-DOM events
 // Normalized between mouse and touch events
@@ -2181,9 +2181,9 @@ hljs.LANGUAGES.javascript = {
     };
 })(this);
 
-/*end events.js*/
+/*end event.js*/
 
-/*begin drag2.js*/
+/*begin drag.js*/
 (function(global){
 
     // FIXME: Remove references to waterbear or jquery (jquery done!)
@@ -2576,7 +2576,7 @@ hljs.LANGUAGES.javascript = {
 })(this);
 
 
-/*end drag2.js*/
+/*end drag.js*/
 
 /*begin uuid.js*/
 // This returns a Version 4 (random) UUID
@@ -2614,7 +2614,7 @@ function uuid(){
 
 /*end uuid.js*/
 
-/*begin block2.js*/
+/*begin block.js*/
 // Revised Block handling.
 //
 // Nearly all the block is defined in the HTML and DOM
@@ -2793,7 +2793,7 @@ function uuid(){
 })(wb);
 
 
-/*end block2.js*/
+/*end block.js*/
 
 /*begin ui.js*/
 (function(wb){
@@ -3574,7 +3574,7 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 
 /*end matrix.js*/
 
-/*begin control_socket.json*/
+/*begin control.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
@@ -3612,7 +3612,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "count##",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
                     "script": "local.count##",
                     "type": "number"
                 }
@@ -3654,7 +3658,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "count##",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
                     "script": "local.count##",
                     "type": "number"
                 }
@@ -3724,7 +3732,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "data##",
+                    "sockets": [
+                        {
+                            "data##"
+                        }
+                    ],
                     "script": "local.data##",
                     "type": "any"
                 }
@@ -3794,10 +3806,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end control_socket.json*/
+}
+);
+/*end control.json*/
 
-/*begin sprite_socket.json*/
+/*begin sprite.json*/
 wb.menu({
     "name": "Sprites",
     "blocks": [
@@ -3834,7 +3847,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "sprite##",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
                     "script": "local.sprite##",
                     "type": "sprite"
                 }
@@ -3999,10 +4016,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end sprite_socket.json*/
+}
+);
+/*end sprite.json*/
 
-/*begin array_socket.json*/
+/*begin array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
@@ -4014,7 +4032,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "array##",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
                     "script": "local.array##",
                     "type": "array"
                 }
@@ -4033,7 +4055,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "array##",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
                     "script": "local.array##",
                     "type": "array"
                 }
@@ -4213,14 +4239,22 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "index",
+                    "sockets": [
+                        {
+                            "name": "index"
+                        }
+                    ],
                     "script": "local.index",
                     "help": "index of current item in array",
                     "type": "number"
                 },
                 {
                     "blocktype": "expression",
-                    "label": "item",
+                    "sockets": [
+                        {
+                            "name": "item"
+                        }
+                    ],
                     "script": "local.item",
                     "help": "the current item in the iteration",
                     "type": "any"
@@ -4239,10 +4273,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end array_socket.json*/
+}
+);
+/*end array.json*/
 
-/*begin boolean_socket.json*/
+/*begin boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -4319,9 +4354,9 @@ wb.menu({
         }
     ]
 });
-/*end boolean_socket.json*/
+/*end boolean.json*/
 
-/*begin canvas_socket.json*/
+/*begin canvas.json*/
 wb.menu({
     "name": "Canvas",
     "blocks": [
@@ -4524,9 +4559,9 @@ wb.menu({
         }
     ]
 });
-/*end canvas_socket.json*/
+/*end canvas.json*/
 
-/*begin color_socket.json*/
+/*begin color.json*/
 wb.menu({
     "name": "Color",
     "blocks": [
@@ -4718,7 +4753,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "radial gradient##",
+                    "sockets": [
+                        {
+                            "name": "radial gradient##"
+                        }
+                    ],
                     "script": "local.gradient##",
                     "type": "gradient"
                 }
@@ -4754,7 +4793,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "linear gradient##",
+                    "sockets": [
+                        {
+                            "linear gradient##"
+                        }
+                    ],
                     "script": "local.linear.gradient##",
                     "type": "gradient"
                 }
@@ -4803,7 +4846,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "pattern##",
+                    "sockets": [
+                        {
+                            "name": "pattern##"
+                        }
+                    ],
                     "script": "local.pattern##",
                     "type": "pattern"
                 }
@@ -4823,10 +4870,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end color_socket.json*/
+}
+);
+/*end color.json*/
 
-/*begin image_socket.json*/
+/*begin image.json*/
 wb.menu({
     "name": "Images",
     "blocks": [
@@ -4896,7 +4944,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "imageData##",
+                    "sockets": [
+                        {
+                            "name": "imageData##"
+                        }
+                    ],
                     "script": "local.imageData##",
                     "type": "imagedata"
                 }
@@ -4917,7 +4969,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "imageData##",
+                    "sockets": [
+                        {
+                            "name": "imageData##"
+                        }
+                    ],
                     "script": "local.imageData##",
                     "type": "imagedata"
                 }
@@ -4938,7 +4994,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "imageData##",
+                    "sockets": [
+                        {
+                            "name": "imageData##"
+                        }
+                    ],
                     "script": "local.imageData##",
                     "type": "imagedata"
                 }
@@ -5103,10 +5163,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end image_socket.json*/
+}
+);
+/*end image.json*/
 
-/*begin math_socket.json*/
+/*begin math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -5475,9 +5536,9 @@ wb.menu({
         }
     ]
 });
-/*end math_socket.json*/
+/*end math.json*/
 
-/*begin object_socket.json*/
+/*begin object.json*/
 wb.menu({
     "name": "Objects",
     "blocks": [
@@ -5488,7 +5549,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "object##",
+                    "sockets": [
+                        {
+                            "name": "object##"
+                        }
+                    ],
                     "script": "local.object##",
                     "type": "object"
                 }
@@ -5549,14 +5614,22 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "key",
+                    "sockets": [
+                        {
+                            "name": "key"
+                        }
+                    ],
                     "script": "local.key",
                     "help": "key of current item in object",
                     "type": "string"
                 },
                 {
                     "blocktype": "expression",
-                    "label": "item",
+                    "sockets": [
+                        {
+                            "name": "item"
+                        }
+                    ],
                     "script": "local.item",
                     "help": "the current item in the iteration",
                     "type": "any"
@@ -5575,10 +5648,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end object_socket.json*/
+}
+);
+/*end object.json*/
 
-/*begin string_socket.json*/
+/*begin string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
@@ -5784,9 +5858,9 @@ wb.menu({
         }
     ]
 });
-/*end string_socket.json*/
+/*end string.json*/
 
-/*begin path_socket.json*/
+/*begin path.json*/
 wb.menu({
     "name": "Paths",
     "blocks": [
@@ -5985,9 +6059,9 @@ wb.menu({
         }
     ]
 });
-/*end path_socket.json*/
+/*end path.json*/
 
-/*begin point_socket.json*/
+/*begin point.json*/
 wb.menu({
     "name": "Points",
     "blocks": [
@@ -6089,9 +6163,9 @@ wb.menu({
         }
     ]
 });
-/*end point_socket.json*/
+/*end point.json*/
 
-/*begin rect_socket.json*/
+/*begin rect.json*/
 wb.menu({
     "name": "Rects",
     "blocks": [
@@ -6268,9 +6342,9 @@ wb.menu({
         }
     ]
 });
-/*end rect_socket.json*/
+/*end rect.json*/
 
-/*begin sensing_socket.json*/
+/*begin sensing.json*/
 wb.menu({
     "name": "Sensing",
     "blocks": [
@@ -6281,7 +6355,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "answer##",
+                    "sockets": [
+                        {
+                            "name": "answer##"
+                        }
+                    ],
                     "type": "string",
                     "script": "local.answer##"
                 }
@@ -6443,10 +6521,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end sensing_socket.json*/
+}
+);
+/*end sensing.json*/
 
-/*begin shape_socket.json*/
+/*begin shape.json*/
 wb.menu({
     "name": "Shapes",
     "blocks": [
@@ -6651,9 +6730,9 @@ wb.menu({
         }
     ]
 });
-/*end shape_socket.json*/
+/*end shape.json*/
 
-/*begin size_socket.json*/
+/*begin size.json*/
 wb.menu({
     "name": "Sizes",
     "blocks": [
@@ -6738,9 +6817,9 @@ wb.menu({
         }
     ]
 });
-/*end size_socket.json*/
+/*end size.json*/
 
-/*begin social_socket.json*/
+/*begin social.json*/
 wb.menu({
     "name": "Twitter",
     "blocks": [
@@ -6751,7 +6830,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "last tweet##",
+                    "sockets": [
+                        {
+                            "name": "last tweet##"
+                        }
+                    ],
                     "script": "local.tweet## || \"waiting…\"",
                     "type": "string"
                 }
@@ -6766,10 +6849,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end social_socket.json*/
+}
+);
+/*end social.json*/
 
-/*begin fb_socket.json*/
+/*begin fb.json*/
 wb.menu({
     "name": "Facebook",
     "blocks": [
@@ -6873,9 +6957,9 @@ wb.menu({
         }
     ]
 });
-/*end fb_socket.json*/
+/*end fb.json*/
 
-/*begin text_socket.json*/
+/*begin text.json*/
 wb.menu({
     "name": "Text",
     "blocks": [
@@ -7051,9 +7135,9 @@ wb.menu({
         }
     ]
 });
-/*end text_socket.json*/
+/*end text.json*/
 
-/*begin matrix_socket.json*/
+/*begin matrix.json*/
 wb.menu({
     "name": "Matrix",
     "blocks": [
@@ -7085,7 +7169,7 @@ wb.menu({
         }
     ]
 });
-/*end matrix_socket.json*/
+/*end matrix.json*/
 
 /*begin launch.js*/
 switch(wb.view){

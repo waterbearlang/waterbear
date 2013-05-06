@@ -254,7 +254,7 @@
 
 /*end util.js*/
 
-/*begin events.js*/
+/*begin event.js*/
 // Add support for event delegation on top of normal DOM events
 // Minimal support for non-DOM events
 // Normalized between mouse and touch events
@@ -358,9 +358,9 @@
     };
 })(this);
 
-/*end events.js*/
+/*end event.js*/
 
-/*begin drag2.js*/
+/*begin drag.js*/
 (function(global){
 
     // FIXME: Remove references to waterbear or jquery (jquery done!)
@@ -753,7 +753,7 @@
 })(this);
 
 
-/*end drag2.js*/
+/*end drag.js*/
 
 /*begin uuid.js*/
 // This returns a Version 4 (random) UUID
@@ -791,7 +791,7 @@ function uuid(){
 
 /*end uuid.js*/
 
-/*begin block2.js*/
+/*begin block.js*/
 // Revised Block handling.
 //
 // Nearly all the block is defined in the HTML and DOM
@@ -970,7 +970,7 @@ function uuid(){
 })(wb);
 
 
-/*end block2.js*/
+/*end block.js*/
 
 /*begin ui.js*/
 (function(wb){
@@ -1614,12 +1614,6 @@ window.loadDefaultScript = function(script){
     }
 };
 
-window.updateScriptsView = function(){
-    var blocks = $('.workspace .scripts_workspace > .wrapper');
-    var view = $('.workspace .scripts_text_view');
-    blocks.writeScript(view);
-};
-
 wb.writeScript = function(elements, view){
     var code = elements.map(function(elem){
         return wb.Block.model(elem).code();
@@ -1639,11 +1633,6 @@ jQuery.fn.extend({
   }
 });
 
-function clearScripts(event, force){
-    if (force || confirm('Throw out the current script?')){
-        $('.workspace > *').empty();
-    }
-}
 
 function clearScriptsDefault(event, force){
   clearScripts(event, force);
@@ -1663,7 +1652,7 @@ setDefaultScript(defaultscript);
 
 /*end arduino.js*/
 
-/*begin boolean_socket.json*/
+/*begin boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -1721,9 +1710,9 @@ wb.menu({
         }
     ]
 });
-/*end boolean_socket.json*/
+/*end boolean.json*/
 
-/*begin control_socket.json*/
+/*begin control.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
@@ -1846,9 +1835,9 @@ wb.menu({
         }
     ]
 });
-/*end control_socket.json*/
+/*end control.json*/
 
-/*begin digitalio_socket.json*/
+/*begin digitalio.json*/
 wb.menu({
     "name": "Digital I/O",
     "blocks": [
@@ -1860,7 +1849,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "digital_output##",
+                    "sockets": [
+                        {
+                            "name": "digital_output##"
+                        }
+                    ],
                     "script": "digital_output##",
                     "type": "string"
                 }
@@ -1900,7 +1893,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "digital_input##",
+                    "sockets": [
+                        {
+                            "name": "digital_input##"
+                        }
+                    ],
                     "script": "digital_input##",
                     "type": "string"
                 }
@@ -1936,7 +1933,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "analog_input##",
+                    "sockets": [
+                        {
+                            "name": "analog_input##"
+                        }
+                    ],
                     "script": "analog_input##",
                     "type": "string"
                 }
@@ -1972,7 +1973,11 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "analog_output##",
+                    "sockets": [
+                        {
+                            "name": "analog_output##"
+                        }
+                    ],
                     "script": "analog_output##",
                     "type": "string"
                 }
@@ -2005,10 +2010,11 @@ wb.menu({
             ]
         }
     ]
-});
-/*end digitalio_socket.json*/
+}
+);
+/*end digitalio.json*/
 
-/*begin math_socket.json*/
+/*begin math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -2368,9 +2374,9 @@ wb.menu({
         }
     ]
 });
-/*end math_socket.json*/
+/*end math.json*/
 
-/*begin serialio_socket.json*/
+/*begin serialio.json*/
 wb.menu({
     "name": "Serial I/O",
     "blocks": [
@@ -2442,9 +2448,9 @@ wb.menu({
         }
     ]
 });
-/*end serialio_socket.json*/
+/*end serialio.json*/
 
-/*begin timing_socket.json*/
+/*begin timing.json*/
 wb.menu({
     "name": "Timing",
     "blocks": [
@@ -2490,9 +2496,9 @@ wb.menu({
         }
     ]
 });
-/*end timing_socket.json*/
+/*end timing.json*/
 
-/*begin variables_socket.json*/
+/*begin variables.json*/
 wb.menu({
     "name": "Variables",
     "blocks": [
@@ -2697,8 +2703,9 @@ wb.menu({
             ]
         }
     ]
-});
-/*end variables_socket.json*/
+}
+);
+/*end variables.json*/
 
 /*begin launch.js*/
 switch(wb.view){

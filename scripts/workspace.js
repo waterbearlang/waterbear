@@ -1,34 +1,33 @@
-(function($){
+(function(wb){
 
 var language = location.pathname.match(/\/(.*)\.html/)[1];
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace > .scripts_workspace').remove();
+        document.querySelector('.workspace > .scripts_workspace').remove();
         createWorkspace('Workspace');
-		$('.workspace > .scripts_text_view').empty();
+		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
     }
 }
-$('.clearScripts').click(clearScripts);
-$('.editScript').click(function(){
+Event.on('.clearScripts', 'click', null, clearScripts);
+Event.on('.editScript', 'click', null, function(){
 	document.body.className = 'editor';
 	wb.buildDelayedMenus();
 	wb.loadCurrentScripts(wb.queryParams);
 });
 
-$('.goto_stage').click(function(){
+Event.on('.goto_stage', 'click', null, function(){
 	document.body.className = 'result';
 });
 
 // Load and Save Section
 
-
 function saveCurrentScripts(){
-    showWorkspace();
-    $('#block_menu')[0].scrollIntoView();
+    wb.showWorkspace('block');
+    document.querySelector('#block_menu').scrollIntoView();
     localStorage['__' + language + '_current_scripts'] = wb.Block.serialize();
 }
-//$(window).unload(saveCurrentScripts);
+// window.onunload = saveCurrentScripts;
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
@@ -62,8 +61,8 @@ function comingSoon(evt){
     alert('Restore will be working again soon. You can drag saved json files to the script workspace now.');
 }
 
-$('.save_scripts').on('click', createDownloadUrl);
-$('.restore_scripts').on('click', comingSoon);
+Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.restore_scripts', 'click', null, comingSoon);
 
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
@@ -129,12 +128,10 @@ wb.loadCurrentScripts = function(queryParsed){
     if (wb.loaded) return;
     console.log('loading current scripts');
 	if (queryParsed.gist){
-		$.ajax({
-			url: 'https://api.github.com/gists/' + queryParsed.gist,
-			type: 'GET',
-			dataType: 'jsonp',
-			success: loadScriptsFromGist
-		});
+		wb.jsonp(
+			'https://api.github.com/gists/' + queryParsed.gist,
+			loadScriptsFromGist
+		);
 	}else if (localStorage['__' + language + '_current_scripts']){
         var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
         if (fileObject){
@@ -147,12 +144,10 @@ wb.loadCurrentScripts = function(queryParsed){
 
 wb.runCurrentScripts = function(queryParsed){
 	if (queryParsed.gist){
-		$.ajax({
-			url: 'https://api.github.com/gists/' + queryParsed.gist,
-			type: 'GET',
-			dataType: 'jsonp',
-			success: runScriptFromGist
-		});
+		wp.json(
+			'https://api.github.com/gists/' + queryParsed.gist,
+			runScriptFromGist
+		);
 	}else if (localStorage['__' + language + '_current_scripts']){
 		var fileObject = localStorage['__' + language + '_current_scripts'];
 		if (fileObject){
@@ -218,4 +213,4 @@ function getFiles(evt){
 
 
 
-})(jQuery);
+})(wb);

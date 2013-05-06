@@ -166,6 +166,8 @@
         return e;
     };
 
+
+    // Remove namespace for matches
     if (document.body.matches){
         wb.matches = function matches(elem, selector){ return wb.elem(elem).matches(selector); };
     }else if(document.body.mozMatchesSelector){
@@ -176,6 +178,23 @@
         wb.matches = function matches(elem, selector){ return wb.elem(elem).msMatchesSelector(selector); };
     }else if(document.body.oMatchesSelector){
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
+    }
+
+    // AJAX utilities
+
+    var jsonpHandlers = {};
+    wb.jsonp = function(url, callback){
+        var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
+        var handler = function(data){
+            // remove jsonp element
+            var script = document.getElementById(id);
+            script.parentElement.removeChild(script);
+            // remove self
+            delete window[id];
+            callback(data);
+        };
+        window[id] = handler;
+        document.head.append(wb.elem('script', {src: url, id: id}));
     }
 
 

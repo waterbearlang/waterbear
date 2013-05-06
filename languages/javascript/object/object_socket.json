@@ -8,7 +8,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "object##",
+                    "sockets": [
+                        {
+                            "name": "object##"
+                        }
+                    ],
                     "script": "local.object##",
                     "type": "object"
                 }
@@ -69,14 +73,22 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "key",
+                    "sockets": [
+                        {
+                            "name": "key"
+                        }
+                    ],
                     "script": "local.key",
                     "help": "key of current item in object",
                     "type": "string"
                 },
                 {
                     "blocktype": "expression",
-                    "label": "item",
+                    "sockets": [
+                        {
+                            "name": "item"
+                        }
+                    ],
                     "script": "local.item",
                     "help": "the current item in the iteration",
                     "type": "any"

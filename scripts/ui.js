@@ -1,25 +1,44 @@
-(function($){
+(function(wb){
 
 // UI Chrome Section
 
 function tabSelect(event){
-    var self = $(this);
-    $('.tabbar .selected').removeClass('selected');
-    self.addClass('selected');
-    if (self.is('.scripts_workspace_tab')){
-		$('.workspace').attr('class', 'workspace blockview');
+    var target = event.wbTarget;
+    document.querySelector('.tabbar .selected').classList.remove('selected');
+    target.classList.addToScriptEvent('selected');
+    if (wb.matches(target, '.scripts_workspace_tab')){
+        showWorkspace('block');
     }else if (self.is('.scripts_text_view_tab')){
-		$('.workspace').attr('class', 'workspace textview');
+        showWorkspace('text');
         updateScriptsView();
     }
 }
-$('.tabbar').on('click', '.chrome_tab', tabSelect);
+Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
-// Expose this to dragging and saving functionality
-function showWorkspace(){
-    $('.workspace').attr('class', 'workspace blockview');
+function accordion(event){
+    var open = document.querySelector('#block_menu .open');
+    if (open){
+        open.classList.remove('open');
+    }
+    if (open && open === event.wbTarget.nextSibling) return;
+    event.wbTarget.nextSibling.classList.add('open');
 }
-window.showWorkspace = showWorkspace;
+
+Event.on('#block_menu', 'click', '.accordion-header', accordion);
+
+
+function showWorkspace(mode){
+    var workspace = document.querySelector('.workspace');
+    if (mode === 'block'){
+        workspace.classList.remove('textview');
+        workspace.classList.add('blockview');
+    }else if (mode === 'text'){
+        workspace.classList.remove('blockview');
+        workspace.classList.add('textview');
+    }
+}
+// Expose this to dragging and saving functionality
+wb.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
     var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
@@ -37,17 +56,17 @@ function runCurrentScripts(event){
 		wb.runScript( wb.prettyScript(blocks) );
 	}
 }
-$('.runScripts').click(runCurrentScripts);
+Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
 	wb.script = script;
-	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
+	document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
 }
 
 function clearStage(event){
-	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
+	document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
-$('.clear_canvas').click(clearStage);
+Event.on('.clear_canvas', 'click', null, clearStage);
 
 // Context Menu
 //
@@ -172,18 +191,18 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
-if (is_touch_device()){
-    $.tappable({
-        container: '.blockmenu, .workspace',
-        selector: '.block',
-        callback: function(){
-            console.info('long tap detected');
-            console.info(this);
-            this.contextMenu();
-        },
-        touchDelay: 150
-    });
-}
+// if (is_touch_device()){
+//     $.tappable({
+//         container: '.blockmenu, .workspace',
+//         selector: '.block',
+//         callback: function(){
+//             console.info('long tap detected');
+//             console.info(this);
+//             this.contextMenu();
+//         },
+//         touchDelay: 150
+//     });
+// }
 
 var menu_built = false;
 var saved_menus = [];
@@ -219,25 +238,20 @@ wb.buildDelayedMenus = function(){
 function edit_menu(title, specs, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = $('.' + group + '+ .submenu');
-    if (!submenu.length){
-        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu block_menu"></div>');
-        $('#block_menu').append(body);
-        submenu = $('.' + group + '+ .submenu');
-        // This is dumb, but jQuery UI accordion widget doesn't support adding sections at runtime
+    var submenu = document.querySelector('.' + group + '+ .submenu');
+    if (!submenu){
+        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var blockmenu = document.querySelector('#block_menu');
+        blockmenu.appendChild(header);
+        blockmenu.appendChild(submenu);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(wb.Block(spec));
-    });
-    var state = $("#block_menu").accordion( "option", "active" );
-    $('#block_menu').accordion('destroy').accordion({
-        autoHeight: false,
-        collapsible: true,
-        active: show ? 'h3.' + group : state
+        submenu.appendChild(wb.Block(spec));
     });
 }
 
-})(jQuery);
+})(wb);
 

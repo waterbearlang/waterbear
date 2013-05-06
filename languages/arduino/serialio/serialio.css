@@ -1,3 +1,5 @@
-.serialio{ border-color: #e66a22; }
-.serialio > .block, h3.serialio{ background-color: #e66a22; }
+.serialio, .serialio .holder{
+    border-color: #e66a22;
+    background-color: #e66a22;
+}
 

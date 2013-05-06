@@ -279,7 +279,7 @@
 .block.scripts_workspace > .contained:before{
     content: none;
 }
-.block.scripts_workspace > .label > .block_menu {
+.block.scripts_workspace > .label > .block-menu {
     border: 1px solid black;
     border-radius: 5px;
 }

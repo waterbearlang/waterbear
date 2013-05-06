@@ -1,5 +1,15 @@
-.math{ border-color: hsl(93,90%,66%); }
-.math > .block, h3.math{ background-color: hsl(93,90%,76%); }
-.number{ border-color: blue; }
-.float{ border-color: blue; border-style: dotted !important; }
-.int{ border-color: blue; border-style: dashed !important; }
+.math, .math .holder{
+    border-color: hsl(93,90%,66%);
+    background-color: hsl(93,90%,76%);
+}
+.number, .number .holder{
+    border-color: blue;
+}
+.float, .float .holder{
+    border-color: blue;
+    border-style: dotted !important;
+}
+.int, .int .holder{
+    border-color: blue;
+    border-style: dashed !important;
+}

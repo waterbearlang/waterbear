@@ -87,7 +87,10 @@
             block.dataset.type = obj.type; // capture type of expression blocks
         }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
-            block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
+            block.appendChild(elem('details', {}, [
+                ['div', {'class': 'locals'}, (obj.locals || []).map(Block)],
+                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
+            ]));
         }
         return block;
     }

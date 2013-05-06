@@ -35,7 +35,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "count##",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
                     "script": "local.count##",
                     "type": "number"
                 }
@@ -77,7 +81,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "count##",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
                     "script": "local.count##",
                     "type": "number"
                 }
@@ -147,7 +155,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "data##",
+                    "sockets": [
+                        {
+                            "data##"
+                        }
+                    ],
                     "script": "local.data##",
                     "type": "any"
                 }

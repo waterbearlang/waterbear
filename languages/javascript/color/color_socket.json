@@ -189,7 +189,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "radial gradient##",
+                    "sockets": [
+                        {
+                            "name": "radial gradient##"
+                        }
+                    ],
                     "script": "local.gradient##",
                     "type": "gradient"
                 }
@@ -225,7 +229,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "linear gradient##",
+                    "sockets": [
+                        {
+                            "linear gradient##"
+                        }
+                    ],
                     "script": "local.linear.gradient##",
                     "type": "gradient"
                 }
@@ -274,7 +282,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "pattern##",
+                    "sockets": [
+                        {
+                            "name": "pattern##"
+                        }
+                    ],
                     "script": "local.pattern##",
                     "type": "pattern"
                 }

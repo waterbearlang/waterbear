@@ -91,7 +91,7 @@
         }
         var target = wb.closest(eT, '.block');
         if (target){
-            console.log('got a drag target: %o', target);
+            // console.log('got a drag target: %o', target);
             dragTarget = target;
             if (target.parentElement.classList.contains('block-menu')){
                 target.dataset.isTemplateBlock = 'true';
@@ -137,7 +137,7 @@
             }
             cloned = true;
             // Make sure the workspace is available to drag to
-            showWorkspace();
+            wb.showWorkspace('block');
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere
@@ -248,7 +248,10 @@
     }
 
     function positionExpressionDropCursor(){
-        if (!potentialDropTargets.length) return;
+        if (!potentialDropTargets.length){
+            console.log('no drop targets found');
+            return;
+        }
         var targets = potentialDropTargets.map(function(target){
             return [wb.overlap(dragTarget, target), target];
         });
@@ -329,7 +332,8 @@
     }
 
     function hasChildBlock(elem){
-        return !elem.querySelector('.block');
+        // FIXME, I don't know how to work around this if we allow default blocks
+        return true;
     }
 
     function getPotentialDropTargets(view){
@@ -346,7 +350,7 @@
                     return wb.findAll(workspace, '.contained').concat([workspace]);
                 }
             case 'expression':
-                var selector = '.socket' + expressionDropTypes(view.dataset.type).join(',.socket');
+                var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
                 if (scope){
                     return wb.findAll(scope, selector).filter(hasChildBlock);
                 }else{
@@ -359,15 +363,22 @@
         }
     };
 
+    function dataSelector(name){
+        if (name[0] === '.'){
+            name = name.slice(1); // remove leading dot
+        }
+        return '.socket[data-type=' + name + '] > .holder';
+    }
+
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
         if (Event.isTouch){
-            Event.on('.scripts_workspace .contained, .block_menu', 'touchstart', '.block', initDrag);
+            Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace .contained, .block_menu', 'mousedown', '.block', initDrag);
+            Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on('.scripts_workspace', 'click', '.socket', selectSocket);

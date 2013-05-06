@@ -8,7 +8,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "last tweet##",
+                    "sockets": [
+                        {
+                            "name": "last tweet##"
+                        }
+                    ],
                     "script": "local.tweet## || \"waiting…\"",
                     "type": "string"
                 }

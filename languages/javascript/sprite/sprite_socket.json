@@ -34,7 +34,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "sprite##",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
                     "script": "local.sprite##",
                     "type": "sprite"
                 }

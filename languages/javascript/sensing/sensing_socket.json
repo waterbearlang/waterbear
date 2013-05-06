@@ -8,7 +8,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "answer##",
+                    "sockets": [
+                        {
+                            "name": "answer##"
+                        }
+                    ],
                     "type": "string",
                     "script": "local.answer##"
                 }

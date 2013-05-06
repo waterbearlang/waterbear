@@ -5,7 +5,7 @@
 (function(global){
     "use strict";
 
-    var on = function(elem, eventname, selector, handler){
+    var on = function on(elem, eventname, selector, handler){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -19,11 +19,13 @@
         if (selector){
             listener = function(event){
                 blend(event); // normalize between touch and mouse events
-                if (eventname === 'mousedown'){
-                    console.log(event);
-                }
+                // if (eventname === 'mousedown'){
+                //     console.log(event);
+                // }
                 if (!event.wbValid) return;
-                if (wb.matches(event.wbTarget, selector + ' *')){
+                if (wb.matches(event.wbTarget, selector)){
+                    handler(event);
+                }else if (wb.matches(event.wbTarget, selector + ' *')){
                     event.wbTarget = wb.closest(event.wbTarget, selector);
                     handler(event);
                 }
@@ -51,7 +53,13 @@
         return Event.on(elem, eventname, selector, listener);
     }
 
-    var trigger = function(elem, eventname, data){
+    var trigger = function(elemOrSelector, eventname, data){
+        var elem;
+        if (elemOrSelector.nodeName){
+            elem = elemOrSelector;
+        }else{
+            elem = document.querySelector(elem);
+        }
         var evt = new CustomEvent(eventname, {detail: data});
         elem.dispatchEvent(evt);
     };

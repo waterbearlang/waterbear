@@ -67,7 +67,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "imageData##",
+                    "sockets": [
+                        {
+                            "name": "imageData##"
+                        }
+                    ],
                     "script": "local.imageData##",
                     "type": "imagedata"
                 }
@@ -88,7 +92,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "imageData##",
+                    "sockets": [
+                        {
+                            "name": "imageData##"
+                        }
+                    ],
                     "script": "local.imageData##",
                     "type": "imagedata"
                 }
@@ -109,7 +117,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "imageData##",
+                    "sockets": [
+                        {
+                            "name": "imageData##"
+                        }
+                    ],
                     "script": "local.imageData##",
                     "type": "imagedata"
                 }

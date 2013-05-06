@@ -9,7 +9,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "array##",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
                     "script": "local.array##",
                     "type": "array"
                 }
@@ -28,7 +32,11 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "array##",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
                     "script": "local.array##",
                     "type": "array"
                 }
@@ -208,14 +216,22 @@
             "locals": [
                 {
                     "blocktype": "expression",
-                    "label": "index",
+                    "sockets": [
+                        {
+                            "name": "index"
+                        }
+                    ],
                     "script": "local.index",
                     "help": "index of current item in array",
                     "type": "number"
                 },
                 {
                     "blocktype": "expression",
-                    "label": "item",
+                    "sockets": [
+                        {
+                            "name": "item"
+                        }
+                    ],
                     "script": "local.item",
                     "help": "the current item in the iteration",
                     "type": "any"

@@ -46,10 +46,9 @@ wb.choiceLists = {
 // wb.menu('Favourite Blocks', []);
 
 
-$('.scripts_workspace').trigger('init');
 
-$('.socket input').live('click',function(){
-    $(this).focus();
-    $(this).select();
+Event.on('.socket input', 'click', null, function(event){
+    event.wbTarget.focus();
+    event.wbTarget.select();
 });
 

@@ -12,64 +12,9 @@
     <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
     <!--script src="/lib/modernizr-1.6.min.js"></script-->
 
-    <!-- Templates for the various block types: -->
-    <script type="text/html" id="step_template">
-        <div class="wrapper step" data-classes="group">
-            <div class="block" data-title="tooltip">
-                <div class="blockhead">
-                    <div class="label">
-						<span data-replace="label"></span>
-					</div>
-                </div>
-            </div>
-        </div>
-    </script>
-    <script type="text/html" id="expression_template">
-        <div class="wrapper value" data-classes="type group">
-            <div class="block" data-title="tooltip">
-                <div class="blockhead">
-                    <div class="label">
-						<span data-replace="label"></span>
-					</div>
-                </div>
-            </div>
-        </div>
-    </script>
-    <script type="text/html" id="context_template">
-        <div class="wrapper step context" data-classes="group">
-            <div class="block" data-title="tooltip">
-                <div class="blockhead">
-                    <div class="label">
-                        <span class="disclosure open">▼</span>
-                        <span data-replace="label"></span>
-                    </div>
-                    <div class="locals block_menu"></div>
-                    <div class="contained">
-                        <i class="slot"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
-    <script type="text/html" id="eventhandler_template">
-        <div class="wrapper step context trigger" data-classes="group">
-            <div class="block" data-title="tooltip">
-                <div class="blockhead">
-	                <div class="label">
-	                    <span class="disclosure open">▼</span>
-	                    <span data-replace="label"></span>
-	                </div>
-	                <div class="locals block_menu"></div>
-                    <div class="contained">
-                        <i class="slot"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </script>
   </head>
   <body>
-      <div id="block_menu_load" class="block_menu">
+      <div id="block_menu_load" >
           Loading...
       </div>
     <div class="content editor">
@@ -79,7 +24,7 @@
             <button class="clearScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear Script</span></button>
             <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
 		</div>
-        <div id="block_menu" class="block_menu"></div>
+        <div id="block_menu"></div>
         <div class="workspace blockview">
 	        <div class="tabbar">
 	            <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>

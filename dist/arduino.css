@@ -348,6 +348,7 @@ body.editor #block_menu{
   margin-bottom: 15px;
 }
 
+
 .holder {
   display: inline-block;
   position: relative;
@@ -358,10 +359,9 @@ body.editor #block_menu{
 }
 
 .socket{
-  display: inline-block;
   position: relative;
+  display: inline-block;
 }
-
 
 .locals{
     display: block;
@@ -383,15 +383,11 @@ body.editor #block_menu{
     margin: 5px;
 }
 
-.label {
-  display: block;
-  cursor: pointer;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  padding: 2px;
-  padding-right: 5px;
+.block-menu .locals{
+  display: none;
 }
+
+
 
 .block {
   position: relative;
@@ -428,12 +424,16 @@ body.editor #block_menu{
   padding-top: 10px;
 }
 
-.label{
+.label {
+  display: block;
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
   font-family: Georgia;
   font-size: 12px;
   white-space: nowrap;
   margin: 0;
-  display: block;
   padding-top: 4px;
   padding-left: 5px;
   padding-bottom: 7px;
@@ -546,6 +546,11 @@ body.editor #block_menu{
 .contained:last-child {
     margin-bottom: 10px;
 }
+
+.block-menu .contained{
+  display: none;
+}
+
 
 .block input {
   margin-left: 5px;

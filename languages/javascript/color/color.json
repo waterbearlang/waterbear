@@ -231,7 +231,7 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "linear gradient##"
+                            "name": "linear gradient##"
                         }
                     ],
                     "script": "local.linear.gradient##",

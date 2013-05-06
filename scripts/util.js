@@ -152,6 +152,7 @@
                     if (child.nodeName){
                         e.appendChild(child);
                     }else if (Array.isArray(child)){
+                        console.log('DEPRECATED array arg to elem: use sub-elem instead');
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
@@ -159,8 +160,13 @@
                     }
                 });
             }else{
-                // assumes children is a string
-                e.appendChild(document.createTextNode(children));
+                if (children.nodeName){
+                    // append single node
+                    e.appendChild(children);
+                }else{
+                    // assumes children is a string
+                    e.appendChild(document.createTextNode(children));
+                }
             }
         }
         return e;

@@ -79,18 +79,14 @@
                 'data-scriptid': obj.scriptid || obj.id,
                 'title': obj.help || getHelp(obj.scriptid || obj.id)
             },
-            [
-                ['div', {'class': 'label'}, getSockets(obj)] // how to get values for restored classes?
-            ]
+            elem('div', {'class': 'label'}, getSockets(obj))
         );
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
-            block.appendChild(elem('details', {}, [
-                ['div', {'class': 'locals'}, (obj.locals || []).map(Block)],
-                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
-            ]));
+            block.appendChild(elem('div', {'class': 'locals block-menu'}, (obj.locals || []).map(Block)));
+            block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }
         return block;
     }
@@ -105,9 +101,7 @@
                 'class': 'socket',
                 'data-name': obj.name
             },
-            [
-                ['label', {'class': 'name'}, [obj.name]]
-            ]
+            elem('label', {'class': 'name'}, obj.name)
         );
         if (obj.type){
             socket.dataset.type = obj.type;

@@ -202,6 +202,7 @@
                     if (child.nodeName){
                         e.appendChild(child);
                     }else if (Array.isArray(child)){
+                        console.log('DEPRECATED array arg to elem: use sub-elem instead');
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
@@ -209,8 +210,13 @@
                     }
                 });
             }else{
-                // assumes children is a string
-                e.appendChild(document.createTextNode(children));
+                if (children.nodeName){
+                    // append single node
+                    e.appendChild(children);
+                }else{
+                    // assumes children is a string
+                    e.appendChild(document.createTextNode(children));
+                }
             }
         }
         return e;
@@ -873,18 +879,14 @@ function uuid(){
                 'data-scriptid': obj.scriptid || obj.id,
                 'title': obj.help || getHelp(obj.scriptid || obj.id)
             },
-            [
-                ['div', {'class': 'label'}, getSockets(obj)] // how to get values for restored classes?
-            ]
+            elem('div', {'class': 'label'}, getSockets(obj))
         );
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
-            block.appendChild(elem('details', {}, [
-                ['div', {'class': 'locals'}, (obj.locals || []).map(Block)],
-                ['div', {'class': 'contained'}, (obj.contained || []).map(Block)]
-            ]));
+            block.appendChild(elem('div', {'class': 'locals block-menu'}, (obj.locals || []).map(Block)));
+            block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }
         return block;
     }
@@ -899,9 +901,7 @@ function uuid(){
                 'class': 'socket',
                 'data-name': obj.name
             },
-            [
-                ['label', {'class': 'name'}, [obj.name]]
-            ]
+            elem('label', {'class': 'name'}, obj.name)
         );
         if (obj.type){
             socket.dataset.type = obj.type;

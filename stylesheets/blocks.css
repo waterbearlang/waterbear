@@ -7,6 +7,7 @@
   margin-bottom: 15px;
 }
 
+
 .holder {
   display: inline-block;
   position: relative;
@@ -17,10 +18,9 @@
 }
 
 .socket{
-  display: inline-block;
   position: relative;
+  display: inline-block;
 }
-
 
 .locals{
     display: block;
@@ -42,15 +42,11 @@
     margin: 5px;
 }
 
-.label {
-  display: block;
-  cursor: pointer;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  padding: 2px;
-  padding-right: 5px;
+.block-menu .locals{
+  display: none;
 }
+
+
 
 .block {
   position: relative;
@@ -87,12 +83,16 @@
   padding-top: 10px;
 }
 
-.label{
+.label {
+  display: block;
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
   font-family: Georgia;
   font-size: 12px;
   white-space: nowrap;
   margin: 0;
-  display: block;
   padding-top: 4px;
   padding-left: 5px;
   padding-bottom: 7px;
@@ -205,6 +205,11 @@
 .contained:last-child {
     margin-bottom: 10px;
 }
+
+.block-menu .contained{
+  display: none;
+}
+
 
 .block input {
   margin-left: 5px;

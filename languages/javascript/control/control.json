@@ -157,7 +157,7 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "data##"
+                            "name": "data##"
                         }
                     ],
                     "script": "local.data##",

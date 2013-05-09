@@ -120,15 +120,16 @@ body.editor #block_menu{
   cursor: pointer;
 }
 
-.submenu .wrapper {
+.submenu .block {
     margin-bottom: 20px;
-    margin-right: 35px;
-    float: left;
 }
 
 .dropCursor {
-    height: 1px;
+    height: 2px;
     border-bottom: 1px solid #CCC;
+    width: 75%
+    float: left;
+    clear: left;
 }
 
 .chrome_tab{
@@ -402,6 +403,8 @@ body.editor #block_menu{
   white-space: nowrap;
   cursor: pointer;
   min-width: 75px;
+  float: left;
+  clear: left;
 }
 
 .expression.block{
@@ -530,7 +533,7 @@ body.editor #block_menu{
   margin-left: 10px;
   margin-bottom: 0;
   padding-bottom: 10px;
-  overflow: visible;
+  overflow: auto;
   -webkit-border-top-left-radius: 10px;
   -webkit-border-bottom-left-radius: 10px;
   -moz-border-radius-topleft: 10px;
@@ -628,6 +631,10 @@ body.editor #block_menu{
 .block.scripts_workspace > .label > .block-menu {
     border: 1px solid black;
     border-radius: 5px;
+}
+
+.block.scripts_workspace:after{
+  content: none;
 }
 
 

@@ -118,15 +118,16 @@ body.editor #block_menu{
   cursor: pointer;
 }
 
-.submenu .wrapper {
+.submenu .block {
     margin-bottom: 20px;
-    margin-right: 35px;
-    float: left;
 }
 
 .dropCursor {
-    height: 1px;
+    height: 2px;
     border-bottom: 1px solid #CCC;
+    width: 75%
+    float: left;
+    clear: left;
 }
 
 .chrome_tab{

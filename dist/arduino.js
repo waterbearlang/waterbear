@@ -481,7 +481,7 @@
             console.log('not a valid drag target');
             dragTarget = null;
         }
-        return true;
+        return false;
     }
 
     function startDrag(event){
@@ -498,6 +498,7 @@
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = dragTarget.cloneNode(true); // clones dataset and children, yay
+            delete dragTarget.dataset.isTemplateBlock;
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -885,7 +886,13 @@ function uuid(){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
-            block.appendChild(elem('div', {'class': 'locals block-menu'}, (obj.locals || []).map(Block)));
+            block.appendChild(elem('div', {'class': 'locals block-menu'}, (obj.locals || []).map(
+                function(spec){
+                    spec.isTemplateBlock = true;
+                    spec.isLocal = true;
+                    spec.group = obj.group;
+                    return Block(spec)
+                })));
             block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }
         return block;

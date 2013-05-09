@@ -112,7 +112,7 @@
             console.log('not a valid drag target');
             dragTarget = null;
         }
-        return true;
+        return false;
     }
 
     function startDrag(event){
@@ -129,6 +129,7 @@
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = dragTarget.cloneNode(true); // clones dataset and children, yay
+            delete dragTarget.dataset.isTemplateBlock;
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');

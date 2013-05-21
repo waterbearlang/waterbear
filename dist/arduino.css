@@ -349,6 +349,10 @@ body.editor #block_menu{
   margin-bottom: 15px;
 }
 
+.submenu .seq-num{
+  display: none;
+}
+
 
 .holder {
   display: inline-block;

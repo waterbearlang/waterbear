@@ -2676,7 +2676,9 @@ function uuid(){
     }
 
     var getSockets = function(obj){
-        return blockRegistry[obj.scriptid || obj.id].sockets.map(Socket);
+        return blockRegistry[obj.scriptid || obj.id].sockets.map(function(socket_descriptor){
+            return Socket(socket_descriptor, obj);
+        });
     }
 
     var Block = function(obj){
@@ -2721,7 +2723,8 @@ function uuid(){
         return block;
     }
 
-    var Socket = function(obj){
+    var Socket = function(obj, block){
+        // obj is a socket descriptor object, block is the owner block descriptor
         // Sockets are described by text, type, and default value
         // type and default value are optional, but if you have one you must have the other
         // If the type is choice it must also have a choicename for the list of values
@@ -2729,10 +2732,13 @@ function uuid(){
         var socket = elem('div',
             {
                 'class': 'socket',
-                'data-name': obj.name
+                'data-name': obj.name,
+                'data-id': block.id,
+                'data-seq-num': block.seqNum
             },
-            elem('label', {'class': 'name'}, obj.name)
+            elem('span', {'class': 'name'}, obj.name)
         );
+        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + block.seqNum + '</span>');
         if (obj.type){
             socket.dataset.type = obj.type;
             socket.appendChild(elem('div', {'class': 'holder'}, [Default(obj)]))

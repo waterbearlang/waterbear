@@ -128,8 +128,9 @@
         if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
-            dragTarget = dragTarget.cloneNode(true); // clones dataset and children, yay
-            delete dragTarget.dataset.isTemplateBlock;
+            dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
+            Event.trigger(dragTarget, 'clone');
+            delete dragTarget.dataset.isTemplateBlock; // moveto on('clone')
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -143,7 +144,7 @@
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere
             // FIXME: Better name?
-            Event.trigger(dragTarget, 'removeFromScript');
+            Event.trigger(dragTarget, 'wb-remove');
         }
         dragging = true;
         // get position and append target to .content, adjust offsets

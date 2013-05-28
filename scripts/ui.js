@@ -95,7 +95,7 @@ function cutBlockCommand(key, opt){
     var view = this.closest('.wrapper');
     pasteboard = Block.model(view);
     // Remove it programatically, and trigger the right events:
-    removeFromScriptEvent(view);
+    Event.trigger(view, 'wb-event');
     view.remove();
 }
 

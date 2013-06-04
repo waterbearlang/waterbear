@@ -80,6 +80,7 @@
                 'id': obj.id,
                 'data-scopeid': obj.scopeid || 0,
                 'data-scriptid': obj.scriptid || obj.id,
+                'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-seq-num': obj.seqNum,
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
@@ -91,14 +92,7 @@
             block.dataset.type = obj.type; // capture type of expression blocks
         }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
-            block.appendChild(elem('div', {'class': 'locals block-menu'}, (obj.locals || []).map(
-                function(spec){
-                    spec.isTemplateBlock = true;
-                    spec.isLocal = true;
-                    spec.group = obj.group;
-                    spec.seqNum = obj.seqNum;
-                    return Block(spec)
-                })));
+            block.appendChild(elem('div', {'class': 'locals block-menu'}));
             block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }
         return block;
@@ -106,39 +100,84 @@
 
     // Block Event Handlers
 
-    Event.on(document.body, 'wb-remove', '.contained > .block', removeBlock);
-    Event.on(document.body, 'wb-remove', '.holder > .expression', removeExpression);
-    Event.on(document.body, 'wb-add', '.contained > .block', addBlock);
-    Event.on(document.body, 'wb-add', '.holder > .expression', addExpression);
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-remove', '.expression', removeExpression);
+    Event.on(document.body, 'wb-add', '.step', addBlock);
+    Event.on(document.body, 'wb-add', '.expression', addExpression);
     Event.on(document.body, 'wb-clone', '.block', onClone);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
     function removeBlock(event){
-        // Remove a block from a block container, but it still exists and can be re-added
+        // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
+        var block = event.wbTarget;
+        // console.log('remove block: %o', block);
+        if (block.classList.contains('step') && !block.classList.contains('context')){
+            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+            if (block.dataset.locals && block.dataset.locals.length){
+                // remove locals
+                var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
+                locals.forEach(function(local){
+                    if (!local.isTemplateBlock){
+                        Event.trigger(local, 'wb-remove');
+                    }
+                    local.parentElement.removeChild(local);
+                });
+            }
+        }
     }
 
     function removeExpression(event){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
+        var block = event.wbTarget;
+        // console.log('remove expression %o', block);
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.removeAttribute('style');
+        });
     }
 
     function addBlock(event){
         // Add a block to a block container
-        // add scopeid to local blocks
+        var block = event.wbTarget;
+        // console.log('add block %o', block);
+        if (block.dataset.locals && block.dataset.locals.length){
+            var parent = wb.closest(block, '.context');
+            var locals = wb.findChild(parent, '.locals');
+            JSON.parse(block.dataset.locals).forEach(
+                function(spec){
+                    spec.isTemplateBlock = true;
+                    spec.isLocal = true;
+                    spec.group = block.dataset.group;
+                    spec.seqNum = block.dataset.seqNum;
+                    // add scopeid to local blocks
+                    spec.scopeid = parent.id;
+                    // add localSource so we can trace a local back to its origin
+                    spec.localSource = block.id;
+                    locals.appendChild(Block(spec));
+                }
+            );
+        }
     }
 
     function addExpression(event){
         // add an expression to an expression holder
         // hide or remove default block
+        var block = event.wbTarget;
+        // console.log('add expression %o', block);
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.style.display = 'none';
+        });
     }
 
     function onClone(event){
         // a block has been cloned. Praise The Loa!
+        var block = event.wbTarget;
+        // console.log('block cloned %o', block);
     }
 
     function blockDesc(block){
-        return {
+        var desc = {
             blocktype: block.dataset.blocktype,
             group: block.dataset.group,
             id: block.id,
@@ -146,11 +185,24 @@
             seqNum: block.dataset.seqNum,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
-            isTemplateBlock: !!block.dataset.isTemplateBlock,
-            isLocal: !!block.dataset.isLocal,
-            sockets: JSON.parse(block.dataset.sockets),
-            locals: JSON.parse(block.dataset.locals)
+            sockets: JSON.parse(block.dataset.sockets)
         }
+        if (block.dataset.isTemplateBlock){
+            desc.isTemplateBlock = true;
+        }
+        if (block.dataset.isLocal){
+            desc.isLocal = true;
+        }
+        if (block.dataset.localSource){
+            desc.localSource = block.dataset.localSource;
+        }
+        if (block.dataset.type){
+            desc.type = block.dataset.type;
+        }
+        if (block.dataset.locals){
+            desc.locals = JSON.parse(block.dataset.locals);
+        }
+        return desc;
     }
 
     function cloneBlock(block){
@@ -167,6 +219,8 @@
     function deleteBlock(event){
         // delete a block from the script entirely
         // remove from registry
+        var block = event.wbTarget;
+        // console.log('block deleted %o', block);
     }
 
     var Socket = function(obj, block){
@@ -245,6 +299,7 @@
     }
 
 
+    // Export methods
     wb.Block = Block;
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;

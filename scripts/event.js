@@ -14,7 +14,7 @@
         if (!elem.tagName){ console.error('first argument must be element'); }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
-        if (typeof handler !== 'function'){ console.flog('fourth argument must be handler'); }
+        if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
             listener = function(event){
@@ -22,7 +22,10 @@
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
                 // }
-                if (!event.wbValid) return;
+                if (!event.wbValid){
+                    // console.log('event %s is not valid', eventname);
+                    return;
+                }
                 if (wb.matches(event.wbTarget, selector)){
                     handler(event);
                 }else if (wb.matches(event.wbTarget, selector + ' *')){
@@ -33,11 +36,13 @@
         }else{
             listener = function(event){
                 blend(event);
-                if (!event.wbValid) return;
+                if (!event.wbValid){
+                    return;
+                }
                 handler(event);
             };
         }
-        elem.addEventListener(eventname, listener);
+        elem.addEventListener(eventname, listener, false);
         return listener;
     };
 
@@ -60,31 +65,52 @@
         }else{
             elem = document.querySelector(elem);
         }
-        var evt = new CustomEvent(eventname, {detail: data});
+        var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
+        // console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     };
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
+    var isPointerEvent = function(event){
+        switch(event.type){
+            case 'touchstart':
+            case 'touchmove':
+            case 'touchend':
+            case 'tap':
+            case 'mousedown':
+            case 'mousemove':
+            case 'mouseup':
+            case 'click':
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // Treat mouse events and single-finger touch events similarly
     var blend = function(event){
-        if (isTouch){
-            if (event.touches.length > 1){
-                return event;
+        if (isPointerEvent(event)){
+            if (isTouch){
+                if (event.touches.length > 1){
+                    return event;
+                }
+                var touch = event.touches[0];
+                event.wbTarget = touch.target;
+                event.wbPageX = touch.pageX;
+                event.wbPageY = touch.pageY;
+                event.wbValid = true;
+            }else{
+                if (event.which !== 1){ // left mouse button
+                    return event;
+                }
+                event.wbTarget = event.target;
+                event.wbPageX = event.pageX;
+                event.wbPageY = event.pageY;
+                event.wbValid = true;
             }
-            var touch = event.touches[0];
-            event.wbTarget = touch.target;
-            event.wbPageX = touch.pageX;
-            event.wbPageY = touch.pageY;
-            event.wbValid = true;
         }else{
-            if (event.which !== 1){ // left mouse button
-                return event;
-            }
             event.wbTarget = event.target;
-            event.wbPageX = event.pageX;
-            event.wbPageY = event.pageY;
             event.wbValid = true;
         }
         // fix target?

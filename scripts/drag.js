@@ -130,7 +130,6 @@
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             Event.trigger(dragTarget, 'clone');
-            delete dragTarget.dataset.isTemplateBlock; // moveto on('clone')
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -205,26 +204,22 @@
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             // FIXME: Handle this event
-            console.log('triggering deleteBlock');
-            Event.trigger(dragTarget, 'deleteBlock');
+            Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
-        }else if (wb.overlap(dragTarget, workspace)){
+        }else if (wb.overlap(dragTarget, workspace) && dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'addToScript', dropTarget);
+                Event.trigger(dragTarget, 'wb-add', dropTarget);
             }else{
                 console.log('inserting a value in a socket');
                 // Insert a value block into a socket
-                wb.findChildren(dropTarget, 'input, select').forEach(function(elem){
-                    wb.hide(elem); // FIXME: Move to block.js
-                });
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'addToScript', dropTarget);
+                Event.trigger(dragTarget, 'wb-add', dropTarget);
             }
         }else{
             if (cloned){

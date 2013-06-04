@@ -136,6 +136,7 @@
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
+                if (attributes[key] === null || attributes[key] === undefined) return;
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){

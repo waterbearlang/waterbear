@@ -2009,6 +2009,7 @@ hljs.LANGUAGES.javascript = {
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
+                if (attributes[key] === null || attributes[key] === undefined) return;
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
@@ -2100,7 +2101,7 @@ hljs.LANGUAGES.javascript = {
         if (!elem.tagName){ console.error('first argument must be element'); }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
-        if (typeof handler !== 'function'){ console.flog('fourth argument must be handler'); }
+        if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
             listener = function(event){
@@ -2108,7 +2109,10 @@ hljs.LANGUAGES.javascript = {
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
                 // }
-                if (!event.wbValid) return;
+                if (!event.wbValid){
+                    // console.log('event %s is not valid', eventname);
+                    return;
+                }
                 if (wb.matches(event.wbTarget, selector)){
                     handler(event);
                 }else if (wb.matches(event.wbTarget, selector + ' *')){
@@ -2119,11 +2123,13 @@ hljs.LANGUAGES.javascript = {
         }else{
             listener = function(event){
                 blend(event);
-                if (!event.wbValid) return;
+                if (!event.wbValid){
+                    return;
+                }
                 handler(event);
             };
         }
-        elem.addEventListener(eventname, listener);
+        elem.addEventListener(eventname, listener, false);
         return listener;
     };
 
@@ -2146,31 +2152,52 @@ hljs.LANGUAGES.javascript = {
         }else{
             elem = document.querySelector(elem);
         }
-        var evt = new CustomEvent(eventname, {detail: data});
+        var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
+        // console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     };
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
+    var isPointerEvent = function(event){
+        switch(event.type){
+            case 'touchstart':
+            case 'touchmove':
+            case 'touchend':
+            case 'tap':
+            case 'mousedown':
+            case 'mousemove':
+            case 'mouseup':
+            case 'click':
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // Treat mouse events and single-finger touch events similarly
     var blend = function(event){
-        if (isTouch){
-            if (event.touches.length > 1){
-                return event;
+        if (isPointerEvent(event)){
+            if (isTouch){
+                if (event.touches.length > 1){
+                    return event;
+                }
+                var touch = event.touches[0];
+                event.wbTarget = touch.target;
+                event.wbPageX = touch.pageX;
+                event.wbPageY = touch.pageY;
+                event.wbValid = true;
+            }else{
+                if (event.which !== 1){ // left mouse button
+                    return event;
+                }
+                event.wbTarget = event.target;
+                event.wbPageX = event.pageX;
+                event.wbPageY = event.pageY;
+                event.wbValid = true;
             }
-            var touch = event.touches[0];
-            event.wbTarget = touch.target;
-            event.wbPageX = touch.pageX;
-            event.wbPageY = touch.pageY;
-            event.wbValid = true;
         }else{
-            if (event.which !== 1){ // left mouse button
-                return event;
-            }
             event.wbTarget = event.target;
-            event.wbPageX = event.pageX;
-            event.wbPageY = event.pageY;
             event.wbValid = true;
         }
         // fix target?
@@ -2322,7 +2349,6 @@ hljs.LANGUAGES.javascript = {
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             Event.trigger(dragTarget, 'clone');
-            delete dragTarget.dataset.isTemplateBlock; // moveto on('clone')
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -2397,26 +2423,22 @@ hljs.LANGUAGES.javascript = {
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             // FIXME: Handle this event
-            console.log('triggering deleteBlock');
-            Event.trigger(dragTarget, 'deleteBlock');
+            Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
-        }else if (wb.overlap(dragTarget, workspace)){
+        }else if (wb.overlap(dragTarget, workspace) && dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'addToScript', dropTarget);
+                Event.trigger(dragTarget, 'wb-add', dropTarget);
             }else{
                 console.log('inserting a value in a socket');
                 // Insert a value block into a socket
-                wb.findChildren(dropTarget, 'input, select').forEach(function(elem){
-                    wb.hide(elem); // FIXME: Move to block.js
-                });
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'addToScript', dropTarget);
+                Event.trigger(dragTarget, 'wb-add', dropTarget);
             }
         }else{
             if (cloned){
@@ -2705,6 +2727,7 @@ function uuid(){
                 'id': obj.id,
                 'data-scopeid': obj.scopeid || 0,
                 'data-scriptid': obj.scriptid || obj.id,
+                'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-seq-num': obj.seqNum,
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
@@ -2716,14 +2739,7 @@ function uuid(){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
-            block.appendChild(elem('div', {'class': 'locals block-menu'}, (obj.locals || []).map(
-                function(spec){
-                    spec.isTemplateBlock = true;
-                    spec.isLocal = true;
-                    spec.group = obj.group;
-                    spec.seqNum = obj.seqNum;
-                    return Block(spec)
-                })));
+            block.appendChild(elem('div', {'class': 'locals block-menu'}));
             block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
         }
         return block;
@@ -2731,39 +2747,85 @@ function uuid(){
 
     // Block Event Handlers
 
-    Event.on(document.body, 'wb-remove', '.contained > .block', removeBlock);
-    Event.on(document.body, 'wb-remove', '.holder > .expression', removeExpression);
-    Event.on(document.body, 'wb-add', '.contained > .block', addBlock);
-    Event.on(document.body, 'wb-add', '.holder > .expression', addExpression);
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-remove', '.expression', removeExpression);
+    Event.on(document.body, 'wb-add', '.step', addBlock);
+    Event.on(document.body, 'wb-add', '.expression', addExpression);
     Event.on(document.body, 'wb-clone', '.block', onClone);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
     function removeBlock(event){
-        // Remove a block from a block container, but it still exists and can be re-added
+        // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
+        var block = event.wbTarget;
+        console.log('remove block: %o', block);
+        if (block.classList.contains('step') && !block.classList.contains('context')){
+            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+            if (block.dataset.locals && block.dataset.locals.length){
+                // remove locals
+                var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
+                locals.forEach(function(local){
+                    if (!local.isTemplateBlock){
+                        Event.trigger(local, 'wb-remove');
+                    }
+                    local.parentElement.removeChild(local);
+                });
+            }
+        }
     }
 
     function removeExpression(event){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
+        var block = event.wbTarget;
+        console.log('remove expression %o', block);
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            console.log('sibling: %o', elem);
+            elem.removeAttribute('style');
+        });
     }
 
     function addBlock(event){
         // Add a block to a block container
-        // add scopeid to local blocks
+        var block = event.wbTarget;
+        // console.log('add block %o', block);
+        if (block.dataset.locals && block.dataset.locals.length){
+            var parent = wb.closest(block, '.context');
+            var locals = wb.findChild(parent, '.locals');
+            JSON.parse(block.dataset.locals).forEach(
+                function(spec){
+                    spec.isTemplateBlock = true;
+                    spec.isLocal = true;
+                    spec.group = block.dataset.group;
+                    spec.seqNum = block.dataset.seqNum;
+                    // add scopeid to local blocks
+                    spec.scopeid = parent.id;
+                    // add localSource so we can trace a local back to its origin
+                    spec.localSource = block.id;
+                    locals.appendChild(Block(spec));
+                }
+            );
+        }
     }
 
     function addExpression(event){
         // add an expression to an expression holder
         // hide or remove default block
+        var block = event.wbTarget;
+        console.log('add expression %o', block);
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.style.display = 'none';
+        });
     }
 
     function onClone(event){
         // a block has been cloned. Praise The Loa!
+        var block = event.wbTarget;
+        console.log('block cloned %o', block);
     }
 
     function blockDesc(block){
-        return {
+        var desc = {
             blocktype: block.dataset.blocktype,
             group: block.dataset.group,
             id: block.id,
@@ -2771,11 +2833,24 @@ function uuid(){
             seqNum: block.dataset.seqNum,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
-            isTemplateBlock: !!block.dataset.isTemplateBlock,
-            isLocal: !!block.dataset.isLocal,
-            sockets: JSON.parse(block.dataset.sockets),
-            locals: JSON.parse(block.dataset.locals)
+            sockets: JSON.parse(block.dataset.sockets)
         }
+        if (block.dataset.isTemplateBlock){
+            desc.isTemplateBlock = true;
+        }
+        if (block.dataset.isLocal){
+            desc.isLocal = true;
+        }
+        if (block.dataset.localSource){
+            desc.localSource = block.dataset.localSource;
+        }
+        if (block.dataset.type){
+            desc.type = block.dataset.type;
+        }
+        if (block.dataset.locals){
+            desc.locals = JSON.parse(block.dataset.locals);
+        }
+        return desc;
     }
 
     function cloneBlock(block){
@@ -2792,6 +2867,8 @@ function uuid(){
     function deleteBlock(event){
         // delete a block from the script entirely
         // remove from registry
+        var block = event.wbTarget;
+        console.log('block deleted %o', block);
     }
 
     var Socket = function(obj, block){
@@ -2870,6 +2947,7 @@ function uuid(){
     }
 
 
+    // Export methods
     wb.Block = Block;
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;

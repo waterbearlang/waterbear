@@ -10,7 +10,8 @@ switch(wb.view){
 }
 
 function switchMode(mode){
-    document.querySelector('#block_menu_load').remove();
+    var loader = document.querySelector('#block_menu_load');
+    loader.parentElement.removeChild(loader);
     document.body.className = mode;
     //wb.loadCurrentScripts(q);
     // remove next line once load/save is working

@@ -1978,6 +1978,7 @@ hljs.LANGUAGES.javascript = {
     };
 
     wb.findChild = function(){
+        // I wish I knew what I was thinking here...
         var args = wb.makeArray(arguments);
         var elem = wb.elem(args.shift());
         var children, selector;
@@ -2677,6 +2678,7 @@ function uuid(){
     }
 
     var blockRegistry = {};
+    wb.blockRegistry = blockRegistry;
 
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
@@ -2758,7 +2760,7 @@ function uuid(){
         // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
         var block = event.wbTarget;
-        console.log('remove block: %o', block);
+        // console.log('remove block: %o', block);
         if (block.classList.contains('step') && !block.classList.contains('context')){
             var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
             if (block.dataset.locals && block.dataset.locals.length){
@@ -2778,9 +2780,8 @@ function uuid(){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
         var block = event.wbTarget;
-        console.log('remove expression %o', block);
+        //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
-            console.log('sibling: %o', elem);
             elem.removeAttribute('style');
         });
     }
@@ -2812,7 +2813,7 @@ function uuid(){
         // add an expression to an expression holder
         // hide or remove default block
         var block = event.wbTarget;
-        console.log('add expression %o', block);
+        // console.log('add expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.style.display = 'none';
         });
@@ -2821,7 +2822,7 @@ function uuid(){
     function onClone(event){
         // a block has been cloned. Praise The Loa!
         var block = event.wbTarget;
-        console.log('block cloned %o', block);
+        // console.log('block cloned %o', block);
     }
 
     function blockDesc(block){
@@ -2860,7 +2861,7 @@ function uuid(){
         delete blockdesc.seqNum;
         delete blockdesc.isTemplateBlock;
         delete blockdesc.isLocal;
-        blockdesc.scriptId = block.dataset.id;
+        blockdesc.scriptid = block.id;
         return Block(blockdesc);
     }
 
@@ -2868,7 +2869,7 @@ function uuid(){
         // delete a block from the script entirely
         // remove from registry
         var block = event.wbTarget;
-        console.log('block deleted %o', block);
+        // console.log('block deleted %o', block);
     }
 
     var Socket = function(obj, block){
@@ -2946,12 +2947,45 @@ function uuid(){
         return elem('input', {type: type, value: value});
     }
 
+    var socketValue = function(holder){
+        if (holder.children.length > 1){
+            return codeFromBlock(wb.findChild(holder, '.block'));
+        }else{
+            return wb.findChild(holder, 'input, select').value;
+        }
+    }
+
+    var codeFromBlock = function(block){
+        var scriptTemplate = getScript(block.dataset.scriptid).replace(/##/g, '_' + block.dataset.seqNum);
+        var childValues = [];
+        var label = wb.findChild(block, '.label');
+        var expressionValues = wb.findChildren(label, '.socket')
+            .map(function(socket){ return wb.findChild(socket, '.holder'); }) // get holders, if any
+            .filter(function(holder){ return holder; }) // remove undefineds
+            .map(socketValue); // get value
+        if (wb.matches(block, '.context')){
+            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock);
+        }
+        // Now intertwingle the values with the template and return the result
+        function replace_values(match, offset, s){
+            var idx = parseInt(match.slice(2, -2), 10) - 1;
+            if (match[0] === '{'){
+                return expressionValues[idx] || 'null';
+            }else{
+                return childValues[idx] || 'null';
+            }
+        }
+        var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
+        var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
+        return _code2;
+    };
+
 
     // Export methods
     wb.Block = Block;
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;
-
+    wb.codeFromBlock = codeFromBlock;
 })(wb);
 
 
@@ -2965,10 +2999,10 @@ function uuid(){
 function tabSelect(event){
     var target = event.wbTarget;
     document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.addToScriptEvent('selected');
+    target.classList.add('selected');
     if (wb.matches(target, '.scripts_workspace_tab')){
         showWorkspace('block');
-    }else if (self.is('.scripts_text_view_tab')){
+    }else if (wb.matches(target, '.scripts_text_view_tab')){
         showWorkspace('text');
         updateScriptsView();
     }
@@ -3578,7 +3612,7 @@ wb.Block.reify = function(serialized){
 
 wb.prettyScript = function(elements){
     return js_beautify(elements.map(function(elem){
-        return wb.Block.model(elem).code();
+        return wb.codeFromBlock(elem);
     }).join(''));
 };
 
@@ -7346,7 +7380,8 @@ switch(wb.view){
 }
 
 function switchMode(mode){
-    document.querySelector('#block_menu_load').remove();
+    var loader = document.querySelector('#block_menu_load');
+    loader.parentElement.removeChild(loader);
     document.body.className = mode;
     //wb.loadCurrentScripts(q);
     // remove next line once load/save is working

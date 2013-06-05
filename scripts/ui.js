@@ -5,10 +5,10 @@
 function tabSelect(event){
     var target = event.wbTarget;
     document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.addToScriptEvent('selected');
+    target.classList.add('selected');
     if (wb.matches(target, '.scripts_workspace_tab')){
         showWorkspace('block');
-    }else if (self.is('.scripts_text_view_tab')){
+    }else if (wb.matches(target, '.scripts_text_view_tab')){
         showWorkspace('text');
         updateScriptsView();
     }

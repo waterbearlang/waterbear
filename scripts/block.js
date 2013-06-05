@@ -30,6 +30,7 @@
     }
 
     var blockRegistry = {};
+    wb.blockRegistry = blockRegistry;
 
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
@@ -131,7 +132,7 @@
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
         var block = event.wbTarget;
-        // console.log('remove expression %o', block);
+        //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.removeAttribute('style');
         });
@@ -212,7 +213,7 @@
         delete blockdesc.seqNum;
         delete blockdesc.isTemplateBlock;
         delete blockdesc.isLocal;
-        blockdesc.scriptId = block.dataset.id;
+        blockdesc.scriptid = block.id;
         return Block(blockdesc);
     }
 
@@ -298,11 +299,44 @@
         return elem('input', {type: type, value: value});
     }
 
+    var socketValue = function(holder){
+        if (holder.children.length > 1){
+            return codeFromBlock(wb.findChild(holder, '.block'));
+        }else{
+            return wb.findChild(holder, 'input, select').value;
+        }
+    }
+
+    var codeFromBlock = function(block){
+        var scriptTemplate = getScript(block.dataset.scriptid).replace(/##/g, '_' + block.dataset.seqNum);
+        var childValues = [];
+        var label = wb.findChild(block, '.label');
+        var expressionValues = wb.findChildren(label, '.socket')
+            .map(function(socket){ return wb.findChild(socket, '.holder'); }) // get holders, if any
+            .filter(function(holder){ return holder; }) // remove undefineds
+            .map(socketValue); // get value
+        if (wb.matches(block, '.context')){
+            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock);
+        }
+        // Now intertwingle the values with the template and return the result
+        function replace_values(match, offset, s){
+            var idx = parseInt(match.slice(2, -2), 10) - 1;
+            if (match[0] === '{'){
+                return expressionValues[idx] || 'null';
+            }else{
+                return childValues[idx] || 'null';
+            }
+        }
+        var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
+        var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
+        return _code2;
+    };
+
 
     // Export methods
     wb.Block = Block;
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;
-
+    wb.codeFromBlock = codeFromBlock;
 })(wb);
 

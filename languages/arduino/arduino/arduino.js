@@ -33,7 +33,7 @@ window.loadDefaultScript = function(script){
 
 wb.writeScript = function(elements, view){
     var code = elements.map(function(elem){
-        return wb.Block.model(elem).code();
+        return wb.codeFromBlock(elem);
     }).join('\n');
     view.innerHTML = '<pre class="language-arduino">' + code + '</pre>';
 };

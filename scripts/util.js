@@ -105,6 +105,7 @@
     };
 
     wb.findChild = function(){
+        // I wish I knew what I was thinking here...
         var args = wb.makeArray(arguments);
         var elem = wb.elem(args.shift());
         var children, selector;

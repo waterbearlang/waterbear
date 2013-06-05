@@ -10,7 +10,7 @@
 
 wb.prettyScript = function(elements){
     return js_beautify(elements.map(function(elem){
-        return wb.Block.model(elem).code();
+        return wb.codeFromBlock(elem);
     }).join(''));
 };
 

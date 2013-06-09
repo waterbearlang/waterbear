@@ -14,7 +14,7 @@ var styles = {
     javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
 }
 
-var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace', 'serialization-1.1'];
+var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace'];
 
 var libs = {
     arduino: [],

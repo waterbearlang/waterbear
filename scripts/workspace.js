@@ -25,18 +25,20 @@ Event.on('.goto_stage', 'click', null, function(){
 function saveCurrentScripts(){
     wb.showWorkspace('block');
     document.querySelector('#block_menu').scrollIntoView();
-    localStorage['__' + language + '_current_scripts'] = wb.Block.serialize();
+    localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
 // window.onunload = saveCurrentScripts;
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
     if (!description){ description = ''; }
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
     return JSON.stringify({
         title: title,
         description: description,
         date: Date.now(),
-        scripts: wb.Block.scriptsToObject('.scripts_workspace')
+        waterbearVersion: '2.0',
+        scripts: blocks.map(wb.blockDesc)
     });
 }
 
@@ -140,6 +142,7 @@ wb.loadCurrentScripts = function(queryParsed){
     }else{
         createWorkspace('Workspace');
     }
+    wb.loaded = true;
 };
 
 wb.runCurrentScripts = function(queryParsed){

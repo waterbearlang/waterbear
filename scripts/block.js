@@ -53,9 +53,14 @@
     }
 
     var getSockets = function(obj){
-        return blockRegistry[obj.scriptid || obj.id].sockets.map(function(socket_descriptor){
-            return Socket(socket_descriptor, obj);
-        });
+        try{
+            return blockRegistry[obj.scriptid || obj.id].sockets.map(function(socket_descriptor){
+                return Socket(socket_descriptor, obj);
+            });
+        }catch(e){
+            console.log('Error: cannot get sockets for %o', obj);
+            throw e;
+        }
     }
 
     var Block = function(obj){
@@ -256,34 +261,35 @@
         }
         switch(type){
             case 'any':
-                value = obj.value || ''; break;
+                value = obj.value || obj.default || ''; break;
             case 'number':
-                value = obj.value || 0; break;
+                value = obj.value || obj.default || 0; break;
             case 'string':
-                value = obj.value || ''; break;
+                value = obj.value || obj.default || ''; break;
             case 'color':
-                value = obj.value || '#000000'; break;
+                value = obj.value || obj.default || '#000000'; break;
             case 'date':
-                value = obj.value || new Date().toISOString().split('T')[0]; break;
+                value = obj.value || obj.default || new Date().toISOString().split('T')[0]; break;
             case 'time':
-                value = obj.value || new Date().toISOString().split('T')[1]; break;
+                value = obj.value || obj.default || new Date().toISOString().split('T')[1]; break;
             case 'datetime':
-                value = obj.value || new Date().toISOString(); break;
+                value = obj.value || obj.default || new Date().toISOString(); break;
             case 'url':
-                value = obj.value || 'http://waterbearlang.com'; break;
+                value = obj.value || obj.default || 'http://waterbearlang.com'; break;
             case 'image':
-                value = obj.value || ''; break;
+                value = obj.value || obj.default || ''; break;
             case 'phone':
-                value = obj.value || '604-555-1212'; break;
+                value = obj.value || obj.default || '604-555-1212'; break;
             case 'email':
-                value = obj.value || 'waterbear@waterbearlang.com'; break;
+                value = obj.value || obj.default || 'waterbear@waterbearlang.com'; break;
             case 'boolean':
                 obj.options = 'boolean';
             case 'choice':
                 var choice = elem('select');
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
-                    if (obj.default && obj.default === opt){
+                    var value = obj.value || obj.default;
+                    if (value && value === opt){
                         option.setAttribute('selected', 'selected');
                     }
                     choice.appendChild(option);
@@ -335,6 +341,7 @@
 
     // Export methods
     wb.Block = Block;
+    wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;

@@ -2701,9 +2701,14 @@ function uuid(){
     }
 
     var getSockets = function(obj){
-        return blockRegistry[obj.scriptid || obj.id].sockets.map(function(socket_descriptor){
-            return Socket(socket_descriptor, obj);
-        });
+        try{
+            return blockRegistry[obj.scriptid || obj.id].sockets.map(function(socket_descriptor){
+                return Socket(socket_descriptor, obj);
+            });
+        }catch(e){
+            console.log('Error: cannot get sockets for %o', obj);
+            throw e;
+        }
     }
 
     var Block = function(obj){
@@ -2904,34 +2909,35 @@ function uuid(){
         }
         switch(type){
             case 'any':
-                value = obj.value || ''; break;
+                value = obj.value || obj.default || ''; break;
             case 'number':
-                value = obj.value || 0; break;
+                value = obj.value || obj.default || 0; break;
             case 'string':
-                value = obj.value || ''; break;
+                value = obj.value || obj.default || ''; break;
             case 'color':
-                value = obj.value || '#000000'; break;
+                value = obj.value || obj.default || '#000000'; break;
             case 'date':
-                value = obj.value || new Date().toISOString().split('T')[0]; break;
+                value = obj.value || obj.default || new Date().toISOString().split('T')[0]; break;
             case 'time':
-                value = obj.value || new Date().toISOString().split('T')[1]; break;
+                value = obj.value || obj.default || new Date().toISOString().split('T')[1]; break;
             case 'datetime':
-                value = obj.value || new Date().toISOString(); break;
+                value = obj.value || obj.default || new Date().toISOString(); break;
             case 'url':
-                value = obj.value || 'http://waterbearlang.com'; break;
+                value = obj.value || obj.default || 'http://waterbearlang.com'; break;
             case 'image':
-                value = obj.value || ''; break;
+                value = obj.value || obj.default || ''; break;
             case 'phone':
-                value = obj.value || '604-555-1212'; break;
+                value = obj.value || obj.default || '604-555-1212'; break;
             case 'email':
-                value = obj.value || 'waterbear@waterbearlang.com'; break;
+                value = obj.value || obj.default || 'waterbear@waterbearlang.com'; break;
             case 'boolean':
                 obj.options = 'boolean';
             case 'choice':
                 var choice = elem('select');
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
-                    if (obj.default && obj.default === opt){
+                    var value = obj.value || obj.default;
+                    if (value && value === opt){
                         option.setAttribute('selected', 'selected');
                     }
                     choice.appendChild(option);
@@ -2983,6 +2989,7 @@ function uuid(){
 
     // Export methods
     wb.Block = Block;
+    wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
@@ -3280,18 +3287,20 @@ Event.on('.goto_stage', 'click', null, function(){
 function saveCurrentScripts(){
     wb.showWorkspace('block');
     document.querySelector('#block_menu').scrollIntoView();
-    localStorage['__' + language + '_current_scripts'] = wb.Block.serialize();
+    localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
 // window.onunload = saveCurrentScripts;
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
     if (!description){ description = ''; }
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
     return JSON.stringify({
         title: title,
         description: description,
         date: Date.now(),
-        scripts: wb.Block.scriptsToObject('.scripts_workspace')
+        waterbearVersion: '2.0',
+        scripts: blocks.map(wb.blockDesc)
     });
 }
 
@@ -3395,6 +3404,7 @@ wb.loadCurrentScripts = function(queryParsed){
     }else{
         createWorkspace('Workspace');
     }
+    wb.loaded = true;
 };
 
 wb.runCurrentScripts = function(queryParsed){
@@ -3471,133 +3481,6 @@ function getFiles(evt){
 })(wb);
 
 /*end workspace.js*/
-
-/*begin serialization-1.1.js*/
-//
-//  Serialize all the blocks in every workspace
-//
-
-// TODO:
-// * Add timestamp
-// * Allow name/description for scripts
-// * Add version of script, automatically generated
-// * Separate each workspace into its own file. This makes more sense and will simplify things, allow files to be cross-included
-// * Include history of editorship (who created, who modified)
-// * UI to get this info
-
-(function(wb){
-
-wb.Block.serialize = function(){
-    return JSON.stringify(wb.Block.scriptsToObject('.scripts_workspace'));
-};
-
-wb.Block.scriptsToObject = function(workspace){
-	if (!workspace) workspace = '.scripts_workspace'; // make a default for debugging convience
-    var workspaceDom = document.querySelector(workspace);
-    var workspaceModel = wb.Block.model(workspaceDom);
-    // console.log('workspace selector: %s', workspace);
-    // console.log('workspaces found: %s', $(workspace).length);
-    return {
-        "waterbearVersion": "1.1",
-        "workspace": workspaceModel.spec.label,
-        "blocks": [workspaceModel.toJSON()]
-    };
-};
-
-// Utility to verify that a list exists and contains values
-function exists(list){
-    if (!list) return false;
-    if (!list.length) return false;
-    for (var i=0; i < list.length; i++){
-        if (list[i]) return true;
-    }
-    return false;
-}
-
-wb.Block.prototype.toJSON = function(){
-    var self = this;
-    var serialized = {
-        blocktype: self.blocktype,
-        label: self.spec.label,
-        group: self.group,
-        id: self.id
-    };
-    if (self.seqNum){
-        serialized.seqNum = self.seqNum;
-    }else{
-        console.warn('Block has no seqnum');
-    }
-    if (self.scriptid){
-        serialized.scriptid = self.scriptid;
-    }else{
-        console.warn('Block has no scriptid');
-    }
-    if (self.collapsed){
-        serialized.collapsed = self.collapsed; // persist open/closed state
-    }
-    if (self.scope){
-        serialized.scope = self.scope;
-    }else{
-        console.warn('Block has no scope');
-    }
-    if (exists(self.values)){
-        // console.info('with %s values', this.values.length);
-        serialized.values = self.values.map(function(value){
-            if (value && value.toJSON){
-                return value.toJSON();
-            }
-            return value;
-        });
-    }
-    if (exists(self.contained)){
-        // console.info('with %s contained', this.contained.length);
-        serialized.contained = self.contained.map(function(child){
-            if (child && child.toJSON){
-                return child.toJSON();
-            }
-            return null;
-        });
-    }
-    if (exists(self.locals)){
-        serialized.locals = self.locals.map(function(local){
-            if (local && local.toJSON){
-                return local.toJSON();
-            }
-            return local;
-        });
-    }
-    return serialized;
-};
-
-// wb.Value.prototype.toJSON = function(){
-//     // Implement me and make sure I round-trip back into the block model
-//     var struct;
-//     if (this.value && this.value.toJSON){
-//         // console.info('serializing block value');
-//         struct = {
-//             type: this.type,
-//             value: this.value.toJSON()
-//         };
-//     }else{
-//         // console.info('serializing raw value');
-//         struct = {
-//             type: this.type,
-//             value: this.value
-//         };
-//         if (this.choiceName){
-//             struct.choiceName = this.choiceName;
-//         }
-//     }
-//     return struct;
-// };
-
-
-wb.Block.reify = function(serialized){
-};
-
-})(wb);
-
-/*end serialization-1.1.js*/
 
 /*begin javascript.js*/
 /*

@@ -1508,7 +1508,6 @@ Event.on('.restore_scripts', 'click', null, comingSoon);
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
-    // FIXME: Make sure we have the appropriate plugins loaded
 	if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(function(spec){
         return wb.Block(spec);
@@ -1567,7 +1566,7 @@ function runScriptFromGist(gist){
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
     if (wb.loaded) return;
-    console.log('loading current scripts');
+    console.log('loadCurrent scripts, not loaded yet');
 	if (queryParsed.gist){
 		wb.jsonp(
 			'https://api.github.com/gists/' + queryParsed.gist,
@@ -1581,6 +1580,7 @@ wb.loadCurrentScripts = function(queryParsed){
     }else{
         createWorkspace('Workspace');
     }
+    console.log('setting loaded = true');
     wb.loaded = true;
 };
 
@@ -2802,9 +2802,9 @@ function switchMode(mode){
     var loader = document.querySelector('#block_menu_load');
     loader.parentElement.removeChild(loader);
     document.body.className = mode;
-    //wb.loadCurrentScripts(q);
+    wb.loadCurrentScripts(q);
     // remove next line once load/save is working
-    wb.createWorkspace('Workspace');
+    //wb.createWorkspace('Workspace');
 }
 
 /*end launch.js*/

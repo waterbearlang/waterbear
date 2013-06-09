@@ -69,7 +69,6 @@ Event.on('.restore_scripts', 'click', null, comingSoon);
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
-    // FIXME: Make sure we have the appropriate plugins loaded
 	if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(function(spec){
         return wb.Block(spec);
@@ -128,7 +127,6 @@ function runScriptFromGist(gist){
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
     if (wb.loaded) return;
-    console.log('loading current scripts');
 	if (queryParsed.gist){
 		wb.jsonp(
 			'https://api.github.com/gists/' + queryParsed.gist,

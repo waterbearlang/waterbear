@@ -215,7 +215,6 @@
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add', dropTarget);
             }else{
-                console.log('inserting a value in a socket');
                 // Insert a value block into a socket
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');

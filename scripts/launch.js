@@ -13,7 +13,5 @@ function switchMode(mode){
     var loader = document.querySelector('#block_menu_load');
     loader.parentElement.removeChild(loader);
     document.body.className = mode;
-    //wb.loadCurrentScripts(q);
-    // remove next line once load/save is working
-    wb.createWorkspace('Workspace');
+    wb.loadCurrentScripts(q);
 }

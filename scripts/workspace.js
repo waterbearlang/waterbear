@@ -67,12 +67,10 @@ Event.on('.save_scripts', 'click', null, createDownloadUrl);
 Event.on('.restore_scripts', 'click', null, comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    // console.info('file format version: %s', fileObject.waterbearVersion);
+    console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
 	if (!fileObject) return createWorkspace();
-    var blocks = fileObject.blocks.map(function(spec){
-        return wb.Block(spec);
-    });
+    var blocks = fileObject.blocks.map(wb.Block);
     if (!blocks.length){
         return createWorkspace();
     }

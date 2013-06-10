@@ -98,7 +98,7 @@ function loadScriptsFromGist(gist){
 		console.log('no json file found in gist: %o', gist);
 		return;
 	}
-	loadScriptsFromObject(JSON.parse(file).scripts);
+	loadScriptsFromObject(JSON.parse(file));
     Event.trigger(document.body, 'scriptLoaded');
 }
 
@@ -180,6 +180,9 @@ wb.createWorkspace = createWorkspace;
 function wireUpWorkspace(workspace){
     workspace.addEventListener('drop', getFiles, false);
     workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+    wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+    });
     document.querySelector('.workspace').appendChild(workspace);
     workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
     wb.initializeDragHandlers();
@@ -205,7 +208,7 @@ function getFiles(evt){
         reader.onload = function (evt){
             clearScripts(null, true);
             var saved = JSON.parse(evt.target.result);
-            loadScriptsFromObject(saved.scripts);
+            loadScriptsFromObject(saved);
         };
     }
 }

@@ -10,7 +10,7 @@
                 {
                     "name": "transform by 6-matrix",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -23,7 +23,7 @@
                 {
                     "name": "set transform to 6-matrix",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         }

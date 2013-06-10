@@ -10,12 +10,12 @@
                 {
                     "name": "size with width",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -28,7 +28,7 @@
                 {
                     "name": "size from array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -41,7 +41,7 @@
                 {
                     "name": "size",
                     "type": "size",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "width"
@@ -57,7 +57,7 @@
                 {
                     "name": "size",
                     "type": "size",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "height"
@@ -73,7 +73,7 @@
                 {
                     "name": "size",
                     "type": "size",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "as array"

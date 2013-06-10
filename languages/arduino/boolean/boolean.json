@@ -11,12 +11,12 @@
                 {
                     "name": "",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "and",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -30,12 +30,12 @@
                 {
                     "name": "",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "or",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -49,7 +49,7 @@
                 {
                     "name": "not",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         }

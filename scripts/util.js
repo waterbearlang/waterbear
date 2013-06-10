@@ -104,22 +104,18 @@
         });
     };
 
-    wb.findChild = function(){
-        // I wish I knew what I was thinking here...
-        var args = wb.makeArray(arguments);
-        var elem = wb.elem(args.shift());
-        var children, selector;
-        while(args.length){
-            selector = args.shift();
-            children = wb.makeArray(elem.children);
-            for(var i = 0; i < children.length; i++){
-                if (wb.matches(children[i], selector)){
-                    elem = children[i];
-                    break;
-                }
+    wb.findChild = function(elem, selector){
+        if (arguments.length !== 2){
+            throw new Exception('This is the culprit');
+        }
+        var children = elem.children;
+        for(var i = 0; i < children.length; i++){
+            var child = children[i];
+            if (wb.matches(child, selector)){
+                return child;
             }
         }
-        return elem;
+        return null;
     }
 
     wb.elem = function elem(name, attributes, children){

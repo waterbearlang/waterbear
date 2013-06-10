@@ -27,7 +27,7 @@ function saveCurrentScripts(){
     document.querySelector('#block_menu').scrollIntoView();
     localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
-// window.onunload = saveCurrentScripts;
+window.onunload = saveCurrentScripts;
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
@@ -38,7 +38,7 @@ function scriptsToString(title, description){
         description: description,
         date: Date.now(),
         waterbearVersion: '2.0',
-        scripts: blocks.map(wb.blockDesc)
+        blocks: blocks.map(wb.blockDesc)
     });
 }
 
@@ -80,10 +80,8 @@ function loadScriptsFromObject(fileObject){
         console.log('not really expecting multiple blocks here right now');
     }
     blocks.forEach(function(block){
-        var view = block.view()[0]; // FIXME: strip jquery wrapper
-        wireUpWorkspace(view);
-        block.script = '[[1]]';
-        Event.trigger(view, 'addToScript', workspace);
+        wireUpWorkspace(block);
+        Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
 }
@@ -164,7 +162,8 @@ function createWorkspace(name){
     var workspace = wb.Block({
         group: 'scripts_workspace',
         id: id,
-        scriptid: id,
+        scriptId: id,
+        scopeId: id,
         blocktype: 'context',
         sockets: [
             {

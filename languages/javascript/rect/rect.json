@@ -10,22 +10,22 @@
                 {
                     "name": "rect at x",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "with width",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -38,12 +38,12 @@
                 {
                     "name": "rect at point",
                     "type": "point",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "with size",
                     "type": "size",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -56,7 +56,7 @@
                 {
                     "name": "rect from array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -69,7 +69,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "position"
@@ -85,7 +85,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "size"
@@ -101,7 +101,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "as array"
@@ -117,7 +117,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "x"
@@ -133,7 +133,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "y"
@@ -149,7 +149,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "width"
@@ -165,7 +165,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "height"

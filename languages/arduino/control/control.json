@@ -43,7 +43,7 @@
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "default": "ack"
+                    "value": "ack"
                 },
                 {
                     "name": "message"
@@ -59,7 +59,7 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "default": "ack"
+                    "value": "ack"
                 },
                 {
                     "name": "message"
@@ -75,7 +75,7 @@
                 {
                     "name": "forever if",
                     "type": "boolean",
-                    "default": "false"
+                    "value": "false"
                 }
             ]
         },
@@ -88,7 +88,7 @@
                 {
                     "name": "if",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -101,7 +101,7 @@
                 {
                     "name": "if not",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -114,7 +114,7 @@
                 {
                     "name": "repeat until",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         }

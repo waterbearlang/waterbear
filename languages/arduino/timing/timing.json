@@ -10,7 +10,7 @@
                 {
                     "name": "wait",
                     "type": "int",
-                    "default": "1"
+                    "value": "1"
                 },
                 {
                     "name": "secs"

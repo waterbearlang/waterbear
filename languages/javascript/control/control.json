@@ -22,7 +22,7 @@
                     "name": "when",
                     "type": "choice",
                     "options": "keys",
-                    "default": "choice"
+                    "value": "choice"
                 },
                 {
                     "name": "key pressed"
@@ -50,7 +50,7 @@
                 {
                     "name": "repeat",
                     "type": "number",
-                    "default": "30"
+                    "value": "30"
                 },
                 {
                     "name": "times a second"
@@ -66,7 +66,7 @@
                 {
                     "name": "wait",
                     "type": "number",
-                    "default": "1"
+                    "value": "1"
                 },
                 {
                     "name": "secs"
@@ -94,7 +94,7 @@
                 {
                     "name": "repeat",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -107,7 +107,7 @@
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "default": "ack"
+                    "value": "ack"
                 },
                 {
                     "name": "message"
@@ -123,12 +123,12 @@
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "default": "ping"
+                    "value": "ping"
                 },
                 {
                     "name": "message with data",
                     "type": "any",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -141,7 +141,7 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "default": "ack"
+                    "value": "ack"
                 },
                 {
                     "name": "message"
@@ -169,7 +169,7 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "default": "ping"
+                    "value": "ping"
                 },
                 {
                     "name": "message with data"
@@ -185,7 +185,7 @@
                 {
                     "name": "forever if",
                     "type": "boolean",
-                    "default": "false"
+                    "value": "false"
                 }
             ]
         },
@@ -198,7 +198,7 @@
                 {
                     "name": "if",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -211,7 +211,7 @@
                 {
                     "name": "if not",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -224,7 +224,7 @@
                 {
                     "name": "repeat until",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         }

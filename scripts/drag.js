@@ -213,12 +213,12 @@
                 // dropTarget.parent().append(dragTarget);
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'wb-add', dropTarget);
+                Event.trigger(dragTarget, 'wb-add');
             }else{
                 // Insert a value block into a socket
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'wb-add', dropTarget);
+                Event.trigger(dragTarget, 'wb-add');
             }
         }else{
             if (cloned){
@@ -372,12 +372,12 @@
             Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
-            Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
+            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
-            Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
+            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
 

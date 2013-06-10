@@ -11,12 +11,12 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "split on",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -30,12 +30,12 @@
                 {
                     "name": "concatenate",
                     "type": "string",
-                    "default": "hello"
+                    "value": "hello"
                 },
                 {
                     "name": "with",
                     "type": "string",
-                    "default": "world"
+                    "value": "world"
                 }
             ]
         },
@@ -49,12 +49,12 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "character at",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -68,7 +68,7 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "length"
@@ -85,12 +85,12 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "indexOf",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -104,17 +104,17 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "replace",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "with",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -128,7 +128,7 @@
                 {
                     "name": "to string",
                     "type": "any",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -141,7 +141,7 @@
                 {
                     "name": "comment",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -154,7 +154,7 @@
                 {
                     "name": "alert",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -167,7 +167,7 @@
                 {
                     "name": "console log",
                     "type": "any",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -180,12 +180,12 @@
                 {
                     "name": "console log format",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "arguments",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         },

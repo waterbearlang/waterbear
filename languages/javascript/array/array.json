@@ -45,7 +45,7 @@
                 {
                     "name": "new array with array##",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -59,12 +59,12 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "item",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -78,7 +78,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "join with [string:, ]"
@@ -94,12 +94,12 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "append",
                     "type": "any",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -113,7 +113,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "length"
@@ -130,12 +130,12 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "remove item",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -149,7 +149,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "pop"
@@ -166,7 +166,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "shift"
@@ -183,7 +183,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "reversed"
@@ -200,12 +200,12 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "concat",
                     "type": "array",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -242,7 +242,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "for each"

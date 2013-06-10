@@ -23,7 +23,7 @@
                     "name": "Create digital_output## on Pin",
                     "type": "choice",
                     "options": "digitalpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -36,12 +36,12 @@
                 {
                     "name": "Digital Pin",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "ON if",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -67,7 +67,7 @@
                     "name": "Create digital_input## on Pin",
                     "type": "choice",
                     "options": "digitalpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -81,7 +81,7 @@
                 {
                     "name": "Digital Pin",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -107,7 +107,7 @@
                     "name": "Create analog_input## on Pin",
                     "type": "choice",
                     "options": "analoginpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -121,7 +121,7 @@
                 {
                     "name": "Analog Pin",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -147,7 +147,7 @@
                     "name": "Create analog_output## on Pin",
                     "type": "choice",
                     "options": "pwmpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -160,12 +160,12 @@
                 {
                     "name": "Analog",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "outputs",
                     "type": "int",
-                    "default": "255"
+                    "value": "255"
                 }
             ]
         }

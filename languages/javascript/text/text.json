@@ -10,18 +10,18 @@
                 {
                     "name": "font",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "",
                     "type": "choice",
                     "options": "unit",
-                    "default": "choice"
+                    "value": "choice"
                 },
                 {
                     "name": "",
                     "type": "string",
-                    "default": "sans-serif"
+                    "value": "sans-serif"
                 }
             ]
         },
@@ -35,7 +35,7 @@
                     "name": "text align",
                     "type": "choice",
                     "options": "align",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -49,7 +49,7 @@
                     "name": "text baseline",
                     "type": "choice",
                     "options": "baseline",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -62,17 +62,17 @@
                 {
                     "name": "fill text",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -85,22 +85,22 @@
                 {
                     "name": "fill text",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -113,17 +113,17 @@
                 {
                     "name": "stroke text",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -136,22 +136,22 @@
                 {
                     "name": "stroke text",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -164,7 +164,7 @@
                 {
                     "name": "text",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "width"

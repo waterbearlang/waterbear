@@ -10,12 +10,12 @@
                 {
                     "name": "draw image",
                     "type": "image",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "at point",
                     "type": "point",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -28,12 +28,12 @@
                 {
                     "name": "draw image",
                     "type": "image",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "in rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -46,17 +46,17 @@
                 {
                     "name": "draw a rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "from image",
                     "type": "image",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "to rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -81,7 +81,7 @@
                 {
                     "name": "create ImageData## with size",
                     "type": "size",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -106,7 +106,7 @@
                 {
                     "name": "createImageData## from imageData",
                     "type": "imageData",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -131,7 +131,7 @@
                 {
                     "name": "get imageData## for rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -144,12 +144,12 @@
                 {
                     "name": "draw imageData",
                     "type": "imagedata",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "at point",
                     "type": "point",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -162,17 +162,17 @@
                 {
                     "name": "draw a rect",
                     "type": "rect",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "from imageData",
                     "type": "imagedata",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "at point",
                     "type": "point",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -185,7 +185,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "width"
@@ -201,7 +201,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "height"
@@ -217,7 +217,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "as array"
@@ -233,7 +233,7 @@
                 {
                     "name": "image from url",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -246,7 +246,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "width"
@@ -262,7 +262,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "height"
@@ -278,7 +278,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "url"

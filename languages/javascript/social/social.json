@@ -22,7 +22,7 @@
                 {
                     "name": "get tweet for",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         }

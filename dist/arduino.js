@@ -154,22 +154,18 @@
         });
     };
 
-    wb.findChild = function(){
-        // I wish I knew what I was thinking here...
-        var args = wb.makeArray(arguments);
-        var elem = wb.elem(args.shift());
-        var children, selector;
-        while(args.length){
-            selector = args.shift();
-            children = wb.makeArray(elem.children);
-            for(var i = 0; i < children.length; i++){
-                if (wb.matches(children[i], selector)){
-                    elem = children[i];
-                    break;
-                }
+    wb.findChild = function(elem, selector){
+        if (arguments.length !== 2){
+            throw new Exception('This is the culprit');
+        }
+        var children = elem.children;
+        for(var i = 0; i < children.length; i++){
+            var child = children[i];
+            if (wb.matches(child, selector)){
+                return child;
             }
         }
-        return elem;
+        return null;
     }
 
     wb.elem = function elem(name, attributes, children){
@@ -610,13 +606,12 @@
                 // dropTarget.parent().append(dragTarget);
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'wb-add', dropTarget);
+                Event.trigger(dragTarget, 'wb-add');
             }else{
-                console.log('inserting a value in a socket');
                 // Insert a value block into a socket
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'wb-add', dropTarget);
+                Event.trigger(dragTarget, 'wb-add');
             }
         }else{
             if (cloned){
@@ -770,12 +765,12 @@
             Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
-            Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
+            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
-            Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
+            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
 
@@ -877,15 +872,15 @@ function uuid(){
         return blockRegistry[id].script;
     }
 
-    var getSockets = function(obj){
-        try{
-            return blockRegistry[obj.scriptid || obj.id].sockets.map(function(socket_descriptor){
+    var createSockets = function(obj){
+        // try{
+            return blockRegistry[obj.scriptId || obj.id].sockets.map(function(socket_descriptor){
                 return Socket(socket_descriptor, obj);
             });
-        }catch(e){
-            console.log('Error: cannot get sockets for %o', obj);
-            throw e;
-        }
+        // }catch(e){
+        //     console.log('Error: cannot get sockets for %o', obj);
+        //     throw e;
+        // }
     }
 
     var Block = function(obj){
@@ -909,22 +904,33 @@ function uuid(){
                 'data-blocktype': obj.blocktype,
                 'data-group': obj.group,
                 'id': obj.id,
-                'data-scopeid': obj.scopeid || 0,
-                'data-scriptid': obj.scriptid || obj.id,
+                'data-scope-id': obj.scopeId || 0,
+                'data-script-id': obj.scriptId || obj.id,
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-seq-num': obj.seqNum,
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
-                'title': obj.help || getHelp(obj.scriptid || obj.id)
+                'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
-            elem('div', {'class': 'label'}, getSockets(obj))
+            elem('div', {'class': 'label'}, createSockets(obj))
         );
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
+        if (obj.script){
+            block.dataset.script = obj.script;
+        }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
             block.appendChild(elem('div', {'class': 'locals block-menu'}));
-            block.appendChild(elem('div', {'class': 'contained'}, (obj.contained || []).map(Block)));
+            var contained = elem('div', {'class': 'contained'});
+            block.appendChild(contained);
+            if (obj.contained){
+                obj.contained.map(function(childdesc){
+                    var child = Block(childdesc);
+                    contained.appendChild(child);
+                    addBlock({wbTarget: child}); // simulate event
+                });
+            }
         }
         return block;
     }
@@ -982,7 +988,7 @@ function uuid(){
                     spec.group = block.dataset.group;
                     spec.seqNum = block.dataset.seqNum;
                     // add scopeid to local blocks
-                    spec.scopeid = parent.id;
+                    spec.scopeId = parent.id;
                     // add localSource so we can trace a local back to its origin
                     spec.localSource = block.id;
                     locals.appendChild(Block(spec));
@@ -1007,7 +1013,93 @@ function uuid(){
         // console.log('block cloned %o', block);
     }
 
+    var Socket = function(desc, blockdesc){
+        // desc is a socket descriptor object, block is the owner block descriptor
+        // Sockets are described by text, type, and (default) value
+        // type and value are optional, but if you have one you must have the other
+        // If the type is choice it must also have a options for the list of values
+        // that can be found in the wb.choiceLists
+        // A socket may also have a block, the id of a default block
+        // A socket may also have a uValue, if it has been set by the user, over-rides value
+        // A socket may also have a uName if it has been set by the user, over-rides name
+        // A socket may also have a uBlock descriptor, if it has been set by the user, this over-rides the block
+        var socket = elem('div',
+            {
+                'class': 'socket',
+                'data-name': desc.name,
+                'data-id': blockdesc.id
+            },
+            elem('span', {'class': 'name'}, desc.name || desc.uName)
+        );
+        // Optional settings
+        if (desc.value){
+            socket.dataset.value = desc.value;
+        }
+        if (desc.options){
+            socket.dataset.options = desc.options;
+        }
+        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + blockdesc.seqNum + '</span>');
+        if (desc.type){
+            socket.dataset.type = desc.type;
+            var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
+            socket.appendChild(holder)
+        }
+        if (desc.block){
+            socket.dataset.block = desc.block;
+        }
+        if (!blockdesc.isTemplateBlock){
+            var newBlock = null;
+            if (desc.uBlock){
+                newBlock = Block(desc.uBlock);
+            }else if (desc.block){
+                newBlock = cloneBlock(document.getElementById(desc.block));
+            }
+            if (newBlock){
+                holder.appendChild(newBlock);
+                addExpression({'wbTarget': newBlock});
+            }
+        }
+        return socket;
+    }
+
+
+    function socketDesc(socket){
+        var desc = {
+            name: socket.dataset.name,
+        }
+        // optional defined settings
+        if (socket.dataset.type){
+            desc.type = socket.dataset.type;
+        }
+        if (socket.dataset.value){
+            desc.value = socket.dataset.value;
+        }
+        if (socket.dataset.options){
+            desc.options = socket.dataset.options;
+        }
+        if (socket.dataset.block){
+            desc.block = socket.dataset.block;
+        }
+        // User-specified settings
+        var uName = wb.findChild(socket, '.name').textContent;
+        if (desc.name !== uName){
+            desc.uName = uName;
+        }
+        var holder = wb.findChild(socket, '.holder');
+        if (holder){
+            var input = wb.findChild(holder, 'input, select');
+            desc.uValue = input.value;
+            var block = wb.findChild(holder, '.block');
+            if (wb.matches(holder.lastElementChild, '.block')){
+                desc.uBlock = blockDesc(holder.lastElementChild);
+            }
+        }
+        return desc;
+    }
+
     function blockDesc(block){
+        var label = wb.findChild(block, '.label');
+        var sockets = wb.findChildren(label, '.socket');
         var desc = {
             blocktype: block.dataset.blocktype,
             group: block.dataset.group,
@@ -1016,7 +1108,10 @@ function uuid(){
             seqNum: block.dataset.seqNum,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
-            sockets: JSON.parse(block.dataset.sockets)
+            sockets: sockets.map(socketDesc)
+        }
+        if (block.dataset.script){
+            desc.script = block.dataset.script;
         }
         if (block.dataset.isTemplateBlock){
             desc.isTemplateBlock = true;
@@ -1033,6 +1128,10 @@ function uuid(){
         if (block.dataset.locals){
             desc.locals = JSON.parse(block.dataset.locals);
         }
+        var contained = wb.findChild(block, '.contained');
+        if (contained && contained.children.length){
+            desc.contained = wb.findChildren(contained, '.block').map(blockDesc);
+        }
         return desc;
     }
 
@@ -1043,7 +1142,7 @@ function uuid(){
         delete blockdesc.seqNum;
         delete blockdesc.isTemplateBlock;
         delete blockdesc.isLocal;
-        blockdesc.scriptid = block.id;
+        blockdesc.scriptId = block.id;
         return Block(blockdesc);
     }
 
@@ -1052,28 +1151,6 @@ function uuid(){
         // remove from registry
         var block = event.wbTarget;
         // console.log('block deleted %o', block);
-    }
-
-    var Socket = function(obj, block){
-        // obj is a socket descriptor object, block is the owner block descriptor
-        // Sockets are described by text, type, and default value
-        // type and default value are optional, but if you have one you must have the other
-        // If the type is choice it must also have a choicename for the list of values
-        // that can be found in the wb.choiceLists
-        var socket = elem('div',
-            {
-                'class': 'socket',
-                'data-name': obj.name,
-                'data-id': block.id
-            },
-            elem('span', {'class': 'name'}, obj.name)
-        );
-        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + block.seqNum + '</span>');
-        if (obj.type){
-            socket.dataset.type = obj.type;
-            socket.appendChild(elem('div', {'class': 'holder'}, [Default(obj)]))
-        }
-        return socket;
     }
 
     var Default = function(obj){
@@ -1100,7 +1177,7 @@ function uuid(){
             case 'datetime':
                 value = obj.value || obj.default || new Date().toISOString(); break;
             case 'url':
-                value = obj.value || obj.default || 'http://waterbearlang.com'; break;
+                value = obj.value || obj.default || 'http://waterbearlang.com/'; break;
             case 'image':
                 value = obj.value || obj.default || ''; break;
             case 'phone':
@@ -1121,11 +1198,7 @@ function uuid(){
                 });
                 return choice;
             default:
-                if (obj.default){
-                    return Block(obj.default);
-                }else{
-                    value = obj.value || '';
-                }
+                value = obj.value || obj.default || '';
         }
         return elem('input', {type: type, value: value});
     }
@@ -1139,7 +1212,7 @@ function uuid(){
     }
 
     var codeFromBlock = function(block){
-        var scriptTemplate = getScript(block.dataset.scriptid).replace(/##/g, '_' + block.dataset.seqNum);
+        var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         var childValues = [];
         var label = wb.findChild(block, '.label');
         var expressionValues = wb.findChildren(label, '.socket')
@@ -1170,6 +1243,7 @@ function uuid(){
     wb.registerSeqNum = registerSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
+    wb.addBlockHandler = addBlock;
 })(wb);
 
 
@@ -1466,7 +1540,7 @@ function saveCurrentScripts(){
     document.querySelector('#block_menu').scrollIntoView();
     localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
-// window.onunload = saveCurrentScripts;
+window.onunload = saveCurrentScripts;
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
@@ -1477,7 +1551,7 @@ function scriptsToString(title, description){
         description: description,
         date: Date.now(),
         waterbearVersion: '2.0',
-        scripts: blocks.map(wb.blockDesc)
+        blocks: blocks.map(wb.blockDesc)
     });
 }
 
@@ -1519,10 +1593,8 @@ function loadScriptsFromObject(fileObject){
         console.log('not really expecting multiple blocks here right now');
     }
     blocks.forEach(function(block){
-        var view = block.view()[0]; // FIXME: strip jquery wrapper
-        wireUpWorkspace(view);
-        block.script = '[[1]]';
-        Event.trigger(view, 'addToScript', workspace);
+        wireUpWorkspace(block);
+        Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
 }
@@ -1566,7 +1638,6 @@ function runScriptFromGist(gist){
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
     if (wb.loaded) return;
-    console.log('loadCurrent scripts, not loaded yet');
 	if (queryParsed.gist){
 		wb.jsonp(
 			'https://api.github.com/gists/' + queryParsed.gist,
@@ -1580,7 +1651,6 @@ wb.loadCurrentScripts = function(queryParsed){
     }else{
         createWorkspace('Workspace');
     }
-    console.log('setting loaded = true');
     wb.loaded = true;
 };
 
@@ -1605,7 +1675,8 @@ function createWorkspace(name){
     var workspace = wb.Block({
         group: 'scripts_workspace',
         id: id,
-        scriptid: id,
+        scriptId: id,
+        scopeId: id,
         blocktype: 'context',
         sockets: [
             {
@@ -1745,12 +1816,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "and",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -1764,12 +1835,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "or",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -1783,12 +1854,13 @@ wb.menu({
                 {
                     "name": "not",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         }
     ]
-});
+}
+);
 /*end boolean.json*/
 
 /*begin control.json*/
@@ -1837,7 +1909,7 @@ wb.menu({
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "default": "ack"
+                    "value": "ack"
                 },
                 {
                     "name": "message"
@@ -1853,7 +1925,7 @@ wb.menu({
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "default": "ack"
+                    "value": "ack"
                 },
                 {
                     "name": "message"
@@ -1869,7 +1941,7 @@ wb.menu({
                 {
                     "name": "forever if",
                     "type": "boolean",
-                    "default": "false"
+                    "value": "false"
                 }
             ]
         },
@@ -1882,7 +1954,7 @@ wb.menu({
                 {
                     "name": "if",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -1895,7 +1967,7 @@ wb.menu({
                 {
                     "name": "if not",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -1908,12 +1980,13 @@ wb.menu({
                 {
                     "name": "repeat until",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         }
     ]
-});
+}
+);
 /*end control.json*/
 
 /*begin digitalio.json*/
@@ -1942,7 +2015,7 @@ wb.menu({
                     "name": "Create digital_output## on Pin",
                     "type": "choice",
                     "options": "digitalpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -1955,12 +2028,12 @@ wb.menu({
                 {
                     "name": "Digital Pin",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "ON if",
                     "type": "boolean",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -1986,7 +2059,7 @@ wb.menu({
                     "name": "Create digital_input## on Pin",
                     "type": "choice",
                     "options": "digitalpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -2000,7 +2073,7 @@ wb.menu({
                 {
                     "name": "Digital Pin",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -2026,7 +2099,7 @@ wb.menu({
                     "name": "Create analog_input## on Pin",
                     "type": "choice",
                     "options": "analoginpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -2040,7 +2113,7 @@ wb.menu({
                 {
                     "name": "Analog Pin",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -2066,7 +2139,7 @@ wb.menu({
                     "name": "Create analog_output## on Pin",
                     "type": "choice",
                     "options": "pwmpins",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -2079,12 +2152,12 @@ wb.menu({
                 {
                     "name": "Analog",
                     "type": "string",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "outputs",
                     "type": "int",
-                    "default": "255"
+                    "value": "255"
                 }
             ]
         }
@@ -2107,12 +2180,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "+",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2126,12 +2199,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "-",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2145,12 +2218,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "*",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2164,12 +2237,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "/",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2183,12 +2256,12 @@ wb.menu({
                 {
                     "name": "pick random",
                     "type": "number",
-                    "default": "1"
+                    "value": "1"
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -2201,7 +2274,7 @@ wb.menu({
                 {
                     "name": "set seed for random numbers to",
                     "type": "number",
-                    "default": "1"
+                    "value": "1"
                 }
             ]
         },
@@ -2215,12 +2288,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "<",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2234,12 +2307,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "=",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2253,12 +2326,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": ">",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2272,12 +2345,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 },
                 {
                     "name": "mod",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2291,7 +2364,7 @@ wb.menu({
                 {
                     "name": "round",
                     "type": "number",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2305,7 +2378,7 @@ wb.menu({
                 {
                     "name": "absolute of",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -2319,7 +2392,7 @@ wb.menu({
                 {
                     "name": "cosine of",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "degrees"
@@ -2336,7 +2409,7 @@ wb.menu({
                 {
                     "name": "sine of",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "degrees"
@@ -2353,7 +2426,7 @@ wb.menu({
                 {
                     "name": "tangent of",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "degrees"
@@ -2370,12 +2443,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "to the power of",
                     "type": "number",
-                    "default": "2"
+                    "value": "2"
                 }
             ]
         },
@@ -2389,7 +2462,7 @@ wb.menu({
                 {
                     "name": "square root of",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 }
             ]
         },
@@ -2403,7 +2476,7 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "default": "10"
+                    "value": "10"
                 },
                 {
                     "name": "as string"
@@ -2420,7 +2493,7 @@ wb.menu({
                 {
                     "name": "Map",
                     "type": "number",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "from Analog in to Analog out"
@@ -2437,22 +2510,23 @@ wb.menu({
                 {
                     "name": "Map",
                     "type": "number",
-                    "default": null
+                    "value": null
                 },
                 {
                     "name": "from",
                     "type": "number",
-                    "default": "0]-[number"
+                    "value": "0]-[number"
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "default": "0]-[number"
+                    "value": "0]-[number"
                 }
             ]
         }
     ]
-});
+}
+);
 /*end math.json*/
 
 /*begin serialio.json*/
@@ -2469,7 +2543,7 @@ wb.menu({
                     "name": "Setup serial communication at",
                     "type": "choice",
                     "options": "baud",
-                    "default": "choice"
+                    "value": "choice"
                 }
             ]
         },
@@ -2482,7 +2556,7 @@ wb.menu({
                 {
                     "name": "Send",
                     "type": "any",
-                    "default": "Message"
+                    "value": "Message"
                 },
                 {
                     "name": "as a line"
@@ -2498,7 +2572,7 @@ wb.menu({
                 {
                     "name": "Send",
                     "type": "any",
-                    "default": "Message"
+                    "value": "Message"
                 }
             ]
         },
@@ -2526,7 +2600,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end serialio.json*/
 
 /*begin timing.json*/
@@ -2542,7 +2617,7 @@ wb.menu({
                 {
                     "name": "wait",
                     "type": "int",
-                    "default": "1"
+                    "value": "1"
                 },
                 {
                     "name": "secs"
@@ -2574,7 +2649,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end timing.json*/
 
 /*begin variables.json*/
@@ -2590,12 +2666,12 @@ wb.menu({
                 {
                     "name": "Create",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "set to",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -2608,12 +2684,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "=",
                     "type": "string",
-                    "default": null
+                    "value": null
                 }
             ]
         },
@@ -2627,7 +2703,7 @@ wb.menu({
                 {
                     "name": "value of",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 }
             ]
         },
@@ -2640,12 +2716,12 @@ wb.menu({
                 {
                     "name": "Create",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "set to",
                     "type": "int",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2658,12 +2734,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "=",
                     "type": "int",
-                    "default": "0"
+                    "value": "0"
                 }
             ]
         },
@@ -2677,7 +2753,7 @@ wb.menu({
                 {
                     "name": "value of",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 }
             ]
         },
@@ -2690,12 +2766,12 @@ wb.menu({
                 {
                     "name": "Create",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "set to",
                     "type": "float",
-                    "default": "0.0"
+                    "value": "0.0"
                 }
             ]
         },
@@ -2708,12 +2784,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "=",
                     "type": "float",
-                    "default": "0.0"
+                    "value": "0.0"
                 }
             ]
         },
@@ -2727,7 +2803,7 @@ wb.menu({
                 {
                     "name": "value of",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 }
             ]
         },
@@ -2740,12 +2816,12 @@ wb.menu({
                 {
                     "name": "Create",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "set to",
                     "type": "boolean",
-                    "default": "false"
+                    "value": "false"
                 }
             ]
         },
@@ -2758,12 +2834,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 },
                 {
                     "name": "=",
                     "type": "boolean",
-                    "default": "false"
+                    "value": "false"
                 }
             ]
         },
@@ -2777,7 +2853,7 @@ wb.menu({
                 {
                     "name": "value of",
                     "type": "string",
-                    "default": "var"
+                    "value": "var"
                 }
             ]
         }
@@ -2803,8 +2879,6 @@ function switchMode(mode){
     loader.parentElement.removeChild(loader);
     document.body.className = mode;
     wb.loadCurrentScripts(q);
-    // remove next line once load/save is working
-    //wb.createWorkspace('Workspace');
 }
 
 /*end launch.js*/

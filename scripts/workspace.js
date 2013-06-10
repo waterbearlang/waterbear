@@ -76,6 +76,7 @@ function loadScriptsFromObject(fileObject){
     }
     if (blocks.length > 1){
         console.log('not really expecting multiple blocks here right now');
+        console.log(blocks);
     }
     blocks.forEach(function(block){
         wireUpWorkspace(block);

@@ -58,6 +58,49 @@
             ]
         },
         {
+            "blocktype": "step",
+            "id": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+            "script": "local.variable## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "script": "local.variable##",
+                    "type": "any",
+                    "sockets": [
+                        {
+                            "name": "variable##"
+                        }
+                    ]
+                }
+            ],
+            "help": "create a reference to re-use the any",
+            "sockets": [
+                {
+                    "name": "variable",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "b4036693-8645-4852-a4de-9e96565f9aec",
+            "script": "{{1}} = {{2}};",
+            "help": "first argument must be a variable",
+            "sockets": [
+                {
+                    "name": "set variable",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",

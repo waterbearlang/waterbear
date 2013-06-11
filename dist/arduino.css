@@ -125,8 +125,8 @@ body.editor #block_menu{
 }
 
 .dropCursor {
-    height: 2px;
-    border-bottom: 1px solid #CCC;
+    height: 0;
+    outline: 2px solid red;
     width: 75%
     float: left;
     clear: left;

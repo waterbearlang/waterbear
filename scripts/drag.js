@@ -118,9 +118,9 @@
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
-        if (wb.matches(dragTarget, '.expression')){
-            wb.hide(dropCursor());
-        }
+        // if (wb.matches(dragTarget, '.expression')){
+        //     wb.hide(dropCursor());
+        // }
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
         // target = clone target if in menu
@@ -155,7 +155,7 @@
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
         wb.reposition(dragTarget, startPosition);
-        potentialDropTargets = getPotentialDropTargets(dragTarget);
+        potentialDropTargets = getPotentialDropTargets(dragTarget).reverse();
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -260,42 +260,44 @@
     }
 
     function positionDropCursor(){
-        var position, middle, y = wb.rect(dragTarget).top;
-        for (var tIdx = 0; tIdx < potentialDropTargets.length; tIdx++){
-            dropTarget = potentialDropTargets[tIdx];
-            if (wb.overlap(dragTarget, dropTarget)){
-                var siblings = wb.findChildren(dropTarget, '.step');
-                if (siblings.length){
-                    for (sIdx = 0; sIdx < siblings.length; sIdx++){
-                        var sibling = siblings[sIdx];
-                        position = wb.rect(sibling);
-                        if (y < position.top || y > position.bottom) continue;
-                        middle = position.top + (position.height / 2);
-                        if (y < middle){
-                            dropTarget.insertBefore(dropCursor(), sibling);
-                            return;
-                        }else{
-                            dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
-                            return;
-                        }
-                    }
+        var dragRect = wb.rect(dragTarget);
+        var cy = dragRect.top + dragRect.height / 2; // vertical centre of drag element
+        // get only the .contains which cx is contained by
+        var overlapping = potentialDropTargets.filter(function(item){
+            var r = wb.rect(item);
+            if (cy < r.top) return false;
+            if (cy > r.bottom) return false;
+            return true;
+        });
+        overlapping.sort(function(a, b){
+            return wb.rect(b).left - wb.rect(a).left; // sort by depth, innermost first
+        });
+        if (!overlapping.length){
+            workspace.appendChild(dropCursor());
+            return;
+        }
+        dropTarget = overlapping[0];
+        var position, middle;
+        var siblings = wb.findChildren(dropTarget, '.step');
+        if (siblings.length){
+            for (var sIdx = 0; sIdx < siblings.length; sIdx++){
+                var sibling = siblings[sIdx];
+                position = wb.rect(sibling);
+                if (cy < (position.top -4) || cy > (position.bottom + 4)) continue;
+                middle = position.top + (position.height / 2);
+                if (cy < middle){
+                    dropTarget.insertBefore(dropCursor(), sibling);
+                    return;
                 }else{
-                    dropTarget.appendChild(dropCursor());
+                    dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
                     return;
                 }
             }
+            dropTarget.appendChild(dropCursor()); // if we get here somehow, add it anyway
+        }else{
+            dropTarget.appendChild(dropCursor());
+            return;
         }
-        wb.findAll(workspace, '.step').forEach(function(elem){
-            // FIXME: Convert to for() iteration to avoid going over every element
-            position = wb.rect(elem);
-            if (y < position.top || y > position.bottom) return;
-            middle = position.top + (position.height / 2);
-            if (y < middle){
-                elem.parentElement.insertBefore(dropCursor(), elem);
-            }else{
-                elem.parentElement.insertBefore(dropCursor(), elem.nextSibling);
-            }
-        });
     }
 
     function selectSocket(event){
@@ -347,6 +349,9 @@
                 }
             case 'expression':
                 var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
+                if (!selector || !selector.length){
+                    selector = '.socket > .holder'; // can drop an any anywhere
+                }
                 if (scope){
                     return wb.findAll(scope, selector).filter(hasChildBlock);
                 }else{

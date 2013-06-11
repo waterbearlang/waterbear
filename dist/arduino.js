@@ -511,9 +511,9 @@
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
-        if (wb.matches(dragTarget, '.expression')){
-            wb.hide(dropCursor());
-        }
+        // if (wb.matches(dragTarget, '.expression')){
+        //     wb.hide(dropCursor());
+        // }
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
         // target = clone target if in menu
@@ -548,7 +548,7 @@
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
         wb.reposition(dragTarget, startPosition);
-        potentialDropTargets = getPotentialDropTargets(dragTarget);
+        potentialDropTargets = getPotentialDropTargets(dragTarget).reverse();
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -653,42 +653,44 @@
     }
 
     function positionDropCursor(){
-        var position, middle, y = wb.rect(dragTarget).top;
-        for (var tIdx = 0; tIdx < potentialDropTargets.length; tIdx++){
-            dropTarget = potentialDropTargets[tIdx];
-            if (wb.overlap(dragTarget, dropTarget)){
-                var siblings = wb.findChildren(dropTarget, '.step');
-                if (siblings.length){
-                    for (sIdx = 0; sIdx < siblings.length; sIdx++){
-                        var sibling = siblings[sIdx];
-                        position = wb.rect(sibling);
-                        if (y < position.top || y > position.bottom) continue;
-                        middle = position.top + (position.height / 2);
-                        if (y < middle){
-                            dropTarget.insertBefore(dropCursor(), sibling);
-                            return;
-                        }else{
-                            dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
-                            return;
-                        }
-                    }
+        var dragRect = wb.rect(dragTarget);
+        var cy = dragRect.top + dragRect.height / 2; // vertical centre of drag element
+        // get only the .contains which cx is contained by
+        var overlapping = potentialDropTargets.filter(function(item){
+            var r = wb.rect(item);
+            if (cy < r.top) return false;
+            if (cy > r.bottom) return false;
+            return true;
+        });
+        overlapping.sort(function(a, b){
+            return wb.rect(b).left - wb.rect(a).left; // sort by depth, innermost first
+        });
+        if (!overlapping.length){
+            workspace.appendChild(dropCursor());
+            return;
+        }
+        dropTarget = overlapping[0];
+        var position, middle;
+        var siblings = wb.findChildren(dropTarget, '.step');
+        if (siblings.length){
+            for (var sIdx = 0; sIdx < siblings.length; sIdx++){
+                var sibling = siblings[sIdx];
+                position = wb.rect(sibling);
+                if (cy < (position.top -4) || cy > (position.bottom + 4)) continue;
+                middle = position.top + (position.height / 2);
+                if (cy < middle){
+                    dropTarget.insertBefore(dropCursor(), sibling);
+                    return;
                 }else{
-                    dropTarget.appendChild(dropCursor());
+                    dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
                     return;
                 }
             }
+            dropTarget.appendChild(dropCursor()); // if we get here somehow, add it anyway
+        }else{
+            dropTarget.appendChild(dropCursor());
+            return;
         }
-        wb.findAll(workspace, '.step').forEach(function(elem){
-            // FIXME: Convert to for() iteration to avoid going over every element
-            position = wb.rect(elem);
-            if (y < position.top || y > position.bottom) return;
-            middle = position.top + (position.height / 2);
-            if (y < middle){
-                elem.parentElement.insertBefore(dropCursor(), elem);
-            }else{
-                elem.parentElement.insertBefore(dropCursor(), elem.nextSibling);
-            }
-        });
     }
 
     function selectSocket(event){
@@ -740,6 +742,9 @@
                 }
             case 'expression':
                 var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
+                if (!selector || !selector.length){
+                    selector = '.socket > .holder'; // can drop an any anywhere
+                }
                 if (scope){
                     return wb.findAll(scope, selector).filter(hasChildBlock);
                 }else{
@@ -869,23 +874,23 @@ function uuid(){
     }
 
     var getScript = function(id){
-        return blockRegistry[id].script;
+        try{
+            return blockRegistry[id].script;
+        }catch(e){
+            console.log('Error: could not get script for %o', id);
+            console.log('Hey look: %o', document.getElementById(id));
+            return '';
+        }
     }
 
     var createSockets = function(obj){
-        // try{
-            return blockRegistry[obj.scriptId || obj.id].sockets.map(function(socket_descriptor){
-                return Socket(socket_descriptor, obj);
-            });
-        // }catch(e){
-        //     console.log('Error: cannot get sockets for %o', obj);
-        //     throw e;
-        // }
+        return obj.sockets.map(function(socket_descriptor){
+            return Socket(socket_descriptor, obj);
+        });
     }
 
     var Block = function(obj){
         // FIXME:
-        // Handle values coming from serialized (saved) blocks
         // Handle customized names (sockets)
         registerBlock(obj);
         var block = elem(
@@ -920,6 +925,12 @@ function uuid(){
         if (obj.script){
             block.dataset.script = obj.script;
         }
+        if (obj.isLocal){
+            block.dataset.isLocal = obj.isLocal;
+        }
+        if (obj.isTemplateBlock){
+            block.dataset.isTemplateBlock = obj.isTemplateBlock;
+        }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
             block.appendChild(elem('div', {'class': 'locals block-menu'}));
             var contained = elem('div', {'class': 'contained'});
@@ -928,23 +939,42 @@ function uuid(){
                 obj.contained.map(function(childdesc){
                     var child = Block(childdesc);
                     contained.appendChild(child);
-                    addBlock({wbTarget: child}); // simulate event
+                    addStep({wbTarget: child}); // simulate event
                 });
             }
         }
+        // if (!obj.isTemplateBlock){
+        //     console.log('instantiated block %o from description %o', block, obj);
+        // }
         return block;
     }
 
     // Block Event Handlers
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
-    Event.on(document.body, 'wb-remove', '.expression', removeExpression);
-    Event.on(document.body, 'wb-add', '.step', addBlock);
-    Event.on(document.body, 'wb-add', '.expression', addExpression);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-clone', '.block', onClone);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
     function removeBlock(event){
+        event.stopPropagation();
+        if (wb.matches(event.wbTarget, '.expression')){
+            removeExpression(event);
+        }else{
+            removeStep(event);
+        }
+    }
+
+    function addBlock(event){
+        event.stopPropagation();
+        if (wb.matches(event.wbTarget, '.expression')){
+            addExpression(event);
+        }else{
+            addStep(event);
+        }
+    }
+
+    function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
         var block = event.wbTarget;
@@ -960,6 +990,7 @@ function uuid(){
                     }
                     local.parentElement.removeChild(local);
                 });
+                delete block.dataset.localsAdded;
             }
         }
     }
@@ -974,11 +1005,11 @@ function uuid(){
         });
     }
 
-    function addBlock(event){
+    function addStep(event){
         // Add a block to a block container
         var block = event.wbTarget;
         // console.log('add block %o', block);
-        if (block.dataset.locals && block.dataset.locals.length){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
             var parent = wb.closest(block, '.context');
             var locals = wb.findChild(parent, '.locals');
             JSON.parse(block.dataset.locals).forEach(
@@ -986,11 +1017,15 @@ function uuid(){
                     spec.isTemplateBlock = true;
                     spec.isLocal = true;
                     spec.group = block.dataset.group;
-                    spec.seqNum = block.dataset.seqNum;
+                    if (!spec.seqNum){
+                        spec.seqNum = block.dataset.seqNum;
+                    }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
+                    spec.id = spec.scriptId = uuid();
                     // add localSource so we can trace a local back to its origin
                     spec.localSource = block.id;
+                    block.dataset.localsAdded = true;
                     locals.appendChild(Block(spec));
                 }
             );
@@ -1005,6 +1040,9 @@ function uuid(){
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.style.display = 'none';
         });
+        if (event.stopPropagation){
+            event.stopPropagation();
+        }
     }
 
     function onClone(event){
@@ -1050,7 +1088,9 @@ function uuid(){
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
             if (desc.uBlock){
+                console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
+                console.log('created instance: %o', newBlock);
             }else if (desc.block){
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
@@ -1139,7 +1179,9 @@ function uuid(){
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
         delete blockdesc.id;
-        delete blockdesc.seqNum;
+        if (!blockdesc.isLocal){
+            delete blockdesc.seqNum;
+        }
         delete blockdesc.isTemplateBlock;
         delete blockdesc.isLocal;
         blockdesc.scriptId = block.id;
@@ -1163,34 +1205,34 @@ function uuid(){
         }
         switch(type){
             case 'any':
-                value = obj.value || obj.default || ''; break;
+                value = obj.uValue || obj.value || ''; break;
             case 'number':
-                value = obj.value || obj.default || 0; break;
+                value = obj.uValue || obj.value || 0; break;
             case 'string':
-                value = obj.value || obj.default || ''; break;
+                value = obj.uValue || obj.value || ''; break;
             case 'color':
-                value = obj.value || obj.default || '#000000'; break;
+                value = obj.uValue || obj.value || '#000000'; break;
             case 'date':
-                value = obj.value || obj.default || new Date().toISOString().split('T')[0]; break;
+                value = obj.uValue || obj.value || new Date().toISOString().split('T')[0]; break;
             case 'time':
-                value = obj.value || obj.default || new Date().toISOString().split('T')[1]; break;
+                value = obj.uValue || obj.value || new Date().toISOString().split('T')[1]; break;
             case 'datetime':
-                value = obj.value || obj.default || new Date().toISOString(); break;
+                value = obj.uValue || obj.value || new Date().toISOString(); break;
             case 'url':
-                value = obj.value || obj.default || 'http://waterbearlang.com/'; break;
+                value = obj.uValue || obj.value || 'http://waterbearlang.com/'; break;
             case 'image':
-                value = obj.value || obj.default || ''; break;
+                value = obj.uValue || obj.value || ''; break;
             case 'phone':
-                value = obj.value || obj.default || '604-555-1212'; break;
+                value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
-                value = obj.value || obj.default || 'waterbear@waterbearlang.com'; break;
+                value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
             case 'boolean':
                 obj.options = 'boolean';
             case 'choice':
                 var choice = elem('select');
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
-                    var value = obj.value || obj.default;
+                    var value = obj.uValue || obj.value;
                     if (value && value === opt){
                         option.setAttribute('selected', 'selected');
                     }
@@ -1198,7 +1240,7 @@ function uuid(){
                 });
                 return choice;
             default:
-                value = obj.value || obj.default || '';
+                value = obj.uValue || obj.value || '';
         }
         return elem('input', {type: type, value: value});
     }
@@ -1580,7 +1622,7 @@ Event.on('.save_scripts', 'click', null, createDownloadUrl);
 Event.on('.restore_scripts', 'click', null, comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    console.info('file format version: %s', fileObject.waterbearVersion);
+    // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
 	if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(wb.Block);

@@ -81,7 +81,9 @@
                     "value": null
                 },
                 {
-                    "name": "join with [string:, ]"
+                    "name": "join with",
+                    "type": "string",
+                    "value": ", "
                 }
             ]
         },

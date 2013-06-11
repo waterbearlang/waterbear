@@ -2,41 +2,232 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-    <link rel="stylesheet" href="../lib/mocha.css" />
 	<title>Waterbear Tests</title>
-    <script type="text/html" id="step_template">
-        <div class="wrapper step" data-classes="group">
-            <div class="block" data-title="help">
-                <div class="blockhead">
-                    <div class="label" data-for="label in labels">
-						<span data-replace="label"></span>
-					</div>
-                </div>
-                <b class="flap"></b>
-            </div>
-            <div class="next">
-                <i class="slot"></i>
-            </div>
-        </div>
-    </script>
+    <style>
+        .blockindex {
+            width: 30%;
+            float: left;
+        }
+        .testindex {
+            width: 65%;
+            float: right;
+        }
+    </style>
 </head>
-<body>
-    <div id="mocha"></div>
-    <script src="../lib/jquery-1.7.2.min.js"></script>
-    <script src="../lib/chai.js"></script>
-    <script src="../lib/mocha.js"></script>
-	<!-- // <script src="../scripts/utils.js"></script> -->
-	<!-- // <script src="../scripts/template.js"></script> -->
-    <!-- // <script src="../scripts/blocks.js"></script> -->
-    <!-- // <script src="../scripts/serialization-1.0.js"></script> -->
-    <script src="../scripts/events.js"></script>
-    <script>mocha.setup('tdd')</script>
-    <!-- // <script src="test.block.js"></script> -->
-    <!-- // <script src="test.template.js"></script> -->
-    <script src="test.events.js"></script>
-    <script>
-      mocha.run();
-    </script>
+
+<body id="home">
+
+	<h1>Waterbear Tests</h1>
+    <div class="blockindex">
+        <h3>Controls</h3>
+        <ul>
+            <li>when program runs</li>
+            <li>when [key] pressed</li>
+            <li>repeat [int] times a second</li>
+            <li>variable [any]</li>
+            <li>set variable [var] to [any]</li>
+            <li>wait [int] seconds</li>
+            <li>repeat [int] times</li>
+            <li>broadcast [str] message</li>
+            <li>broadcast [str] message with data [any]</li>
+            <li>when I receive [str] message</li>
+            <li>when I receive [str] message with data</li>
+            <li>forever if [bool]</li>
+            <li>if [bool]</li>
+            <li>if not [bool]</li>
+            <li>repeat until [bool]</li>
+        </ul>
+        <h3>Sprites</h3>
+        <ul>
+            <li>clear stage to [color]</li>
+            <li>clear stage to [image]</li>
+            <li>rectangle sprite [size] at [point] with [color]</li>
+            <li>draw [sprite]</li>
+            <li>[sprite] collides with [sprite]</li>
+            <li>move [sprite] by [x][y]</li>
+            <li>move [sprite] to [point]</li>
+            <li>[sprite] left</li>
+            <li>[sprite] right</li>
+            <li>[sprite] top</li>
+            <li>[sprite] bottom</li>
+        </ul>
+        <h3>Arrays</h3>
+        <ul>
+            <li>new array</li>
+            <li>new array with array</li>
+            <li>[array] item [index]</li>
+            <li>[array] join with [string]</li>
+            <li>[array] append [any]</li>
+            <li>[array] length</li>
+            <li>[array] remove item [index]</li>
+            <li>[array] pop</li>
+            <li>[array] shift</li>
+            <li>[array] reversed</li>
+            <li>[array] concat [array]</li>
+            <li>[array] for each</li>
+        </ul>
+        <h3>Boolean</h3>
+        <ul>
+            <li>[bool] and [bool]</li>
+            <li>[bool] or [bool]</li>
+            <li>[bool] xor [bool]</li>
+            <li>not [bool]</li>
+        </ul>
+        <h3>Canvas</h3>
+        <ul>
+            <li>with local state</li>
+            <li>stroke</li>
+            <li>fill</li>
+            <li>global alpha</li>
+            <li>global composite operator [operator]</li>
+            <li>scale [x] [y]</li>
+            <li>rotate by [degrees]</li>
+            <li>translate by [x] [y]</li>
+            <li>line width [int]</li>
+            <li>line cap [style]</li>
+            <li>line join [style]</li>
+            <li>mitre limit [int]</li>
+            <li>shadow offset [x] [y]</li>
+            <li>shadow blur [int]</li>
+        </ul>
+        <h3>Color</h3>
+        <ul>
+            <li>shadow [color]</li>
+            <li>stroke [color]</li>
+            <li>fill [color]</li>
+            <li>color with [red] [green] [blue]</li>
+            <li>color with [red] [green] [blue] [alpha]</li>
+            <li>color with [hue] [saturation] [brightness]</li>
+            <li>random color</li>
+            <li>stroke [gradient]</li>
+            <li>fill [gradient]</li>
+            <li>stroke [pattern]</li>
+            <li>fill [pattern]</li>
+            <li>create radial gradient from [point] [radius] to [point] [radius]</li>
+            <li>create linear gradient from [point] to [point]</li>
+            <li>add color stop to [gradient] at [offset] with [color]</li>
+            <li>create pattern from [image] [repeats]</li>
+        </ul>
+        <h3>Images</h3>
+        <ul>
+            <li>draw [image] at [point]</li>
+            <li>draw [image] in [rect]</li>
+            <li>draw a [rect] from [image] to [rect]</li>
+            <li>create ImageData with [size]</li>
+            <li>create ImageData from [ImageData]</li>
+            <li>get ImageData for [rect]</li>
+            <li>draw [ImageData] at [point]</li>
+            <li>draw a [rect] from [ImageData] at [point]</li>
+            <li>[ImageData] width</li>
+            <li>[ImageData] height</li>
+            <li>[ImageData] as array</li>
+            <li>image from [url]</li>
+            <li>[image] width</li>
+            <li>[image] height</li>
+            <li>[image] url</li>
+        </ul>
+        <h3>Math</h3>
+        <ul>
+            <li>[number] + [number]</li>
+            <li>[number] - [number]</li>
+            <li>[number] * [number]</li>
+            <li>[number] / [number]</li>
+            <li>[number] = [number]</li>
+            <li>[number] &lt; [number]</li>
+            <li>[number] > [number]</li>
+            <li>pick random [number] to [number]</li>
+            <li>[number] mod [number]</li>
+            <li>round [number]</li>
+            <li>absolute of [number]</li>
+            <li>arccosine degrees of [number]</li>
+            <li>arcsine degrees of [number]</li>
+            <li>arctangent degrees of [number]</li>
+            <li>ceiling of [number]</li>
+            <li>cosine of [degrees]</li>
+            <li>sine of [degrees]</li>
+            <li>tangent of [degrees]</li>
+            <li>[number] to the power of [number]</li>
+            <li>square root of [number]</li>
+            <li>pi</li>
+            <li>tau</li>
+        </ul>
+        <h3>Objects</h3>
+        <ul>
+            <li>new object</li>
+            <li>[object] [key] = [value]</li>
+            <li>[object] value at [key]</li>
+            <li>for each item in [object] do</li>
+        </ul>
+        <h3>Strings</h3>
+        <ul>
+            <li>[string] split on [string]</li>
+            <li>concatenate [string] with [string]</li>
+            <li>[string] character at [index]</li>
+            <li>[string] length</li>
+            <li>[string] indexOf [string]</li>
+            <li>[string] replace [string] with [string]</li>
+            <li>to string [any]</li>
+            <li>comment [string]</li>
+            <li>alert [string]</li>
+            <li>console log [string]</li>
+            <li>console log [format] [arguments]</li>
+            <li>global keys object</li>
+        </ul>
+        <h3>Paths</h3>
+        <ul>
+            <li>with path</li>
+            <li>move to [point]</li>
+            <li>line to [point]</li>
+            <li>quadratic curve to [point] with control [point]</li>
+            <li>bezier curve to [point] with controls [point] and [point]</li>
+            <li>arc to [point] through [point] with [radius]</li>
+            <li>arc with [origin] [radius] start angle [degrees] end angle [degrees] [bool]</li>
+            <li>[rect]</li>
+            <li>circle at [point] with [radius]</li>
+            <li>clip</li>
+            <li>is [point] in path?</li>
+        </ul>
+        <h3>Points</h3>
+        <ul>
+            <li>point at [x] [y]</li>
+            <li>point from [array]</li>
+            <li>random point</li>
+            <li>[point] x</li>
+            <li>[point] y</li>
+            <li>[point] as array</li>
+        </ul>
+        <h3>Rects</h3>
+        <ul>
+            <li>rect at [x] [y] with [width] [height]</li>
+            <li>rect at [point] with [size]</li>
+            <li>rect from [array]</li>
+            <li>[rect] position</li>
+            <li>[rect] size</li>
+            <li>[rect] as array</li>
+            <li>[rect] x</li>
+            <li>[rect] y</li>
+            <li>[rect] width</li>
+            <li>[rect] height</li>
+        </ul>
+        <h3>Sensing</h3>
+        <ul>
+            <li>ask [string] and wait</li>
+            <li>mouse x</li>
+            <li>mouse y</li>
+            <li>mouse down</li>
+            <li>[key] pressed?</li>
+            <li>stage width</li>
+            <li>stage height</li>
+            <li>center x</li>
+            <li>center y</li>
+            <li>random x</li>
+            <li>random y</li>
+            <li>reset timer</li>
+            <li>timer</li>
+        </ul>
+    </div>
+    <div class="testindex">
+    </div>
+
 </body>
 </html>
-

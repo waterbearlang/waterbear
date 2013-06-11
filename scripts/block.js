@@ -49,23 +49,23 @@
     }
 
     var getScript = function(id){
-        return blockRegistry[id].script;
+        try{
+            return blockRegistry[id].script;
+        }catch(e){
+            console.log('Error: could not get script for %o', id);
+            console.log('Hey look: %o', document.getElementById(id));
+            return '';
+        }
     }
 
     var createSockets = function(obj){
-        // try{
-            return blockRegistry[obj.scriptId || obj.id].sockets.map(function(socket_descriptor){
-                return Socket(socket_descriptor, obj);
-            });
-        // }catch(e){
-        //     console.log('Error: cannot get sockets for %o', obj);
-        //     throw e;
-        // }
+        return obj.sockets.map(function(socket_descriptor){
+            return Socket(socket_descriptor, obj);
+        });
     }
 
     var Block = function(obj){
         // FIXME:
-        // Handle values coming from serialized (saved) blocks
         // Handle customized names (sockets)
         registerBlock(obj);
         var block = elem(
@@ -100,6 +100,12 @@
         if (obj.script){
             block.dataset.script = obj.script;
         }
+        if (obj.isLocal){
+            block.dataset.isLocal = obj.isLocal;
+        }
+        if (obj.isTemplateBlock){
+            block.dataset.isTemplateBlock = obj.isTemplateBlock;
+        }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
             block.appendChild(elem('div', {'class': 'locals block-menu'}));
             var contained = elem('div', {'class': 'contained'});
@@ -108,23 +114,42 @@
                 obj.contained.map(function(childdesc){
                     var child = Block(childdesc);
                     contained.appendChild(child);
-                    addBlock({wbTarget: child}); // simulate event
+                    addStep({wbTarget: child}); // simulate event
                 });
             }
         }
+        // if (!obj.isTemplateBlock){
+        //     console.log('instantiated block %o from description %o', block, obj);
+        // }
         return block;
     }
 
     // Block Event Handlers
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
-    Event.on(document.body, 'wb-remove', '.expression', removeExpression);
-    Event.on(document.body, 'wb-add', '.step', addBlock);
-    Event.on(document.body, 'wb-add', '.expression', addExpression);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-clone', '.block', onClone);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
     function removeBlock(event){
+        event.stopPropagation();
+        if (wb.matches(event.wbTarget, '.expression')){
+            removeExpression(event);
+        }else{
+            removeStep(event);
+        }
+    }
+
+    function addBlock(event){
+        event.stopPropagation();
+        if (wb.matches(event.wbTarget, '.expression')){
+            addExpression(event);
+        }else{
+            addStep(event);
+        }
+    }
+
+    function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
         var block = event.wbTarget;
@@ -140,6 +165,7 @@
                     }
                     local.parentElement.removeChild(local);
                 });
+                delete block.dataset.localsAdded;
             }
         }
     }
@@ -154,11 +180,11 @@
         });
     }
 
-    function addBlock(event){
+    function addStep(event){
         // Add a block to a block container
         var block = event.wbTarget;
         // console.log('add block %o', block);
-        if (block.dataset.locals && block.dataset.locals.length){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
             var parent = wb.closest(block, '.context');
             var locals = wb.findChild(parent, '.locals');
             JSON.parse(block.dataset.locals).forEach(
@@ -166,11 +192,15 @@
                     spec.isTemplateBlock = true;
                     spec.isLocal = true;
                     spec.group = block.dataset.group;
-                    spec.seqNum = block.dataset.seqNum;
+                    if (!spec.seqNum){
+                        spec.seqNum = block.dataset.seqNum;
+                    }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
+                    spec.id = spec.scriptId = uuid();
                     // add localSource so we can trace a local back to its origin
                     spec.localSource = block.id;
+                    block.dataset.localsAdded = true;
                     locals.appendChild(Block(spec));
                 }
             );
@@ -185,6 +215,9 @@
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.style.display = 'none';
         });
+        if (event.stopPropagation){
+            event.stopPropagation();
+        }
     }
 
     function onClone(event){
@@ -230,7 +263,9 @@
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
             if (desc.uBlock){
+                console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
+                console.log('created instance: %o', newBlock);
             }else if (desc.block){
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
@@ -319,7 +354,9 @@
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
         delete blockdesc.id;
-        delete blockdesc.seqNum;
+        if (!blockdesc.isLocal){
+            delete blockdesc.seqNum;
+        }
         delete blockdesc.isTemplateBlock;
         delete blockdesc.isLocal;
         blockdesc.scriptId = block.id;
@@ -343,34 +380,34 @@
         }
         switch(type){
             case 'any':
-                value = obj.value || obj.default || ''; break;
+                value = obj.uValue || obj.value || ''; break;
             case 'number':
-                value = obj.value || obj.default || 0; break;
+                value = obj.uValue || obj.value || 0; break;
             case 'string':
-                value = obj.value || obj.default || ''; break;
+                value = obj.uValue || obj.value || ''; break;
             case 'color':
-                value = obj.value || obj.default || '#000000'; break;
+                value = obj.uValue || obj.value || '#000000'; break;
             case 'date':
-                value = obj.value || obj.default || new Date().toISOString().split('T')[0]; break;
+                value = obj.uValue || obj.value || new Date().toISOString().split('T')[0]; break;
             case 'time':
-                value = obj.value || obj.default || new Date().toISOString().split('T')[1]; break;
+                value = obj.uValue || obj.value || new Date().toISOString().split('T')[1]; break;
             case 'datetime':
-                value = obj.value || obj.default || new Date().toISOString(); break;
+                value = obj.uValue || obj.value || new Date().toISOString(); break;
             case 'url':
-                value = obj.value || obj.default || 'http://waterbearlang.com/'; break;
+                value = obj.uValue || obj.value || 'http://waterbearlang.com/'; break;
             case 'image':
-                value = obj.value || obj.default || ''; break;
+                value = obj.uValue || obj.value || ''; break;
             case 'phone':
-                value = obj.value || obj.default || '604-555-1212'; break;
+                value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
-                value = obj.value || obj.default || 'waterbear@waterbearlang.com'; break;
+                value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
             case 'boolean':
                 obj.options = 'boolean';
             case 'choice':
                 var choice = elem('select');
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
-                    var value = obj.value || obj.default;
+                    var value = obj.uValue || obj.value;
                     if (value && value === opt){
                         option.setAttribute('selected', 'selected');
                     }
@@ -378,7 +415,7 @@
                 });
                 return choice;
             default:
-                value = obj.value || obj.default || '';
+                value = obj.uValue || obj.value || '';
         }
         return elem('input', {type: type, value: value});
     }

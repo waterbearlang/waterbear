@@ -20,7 +20,12 @@
             "help": "Prompt the user for information",
             "sockets": [
                 {
-                    "name": "ask [string:What's your name?] and wait"
+                    "name": "ask [string:What's your name?] and wait",
+                    "type": "string",
+                    "value": "What's your name?"
+                },
+                {
+                    "name": "and wait"
                 }
             ]
         },

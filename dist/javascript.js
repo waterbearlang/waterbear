@@ -2071,7 +2071,7 @@ hljs.LANGUAGES.javascript = {
             callback(data);
         };
         window[id] = handler;
-        document.head.append(wb.elem('script', {src: url, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url, id: id}));
     }
 
 
@@ -2835,6 +2835,7 @@ function uuid(){
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
             var parent = wb.closest(block, '.context');
             var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = [];
             JSON.parse(block.dataset.locals).forEach(
                 function(spec){
                     spec.isTemplateBlock = true;
@@ -2845,13 +2846,17 @@ function uuid(){
                     }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
-                    spec.id = spec.scriptId = uuid();
+                    if(!spec.id){
+                        spec.id = spec.scriptId = uuid();
+                    }
                     // add localSource so we can trace a local back to its origin
                     spec.localSource = block.id;
                     block.dataset.localsAdded = true;
                     locals.appendChild(Block(spec));
+                    parsedLocals.push(spec);
                 }
             );
+            block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
 
@@ -2911,9 +2916,9 @@ function uuid(){
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
             if (desc.uBlock){
-                console.log('trying to instantiate %o', desc.uBlock);
+                // console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
-                console.log('created instance: %o', newBlock);
+                // console.log('created instance: %o', newBlock);
             }else if (desc.block){
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
@@ -3072,7 +3077,15 @@ function uuid(){
         if (holder.children.length > 1){
             return codeFromBlock(wb.findChild(holder, '.block'));
         }else{
-            return wb.findChild(holder, 'input, select').value;
+            var value = wb.findChild(holder, 'input, select').value;
+            var type = holder.parentElement.dataset.type;
+            if (type === 'string' || type === 'choice'){
+                if (value[0] === '"'){value = value.slice(1);}
+                if (value[value.length-1] === '"'){value = value.slice(0,-1);}
+                value = value.replace(/"/g, '\\"');
+                value = '"' + value + '"';
+            }
+            return value;
         }
     }
 
@@ -3085,7 +3098,7 @@ function uuid(){
             .filter(function(holder){ return holder; }) // remove undefineds
             .map(socketValue); // get value
         if (wb.matches(block, '.context')){
-            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock);
+            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock).join('');
         }
         // Now intertwingle the values with the template and return the result
         function replace_values(match, offset, s){
@@ -3093,7 +3106,7 @@ function uuid(){
             if (match[0] === '{'){
                 return expressionValues[idx] || 'null';
             }else{
-                return childValues[idx] || 'null';
+                return childValues || 'null';
             }
         }
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
@@ -4060,7 +4073,7 @@ wb.menu({
                 {
                     "name": "clear stage to color",
                     "type": "color",
-                    "value": null
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
             ]
         },
@@ -4098,17 +4111,16 @@ wb.menu({
                 {
                     "name": "rectangle sprite##",
                     "type": "size",
-                    "value": null
+                    "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
                 },
                 {
                     "name": "big at",
                     "type": "point",
-                    "value": null
+                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
                 },
                 {
                     "name": "with color",
                     "type": "color",
-                    "value": null,
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
             ]
@@ -4148,7 +4160,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
-            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}})",
+            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}});",
             "help": "move a sprite relatively",
             "sockets": [
                 {
@@ -4165,6 +4177,53 @@ wb.menu({
                     "name": "y",
                     "type": "number",
                     "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "372de8c1-5f72-49cb-a2bd-faf66c36e318",
+            "help": "move a sprite by its own speed and direction",
+            "script": "(function(sprite){sprite.x+=sprite.dx;sprite.y+=sprite.dy;})({{1}});",
+            "sockets": [
+                {
+                    "name": "move",
+                    "type": "sprite",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
+            "help": "set the direction (angle in degrees) and speed of a sprite",
+            "script": "(function(sprite,degrees,speed){sprite.dx=Math.cos(degrees*Math.PI/180)*speed;sprite.dy=Math.sin(degrees*Math.PI/180)*speed;sprite.direction=degrees;sprite.speed=speed;})({{1}},{{2}},{{3}});",
+            "sockets": [
+                {
+                    "name": "set sprite",
+                    "type": "sprite",
+                },
+                {
+                    "name": "direction",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees and speed",
+                    "type": "number",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
+            "help": "bounce in the x and/or y direction if the stage is exceeded",
+            "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "bounce",
+                    "type": "sprite"
                 }
             ]
         },
@@ -4895,7 +4954,7 @@ wb.menu({
                 {
                     "name": "alpha",
                     "type": "number",
-                    "value": "0"
+                    "value": "0.1"
                 }
             ]
         },
@@ -6614,7 +6673,12 @@ wb.menu({
             "help": "Prompt the user for information",
             "sockets": [
                 {
-                    "name": "ask [string:What's your name?] and wait"
+                    "name": "ask [string:What's your name?] and wait",
+                    "type": "string",
+                    "value": "What's your name?"
+                },
+                {
+                    "name": "and wait"
                 }
             ]
         },
@@ -6994,12 +7058,12 @@ wb.menu({
                 {
                     "name": "size with width",
                     "type": "number",
-                    "value": "10"
+                    "value": "32"
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": "32"
                 }
             ]
         },

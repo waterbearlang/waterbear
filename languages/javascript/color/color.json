@@ -89,7 +89,7 @@
                 {
                     "name": "alpha",
                     "type": "number",
-                    "value": "0"
+                    "value": "0.1"
                 }
             ]
         },

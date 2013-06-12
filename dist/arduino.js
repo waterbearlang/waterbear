@@ -248,7 +248,7 @@
             callback(data);
         };
         window[id] = handler;
-        document.head.append(wb.elem('script', {src: url, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url, id: id}));
     }
 
 
@@ -1012,6 +1012,7 @@ function uuid(){
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
             var parent = wb.closest(block, '.context');
             var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = [];
             JSON.parse(block.dataset.locals).forEach(
                 function(spec){
                     spec.isTemplateBlock = true;
@@ -1022,13 +1023,17 @@ function uuid(){
                     }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
-                    spec.id = spec.scriptId = uuid();
+                    if(!spec.id){
+                        spec.id = spec.scriptId = uuid();
+                    }
                     // add localSource so we can trace a local back to its origin
                     spec.localSource = block.id;
                     block.dataset.localsAdded = true;
                     locals.appendChild(Block(spec));
+                    parsedLocals.push(spec);
                 }
             );
+            block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
 
@@ -1088,9 +1093,9 @@ function uuid(){
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
             if (desc.uBlock){
-                console.log('trying to instantiate %o', desc.uBlock);
+                // console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
-                console.log('created instance: %o', newBlock);
+                // console.log('created instance: %o', newBlock);
             }else if (desc.block){
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
@@ -1249,7 +1254,15 @@ function uuid(){
         if (holder.children.length > 1){
             return codeFromBlock(wb.findChild(holder, '.block'));
         }else{
-            return wb.findChild(holder, 'input, select').value;
+            var value = wb.findChild(holder, 'input, select').value;
+            var type = holder.parentElement.dataset.type;
+            if (type === 'string' || type === 'choice'){
+                if (value[0] === '"'){value = value.slice(1);}
+                if (value[value.length-1] === '"'){value = value.slice(0,-1);}
+                value = value.replace(/"/g, '\\"');
+                value = '"' + value + '"';
+            }
+            return value;
         }
     }
 
@@ -1262,7 +1275,7 @@ function uuid(){
             .filter(function(holder){ return holder; }) // remove undefineds
             .map(socketValue); // get value
         if (wb.matches(block, '.context')){
-            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock);
+            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock).join('');
         }
         // Now intertwingle the values with the template and return the result
         function replace_values(match, offset, s){
@@ -1270,7 +1283,7 @@ function uuid(){
             if (match[0] === '{'){
                 return expressionValues[idx] || 'null';
             }else{
-                return childValues[idx] || 'null';
+                return childValues || 'null';
             }
         }
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);

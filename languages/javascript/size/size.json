@@ -10,12 +10,12 @@
                 {
                     "name": "size with width",
                     "type": "number",
-                    "value": "10"
+                    "value": "32"
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": "32"
                 }
             ]
         },

@@ -2754,6 +2754,9 @@ function uuid(){
         if (obj.isTemplateBlock){
             block.dataset.isTemplateBlock = obj.isTemplateBlock;
         }
+        if (obj.closed){
+            block.dataset.closed = true;
+        }
         if (obj.blocktype === 'context' || obj.blocktype === 'eventhandler'){
             block.appendChild(elem('div', {'class': 'locals block-menu'}));
             var contained = elem('div', {'class': 'contained'});
@@ -2764,6 +2767,10 @@ function uuid(){
                     contained.appendChild(child);
                     addStep({wbTarget: child}); // simulate event
                 });
+            }
+            if (! wb.matches(block, '.scripts_workspace')){
+                var label = wb.findChild(block, '.label');
+                label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
         // if (!obj.isTemplateBlock){
@@ -2995,6 +3002,9 @@ function uuid(){
         }
         if (block.dataset.locals){
             desc.locals = JSON.parse(block.dataset.locals);
+        }
+        if (block.dataset.closed){
+            desc.closed = true;
         }
         var contained = wb.findChild(block, '.contained');
         if (contained && contained.children.length){
@@ -3604,6 +3614,14 @@ function getFiles(evt){
     }
 }
 
+Event.on('.workspace', 'click', '.disclosure', function(evt){
+    var block = wb.closest(evt.wbTarget, '.block');
+    if (block.dataset.closed){
+        delete block.dataset.closed;
+    }else{
+        block.dataset.closed = true;
+    }
+});
 
 
 })(wb);

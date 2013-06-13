@@ -213,6 +213,14 @@ function getFiles(evt){
     }
 }
 
+Event.on('.workspace', 'click', '.disclosure', function(evt){
+    var block = wb.closest(evt.wbTarget, '.block');
+    if (block.dataset.closed){
+        delete block.dataset.closed;
+    }else{
+        block.dataset.closed = true;
+    }
+});
 
 
 })(wb);

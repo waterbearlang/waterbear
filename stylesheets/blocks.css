@@ -1,4 +1,8 @@
 /* Styles for steps and containers */
+*{
+  box-sizing: border-box;
+}
+
 .block, .socket, .autosocket{
   position: relative;
 }
@@ -46,7 +50,7 @@
     margin: 5px;
 }
 
-.block-menu .locals{
+.block-menu .locals, [data-closed] .locals{
   display: none;
 }
 
@@ -212,7 +216,7 @@
     margin-bottom: 10px;
 }
 
-.block-menu .contained{
+.block-menu .contained, [data-closed] .contained{
   display: none;
 }
 
@@ -297,6 +301,26 @@
 
 .block.scripts_workspace:after{
   content: none;
+}
+
+.disclosure{
+  width: 1em;
+  height: 1em;
+  margin-right: 1em;
+  margin-left -1em;
+  display: inline-block;
+}
+
+.disclosure:before{
+  content: "▼"
+}
+
+[data-closed] .disclosure:before{
+  content: "▶"
+}
+
+.block_menu .disclosure{
+  display: none;
 }
 
 

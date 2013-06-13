@@ -254,7 +254,7 @@
                 'data-name': desc.name,
                 'data-id': blockdesc.id
             },
-            elem('span', {'class': 'name'}, desc.name || desc.uName)
+            elem('span', {'class': 'name'}, desc.uName || desc.name)
         );
         // Optional settings
         if (desc.value){
@@ -432,7 +432,9 @@
             default:
                 value = obj.uValue || obj.value || '';
         }
-        return elem('input', {type: type, value: value});
+        var input = elem('input', {type: type, value: value});
+        wb.resize(input);
+        return input;
     }
 
     var socketValue = function(holder){
@@ -476,6 +478,57 @@
         return _code2;
     };
 
+    function changeName(event){
+        var nameSpan = event.wbTarget;
+        var input = elem('input', {value: nameSpan.textContent});
+        nameSpan.parentNode.appendChild(input);
+        nameSpan.style.display = 'none';
+        input.focus();
+        input.select();
+        wb.resize(input);
+        Event.on(input, 'blur', null, updateName);
+        Event.on(input, 'keydown', null, maybeUpdateName);
+    }
+
+    function updateName(event){
+        console.log('updateName on %o', event);
+        var input = event.wbTarget;
+        Event.off(input, 'blur', updateName);
+        Event.off(input, 'keydown', maybeUpdateName);
+        var nameSpan = input.previousSibling;
+        var newName = input.value;
+        // if (!input.parentElement) return; // already removed it, not sure why we're getting multiple blurs
+        input.parentElement.removeChild(input);
+        nameSpan.style.display = 'initial';
+        console.log('now update all instances too');
+        var source = wb.closest(nameSpan, '.block');
+        var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+        instances.forEach(function(elem){
+            wb.find(elem, '.name').textContent = newName;
+        });
+    }
+
+    function cancelUpdateName(event){
+        var input = event.wbTarget;
+        var nameSpan = input.previousSibling;
+        Event.off(input, 'blur', updateName);
+        Event.off(input, 'keydown', maybeUpdateName);
+        input.parentElement.removeChild(input);
+        nameSpan.style.display = 'initial';
+    }
+
+    function maybeUpdateName(event){
+        var input = event.wbTarget;
+        if (event.keyCode === 0x1B /* escape */ ){
+            event.preventDefault();
+            input.value = input.previousSibling.textContent;
+            input.blur()
+        }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
+            event.preventDefault();
+            input.blur();
+        }
+    }
+
 
     // Export methods
     wb.Block = Block;
@@ -484,5 +537,6 @@
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
+    wb.changeName = changeName;
 })(wb);
 

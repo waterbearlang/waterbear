@@ -334,3 +334,15 @@ body.editor #block_menu{
 .accordion-body.open{
     display: block
 }
+
+/* SVG is in place for text-sizing only */
+
+svg{
+    position:absolute;
+    left: -1000px;
+}
+svg text{
+    /* This should be the same font used for <input> */
+    font-family: 'Lucida Grande';
+    font-size: 11px;
+}

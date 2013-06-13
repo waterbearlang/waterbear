@@ -1,8 +1,7 @@
 (function(global){
 
-    // FIXME: Remove references to waterbear or jquery (jquery done!)
+    // FIXME: Remove references to waterbear
     // FIXME: Include mousetouch in garden
-    // FIXME: Refactor utilities for testing rectangles to its own library (done)
 
 
 // Goals:

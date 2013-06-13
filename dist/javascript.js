@@ -1903,6 +1903,16 @@ hljs.LANGUAGES.javascript = {
         delete elem.dataset.display;
     };
 
+    var svgtext = document.querySelector('svg text');
+    wb.resize = function(input){
+        if (input.wbTarget){
+            input = input.wbTarget;
+        }
+        svgtext.textContent = input.value;
+        var width = svgtext.getComputedTextLength();
+        input.style.width = (width + 20) + 'px';
+    };
+
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };
@@ -2216,9 +2226,8 @@ hljs.LANGUAGES.javascript = {
 /*begin drag.js*/
 (function(global){
 
-    // FIXME: Remove references to waterbear or jquery (jquery done!)
+    // FIXME: Remove references to waterbear
     // FIXME: Include mousetouch in garden
-    // FIXME: Refactor utilities for testing rectangles to its own library (done)
 
 
 // Goals:
@@ -2902,7 +2911,7 @@ function uuid(){
                 'data-name': desc.name,
                 'data-id': blockdesc.id
             },
-            elem('span', {'class': 'name'}, desc.name || desc.uName)
+            elem('span', {'class': 'name'}, desc.uName || desc.name)
         );
         // Optional settings
         if (desc.value){
@@ -3080,7 +3089,9 @@ function uuid(){
             default:
                 value = obj.uValue || obj.value || '';
         }
-        return elem('input', {type: type, value: value});
+        var input = elem('input', {type: type, value: value});
+        wb.resize(input);
+        return input;
     }
 
     var socketValue = function(holder){
@@ -3124,6 +3135,57 @@ function uuid(){
         return _code2;
     };
 
+    function changeName(event){
+        var nameSpan = event.wbTarget;
+        var input = elem('input', {value: nameSpan.textContent});
+        nameSpan.parentNode.appendChild(input);
+        nameSpan.style.display = 'none';
+        input.focus();
+        input.select();
+        wb.resize(input);
+        Event.on(input, 'blur', null, updateName);
+        Event.on(input, 'keydown', null, maybeUpdateName);
+    }
+
+    function updateName(event){
+        console.log('updateName on %o', event);
+        var input = event.wbTarget;
+        Event.off(input, 'blur', updateName);
+        Event.off(input, 'keydown', maybeUpdateName);
+        var nameSpan = input.previousSibling;
+        var newName = input.value;
+        // if (!input.parentElement) return; // already removed it, not sure why we're getting multiple blurs
+        input.parentElement.removeChild(input);
+        nameSpan.style.display = 'initial';
+        console.log('now update all instances too');
+        var source = wb.closest(nameSpan, '.block');
+        var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+        instances.forEach(function(elem){
+            wb.find(elem, '.name').textContent = newName;
+        });
+    }
+
+    function cancelUpdateName(event){
+        var input = event.wbTarget;
+        var nameSpan = input.previousSibling;
+        Event.off(input, 'blur', updateName);
+        Event.off(input, 'keydown', maybeUpdateName);
+        input.parentElement.removeChild(input);
+        nameSpan.style.display = 'initial';
+    }
+
+    function maybeUpdateName(event){
+        var input = event.wbTarget;
+        if (event.keyCode === 0x1B /* escape */ ){
+            event.preventDefault();
+            input.value = input.previousSibling.textContent;
+            input.blur()
+        }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
+            event.preventDefault();
+            input.blur();
+        }
+    }
+
 
     // Export methods
     wb.Block = Block;
@@ -3132,6 +3194,7 @@ function uuid(){
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
+    wb.changeName = changeName;
 })(wb);
 
 
@@ -3623,6 +3686,8 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
     }
 });
 
+Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+Event.on('.workspace', 'keypress', 'input', wb.resize);
 
 })(wb);
 

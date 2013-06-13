@@ -229,6 +229,8 @@
   padding: 0;
   height: 16px;
   background-color: white;
+  font-family: 'Lucida Grande'; /* Make sure if this is changed to also change svg text font in workspace.css */
+  font-size: 11px;
 }
 
 

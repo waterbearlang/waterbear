@@ -30,6 +30,16 @@
         delete elem.dataset.display;
     };
 
+    var svgtext = document.querySelector('svg text');
+    wb.resize = function(input){
+        if (input.wbTarget){
+            input = input.wbTarget;
+        }
+        svgtext.textContent = input.value;
+        var width = svgtext.getComputedTextLength();
+        input.style.width = (width + 20) + 'px';
+    };
+
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };

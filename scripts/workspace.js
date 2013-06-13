@@ -222,5 +222,7 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
     }
 });
 
+Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+Event.on('.workspace', 'keypress', 'input', wb.resize);
 
 })(wb);

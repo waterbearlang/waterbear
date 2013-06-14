@@ -2556,7 +2556,7 @@ hljs.LANGUAGES.javascript = {
 
     function hasChildBlock(elem){
         // FIXME, I don't know how to work around this if we allow default blocks
-        return true;
+        return !wb.findChild(elem, '.block');
     }
 
     function getPotentialDropTargets(view){

@@ -208,7 +208,7 @@
             callback(data);
         };
         window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
     }
 
 

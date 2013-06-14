@@ -2081,7 +2081,7 @@ hljs.LANGUAGES.javascript = {
             callback(data);
         };
         window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
     }
 
 
@@ -2453,9 +2453,9 @@ hljs.LANGUAGES.javascript = {
                 // Put blocks back where we got them from
                 if (startParent){
                     if (wb.matches(startParent, '.socket')){
-                        wb.findChildren(startParent, 'input').forEach(function(elem){
-                            elem.hide();
-                        });
+                        // wb.findChildren(startParent, 'input').forEach(function(elem){
+                        //     elem.hide();
+                        // });
                     }
                     startParent.appendChild(dragTarget); // FIXME: We'll need an index into the contained array
                     dragTarget.removeAttribute('style');

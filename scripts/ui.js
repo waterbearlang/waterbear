@@ -47,26 +47,6 @@ function updateScriptsView(){
 }
 window.updateScriptsView = updateScriptsView;
 
-function runCurrentScripts(event){
-	if (document.body.className === 'result' && wb.script){
-		wb.runScript(wb.script);
-	}else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		document.body.className = 'result';
-		wb.runScript( wb.prettyScript(blocks) );
-	}
-}
-Event.on('.runScripts', 'click', null, runCurrentScripts);
-
-wb.runScript = function(script){
-	wb.script = script;
-	document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
-}
-
-function clearStage(event){
-	document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
-}
-Event.on('.clear_canvas', 'click', null, clearStage);
 
 // Context Menu
 //

@@ -3250,26 +3250,6 @@ function updateScriptsView(){
 }
 window.updateScriptsView = updateScriptsView;
 
-function runCurrentScripts(event){
-	if (document.body.className === 'result' && wb.script){
-		wb.runScript(wb.script);
-	}else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		document.body.className = 'result';
-		wb.runScript( wb.prettyScript(blocks) );
-	}
-}
-Event.on('.runScripts', 'click', null, runCurrentScripts);
-
-wb.runScript = function(script){
-	wb.script = script;
-	document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
-}
-
-function clearStage(event){
-	document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
-}
-Event.on('.clear_canvas', 'click', null, clearStage);
 
 // Context Menu
 //
@@ -3703,6 +3683,34 @@ Event.on('.workspace', 'keypress', 'input', wb.resize);
 
 
 // Add some utilities
+
+wb.wrap = function(script){
+    return 'var global = new Global();(function(){var local = new Local(); try{local.canvas = document.createElement("canvas"); local.canvas.setAttribute("width", global.stage_width); local.canvas.setAttribute("height", global.stage_height); global.stage.appendChild(local.canvas); local.ctx = local.canvas.getContext("2d");' + script + '}catch(e){alert(e);}})()';
+}
+
+function runCurrentScripts(event){
+    if (document.body.className === 'result' && wb.script){
+        wb.runScript(wb.script);
+    }else{
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        document.body.className = 'result';
+        wb.runScript( wb.prettyScript(blocks) );
+    }
+}
+Event.on('.runScripts', 'click', null, runCurrentScripts);
+
+wb.runScript = function(script){
+    wb.script = script;
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
+    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+}
+
+function clearStage(event){
+    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
+}
+Event.on('.clear_canvas', 'click', null, clearStage);
+
+
 
 wb.prettyScript = function(elements){
     return js_beautify(elements.map(function(elem){

@@ -3,6 +3,8 @@
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
+var cleanCSS = require('clean-css');
+var UglifyJS = require('uglify-js');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
@@ -32,6 +34,36 @@ function clear(){
         fs.mkdirSync('dist');
     }
 };
+
+function compressJS(code){
+    var ast = UglifyJS.parse(code);
+    ast.figure_out_scope();
+    var compressor = UglifyJS.Compressor();
+    ast = ast.transform(compressor);
+    return ast.print_to_string();
+}
+
+function minimize(directory){
+    var files = fs.readdirSync(directory);
+    var src, dest;
+    files.forEach(function(filename){
+        src = path.join(directory, filename);
+        if (endswith(filename, '.css')){
+            dest = src.replace(/\.css$/, '.min.css');
+            fs.writeFileSync(dest, cleanCSS.process(fs.readFileSync(src, 'utf8')));
+        }else if (endswith(filename, '.js')){
+            try{
+                dest = src.replace(/\.js$/, '.min.js');
+                fs.writeFileSync(dest, compressJS(fs.readFileSync(src, 'utf8')));
+            }catch(e){
+                console.log('Error minifying file %s', filename);
+                console.log('\t%s', e.message);
+                console.log('\tline: %s, col: %s', e.line, e.col);
+                return;
+            }
+        }
+    });
+}
 
 function cat(src, dest){
     fs.appendFileSync(dest, '\n/*begin ' + path.basename(src) + '*/\n');
@@ -87,9 +119,11 @@ function build(){
         if (lang === 'javascript'){
             concat(src, dest + '_runtime.js', files, '.js', 'runtime');
         }
+        // minimize dist files
         // add launch to kick it all off
         cat('scripts/launch.js', dest + '.js');
     });
+    minimize('dist');
 };
 
 build();

@@ -557,7 +557,7 @@
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
         wb.reposition(dragTarget, startPosition);
-        potentialDropTargets = getPotentialDropTargets(dragTarget).reverse();
+        potentialDropTargets = getPotentialDropTargets(dragTarget);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -605,10 +605,9 @@
         });
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
-            // FIXME: Handle this event
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
-        }else if (wb.overlap(dragTarget, workspace) && dropTarget){
+        }else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
@@ -662,7 +661,7 @@
     }
 
     function positionDropCursor(){
-        var dragRect = wb.rect(dragTarget);
+        var dragRect = wb.rect(wb.findChild(dragTarget, '.label'));
         var cy = dragRect.top + dragRect.height / 2; // vertical centre of drag element
         // get only the .contains which cx is contained by
         var overlapping = potentialDropTargets.filter(function(item){
@@ -676,6 +675,7 @@
         });
         if (!overlapping.length){
             workspace.appendChild(dropCursor());
+            dropTarget = workspace;
             return;
         }
         dropTarget = overlapping[0];

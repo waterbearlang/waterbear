@@ -80,13 +80,14 @@
   clear: left;
 }
 
+.locals .expression{
+  clear: none;
+}
+
 .expression.block{
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-}
-
-.block.expression{
   display: inline-block;
 }
 
@@ -206,7 +207,7 @@
   margin-left: 10px;
   margin-bottom: 0;
   padding-bottom: 10px;
-  /*overflow: auto;*/
+  overflow: visible;
   -webkit-border-top-left-radius: 10px;
   -webkit-border-bottom-left-radius: 10px;
   -moz-border-radius-topleft: 10px;
@@ -221,6 +222,14 @@
 
 .contained:last-child {
     margin-bottom: 10px;
+}
+
+.contained:last-child:after{
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }
 
 .block-menu .contained, [data-closed] .contained{

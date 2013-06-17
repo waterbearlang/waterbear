@@ -28,6 +28,13 @@
 .socket{
   position: relative;
   display: inline-block;
+  height:100%;
+  vertical-align:middle;
+}
+.socket > *{
+  height:100%;
+  vertical-align:middle;
+  margin:0px 5px;
 }
 
 .locals{

@@ -3701,7 +3701,7 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
     wb.script = script;
-    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
 
@@ -3855,14 +3855,6 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 /*begin size.js*/
 
 /*end size.js*/
-
-/*begin social.js*/
-
-/*end social.js*/
-
-/*begin fb.js*/
-
-/*end fb.js*/
 
 /*begin text.js*/
 
@@ -7223,147 +7215,6 @@ wb.menu({
 }
 );
 /*end size.json*/
-
-/*begin social.json*/
-wb.menu({
-    "name": "Twitter",
-    "blocks": [
-        {
-            "blocktype": "eventhandler",
-            "id": "467848f3-3493-439a-9228-d6f83007e886",
-            "script": "local.getTweet({{1}}, function(tweet){local.tweet## = tweet;[[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "last tweet##"
-                        }
-                    ],
-                    "script": "local.tweet## || \"waiting…\"",
-                    "type": "string"
-                }
-            ],
-            "help": "asynchronous call to get the last tweet of the named account",
-            "sockets": [
-                {
-                    "name": "get tweet for",
-                    "type": "string",
-                    "value": null
-                }
-            ]
-        }
-    ]
-}
-);
-/*end social.json*/
-
-/*begin fb.json*/
-wb.menu({
-    "name": "Facebook",
-    "blocks": [
-        {
-            "blocktype": "step",
-            "id": "4a2fd78c-4d0e-4c96-8ec3-52a96b2d6920",
-            "script": "FB.api(\"/me/feed/\", \"post\", { message : {{1}} }, $.noop );",
-            "sockets": [
-                {
-                    "name": "share",
-                    "type": "string",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "4f41013c-b053-439a-b284-769525f6df5d",
-            "script": "fb.friends.data",
-            "type": "array",
-            "sockets": [
-                {
-                    "name": "all my friends"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "9f987bdb-87f4-4cf7-aea7-6d282bc0276e",
-            "script": "fb.me",
-            "type": "object",
-            "sockets": [
-                {
-                    "name": "me"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "c290da4a-c84d-46ac-a6c8-20b367283ea1",
-            "script": "{{1}}.name",
-            "type": "string",
-            "sockets": [
-                {
-                    "name": "name of",
-                    "type": "any",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "f0361c85-7ed9-4ecf-b5dc-c08da20034e1",
-            "script": "(function(){var img = new Image(); img.src=\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"; return img;})",
-            "type": "image",
-            "sockets": [
-                {
-                    "name": "image of",
-                    "type": "any",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "6a4bbc09-5782-43b9-968b-4610c7664d29",
-            "type": "string",
-            "script": "\"https://graph.facebook.com/\" + {{1}}.id + \"/picture\"",
-            "sockets": [
-                {
-                    "name": "images url of",
-                    "type": "any",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "ac41fb9e-c0c6-4e41-b190-87ba3fdb258d",
-            "script": "(function(){var correct = {id: \"\", name: \"\"}; $.each( fb.friends.data , function(i, user) { if( user.name.indexOf( {{1}} ) != -1 ) correct = user; } ); return correct;})()",
-            "type": "object",
-            "sockets": [
-                {
-                    "name": "friend with name like",
-                    "type": "string",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "cc6fa7cf-fa7e-47fc-b97a-27f5c83d8d4b",
-            "script": "FB.api( \"/search\", { \"type\" : \"place\", \"center\" : \"{{1}}.latitude,{{1}}.longitude\", \"distance\": \"1000\" }, function(r){ FB.api(\"/me/feed/\", \"post\", { place : r.data[0].id }, $.noop ); } );",
-            "sockets": [
-                {
-                    "name": "checkin at",
-                    "type": "location",
-                    "value": null
-                }
-            ]
-        }
-    ]
-}
-);
-/*end fb.json*/
 
 /*begin text.json*/
 wb.menu({

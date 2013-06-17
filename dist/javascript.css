@@ -382,6 +382,13 @@ svg text{
 .socket{
   position: relative;
   display: inline-block;
+  height:100%;
+  vertical-align:middle;
+}
+.socket > *{
+  height:100%;
+  vertical-align:middle;
+  margin:0px 5px;
 }
 
 .locals{
@@ -981,22 +988,6 @@ pre .tex .formula {
 
 
 /*end size.css*/
-
-/*begin social.css*/
-.twitter, .twitter .holder{
-    border-color: hsl(90, 65%, 79%);
-    background-color: hsl(90, 62%, 89%);
-}
-
-/*end social.css*/
-
-/*begin fb.css*/
-.facebook, .facebook .holder{
-    border-color: hsl(300, 90%, 66%);
-    background-color: hsl(300, 90%, 76%);
-}
-
-/*end fb.css*/
 
 /*begin text.css*/
 .text, .text .holder{

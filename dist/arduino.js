@@ -1564,8 +1564,8 @@ function is_touch_device() {
 //     });
 // }
 
-var menu_built = false;
-var saved_menus = [];
+// var menu_built = false;
+// var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){
@@ -1579,21 +1579,22 @@ wb.menu = function(blockspec){
 	}
 };
 
-function run_menu(title, specs){
-	if (menu_built){
-		return edit_menu(title, specs);
-	}
-	saved_menus.push([title, specs]);
+if (wb.view === 'result'){
+    Event.once(document.body, 'scriptLoaded', null, runCurrentScripts);
 }
 
-wb.buildDelayedMenus = function(){
-	if (!menu_built && saved_menus.length){
-		saved_menus.forEach(function(m){
-			edit_menu(m[0], m[1]);
-		});
-		saved_menus = [];
-	}
+function run_menu(title, specs){
+    edit_menu(title, specs);
 }
+
+// wb.buildDelayedMenus = function(){
+// 	if (!menu_built && saved_menus.length){
+// 		saved_menus.forEach(function(m){
+// 			edit_menu(m[0], m[1]);
+// 		});
+// 		saved_menus = [];
+// 	}
+// }
 
 function edit_menu(title, specs, show){
 	menu_built = true;

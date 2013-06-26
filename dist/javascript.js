@@ -3410,14 +3410,6 @@ function run_menu(title, specs){
     edit_menu(title, specs);
 }
 
-// wb.buildDelayedMenus = function(){
-// 	if (!menu_built && saved_menus.length){
-// 		saved_menus.forEach(function(m){
-// 			edit_menu(m[0], m[1]);
-// 		});
-// 		saved_menus = [];
-// 	}
-// }
 
 function edit_menu(title, specs, show){
 	menu_built = true;
@@ -3457,7 +3449,6 @@ function clearScripts(event, force){
 Event.on('.clearScripts', 'click', null, clearScripts);
 Event.on('.editScript', 'click', null, function(){
 	document.body.className = 'editor';
-	wb.buildDelayedMenus();
 	wb.loadCurrentScripts(wb.queryParams);
 });
 
@@ -3690,6 +3681,7 @@ wb.wrap = function(script){
 }
 
 function runCurrentScripts(event){
+    clearStage();
     if (document.body.className === 'result' && wb.script){
         wb.runScript(wb.script);
     }else{
@@ -3710,6 +3702,7 @@ function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
 Event.on('.clear_canvas', 'click', null, clearStage);
+Event.on('.editScript', 'click', null, clearStage);
 
 
 

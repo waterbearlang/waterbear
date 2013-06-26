@@ -26,6 +26,7 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 wb.runScript = function(script){
     wb.script = script;
     var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
+    console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
 
@@ -33,6 +34,7 @@ function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
 Event.on('.clear_canvas', 'click', null, clearStage);
+Event.on('.editScript', 'click', null, clearStage);
 
 
 

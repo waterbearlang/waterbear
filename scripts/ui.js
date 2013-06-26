@@ -207,14 +207,6 @@ function run_menu(title, specs){
     edit_menu(title, specs);
 }
 
-// wb.buildDelayedMenus = function(){
-// 	if (!menu_built && saved_menus.length){
-// 		saved_menus.forEach(function(m){
-// 			edit_menu(m[0], m[1]);
-// 		});
-// 		saved_menus = [];
-// 	}
-// }
 
 function edit_menu(title, specs, show){
 	menu_built = true;

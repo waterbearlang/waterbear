@@ -4,13 +4,14 @@ html, body{
     height: 100%;
     overflow: hidden;
     background-color: #FFF;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.6em;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
     margin: 0;
     padding: 0;
-/*    -moz-box-sizing: border-box;
-    box-sizing: border-box; */
 }
 img {
     border:0;
@@ -193,85 +194,6 @@ body.editor #block_menu{
     color: #515151;
 }
 
-/* Save/Restore Dialogs */
-
-.dialog{
-    background-color: #CCC;
-    font-family: Helvetica;
-    padding: 1em;
-    border: 0px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-}
-
-.dialog h2{
-    font-size: 200%;
-    font-weight: bold;
-    text-align: center;
-}
-
-.dialog input{
-    font-size: 180%;
-    margin-bottom: 1em;
-    width: 99%;
-    border: 0px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-    padding-left: 10px;
-}
-
-.dialog textarea{
-    width: 100%;
-    height: 5em;
-    font-size: 150%;
-}
-
-.dialog ul{
-    min-width: 400px;
-    margin-top: 1em;
-    margin-bottom: 1.5em;
-}
-
-.dialog button{
-    font-size: 120%;
-    float: right;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    margin-left: 1em;
-    background-color: #4D736D;
-    color: white;
-    margin-left: 1em;
-    border: 0px;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-top: .5em;
-}
-
-.dialog .action{
-    margin-left: .2em;
-    font-size: 90%;
-}
-
-.dialog li{
-    display: block;
-    clear: both;
-    margin-bottom: .5em
-}
-
-.dialog .timestamp{
-    clear: both;
-    font-size: 80%;
-    color: #666;
-    margin-top: 1.5em;
-}
-
-.dialog button.delete, button.cancel {
-    background-color: #854D53; /*This is a redish color*/
-    margin-top: .5em;
-}
 /* These additions should only change the appearance of the tabs*/
 
 

@@ -12,7 +12,6 @@ function clearScripts(event, force){
 Event.on('.clearScripts', 'click', null, clearScripts);
 Event.on('.editScript', 'click', null, function(){
 	document.body.className = 'editor';
-	wb.buildDelayedMenus();
 	wb.loadCurrentScripts(wb.queryParams);
 });
 

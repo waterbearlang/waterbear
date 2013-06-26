@@ -3681,7 +3681,6 @@ wb.wrap = function(script){
 }
 
 function runCurrentScripts(event){
-    clearStage();
     if (document.body.className === 'result' && wb.script){
         wb.runScript(wb.script);
     }else{
@@ -3694,7 +3693,8 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
     wb.script = script;
-    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
+    console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
 

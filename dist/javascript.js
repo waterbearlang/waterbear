@@ -5482,7 +5482,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
-            "script": "(function(){var img = new Image(); img.src=\"{{1}}\";return img;})()",
+            "script": "(function(){var img = new Image(); img.src={{1}};return img;})()",
             "type": "image",
             "sockets": [
                 {

@@ -53,6 +53,7 @@ body.result .result{
 
 body.blocks .workspace{
 	padding-left: 0;
+    width: 100%;
 }
 
 .menubar, .tabbar{

@@ -3,8 +3,6 @@ html, body{
     overflow: hidden;
     background-color: #FFF;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.2em;
-    line-height: 1.6em;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
@@ -13,6 +11,9 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgr
 }
 img {
     border:0;
+}
+input{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* Scratch-ish Layout Styles */
@@ -265,6 +266,5 @@ svg{
 }
 svg text{
     /* This should be the same font used for <input> */
-    font-family: 'Lucida Grande';
-    font-size: 11px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

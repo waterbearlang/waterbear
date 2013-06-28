@@ -107,7 +107,7 @@
   -moz-user-select: none;
   -webkit-user-select: none;
   user-select: none;
-  font-family: Georgia;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   white-space: nowrap;
   margin: 0;
@@ -245,7 +245,7 @@
   padding: 0;
   height: 16px;
   background-color: white;
-  font-family: 'Lucida Grande'; /* Make sure if this is changed to also change svg text font in workspace.css */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Make sure if this is changed to also change svg text font in workspace.css */
   font-size: 11px;
 }
 

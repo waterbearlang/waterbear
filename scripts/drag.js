@@ -1,5 +1,13 @@
 (function(global){
 
+    // After trying to find a decent drag-and-drop library which could handle
+    // snapping tabs to slots *and* dropping expressions in sockets *and*
+    // work on both touch devices and with mouse/trackpad *and* could prevent dragging
+    // expressions to sockets of the wrong type, ended up writing a custom one for
+    // Waterbear which does what we need. The last piece makes it waterbear-specific
+    // but could potentially be factored out if another library supported all of the
+    // rest (and didn't introduce new dependencies such as jQuery)
+
     // FIXME: Remove references to waterbear
     // FIXME: Include mousetouch in garden
 

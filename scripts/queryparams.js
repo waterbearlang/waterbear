@@ -1,3 +1,6 @@
+// Sets up wb namespace (wb === waterbear)
+// Extracts parameters from URL, used to switch embed modes, load from gist, etc.
+
     	var wb = {};
 
 		// Source: http://stackoverflow.com/a/13984429

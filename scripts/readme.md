@@ -2,46 +2,64 @@
 
 This is the implementation of Waterbear. It pulls the libraries and the plugins together, implements the IDE and script writing, etc.
 
-## blocks.js
+## block.js
 
-Defines the models and pulls in the views (defined in garden.html) for all of the blocks. Nearly all of the basic block support and behaviour is defined here by several objects: Block and its subtypes (Expression, Step, Context, EventHandler), Value, and Label.
+Initialize both menu (template) blocks and instance (script) blocks, maintain their state, serialize and deserialize them.
 
 ## drag.js
 
 Waterbear has some fairly specific drag-and-drop requirements, and has to work across both desktop and mobile browsers, so it has its own custom dragging library for this. Since the time of writing this library, some libraries have added support across desktop and mobile browsers, so we should investigate using a more standard library at some point.
 
-## jquery.blocks.js
+## event.js
 
-In the early versions of Waterbear, most of the block behaviour was defined as jQuery extension methods, but this got out of hand and convoluted, leading to the models in blocks.js. There are still a handful of jQuery extensions used, mostly defined here, but these should be considered deprecated and will be phased out pretty soon.
+Utilities for handling event delegation, normalization between touch and mouse/trackpad events, custom events, and tying events to blocks.
 
-## runtime.js
+* Event.on
+* Event.off
+* Event.once
+* Event.trigger
 
-The Javascript plugin relies on specific behaviour, and on being isolated from the IDE. This is where the code lives for implementing the Javascript stage for the IDE.
+## launch.js
 
-## serialization-[version].js
+Minimal script to support different embed modes at load time
 
-In an effort to a) standardize the Waterbear serialization and b) provide forward and backward compatibility, it has been kept out of block.js and move here. Currently only the writing of serialized files is here, reading them back in is still in blocks.js and workspace.js, but that is a bug which should be corrected.
+## queryparams
 
-## template.js
-
-After considering many templating languages, I ended up writing my own. The main thing I was looking for was to avoid going back and forth between HTML strings, the DOM, and jQuery objects. This template keeps the jQuery objects around (and the associated models), which helps with the very dynamic blocks. We'll see how this works in practice, and may have to revisit it down the road.
-
-## test.js
-
-Early, and primitive testing for blocks. This should be moved and expanded to the test directory.
-
-## timer.js
-
-Support for timers in the runtime.js, used by the Javascript stage in the IDE.
+Parse the URL queries and make them available to the rest of the code. Used to determine embed mode, to load from gists, etc.
 
 ## ui.js
 
-Support for various UI features in the IDE
+Support for various generic UI features in the IDE: buttons, accordion view, tab switching. Also has nascent support for the coming context menus. The block menus are built here.
 
-## utils.js
+## util.js
 
-Simple utility methods and helpers.
+Simple utility methods and helpers. Some jQuery-ish replacements.
+
+* wb.makeArray(arrayLike): turns an array-like into a true array
+* wb.reposition(elem, pos): moves an absolutely positioned element
+* wb.hide(elem)
+* wb.show(elem)
+* wb.resize(elem): resizes a text input based on the length of its content
+* wb.dist(x1, y1, x2, y2): distance between two points using Pythagorean theorem
+* wb.overlapRect(r1, r2): the area of overlap between two rects
+* wb.rect(elem): utility for calling elem.getBoundingClientRect()
+* wb.overlap(elem1, elem2): returns the area of overlap between two elements
+* wb.area(elem): returns the area of an element
+* wb.containedBy(target, container): returns whether the rect of target is at least 90% contained by the rect of container
+* wb.closest(elem, selector): find nearest parent, or self, which matches selector, because this is one thing I really missed from jQuery
+* wb.indexOf(elem): what is the index of this element in a list of its parents children?
+* wb.find(elem, selector): return the first decendant that matches selector
+* wb.findAll(elem, selector): returns a (true) array of all decendants that match selector
+* wb.findChildren(elem, selector): find direct children which match selector as an array
+* wb.findChild(elem, selector): find the first child which matches selector
+* wb.elem(name, attributes, children): utility for dynamically creating DOM elements and structures
+* wb.matches(elem, selector): does elem match selector?
+* wb.jsonp(url, callback): minimal support for jsonp, should probably be replaced by a better library
+
+## uuid.js
+
+uuid(): returns a universally unique identifier as a string
 
 ## workspace.js
 
-This is where the IDE is defined and implemented, built around the framework provided by HTML in the garden.html file.
+This is where the IDE is defined and implemented, built around the framework provided by HTML in the [language].html file. Event handlers, load and save, switching views, downloading code, etc. are handled here.

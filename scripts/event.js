@@ -1,6 +1,8 @@
-// Add support for event delegation on top of normal DOM events
-// Minimal support for non-DOM events
+// Bare-bones Event library
+// Adds support for event delegation on top of normal DOM events (like jQuery "live" events)
+// Minimal support for non-DOM (custom) events
 // Normalized between mouse and touch events
+// Waterbear specific: events have wb-target which is always a block element
 
 (function(global){
     "use strict";

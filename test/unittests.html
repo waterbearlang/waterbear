@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" href="../lib/mocha.css" />
+	<title>Waterbear Tests</title>
+    <script type="text/html" id="step_template">
+        <div class="wrapper step" data-classes="group">
+            <div class="block" data-title="help">
+                <div class="blockhead">
+                    <div class="label" data-for="label in labels">
+						<span data-replace="label"></span>
+					</div>
+                </div>
+                <b class="flap"></b>
+            </div>
+            <div class="next">
+                <i class="slot"></i>
+            </div>
+        </div>
+    </script>
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="../lib/jquery-1.7.2.min.js"></script>
+    <script src="../lib/chai.js"></script>
+    <script src="../lib/mocha.js"></script>
+	<!-- // <script src="../scripts/utils.js"></script> -->
+	<!-- // <script src="../scripts/template.js"></script> -->
+    <!-- // <script src="../scripts/blocks.js"></script> -->
+    <!-- // <script src="../scripts/serialization-1.0.js"></script> -->
+    <script src="../scripts/events.js"></script>
+    <script>mocha.setup('tdd')</script>
+    <!-- // <script src="test.block.js"></script> -->
+    <!-- // <script src="test.template.js"></script> -->
+    <script src="test.events.js"></script>
+    <script>
+      mocha.run();
+    </script>
+</body>
+</html>
+

@@ -1,3 +1,17 @@
+(function(global){
+
+    // After trying to find a decent drag-and-drop library which could handle
+    // snapping tabs to slots *and* dropping expressions in sockets *and*
+    // work on both touch devices and with mouse/trackpad *and* could prevent dragging
+    // expressions to sockets of the wrong type, ended up writing a custom one for
+    // Waterbear which does what we need. The last piece makes it waterbear-specific
+    // but could potentially be factored out if another library supported all of the
+    // rest (and didn't introduce new dependencies such as jQuery)
+
+    // FIXME: Remove references to waterbear
+    // FIXME: Include mousetouch in garden
+
+
 // Goals:
 //
 // Drag any block from block menu to canvas: clone and add to canvas
@@ -34,149 +48,124 @@
 
 // Key to jquery.event.touch is the timer function for handling movement and hit testing
 
-(function($){
-    var dragTarget, potentialDropTargets, dropTarget, dropRects, startPosition, timer, cloned, dragging, currentPosition, distance, dropCursor, dragPlaceholder;
-    window.isTouch = ('ontouchstart' in window);
     var dragTimeout = 20;
-    // TODO: update this whenever we switch to a new workspace
-    var targetCanvas = $('.workspace .scripts_workspace').eq(0);
-
     var snapDist = 25; //In pixels
+    var startParent;
+    var startIndex;
+    var timer;
+    var dragTarget;
+    var dropTarget;
+    var dragging;
+    var currentPosition;
+    var scope;
+    var workspace;
+    var blockMenu = document.querySelector('#block_menu');
+    var potentialDropTargets;
+    var selectedSocket;
 
-    function blockType(block){
-        var model = block.data('model');
-        if (model.blocktype === 'expression'){
-            return model.type;
-        }else{
-            return model.blocktype;
+    var _dropCursor;
+
+    function dropCursor(){
+        if (!_dropCursor){
+            _dropCursor = document.querySelector('.dropCursor');
         }
+        return _dropCursor;
     }
 
     function reset(){
         dragTarget = null;
-        potentialDropTargets = $();
+        potentialDropTargets = [];
         dropRects = [];
-        dropTarget = $();
+        dropTarget = null;
         startPosition = null;
         currentPosition = null;
         timer = null;
         dragging = false;
         cloned = false;
+        scope = null;
     }
-
     reset();
 
-    function blend(event){
-        if (isTouch){
-            if (event.originalEvent.touches.length > 1){
-                return false;
-            }
-            var touch = event.originalEvent.touches[0];
-            event.target = touch.target;
-            event.pageX = touch.pageX;
-            event.pageY = touch.pageY;
-        }else{
-            if (event.which !== 1){ // left mouse button
-                return false;
-            }
-        }
-        // fix target?
-        return event;
-    }
 
-    function getPotentialDropTargets(){
-        switch(blockType(dragTarget)){
-            case 'step': return stepTargets();
-            case 'context': return stepTargets();
-            case 'int':
-            case 'float': return socketTargets2(['any', 'number', blockType(dragTarget)].join(','));
-            case 'any': return anyTargets();
-            default: return socketTargets2(['any', dragTarget.block_type()].join(','));
-        }
-    }
-
-    function stepTargets(){
-        return targetCanvas.find('.slot:only-child');
-    }
-
-    function socketTargets(type){
-        return targetCanvas.find('.socket.' + type + ':not(:has(.value))');
-    }
-
-	function anyTargets(){
-		return targetCanvas.find('.socket:not(:has(.value))');
-	}
-
-    /*a slower but more flexible way of doing the socket targets
-    This method could have its setting be held in an array and
-    so might be better for config*/
-    function socketTargets2(types){
-        /* I (dethe) don't even understand what this does */
-        var typeArray = types.split(',');
-        var res = $();
-        for(var i = 0 ; i< typeArray.length ; i++)
-        {
-          res = res.add(targetCanvas.find('.socket.' + typeArray[i] + ':not(:has(.value))'));
-        }
-        return res;
-    }
 
     function initDrag(event){
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        if (!blend(event)) {return undefined;}
-        var eT = $(event.target);
-        if ((eT.is(':input') || eT.is('option') || eT.is('.disclosure')) && ! eT.containedBy($('#block_menu'))) {return undefined;}
-        var target = eT.closest('.wrapper');
-        if (target.length){
+        var eT = event.wbTarget;
+        if (wb.matches(eT, 'input, select, option, .disclosure')  && !wb.matches(eT, '#block_menu *')) {
+            console.log('not a drag handle');
+            return undefined;
+        }
+        var target = wb.closest(eT, '.block');
+        if (target){
+            // console.log('got a drag target: %o', target);
             dragTarget = target;
-            //dragTarget.addClass("drag_indication");
-            startPosition = target.offset();
-            if (! target.parent().is('.scripts_workspace')){
-                target.data('startParent', target.parent());
+            if (target.parentElement.classList.contains('block-menu')){
+                target.dataset.isTemplateBlock = 'true';
+            }
+            if (target.parentElement.classList.contains('local')){
+                target.dataset.isLocal = 'true';
+            }
+            //dragTarget.classList.add("dragIndication");
+            startPosition = wb.rect(target);
+            if (! wb.matches(target.parentElement, '.scripts_workspace')){
+                startParent = target.parentElement;
+            }
+            // Need index too, if it is a step
+            if (wb.matches(target, '.step')){
+                startIndex = wb.indexOf(target);
             }
         }else{
+            console.log('not a valid drag target');
             dragTarget = null;
         }
-        return true;
+        return false;
     }
 
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
-        if (!blend(event)) {return undefined;}
         if (!dragTarget) {return undefined;}
-        dropCursor = $('.dropCursor');
-        dragTarget.addClass("drag_indication");
-        var model = dragTarget.data('model');
-        currentPosition = {left: event.pageX, top: event.pageY};
+        // if (wb.matches(dragTarget, '.expression')){
+        //     wb.hide(dropCursor());
+        // }
+        dragTarget.classList.add("dragIndication");
+        currentPosition = {left: event.wbPageX, top: event.wbPageY};
         // target = clone target if in menu
-        if (model.isTemplateBlock){
-            dragTarget.removeClass('drag_indication');
-            dragTarget = model.cloneScript().view();
-            dragTarget.addClass('drag_indication');
+        // FIXME: Set different listeners on menu blocks than on the script area
+        if (dragTarget.dataset.isTemplateBlock){
+            dragTarget.classList.remove('dragIndication');
+            var parent = dragTarget.parentElement;
+            dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
+            Event.trigger(dragTarget, 'clone');
+            dragTarget.classList.add('dragIndication');
+            if (dragTarget.dataset.isLocal){
+                scope = wb.closest(parent, '.context');
+            }else{
+                scope = null;
+            }
             cloned = true;
+            // Make sure the workspace is available to drag to
+            wb.showWorkspace('block');
+        }else{
+            // TODO: handle detach better (generalize restoring sockets, put in language file)
+            // FIXME: Need to handle this somewhere
+            // FIXME: Better name?
+            Event.trigger(dragTarget, 'wb-remove');
         }
         dragging = true;
-        // Make sure the workspace is available to drag to
-        showWorkspace();
         // get position and append target to .content, adjust offsets
         // set last offset
-        // TODO: handle detach better (generalize restoring sockets, put in language file)
-        // console.log('[1] model: %s', dragTarget.data('model'));
-        wb.removeFromScriptEvent(dragTarget);
-        // console.log('[2] model: %s', dragTarget.data('model'));
-        dragTarget.css('position', 'absolute');
-        if (dragTarget.is('.scripts_workspace .wrapper')){
-            dragPlaceholder = $('<div class="dragPlaceholder"></div>');
-            dragPlaceholder.height(dragTarget.outerHeight());
-            dragTarget.before(dragPlaceholder);
-        }
-        $('.content.editor').append(dragTarget);
-        // console.log('[3] model: %s', dragTarget.data('model'));
-        dragTarget.offset(startPosition);
-        potentialDropTargets = getPotentialDropTargets();
-        dropRects = $.map(potentialDropTargets, function(elem, idx){
-            return $(elem).rect();
+        dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+//        if (wb.matches(dragTarget, '.scripts_workspace .step')){
+//            dragPlaceholder.style.height = dragTarget.clientHeight + 'px';
+//            dragTarget.parentElement.insertBefore(dragPlaceholder, dragTarget);
+//        }
+        document.querySelector('.content.editor').appendChild(dragTarget);
+        wb.reposition(dragTarget, startPosition);
+        potentialDropTargets = getPotentialDropTargets(dragTarget);
+        dropRects = potentialDropTargets.map(function(elem, idx){
+            elem.classList.add('dropTarget');
+            return wb.rect(elem);
         });
 
         // start timer for drag events
@@ -185,16 +174,15 @@
     }
 
     function drag(event){
-        if (!blend(event)) {return undefined;}
         if (!dragTarget) {return undefined;}
         if (!currentPosition) {startDrag(event);}
         event.preventDefault();
         // update the variables, distance, button pressed
-        var nextPosition = {left: event.pageX, top: event.pageY};
+        var nextPosition = {left: event.wbPageX, top: event.wbPageY};
         var dX = nextPosition.left - currentPosition.left;
         var dY = nextPosition.top - currentPosition.top;
-        var currPos = dragTarget.offset();
-        dragTarget.offset({left: currPos.left + dX, top: currPos.top + dY});
+        var currPos = wb.rect(dragTarget);
+        wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
         currentPosition = nextPosition;
         return false;
     }
@@ -215,76 +203,114 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        dragTarget.removeClass('drag_active');
-        dragTarget.removeClass("drag_indication");
-        if (dropTarget && dropTarget.length){
-            dropTarget.removeClass('drop_active');
-            if (blockType(dragTarget) === 'step' || blockType(dragTarget) === 'context'){
+        dragTarget.classList.remove('dragActive');
+        dragTarget.classList.remove('dragIndication');
+        potentialDropTargets.forEach(function(elem){
+            elem.classList.remove('dropTarget');
+        });
+        if (wb.overlap(dragTarget, blockMenu)){
+            // delete block if dragged back to menu
+            Event.trigger(dragTarget, 'wb-delete');
+            dragTarget.parentElement.removeChild(dragTarget);
+        }else if (dropTarget){
+            dropTarget.classList.remove('dropActive');
+            if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
-                dragTarget.removeAttr('style');
-                wb.addToScriptEvent(dropTarget, dragTarget);
+                dropTarget.insertBefore(dragTarget, dropCursor());
+                dragTarget.removeAttribute('style');
+                Event.trigger(dragTarget, 'wb-add');
             }else{
                 // Insert a value block into a socket
-                dropTarget.children('input, select').hide(); // FIXME: Move to block.js
-                // dropTarget.append(dragTarget);
-                dragTarget.removeAttr('style');
-                wb.addToScriptEvent(dropTarget, dragTarget);
-                // dragTarget.trigger('add_to_socket', {dropTarget: dropTarget, parentIndex: dropTarget.data('index')});
+                dropTarget.appendChild(dragTarget);
+                dragTarget.removeAttribute('style');
+                Event.trigger(dragTarget, 'wb-add');
             }
-        }else if ($('#block_menu').cursorOver()){
-            // delete block if dragged back to menu
-            console.log('triggering delete_block');
-            dragTarget.trigger('delete_block');
-            dragTarget.remove();
-        }else if (dragTarget.overlap(targetCanvas)){
-            dropCursor.before(dragTarget);
-            dropCursor.remove();
-            dropCursor = null;
-            dragTarget.removeAttr('style');
-            wb.addToScriptEvent(targetCanvas, dragTarget);
         }else{
             if (cloned){
                 // remove cloned block (from menu)
-                dragTarget.remove();
+                dragTarget.parentElement.removeChild(dragTarget);
             }else{
                 // Put blocks back where we got them from
-                var startParent = dragTarget.data('startParent');
                 if (startParent){
-                    if (startParent.is('.socket')){
-                        startParent.children('input').hide();
+                    if (wb.matches(startParent, '.socket')){
+                        // wb.findChildren(startParent, 'input').forEach(function(elem){
+                        //     elem.hide();
+                        // });
                     }
-                    startParent.append(dragTarget); // FIXME: We'll need an index into the contained array
-                    dragTarget.removeAttr('style');
-                    dragTarget.removeData('startParent');
+                    startParent.appendChild(dragTarget); // FIXME: We'll need an index into the contained array
+                    dragTarget.removeAttribute('style');
+                    startParent = null;
                 }else{
-                    targetCanvas.append(dragTarget); // FIXME: We'll need an index into the canvas array
-                    dragTarget.offset(startPosition);
+                    workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
+                    wb.reposition(dragTarget, startPosition);
                 }
             }
         }
-        if (dragPlaceholder){
-            dragPlaceholder.remove();
-            dragPlaceholder = null;
+    }
+
+    function positionExpressionDropCursor(){
+        if (!potentialDropTargets.length){
+            console.log('no drop targets found');
+            return;
         }
+        var targets = potentialDropTargets.map(function(target){
+            return [wb.overlap(dragTarget, target), target];
+        });
+        targets.sort().reverse();
+        if(dropTarget){
+            dropTarget.classList.remove('dropActive');
+        }
+        dropTarget = targets[0][1]; // should be the potential target with largest overlap
+        dropTarget.classList.add('dropActive');
     }
 
     function positionDropCursor(){
-        var self, top, middle, bottom, x = dragTarget.position().top;
-        targetCanvas.prepend(dropCursor);
-        dropCursor.show();
-        targetCanvas.children('.wrapper').each(function(idx){
-            self = $(this);
-            top = self.position().top;
-            bottom = top + self.outerHeight();
-            middle = (bottom - top) / 2 + top;
-            if (x < middle){
-                self.before(dropCursor);
-                return false;
-            }else{
-                self.after(dropCursor);
-            }
+        var dragRect = wb.rect(wb.findChild(dragTarget, '.label'));
+        var cy = dragRect.top + dragRect.height / 2; // vertical centre of drag element
+        // get only the .contains which cx is contained by
+        var overlapping = potentialDropTargets.filter(function(item){
+            var r = wb.rect(item);
+            if (cy < r.top) return false;
+            if (cy > r.bottom) return false;
+            return true;
         });
+        overlapping.sort(function(a, b){
+            return wb.rect(b).left - wb.rect(a).left; // sort by depth, innermost first
+        });
+        if (!overlapping.length){
+            workspace.appendChild(dropCursor());
+            dropTarget = workspace;
+            return;
+        }
+        dropTarget = overlapping[0];
+        var position, middle;
+        var siblings = wb.findChildren(dropTarget, '.step');
+        if (siblings.length){
+            for (var sIdx = 0; sIdx < siblings.length; sIdx++){
+                var sibling = siblings[sIdx];
+                position = wb.rect(sibling);
+                if (cy < (position.top -4) || cy > (position.bottom + 4)) continue;
+                middle = position.top + (position.height / 2);
+                if (cy < middle){
+                    dropTarget.insertBefore(dropCursor(), sibling);
+                    return;
+                }else{
+                    dropTarget.insertBefore(dropCursor(), sibling.nextSibling);
+                    return;
+                }
+            }
+            dropTarget.appendChild(dropCursor()); // if we get here somehow, add it anyway
+        }else{
+            dropTarget.appendChild(dropCursor());
+            return;
+        }
+    }
+
+    function selectSocket(event){
+        // FIXME: Add tests for type of socket, whether it is filled, etc.
+        event.wbTarget.classList.add('selected');
+        selectedSocket = event.wbTarget;
     }
 
     function hitTest(){
@@ -292,115 +318,82 @@
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
         if (!dragTarget) {return;}
-        var dropIndex = -1;
-        var dropArea = 0;
-        var dragType = blockType(dragTarget);
-        var dragTargetFlap = dragTarget.children('.block');
-        switch(dragType){
-            case 'eventhandler':
-                setTimeout(hitTest, dragTimeout);
-                return positionDropCursor(); // no flap
-            case 'step': dragTargetFlap = dragTargetFlap.children('.flap');
-        }
-        var dragRect = dragTargetFlap.rect();
-        var area = 0;
-        $.each(dropRects, function(idx, elem){
-            area = overlap(dragRect, elem);
-            if (area > dropArea){
-                dropIndex = idx;
-                dropArea = area;
-            }
-        else if(dragRect && elem){
-        val = dist(dragRect.left, dragRect.top, elem.left, elem.top);
-        if(val < snapDist){
-            dropIndex = idx;
-            dropArea = area;
-        }
-        }
-        });
-        if (dropTarget && dropTarget.length){
-            dropTarget.removeClass('drop_active');
-        }
-        if (dropIndex > -1){
-            dropTarget = potentialDropTargets.eq(dropIndex).addClass('drop_active');
-            dragTarget.addClass('drag_active');
-            dropCursor.hide();
+        if (wb.matches(dragTarget, '.expression')){
+            positionExpressionDropCursor();
         }else{
-            dragTarget.removeClass('drag_active');
             positionDropCursor();
-            dropTarget = null;
         }
-        timer = setTimeout(hitTest, dragTimeout);
+        setTimeout(hitTest, dragTimeout);
+    }
+
+    function expressionDropTypes(expressionType){
+        switch(expressionType){
+            case 'number': return ['.number', '.int', '.float', '.any'];
+            case 'int': return ['.number', '.int', '.float', '.any'];
+            case 'float': return ['.number', '.float', '.any'];
+            case 'any': return [];
+            default: return ['.' + expressionType, '.any'];
+        }
+    }
+
+    function hasChildBlock(elem){
+        // FIXME, I don't know how to work around this if we allow default blocks
+        return !wb.findChild(elem, '.block');
+    }
+
+    function getPotentialDropTargets(view){
+        if (!workspace){
+            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
+        }
+        var blocktype = view.dataset.blocktype;
+        switch(blocktype){
+            case 'step':
+            case 'context':
+                if (scope){
+                    return wb.findAll(scope, '.contained');
+                }else{
+                    return wb.findAll(workspace, '.contained').concat([workspace]);
+                }
+            case 'expression':
+                var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
+                if (!selector || !selector.length){
+                    selector = '.socket > .holder'; // can drop an any anywhere
+                }
+                if (scope){
+                    return wb.findAll(scope, selector).filter(hasChildBlock);
+                }else{
+                    return wb.findAll(workspace, selector).filter(hasChildBlock);
+                }
+            case 'eventhandler':
+                return [workspace];
+            default:
+                throw new Error('Unrecognized blocktype: ' + blocktype);
+        }
+    };
+
+    function dataSelector(name){
+        if (name[0] === '.'){
+            name = name.slice(1); // remove leading dot
+        }
+        return '.socket[data-type=' + name + '] > .holder';
     }
 
     // Initialize event handlers
-    if (isTouch){
-        $('.scripts_workspace, .block_menu').on('touchstart', '.block', initDrag);
-        $('.content').live('touchmove', drag);
-        $('.content').live('touchend', endDrag);
-    }else{
-        $('.scripts_workspace, .block_menu').on('mousedown', '.block', initDrag);
-        $('.content').live('mousemove', drag);
-        $('.content').live('mouseup', endDrag);
-    }
-
-    // Utility methods
-    function mag(p1, p2){
-        return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
-    }
-    //I didn't really need to rewrite the above, but I was tired and Couldn't get it to work. Sill can't :(
-    function dist(p1, p2, m1, m2){
-        return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
-    }
-
-    function rectToString(r){
-        return '<rect left: ' + r.left + ', top: ' + r.top + ', width: ' + r.width + ', height: ' + r.height + ', right: ' + r.right + ', bottom: ' + r.bottom + ', centerX = ' + r.centerX + ', centerY = ' + r.centerY + '>';
-    }
-
-    function overlap(r1, r2){ // determine area of overlap between two rects
-        if (r1.left > r2.right){ return 0; }
-        if (r1.right < r2.left){ return 0; }
-        if (r1.top > r2.bottom){ return 0; }
-        if (r1.bottom < r2.top){ return 0; }
-        var max = Math.max, min = Math.min;
-        return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
-    }
-
-    // jQuery extensions
-    $.fn.extend({
-        rectToString: function(){
-            return rectToString(this.rect());
-        },
-        rect: function(){
-            if (this.length !== 1) throw new Error('calling rect on ' + this.length + ' blocks is not defined');
-            var pos = this.offset();
-            var width = this.outerWidth();
-            var height = this.outerHeight();
-            return {left: pos.left,
-                    top: pos.top,
-                    width: width,
-                    height: height,
-                    right: pos.left + width,
-                    bottom: pos.top + height,
-                    centerX: pos.left + width/2,
-                    centerY: pos.top + height/2
-            };
-        },
-        overlap: function(target){
-            return overlap(this.rect(), target.rect());
-        },
-        area: function(){
-            return this.outerWidth() * this.outerHeight();
-        },
-        containedBy: function(target){
-          var targetArea = Math.min(this.area(), target.outerWidth() * this.outerHeight() * 0.90);
-          return this.overlap(target) >= targetArea;
-        },
-        cursorOver: function(){
-            var rect = this.rect();
-            return currentPosition.left >= rect.left && currentPosition.left <= rect.right &&
-                   currentPosition.top >= rect.top && currentPosition.top <= rect.bottom;
+    wb.initializeDragHandlers = function(){
+        if (Event.isTouch){
+            Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchmove', null, drag);
+            Event.on('.content', 'touchend', null, endDrag);
+            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
+        }else{
+            Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousemove', null, drag);
+            Event.on('.content', 'mouseup', null, endDrag);
+            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
-    });
+    };
 
-})(jQuery);
+
+
+})(this);
+

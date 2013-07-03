@@ -2,41 +2,278 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-    <link rel="stylesheet" href="../lib/mocha.css" />
 	<title>Waterbear Tests</title>
-    <script type="text/html" id="step_template">
-        <div class="wrapper step" data-classes="group">
-            <div class="block" data-title="help">
-                <div class="blockhead">
-                    <div class="label" data-for="label in labels">
-						<span data-replace="label"></span>
-					</div>
-                </div>
-                <b class="flap"></b>
-            </div>
-            <div class="next">
-                <i class="slot"></i>
-            </div>
-        </div>
-    </script>
+    <style>
+        .blockindex {
+            width: 30%;
+            float: left;
+        }
+        .testindex {
+            width: 65%;
+            float: right;
+        }
+    </style>
 </head>
-<body>
-    <div id="mocha"></div>
-    <script src="../lib/jquery-1.7.2.min.js"></script>
-    <script src="../lib/chai.js"></script>
-    <script src="../lib/mocha.js"></script>
-	<!-- // <script src="../scripts/utils.js"></script> -->
-	<!-- // <script src="../scripts/template.js"></script> -->
-    <!-- // <script src="../scripts/blocks.js"></script> -->
-    <!-- // <script src="../scripts/serialization-1.0.js"></script> -->
-    <script src="../scripts/events.js"></script>
-    <script>mocha.setup('tdd')</script>
-    <!-- // <script src="test.block.js"></script> -->
-    <!-- // <script src="test.template.js"></script> -->
-    <script src="test.events.js"></script>
-    <script>
-      mocha.run();
-    </script>
+
+<body id="home">
+
+	<h1>Waterbear Tests</h1>
+    <p>Every block should have one or more corresponding tests.</p>
+    <div class="blockindex">
+        <h2>Blocks</h2>
+        <h3>Controls</h3>
+        <ul>
+            <li id="ctl01">when program runs</li>
+            <li id="ctl02">when [key] pressed</li>
+            <li id="ctl03">repeat [int] times a second [<a href="#tst001">tst001</a>] [<a href="#tst002">tst002</a>]</li>
+            <li id="ctl04">variable [any]</li>
+            <li id="ctl05">set variable [var] to [any]</li>
+            <li id="ctl06">wait [int] seconds</li>
+            <li id="ctl07">repeat [int] times [<a href="#tst002">tst002</a>]</li>
+            <li id="ctl08">broadcast [str] message</li>
+            <li id="ctl09">broadcast [str] message with data [any]</li>
+            <li id="ctl10">when I receive [str] message</li>
+            <li id="ctl11">when I receive [str] message with data</li>
+            <li id="ctl12">forever if [bool]</li>
+            <li id="ctl13">if [bool]</li>
+            <li id="ctl14">if not [bool]</li>
+            <li id="ctl15">repeat until [bool]</li>
+        </ul>
+        <h3>Sprites</h3>
+        <ul>
+            <li id="spr01">clear stage to [color] [<a href="#tst002">tst002</a>]</li>
+            <li id="spr02">clear stage to [image]</li>
+            <li id="spr03">rectangle sprite [size] at [point] with [color] [<a href="#tst002">tst002</a>]</li>
+            <li id="spr04">draw [sprite] [<a href="#tst002">tst002</a>]</li>
+            <li id="spr05">[sprite] collides with [sprite]</li>
+            <li id="spr06">move [sprite] by [x][y]</li>
+            <li id="spr07">move [sprite] to [point]</li>
+            <li id="spr08">[sprite] left</li>
+            <li id="spr09">[sprite] right</li>
+            <li id="spr10">[sprite] top</li>
+            <li id="spr11">[sprite] bottom</li>
+            <li id="spr12">set [sprite] [direction] and [speed] [<a href="#tst002">tst002</a>]</li>
+            <li id="spr13">move [sprite] [<a href="#tst002">tst002</a>]</li>
+            <li id="spr14">bounce [sprite] [<a href="#tst002">tst002</a>]</li>
+        </ul>
+        <h3>Arrays</h3>
+        <ul>
+            <li id="arr01">new array [<a href="#tst002">tst002</a>]</li>
+            <li id="arr02">new array with array</li>
+            <li id="arr03">[array] item [index]</li>
+            <li id="arr04">[array] join with [string]</li>
+            <li id="arr05">[array] append [any] [<a href="#tst002">tst002</a>]</li>
+            <li id="arr06">[array] length</li>
+            <li id="arr07">[array] remove item [index]</li>
+            <li id="arr08">[array] pop</li>
+            <li id="arr09">[array] shift</li>
+            <li id="arr10">[array] reversed</li>
+            <li id="arr11">[array] concat [array]</li>
+            <li id="arr12">[array] for each [<a href="#tst002">tst002</a>]</li>
+        </ul>
+        <h3>Boolean</h3>
+        <ul>
+            <li id="boo01">[bool] and [bool]</li>
+            <li id="boo02">[bool] or [bool]</li>
+            <li id="boo03">[bool] xor [bool]</li>
+            <li id="boo04">not [bool]</li>
+        </ul>
+        <h3>Canvas</h3>
+        <ul>
+            <li id="can01">with local state</li>
+            <li id="can02">stroke</li>
+            <li id="can03">fill</li>
+            <li id="can04">global alpha</li>
+            <li id="can05">global composite operator [operator]</li>
+            <li id="can06">scale [x] [y]</li>
+            <li id="can07">rotate by [degrees]</li>
+            <li id="can08">translate by [x] [y]</li>
+            <li id="can09">line width [int]</li>
+            <li id="can10">line cap [style]</li>
+            <li id="can11">line join [style]</li>
+            <li id="can12">mitre limit [int]</li>
+            <li id="can13">shadow offset [x] [y]</li>
+            <li id="can14">shadow blur [int]</li>
+        </ul>
+        <h3>Color</h3>
+        <ul>
+            <li id="col01">shadow [color]</li>
+            <li id="col02">stroke [color]</li>
+            <li id="col03">fill [color]</li>
+            <li id="col04">color with [red] [green] [blue]</li>
+            <li id="col05">color with [red] [green] [blue] [alpha] [<a href="#tst002">tst002</a>]</li>
+            <li id="col06">color with [hue] [saturation] [brightness]</li>
+            <li id="col07">random color [<a href="#tst001">tst001</a>]</li>
+            <li id="col08">stroke [gradient]</li>
+            <li id="col09">fill [gradient]</li>
+            <li id="col10">stroke [pattern]</li>
+            <li id="col11">fill [pattern]</li>
+            <li id="col12">create radial gradient from [point] [radius] to [point] [radius]</li>
+            <li id="col13">create linear gradient from [point] to [point]</li>
+            <li id="col14">add color stop to [gradient] at [offset] with [color]</li>
+            <li id="col15">create pattern from [image] [repeats]</li>
+        </ul>
+        <h3>Images</h3>
+        <ul>
+            <li id="img01">draw [image] at [point]</li>
+            <li id="img02">draw [image] in [rect]</li>
+            <li id="img03">draw a [rect] from [image] to [rect]</li>
+            <li id="img04">create ImageData with [size]</li>
+            <li id="img05">create ImageData from [ImageData]</li>
+            <li id="img06">get ImageData for [rect]</li>
+            <li id="img07">draw [ImageData] at [point]</li>
+            <li id="img08">draw a [rect] from [ImageData] at [point]</li>
+            <li id="img09">[ImageData] width</li>
+            <li id="img10">[ImageData] height</li>
+            <li id="img11">[ImageData] as array</li>
+            <li id="img12">image from [url]</li>
+            <li id="img13">[image] width</li>
+            <li id="img14">[image] height</li>
+            <li id="img15">[image] url</li>
+        </ul>
+        <h3>Math</h3>
+        <ul>
+            <li id="mth01">[number] + [number]</li>
+            <li id="mth02">[number] - [number]</li>
+            <li id="mth03">[number] * [number]</li>
+            <li id="mth04">[number] / [number]</li>
+            <li id="mth05">[number] = [number]</li>
+            <li id="mth06">[number] &lt; [number]</li>
+            <li id="mth07">[number] > [number]</li>
+            <li id="mth08">pick random [number] to [number] [<a href="#tst002">tst002</a>]</li>
+            <li id="mth09">[number] mod [number]</li>
+            <li id="mth10">round [number]</li>
+            <li id="mth11">absolute of [number]</li>
+            <li id="mth12">arccosine degrees of [number]</li>
+            <li id="mth13">arcsine degrees of [number]</li>
+            <li id="mth14">arctangent degrees of [number]</li>
+            <li id="mth15">ceiling of [number]</li>
+            <li id="mth16">cosine of [degrees]</li>
+            <li id="mth17">sine of [degrees]</li>
+            <li id="mth18">tangent of [degrees]</li>
+            <li id="mth19">[number] to the power of [number]</li>
+            <li id="mth20">square root of [number]</li>
+            <li id="mth21">pi</li>
+            <li id="mth22">tau</li>
+        </ul>
+        <h3>Objects</h3>
+        <ul>
+            <li id="obj01">new object</li>
+            <li id="obj02">[object] [key] = [value]</li>
+            <li id="obj03">[object] value at [key]</li>
+            <li id="obj04">for each item in [object] do</li>
+        </ul>
+        <h3>Strings</h3>
+        <ul>
+            <li id="str01">[string] split on [string]</li>
+            <li id="str02">concatenate [string] with [string]</li>
+            <li id="str03">[string] character at [index]</li>
+            <li id="str04">[string] length</li>
+            <li id="str05">[string] indexOf [string]</li>
+            <li id="str06">[string] replace [string] with [string]</li>
+            <li id="str07">to string [any]</li>
+            <li id="str08">comment [string]</li>
+            <li id="str09">alert [string]</li>
+            <li id="str10">console log [string]</li>
+            <li id="str11">console log [format] [arguments]</li>
+            <li id="str12">global keys object</li>
+        </ul>
+        <h3>Paths</h3>
+        <ul>
+            <li id="pth01">with path</li>
+            <li id="pth02">move to [point]</li>
+            <li id="pth03">line to [point]</li>
+            <li id="pth04">quadratic curve to [point] with control [point]</li>
+            <li id="pth05">bezier curve to [point] with controls [point] and [point]</li>
+            <li id="pth06">arc to [point] through [point] with [radius]</li>
+            <li id="pth07">arc with [origin] [radius] start angle [degrees] end angle [degrees] [bool]</li>
+            <li id="pth08">[rect]</li>
+            <li id="pth09">circle at [point] with [radius]</li>
+            <li id="pth10">clip</li>
+            <li id="pth11">is [point] in path?</li>
+        </ul>
+        <h3>Points</h3>
+        <ul>
+            <li id="pnt01">point at [x] [y]</li>
+            <li id="pnt02">point from [array]</li>
+            <li id="pnt03">random point [<a href="#tst001">tst001</a>]</li>
+            <li id="pnt04">[point] x</li>
+            <li id="pnt05">[point] y</li>
+            <li id="pnt06">[point] as array</li>
+        </ul>
+        <h3>Rects</h3>
+        <ul>
+            <li id="rct01">rect at [x] [y] with [width] [height]</li>
+            <li id="rct01">rect at [point] with [size]</li>
+            <li id="rct01">rect from [array]</li>
+            <li id="rct01">[rect] position</li>
+            <li id="rct01">[rect] size</li>
+            <li id="rct01">[rect] as array</li>
+            <li id="rct01">[rect] x</li>
+            <li id="rct01">[rect] y</li>
+            <li id="rct01">[rect] width</li>
+            <li id="rct01">[rect] height</li>
+        </ul>
+        <h3>Sensing</h3>
+        <ul>
+            <li id="sns01">ask [string] and wait</li>
+            <li id="sns01">mouse x</li>
+            <li id="sns01">mouse y</li>
+            <li id="sns01">mouse down</li>
+            <li id="sns01">[key] pressed?</li>
+            <li id="sns01">stage width</li>
+            <li id="sns01">stage height</li>
+            <li id="sns01">center x</li>
+            <li id="sns01">center y</li>
+            <li id="sns01">random x</li>
+            <li id="sns01">random y</li>
+            <li id="sns01">reset timer</li>
+            <li id="sns01">timer</li>
+        </ul>
+        <h3>Shapes</h3>
+        <ul>
+            <li id="shp01">clear [rect]</li>
+            <li id="shp02">fill circle at [point] with [radius]</li>
+            <li id="shp03">fill circle at [point] with [radius] and [color] [<a href="#tst001">tst001</a>]</li>
+            <li id="shp04">stroke circle at [point] with [radius]</li>
+            <li id="shp05">stroke circle at [point] with [radius] and [color]</li>
+            <li id="shp06">stroke and fill circle at [point] with [radius]</li>
+            <li id="shp07">fill [rect]</li>
+            <li id="shp08">fill [rect] with [color]</li>
+            <li id="shp09">stroke [rect] with [color]</li>
+            <li id="shp10">stroke [rect]</li>
+            <li id="shp11">fill and stroke rect [x] [y] [width] [height]</a>
+        </ul>
+        <h3>Sizes</h3>
+        <ul>
+            <li id="siz01">size with [width] [height]</li>
+            <li id="siz02">size from [array]</li>
+            <li id="siz03">[size] width</li>
+            <li id="siz04">[size] height</li>
+            <li id="siz05">[size] as array</li>
+        </ul>
+        <h3>Text</h3>
+        <ul>
+            <li id="txt01">font [number] [unit] [family]</li>
+            <li id="txt02">text [align]</li>
+            <li id="txt03">text [baseline]</li>
+            <li id="txt04">fill [text] [x] [y]</li>
+            <li id="txt05">fill [text] [x] [y] [max width]</li>
+            <li id="txt06">stroke [text] [x] [y]</li>
+            <li id="txt07">stroke [text] [x] [y] [max width]</li>
+            <li id="txt08">[text] width</li>
+        </ul>
+        <h3>Matrix</h3>
+        <ul>
+            <li id="mtx01">transform by [6-matrix]</li>
+            <li id="mtx02">set transform to [6-matrix]</li>
+        </ul>
+    </div>
+    <div class="testindex">
+        <iframe id="run" width="100%" height="300px" src="/javascript.html?view=result&gist=5746540"></iframe>
+        <h2>Tests</h2>
+        <li id="tst001"><a href="/javascript.html?view=result&gist=5746540" target="run">Random Circles</a> [<a href="#ctl03">ctl03</a>] [<a href="#shp03">shp03</a>] [<a href="#pnt03">pnt03</a>] [<a href="#col07">col07</a>]</li>
+        <li id="tst002"><a href="/javascript.html?view=result&gist=5763474" target="run">Blacklight Worms</a> [<a href="#arr01">arr01</a>] [<a href="#ctl07">ctl07</a>] [<a href="#spr03">spr03</a>] [<a href="#mth08">mth08</a>] [<a href="#spr12">spr12</a>] [<a href="#arr05">arr05</a>] [<a href="#ctl03">ctl03</a>] [<a href="#spr01">spr01</a>] [<a href="#col05">col05</a>] [<a href="#arr12">arr12</a>] [<a href="#spr04">spr04</a>] [<a href="#spr13">spr13</a>] [<a href="#spr14">spr14</a>]</li>
+    </div>
 </body>
 </html>
-

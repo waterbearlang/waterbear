@@ -1,0 +1,5 @@
+.digitalio, .digitalio .holder {
+    border-color: hsl(225,65%,83%);
+    background-color: hsl(225, 65%, 93%);
+}
+

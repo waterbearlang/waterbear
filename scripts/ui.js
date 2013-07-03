@@ -1,53 +1,52 @@
-(function($){
+(function(wb){
 
 // UI Chrome Section
 
 function tabSelect(event){
-    var self = $(this);
-    $('.tabbar .selected').removeClass('selected');
-    self.addClass('selected');
-    if (self.is('.scripts_workspace_tab')){
-		$('.workspace').attr('class', 'workspace blockview');
-    }else if (self.is('.scripts_text_view_tab')){
-		$('.workspace').attr('class', 'workspace textview');
+    var target = event.wbTarget;
+    document.querySelector('.tabbar .selected').classList.remove('selected');
+    target.classList.add('selected');
+    if (wb.matches(target, '.scripts_workspace_tab')){
+        showWorkspace('block');
+    }else if (wb.matches(target, '.scripts_text_view_tab')){
+        showWorkspace('text');
         updateScriptsView();
     }
 }
-$('.tabbar').on('click', '.chrome_tab', tabSelect);
+Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
-// Expose this to dragging and saving functionality
-function showWorkspace(){
-    $('.workspace').attr('class', 'workspace blockview');
+function accordion(event){
+    var open = document.querySelector('#block_menu .open');
+    if (open){
+        open.classList.remove('open');
+    }
+    if (open && open === event.wbTarget.nextSibling) return;
+    event.wbTarget.nextSibling.classList.add('open');
 }
-window.showWorkspace = showWorkspace;
+
+Event.on('#block_menu', 'click', '.accordion-header', accordion);
+
+
+function showWorkspace(mode){
+    var workspace = document.querySelector('.workspace');
+    if (mode === 'block'){
+        workspace.classList.remove('textview');
+        workspace.classList.add('blockview');
+    }else if (mode === 'text'){
+        workspace.classList.remove('blockview');
+        workspace.classList.add('textview');
+    }
+}
+// Expose this to dragging and saving functionality
+wb.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
     var view = wb.find(document.body, '.workspace .scripts_text_view');
     wb.writeScript(blocks, view);
 }
 window.updateScriptsView = updateScriptsView;
 
-function runCurrentScripts(event){
-	if (document.body.className === 'result' && wb.script){
-		wb.runScript(wb.script);
-	}else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace > .wrapper');
-		document.body.className = 'result';
-		wb.runScript( wb.prettyScript(blocks) );
-	}
-}
-$('.runScripts').click(runCurrentScripts);
-
-wb.runScript = function(script){
-	wb.script = script;
-	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'runscript', script: script}), '*');
-}
-
-function clearStage(event){
-	$('.stageframe')[0].contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
-}
-$('.clear_canvas').click(clearStage);
 
 // Context Menu
 //
@@ -76,7 +75,7 @@ function cutBlockCommand(key, opt){
     var view = this.closest('.wrapper');
     pasteboard = Block.model(view);
     // Remove it programatically, and trigger the right events:
-    removeFromScriptEvent(view);
+    Event.trigger(view, 'wb-event');
     view.remove();
 }
 
@@ -172,70 +171,60 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
-if (is_touch_device()){
-    $.tappable({
-        container: '.blockmenu, .workspace',
-        selector: '.block',
-        callback: function(){
-            console.info('long tap detected');
-            console.info(this);
-            this.contextMenu();
-        },
-        touchDelay: 150
-    });
-}
+// if (is_touch_device()){
+//     $.tappable({
+//         container: '.blockmenu, .workspace',
+//         selector: '.block',
+//         callback: function(){
+//             console.info('long tap detected');
+//             console.info(this);
+//             this.contextMenu();
+//         },
+//         touchDelay: 150
+//     });
+// }
 
-var menu_built = false;
-var saved_menus = [];
+// var menu_built = false;
+// var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
-wb.menu = function(title, specs, show){
+wb.menu = function(blockspec){
+    var title = blockspec.name.replace(/\W/g, '');
+    var specs = blockspec.blocks;
 	switch(wb.view){
-		case 'result': return run_menu(title, specs, show);
-		case 'blocks': return edit_menu(title, specs, show);
-		case 'editor': return edit_menu(title, specs, show);
-		default: return edit_menu(title, specs, show);
+		case 'result': return run_menu(title, specs);
+		case 'blocks': return edit_menu(title, specs);
+		case 'editor': return edit_menu(title, specs);
+		default: return edit_menu(title, specs);
 	}
 };
 
-function run_menu(title, specs, show){
-	if (menu_built){
-		return edit_menu(title, specs, show);
-	}
-	saved_menus.push([title, specs, show]);
+if (wb.view === 'result'){
+    Event.once(document.body, 'scriptLoaded', null, runCurrentScripts);
 }
 
-wb.buildDelayedMenus = function(){
-	if (!menu_built && saved_menus.length){
-		saved_menus.forEach(function(m){
-			edit_menu(m[0], m[1], m[2]);
-		});
-		saved_menus = [];
-	}
+function run_menu(title, specs){
+    edit_menu(title, specs);
 }
+
 
 function edit_menu(title, specs, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = $('.submenu.' + group);
-    if (!submenu.length){
-        var body = $('<h3 class="' + group + '"><a href="#">' + title + '</a></h3><div class="submenu ' + group + '"></div>');
-        $('#block_menu').append(body);
-        submenu = $('.submenu.' + group);
-        // This is dumb, but jQuery UI accordion widget doesn't support adding sections at runtime
+    var submenu = document.querySelector('.' + group + '+ .submenu');
+    if (!submenu){
+        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var blockmenu = document.querySelector('#block_menu');
+        blockmenu.appendChild(header);
+        blockmenu.appendChild(submenu);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;
         spec.isTemplateBlock = true;
-        submenu.append(wb.Block(spec).view());
-    });
-    var state = $("#block_menu").accordion( "option", "active" );
-    $('#block_menu').accordion('destroy').accordion({
-        autoHeight: false,
-        collapsible: true,
-        active: show ? 'h3.' + group : state
+        submenu.appendChild(wb.Block(spec));
     });
 }
 
-})(jQuery);
+})(wb);
 

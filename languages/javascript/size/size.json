@@ -1,0 +1,84 @@
+{
+    "name": "Sizes",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
+            "script": "{w: {{1}}, h: {{2}} }",
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "size with width",
+                    "type": "number",
+                    "value": "32"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "value": "32"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "404cb2f4-abe5-4c3b-a9da-9b44050e012d",
+            "script": "{w: {{1}}[0], h: {{1}}[1]",
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "size from array",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "33f2a3b7-5d87-4481-ad1c-f2970915db51",
+            "script": "{{1}}.w",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "value": null
+                },
+                {
+                    "name": "width"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "2d449e0e-cb18-473f-a574-614320b7ba22",
+            "script": "{{1}}.h",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "value": null
+                },
+                {
+                    "name": "height"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7ca31ad7-946a-4587-a5c8-d6b8879dc4e2",
+            "script": "[{{1}}.w, {{1}}.h]",
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "size",
+                    "type": "size",
+                    "value": null
+                },
+                {
+                    "name": "as array"
+                }
+            ]
+        }
+    ]
+}

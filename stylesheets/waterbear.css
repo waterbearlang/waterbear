@@ -1,11 +1,10 @@
 body{
-    font-family: 'ColwellRegular';
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.2em;
     line-height: 1.6em;
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-family: 'TriniganFGRegular';
     font-weight: normal;
 }
 

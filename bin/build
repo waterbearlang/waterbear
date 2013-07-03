@@ -1,0 +1,129 @@
+#!/usr/bin/env node
+
+// I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
+var fs = require('fs');
+var path = require('path');
+var cleanCSS = require('clean-css');
+var UglifyJS = require('uglify-js');
+
+var plugins = {
+    arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
+    javascript: ['javascript', 'control', 'sprite', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix' ]
+};
+
+var styles = {
+    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css'],
+    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
+}
+
+var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace'];
+
+var libs = {
+    arduino: [],
+    javascript: ['beautify', 'highlight', 'highlight-javascript']
+};
+
+
+function clear(){
+    if (fs.existsSync('dist')){
+        var files = fs.readdirSync('dist');
+        files.forEach(function(filename){
+            fs.unlinkSync(path.join('dist', filename));
+        });
+    }else{
+        fs.mkdirSync('dist');
+    }
+};
+
+function compressJS(code){
+    var ast = UglifyJS.parse(code);
+    ast.figure_out_scope();
+    var compressor = UglifyJS.Compressor();
+    ast = ast.transform(compressor);
+    return ast.print_to_string();
+}
+
+function minimize(directory){
+    var files = fs.readdirSync(directory);
+    var src, dest;
+    files.forEach(function(filename){
+        src = path.join(directory, filename);
+        if (endswith(filename, '.css')){
+            dest = src.replace(/\.css$/, '.min.css');
+            fs.writeFileSync(dest, cleanCSS.process(fs.readFileSync(src, 'utf8')));
+        }else if (endswith(filename, '.js')){
+            try{
+                dest = src.replace(/\.js$/, '.min.js');
+                fs.writeFileSync(dest, compressJS(fs.readFileSync(src, 'utf8')));
+            }catch(e){
+                console.log('Error minifying file %s', filename);
+                console.log('\t%s', e.message);
+                console.log('\tline: %s, col: %s', e.line, e.col);
+                return;
+            }
+        }
+    });
+}
+
+function cat(src, dest){
+    fs.appendFileSync(dest, '\n/*begin ' + path.basename(src) + '*/\n');
+    fs.appendFileSync(dest, fs.readFileSync(src, 'utf8'));
+    fs.appendFileSync(dest, '\n/*end ' + path.basename(src) + '*/\n');
+}
+
+function endswith(str, suffix){
+    return RegExp(suffix + '$').test(str);
+}
+
+function concat(src, dest, files, ext, subdir, before, after){
+    before = before || '';
+    after = after || '';
+    files.forEach(function(pathname){
+        if (subdir){
+            pathname = path.join(pathname, subdir);
+        }
+        var filenames = fs.readdirSync(path.join(src, pathname)).filter(function(filename){
+            return endswith(filename, ext);
+        });
+        if (filenames.length){
+            // just using the first filename for now
+            try{
+                var contents = before + fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8') + after;
+            }catch(e){
+                console.log('Could not read %s: %s', path.join(src, pathname, filenames[0]), e.message);
+                return;
+            }
+            fs.appendFileSync(dest, '\n/*begin ' + filenames[0] + '*/\n');
+            fs.appendFileSync(dest, contents);
+            fs.appendFileSync(dest, '\n/*end ' + filenames[0] + '*/\n');
+        }
+    });
+}
+
+function build(){
+    clear();
+    Object.keys(plugins).forEach(function(lang){
+        var files = plugins[lang];
+        var src = path.join('languages', lang);
+        var dest = path.join('dist', lang);
+        libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
+        styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+        scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
+        // Build CSS
+        concat(src, dest + '.css', files, '.css');
+        // Build Waterbear support
+        concat(src, dest + '.js', files, '.js');
+        // Build Waterbear blocks
+        concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
+        // Build runtime support
+        if (lang === 'javascript'){
+            concat(src, dest + '_runtime.js', files, '.js', 'runtime');
+        }
+        // minimize dist files
+        // add launch to kick it all off
+        cat('scripts/launch.js', dest + '.js');
+    });
+    minimize('dist');
+};
+
+build();

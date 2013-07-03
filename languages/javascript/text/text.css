@@ -1,0 +1,5 @@
+.text, .text .holder{
+    border-color: hsl(93,90%,66%);
+    background-color: hsl(93,90%,76%);
+}
+

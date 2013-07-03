@@ -1,0 +1,34 @@
+/* block and border colours for different groups of blocks */
+.interface, .interface .holder{
+    border-color: hsl(296, 65%, 57%);
+    background-color: hsl(296, 65%, 77%);
+}
+
+.sensing, .sensing .holder{
+    border-color: hsl(200,98%,56%);
+    background-color: hsl(200,98%,76%);
+}
+
+.animation, .animation .holder{
+    border-color: hsl(150, 65%, 79%);
+    background-color: hsl(150, 62%, 89%);
+}
+
+.twitter, .twitter .holder{
+    border-color: hsl(90, 65%, 79%);
+    background-color: hsl(90, 62%, 89%);
+}
+
+/* Border colours for type values and sockets */
+
+.color, .color .holder{
+    border-color: yellow;
+}
+
+.string, .string .holder{
+    border-color: green;
+}
+
+.any, .any .holder{
+    border-color: gray;
+}

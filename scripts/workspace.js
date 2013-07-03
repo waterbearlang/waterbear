@@ -1,43 +1,43 @@
-(function($){
+(function(wb){
 
-
+var language = location.pathname.match(/\/(.*)\.html/)[1];
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        $('.workspace > .scripts_workspace').empty();
-		$('.workspace > .scripts_text_view').empty();
-        $('.submenu.globals').empty();
+        document.querySelector('.workspace > .scripts_workspace').remove();
+        createWorkspace('Workspace');
+		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
     }
 }
-$('.clearScripts').click(clearScripts);
-$('.editScript').click(function(){
+Event.on('.clearScripts', 'click', null, clearScripts);
+Event.on('.editScript', 'click', null, function(){
 	document.body.className = 'editor';
-	wb.buildDelayedMenus();
 	wb.loadCurrentScripts(wb.queryParams);
 });
 
-$('.goto_stage').click(function(){
+Event.on('.goto_stage', 'click', null, function(){
 	document.body.className = 'result';
 });
 
 // Load and Save Section
 
-
 function saveCurrentScripts(){
-    showWorkspace();
-    $('#block_menu')[0].scrollIntoView();
-    localStorage.__current_scripts = wb.Block.serialize();
+    wb.showWorkspace('block');
+    document.querySelector('#block_menu').scrollIntoView();
+    localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
-$(window).unload(saveCurrentScripts);
+window.onunload = saveCurrentScripts;
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
     if (!description){ description = ''; }
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
     return JSON.stringify({
         title: title,
         description: description,
         date: Date.now(),
-        scripts: wb.Block.scriptsToObject('.scripts_workspace')
+        waterbearVersion: '2.0',
+        blocks: blocks.map(wb.blockDesc)
     });
 }
 
@@ -62,22 +62,24 @@ function comingSoon(evt){
     alert('Restore will be working again soon. You can drag saved json files to the script workspace now.');
 }
 
-$('.save_scripts').on('click', createDownloadUrl);
-$('.restore_scripts').on('click', comingSoon);
+Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.restore_scripts', 'click', null, comingSoon);
 
 function loadScriptsFromObject(fileObject){
-    var workspace = document.querySelector('.workspace .scripts_workspace');
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
-    // FIXME: Make sure we have the appropriate plugins loaded
-	if (!fileObject) return;
-    var blocks = fileObject.blocks.map(function(spec){
-        return wb.Block(spec);
-    });
+	if (!fileObject) return createWorkspace();
+    var blocks = fileObject.blocks.map(wb.Block);
+    if (!blocks.length){
+        return createWorkspace();
+    }
+    if (blocks.length > 1){
+        console.log('not really expecting multiple blocks here right now');
+        console.log(blocks);
+    }
     blocks.forEach(function(block){
-        var view = block.view()[0]; // FIXME: strip jquery wrapper
-        workspace.appendChild(view);
-        wb.addToScriptEvent(workspace, view);
+        wireUpWorkspace(block);
+        Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
 }
@@ -95,8 +97,8 @@ function loadScriptsFromGist(gist){
 		console.log('no json file found in gist: %o', gist);
 		return;
 	}
-	loadScriptsFromObject(JSON.parse(file).scripts);
-	$(document.body).trigger('scriptloaded');
+	loadScriptsFromObject(JSON.parse(file));
+    Event.trigger(document.body, 'scriptLoaded');
 }
 
 function runScriptFromGist(gist){
@@ -121,32 +123,30 @@ function runScriptFromGist(gist){
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
     if (wb.loaded) return;
-    console.log('loading current scripts');
 	if (queryParsed.gist){
-		$.ajax({
-			url: 'https://api.github.com/gists/' + queryParsed.gist,
-			type: 'GET',
-			dataType: 'jsonp',
-			success: loadScriptsFromGist
-		});
-	}else if (localStorage.__current_scripts){
-        var fileObject = JSON.parse(localStorage.__current_scripts);
+		wb.jsonp(
+			'https://api.github.com/gists/' + queryParsed.gist,
+			loadScriptsFromGist
+		);
+	}else if (localStorage['__' + language + '_current_scripts']){
+        var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
         if (fileObject){
             loadScriptsFromObject(fileObject);
         }
+    }else{
+        createWorkspace('Workspace');
     }
+    wb.loaded = true;
 };
 
 wb.runCurrentScripts = function(queryParsed){
 	if (queryParsed.gist){
-		$.ajax({
-			url: 'https://api.github.com/gists/' + queryParsed.gist,
-			type: 'GET',
-			dataType: 'jsonp',
-			success: runScriptFromGist
-		});
-	}else if (localStorage.__current_scripts_js){
-		var fileObject = localStorage.__current_scripts_js;
+		wp.json(
+			'https://api.github.com/gists/' + queryParsed.gist,
+			runScriptFromGist
+		);
+	}else if (localStorage['__' + language + '_current_scripts']){
+		var fileObject = localStorage['__' + language + '_current_scripts'];
 		if (fileObject){
 			wb.runScript(fileObject);
 		}
@@ -155,9 +155,37 @@ wb.runCurrentScripts = function(queryParsed){
 
 
 // Allow saved scripts to be dropped in
-var workspace = $('.scripts_workspace')[0];
-workspace.addEventListener('drop', getFiles, false);
-workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+function createWorkspace(name){
+    var id = uuid();
+    var workspace = wb.Block({
+        group: 'scripts_workspace',
+        id: id,
+        scriptId: id,
+        scopeId: id,
+        blocktype: 'context',
+        sockets: [
+            {
+                name: name
+            }
+        ],
+        script: '[[1]]',
+        isTemplateBlock: false,
+        help: 'Drag your script blocks here'
+    });
+    wireUpWorkspace(workspace);
+}
+wb.createWorkspace = createWorkspace;
+
+function wireUpWorkspace(workspace){
+    workspace.addEventListener('drop', getFiles, false);
+    workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+    wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+    });
+    document.querySelector('.workspace').appendChild(workspace);
+    workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+    wb.initializeDragHandlers();
+}
 
 function handleDragover(evt){
     // Stop Firefox from grabbing the file prematurely
@@ -179,12 +207,21 @@ function getFiles(evt){
         reader.onload = function (evt){
             clearScripts(null, true);
             var saved = JSON.parse(evt.target.result);
-            loadScriptsFromObject(saved.scripts);
+            loadScriptsFromObject(saved);
         };
     }
 }
 
+Event.on('.workspace', 'click', '.disclosure', function(evt){
+    var block = wb.closest(evt.wbTarget, '.block');
+    if (block.dataset.closed){
+        delete block.dataset.closed;
+    }else{
+        block.dataset.closed = true;
+    }
+});
 
+Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+Event.on('.workspace', 'keypress', 'input', wb.resize);
 
-
-})(jQuery);
+})(wb);

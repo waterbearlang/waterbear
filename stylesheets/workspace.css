@@ -2,16 +2,18 @@ html, body{
     height: 100%;
     overflow: hidden;
     background-color: #FFF;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
     margin: 0;
     padding: 0;
-/*    -moz-box-sizing: border-box;
-    box-sizing: border-box; */
 }
 img {
     border:0;
+}
+input{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* Scratch-ish Layout Styles */
@@ -51,6 +53,7 @@ body.result .result{
 
 body.blocks .workspace{
 	padding-left: 0;
+    width: 100%;
 }
 
 .menubar, .tabbar{
@@ -118,15 +121,16 @@ body.editor #block_menu{
   cursor: pointer;
 }
 
-.submenu .wrapper {
+.submenu .block {
     margin-bottom: 20px;
-    margin-right: 35px;
-    float: left;
 }
 
 .dropCursor {
-    height: 1px;
-    border-bottom: 1px solid #CCC;
+    height: 0;
+    outline: 2px solid red;
+    width: 75%
+    float: left;
+    clear: left;
 }
 
 .chrome_tab{
@@ -190,85 +194,6 @@ body.editor #block_menu{
     color: #515151;
 }
 
-/* Save/Restore Dialogs */
-
-.dialog{
-    background-color: #CCC;
-    font-family: Helvetica;
-    padding: 1em;
-    border: 0px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-}
-
-.dialog h2{
-    font-size: 200%;
-    font-weight: bold;
-    text-align: center;
-}
-
-.dialog input{
-    font-size: 180%;
-    margin-bottom: 1em;
-    width: 99%;
-    border: 0px;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-    padding-left: 10px;
-}
-
-.dialog textarea{
-    width: 100%;
-    height: 5em;
-    font-size: 150%;
-}
-
-.dialog ul{
-    min-width: 400px;
-    margin-top: 1em;
-    margin-bottom: 1.5em;
-}
-
-.dialog button{
-    font-size: 120%;
-    float: right;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    margin-left: 1em;
-    background-color: #4D736D;
-    color: white;
-    margin-left: 1em;
-    border: 0px;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-top: .5em;
-}
-
-.dialog .action{
-    margin-left: .2em;
-    font-size: 90%;
-}
-
-.dialog li{
-    display: block;
-    clear: both;
-    margin-bottom: .5em
-}
-
-.dialog .timestamp{
-    clear: both;
-    font-size: 80%;
-    color: #666;
-    margin-top: 1.5em;
-}
-
-.dialog button.delete, button.cancel {
-    background-color: #854D53; /*This is a redish color*/
-    margin-top: .5em;
-}
 /* These additions should only change the appearance of the tabs*/
 
 
@@ -297,4 +222,50 @@ body.editor #block_menu{
 .scrollList{
     max-height: 300px;
     overflow-y:scroll;
+}
+
+/* ACCORDION */
+
+#block_menu{
+    position: relative;
+    cursor: pointer;
+    margin-top: 1px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    border-width: 0;
+    border-style: solid;
+    font-weight: normal;
+    color: #252323;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    line-height: 1.3;
+}
+
+.accordion-header{
+    display: block;
+    font-size: 1em;
+    padding: .5em .5em .5em .7em;
+}
+
+.accordion-body{
+    padding: 1em 2.2em;
+    overflow: auto;
+    display: none;
+}
+
+.accordion-body.open{
+    display: block
+}
+
+/* SVG is in place for text-sizing only */
+
+svg{
+    position:absolute;
+    left: -1000px;
+}
+svg text{
+    /* This should be the same font used for <input> */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

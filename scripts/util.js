@@ -6,6 +6,8 @@
     // A bunch of these are to avoid needing jQuery just for simple things like matches(selector) and closest(selector)
     //
     //
+    // TODO
+    // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
     wb.makeArray = function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
@@ -19,16 +21,23 @@
     };
 
     wb.hide = function(elem){
-        // FIXME
         elem.dataset.display = elem.style.display;
         elem.style.display = 'none';
     };
 
     wb.show = function(elem){
-        if (elem.dataset.display !== undefined && elem.dataset.display !== null){
-            elem.style.display = elem.dataset.display;
+        elem.style.display = elem.dataset.display || 'block';
+        delete elem.dataset.display;
+    };
+
+    var svgtext = document.querySelector('svg text');
+    wb.resize = function(input){
+        if (input.wbTarget){
+            input = input.wbTarget;
         }
-        elem.dataset.display = null;
+        svgtext.textContent = input.value;
+        var width = svgtext.getComputedTextLength();
+        input.style.width = (width + 20) + 'px';
     };
 
     // wb.mag = function mag(p1, p2){
@@ -67,9 +76,15 @@
     };
 
     wb.closest = function closest(elem, selector){
+        if (elem.jquery){
+            elem = elem[0];
+        }
         while(elem){
             if (wb.matches(elem, selector)){
                 return elem;
+            }
+            if (!elem.parentElement){
+                throw new Error('Element has no parent, is it in the tree? %o', elem);
             }
             elem = elem.parentElement;
         }
@@ -99,21 +114,18 @@
         });
     };
 
-    wb.findChild = function(){
-        var args = wb.makeArray(arguments);
-        var elem = wb.elem(args.shift());
-        var children, selector;
-        while(args.length){
-            selector = args.shift();
-            children = wb.makeArray(elem.children);
-            for(var i = 0; i < children.length; i++){
-                if (wb.matches(children[i], selector)){
-                    elem = children[i];
-                    break;
-                }
+    wb.findChild = function(elem, selector){
+        if (arguments.length !== 2){
+            throw new Exception('This is the culprit');
+        }
+        var children = elem.children;
+        for(var i = 0; i < children.length; i++){
+            var child = children[i];
+            if (wb.matches(child, selector)){
+                return child;
             }
         }
-        return elem;
+        return null;
     }
 
     wb.elem = function elem(name, attributes, children){
@@ -131,10 +143,11 @@
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
+                if (attributes[key] === null || attributes[key] === undefined) return;
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
-                        e.setAttribute(key, attributes[key]);
+                        e.setAttribute(key, val);
                     }
                 }else{
                     e.setAttribute(key, attributes[key]);
@@ -144,21 +157,31 @@
         if (children){
             if (Array.isArray(children)){
                 children.forEach(function(child){
-                    if (Array.isArray(child)){
+                    if (child.nodeName){
+                        e.appendChild(child);
+                    }else if (Array.isArray(child)){
+                        console.log('DEPRECATED array arg to elem: use sub-elem instead');
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
-                        e.appendChild(elem(child));
+                        e.appendChild(document.createTextNode(child));
                     }
                 });
             }else{
-                // assumes children is a string
-                e.appendChild(document.createTextNode(children));
+                if (children.nodeName){
+                    // append single node
+                    e.appendChild(children);
+                }else{
+                    // assumes children is a string
+                    e.appendChild(document.createTextNode(children));
+                }
             }
         }
         return e;
     };
 
+
+    // Remove namespace for matches
     if (document.body.matches){
         wb.matches = function matches(elem, selector){ return wb.elem(elem).matches(selector); };
     }else if(document.body.mozMatchesSelector){
@@ -169,6 +192,23 @@
         wb.matches = function matches(elem, selector){ return wb.elem(elem).msMatchesSelector(selector); };
     }else if(document.body.oMatchesSelector){
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
+    }
+
+    // AJAX utilities
+
+    var jsonpHandlers = {};
+    wb.jsonp = function(url, callback){
+        var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
+        var handler = function(data){
+            // remove jsonp element
+            var script = document.getElementById(id);
+            script.parentElement.removeChild(script);
+            // remove self
+            delete window[id];
+            callback(data);
+        };
+        window[id] = handler;
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
     }
 
 

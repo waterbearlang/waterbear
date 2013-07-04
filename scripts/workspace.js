@@ -82,6 +82,7 @@ function loadScriptsFromObject(fileObject){
         Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
+    Event.trigger(document.body, 'wb-script-loaded');
 }
 
 function loadScriptsFromGist(gist){
@@ -98,7 +99,6 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file));
-    Event.trigger(document.body, 'scriptLoaded');
 }
 
 function runScriptFromGist(gist){
@@ -122,21 +122,23 @@ function runScriptFromGist(gist){
 
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
-    if (wb.loaded) return;
-	if (queryParsed.gist){
-		wb.jsonp(
-			'https://api.github.com/gists/' + queryParsed.gist,
-			loadScriptsFromGist
-		);
-	}else if (localStorage['__' + language + '_current_scripts']){
-        var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
-        if (fileObject){
-            loadScriptsFromObject(fileObject);
+    if (!wb.loaded){
+    	if (queryParsed.gist){
+    		wb.jsonp(
+    			'https://api.github.com/gists/' + queryParsed.gist,
+    			loadScriptsFromGist
+    		);
+    	}else if (localStorage['__' + language + '_current_scripts']){
+            var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
+            if (fileObject){
+                loadScriptsFromObject(fileObject);
+            }
+        }else{
+            createWorkspace('Workspace');
         }
-    }else{
-        createWorkspace('Workspace');
+        wb.loaded = true;
     }
-    wb.loaded = true;
+    Event.trigger(document.body, 'wb-loaded');
 };
 
 wb.runCurrentScripts = function(queryParsed){
@@ -223,5 +225,4 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
-
 })(wb);

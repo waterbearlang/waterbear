@@ -2367,7 +2367,7 @@ hljs.LANGUAGES.javascript = {
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
-            Event.trigger(dragTarget, 'clone');
+            // Event.trigger(dragTarget, 'wb-clone'); // not in document, won't bubble to document.body
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -2392,6 +2392,10 @@ hljs.LANGUAGES.javascript = {
 //            dragTarget.parentElement.insertBefore(dragPlaceholder, dragTarget);
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
+        if (cloned){
+            // call this here so it can bubble to document.body
+            Event.trigger(dragTarget, 'wb-clone');
+        }
         wb.reposition(dragTarget, startPosition);
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         dropRects = potentialDropTargets.map(function(elem, idx){
@@ -3420,7 +3424,7 @@ wb.menu = function(blockspec){
 };
 
 if (wb.view === 'result'){
-    Event.once(document.body, 'scriptLoaded', null, runCurrentScripts);
+    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
 }
 
 function run_menu(title, specs){
@@ -3536,6 +3540,7 @@ function loadScriptsFromObject(fileObject){
         Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
+    Event.trigger(document.body, 'wb-script-loaded');
 }
 
 function loadScriptsFromGist(gist){
@@ -3552,7 +3557,6 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file));
-    Event.trigger(document.body, 'scriptLoaded');
 }
 
 function runScriptFromGist(gist){
@@ -3576,21 +3580,23 @@ function runScriptFromGist(gist){
 
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
-    if (wb.loaded) return;
-	if (queryParsed.gist){
-		wb.jsonp(
-			'https://api.github.com/gists/' + queryParsed.gist,
-			loadScriptsFromGist
-		);
-	}else if (localStorage['__' + language + '_current_scripts']){
-        var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
-        if (fileObject){
-            loadScriptsFromObject(fileObject);
+    if (!wb.loaded){
+    	if (queryParsed.gist){
+    		wb.jsonp(
+    			'https://api.github.com/gists/' + queryParsed.gist,
+    			loadScriptsFromGist
+    		);
+    	}else if (localStorage['__' + language + '_current_scripts']){
+            var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
+            if (fileObject){
+                loadScriptsFromObject(fileObject);
+            }
+        }else{
+            createWorkspace('Workspace');
         }
-    }else{
-        createWorkspace('Workspace');
+        wb.loaded = true;
     }
-    wb.loaded = true;
+    Event.trigger(document.body, 'wb-loaded');
 };
 
 wb.runCurrentScripts = function(queryParsed){
@@ -3677,7 +3683,6 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
-
 })(wb);
 
 /*end workspace.js*/

@@ -136,7 +136,7 @@
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
-            Event.trigger(dragTarget, 'clone');
+            // Event.trigger(dragTarget, 'wb-clone'); // not in document, won't bubble to document.body
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -161,6 +161,10 @@
 //            dragTarget.parentElement.insertBefore(dragPlaceholder, dragTarget);
 //        }
         document.querySelector('.content.editor').appendChild(dragTarget);
+        if (cloned){
+            // call this here so it can bubble to document.body
+            Event.trigger(dragTarget, 'wb-clone');
+        }
         wb.reposition(dragTarget, startPosition);
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         dropRects = potentialDropTargets.map(function(elem, idx){

@@ -200,7 +200,7 @@ wb.menu = function(blockspec){
 };
 
 if (wb.view === 'result'){
-    Event.once(document.body, 'scriptLoaded', null, runCurrentScripts);
+    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
 }
 
 function run_menu(title, specs){

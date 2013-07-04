@@ -98,7 +98,7 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file));
-    Event.trigger(document.body, 'scriptLoaded');
+    Event.trigger(document.body, 'wb-script-loaded');
 }
 
 function runScriptFromGist(gist){
@@ -137,6 +137,7 @@ wb.loadCurrentScripts = function(queryParsed){
         createWorkspace('Workspace');
     }
     wb.loaded = true;
+    Event.trigger(document.body, 'wb-loaded');
 };
 
 wb.runCurrentScripts = function(queryParsed){

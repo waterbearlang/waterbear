@@ -136,7 +136,7 @@
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
-            Event.trigger(dragTarget, 'clone');
+            Event.trigger(dragTarget, 'wb-clone');
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');

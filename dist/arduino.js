@@ -544,7 +544,7 @@
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
-            Event.trigger(dragTarget, 'clone');
+            Event.trigger(dragTarget, 'wb-clone');
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
                 scope = wb.closest(parent, '.context');
@@ -1597,7 +1597,7 @@ wb.menu = function(blockspec){
 };
 
 if (wb.view === 'result'){
-    Event.once(document.body, 'scriptLoaded', null, runCurrentScripts);
+    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
 }
 
 function run_menu(title, specs){
@@ -1729,7 +1729,7 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file));
-    Event.trigger(document.body, 'scriptLoaded');
+    Event.trigger(document.body, 'wb-script-loaded');
 }
 
 function runScriptFromGist(gist){
@@ -1768,6 +1768,7 @@ wb.loadCurrentScripts = function(queryParsed){
         createWorkspace('Workspace');
     }
     wb.loaded = true;
+    Event.trigger(document.body, 'wb-loaded');
 };
 
 wb.runCurrentScripts = function(queryParsed){

@@ -474,7 +474,7 @@
             if (match[0] === '{'){
                 return expressionValues[idx] || 'null';
             }else{
-                return childValues || 'null';
+                return childValues || '/* do nothing */';
             }
         }
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);

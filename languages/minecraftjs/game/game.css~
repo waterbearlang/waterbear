@@ -1,0 +1,5 @@
+.controls, .controls .holder{
+    border-color: hsl(44, 81%, 49%);
+    background-color: hsl(44, 81%, 85%);
+}
+

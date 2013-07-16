@@ -1,0 +1,46 @@
+{
+    "name": "Game",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "say"
+                },
+                {
+                    "type": "string",
+                    "value": "hi"
+                },
+                {
+                    "name": "in chat"
+                }
+                
+            ],
+            "script": "client.chat({{1}});",
+            "help": "send a message as chat"
+        },
+        
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "Save Checkpoint"
+                }
+            ],
+            "script": "client.saveCheckpoint();",
+            "help": "Save Checkpoint"
+        },
+        
+        
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "Restore Checkpoint"
+                }
+            ],
+            "script": "client.restoreCheckpoint();",
+            "help": "Restore Last Checkpoint"
+        }
+    ]
+}

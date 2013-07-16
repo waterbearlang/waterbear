@@ -1,0 +1,8 @@
+.objects, .objects .holder{
+    border-color: hsl(75, 90%, 66%);
+    background-color: hsl(75, 90%, 76%);
+}
+
+.any, .any .holder{
+    border-color: gray;
+}

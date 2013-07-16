@@ -1,0 +1,92 @@
+{
+    "name": "Player",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "sockets": [
+                {
+                    "name": "Get Player Tile Position"
+                }
+            ],
+            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerPos = {x:parseInt(aData[0]), y: parseInt(aData[1]), z: parseInt(aData[2])}; [[1]]  client.end()});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "playerPos"
+                        }
+                    ],
+                    "script": "playerPos",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "playerPos as text"
+                        }
+                    ],"script": "\"x:\"+playerPos.x.toString()+\", y:\"+playerPos.y.toString()+\", z:\"+playerPos.z.toString()",
+                    "type": "string"
+                }
+            ],
+            "help": "get the tile that the player is on"
+        },
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "Pos##"
+                },
+                {
+                    "name": "from Player offset by"
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "value": 1
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "z",
+                    "type": "number",
+                    "value": 0
+                }
+            ],
+            "script": "var pos## = {x:(playerPos.x+{{1}}), y:(playerPos.y+{{2}}) , z:(playerPos.z+{{3}})};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Pos##"
+                        }
+                    ],
+                    "script": "pos##",
+                    "type": "position"
+                }
+            ],
+            
+            "help": "create new position relative to Player position"
+        },
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "move Player to"
+                },
+                {
+                    "type": "position"
+                }
+            ],
+            "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
+            "help": "move Player to x, y, z of position"
+        }
+        
+    
+    ]
+}

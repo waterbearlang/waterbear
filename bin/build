@@ -8,19 +8,22 @@ var UglifyJS = require('uglify-js');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'control', 'sprite', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix' ]
+    javascript: ['javascript', 'control', 'sprite', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix' ],
+    minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'object', 'string', 'matrix' ]
 };
 
 var styles = {
     arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
+    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
+    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
 }
 
 var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace'];
 
 var libs = {
     arduino: [],
-    javascript: ['beautify', 'highlight', 'highlight-javascript']
+    javascript: ['beautify', 'highlight', 'highlight-javascript'],
+    minecraftjs: ['beautify', 'highlight', 'highlight-javascript']
 };
 
 

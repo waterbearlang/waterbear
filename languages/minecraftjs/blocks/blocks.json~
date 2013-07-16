@@ -1,0 +1,64 @@
+{
+    "name": "Block",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "sockets": [
+                    {
+                        "name": "get Block Type at "
+                    },
+                    {
+                        "type": "object"
+                    }
+                ],
+            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  client.end()});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "block##"
+                            }
+                        ],
+                        
+                    "script": "parseInt(block##)",
+                    "type": "number"
+                }
+            ],
+            "help": "get block type at x, y, z"
+        },
+        {
+            "blocktype": "context",
+            "sockets": [
+                    {
+                        "name": "get height at "
+                    },
+                    {
+                        "type": "number",
+                        "value": "0"
+                    },
+                    {
+                        "type": "number",
+                        "value": "0"
+                    }
+                ],
+            
+            "script": "client.getHeight({{1}}, {{2}}, function(height##){[[1]]  client.end()});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "height##"
+                            }
+                        ],
+                        "script": "parseInt(height##)",
+                    "type": "number"
+                }
+            ],
+            "help": "get height of blocks at x, y"
+        }
+    ]
+}
+
+

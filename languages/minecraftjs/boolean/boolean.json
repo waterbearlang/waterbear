@@ -1,0 +1,76 @@
+{
+    "name": "Boolean",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "770756e8-3a10-4993-b02e-3d1333c98958",
+            "type": "boolean",
+            "script": "({{1}} && {{2}})",
+            "help": "both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "and",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a56c0d03-5c5c-4459-9aaf-cbbea6eb3abf",
+            "type": "boolean",
+            "script": "({{1}} || {{2}})",
+            "help": "either or both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "or",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "cb9ddee8-5ee1-423b-9559-6d2cbb379b80",
+            "type": "boolean",
+            "script": "({{1}} ? !{{2}} : {{2}})",
+            "help": "either, but not both, operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "xor",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "138a6840-37cc-4e2d-b44a-af32e673ba56",
+            "type": "boolean",
+            "script": "(! {{1}})",
+            "help": "operand is false",
+            "sockets": [
+                {
+                    "name": "not",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,196 @@
+{
+    "name": "Position",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "new pos##"
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "z",
+                    "type": "number",
+                    "value": "0"
+                },
+            ],  
+            "script": "var pos## = {x:{{1}}, y:{{2}} , z:{{3}}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Pos##"
+                        },
+                    ],  
+                    "script": "pos##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position"
+        },
+        
+        {
+            "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "get parts of"
+                },
+                {
+                    "name" : "pos",
+                    "type": "postion"
+                },
+            ],  
+            "script": "var pos## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name" : "x##",
+                            "type": "number"
+                        },
+                    ],  
+                    "script": "pos##.x",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name" : "y##",
+                            "type": "number"
+                        },
+                    ],  
+                    "script": "pos##.y",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name" : "z##",
+                            "type": "number"
+                        },
+                    ],  
+                    "script": "pos##.z",
+                    "type": "number"
+                }
+            ],
+            
+            "help": "get parts of position"
+        },
+        
+     
+        {
+            "blocktype": "step",
+            "labels": ["new pos## adding [number:0], [number:0], [number:0] to pos [object]"],
+            "sockets": [
+                {
+                    "name": "new pos##"
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "z",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "from",
+                },                
+                {
+                    "name": "pos",
+                    "type": "position",
+                    "value": "{\"x\":0,\"y\":0,\"z\":0}"
+                }
+            ],  
+            "script": "var pos## = {x:({{4}}.x+{{1}}), y:({{4}}.y+{{2}}) , z:({{4}}.z+{{3}})};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Pos##"
+                        },
+                    ],  
+                    
+                    "script": "pos##",
+                    "type": "object"
+                }
+            ],
+            
+            "help": "create new position relative to extisting position"
+        },
+        
+        {
+            "blocktype": "step",
+            "labels": ["new pos## adding pos [object] to pos [object]"],
+            "sockets": [
+                {
+                    "name": "new pos##"
+                },
+                {
+                    "name": "pos1",
+                    "type": "postion"
+                },
+                {
+                    "name": "to"
+                },
+                {
+                    "name": "pos2",
+                    "type": "postion"
+                }
+            ],  
+            "script": "var pos## = {x:({{1}}.x+{{2}}.x), y:({{1}}.y+{{2}}.y) , z:({{1}}.z+{{2}}.z)};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Pos##"
+                        },
+                    ],  
+                    
+                    "script": "pos##",
+                    "type": "object"
+                }
+            ],
+            
+            "help": "create new position by adding 2 others"
+        },
+        {
+            "blocktype": "expression",
+            "labels": ["position [object] as text"],
+            "sockets": [
+                {
+                    "name": "Position",
+                    "type": "position"
+                },
+                {
+                    "name": "as text",
+                },
+            ],  
+                    
+            "script": "\"x:\"+{{1}}.x.toString()+\", \"y\":\"+{{1}}.y.toString()+\", \"z\":\"+{{1}}.z.toString()",
+            "type": "string"
+        }
+    ]
+}

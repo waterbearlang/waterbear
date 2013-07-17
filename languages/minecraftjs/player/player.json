@@ -3,6 +3,7 @@
     "blocks": [
         {
             "blocktype": "context",
+            "id": "fe8f0ff3-1f52-4866-bbf0-bc3c7a850e11",
             "sockets": [
                 {
                     "name": "Get Player Tile Position"
@@ -34,36 +35,27 @@
         },
         {
             "blocktype": "step",
+            "id": "5474d53a-b671-4392-b299-d10339ad12af",
             "sockets": [
                 {
-                    "name": "Pos##"
+                    "name": "Create Position##"
                 },
                 {
                     "name": "from Player offset by"
                 },
                 {
-                    "name": "x",
-                    "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "y",
-                    "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "z",
-                    "type": "number",
-                    "value": 0
+                    "name": "Position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var pos## = {x:(playerPos.x+{{1}}), y:(playerPos.y+{{2}}) , z:(playerPos.z+{{3}})};",
+            "script": "var pos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "Pos##"
+                            "name": "Position ##"
                         }
                     ],
                     "script": "pos##",
@@ -75,12 +67,15 @@
         },
         {
             "blocktype": "step",
+            "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
             "sockets": [
                 {
                     "name": "move Player to"
                 },
                 {
-                    "type": "position"
+                    "name": "Position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
             "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",

@@ -313,6 +313,8 @@
         }
         // User-specified settings
         var uName = wb.findChild(socket, '.name').textContent;
+        var uEle = wb.findChild(socket, '.name')
+        
         if (desc.name !== uName){
             desc.uName = uName;
         }

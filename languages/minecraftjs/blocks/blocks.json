@@ -1,5 +1,6 @@
 {
     "name": "Blocks",
+    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
     "blocks": [
         {
             "blocktype": "context",
@@ -8,7 +9,9 @@
                         "name": "get Block Type at "
                     },
                     {
-                        "type": "position"
+                        "name": "Position",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
             "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  client.end()});",
@@ -30,12 +33,15 @@
         
         {
             "blocktype": "step",
+            "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
             "sockets": [
                     {
                         "name": "set Block at"
                     },
-                    {
-                        "type": "position"
+                        {
+                        "name": "Position",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     },
                     {
                         "name": "to"
@@ -53,19 +59,24 @@
     
         {
             "blocktype": "step",
+            "id": "3969a128-5e8d-4320-9f91-73bebf81820f",
             "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
             "sockets": [
                     {
                         "name": "set Blocks between"
                     },
                     {
-                        "type": "position"
+                        "name": "Position1",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     },
                     {
                         "name": "and"
                     },
                     {
-                        "type": "position"
+                        "name": "Position2",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     },
                     {
                         "name": "to"
@@ -85,7 +96,7 @@
         
         {
             "blocktype": "expression",
-            
+            "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
             "sockets": [
                 {
                     "name": "block type name"
@@ -103,6 +114,7 @@
         
         {
             "blocktype": "context",
+            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
             "sockets": [
                     {
                         "name": "get height at "
@@ -134,5 +146,3 @@
         }
     ]
 }
-
-

@@ -3,9 +3,38 @@
     "blocks": [
         {
             "blocktype": "step",
+            "id": "1a18abe9-0c1e-42e6-a530-b99fc85900fd",
             "sockets": [
                 {
-                    "name": "new pos##"
+                    "name": "Create"
+                },
+                {
+                    "name": "Position##",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "var pos## = {x:{{1}}, y:{{2}} , z:{{3}}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        },
+                    ],  
+                    "script": "pos##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+            "sockets": [
+                {
+                    "name": "Position"
                 },
                 {
                     "name": "x",
@@ -23,24 +52,13 @@
                     "value": "0"
                 },
             ],  
-            "script": "var pos## = {x:{{1}}, y:{{2}} , z:{{3}}};",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Pos##"
-                        },
-                    ],  
-                    "script": "pos##",
-                    "type": "position"
-                }
-            ],
-            "help": "create new position"
+            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
+            "help": "position"
         },
         
         {
             "blocktype": "step",
+            "id": "353d8095-32e3-443f-92dc-4e10a0ba7f28",
             "sockets": [
                 {
                     "name": "get parts of"
@@ -93,6 +111,7 @@
      
         {
             "blocktype": "step",
+            "id": "293c30ce-0184-49e2-9b28-d5a67a73a5ed",
             "labels": ["new pos## adding [number:0], [number:0], [number:0] to pos [object]"],
             "sockets": [
                 {
@@ -142,21 +161,24 @@
         
         {
             "blocktype": "step",
+            "id": "bdd6ec2f-bcf0-454c-8d8b-1e5361922af0",
             "labels": ["new pos## adding pos [object] to pos [object]"],
             "sockets": [
                 {
                     "name": "new pos##"
                 },
                 {
-                    "name": "pos1",
-                    "type": "postion"
+                    "name": "Position1",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
                     "name": "to"
                 },
                 {
-                    "name": "pos2",
-                    "type": "postion"
+                    "name": "Position2",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
             "script": "var pos## = {x:({{1}}.x+{{2}}.x), y:({{1}}.y+{{2}}.y) , z:({{1}}.z+{{2}}.z)};",
@@ -178,11 +200,13 @@
         },
         {
             "blocktype": "expression",
+            "id": "3fa57ab7-bfed-4d36-8307-0ba11eda25f0",
             "labels": ["position [object] as text"],
             "sockets": [
                 {
                     "name": "Position",
-                    "type": "position"
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
                     "name": "as text",

@@ -2988,6 +2988,8 @@ function uuid(){
         }
         // User-specified settings
         var uName = wb.findChild(socket, '.name').textContent;
+        var uEle = wb.findChild(socket, '.name')
+        
         if (desc.name !== uName){
             desc.uName = uName;
         }
@@ -4196,6 +4198,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "context",
+            "id": "fe8f0ff3-1f52-4866-bbf0-bc3c7a850e11",
             "sockets": [
                 {
                     "name": "Get Player Tile Position"
@@ -4227,36 +4230,27 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "5474d53a-b671-4392-b299-d10339ad12af",
             "sockets": [
                 {
-                    "name": "Pos##"
+                    "name": "Create Position##"
                 },
                 {
                     "name": "from Player offset by"
                 },
                 {
-                    "name": "x",
-                    "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "y",
-                    "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "z",
-                    "type": "number",
-                    "value": 0
+                    "name": "Position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var pos## = {x:(playerPos.x+{{1}}), y:(playerPos.y+{{2}}) , z:(playerPos.z+{{3}})};",
+            "script": "var pos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "Pos##"
+                            "name": "Position ##"
                         }
                     ],
                     "script": "pos##",
@@ -4268,12 +4262,15 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
             "sockets": [
                 {
                     "name": "move Player to"
                 },
                 {
-                    "type": "position"
+                    "name": "Position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
             "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
@@ -4292,9 +4289,38 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
+            "id": "1a18abe9-0c1e-42e6-a530-b99fc85900fd",
             "sockets": [
                 {
-                    "name": "new pos##"
+                    "name": "Create"
+                },
+                {
+                    "name": "Position##",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "var pos## = {x:{{1}}, y:{{2}} , z:{{3}}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        },
+                    ],  
+                    "script": "pos##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+            "sockets": [
+                {
+                    "name": "Position"
                 },
                 {
                     "name": "x",
@@ -4312,24 +4338,13 @@ wb.menu({
                     "value": "0"
                 },
             ],  
-            "script": "var pos## = {x:{{1}}, y:{{2}} , z:{{3}}};",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Pos##"
-                        },
-                    ],  
-                    "script": "pos##",
-                    "type": "position"
-                }
-            ],
-            "help": "create new position"
+            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
+            "help": "position"
         },
         
         {
             "blocktype": "step",
+            "id": "353d8095-32e3-443f-92dc-4e10a0ba7f28",
             "sockets": [
                 {
                     "name": "get parts of"
@@ -4382,6 +4397,7 @@ wb.menu({
      
         {
             "blocktype": "step",
+            "id": "293c30ce-0184-49e2-9b28-d5a67a73a5ed",
             "labels": ["new pos## adding [number:0], [number:0], [number:0] to pos [object]"],
             "sockets": [
                 {
@@ -4431,21 +4447,24 @@ wb.menu({
         
         {
             "blocktype": "step",
+            "id": "bdd6ec2f-bcf0-454c-8d8b-1e5361922af0",
             "labels": ["new pos## adding pos [object] to pos [object]"],
             "sockets": [
                 {
                     "name": "new pos##"
                 },
                 {
-                    "name": "pos1",
-                    "type": "postion"
+                    "name": "Position1",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
                     "name": "to"
                 },
                 {
-                    "name": "pos2",
-                    "type": "postion"
+                    "name": "Position2",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
             "script": "var pos## = {x:({{1}}.x+{{2}}.x), y:({{1}}.y+{{2}}.y) , z:({{1}}.z+{{2}}.z)};",
@@ -4467,11 +4486,13 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "3fa57ab7-bfed-4d36-8307-0ba11eda25f0",
             "labels": ["position [object] as text"],
             "sockets": [
                 {
                     "name": "Position",
-                    "type": "position"
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
                     "name": "as text",
@@ -4489,6 +4510,7 @@ wb.menu({
 /*begin blocks.json*/
 wb.menu({
     "name": "Blocks",
+    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
     "blocks": [
         {
             "blocktype": "context",
@@ -4497,7 +4519,9 @@ wb.menu({
                         "name": "get Block Type at "
                     },
                     {
-                        "type": "position"
+                        "name": "Position",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
             "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  client.end()});",
@@ -4519,12 +4543,15 @@ wb.menu({
         
         {
             "blocktype": "step",
+            "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
             "sockets": [
                     {
                         "name": "set Block at"
                     },
-                    {
-                        "type": "position"
+                        {
+                        "name": "Position",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     },
                     {
                         "name": "to"
@@ -4542,19 +4569,24 @@ wb.menu({
     
         {
             "blocktype": "step",
+            "id": "3969a128-5e8d-4320-9f91-73bebf81820f",
             "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
             "sockets": [
                     {
                         "name": "set Blocks between"
                     },
                     {
-                        "type": "position"
+                        "name": "Position1",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     },
                     {
                         "name": "and"
                     },
                     {
-                        "type": "position"
+                        "name": "Position2",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     },
                     {
                         "name": "to"
@@ -4574,7 +4606,7 @@ wb.menu({
         
         {
             "blocktype": "expression",
-            
+            "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
             "sockets": [
                 {
                     "name": "block type name"
@@ -4592,6 +4624,7 @@ wb.menu({
         
         {
             "blocktype": "context",
+            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
             "sockets": [
                     {
                         "name": "get height at "
@@ -4623,8 +4656,6 @@ wb.menu({
         }
     ]
 }
-
-
 );
 /*end blocks.json*/
 
@@ -4636,6 +4667,7 @@ wb.menu({
       
         {
             "blocktype": "step",
+            "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
             "sockets": [
                 {
                     "name": "set camera mode to"
@@ -4652,6 +4684,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
             "sockets": [
                 {
                     "name": "set camera position to"

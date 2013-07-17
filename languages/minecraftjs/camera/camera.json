@@ -5,6 +5,7 @@
       
         {
             "blocktype": "step",
+            "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
             "sockets": [
                 {
                     "name": "set camera mode to"
@@ -21,6 +22,7 @@
         },
         {
             "blocktype": "step",
+            "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
             "sockets": [
                 {
                     "name": "set camera position to"

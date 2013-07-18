@@ -2323,7 +2323,7 @@ hljs.LANGUAGES.javascript = {
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
-        if (wb.matches(eT, 'input, select, option, .disclosure')  && !wb.matches(eT, '#block_menu *')) {
+        if (wb.matches(eT, 'input, select, option, .disclosure,.scripts_workspace')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
         }
@@ -2713,7 +2713,7 @@ function uuid(){
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
-        }else{
+        }else if (!blockdesc.isTemplateBlock){
             blockdesc.seqNum = newSeqNum();
         }
         if (! blockdesc.id){
@@ -2746,6 +2746,9 @@ function uuid(){
         // FIXME:
         // Handle customized names (sockets)
         registerBlock(obj);
+        // if (!obj.isTemplateBlock){
+        //     console.log('block seq num: %s', obj.seqNum);
+        // }
         var block = elem(
             'div',
             {
@@ -2765,13 +2768,15 @@ function uuid(){
                 'data-scope-id': obj.scopeId || 0,
                 'data-script-id': obj.scriptId || obj.id,
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
-                'data-seq-num': obj.seqNum,
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
         );
+        if (obj.seqNum){
+            block.dataset.seqNum = obj.seqNum;
+        }
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
@@ -2941,7 +2946,10 @@ function uuid(){
         if (desc.options){
             socket.dataset.options = desc.options;
         }
-        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + blockdesc.seqNum + '</span>');
+        // if (!blockdesc.isTemplateBlock){
+        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        // }
+        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
@@ -3010,10 +3018,12 @@ function uuid(){
             group: block.dataset.group,
             id: block.id,
             help: block.title,
-            seqNum: block.dataset.seqNum,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        }
+        if (block.dataset.seqNum){
+            desc.seqNum  = block.dataset.seqNum;
         }
         if (block.dataset.script){
             desc.script = block.dataset.script;
@@ -3683,6 +3693,8 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
+Event.on(document.body, 'wb-loaded', null, function(evt){console.log('loaded');});
+Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
 })(wb);
 
 /*end workspace.js*/

@@ -39,7 +39,7 @@
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
-        }else{
+        }else if (!blockdesc.isTemplateBlock){
             blockdesc.seqNum = newSeqNum();
         }
         if (! blockdesc.id){
@@ -72,6 +72,9 @@
         // FIXME:
         // Handle customized names (sockets)
         registerBlock(obj);
+        // if (!obj.isTemplateBlock){
+        //     console.log('block seq num: %s', obj.seqNum);
+        // }
         var block = elem(
             'div',
             {
@@ -91,13 +94,15 @@
                 'data-scope-id': obj.scopeId || 0,
                 'data-script-id': obj.scriptId || obj.id,
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
-                'data-seq-num': obj.seqNum,
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
         );
+        if (obj.seqNum){
+            block.dataset.seqNum = obj.seqNum;
+        }
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
@@ -267,7 +272,10 @@
         if (desc.options){
             socket.dataset.options = desc.options;
         }
-        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + blockdesc.seqNum + '</span>');
+        // if (!blockdesc.isTemplateBlock){
+        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        // }
+        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
@@ -336,10 +344,12 @@
             group: block.dataset.group,
             id: block.id,
             help: block.title,
-            seqNum: block.dataset.seqNum,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        }
+        if (block.dataset.seqNum){
+            desc.seqNum  = block.dataset.seqNum;
         }
         if (block.dataset.script){
             desc.script = block.dataset.script;

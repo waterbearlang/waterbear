@@ -1,5 +1,5 @@
 
-/*begin javascript.js*/
+/*begin languages/javascript/javascript_runtime.js*/
 // Timer utility
 
 function Timer(){
@@ -373,13 +373,13 @@ if(typeof(console) == "undefined") {
 }
 
 
-/*end javascript.js*/
+/*end languages/javascript/javascript_runtime.js*/
 
-/*begin control.js*/
+/*begin languages/javascript/control_runtime.js*/
 
-/*end control.js*/
+/*end languages/javascript/control_runtime.js*/
 
-/*begin sprite.js*/
+/*begin languages/javascript/sprite_runtime.js*/
 // Sprite Routines
 function RectSprite(size,pos,color){
     this.x = pos.x;
@@ -449,68 +449,68 @@ Vector2.prototype.rotate = function(radians){
     return Vector.fromAngle(theta + radians, mag);
 }
 
-/*end sprite.js*/
+/*end languages/javascript/sprite_runtime.js*/
 
-/*begin array.js*/
+/*begin languages/javascript/array_runtime.js*/
 
-/*end array.js*/
+/*end languages/javascript/array_runtime.js*/
 
-/*begin boolean.js*/
+/*begin languages/javascript/boolean_runtime.js*/
 
-/*end boolean.js*/
+/*end languages/javascript/boolean_runtime.js*/
 
-/*begin canvas.js*/
+/*begin languages/javascript/canvas_runtime.js*/
 
-/*end canvas.js*/
+/*end languages/javascript/canvas_runtime.js*/
 
-/*begin color.js*/
+/*begin languages/javascript/color_runtime.js*/
 
-/*end color.js*/
+/*end languages/javascript/color_runtime.js*/
 
-/*begin image.js*/
+/*begin languages/javascript/image_runtime.js*/
 
-/*end image.js*/
+/*end languages/javascript/image_runtime.js*/
 
-/*begin math.js*/
+/*begin languages/javascript/math_runtime.js*/
 
-/*end math.js*/
+/*end languages/javascript/math_runtime.js*/
 
-/*begin object.js*/
+/*begin languages/javascript/object_runtime.js*/
 
-/*end object.js*/
+/*end languages/javascript/object_runtime.js*/
 
-/*begin string.js*/
+/*begin languages/javascript/string_runtime.js*/
 
-/*end string.js*/
+/*end languages/javascript/string_runtime.js*/
 
-/*begin path.js*/
+/*begin languages/javascript/path_runtime.js*/
 
-/*end path.js*/
+/*end languages/javascript/path_runtime.js*/
 
-/*begin point.js*/
+/*begin languages/javascript/point_runtime.js*/
 
-/*end point.js*/
+/*end languages/javascript/point_runtime.js*/
 
-/*begin rect.js*/
+/*begin languages/javascript/rect_runtime.js*/
 
-/*end rect.js*/
+/*end languages/javascript/rect_runtime.js*/
 
-/*begin sensing.js*/
+/*begin languages/javascript/sensing_runtime.js*/
 
-/*end sensing.js*/
+/*end languages/javascript/sensing_runtime.js*/
 
-/*begin shape.js*/
+/*begin languages/javascript/shape_runtime.js*/
 
-/*end shape.js*/
+/*end languages/javascript/shape_runtime.js*/
 
-/*begin size.js*/
+/*begin languages/javascript/size_runtime.js*/
 
-/*end size.js*/
+/*end languages/javascript/size_runtime.js*/
 
-/*begin text.js*/
+/*begin languages/javascript/text_runtime.js*/
 
-/*end text.js*/
+/*end languages/javascript/text_runtime.js*/
 
-/*begin matrix.js*/
+/*begin languages/javascript/matrix_runtime.js*/
 
-/*end matrix.js*/
+/*end languages/javascript/matrix_runtime.js*/

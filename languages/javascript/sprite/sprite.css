@@ -1,9 +1,0 @@
-.sprites, .sprites .holder{
-    border-color: hsl(120, 81%, 49%);
-    background-color: hsl(120, 81%, 85%);
-}
-
-.movingsprite, .movingsprite .holder{
-    border-color: hsl(150, 81%, 49%);
-    background-color: hsl(150, 81%, 85%);
-}

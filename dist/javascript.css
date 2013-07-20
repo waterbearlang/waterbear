@@ -755,20 +755,20 @@ pre .tex .formula {
 
 /*end highlight-github.css*/
 
-/*begin javascript.css*/
+/*begin languages/javascript/javascript.css*/
 
-/*end javascript.css*/
+/*end languages/javascript/javascript.css*/
 
-/*begin control.css*/
+/*begin languages/javascript/control.css*/
 .controls, .controls .holder{
     border-color: hsl(44, 81%, 49%);
     background-color: hsl(44, 81%, 85%);
 }
 
 
-/*end control.css*/
+/*end languages/javascript/control.css*/
 
-/*begin sprite.css*/
+/*begin languages/javascript/sprite.css*/
 .sprites, .sprites .holder{
     border-color: hsl(120, 81%, 49%);
     background-color: hsl(120, 81%, 85%);
@@ -778,27 +778,26 @@ pre .tex .formula {
     border-color: hsl(150, 81%, 49%);
     background-color: hsl(150, 81%, 85%);
 }
+/*end languages/javascript/sprite.css*/
 
-/*end sprite.css*/
-
-/*begin array.css*/
+/*begin languages/javascript/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);
     background-color: hsl(195, 62%, 89%);
 }
 
-/*end array.css*/
+/*end languages/javascript/array.css*/
 
-/*begin boolean.css*/
+/*begin languages/javascript/boolean.css*/
 .boolean, .boolean .holder{
     background-color: #FF4444;
     border-color: red;
 }
 
 
-/*end boolean.css*/
+/*end languages/javascript/boolean.css*/
 
-/*begin canvas.css*/
+/*begin languages/javascript/canvas.css*/
 /* block and border colours for different groups of blocks */
 
 
@@ -819,25 +818,25 @@ pre .tex .formula {
 
 
 
-/*end canvas.css*/
+/*end languages/javascript/canvas.css*/
 
-/*begin color.css*/
+/*begin languages/javascript/color.css*/
 .color, .color .holder{
     border-color: #e77a33;
     background-color: #e77a33;
 }
 
-/*end color.css*/
+/*end languages/javascript/color.css*/
 
-/*begin image.css*/
+/*begin languages/javascript/image.css*/
 .images, .images .holder{
     background-color: hsl(296, 65%, 77%);
     border-color: hsl(296, 65%, 57%);
 }
 
-/*end image.css*/
+/*end languages/javascript/image.css*/
 
-/*begin math.css*/
+/*begin languages/javascript/math.css*/
 .math, .math .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
@@ -848,9 +847,9 @@ pre .tex .formula {
 }
 
 
-/*end math.css*/
+/*end languages/javascript/math.css*/
 
-/*begin object.css*/
+/*begin languages/javascript/object.css*/
 .objects, .objects .holder{
     border-color: hsl(75, 90%, 66%);
     background-color: hsl(75, 90%, 76%);
@@ -860,80 +859,80 @@ pre .tex .formula {
     border-color: gray;
 }
 
-/*end object.css*/
+/*end languages/javascript/object.css*/
 
-/*begin string.css*/
+/*begin languages/javascript/string.css*/
 .strings, .strings .holder{
     border-color: hsl(240, 65%, 83%);
     background-color: hsl(240, 65%, 93%);
 }
 
-/*end string.css*/
+/*end languages/javascript/string.css*/
 
-/*begin path.css*/
+/*begin languages/javascript/path.css*/
 .paths, .paths .holder{
     border-color: hsl(156, 90%, 66%);
     background-color: hsl(156, 85%, 70%);
 }
 
-/*end path.css*/
+/*end languages/javascript/path.css*/
 
-/*begin point.css*/
+/*begin languages/javascript/point.css*/
 .points, .points .holder{
     border-color: hsl(90, 65%, 79%);
     background-color: hsl(90, 62%, 89%);
 }
 
 
-/*end point.css*/
+/*end languages/javascript/point.css*/
 
-/*begin rect.css*/
+/*begin languages/javascript/rect.css*/
 .rects, .rects .holder{
     border-color: hsl(150, 65%, 79%);
     background-color: hsl(150, 62%, 89%);
 }
 
 
-/*end rect.css*/
+/*end languages/javascript/rect.css*/
 
-/*begin sensing.css*/
+/*begin languages/javascript/sensing.css*/
 .sensing, .sensing .holder{
     border-color: hsl(200,98%,56%);
     background-color: hsl(200,98%,76%);
 }
 
-/*end sensing.css*/
+/*end languages/javascript/sensing.css*/
 
-/*begin shape.css*/
+/*begin languages/javascript/shape.css*/
 .shapes, .shapes .holder{
     border-color: hsl(25, 100%, 63%);
     background-color: hsl(25, 100%, 83%);
 }
 
-/*end shape.css*/
+/*end languages/javascript/shape.css*/
 
-/*begin size.css*/
+/*begin languages/javascript/size.css*/
 .sizes, .sizes .holder{
     border-color: hsl(15,100%,63%);
     background-color: hsl(15,100%,83%);
 }
 
 
-/*end size.css*/
+/*end languages/javascript/size.css*/
 
-/*begin text.css*/
+/*begin languages/javascript/text.css*/
 .text, .text .holder{
     border-color: hsl(93,90%,66%);
     background-color: hsl(93,90%,76%);
 }
 
 
-/*end text.css*/
+/*end languages/javascript/text.css*/
 
-/*begin matrix.css*/
+/*begin languages/javascript/matrix.css*/
 .matrix, .matrix .holder{
     border-color: hsl(2264,65%,83%);
     background-color: hsl(264, 65%, 93%);
 }
 
-/*end matrix.css*/
+/*end languages/javascript/matrix.css*/

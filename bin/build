@@ -75,28 +75,21 @@ function endswith(str, suffix){
     return RegExp(suffix + '$').test(str);
 }
 
-function concat(src, dest, files, ext, subdir, before, after){
+function concat(src, dest, files, ext, suffix, before, after){
     before = before || '';
     after = after || '';
+    suffix = suffix || '';
     files.forEach(function(pathname){
-        if (subdir){
-            pathname = path.join(pathname, subdir);
+        var filename = path.join(src, pathname) + suffix + ext;
+        try{
+            var contents = before + fs.readFileSync(path.join(filename), 'utf8') + after;
+        }catch(e){
+            console.log('Could not read %s: %s', path.join(filename), e.message);
+            return;
         }
-        var filenames = fs.readdirSync(path.join(src, pathname)).filter(function(filename){
-            return endswith(filename, ext);
-        });
-        if (filenames.length){
-            // just using the first filename for now
-            try{
-                var contents = before + fs.readFileSync(path.join(src, pathname, filenames[0]), 'utf8') + after;
-            }catch(e){
-                console.log('Could not read %s: %s', path.join(src, pathname, filenames[0]), e.message);
-                return;
-            }
-            fs.appendFileSync(dest, '\n/*begin ' + filenames[0] + '*/\n');
-            fs.appendFileSync(dest, contents);
-            fs.appendFileSync(dest, '\n/*end ' + filenames[0] + '*/\n');
-        }
+        fs.appendFileSync(dest, '\n/*begin ' + filename + '*/\n');
+        fs.appendFileSync(dest, contents);
+        fs.appendFileSync(dest, '\n/*end ' + filename + '*/\n');
     });
 }
 
@@ -117,7 +110,7 @@ function build(){
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
         // Build runtime support
         if (lang === 'javascript'){
-            concat(src, dest + '_runtime.js', files, '.js', 'runtime');
+            concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }
         // minimize dist files
         // add launch to kick it all off

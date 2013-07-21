@@ -187,6 +187,30 @@
         var dY = nextPosition.top - currentPosition.top;
         var currPos = wb.rect(dragTarget);
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
+        // Scoll workspace as needed
+        if (workspace){
+            var container = workspace.parentElement;
+            var offset = wb.rect(container);
+            // console.log('scrollTop: %s, scrollHeight: %s', container.scrollTop, container.scrollHeight);
+            // console.log('top: %s, bottom: %s', currPos.top, currPos.bottom);
+            // console.log('offset top: %s, offset bottom: %s', offset.top, offset.bottom);
+            if (currPos.top < offset.top){
+                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
+            }else if (currPos.bottom > offset.bottom){
+                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
+                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
+            }
+            // console.log('scrollLeft: %s, scrollWidth: %s', container.scrollLeft, container.scrollWidth);
+            // console.log('left: %s, right: %s', currPos.left, currPos.right);
+            // console.log('offset left: %s, offset right: %s', offset.left, offset.width);
+            if (currPos.left < offset.left){
+                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
+            }else if(currPos.right > offset.right){
+                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
+                console.log('maxHorizontalScroll: %s', maxHorizontalScroll);
+                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
+            }
+        }
         currentPosition = nextPosition;
         return false;
     }

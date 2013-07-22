@@ -62,6 +62,14 @@
         }
     }
 
+    var getSockets = function(block){
+        return wb.findChildren(wb.findChild(block, '.label'), '.socket');
+    }
+
+    var getSocketValue = function(socket){
+        return socketValue(wb.findChild(socket, '.holder'));
+    }
+
     var createSockets = function(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
@@ -85,6 +93,8 @@
                     }else if (obj.blocktype === 'eventhandler'){
                         names.push('step');
                         names.push('context');
+                    }else if (obj.blocktype === 'asset'){
+                        names.push('expression');
                     }
                     return names.join(' ');
                 },
@@ -552,5 +562,7 @@
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
+    wb.getSockets = getSockets;
+    wb.getSocketValue = getSocketValue;
 })(wb);
 

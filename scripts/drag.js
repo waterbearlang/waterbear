@@ -382,6 +382,7 @@
                 }else{
                     return wb.findAll(workspace, '.contained').concat([workspace]);
                 }
+            case 'asset':
             case 'expression':
                 var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
                 if (!selector || !selector.length){

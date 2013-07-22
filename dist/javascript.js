@@ -2613,6 +2613,7 @@ hljs.LANGUAGES.javascript = {
                 }else{
                     return wb.findAll(workspace, '.contained').concat([workspace]);
                 }
+            case 'asset':
             case 'expression':
                 var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
                 if (!selector || !selector.length){
@@ -2760,6 +2761,14 @@ function uuid(){
         }
     }
 
+    var getSockets = function(block){
+        return wb.findChildren(wb.findChild(block, '.label'), '.socket');
+    }
+
+    var getSocketValue = function(socket){
+        return socketValue(wb.findChild(socket, '.holder'));
+    }
+
     var createSockets = function(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
@@ -2783,6 +2792,8 @@ function uuid(){
                     }else if (obj.blocktype === 'eventhandler'){
                         names.push('step');
                         names.push('context');
+                    }else if (obj.blocktype === 'asset'){
+                        names.push('expression');
                     }
                     return names.join(' ');
                 },
@@ -3250,6 +3261,8 @@ function uuid(){
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
+    wb.getSockets = getSockets;
+    wb.getSocketValue = getSocketValue;
 })(wb);
 
 
@@ -3733,9 +3746,34 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 
 
 // Add some utilities
-
 wb.wrap = function(script){
-    return 'var global = new Global();(function(){var local = new Local(); try{local.canvas = document.createElement("canvas"); local.canvas.setAttribute("width", global.stage_width); local.canvas.setAttribute("height", global.stage_height); global.stage.appendChild(local.canvas); local.ctx = local.canvas.getContext("2d");' + script + '}catch(e){alert(e);}})()';
+    return [
+        'var global = new Global();',
+        '(function(){', 
+            'var local = new Local();', 
+            // 'try{',
+                'local.canvas = document.createElement("canvas");',
+                'local.canvas.setAttribute("width", global.stage_width);',
+                'local.canvas.setAttribute("height", global.stage_height);',
+                'global.stage.appendChild(local.canvas);',
+                'local.ctx = local.canvas.getContext("2d");',
+                'var main = function(){',
+                    script,
+                '}',
+                'global.preloadAssets(' + assetUrls() + ', main);',
+            // '}catch(e){',
+                // 'alert(e);',
+            // '}',
+        '})()'
+    ].join('\n');
+}
+
+function assetUrls(){
+    return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
+        // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
+        var source = document.getElementById(asset.dataset.localSource);
+        return wb.getSocketValue(wb.getSockets(source)[0]);
+    }).join(',') + ']';
 }
 
 function runCurrentScripts(event){
@@ -3751,7 +3789,7 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
     wb.script = script;
-    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
     console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
@@ -3810,6 +3848,10 @@ Event.on('.socket input', 'click', null, function(event){
 
 
 /*end languages/javascript/javascript.js*/
+
+/*begin languages/javascript/asset.js*/
+
+/*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/control.js*/
 
@@ -5537,15 +5579,27 @@ wb.menu({
             ]
         },
         {
-            "blocktype": "expression",
+            "blocktype": "step",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
-            "script": "(function(){var img = new Image(); img.src={{1}};return img;})()",
+            "script": "global.preloadImage('##', {{1}});",
             "type": "image",
             "sockets": [
                 {
                     "name": "image from url",
                     "type": "string",
                     "value": null
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "asset",
+                    "sockets": [
+                        {
+                            "name": "image ##"
+                        }
+                    ],
+                    "script": "global.images[\"##\"]",
+                    "type": "image"
                 }
             ]
         },

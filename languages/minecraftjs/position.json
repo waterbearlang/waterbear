@@ -28,7 +28,18 @@
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
             "help": "position"
         },
-        
+        {
+            "blocktype": "expression",
+            "id": "590c8aef-a755-4df5-8930-b430db5a3c3d",
+            "sockets": [
+                {
+                    "name": "Centre"
+                },
+            ], 
+            "type":"position",
+            "script": "zeros",
+            "help": "position"
+        }, 
         {
             "blocktype": "expression",
             "id": "ad36ae75-3655-4226-a759-312487bc48d9",

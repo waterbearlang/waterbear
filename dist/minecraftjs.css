@@ -755,82 +755,82 @@ pre .tex .formula {
 
 /*end highlight-github.css*/
 
-/*begin minecraftjs.css*/
+/*begin languages/minecraftjs/minecraftjs.css*/
 
-/*end minecraftjs.css*/
+/*end languages/minecraftjs/minecraftjs.css*/
 
-/*begin control.css*/
+/*begin languages/minecraftjs/control.css*/
 .control, .control .holder{
     border-color: hsl(44, 81%, 49%);
     background-color: hsl(44, 81%, 85%);
 }
 
 
-/*end control.css*/
+/*end languages/minecraftjs/control.css*/
 
-/*begin game.css*/
+/*begin languages/minecraftjs/game.css*/
 .game, .game .holder{
     border-color: hsl(156, 90%, 66%);
     background-color: hsl(156, 85%, 70%);
 }
 
 
-/*end game.css*/
+/*end languages/minecraftjs/game.css*/
 
-/*begin player.css*/
+/*begin languages/minecraftjs/player.css*/
 .player, .player .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
 }
 
 
-/*end player.css*/
+/*end languages/minecraftjs/player.css*/
 
-/*begin position.css*/
+/*begin languages/minecraftjs/position.css*/
 .position, .position .holder{
     border-color: hsl(115, 65%, 79%);
     background-color: hsl(115, 62%, 89%);
 }
 
 
-/*end position.css*/
+/*end languages/minecraftjs/position.css*/
 
-/*begin blocks.css*/
+/*begin languages/minecraftjs/blocks.css*/
 .blocks, .blocks .holder{
     border-color: hsl(195, 65%, 79%);
     background-color: hsl(195, 62%, 89%);
 }
 
 
-/*end blocks.css*/
+/*end languages/minecraftjs/blocks.css*/
 
-/*begin camera.css*/
+/*begin languages/minecraftjs/camera.css*/
 .controls, .camera .holder{
     border-color: hsl(164,65%,83%);
     background-color: hsl(164, 65%, 93%);
 }
 
 
-/*end camera.css*/
+/*end languages/minecraftjs/camera.css*/
 
-/*begin array.css*/
+/*begin languages/minecraftjs/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);
     background-color: hsl(195, 62%, 89%);
 }
 
-/*end array.css*/
+/*end languages/minecraftjs/array.css*/
 
-/*begin boolean.css*/
+/*begin languages/minecraftjs/boolean.css*/
 .boolean, .boolean .holder{
     background-color: #FF4444;
     border-color: red;
 }
 
 
-/*end boolean.css*/
+/*end languages/minecraftjs/boolean.css*/
 
-/*begin math.css*/
+/*begin languages/minecraftjs/math.css*/
 .math, .math .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
@@ -841,9 +841,9 @@ pre .tex .formula {
 }
 
 
-/*end math.css*/
+/*end languages/minecraftjs/math.css*/
 
-/*begin object.css*/
+/*begin languages/minecraftjs/object.css*/
 .objects, .objects .holder{
     border-color: hsl(75, 90%, 66%);
     background-color: hsl(75, 90%, 76%);
@@ -853,20 +853,12 @@ pre .tex .formula {
     border-color: gray;
 }
 
-/*end object.css*/
+/*end languages/minecraftjs/object.css*/
 
-/*begin string.css*/
+/*begin languages/minecraftjs/string.css*/
 .strings, .strings .holder{
     border-color: hsl(240, 65%, 83%);
     background-color: hsl(240, 65%, 93%);
 }
 
-/*end string.css*/
-
-/*begin matrix.css*/
-.matrix, .matrix .holder{
-    border-color: hsl(2264,65%,83%);
-    background-color: hsl(264, 65%, 93%);
-}
-
-/*end matrix.css*/
+/*end languages/minecraftjs/string.css*/

@@ -1,0 +1,197 @@
+{
+    "name": "Position",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+            "sockets": [
+                {
+                    "name": "Position"
+                },
+                {
+                    "name": "x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "z",
+                    "type": "number",
+                    "value": "0"
+                },
+            ], 
+            "type":"position",
+            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
+            "help": "position"
+        },
+        
+        {
+            "blocktype": "expression",
+            "id": "ad36ae75-3655-4226-a759-312487bc48d9",
+            "sockets": [
+                {
+                    "name": "Position1",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "add"
+                },
+                {
+                    "name": "Position2",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "{x:({{1}}.x+{{2}}.x), y:({{1}}.y+{{2}}.y) , z:({{1}}.z+{{2}}.z)}",
+            "type":"position",
+            "help": "add 2 positions"
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "1a18abe9-0c1e-42e6-a530-b99fc85900fd",
+            "sockets": [
+                {
+                    "name": "Create"
+                },
+                {
+                    "name": "Position##",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "var pos## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        },
+                    ],  
+                    "script": "pos##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new named position"
+        },
+        
+        
+        
+        
+        
+        
+        
+        {
+            "blocktype": "step",
+            "id": "353d8095-32e3-443f-92dc-4e10a0ba7f28",
+            "sockets": [
+                {
+                    "name": "create new named numbers from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "postion",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "var pos## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name" : "x##",
+                        },
+                    ],  
+                    "script": "pos##.x",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name" : "y##",
+                        },
+                    ],  
+                    "script": "pos##.y",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name" : "z##",
+                        },
+                    ],  
+                    "script": "pos##.z",
+                    "type": "number"
+                }
+            ],
+            "help": "get parts of position"
+        },
+        
+        
+        {
+            "blocktype": "step",
+            "id": "bdd6ec2f-bcf0-454c-8d8b-1e5361922af0",
+            "sockets": [
+                {
+                    "name": "Create pos##"
+                },
+                {
+                    "name": "Position1",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "add"
+                },
+                {
+                    "name": "Position2",
+                    "type": "postion",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "var pos## = {x:({{1}}.x+{{2}}.x), y:({{1}}.y+{{2}}.y) , z:({{1}}.z+{{2}}.z)};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Pos##"
+                        },
+                    ],  
+                    
+                    "script": "pos##",
+                    "type": "position"
+                }
+            ],
+            
+            "help": "create new position by adding 2 others"
+        },
+        {
+            "blocktype": "expression",
+            "id": "3fa57ab7-bfed-4d36-8307-0ba11eda25f0",
+            "sockets": [
+                {
+                    "name": "Position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "as text",
+                },
+            ],  
+                    
+            "script": "\"x:\"+{{1}}.x.toString()+\", \"y\":\"+{{1}}.y.toString()+\", \"z\":\"+{{1}}.z.toString()",
+            "type": "string",
+            "help": "Position as text"
+        }
+    ]
+}

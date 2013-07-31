@@ -500,7 +500,8 @@
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
-        if (wb.matches(eT, 'input, select, option, .disclosure,.scripts_workspace')  && !wb.matches(eT, '#block_menu *')) {
+        //Check whther the original target was an input ....
+        if (wb.matches(event.target, 'input, select, option, .disclosure,.scripts_workspace')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
         }
@@ -1196,6 +1197,8 @@ function uuid(){
         }
         // User-specified settings
         var uName = wb.findChild(socket, '.name').textContent;
+        var uEle = wb.findChild(socket, '.name')
+        
         if (desc.name !== uName){
             desc.uName = uName;
         }

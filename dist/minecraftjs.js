@@ -3820,9 +3820,11 @@ Event.on('.editScript', 'click', null, clearStage);
 
 
 wb.prettyScript = function(elements){
-    return js_beautify(elements.map(function(elem){
-        return wb.codeFromBlock(elem);
-    }).join(''));
+    var script = js_beautify(elements.map(function(elem){
+            return wb.codeFromBlock(elem);
+        }).join(''));
+    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js'); \n var client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    return script;
 };
 
 wb.writeScript = function(elements, view){
@@ -4342,18 +4344,29 @@ wb.menu({
                     "value": "0"
                 },
             ], 
-            "type":"position",
+            "type": "position",
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
             "help": "position"
         },
-        
+        {
+            "blocktype": "expression",
+            "id": "590c8aef-a755-4df5-8930-b430db5a3c3d",
+            "sockets": [
+                {
+                    "name": "Centre"
+                },
+            ], 
+            "type":"position",
+            "script": "zeros",
+            "help": "position"
+        }, 
         {
             "blocktype": "expression",
             "id": "ad36ae75-3655-4226-a759-312487bc48d9",
             "sockets": [
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -4361,7 +4374,7 @@ wb.menu({
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
@@ -4414,7 +4427,7 @@ wb.menu({
                 },
                 {
                     "name" : "Position",
-                    "type": "postion",
+                    "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
             ],  
@@ -4464,7 +4477,7 @@ wb.menu({
                 },
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -4472,7 +4485,7 @@ wb.menu({
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
@@ -4508,7 +4521,8 @@ wb.menu({
             ],  
                     
             "script": "\"x:\"+{{1}}.x.toString()+\", \"y\":\"+{{1}}.y.toString()+\", \"z\":\"+{{1}}.z.toString()",
-            "type": "string"
+            "type": "string",
+            "help": "Position as text"
         }
     ]
 }
@@ -4609,7 +4623,7 @@ wb.menu({
                 ],
             
             "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
-            "help": "set blocks in a 3D rectangle between the first and second postions to .."
+            "help": "set blocks in a 3D rectangle between the first and second positions to .."
         },
         
         {

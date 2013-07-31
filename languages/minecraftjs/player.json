@@ -49,16 +49,16 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var pos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
+            "script": "var ppos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "Position ##"
+                            "name": "Position##"
                         }
                     ],
-                    "script": "pos##",
+                    "script": "ppos##",
                     "type": "position"
                 }
             ],

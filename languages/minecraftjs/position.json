@@ -46,7 +46,7 @@
             "sockets": [
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -54,7 +54,7 @@
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
@@ -107,7 +107,7 @@
                 },
                 {
                     "name" : "Position",
-                    "type": "postion",
+                    "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
             ],  
@@ -157,7 +157,7 @@
                 },
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -165,7 +165,7 @@
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  

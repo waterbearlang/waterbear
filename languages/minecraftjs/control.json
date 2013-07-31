@@ -4,7 +4,7 @@
         {
             "blocktype": "eventhandler",
             "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
-            "script": "function _start(){[[1]]}_start();",
+            "script": "[[1]]",
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
                 {
@@ -23,17 +23,17 @@
                             "name": "count##"
                         }
                     ],
-                    "script": "local.count##",
+                    "script": "count##",
                     "type": "number"
                 }
             ],
-            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000/{{1}})})();",
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
                     "name": "repeat",
                     "type": "number",
-                    "value": "30"
+                    "value": "2"
                 },
                 {
                     "name": "times a second"
@@ -43,11 +43,11 @@
         {
             "blocktype": "step",
             "id": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
-            "script": "local.variable## = {{1}};",
+            "script": "variable## = {{1}};",
             "locals": [
                 {
                     "blocktype": "expression",
-                    "script": "local.variable##",
+                    "script": "variable##",
                     "type": "any",
                     "sockets": [
                         {
@@ -102,7 +102,7 @@
         {
             "blocktype": "context",
             "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
-            "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+            "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
             "help": "repeat the contained blocks so many times",
             "locals": [
                 {
@@ -112,7 +112,7 @@
                             "name": "count##"
                         }
                     ],
-                    "script": "local.count##",
+                    "script": "count##",
                     "type": "number"
                 }
             ],
@@ -121,84 +121,6 @@
                     "name": "repeat",
                     "type": "number",
                     "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
-            "help": "send this message to any listeners",
-            "sockets": [
-                {
-                    "name": "broadcast",
-                    "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
-            "help": "send this message with an object argument to any listeners",
-            "sockets": [
-                {
-                    "name": "broadcast",
-                    "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data",
-                    "type": "any",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
-            "help": "add a listener for the given message, run these blocks when it is received",
-            "sockets": [
-                {
-                    "name": "when I receive",
-                    "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
-                }
-            ]
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "data##"
-                        }
-                    ],
-                    "script": "local.data##",
-                    "type": "any"
-                }
-            ],
-            "help": "add a listener for the given message which receives data, run these blocks when it is received",
-            "sockets": [
-                {
-                    "name": "when I receive",
-                    "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data"
                 }
             ]
         },

@@ -500,7 +500,8 @@
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
-        if (wb.matches(eT, 'input, select, option, .disclosure,.scripts_workspace')  && !wb.matches(eT, '#block_menu *')) {
+        //Check whther the original target was an input ....
+        if (wb.matches(event.target, 'input, select, option, .disclosure,.scripts_workspace')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
         }
@@ -768,7 +769,7 @@
             case 'int': return ['.number', '.int', '.float', '.any'];
             case 'float': return ['.number', '.float', '.any'];
             case 'any': return [];
-            default: return ['.' + expressionType, '.any'];
+            default: console.log('expression drop types: [.' + expressionType + ', .any]'); return ['.' + expressionType, '.any'];
         }
     }
 
@@ -795,7 +796,12 @@
                 if (!selector || !selector.length){
                     selector = '.socket > .holder'; // can drop an any anywhere
                 }
+                var highlighted = wb.find(workspace, '.scope-highlight');
+                if (highlighted){
+                    highlighted.classList.remove('scope-highlight');
+                }
                 if (scope){
+                    wb.findChild(scope, '.contained').classList.add('scope-highlight');
                     return wb.findAll(scope, selector).filter(hasChildBlock);
                 }else{
                     return wb.findAll(workspace, selector).filter(hasChildBlock);
@@ -1196,6 +1202,8 @@ function uuid(){
         }
         // User-specified settings
         var uName = wb.findChild(socket, '.name').textContent;
+        var uEle = wb.findChild(socket, '.name')
+        
         if (desc.name !== uName){
             desc.uName = uName;
         }

@@ -2419,6 +2419,30 @@ hljs.LANGUAGES.javascript = {
         var dY = nextPosition.top - currentPosition.top;
         var currPos = wb.rect(dragTarget);
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
+        // Scoll workspace as needed
+        if (workspace){
+            var container = workspace.parentElement;
+            var offset = wb.rect(container);
+            // console.log('scrollTop: %s, scrollHeight: %s', container.scrollTop, container.scrollHeight);
+            // console.log('top: %s, bottom: %s', currPos.top, currPos.bottom);
+            // console.log('offset top: %s, offset bottom: %s', offset.top, offset.bottom);
+            if (currPos.top < offset.top){
+                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
+            }else if (currPos.bottom > offset.bottom){
+                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
+                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
+            }
+            // console.log('scrollLeft: %s, scrollWidth: %s', container.scrollLeft, container.scrollWidth);
+            // console.log('left: %s, right: %s', currPos.left, currPos.right);
+            // console.log('offset left: %s, offset right: %s', offset.left, offset.width);
+            if (currPos.left < offset.left){
+                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
+            }else if(currPos.right > offset.right){
+                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
+                console.log('maxHorizontalScroll: %s', maxHorizontalScroll);
+                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
+            }
+        }
         currentPosition = nextPosition;
         return false;
     }
@@ -2568,7 +2592,7 @@ hljs.LANGUAGES.javascript = {
             case 'int': return ['.number', '.int', '.float', '.any'];
             case 'float': return ['.number', '.float', '.any'];
             case 'any': return [];
-            default: return ['.' + expressionType, '.any'];
+            default: console.log('expression drop types: [.' + expressionType + ', .any]'); return ['.' + expressionType, '.any'];
         }
     }
 
@@ -2595,7 +2619,12 @@ hljs.LANGUAGES.javascript = {
                 if (!selector || !selector.length){
                     selector = '.socket > .holder'; // can drop an any anywhere
                 }
+                var highlighted = wb.find(workspace, '.scope-highlight');
+                if (highlighted){
+                    highlighted.classList.remove('scope-highlight');
+                }
                 if (scope){
+                    wb.findChild(scope, '.contained').classList.add('scope-highlight');
                     return wb.findAll(scope, selector).filter(hasChildBlock);
                 }else{
                     return wb.findAll(workspace, selector).filter(hasChildBlock);
@@ -2714,7 +2743,7 @@ function uuid(){
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
-        }else{
+        }else if (!blockdesc.isTemplateBlock){
             blockdesc.seqNum = newSeqNum();
         }
         if (! blockdesc.id){
@@ -2747,6 +2776,9 @@ function uuid(){
         // FIXME:
         // Handle customized names (sockets)
         registerBlock(obj);
+        // if (!obj.isTemplateBlock){
+        //     console.log('block seq num: %s', obj.seqNum);
+        // }
         var block = elem(
             'div',
             {
@@ -2766,13 +2798,15 @@ function uuid(){
                 'data-scope-id': obj.scopeId || 0,
                 'data-script-id': obj.scriptId || obj.id,
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
-                'data-seq-num': obj.seqNum,
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
         );
+        if (obj.seqNum){
+            block.dataset.seqNum = obj.seqNum;
+        }
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
         }
@@ -2942,7 +2976,10 @@ function uuid(){
         if (desc.options){
             socket.dataset.options = desc.options;
         }
-        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + blockdesc.seqNum + '</span>');
+        // if (!blockdesc.isTemplateBlock){
+        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        // }
+        socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
@@ -3013,10 +3050,12 @@ function uuid(){
             group: block.dataset.group,
             id: block.id,
             help: block.title,
-            seqNum: block.dataset.seqNum,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        }
+        if (block.dataset.seqNum){
+            desc.seqNum  = block.dataset.seqNum;
         }
         if (block.dataset.script){
             desc.script = block.dataset.script;
@@ -3686,11 +3725,13 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
+Event.on(document.body, 'wb-loaded', null, function(evt){console.log('loaded');});
+Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
 })(wb);
 
 /*end workspace.js*/
 
-/*begin minecraftjs.js*/
+/*begin languages/minecraftjs/minecraftjs.js*/
 /*
  *    MINECRAFTJS PLUGIN
  *
@@ -3823,64 +3864,64 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end minecraftjs.js*/
+/*end languages/minecraftjs/minecraftjs.js*/
 
-/*begin control.js*/
+/*begin languages/minecraftjs/control.js*/
 
-/*end control.js*/
+/*end languages/minecraftjs/control.js*/
 
-/*begin game.js*/
+/*begin languages/minecraftjs/game.js*/
 
-/*end game.js*/
+/*end languages/minecraftjs/game.js*/
 
-/*begin player.js*/
+/*begin languages/minecraftjs/player.js*/
 
-/*end player.js*/
+/*end languages/minecraftjs/player.js*/
 
-/*begin position.js*/
+/*begin languages/minecraftjs/position.js*/
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
-/*end position.js*/
+/*end languages/minecraftjs/position.js*/
 
-/*begin blocks.js*/
+/*begin languages/minecraftjs/blocks.js*/
 
 wb.choiceLists.blocks = ["AIR", "STONE", "GRASS", "DIRT", "COBBLESTONE", "WOOD_PLANKS", "SAPLING", "BEDROCK", "WATER_FLOWING", "WATER_STATIONARY", "LAVA_FLOWING", "LAVA_STATIONARY", "SAND", "GRAVEL", "GOLD_ORE", "IRON_ORE", "COAL_ORE", "WOOD", "LEAVES", "GLASS", "LAPIS_LAZULI_ORE", "LAPIS_LAZULI_BLOCK", "SANDSTONE", "BED", "COBWEB", "GRASS_TALL", "WOOL", "FLOWER_YELLOW", "FLOWER_CYAN", "MUSHROOM_BROWN", "MUSHROOM_RED", "GOLD_BLOCK", "IRON_BLOCK", "STONE_SLAB_DOUBLE", "STONE_SLAB", "BRICK_BLOCK", "TNT", "BOOKSHELF", "MOSS_STONE", "OBSIDIAN", "TORCH", "FIRE", "STAIRS_WOOD", "CHEST", "DIAMOND_ORE", "DIAMOND_BLOCK", "CRAFTING_TABLE", "FARMLAND", "FURNACE_INACTIVE", "FURNACE_ACTIVE", "DOOR_WOOD", "LADDER", "STAIRS_COBBLESTONE", "DOOR_IRON", "REDSTONE_ORE", "SNOW", "ICE", "SNOW_BLOCK", "CACTUS", "CLAY", "SUGAR_CANE", "FENCE", "GLOWSTONE_BLOCK", "BEDROCK_INVISIBLE", "GLASS_PANE", "MELON", "FENCE_GATE", "GLOWING_OBSIDIAN", "NETHER_REACTOR_CORE"];
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['block']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['block']);
-/*end blocks.js*/
+/*end languages/minecraftjs/blocks.js*/
 
-/*begin camera.js*/
+/*begin languages/minecraftjs/camera.js*/
 
 wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
-/*end camera.js*/
+/*end languages/minecraftjs/camera.js*/
 
-/*begin array.js*/
+/*begin languages/minecraftjs/array.js*/
 
-/*end array.js*/
+/*end languages/minecraftjs/array.js*/
 
-/*begin boolean.js*/
+/*begin languages/minecraftjs/boolean.js*/
 
-/*end boolean.js*/
+/*end languages/minecraftjs/boolean.js*/
 
-/*begin math.js*/
+/*begin languages/minecraftjs/math.js*/
 
-/*end math.js*/
+/*end languages/minecraftjs/math.js*/
 
-/*begin object.js*/
+/*begin languages/minecraftjs/object.js*/
 
-/*end object.js*/
+/*end languages/minecraftjs/object.js*/
 
-/*begin string.js*/
+/*begin languages/minecraftjs/string.js*/
 
-/*end string.js*/
+/*end languages/minecraftjs/string.js*/
 
-/*begin matrix.js*/
+/*begin languages/minecraftjs/matrix.js*/
 
-/*end matrix.js*/
+/*end languages/minecraftjs/matrix.js*/
 
-/*begin control.json*/
+/*begin languages/minecraftjs/control.json*/
 wb.menu({
     "name": "Control",
     "blocks": [
@@ -4140,9 +4181,9 @@ wb.menu({
     ]
 }
 );
-/*end control.json*/
+/*end languages/minecraftjs/control.json*/
 
-/*begin game.json*/
+/*begin languages/minecraftjs/game.json*/
 wb.menu({
     "name": "Game",
     "blocks": [
@@ -4190,9 +4231,9 @@ wb.menu({
     ]
 }
 );
-/*end game.json*/
+/*end languages/minecraftjs/game.json*/
 
-/*begin player.json*/
+/*begin languages/minecraftjs/player.json*/
 wb.menu({
     "name": "Player",
     "blocks": [
@@ -4281,9 +4322,9 @@ wb.menu({
     ]
 }
 );
-/*end player.json*/
+/*end languages/minecraftjs/player.json*/
 
-/*begin position.json*/
+/*begin languages/minecraftjs/position.json*/
 wb.menu({
     "name": "Position",
     "blocks": [
@@ -4339,7 +4380,8 @@ wb.menu({
                 },
             ],  
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
-            "help": "position"
+            "help": "position",
+            "type": "position"
         },
         
         {
@@ -4351,7 +4393,7 @@ wb.menu({
                 },
                 {
                     "name" : "pos",
-                    "type": "postion"
+                    "type": "position"
                 },
             ],  
             "script": "var pos## = {{1}};",
@@ -4438,7 +4480,7 @@ wb.menu({
                     ],  
                     
                     "script": "pos##",
-                    "type": "object"
+                    "type": "position"
                 }
             ],
             
@@ -4448,14 +4490,13 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "bdd6ec2f-bcf0-454c-8d8b-1e5361922af0",
-            "labels": ["new pos## adding pos [object] to pos [object]"],
             "sockets": [
                 {
                     "name": "new pos##"
                 },
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -4463,7 +4504,7 @@ wb.menu({
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
@@ -4478,7 +4519,7 @@ wb.menu({
                     ],  
                     
                     "script": "pos##",
-                    "type": "object"
+                    "type": "position"
                 }
             ],
             
@@ -4505,9 +4546,9 @@ wb.menu({
     ]
 }
 );
-/*end position.json*/
+/*end languages/minecraftjs/position.json*/
 
-/*begin blocks.json*/
+/*begin languages/minecraftjs/blocks.json*/
 wb.menu({
     "name": "Blocks",
     "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
@@ -4601,7 +4642,7 @@ wb.menu({
                 ],
             
             "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
-            "help": "set blocks in a 3D rectangle between the first and second postions to .."
+            "help": "set blocks in a 3D rectangle between the first and second positions to .."
         },
         
         {
@@ -4657,9 +4698,9 @@ wb.menu({
     ]
 }
 );
-/*end blocks.json*/
+/*end languages/minecraftjs/blocks.json*/
 
-/*begin camera.json*/
+/*begin languages/minecraftjs/camera.json*/
 wb.menu({
     "name": "Camera",
     "blocks": [
@@ -4699,9 +4740,9 @@ wb.menu({
     ]
 }
 );
-/*end camera.json*/
+/*end languages/minecraftjs/camera.json*/
 
-/*begin array.json*/
+/*begin languages/minecraftjs/array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
@@ -4958,9 +4999,9 @@ wb.menu({
     ]
 }
 );
-/*end array.json*/
+/*end languages/minecraftjs/array.json*/
 
-/*begin boolean.json*/
+/*begin languages/minecraftjs/boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -5038,9 +5079,9 @@ wb.menu({
     ]
 }
 );
-/*end boolean.json*/
+/*end languages/minecraftjs/boolean.json*/
 
-/*begin math.json*/
+/*begin languages/minecraftjs/math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -5410,9 +5451,9 @@ wb.menu({
     ]
 }
 );
-/*end math.json*/
+/*end languages/minecraftjs/math.json*/
 
-/*begin object.json*/
+/*begin languages/minecraftjs/object.json*/
 wb.menu({
     "name": "Objects",
     "blocks": [
@@ -5524,9 +5565,9 @@ wb.menu({
     ]
 }
 );
-/*end object.json*/
+/*end languages/minecraftjs/object.json*/
 
-/*begin string.json*/
+/*begin languages/minecraftjs/string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
@@ -5733,9 +5774,9 @@ wb.menu({
     ]
 }
 );
-/*end string.json*/
+/*end languages/minecraftjs/string.json*/
 
-/*begin matrix.json*/
+/*begin languages/minecraftjs/matrix.json*/
 wb.menu({
     "name": "Matrix",
     "blocks": [
@@ -5768,7 +5809,7 @@ wb.menu({
     ]
 }
 );
-/*end matrix.json*/
+/*end languages/minecraftjs/matrix.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

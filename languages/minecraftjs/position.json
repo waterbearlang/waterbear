@@ -26,7 +26,7 @@
             ], 
             "type":"position",
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
-            "help": "position"
+            "help": "A position: x is across, y is up and z is depth"
         },
         {
             "blocktype": "expression",
@@ -96,7 +96,57 @@
         
         
         
-        
+        {
+            "blocktype": "expression",
+            "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
+            "sockets": [
+                {
+                    "name": "x from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "{{1}}.x",
+            "type": "number",
+            "help": "the x (across) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
+            "sockets": [
+                {
+                    "name": "y from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "{{1}}.y",
+            "type": "number",
+            "help": "the y (up) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "96c32f90-7234-4463-b18d-d528271bf224",
+            "sockets": [
+                {
+                    "name": "z from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "{{1}}.z",
+            "type": "number",
+            "help": "the z (depth) part of the postion"
+        },
         
         {
             "blocktype": "step",

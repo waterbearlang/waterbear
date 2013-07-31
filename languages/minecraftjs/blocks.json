@@ -91,7 +91,7 @@
                 ],
             
             "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
-            "help": "set blocks in a 3D rectangle between the first and second postions to .."
+            "help": "set blocks in a 3D rectangle between the first and second positions to .."
         },
         
         {

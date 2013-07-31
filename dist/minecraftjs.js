@@ -3727,6 +3727,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 /*end workspace.js*/
 
 /*begin languages/minecraftjs/minecraftjs.js*/
+
 /*
  *    MINECRAFTJS PLUGIN
  *
@@ -3772,21 +3773,6 @@ jQuery.fn.extend({
 });
 
 // End UI section
-
-// expose these globally so the Block/Label methods can find them
-window.choiceLists = {
-    keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
-        .split('').concat(['up', 'down', 'left', 'right',
-        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
-        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
-        'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-        blocks:["AIR","STONE","GRASS","DIRT","COBBLESTONE","WOOD_PLANKS","SAPLING","BEDROCK","WATER_FLOWING","WATER_STATIONARY","LAVA_FLOWING","LAVA_STATIONARY","SAND","GRAVEL","GOLD_ORE","IRON_ORE","COAL_ORE","WOOD","LEAVES","GLASS","LAPIS_LAZULI_ORE","LAPIS_LAZULI_BLOCK","SANDSTONE","BED","COBWEB","GRASS_TALL","WOOL","FLOWER_YELLOW","FLOWER_CYAN","MUSHROOM_BROWN","MUSHROOM_RED","GOLD_BLOCK","IRON_BLOCK","STONE_SLAB_DOUBLE","STONE_SLAB","BRICK_BLOCK","TNT","BOOKSHELF","MOSS_STONE","OBSIDIAN","TORCH","FIRE","STAIRS_WOOD","CHEST","DIAMOND_ORE","DIAMOND_BLOCK","CRAFTING_TABLE","FARMLAND","FURNACE_INACTIVE","FURNACE_ACTIVE","DOOR_WOOD","LADDER","STAIRS_COBBLESTONE","DOOR_IRON","REDSTONE_ORE","SNOW","ICE","SNOW_BLOCK","CACTUS","CLAY","SUGAR_CANE","FENCE","GLOWSTONE_BLOCK","BEDROCK_INVISIBLE","GLASS_PANE","MELON","FENCE_GATE","GLOWING_OBSIDIAN","NETHER_REACTOR_CORE"],
-        cameramode:['normal','thirdPerson','fixed'],
-        blocktypes: ['step', 'expression', 'context', 'eventhandler'],
-    types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
-    rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
-};
-
 */
 
 wb.wrap = function(script){
@@ -3794,21 +3780,71 @@ wb.wrap = function(script){
 }
 
 function runCurrentScripts(event){
-    if (document.body.className === 'result' && wb.script){
-        wb.runScript(wb.script);
-    }else{
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        document.body.className = 'result';
         wb.runScript( wb.prettyScript(blocks) );
-    }
+        
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
+
+wb.ajax = {
+        jsonp: function(url, data, success, error){
+            var callbackname = '_callback' + Math.round(Math.random() * 10000);
+            window[callbackname] = function(result){
+                delete window[callbackname];
+                success(result);
+            };
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState === 4){
+                    if (xhr.status === 200){
+                        // this is particularly unsafe code
+                        eval(xhr.responseText); // this should call window[callbackname]
+                    }else{
+                        delete window[callbackname];
+                        error(xhr);
+                    }
+                }
+            };
+            xhr.open('GET', url + '?' + data + '&callback=' + callbackname, true);
+            xhr.send();
+        }
+    };
+
 wb.runScript = function(script){
-    wb.script = script;
-    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
-    console.log('trying to load library %s', runtimeUrl);
-    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+  
+    var params = {'code':script};
+  
+    var keys = Object.keys(params);
+    var parts = [];
+    keys.forEach(function(key){
+      if (Array.isArray(params[key])){
+        params[key].forEach(function(value){
+          parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+        });
+      }else{
+        parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+      }
+    });
+    var query = parts.join('&');
+    
+    var messagebox = document.querySelector('#messagebox');
+    if(messagebox === null || messagebox.length === 0)
+    {
+        messagebox = wb.elem('div', {"id":"messagebox"});
+        document.querySelector('.tabbar').appendChild(messagebox);
+        messagebox = document.querySelector('#messagebox');
+        
+    }
+    messagebox.innerHTML = "Sending Code to Raspberry Pi";
+    
+    
+    
+    wb.ajax.jsonp("../run", query, function(){ messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);});
+    
+    //var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
+    //console.log('trying to load library %s', runtimeUrl);
+    //document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: //runtimeUrl, script: wb.wrap(script)}), '*');
 }
 
 function clearStage(event){
@@ -3820,9 +3856,11 @@ Event.on('.editScript', 'click', null, clearStage);
 
 
 wb.prettyScript = function(elements){
-    return js_beautify(elements.map(function(elem){
-        return wb.codeFromBlock(elem);
-    }).join(''));
+    var script = js_beautify(elements.map(function(elem){
+            return wb.codeFromBlock(elem);
+        }).join(''));
+    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js'); \nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    return script;
 };
 
 wb.writeScript = function(elements, view){
@@ -3919,7 +3957,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
-            "script": "function _start(){[[1]]}_start();",
+            "script": "[[1]]",
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
                 {
@@ -3938,17 +3976,17 @@ wb.menu({
                             "name": "count##"
                         }
                     ],
-                    "script": "local.count##",
+                    "script": "count##",
                     "type": "number"
                 }
             ],
-            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000/{{1}})})();",
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
                     "name": "repeat",
                     "type": "number",
-                    "value": "30"
+                    "value": "2"
                 },
                 {
                     "name": "times a second"
@@ -3958,11 +3996,11 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
-            "script": "local.variable## = {{1}};",
+            "script": "variable## = {{1}};",
             "locals": [
                 {
                     "blocktype": "expression",
-                    "script": "local.variable##",
+                    "script": "variable##",
                     "type": "any",
                     "sockets": [
                         {
@@ -4017,7 +4055,7 @@ wb.menu({
         {
             "blocktype": "context",
             "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
-            "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+            "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
             "help": "repeat the contained blocks so many times",
             "locals": [
                 {
@@ -4027,7 +4065,7 @@ wb.menu({
                             "name": "count##"
                         }
                     ],
-                    "script": "local.count##",
+                    "script": "count##",
                     "type": "number"
                 }
             ],
@@ -4036,84 +4074,6 @@ wb.menu({
                     "name": "repeat",
                     "type": "number",
                     "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
-            "help": "send this message to any listeners",
-            "sockets": [
-                {
-                    "name": "broadcast",
-                    "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
-            "help": "send this message with an object argument to any listeners",
-            "sockets": [
-                {
-                    "name": "broadcast",
-                    "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data",
-                    "type": "any",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
-            "help": "add a listener for the given message, run these blocks when it is received",
-            "sockets": [
-                {
-                    "name": "when I receive",
-                    "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
-                }
-            ]
-        },
-        {
-            "blocktype": "eventhandler",
-            "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "data##"
-                        }
-                    ],
-                    "script": "local.data##",
-                    "type": "any"
-                }
-            ],
-            "help": "add a listener for the given message which receives data, run these blocks when it is received",
-            "sockets": [
-                {
-                    "name": "when I receive",
-                    "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data"
                 }
             ]
         },
@@ -4276,16 +4236,16 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var pos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
+            "script": "var ppos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "Position ##"
+                            "name": "Position##"
                         }
                     ],
-                    "script": "pos##",
+                    "script": "ppos##",
                     "type": "position"
                 }
             ],
@@ -4344,16 +4304,27 @@ wb.menu({
             ], 
             "type":"position",
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
-            "help": "position"
+            "help": "A position: x is across, y is up and z is depth"
         },
-        
+        {
+            "blocktype": "expression",
+            "id": "590c8aef-a755-4df5-8930-b430db5a3c3d",
+            "sockets": [
+                {
+                    "name": "Centre"
+                },
+            ], 
+            "type":"position",
+            "script": "zeros",
+            "help": "position"
+        }, 
         {
             "blocktype": "expression",
             "id": "ad36ae75-3655-4226-a759-312487bc48d9",
             "sockets": [
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -4361,7 +4332,7 @@ wb.menu({
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
@@ -4403,7 +4374,57 @@ wb.menu({
         
         
         
-        
+        {
+            "blocktype": "expression",
+            "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
+            "sockets": [
+                {
+                    "name": "x from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "{{1}}.x",
+            "type": "number",
+            "help": "the x (across) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
+            "sockets": [
+                {
+                    "name": "y from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "{{1}}.y",
+            "type": "number",
+            "help": "the y (up) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "96c32f90-7234-4463-b18d-d528271bf224",
+            "sockets": [
+                {
+                    "name": "z from"
+                },
+                {
+                    "name" : "Position",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+            ],  
+            "script": "{{1}}.z",
+            "type": "number",
+            "help": "the z (depth) part of the postion"
+        },
         
         {
             "blocktype": "step",
@@ -4414,7 +4435,7 @@ wb.menu({
                 },
                 {
                     "name" : "Position",
-                    "type": "postion",
+                    "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
             ],  
@@ -4464,7 +4485,7 @@ wb.menu({
                 },
                 {
                     "name": "Position1",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
@@ -4472,7 +4493,7 @@ wb.menu({
                 },
                 {
                     "name": "Position2",
-                    "type": "postion",
+                    "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],  
@@ -4508,7 +4529,8 @@ wb.menu({
             ],  
                     
             "script": "\"x:\"+{{1}}.x.toString()+\", \"y\":\"+{{1}}.y.toString()+\", \"z\":\"+{{1}}.z.toString()",
-            "type": "string"
+            "type": "string",
+            "help": "Position as text"
         }
     ]
 }

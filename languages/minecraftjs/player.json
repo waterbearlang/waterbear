@@ -9,30 +9,42 @@
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerPos = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]  client.end();});",
+            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]  client.end();});",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "playerPos"
+                            "name": "Player Position"
                         }
                     ],
-                    "script": "playerPos",
+                    "script": "playerposition",
                     "type": "position"
                 },
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "playerPos as text"
+                            "name": "Player Position as text"
                         }
-                    ],"script": "\"x:\"+playerPos.x.toString()+\", y:\"+playerPos.y.toString()+\", z:\"+playerPos.z.toString()",
+                    ],"script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
                     "type": "string"
                 }
             ],
-            "help": "get the tile that the player is on"
+            "help": "Get the tile that the player is on"
         },
+        {
+            "blocktype": "expression",
+            "id": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9",
+            "sockets": [
+                {
+                    "name": "Player Position"
+                },
+            ], 
+            "type":"position",
+            "script": "playerposition",
+            "help": "position"
+        }, 
         {
             "blocktype": "step",
             "id": "5474d53a-b671-4392-b299-d10339ad12af",
@@ -40,16 +52,20 @@
                 {
                     "name": "Create Position##"
                 },
-                {
-                    "name": "from Player offset by"
+                {   "name": "from"
                 },
                 {
-                    "name": "Position",
+                    "type": "position",
+                    "block": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9"
+                },
+                {   "name": "offset by"
+                },
+                {
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var ppos## = {x:(playerPos.x+{{1}}.x), y:(playerPos.y+{{1}}.x) , z:(playerPos.z+{{1}}.x)};",
+            "script": "var posA## = {{1}};var posB## = {{2}};var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -58,28 +74,27 @@
                             "name": "Position##"
                         }
                     ],
-                    "script": "ppos##",
+                    "script": "position##",
                     "type": "position"
                 }
             ],
             
-            "help": "create new position relative to Player position"
+            "help": "Create new position relative to Player position"
         },
         {
             "blocktype": "step",
             "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
             "sockets": [
                 {
-                    "name": "move Player to"
+                    "name": "Move Player to"
                 },
                 {
-                    "name": "Position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
             "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
-            "help": "move Player to x, y, z of position"
+            "help": "Move Player to x, y, z of position"
         }
         
     

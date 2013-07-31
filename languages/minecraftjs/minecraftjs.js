@@ -130,7 +130,7 @@ wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
             return wb.codeFromBlock(elem);
         }).join(''));
-    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js'); \nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./dist/minecraftjs.min.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
     return script;
 };
 

@@ -5,7 +5,7 @@
             "blocktype": "step",
             "sockets": [
                 {
-                    "name": "say"
+                    "name": "Say"
                 },
                 {
                     "type": "string",
@@ -17,7 +17,7 @@
                 
             ],
             "script": "client.chat({{1}});",
-            "help": "send a message as chat"
+            "help": "Send a message as chat"
         },
         
         {

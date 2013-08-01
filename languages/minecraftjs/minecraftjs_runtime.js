@@ -55,6 +55,11 @@ Position.prototype.add = function(oPos)
 };
 
 
+Position.prototype.equals = function(oPos)
+{
+  return ((this.x === oPos.x) && (this.y === oPos.y) && (this.z === oPos.z));
+};
+
 Position.prototype.subtract = function(oPos)
 {
   return new Position(this.x-oPos.x,this.y-oPos.y,this.z-oPos.z);

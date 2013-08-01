@@ -13,7 +13,7 @@
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  client.end()});",
+            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  this.end()});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -27,6 +27,20 @@
                 }
             ],
             "help": "get block type at x, y, z"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a7c17404-8555-42be-877e-9d01d7647604",
+            "sockets": [
+                    {
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+                ],
+            "script": "{{1}}",
+            "type": "number",
+            "help": "a blocktype"
         },
         {
             "blocktype": "step",
@@ -95,39 +109,8 @@
                 }
             ],
             "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
-            "type": "number",
+            "type": "string",
             "help": "name of a blocktype by number"
-        },
-        {
-            "blocktype": "context",
-            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
-            "sockets": [
-                {
-                    "name": "get height at "
-                },
-                {
-                    "type": "number",
-                    "value": "0"
-                },
-                {
-                    "type": "number",
-                    "value": "0"
-                }
-            ],
-            "script": "client.getHeight({{1}}, {{2}}, function(height##){[[1]]  client.end()});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                            {
-                                "name": "height##"
-                            }
-                        ],
-                        "script": "parseInt(height##)",
-                    "type": "number"
-                }
-            ],
-            "help": "get height of blocks at x, y"
         }
     ]
 }

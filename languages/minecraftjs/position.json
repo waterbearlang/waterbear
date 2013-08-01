@@ -67,7 +67,26 @@
             
             "help": "create new position"
         },
-        
+        {
+            "blocktype": "expression",
+            "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
+            "sockets": [
+                {
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "equals"
+                },
+                {
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "({{1}}.x === {{2}}.x && {{1}}.y === {{2}}.y && {{1}}.z === {{2}}.z);",
+            "type": "boolean",
+            "help": "are 2 positions the same"
+        },
         {
             "blocktype": "step",
             "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
@@ -103,6 +122,33 @@
             ],
             
             "help": "create new position by adding 2 others"
+        },
+        {
+            "blocktype": "context",
+            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
+            "sockets": [
+                {
+                    "name": "Get ground position from"
+                },
+                {
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}}.z; [[1]]  this.end()});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Ground Position"
+                        }
+                    ],
+                    "script": "groundposition",
+                    "type": "position"
+                }
+            ],
+            "help": "get height of blocks at position"
         },
         {
             "blocktype": "expression",

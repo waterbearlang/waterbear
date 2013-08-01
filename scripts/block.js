@@ -80,7 +80,10 @@
             {
                 'class': function(){
                     var names = ['block', obj.group, obj.blocktype];
-                    if (obj.blocktype === 'context'){
+                    if(obj.blocktype === "expression"){
+                        names.push(obj.type);
+                        names.push(obj.type+'s');
+                    }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
                         names.push('step');

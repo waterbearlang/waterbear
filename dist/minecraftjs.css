@@ -805,7 +805,7 @@ pre .tex .formula {
 /*end languages/minecraftjs/blocks.css*/
 
 /*begin languages/minecraftjs/camera.css*/
-.controls, .camera .holder{
+.camera, .camera .holder{
     border-color: hsl(164,65%,83%);
     background-color: hsl(164, 65%, 93%);
 }
@@ -842,18 +842,6 @@ pre .tex .formula {
 
 
 /*end languages/minecraftjs/math.css*/
-
-/*begin languages/minecraftjs/object.css*/
-.objects, .objects .holder{
-    border-color: hsl(75, 90%, 66%);
-    background-color: hsl(75, 90%, 76%);
-}
-
-.any, .any .holder{
-    border-color: gray;
-}
-
-/*end languages/minecraftjs/object.css*/
 
 /*begin languages/minecraftjs/string.css*/
 .strings, .strings .holder{

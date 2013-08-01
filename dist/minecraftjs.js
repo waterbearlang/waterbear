@@ -2779,7 +2779,10 @@ function uuid(){
             {
                 'class': function(){
                     var names = ['block', obj.group, obj.blocktype];
-                    if (obj.blocktype === 'context'){
+                    if(obj.blocktype === "expression"){
+                        names.push(obj.type);
+                        names.push(obj.type+'s');
+                    }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
                         names.push('step');
@@ -3942,10 +3945,6 @@ wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
 
 /*end languages/minecraftjs/math.js*/
 
-/*begin languages/minecraftjs/object.js*/
-
-/*end languages/minecraftjs/object.js*/
-
 /*begin languages/minecraftjs/string.js*/
 
 /*end languages/minecraftjs/string.js*/
@@ -4196,7 +4195,7 @@ wb.menu({
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]  client.end();});",
+            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]  this.end();});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4360,7 +4359,26 @@ wb.menu({
             
             "help": "create new position"
         },
-        
+        {
+            "blocktype": "expression",
+            "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
+            "sockets": [
+                {
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "equals"
+                },
+                {
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "({{1}}.x === {{2}}.x && {{1}}.y === {{2}}.y && {{1}}.z === {{2}}.z);",
+            "type": "boolean",
+            "help": "are 2 positions the same"
+        },
         {
             "blocktype": "step",
             "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
@@ -4396,6 +4414,33 @@ wb.menu({
             ],
             
             "help": "create new position by adding 2 others"
+        },
+        {
+            "blocktype": "context",
+            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
+            "sockets": [
+                {
+                    "name": "Get ground position from"
+                },
+                {
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}}.z; [[1]]  this.end()});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Ground Position"
+                        }
+                    ],
+                    "script": "groundposition",
+                    "type": "position"
+                }
+            ],
+            "help": "get height of blocks at position"
         },
         {
             "blocktype": "expression",
@@ -4486,7 +4531,7 @@ wb.menu({
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  client.end()});",
+            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  this.end()});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4500,6 +4545,20 @@ wb.menu({
                 }
             ],
             "help": "get block type at x, y, z"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a7c17404-8555-42be-877e-9d01d7647604",
+            "sockets": [
+                    {
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+                ],
+            "script": "{{1}}",
+            "type": "number",
+            "help": "a blocktype"
         },
         {
             "blocktype": "step",
@@ -4568,39 +4627,8 @@ wb.menu({
                 }
             ],
             "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
-            "type": "number",
+            "type": "string",
             "help": "name of a blocktype by number"
-        },
-        {
-            "blocktype": "context",
-            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
-            "sockets": [
-                {
-                    "name": "get height at "
-                },
-                {
-                    "type": "number",
-                    "value": "0"
-                },
-                {
-                    "type": "number",
-                    "value": "0"
-                }
-            ],
-            "script": "client.getHeight({{1}}, {{2}}, function(height##){[[1]]  client.end()});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                            {
-                                "name": "height##"
-                            }
-                        ],
-                        "script": "parseInt(height##)",
-                    "type": "number"
-                }
-            ],
-            "help": "get height of blocks at x, y"
         }
     ]
 }
@@ -4993,6 +5021,47 @@ wb.menu({
     "name": "Math",
     "blocks": [
         {
+            "blocktype": "step",
+            "id": "f51d2d51-d5b4-4fef-a79b-b750694bcc1a",
+            "sockets": [
+                {
+                    "name": "Create Number## from"
+                },
+                {
+                    "type": "number",
+                    "value": "0"
+                },
+            ],  
+            "script": "var number## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Number##"
+                        },
+                    ],  
+                    "script": "number##",
+                    "type": "number"
+                }
+            ],
+            "help": "create a new named number"
+        },
+        {
+            "blocktype": "expression",
+            "type": "number",
+            "id": "f08f2d43-23e8-47a9-8bf5-7904af9313da",
+            "sockets": [
+                {
+                    "type": "number",
+                    "value": "0"
+                },
+            ],  
+            "script": "{{1}}",
+            "help": "create a new named number"
+        },
+        
+        {
             "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
             "type": "number",
@@ -5359,120 +5428,6 @@ wb.menu({
 }
 );
 /*end languages/minecraftjs/math.json*/
-
-/*begin languages/minecraftjs/object.json*/
-wb.menu({
-    "name": "Objects",
-    "blocks": [
-        {
-            "blocktype": "step",
-            "id": "26ee5e5c-5405-453f-8941-26ac6ea009ec",
-            "script": "local.object## = {};",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "object##"
-                        }
-                    ],
-                    "script": "local.object##",
-                    "type": "object"
-                }
-            ],
-            "help": "create a new, empty object",
-            "sockets": [
-                {
-                    "name": "new object##"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "ee86bcd0-10e3-499f-9a81-6738374c0c1f",
-            "script": "{{1}}[{{2}}] = {{3}};",
-            "help": "set the key/value of an object",
-            "sockets": [
-                {
-                    "name": "object",
-                    "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "key",
-                    "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "= value",
-                    "type": "any",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "7ca6df56-7c25-4c8c-98ef-8dfef90eff36",
-            "script": "{{1}}[{{2}}]",
-            "type": "any",
-            "help": "return the value of the key in an object",
-            "sockets": [
-                {
-                    "name": "object",
-                    "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "value at key",
-                    "type": "string",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "context",
-            "id": "322da80d-d8e2-4261-bab7-6ff0ae89e5f4",
-            "script": "Object.keys({{1}}).forEach(function(key){local.key = key; local.item = {{1}}[key]; [[1]] });",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "key"
-                        }
-                    ],
-                    "script": "local.key",
-                    "help": "key of current item in object",
-                    "type": "string"
-                },
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "item"
-                        }
-                    ],
-                    "script": "local.item",
-                    "help": "the current item in the iteration",
-                    "type": "any"
-                }
-            ],
-            "help": "run the blocks with each item of a object",
-            "sockets": [
-                {
-                    "name": "for each item in",
-                    "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "do"
-                }
-            ]
-        }
-    ]
-}
-);
-/*end languages/minecraftjs/object.json*/
 
 /*begin languages/minecraftjs/string.json*/
 wb.menu({

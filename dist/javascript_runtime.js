@@ -367,6 +367,9 @@ var loaded = 0;
 var toload = 0;
 
 function preloadAssets(assetUrls, callback){
+	if (!assetUrls.length){
+		return callback();
+	}
 	load = function() {
 		loaded++;
 	    if (loaded >= toload){

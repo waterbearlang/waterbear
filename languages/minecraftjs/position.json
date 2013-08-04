@@ -135,7 +135,7 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}}.z; [[1]]  this.end()});",
+            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]  this.end()});",
             "locals": [
                 {
                     "blocktype": "expression",

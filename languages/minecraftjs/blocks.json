@@ -13,7 +13,7 @@
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  this.end()});",
+            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -23,7 +23,7 @@
                             }
                         ],
                     "script": "parseInt(block##)",
-                    "type": "block"
+                    "type": "number"
                 }
             ],
             "help": "get block type at x, y, z"

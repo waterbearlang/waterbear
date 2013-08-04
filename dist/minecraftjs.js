@@ -3779,7 +3779,8 @@ jQuery.fn.extend({
 */
 
 wb.wrap = function(script){
-    return 'try{' + script + '}catch(e){console,log(e);}})()';
+    //return 'try{' + script + '}catch(e){console,log(e);}})()';
+    return script;
 }
 
 function runCurrentScripts(event){
@@ -3843,7 +3844,7 @@ wb.runScript = function(script){
     
     
     
-    wb.ajax.jsonp("../run", query, function(){ messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);});
+    wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
     
     //var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
     //console.log('trying to load library %s', runtimeUrl);
@@ -3862,7 +3863,7 @@ wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
             return wb.codeFromBlock(elem);
         }).join(''));
-    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./dist/minecraftjs.min.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
     return script;
 };
 
@@ -4196,7 +4197,7 @@ wb.menu({
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]  this.end();});",
+            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4428,7 +4429,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]  this.end()});",
+            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4507,7 +4508,7 @@ wb.menu({
                     "name": "as text",
                 },
             ],  
-            "script": "\"x:\"+{{1}}.x.toString()+\", \"y\":\"+{{1}}.y.toString()+\", \"z\":\"+{{1}}.z.toString()",
+            "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
             "type": "string",
             "help": "Position as text"
         }
@@ -4532,7 +4533,7 @@ wb.menu({
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]  this.end()});",
+            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4542,7 +4543,7 @@ wb.menu({
                             }
                         ],
                     "script": "parseInt(block##)",
-                    "type": "block"
+                    "type": "number"
                 }
             ],
             "help": "get block type at x, y, z"

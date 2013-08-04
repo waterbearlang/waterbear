@@ -823,7 +823,7 @@ pre .tex .formula {
 
 /*begin languages/minecraftjs/boolean.css*/
 .boolean, .boolean .holder{
-    background-color: #FF4444;
+    background-color: #FFAAAA;
     border-color: red;
 }
 

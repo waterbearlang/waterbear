@@ -3965,6 +3965,45 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "context",
+            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
+            "script": "if({{1}}){[[1]]}",
+            "help": "run the following blocks only if the condition is true",
+            "sockets": [
+                {
+                    "name": "if",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
+            "script": "if( ! {{1}} ){ [[1]]} }",
+            "help": "run the  blocks if the condition is not true",
+            "sockets": [
+                {
+                    "name": "if not",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
+            "script": "while(!({{1}})){[[1]]}",
+            "help": "repeat forever until condition is true",
+            "sockets": [
+                {
+                    "name": "repeat until",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
             "blocktype": "eventhandler",
             "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
             "locals": [
@@ -4088,46 +4127,8 @@ wb.menu({
                     "value": "false"
                 }
             ]
-        },
-        {
-            "blocktype": "context",
-            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
-            "script": "if({{1}}){[[1]]}",
-            "help": "run the following blocks only if the condition is true",
-            "sockets": [
-                {
-                    "name": "if",
-                    "type": "boolean",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "context",
-            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
-            "script": "if( ! {{1}} ){ [[1]]} }",
-            "help": "run the  blocks if the condition is not true",
-            "sockets": [
-                {
-                    "name": "if not",
-                    "type": "boolean",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "context",
-            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
-            "script": "while(!({{1}})){[[1]]}",
-            "help": "repeat forever until condition is true",
-            "sockets": [
-                {
-                    "name": "repeat until",
-                    "type": "boolean",
-                    "value": null
-                }
-            ]
         }
+        
     ]
 }
 );
@@ -4427,7 +4428,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}}.z; [[1]]  this.end()});",
+            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]  this.end()});",
             "locals": [
                 {
                     "blocktype": "expression",

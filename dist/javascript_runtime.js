@@ -538,3 +538,7 @@ Vector2.prototype.rotate = function(radians){
 /*begin languages/javascript/matrix_runtime.js*/
 
 /*end languages/javascript/matrix_runtime.js*/
+
+/*begin languages/javascript/demo_runtime.js*/
+
+/*end languages/javascript/demo_runtime.js*/

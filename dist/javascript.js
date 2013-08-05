@@ -3563,12 +3563,19 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-function comingSoon(evt){
-    alert('Restore will be working again soon. You can drag saved json files to the script workspace now.');
-}
-
 Event.on('.save_scripts', 'click', null, createDownloadUrl);
-Event.on('.restore_scripts', 'click', null, comingSoon);
+Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+function loadScriptsFromFilesystem(){
+    var input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'application/json');
+    input.addEventListener('change', function(evt){
+        var file = input.files[0];
+        loadScriptsFromFile(file);
+    });
+    input.click();
+}
 
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
@@ -3701,6 +3708,17 @@ function handleDragover(evt){
     evt.dataTransfer.dropEffect = 'copy';
 }
 
+function loadScriptsFromFile(file){
+    if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+    var reader = new FileReader();
+    reader.readAsText( file );
+    reader.onload = function (evt){
+        clearScripts(null, true);
+        var saved = JSON.parse(evt.target.result);
+        loadScriptsFromObject(saved);
+    };
+}
+
 function getFiles(evt){
     evt.stopPropagation();
     evt.preventDefault();
@@ -3708,14 +3726,7 @@ function getFiles(evt){
     if ( files.length > 0 ){
         // we only support dropping one file for now
         var file = files[0];
-        if ( file.type.indexOf( 'json' ) === -1 ) { return; }
-        var reader = new FileReader();
-        reader.readAsText( file );
-        reader.onload = function (evt){
-            clearScripts(null, true);
-            var saved = JSON.parse(evt.target.result);
-            loadScriptsFromObject(saved);
-        };
+        loadScriptsFromFile(file);
     }
 }
 
@@ -3853,13 +3864,6 @@ Event.on('.socket input', 'click', null, function(event){
 
 /*end languages/javascript/asset.js*/
 
-/*begin languages/javascript/demo.js*/
-/* Add Demo type and toolkists list */
-wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
-wb.choiceLists.types.push('demo');
-wb.choiceLists.rettypes.push('demo');
-/*end languages/javascript/demo.js*/
-
 /*begin languages/javascript/control.js*/
 
 /*end languages/javascript/control.js*/
@@ -3965,48 +3969,12 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 
 /*end languages/javascript/matrix.js*/
 
-/*begin languages/javascript/demo.json*/
-wb.menu({
-    "name": "Demo",
-    "blocks": [
-        {
-            "blocktype": "context",
-            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
-            "script": "/* do nothing */",
-            "help": "make a point",
-            "sockets": [
-                {
-                    "name": "draw pattern at",
-                    "type": "point",
-                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
-                },
-                {
-                    "name": "with toolkit",
-                    "type": "choice",
-                    "options": "toolkits",
-                    "value": "AIR"
-                }
-            ],
-            "locals": [
-                {
-                    "blocktype": "step",
-                    "name": "binary",
-                    "script": "/* do nothing */",
-                    "help": "should only allow binary here",
-                    "sockets": [
-                        {
-                            "name": "binary",
-                            "type": "binary",
-                            "value": "01010101"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
-);
-/*end languages/javascript/demo.json*/
+/*begin languages/javascript/demo.js*/
+/* Add Demo type and toolkists list */
+wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
+wb.choiceLists.types.push('demo');
+wb.choiceLists.rettypes.push('demo');
+/*end languages/javascript/demo.js*/
 
 /*begin languages/javascript/control.json*/
 wb.menu({
@@ -7584,6 +7552,49 @@ wb.menu({
 }
 );
 /*end languages/javascript/matrix.json*/
+
+/*begin languages/javascript/demo.json*/
+wb.menu({
+    "name": "Demo",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
+            "script": "/* do nothing */",
+            "help": "make a point",
+            "sockets": [
+                {
+                    "name": "draw pattern at",
+                    "type": "point",
+                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
+                },
+                {
+                    "name": "with toolkit",
+                    "type": "choice",
+                    "options": "toolkits",
+                    "value": "AIR"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "binary",
+                    "script": "/* do nothing */",
+                    "help": "should only allow binary here",
+                    "sockets": [
+                        {
+                            "name": "binary",
+                            "type": "binary",
+                            "value": "01010101"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+);
+/*end languages/javascript/demo.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

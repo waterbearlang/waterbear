@@ -4,7 +4,8 @@ var language = location.pathname.match(/\/(.*)\.html/)[1];
 
 function clearScripts(event, force){
     if (force || confirm('Throw out the current script?')){
-        document.querySelector('.workspace > .scripts_workspace').remove();
+        var workspace = document.querySelector('.workspace > .scripts_workspace')
+        workspace.parentElement.removeChild(workspace);
         createWorkspace('Workspace');
 		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
     }

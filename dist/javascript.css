@@ -936,3 +936,12 @@ pre .tex .formula {
 }
 
 /*end languages/javascript/matrix.css*/
+
+/*begin languages/javascript/demo.css*/
+.demo, .demo .holder{
+    border-color: hsl(250, 65%, 79%);
+    background-color: hsl(250, 62%, 89%);
+}
+
+
+/*end languages/javascript/demo.css*/

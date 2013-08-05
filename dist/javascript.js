@@ -1912,8 +1912,8 @@ hljs.LANGUAGES.javascript = {
             input = input.wbTarget;
         }
         svgtext.textContent = input.value;
-        var width = svgtext.getComputedTextLength();
-        input.style.width = (width + 20) + 'px';
+        var textbox = svgtext.getBBox();
+        input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
 
     // wb.mag = function mag(p1, p2){
@@ -2614,6 +2614,7 @@ hljs.LANGUAGES.javascript = {
                 }else{
                     return wb.findAll(workspace, '.contained').concat([workspace]);
                 }
+            case 'asset':
             case 'expression':
                 var selector = expressionDropTypes(view.dataset.type).map(dataSelector).join(',');
                 if (!selector || !selector.length){
@@ -2761,6 +2762,14 @@ function uuid(){
         }
     }
 
+    var getSockets = function(block){
+        return wb.findChildren(wb.findChild(block, '.label'), '.socket');
+    }
+
+    var getSocketValue = function(socket){
+        return socketValue(wb.findChild(socket, '.holder'));
+    }
+
     var createSockets = function(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
@@ -2787,6 +2796,8 @@ function uuid(){
                     }else if (obj.blocktype === 'eventhandler'){
                         names.push('step');
                         names.push('context');
+                    }else if (obj.blocktype === 'asset'){
+                        names.push('expression');
                     }
                     return names.join(' ');
                 },
@@ -3256,6 +3267,8 @@ function uuid(){
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
+    wb.getSockets = getSockets;
+    wb.getSocketValue = getSocketValue;
 })(wb);
 
 
@@ -3556,12 +3569,19 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-function comingSoon(evt){
-    alert('Restore will be working again soon. You can drag saved json files to the script workspace now.');
-}
-
 Event.on('.save_scripts', 'click', null, createDownloadUrl);
-Event.on('.restore_scripts', 'click', null, comingSoon);
+Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+function loadScriptsFromFilesystem(){
+    var input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'application/json');
+    input.addEventListener('change', function(evt){
+        var file = input.files[0];
+        loadScriptsFromFile(file);
+    });
+    input.click();
+}
 
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
@@ -3694,6 +3714,17 @@ function handleDragover(evt){
     evt.dataTransfer.dropEffect = 'copy';
 }
 
+function loadScriptsFromFile(file){
+    if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+    var reader = new FileReader();
+    reader.readAsText( file );
+    reader.onload = function (evt){
+        clearScripts(null, true);
+        var saved = JSON.parse(evt.target.result);
+        loadScriptsFromObject(saved);
+    };
+}
+
 function getFiles(evt){
     evt.stopPropagation();
     evt.preventDefault();
@@ -3701,14 +3732,7 @@ function getFiles(evt){
     if ( files.length > 0 ){
         // we only support dropping one file for now
         var file = files[0];
-        if ( file.type.indexOf( 'json' ) === -1 ) { return; }
-        var reader = new FileReader();
-        reader.readAsText( file );
-        reader.onload = function (evt){
-            clearScripts(null, true);
-            var saved = JSON.parse(evt.target.result);
-            loadScriptsFromObject(saved);
-        };
+        loadScriptsFromFile(file);
     }
 }
 
@@ -3739,9 +3763,34 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 
 
 // Add some utilities
-
 wb.wrap = function(script){
-    return 'var global = new Global();(function(){var local = new Local(); try{local.canvas = document.createElement("canvas"); local.canvas.setAttribute("width", global.stage_width); local.canvas.setAttribute("height", global.stage_height); global.stage.appendChild(local.canvas); local.ctx = local.canvas.getContext("2d");' + script + '}catch(e){alert(e);}})()';
+    return [
+        'var global = new Global();',
+        '(function(){', 
+            'var local = new Local();', 
+            // 'try{',
+                'local.canvas = document.createElement("canvas");',
+                'local.canvas.setAttribute("width", global.stage_width);',
+                'local.canvas.setAttribute("height", global.stage_height);',
+                'global.stage.appendChild(local.canvas);',
+                'local.ctx = local.canvas.getContext("2d");',
+                'var main = function(){',
+                    script,
+                '}',
+                'global.preloadAssets(' + assetUrls() + ', main);',
+            // '}catch(e){',
+                // 'alert(e);',
+            // '}',
+        '})()'
+    ].join('\n');
+}
+
+function assetUrls(){
+    return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
+        // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
+        var source = document.getElementById(asset.dataset.localSource);
+        return wb.getSocketValue(wb.getSockets(source)[0]);
+    }).join(',') + ']';
 }
 
 function runCurrentScripts(event){
@@ -3757,7 +3806,7 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
     wb.script = script;
-    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
     console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
@@ -3791,7 +3840,7 @@ wb.choiceLists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-    blocktypes: ['step', 'expression', 'context', 'eventhandler'],
+    blocktypes: ['step', 'expression', 'context', 'eventhandler', 'asset'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
 };
@@ -3921,6 +3970,13 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 /*begin languages/javascript/matrix.js*/
 
 /*end languages/javascript/matrix.js*/
+
+/*begin languages/javascript/demo.js*/
+/* Add Demo type and toolkists list */
+wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
+wb.choiceLists.types.push('demo');
+wb.choiceLists.rettypes.push('demo');
+/*end languages/javascript/demo.js*/
 
 /*begin languages/javascript/control.json*/
 wb.menu({
@@ -5543,15 +5599,27 @@ wb.menu({
             ]
         },
         {
-            "blocktype": "expression",
+            "blocktype": "step",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
-            "script": "(function(){var img = new Image(); img.src={{1}};return img;})()",
+            "script": "global.preloadImage('##', {{1}});",
             "type": "image",
             "sockets": [
                 {
                     "name": "image from url",
                     "type": "string",
                     "value": null
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "asset",
+                    "sockets": [
+                        {
+                            "name": "image ##"
+                        }
+                    ],
+                    "script": "global.images[\"##\"]",
+                    "type": "image"
                 }
             ]
         },
@@ -7486,6 +7554,49 @@ wb.menu({
 }
 );
 /*end languages/javascript/matrix.json*/
+
+/*begin languages/javascript/demo.json*/
+wb.menu({
+    "name": "Demo",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
+            "script": "/* do nothing */",
+            "help": "make a point",
+            "sockets": [
+                {
+                    "name": "draw pattern at",
+                    "type": "point",
+                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
+                },
+                {
+                    "name": "with toolkit",
+                    "type": "choice",
+                    "options": "toolkits",
+                    "value": "AIR"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "binary",
+                    "script": "/* do nothing */",
+                    "help": "should only allow binary here",
+                    "sockets": [
+                        {
+                            "name": "binary",
+                            "type": "binary",
+                            "value": "01010101"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+);
+/*end languages/javascript/demo.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

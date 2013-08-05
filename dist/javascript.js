@@ -1912,8 +1912,8 @@ hljs.LANGUAGES.javascript = {
             input = input.wbTarget;
         }
         svgtext.textContent = input.value;
-        var width = svgtext.getComputedTextLength();
-        input.style.width = (width + 20) + 'px';
+        var textbox = svgtext.getBBox();
+        input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
 
     // wb.mag = function mag(p1, p2){
@@ -3823,7 +3823,7 @@ wb.choiceLists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-    blocktypes: ['step', 'expression', 'context', 'eventhandler'],
+    blocktypes: ['step', 'expression', 'context', 'eventhandler', 'asset'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
 };
@@ -3852,6 +3852,13 @@ Event.on('.socket input', 'click', null, function(event){
 /*begin languages/javascript/asset.js*/
 
 /*end languages/javascript/asset.js*/
+
+/*begin languages/javascript/demo.js*/
+/* Add Demo type and toolkists list */
+wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
+wb.choiceLists.types.push('demo');
+wb.choiceLists.rettypes.push('demo');
+/*end languages/javascript/demo.js*/
 
 /*begin languages/javascript/control.js*/
 
@@ -3957,6 +3964,49 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 /*begin languages/javascript/matrix.js*/
 
 /*end languages/javascript/matrix.js*/
+
+/*begin languages/javascript/demo.json*/
+wb.menu({
+    "name": "Demo",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
+            "script": "/* do nothing */",
+            "help": "make a point",
+            "sockets": [
+                {
+                    "name": "draw pattern at",
+                    "type": "point",
+                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
+                },
+                {
+                    "name": "with toolkit",
+                    "type": "choice",
+                    "options": "toolkits",
+                    "value": "AIR"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "binary",
+                    "script": "/* do nothing */",
+                    "help": "should only allow binary here",
+                    "sockets": [
+                        {
+                            "name": "binary",
+                            "type": "binary",
+                            "value": "01010101"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+);
+/*end languages/javascript/demo.json*/
 
 /*begin languages/javascript/control.json*/
 wb.menu({

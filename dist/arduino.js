@@ -89,8 +89,8 @@
             input = input.wbTarget;
         }
         svgtext.textContent = input.value;
-        var width = svgtext.getComputedTextLength();
-        input.style.width = (width + 20) + 'px';
+        var textbox = svgtext.getBBox();
+        input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
 
     // wb.mag = function mag(p1, p2){

@@ -399,6 +399,10 @@ Global.prototype.preloadImage = preloadImage; // called by script block to set u
 })();
 /*end languages/javascript/asset_runtime.js*/
 
+/*begin languages/javascript/demo_runtime.js*/
+
+/*end languages/javascript/demo_runtime.js*/
+
 /*begin languages/javascript/control_runtime.js*/
 
 /*end languages/javascript/control_runtime.js*/

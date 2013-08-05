@@ -763,6 +763,15 @@ pre .tex .formula {
 
 /*end languages/javascript/asset.css*/
 
+/*begin languages/javascript/demo.css*/
+.demo, .demo .holder{
+    border-color: hsl(250, 65%, 79%);
+    background-color: hsl(250, 62%, 89%);
+}
+
+
+/*end languages/javascript/demo.css*/
+
 /*begin languages/javascript/control.css*/
 .controls, .controls .holder{
     border-color: hsl(44, 81%, 49%);

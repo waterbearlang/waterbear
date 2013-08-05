@@ -84,7 +84,7 @@ wb.choiceLists = {
         'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
         'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
         'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-    blocktypes: ['step', 'expression', 'context', 'eventhandler'],
+    blocktypes: ['step', 'expression', 'context', 'eventhandler', 'asset'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
 };

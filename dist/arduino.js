@@ -89,8 +89,8 @@
             input = input.wbTarget;
         }
         svgtext.textContent = input.value;
-        var width = svgtext.getComputedTextLength();
-        input.style.width = (width + 20) + 'px';
+        var textbox = svgtext.getBBox();
+        input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
 
     // wb.mag = function mag(p1, p2){
@@ -1740,12 +1740,19 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-function comingSoon(evt){
-    alert('Restore will be working again soon. You can drag saved json files to the script workspace now.');
-}
-
 Event.on('.save_scripts', 'click', null, createDownloadUrl);
-Event.on('.restore_scripts', 'click', null, comingSoon);
+Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+function loadScriptsFromFilesystem(){
+    var input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'application/json');
+    input.addEventListener('change', function(evt){
+        var file = input.files[0];
+        loadScriptsFromFile(file);
+    });
+    input.click();
+}
 
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
@@ -1878,6 +1885,17 @@ function handleDragover(evt){
     evt.dataTransfer.dropEffect = 'copy';
 }
 
+function loadScriptsFromFile(file){
+    if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+    var reader = new FileReader();
+    reader.readAsText( file );
+    reader.onload = function (evt){
+        clearScripts(null, true);
+        var saved = JSON.parse(evt.target.result);
+        loadScriptsFromObject(saved);
+    };
+}
+
 function getFiles(evt){
     evt.stopPropagation();
     evt.preventDefault();
@@ -1885,14 +1903,7 @@ function getFiles(evt){
     if ( files.length > 0 ){
         // we only support dropping one file for now
         var file = files[0];
-        if ( file.type.indexOf( 'json' ) === -1 ) { return; }
-        var reader = new FileReader();
-        reader.readAsText( file );
-        reader.onload = function (evt){
-            clearScripts(null, true);
-            var saved = JSON.parse(evt.target.result);
-            loadScriptsFromObject(saved);
-        };
+        loadScriptsFromFile(file);
     }
 }
 

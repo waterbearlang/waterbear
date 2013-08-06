@@ -93,12 +93,16 @@
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget;
         //Check whther the original target was an input ....
-        if (wb.matches(event.target, 'input, select, option, .disclosure,.scripts_workspace')  && !wb.matches(eT, '#block_menu *')) {
-            console.log('not a drag handle');
+        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
+            // console.log('not a drag handle');
             return undefined;
         }
         var target = wb.closest(eT, '.block');
         if (target){
+            if (wb.matches(target, '.scripts_workspace')){
+                // don't start drag on workspace block
+                return undefined;
+            }
             // console.log('got a drag target: %o', target);
             dragTarget = target;
             if (target.parentElement.classList.contains('block-menu')){

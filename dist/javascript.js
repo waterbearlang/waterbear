@@ -3871,6 +3871,10 @@ Event.on('.socket input', 'click', null, function(event){
 
 /*end languages/javascript/javascript.js*/
 
+/*begin languages/javascript/asset.js*/
+
+/*end languages/javascript/asset.js*/
+
 /*begin languages/javascript/control.js*/
 
 /*end languages/javascript/control.js*/

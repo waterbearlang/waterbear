@@ -14,6 +14,15 @@ html, body{
     user-select: none;
 }
 
+.scripts_text_view {
+	-webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
     margin: 0;
     padding: 0;
@@ -170,7 +179,6 @@ body.editor #block_menu{
 
 .stage {
     position: absolute;
-    overflow: hidden;
 	padding-top: 36px;
 	height: 100%;
 	width: 100%;
@@ -763,82 +771,82 @@ pre .tex .formula {
 
 /*end highlight-github.css*/
 
-/*begin languages\minecraftjs\minecraftjs.css*/
+/*begin languages/minecraftjs/minecraftjs.css*/
 
-/*end languages\minecraftjs\minecraftjs.css*/
+/*end languages/minecraftjs/minecraftjs.css*/
 
-/*begin languages\minecraftjs\control.css*/
+/*begin languages/minecraftjs/control.css*/
 .control, .control .holder{
     border-color: hsl(44, 81%, 49%);
     background-color: hsl(44, 81%, 85%);
 }
 
 
-/*end languages\minecraftjs\control.css*/
+/*end languages/minecraftjs/control.css*/
 
-/*begin languages\minecraftjs\game.css*/
+/*begin languages/minecraftjs/game.css*/
 .game, .game .holder{
     border-color: hsl(156, 90%, 66%);
     background-color: hsl(156, 85%, 70%);
 }
 
 
-/*end languages\minecraftjs\game.css*/
+/*end languages/minecraftjs/game.css*/
 
-/*begin languages\minecraftjs\player.css*/
+/*begin languages/minecraftjs/player.css*/
 .player, .player .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
 }
 
 
-/*end languages\minecraftjs\player.css*/
+/*end languages/minecraftjs/player.css*/
 
-/*begin languages\minecraftjs\position.css*/
+/*begin languages/minecraftjs/position.css*/
 .position, .position .holder{
     border-color: hsl(115, 65%, 79%);
     background-color: hsl(115, 62%, 89%);
 }
 
 
-/*end languages\minecraftjs\position.css*/
+/*end languages/minecraftjs/position.css*/
 
-/*begin languages\minecraftjs\blocks.css*/
+/*begin languages/minecraftjs/blocks.css*/
 .blocks, .blocks .holder{
     border-color: hsl(195, 65%, 79%);
     background-color: hsl(195, 62%, 89%);
 }
 
 
-/*end languages\minecraftjs\blocks.css*/
+/*end languages/minecraftjs/blocks.css*/
 
-/*begin languages\minecraftjs\camera.css*/
+/*begin languages/minecraftjs/camera.css*/
 .camera, .camera .holder{
     border-color: hsl(164,65%,83%);
     background-color: hsl(164, 65%, 93%);
 }
 
 
-/*end languages\minecraftjs\camera.css*/
+/*end languages/minecraftjs/camera.css*/
 
-/*begin languages\minecraftjs\array.css*/
+/*begin languages/minecraftjs/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);
     background-color: hsl(195, 62%, 89%);
 }
 
-/*end languages\minecraftjs\array.css*/
+/*end languages/minecraftjs/array.css*/
 
-/*begin languages\minecraftjs\boolean.css*/
+/*begin languages/minecraftjs/boolean.css*/
 .boolean, .boolean .holder{
     background-color: #FFAAAA;
     border-color: red;
 }
 
 
-/*end languages\minecraftjs\boolean.css*/
+/*end languages/minecraftjs/boolean.css*/
 
-/*begin languages\minecraftjs\math.css*/
+/*begin languages/minecraftjs/math.css*/
 .math, .math .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
@@ -849,12 +857,12 @@ pre .tex .formula {
 }
 
 
-/*end languages\minecraftjs\math.css*/
+/*end languages/minecraftjs/math.css*/
 
-/*begin languages\minecraftjs\string.css*/
+/*begin languages/minecraftjs/string.css*/
 .strings, .strings .holder{
     border-color: hsl(240, 65%, 83%);
     background-color: hsl(240, 65%, 93%);
 }
 
-/*end languages\minecraftjs\string.css*/
+/*end languages/minecraftjs/string.css*/

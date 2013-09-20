@@ -3720,7 +3720,11 @@ function handleDragover(evt){
 }
 
 function loadScriptsFromFile(file){
-    if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+    fileName = file.name;
+    if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+        console.error("File not a JSON file");
+        return;
+    }
     var reader = new FileReader();
     reader.readAsText( file );
     reader.onload = function (evt){
@@ -3811,8 +3815,7 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
     wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
     console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
@@ -4437,7 +4440,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})",
+            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}});",
             "help": "move a sprite absolutely",
             "sockets": [
                 {

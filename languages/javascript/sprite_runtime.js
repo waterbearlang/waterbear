@@ -8,11 +8,19 @@ function RectSprite(size,pos,color){
     this.color = color;
     this.origW = size.w;
     this.origH = size.h;
+    this.direction = 0;
+    this.speed = 0;
 };
+
 window.RectSprite = RectSprite;
 
 RectSprite.prototype.draw = function(ctx){
+    console.log(this.direction, this);
     ctx.save();
+    //rotation
+    ctx.translate(this.x + this.w / 2, this.y + this.h / 2);
+    ctx.rotate(this.direction * Math.PI / 180);
+    ctx.translate(-(this.x + this.w / 2), -(this.y + this.h / 2));
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.w, this.h);
     ctx.restore();
@@ -26,6 +34,25 @@ RectSprite.prototype.collides = function(sprite){
     if (self.x > (that.x + that.w)) return false;
     if (self.y > (that.y + that.h)) return false;
     return true;
+};
+
+RectSprite.prototype.setSpeed = function(speed){
+    this.speed = speed;
+    this.calculateDifference();
+};
+
+RectSprite.prototype.setDirection = function(degrees){
+    this.direction = degrees % 360;
+    this.calculateDifference();
+};
+
+RectSprite.prototype.rotate = function(degrees){
+    this.setDirection(this.direction + degrees);
+}
+
+RectSprite.prototype.calculateDifference = function(){
+    this.dx=Math.cos(this.direction*Math.PI/180)*this.speed;
+    this.dy=Math.sin(this.direction*Math.PI/180)*this.speed;
 };
 
 RectSprite.prototype.toString = function(){

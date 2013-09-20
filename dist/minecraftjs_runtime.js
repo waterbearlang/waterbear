@@ -1,5 +1,5 @@
 
-/*begin languages\minecraftjs\minecraftjs_runtime.js*/
+/*begin languages/minecraftjs/minecraftjs_runtime.js*/
 
 function rad2deg(rad){
     return rad / DEGREE;
@@ -75,44 +75,44 @@ Position.prototype.set = function(x,y,z){
 }
 
 
-/*end languages\minecraftjs\minecraftjs_runtime.js*/
+/*end languages/minecraftjs/minecraftjs_runtime.js*/
 
-/*begin languages\minecraftjs\control_runtime.js*/
+/*begin languages/minecraftjs/control_runtime.js*/
 
-/*end languages\minecraftjs\control_runtime.js*/
+/*end languages/minecraftjs/control_runtime.js*/
 
-/*begin languages\minecraftjs\game_runtime.js*/
+/*begin languages/minecraftjs/game_runtime.js*/
 
-/*end languages\minecraftjs\game_runtime.js*/
+/*end languages/minecraftjs/game_runtime.js*/
 
-/*begin languages\minecraftjs\player_runtime.js*/
+/*begin languages/minecraftjs/player_runtime.js*/
 
-/*end languages\minecraftjs\player_runtime.js*/
+/*end languages/minecraftjs/player_runtime.js*/
 
-/*begin languages\minecraftjs\position_runtime.js*/
+/*begin languages/minecraftjs/position_runtime.js*/
 
-/*end languages\minecraftjs\position_runtime.js*/
+/*end languages/minecraftjs/position_runtime.js*/
 
-/*begin languages\minecraftjs\blocks_runtime.js*/
+/*begin languages/minecraftjs/blocks_runtime.js*/
 
-/*end languages\minecraftjs\blocks_runtime.js*/
+/*end languages/minecraftjs/blocks_runtime.js*/
 
-/*begin languages\minecraftjs\camera_runtime.js*/
+/*begin languages/minecraftjs/camera_runtime.js*/
 
-/*end languages\minecraftjs\camera_runtime.js*/
+/*end languages/minecraftjs/camera_runtime.js*/
 
-/*begin languages\minecraftjs\array_runtime.js*/
+/*begin languages/minecraftjs/array_runtime.js*/
 
-/*end languages\minecraftjs\array_runtime.js*/
+/*end languages/minecraftjs/array_runtime.js*/
 
-/*begin languages\minecraftjs\boolean_runtime.js*/
+/*begin languages/minecraftjs/boolean_runtime.js*/
 
-/*end languages\minecraftjs\boolean_runtime.js*/
+/*end languages/minecraftjs/boolean_runtime.js*/
 
-/*begin languages\minecraftjs\math_runtime.js*/
+/*begin languages/minecraftjs/math_runtime.js*/
 
-/*end languages\minecraftjs\math_runtime.js*/
+/*end languages/minecraftjs/math_runtime.js*/
 
-/*begin languages\minecraftjs\string_runtime.js*/
+/*begin languages/minecraftjs/string_runtime.js*/
 
-/*end languages\minecraftjs\string_runtime.js*/
+/*end languages/minecraftjs/string_runtime.js*/

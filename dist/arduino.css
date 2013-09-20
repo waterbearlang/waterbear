@@ -170,7 +170,6 @@ body.editor #block_menu{
 
 .stage {
     position: absolute;
-    overflow: hidden;
 	padding-top: 36px;
 	height: 100%;
 	width: 100%;

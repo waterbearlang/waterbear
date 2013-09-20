@@ -18,6 +18,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
                 'local.ctx = local.canvas.getContext("2d");',
+                'local.ctx.textAlign = "center";',
                 'var main = function(){',
                     script,
                 '}',

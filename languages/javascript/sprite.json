@@ -182,6 +182,37 @@
                 }
             ]
         },
+	{
+            "blocktype": "step",
+            "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
+            "script": "(function(sprite, newSize){sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
+            "help": "resize a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "resize sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to size",
+                    "type": "size",
+                    "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
+                }
+            ]
+        },
+	{
+            "blocktype": "step",
+            "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
+            "script": "(function(sprite){sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
+            "help": "restore the original size of a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "restore size of sprite",
+                    "type": "sprite",
+                    "value": null
+                }
+            ]
+        },
         {
             "blocktype": "expression",
             "id": "a0c6d157-7fc7-4819-9b97-7b81d4c49a83",

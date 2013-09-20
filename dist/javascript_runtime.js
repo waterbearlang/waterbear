@@ -412,6 +412,8 @@ function RectSprite(size,pos,color){
     this.h = size.h;
     this.collisionRect = this;
     this.color = color;
+    this.origW = size.w;
+    this.origH = size.h;
 };
 window.RectSprite = RectSprite;
 

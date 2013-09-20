@@ -1939,7 +1939,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 
 /*end workspace.js*/
 
-/*begin languages/arduino/arduino.js*/
+/*begin languages\arduino\arduino.js*/
 (function(){
 
     // This file depends on the runtime extensions, which should probably be moved into this namespace rather than made global
@@ -2009,9 +2009,9 @@ setDefaultScript(defaultscript);
 
 })();
 
-/*end languages/arduino/arduino.js*/
+/*end languages\arduino\arduino.js*/
 
-/*begin languages/arduino/boolean.json*/
+/*begin languages\arduino\boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -2070,9 +2070,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/boolean.json*/
+/*end languages\arduino\boolean.json*/
 
-/*begin languages/arduino/control.json*/
+/*begin languages\arduino\control.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
@@ -2196,9 +2196,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/control.json*/
+/*end languages\arduino\control.json*/
 
-/*begin languages/arduino/digitalio.json*/
+/*begin languages\arduino\digitalio.json*/
 wb.menu({
     "name": "Digital I/O",
     "blocks": [
@@ -2373,9 +2373,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/digitalio.json*/
+/*end languages\arduino\digitalio.json*/
 
-/*begin languages/arduino/math.json*/
+/*begin languages\arduino\math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -2736,9 +2736,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/math.json*/
+/*end languages\arduino\math.json*/
 
-/*begin languages/arduino/serialio.json*/
+/*begin languages\arduino\serialio.json*/
 wb.menu({
     "name": "Serial I/O",
     "blocks": [
@@ -2811,9 +2811,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/serialio.json*/
+/*end languages\arduino\serialio.json*/
 
-/*begin languages/arduino/timing.json*/
+/*begin languages\arduino\timing.json*/
 wb.menu({
     "name": "Timing",
     "blocks": [
@@ -2860,9 +2860,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/timing.json*/
+/*end languages\arduino\timing.json*/
 
-/*begin languages/arduino/variables.json*/
+/*begin languages\arduino\variables.json*/
 wb.menu({
     "name": "Variables",
     "blocks": [
@@ -3069,7 +3069,7 @@ wb.menu({
     ]
 }
 );
-/*end languages/arduino/variables.json*/
+/*end languages\arduino\variables.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

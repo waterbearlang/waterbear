@@ -4521,6 +4521,22 @@ wb.menu({
                     "name": "bottom"
                 }
             ]
+        },
+{
+            "blocktype": "expression",
+            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
+            "script": "{{1}}.direction",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "direction"
+                }
+            ]
         }
     ]
 });

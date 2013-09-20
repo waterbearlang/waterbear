@@ -3,8 +3,8 @@
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
-var cleanCSS = require('clean-css');
-var UglifyJS = require('uglify-js');
+// var cleanCSS = require('clean-css');
+// var UglifyJS = require('uglify-js');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
@@ -54,6 +54,7 @@ function minimize(directory){
         if (endswith(filename, '.css')){
             dest = src.replace(/\.css$/, '.min.css');
             fs.writeFileSync(dest, cleanCSS.process(fs.readFileSync(src, 'utf8')));
+            // fs.writeFileSync(dest, cleanCSS.process(fs.readFileSync(src, 'utf8')));
         }else if (endswith(filename, '.js')){
             try{
                 dest = src.replace(/\.js$/, '.min.js');
@@ -120,7 +121,7 @@ function build(){
         // add launch to kick it all off
         cat('scripts/launch.js', dest + '.js');
     });
-    minimize('dist');
+    //minimize('dist');
 };
 
 build();

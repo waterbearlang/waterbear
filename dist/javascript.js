@@ -4459,7 +4459,7 @@ wb.menu({
 	{
             "blocktype": "step",
             "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
-            "script": "(function(sprite, newSize){sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
+            "script": "(function(sprite, newSize){sprite.x += (sprite.w - newSize.w)/2; sprite.y += (sprite.h - newSize.h)/2; sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
             "help": "resize a simple rectangle sprite",
             "sockets": [
                 {
@@ -4477,7 +4477,7 @@ wb.menu({
 	{
             "blocktype": "step",
             "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
-            "script": "(function(sprite){sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
+            "script": "(function(sprite){sprite.x += (sprite.w - sprite.origW)/2; sprite.y += (sprite.h - sprite.origH)/2; sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
             "help": "restore the original size of a simple rectangle sprite",
             "sockets": [
                 {

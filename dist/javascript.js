@@ -3720,7 +3720,11 @@ function handleDragover(evt){
 }
 
 function loadScriptsFromFile(file){
-    if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+    fileName = file.name;
+    if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+        console.error("File not a JSON file");
+        return;
+    }
     var reader = new FileReader();
     reader.readAsText( file );
     reader.onload = function (evt){
@@ -3811,8 +3815,7 @@ Event.on('.runScripts', 'click', null, runCurrentScripts);
 
 wb.runScript = function(script){
     wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+    var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.js';
     console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
 }
@@ -4472,7 +4475,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "23b4ffd1-3812-4372-8873-8a1b3107bdac",
-            "script": "{{1}}.x + {{1}}.w",
+            "script": "({{1}}.x + {{1}}.w)",
             "help": "get x+w (right) position of sprite",
             "type": "number",
             "sockets": [
@@ -4506,7 +4509,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
-            "script": "{{1}}.y + {{1}}.h",
+            "script": "({{1}}.y + {{1}}.h)",
             "type": "number",
             "sockets": [
                 {

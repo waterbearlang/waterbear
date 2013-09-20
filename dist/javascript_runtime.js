@@ -1,5 +1,5 @@
 
-/*begin languages\javascript\javascript_runtime.js*/
+/*begin languages/javascript/javascript_runtime.js*/
 // Timer utility
 //console.log('Loaded runtime, defining utilities');
 function Timer(){
@@ -336,9 +336,9 @@ if(typeof(console) == "undefined") {
 }
 console.log('runtime ready');
 
-/*end languages\javascript\javascript_runtime.js*/
+/*end languages/javascript/javascript_runtime.js*/
 
-/*begin languages\javascript\asset_runtime.js*/
+/*begin languages/javascript/asset_runtime.js*/
 (function(){
 
 var assets = {};
@@ -398,13 +398,13 @@ Global.prototype.preloadAssets = preloadAssets; // called by runtime automatical
 Global.prototype.preloadImage = preloadImage; // called by script block to set up convenient name
 
 })();
-/*end languages\javascript\asset_runtime.js*/
+/*end languages/javascript/asset_runtime.js*/
 
-/*begin languages\javascript\control_runtime.js*/
+/*begin languages/javascript/control_runtime.js*/
 
-/*end languages\javascript\control_runtime.js*/
+/*end languages/javascript/control_runtime.js*/
 
-/*begin languages\javascript\sprite_runtime.js*/
+/*begin languages/javascript/sprite_runtime.js*/
 // Sprite Routines
 function RectSprite(size,pos,color){
     this.x = pos.x;
@@ -501,72 +501,72 @@ Vector2.prototype.rotate = function(radians){
     return Vector.fromAngle(theta + radians, mag);
 }
 
-/*end languages\javascript\sprite_runtime.js*/
+/*end languages/javascript/sprite_runtime.js*/
 
-/*begin languages\javascript\array_runtime.js*/
+/*begin languages/javascript/array_runtime.js*/
 
-/*end languages\javascript\array_runtime.js*/
+/*end languages/javascript/array_runtime.js*/
 
-/*begin languages\javascript\boolean_runtime.js*/
+/*begin languages/javascript/boolean_runtime.js*/
 
-/*end languages\javascript\boolean_runtime.js*/
+/*end languages/javascript/boolean_runtime.js*/
 
-/*begin languages\javascript\canvas_runtime.js*/
+/*begin languages/javascript/canvas_runtime.js*/
 
-/*end languages\javascript\canvas_runtime.js*/
+/*end languages/javascript/canvas_runtime.js*/
 
-/*begin languages\javascript\color_runtime.js*/
+/*begin languages/javascript/color_runtime.js*/
 
-/*end languages\javascript\color_runtime.js*/
+/*end languages/javascript/color_runtime.js*/
 
-/*begin languages\javascript\image_runtime.js*/
+/*begin languages/javascript/image_runtime.js*/
 
-/*end languages\javascript\image_runtime.js*/
+/*end languages/javascript/image_runtime.js*/
 
-/*begin languages\javascript\math_runtime.js*/
+/*begin languages/javascript/math_runtime.js*/
 
-/*end languages\javascript\math_runtime.js*/
+/*end languages/javascript/math_runtime.js*/
 
-/*begin languages\javascript\object_runtime.js*/
+/*begin languages/javascript/object_runtime.js*/
 
-/*end languages\javascript\object_runtime.js*/
+/*end languages/javascript/object_runtime.js*/
 
-/*begin languages\javascript\string_runtime.js*/
+/*begin languages/javascript/string_runtime.js*/
 
-/*end languages\javascript\string_runtime.js*/
+/*end languages/javascript/string_runtime.js*/
 
-/*begin languages\javascript\path_runtime.js*/
+/*begin languages/javascript/path_runtime.js*/
 
-/*end languages\javascript\path_runtime.js*/
+/*end languages/javascript/path_runtime.js*/
 
-/*begin languages\javascript\point_runtime.js*/
+/*begin languages/javascript/point_runtime.js*/
 
-/*end languages\javascript\point_runtime.js*/
+/*end languages/javascript/point_runtime.js*/
 
-/*begin languages\javascript\rect_runtime.js*/
+/*begin languages/javascript/rect_runtime.js*/
 
-/*end languages\javascript\rect_runtime.js*/
+/*end languages/javascript/rect_runtime.js*/
 
-/*begin languages\javascript\sensing_runtime.js*/
+/*begin languages/javascript/sensing_runtime.js*/
 
-/*end languages\javascript\sensing_runtime.js*/
+/*end languages/javascript/sensing_runtime.js*/
 
-/*begin languages\javascript\shape_runtime.js*/
+/*begin languages/javascript/shape_runtime.js*/
 
-/*end languages\javascript\shape_runtime.js*/
+/*end languages/javascript/shape_runtime.js*/
 
-/*begin languages\javascript\size_runtime.js*/
+/*begin languages/javascript/size_runtime.js*/
 
-/*end languages\javascript\size_runtime.js*/
+/*end languages/javascript/size_runtime.js*/
 
-/*begin languages\javascript\text_runtime.js*/
+/*begin languages/javascript/text_runtime.js*/
 
-/*end languages\javascript\text_runtime.js*/
+/*end languages/javascript/text_runtime.js*/
 
-/*begin languages\javascript\matrix_runtime.js*/
+/*begin languages/javascript/matrix_runtime.js*/
 
-/*end languages\javascript\matrix_runtime.js*/
+/*end languages/javascript/matrix_runtime.js*/
 
-/*begin languages\javascript\demo_runtime.js*/
+/*begin languages/javascript/demo_runtime.js*/
 
-/*end languages\javascript\demo_runtime.js*/
+/*end languages/javascript/demo_runtime.js*/

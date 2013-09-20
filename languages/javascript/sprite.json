@@ -249,7 +249,7 @@
                 }
             ]
         },
-{
+        {
             "blocktype": "expression",
             "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
             "script": "{{1}}.direction",
@@ -262,6 +262,54 @@
                 },
                 {
                     "name": "direction"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
+            "script": "{{1}}.speed",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
+            "script": "{{1}}.dx",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "horizontal speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
+            "script": "{{1}}.dy",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "vertical speed"
                 }
             ]
         }

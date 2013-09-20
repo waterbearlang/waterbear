@@ -4349,9 +4349,30 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "468e4180-2221-11e3-8224-0800200c9a66",
+            "script": "{{1}}.rotate({{2}});",
+            "help": "Rotate the sprite at its current location",
+            "sockets": [
+                {
+                    "name": "rotate sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": null
+                },
+                {
+                    "name": "degrees",
+                },
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
-            "script": "{{1}}.collides({{2}})",
+            "script": "{{1}}.collides({{2}});",
             "type": "boolean",
             "help": "test for collision",
             "sockets": [
@@ -4406,8 +4427,8 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
-            "help": "set the direction (angle in degrees) and speed of a sprite",
-            "script": "(function(sprite,degrees,speed){sprite.dx=Math.cos(degrees*Math.PI/180)*speed;sprite.dy=Math.sin(degrees*Math.PI/180)*speed;sprite.direction=degrees;sprite.speed=speed;})({{1}},{{2}},{{3}});",
+            "help": "set the direction (angle in degrees) of a sprite",
+            "script": "{{1}}.setDirection({{2}});",
             "sockets": [
                 {
                     "name": "set sprite",
@@ -4417,9 +4438,21 @@ wb.menu({
                     "name": "direction",
                     "type": "number",
                     "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "4d7d6b10-222b-11e3-8224-0800200c9a66",
+            "help": "set the speed of a sprite",
+            "script": "{{1}}.setSpeed({{2}});",
+            "sockets": [
+                {
+                    "name": "set sprite",
+                    "type": "sprite",
                 },
                 {
-                    "name": "degrees and speed",
+                    "name": "speed",
                     "type": "number",
                     "value": 3
                 }

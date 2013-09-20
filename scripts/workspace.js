@@ -205,7 +205,11 @@ function handleDragover(evt){
 }
 
 function loadScriptsFromFile(file){
-    if ( file.type.indexOf( 'json' ) === -1 ) { return; }
+    fileName = file.name;
+    if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+        console.error("File not a JSON file");
+        return;
+    }
     var reader = new FileReader();
     reader.readAsText( file );
     reader.onload = function (evt){

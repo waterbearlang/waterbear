@@ -107,7 +107,7 @@
             "help": "pause before running the following blocks",
             "sockets": [
                 {
-                    "name": "wait",
+                    "name": "schedule in",
                     "type": "number",
                     "value": "1"
                 },

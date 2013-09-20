@@ -3762,7 +3762,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 
 /*end workspace.js*/
 
-/*begin languages\javascript\javascript.js*/
+/*begin languages/javascript/javascript.js*/
 /*
  *    JAVASCRIPT PLUGIN
  *
@@ -3875,17 +3875,17 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end languages\javascript\javascript.js*/
+/*end languages/javascript/javascript.js*/
 
-/*begin languages\javascript\asset.js*/
+/*begin languages/javascript/asset.js*/
 
-/*end languages\javascript\asset.js*/
+/*end languages/javascript/asset.js*/
 
-/*begin languages\javascript\control.js*/
+/*begin languages/javascript/control.js*/
 
-/*end languages\javascript\control.js*/
+/*end languages/javascript/control.js*/
 
-/*begin languages\javascript\sprite.js*/
+/*begin languages/javascript/sprite.js*/
 /*
  *    Sprite Plugin
  *
@@ -3898,17 +3898,17 @@ wb.choiceLists.types.push('sprite');
 wb.choiceLists.rettypes.push('sprite');
 
 
-/*end languages\javascript\sprite.js*/
+/*end languages/javascript/sprite.js*/
 
-/*begin languages\javascript\array.js*/
+/*begin languages/javascript/array.js*/
 
-/*end languages\javascript\array.js*/
+/*end languages/javascript/array.js*/
 
-/*begin languages\javascript\boolean.js*/
+/*begin languages/javascript/boolean.js*/
 
-/*end languages\javascript\boolean.js*/
+/*end languages/javascript/boolean.js*/
 
-/*begin languages\javascript\canvas.js*/
+/*begin languages/javascript/canvas.js*/
 /*
  *    Canvas Plugin
  *
@@ -3932,68 +3932,68 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 
 
 
-/*end languages\javascript\canvas.js*/
+/*end languages/javascript/canvas.js*/
 
-/*begin languages\javascript\color.js*/
+/*begin languages/javascript/color.js*/
 
-/*end languages\javascript\color.js*/
+/*end languages/javascript/color.js*/
 
-/*begin languages\javascript\image.js*/
+/*begin languages/javascript/image.js*/
 
-/*end languages\javascript\image.js*/
+/*end languages/javascript/image.js*/
 
-/*begin languages\javascript\math.js*/
+/*begin languages/javascript/math.js*/
 
-/*end languages\javascript\math.js*/
+/*end languages/javascript/math.js*/
 
-/*begin languages\javascript\object.js*/
+/*begin languages/javascript/object.js*/
 
-/*end languages\javascript\object.js*/
+/*end languages/javascript/object.js*/
 
-/*begin languages\javascript\string.js*/
+/*begin languages/javascript/string.js*/
 
-/*end languages\javascript\string.js*/
+/*end languages/javascript/string.js*/
 
-/*begin languages\javascript\path.js*/
+/*begin languages/javascript/path.js*/
 
-/*end languages\javascript\path.js*/
+/*end languages/javascript/path.js*/
 
-/*begin languages\javascript\point.js*/
+/*begin languages/javascript/point.js*/
 
-/*end languages\javascript\point.js*/
+/*end languages/javascript/point.js*/
 
-/*begin languages\javascript\rect.js*/
+/*begin languages/javascript/rect.js*/
 
-/*end languages\javascript\rect.js*/
+/*end languages/javascript/rect.js*/
 
-/*begin languages\javascript\sensing.js*/
+/*begin languages/javascript/sensing.js*/
 
-/*end languages\javascript\sensing.js*/
+/*end languages/javascript/sensing.js*/
 
-/*begin languages\javascript\shape.js*/
+/*begin languages/javascript/shape.js*/
 
-/*end languages\javascript\shape.js*/
+/*end languages/javascript/shape.js*/
 
-/*begin languages\javascript\size.js*/
+/*begin languages/javascript/size.js*/
 
-/*end languages\javascript\size.js*/
+/*end languages/javascript/size.js*/
 
-/*begin languages\javascript\text.js*/
+/*begin languages/javascript/text.js*/
 
-/*end languages\javascript\text.js*/
+/*end languages/javascript/text.js*/
 
-/*begin languages\javascript\matrix.js*/
+/*begin languages/javascript/matrix.js*/
 
-/*end languages\javascript\matrix.js*/
+/*end languages/javascript/matrix.js*/
 
-/*begin languages\javascript\demo.js*/
+/*begin languages/javascript/demo.js*/
 /* Add Demo type and toolkists list */
 wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
 wb.choiceLists.types.push('demo');
 wb.choiceLists.rettypes.push('demo');
-/*end languages\javascript\demo.js*/
+/*end languages/javascript/demo.js*/
 
-/*begin languages\javascript\control.json*/
+/*begin languages/javascript/control.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
@@ -4270,9 +4270,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\control.json*/
+/*end languages/javascript/control.json*/
 
-/*begin languages\javascript\sprite.json*/
+/*begin languages/javascript/sprite.json*/
 wb.menu({
     "name": "Sprites",
     "blocks": [
@@ -4351,6 +4351,27 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "468e4180-2221-11e3-8224-0800200c9a66",
+            "script": "{{1}}.rotate({{2}});",
+            "help": "Rotate the sprite at its current location",
+            "sockets": [
+                {
+                    "name": "rotate sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": null
+                },
+                {
+                    "name": "degrees",
+                },
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
             "script": "{{1}}.collides({{2}})",
@@ -4408,8 +4429,8 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
-            "help": "set the direction (angle in degrees) and speed of a sprite",
-            "script": "(function(sprite,degrees,speed){sprite.dx=Math.cos(degrees*Math.PI/180)*speed;sprite.dy=Math.sin(degrees*Math.PI/180)*speed;sprite.direction=degrees;sprite.speed=speed;})({{1}},{{2}},{{3}});",
+            "help": "set the direction (angle in degrees) of a sprite",
+            "script": "{{1}}.setDirection({{2}});",
             "sockets": [
                 {
                     "name": "set sprite",
@@ -4419,9 +4440,21 @@ wb.menu({
                     "name": "direction",
                     "type": "number",
                     "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "4d7d6b10-222b-11e3-8224-0800200c9a66",
+            "help": "set the speed of a sprite",
+            "script": "{{1}}.setSpeed({{2}});",
+            "sockets": [
+                {
+                    "name": "set sprite",
+                    "type": "sprite",
                 },
                 {
-                    "name": "degrees and speed",
+                    "name": "speed",
                     "type": "number",
                     "value": 3
                 }
@@ -4621,9 +4654,9 @@ wb.menu({
         }
     ]
 });
-/*end languages\javascript\sprite.json*/
+/*end languages/javascript/sprite.json*/
 
-/*begin languages\javascript\array.json*/
+/*begin languages/javascript/array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
@@ -4880,9 +4913,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\array.json*/
+/*end languages/javascript/array.json*/
 
-/*begin languages\javascript\boolean.json*/
+/*begin languages/javascript/boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -4960,9 +4993,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\boolean.json*/
+/*end languages/javascript/boolean.json*/
 
-/*begin languages\javascript\canvas.json*/
+/*begin languages/javascript/canvas.json*/
 wb.menu({
     "name": "Canvas",
     "blocks": [
@@ -5166,9 +5199,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\canvas.json*/
+/*end languages/javascript/canvas.json*/
 
-/*begin languages\javascript\color.json*/
+/*begin languages/javascript/color.json*/
 wb.menu({
     "name": "Color",
     "blocks": [
@@ -5479,9 +5512,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\color.json*/
+/*end languages/javascript/color.json*/
 
-/*begin languages\javascript\image.json*/
+/*begin languages/javascript/image.json*/
 wb.menu({
     "name": "Images",
     "blocks": [
@@ -5784,9 +5817,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\image.json*/
+/*end languages/javascript/image.json*/
 
-/*begin languages\javascript\math.json*/
+/*begin languages/javascript/math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -6156,9 +6189,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\math.json*/
+/*end languages/javascript/math.json*/
 
-/*begin languages\javascript\object.json*/
+/*begin languages/javascript/object.json*/
 wb.menu({
     "name": "Objects",
     "blocks": [
@@ -6270,9 +6303,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\object.json*/
+/*end languages/javascript/object.json*/
 
-/*begin languages\javascript\string.json*/
+/*begin languages/javascript/string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
@@ -6479,9 +6512,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\string.json*/
+/*end languages/javascript/string.json*/
 
-/*begin languages\javascript\path.json*/
+/*begin languages/javascript/path.json*/
 wb.menu({
     "name": "Paths",
     "blocks": [
@@ -6681,9 +6714,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\path.json*/
+/*end languages/javascript/path.json*/
 
-/*begin languages\javascript\point.json*/
+/*begin languages/javascript/point.json*/
 wb.menu({
     "name": "Points",
     "blocks": [
@@ -6786,9 +6819,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\point.json*/
+/*end languages/javascript/point.json*/
 
-/*begin languages\javascript\rect.json*/
+/*begin languages/javascript/rect.json*/
 wb.menu({
     "name": "Rects",
     "blocks": [
@@ -6966,9 +6999,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\rect.json*/
+/*end languages/javascript/rect.json*/
 
-/*begin languages\javascript\sensing.json*/
+/*begin languages/javascript/sensing.json*/
 wb.menu({
     "name": "Sensing",
     "blocks": [
@@ -7152,9 +7185,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\sensing.json*/
+/*end languages/javascript/sensing.json*/
 
-/*begin languages\javascript\shape.json*/
+/*begin languages/javascript/shape.json*/
 wb.menu({
     "name": "Shapes",
     "blocks": [
@@ -7361,9 +7394,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\shape.json*/
+/*end languages/javascript/shape.json*/
 
-/*begin languages\javascript\size.json*/
+/*begin languages/javascript/size.json*/
 wb.menu({
     "name": "Sizes",
     "blocks": [
@@ -7449,9 +7482,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\size.json*/
+/*end languages/javascript/size.json*/
 
-/*begin languages\javascript\text.json*/
+/*begin languages/javascript/text.json*/
 wb.menu({
     "name": "Text",
     "blocks": [
@@ -7628,9 +7661,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\text.json*/
+/*end languages/javascript/text.json*/
 
-/*begin languages\javascript\matrix.json*/
+/*begin languages/javascript/matrix.json*/
 wb.menu({
     "name": "Matrix",
     "blocks": [
@@ -7663,9 +7696,9 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\matrix.json*/
+/*end languages/javascript/matrix.json*/
 
-/*begin languages\javascript\demo.json*/
+/*begin languages/javascript/demo.json*/
 wb.menu({
     "name": "Demo",
     "blocks": [
@@ -7706,7 +7739,7 @@ wb.menu({
     ]
 }
 );
-/*end languages\javascript\demo.json*/
+/*end languages/javascript/demo.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

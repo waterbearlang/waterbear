@@ -4372,7 +4372,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
-            "script": "{{1}}.collides({{2}});",
+            "script": "{{1}}.collides({{2}})",
             "type": "boolean",
             "help": "test for collision",
             "sockets": [

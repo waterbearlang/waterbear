@@ -15,7 +15,7 @@
         {
             "blocktype": "eventhandler",
             "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
-            "script": "$(document).bind(\"keydown\", {{1}}, function(){[[1]]; return false;});",
+            "script": "document.addEventListener('keydown', function(event){ if (event.isChar && String.fromCharCode(event.charCode) === {{1}}){[[1]]; return false;});",
             "help": "this trigger will run the attached blocks every time this key is pressed",
             "sockets": [
                 {

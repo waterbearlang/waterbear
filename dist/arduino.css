@@ -638,7 +638,7 @@ svg text{
 
 /*end blocks.css*/
 
-/*begin languages\arduino\arduino.css*/
+/*begin languages/arduino/arduino.css*/
 /* block and border colours for different groups of blocks */
 .interface, .interface .holder{
     border-color: hsl(296, 65%, 57%);
@@ -674,35 +674,35 @@ svg text{
     border-color: gray;
 }
 
-/*end languages\arduino\arduino.css*/
+/*end languages/arduino/arduino.css*/
 
-/*begin languages\arduino\boolean.css*/
+/*begin languages/arduino/boolean.css*/
 .boolean, .boolean .holder{
     background-color: #FF4444;
     border-color: red;
 }
 
-/*end languages\arduino\boolean.css*/
+/*end languages/arduino/boolean.css*/
 
-/*begin languages\arduino\control.css*/
+/*begin languages/arduino/control.css*/
 .controls, .controls .holder{
     border-color: hsl(44, 81%, 49%);
     background-color: hsl(44, 81%, 85%);
 }
 
 
-/*end languages\arduino\control.css*/
+/*end languages/arduino/control.css*/
 
-/*begin languages\arduino\digitalio.css*/
+/*begin languages/arduino/digitalio.css*/
 .digitalio, .digitalio .holder {
     border-color: hsl(225,65%,83%);
     background-color: hsl(225, 65%, 93%);
 }
 
 
-/*end languages\arduino\digitalio.css*/
+/*end languages/arduino/digitalio.css*/
 
-/*begin languages\arduino\math.css*/
+/*begin languages/arduino/math.css*/
 .math, .math .holder{
     border-color: hsl(93,90%,66%);
     background-color: hsl(93,90%,76%);
@@ -719,31 +719,31 @@ svg text{
     border-style: dashed !important;
 }
 
-/*end languages\arduino\math.css*/
+/*end languages/arduino/math.css*/
 
-/*begin languages\arduino\serialio.css*/
+/*begin languages/arduino/serialio.css*/
 .serialio, .serialio .holder{
     border-color: #e66a22;
     background-color: #e66a22;
 }
 
 
-/*end languages\arduino\serialio.css*/
+/*end languages/arduino/serialio.css*/
 
-/*begin languages\arduino\timing.css*/
+/*begin languages/arduino/timing.css*/
 .timing, .timing .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
 }
 
 
-/*end languages\arduino\timing.css*/
+/*end languages/arduino/timing.css*/
 
-/*begin languages\arduino\variables.css*/
+/*begin languages/arduino/variables.css*/
 .variables, .variables .holder{
     border-color: hsl(15,100%,63%);
     background-color: hsl(15,100%,83%);
 }
 
 
-/*end languages\arduino\variables.css*/
+/*end languages/arduino/variables.css*/

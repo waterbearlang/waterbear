@@ -3913,7 +3913,7 @@ wb.choiceLists = {
 
 // Hints for building blocks
 //
-//
+//`
 // Expression blocks can nest, so don't end their scripts with semi-colons (i.e., if there is a "type" specified).
 //
 //

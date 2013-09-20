@@ -200,7 +200,7 @@
         {
             "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}})",
+            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}});",
             "help": "move a sprite absolutely",
             "sockets": [
                 {

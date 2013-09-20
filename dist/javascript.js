@@ -4243,7 +4243,7 @@ wb.menu({
         {
             "blocktype": "context",
             "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
-            "script": "if( ! {{1}} ){ [[1]]} }",
+            "script": "if( ! {{1}} ){ [[1]] }",
             "help": "run the  blocks if the condition is not true",
             "sockets": [
                 {

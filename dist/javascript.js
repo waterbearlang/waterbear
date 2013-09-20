@@ -4475,7 +4475,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "23b4ffd1-3812-4372-8873-8a1b3107bdac",
-            "script": "{{1}}.x + {{1}}.w",
+            "script": "({{1}}.x + {{1}}.w)",
             "help": "get x+w (right) position of sprite",
             "type": "number",
             "sockets": [
@@ -4509,7 +4509,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
-            "script": "{{1}}.y + {{1}}.h",
+            "script": "({{1}}.y + {{1}}.h)",
             "type": "number",
             "sockets": [
                 {

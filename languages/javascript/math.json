@@ -246,6 +246,20 @@
             "blocktype": "expression",
             "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
             "type": "number",
+            "script": "Math.floor({{1}})",
+            "help": "rounds down to nearest whole number",
+            "sockets": [
+                {
+                    "name": "floor of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4945df27-f4f3-490b-94ae-67c7081f744b",
+            "type": "number",
             "script": "Math.ceil({{1}})",
             "help": "rounds up to nearest whole number",
             "sockets": [

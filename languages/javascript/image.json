@@ -79,7 +79,7 @@
             "help": "initialize a new imageData with the specified dimensions",
             "sockets": [
                 {
-                    "name": "create ImageData## with size",
+                    "name": "create ImageData ImageData## with size",
                     "type": "size",
                     "value": null
                 }
@@ -104,7 +104,7 @@
             "help": "initialized a new imageData the same size as an existing imageData",
             "sockets": [
                 {
-                    "name": "createImageData## from imageData",
+                    "name": "create ImageData ImageData## from imageData",
                     "type": "imageData",
                     "value": null
                 }
@@ -231,7 +231,7 @@
             "type": "image",
             "sockets": [
                 {
-                    "name": "image from url",
+                    "name": "create ImageData image## from url",
                     "type": "string",
                     "value": null
                 }

@@ -76,7 +76,7 @@
             "help": "create a reference to re-use the any",
             "sockets": [
                 {
-                    "name": "variable",
+                    "name": "variable variable##",
                     "type": "any",
                     "value": null
                 }

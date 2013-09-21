@@ -3239,6 +3239,12 @@ function uuid(){
         instances.forEach(function(elem){
             wb.find(elem, '.name').textContent = newName;
         });
+
+        var parent = document.getElementById(source.dataset.localSource);
+        var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+        nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        wb.find(parent, '.name').textContent = nameTemplate;
     }
 
     function cancelUpdateName(event){
@@ -4072,7 +4078,7 @@ wb.menu({
             "help": "create a reference to re-use the any",
             "sockets": [
                 {
-                    "name": "variable",
+                    "name": "variable variable##",
                     "type": "any",
                     "value": null
                 }
@@ -5596,7 +5602,7 @@ wb.menu({
             "help": "initialize a new imageData with the specified dimensions",
             "sockets": [
                 {
-                    "name": "create ImageData## with size",
+                    "name": "create ImageData ImageData## with size",
                     "type": "size",
                     "value": null
                 }
@@ -5621,7 +5627,7 @@ wb.menu({
             "help": "initialized a new imageData the same size as an existing imageData",
             "sockets": [
                 {
-                    "name": "createImageData## from imageData",
+                    "name": "create ImageData ImageData## from imageData",
                     "type": "imageData",
                     "value": null
                 }
@@ -5748,7 +5754,7 @@ wb.menu({
             "type": "image",
             "sockets": [
                 {
-                    "name": "image from url",
+                    "name": "create ImageData image## from url",
                     "type": "string",
                     "value": null
                 }

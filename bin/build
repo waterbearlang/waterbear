@@ -92,9 +92,9 @@ function concat(src, dest, files, ext, suffix, before, after){
             // console.log('Could not read %s: %s', path.join(filename), e.message);
             return;
         }
-        fs.appendFileSync(dest, '\n/*begin ' + filename + '*/\n');
+        fs.appendFileSync(dest, '\n/*begin ' + filename.replace(/\\/g, '/') + '*/\n');
         fs.appendFileSync(dest, contents);
-        fs.appendFileSync(dest, '\n/*end ' + filename + '*/\n');
+        fs.appendFileSync(dest, '\n/*end ' + filename.replace(/\\/g, '/') + '*/\n');
     });
 }
 

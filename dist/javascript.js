@@ -3783,6 +3783,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
                 'local.ctx = local.canvas.getContext("2d");',
+                'local.ctx.textAlign = "center";',
                 'var main = function(){',
                     script,
                 '}',
@@ -4398,6 +4399,27 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "468e4180-2221-11e3-8224-0800200c9a66",
+            "script": "{{1}}.rotate({{2}});",
+            "help": "Rotate the sprite at its current location",
+            "sockets": [
+                {
+                    "name": "rotate sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": null
+                },
+                {
+                    "name": "degrees",
+                },
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
             "script": "{{1}}.collides({{2}})",
@@ -4455,8 +4477,8 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
-            "help": "set the direction (angle in degrees) and speed of a sprite",
-            "script": "(function(sprite,degrees,speed){sprite.dx=Math.cos(degrees*Math.PI/180)*speed;sprite.dy=Math.sin(degrees*Math.PI/180)*speed;sprite.direction=degrees;sprite.speed=speed;})({{1}},{{2}},{{3}});",
+            "help": "set the direction (angle in degrees) of a sprite",
+            "script": "{{1}}.setDirection({{2}});",
             "sockets": [
                 {
                     "name": "set sprite",
@@ -4466,9 +4488,21 @@ wb.menu({
                     "name": "direction",
                     "type": "number",
                     "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "4d7d6b10-222b-11e3-8224-0800200c9a66",
+            "help": "set the speed of a sprite",
+            "script": "{{1}}.setSpeed({{2}});",
+            "sockets": [
+                {
+                    "name": "set sprite",
+                    "type": "sprite",
                 },
                 {
-                    "name": "degrees and speed",
+                    "name": "speed",
                     "type": "number",
                     "value": 3
                 }
@@ -4500,6 +4534,37 @@ wb.menu({
                 {
                     "name": "to",
                     "type": "point",
+                    "value": null
+                }
+            ]
+        },
+	{
+            "blocktype": "step",
+            "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
+            "script": "(function(sprite, newSize){sprite.x += (sprite.w - newSize.w)/2; sprite.y += (sprite.h - newSize.h)/2; sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
+            "help": "resize a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "resize sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to size",
+                    "type": "size",
+                    "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
+                }
+            ]
+        },
+	{
+            "blocktype": "step",
+            "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
+            "script": "(function(sprite){sprite.x += (sprite.w - sprite.origW)/2; sprite.y += (sprite.h - sprite.origH)/2; sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
+            "help": "restore the original size of a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "restore size of sprite",
+                    "type": "sprite",
                     "value": null
                 }
             ]
@@ -6050,6 +6115,20 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+            "type": "number",
+            "script": "Math.floor({{1}})",
+            "help": "rounds down to nearest whole number",
+            "sockets": [
+                {
+                    "name": "floor of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4945df27-f4f3-490b-94ae-67c7081f744b",
             "type": "number",
             "script": "Math.ceil({{1}})",
             "help": "rounds up to nearest whole number",

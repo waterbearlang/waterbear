@@ -4039,7 +4039,7 @@ wb.menu({
                     "type": "number"
                 }
             ],
-            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "script": "(function(){local.count##=0;setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
@@ -4049,6 +4049,36 @@ wb.menu({
                 },
                 {
                     "name": "times a second"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "47AA31E2-5A90-4AF1-8F98-5FDD437561B6",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "local.count##",
+                    "type": "number"
+                }
+            ],
+            "script": "(function(){local.count##=0;local.timerid##=setInterval(function(){local.count##++;if({{2}}){clearInterval(local.timerid##);return;}[[1]]},1000/{{1}});})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "number",
+                    "value": "30"
+                },
+                {
+                    "name": "times a second until",
+                    "type": "boolean",
+                    "value": "true"
                 }
             ]
         },
@@ -4096,13 +4126,31 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "9AED48C9-A90B-49FB-9C1A-FD632F0388F5",
+            "script": "{{1}} += {{2}};",
+            "help": "first argument must be a variable",
+            "sockets": [
+                {
+                    "name": "increment variable",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "any",
+                    "value": 1
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",
             "help": "pause before running the following blocks",
             "sockets": [
                 {
-                    "name": "wait",
+                    "name": "schedule in",
                     "type": "number",
                     "value": "1"
                 },
@@ -6378,12 +6426,12 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
-            "script": "// {{1}};\n",
+            "script": "/* {{1}}; */",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
                 {
                     "name": "comment",
-                    "type": "string",
+                    "type": "any",
                     "value": null
                 }
             ]

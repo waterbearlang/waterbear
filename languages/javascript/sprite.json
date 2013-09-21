@@ -187,6 +187,22 @@
         },
         {
             "blocktype": "step",
+            "id": "473b0d99-b560-4bd1-a67f-b349abf1b24a",
+            "help": "set the color of a sprite",
+            "script": "{{1}}.setColor({{2}});",
+            "sockets": [
+                {
+                    "name": "set sprite",
+                    "type": "sprite"
+                },
+                {
+                    "name": "color",
+                    "type": "color"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
             "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});",

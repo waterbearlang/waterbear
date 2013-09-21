@@ -15,7 +15,7 @@ function RectSprite(size,pos,color){
 window.RectSprite = RectSprite;
 
 RectSprite.prototype.draw = function(ctx){
-    console.log(this.direction, this);
+    // console.log(this.direction, this);
     ctx.save();
     //rotation
     ctx.translate(this.x + this.w / 2, this.y + this.h / 2);
@@ -48,6 +48,10 @@ RectSprite.prototype.setDirection = function(degrees){
 
 RectSprite.prototype.rotate = function(degrees){
     this.setDirection(this.direction + degrees);
+}
+
+RectSprite.prototype.setColor = function(color){
+    this.color = color;
 }
 
 RectSprite.prototype.calculateDifference = function(){

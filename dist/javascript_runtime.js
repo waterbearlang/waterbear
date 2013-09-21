@@ -505,6 +505,49 @@ Vector2.prototype.rotate = function(radians){
 
 /*end languages/javascript/sprite_runtime.js*/
 
+/*begin languages/javascript/voice_runtime.js*/
+// Music Routines
+function Voice(){
+    this.on = false;
+    this.osc;
+    context = new webkitAudioContext();
+    var vco = context.createOscillator();
+    vco.type = vco.SINE;
+    vco.frequency.value = 400;
+    var vca = context.createGain();
+    vca.gain.value = 0.3;
+    vco.connect(vca);
+    vca.connect(context.destination);
+    this.osc = vco;
+};
+
+Voice.prototype.toggle = function(boolean){
+    this.on = boolean;
+    if (boolean) 
+        this.osc.start(0);
+    else
+        this.osc.stop(0);
+    return true;
+};
+
+/*window.RectSprite = RectSprite;
+
+RectSprite.prototype.collides = function(sprite){
+    var self = this.collisionRect;
+    var that = sprite.collisionRect;
+    if ((self.x + self.w) < that.x) return false;
+    if ((self.y + self.h) < that.y) return false;
+    if (self.x > (that.x + that.w)) return false;
+    if (self.y > (that.y + that.h)) return false;
+    return true;
+};
+
+RectSprite.prototype.toString = function(){
+    return '<RectSprite ' + this.x + ' ' + this.y + ' ' + this.w + ' ' +  this.h + ' ' + this.color + '>';
+};*/
+
+/*end languages/javascript/voice_runtime.js*/
+
 /*begin languages/javascript/array_runtime.js*/
 
 /*end languages/javascript/array_runtime.js*/

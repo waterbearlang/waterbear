@@ -70,9 +70,9 @@ function minimize(directory){
 }
 
 function cat(src, dest){
-    fs.appendFileSync(dest, '\n/*begin ' + path.basename(src) + '*/\n');
+    fs.appendFileSync(dest, '\n/*begin ' + path.basename(src).replace(/\\/g, '/') + '*/\n');
     fs.appendFileSync(dest, fs.readFileSync(src, 'utf8'));
-    fs.appendFileSync(dest, '\n/*end ' + path.basename(src) + '*/\n');
+    fs.appendFileSync(dest, '\n/*end ' + path.basename(src).replace(/\\/g, '/') + '*/\n');
 }
 
 function endswith(str, suffix){

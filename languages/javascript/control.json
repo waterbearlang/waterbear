@@ -131,6 +131,24 @@
             ]
         },
         {
+            "blocktype": "step",
+            "id": "9AED48C9-A90B-49FB-9C1A-FD632F0388F5",
+            "script": "{{1}} += {{2}};",
+            "help": "first argument must be a variable",
+            "sockets": [
+                {
+                    "name": "increment variable",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "any",
+                    "value": 1
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",

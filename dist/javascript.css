@@ -800,6 +800,18 @@ pre .tex .formula {
 }
 /*end languages/javascript/sprite.css*/
 
+/*begin languages/javascript/voice.css*/
+.voices, .voices .holder{
+    border-color: hsl(120, 81%, 49%);
+    background-color: hsl(120, 81%, 85%);
+}
+
+.movingvoice, .movingvoice .holder{
+    border-color: hsl(150, 81%, 49%);
+    background-color: hsl(150, 81%, 85%);
+}
+/*end languages/javascript/voice.css*/
+
 /*begin languages/javascript/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);

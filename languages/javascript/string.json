@@ -135,12 +135,12 @@
         {
             "blocktype": "step",
             "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
-            "script": "// {{1}};\n",
+            "script": "/* {{1}}; */",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
                 {
                     "name": "comment",
-                    "type": "string",
+                    "type": "any",
                     "value": null
                 }
             ]

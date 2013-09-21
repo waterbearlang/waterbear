@@ -3317,9 +3317,13 @@ Event.on('#block_menu', 'click', '.accordion-header', accordion);
 function showWorkspace(mode){
     var workspace = document.querySelector('.workspace');
     if (mode === 'block'){
+	    document.querySelector('.scripts_workspace').style.display = '';
+	    document.querySelector('.scripts_text_view').style.display = 'none';
         workspace.classList.remove('textview');
         workspace.classList.add('blockview');
     }else if (mode === 'text'){
+    	document.querySelector('.scripts_workspace').style.display = 'none';
+    	document.querySelector('.scripts_text_view').style.display = '';
         workspace.classList.remove('blockview');
         workspace.classList.add('textview');
     }

@@ -302,6 +302,7 @@
 			workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
 			wb.reposition(dragTarget, startPosition);
 		}
+        Event.trigger(dragTarget, 'wb-add');
     }
 
     function positionExpressionDropCursor(){

@@ -44,7 +44,7 @@
                     "type": "number"
                 }
             ],
-            "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "script": "(function(){local.count##=0;setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
@@ -54,6 +54,36 @@
                 },
                 {
                     "name": "times a second"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "47AA31E2-5A90-4AF1-8F98-5FDD437561B6",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "local.count##",
+                    "type": "number"
+                }
+            ],
+            "script": "(function(){local.count##=0;local.timerid##=setInterval(function(){local.count##++;if({{2}}){clearInterval(local.timerid##);return;}[[1]]},1000/{{1}});})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "number",
+                    "value": "30"
+                },
+                {
+                    "name": "times a second until",
+                    "type": "boolean",
+                    "value": "true"
                 }
             ]
         },

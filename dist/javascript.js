@@ -3762,7 +3762,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 
 /*end workspace.js*/
 
-/*begin languages/javascript/javascript.js*/
+/*begin languages\javascript\javascript.js*/
 /*
  *    JAVASCRIPT PLUGIN
  *
@@ -3874,17 +3874,17 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end languages/javascript/javascript.js*/
+/*end languages\javascript\javascript.js*/
 
-/*begin languages/javascript/asset.js*/
+/*begin languages\javascript\asset.js*/
 
-/*end languages/javascript/asset.js*/
+/*end languages\javascript\asset.js*/
 
-/*begin languages/javascript/control.js*/
+/*begin languages\javascript\control.js*/
 
-/*end languages/javascript/control.js*/
+/*end languages\javascript\control.js*/
 
-/*begin languages/javascript/sprite.js*/
+/*begin languages\javascript\sprite.js*/
 /*
  *    Sprite Plugin
  *
@@ -3897,17 +3897,17 @@ wb.choiceLists.types.push('sprite');
 wb.choiceLists.rettypes.push('sprite');
 
 
-/*end languages/javascript/sprite.js*/
+/*end languages\javascript\sprite.js*/
 
-/*begin languages/javascript/array.js*/
+/*begin languages\javascript\array.js*/
 
-/*end languages/javascript/array.js*/
+/*end languages\javascript\array.js*/
 
-/*begin languages/javascript/boolean.js*/
+/*begin languages\javascript\boolean.js*/
 
-/*end languages/javascript/boolean.js*/
+/*end languages\javascript\boolean.js*/
 
-/*begin languages/javascript/canvas.js*/
+/*begin languages\javascript\canvas.js*/
 /*
  *    Canvas Plugin
  *
@@ -3931,68 +3931,68 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 
 
 
-/*end languages/javascript/canvas.js*/
+/*end languages\javascript\canvas.js*/
 
-/*begin languages/javascript/color.js*/
+/*begin languages\javascript\color.js*/
 
-/*end languages/javascript/color.js*/
+/*end languages\javascript\color.js*/
 
-/*begin languages/javascript/image.js*/
+/*begin languages\javascript\image.js*/
 
-/*end languages/javascript/image.js*/
+/*end languages\javascript\image.js*/
 
-/*begin languages/javascript/math.js*/
+/*begin languages\javascript\math.js*/
 
-/*end languages/javascript/math.js*/
+/*end languages\javascript\math.js*/
 
-/*begin languages/javascript/object.js*/
+/*begin languages\javascript\object.js*/
 
-/*end languages/javascript/object.js*/
+/*end languages\javascript\object.js*/
 
-/*begin languages/javascript/string.js*/
+/*begin languages\javascript\string.js*/
 
-/*end languages/javascript/string.js*/
+/*end languages\javascript\string.js*/
 
-/*begin languages/javascript/path.js*/
+/*begin languages\javascript\path.js*/
 
-/*end languages/javascript/path.js*/
+/*end languages\javascript\path.js*/
 
-/*begin languages/javascript/point.js*/
+/*begin languages\javascript\point.js*/
 
-/*end languages/javascript/point.js*/
+/*end languages\javascript\point.js*/
 
-/*begin languages/javascript/rect.js*/
+/*begin languages\javascript\rect.js*/
 
-/*end languages/javascript/rect.js*/
+/*end languages\javascript\rect.js*/
 
-/*begin languages/javascript/sensing.js*/
+/*begin languages\javascript\sensing.js*/
 
-/*end languages/javascript/sensing.js*/
+/*end languages\javascript\sensing.js*/
 
-/*begin languages/javascript/shape.js*/
+/*begin languages\javascript\shape.js*/
 
-/*end languages/javascript/shape.js*/
+/*end languages\javascript\shape.js*/
 
-/*begin languages/javascript/size.js*/
+/*begin languages\javascript\size.js*/
 
-/*end languages/javascript/size.js*/
+/*end languages\javascript\size.js*/
 
-/*begin languages/javascript/text.js*/
+/*begin languages\javascript\text.js*/
 
-/*end languages/javascript/text.js*/
+/*end languages\javascript\text.js*/
 
-/*begin languages/javascript/matrix.js*/
+/*begin languages\javascript\matrix.js*/
 
-/*end languages/javascript/matrix.js*/
+/*end languages\javascript\matrix.js*/
 
-/*begin languages/javascript/demo.js*/
+/*begin languages\javascript\demo.js*/
 /* Add Demo type and toolkists list */
 wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
 wb.choiceLists.types.push('demo');
 wb.choiceLists.rettypes.push('demo');
-/*end languages/javascript/demo.js*/
+/*end languages\javascript\demo.js*/
 
-/*begin languages/javascript/control.json*/
+/*begin languages\javascript\control.json*/
 wb.menu({
     "name": "Controls",
     "blocks": [
@@ -4269,9 +4269,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/control.json*/
+/*end languages\javascript\control.json*/
 
-/*begin languages/javascript/sprite.json*/
+/*begin languages\javascript\sprite.json*/
 wb.menu({
     "name": "Sprites",
     "blocks": [
@@ -4349,27 +4349,110 @@ wb.menu({
                 }
             ]
         },
+        //NEW BLOCKS
         {
             "blocktype": "step",
             "id": "468e4180-2221-11e3-8224-0800200c9a66",
-            "script": "{{1}}.rotate({{2}});",
-            "help": "Rotate the sprite at its current location",
+            "script": "{{1}}.setFacingDirectionBy({{2}});",
+            "help": "Rotate the sprites facing direction absolutely",
             "sockets": [
                 {
-                    "name": "rotate sprite",
+                    "name": "Turn sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
                     "name": "by",
                     "type": "number",
-                    "value": null
+                    "value": 0
                 },
                 {
                     "name": "degrees",
                 },
             ]
         },
+        {
+            "blocktype": "step",
+            "id": "69998440-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setFacingDirection({{2}});",
+            "help": "Rotate the sprites facing direction",
+            "sockets": [
+                {
+                    "name": "Turn sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees",
+                },
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "71c09d20-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setMovementDirectionBy({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees",
+                },
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "799b91d0-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setMovementDirection({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees",
+                },
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7381ea40-22f6-11e3-8224-0800200c9a66",
+            "script": "{{1}}.autosteer = ({{2}});",
+            "help": "Set the sprite to sync facing and movement directions",
+            "sockets": [
+                {
+                    "name": "Autosteer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": 0
+                },
+            ]
+        },
+        //END NEW BLOCKS
         {
             "blocktype": "expression",
             "id": "04c9dfd8-82eb-4f64-9d1c-54b78d744c21",
@@ -4416,7 +4499,7 @@ wb.menu({
             "blocktype": "step",
             "id": "372de8c1-5f72-49cb-a2bd-faf66c36e318",
             "help": "move a sprite by its own speed and direction",
-            "script": "(function(sprite){sprite.x+=sprite.dx;sprite.y+=sprite.dy;})({{1}});",
+            "script": "{{1}}.move();",
             "sockets": [
                 {
                     "name": "move",
@@ -4429,7 +4512,7 @@ wb.menu({
             "blocktype": "step",
             "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
             "help": "set the direction (angle in degrees) of a sprite",
-            "script": "{{1}}.setDirection({{2}});",
+            "script": "{{1}}.setFacingDirection({{2}});",
             "sockets": [
                 {
                     "name": "set sprite",
@@ -4485,6 +4568,37 @@ wb.menu({
                 {
                     "name": "to",
                     "type": "point",
+                    "value": null
+                }
+            ]
+        },
+    {
+            "blocktype": "step",
+            "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
+            "script": "{{1}}.color = {{2}};",
+            "help": "Recolor a sprite",
+            "sockets": [
+                {
+                    "name": "Color sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to color",
+                    "type": "color",
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
+                }
+            ]
+        },
+    {
+            "blocktype": "step",
+            "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
+            "script": "(function(sprite){sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
+            "help": "restore the original size of a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "restore size of sprite",
+                    "type": "sprite",
                     "value": null
                 }
             ]
@@ -4556,10 +4670,10 @@ wb.menu({
                 }
             ]
         },
-{
+        {
             "blocktype": "expression",
             "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
-            "script": "{{1}}.direction",
+            "script": "{{1}}.movementDirection",
             "type": "number",
             "sockets": [
                 {
@@ -4568,15 +4682,47 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "direction"
+                    "name": "facing direction"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "495336f3-68ed-4bc7-a145-11756803876b",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "movement direction"
+                }
+            ]
+        },
+         {
+            "blocktype": "expression",
+            "id": "86aa39be-5419-4abb-9765-e63f824608f0",
+            "script": "{{1}}.polygon.average",
+            "type": "point",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "centre"
                 }
             ]
         }
     ]
 });
-/*end languages/javascript/sprite.json*/
+/*end languages\javascript\sprite.json*/
 
-/*begin languages/javascript/array.json*/
+/*begin languages\javascript\array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
@@ -4833,9 +4979,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/array.json*/
+/*end languages\javascript\array.json*/
 
-/*begin languages/javascript/boolean.json*/
+/*begin languages\javascript\boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -4913,9 +5059,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/boolean.json*/
+/*end languages\javascript\boolean.json*/
 
-/*begin languages/javascript/canvas.json*/
+/*begin languages\javascript\canvas.json*/
 wb.menu({
     "name": "Canvas",
     "blocks": [
@@ -5119,9 +5265,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/canvas.json*/
+/*end languages\javascript\canvas.json*/
 
-/*begin languages/javascript/color.json*/
+/*begin languages\javascript\color.json*/
 wb.menu({
     "name": "Color",
     "blocks": [
@@ -5432,9 +5578,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/color.json*/
+/*end languages\javascript\color.json*/
 
-/*begin languages/javascript/image.json*/
+/*begin languages\javascript\image.json*/
 wb.menu({
     "name": "Images",
     "blocks": [
@@ -5737,9 +5883,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/image.json*/
+/*end languages\javascript\image.json*/
 
-/*begin languages/javascript/math.json*/
+/*begin languages\javascript\math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -6109,9 +6255,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/math.json*/
+/*end languages\javascript\math.json*/
 
-/*begin languages/javascript/object.json*/
+/*begin languages\javascript\object.json*/
 wb.menu({
     "name": "Objects",
     "blocks": [
@@ -6223,9 +6369,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/object.json*/
+/*end languages\javascript\object.json*/
 
-/*begin languages/javascript/string.json*/
+/*begin languages\javascript\string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
@@ -6432,9 +6578,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/string.json*/
+/*end languages\javascript\string.json*/
 
-/*begin languages/javascript/path.json*/
+/*begin languages\javascript\path.json*/
 wb.menu({
     "name": "Paths",
     "blocks": [
@@ -6634,9 +6780,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/path.json*/
+/*end languages\javascript\path.json*/
 
-/*begin languages/javascript/point.json*/
+/*begin languages\javascript\point.json*/
 wb.menu({
     "name": "Points",
     "blocks": [
@@ -6739,9 +6885,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/point.json*/
+/*end languages\javascript\point.json*/
 
-/*begin languages/javascript/rect.json*/
+/*begin languages\javascript\rect.json*/
 wb.menu({
     "name": "Rects",
     "blocks": [
@@ -6919,9 +7065,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/rect.json*/
+/*end languages\javascript\rect.json*/
 
-/*begin languages/javascript/sensing.json*/
+/*begin languages\javascript\sensing.json*/
 wb.menu({
     "name": "Sensing",
     "blocks": [
@@ -7105,9 +7251,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/sensing.json*/
+/*end languages\javascript\sensing.json*/
 
-/*begin languages/javascript/shape.json*/
+/*begin languages\javascript\shape.json*/
 wb.menu({
     "name": "Shapes",
     "blocks": [
@@ -7314,9 +7460,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/shape.json*/
+/*end languages\javascript\shape.json*/
 
-/*begin languages/javascript/size.json*/
+/*begin languages\javascript\size.json*/
 wb.menu({
     "name": "Sizes",
     "blocks": [
@@ -7402,9 +7548,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/size.json*/
+/*end languages\javascript\size.json*/
 
-/*begin languages/javascript/text.json*/
+/*begin languages\javascript\text.json*/
 wb.menu({
     "name": "Text",
     "blocks": [
@@ -7581,9 +7727,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/text.json*/
+/*end languages\javascript\text.json*/
 
-/*begin languages/javascript/matrix.json*/
+/*begin languages\javascript\matrix.json*/
 wb.menu({
     "name": "Matrix",
     "blocks": [
@@ -7616,9 +7762,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/matrix.json*/
+/*end languages\javascript\matrix.json*/
 
-/*begin languages/javascript/demo.json*/
+/*begin languages\javascript\demo.json*/
 wb.menu({
     "name": "Demo",
     "blocks": [
@@ -7659,7 +7805,7 @@ wb.menu({
     ]
 }
 );
-/*end languages/javascript/demo.json*/
+/*end languages\javascript\demo.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

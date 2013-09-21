@@ -3762,7 +3762,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 
 /*end workspace.js*/
 
-/*begin languages/minecraftjs/minecraftjs.js*/
+/*begin languages\minecraftjs\minecraftjs.js*/
 
 /*
  *    MINECRAFTJS PLUGIN
@@ -3934,56 +3934,56 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end languages/minecraftjs/minecraftjs.js*/
+/*end languages\minecraftjs\minecraftjs.js*/
 
-/*begin languages/minecraftjs/control.js*/
+/*begin languages\minecraftjs\control.js*/
 
-/*end languages/minecraftjs/control.js*/
+/*end languages\minecraftjs\control.js*/
 
-/*begin languages/minecraftjs/game.js*/
+/*begin languages\minecraftjs\game.js*/
 
-/*end languages/minecraftjs/game.js*/
+/*end languages\minecraftjs\game.js*/
 
-/*begin languages/minecraftjs/player.js*/
+/*begin languages\minecraftjs\player.js*/
 
-/*end languages/minecraftjs/player.js*/
+/*end languages\minecraftjs\player.js*/
 
-/*begin languages/minecraftjs/position.js*/
+/*begin languages\minecraftjs\position.js*/
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
-/*end languages/minecraftjs/position.js*/
+/*end languages\minecraftjs\position.js*/
 
-/*begin languages/minecraftjs/blocks.js*/
+/*begin languages\minecraftjs\blocks.js*/
 
 wb.choiceLists.blocks = ["AIR", "STONE", "GRASS", "DIRT", "COBBLESTONE", "WOOD_PLANKS", "SAPLING", "BEDROCK", "WATER_FLOWING", "WATER_STATIONARY", "LAVA_FLOWING", "LAVA_STATIONARY", "SAND", "GRAVEL", "GOLD_ORE", "IRON_ORE", "COAL_ORE", "WOOD", "LEAVES", "GLASS", "LAPIS_LAZULI_ORE", "LAPIS_LAZULI_BLOCK", "SANDSTONE", "BED", "COBWEB", "GRASS_TALL", "WOOL", "FLOWER_YELLOW", "FLOWER_CYAN", "MUSHROOM_BROWN", "MUSHROOM_RED", "GOLD_BLOCK", "IRON_BLOCK", "STONE_SLAB_DOUBLE", "STONE_SLAB", "BRICK_BLOCK", "TNT", "BOOKSHELF", "MOSS_STONE", "OBSIDIAN", "TORCH", "FIRE", "STAIRS_WOOD", "CHEST", "DIAMOND_ORE", "DIAMOND_BLOCK", "CRAFTING_TABLE", "FARMLAND", "FURNACE_INACTIVE", "FURNACE_ACTIVE", "DOOR_WOOD", "LADDER", "STAIRS_COBBLESTONE", "DOOR_IRON", "REDSTONE_ORE", "SNOW", "ICE", "SNOW_BLOCK", "CACTUS", "CLAY", "SUGAR_CANE", "FENCE", "GLOWSTONE_BLOCK", "BEDROCK_INVISIBLE", "GLASS_PANE", "MELON", "FENCE_GATE", "GLOWING_OBSIDIAN", "NETHER_REACTOR_CORE"];
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['block']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['block']);
-/*end languages/minecraftjs/blocks.js*/
+/*end languages\minecraftjs\blocks.js*/
 
-/*begin languages/minecraftjs/camera.js*/
+/*begin languages\minecraftjs\camera.js*/
 
 wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
-/*end languages/minecraftjs/camera.js*/
+/*end languages\minecraftjs\camera.js*/
 
-/*begin languages/minecraftjs/array.js*/
+/*begin languages\minecraftjs\array.js*/
 
-/*end languages/minecraftjs/array.js*/
+/*end languages\minecraftjs\array.js*/
 
-/*begin languages/minecraftjs/boolean.js*/
+/*begin languages\minecraftjs\boolean.js*/
 
-/*end languages/minecraftjs/boolean.js*/
+/*end languages\minecraftjs\boolean.js*/
 
-/*begin languages/minecraftjs/math.js*/
+/*begin languages\minecraftjs\math.js*/
 
-/*end languages/minecraftjs/math.js*/
+/*end languages\minecraftjs\math.js*/
 
-/*begin languages/minecraftjs/string.js*/
+/*begin languages\minecraftjs\string.js*/
 
-/*end languages/minecraftjs/string.js*/
+/*end languages\minecraftjs\string.js*/
 
-/*begin languages/minecraftjs/control.json*/
+/*begin languages\minecraftjs\control.json*/
 wb.menu({
     "name": "Control",
     "blocks": [
@@ -4166,9 +4166,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/control.json*/
+/*end languages\minecraftjs\control.json*/
 
-/*begin languages/minecraftjs/game.json*/
+/*begin languages\minecraftjs\game.json*/
 wb.menu({
     "name": "Game",
     "blocks": [
@@ -4216,9 +4216,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/game.json*/
+/*end languages\minecraftjs\game.json*/
 
-/*begin languages/minecraftjs/player.json*/
+/*begin languages\minecraftjs\player.json*/
 wb.menu({
     "name": "Player",
     "blocks": [
@@ -4322,9 +4322,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/player.json*/
+/*end languages\minecraftjs\player.json*/
 
-/*begin languages/minecraftjs/position.json*/
+/*begin languages\minecraftjs\position.json*/
 wb.menu({
     "name": "Position",
     "blocks": [
@@ -4548,9 +4548,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/position.json*/
+/*end languages\minecraftjs\position.json*/
 
-/*begin languages/minecraftjs/blocks.json*/
+/*begin languages\minecraftjs\blocks.json*/
 wb.menu({
     "name": "Blocks",
     "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
@@ -4668,9 +4668,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/blocks.json*/
+/*end languages\minecraftjs\blocks.json*/
 
-/*begin languages/minecraftjs/camera.json*/
+/*begin languages\minecraftjs\camera.json*/
 wb.menu({
     "name": "Camera",
     "blocks": [
@@ -4710,9 +4710,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/camera.json*/
+/*end languages\minecraftjs\camera.json*/
 
-/*begin languages/minecraftjs/array.json*/
+/*begin languages\minecraftjs\array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
@@ -4969,9 +4969,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/array.json*/
+/*end languages\minecraftjs\array.json*/
 
-/*begin languages/minecraftjs/boolean.json*/
+/*begin languages\minecraftjs\boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -5049,9 +5049,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/boolean.json*/
+/*end languages\minecraftjs\boolean.json*/
 
-/*begin languages/minecraftjs/math.json*/
+/*begin languages\minecraftjs\math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -5462,9 +5462,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/math.json*/
+/*end languages\minecraftjs\math.json*/
 
-/*begin languages/minecraftjs/string.json*/
+/*begin languages\minecraftjs\string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
@@ -5671,7 +5671,7 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/string.json*/
+/*end languages\minecraftjs\string.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

@@ -118,6 +118,10 @@
                 startParent = target.parentElement;
             }
             startSibling = target.nextElementSibling;
+            if(!wb.matches(startSibling, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	startSibling = startSibling.nextElementSibling;
+            }
             // Need index too, if it is a step
             if (wb.matches(target, '.step')){
                 startIndex = wb.indexOf(target);

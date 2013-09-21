@@ -3239,6 +3239,12 @@ function uuid(){
         instances.forEach(function(elem){
             wb.find(elem, '.name').textContent = newName;
         });
+
+        var parent = document.getElementById(source.dataset.localSource);
+        var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+        nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        wb.find(parent, '.name').textContent = nameTemplate;
     }
 
     function cancelUpdateName(event){

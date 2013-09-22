@@ -17,6 +17,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("width", global.stage_width);',
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
+                'local.canvas.focus()',
                 'local.ctx = local.canvas.getContext("2d");',
                 'local.ctx.textAlign = "center";',
                 'var main = function(){',
@@ -55,6 +56,7 @@ wb.runScript = function(script){
     var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
     console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+    document.querySelector('.stageframe').focus();
 }
 
 function clearStage(event){

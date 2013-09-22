@@ -8,16 +8,12 @@ range(30).forEach(function(idx, item) {
         x: randint(0, global.stage_width),
         y: randint(0, global.stage_height)
     }, "rgb(" + randint(0, 255) + "," + randint(0, 255) + "," + randint(0, 255) + ")");
-    (function(sprite, degrees, speed) {
-        sprite.dx = Math.cos(degrees * Math.PI / 180) * speed;
-        sprite.dy = Math.sin(degrees * Math.PI / 180) * speed;
-        sprite.direction = degrees;
-        sprite.speed = speed;
-    })(local.sprite_210, randint(1, 360), randint(2, 5));
+    local.sprite_210.setDirection(randint(1, 360));
+    local.sprite_210.setSpeed(randint(2, 5));
     local.array_205.push(local.sprite_210);
 });
-local.count_209 = 0;
 (function() {
+    local.count_209 = 0;
     setInterval(function() {
         local.count_209++;
         local.ctx.save();

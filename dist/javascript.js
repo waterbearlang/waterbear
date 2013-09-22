@@ -2282,6 +2282,7 @@ hljs.LANGUAGES.javascript = {
     var dragTimeout = 20;
     var snapDist = 25; //In pixels
     var startParent;
+    var startSibling;
     var startIndex;
     var timer;
     var dragTarget;
@@ -2346,6 +2347,11 @@ hljs.LANGUAGES.javascript = {
             startPosition = wb.rect(target);
             if (! wb.matches(target.parentElement, '.scripts_workspace')){
                 startParent = target.parentElement;
+            }
+            startSibling = target.nextElementSibling;
+            if(startSibling && !wb.matches(startSibling, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	startSibling = startSibling.nextElementSibling;
             }
             // Need index too, if it is a step
             if (wb.matches(target, '.step')){
@@ -2455,12 +2461,12 @@ hljs.LANGUAGES.javascript = {
         clearTimeout(timer);
         timer = null;
         if (!dragging) {return undefined;}
-        handleDrop();
+        handleDrop(end.altKey || end.ctrlKey);
         reset();
         return false;
     }
 
-    function handleDrop(){
+    function handleDrop(copyBlock){
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -2481,11 +2487,19 @@ hljs.LANGUAGES.javascript = {
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
+                if(copyBlock) {
+                	revertDrop();
+                	dragTarget = wb.cloneBlock(dragTarget);
+                }
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
             }else{
                 // Insert a value block into a socket
+                if(copyBlock) {
+                	revertDrop();
+                	dragTarget = wb.cloneBlock(dragTarget);
+                }
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
@@ -2495,22 +2509,31 @@ hljs.LANGUAGES.javascript = {
                 // remove cloned block (from menu)
                 dragTarget.parentElement.removeChild(dragTarget);
             }else{
-                // Put blocks back where we got them from
-                if (startParent){
-                    if (wb.matches(startParent, '.socket')){
-                        // wb.findChildren(startParent, 'input').forEach(function(elem){
-                        //     elem.hide();
-                        // });
-                    }
-                    startParent.appendChild(dragTarget); // FIXME: We'll need an index into the contained array
-                    dragTarget.removeAttribute('style');
-                    startParent = null;
-                }else{
-                    workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
-                    wb.reposition(dragTarget, startPosition);
-                }
+            	revertDrop();
             }
         }
+    }
+    
+    function revertDrop() {
+		// Put blocks back where we got them from
+		if (startParent){
+			if (wb.matches(startParent, '.socket')){
+				// wb.findChildren(startParent, 'input').forEach(function(elem){
+				//     elem.hide();
+				// });
+			}
+			if(startSibling) {
+				startParent.insertBefore(dragTarget, startSibling);
+			} else {
+				startParent.appendChild(dragTarget);
+			}
+			dragTarget.removeAttribute('style');
+			startParent = null;
+		}else{
+			workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
+			wb.reposition(dragTarget, startPosition);
+		}
+        Event.trigger(dragTarget, 'wb-add');
     }
 
     function positionExpressionDropCursor(){
@@ -3240,9 +3263,16 @@ function uuid(){
             wb.find(elem, '.name').textContent = newName;
         });
 
+        //Change name of parent
         var parent = document.getElementById(source.dataset.localSource);
         var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
         nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        //Change locals name of parent
+        var parentLocals = JSON.parse(parent.dataset.locals);
+        var localSocket = parentLocals[0].sockets[0];
+        localSocket.name = newName;
+        parent.dataset.locals = JSON.stringify(parentLocals);
 
         wb.find(parent, '.name').textContent = nameTemplate;
     }
@@ -3792,6 +3822,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("width", global.stage_width);',
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
+                'local.canvas.focus()',
                 'local.ctx = local.canvas.getContext("2d");',
                 'local.ctx.textAlign = "center";',
                 'var main = function(){',
@@ -3830,6 +3861,7 @@ wb.runScript = function(script){
     var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
     console.log('trying to load library %s', runtimeUrl);
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+    document.querySelector('.stageframe').focus();
 }
 
 function clearStage(event){
@@ -4036,7 +4068,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
-            "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]]; return false;}else{console.log(global.keyForEvent(event) );}});",
+            "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
             "help": "this trigger will run the attached blocks every time this key is pressed",
             "sockets": [
                 {

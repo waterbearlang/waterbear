@@ -4449,22 +4449,103 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "468e4180-2221-11e3-8224-0800200c9a66",
-            "script": "{{1}}.rotate({{2}});",
-            "help": "Rotate the sprite at its current location",
+            "script": "{{1}}.setFacingDirectionBy({{2}});",
+            "help": "Rotate the sprites facing direction absolutely",
             "sockets": [
                 {
-                    "name": "rotate sprite",
+                    "name": "Turn sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
                     "name": "by",
                     "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "69998440-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setFacingDirection({{2}});",
+            "help": "Rotate the sprites facing direction",
+            "sockets": [
+                {
+                    "name": "Turn sprite",
+                    "type": "sprite",
                     "value": null
                 },
                 {
-                    "name": "degrees",
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
                 },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "71c09d20-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setMovementDirectionBy({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
+            "script": "{{1}}.setMovementDirection({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7381ea40-22f6-11e3-8224-0800200c9a66",
+            "script": "{{1}}.autosteer = ({{2}});",
+            "help": "Set the sprite to sync facing and movement directions",
+            "sockets": [
+                {
+                    "name": "Autosteer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": 0
+                }
             ]
         },
         {
@@ -4489,7 +4570,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
-            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}});",
+            "script": "{{1}}.moveRelative({{2}},{{3}});",
             "help": "move a sprite relatively",
             "sockets": [
                 {
@@ -4513,29 +4594,12 @@ wb.menu({
             "blocktype": "step",
             "id": "372de8c1-5f72-49cb-a2bd-faf66c36e318",
             "help": "move a sprite by its own speed and direction",
-            "script": "(function(sprite){sprite.x+=sprite.dx;sprite.y+=sprite.dy;})({{1}});",
+            "script": "{{1}}.move();",
             "sockets": [
                 {
                     "name": "move",
                     "type": "sprite",
                     "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
-            "help": "set the direction (angle in degrees) of a sprite",
-            "script": "{{1}}.setDirection({{2}});",
-            "sockets": [
-                {
-                    "name": "set sprite",
-                    "type": "sprite",
-                },
-                {
-                    "name": "direction",
-                    "type": "number",
-                    "value": 0
                 }
             ]
         },
@@ -4547,28 +4611,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set sprite",
-                    "type": "sprite",
+                    "type": "sprite"
                 },
                 {
                     "name": "speed",
                     "type": "number",
                     "value": 3
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "473b0d99-b560-4bd1-a67f-b349abf1b24a",
-            "help": "set the color of a sprite",
-            "script": "{{1}}.setColor({{2}});",
-            "sockets": [
-                {
-                    "name": "set sprite",
-                    "type": "sprite"
-                },
-                {
-                    "name": "color",
-                    "type": "color"
                 }
             ]
         },
@@ -4587,7 +4635,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}});",
+            "script": "{{1}}.moveAbsolute({{2}}.x, {{2}}.y);",
             "help": "move a sprite absolutely",
             "sockets": [
                 {
@@ -4602,34 +4650,117 @@ wb.menu({
                 }
             ]
         },
-	{
+    {
             "blocktype": "step",
-            "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
-            "script": "(function(sprite, newSize){sprite.x += (sprite.w - newSize.w)/2; sprite.y += (sprite.h - newSize.h)/2; sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
-            "help": "resize a simple rectangle sprite",
+            "id": "badee0b6-8f7c-4cbd-9173-f450c765045d",
+            "script": "{{1}}.color = {{2}};",
+            "help": "Recolor a sprite",
             "sockets": [
                 {
-                    "name": "resize sprite",
+                    "name": "Color sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
-                    "name": "to size",
-                    "type": "size",
-                    "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
+                    "name": "to color",
+                    "type": "color",
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
             ]
         },
-	{
-            "blocktype": "step",
-            "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
-            "script": "(function(sprite){sprite.x += (sprite.w - sprite.origW)/2; sprite.y += (sprite.h - sprite.origH)/2; sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
-            "help": "restore the original size of a simple rectangle sprite",
+        {
+            "blocktype": "expression",
+            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
             "sockets": [
                 {
-                    "name": "restore size of sprite",
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
+                },
+                {
+                    "name": "facing direction"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "495336f3-68ed-4bc7-a145-11756803876b",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "movement direction"
+                }
+            ]
+        },
+         {
+            "blocktype": "expression",
+            "id": "86aa39be-5419-4abb-9765-e63f824608f0",
+            "script": "{{1}}.polygon.average",
+            "type": "point",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "center"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
+            "script": "{{1}}.speed",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
+            "script": "{{1}}.dx",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "horizontal speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
+            "script": "{{1}}.dy",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "vertical speed"
                 }
             ]
         },
@@ -4697,70 +4828,6 @@ wb.menu({
                 },
                 {
                     "name": "bottom"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
-            "script": "{{1}}.direction",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "direction"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
-            "script": "{{1}}.speed",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
-            "script": "{{1}}.dx",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
-            "script": "{{1}}.dy",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
                 }
             ]
         }

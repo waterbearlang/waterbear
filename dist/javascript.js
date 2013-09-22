@@ -3933,6 +3933,21 @@ wb.choiceLists.rettypes.push('sprite');
 
 /*end languages/javascript/sprite.js*/
 
+/*begin languages/javascript/voice.js*/
+/*
+ *    Music Plugin
+ *
+ *    Support for playing music/sounds using Waterbear
+ *
+ */
+
+
+wb.choiceLists.types.push('voice');
+wb.choiceLists.rettypes.push('voice');
+
+
+/*end languages/javascript/voice.js*/
+
 /*begin languages/javascript/array.js*/
 
 /*end languages/javascript/array.js*/
@@ -4752,6 +4767,128 @@ wb.menu({
     ]
 });
 /*end languages/javascript/sprite.json*/
+
+/*begin languages/javascript/voice.json*/
+wb.menu({
+    "name": "Music",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "ac1d8b1a-013c-46e0-b5e7-f241c594a7c7",
+            "script": "local.voice## = new Voice();",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "voice##"
+                        }
+                    ],
+                    "script": "local.voice##",
+                    "type": "voice"
+                }
+            ],
+            "help": "create a simple voice to play tones",
+            "sockets": [
+                {
+                    "name": "voice##",
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "ee91b7ec-d52b-45ff-bd13-ff8a8e5e50fb",
+            "help": "set the frequency of the voice",
+            "script": "(function(voice, freq){voice.osc.frequency.value = freq;})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "tone",
+                    "type": "number",
+                    "value": 400
+                },
+                {
+                    "name": "Hz"
+                }
+            ]
+        },
+                {
+            "blocktype": "step",
+            "id": "a133f0ad-27e6-444c-898a-66410c447a07",
+            "help": "set the volume of the voice",
+            "script": "(function(voice, vol){voice.amp.gain.value = vol;})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "tone",
+                    "type": "number",
+                    "value": 1
+                },
+                {
+                    "name": "Hz"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c1ce82b2-9810-41e0-b96e-44702982372b",
+            "script": "{{1}}.osc.frequency.value",
+            "help": "get frequency of a voice",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "voice",
+                    "type": "voice",
+                    "value": null
+                },
+                {
+                    "name": "Hz"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e4a4949f-1010-4026-a070-2555dbf3be0e",
+            "script": "{{1}}.toggle({{2}});",
+            "help": "turn the voice on or off",
+            "sockets": [
+                {
+                    "name": "turn voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "on",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "112ffdd3-7832-43df-85a5-85587e951295",
+            "script": "{{1}}.on",
+            "help": "get if the voice is turned on",
+            "type": "boolean",
+            "sockets": [
+                {
+                    "name": "voice",
+                    "type": "voice",
+                    "value": null
+                },
+                {
+                    "name": "is on?"
+                }
+            ]
+        }
+    ]
+});
+/*end languages/javascript/voice.json*/
 
 /*begin languages/javascript/array.json*/
 wb.menu({

@@ -66,7 +66,7 @@
         },
         {
             "blocktype": "expression",
-            "id": "a0c6d157-7fc7-4819-9b97-7b81d4c49a83",
+            "id": "c1ce82b2-9810-41e0-b96e-44702982372b",
             "script": "{{1}}.osc.frequency.value",
             "help": "get frequency of a voice",
             "type": "number",

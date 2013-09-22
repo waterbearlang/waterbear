@@ -2349,7 +2349,7 @@ hljs.LANGUAGES.javascript = {
                 startParent = target.parentElement;
             }
             startSibling = target.nextElementSibling;
-            if(!wb.matches(startSibling, '.block')) {
+            if(startSibling && !wb.matches(startSibling, '.block')) {
             	// Sometimes the "next sibling" ends up being the cursor
             	startSibling = startSibling.nextElementSibling;
             }

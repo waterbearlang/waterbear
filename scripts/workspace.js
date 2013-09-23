@@ -109,6 +109,14 @@ function loadScriptsFromGist(gist){
 	loadScriptsFromObject(JSON.parse(file));
 }
 
+function loadScriptsFromExample(name){
+    wb.ajax('examples/' + name + '.json', function(exampleJson){
+        loadScriptsFromObject(JSON.parse(exampleJson));
+    }, function(xhr, status){
+        console.error('Error in wb.ajax: %s', status);
+    });
+}
+
 function runScriptFromGist(gist){
 	console.log('running script from gist');
 	var keys = Object.keys(gist.data.files);
@@ -136,6 +144,8 @@ wb.loadCurrentScripts = function(queryParsed){
     			'https://api.github.com/gists/' + queryParsed.gist,
     			loadScriptsFromGist
     		);
+        }else if (queryParsed.example){
+            loadScriptsFromExample(queryParsed.example);
     	}else if (localStorage['__' + language + '_current_scripts']){
             var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
             if (fileObject){

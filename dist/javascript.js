@@ -2076,7 +2076,7 @@ hljs.LANGUAGES.javascript = {
     wb.jsonp = function(url, callback){
         var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
         var handler = function(data){
-            // remove jsonp element
+            // remove jsonp 
             var script = document.getElementById(id);
             script.parentElement.removeChild(script);
             // remove self
@@ -2084,10 +2084,28 @@ hljs.LANGUAGES.javascript = {
             callback(data);
         };
         window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
     }
 
-
+    /* adapted from code here: http://javascriptexample.net/ajax01.php */
+    wb.ajax = function(url, success, failure){
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            var cType;
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    cType = this.getResponseHeader("Content-Type");
+                    success(this.responseText, cType);
+                }else{
+                    if (failure){
+                        failure(this.status, this);
+                    }
+                }
+            }
+        }
+        req.open('GET', url, true);
+        req.send(null);
+    }
 
 
 })(this);
@@ -3664,6 +3682,14 @@ function loadScriptsFromGist(gist){
 	loadScriptsFromObject(JSON.parse(file));
 }
 
+function loadScriptsFromExample(name){
+    wb.ajax('examples/' + name + '.json', function(exampleJson){
+        loadScriptsFromObject(JSON.parse(exampleJson));
+    }, function(xhr, status){
+        console.error('Error in wb.ajax: %s', status);
+    });
+}
+
 function runScriptFromGist(gist){
 	console.log('running script from gist');
 	var keys = Object.keys(gist.data.files);
@@ -3691,6 +3717,8 @@ wb.loadCurrentScripts = function(queryParsed){
     			'https://api.github.com/gists/' + queryParsed.gist,
     			loadScriptsFromGist
     		);
+        }else if (queryParsed.example){
+            loadScriptsFromExample(queryParsed.example);
     	}else if (localStorage['__' + language + '_current_scripts']){
             var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
             if (fileObject){

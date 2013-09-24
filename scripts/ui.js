@@ -125,6 +125,86 @@ function cancelCommand(key, opt){
 }
 
 var pasteboard = null;
+var current_cmenu = null;
+var show_context = false;
+
+function initContextMenus() {
+	Event.on(document.body, 'contextmenu', null, handleContextMenu);
+	Event.on(document.body, 'mouseup', null, closeContextMenu);
+}
+
+function buildContextMenu(options) {
+	console.log('building context menu');
+	console.log(options);
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.innerHTML = '';
+	var menu = document.createElement('ul');
+	menu.classList.add('cmenu');
+	for(var key in options) {
+		if(options.hasOwnProperty(key) && options[key]) {
+			var item = document.createElement('li');
+			item.onclick = options[key].callback;
+			if(options[key].startGroup) {
+				item.classList.add('topSep');
+			}
+			item.innerHTML = options[key].name;
+			menu.appendChild(item);
+		}
+	}
+	var item = document.createElement('li');
+	item.onclick = function(evt) {};
+	item.innerHTML = 'Disable this menu';
+	item.classList.add('topSep');
+	menu.appendChild(item);
+	contextDiv.appendChild(menu);
+}
+
+function stackTrace() {
+	var e = new Error('stack trace');
+	var stack = e.stack.replace(/@.*\//gm, '@')
+		.split('\n');
+	console.log(stack);
+}
+
+function closeContextMenu(evt) {
+	var contextDiv = document.getElementById('context_menu');
+	if(!wb.matches(evt.wbTarget, '#context_menu *')) {
+		contextDiv.style.display = 'none';
+	}
+}
+
+function handleContextMenu(evt) {
+	console.log('handling context menu');
+	stackTrace();
+	//if(!show_context) return;
+	console.log(evt.clientX, evt.clientY);
+	console.log(evt.wbTarget);
+	if(wb.matches(evt.wbTarget, '#block_menu *')) return;
+	else if(false);
+	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		buildContextMenu(block_cmenu);
+	} else return;
+	showContextMenu(evt.clientX, evt.clientY);
+	evt.preventDefault();
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
+}
+
+var block_cmenu = {
+	expand: {name: 'Expand All'},
+	collapse: {name: 'Collapse All'},
+	cut: {name: 'Cut'},
+	copy: {name: 'Copy'},
+	copySubscript: {name: 'Copy Subscript'},
+	paste: {name: 'Paste'},
+	cancel: {name: 'Cancel'},
+}
 
 // $.contextMenu({
 //     selector: '.scripts_workspace .block',
@@ -175,6 +255,7 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
+initContextMenus();
 // if (is_touch_device()){
 //     $.tappable({
 //         container: '.blockmenu, .workspace',

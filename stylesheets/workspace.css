@@ -285,3 +285,29 @@ svg text{
     /* This should be the same font used for <input> */
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+/* Context menu */
+
+#context_menu {
+	position: absolute;
+	z-index: 99;
+}
+
+.cmenu {
+	margin: 0;
+	padding: 0.3em;
+	list-style-type: none;
+	background-color: white;
+	text-decoration: none;
+}
+
+.cmenu li:hover {
+	text-decoration: underline !important;
+}
+
+.cmenu .topSep {
+	font-size: 90%;
+	border-top: 1px solid gray;
+	margin-top: 0.3em;
+	padding-top: 0.3em;
+}

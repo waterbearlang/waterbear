@@ -127,10 +127,13 @@ function cancelCommand(key, opt){
 var pasteboard = null;
 var current_cmenu = null;
 var show_context = false;
+var cmenu_disabled = false;
 
 function initContextMenus() {
 	Event.on(document.body, 'contextmenu', null, handleContextMenu);
 	Event.on(document.body, 'mouseup', null, closeContextMenu);
+	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
+	document.querySelector('.cmenuEnable').style.display = 'none';
 }
 
 function buildContextMenu(options) {
@@ -143,7 +146,7 @@ function buildContextMenu(options) {
 	for(var key in options) {
 		if(options.hasOwnProperty(key) && options[key]) {
 			var item = document.createElement('li');
-			item.onclick = options[key].callback;
+			Event.on(item, "click", null, cmenuCallback(options[key].callback));
 			if(options[key].startGroup) {
 				item.classList.add('topSep');
 			}
@@ -155,6 +158,7 @@ function buildContextMenu(options) {
 	item.onclick = function(evt) {};
 	item.innerHTML = 'Disable this menu';
 	item.classList.add('topSep');
+	Event.on(item, 'click', null, disableContextMenu);
 	menu.appendChild(item);
 	contextDiv.appendChild(menu);
 }
@@ -179,7 +183,7 @@ function handleContextMenu(evt) {
 	//if(!show_context) return;
 	console.log(evt.clientX, evt.clientY);
 	console.log(evt.wbTarget);
-	if(wb.matches(evt.wbTarget, '#block_menu *')) return;
+	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		buildContextMenu(block_cmenu);
@@ -196,14 +200,40 @@ function showContextMenu(atX, atY) {
 	contextDiv.style.top = atY + 'px';
 }
 
+function dummyCallback(evt) {
+	alert("Menuitem selected!");
+}
+
+function cmenuCallback(fcn) {
+	return function(evt) {
+		fcn(evt);
+		var contextDiv = document.getElementById('context_menu');
+		contextDiv.style.display = 'none';
+	};
+}
+
+function disableContextMenu(evt) {
+	cmenu_disabled = true;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = '';
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'none';
+}
+
+function enableContextMenu(evt) {
+	cmenu_disabled = false;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = 'none';
+}
+
 var block_cmenu = {
-	expand: {name: 'Expand All'},
-	collapse: {name: 'Collapse All'},
-	cut: {name: 'Cut'},
-	copy: {name: 'Copy'},
-	copySubscript: {name: 'Copy Subscript'},
-	paste: {name: 'Paste'},
-	cancel: {name: 'Cancel'},
+	expand: {name: 'Expand All', callback: dummyCallback},
+	collapse: {name: 'Collapse All', callback: dummyCallback},
+	cut: {name: 'Cut', callback: dummyCallback},
+	copy: {name: 'Copy', callback: dummyCallback},
+	copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
+	paste: {name: 'Paste', callback: dummyCallback},
+	cancel: {name: 'Cancel', callback: dummyCallback},
 }
 
 // $.contextMenu({

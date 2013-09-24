@@ -303,6 +303,7 @@ svg text{
 
 .cmenu li:hover {
 	text-decoration: underline !important;
+	cursor: pointer;
 }
 
 .cmenu .topSep {

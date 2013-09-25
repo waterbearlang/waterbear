@@ -7355,9 +7355,9 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "expression",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-            "script": "local.answer## = prompt({{1}});",
+            "script": "prompt({{1}})",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -7373,7 +7373,7 @@ wb.menu({
             "help": "Prompt the user for information",
             "sockets": [
                 {
-                    "name": "ask [string:What's your name?] and wait",
+                    "name": "ask",
                     "type": "string",
                     "value": "What's your name?"
                 },

@@ -1,4 +1,19 @@
 
+/*begin ajax.js*/
+function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
+function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+
+ajax={};
+ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
+ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
+ajax.send=function(u,f,m,a){var x=ajax.x();x.open(m,u,true);x.onreadystatechange=function(){if(x.readyState==4)f(x.responseText)};if(m=='POST')x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send(a)};
+ajax.get=function(url,func){ajax.send(url,func,'GET')};
+ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
+ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
+ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
+ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
+/*end ajax.js*/
+
 /*begin queryparams.js*/
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
@@ -1761,6 +1776,23 @@ function saveCurrentScripts(){
 }
 window.onunload = saveCurrentScripts;
 
+// Save script to gist;
+function saveCurrentScriptsToGist(){
+    console.log("Saving to Gist")
+    ajax.post("https://api.github.com/gists", function(data){
+        var raw_url = JSON.parse(data).files["script.js"].raw_url;
+        alert("Your script has been saved to " + raw_url);
+    }, JSON.stringify({
+        "description": prompt("Save to an anonymous Gist titled:"),
+        "public": true,
+        "files": {
+            "script.js": {
+                "content": scriptsToString()
+            },
+        }
+    }));
+}
+
 function scriptsToString(title, description){
     if (!title){ title = ''; }
     if (!description){ description = ''; }
@@ -1791,7 +1823,8 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+Event.on('.download_scripts', 'click', null, createDownloadUrl);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
 function loadScriptsFromFilesystem(){
@@ -1840,6 +1873,7 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
+window.fromgist = loadScriptsFromGist;
 
 function runScriptFromGist(gist){
 	console.log('running script from gist');

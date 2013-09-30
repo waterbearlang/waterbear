@@ -29,6 +29,23 @@ function saveCurrentScripts(){
 }
 window.onunload = saveCurrentScripts;
 
+// Save script to gist;
+function saveCurrentScriptsToGist(){
+    console.log("Saving to Gist")
+    ajax.post("https://api.github.com/gists", function(data){
+        var raw_url = JSON.parse(data).files["script.js"].raw_url;
+        alert("Your script has been saved to " + raw_url);
+    }, JSON.stringify({
+        "description": prompt("Save to an anonymous Gist titled:"),
+        "public": true,
+        "files": {
+            "script.js": {
+                "content": scriptsToString()
+            },
+        }
+    }));
+}
+
 function scriptsToString(title, description){
     if (!title){ title = ''; }
     if (!description){ description = ''; }
@@ -59,7 +76,8 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+Event.on('.download_scripts', 'click', null, createDownloadUrl);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
 function loadScriptsFromFilesystem(){
@@ -108,6 +126,7 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
+window.fromgist = loadScriptsFromGist;
 
 function runScriptFromGist(gist){
 	console.log('running script from gist');

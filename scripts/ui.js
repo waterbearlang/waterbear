@@ -195,12 +195,13 @@ function is_touch_device() {
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-	switch(wb.view){
-		case 'result': return run_menu(title, specs);
-		case 'blocks': return edit_menu(title, specs);
-		case 'editor': return edit_menu(title, specs);
-		default: return edit_menu(title, specs);
-	}
+    return run_menu(title, specs);
+	// switch(wb.view){
+	// 	case 'result': return run_menu(title, specs);
+	// 	case 'blocks': return edit_menu(title, specs);
+	// 	case 'editor': return edit_menu(title, specs);
+	// 	default: return edit_menu(title, specs);
+	// }
 };
 
 if (wb.view === 'result'){

@@ -46,13 +46,28 @@ function runCurrentScripts(event){
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
+Event.on('.stageframe', 'load', null, function(event){
+    console.log('iframe ready');
+    wb.iframeready = true;
+    if (wb.iframewaiting){
+        wb.iframewaiting();
+    }
+})
+
 wb.runScript = function(script){
-    wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-    console.log('trying to load library %s', runtimeUrl);
-    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
-    document.querySelector('.stageframe').focus();
+    var run = function(){
+        wb.script = script;
+        var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
+        var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+        // console.log('trying to load library %s', runtimeUrl);
+        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+        document.querySelector('.stageframe').focus();
+    };
+    if (wb.iframeready){
+        run();
+    }else{
+        wb.iframewaiting = run;
+    }
 }
 
 function clearStage(event){

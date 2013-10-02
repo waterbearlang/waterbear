@@ -3530,7 +3530,7 @@ function is_touch_device() {
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return run_menu(title, specs);
+    return edit_menu(title, specs);
 	// switch(wb.view){
 	// 	case 'result': return run_menu(title, specs);
 	// 	case 'blocks': return edit_menu(title, specs);
@@ -3540,11 +3540,8 @@ wb.menu = function(blockspec){
 };
 
 if (wb.view === 'result'){
+    console.log('listen for script load');
     Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-function run_menu(title, specs){
-    edit_menu(title, specs);
 }
 
 
@@ -3866,13 +3863,28 @@ function runCurrentScripts(event){
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
+Event.on('.stageframe', 'load', null, function(event){
+    console.log('iframe ready');
+    wb.iframeready = true;
+    if (wb.iframewaiting){
+        wb.iframewaiting();
+    }
+})
+
 wb.runScript = function(script){
-    wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-    console.log('trying to load library %s', runtimeUrl);
-    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
-    document.querySelector('.stageframe').focus();
+    var run = function(){
+        wb.script = script;
+        var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
+        var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+        // console.log('trying to load library %s', runtimeUrl);
+        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+        document.querySelector('.stageframe').focus();
+    };
+    if (wb.iframeready){
+        run();
+    }else{
+        wb.iframewaiting = run;
+    }
 }
 
 function clearStage(event){

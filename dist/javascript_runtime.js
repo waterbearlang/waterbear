@@ -444,7 +444,6 @@ PolySprite.prototype.draw = function(ctx){
 PolySprite.prototype.calculateBoundingBox = function(){
     var minX, maxX, minY, maxY;
     var points = this.polygon.points;
-    console.debug(points);
     for(var i=0; i < points.length; i++){
         
         minX = (points[i].x < minX || minX == null) ? points[i].x : minX;
@@ -456,7 +455,6 @@ PolySprite.prototype.calculateBoundingBox = function(){
     this.y = minY + this.polygon.pos.y;
     this.w = maxX - minX;
     this.h = maxY - minY;
-    console.debug(minX, maxX, minY, maxY);
 };
 
 PolySprite.prototype.collides = function(sprite) {

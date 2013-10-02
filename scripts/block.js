@@ -464,7 +464,8 @@
         var input = elem('input', {type: type, value: value});
 
         //Only enable editing for the appropriate types
-        if (!(type === "string" || type === "any" || type === "number")) {
+        if (!(type === "string" || type === "any" || 
+              type === "number" || type === "color")) {
             input.readOnly = true;
         }
 

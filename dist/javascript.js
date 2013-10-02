@@ -3869,13 +3869,14 @@ function runCurrentScripts(event){
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
-Event.on('.stageframe', 'load', null, function(event){
+window.addEventListener('load', function(event){
     console.log('iframe ready');
     wb.iframeready = true;
     if (wb.iframewaiting){
         wb.iframewaiting();
     }
-})
+    wb.iframewaiting = null;
+}, false);
 
 wb.runScript = function(script){
     var run = function(){

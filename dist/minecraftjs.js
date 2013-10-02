@@ -3207,6 +3207,12 @@ function uuid(){
                 value = obj.uValue || obj.value || '';
         }
         var input = elem('input', {type: type, value: value});
+
+        //Only enable editing for the appropriate types
+        if (!(type === "string" || type === "any" || type === "number")) {
+            input.readOnly = true;
+        }
+
         wb.resize(input);
         return input;
     }

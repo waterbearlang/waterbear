@@ -195,7 +195,7 @@ function is_touch_device() {
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return run_menu(title, specs);
+    return edit_menu(title, specs);
 	// switch(wb.view){
 	// 	case 'result': return run_menu(title, specs);
 	// 	case 'blocks': return edit_menu(title, specs);
@@ -205,11 +205,8 @@ wb.menu = function(blockspec){
 };
 
 if (wb.view === 'result'){
+    console.log('listen for script load');
     Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-function run_menu(title, specs){
-    edit_menu(title, specs);
 }
 
 

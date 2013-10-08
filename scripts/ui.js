@@ -74,60 +74,38 @@ function collapseCommand(key, opt){
     console.info('collapseCommand(%s, %o)', key, opt);
 }
 
-function cutBlockCommand(key, opt){
-    console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
-    var view = this.closest('.wrapper');
-    pasteboard = Block.model(view);
-    // Remove it programatically, and trigger the right events:
-    Event.trigger(view, 'wb-event');
-    view.remove();
+function copyCommand(evt) {
+	console.log("Copying a block!");
+	console.log(this);
+	pasteboard = wb.cloneBlock(this);
 }
 
-function copyBlockCommand(key, opt){
-    console.info('copyBlockCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone();
+function cutCommand(evt) {
+	console.log("Cutting a block!");
+	Event.trigger(this, 'wb-remove');
+	this.remove();
+	pasteboard = this;
 }
 
-function copySubscriptCommand(key, opt){
-    console.info('copySubscriptCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone(true);
-}
-
-function pasteCommand(key, opt){
-    console.info('pasteCommand(%s, %o)', key, opt);
-    if (pasteboard){
-        this.append(pasteboard.view());
-        addToScriptEvent(this, pasteboard.view());
-    }
-}
-
-function pasteExpressionCommand(key, opt){
-    console.info('pasteExpressionCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype === 'expression'){
-        this.hide();
-        pasteCommand.call(this.parent(), key, opt);
-    }
-}
-
-function pasteStepCommand(key, opt){
-    console.info('pasteStepCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype !== 'expression'){
-        if (this.find('> .wrapper').length){
-            console.log('already has a child element');
-        }else{
-            pasteCommand.call(this, key, opt);
-        }
-    }
-}
-
-function cancelCommand(key, opt){
-    console.info('cancelCommand(%s, %o)', key, opt);
+function pasteCommand(evt) {
+	console.log(pasteboard);
+	var paste = wb.cloneBlock(pasteboard);
+	if(wb.matches(pasteboard,'.step')) {
+		console.log("Pasting a step!");
+		cmenu_target.parentNode.insertBefore(paste,cmenu_target.nextSibling);
+		Event.trigger(paste, 'wb-add');
+	} else {
+		console.log("Pasting an expression!");
+		cmenu_target.appendChild(paste);
+		Event.trigger(paste, 'wb-add');
+	}
 }
 
 var pasteboard = null;
 var current_cmenu = null;
 var show_context = false;
 var cmenu_disabled = false;
+var cmenu_target = null;
 
 function initContextMenus() {
 	Event.on(document.body, 'contextmenu', null, handleContextMenu);
@@ -188,6 +166,7 @@ function handleContextMenu(evt) {
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		buildContextMenu(block_cmenu);
 	} else return;
+	cmenu_target = evt.wbTarget;
 	showContextMenu(evt.clientX, evt.clientY);
 	evt.preventDefault();
 }
@@ -198,17 +177,24 @@ function showContextMenu(atX, atY) {
 	contextDiv.style.display = 'block';
 	contextDiv.style.left = atX + 'px';
 	contextDiv.style.top = atY + 'px';
-}
-
-function dummyCallback(evt) {
-	alert("Menuitem selected!");
+	while(!wb.matches(cmenu_target, '.block')) {
+		console.log(cmenu_target);
+		cmenu_target = cmenu_target.parentNode;
+		if(cmenu_target.tagName == 'BODY') {
+			console.error("Something went wrong with determining the context menu target!");
+			cmenu_target = null;
+			contextDiv.style.display = 'none';
+		}
+	}
 }
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		fcn(evt);
+		console.log(cmenu_target);
+		fcn.call(cmenu_target,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';
+		evt.preventDefault();
 	};
 }
 
@@ -227,13 +213,13 @@ function enableContextMenu(evt) {
 }
 
 var block_cmenu = {
-	expand: {name: 'Expand All', callback: dummyCallback},
-	collapse: {name: 'Collapse All', callback: dummyCallback},
-	cut: {name: 'Cut', callback: dummyCallback},
-	copy: {name: 'Copy', callback: dummyCallback},
-	copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
-	paste: {name: 'Paste', callback: dummyCallback},
-	cancel: {name: 'Cancel', callback: dummyCallback},
+	//expand: {name: 'Expand All', callback: dummyCallback},
+	//collapse: {name: 'Collapse All', callback: dummyCallback},
+	cut: {name: 'Cut', callback: cutCommand},
+	copy: {name: 'Copy', callback: copyCommand},
+	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
+	paste: {name: 'Paste', callback: pasteCommand},
+	//cancel: {name: 'Cancel', callback: dummyCallback},
 }
 
 // $.contextMenu({

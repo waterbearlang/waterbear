@@ -177,7 +177,7 @@ function showContextMenu(atX, atY) {
 	contextDiv.style.display = 'block';
 	contextDiv.style.left = atX + 'px';
 	contextDiv.style.top = atY + 'px';
-	while(!wb.matches(cmenu_target, '.block')) {
+	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
 		console.log(cmenu_target);
 		cmenu_target = cmenu_target.parentNode;
 		if(cmenu_target.tagName == 'BODY') {

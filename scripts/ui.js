@@ -101,11 +101,36 @@ function pasteCommand(evt) {
 	}
 }
 
+function canPaste() {
+	console.log('A');
+	if(!pasteboard) return false;
+	console.log('B');
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+	console.log('C');
+		return true;
+	}
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+	console.log('D');
+		return true;
+	}
+	console.log('E');
+	return false;
+}
+
 var pasteboard = null;
 var current_cmenu = null;
 var show_context = false;
 var cmenu_disabled = false;
 var cmenu_target = null;
+
+function cmenuitem_enabled(menuitem) {
+	if(menuitem.enabled) {
+		if(typeof(menuitem.enabled) == 'function') {
+			return menuitem.enabled();
+		} else return menuitem.enabled;
+	}
+	return true;
+}
 
 function initContextMenus() {
 	Event.on(document.body, 'contextmenu', null, handleContextMenu);
@@ -124,7 +149,11 @@ function buildContextMenu(options) {
 	for(var key in options) {
 		if(options.hasOwnProperty(key) && options[key]) {
 			var item = document.createElement('li');
-			Event.on(item, "click", null, cmenuCallback(options[key].callback));
+			if(cmenuitem_enabled(options[key])) {
+				Event.on(item, "click", null, cmenuCallback(options[key].callback));
+			} else {
+				item.classList.add('disabled');
+			}
 			if(options[key].startGroup) {
 				item.classList.add('topSep');
 			}
@@ -218,7 +247,7 @@ var block_cmenu = {
 	cut: {name: 'Cut', callback: cutCommand},
 	copy: {name: 'Copy', callback: copyCommand},
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
-	paste: {name: 'Paste', callback: pasteCommand},
+	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
 }
 

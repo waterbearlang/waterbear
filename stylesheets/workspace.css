@@ -314,7 +314,11 @@ svg text{
 	padding: 0em 0.2em 0em 0.2em;
 }
 
-.cmenu li:hover {
+.cmenu li.disabled {
+	color: grey;
+}
+
+.cmenu li:hover:not(.disabled) {
 	text-decoration: underline !important;
 	background-color: #888;
 	cursor: pointer;

@@ -102,18 +102,13 @@ function pasteCommand(evt) {
 }
 
 function canPaste() {
-	console.log('A');
 	if(!pasteboard) return false;
-	console.log('B');
 	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
-	console.log('C');
 		return true;
 	}
 	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
-	console.log('D');
 		return true;
 	}
-	console.log('E');
 	return false;
 }
 
@@ -193,19 +188,15 @@ function handleContextMenu(evt) {
 	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		setContextMenuTarget(evt.wbTarget);
 		buildContextMenu(block_cmenu);
 	} else return;
-	cmenu_target = evt.wbTarget;
 	showContextMenu(evt.clientX, evt.clientY);
 	evt.preventDefault();
 }
 
-function showContextMenu(atX, atY) {
-	console.log('showing context menu');
-	var contextDiv = document.getElementById('context_menu');
-	contextDiv.style.display = 'block';
-	contextDiv.style.left = atX + 'px';
-	contextDiv.style.top = atY + 'px';
+function setContextMenuTarget(target) {
+	cmenu_target = target;
 	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
 		console.log(cmenu_target);
 		cmenu_target = cmenu_target.parentNode;
@@ -215,6 +206,14 @@ function showContextMenu(atX, atY) {
 			contextDiv.style.display = 'none';
 		}
 	}
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
 }
 
 function cmenuCallback(fcn) {

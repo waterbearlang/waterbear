@@ -4799,7 +4799,7 @@ wb.menu({
             "blocktype": "step",
             "id": "ee91b7ec-d52b-45ff-bd13-ff8a8e5e50fb",
             "help": "set the frequency of the voice",
-            "script": "(function(voice, freq){voice.osc.frequency.value = freq;})({{1}}, {{2}});",
+            "script": "(function(voice, freq){voice.frequency = freq; voice.updateTone();})({{1}}, {{2}});",
             "sockets": [
                 {
                     "name": "set voice",
@@ -4819,7 +4819,7 @@ wb.menu({
             "blocktype": "step",
             "id": "a133f0ad-27e6-444c-898a-66410c447a07",
             "help": "set the volume of the voice",
-            "script": "(function(voice, vol){voice.amp.gain.value = vol;})({{1}}, {{2}});",
+            "script": "(function(voice, vol){voice.volume = vol; voice.updateTone();})({{1}}, {{2}});",
             "sockets": [
                 {
                     "name": "set voice",
@@ -4835,7 +4835,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "c1ce82b2-9810-41e0-b96e-44702982372b",
-            "script": "{{1}}.osc.frequency.value",
+            "script": "{{1}}.frequency",
             "help": "get frequency of a voice",
             "type": "number",
             "sockets": [
@@ -4852,17 +4852,30 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "e4a4949f-1010-4026-a070-2555dbf3be0e",
-            "script": "{{1}}.toggle({{2}});",
-            "help": "turn the voice on or off",
+            "script": "{{1}}.startOsc();",
+            "help": "turn the voice on",
             "sockets": [
                 {
                     "name": "turn voice",
                     "type": "voice"
                 },
                 {
-                    "name": "on",
-                    "type": "boolean",
-                    "value": null
+                    "name": "on"
+                }
+            ]
+        },
+                {
+            "blocktype": "step",
+            "id": "c471bc07-fe25-4c6d-a5ef-4ee7f3076561",
+            "script": "{{1}}.stopOsc();",
+            "help": "turn the voice off",
+            "sockets": [
+                {
+                    "name": "turn voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "off"
                 }
             ]
         },
@@ -4870,7 +4883,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "112ffdd3-7832-43df-85a5-85587e951295",
             "script": "{{1}}.on",
-            "help": "get if the voice is turned on",
+            "help": "get whether the voice is turned on or off",
             "type": "boolean",
             "sockets": [
                 {

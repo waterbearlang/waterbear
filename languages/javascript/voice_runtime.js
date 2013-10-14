@@ -1,5 +1,6 @@
 // Music Routines
 function Voice(){
+    console.log("Message");
     this.on = false;
     this.osc;
     this.amp;

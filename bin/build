@@ -88,7 +88,7 @@ function concat(src, dest, files, ext, suffix, before, after){
         try{
             var contents = before + fs.readFileSync(path.join(filename), 'utf8') + after;
         }catch(e){
-            console.log('file %s not found', path.join(filename));
+            // console.log('file %s not found', path.join(filename));
             // console.log('Could not read %s: %s', path.join(filename), e.message);
             return;
         }

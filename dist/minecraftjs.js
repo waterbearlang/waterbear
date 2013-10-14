@@ -2076,7 +2076,7 @@ hljs.LANGUAGES.javascript = {
     wb.jsonp = function(url, callback){
         var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
         var handler = function(data){
-            // remove jsonp element
+            // remove jsonp 
             var script = document.getElementById(id);
             script.parentElement.removeChild(script);
             // remove self
@@ -2084,10 +2084,28 @@ hljs.LANGUAGES.javascript = {
             callback(data);
         };
         window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
     }
 
-
+    /* adapted from code here: http://javascriptexample.net/ajax01.php */
+    wb.ajax = function(url, success, failure){
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            var cType;
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    cType = this.getResponseHeader("Content-Type");
+                    success(this.responseText, cType);
+                }else{
+                    if (failure){
+                        failure(this.status, this);
+                    }
+                }
+            }
+        }
+        req.open('GET', url, true);
+        req.send(null);
+    }
 
 
 })(this);
@@ -2282,6 +2300,7 @@ hljs.LANGUAGES.javascript = {
     var dragTimeout = 20;
     var snapDist = 25; //In pixels
     var startParent;
+    var startSibling;
     var startIndex;
     var timer;
     var dragTarget;
@@ -2346,6 +2365,11 @@ hljs.LANGUAGES.javascript = {
             startPosition = wb.rect(target);
             if (! wb.matches(target.parentElement, '.scripts_workspace')){
                 startParent = target.parentElement;
+            }
+            startSibling = target.nextElementSibling;
+            if(startSibling && !wb.matches(startSibling, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	startSibling = startSibling.nextElementSibling;
             }
             // Need index too, if it is a step
             if (wb.matches(target, '.step')){
@@ -2455,12 +2479,12 @@ hljs.LANGUAGES.javascript = {
         clearTimeout(timer);
         timer = null;
         if (!dragging) {return undefined;}
-        handleDrop();
+        handleDrop(end.altKey || end.ctrlKey);
         reset();
         return false;
     }
 
-    function handleDrop(){
+    function handleDrop(copyBlock){
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -2481,11 +2505,19 @@ hljs.LANGUAGES.javascript = {
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
+                if(copyBlock) {
+                	revertDrop();
+                	dragTarget = wb.cloneBlock(dragTarget);
+                }
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
             }else{
                 // Insert a value block into a socket
+                if(copyBlock) {
+                	revertDrop();
+                	dragTarget = wb.cloneBlock(dragTarget);
+                }
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
@@ -2495,22 +2527,31 @@ hljs.LANGUAGES.javascript = {
                 // remove cloned block (from menu)
                 dragTarget.parentElement.removeChild(dragTarget);
             }else{
-                // Put blocks back where we got them from
-                if (startParent){
-                    if (wb.matches(startParent, '.socket')){
-                        // wb.findChildren(startParent, 'input').forEach(function(elem){
-                        //     elem.hide();
-                        // });
-                    }
-                    startParent.appendChild(dragTarget); // FIXME: We'll need an index into the contained array
-                    dragTarget.removeAttribute('style');
-                    startParent = null;
-                }else{
-                    workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
-                    wb.reposition(dragTarget, startPosition);
-                }
+            	revertDrop();
             }
         }
+    }
+    
+    function revertDrop() {
+		// Put blocks back where we got them from
+		if (startParent){
+			if (wb.matches(startParent, '.socket')){
+				// wb.findChildren(startParent, 'input').forEach(function(elem){
+				//     elem.hide();
+				// });
+			}
+			if(startSibling) {
+				startParent.insertBefore(dragTarget, startSibling);
+			} else {
+				startParent.appendChild(dragTarget);
+			}
+			dragTarget.removeAttribute('style');
+			startParent = null;
+		}else{
+			workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
+			wb.reposition(dragTarget, startPosition);
+		}
+        Event.trigger(dragTarget, 'wb-add');
     }
 
     function positionExpressionDropCursor(){
@@ -3166,6 +3207,13 @@ function uuid(){
                 value = obj.uValue || obj.value || '';
         }
         var input = elem('input', {type: type, value: value});
+
+        //Only enable editing for the appropriate types
+        if (!(type === "string" || type === "any" || 
+              type === "number" || type === "color")) {
+            input.readOnly = true;
+        }
+
         wb.resize(input);
         return input;
     }
@@ -3240,9 +3288,16 @@ function uuid(){
             wb.find(elem, '.name').textContent = newName;
         });
 
+        //Change name of parent
         var parent = document.getElementById(source.dataset.localSource);
         var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
         nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        //Change locals name of parent
+        var parentLocals = JSON.parse(parent.dataset.locals);
+        var localSocket = parentLocals[0].sockets[0];
+        localSocket.name = newName;
+        parent.dataset.locals = JSON.stringify(parentLocals);
 
         wb.find(parent, '.name').textContent = nameTemplate;
     }
@@ -3389,18 +3444,13 @@ function pasteCommand(evt) {
 }
 
 function canPaste() {
-	console.log('A');
 	if(!pasteboard) return false;
-	console.log('B');
 	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
-	console.log('C');
 		return true;
 	}
 	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
-	console.log('D');
 		return true;
 	}
-	console.log('E');
 	return false;
 }
 
@@ -3480,19 +3530,15 @@ function handleContextMenu(evt) {
 	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		setContextMenuTarget(evt.wbTarget);
 		buildContextMenu(block_cmenu);
 	} else return;
-	cmenu_target = evt.wbTarget;
 	showContextMenu(evt.clientX, evt.clientY);
 	evt.preventDefault();
 }
 
-function showContextMenu(atX, atY) {
-	console.log('showing context menu');
-	var contextDiv = document.getElementById('context_menu');
-	contextDiv.style.display = 'block';
-	contextDiv.style.left = atX + 'px';
-	contextDiv.style.top = atY + 'px';
+function setContextMenuTarget(target) {
+	cmenu_target = target;
 	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
 		console.log(cmenu_target);
 		cmenu_target = cmenu_target.parentNode;
@@ -3502,6 +3548,14 @@ function showContextMenu(atX, atY) {
 			contextDiv.style.display = 'none';
 		}
 	}
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
 }
 
 function cmenuCallback(fcn) {
@@ -3608,20 +3662,18 @@ initContextMenus();
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-	switch(wb.view){
-		case 'result': return run_menu(title, specs);
-		case 'blocks': return edit_menu(title, specs);
-		case 'editor': return edit_menu(title, specs);
-		default: return edit_menu(title, specs);
-	}
+    return edit_menu(title, specs);
+	// switch(wb.view){
+	// 	case 'result': return run_menu(title, specs);
+	// 	case 'blocks': return edit_menu(title, specs);
+	// 	case 'editor': return edit_menu(title, specs);
+	// 	default: return edit_menu(title, specs);
+	// }
 };
 
 if (wb.view === 'result'){
+    console.log('listen for script load');
     Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-function run_menu(title, specs){
-    edit_menu(title, specs);
 }
 
 
@@ -3760,6 +3812,14 @@ function loadScriptsFromGist(gist){
 	loadScriptsFromObject(JSON.parse(file));
 }
 
+function loadScriptsFromExample(name){
+    wb.ajax('examples/' + name + '.json', function(exampleJson){
+        loadScriptsFromObject(JSON.parse(exampleJson));
+    }, function(xhr, status){
+        console.error('Error in wb.ajax: %s', status);
+    });
+}
+
 function runScriptFromGist(gist){
 	console.log('running script from gist');
 	var keys = Object.keys(gist.data.files);
@@ -3787,6 +3847,8 @@ wb.loadCurrentScripts = function(queryParsed){
     			'https://api.github.com/gists/' + queryParsed.gist,
     			loadScriptsFromGist
     		);
+        }else if (queryParsed.example){
+            loadScriptsFromExample(queryParsed.example);
     	}else if (localStorage['__' + language + '_current_scripts']){
             var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
             if (fileObject){
@@ -3799,20 +3861,6 @@ wb.loadCurrentScripts = function(queryParsed){
     }
     Event.trigger(document.body, 'wb-loaded');
 };
-
-wb.runCurrentScripts = function(queryParsed){
-	if (queryParsed.gist){
-		wp.json(
-			'https://api.github.com/gists/' + queryParsed.gist,
-			runScriptFromGist
-		);
-	}else if (localStorage['__' + language + '_current_scripts']){
-		var fileObject = localStorage['__' + language + '_current_scripts'];
-		if (fileObject){
-			wb.runScript(fileObject);
-		}
-	}
-}
 
 
 // Allow saved scripts to be dropped in
@@ -3892,7 +3940,7 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
-Event.on(document.body, 'wb-loaded', null, function(evt){console.log('loaded');});
+Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
 Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
 })(wb);
 

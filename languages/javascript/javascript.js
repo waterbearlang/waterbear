@@ -17,6 +17,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("width", global.stage_width);',
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
+                'local.canvas.focus()',
                 'local.ctx = local.canvas.getContext("2d");',
                 'local.ctx.textAlign = "center";',
                 'var main = function(){',
@@ -39,22 +40,35 @@ function assetUrls(){
 }
 
 function runCurrentScripts(event){
-    if (document.body.className === 'result' && wb.script){
-        wb.runScript(wb.script);
-    }else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        document.body.className = 'result';
-        wb.runScript( wb.prettyScript(blocks) );
-    }
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+    document.body.className = 'result';
+    wb.runScript( wb.prettyScript(blocks) );
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
+window.addEventListener('load', function(event){
+    console.log('iframe ready');
+    wb.iframeready = true;
+    if (wb.iframewaiting){
+        wb.iframewaiting();
+    }
+    wb.iframewaiting = null;
+}, false);
+
 wb.runScript = function(script){
-    wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-    console.log('trying to load library %s', runtimeUrl);
-    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+    var run = function(){
+        wb.script = script;
+        var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
+        var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+        // console.log('trying to load library %s', runtimeUrl);
+        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+        document.querySelector('.stageframe').focus();
+    };
+    if (wb.iframeready){
+        run();
+    }else{
+        wb.iframewaiting = run;
+    }
 }
 
 function clearStage(event){

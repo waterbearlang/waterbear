@@ -2076,7 +2076,7 @@ hljs.LANGUAGES.javascript = {
     wb.jsonp = function(url, callback){
         var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
         var handler = function(data){
-            // remove jsonp element
+            // remove jsonp 
             var script = document.getElementById(id);
             script.parentElement.removeChild(script);
             // remove self
@@ -2084,10 +2084,28 @@ hljs.LANGUAGES.javascript = {
             callback(data);
         };
         window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
     }
 
-
+    /* adapted from code here: http://javascriptexample.net/ajax01.php */
+    wb.ajax = function(url, success, failure){
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            var cType;
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    cType = this.getResponseHeader("Content-Type");
+                    success(this.responseText, cType);
+                }else{
+                    if (failure){
+                        failure(this.status, this);
+                    }
+                }
+            }
+        }
+        req.open('GET', url, true);
+        req.send(null);
+    }
 
 
 })(this);
@@ -2282,6 +2300,7 @@ hljs.LANGUAGES.javascript = {
     var dragTimeout = 20;
     var snapDist = 25; //In pixels
     var startParent;
+    var startSibling;
     var startIndex;
     var timer;
     var dragTarget;
@@ -2346,6 +2365,11 @@ hljs.LANGUAGES.javascript = {
             startPosition = wb.rect(target);
             if (! wb.matches(target.parentElement, '.scripts_workspace')){
                 startParent = target.parentElement;
+            }
+            startSibling = target.nextElementSibling;
+            if(startSibling && !wb.matches(startSibling, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	startSibling = startSibling.nextElementSibling;
             }
             // Need index too, if it is a step
             if (wb.matches(target, '.step')){
@@ -2455,12 +2479,12 @@ hljs.LANGUAGES.javascript = {
         clearTimeout(timer);
         timer = null;
         if (!dragging) {return undefined;}
-        handleDrop();
+        handleDrop(end.altKey || end.ctrlKey);
         reset();
         return false;
     }
 
-    function handleDrop(){
+    function handleDrop(copyBlock){
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -2481,11 +2505,19 @@ hljs.LANGUAGES.javascript = {
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
+                if(copyBlock) {
+                	revertDrop();
+                	dragTarget = wb.cloneBlock(dragTarget);
+                }
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
             }else{
                 // Insert a value block into a socket
+                if(copyBlock) {
+                	revertDrop();
+                	dragTarget = wb.cloneBlock(dragTarget);
+                }
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
@@ -2495,22 +2527,31 @@ hljs.LANGUAGES.javascript = {
                 // remove cloned block (from menu)
                 dragTarget.parentElement.removeChild(dragTarget);
             }else{
-                // Put blocks back where we got them from
-                if (startParent){
-                    if (wb.matches(startParent, '.socket')){
-                        // wb.findChildren(startParent, 'input').forEach(function(elem){
-                        //     elem.hide();
-                        // });
-                    }
-                    startParent.appendChild(dragTarget); // FIXME: We'll need an index into the contained array
-                    dragTarget.removeAttribute('style');
-                    startParent = null;
-                }else{
-                    workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
-                    wb.reposition(dragTarget, startPosition);
-                }
+            	revertDrop();
             }
         }
+    }
+    
+    function revertDrop() {
+		// Put blocks back where we got them from
+		if (startParent){
+			if (wb.matches(startParent, '.socket')){
+				// wb.findChildren(startParent, 'input').forEach(function(elem){
+				//     elem.hide();
+				// });
+			}
+			if(startSibling) {
+				startParent.insertBefore(dragTarget, startSibling);
+			} else {
+				startParent.appendChild(dragTarget);
+			}
+			dragTarget.removeAttribute('style');
+			startParent = null;
+		}else{
+			workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
+			wb.reposition(dragTarget, startPosition);
+		}
+        Event.trigger(dragTarget, 'wb-add');
     }
 
     function positionExpressionDropCursor(){
@@ -3166,6 +3207,13 @@ function uuid(){
                 value = obj.uValue || obj.value || '';
         }
         var input = elem('input', {type: type, value: value});
+
+        //Only enable editing for the appropriate types
+        if (!(type === "string" || type === "any" || 
+              type === "number" || type === "color")) {
+            input.readOnly = true;
+        }
+
         wb.resize(input);
         return input;
     }
@@ -3240,9 +3288,16 @@ function uuid(){
             wb.find(elem, '.name').textContent = newName;
         });
 
+        //Change name of parent
         var parent = document.getElementById(source.dataset.localSource);
         var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
         nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        //Change locals name of parent
+        var parentLocals = JSON.parse(parent.dataset.locals);
+        var localSocket = parentLocals[0].sockets[0];
+        localSocket.name = newName;
+        parent.dataset.locals = JSON.stringify(parentLocals);
 
         wb.find(parent, '.name').textContent = nameTemplate;
     }
@@ -3389,18 +3444,13 @@ function pasteCommand(evt) {
 }
 
 function canPaste() {
-	console.log('A');
 	if(!pasteboard) return false;
-	console.log('B');
 	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
-	console.log('C');
 		return true;
 	}
 	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
-	console.log('D');
 		return true;
 	}
-	console.log('E');
 	return false;
 }
 
@@ -3480,19 +3530,15 @@ function handleContextMenu(evt) {
 	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		setContextMenuTarget(evt.wbTarget);
 		buildContextMenu(block_cmenu);
 	} else return;
-	cmenu_target = evt.wbTarget;
 	showContextMenu(evt.clientX, evt.clientY);
 	evt.preventDefault();
 }
 
-function showContextMenu(atX, atY) {
-	console.log('showing context menu');
-	var contextDiv = document.getElementById('context_menu');
-	contextDiv.style.display = 'block';
-	contextDiv.style.left = atX + 'px';
-	contextDiv.style.top = atY + 'px';
+function setContextMenuTarget(target) {
+	cmenu_target = target;
 	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
 		console.log(cmenu_target);
 		cmenu_target = cmenu_target.parentNode;
@@ -3502,6 +3548,14 @@ function showContextMenu(atX, atY) {
 			contextDiv.style.display = 'none';
 		}
 	}
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
 }
 
 function cmenuCallback(fcn) {
@@ -3608,20 +3662,18 @@ initContextMenus();
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-	switch(wb.view){
-		case 'result': return run_menu(title, specs);
-		case 'blocks': return edit_menu(title, specs);
-		case 'editor': return edit_menu(title, specs);
-		default: return edit_menu(title, specs);
-	}
+    return edit_menu(title, specs);
+	// switch(wb.view){
+	// 	case 'result': return run_menu(title, specs);
+	// 	case 'blocks': return edit_menu(title, specs);
+	// 	case 'editor': return edit_menu(title, specs);
+	// 	default: return edit_menu(title, specs);
+	// }
 };
 
 if (wb.view === 'result'){
+    console.log('listen for script load');
     Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-function run_menu(title, specs){
-    edit_menu(title, specs);
 }
 
 
@@ -3760,6 +3812,14 @@ function loadScriptsFromGist(gist){
 	loadScriptsFromObject(JSON.parse(file));
 }
 
+function loadScriptsFromExample(name){
+    wb.ajax('examples/' + name + '.json', function(exampleJson){
+        loadScriptsFromObject(JSON.parse(exampleJson));
+    }, function(xhr, status){
+        console.error('Error in wb.ajax: %s', status);
+    });
+}
+
 function runScriptFromGist(gist){
 	console.log('running script from gist');
 	var keys = Object.keys(gist.data.files);
@@ -3787,6 +3847,8 @@ wb.loadCurrentScripts = function(queryParsed){
     			'https://api.github.com/gists/' + queryParsed.gist,
     			loadScriptsFromGist
     		);
+        }else if (queryParsed.example){
+            loadScriptsFromExample(queryParsed.example);
     	}else if (localStorage['__' + language + '_current_scripts']){
             var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
             if (fileObject){
@@ -3799,20 +3861,6 @@ wb.loadCurrentScripts = function(queryParsed){
     }
     Event.trigger(document.body, 'wb-loaded');
 };
-
-wb.runCurrentScripts = function(queryParsed){
-	if (queryParsed.gist){
-		wp.json(
-			'https://api.github.com/gists/' + queryParsed.gist,
-			runScriptFromGist
-		);
-	}else if (localStorage['__' + language + '_current_scripts']){
-		var fileObject = localStorage['__' + language + '_current_scripts'];
-		if (fileObject){
-			wb.runScript(fileObject);
-		}
-	}
-}
 
 
 // Allow saved scripts to be dropped in
@@ -3892,7 +3940,7 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
-Event.on(document.body, 'wb-loaded', null, function(evt){console.log('loaded');});
+Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
 Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
 })(wb);
 
@@ -3918,6 +3966,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("width", global.stage_width);',
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
+                'local.canvas.focus()',
                 'local.ctx = local.canvas.getContext("2d");',
                 'local.ctx.textAlign = "center";',
                 'var main = function(){',
@@ -3940,22 +3989,35 @@ function assetUrls(){
 }
 
 function runCurrentScripts(event){
-    if (document.body.className === 'result' && wb.script){
-        wb.runScript(wb.script);
-    }else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        document.body.className = 'result';
-        wb.runScript( wb.prettyScript(blocks) );
-    }
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+    document.body.className = 'result';
+    wb.runScript( wb.prettyScript(blocks) );
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
+window.addEventListener('load', function(event){
+    console.log('iframe ready');
+    wb.iframeready = true;
+    if (wb.iframewaiting){
+        wb.iframewaiting();
+    }
+    wb.iframewaiting = null;
+}, false);
+
 wb.runScript = function(script){
-    wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-    console.log('trying to load library %s', runtimeUrl);
-    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+    var run = function(){
+        wb.script = script;
+        var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
+        var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+        // console.log('trying to load library %s', runtimeUrl);
+        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+        document.querySelector('.stageframe').focus();
+    };
+    if (wb.iframeready){
+        run();
+    }else{
+        wb.iframewaiting = run;
+    }
 }
 
 function clearStage(event){
@@ -4552,22 +4614,103 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "468e4180-2221-11e3-8224-0800200c9a66",
-            "script": "{{1}}.rotate({{2}});",
-            "help": "Rotate the sprite at its current location",
+            "script": "{{1}}.setFacingDirectionBy({{2}});",
+            "help": "Rotate the sprites facing direction absolutely",
             "sockets": [
                 {
-                    "name": "rotate sprite",
+                    "name": "Turn sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
                     "name": "by",
                     "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "69998440-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setFacingDirection({{2}});",
+            "help": "Rotate the sprites facing direction",
+            "sockets": [
+                {
+                    "name": "Turn sprite",
+                    "type": "sprite",
                     "value": null
                 },
                 {
-                    "name": "degrees",
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
                 },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "71c09d20-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setMovementDirectionBy({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
+            "script": "{{1}}.setMovementDirection({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7381ea40-22f6-11e3-8224-0800200c9a66",
+            "script": "{{1}}.autosteer = ({{2}});",
+            "help": "Set the sprite to sync facing and movement directions",
+            "sockets": [
+                {
+                    "name": "Autosteer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": 0
+                }
             ]
         },
         {
@@ -4592,7 +4735,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
-            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}});",
+            "script": "{{1}}.moveRelative({{2}},{{3}});",
             "help": "move a sprite relatively",
             "sockets": [
                 {
@@ -4616,29 +4759,12 @@ wb.menu({
             "blocktype": "step",
             "id": "372de8c1-5f72-49cb-a2bd-faf66c36e318",
             "help": "move a sprite by its own speed and direction",
-            "script": "(function(sprite){sprite.x+=sprite.dx;sprite.y+=sprite.dy;})({{1}});",
+            "script": "{{1}}.move();",
             "sockets": [
                 {
                     "name": "move",
                     "type": "sprite",
                     "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
-            "help": "set the direction (angle in degrees) of a sprite",
-            "script": "{{1}}.setDirection({{2}});",
-            "sockets": [
-                {
-                    "name": "set sprite",
-                    "type": "sprite",
-                },
-                {
-                    "name": "direction",
-                    "type": "number",
-                    "value": 0
                 }
             ]
         },
@@ -4650,28 +4776,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set sprite",
-                    "type": "sprite",
+                    "type": "sprite"
                 },
                 {
                     "name": "speed",
                     "type": "number",
                     "value": 3
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "473b0d99-b560-4bd1-a67f-b349abf1b24a",
-            "help": "set the color of a sprite",
-            "script": "{{1}}.setColor({{2}});",
-            "sockets": [
-                {
-                    "name": "set sprite",
-                    "type": "sprite"
-                },
-                {
-                    "name": "color",
-                    "type": "color"
                 }
             ]
         },
@@ -4690,7 +4800,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}});",
+            "script": "{{1}}.moveAbsolute({{2}}.x, {{2}}.y);",
             "help": "move a sprite absolutely",
             "sockets": [
                 {
@@ -4705,34 +4815,117 @@ wb.menu({
                 }
             ]
         },
-	{
+    {
             "blocktype": "step",
-            "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
-            "script": "(function(sprite, newSize){sprite.x += (sprite.w - newSize.w)/2; sprite.y += (sprite.h - newSize.h)/2; sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
-            "help": "resize a simple rectangle sprite",
+            "id": "badee0b6-8f7c-4cbd-9173-f450c765045d",
+            "script": "{{1}}.color = {{2}};",
+            "help": "Recolor a sprite",
             "sockets": [
                 {
-                    "name": "resize sprite",
+                    "name": "Color sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
-                    "name": "to size",
-                    "type": "size",
-                    "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
+                    "name": "to color",
+                    "type": "color",
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
             ]
         },
-	{
-            "blocktype": "step",
-            "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
-            "script": "(function(sprite){sprite.x += (sprite.w - sprite.origW)/2; sprite.y += (sprite.h - sprite.origH)/2; sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
-            "help": "restore the original size of a simple rectangle sprite",
+        {
+            "blocktype": "expression",
+            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
             "sockets": [
                 {
-                    "name": "restore size of sprite",
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
+                },
+                {
+                    "name": "facing direction"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "495336f3-68ed-4bc7-a145-11756803876b",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "movement direction"
+                }
+            ]
+        },
+         {
+            "blocktype": "expression",
+            "id": "86aa39be-5419-4abb-9765-e63f824608f0",
+            "script": "{{1}}.polygon.average",
+            "type": "point",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "center"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
+            "script": "{{1}}.speed",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
+            "script": "{{1}}.dx",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "horizontal speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
+            "script": "{{1}}.dy",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "vertical speed"
                 }
             ]
         },
@@ -4802,70 +4995,6 @@ wb.menu({
                     "name": "bottom"
                 }
             ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
-            "script": "{{1}}.direction",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "direction"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
-            "script": "{{1}}.speed",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
-            "script": "{{1}}.dx",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
-            "script": "{{1}}.dy",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
-                }
-            ]
         }
     ]
 });
@@ -4929,12 +5058,9 @@ wb.menu({
                     "type": "voice",
                 },
                 {
-                    "name": "tone",
+                    "name": "volume",
                     "type": "number",
                     "value": 1
-                },
-                {
-                    "name": "Hz"
                 }
             ]
         },
@@ -7357,9 +7483,9 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "expression",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-            "script": "local.answer## = prompt({{1}});",
+            "script": "prompt({{1}})",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -7375,7 +7501,7 @@ wb.menu({
             "help": "Prompt the user for information",
             "sockets": [
                 {
-                    "name": "ask [string:What's your name?] and wait",
+                    "name": "ask",
                     "type": "string",
                     "value": "What's your name?"
                 },

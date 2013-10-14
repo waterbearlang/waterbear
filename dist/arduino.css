@@ -288,6 +288,51 @@ svg text{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* Context menu */
+
+#context_menu {
+	position: absolute;
+	z-index: 99;
+}
+
+.cmenu {
+	margin: 0;
+	padding: 0.3em 0.1em 0.3em 0.1em;
+	list-style-type: none;
+	background-color: white;
+	text-decoration: none;
+	border: solid 1px #dedede;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px #888;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cmenu li {
+	padding: 0em 0.2em 0em 0.2em;
+}
+
+.cmenu li.disabled {
+	color: grey;
+}
+
+.cmenu li:hover:not(.disabled) {
+	text-decoration: underline !important;
+	background-color: #888;
+	cursor: pointer;
+}
+
+.cmenu .topSep {
+	font-size: 90%;
+	border-top: 1px solid silver;
+	margin-top: 0.3em;
+	padding-top: 0.3em;
+}
+
 /*end workspace.css*/
 
 /*begin blocks.css*/

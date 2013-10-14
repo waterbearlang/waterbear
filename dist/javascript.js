@@ -3361,57 +3361,182 @@ function collapseCommand(key, opt){
     console.info('collapseCommand(%s, %o)', key, opt);
 }
 
-function cutBlockCommand(key, opt){
-    console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
-    var view = this.closest('.wrapper');
-    pasteboard = Block.model(view);
-    // Remove it programatically, and trigger the right events:
-    Event.trigger(view, 'wb-event');
-    view.remove();
+function copyCommand(evt) {
+	console.log("Copying a block!");
+	console.log(this);
+	pasteboard = wb.cloneBlock(this);
 }
 
-function copyBlockCommand(key, opt){
-    console.info('copyBlockCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone();
+function cutCommand(evt) {
+	console.log("Cutting a block!");
+	Event.trigger(this, 'wb-remove');
+	this.remove();
+	pasteboard = this;
 }
 
-function copySubscriptCommand(key, opt){
-    console.info('copySubscriptCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone(true);
+function pasteCommand(evt) {
+	console.log(pasteboard);
+	var paste = wb.cloneBlock(pasteboard);
+	if(wb.matches(pasteboard,'.step')) {
+		console.log("Pasting a step!");
+		cmenu_target.parentNode.insertBefore(paste,cmenu_target.nextSibling);
+		Event.trigger(paste, 'wb-add');
+	} else {
+		console.log("Pasting an expression!");
+		cmenu_target.appendChild(paste);
+		Event.trigger(paste, 'wb-add');
+	}
 }
 
-function pasteCommand(key, opt){
-    console.info('pasteCommand(%s, %o)', key, opt);
-    if (pasteboard){
-        this.append(pasteboard.view());
-        addToScriptEvent(this, pasteboard.view());
-    }
-}
-
-function pasteExpressionCommand(key, opt){
-    console.info('pasteExpressionCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype === 'expression'){
-        this.hide();
-        pasteCommand.call(this.parent(), key, opt);
-    }
-}
-
-function pasteStepCommand(key, opt){
-    console.info('pasteStepCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype !== 'expression'){
-        if (this.find('> .wrapper').length){
-            console.log('already has a child element');
-        }else{
-            pasteCommand.call(this, key, opt);
-        }
-    }
-}
-
-function cancelCommand(key, opt){
-    console.info('cancelCommand(%s, %o)', key, opt);
+function canPaste() {
+	console.log('A');
+	if(!pasteboard) return false;
+	console.log('B');
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+	console.log('C');
+		return true;
+	}
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+	console.log('D');
+		return true;
+	}
+	console.log('E');
+	return false;
 }
 
 var pasteboard = null;
+var current_cmenu = null;
+var show_context = false;
+var cmenu_disabled = false;
+var cmenu_target = null;
+
+function cmenuitem_enabled(menuitem) {
+	if(menuitem.enabled) {
+		if(typeof(menuitem.enabled) == 'function') {
+			return menuitem.enabled();
+		} else return menuitem.enabled;
+	}
+	return true;
+}
+
+function initContextMenus() {
+	Event.on(document.body, 'contextmenu', null, handleContextMenu);
+	Event.on(document.body, 'mouseup', null, closeContextMenu);
+	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
+	document.querySelector('.cmenuEnable').style.display = 'none';
+}
+
+function buildContextMenu(options) {
+	console.log('building context menu');
+	console.log(options);
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.innerHTML = '';
+	var menu = document.createElement('ul');
+	menu.classList.add('cmenu');
+	for(var key in options) {
+		if(options.hasOwnProperty(key) && options[key]) {
+			var item = document.createElement('li');
+			if(cmenuitem_enabled(options[key])) {
+				Event.on(item, "click", null, cmenuCallback(options[key].callback));
+			} else {
+				item.classList.add('disabled');
+			}
+			if(options[key].startGroup) {
+				item.classList.add('topSep');
+			}
+			item.innerHTML = options[key].name;
+			menu.appendChild(item);
+		}
+	}
+	var item = document.createElement('li');
+	item.onclick = function(evt) {};
+	item.innerHTML = 'Disable this menu';
+	item.classList.add('topSep');
+	Event.on(item, 'click', null, disableContextMenu);
+	menu.appendChild(item);
+	contextDiv.appendChild(menu);
+}
+
+function stackTrace() {
+	var e = new Error('stack trace');
+	var stack = e.stack.replace(/@.*\//gm, '@')
+		.split('\n');
+	console.log(stack);
+}
+
+function closeContextMenu(evt) {
+	var contextDiv = document.getElementById('context_menu');
+	if(!wb.matches(evt.wbTarget, '#context_menu *')) {
+		contextDiv.style.display = 'none';
+	}
+}
+
+function handleContextMenu(evt) {
+	console.log('handling context menu');
+	stackTrace();
+	//if(!show_context) return;
+	console.log(evt.clientX, evt.clientY);
+	console.log(evt.wbTarget);
+	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
+	else if(false);
+	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		buildContextMenu(block_cmenu);
+	} else return;
+	cmenu_target = evt.wbTarget;
+	showContextMenu(evt.clientX, evt.clientY);
+	evt.preventDefault();
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
+	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
+		console.log(cmenu_target);
+		cmenu_target = cmenu_target.parentNode;
+		if(cmenu_target.tagName == 'BODY') {
+			console.error("Something went wrong with determining the context menu target!");
+			cmenu_target = null;
+			contextDiv.style.display = 'none';
+		}
+	}
+}
+
+function cmenuCallback(fcn) {
+	return function(evt) {
+		console.log(cmenu_target);
+		fcn.call(cmenu_target,evt);
+		var contextDiv = document.getElementById('context_menu');
+		contextDiv.style.display = 'none';
+		evt.preventDefault();
+	};
+}
+
+function disableContextMenu(evt) {
+	cmenu_disabled = true;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = '';
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'none';
+}
+
+function enableContextMenu(evt) {
+	cmenu_disabled = false;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = 'none';
+}
+
+var block_cmenu = {
+	//expand: {name: 'Expand All', callback: dummyCallback},
+	//collapse: {name: 'Collapse All', callback: dummyCallback},
+	cut: {name: 'Cut', callback: cutCommand},
+	copy: {name: 'Copy', callback: copyCommand},
+	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
+	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
+	//cancel: {name: 'Cancel', callback: dummyCallback},
+}
 
 // $.contextMenu({
 //     selector: '.scripts_workspace .block',
@@ -3462,6 +3587,7 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
+initContextMenus();
 // if (is_touch_device()){
 //     $.tappable({
 //         container: '.blockmenu, .workspace',
@@ -3909,6 +4035,21 @@ wb.choiceLists.rettypes.push('sprite');
 
 
 /*end languages/javascript/sprite.js*/
+
+/*begin languages/javascript/voice.js*/
+/*
+ *    Music Plugin
+ *
+ *    Support for playing music/sounds using Waterbear
+ *
+ */
+
+
+wb.choiceLists.types.push('voice');
+wb.choiceLists.rettypes.push('voice');
+
+
+/*end languages/javascript/voice.js*/
 
 /*begin languages/javascript/array.js*/
 
@@ -4729,6 +4870,128 @@ wb.menu({
     ]
 });
 /*end languages/javascript/sprite.json*/
+
+/*begin languages/javascript/voice.json*/
+wb.menu({
+    "name": "Music",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "ac1d8b1a-013c-46e0-b5e7-f241c594a7c7",
+            "script": "local.voice## = new Voice();",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "voice##"
+                        }
+                    ],
+                    "script": "local.voice##",
+                    "type": "voice"
+                }
+            ],
+            "help": "create a simple voice to play tones",
+            "sockets": [
+                {
+                    "name": "voice##",
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "ee91b7ec-d52b-45ff-bd13-ff8a8e5e50fb",
+            "help": "set the frequency of the voice",
+            "script": "(function(voice, freq){voice.osc.frequency.value = freq;})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "tone",
+                    "type": "number",
+                    "value": 400
+                },
+                {
+                    "name": "Hz"
+                }
+            ]
+        },
+                {
+            "blocktype": "step",
+            "id": "a133f0ad-27e6-444c-898a-66410c447a07",
+            "help": "set the volume of the voice",
+            "script": "(function(voice, vol){voice.amp.gain.value = vol;})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "tone",
+                    "type": "number",
+                    "value": 1
+                },
+                {
+                    "name": "Hz"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c1ce82b2-9810-41e0-b96e-44702982372b",
+            "script": "{{1}}.osc.frequency.value",
+            "help": "get frequency of a voice",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "voice",
+                    "type": "voice",
+                    "value": null
+                },
+                {
+                    "name": "Hz"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e4a4949f-1010-4026-a070-2555dbf3be0e",
+            "script": "{{1}}.toggle({{2}});",
+            "help": "turn the voice on or off",
+            "sockets": [
+                {
+                    "name": "turn voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "on",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "112ffdd3-7832-43df-85a5-85587e951295",
+            "script": "{{1}}.on",
+            "help": "get if the voice is turned on",
+            "type": "boolean",
+            "sockets": [
+                {
+                    "name": "voice",
+                    "type": "voice",
+                    "value": null
+                },
+                {
+                    "name": "is on?"
+                }
+            ]
+        }
+    ]
+});
+/*end languages/javascript/voice.json*/
 
 /*begin languages/javascript/array.json*/
 wb.menu({

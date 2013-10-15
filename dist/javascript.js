@@ -5051,18 +5051,9 @@ wb.menu({
                     "type": "voice",
                 },
                 {
-<<<<<<< HEAD
                     "name": "volume",
                     "type": "number",
                     "value": 1
-=======
-                    "name": "tone",
-                    "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "Hz"
->>>>>>> 532e5be86283643dda1b5382d0a691a79ff336d7
                 }
             ]
         },

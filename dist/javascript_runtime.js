@@ -1402,7 +1402,3 @@ Voice.prototype.toggle = function(boolean){
 /*begin languages/javascript/matrix_runtime.js*/
 
 /*end languages/javascript/matrix_runtime.js*/
-
-/*begin languages/javascript/demo_runtime.js*/
-
-/*end languages/javascript/demo_runtime.js*/

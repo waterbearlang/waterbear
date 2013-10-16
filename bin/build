@@ -20,7 +20,7 @@ var styles = {
     demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
 }
 
-var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace'];
 
 var libs = {
     arduino: [],

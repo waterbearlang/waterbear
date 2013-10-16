@@ -1,0 +1,10 @@
+var watch = require('node-watch');
+var sys = require('sys')
+var exec = require('child_process').exec;
+function puts(error, stdout, stderr) { sys.puts(stdout) }
+
+var directories = ['languages', 'lib', 'scripts', 'stylesheets'];
+watch(directories, { recursive: true, followSymLinks: true }, function(filename) {
+    console.log(filename, ' changed.');
+    exec("node bin/build", puts);
+});

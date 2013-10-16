@@ -1915,6 +1915,8 @@ Event.on('.goto_stage', 'click', null, function(){
 	document.body.className = 'result';
 });
 
+
+
 // Load and Save Section
 
 function saveCurrentScripts(){
@@ -1928,13 +1930,15 @@ window.onunload = saveCurrentScripts;
 function saveCurrentScriptsToGist(){
     console.log("Saving to Gist")
     ajax.post("https://api.github.com/gists", function(data){
-        var raw_url = JSON.parse(data).files["script.js"].raw_url;
-        alert("Your script has been saved to " + raw_url);
+        var raw_url = JSON.parse(data).files["script.json"].raw_url;
+        var gistID = JSON.parse(data).url.split("/").pop();
+		prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+        //alert("Your script has been saved to " + raw_url);
     }, JSON.stringify({
         "description": prompt("Save to an anonymous Gist titled:"),
         "public": true,
         "files": {
-            "script.js": {
+            "script.json": {
                 "content": scriptsToString()
             },
         }
@@ -1973,7 +1977,16 @@ function createDownloadUrl(evt){
 
 Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
 Event.on('.download_scripts', 'click', null, createDownloadUrl);
+Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+
+function loadScriptsFromGistId(){
+	var gistID = prompt("What Gist would you like to load?");
+	ajax.get("https://api.github.com/gists/"+gistID, function(data){
+		loadScriptsFromGist({data:JSON.parse(data)});
+	});
+}
 
 function loadScriptsFromFilesystem(){
     var input = document.createElement('input');

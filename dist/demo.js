@@ -1822,6 +1822,21 @@ hljs.LANGUAGES.javascript = {
 
 /*end highlight-javascript.js*/
 
+/*begin ajax.js*/
+function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
+function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+
+ajax={};
+ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
+ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
+ajax.send=function(u,f,m,a){var x=ajax.x();x.open(m,u,true);x.onreadystatechange=function(){if(x.readyState==4)f(x.responseText)};if(m=='POST')x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send(a)};
+ajax.get=function(url,func){ajax.send(url,func,'GET')};
+ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
+ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
+ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
+ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
+/*end ajax.js*/
+
 /*begin queryparams.js*/
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
@@ -3713,8 +3728,8 @@ function clearScripts(event, force){
 		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
     }
 }
-Event.on('.clearScripts', 'click', null, clearScripts);
-Event.on('.editScript', 'click', null, function(){
+Event.on('.clear_scripts', 'click', null, clearScripts);
+Event.on('.edit_script', 'click', null, function(){
 	document.body.className = 'editor';
 	wb.loadCurrentScripts(wb.queryParams);
 });
@@ -3722,6 +3737,8 @@ Event.on('.editScript', 'click', null, function(){
 Event.on('.goto_stage', 'click', null, function(){
 	document.body.className = 'result';
 });
+
+
 
 // Load and Save Section
 
@@ -3731,6 +3748,25 @@ function saveCurrentScripts(){
     localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
 window.onunload = saveCurrentScripts;
+
+// Save script to gist;
+function saveCurrentScriptsToGist(){
+    console.log("Saving to Gist")
+    ajax.post("https://api.github.com/gists", function(data){
+        var raw_url = JSON.parse(data).files["script.json"].raw_url;
+        var gistID = JSON.parse(data).url.split("/").pop();
+		prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+        //alert("Your script has been saved to " + raw_url);
+    }, JSON.stringify({
+        "description": prompt("Save to an anonymous Gist titled:"),
+        "public": true,
+        "files": {
+            "script.json": {
+                "content": scriptsToString()
+            },
+        }
+    }));
+}
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
@@ -3762,8 +3798,18 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+Event.on('.download_scripts', 'click', null, createDownloadUrl);
+Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+
+function loadScriptsFromGistId(){
+	var gistID = prompt("What Gist would you like to load?");
+	ajax.get("https://api.github.com/gists/"+gistID, function(data){
+		loadScriptsFromGist({data:JSON.parse(data)});
+	});
+}
 
 function loadScriptsFromFilesystem(){
     var input = document.createElement('input');
@@ -3811,6 +3857,7 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
+window.fromgist = loadScriptsFromGist;
 
 function loadScriptsFromExample(name){
     wb.ajax('examples/' + name + '.json', function(exampleJson){

@@ -10,8 +10,8 @@ function clearScripts(event, force){
 		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
     }
 }
-Event.on('.clearScripts', 'click', null, clearScripts);
-Event.on('.editScript', 'click', null, function(){
+Event.on('.clear_scripts', 'click', null, clearScripts);
+Event.on('.edit_script', 'click', null, function(){
 	document.body.className = 'editor';
 	wb.loadCurrentScripts(wb.queryParams);
 });
@@ -19,6 +19,8 @@ Event.on('.editScript', 'click', null, function(){
 Event.on('.goto_stage', 'click', null, function(){
 	document.body.className = 'result';
 });
+
+
 
 // Load and Save Section
 
@@ -28,6 +30,27 @@ function saveCurrentScripts(){
     localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
 window.onunload = saveCurrentScripts;
+
+// Save script to gist;
+function saveCurrentScriptsToGist(){
+    console.log("Saving to Gist")
+    ajax.post("https://api.github.com/gists", function(data){
+        var raw_url = JSON.parse(data).files["script.json"].raw_url;
+        var gistID = JSON.parse(data).url.split("/").pop();
+		prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+
+        //alert("Your script has been saved to " + raw_url);
+    }, JSON.stringify({
+        "description": prompt("Save to an anonymous Gist titled:"),
+        "public": true,
+        "files": {
+            "script.json": {
+                "content": scriptsToString()
+            },
+        }
+    }));
+}
+
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }
@@ -59,8 +82,18 @@ function createDownloadUrl(evt){
     evt.preventDefault();
 }
 
-Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+Event.on('.download_scripts', 'click', null, createDownloadUrl);
+Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+
+function loadScriptsFromGistId(){
+	var gistID = prompt("What Gist would you like to load?");
+	ajax.get("https://api.github.com/gists/"+gistID, function(data){
+		loadScriptsFromGist({data:JSON.parse(data)});
+	});
+}
 
 function loadScriptsFromFilesystem(){
     var input = document.createElement('input');
@@ -108,6 +141,7 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
+window.fromgist = loadScriptsFromGist;
 
 function loadScriptsFromExample(name){
     wb.ajax('examples/' + name + '.json', function(exampleJson){

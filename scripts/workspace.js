@@ -38,6 +38,7 @@ function saveCurrentScriptsToGist(){
         var raw_url = JSON.parse(data).files["script.json"].raw_url;
         var gistID = JSON.parse(data).url.split("/").pop();
 		prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+
         //alert("Your script has been saved to " + raw_url);
     }, JSON.stringify({
         "description": prompt("Save to an anonymous Gist titled:"),
@@ -49,6 +50,7 @@ function saveCurrentScriptsToGist(){
         }
     }));
 }
+
 
 function scriptsToString(title, description){
     if (!title){ title = ''; }

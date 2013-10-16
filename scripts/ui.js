@@ -74,57 +74,181 @@ function collapseCommand(key, opt){
     console.info('collapseCommand(%s, %o)', key, opt);
 }
 
-function cutBlockCommand(key, opt){
-    console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
-    var view = this.closest('.wrapper');
-    pasteboard = Block.model(view);
-    // Remove it programatically, and trigger the right events:
-    Event.trigger(view, 'wb-event');
-    view.remove();
+function copyCommand(evt) {
+	console.log("Copying a block!");
+	console.log(this);
+	pasteboard = wb.cloneBlock(this);
 }
 
-function copyBlockCommand(key, opt){
-    console.info('copyBlockCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone();
+function cutCommand(evt) {
+	console.log("Cutting a block!");
+	Event.trigger(this, 'wb-remove');
+	this.remove();
+	pasteboard = this;
 }
 
-function copySubscriptCommand(key, opt){
-    console.info('copySubscriptCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone(true);
+function pasteCommand(evt) {
+	console.log(pasteboard);
+	var paste = wb.cloneBlock(pasteboard);
+	if(wb.matches(pasteboard,'.step')) {
+		console.log("Pasting a step!");
+		cmenu_target.parentNode.insertBefore(paste,cmenu_target.nextSibling);
+		Event.trigger(paste, 'wb-add');
+	} else {
+		console.log("Pasting an expression!");
+		cmenu_target.appendChild(paste);
+		Event.trigger(paste, 'wb-add');
+	}
 }
 
-function pasteCommand(key, opt){
-    console.info('pasteCommand(%s, %o)', key, opt);
-    if (pasteboard){
-        this.append(pasteboard.view());
-        addToScriptEvent(this, pasteboard.view());
-    }
-}
-
-function pasteExpressionCommand(key, opt){
-    console.info('pasteExpressionCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype === 'expression'){
-        this.hide();
-        pasteCommand.call(this.parent(), key, opt);
-    }
-}
-
-function pasteStepCommand(key, opt){
-    console.info('pasteStepCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype !== 'expression'){
-        if (this.find('> .wrapper').length){
-            console.log('already has a child element');
-        }else{
-            pasteCommand.call(this, key, opt);
-        }
-    }
-}
-
-function cancelCommand(key, opt){
-    console.info('cancelCommand(%s, %o)', key, opt);
+function canPaste() {
+	if(!pasteboard) return false;
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+		return true;
+	}
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+		return true;
+	}
+	return false;
 }
 
 var pasteboard = null;
+var current_cmenu = null;
+var show_context = false;
+var cmenu_disabled = false;
+var cmenu_target = null;
+
+function cmenuitem_enabled(menuitem) {
+	if(menuitem.enabled) {
+		if(typeof(menuitem.enabled) == 'function') {
+			return menuitem.enabled();
+		} else return menuitem.enabled;
+	}
+	return true;
+}
+
+function initContextMenus() {
+	Event.on(document.body, 'contextmenu', null, handleContextMenu);
+	Event.on(document.body, 'mouseup', null, closeContextMenu);
+	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
+	document.querySelector('.cmenuEnable').style.display = 'none';
+}
+
+function buildContextMenu(options) {
+	console.log('building context menu');
+	console.log(options);
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.innerHTML = '';
+	var menu = document.createElement('ul');
+	menu.classList.add('cmenu');
+	for(var key in options) {
+		if(options.hasOwnProperty(key) && options[key]) {
+			var item = document.createElement('li');
+			if(cmenuitem_enabled(options[key])) {
+				Event.on(item, "click", null, cmenuCallback(options[key].callback));
+			} else {
+				item.classList.add('disabled');
+			}
+			if(options[key].startGroup) {
+				item.classList.add('topSep');
+			}
+			item.innerHTML = options[key].name;
+			menu.appendChild(item);
+		}
+	}
+	var item = document.createElement('li');
+	item.onclick = function(evt) {};
+	item.innerHTML = 'Disable this menu';
+	item.classList.add('topSep');
+	Event.on(item, 'click', null, disableContextMenu);
+	menu.appendChild(item);
+	contextDiv.appendChild(menu);
+}
+
+function stackTrace() {
+	var e = new Error('stack trace');
+	var stack = e.stack.replace(/@.*\//gm, '@')
+		.split('\n');
+	console.log(stack);
+}
+
+function closeContextMenu(evt) {
+	var contextDiv = document.getElementById('context_menu');
+	if(!wb.matches(evt.wbTarget, '#context_menu *')) {
+		contextDiv.style.display = 'none';
+	}
+}
+
+function handleContextMenu(evt) {
+	console.log('handling context menu');
+	stackTrace();
+	//if(!show_context) return;
+	console.log(evt.clientX, evt.clientY);
+	console.log(evt.wbTarget);
+	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
+	else if(false);
+	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		setContextMenuTarget(evt.wbTarget);
+		buildContextMenu(block_cmenu);
+	} else return;
+	showContextMenu(evt.clientX, evt.clientY);
+	evt.preventDefault();
+}
+
+function setContextMenuTarget(target) {
+	cmenu_target = target;
+	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
+		console.log(cmenu_target);
+		cmenu_target = cmenu_target.parentNode;
+		if(cmenu_target.tagName == 'BODY') {
+			console.error("Something went wrong with determining the context menu target!");
+			cmenu_target = null;
+			contextDiv.style.display = 'none';
+		}
+	}
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
+}
+
+function cmenuCallback(fcn) {
+	return function(evt) {
+		console.log(cmenu_target);
+		fcn.call(cmenu_target,evt);
+		var contextDiv = document.getElementById('context_menu');
+		contextDiv.style.display = 'none';
+		evt.preventDefault();
+	};
+}
+
+function disableContextMenu(evt) {
+	cmenu_disabled = true;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = '';
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'none';
+}
+
+function enableContextMenu(evt) {
+	cmenu_disabled = false;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = 'none';
+}
+
+var block_cmenu = {
+	//expand: {name: 'Expand All', callback: dummyCallback},
+	//collapse: {name: 'Collapse All', callback: dummyCallback},
+	cut: {name: 'Cut', callback: cutCommand},
+	copy: {name: 'Copy', callback: copyCommand},
+	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
+	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
+	//cancel: {name: 'Cancel', callback: dummyCallback},
+}
 
 // $.contextMenu({
 //     selector: '.scripts_workspace .block',
@@ -175,6 +299,7 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
+initContextMenus();
 // if (is_touch_device()){
 //     $.tappable({
 //         container: '.blockmenu, .workspace',
@@ -195,20 +320,18 @@ function is_touch_device() {
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-	switch(wb.view){
-		case 'result': return run_menu(title, specs);
-		case 'blocks': return edit_menu(title, specs);
-		case 'editor': return edit_menu(title, specs);
-		default: return edit_menu(title, specs);
-	}
+    return edit_menu(title, specs);
+	// switch(wb.view){
+	// 	case 'result': return run_menu(title, specs);
+	// 	case 'blocks': return edit_menu(title, specs);
+	// 	case 'editor': return edit_menu(title, specs);
+	// 	default: return edit_menu(title, specs);
+	// }
 };
 
 if (wb.view === 'result'){
+    console.log('listen for script load');
     Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-function run_menu(title, specs){
-    edit_menu(title, specs);
 }
 
 

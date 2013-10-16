@@ -331,10 +331,17 @@ ul#menu li ul.sub-menu {
 ul#menu li ul.sub-menu li a {
 	min-width:200px;
 }
+ul#menu li ul.sub-menu li a.disabled {
+	background:#777;
+}
 ul#menu li:hover ul.sub-menu {
 	display:block;
 }
 
+a.disabled {
+   pointer-events: none;
+   cursor: default;
+}
 h1.title {
 	float: left;
 	display: block;

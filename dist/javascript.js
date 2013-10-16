@@ -3580,8 +3580,8 @@ function clearScripts(event, force){
 		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
     }
 }
-Event.on('.clearScripts', 'click', null, clearScripts);
-Event.on('.editScript', 'click', null, function(){
+Event.on('.clear_scripts', 'click', null, clearScripts);
+Event.on('.edit_script', 'click', null, function(){
 	document.body.className = 'editor';
 	wb.loadCurrentScripts(wb.queryParams);
 });

@@ -4153,7 +4153,7 @@ wb.menu({
                     "help": "making these event handlers prevents having blocks follow them",
                     "sockets": [
                         {
-                            "name": "Asynchronous callback ##"
+                            "name": "Asynchronous callback ##"  
                         }
                     ]
                 }

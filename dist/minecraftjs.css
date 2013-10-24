@@ -289,69 +289,27 @@ svg text{
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* Menu system */
-ul#menu {
-	background:#666;
-}
-/*Initialize*/
-ul#menu, ul#menu ul.sub-menu {
-	padding:0;
-	margin: 0 0 5px 0;
-}
-ul#menu li, ul#menu ul.sub-menu li {
-	list-style-type: none;
-	display: inline-block;
-}
-/*Link Appearance*/
-ul#menu li a, ul#menu li ul.sub-menu li a {
-	text-decoration: none;
-	color: #fff;
-	background: #666;
-	padding: 10px;
-	display:inline-block;
-	min-width:60px;
-}
-ul#menu > li > a {
-	text-align:center;
-}
-ul#menu li a:hover, ul#menu li ul.sub-menu li a:hover {
-	background:#555;
-}
-/*Make the parent of sub-menu relative*/
-ul#menu li {
-	position: relative;
-}
-/*sub menu*/
-ul#menu li ul.sub-menu {
-	display:none;
-	position: absolute;
-	top: 30px;
-	left: 0;
-	width: 100px;
-	z-index:1000;
-}
-ul#menu li ul.sub-menu li a {
-	min-width:200px;
-}
-ul#menu li ul.sub-menu li a.disabled {
-	background:#777;
-}
-ul#menu li:hover ul.sub-menu {
-	display:block;
-}
+
 
 a.disabled {
-   pointer-events: none;
-   cursor: default;
+	pointer-events: none;
+	cursor: default;
 }
 h1.title {
+	margin:0;
 	float: left;
 	display: block;
-	margin:0 10px;
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
 	text-shadow: 0 2px 0 #000;
+}
+
+@media (max-width: 600px) {
+	h1.title{
+		background:#333;
+		width:100%;
+	}
 }
 
 /* Context menu */
@@ -371,11 +329,11 @@ h1.title {
 	border-radius: 5px;
 	box-shadow: 2px 2px 2px #888;
 	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .cmenu li {

@@ -15,7 +15,7 @@ var plugins = {
 
 var styles = {
     arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
+    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css'],
     minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
     demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
 }

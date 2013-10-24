@@ -33,15 +33,22 @@ window.onunload = saveCurrentScripts;
 
 // Save script to gist;
 function saveCurrentScriptsToGist(){
-    console.log("Saving to Gist")
+    console.log("Saving to Gist");
+    var title = prompt("Save to an anonymous Gist titled: ");
+
     ajax.post("https://api.github.com/gists", function(data){
-        var raw_url = JSON.parse(data).files["script.json"].raw_url;
+        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
         var gistID = JSON.parse(data).url.split("/").pop();
 		prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
-        //alert("Your script has been saved to " + raw_url);
+        //save gist id to local storage
+        var localGists = localStorage['__' + language + '_recent_gists'];
+        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+        gistArray.push(gistID);
+        localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
+
     }, JSON.stringify({
-        "description": prompt("Save to an anonymous Gist titled:"),
+        "description": title,
         "public": true,
         "files": {
             "script.json": {

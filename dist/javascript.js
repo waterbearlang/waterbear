@@ -3761,12 +3761,8 @@ function saveCurrentScriptsToGist(){
 
         //save gist id to local storage
         var localGists = localStorage['__' + language + '_recent_gists'];
-
         var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-
         gistArray.push(gistID);
-        console.log(gistArray);
-
         localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
 
     }, JSON.stringify({

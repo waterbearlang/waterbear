@@ -917,6 +917,11 @@ ul#menu li:hover ul.sub-menu {
 	display:block;
 }
 
+/* Hide nav on result and blocks pages */
+body.result nav, body.blocks nav {
+	display:none;
+}
+
 /*end menu.css*/
 
 /*begin languages/javascript/javascript.css*/

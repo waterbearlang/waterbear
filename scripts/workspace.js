@@ -31,6 +31,32 @@ function saveCurrentScripts(){
 }
 window.onunload = saveCurrentScripts;
 
+
+window.onload = loadRecentGists;
+
+function loadRecentGists(){
+	var localGists = localStorage['__' + language + '_recent_gists'];
+	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	var gistContainer = document.querySelector("#recent-gists");
+	gistContainer.innerHTML = '';
+	for (var i = 0; i < gistArray.length; i++) {
+		var node = document.createElement("li");
+		var a = document.createElement('a');
+		var linkText = document.createTextNode(gistArray[i]);
+
+		a.appendChild(linkText)
+		//a.href = language + ".html?gist=" + gistArray[i];
+
+		node.appendChild(a);
+		gistContainer.appendChild(node);
+		var gist = gistArray[i];
+		console.log(gist);
+		a.addEventListener('click', function(){
+			loadScriptsFromGistId(parseInt(gist));
+			return false;
+		});
+	};
+}
 // Save script to gist;
 function saveCurrentScriptsToGist(){
 	console.log("Saving to Gist");
@@ -44,8 +70,9 @@ function saveCurrentScriptsToGist(){
         //save gist id to local storage
         var localGists = localStorage['__' + language + '_recent_gists'];
         var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-        gistArray.push(gistID);
+        gistArray.push(parseInt(gistID));
         localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
+        loadRecentGists();
 
     }, JSON.stringify({
     	"description": title,
@@ -95,8 +122,9 @@ Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
 
-function loadScriptsFromGistId(){
-	var gistID = prompt("What Gist would you like to load?");
+function loadScriptsFromGistId(id){
+	var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load?") : id;
+	console.log("Loading gist: " + gistID);
 	ajax.get("https://api.github.com/gists/"+gistID, function(data){
 		loadScriptsFromGist({data:JSON.parse(data)});
 	});
@@ -148,7 +176,7 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
-window.fromgist = loadScriptsFromGist;
+
 
 function loadScriptsFromExample(name){
 	wb.ajax('examples/' + name + '.json', function(exampleJson){
@@ -181,10 +209,7 @@ wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
 	if (!wb.loaded){
 		if (queryParsed.gist){
-			console.log("Loading gist via url.");
-			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
-				loadScriptsFromGist({data:JSON.parse(data)});
-			});
+			loadScriptsFromGistId(queryParsed.gist);
 		}else if (queryParsed.example){
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + language + '_current_scripts']){

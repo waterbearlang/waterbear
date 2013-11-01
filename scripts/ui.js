@@ -51,6 +51,54 @@ function updateScriptsView(){
 }
 window.updateScriptsView = updateScriptsView;
 
+// Undo list
+
+// Undo actions must support two methods:
+// - undo() which reverses the effect of the action
+// - redo() which reapplies the effect of the action, assuming it has been redone.
+// These methods may safely assume that no other actions have been performed.
+
+// This is the maximum number of actions that will be stored in the undo list.
+// There's no reason why it needs to be constant; there could be an interface to alter it.
+// (Of course, that'd require making it public first.)
+var MAX_UNDO = 30;
+var undoActions = [];
+// When currentAction == undoActions.length, there are no actions available to redo
+var currentAction = 0;
+
+function undoLastAction() {
+	if(currentAction <= 0) return; // No action to undo!
+	currentAction--;
+	undoActions[currentAction].undo();
+}
+
+function redoLastAction() {
+	if(currentAction >= undoActions.length) return; // No action to redo!
+	undoActions[currentAction].redo();
+	currentAction++;
+}
+
+function addUndoAction(action) {
+	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
+		console.log("Tried to add invalid action!");
+		return;
+	}
+	if(currentAction < undoActions.length) {
+		// Truncate any actions available to be redone
+		undoActions.length = currentAction;
+	} else if(currentAction >= MAX_UNDO) {
+		// Drop the oldest action
+		currentAction--;
+		undoActions.shift();
+	}
+	undoActions[currentAction] = action;
+}
+
+wb.history = {
+	add: addUndoAction,
+	undo: undoLastAction,
+	redo: redoLastAction,
+}
 
 // Context Menu
 //

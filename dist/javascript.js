@@ -1923,10 +1923,11 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
 
     var svgtext = document.querySelector('svg text');
     wb.resize = function(input){
+        if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value;
+        svgtext.textContent = input.value || '';
         var textbox = svgtext.getBBox();
         input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
@@ -3385,15 +3386,19 @@ Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 
 function showWorkspace(mode){
+    console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
+    var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    if (!scriptsWorkspace) return;
+    var scriptsTextView = document.querySelector('.scripts_text_view');
     if (mode === 'block'){
-	    document.querySelector('.scripts_workspace').style.display = '';
-	    document.querySelector('.scripts_text_view').style.display = 'none';
+	    scriptsWorkspace.style.display = '';
+	    scriptsTextView.style.display = 'none';
         workspace.classList.remove('textview');
         workspace.classList.add('blockview');
     }else if (mode === 'text'){
-    	document.querySelector('.scripts_workspace').style.display = 'none';
-    	document.querySelector('.scripts_text_view').style.display = '';
+    	scriptsWorkspace.style.display = 'none';
+    	scriptsTextView.style.display = '';
         workspace.classList.remove('blockview');
         workspace.classList.add('textview');
     }
@@ -3921,6 +3926,7 @@ wb.loadCurrentScripts = function(queryParsed){
 
 // Allow saved scripts to be dropped in
 function createWorkspace(name){
+    console.log('createWorkspace');
 	var id = uuid();
 	var workspace = wb.Block({
 		group: 'scripts_workspace',

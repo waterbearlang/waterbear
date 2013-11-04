@@ -32,10 +32,11 @@
 
     var svgtext = document.querySelector('svg text');
     wb.resize = function(input){
+        if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value;
+        svgtext.textContent = input.value || '';
         var textbox = svgtext.getBBox();
         input.style.width = (textbox.width*0.7 + 25) + 'px';
     };

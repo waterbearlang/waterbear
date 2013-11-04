@@ -1,4 +1,4 @@
-html, body{
+ html, body{
 	height: 100%;
 	overflow: hidden;
 	background-color: #FFF;
@@ -280,11 +280,12 @@ body.editor #block_menu{
 svg{
 	position:absolute;
 	left: -1000px;
-	display: none;
+	/*display: none;*/
 }
 svg text{
 	/* This should be the same font used for <input> */
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 11px;
 }
 
 

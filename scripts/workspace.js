@@ -203,6 +203,7 @@ wb.loadCurrentScripts = function(queryParsed){
 
 // Allow saved scripts to be dropped in
 function createWorkspace(name){
+    console.log('createWorkspace');
 	var id = uuid();
 	var workspace = wb.Block({
 		group: 'scripts_workspace',

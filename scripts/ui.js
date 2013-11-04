@@ -28,15 +28,19 @@ Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 
 function showWorkspace(mode){
+    console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
+    var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    if (!scriptsWorkspace) return;
+    var scriptsTextView = document.querySelector('.scripts_text_view');
     if (mode === 'block'){
-	    document.querySelector('.scripts_workspace').style.display = '';
-	    document.querySelector('.scripts_text_view').style.display = 'none';
+	    scriptsWorkspace.style.display = '';
+	    scriptsTextView.style.display = 'none';
         workspace.classList.remove('textview');
         workspace.classList.add('blockview');
     }else if (mode === 'text'){
-    	document.querySelector('.scripts_workspace').style.display = 'none';
-    	document.querySelector('.scripts_text_view').style.display = '';
+    	scriptsWorkspace.style.display = 'none';
+    	scriptsTextView.style.display = '';
         workspace.classList.remove('blockview');
         workspace.classList.add('textview');
     }

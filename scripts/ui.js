@@ -83,6 +83,7 @@ function addUndoAction(action) {
 		console.log("Tried to add invalid action!");
 		return;
 	}
+	action.redo();
 	if(currentAction < undoActions.length) {
 		// Truncate any actions available to be redone
 		undoActions.length = currentAction;
@@ -92,6 +93,7 @@ function addUndoAction(action) {
 		undoActions.shift();
 	}
 	undoActions[currentAction] = action;
+	currentAction++;
 }
 
 wb.history = {
@@ -125,28 +127,69 @@ function collapseCommand(key, opt){
 function copyCommand(evt) {
 	console.log("Copying a block!");
 	console.log(this);
-	pasteboard = wb.cloneBlock(this);
+	action = {
+		copied: wb.cloneBlock(this),
+		oldPasteboard: pasteboard,
+		undo: function() {
+			pasteboard = this.oldPasteboard;
+		},
+		redo: function() {
+			pasteboard = this.copied;
+		},
+	}
+	wb.history.add(action);
 }
 
 function cutCommand(evt) {
 	console.log("Cutting a block!");
-	Event.trigger(this, 'wb-remove');
-	this.remove();
-	pasteboard = this;
+	action = {
+		removed: this,
+		// Storing parent and next sibling in case removing the node from the DOM clears them
+		parent: this.parentNode,
+		before: this.nextSibling,
+		oldPasteboard: pasteboard,
+		undo: function() {console.log(this);
+			if(wb.matches(this.removed,'.step')) {
+				this.parent.insertBefore(this.removed, this.before);
+				Event.trigger(this.removed, 'wb-add');
+			} else {
+				this.parent.appendChild(this.removed);
+				Event.trigger(this.removed, 'wb-add');
+			}
+			pasteboard = this.oldPasteboard;
+		},
+		redo: function() {
+			Event.trigger(this.removed, 'wb-remove');
+			this.removed.remove();
+			pasteboard = this.removed;
+		},
+	}
+	wb.history.add(action);
 }
 
 function pasteCommand(evt) {
 	console.log(pasteboard);
-	var paste = wb.cloneBlock(pasteboard);
-	if(wb.matches(pasteboard,'.step')) {
-		console.log("Pasting a step!");
-		cmenu_target.parentNode.insertBefore(paste,cmenu_target.nextSibling);
-		Event.trigger(paste, 'wb-add');
-	} else {
-		console.log("Pasting an expression!");
-		cmenu_target.appendChild(paste);
-		Event.trigger(paste, 'wb-add');
+	action = {
+		pasted: wb.cloneBlock(pasteboard),
+		into: cmenu_target.parentNode,
+		before: cmenu_target.nextSibling,
+		undo: function() {
+			Event.trigger(this.pasted, 'wb-remove');
+			this.pasted.remove();
+		},
+		redo: function() {
+			if(wb.matches(pasteboard,'.step')) {
+				console.log("Pasting a step!");
+				this.into.insertBefore(this.pasted,this.before);
+				Event.trigger(this.pasted, 'wb-add');
+			} else {
+				console.log("Pasting an expression!");
+				cmenu_target.appendChild(this.pasted);
+				Event.trigger(this.pasted, 'wb-add');
+			}
+		},
 	}
+	wb.history.add(action);
 }
 
 function canPaste() {
@@ -291,7 +334,9 @@ function enableContextMenu(evt) {
 var block_cmenu = {
 	//expand: {name: 'Expand All', callback: dummyCallback},
 	//collapse: {name: 'Collapse All', callback: dummyCallback},
-	cut: {name: 'Cut', callback: cutCommand},
+	undo: {name: 'Undo', callback: undoLastAction, enabled: function() {return currentAction > 0}},
+	redo: {name: 'Redo', callback: redoLastAction, enabled: function() {return currentAction < undoActions.length}},
+	cut: {name: 'Cut', callback: cutCommand, startGroup: true},
 	copy: {name: 'Copy', callback: copyCommand},
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},

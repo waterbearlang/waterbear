@@ -83,7 +83,6 @@ function addUndoAction(action) {
 		console.log("Tried to add invalid action!");
 		return;
 	}
-	action.redo();
 	if(currentAction < undoActions.length) {
 		// Truncate any actions available to be redone
 		undoActions.length = currentAction;
@@ -138,6 +137,7 @@ function copyCommand(evt) {
 		},
 	}
 	wb.history.add(action);
+	action.redo();
 }
 
 function cutCommand(evt) {
@@ -151,11 +151,10 @@ function cutCommand(evt) {
 		undo: function() {console.log(this);
 			if(wb.matches(this.removed,'.step')) {
 				this.parent.insertBefore(this.removed, this.before);
-				Event.trigger(this.removed, 'wb-add');
 			} else {
 				this.parent.appendChild(this.removed);
-				Event.trigger(this.removed, 'wb-add');
 			}
+			Event.trigger(this.removed, 'wb-add');
 			pasteboard = this.oldPasteboard;
 		},
 		redo: function() {
@@ -165,6 +164,7 @@ function cutCommand(evt) {
 		},
 	}
 	wb.history.add(action);
+	action.redo();
 }
 
 function pasteCommand(evt) {
@@ -181,15 +181,15 @@ function pasteCommand(evt) {
 			if(wb.matches(pasteboard,'.step')) {
 				console.log("Pasting a step!");
 				this.into.insertBefore(this.pasted,this.before);
-				Event.trigger(this.pasted, 'wb-add');
 			} else {
 				console.log("Pasting an expression!");
 				cmenu_target.appendChild(this.pasted);
-				Event.trigger(this.pasted, 'wb-add');
 			}
+			Event.trigger(this.pasted, 'wb-add');
 		},
 	}
 	wb.history.add(action);
+	action.redo();
 }
 
 function canPaste() {

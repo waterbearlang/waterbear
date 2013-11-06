@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Waterbear: Code Garden</title>
+    <link href="dist/demo.css" rel="stylesheet" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="height=device-height, initial-scale=1.0" />
+    <!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
+    <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
+    <!--script src="/lib/modernizr-1.6.min.js"></script-->
+  </head>
+  <body>
+		<div id='context_menu'></div>
+      <div id="block_menu_load">
+          Loading...
+      </div>
+    <div class="content editor">
+		<div class="menubar">
+            <button class="save_scripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Save</span></button>
+            <button class="restore_scripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Restore</span></button>
+            <button class="clearScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear Script</span></button>
+            <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Run</span></button>
+            <button class="cmenuEnable ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Enable Context Menus</span></button>
+		</div>
+        <div id="block_menu"></div>
+        <div class="workspace blockview">
+	        <div class="tabbar">
+	            <div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
+	            <div class="scripts_text_view_tab chrome_tab">Script Text</div>
+	        </div>
+            <div class="scripts_text_view"></div>
+        </div>
+	</div>
+	<div class="content result">
+        <div class="menubar">
+            <button class="editScript ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Edit</span></button>
+            <button class="clear_canvas ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear</span></button>
+            <button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Restart</span></button>
+        </div>
+        <div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.com/iframerunner/index2.html"></iframe></div>
+    </div>
+    <svg><text></text></svg>
+    <script src="dist/demo.js"></script>
+  </body>
+</html>

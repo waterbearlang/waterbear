@@ -1,4 +1,19 @@
 
+/*begin ajax.js*/
+function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
+function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+
+ajax={};
+ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
+ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
+ajax.send=function(u,f,m,a){var x=ajax.x();x.open(m,u,true);x.onreadystatechange=function(){if(x.readyState==4)f(x.responseText)};if(m=='POST')x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send(a)};
+ajax.get=function(url,func){ajax.send(url,func,'GET')};
+ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
+ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
+ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
+ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
+/*end ajax.js*/
+
 /*begin queryparams.js*/
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
@@ -85,10 +100,11 @@
 
     var svgtext = document.querySelector('svg text');
     wb.resize = function(input){
+        if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value;
+        svgtext.textContent = input.value || '';
         var textbox = svgtext.getBBox();
         input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
@@ -1547,15 +1563,19 @@ Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 
 function showWorkspace(mode){
+    console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
+    var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    if (!scriptsWorkspace) return;
+    var scriptsTextView = document.querySelector('.scripts_text_view');
     if (mode === 'block'){
-	    document.querySelector('.scripts_workspace').style.display = '';
-	    document.querySelector('.scripts_text_view').style.display = 'none';
+	    scriptsWorkspace.style.display = '';
+	    scriptsTextView.style.display = 'none';
         workspace.classList.remove('textview');
         workspace.classList.add('blockview');
     }else if (mode === 'text'){
-    	document.querySelector('.scripts_workspace').style.display = 'none';
-    	document.querySelector('.scripts_text_view').style.display = '';
+    	scriptsWorkspace.style.display = 'none';
+    	scriptsTextView.style.display = '';
         workspace.classList.remove('blockview');
         workspace.classList.add('textview');
     }
@@ -1880,94 +1900,134 @@ function edit_menu(title, specs, show){
 /*begin workspace.js*/
 (function(wb){
 
-var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var language = location.pathname.match(/\/(.*)\.html/)[1];
 
-function clearScripts(event, force){
-    if (force || confirm('Throw out the current script?')){
-        var workspace = document.querySelector('.workspace > .scripts_workspace')
-        workspace.parentElement.removeChild(workspace);
-        createWorkspace('Workspace');
-		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
-    }
-}
-Event.on('.clearScripts', 'click', null, clearScripts);
-Event.on('.editScript', 'click', null, function(){
-	document.body.className = 'editor';
-	wb.loadCurrentScripts(wb.queryParams);
-});
+	function clearScripts(event, force){
+		if (force || confirm('Throw out the current script?')){
+			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			workspace.parentElement.removeChild(workspace);
+			createWorkspace('Workspace');
+			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+		}
+	}
+	Event.on('.clear_scripts', 'click', null, clearScripts);
+	Event.on('.edit_script', 'click', null, function(){
+		document.body.className = 'editor';
+		wb.loadCurrentScripts(wb.queryParams);
+	});
 
-Event.on('.goto_stage', 'click', null, function(){
-	document.body.className = 'result';
-});
+	Event.on('.goto_stage', 'click', null, function(){
+		document.body.className = 'result';
+	});
+
+
 
 // Load and Save Section
 
 function saveCurrentScripts(){
-    wb.showWorkspace('block');
-    document.querySelector('#block_menu').scrollIntoView();
-    localStorage['__' + language + '_current_scripts'] = scriptsToString();
+	wb.showWorkspace('block');
+	document.querySelector('#block_menu').scrollIntoView();
+	localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
 window.onunload = saveCurrentScripts;
 
+// Save script to gist;
+function saveCurrentScriptsToGist(){
+	console.log("Saving to Gist");
+	var title = prompt("Save to an anonymous Gist titled: ");
+
+	ajax.post("https://api.github.com/gists", function(data){
+        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
+        var gistID = JSON.parse(data).url.split("/").pop();
+        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+
+        //save gist id to local storage
+        var localGists = localStorage['__' + language + '_recent_gists'];
+        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+        gistArray.push(gistID);
+        localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
+
+    }, JSON.stringify({
+    	"description": title,
+    	"public": true,
+    	"files": {
+    		"script.json": {
+    			"content": scriptsToString()
+    		},
+    	}
+    }));
+}
+
+
 function scriptsToString(title, description){
-    if (!title){ title = ''; }
-    if (!description){ description = ''; }
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    return JSON.stringify({
-        title: title,
-        description: description,
-        date: Date.now(),
-        waterbearVersion: '2.0',
-        blocks: blocks.map(wb.blockDesc)
-    });
+	if (!title){ title = ''; }
+	if (!description){ description = ''; }
+	var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+	return JSON.stringify({
+		title: title,
+		description: description,
+		date: Date.now(),
+		waterbearVersion: '2.0',
+		blocks: blocks.map(wb.blockDesc)
+	});
 }
 
 
 function createDownloadUrl(evt){
-    var URL = window.webkitURL || window.URL;
-    var file = new Blob([scriptsToString()], {type: 'application/json'});
-    var reader = new FileReader();
-    var a = document.createElement('a');
-    reader.onloadend = function(){
-        a.href = reader.result;
-        a.download = 'script.json';
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-    };
-    reader.readAsDataURL(file);
-    evt.preventDefault();
+	var URL = window.webkitURL || window.URL;
+	var file = new Blob([scriptsToString()], {type: 'application/json'});
+	var reader = new FileReader();
+	var a = document.createElement('a');
+	reader.onloadend = function(){
+		a.href = reader.result;
+		a.download = 'script.json';
+		a.target = '_blank';
+		document.body.appendChild(a);
+		a.click();
+	};
+	reader.readAsDataURL(file);
+	evt.preventDefault();
 }
 
-Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+Event.on('.download_scripts', 'click', null, createDownloadUrl);
+Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
+
+function loadScriptsFromGistId(){
+	var gistID = prompt("What Gist would you like to load?");
+	ajax.get("https://api.github.com/gists/"+gistID, function(data){
+		loadScriptsFromGist({data:JSON.parse(data)});
+	});
+}
+
 function loadScriptsFromFilesystem(){
-    var input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'application/json');
-    input.addEventListener('change', function(evt){
-        var file = input.files[0];
-        loadScriptsFromFile(file);
-    });
-    input.click();
+	var input = document.createElement('input');
+	input.setAttribute('type', 'file');
+	input.setAttribute('accept', 'application/json');
+	input.addEventListener('change', function(evt){
+		var file = input.files[0];
+		loadScriptsFromFile(file);
+	});
+	input.click();
 }
 
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
-	if (!fileObject) return createWorkspace();
+    if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(wb.Block);
     if (!blocks.length){
-        return createWorkspace();
+    	return createWorkspace();
     }
     if (blocks.length > 1){
-        console.log('not really expecting multiple blocks here right now');
-        console.log(blocks);
+    	console.log('not really expecting multiple blocks here right now');
+    	console.log(blocks);
     }
     blocks.forEach(function(block){
-        wireUpWorkspace(block);
-        Event.trigger(block, 'wb-add');
+    	wireUpWorkspace(block);
+    	Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
     Event.trigger(document.body, 'wb-script-loaded');
@@ -1988,13 +2048,14 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
+window.fromgist = loadScriptsFromGist;
 
 function loadScriptsFromExample(name){
-    wb.ajax('examples/' + name + '.json', function(exampleJson){
-        loadScriptsFromObject(JSON.parse(exampleJson));
-    }, function(xhr, status){
-        console.error('Error in wb.ajax: %s', status);
-    });
+	wb.ajax('examples/' + name + '.json', function(exampleJson){
+		loadScriptsFromObject(JSON.parse(exampleJson));
+	}, function(xhr, status){
+		console.error('Error in wb.ajax: %s', status);
+	});
 }
 
 function runScriptFromGist(gist){
@@ -2018,59 +2079,60 @@ function runScriptFromGist(gist){
 
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
-    if (!wb.loaded){
-    	if (queryParsed.gist){
-    		wb.jsonp(
-    			'https://api.github.com/gists/' + queryParsed.gist,
-    			loadScriptsFromGist
-    		);
-        }else if (queryParsed.example){
-            loadScriptsFromExample(queryParsed.example);
-    	}else if (localStorage['__' + language + '_current_scripts']){
-            var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
-            if (fileObject){
-                loadScriptsFromObject(fileObject);
-            }
-        }else{
-            createWorkspace('Workspace');
-        }
-        wb.loaded = true;
-    }
-    Event.trigger(document.body, 'wb-loaded');
+	if (!wb.loaded){
+		if (queryParsed.gist){
+			console.log("Loading gist via url.");
+			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
+				loadScriptsFromGist({data:JSON.parse(data)});
+			});
+		}else if (queryParsed.example){
+			loadScriptsFromExample(queryParsed.example);
+		}else if (localStorage['__' + language + '_current_scripts']){
+			var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
+			if (fileObject){
+				loadScriptsFromObject(fileObject);
+			}
+		}else{
+			createWorkspace('Workspace');
+		}
+		wb.loaded = true;
+	}
+	Event.trigger(document.body, 'wb-loaded');
 };
 
 
 // Allow saved scripts to be dropped in
 function createWorkspace(name){
-    var id = uuid();
-    var workspace = wb.Block({
-        group: 'scripts_workspace',
-        id: id,
-        scriptId: id,
-        scopeId: id,
-        blocktype: 'context',
-        sockets: [
-            {
-                name: name
-            }
-        ],
-        script: '[[1]]',
-        isTemplateBlock: false,
-        help: 'Drag your script blocks here'
-    });
-    wireUpWorkspace(workspace);
+    console.log('createWorkspace');
+	var id = uuid();
+	var workspace = wb.Block({
+		group: 'scripts_workspace',
+		id: id,
+		scriptId: id,
+		scopeId: id,
+		blocktype: 'context',
+		sockets: [
+		{
+			name: name
+		}
+		],
+		script: '[[1]]',
+		isTemplateBlock: false,
+		help: 'Drag your script blocks here'
+	});
+	wireUpWorkspace(workspace);
 }
 wb.createWorkspace = createWorkspace;
 
 function wireUpWorkspace(workspace){
-    workspace.addEventListener('drop', getFiles, false);
-    workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
-    wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+	workspace.addEventListener('drop', getFiles, false);
+	workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+	wb.findAll(document, '.scripts_workspace').forEach(function(ws){
         ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
     });
-    document.querySelector('.workspace').appendChild(workspace);
-    workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-    wb.initializeDragHandlers();
+	document.querySelector('.workspace').appendChild(workspace);
+	workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+	wb.initializeDragHandlers();
 }
 
 function handleDragover(evt){
@@ -2081,25 +2143,25 @@ function handleDragover(evt){
 }
 
 function loadScriptsFromFile(file){
-    fileName = file.name;
-    if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-        console.error("File not a JSON file");
-        return;
-    }
-    var reader = new FileReader();
-    reader.readAsText( file );
-    reader.onload = function (evt){
-        clearScripts(null, true);
-        var saved = JSON.parse(evt.target.result);
-        loadScriptsFromObject(saved);
-    };
+	fileName = file.name;
+	if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+		console.error("File not a JSON file");
+		return;
+	}
+	var reader = new FileReader();
+	reader.readAsText( file );
+	reader.onload = function (evt){
+		clearScripts(null, true);
+		var saved = JSON.parse(evt.target.result);
+		loadScriptsFromObject(saved);
+	};
 }
 
 function getFiles(evt){
-    evt.stopPropagation();
-    evt.preventDefault();
-    var files = evt.dataTransfer.files;
-    if ( files.length > 0 ){
+	evt.stopPropagation();
+	evt.preventDefault();
+	var files = evt.dataTransfer.files;
+	if ( files.length > 0 ){
         // we only support dropping one file for now
         var file = files[0];
         loadScriptsFromFile(file);
@@ -2107,12 +2169,12 @@ function getFiles(evt){
 }
 
 Event.on('.workspace', 'click', '.disclosure', function(evt){
-    var block = wb.closest(evt.wbTarget, '.block');
-    if (block.dataset.closed){
-        delete block.dataset.closed;
-    }else{
-        block.dataset.closed = true;
-    }
+	var block = wb.closest(evt.wbTarget, '.block');
+	if (block.dataset.closed){
+		delete block.dataset.closed;
+	}else{
+		block.dataset.closed = true;
+	}
 });
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);

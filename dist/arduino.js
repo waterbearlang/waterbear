@@ -684,11 +684,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
-        potentialDropTargets.forEach(function(elem){
-            elem.classList.remove('dropTarget');
-        });
+        resetDragStyles();
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
@@ -723,6 +719,14 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             	revertDrop();
             }
         }
+    }
+    
+    function resetDragStyles() {
+        dragTarget.classList.remove('dragActive');
+        dragTarget.classList.remove('dragIndication');
+        potentialDropTargets.forEach(function(elem){
+            elem.classList.remove('dropTarget');
+        });
     }
     
     function revertDrop() {
@@ -880,6 +884,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
     function cancelDrag(event) {
     	// Cancel if escape key pressed
     	if(event.keyCode == 27) {
+    		resetDragStyles();
 	    	revertDrop();
 			clearTimeout(timer);
 			timer = null;
@@ -900,7 +905,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
-            Event.on('.content', 'keyup', null, cancelDrag);
+            Event.on(document, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };

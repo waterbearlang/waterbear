@@ -462,6 +462,13 @@
                 value = obj.uValue || obj.value || '';
         }
         var input = elem('input', {type: type, value: value});
+
+        //Only enable editing for the appropriate types
+        if (!(type === "string" || type === "any" || 
+              type === "number" || type === "color")) {
+            input.readOnly = true;
+        }
+
         wb.resize(input);
         return input;
     }
@@ -472,7 +479,7 @@
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice'){
+            if (type === 'string' || type === 'choice' || type === 'color'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -535,6 +542,19 @@
         instances.forEach(function(elem){
             wb.find(elem, '.name').textContent = newName;
         });
+
+        //Change name of parent
+        var parent = document.getElementById(source.dataset.localSource);
+        var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+        nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        //Change locals name of parent
+        var parentLocals = JSON.parse(parent.dataset.locals);
+        var localSocket = parentLocals[0].sockets[0];
+        localSocket.name = newName;
+        parent.dataset.locals = JSON.stringify(parentLocals);
+
+        wb.find(parent, '.name').textContent = nameTemplate;
     }
 
     function cancelUpdateName(event){

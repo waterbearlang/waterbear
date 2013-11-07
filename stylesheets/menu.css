@@ -1,0 +1,79 @@
+/* Menu system */
+ul#menu {
+	background:#666;
+}
+/*Initialize*/
+ul#menu, ul#menu ul.sub-menu {
+	padding:0;
+	margin: 0 0 5px 0;
+}
+ul#menu li, ul#menu ul.sub-menu li {
+	list-style-type: none;
+	display: inline-block;
+}
+/*Link Appearance*/
+ul#menu li a, ul#menu li ul.sub-menu li a {
+	text-decoration: none;
+	color: #fff;
+	background: #666;
+	padding: 10px;
+	display:inline-block;
+	min-width:60px;
+}
+ul#menu > li > a {
+	text-align:center;
+}
+ul#menu li a:hover, ul#menu li ul.sub-menu li a:hover {
+	background:#555;
+}
+/*Make the parent of sub-menu relative*/
+ul#menu li {
+	position: relative;
+}
+/*sub menu*/
+ul#menu li ul.sub-menu {
+	display:none;
+	position: absolute;
+	top: 30px;
+	left: 0;
+	width: 100px;
+	z-index:1000;
+}
+ul#menu li ul.sub-menu li a {
+	min-width:200px;
+}
+ul#menu li ul.sub-menu li a.disabled {
+	background:#777;
+}
+ul#menu li:hover ul.sub-menu {
+	display:block;
+}
+
+.menu_buttons {
+	display:none;
+}
+/* Mobile nav */
+@media (max-width: 600px) {
+	#nav{
+		display:none;
+	}
+	.menu_buttons {
+		display:block;
+	}
+	#nav li, #nav li a {
+		width:100%;
+
+	}
+	#nav li {
+		border-top:1px solid black;
+	}
+}
+
+#nav:target {
+	display:block;
+}
+
+/* Hide nav on result and blocks pages */
+body.result nav, body.blocks nav {
+	display:none;
+}

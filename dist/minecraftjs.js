@@ -3697,7 +3697,7 @@ function edit_menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
@@ -3716,12 +3716,12 @@ function edit_menu(title, specs, show){
 /*end ui.js*/
 
 /*begin workspace.js*/
-(function(wb){
+(function (wb) {
 
 	var language = location.pathname.match(/\/(.*)\.html/)[1];
 
-	function clearScripts(event, force){
-		if (force || confirm('Throw out the current script?')){
+	function clearScripts(event, force) {
+		if (force || confirm('Throw out the current script?')) {
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
 			createWorkspace('Workspace');
@@ -3729,303 +3729,457 @@ function edit_menu(title, specs, show){
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, clearScripts);
-	Event.on('.edit_script', 'click', null, function(){
+	Event.on('.edit_script', 'click', null, function () {
 		document.body.className = 'editor';
 		wb.loadCurrentScripts(wb.queryParams);
 	});
 
-	Event.on('.goto_stage', 'click', null, function(){
+	Event.on('.goto_stage', 'click', null, function () {
 		document.body.className = 'result';
 	});
 
 
 
-// Load and Save Section
+	// Load and Save Section
 
-function saveCurrentScripts(){
-	wb.showWorkspace('block');
-	document.querySelector('#block_menu').scrollIntoView();
-	localStorage['__' + language + '_current_scripts'] = scriptsToString();
-}
-window.onunload = saveCurrentScripts;
-
-
-window.onload = loadRecentGists;
-
-function loadRecentGists(){
-	var localGists = localStorage['__' + language + '_recent_gists'];
-	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-	var gistContainer = document.querySelector("#recent-gists");
-	gistContainer.innerHTML = '';
-	for (var i = 0; i < gistArray.length; i++) {
-		var node = document.createElement("li");
-		var a = document.createElement('a');
-		var linkText = document.createTextNode(gistArray[i]);
-
-		a.appendChild(linkText)
-		//a.href = language + ".html?gist=" + gistArray[i];
-
-		node.appendChild(a);
-		gistContainer.appendChild(node);
-		var gist = gistArray[i];
-		console.log(gist);
-		a.addEventListener('click', function(){
-			loadScriptsFromGistId(parseInt(gist));
-			return false;
-		});
-	};
-}
-// Save script to gist;
-function saveCurrentScriptsToGist(){
-	console.log("Saving to Gist");
-	var title = prompt("Save to an anonymous Gist titled: ");
-
-	ajax.post("https://api.github.com/gists", function(data){
-        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
-        var gistID = JSON.parse(data).url.split("/").pop();
-        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
-
-        //save gist id to local storage
-        var localGists = localStorage['__' + language + '_recent_gists'];
-        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-        gistArray.push(parseInt(gistID));
-        localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
-        loadRecentGists();
-
-    }, JSON.stringify({
-    	"description": title,
-    	"public": true,
-    	"files": {
-    		"script.json": {
-    			"content": scriptsToString()
-    		},
-    	}
-    }));
-}
-
-
-function scriptsToString(title, description){
-	if (!title){ title = ''; }
-	if (!description){ description = ''; }
-	var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-	return JSON.stringify({
-		title: title,
-		description: description,
-		date: Date.now(),
-		waterbearVersion: '2.0',
-		blocks: blocks.map(wb.blockDesc)
-	});
-}
-
-
-function createDownloadUrl(evt){
-	var URL = window.webkitURL || window.URL;
-	var file = new Blob([scriptsToString()], {type: 'application/json'});
-	var reader = new FileReader();
-	var a = document.createElement('a');
-	reader.onloadend = function(){
-		a.href = reader.result;
-		a.download = 'script.json';
-		a.target = '_blank';
-		document.body.appendChild(a);
-		a.click();
-	};
-	reader.readAsDataURL(file);
-	evt.preventDefault();
-}
-
-Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
-Event.on('.download_scripts', 'click', null, createDownloadUrl);
-Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
-Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
-
-
-function loadScriptsFromGistId(id){
-	var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load?") : id;
-	console.log("Loading gist: " + gistID);
-	ajax.get("https://api.github.com/gists/"+gistID, function(data){
-		loadScriptsFromGist({data:JSON.parse(data)});
-	});
-}
-
-function loadScriptsFromFilesystem(){
-	var input = document.createElement('input');
-	input.setAttribute('type', 'file');
-	input.setAttribute('accept', 'application/json');
-	input.addEventListener('change', function(evt){
-		var file = input.files[0];
-		loadScriptsFromFile(file);
-	});
-	input.click();
-}
-
-function loadScriptsFromObject(fileObject){
-    // console.info('file format version: %s', fileObject.waterbearVersion);
-    // console.info('restoring to workspace %s', fileObject.workspace);
-    if (!fileObject) return createWorkspace();
-    var blocks = fileObject.blocks.map(wb.Block);
-    if (!blocks.length){
-    	return createWorkspace();
-    }
-    if (blocks.length > 1){
-    	console.log('not really expecting multiple blocks here right now');
-    	console.log(blocks);
-    }
-    blocks.forEach(function(block){
-    	wireUpWorkspace(block);
-    	Event.trigger(block, 'wb-add');
-    });
-    wb.loaded = true;
-    Event.trigger(document.body, 'wb-script-loaded');
-}
-
-function loadScriptsFromGist(gist){
-	var keys = Object.keys(gist.data.files);
-	var file;
-	keys.forEach(function(key){
-		if (/.*\.json/.test(key)){
-			// it's a json file
-			file = gist.data.files[key].content;
-		}
-	});
-	if (!file){
-		console.log('no json file found in gist: %o', gist);
-		return;
+	function saveCurrentScripts() {
+		wb.showWorkspace('block');
+		document.querySelector('#block_menu').scrollIntoView();
+		localStorage['__' + language + '_current_scripts'] = scriptsToString();
 	}
-	loadScriptsFromObject(JSON.parse(file));
-}
+	window.onunload = saveCurrentScripts;
 
 
-function loadScriptsFromExample(name){
-	wb.ajax('examples/' + name + '.json', function(exampleJson){
-		loadScriptsFromObject(JSON.parse(exampleJson));
-	}, function(xhr, status){
-		console.error('Error in wb.ajax: %s', status);
-	});
-}
+	window.onload = loadRecentGists;
 
-function runScriptFromGist(gist){
-	console.log('running script from gist');
-	var keys = Object.keys(gist.data.files);
-	var file;
-	keys.forEach(function(key){
-		if (/.*\.js$/.test(key)){
-			// it's a javascript file
-			console.log('found javascript file: %s', key);
-			file = gist.data.files[key].content;
-		}
-	});
-	if (!file){
-		console.log('no javascript file found in gist: %o', gist);
-		return;
+	function loadRecentGists() {
+		var localGists = localStorage['__' + language + '_recent_gists'];
+		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+		var gistContainer = document.querySelector("#recent_gists");
+		gistContainer.innerHTML = '';
+		for (var i = 0; i < gistArray.length; i++) {
+			var node = document.createElement("li");
+			var a = document.createElement('a');
+			var linkText = document.createTextNode(gistArray[i]);
+
+			a.appendChild(linkText)
+			//a.href = language + ".html?gist=" + gistArray[i];
+
+			node.appendChild(a);
+			gistContainer.appendChild(node);
+			var gist = gistArray[i];
+			console.log(gist);
+			a.addEventListener('click', function () {
+				loadScriptsFromGistId(parseInt(gist));
+				return false;
+			});
+		};
 	}
-	wb.runScript(file);
-}
+	// Save script to gist;
+	function saveCurrentScriptsToGist() {
+		console.log("Saving to Gist");
+		var title = prompt("Save to an anonymous Gist titled: ");
 
+		ajax.post("https://api.github.com/gists", function (data) {
+			//var raw_url = JSON.parse(data).files["script.json"].raw_url;
+			var gistID = JSON.parse(data).url.split("/").pop();
+			prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
-wb.loaded = false;
-wb.loadCurrentScripts = function(queryParsed){
-	if (!wb.loaded){
-		if (queryParsed.gist){
-			loadScriptsFromGistId(queryParsed.gist);
-		}else if (queryParsed.example){
-			loadScriptsFromExample(queryParsed.example);
-		}else if (localStorage['__' + language + '_current_scripts']){
-			var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
-			if (fileObject){
-				loadScriptsFromObject(fileObject);
+			//save gist id to local storage
+			var localGists = localStorage['__' + language + '_recent_gists'];
+			var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+			gistArray.push(parseInt(gistID));
+			localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
+			loadRecentGists();
+
+		}, JSON.stringify({
+			"description": title,
+			"public": true,
+			"files": {
+				"script.json": {
+					"content": scriptsToString()
+				},
 			}
-		}else{
-			createWorkspace('Workspace');
+		}));
+	}
+
+
+	function scriptsToString(title, description) {
+		if (!title) {
+			title = '';
 		}
+		if (!description) {
+			description = '';
+		}
+		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+		return JSON.stringify({
+			title: title,
+			description: description,
+			date: Date.now(),
+			waterbearVersion: '2.0',
+			blocks: blocks.map(wb.blockDesc)
+		});
+	}
+
+
+	function createDownloadUrl(evt) {
+		var URL = window.webkitURL || window.URL;
+		var file = new Blob([scriptsToString()], {
+			type: 'application/json'
+		});
+		var reader = new FileReader();
+		var a = document.createElement('a');
+		reader.onloadend = function () {
+			a.href = reader.result;
+			a.download = 'script.json';
+			a.target = '_blank';
+			document.body.appendChild(a);
+			a.click();
+		};
+		reader.readAsDataURL(file);
+		evt.preventDefault();
+	}
+
+	Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
+
+
+	function loadScriptsFromGistId(id) {
+		var gistID = isNaN(parseInt(id)) ? prompt("Enter the ID of the gist you'd like to load: ") : id;
+		console.log("Loading gist: " + gistID);
+		ajax.get("https://api.github.com/gists/" + gistID, function (data) {
+			loadScriptsFromGist({
+				data: JSON.parse(data)
+			});
+		});
+	}
+
+	function loadScriptsFromFilesystem() {
+		var input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('accept', 'application/json');
+		input.addEventListener('change', function (evt) {
+			var file = input.files[0];
+			loadScriptsFromFile(file);
+		});
+		input.click();
+	}
+
+	function loadScriptsFromObject(fileObject) {
+		// console.info('file format version: %s', fileObject.waterbearVersion);
+		// console.info('restoring to workspace %s', fileObject.workspace);
+		if (!fileObject) return createWorkspace();
+		var blocks = fileObject.blocks.map(wb.Block);
+		if (!blocks.length) {
+			return createWorkspace();
+		}
+		if (blocks.length > 1) {
+			console.log('not really expecting multiple blocks here right now');
+			console.log(blocks);
+		}
+		blocks.forEach(function (block) {
+			wireUpWorkspace(block);
+			Event.trigger(block, 'wb-add');
+		});
 		wb.loaded = true;
+		Event.trigger(document.body, 'wb-script-loaded');
 	}
-	Event.trigger(document.body, 'wb-loaded');
-};
 
-
-// Allow saved scripts to be dropped in
-function createWorkspace(name){
-	var id = uuid();
-	var workspace = wb.Block({
-		group: 'scripts_workspace',
-		id: id,
-		scriptId: id,
-		scopeId: id,
-		blocktype: 'context',
-		sockets: [
-		{
-			name: name
+	function loadScriptsFromGist(gist) {
+		var keys = Object.keys(gist.data.files);
+		var file;
+		keys.forEach(function (key) {
+			if (/.*\.json/.test(key)) {
+				// it's a json file
+				file = gist.data.files[key].content;
+			}
+		});
+		if (!file) {
+			console.log('no json file found in gist: %o', gist);
+			return;
 		}
-		],
-		script: '[[1]]',
-		isTemplateBlock: false,
-		help: 'Drag your script blocks here'
-	});
-	wireUpWorkspace(workspace);
-}
-wb.createWorkspace = createWorkspace;
-
-function wireUpWorkspace(workspace){
-	workspace.addEventListener('drop', getFiles, false);
-	workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
-	wb.findAll(document, '.scripts_workspace').forEach(function(ws){
-        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
-    });
-	document.querySelector('.workspace').appendChild(workspace);
-	workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-	wb.initializeDragHandlers();
-}
-
-function handleDragover(evt){
-    // Stop Firefox from grabbing the file prematurely
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy';
-}
-
-function loadScriptsFromFile(file){
-	fileName = file.name;
-	if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-		console.error("File not a JSON file");
-		return;
+		loadScriptsFromObject(JSON.parse(file));
 	}
-	var reader = new FileReader();
-	reader.readAsText( file );
-	reader.onload = function (evt){
-		clearScripts(null, true);
-		var saved = JSON.parse(evt.target.result);
-		loadScriptsFromObject(saved);
+
+
+	function loadScriptsFromExample(name) {
+		wb.ajax('examples/' + name + '.json', function (exampleJson) {
+			loadScriptsFromObject(JSON.parse(exampleJson));
+		}, function (xhr, status) {
+			console.error('Error in wb.ajax: %s', status);
+		});
+	}
+
+	function runScriptFromGist(gist) {
+		console.log('running script from gist');
+		var keys = Object.keys(gist.data.files);
+		var file;
+		keys.forEach(function (key) {
+			if (/.*\.js$/.test(key)) {
+				// it's a javascript file
+				console.log('found javascript file: %s', key);
+				file = gist.data.files[key].content;
+			}
+		});
+		if (!file) {
+			console.log('no javascript file found in gist: %o', gist);
+			return;
+		}
+		wb.runScript(file);
+	}
+
+
+	wb.loaded = false;
+	wb.loadCurrentScripts = function (queryParsed) {
+		if (!wb.loaded) {
+			if (queryParsed.gist) {
+				loadScriptsFromGistId(queryParsed.gist);
+			} else if (queryParsed.example) {
+				loadScriptsFromExample(queryParsed.example);
+			} else if (localStorage['__' + language + '_current_scripts']) {
+				var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
+				if (fileObject) {
+					loadScriptsFromObject(fileObject);
+				}
+			} else {
+				createWorkspace('Workspace');
+			}
+			wb.loaded = true;
+		}
+		Event.trigger(document.body, 'wb-loaded');
 	};
-}
 
-function getFiles(evt){
-	evt.stopPropagation();
-	evt.preventDefault();
-	var files = evt.dataTransfer.files;
-	if ( files.length > 0 ){
-        // we only support dropping one file for now
-        var file = files[0];
-        loadScriptsFromFile(file);
-    }
-}
 
-Event.on('.workspace', 'click', '.disclosure', function(evt){
-	var block = wb.closest(evt.wbTarget, '.block');
-	if (block.dataset.closed){
-		delete block.dataset.closed;
-	}else{
-		block.dataset.closed = true;
+	// Allow saved scripts to be dropped in
+	function createWorkspace(name) {
+		var id = uuid();
+		var workspace = wb.Block({
+			group: 'scripts_workspace',
+			id: id,
+			scriptId: id,
+			scopeId: id,
+			blocktype: 'context',
+			sockets: [{
+				name: name
+			}],
+			script: '[[1]]',
+			isTemplateBlock: false,
+			help: 'Drag your script blocks here'
+		});
+		wireUpWorkspace(workspace);
 	}
-});
+	wb.createWorkspace = createWorkspace;
 
-Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-Event.on('.workspace', 'keypress', 'input', wb.resize);
-Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
-Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
+	function wireUpWorkspace(workspace) {
+		workspace.addEventListener('drop', getFiles, false);
+		workspace.addEventListener('dragover', function (evt) {
+			evt.preventDefault();
+		}, false);
+		wb.findAll(document, '.scripts_workspace').forEach(function (ws) {
+			ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+		});
+		document.querySelector('.workspace').appendChild(workspace);
+		workspace.querySelector('.contained').appendChild(wb.elem('div', {
+			'class': 'dropCursor'
+		}));
+		wb.initializeDragHandlers();
+	}
+
+	function handleDragover(evt) {
+		// Stop Firefox from grabbing the file prematurely
+		evt.stopPropagation();
+		evt.preventDefault();
+		evt.dataTransfer.dropEffect = 'copy';
+	}
+
+	function loadScriptsFromFile(file) {
+		fileName = file.name;
+		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+			console.error("File not a JSON file");
+			return;
+		}
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = function (evt) {
+			clearScripts(null, true);
+			var saved = JSON.parse(evt.target.result);
+			loadScriptsFromObject(saved);
+		};
+	}
+
+	function getFiles(evt) {
+		evt.stopPropagation();
+		evt.preventDefault();
+		var files = evt.dataTransfer.files;
+		if (files.length > 0) {
+			// we only support dropping one file for now
+			var file = files[0];
+			loadScriptsFromFile(file);
+		}
+	}
+
+	Event.on('.workspace', 'click', '.disclosure', function (evt) {
+		var block = wb.closest(evt.wbTarget, '.block');
+		if (block.dataset.closed) {
+			delete block.dataset.closed;
+		} else {
+			block.dataset.closed = true;
+		}
+	});
+
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on(document.body, 'wb-loaded', null, function (evt) {
+		console.log('menu loaded');
+	});
+	Event.on(document.body, 'wb-script-loaded', null, function (evt) {
+		console.log('script loaded');
+	});
 })(wb);
 
 /*end workspace.js*/
+
+/*begin blockprefs.js*/
+// User block preferences
+//
+// Allows the user to hide groups of blocks within the interface
+// Settings are stored in LocalStorage and retreived each
+// time the page is loaded.
+
+(function(wb){
+
+	//save the state of the settings link
+	var closed = true;
+	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var settings_link;
+	//add a link to show the show/hide block link
+	function addSettingsLink(callback) {
+		console.log("adding settings link");
+		var block_menu = document.querySelector('#block_menu');
+		var settings_link = document.createElement('a');
+		settings_link.href = '#';
+		settings_link.style.float = 'right';
+		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
+		settings_link.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settings_link);
+		return settings_link;
+	}
+
+	//create the checkboxes next to the headers
+	function createCheckboxes() {
+		var block_headers = document.querySelectorAll('.accordion-header');
+		[].forEach.call(block_headers, function (el) {
+			var checkbox = document.createElement('input');
+			checkbox.type = 'checkbox';
+			checkbox.value = '1';
+			checkbox.style.float = 'right';
+			checkbox.style.display = 'none';
+			checkbox.checked = 'true';
+			checkbox.addEventListener('click', hideBlocks);
+			el.appendChild(checkbox);
+		});
+	};
+
+	//settings link has been clicked
+	function toggleCheckboxDisplay() {
+		console.log('toggle checkboxes called');
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var block_menu = document.querySelector('#block_menu');
+		var display;
+
+		if (closed) {
+			closed = false;
+			display = 'inline';
+			block_menu.addClass("settings");
+			settings_link.innerHTML = 'Save';
+		} else {
+			closed = true;
+			display = 'none'
+			block_menu.removeClass("settings");
+			settings_link.innerHTML = 'Show/Hide blocks';
+			//save the settings
+			saveSettings();
+		}
+		[].forEach.call(checkboxes, function (el) {
+			el.style.display = display;
+		});
+	};
+
+	//checkbox has been clicked
+	function hideBlocks(e) {
+		var parent = this.parentNode;
+		if (this.checked) {
+			parent.removeClass('hidden');
+		} else {
+			parent.addClass('hidden');
+		}
+		//save the settings
+		saveSettings();
+		e.stopPropagation();
+	};
+
+	//save the block preferences to local storage
+	function saveSettings(){
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var toSave = {};
+		[].forEach.call(checkboxes,	function (el) {
+			var id = el.parentNode.id;
+			var checked = el.checked;
+			toSave[id] = checked;
+		});
+		console.log("Saving block preferences", toSave);
+		localStorage['__' + language + '_hidden_blocks'] = JSON.stringify(toSave);
+	};
+
+	//load block display from local storage
+	function loadSettings(){
+		var storedData = localStorage['__' + language + '_hidden_blocks'];
+		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
+		window.hbl = hiddenBlocks;
+		console.log("Loading block preferences", hiddenBlocks);
+		for (key in hiddenBlocks) {
+			if(!hiddenBlocks[key]){
+				var h3 = document.getElementById(key);
+				if(h3 != null){
+					var check = h3.querySelector('input[type="checkbox"]');
+					check.checked = false;
+					h3.addClass('hidden');
+				}
+			}
+		}
+	};
+
+	//after initliazation, create the settings and checkboxes
+	function load(){
+		settings_link = addSettingsLink();
+		createCheckboxes();
+		loadSettings();
+	}
+
+	//onload initialize the blockmanager
+	window.onload = load;
+})(wb);
+
+//helper methods
+Element.prototype.hasClass = function (name) {
+	return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(this.className);
+};
+
+Element.prototype.addClass = function (name) {
+	if (!this.hasClass(name)) {
+		this.className = this.className ? [this.className, name].join(' ') : name;
+	}
+};
+Element.prototype.removeClass = function (name) {
+	if (this.hasClass(name)) {
+		var c = this.className;
+		this.className = c.replace(new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)", "g"), "");
+	}
+};
+
+/*end blockprefs.js*/
 
 /*begin languages/minecraftjs/minecraftjs.js*/
 

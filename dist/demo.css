@@ -704,7 +704,13 @@ h1.title {
   display: none;
 }
 
-
+#block_menu.settings .accordion-header.hidden {
+	display:block;
+	opacity:0.5;
+}
+#block_menu .accordion-header.hidden {
+	display:none;
+}
 
 /*end blocks.css*/
 

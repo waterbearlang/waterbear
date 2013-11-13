@@ -37,7 +37,7 @@
 	function loadRecentGists() {
 		var localGists = localStorage['__' + language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-		var gistContainer = document.querySelector("#recent-gists");
+		var gistContainer = document.querySelector("#recent_gists");
 		gistContainer.innerHTML = '';
 		for (var i = 0; i < gistArray.length; i++) {
 			var node = document.createElement("li");

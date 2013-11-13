@@ -2276,16 +2276,15 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
 		var block_menu = document.querySelector('#block_menu');
 		var display;
-
+		block_menu.classList.toggle("settings");
 		if (closed) {
 			closed = false;
 			display = 'inline';
-			block_menu.addClass("settings");
 			settings_link.innerHTML = 'Save';
 		} else {
+			//save was clicked
 			closed = true;
 			display = 'none'
-			block_menu.removeClass("settings");
 			settings_link.innerHTML = 'Show/Hide blocks';
 			//save the settings
 			saveSettings();
@@ -2299,9 +2298,9 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 	function hideBlocks(e) {
 		var parent = this.parentNode;
 		if (this.checked) {
-			parent.removeClass('hidden');
+			parent.classList.remove('hidden');
 		} else {
-			parent.addClass('hidden');
+			parent.classList.add('hidden');
 		}
 		//save the settings
 		saveSettings();
@@ -2333,7 +2332,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 				if(h3 != null){
 					var check = h3.querySelector('input[type="checkbox"]');
 					check.checked = false;
-					h3.addClass('hidden');
+					h3.classList.add('hidden');
 				}
 			}
 		}
@@ -2349,23 +2348,6 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 	//onload initialize the blockmanager
 	window.onload = load;
 })(wb);
-
-//helper methods
-Element.prototype.hasClass = function (name) {
-	return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(this.className);
-};
-
-Element.prototype.addClass = function (name) {
-	if (!this.hasClass(name)) {
-		this.className = this.className ? [this.className, name].join(' ') : name;
-	}
-};
-Element.prototype.removeClass = function (name) {
-	if (this.hasClass(name)) {
-		var c = this.className;
-		this.className = c.replace(new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)", "g"), "");
-	}
-};
 
 /*end blockprefs.js*/
 

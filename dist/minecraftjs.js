@@ -3799,6 +3799,32 @@ function saveCurrentScriptsToGist(){
     }));
 }
 
+window.onload = loadRecentGists;
+
+function loadRecentGists() {
+	var localGists = localStorage['__' + language + '_recent_gists'];
+	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	var gistContainer = document.querySelector("#recent_gists");
+	gistContainer.innerHTML = '';
+	for (var i = 0; i < gistArray.length; i++) {
+		var node = document.createElement("li");
+		var a = document.createElement('a');
+		var linkText = document.createTextNode(gistArray[i]);
+
+		a.appendChild(linkText)
+		//a.href = language + ".html?gist=" + gistArray[i];
+
+		node.appendChild(a);
+		gistContainer.appendChild(node);
+		var gist = gistArray[i];
+		console.log(gist);
+		a.addEventListener('click', function () {
+			loadScriptsFromGistId(parseInt(gist));
+			return false;
+		});
+	};
+}
+
 
 function scriptsToString(title, description){
 	if (!title){ title = ''; }

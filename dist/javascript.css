@@ -1,6 +1,6 @@
 
 /*begin workspace.css*/
-html, body{
+ html, body{
 	height: 100%;
 	overflow: hidden;
 	background-color: #FFF;
@@ -282,11 +282,12 @@ body.editor #block_menu{
 svg{
 	position:absolute;
 	left: -1000px;
-	display: none;
+	/*display: none;*/
 }
 svg text{
 	/* This should be the same font used for <input> */
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 11px;
 }
 
 
@@ -965,7 +966,7 @@ body.result nav, body.blocks nav {
     background-color: hsl(120, 81%, 85%);
 }
 
-.movingvoice, .movingvoice .holder{
+.music, .music .holder{
     border-color: hsl(150, 81%, 49%);
     background-color: hsl(150, 81%, 85%);
 }

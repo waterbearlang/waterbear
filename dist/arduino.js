@@ -1897,7 +1897,7 @@ function edit_menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
@@ -1974,6 +1974,32 @@ function saveCurrentScriptsToGist(){
     		},
     	}
     }));
+}
+
+window.onload = loadRecentGists;
+
+function loadRecentGists() {
+	var localGists = localStorage['__' + language + '_recent_gists'];
+	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	var gistContainer = document.querySelector("#recent_gists");
+	gistContainer.innerHTML = '';
+	for (var i = 0; i < gistArray.length; i++) {
+		var node = document.createElement("li");
+		var a = document.createElement('a');
+		var linkText = document.createTextNode(gistArray[i]);
+
+		a.appendChild(linkText)
+		//a.href = language + ".html?gist=" + gistArray[i];
+
+		node.appendChild(a);
+		gistContainer.appendChild(node);
+		var gist = gistArray[i];
+		console.log(gist);
+		a.addEventListener('click', function () {
+			loadScriptsFromGistId(parseInt(gist));
+			return false;
+		});
+	};
 }
 
 
@@ -2202,6 +2228,146 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 })(wb);
 
 /*end workspace.js*/
+
+/*begin blockprefs.js*/
+// User block preferences
+//
+// Allows the user to hide groups of blocks within the interface
+// Settings are stored in LocalStorage and retreived each
+// time the page is loaded.
+
+(function(wb){
+
+	//save the state of the settings link
+	var closed = true;
+	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var settings_link;
+	//add a link to show the show/hide block link
+	function addSettingsLink(callback) {
+		console.log("adding settings link");
+		var block_menu = document.querySelector('#block_menu');
+		var settings_link = document.createElement('a');
+		settings_link.href = '#';
+		settings_link.style.float = 'right';
+		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
+		settings_link.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settings_link);
+		return settings_link;
+	}
+
+	//create the checkboxes next to the headers
+	function createCheckboxes() {
+		var block_headers = document.querySelectorAll('.accordion-header');
+		[].forEach.call(block_headers, function (el) {
+			var checkbox = document.createElement('input');
+			checkbox.type = 'checkbox';
+			checkbox.value = '1';
+			checkbox.style.float = 'right';
+			checkbox.style.display = 'none';
+			checkbox.checked = 'true';
+			checkbox.addEventListener('click', hideBlocks);
+			el.appendChild(checkbox);
+		});
+	};
+
+	//settings link has been clicked
+	function toggleCheckboxDisplay() {
+		console.log('toggle checkboxes called');
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var block_menu = document.querySelector('#block_menu');
+		var display;
+
+		if (closed) {
+			closed = false;
+			display = 'inline';
+			block_menu.addClass("settings");
+			settings_link.innerHTML = 'Save';
+		} else {
+			closed = true;
+			display = 'none'
+			block_menu.removeClass("settings");
+			settings_link.innerHTML = 'Show/Hide blocks';
+			//save the settings
+			saveSettings();
+		}
+		[].forEach.call(checkboxes, function (el) {
+			el.style.display = display;
+		});
+	};
+
+	//checkbox has been clicked
+	function hideBlocks(e) {
+		var parent = this.parentNode;
+		if (this.checked) {
+			parent.removeClass('hidden');
+		} else {
+			parent.addClass('hidden');
+		}
+		//save the settings
+		saveSettings();
+		e.stopPropagation();
+	};
+
+	//save the block preferences to local storage
+	function saveSettings(){
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var toSave = {};
+		[].forEach.call(checkboxes,	function (el) {
+			var id = el.parentNode.id;
+			var checked = el.checked;
+			toSave[id] = checked;
+		});
+		console.log("Saving block preferences", toSave);
+		localStorage['__' + language + '_hidden_blocks'] = JSON.stringify(toSave);
+	};
+
+	//load block display from local storage
+	function loadSettings(){
+		var storedData = localStorage['__' + language + '_hidden_blocks'];
+		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
+		window.hbl = hiddenBlocks;
+		console.log("Loading block preferences", hiddenBlocks);
+		for (key in hiddenBlocks) {
+			if(!hiddenBlocks[key]){
+				var h3 = document.getElementById(key);
+				if(h3 != null){
+					var check = h3.querySelector('input[type="checkbox"]');
+					check.checked = false;
+					h3.addClass('hidden');
+				}
+			}
+		}
+	};
+
+	//after initliazation, create the settings and checkboxes
+	function load(){
+		settings_link = addSettingsLink();
+		createCheckboxes();
+		loadSettings();
+	}
+
+	//onload initialize the blockmanager
+	window.onload = load;
+})(wb);
+
+//helper methods
+Element.prototype.hasClass = function (name) {
+	return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(this.className);
+};
+
+Element.prototype.addClass = function (name) {
+	if (!this.hasClass(name)) {
+		this.className = this.className ? [this.className, name].join(' ') : name;
+	}
+};
+Element.prototype.removeClass = function (name) {
+	if (this.hasClass(name)) {
+		var c = this.className;
+		this.className = c.replace(new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)", "g"), "");
+	}
+};
+
+/*end blockprefs.js*/
 
 /*begin languages/arduino/arduino.js*/
 (function(){

@@ -5020,6 +5020,51 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
+            "help": "if the sprite moves to the edge of the screen, stop it at the edge",
+            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;sprite.dy=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polgyon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;sprite.dy=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;sprite.dx=0;}else if((sprite.polygon.pos.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;sprite.dx=0;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "stop sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
+            "help": "if the sprite moves to the edge of the screen, slide it along the edge",
+            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polygon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;}else if((sprite.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "slide sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
+            "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
+            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = (global.stage_width - sprite.w);}else if((sprite.x + sprite.w) > global.stage_width){sprite.polygon.pos.x = 0;};if(sprite.y < 0){sprite.polygon.pos.y = (global.stage_height - sprite.h);}else if((sprite.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = 0;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "wrap sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "around edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
             "script": "{{1}}.moveAbsolute({{2}}.x, {{2}}.y);",
             "help": "move a sprite absolutely",

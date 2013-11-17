@@ -263,22 +263,6 @@
         },
         {
             "blocktype": "step",
-            "id": "f2ffc7ec-f201-4f89-8340-41b971dc2931",
-            "help" :"bounce off of another sprite",
-            "script": "(function(sprite1, sprite2){if(sprite1.collides(sprite2)){ } });",
-            "sockets": [
-                {
-                    "name": "bounce",
-                    "type": "sprite"
-                },
-                {
-                    "name": "off of sprite ",
-                    "type": "sprite"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
             "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
             "help": "if the sprite moves to the edge of the screen, stop it at the edge",
             "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;sprite.dy=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polgyon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;sprite.dy=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;sprite.dx=0;}else if((sprite.polygon.pos.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;sprite.dx=0;}})({{1}});",

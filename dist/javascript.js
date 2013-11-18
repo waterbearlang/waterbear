@@ -5396,6 +5396,26 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "2003f5ae-0bef-4517-aad4-7baf4457a823",
+            "script": "(function(voice, sec){voice.startOsc();setTimeout(function() {voice.stopOsc();}, 1000 * sec);})({{1}},{{2}});",
+            "help": "play the voice for a number of seconds",
+            "sockets": [
+                {
+                    "name": "play voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "for ",
+                    "type": "number",
+                    "value": 2
+                },
+                {
+                    "name": "seconds"
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "112ffdd3-7832-43df-85a5-85587e951295",
             "script": "{{1}}.on",

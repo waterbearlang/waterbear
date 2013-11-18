@@ -11,6 +11,8 @@ function Voice(){
 
 // Turn on the oscillator, routed through a gain node for volume
 Voice.prototype.startOsc = function() {
+    if (this.on) 
+        this.stopOsc();
     this.osc = this.context.createOscillator();
     this.osc.type = 0; // Sine wave
     this.osc.frequency.value = this.frequency;

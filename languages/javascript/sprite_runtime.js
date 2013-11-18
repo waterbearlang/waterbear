@@ -55,6 +55,13 @@ PolySprite.prototype.collides = function(sprite) {
     return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
 };
 
+PolySprite.prototype.bounceOff = function(sprite) {
+    var response = new SAT.Response();
+    if (SAT.testPolygonPolygon(this.polygon, sprite.polygon, response)) {
+        this.movementDirection.reflectN(response.overlapN);
+    }
+}
+
 PolySprite.prototype.setSpeed = function(speed){
     this.speed = speed;
     this.calculateMovementVector();
@@ -97,6 +104,10 @@ PolySprite.prototype.calculateMovementVector = function(){
     this.movementDirection.y = Math.sin(this.movementDegrees*Math.PI/180)*this.speed;
 };
 
+PolySprite.prototype.calculateMovementDegrees = function() {
+    this.movementDegrees = Math.Atan2(this.movementDirection.x,this.movementDirection.y) * (Math.PI / 180);
+}
+
 //move a sprite by its own speed and direction
 PolySprite.prototype.move = function(){
     this.polygon.pos.add(this.movementDirection);
@@ -120,6 +131,74 @@ PolySprite.prototype.moveAbsolute = function(x,y){
     this.calculateBoundingBox();
     this.polygon.recalc();
 };
+
+// Bounce the sprite off the edge of the stage
+PolySprite.prototype.stageBounce = function(stage_width, stage_height) {
+    if(this.x<0){
+        this.movementDirection.reflectN(new SAT.Vector(1,0));
+    } else if ((this.x+this.w) > stage_width) {
+        this.movementDirection.reflectN(new SAT.Vector(-1,0));
+    }
+    if(this.y<0){
+        this.movementDirection.reflectN(new SAT.Vector(0,1));
+    } else if ((this.y+this.h) > stage_height){
+        this.movementDirection.reflectN(new SAT.Vector(0,-1));
+    }
+};
+
+// Stop the sprite if it hits the edge of the stage
+PolySprite.prototype.edgeStop = function(stage_width, stage_height) {
+    if(this.x < 0){
+        this.polygon.pos.x = 0;
+        this.setSpeed(0);
+    } else if ((this.x + this.w) > stage_width){
+        this.polygon.pos.x = (stage_width - this.w);
+        this.setSpeed(0);
+    }
+    if(this.y < 0){
+        this.polygon.pos.y = 0;
+        this.setSpeed(0);
+    } else if((this.polygon.pos.y + this.h) > stage_height){
+        this.polygon.pos.y = (stage_height - this.h);
+        this.setSpeed(0);
+    }
+}
+
+// If the sprite moves to the edge of the screen, slide it along that edge
+PolySprite.prototype.edgeSlide = function(stage_width, stage_height) {
+    if(this.x < 0){
+        this.polygon.pos.x = 0;
+        this.movementDirection.x = 0;
+        this.calculateMovementDegrees;
+    } else if ((this.x + this.w) > stage_width){
+        this.polygon.pos.x = (stage_width - this.w);
+        this.movementDirection.x = 0;
+        this.calculateMovementDegrees;
+    }
+    if(this.y < 0){
+        this.polygon.pos.y = 0;
+        this.movementDirection.y=0;
+        this.calculateMovementDegrees;
+    } else if((this.y + this.h) > stage_height){
+        this.polygon.pos.y = (stage_height-this.h);
+        this.movementDirection.y=0;
+        this.calculateMovementDegrees;
+    }
+}
+
+// Wrap around the edge of the stage
+PolySprite.prototype.edgeWrap = function(stage_width, stage_height) {
+    if(this.x < 0) {
+        this.polygon.pos.x = (stage_width - this.w);
+    } else if((this.x + this.w) > stage_width) {
+        this.polygon.pos.x = 0;
+    }
+    if(this.y < 0) {
+        this.polygon.pos.y = (stage_height - this.h);
+    } else if((this.y + this.h) > stage_height) {
+        this.polygon.pos.y = 0;
+    }
+}
 
 /** @preserve @author Jim Riecken - released under the MIT License. */
 /**

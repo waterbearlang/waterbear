@@ -4955,6 +4955,24 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "aaa2f728-cae3-4368-b241-e80f94c360d3",
+            "script": "{{1}}.bounceOff({{2}});",
+            "help": "Bounce the sprite off of the passed in sprite",
+            "sockets": [
+                {
+                    "name": "bounce sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "off of sprite",
+                    "type": "sprite",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
             "script": "{{1}}.moveRelative({{2}},{{3}});",
             "help": "move a sprite relatively",
@@ -5010,7 +5028,7 @@ wb.menu({
             "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
-            "script": "(function(sprite){if(sprite.x<0){sprite.movementDirection.reflectN(new SAT.Vector(1,0));}else if((sprite.x+sprite.w)>global.stage_width){sprite.movementDirection.reflectN(new SAT.Vector(-1,0));};if(sprite.y<0){sprite.movementDirection.reflectN(new SAT.Vector(0,1));}else if((sprite.y+sprite.h)>global.stage_height){sprite.movementDirection.reflectN(new SAT.Vector(0,-1));}})({{1}});",
+            "script": "{{1}}.stageBounce(global.stage_width, global.stage_height);",
             "sockets": [
                 {
                     "name": "bounce",
@@ -5022,7 +5040,7 @@ wb.menu({
             "blocktype": "step",
             "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
             "help": "if the sprite moves to the edge of the screen, stop it at the edge",
-            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;sprite.dy=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polgyon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;sprite.dy=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;sprite.dx=0;}else if((sprite.polygon.pos.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;sprite.dx=0;}})({{1}});",
+            "script": "{{1}}.edgeStop(global.stage_width, global.stage_height);",
             "sockets": [
                 {
                     "name": "stop sprite ",
@@ -5037,7 +5055,7 @@ wb.menu({
             "blocktype": "step",
             "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
             "help": "if the sprite moves to the edge of the screen, slide it along the edge",
-            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polygon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;}else if((sprite.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;}})({{1}});",
+            "script": "{{1}}.edgeSlide(global.stage_width, global.stage_height);",
             "sockets": [
                 {
                     "name": "slide sprite ",
@@ -5052,7 +5070,7 @@ wb.menu({
             "blocktype": "step",
             "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
             "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
-            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = (global.stage_width - sprite.w);}else if((sprite.x + sprite.w) > global.stage_width){sprite.polygon.pos.x = 0;};if(sprite.y < 0){sprite.polygon.pos.y = (global.stage_height - sprite.h);}else if((sprite.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = 0;}})({{1}});",
+            "script": "{{1}}.edgeWrap(global.stage_width, global.stage_height);",
             "sockets": [
                 {
                     "name": "wrap sprite ",

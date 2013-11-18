@@ -1411,9 +1411,10 @@ Voice.prototype.startOsc = function() {
     this.osc = this.context.createOscillator();
     this.osc.type = 0; // Sine wave
     this.osc.frequency.value = this.frequency;
-    this.osc.noteOn(0);
+    console.log('oscillator: %o', this.osc);
+    this.osc.start(0);
     
-    this.gain = this.context.createGainNode();
+    this.gain = this.context.createGain();
     this.gain.gain.value = this.volume;
     
     this.osc.connect(this.gain);
@@ -1424,7 +1425,7 @@ Voice.prototype.startOsc = function() {
 
 // Turn off the oscillator
 Voice.prototype.stopOsc = function() {
-    this.osc.noteOff(0);
+    this.osc.stop(0);
     this.osc.disconnect();
     this.on = false;
 }

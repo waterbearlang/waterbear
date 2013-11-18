@@ -35,6 +35,7 @@
   height:100%;
   vertical-align:middle;
   margin:0px 5px;
+  font-family: Consolas;
 }
 
 .locals{
@@ -296,11 +297,11 @@
 
 .block.scripts_workspace{
     width: 100%;
-    height: 100%
+    height: 95%;
     margin: 0px;
 }
 .block.scripts_workspace{
-    width: 95%;
+    width: 100%;
     border: 0;
 }
 .block.scripts_workspace:before{
@@ -341,4 +342,10 @@
   display: none;
 }
 
-
+#block_menu.settings .accordion-header.hidden {
+	display:block;
+	opacity:0.5;
+}
+#block_menu .accordion-header.hidden {
+	display:none;
+}

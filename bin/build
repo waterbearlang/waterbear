@@ -8,22 +8,25 @@ var path = require('path');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix', 'demo'],
-    minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string']
+    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix' /*'demo'*/],
+    minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
+    demo: ['javascript', 'demo']
 };
 
 var styles = {
     arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
-    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
+    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css'],
+    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
+    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
 }
 
-var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace', 'blockprefs'];
 
 var libs = {
     arduino: [],
     javascript: ['beautify', 'highlight', 'highlight-javascript'],
-    minecraftjs: ['beautify', 'highlight', 'highlight-javascript']
+    minecraftjs: ['beautify', 'highlight', 'highlight-javascript'],
+    demo: ['beautify', 'highlight', 'highlight-javascript']
 };
 
 
@@ -88,7 +91,7 @@ function concat(src, dest, files, ext, suffix, before, after){
         try{
             var contents = before + fs.readFileSync(path.join(filename), 'utf8') + after;
         }catch(e){
-            console.log('file %s not found', path.join(filename));
+            // console.log('file %s not found', path.join(filename));
             // console.log('Could not read %s: %s', path.join(filename), e.message);
             return;
         }

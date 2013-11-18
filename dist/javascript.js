@@ -1822,6 +1822,21 @@ hljs.LANGUAGES.javascript = {
 
 /*end highlight-javascript.js*/
 
+/*begin ajax.js*/
+function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
+function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+
+ajax={};
+ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
+ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
+ajax.send=function(u,f,m,a){var x=ajax.x();x.open(m,u,true);x.onreadystatechange=function(){if(x.readyState==4)f(x.responseText)};if(m=='POST')x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send(a)};
+ajax.get=function(url,func){ajax.send(url,func,'GET')};
+ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
+ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
+ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
+ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
+/*end ajax.js*/
+
 /*begin queryparams.js*/
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
@@ -1908,10 +1923,11 @@ hljs.LANGUAGES.javascript = {
 
     var svgtext = document.querySelector('svg text');
     wb.resize = function(input){
+        if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value;
+        svgtext.textContent = input.value || '';
         var textbox = svgtext.getBBox();
         input.style.width = (textbox.width*0.7 + 25) + 'px';
     };
@@ -2076,7 +2092,7 @@ hljs.LANGUAGES.javascript = {
     wb.jsonp = function(url, callback){
         var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
         var handler = function(data){
-            // remove jsonp element
+            // remove jsonp 
             var script = document.getElementById(id);
             script.parentElement.removeChild(script);
             // remove self
@@ -2084,10 +2100,28 @@ hljs.LANGUAGES.javascript = {
             callback(data);
         };
         window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id}));
+        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
     }
 
-
+    /* adapted from code here: http://javascriptexample.net/ajax01.php */
+    wb.ajax = function(url, success, failure){
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            var cType;
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    cType = this.getResponseHeader("Content-Type");
+                    success(this.responseText, cType);
+                }else{
+                    if (failure){
+                        failure(this.status, this);
+                    }
+                }
+            }
+        }
+        req.open('GET', url, true);
+        req.send(null);
+    }
 
 
 })(this);
@@ -2349,7 +2383,7 @@ hljs.LANGUAGES.javascript = {
                 startParent = target.parentElement;
             }
             startSibling = target.nextElementSibling;
-            if(!wb.matches(startSibling, '.block')) {
+            if(startSibling && !wb.matches(startSibling, '.block')) {
             	// Sometimes the "next sibling" ends up being the cursor
             	startSibling = startSibling.nextElementSibling;
             }
@@ -2473,11 +2507,7 @@ hljs.LANGUAGES.javascript = {
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
-        potentialDropTargets.forEach(function(elem){
-            elem.classList.remove('dropTarget');
-        });
+        resetDragStyles();
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
@@ -2512,6 +2542,14 @@ hljs.LANGUAGES.javascript = {
             	revertDrop();
             }
         }
+    }
+    
+    function resetDragStyles() {
+        dragTarget.classList.remove('dragActive');
+        dragTarget.classList.remove('dragIndication');
+        potentialDropTargets.forEach(function(elem){
+            elem.classList.remove('dropTarget');
+        });
     }
     
     function revertDrop() {
@@ -2665,6 +2703,18 @@ hljs.LANGUAGES.javascript = {
         }
         return '.socket[data-type=' + name + '] > .holder';
     }
+    
+    function cancelDrag(event) {
+    	// Cancel if escape key pressed
+    	if(event.keyCode == 27) {
+    		resetDragStyles();
+	    	revertDrop();
+			clearTimeout(timer);
+			timer = null;
+			reset();
+			return false;
+	    }
+    }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -2672,11 +2722,13 @@ hljs.LANGUAGES.javascript = {
             Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
+            // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
+            Event.on(document, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
@@ -3189,6 +3241,13 @@ function uuid(){
                 value = obj.uValue || obj.value || '';
         }
         var input = elem('input', {type: type, value: value});
+
+        //Only enable editing for the appropriate types
+        if (!(type === "string" || type === "any" || 
+              type === "number" || type === "color")) {
+            input.readOnly = true;
+        }
+
         wb.resize(input);
         return input;
     }
@@ -3263,9 +3322,16 @@ function uuid(){
             wb.find(elem, '.name').textContent = newName;
         });
 
+        //Change name of parent
         var parent = document.getElementById(source.dataset.localSource);
         var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
         nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+
+        //Change locals name of parent
+        var parentLocals = JSON.parse(parent.dataset.locals);
+        var localSocket = parentLocals[0].sockets[0];
+        localSocket.name = newName;
+        parent.dataset.locals = JSON.stringify(parentLocals);
 
         wb.find(parent, '.name').textContent = nameTemplate;
     }
@@ -3338,15 +3404,19 @@ Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 
 function showWorkspace(mode){
+    console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
+    var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    if (!scriptsWorkspace) return;
+    var scriptsTextView = document.querySelector('.scripts_text_view');
     if (mode === 'block'){
-	    document.querySelector('.scripts_workspace').style.display = '';
-	    document.querySelector('.scripts_text_view').style.display = 'none';
+	    scriptsWorkspace.style.display = '';
+	    scriptsTextView.style.display = 'none';
         workspace.classList.remove('textview');
         workspace.classList.add('blockview');
     }else if (mode === 'text'){
-    	document.querySelector('.scripts_workspace').style.display = 'none';
-    	document.querySelector('.scripts_text_view').style.display = '';
+    	scriptsWorkspace.style.display = 'none';
+    	scriptsTextView.style.display = '';
         workspace.classList.remove('blockview');
         workspace.classList.add('textview');
     }
@@ -3384,57 +3454,181 @@ function collapseCommand(key, opt){
     console.info('collapseCommand(%s, %o)', key, opt);
 }
 
-function cutBlockCommand(key, opt){
-    console.info('cutBlockCommand(%o, %s, %o)', this, key, opt);
-    var view = this.closest('.wrapper');
-    pasteboard = Block.model(view);
-    // Remove it programatically, and trigger the right events:
-    Event.trigger(view, 'wb-event');
-    view.remove();
+function copyCommand(evt) {
+	console.log("Copying a block!");
+	console.log(this);
+	pasteboard = wb.cloneBlock(this);
 }
 
-function copyBlockCommand(key, opt){
-    console.info('copyBlockCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone();
+function cutCommand(evt) {
+	console.log("Cutting a block!");
+	Event.trigger(this, 'wb-remove');
+	this.remove();
+	pasteboard = this;
 }
 
-function copySubscriptCommand(key, opt){
-    console.info('copySubscriptCommand(%s, %o)', key, opt);
-    pasteboard = Block.model(this.closest('.wrapper')).clone(true);
+function pasteCommand(evt) {
+	console.log(pasteboard);
+	var paste = wb.cloneBlock(pasteboard);
+	if(wb.matches(pasteboard,'.step')) {
+		console.log("Pasting a step!");
+		cmenu_target.parentNode.insertBefore(paste,cmenu_target.nextSibling);
+		Event.trigger(paste, 'wb-add');
+	} else {
+		console.log("Pasting an expression!");
+		cmenu_target.appendChild(paste);
+		Event.trigger(paste, 'wb-add');
+	}
 }
 
-function pasteCommand(key, opt){
-    console.info('pasteCommand(%s, %o)', key, opt);
-    if (pasteboard){
-        this.append(pasteboard.view());
-        addToScriptEvent(this, pasteboard.view());
-    }
-}
-
-function pasteExpressionCommand(key, opt){
-    console.info('pasteExpressionCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype === 'expression'){
-        this.hide();
-        pasteCommand.call(this.parent(), key, opt);
-    }
-}
-
-function pasteStepCommand(key, opt){
-    console.info('pasteStepCommand(%s, %o)', key, opt);
-    if (pasteboard && pasteboard.blocktype !== 'expression'){
-        if (this.find('> .wrapper').length){
-            console.log('already has a child element');
-        }else{
-            pasteCommand.call(this, key, opt);
-        }
-    }
-}
-
-function cancelCommand(key, opt){
-    console.info('cancelCommand(%s, %o)', key, opt);
+function canPaste() {
+	if(!pasteboard) return false;
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+		return true;
+	}
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+		return true;
+	}
+	return false;
 }
 
 var pasteboard = null;
+var current_cmenu = null;
+var show_context = false;
+var cmenu_disabled = false;
+var cmenu_target = null;
+
+function cmenuitem_enabled(menuitem) {
+	if(menuitem.enabled) {
+		if(typeof(menuitem.enabled) == 'function') {
+			return menuitem.enabled();
+		} else return menuitem.enabled;
+	}
+	return true;
+}
+
+function initContextMenus() {
+	Event.on(document.body, 'contextmenu', null, handleContextMenu);
+	Event.on(document.body, 'mouseup', null, closeContextMenu);
+	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
+	document.querySelector('.cmenuEnable').style.display = 'none';
+}
+
+function buildContextMenu(options) {
+	console.log('building context menu');
+	console.log(options);
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.innerHTML = '';
+	var menu = document.createElement('ul');
+	menu.classList.add('cmenu');
+	for(var key in options) {
+		if(options.hasOwnProperty(key) && options[key]) {
+			var item = document.createElement('li');
+			if(cmenuitem_enabled(options[key])) {
+				Event.on(item, "click", null, cmenuCallback(options[key].callback));
+			} else {
+				item.classList.add('disabled');
+			}
+			if(options[key].startGroup) {
+				item.classList.add('topSep');
+			}
+			item.innerHTML = options[key].name;
+			menu.appendChild(item);
+		}
+	}
+	var item = document.createElement('li');
+	item.onclick = function(evt) {};
+	item.innerHTML = 'Disable this menu';
+	item.classList.add('topSep');
+	Event.on(item, 'click', null, disableContextMenu);
+	menu.appendChild(item);
+	contextDiv.appendChild(menu);
+}
+
+function stackTrace() {
+	var e = new Error('stack trace');
+	var stack = e.stack.replace(/@.*\//gm, '@')
+		.split('\n');
+	console.log(stack);
+}
+
+function closeContextMenu(evt) {
+	var contextDiv = document.getElementById('context_menu');
+	if(!wb.matches(evt.wbTarget, '#context_menu *')) {
+		contextDiv.style.display = 'none';
+	}
+}
+
+function handleContextMenu(evt) {
+	console.log('handling context menu');
+	stackTrace();
+	//if(!show_context) return;
+	console.log(evt.clientX, evt.clientY);
+	console.log(evt.wbTarget);
+	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
+	else if(false);
+	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
+		setContextMenuTarget(evt.wbTarget);
+		buildContextMenu(block_cmenu);
+	} else return;
+	showContextMenu(evt.clientX, evt.clientY);
+	evt.preventDefault();
+}
+
+function setContextMenuTarget(target) {
+	cmenu_target = target;
+	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
+		console.log(cmenu_target);
+		cmenu_target = cmenu_target.parentNode;
+		if(cmenu_target.tagName == 'BODY') {
+			console.error("Something went wrong with determining the context menu target!");
+			cmenu_target = null;
+			contextDiv.style.display = 'none';
+		}
+	}
+}
+
+function showContextMenu(atX, atY) {
+	console.log('showing context menu');
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'block';
+	contextDiv.style.left = atX + 'px';
+	contextDiv.style.top = atY + 'px';
+}
+
+function cmenuCallback(fcn) {
+	return function(evt) {
+		console.log(cmenu_target);
+		fcn.call(cmenu_target,evt);
+		var contextDiv = document.getElementById('context_menu');
+		contextDiv.style.display = 'none';
+		evt.preventDefault();
+	};
+}
+
+function disableContextMenu(evt) {
+	cmenu_disabled = true;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = '';
+	var contextDiv = document.getElementById('context_menu');
+	contextDiv.style.display = 'none';
+}
+
+function enableContextMenu(evt) {
+	cmenu_disabled = false;
+	var enableBtn = document.querySelector('.cmenuEnable');
+	enableBtn.style.display = 'none';
+}
+
+var block_cmenu = {
+	//expand: {name: 'Expand All', callback: dummyCallback},
+	//collapse: {name: 'Collapse All', callback: dummyCallback},
+	cut: {name: 'Cut', callback: cutCommand},
+	copy: {name: 'Copy', callback: copyCommand},
+	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
+	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
+	//cancel: {name: 'Cancel', callback: dummyCallback},
+}
 
 // $.contextMenu({
 //     selector: '.scripts_workspace .block',
@@ -3485,6 +3679,7 @@ function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
+initContextMenus();
 // if (is_touch_device()){
 //     $.tappable({
 //         container: '.blockmenu, .workspace',
@@ -3505,20 +3700,18 @@ function is_touch_device() {
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-	switch(wb.view){
-		case 'result': return run_menu(title, specs);
-		case 'blocks': return edit_menu(title, specs);
-		case 'editor': return edit_menu(title, specs);
-		default: return edit_menu(title, specs);
-	}
+    return edit_menu(title, specs);
+	// switch(wb.view){
+	// 	case 'result': return run_menu(title, specs);
+	// 	case 'blocks': return edit_menu(title, specs);
+	// 	case 'editor': return edit_menu(title, specs);
+	// 	default: return edit_menu(title, specs);
+	// }
 };
 
 if (wb.view === 'result'){
+    console.log('listen for script load');
     Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-function run_menu(title, specs){
-    edit_menu(title, specs);
 }
 
 
@@ -3527,7 +3720,7 @@ function edit_menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
@@ -3548,94 +3741,160 @@ function edit_menu(title, specs, show){
 /*begin workspace.js*/
 (function(wb){
 
-var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var language = location.pathname.match(/\/(.*)\.html/)[1];
 
-function clearScripts(event, force){
-    if (force || confirm('Throw out the current script?')){
-        var workspace = document.querySelector('.workspace > .scripts_workspace')
-        workspace.parentElement.removeChild(workspace);
-        createWorkspace('Workspace');
-		document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
-    }
-}
-Event.on('.clearScripts', 'click', null, clearScripts);
-Event.on('.editScript', 'click', null, function(){
-	document.body.className = 'editor';
-	wb.loadCurrentScripts(wb.queryParams);
-});
+	function clearScripts(event, force){
+		if (force || confirm('Throw out the current script?')){
+			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			workspace.parentElement.removeChild(workspace);
+			createWorkspace('Workspace');
+			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+		}
+	}
+	Event.on('.clear_scripts', 'click', null, clearScripts);
+	Event.on('.edit_script', 'click', null, function(){
+		document.body.className = 'editor';
+		wb.loadCurrentScripts(wb.queryParams);
+	});
 
-Event.on('.goto_stage', 'click', null, function(){
-	document.body.className = 'result';
-});
+	Event.on('.goto_stage', 'click', null, function(){
+		document.body.className = 'result';
+	});
+
+
 
 // Load and Save Section
 
 function saveCurrentScripts(){
-    wb.showWorkspace('block');
-    document.querySelector('#block_menu').scrollIntoView();
-    localStorage['__' + language + '_current_scripts'] = scriptsToString();
+	wb.showWorkspace('block');
+	document.querySelector('#block_menu').scrollIntoView();
+	localStorage['__' + language + '_current_scripts'] = scriptsToString();
 }
 window.onunload = saveCurrentScripts;
 
+// Save script to gist;
+function saveCurrentScriptsToGist(){
+	console.log("Saving to Gist");
+	var title = prompt("Save to an anonymous Gist titled: ");
+
+	ajax.post("https://api.github.com/gists", function(data){
+        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
+        var gistID = JSON.parse(data).url.split("/").pop();
+        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+
+        //save gist id to local storage
+        var localGists = localStorage['__' + language + '_recent_gists'];
+        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+        gistArray.push(gistID);
+        localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
+
+    }, JSON.stringify({
+    	"description": title,
+    	"public": true,
+    	"files": {
+    		"script.json": {
+    			"content": scriptsToString()
+    		},
+    	}
+    }));
+}
+
+window.onload = loadRecentGists;
+
+function loadRecentGists() {
+	var localGists = localStorage['__' + language + '_recent_gists'];
+	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	var gistContainer = document.querySelector("#recent_gists");
+	gistContainer.innerHTML = '';
+	for (var i = 0; i < gistArray.length; i++) {
+		var node = document.createElement("li");
+		var a = document.createElement('a');
+		var linkText = document.createTextNode(gistArray[i]);
+
+		a.appendChild(linkText)
+		//a.href = language + ".html?gist=" + gistArray[i];
+
+		node.appendChild(a);
+		gistContainer.appendChild(node);
+		var gist = gistArray[i];
+		console.log(gist);
+		a.addEventListener('click', function () {
+			loadScriptsFromGistId(parseInt(gist));
+			return false;
+		});
+	};
+}
+
+
 function scriptsToString(title, description){
-    if (!title){ title = ''; }
-    if (!description){ description = ''; }
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    return JSON.stringify({
-        title: title,
-        description: description,
-        date: Date.now(),
-        waterbearVersion: '2.0',
-        blocks: blocks.map(wb.blockDesc)
-    });
+	if (!title){ title = ''; }
+	if (!description){ description = ''; }
+	var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+	return JSON.stringify({
+		title: title,
+		description: description,
+		date: Date.now(),
+		waterbearVersion: '2.0',
+		blocks: blocks.map(wb.blockDesc)
+	});
 }
 
 
 function createDownloadUrl(evt){
-    var URL = window.webkitURL || window.URL;
-    var file = new Blob([scriptsToString()], {type: 'application/json'});
-    var reader = new FileReader();
-    var a = document.createElement('a');
-    reader.onloadend = function(){
-        a.href = reader.result;
-        a.download = 'script.json';
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-    };
-    reader.readAsDataURL(file);
-    evt.preventDefault();
+	var URL = window.webkitURL || window.URL;
+	var file = new Blob([scriptsToString()], {type: 'application/json'});
+	var reader = new FileReader();
+	var a = document.createElement('a');
+	reader.onloadend = function(){
+		a.href = reader.result;
+		a.download = 'script.json';
+		a.target = '_blank';
+		document.body.appendChild(a);
+		a.click();
+	};
+	reader.readAsDataURL(file);
+	evt.preventDefault();
 }
 
-Event.on('.save_scripts', 'click', null, createDownloadUrl);
+Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
+Event.on('.download_scripts', 'click', null, createDownloadUrl);
+Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
+
+function loadScriptsFromGistId(){
+	var gistID = prompt("What Gist would you like to load?");
+	ajax.get("https://api.github.com/gists/"+gistID, function(data){
+		loadScriptsFromGist({data:JSON.parse(data)});
+	});
+}
+
 function loadScriptsFromFilesystem(){
-    var input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'application/json');
-    input.addEventListener('change', function(evt){
-        var file = input.files[0];
-        loadScriptsFromFile(file);
-    });
-    input.click();
+	var input = document.createElement('input');
+	input.setAttribute('type', 'file');
+	input.setAttribute('accept', 'application/json');
+	input.addEventListener('change', function(evt){
+		var file = input.files[0];
+		loadScriptsFromFile(file);
+	});
+	input.click();
 }
 
 function loadScriptsFromObject(fileObject){
     // console.info('file format version: %s', fileObject.waterbearVersion);
     // console.info('restoring to workspace %s', fileObject.workspace);
-	if (!fileObject) return createWorkspace();
+    if (!fileObject) return createWorkspace();
     var blocks = fileObject.blocks.map(wb.Block);
     if (!blocks.length){
-        return createWorkspace();
+    	return createWorkspace();
     }
     if (blocks.length > 1){
-        console.log('not really expecting multiple blocks here right now');
-        console.log(blocks);
+    	console.log('not really expecting multiple blocks here right now');
+    	console.log(blocks);
     }
     blocks.forEach(function(block){
-        wireUpWorkspace(block);
-        Event.trigger(block, 'wb-add');
+    	wireUpWorkspace(block);
+    	Event.trigger(block, 'wb-add');
     });
     wb.loaded = true;
     Event.trigger(document.body, 'wb-script-loaded');
@@ -3655,6 +3914,15 @@ function loadScriptsFromGist(gist){
 		return;
 	}
 	loadScriptsFromObject(JSON.parse(file));
+}
+window.fromgist = loadScriptsFromGist;
+
+function loadScriptsFromExample(name){
+	wb.ajax('examples/' + name + '.json', function(exampleJson){
+		loadScriptsFromObject(JSON.parse(exampleJson));
+	}, function(xhr, status){
+		console.error('Error in wb.ajax: %s', status);
+	});
 }
 
 function runScriptFromGist(gist){
@@ -3678,71 +3946,60 @@ function runScriptFromGist(gist){
 
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
-    if (!wb.loaded){
-    	if (queryParsed.gist){
-    		wb.jsonp(
-    			'https://api.github.com/gists/' + queryParsed.gist,
-    			loadScriptsFromGist
-    		);
-    	}else if (localStorage['__' + language + '_current_scripts']){
-            var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
-            if (fileObject){
-                loadScriptsFromObject(fileObject);
-            }
-        }else{
-            createWorkspace('Workspace');
-        }
-        wb.loaded = true;
-    }
-    Event.trigger(document.body, 'wb-loaded');
-};
-
-wb.runCurrentScripts = function(queryParsed){
-	if (queryParsed.gist){
-		wp.json(
-			'https://api.github.com/gists/' + queryParsed.gist,
-			runScriptFromGist
-		);
-	}else if (localStorage['__' + language + '_current_scripts']){
-		var fileObject = localStorage['__' + language + '_current_scripts'];
-		if (fileObject){
-			wb.runScript(fileObject);
+	if (!wb.loaded){
+		if (queryParsed.gist){
+			console.log("Loading gist via url.");
+			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
+				loadScriptsFromGist({data:JSON.parse(data)});
+			});
+		}else if (queryParsed.example){
+			loadScriptsFromExample(queryParsed.example);
+		}else if (localStorage['__' + language + '_current_scripts']){
+			var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
+			if (fileObject){
+				loadScriptsFromObject(fileObject);
+			}
+		}else{
+			createWorkspace('Workspace');
 		}
+		wb.loaded = true;
 	}
-}
+	Event.trigger(document.body, 'wb-loaded');
+};
 
 
 // Allow saved scripts to be dropped in
 function createWorkspace(name){
-    var id = uuid();
-    var workspace = wb.Block({
-        group: 'scripts_workspace',
-        id: id,
-        scriptId: id,
-        scopeId: id,
-        blocktype: 'context',
-        sockets: [
-            {
-                name: name
-            }
-        ],
-        script: '[[1]]',
-        isTemplateBlock: false,
-        help: 'Drag your script blocks here'
-    });
-    wireUpWorkspace(workspace);
+    console.log('createWorkspace');
+	var id = uuid();
+	var workspace = wb.Block({
+		group: 'scripts_workspace',
+		id: id,
+		scriptId: id,
+		scopeId: id,
+		blocktype: 'context',
+		sockets: [
+		{
+			name: name
+		}
+		],
+		script: '[[1]]',
+		isTemplateBlock: false,
+		help: 'Drag your script blocks here'
+	});
+	wireUpWorkspace(workspace);
 }
 wb.createWorkspace = createWorkspace;
 
 function wireUpWorkspace(workspace){
-    workspace.addEventListener('drop', getFiles, false);
-    workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
-    wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+	workspace.addEventListener('drop', getFiles, false);
+	workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+	wb.findAll(document, '.scripts_workspace').forEach(function(ws){
         ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
     });
-    document.querySelector('.workspace').appendChild(workspace);
-    workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-    wb.initializeDragHandlers();
+	document.querySelector('.workspace').appendChild(workspace);
+	workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+	wb.initializeDragHandlers();
 }
 
 function handleDragover(evt){
@@ -3753,25 +4010,25 @@ function handleDragover(evt){
 }
 
 function loadScriptsFromFile(file){
-    fileName = file.name;
-    if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-        console.error("File not a JSON file");
-        return;
-    }
-    var reader = new FileReader();
-    reader.readAsText( file );
-    reader.onload = function (evt){
-        clearScripts(null, true);
-        var saved = JSON.parse(evt.target.result);
-        loadScriptsFromObject(saved);
-    };
+	fileName = file.name;
+	if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+		console.error("File not a JSON file");
+		return;
+	}
+	var reader = new FileReader();
+	reader.readAsText( file );
+	reader.onload = function (evt){
+		clearScripts(null, true);
+		var saved = JSON.parse(evt.target.result);
+		loadScriptsFromObject(saved);
+	};
 }
 
 function getFiles(evt){
-    evt.stopPropagation();
-    evt.preventDefault();
-    var files = evt.dataTransfer.files;
-    if ( files.length > 0 ){
+	evt.stopPropagation();
+	evt.preventDefault();
+	var files = evt.dataTransfer.files;
+	if ( files.length > 0 ){
         // we only support dropping one file for now
         var file = files[0];
         loadScriptsFromFile(file);
@@ -3779,21 +4036,143 @@ function getFiles(evt){
 }
 
 Event.on('.workspace', 'click', '.disclosure', function(evt){
-    var block = wb.closest(evt.wbTarget, '.block');
-    if (block.dataset.closed){
-        delete block.dataset.closed;
-    }else{
-        block.dataset.closed = true;
-    }
+	var block = wb.closest(evt.wbTarget, '.block');
+	if (block.dataset.closed){
+		delete block.dataset.closed;
+	}else{
+		block.dataset.closed = true;
+	}
 });
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
-Event.on(document.body, 'wb-loaded', null, function(evt){console.log('loaded');});
+Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
 Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
 })(wb);
 
 /*end workspace.js*/
+
+/*begin blockprefs.js*/
+// User block preferences
+//
+// Allows the user to hide groups of blocks within the interface
+// Settings are stored in LocalStorage and retreived each
+// time the page is loaded.
+
+(function(wb){
+
+	//save the state of the settings link
+	var closed = true;
+	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var settings_link;
+	//add a link to show the show/hide block link
+	function addSettingsLink(callback) {
+		console.log("adding settings link");
+		var block_menu = document.querySelector('#block_menu');
+		var settings_link = document.createElement('a');
+		settings_link.href = '#';
+		settings_link.style.float = 'right';
+		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
+		settings_link.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settings_link);
+		return settings_link;
+	}
+
+	//create the checkboxes next to the headers
+	function createCheckboxes() {
+		var block_headers = document.querySelectorAll('.accordion-header');
+		[].forEach.call(block_headers, function (el) {
+			var checkbox = document.createElement('input');
+			checkbox.type = 'checkbox';
+			checkbox.value = '1';
+			checkbox.style.float = 'right';
+			checkbox.style.display = 'none';
+			checkbox.checked = 'true';
+			checkbox.addEventListener('click', hideBlocks);
+			el.appendChild(checkbox);
+		});
+	};
+
+	//settings link has been clicked
+	function toggleCheckboxDisplay() {
+		console.log('toggle checkboxes called');
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var block_menu = document.querySelector('#block_menu');
+		var display;
+		block_menu.classList.toggle("settings");
+		if (closed) {
+			closed = false;
+			display = 'inline';
+			settings_link.innerHTML = 'Save';
+		} else {
+			//save was clicked
+			closed = true;
+			display = 'none'
+			settings_link.innerHTML = 'Show/Hide blocks';
+			//save the settings
+			saveSettings();
+		}
+		[].forEach.call(checkboxes, function (el) {
+			el.style.display = display;
+		});
+	};
+
+	//checkbox has been clicked
+	function hideBlocks(e) {
+		var parent = this.parentNode;
+		if (this.checked) {
+			parent.classList.remove('hidden');
+		} else {
+			parent.classList.add('hidden');
+		}
+		//save the settings
+		saveSettings();
+		e.stopPropagation();
+	};
+
+	//save the block preferences to local storage
+	function saveSettings(){
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var toSave = {};
+		[].forEach.call(checkboxes,	function (el) {
+			var id = el.parentNode.id;
+			var checked = el.checked;
+			toSave[id] = checked;
+		});
+		console.log("Saving block preferences", toSave);
+		localStorage['__' + language + '_hidden_blocks'] = JSON.stringify(toSave);
+	};
+
+	//load block display from local storage
+	function loadSettings(){
+		var storedData = localStorage['__' + language + '_hidden_blocks'];
+		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
+		window.hbl = hiddenBlocks;
+		console.log("Loading block preferences", hiddenBlocks);
+		for (key in hiddenBlocks) {
+			if(!hiddenBlocks[key]){
+				var h3 = document.getElementById(key);
+				if(h3 != null){
+					var check = h3.querySelector('input[type="checkbox"]');
+					check.checked = false;
+					h3.classList.add('hidden');
+				}
+			}
+		}
+	};
+
+	//after initliazation, create the settings and checkboxes
+	function load(){
+		settings_link = addSettingsLink();
+		createCheckboxes();
+		loadSettings();
+	}
+
+	//onload initialize the blockmanager
+	window.onload = load;
+})(wb);
+
+/*end blockprefs.js*/
 
 /*begin languages/javascript/javascript.js*/
 /*
@@ -3815,6 +4194,7 @@ wb.wrap = function(script){
                 'local.canvas.setAttribute("width", global.stage_width);',
                 'local.canvas.setAttribute("height", global.stage_height);',
                 'global.stage.appendChild(local.canvas);',
+                'local.canvas.focus()',
                 'local.ctx = local.canvas.getContext("2d");',
                 'local.ctx.textAlign = "center";',
                 'var main = function(){',
@@ -3837,22 +4217,35 @@ function assetUrls(){
 }
 
 function runCurrentScripts(event){
-    if (document.body.className === 'result' && wb.script){
-        wb.runScript(wb.script);
-    }else{
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        document.body.className = 'result';
-        wb.runScript( wb.prettyScript(blocks) );
-    }
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+    document.body.className = 'result';
+    wb.runScript( wb.prettyScript(blocks) );
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
+window.addEventListener('load', function(event){
+    console.log('iframe ready');
+    wb.iframeready = true;
+    if (wb.iframewaiting){
+        wb.iframewaiting();
+    }
+    wb.iframewaiting = null;
+}, false);
+
 wb.runScript = function(script){
-    wb.script = script;
-    var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-    var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-    console.log('trying to load library %s', runtimeUrl);
-    document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+    var run = function(){
+        wb.script = script;
+        var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
+        var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
+        // console.log('trying to load library %s', runtimeUrl);
+        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+        document.querySelector('.stageframe').focus();
+    };
+    if (wb.iframeready){
+        run();
+    }else{
+        wb.iframewaiting = run;
+    }
 }
 
 function clearStage(event){
@@ -4033,13 +4426,6 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 /*begin languages/javascript/matrix.js*/
 
 /*end languages/javascript/matrix.js*/
-
-/*begin languages/javascript/demo.js*/
-/* Add Demo type and toolkists list */
-wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
-wb.choiceLists.types.push('demo');
-wb.choiceLists.rettypes.push('demo');
-/*end languages/javascript/demo.js*/
 
 /*begin languages/javascript/control.json*/
 wb.menu({
@@ -4449,22 +4835,103 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "468e4180-2221-11e3-8224-0800200c9a66",
-            "script": "{{1}}.rotate({{2}});",
-            "help": "Rotate the sprite at its current location",
+            "script": "{{1}}.setFacingDirectionBy({{2}});",
+            "help": "Rotate the sprites facing direction absolutely",
             "sockets": [
                 {
-                    "name": "rotate sprite",
+                    "name": "Turn sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
                     "name": "by",
                     "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "69998440-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setFacingDirection({{2}});",
+            "help": "Rotate the sprites facing direction",
+            "sockets": [
+                {
+                    "name": "Turn sprite",
+                    "type": "sprite",
                     "value": null
                 },
                 {
-                    "name": "degrees",
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
                 },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "71c09d20-22f4-11e3-8224-0800200c9a66",
+            "script": "{{1}}.setMovementDirectionBy({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
+            "script": "{{1}}.setMovementDirection({{2}});",
+            "help": "Rotate the sprites movement direction",
+            "sockets": [
+                {
+                    "name": "Steer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7381ea40-22f6-11e3-8224-0800200c9a66",
+            "script": "{{1}}.autosteer = ({{2}});",
+            "help": "Set the sprite to sync facing and movement directions",
+            "sockets": [
+                {
+                    "name": "Autosteer sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": 0
+                }
             ]
         },
         {
@@ -4488,8 +4955,26 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "aaa2f728-cae3-4368-b241-e80f94c360d3",
+            "script": "{{1}}.bounceOff({{2}});",
+            "help": "Bounce the sprite off of the passed in sprite",
+            "sockets": [
+                {
+                    "name": "bounce sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "off of sprite",
+                    "type": "sprite",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
-            "script": "(function(sprite,dx,dy){sprite.x += dx;sprite.y += dy;})({{1}},{{2}},{{3}});",
+            "script": "{{1}}.moveRelative({{2}},{{3}});",
             "help": "move a sprite relatively",
             "sockets": [
                 {
@@ -4513,29 +4998,12 @@ wb.menu({
             "blocktype": "step",
             "id": "372de8c1-5f72-49cb-a2bd-faf66c36e318",
             "help": "move a sprite by its own speed and direction",
-            "script": "(function(sprite){sprite.x+=sprite.dx;sprite.y+=sprite.dy;})({{1}});",
+            "script": "{{1}}.move();",
             "sockets": [
                 {
                     "name": "move",
                     "type": "sprite",
                     "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "7ecb947f-28ac-4418-bc44-cd797be697c9",
-            "help": "set the direction (angle in degrees) of a sprite",
-            "script": "{{1}}.setDirection({{2}});",
-            "sockets": [
-                {
-                    "name": "set sprite",
-                    "type": "sprite",
-                },
-                {
-                    "name": "direction",
-                    "type": "number",
-                    "value": 0
                 }
             ]
         },
@@ -4547,7 +5015,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set sprite",
-                    "type": "sprite",
+                    "type": "sprite"
                 },
                 {
                     "name": "speed",
@@ -4558,25 +5026,9 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "473b0d99-b560-4bd1-a67f-b349abf1b24a",
-            "help": "set the color of a sprite",
-            "script": "{{1}}.setColor({{2}});",
-            "sockets": [
-                {
-                    "name": "set sprite",
-                    "type": "sprite"
-                },
-                {
-                    "name": "color",
-                    "type": "color"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
-            "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});",
+            "script": "{{1}}.stageBounce(global.stage_width, global.stage_height);",
             "sockets": [
                 {
                     "name": "bounce",
@@ -4586,8 +5038,53 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
+            "help": "if the sprite moves to the edge of the screen, stop it at the edge",
+            "script": "{{1}}.edgeStop(global.stage_width, global.stage_height);",
+            "sockets": [
+                {
+                    "name": "stop sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
+            "help": "if the sprite moves to the edge of the screen, slide it along the edge",
+            "script": "{{1}}.edgeSlide(global.stage_width, global.stage_height);",
+            "sockets": [
+                {
+                    "name": "slide sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
+            "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
+            "script": "{{1}}.edgeWrap(global.stage_width, global.stage_height);",
+            "sockets": [
+                {
+                    "name": "wrap sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "around edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "88c75c2b-18f1-4195-92bc-a90d99743551",
-            "script": "(function(sprite,pos){sprite.x = pos.x; sprite.y=pos.y;})({{1}},{{2}});",
+            "script": "{{1}}.moveAbsolute({{2}}.x, {{2}}.y);",
             "help": "move a sprite absolutely",
             "sockets": [
                 {
@@ -4602,34 +5099,117 @@ wb.menu({
                 }
             ]
         },
-	{
+    {
             "blocktype": "step",
-            "id": "4b68f640-c10f-47a1-bfd9-831248820d14",
-            "script": "(function(sprite, newSize){sprite.x += (sprite.w - newSize.w)/2; sprite.y += (sprite.h - newSize.h)/2; sprite.w = newSize.w; sprite.h = newSize.h;})({{1}}, {{2}});",
-            "help": "resize a simple rectangle sprite",
+            "id": "badee0b6-8f7c-4cbd-9173-f450c765045d",
+            "script": "{{1}}.color = {{2}};",
+            "help": "Recolor a sprite",
             "sockets": [
                 {
-                    "name": "resize sprite",
+                    "name": "Color sprite",
                     "type": "sprite",
                     "value": null
                 },
                 {
-                    "name": "to size",
-                    "type": "size",
-                    "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
+                    "name": "to color",
+                    "type": "color",
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
             ]
         },
-	{
-            "blocktype": "step",
-            "id": "c374d8b1-21d7-4b80-9767-54ea45d196be",
-            "script": "(function(sprite){sprite.x += (sprite.w - sprite.origW)/2; sprite.y += (sprite.h - sprite.origH)/2; sprite.w = sprite.origW; sprite.h = sprite.origH;})({{1}});",
-            "help": "restore the original size of a simple rectangle sprite",
+        {
+            "blocktype": "expression",
+            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
             "sockets": [
                 {
-                    "name": "restore size of sprite",
+                    "name": "sprite",
                     "type": "sprite",
                     "value": null
+                },
+                {
+                    "name": "facing direction"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "495336f3-68ed-4bc7-a145-11756803876b",
+            "script": "{{1}}.movementDirection",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "movement direction"
+                }
+            ]
+        },
+         {
+            "blocktype": "expression",
+            "id": "86aa39be-5419-4abb-9765-e63f824608f0",
+            "script": "{{1}}.polygon.average",
+            "type": "point",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "center"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
+            "script": "{{1}}.speed",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
+            "script": "{{1}}.movementDirection.x",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "horizontal speed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
+            "script": "{{1}}.movementDirection.y",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "vertical speed"
                 }
             ]
         },
@@ -4697,70 +5277,6 @@ wb.menu({
                 },
                 {
                     "name": "bottom"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
-            "script": "{{1}}.direction",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "direction"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "DF9E52B5-CE65-477A-BE10-95DF88C53FD0",
-            "script": "{{1}}.speed",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
-            "script": "{{1}}.dx",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
-            "script": "{{1}}.dy",
-            "type": "number",
-            "sockets": [
-                {
-                    "name": "sprite",
-                    "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
                 }
             ]
         }
@@ -7264,9 +7780,9 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "expression",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-            "script": "local.answer## = prompt({{1}});",
+            "script": "prompt({{1}})",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -7282,7 +7798,7 @@ wb.menu({
             "help": "Prompt the user for information",
             "sockets": [
                 {
-                    "name": "ask [string:What's your name?] and wait",
+                    "name": "ask",
                     "type": "string",
                     "value": "What's your name?"
                 },
@@ -7955,49 +8471,6 @@ wb.menu({
 }
 );
 /*end languages/javascript/matrix.json*/
-
-/*begin languages/javascript/demo.json*/
-wb.menu({
-    "name": "Demo",
-    "blocks": [
-        {
-            "blocktype": "context",
-            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
-            "script": "/* do nothing */",
-            "help": "make a point",
-            "sockets": [
-                {
-                    "name": "draw pattern at",
-                    "type": "point",
-                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
-                },
-                {
-                    "name": "with toolkit",
-                    "type": "choice",
-                    "options": "toolkits",
-                    "value": "AIR"
-                }
-            ],
-            "locals": [
-                {
-                    "blocktype": "step",
-                    "name": "binary",
-                    "script": "/* do nothing */",
-                    "help": "should only allow binary here",
-                    "sockets": [
-                        {
-                            "name": "binary",
-                            "type": "binary",
-                            "value": "01010101"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
-);
-/*end languages/javascript/demo.json*/
 
 /*begin launch.js*/
 // Minimal script to run on load

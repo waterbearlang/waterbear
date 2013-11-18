@@ -406,6 +406,9 @@ Global.prototype.preloadImage = preloadImage; // called by script block to set u
 
 /*begin languages/javascript/sprite_runtime.js*/
 // Sprite Routines
+
+// This uses and embeds code from https://github.com/jriecken/sat-js
+
 function PolySprite(pos,color,points){
     this.color = color;
     this.movementDirection = new SAT.Vector(0, 0);

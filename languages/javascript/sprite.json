@@ -198,6 +198,24 @@
         },
         {
             "blocktype": "step",
+            "id": "aaa2f728-cae3-4368-b241-e80f94c360d3",
+            "script": "{{1}}.bounceOff({{2}});",
+            "help": "Bounce the sprite off of the passed in sprite",
+            "sockets": [
+                {
+                    "name": "bounce sprite",
+                    "type": "sprite",
+                    "value": null
+                },
+                {
+                    "name": "off of sprite",
+                    "type": "sprite",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
             "script": "{{1}}.moveRelative({{2}},{{3}});",
             "help": "move a sprite relatively",
@@ -253,11 +271,56 @@
             "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
-            "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});",
+            "script": "{{1}}.stageBounce(global.stage_width, global.stage_height);",
             "sockets": [
                 {
                     "name": "bounce",
                     "type": "sprite"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
+            "help": "if the sprite moves to the edge of the screen, stop it at the edge",
+            "script": "{{1}}.edgeStop(global.stage_width, global.stage_height);",
+            "sockets": [
+                {
+                    "name": "stop sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
+            "help": "if the sprite moves to the edge of the screen, slide it along the edge",
+            "script": "{{1}}.edgeSlide(global.stage_width, global.stage_height);",
+            "sockets": [
+                {
+                    "name": "slide sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
+            "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
+            "script": "{{1}}.edgeWrap(global.stage_width, global.stage_height);",
+            "sockets": [
+                {
+                    "name": "wrap sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "around edge of stage"
                 }
             ]
         },
@@ -364,7 +427,7 @@
         {
             "blocktype": "expression",
             "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
-            "script": "{{1}}.dx",
+            "script": "{{1}}.movementDirection.x",
             "type": "number",
             "sockets": [
                 {
@@ -380,7 +443,7 @@
         {
             "blocktype": "expression",
             "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
-            "script": "{{1}}.dy",
+            "script": "{{1}}.movementDirection.y",
             "type": "number",
             "sockets": [
                 {

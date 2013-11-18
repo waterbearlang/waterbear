@@ -34,7 +34,7 @@ ul#menu li {
 ul#menu li ul.sub-menu {
 	display:none;
 	position: absolute;
-	top: 30px;
+	top: 35px;
 	left: 0;
 	width: 100px;
 	z-index:1000;

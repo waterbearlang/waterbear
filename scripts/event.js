@@ -13,7 +13,10 @@
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ console.error('first argument must be element'); }
+        if (!elem.tagName){ 
+            console.error('first argument must be element: %o', elem); 
+            debugger;
+        }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }

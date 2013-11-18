@@ -252,11 +252,7 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
-        potentialDropTargets.forEach(function(elem){
-            elem.classList.remove('dropTarget');
-        });
+        resetDragStyles();
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
@@ -303,6 +299,7 @@
         }
     }
     
+<<<<<<< HEAD
     /* There's basically four types of drag actions
 - Drag-in – dragging a block from the menu to the workspace
  	If fromParent is null, this is the type of drag that occurred.
@@ -359,6 +356,16 @@
     	}
     }
 
+=======
+    function resetDragStyles() {
+        dragTarget.classList.remove('dragActive');
+        dragTarget.classList.remove('dragIndication');
+        potentialDropTargets.forEach(function(elem){
+            elem.classList.remove('dropTarget');
+        });
+    }
+    
+>>>>>>> 5f801199934416f5fe6e4a27340284eae5768d81
     function revertDrop() {
 		// Put blocks back where we got them from
 		if (startParent){
@@ -510,6 +517,18 @@
         }
         return '.socket[data-type=' + name + '] > .holder';
     }
+    
+    function cancelDrag(event) {
+    	// Cancel if escape key pressed
+    	if(event.keyCode == 27) {
+    		resetDragStyles();
+	    	revertDrop();
+			clearTimeout(timer);
+			timer = null;
+			reset();
+			return false;
+	    }
+    }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -517,11 +536,13 @@
             Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
+            // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
+            Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };

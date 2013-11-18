@@ -5010,11 +5010,56 @@ wb.menu({
             "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
-            "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});",
+            "script": "(function(sprite){if(sprite.x<0){sprite.movementDirection.reflectN(new SAT.Vector(1,0));}else if((sprite.x+sprite.w)>global.stage_width){sprite.movementDirection.reflectN(new SAT.Vector(-1,0));};if(sprite.y<0){sprite.movementDirection.reflectN(new SAT.Vector(0,1));}else if((sprite.y+sprite.h)>global.stage_height){sprite.movementDirection.reflectN(new SAT.Vector(0,-1));}})({{1}});",
             "sockets": [
                 {
                     "name": "bounce",
                     "type": "sprite"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
+            "help": "if the sprite moves to the edge of the screen, stop it at the edge",
+            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;sprite.dy=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polgyon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;sprite.dy=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;sprite.dx=0;}else if((sprite.polygon.pos.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;sprite.dx=0;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "stop sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
+            "help": "if the sprite moves to the edge of the screen, slide it along the edge",
+            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = 0;sprite.dx=0;}else if ((sprite.x + sprite.w) > global.stage_width){sprite.polygon.pos.x = (global.stage_width - sprite.w);sprite.dx=0;};if(sprite.y < 0){sprite.polygon.pos.y = 0;sprite.dy=0;}else if((sprite.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = (global.stage_height - sprite.h);sprite.dy=0;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "slide sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "at edge of stage"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
+            "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
+            "script": "(function(sprite){if(sprite.x < 0){sprite.polygon.pos.x = (global.stage_width - sprite.w);}else if((sprite.x + sprite.w) > global.stage_width){sprite.polygon.pos.x = 0;};if(sprite.y < 0){sprite.polygon.pos.y = (global.stage_height - sprite.h);}else if((sprite.y + sprite.h) > global.stage_height){sprite.polygon.pos.y = 0;}})({{1}});",
+            "sockets": [
+                {
+                    "name": "wrap sprite ",
+                    "type": "sprite"
+                },
+                {
+                    "name": "around edge of stage"
                 }
             ]
         },
@@ -5121,7 +5166,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "8D0880EA-1722-435A-989D-06E8A9B62FB0",
-            "script": "{{1}}.dx",
+            "script": "{{1}}.movementDirection.x",
             "type": "number",
             "sockets": [
                 {
@@ -5137,7 +5182,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "21A7A835-9647-4DC2-80AE-AE9B06346706",
-            "script": "{{1}}.dy",
+            "script": "{{1}}.movementDirection.y",
             "type": "number",
             "sockets": [
                 {

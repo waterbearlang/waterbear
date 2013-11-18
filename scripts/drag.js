@@ -75,6 +75,7 @@
     }
 
     function reset(){
+        // console.log('reset dragTarget to null');
         dragTarget = null;
         dragAction = {undo: undoDrag, redo: redoDrag};
         potentialDropTargets = [];
@@ -153,6 +154,7 @@
         if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
+            // console.log('set drag target to clone of old drag target');
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             dragAction.target = dragTarget;
 			// If we're dragging from the menu, there's no source to track for undo/redo
@@ -267,6 +269,7 @@
                 // dropTarget.parent().append(dragTarget);
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget block to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.insertBefore(dragTarget, dropCursor());
@@ -276,6 +279,7 @@
                 // Insert a value block into a socket
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget value to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.appendChild(dragTarget);
@@ -356,8 +360,10 @@
     }
 
     function resetDragStyles() {
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
+        if (dragTarget){
+            dragTarget.classList.remove('dragActive');
+            dragTarget.classList.remove('dragIndication');
+        }
         potentialDropTargets.forEach(function(elem){
             elem.classList.remove('dropTarget');
         });
@@ -517,6 +523,7 @@
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed
+        console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
     		resetDragStyles();
 	    	revertDrop();

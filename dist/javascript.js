@@ -2343,6 +2343,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
     }
 
     function reset(){
+        // console.log('reset dragTarget to null');
         dragTarget = null;
         dragAction = {undo: undoDrag, redo: redoDrag};
         potentialDropTargets = [];
@@ -2421,6 +2422,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
+            // console.log('set drag target to clone of old drag target');
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             dragAction.target = dragTarget;
 			// If we're dragging from the menu, there's no source to track for undo/redo
@@ -2535,6 +2537,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                 // dropTarget.parent().append(dragTarget);
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget block to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.insertBefore(dragTarget, dropCursor());
@@ -2544,6 +2547,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                 // Insert a value block into a socket
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget value to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.appendChild(dragTarget);
@@ -2624,8 +2628,10 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
     }
 
     function resetDragStyles() {
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
+        if (dragTarget){
+            dragTarget.classList.remove('dragActive');
+            dragTarget.classList.remove('dragIndication');
+        }
         potentialDropTargets.forEach(function(elem){
             elem.classList.remove('dropTarget');
         });
@@ -2785,6 +2791,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed
+        console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
     		resetDragStyles();
 	    	revertDrop();

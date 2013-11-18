@@ -35,7 +35,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
 
 		            qpart = qparts[i].split('=');
 		            qparams[decodeURIComponent(qpart[0])] =
-		                           decodeURIComponent(qpart[1] || '');
+		                           decodeURIComponent(qpart[1] || '').split('#')[0];
 		        }
 		    }
 

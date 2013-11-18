@@ -4,7 +4,7 @@ function Voice(){
     this.on = false;
     this.osc;
     this.amp;
-    var context = AudioContext || webkitAudioContext;
+    var context = window.AudioContext || window.webkitAudioContext;
     context = new context();
     var vco = context.createOscillator();
     vco.type = vco.SINE;

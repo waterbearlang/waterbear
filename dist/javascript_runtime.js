@@ -408,8 +408,9 @@ Global.prototype.preloadImage = preloadImage; // called by script block to set u
 // Sprite Routines
 function PolySprite(pos,color,points){
     this.color = color;
-    this.movementDirection = 0;
-    this.facingDirection = 0;
+    this.movementDirection = new SAT.Vector(0, 0);
+    this.movementDegrees = 0;
+    this.facingDirection = new SAT.Vector(0, 0);
     this.speed = 0;
     this.polygon = new SAT.Polygon();
     this.polygon.pos = new SAT.Vector(pos.x,pos.y);
@@ -463,7 +464,7 @@ PolySprite.prototype.collides = function(sprite) {
 
 PolySprite.prototype.setSpeed = function(speed){
     this.speed = speed;
-    this.calculateDifference();
+    this.calculateMovementVector();
 };
 
 PolySprite.prototype.setFacingDirectionBy = function(degrees,internalCall){
@@ -486,26 +487,26 @@ PolySprite.prototype.setMovementDirectionBy = function(degrees,internalCall){
     if(this.autosteer && !internalCall){
         this.setFacingDirectionBy(degrees, true);
     }
-    this.setMovementDirection(this.movementDirection + degrees);
+    this.movementDegrees += degrees;
+    this.calculateMovementVector();
 }
 
 PolySprite.prototype.setMovementDirection = function(degrees, internalCall){
     if(this.autosteer && !internalCall){
         this.setFacingDirection(degrees, true);
     }
-    this.movementDirection = degrees % 360;
-    this.calculateDifference();
+    this.movementDegrees = degrees;
+    this.calculateMovementVector();
 };
 
-PolySprite.prototype.calculateDifference = function(){
-    this.dx = Math.cos(this.movementDirection*Math.PI/180)*this.speed;
-    this.dy = Math.sin(this.movementDirection*Math.PI/180)*this.speed;
+PolySprite.prototype.calculateMovementVector = function(){
+    this.movementDirection.x = Math.cos(this.movementDegrees*Math.PI/180)*this.speed;
+    this.movementDirection.y = Math.sin(this.movementDegrees*Math.PI/180)*this.speed;
 };
 
 //move a sprite by its own speed and direction
 PolySprite.prototype.move = function(){
-    this.polygon.pos.x += this.dx;
-    this.polygon.pos.y += this.dy;
+    this.polygon.pos.add(this.movementDirection);
     this.polygon.average = this.polygon.calculateAverage();
     this.calculateBoundingBox();
     this.polygon.recalc();
@@ -684,8 +685,8 @@ var SAT = window['SAT'] = {};
     var x = this.x;
     var y = this.y;
     this.project(axis).scale(2);
-    this.x -= x; 
-    this.y -= y;
+    this.x = x - this.x; 
+    this.y = y - this.y;
     return this;
   };
   Vector.prototype['reflect'] = Vector.prototype.reflect;
@@ -700,8 +701,8 @@ var SAT = window['SAT'] = {};
     var x = this.x;
     var y = this.y;
     this.projectN(axis).scale(2);
-    this.x -= x; 
-    this.y -= y;
+    this.x = x - this.x; 
+    this.y = y - this.y;
     return this;
   };
   Vector.prototype['relectN'] = Vector.prototype.reflectN;

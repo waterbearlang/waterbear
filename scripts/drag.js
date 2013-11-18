@@ -299,7 +299,6 @@
         }
     }
     
-<<<<<<< HEAD
     /* There's basically four types of drag actions
 - Drag-in – dragging a block from the menu to the workspace
  	If fromParent is null, this is the type of drag that occurred.
@@ -356,7 +355,6 @@
     	}
     }
 
-=======
     function resetDragStyles() {
         dragTarget.classList.remove('dragActive');
         dragTarget.classList.remove('dragIndication');
@@ -365,7 +363,6 @@
         });
     }
     
->>>>>>> 5f801199934416f5fe6e4a27340284eae5768d81
     function revertDrop() {
 		// Put blocks back where we got them from
 		if (startParent){

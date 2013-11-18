@@ -2331,6 +2331,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
     var blockMenu = document.querySelector('#block_menu');
     var potentialDropTargets;
     var selectedSocket;
+    var dragAction = {};
 
     var _dropCursor;
 
@@ -2343,6 +2344,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
 
     function reset(){
         dragTarget = null;
+        dragAction = {undo: undoDrag, redo: redoDrag};
         potentialDropTargets = [];
         dropRects = [];
         dropTarget = null;
@@ -2377,6 +2379,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             if (target.parentElement.classList.contains('block-menu')){
                 target.dataset.isTemplateBlock = 'true';
             }
+        	dragAction.target = target;
             if (target.parentElement.classList.contains('local')){
                 target.dataset.isLocal = 'true';
             }
@@ -2409,12 +2412,19 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         // }
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
+		// Track source for undo/redo
+		dragAction.target = dragTarget;
+		dragAction.fromParent = startParent;
+		dragAction.fromBefore = startSibling;
         // target = clone target if in menu
         // FIXME: Set different listeners on menu blocks than on the script area
         if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
+            dragAction.target = dragTarget;
+			// If we're dragging from the menu, there's no source to track for undo/redo
+			dragAction.fromParent = dragAction.fromBefore = null;
             // Event.trigger(dragTarget, 'wb-clone'); // not in document, won't bubble to document.body
             dragTarget.classList.add('dragIndication');
             if (dragTarget.dataset.isLocal){
@@ -2515,6 +2525,9 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
+        	// If we're dragging to the menu, there's no destination to track for undo/redo
+        	dragAction.toParent = dragAction.toBefore = null;
+        	wb.history.add(dragAction);
         }else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
@@ -2537,6 +2550,13 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                 dragTarget.removeAttribute('style');
                 Event.trigger(dragTarget, 'wb-add');
             }
+            dragAction.toParent = dragTarget.parentNode;
+            dragAction.toBefore = dragTarget.nextElementSibling;
+            if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+            }
+            wb.history.add(dragAction);
         }else{
             if (cloned){
                 // remove cloned block (from menu)
@@ -2547,6 +2567,62 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         }
     }
     
+    /* There's basically four types of drag actions
+- Drag-in – dragging a block from the menu to the workspace
+ 	If fromParent is null, this is the type of drag that occurred.
+ 	- To undo: remove the block from the workspace
+ 	- To redo: re-insert the block into the workspace
+- Drag-around - dragging a block from one position to another in the workspace
+	Indicated by neither of fromParent and toParent being null.
+	- To undo: remove the block from the old position and re-insert it at the new position.
+	- To redo: remove the block from the old position and re-insert it at the new position.
+- Drag-out - dragging a block from the workspace to the menu (thus deleting it)
+	If toParent is null, this is the type of drag that occurred.
+	- To undo: re-insert the block into the workspace.
+	- To redo: remove the block from the workspace.
+- Drag-copy - dragging a block from one position to another in the workspace and duplicating it
+	At the undo/redo level, no distinction from drag-in is required.
+	- To undo: remove the block from the new location.
+	- To redo: re-insert the block at the new location.
+	
+	Note: If toBefore or fromBefore is null, that just means the location refers to the last
+	possible position (ie, the block was added to or removed from the end of a sequence). Thus,
+	we don't check those to determine what action to undo/redo.
+ 	*/
+    
+    function undoDrag() {
+    	if(this.toParent != null) {
+    		// Remove the inserted block
+    		Event.trigger(this.target, 'wb-remove');
+    		this.target.remove();
+    	}
+    	if(this.fromParent != null) {
+    		// Put back the removed block
+    		this.target.removeAttribute('style');
+    		if(wb.matches(this.target,'.step')) {
+    			this.fromParent.insertBefore(this.target, this.fromBefore);
+    		} else {
+    			this.fromParent.appendChild(this.target);
+    		}
+			Event.trigger(this.target, 'wb-add');
+    	}
+    }
+    
+    function redoDrag() {
+    	if(this.toParent != null) {
+    		if(wb.matches(this.target,'.step')) {
+    			this.toParent.insertBefore(this.target, this.toBefore);
+    		} else {
+    			this.toParent.appendChild(this.target);
+    		}
+			Event.trigger(this.target, 'wb-add');
+    	}
+    	if(this.fromParent != null) {
+    		Event.trigger(this.target, 'wb-remove');
+    		this.target.remove();
+    	}
+    }
+
     function resetDragStyles() {
         dragTarget.classList.remove('dragActive');
         dragTarget.classList.remove('dragIndication');
@@ -3434,6 +3510,55 @@ function updateScriptsView(){
 }
 window.updateScriptsView = updateScriptsView;
 
+// Undo list
+
+// Undo actions must support two methods:
+// - undo() which reverses the effect of the action
+// - redo() which reapplies the effect of the action, assuming it has been redone.
+// These methods may safely assume that no other actions have been performed.
+
+// This is the maximum number of actions that will be stored in the undo list.
+// There's no reason why it needs to be constant; there could be an interface to alter it.
+// (Of course, that'd require making it public first.)
+var MAX_UNDO = 30;
+var undoActions = [];
+// When currentAction == undoActions.length, there are no actions available to redo
+var currentAction = 0;
+
+function undoLastAction() {
+	if(currentAction <= 0) return; // No action to undo!
+	currentAction--;
+	undoActions[currentAction].undo();
+}
+
+function redoLastAction() {
+	if(currentAction >= undoActions.length) return; // No action to redo!
+	undoActions[currentAction].redo();
+	currentAction++;
+}
+
+function addUndoAction(action) {
+	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
+		console.log("Tried to add invalid action!");
+		return;
+	}
+	if(currentAction < undoActions.length) {
+		// Truncate any actions available to be redone
+		undoActions.length = currentAction;
+	} else if(currentAction >= MAX_UNDO) {
+		// Drop the oldest action
+		currentAction--;
+		undoActions.shift();
+	}
+	undoActions[currentAction] = action;
+	currentAction++;
+}
+
+wb.history = {
+	add: addUndoAction,
+	undo: undoLastAction,
+	redo: redoLastAction,
+}
 
 // Context Menu
 //
@@ -3460,28 +3585,70 @@ function collapseCommand(key, opt){
 function copyCommand(evt) {
 	console.log("Copying a block!");
 	console.log(this);
-	pasteboard = wb.cloneBlock(this);
+	action = {
+		copied: wb.cloneBlock(this),
+		oldPasteboard: pasteboard,
+		undo: function() {
+			pasteboard = this.oldPasteboard;
+		},
+		redo: function() {
+			pasteboard = this.copied;
+		},
+	}
+	wb.history.add(action);
+	action.redo();
 }
 
 function cutCommand(evt) {
 	console.log("Cutting a block!");
-	Event.trigger(this, 'wb-remove');
-	this.remove();
-	pasteboard = this;
+	action = {
+		removed: this,
+		// Storing parent and next sibling in case removing the node from the DOM clears them
+		parent: this.parentNode,
+		before: this.nextSibling,
+		oldPasteboard: pasteboard,
+		undo: function() {console.log(this);
+			if(wb.matches(this.removed,'.step')) {
+				this.parent.insertBefore(this.removed, this.before);
+			} else {
+				this.parent.appendChild(this.removed);
+			}
+			Event.trigger(this.removed, 'wb-add');
+			pasteboard = this.oldPasteboard;
+		},
+		redo: function() {
+			Event.trigger(this.removed, 'wb-remove');
+			this.removed.remove();
+			pasteboard = this.removed;
+		},
+	}
+	wb.history.add(action);
+	action.redo();
 }
 
 function pasteCommand(evt) {
 	console.log(pasteboard);
-	var paste = wb.cloneBlock(pasteboard);
-	if(wb.matches(pasteboard,'.step')) {
-		console.log("Pasting a step!");
-		cmenu_target.parentNode.insertBefore(paste,cmenu_target.nextSibling);
-		Event.trigger(paste, 'wb-add');
-	} else {
-		console.log("Pasting an expression!");
-		cmenu_target.appendChild(paste);
-		Event.trigger(paste, 'wb-add');
+	action = {
+		pasted: wb.cloneBlock(pasteboard),
+		into: cmenu_target.parentNode,
+		before: cmenu_target.nextSibling,
+		undo: function() {
+			Event.trigger(this.pasted, 'wb-remove');
+			this.pasted.remove();
+		},
+		redo: function() {
+			if(wb.matches(pasteboard,'.step')) {
+				console.log("Pasting a step!");
+				this.into.insertBefore(this.pasted,this.before);
+			} else {
+				console.log("Pasting an expression!");
+				cmenu_target.appendChild(this.pasted);
+			}
+			Event.trigger(this.pasted, 'wb-add');
+		},
 	}
+	wb.history.add(action);
+	action.redo();
 }
 
 function canPaste() {
@@ -3626,7 +3793,9 @@ function enableContextMenu(evt) {
 var block_cmenu = {
 	//expand: {name: 'Expand All', callback: dummyCallback},
 	//collapse: {name: 'Collapse All', callback: dummyCallback},
-	cut: {name: 'Cut', callback: cutCommand},
+	undo: {name: 'Undo', callback: undoLastAction, enabled: function() {return currentAction > 0}},
+	redo: {name: 'Redo', callback: redoLastAction, enabled: function() {return currentAction < undoActions.length}},
+	cut: {name: 'Cut', callback: cutCommand, startGroup: true},
 	copy: {name: 'Copy', callback: copyCommand},
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},

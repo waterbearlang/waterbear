@@ -4,7 +4,7 @@ function Voice(){
     this.osc;       // The oscillator which will generate tones
     this.gain;      // The gain node for controlling volume
     var context = window.AudioContext || window.webkitAudioContext;
-    context = new context();
+    this.context = new context();
     this.frequency = 400;   // Frequency to be used by oscillator
     this.volume = 0.3;      // Volume to be used by the gain node
 };

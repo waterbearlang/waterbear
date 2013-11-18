@@ -1,4 +1,7 @@
 // Sprite Routines
+
+// This uses and embeds code from https://github.com/jriecken/sat-js
+
 function PolySprite(pos,color,points){
     this.color = color;
     this.movementDirection = 0;

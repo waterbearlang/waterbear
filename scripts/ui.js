@@ -74,13 +74,27 @@ function undoLastAction() {
 	if(currentAction <= 0) return; // No action to undo!
 	currentAction--;
 	undoActions[currentAction].undo();
+	if(currentAction <= 0) {
+		document.querySelector('.undoAction').style.display = 'none';
+	}
+	document.querySelector('.redoAction').style.display = '';
 }
+
+Event.on('.undoAction', 'click', null, undoLastAction);
+document.querySelector('.undoAction').style.display = 'none';
 
 function redoLastAction() {
 	if(currentAction >= undoActions.length) return; // No action to redo!
 	undoActions[currentAction].redo();
 	currentAction++;
+	if(currentAction >= undoActions.length) {
+		document.querySelector('.redoAction').style.display = 'none';
+	}
+	document.querySelector('.undoAction').style.display = '';
 }
+
+Event.on('.redoAction', 'click', null, redoLastAction);
+document.querySelector('.redoAction').style.display = 'none';
 
 function addUndoAction(action) {
 	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
@@ -97,6 +111,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
+	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.redoAction').style.display = 'none';
 }
 
 wb.history = {
@@ -361,9 +377,7 @@ function enableContextMenu(evt) {
 var block_cmenu = {
 	//expand: {name: 'Expand All', callback: dummyCallback},
 	//collapse: {name: 'Collapse All', callback: dummyCallback},
-	undo: {name: 'Undo', callback: undoLastAction, enabled: function() {return currentAction > 0}},
-	redo: {name: 'Redo', callback: redoLastAction, enabled: function() {return currentAction < undoActions.length}},
-	cut: {name: 'Cut', callback: cutCommand, startGroup: true},
+	cut: {name: 'Cut', callback: cutCommand},
 	copy: {name: 'Copy', callback: copyCommand},
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},

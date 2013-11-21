@@ -144,6 +144,32 @@ function changeSocket(event) {
 
 Event.on(document.body, 'change', 'input', changeSocket);
 
+/* TODO list of undoable actions:
+ -  Moving a step from position A to position B
+ -  Adding a new block at position X
+ -  Moving an expression from slot A to slot B
+ -  Adding a new expression to slot X
+ -  Editing the value in slot X (eg, using the colour picker, typing in a string, etc)
+ -  Renaming a local expression/variable
+ -  Deleting a step from position X
+ -  Deleting an expression from slot X
+ Break them down:
+1. Replacing the block in the clipboard with a new block
+2. Editing the literal value in slot X
+3. Inserting a step at position X
+4. Removing a step at position X
+5. Inserting an expression into slot X
+6. Removing an expression from slot X
+ More detail:
+ - Copy is 1
+ - Cut is 1 and 4 or 1 and 6
+ - Paste is 3 or 5
+ - Drag-in is 3 or 5
+ - Drag-around is 4 and 3 or 6 and 5
+ - Drag-out is 4 or 6
+ - Drag-copy is 3 or 5
+*/
+
 // Context Menu
 //
 // 'this' is the object matching the selector

@@ -18,7 +18,7 @@
 
 		            qpart = qparts[i].split('=');
 		            qparams[decodeURIComponent(qpart[0])] =
-		                           decodeURIComponent(qpart[1] || '');
+		                           decodeURIComponent(qpart[1] || '').split('#')[0];
 		        }
 		    }
 

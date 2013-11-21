@@ -1858,7 +1858,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
 
 		            qpart = qparts[i].split('=');
 		            qparams[decodeURIComponent(qpart[0])] =
-		                           decodeURIComponent(qpart[1] || '');
+		                           decodeURIComponent(qpart[1] || '').split('#')[0];
 		        }
 		    }
 
@@ -2144,7 +2144,10 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ console.error('first argument must be element'); }
+        if (!elem.tagName){ 
+            console.error('first argument must be element: %o', elem); 
+            debugger;
+        }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
@@ -2507,11 +2510,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
-        potentialDropTargets.forEach(function(elem){
-            elem.classList.remove('dropTarget');
-        });
+        resetDragStyles();
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
@@ -2546,6 +2545,14 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             	revertDrop();
             }
         }
+    }
+    
+    function resetDragStyles() {
+        dragTarget.classList.remove('dragActive');
+        dragTarget.classList.remove('dragIndication');
+        potentialDropTargets.forEach(function(elem){
+            elem.classList.remove('dropTarget');
+        });
     }
     
     function revertDrop() {
@@ -2699,6 +2706,18 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         }
         return '.socket[data-type=' + name + '] > .holder';
     }
+    
+    function cancelDrag(event) {
+    	// Cancel if escape key pressed
+    	if(event.keyCode == 27) {
+    		resetDragStyles();
+	    	revertDrop();
+			clearTimeout(timer);
+			timer = null;
+			reset();
+			return false;
+	    }
+    }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -2706,11 +2725,13 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
+            // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
+            Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
@@ -3702,7 +3723,7 @@ function edit_menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
@@ -3779,6 +3800,32 @@ function saveCurrentScriptsToGist(){
     		},
     	}
     }));
+}
+
+window.onload = loadRecentGists;
+
+function loadRecentGists() {
+	var localGists = localStorage['__' + language + '_recent_gists'];
+	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	var gistContainer = document.querySelector("#recent_gists");
+	gistContainer.innerHTML = '';
+	for (var i = 0; i < gistArray.length; i++) {
+		var node = document.createElement("li");
+		var a = document.createElement('a');
+		var linkText = document.createTextNode(gistArray[i]);
+
+		a.appendChild(linkText)
+		//a.href = language + ".html?gist=" + gistArray[i];
+
+		node.appendChild(a);
+		gistContainer.appendChild(node);
+		var gist = gistArray[i];
+		console.log(gist);
+		a.addEventListener('click', function () {
+			loadScriptsFromGistId(parseInt(gist));
+			return false;
+		});
+	};
 }
 
 
@@ -4007,6 +4054,128 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('scr
 })(wb);
 
 /*end workspace.js*/
+
+/*begin blockprefs.js*/
+// User block preferences
+//
+// Allows the user to hide groups of blocks within the interface
+// Settings are stored in LocalStorage and retreived each
+// time the page is loaded.
+
+(function(wb){
+
+	//save the state of the settings link
+	var closed = true;
+	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var settings_link;
+	//add a link to show the show/hide block link
+	function addSettingsLink(callback) {
+		console.log("adding settings link");
+		var block_menu = document.querySelector('#block_menu');
+		var settings_link = document.createElement('a');
+		settings_link.href = '#';
+		settings_link.style.float = 'right';
+		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
+		settings_link.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settings_link);
+		return settings_link;
+	}
+
+	//create the checkboxes next to the headers
+	function createCheckboxes() {
+		var block_headers = document.querySelectorAll('.accordion-header');
+		[].forEach.call(block_headers, function (el) {
+			var checkbox = document.createElement('input');
+			checkbox.type = 'checkbox';
+			checkbox.value = '1';
+			checkbox.style.float = 'right';
+			checkbox.style.display = 'none';
+			checkbox.checked = 'true';
+			checkbox.addEventListener('click', hideBlocks);
+			el.appendChild(checkbox);
+		});
+	};
+
+	//settings link has been clicked
+	function toggleCheckboxDisplay() {
+		console.log('toggle checkboxes called');
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var block_menu = document.querySelector('#block_menu');
+		var display;
+		block_menu.classList.toggle("settings");
+		if (closed) {
+			closed = false;
+			display = 'inline';
+			settings_link.innerHTML = 'Save';
+		} else {
+			//save was clicked
+			closed = true;
+			display = 'none'
+			settings_link.innerHTML = 'Show/Hide blocks';
+			//save the settings
+			saveSettings();
+		}
+		[].forEach.call(checkboxes, function (el) {
+			el.style.display = display;
+		});
+	};
+
+	//checkbox has been clicked
+	function hideBlocks(e) {
+		var parent = this.parentNode;
+		if (this.checked) {
+			parent.classList.remove('hidden');
+		} else {
+			parent.classList.add('hidden');
+		}
+		//save the settings
+		saveSettings();
+		e.stopPropagation();
+	};
+
+	//save the block preferences to local storage
+	function saveSettings(){
+		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
+		var toSave = {};
+		[].forEach.call(checkboxes,	function (el) {
+			var id = el.parentNode.id;
+			var checked = el.checked;
+			toSave[id] = checked;
+		});
+		console.log("Saving block preferences", toSave);
+		localStorage['__' + language + '_hidden_blocks'] = JSON.stringify(toSave);
+	};
+
+	//load block display from local storage
+	function loadSettings(){
+		var storedData = localStorage['__' + language + '_hidden_blocks'];
+		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
+		window.hbl = hiddenBlocks;
+		console.log("Loading block preferences", hiddenBlocks);
+		for (key in hiddenBlocks) {
+			if(!hiddenBlocks[key]){
+				var h3 = document.getElementById(key);
+				if(h3 != null){
+					var check = h3.querySelector('input[type="checkbox"]');
+					check.checked = false;
+					h3.classList.add('hidden');
+				}
+			}
+		}
+	};
+
+	//after initliazation, create the settings and checkboxes
+	function load(){
+		settings_link = addSettingsLink();
+		createCheckboxes();
+		loadSettings();
+	}
+
+	//onload initialize the blockmanager
+	window.onload = load;
+})(wb);
+
+/*end blockprefs.js*/
 
 /*begin languages/minecraftjs/minecraftjs.js*/
 

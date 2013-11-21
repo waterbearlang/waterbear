@@ -474,7 +474,7 @@ function edit_menu(title, specs, show){
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header'}, title);
+        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);

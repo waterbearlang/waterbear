@@ -406,10 +406,14 @@ Global.prototype.preloadImage = preloadImage; // called by script block to set u
 
 /*begin languages/javascript/sprite_runtime.js*/
 // Sprite Routines
+
+// This uses and embeds code from https://github.com/jriecken/sat-js
+
 function PolySprite(pos,color,points){
     this.color = color;
-    this.movementDirection = 0;
-    this.facingDirection = 0;
+    this.movementDirection = new SAT.Vector(0, 0);
+    this.movementDegrees = 0;
+    this.facingDirection = new SAT.Vector(0, 0);
     this.speed = 0;
     this.polygon = new SAT.Polygon();
     this.polygon.pos = new SAT.Vector(pos.x,pos.y);
@@ -461,9 +465,16 @@ PolySprite.prototype.collides = function(sprite) {
     return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
 };
 
+PolySprite.prototype.bounceOff = function(sprite) {
+    var response = new SAT.Response();
+    if (SAT.testPolygonPolygon(this.polygon, sprite.polygon, response)) {
+        this.movementDirection.reflectN(response.overlapN);
+    }
+}
+
 PolySprite.prototype.setSpeed = function(speed){
     this.speed = speed;
-    this.calculateDifference();
+    this.calculateMovementVector();
 };
 
 PolySprite.prototype.setFacingDirectionBy = function(degrees,internalCall){
@@ -486,26 +497,30 @@ PolySprite.prototype.setMovementDirectionBy = function(degrees,internalCall){
     if(this.autosteer && !internalCall){
         this.setFacingDirectionBy(degrees, true);
     }
-    this.setMovementDirection(this.movementDirection + degrees);
+    this.movementDegrees += degrees;
+    this.calculateMovementVector();
 }
 
 PolySprite.prototype.setMovementDirection = function(degrees, internalCall){
     if(this.autosteer && !internalCall){
         this.setFacingDirection(degrees, true);
     }
-    this.movementDirection = degrees % 360;
-    this.calculateDifference();
+    this.movementDegrees = degrees;
+    this.calculateMovementVector();
 };
 
-PolySprite.prototype.calculateDifference = function(){
-    this.dx = Math.cos(this.movementDirection*Math.PI/180)*this.speed;
-    this.dy = Math.sin(this.movementDirection*Math.PI/180)*this.speed;
+PolySprite.prototype.calculateMovementVector = function(){
+    this.movementDirection.x = Math.cos(this.movementDegrees*Math.PI/180)*this.speed;
+    this.movementDirection.y = Math.sin(this.movementDegrees*Math.PI/180)*this.speed;
 };
+
+PolySprite.prototype.calculateMovementDegrees = function() {
+    this.movementDegrees = Math.Atan2(this.movementDirection.x,this.movementDirection.y) * (Math.PI / 180);
+}
 
 //move a sprite by its own speed and direction
 PolySprite.prototype.move = function(){
-    this.polygon.pos.x += this.dx;
-    this.polygon.pos.y += this.dy;
+    this.polygon.pos.add(this.movementDirection);
     this.polygon.average = this.polygon.calculateAverage();
     this.calculateBoundingBox();
     this.polygon.recalc();
@@ -526,6 +541,74 @@ PolySprite.prototype.moveAbsolute = function(x,y){
     this.calculateBoundingBox();
     this.polygon.recalc();
 };
+
+// Bounce the sprite off the edge of the stage
+PolySprite.prototype.stageBounce = function(stage_width, stage_height) {
+    if(this.x<0){
+        this.movementDirection.reflectN(new SAT.Vector(1,0));
+    } else if ((this.x+this.w) > stage_width) {
+        this.movementDirection.reflectN(new SAT.Vector(-1,0));
+    }
+    if(this.y<0){
+        this.movementDirection.reflectN(new SAT.Vector(0,1));
+    } else if ((this.y+this.h) > stage_height){
+        this.movementDirection.reflectN(new SAT.Vector(0,-1));
+    }
+};
+
+// Stop the sprite if it hits the edge of the stage
+PolySprite.prototype.edgeStop = function(stage_width, stage_height) {
+    if(this.x < 0){
+        this.polygon.pos.x = 0;
+        this.setSpeed(0);
+    } else if ((this.x + this.w) > stage_width){
+        this.polygon.pos.x = (stage_width - this.w);
+        this.setSpeed(0);
+    }
+    if(this.y < 0){
+        this.polygon.pos.y = 0;
+        this.setSpeed(0);
+    } else if((this.polygon.pos.y + this.h) > stage_height){
+        this.polygon.pos.y = (stage_height - this.h);
+        this.setSpeed(0);
+    }
+}
+
+// If the sprite moves to the edge of the screen, slide it along that edge
+PolySprite.prototype.edgeSlide = function(stage_width, stage_height) {
+    if(this.x < 0){
+        this.polygon.pos.x = 0;
+        this.movementDirection.x = 0;
+        this.calculateMovementDegrees;
+    } else if ((this.x + this.w) > stage_width){
+        this.polygon.pos.x = (stage_width - this.w);
+        this.movementDirection.x = 0;
+        this.calculateMovementDegrees;
+    }
+    if(this.y < 0){
+        this.polygon.pos.y = 0;
+        this.movementDirection.y=0;
+        this.calculateMovementDegrees;
+    } else if((this.y + this.h) > stage_height){
+        this.polygon.pos.y = (stage_height-this.h);
+        this.movementDirection.y=0;
+        this.calculateMovementDegrees;
+    }
+}
+
+// Wrap around the edge of the stage
+PolySprite.prototype.edgeWrap = function(stage_width, stage_height) {
+    if(this.x < 0) {
+        this.polygon.pos.x = (stage_width - this.w);
+    } else if((this.x + this.w) > stage_width) {
+        this.polygon.pos.x = 0;
+    }
+    if(this.y < 0) {
+        this.polygon.pos.y = (stage_height - this.h);
+    } else if((this.y + this.h) > stage_height) {
+        this.polygon.pos.y = 0;
+    }
+}
 
 /** @preserve @author Jim Riecken - released under the MIT License. */
 /**
@@ -684,8 +767,8 @@ var SAT = window['SAT'] = {};
     var x = this.x;
     var y = this.y;
     this.project(axis).scale(2);
-    this.x -= x; 
-    this.y -= y;
+    this.x = x - this.x; 
+    this.y = y - this.y;
     return this;
   };
   Vector.prototype['reflect'] = Vector.prototype.reflect;
@@ -700,8 +783,8 @@ var SAT = window['SAT'] = {};
     var x = this.x;
     var y = this.y;
     this.projectN(axis).scale(2);
-    this.x -= x; 
-    this.y -= y;
+    this.x = x - this.x; 
+    this.y = y - this.y;
     return this;
   };
   Vector.prototype['relectN'] = Vector.prototype.reflectN;
@@ -1312,29 +1395,47 @@ var SAT = window['SAT'] = {};
 /*begin languages/javascript/voice_runtime.js*/
 // Music Routines
 function Voice(){
-    console.log("Message");
     this.on = false;
-    this.osc;
-    this.amp;
-    context = new webkitAudioContext();
-    var vco = context.createOscillator();
-    vco.type = vco.SINE;
-    vco.frequency.value = 400;
-    var vca = context.createGain();
-    vca.gain.value = 0.3;
-    vco.connect(vca);
-    vca.connect(context.destination);
-    this.osc = vco;
-    this.amp = vca;
+    this.osc;       // The oscillator which will generate tones
+    this.gain;      // The gain node for controlling volume
+    var context = window.AudioContext || window.webkitAudioContext;
+    this.context = new context();
+    this.frequency = 400;   // Frequency to be used by oscillator
+    this.volume = 0.3;      // Volume to be used by the gain node
 };
 
-Voice.prototype.toggle = function(boolean){
-    this.on = boolean;
-    if (boolean) 
-        this.osc.start(0);
-    else
-        this.osc.stop(0);
-    return true;
+// Turn on the oscillator, routed through a gain node for volume
+Voice.prototype.startOsc = function() {
+    if (this.on) 
+        this.stopOsc();
+    this.osc = this.context.createOscillator();
+    this.osc.type = 0; // Sine wave
+    this.osc.frequency.value = this.frequency;
+    console.log('oscillator: %o', this.osc);
+    this.osc.start(0);
+    
+    this.gain = this.context.createGain();
+    this.gain.gain.value = this.volume;
+    
+    this.osc.connect(this.gain);
+    this.gain.connect(this.context.destination);
+    
+    this.on = true;
+};
+
+// Turn off the oscillator
+Voice.prototype.stopOsc = function() {
+    this.osc.stop(0);
+    this.osc.disconnect();
+    this.on = false;
+}
+
+// Ensure a playing tone is updated when values change
+Voice.prototype.updateTone = function() {
+    if (this.on) {
+        stopOsc();
+        startOsc();
+    }
 };
 
 /*end languages/javascript/voice_runtime.js*/

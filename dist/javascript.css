@@ -705,7 +705,13 @@ h1.title {
   display: none;
 }
 
-
+#block_menu.settings .accordion-header.hidden {
+	display:block;
+	opacity:0.5;
+}
+#block_menu .accordion-header.hidden {
+	display:none;
+}
 
 /*end blocks.css*/
 
@@ -879,7 +885,7 @@ ul#menu li {
 ul#menu li ul.sub-menu {
 	display:none;
 	position: absolute;
-	top: 30px;
+	top: 35px;
 	left: 0;
 	width: 100px;
 	z-index:1000;

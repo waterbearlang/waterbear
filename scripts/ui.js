@@ -105,6 +105,29 @@ wb.history = {
 	redo: redoLastAction,
 }
 
+function changeSocket(event) {
+	console.log("Changed a socket!");
+	var oldValue = event.target.getAttribute('data-oldvalue');
+	var newValue = event.target.value;
+	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	console.log("New value:", newValue);
+	console.log("Old value:", oldValue);
+	event.target.setAttribute('data-oldvalue', newValue);
+	var action = {
+		undo: function() {
+			event.target.value = oldValue;
+			event.target.setAttribute('data-oldvalue', oldValue);
+		},
+		redo: function() {
+			event.target.value = newValue;
+			event.target.setAttribute('data-oldvalue', newValue);
+		}
+	}
+	wb.history.add(action);
+}
+
+Event.on(document.body, 'change', 'input', changeSocket);
+
 // Context Menu
 //
 // 'this' is the object matching the selector

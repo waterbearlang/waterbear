@@ -60,7 +60,7 @@ body.result .result{
 
 .workspace {
 	width: calc(100% - 300px);
-	height: 100%;
+	height: calc(100% - 40px);
 	overflow: hidden;
 	pointer-events: none;
 }

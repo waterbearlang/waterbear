@@ -3559,6 +3559,7 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
+	console.log('undo stack: %s', undoActions.length);
 }
 
 wb.history = {

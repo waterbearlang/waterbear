@@ -419,19 +419,7 @@ wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     return edit_menu(title, specs);
-	// switch(wb.view){
-	// 	case 'result': return run_menu(title, specs);
-	// 	case 'blocks': return edit_menu(title, specs);
-	// 	case 'editor': return edit_menu(title, specs);
-	// 	default: return edit_menu(title, specs);
-	// }
 };
-
-if (wb.view === 'result'){
-    console.log('listen for script load');
-    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
 
 function edit_menu(title, specs, show){
 	menu_built = true;

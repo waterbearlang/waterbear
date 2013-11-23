@@ -53,8 +53,7 @@ wb.wrap = function(script){
 
 function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        wb.runScript( wb.prettyScript(blocks) );
-        
+        wb.runScript( wb.prettyScript(blocks) );        
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 

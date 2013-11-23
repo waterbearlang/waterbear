@@ -41,10 +41,15 @@ function assetUrls(){
 
 function runCurrentScripts(event){
     var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    document.body.className = 'result';
     wb.runScript( wb.prettyScript(blocks) );
 }
-Event.on('.runScripts', 'click', null, runCurrentScripts);
+wb.runCurrentScripts = runCurrentScripts;
+
+Event.on('.runScripts', 'click', null, function(){
+    document.body.className = 'result';
+    wb.historySwitchState('result');
+    runCurrentScripts();
+});
 
 window.addEventListener('load', function(event){
     console.log('iframe ready');

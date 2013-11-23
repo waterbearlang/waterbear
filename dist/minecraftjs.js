@@ -1823,6 +1823,7 @@ hljs.LANGUAGES.javascript = {
 /*end highlight-javascript.js*/
 
 /*begin ajax.js*/
+(function(global){
 function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
 function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
 
@@ -1835,56 +1836,59 @@ ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);retu
 ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
 ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
 ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
+global.ajax = ajax;
+})(this);
 /*end ajax.js*/
 
 /*begin queryparams.js*/
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
+(function(global){
+	var wb = {
+		scriptModified: true
+	};
 
-    	var wb = {};
+	// Source: http://stackoverflow.com/a/13984429
+	wb.urlToQueryParams = function(url){
+	    var qparams = {},
+	        parts = (url||'').split('?'),
+	        qparts, qpart,
+	        i=0;
 
-		// Source: http://stackoverflow.com/a/13984429
-		wb.urlToQueryParams = function(url){
-		    var qparams = {},
-		        parts = (url||'').split('?'),
-		        qparts, qpart,
-		        i=0;
+	    if(parts.length <= 1 ){
+	        return qparams;
+	    }else{
+	        qparts = parts[1].split('&');
+	        for(i in qparts){
 
-		    if(parts.length <= 1 ){
-		        return qparams;
-		    }else{
-		        qparts = parts[1].split('&');
-		        for(i in qparts){
+	            qpart = qparts[i].split('=');
+	            qparams[decodeURIComponent(qpart[0])] =
+	                           decodeURIComponent(qpart[1] || '').split('#')[0];
+	        }
+	    }
+	    return qparams;
+	};
 
-		            qpart = qparts[i].split('=');
-		            qparams[decodeURIComponent(qpart[0])] =
-		                           decodeURIComponent(qpart[1] || '').split('#')[0];
-		        }
-		    }
-
-		    return qparams;
-		};
-
-		wb.queryParamsToUrl = function(params){
-			var base = location.href.split('?')[0];
-			var keys = Object.keys(params);
-			var parts = [];
-			keys.forEach(function(key){
-				if (Array.isArray(params[key])){
-					params[key].forEach(function(value){
-						parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
-					});
-				}else{
-					parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
-				}
-			});
-			return base + '?' + parts.join('&');
+	wb.queryParamsToUrl = function(params){
+		var base = location.href.split('?')[0];
+		var keys = Object.keys(params);
+		var parts = [];
+		keys.forEach(function(key){
+			if (Array.isArray(params[key])){
+				params[key].forEach(function(value){
+					parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+				});
+			}else{
+				parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+			}
+		});
+		if (!parts.length){
+			return base;
 		}
-
-	    var q = wb.urlToQueryParams(location.href);
-		wb.queryParams = q;
-		wb.view = wb.queryParams.view || 'editor';
-	    // if they don't have the plugin part of the query string lets send them back home.
+		return base + '?' + parts.join('&');
+	}
+	global.wb = wb;
+})(this);
 
 /*end queryparams.js*/
 
@@ -1990,7 +1994,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             idx++;
         }
         return idx;
-    }
+    };
 
     wb.find = function find(elem, selector){
         return elem.querySelector(selector);
@@ -2018,7 +2022,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             }
         }
         return null;
-    }
+    };
 
     wb.elem = function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -2101,7 +2105,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         };
         window[id] = handler;
         document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
-    }
+    };
 
     /* adapted from code here: http://javascriptexample.net/ajax01.php */
     wb.ajax = function(url, success, failure){
@@ -2118,10 +2122,10 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                     }
                 }
             }
-        }
+        };
         req.open('GET', url, true);
         req.send(null);
-    }
+    };
 
 
 })(this);
@@ -3032,6 +3036,7 @@ function uuid(){
         }else{
             removeStep(event);
         }
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'removed'});
     }
 
     function addBlock(event){
@@ -3041,6 +3046,7 @@ function uuid(){
         }else{
             addStep(event);
         }
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
 
     function removeStep(event){
@@ -3420,6 +3426,7 @@ function uuid(){
         parent.dataset.locals = JSON.stringify(parentLocals);
 
         wb.find(parent, '.name').textContent = nameTemplate;
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
     }
 
     function cancelUpdateName(event){
@@ -3889,12 +3896,6 @@ wb.menu = function(blockspec){
 	// }
 };
 
-if (wb.view === 'result'){
-    console.log('listen for script load');
-    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
-
 function edit_menu(title, specs, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
@@ -3934,18 +3935,39 @@ function edit_menu(title, specs, show){
 	Event.on('.clear_scripts', 'click', null, clearScripts);
 	Event.on('.edit_script', 'click', null, function(){
 		document.body.className = 'editor';
+		wb.historySwitchState('editor');
 		wb.loadCurrentScripts(wb.queryParams);
 	});
 
 	Event.on('.goto_stage', 'click', null, function(){
 		document.body.className = 'result';
+		wb.historySwitchState('result');
 	});
-
-
 
 // Load and Save Section
 
+wb.historySwitchState = function historySwitchState(state, clearFiles){
+	console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+	var params = wb.urlToQueryParams(location.href);
+	if (state === 'code'){
+		delete params['view'];
+	}else{
+		params.view = state;
+	}
+	if (clearFiles){
+		delete params['gist'];
+		delete params['example'];
+	}
+	history.pushState(JSON.stringify(wb.querParams), '', wb.queryParamsToUrl(params));
+	wb.queryParams = params;
+}
+
 function saveCurrentScripts(){
+	if (!wb.scriptModified){
+		console.log('nothing to save');
+		// nothing to save
+		return;
+	}
 	wb.showWorkspace('block');
 	document.querySelector('#block_menu').scrollIntoView();
 	localStorage['__' + language + '_current_scripts'] = scriptsToString();
@@ -4043,7 +4065,7 @@ Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
 
 function loadScriptsFromGistId(){
-	var gistID = prompt("What Gist would you like to load?");
+	var gistID = prompt("What Gist would you like to load? Please enter the ID of the Gist: ");
 	ajax.get("https://api.github.com/gists/"+gistID, function(data){
 		loadScriptsFromGist({data:JSON.parse(data)});
 	});
@@ -4105,41 +4127,27 @@ function loadScriptsFromExample(name){
 	});
 }
 
-function runScriptFromGist(gist){
-	console.log('running script from gist');
-	var keys = Object.keys(gist.data.files);
-	var file;
-	keys.forEach(function(key){
-		if (/.*\.js$/.test(key)){
-			// it's a javascript file
-			console.log('found javascript file: %s', key);
-			file = gist.data.files[key].content;
-		}
-	});
-	if (!file){
-		console.log('no javascript file found in gist: %o', gist);
-		return;
-	}
-	wb.runScript(file);
-}
-
 
 wb.loaded = false;
 wb.loadCurrentScripts = function(queryParsed){
+	console.log('loadCurrentScripts(%o)', queryParsed);
 	if (!wb.loaded){
 		if (queryParsed.gist){
-			console.log("Loading gist via url.");
+			console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
+			console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + language + '_current_scripts']){
+			console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
+			console.log('no script to load, starting a new script');
 			createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -4201,6 +4209,7 @@ function loadScriptsFromFile(file){
 		clearScripts(null, true);
 		var saved = JSON.parse(evt.target.result);
 		loadScriptsFromObject(saved);
+		wb.scriptModified = true;	
 	};
 }
 
@@ -4215,6 +4224,25 @@ function getFiles(evt){
     }
 }
 
+wb.switchView = function switchView(view){
+    if (['editor','blocks','result'].indexOf(view) < 0){
+        view = 'editor';
+    }
+    console.log('view: %s', view);
+    wb.view = view;
+    var loader = document.querySelector('#block_menu_load');
+    if (loader){
+        loader.parentElement.removeChild(loader);
+    }
+    document.body.className = view;
+    // don't call switch state when we're first loading, doesn't make sense
+    if (wb.loaded){
+	    wb.historySwitchState(view);
+	}
+    wb.loadCurrentScripts(wb.queryParams);
+}
+
+
 Event.on('.workspace', 'click', '.disclosure', function(evt){
 	var block = wb.closest(evt.wbTarget, '.block');
 	if (block.dataset.closed){
@@ -4226,8 +4254,48 @@ Event.on('.workspace', 'click', '.disclosure', function(evt){
 
 Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 Event.on('.workspace', 'keypress', 'input', wb.resize);
+Event.on('.workspace', 'change', 'input, select', function(evt){
+	Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+
+});
 Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
-Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
+Event.on(document.body, 'wb-script-loaded', null, function(evt){
+	wb.scriptModified = false;
+	if (wb.view === 'result'){
+		console.log('run script because we are awesome');
+		window.addEventListener('load', function(){
+			console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
+			wb.runCurrentScripts();
+		}, false);
+	}else{
+		console.log('do not run script for some odd reason: %s', wb.view);
+	}
+	// clear undo/redo stack
+	wb.scriptLoaded = true;
+	console.log('script loaded');
+});
+Event.on(document.body, 'wb-modified', null, function(evt){
+	// still need modified events for changing input values
+	if (!wb.scriptLoaded) return;
+	if (!wb.scriptModified){
+		wb.scriptModified = true;
+		wb.historySwitchState(wb.view, true);
+	}
+});
+window.addEventListener('popstate', function(evt){
+	var state = JSON.parse(evt.state);
+	console.log('popstate: %o', state);
+}, false);
+
+	// Kick off some initialization work
+	function waterbearInit(){
+		console.log('initializing');
+		wb.queryParams = wb.urlToQueryParams(location.href);
+		console.log('queryParams: %o', wb.queryParams);
+		wb.switchView(wb.queryParams.view);
+		console.log('fini');
+	}
+	waterbearInit();
 })(wb);
 
 /*end workspace.js*/
@@ -4410,8 +4478,7 @@ wb.wrap = function(script){
 
 function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        wb.runScript( wb.prettyScript(blocks) );
-        
+        wb.runScript( wb.prettyScript(blocks) );        
 }
 Event.on('.runScripts', 'click', null, runCurrentScripts);
 
@@ -6264,28 +6331,3 @@ wb.menu({
 }
 );
 /*end languages/minecraftjs/string.json*/
-
-/*begin launch.js*/
-// Minimal script to run on load
-// Loads stored state from localStorage
-// Detects mode from URL for different embed views
-
-switch(wb.view){
-    case 'editor':
-    case 'blocks':
-    case 'result':
-        switchMode(wb.view);
-        break;
-    default:
-        switchMode('editor');
-        break;
-}
-
-function switchMode(mode){
-    var loader = document.querySelector('#block_menu_load');
-    loader.parentElement.removeChild(loader);
-    document.body.className = mode;
-    wb.loadCurrentScripts(q);
-}
-
-/*end launch.js*/

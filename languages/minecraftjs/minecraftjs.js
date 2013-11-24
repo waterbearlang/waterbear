@@ -11,7 +11,7 @@
 
 /*
 
-$('.runScripts').click(function(){
+$('.run-scripts').click(function(){
      var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
      var code = blocks.prettyScript();
      var query = $.param({'code':code});
@@ -53,10 +53,9 @@ wb.wrap = function(script){
 
 function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        wb.runScript( wb.prettyScript(blocks) );
-        
+        wb.runScript( wb.prettyScript(blocks) );        
 }
-Event.on('.runScripts', 'click', null, runCurrentScripts);
+Event.on('.run-scripts', 'click', null, runCurrentScripts);
 
 
 wb.ajax = {
@@ -122,8 +121,8 @@ wb.runScript = function(script){
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
-Event.on('.clear_canvas', 'click', null, clearStage);
-Event.on('.editScript', 'click', null, clearStage);
+Event.on('.clear-stage', 'click', null, clearStage);
+Event.on('.edit-script', 'click', null, clearStage);
 
 
 

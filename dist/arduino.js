@@ -1,5 +1,6 @@
 
 /*begin ajax.js*/
+(function(global){
 function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
 function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
 
@@ -12,56 +13,59 @@ ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);retu
 ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
 ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
 ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
+global.ajax = ajax;
+})(this);
 /*end ajax.js*/
 
 /*begin queryparams.js*/
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
+(function(global){
+	var wb = {
+		scriptModified: true
+	};
 
-    	var wb = {};
+	// Source: http://stackoverflow.com/a/13984429
+	wb.urlToQueryParams = function(url){
+	    var qparams = {},
+	        parts = (url||'').split('?'),
+	        qparts, qpart,
+	        i=0;
 
-		// Source: http://stackoverflow.com/a/13984429
-		wb.urlToQueryParams = function(url){
-		    var qparams = {},
-		        parts = (url||'').split('?'),
-		        qparts, qpart,
-		        i=0;
+	    if(parts.length <= 1 ){
+	        return qparams;
+	    }else{
+	        qparts = parts[1].split('&');
+	        for(i in qparts){
 
-		    if(parts.length <= 1 ){
-		        return qparams;
-		    }else{
-		        qparts = parts[1].split('&');
-		        for(i in qparts){
+	            qpart = qparts[i].split('=');
+	            qparams[decodeURIComponent(qpart[0])] =
+	                           decodeURIComponent(qpart[1] || '').split('#')[0];
+	        }
+	    }
+	    return qparams;
+	};
 
-		            qpart = qparts[i].split('=');
-		            qparams[decodeURIComponent(qpart[0])] =
-		                           decodeURIComponent(qpart[1] || '').split('#')[0];
-		        }
-		    }
-
-		    return qparams;
-		};
-
-		wb.queryParamsToUrl = function(params){
-			var base = location.href.split('?')[0];
-			var keys = Object.keys(params);
-			var parts = [];
-			keys.forEach(function(key){
-				if (Array.isArray(params[key])){
-					params[key].forEach(function(value){
-						parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
-					});
-				}else{
-					parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
-				}
-			});
-			return base + '?' + parts.join('&');
+	wb.queryParamsToUrl = function(params){
+		var base = location.href.split('?')[0];
+		var keys = Object.keys(params);
+		var parts = [];
+		keys.forEach(function(key){
+			if (Array.isArray(params[key])){
+				params[key].forEach(function(value){
+					parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+				});
+			}else{
+				parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
+			}
+		});
+		if (!parts.length){
+			return base;
 		}
-
-	    var q = wb.urlToQueryParams(location.href);
-		wb.queryParams = q;
-		wb.view = wb.queryParams.view || 'editor';
-	    // if they don't have the plugin part of the query string lets send them back home.
+		return base + '?' + parts.join('&');
+	}
+	global.wb = wb;
+})(this);
 
 /*end queryparams.js*/
 
@@ -167,7 +171,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             idx++;
         }
         return idx;
-    }
+    };
 
     wb.find = function find(elem, selector){
         return elem.querySelector(selector);
@@ -195,7 +199,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             }
         }
         return null;
-    }
+    };
 
     wb.elem = function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -278,7 +282,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         };
         window[id] = handler;
         document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
-    }
+    };
 
     /* adapted from code here: http://javascriptexample.net/ajax01.php */
     wb.ajax = function(url, success, failure){
@@ -295,10 +299,10 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                     }
                 }
             }
-        }
+        };
         req.open('GET', url, true);
         req.send(null);
-    }
+    };
 
 
 })(this);
@@ -520,6 +524,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
     }
 
     function reset(){
+        // console.log('reset dragTarget to null');
         dragTarget = null;
         dragAction = {undo: undoDrag, redo: redoDrag};
         potentialDropTargets = [];
@@ -545,6 +550,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
             // console.log('not a drag handle');
             return undefined;
         }
+        // console.log('initDrag');
         var target = wb.closest(eT, '.block');
         if (target){
             if (wb.matches(target, '.scripts_workspace')){
@@ -598,6 +604,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
         if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
+            // console.log('set drag target to clone of old drag target');
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             dragAction.target = dragTarget;
 			// If we're dragging from the menu, there's no source to track for undo/redo
@@ -712,6 +719,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                 // dropTarget.parent().append(dragTarget);
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget block to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.insertBefore(dragTarget, dropCursor());
@@ -721,6 +729,7 @@ ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};
                 // Insert a value block into a socket
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget value to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.appendChild(dragTarget);
@@ -872,8 +881,10 @@ function pasteCommand(evt) {
 }
 
     function resetDragStyles() {
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
+        if (dragTarget){
+            dragTarget.classList.remove('dragActive');
+            dragTarget.classList.remove('dragIndication');
+        }
         potentialDropTargets.forEach(function(elem){
             elem.classList.remove('dropTarget');
         });
@@ -1033,6 +1044,7 @@ function pasteCommand(evt) {
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed
+        console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
     		resetDragStyles();
 	    	revertDrop();
@@ -1045,14 +1057,15 @@ function pasteCommand(evt) {
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
+        console.log('initializeDragHandlers');
         if (Event.isTouch){
-            Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
@@ -1071,35 +1084,40 @@ function pasteCommand(evt) {
 // This returns a Version 4 (random) UUID
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
-function hex(length){
-  if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
-  var myHex = Math.random().toString(16).slice(2,2+length);
-  return pad(myHex, length); // just in case we don't get 8 digits for some reason
-}
+(function(global){
+  function hex(length){
+    if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
+    var myHex = Math.random().toString(16).slice(2,2+length);
+    return pad(myHex, length); // just in case we don't get 8 digits for some reason
+  }
 
-function pad(str, length){
-    while(str.length < length){
-        str += '0';
-    }
-    return str;
-}
+  function pad(str, length){
+      while(str.length < length){
+          str += '0';
+      }
+      return str;
+  }
 
-function variant(){
-    return '89ab'[Math.floor(Math.random() * 4)];
-}
+  function variant(){
+      return '89ab'[Math.floor(Math.random() * 4)];
+  }
 
-// Constants
-var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
+  // Constants
+  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
 
-function isUuid(value){
-  return UUID_TEST.test(value);
-}
+  function isUuid(value){
+    return UUID_TEST.test(value);
+  }
 
-// Public interface
-function uuid(){
-  return hex(8) + '-' + hex(4) + '-4' + hex(3) + '-' + variant() + hex(3) + '-' + hex(12);
-}
+  // Public interface
+  function uuid(){
+    return hex(8) + '-' + hex(4) + '-4' + hex(3) + '-' + variant() + hex(3) + '-' + hex(12);
+  }
 
+  global.uuid = uuid;
+  global.isUuid = isUuid;
+
+})(this);
 
 /*end uuid.js*/
 
@@ -1273,6 +1291,7 @@ function uuid(){
         }else{
             removeStep(event);
         }
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'removed'});
     }
 
     function addBlock(event){
@@ -1282,6 +1301,7 @@ function uuid(){
         }else{
             addStep(event);
         }
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
 
     function removeStep(event){
@@ -1663,6 +1683,7 @@ function uuid(){
 			parent.dataset.locals = JSON.stringify(parentLocals);
 
 			wb.find(parent, '.name').textContent = nameTemplate;
+    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
 		}
 		var action = {
 			undo: function() {
@@ -1713,6 +1734,233 @@ function uuid(){
 
 /*end block.js*/
 
+/*begin file.js*/
+// All File-like I/O functions, including:
+//
+// * Loading and saving to Gists
+// * Loading and saving to MakeAPI (not implemented yet)
+// * Loading and saving to Filesystem
+// * Loading and saving to LocalStorage (including currentScript)
+// * Loading examples
+// * etc.
+
+(function(wb){
+
+	wb.saveCurrentScripts = function saveCurrentScripts(){
+		if (!wb.scriptModified){
+			console.log('nothing to save');
+			// nothing to save
+			return;
+		}
+		wb.showWorkspace('block');
+		document.querySelector('#block_menu').scrollIntoView();
+		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
+	};
+
+	// Save script to gist;
+	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	    event.preventDefault();
+		console.log("Saving to Gist");
+		var title = prompt("Save to an anonymous Gist titled: ");
+
+		ajax.post("https://api.github.com/gists", function(data){
+	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
+	        var gistID = JSON.parse(data).url.split("/").pop();
+	        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+
+	        //save gist id to local storage
+	        var localGists = localStorage['__' + wb.language + '_recent_gists'];
+	        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	        gistArray.push(gistID);
+	        localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
+
+	    }, JSON.stringify({
+	    	"description": title,
+	    	"public": true,
+	    	"files": {
+	    		"script.json": {
+	    			"content": scriptsToString()
+	    		},
+	    	}
+	    }));
+	};
+
+	wb.loadRecentGists = function loadRecentGists() {
+		var localGists = localStorage['__' + wb.language + '_recent_gists'];
+		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+		var gistContainer = document.querySelector("#recent_gists");
+		gistContainer.innerHTML = '';
+		for (var i = 0; i < gistArray.length; i++) {
+			var node = document.createElement("li");
+			var a = document.createElement('a');
+			var linkText = document.createTextNode(gistArray[i]);
+
+			a.appendChild(linkText)
+			//a.href = wb.language + ".html?gist=" + gistArray[i];
+
+			node.appendChild(a);
+			gistContainer.appendChild(node);
+			var gist = gistArray[i];
+			console.log(gist);
+			a.addEventListener('click', function () {
+				loadScriptsFromGistId(parseInt(gist));
+				return false;
+			});
+		};
+	};
+
+
+	function scriptsToString(title, description){
+		if (!title){ title = ''; }
+		if (!description){ description = ''; }
+		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+		return JSON.stringify({
+			title: title,
+			description: description,
+			date: Date.now(),
+			waterbearVersion: '2.0',
+			blocks: blocks.map(wb.blockDesc)
+		});
+	}
+
+
+	wb.createDownloadUrl = function createDownloadUrl(evt){
+	    evt.preventDefault();
+		var URL = window.webkitURL || window.URL;
+		var file = new Blob([scriptsToString()], {type: 'application/json'});
+		var reader = new FileReader();
+		var a = document.createElement('a');
+		reader.onloadend = function(){
+			a.href = reader.result;
+			a.download = 'script.json';
+			a.target = '_blank';
+			document.body.appendChild(a);
+			a.click();
+		};
+		reader.readAsDataURL(file);
+		evt.preventDefault();
+	};
+
+	wb.loadScriptsFromGistId = function loadScriptsFromGistId(event){
+	    event.preventDefault();
+		var gistID = prompt("What Gist would you like to load? Please enter the ID of the Gist: ");
+		ajax.get("https://api.github.com/gists/"+gistID, function(data){
+			loadScriptsFromGist({data:JSON.parse(data)});
+		});
+	};
+
+	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+	    event.preventDefault();
+		var input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('accept', 'application/json');
+		input.addEventListener('change', function(evt){
+			var file = input.files[0];
+			loadScriptsFromFile(file);
+		});
+		input.click();
+	};
+
+	function loadScriptsFromObject(fileObject){
+	    // console.info('file format version: %s', fileObject.waterbearVersion);
+	    // console.info('restoring to workspace %s', fileObject.workspace);
+	    if (!fileObject) return createWorkspace();
+	    var blocks = fileObject.blocks.map(wb.Block);
+	    if (!blocks.length){
+	    	return createWorkspace();
+	    }
+	    if (blocks.length > 1){
+	    	console.log('not really expecting multiple blocks here right now');
+	    	console.log(blocks);
+	    }
+	    blocks.forEach(function(block){
+	    	wb.wireUpWorkspace(block);
+	    	Event.trigger(block, 'wb-add');
+	    });
+	    wb.loaded = true;
+	    Event.trigger(document.body, 'wb-script-loaded');
+	}
+
+	function loadScriptsFromGist(gist){
+		var keys = Object.keys(gist.data.files);
+		var file;
+		keys.forEach(function(key){
+			if (/.*\.json/.test(key)){
+				// it's a json file
+				file = gist.data.files[key].content;
+			}
+		});
+		if (!file){
+			console.log('no json file found in gist: %o', gist);
+			return;
+		}
+		loadScriptsFromObject(JSON.parse(file));
+	}
+
+	function loadScriptsFromExample(name){
+		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+			loadScriptsFromObject(JSON.parse(exampleJson));
+		}, function(xhr, status){
+			console.error('Error in wb.ajax: %s', status);
+		});
+	}
+
+	wb.loadCurrentScripts = function(queryParsed){
+		// console.log('loadCurrentScripts(%o)', queryParsed);
+		if (wb.loaded) return;
+		if (queryParsed.gist){
+			console.log("Loading gist %s", queryParsed.gist);
+			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
+				loadScriptsFromGist({data:JSON.parse(data)});
+			});
+		}else if (queryParsed.example){
+			console.log('loading example %s', queryParsed.example);
+			loadScriptsFromExample(queryParsed.example);
+		}else if (localStorage['__' + wb.language + '_current_scripts']){
+			console.log('loading current script from local storage');
+			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
+			if (fileObject){
+				loadScriptsFromObject(fileObject);
+			}
+		}else{
+			console.log('no script to load, starting a new script');
+			createWorkspace('Workspace');
+		}
+		wb.loaded = true;
+		Event.trigger(document.body, 'wb-loaded');
+	};
+
+	function loadScriptsFromFile(file){
+		fileName = file.name;
+		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+			console.error("File not a JSON file");
+			return;
+		}
+		var reader = new FileReader();
+		reader.readAsText( file );
+		reader.onload = function (evt){
+			wb.clearScripts(null, true);
+			var saved = JSON.parse(evt.target.result);
+			loadScriptsFromObject(saved);
+			wb.scriptModified = true;	
+		};
+	}
+
+	wb.getFiles = function getFiles(evt){
+		evt.stopPropagation();
+		evt.preventDefault();
+		var files = evt.dataTransfer.files;
+		if ( files.length > 0 ){
+	        // we only support dropping one file for now
+	        var file = files[0];
+	        loadScriptsFromFile(file);
+	    }
+	}
+
+
+})(wb);
+/*end file.js*/
+
 /*begin ui.js*/
 (function(wb){
 
@@ -1720,6 +1968,7 @@ function uuid(){
 
 function tabSelect(event){
     var target = event.wbTarget;
+    event.preventDefault();
     document.querySelector('.tabbar .selected').classList.remove('selected');
     target.classList.add('selected');
     if (wb.matches(target, '.scripts_workspace_tab')){
@@ -1732,6 +1981,7 @@ function tabSelect(event){
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 function accordion(event){
+    event.preventDefault();
     var open = document.querySelector('#block_menu .open');
     if (open){
         open.classList.remove('open');
@@ -1741,7 +1991,6 @@ function accordion(event){
 }
 
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-
 
 function showWorkspace(mode){
     console.log('showWorkspace');
@@ -1829,6 +2078,7 @@ function addUndoAction(action) {
 	currentAction++;
 	document.querySelector('.undoAction').style.display = '';
 	document.querySelector('.redoAction').style.display = 'none';
+	console.log('undo stack: %s', undoActions.length);
 }
 
 wb.history = {
@@ -2126,90 +2376,19 @@ var block_cmenu = {
 	//cancel: {name: 'Cancel', callback: dummyCallback},
 }
 
-// $.contextMenu({
-//     selector: '.scripts_workspace .block',
-//     items: {
-//         //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
-//         //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
-//         //expand: {'name': 'Expand', callback: expandCommand},
-//         //collapse: {'name': 'Collapse', callback: collapseCommand},
-//         cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
-//         copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
-//         copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
-//         //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//    selector: '.scripts_workspace',
-//    items: {
-//        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//        cancel: {'name': 'Cancel', callback: cancelCommand}
-//    }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .value > input',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteExpressionCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .contained',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteStepCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-
-// TODO: add event handler to enable/disable, hide/show items based on state of block
-
-// Handle Context menu for touch devices:
 // Test drawn from modernizr
-
 function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
 initContextMenus();
-// if (is_touch_device()){
-//     $.tappable({
-//         container: '.blockmenu, .workspace',
-//         selector: '.block',
-//         callback: function(){
-//             console.info('long tap detected');
-//             console.info(this);
-//             this.contextMenu();
-//         },
-//         touchDelay: 150
-//     });
-// }
-
-// var menu_built = false;
-// var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     return edit_menu(title, specs);
-	// switch(wb.view){
-	// 	case 'result': return run_menu(title, specs);
-	// 	case 'blocks': return edit_menu(title, specs);
-	// 	case 'editor': return edit_menu(title, specs);
-	// 	default: return edit_menu(title, specs);
-	// }
 };
-
-if (wb.view === 'result'){
-    console.log('listen for script load');
-    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
 
 function edit_menu(title, specs, show){
 	menu_built = true;
@@ -2237,9 +2416,12 @@ function edit_menu(title, specs, show){
 /*begin workspace.js*/
 (function(wb){
 
-	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	wb.language = location.pathname.match(/\/(.*)\.html/)[1];
 
-	function clearScripts(event, force){
+	wb.clearScripts = function clearScripts(event, force){
+		if (event){
+		    event.preventDefault();
+		}
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
@@ -2247,303 +2429,160 @@ function edit_menu(title, specs, show){
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 		}
 	}
-	Event.on('.clear_scripts', 'click', null, clearScripts);
-	Event.on('.edit_script', 'click', null, function(){
-		document.body.className = 'editor';
-		wb.loadCurrentScripts(wb.queryParams);
+	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
+	Event.on('.edit-script', 'click', null, function(event){
+	    event.preventDefault();
+		wb.historySwitchState('editor');
 	});
 
-	Event.on('.goto_stage', 'click', null, function(){
-		document.body.className = 'result';
-	});
-
-
-
-// Load and Save Section
-
-function saveCurrentScripts(){
-	wb.showWorkspace('block');
-	document.querySelector('#block_menu').scrollIntoView();
-	localStorage['__' + language + '_current_scripts'] = scriptsToString();
-}
-window.onunload = saveCurrentScripts;
-
-// Save script to gist;
-function saveCurrentScriptsToGist(){
-	console.log("Saving to Gist");
-	var title = prompt("Save to an anonymous Gist titled: ");
-
-	ajax.post("https://api.github.com/gists", function(data){
-        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
-        var gistID = JSON.parse(data).url.split("/").pop();
-        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
-
-        //save gist id to local storage
-        var localGists = localStorage['__' + language + '_recent_gists'];
-        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-        gistArray.push(gistID);
-        localStorage['__' + language + '_recent_gists'] = JSON.stringify(gistArray);
-
-    }, JSON.stringify({
-    	"description": title,
-    	"public": true,
-    	"files": {
-    		"script.json": {
-    			"content": scriptsToString()
-    		},
-    	}
-    }));
-}
-
-window.onload = loadRecentGists;
-
-function loadRecentGists() {
-	var localGists = localStorage['__' + language + '_recent_gists'];
-	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-	var gistContainer = document.querySelector("#recent_gists");
-	gistContainer.innerHTML = '';
-	for (var i = 0; i < gistArray.length; i++) {
-		var node = document.createElement("li");
-		var a = document.createElement('a');
-		var linkText = document.createTextNode(gistArray[i]);
-
-		a.appendChild(linkText)
-		//a.href = language + ".html?gist=" + gistArray[i];
-
-		node.appendChild(a);
-		gistContainer.appendChild(node);
-		var gist = gistArray[i];
-		console.log(gist);
-		a.addEventListener('click', function () {
-			loadScriptsFromGistId(parseInt(gist));
-			return false;
-		});
-	};
-}
-
-
-function scriptsToString(title, description){
-	if (!title){ title = ''; }
-	if (!description){ description = ''; }
-	var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-	return JSON.stringify({
-		title: title,
-		description: description,
-		date: Date.now(),
-		waterbearVersion: '2.0',
-		blocks: blocks.map(wb.blockDesc)
-	});
-}
-
-
-function createDownloadUrl(evt){
-	var URL = window.webkitURL || window.URL;
-	var file = new Blob([scriptsToString()], {type: 'application/json'});
-	var reader = new FileReader();
-	var a = document.createElement('a');
-	reader.onloadend = function(){
-		a.href = reader.result;
-		a.download = 'script.json';
-		a.target = '_blank';
-		document.body.appendChild(a);
-		a.click();
-	};
-	reader.readAsDataURL(file);
-	evt.preventDefault();
-}
-
-Event.on('.save_scripts', 'click', null, saveCurrentScriptsToGist);
-Event.on('.download_scripts', 'click', null, createDownloadUrl);
-Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
-Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
-
-
-function loadScriptsFromGistId(){
-	var gistID = prompt("What Gist would you like to load?");
-	ajax.get("https://api.github.com/gists/"+gistID, function(data){
-		loadScriptsFromGist({data:JSON.parse(data)});
-	});
-}
-
-function loadScriptsFromFilesystem(){
-	var input = document.createElement('input');
-	input.setAttribute('type', 'file');
-	input.setAttribute('accept', 'application/json');
-	input.addEventListener('change', function(evt){
-		var file = input.files[0];
-		loadScriptsFromFile(file);
-	});
-	input.click();
-}
-
-function loadScriptsFromObject(fileObject){
-    // console.info('file format version: %s', fileObject.waterbearVersion);
-    // console.info('restoring to workspace %s', fileObject.workspace);
-    if (!fileObject) return createWorkspace();
-    var blocks = fileObject.blocks.map(wb.Block);
-    if (!blocks.length){
-    	return createWorkspace();
-    }
-    if (blocks.length > 1){
-    	console.log('not really expecting multiple blocks here right now');
-    	console.log(blocks);
-    }
-    blocks.forEach(function(block){
-    	wireUpWorkspace(block);
-    	Event.trigger(block, 'wb-add');
-    });
-    wb.loaded = true;
-    Event.trigger(document.body, 'wb-script-loaded');
-}
-
-function loadScriptsFromGist(gist){
-	var keys = Object.keys(gist.data.files);
-	var file;
-	keys.forEach(function(key){
-		if (/.*\.json/.test(key)){
-			// it's a json file
-			file = gist.data.files[key].content;
-		}
-	});
-	if (!file){
-		console.log('no json file found in gist: %o', gist);
-		return;
-	}
-	loadScriptsFromObject(JSON.parse(file));
-}
-window.fromgist = loadScriptsFromGist;
-
-function loadScriptsFromExample(name){
-	wb.ajax('examples/' + name + '.json', function(exampleJson){
-		loadScriptsFromObject(JSON.parse(exampleJson));
-	}, function(xhr, status){
-		console.error('Error in wb.ajax: %s', status);
-	});
-}
-
-function runScriptFromGist(gist){
-	console.log('running script from gist');
-	var keys = Object.keys(gist.data.files);
-	var file;
-	keys.forEach(function(key){
-		if (/.*\.js$/.test(key)){
-			// it's a javascript file
-			console.log('found javascript file: %s', key);
-			file = gist.data.files[key].content;
-		}
-	});
-	if (!file){
-		console.log('no javascript file found in gist: %o', gist);
-		return;
-	}
-	wb.runScript(file);
-}
-
-
-wb.loaded = false;
-wb.loadCurrentScripts = function(queryParsed){
-	if (!wb.loaded){
-		if (queryParsed.gist){
-			console.log("Loading gist via url.");
-			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
-				loadScriptsFromGist({data:JSON.parse(data)});
-			});
-		}else if (queryParsed.example){
-			loadScriptsFromExample(queryParsed.example);
-		}else if (localStorage['__' + language + '_current_scripts']){
-			var fileObject = JSON.parse(localStorage['__' + language + '_current_scripts']);
-			if (fileObject){
-				loadScriptsFromObject(fileObject);
-			}
+	var handleStateChange = function handleStateChange(evt){
+		// hide loading spinner if needed
+		hideLoader();
+		wb.queryParams = wb.urlToQueryParams(location.href);
+		if (wb.queryParams.view === 'result'){
+			document.body.className = 'result';
+			wb.view = 'result';
 		}else{
-			createWorkspace('Workspace');
+			document.body.className = 'editor';
+			wb.view = 'editor';
 		}
-		wb.loaded = true;
+		// handle loading example, gist, currentScript, etc. if needed
+	    wb.loadCurrentScripts(wb.queryParams);
+	    // If we go to the result and can run the result inline, do it
+	    if (wb.view === 'result' && wb.runCurrentScripts){
+	    	wb.runCurrentScripts();
+	    }
 	}
-	Event.trigger(document.body, 'wb-loaded');
-};
+	Event.on(document.body, 'wb-state-change', null, handleStateChange);
+
+	var hideLoader = function hideLoader(){
+	    var loader = document.querySelector('#block_menu_load');
+	    if (loader){
+	        loader.parentElement.removeChild(loader);
+	    }		
+	}
 
 
-// Allow saved scripts to be dropped in
-function createWorkspace(name){
-    console.log('createWorkspace');
-	var id = uuid();
-	var workspace = wb.Block({
-		group: 'scripts_workspace',
-		id: id,
-		scriptId: id,
-		scopeId: id,
-		blocktype: 'context',
-		sockets: [
-		{
-			name: name
+	// Load and Save Section
+
+	wb.historySwitchState = function historySwitchState(state, clearFiles){
+		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		var params = wb.urlToQueryParams(location.href);
+		if (state !== 'result'){
+			delete params['view'];
+		}else{
+			params.view = state;
 		}
-		],
-		script: '[[1]]',
-		isTemplateBlock: false,
-		help: 'Drag your script blocks here'
-	});
-	wireUpWorkspace(workspace);
-}
-wb.createWorkspace = createWorkspace;
-
-function wireUpWorkspace(workspace){
-	workspace.addEventListener('drop', getFiles, false);
-	workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
-	wb.findAll(document, '.scripts_workspace').forEach(function(ws){
-        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
-    });
-	document.querySelector('.workspace').appendChild(workspace);
-	workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-	wb.initializeDragHandlers();
-}
-
-function handleDragover(evt){
-    // Stop Firefox from grabbing the file prematurely
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy';
-}
-
-function loadScriptsFromFile(file){
-	fileName = file.name;
-	if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-		console.error("File not a JSON file");
-		return;
+		if (clearFiles){
+			delete params['gist'];
+			delete params['example'];
+		}
+		history.pushState(null, '', wb.queryParamsToUrl(params));
+		Event.trigger(document.body, 'wb-state-change');
 	}
-	var reader = new FileReader();
-	reader.readAsText( file );
-	reader.onload = function (evt){
-		clearScripts(null, true);
-		var saved = JSON.parse(evt.target.result);
-		loadScriptsFromObject(saved);
+
+	window.addEventListener('unload', wb.saveCurrentScripts, false);
+	window.addEventListener('load', wb.loadRecentGists, false);
+
+	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+
+
+	wb.loaded = false;
+
+
+	// Allow saved scripts to be dropped in
+	function createWorkspace(name){
+	    console.log('createWorkspace');
+		var id = uuid();
+		var workspace = wb.Block({
+			group: 'scripts_workspace',
+			id: id,
+			scriptId: id,
+			scopeId: id,
+			blocktype: 'context',
+			sockets: [
+			{
+				name: name
+			}
+			],
+			script: '[[1]]',
+			isTemplateBlock: false,
+			help: 'Drag your script blocks here'
+		});
+		wb.wireUpWorkspace(workspace);
+	}
+	wb.createWorkspace = createWorkspace;
+
+	wb.wireUpWorkspace = function wireUpWorkspace(workspace){
+		workspace.addEventListener('drop', wb.getFiles, false);
+		workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+	    });
+		document.querySelector('.workspace').appendChild(workspace);
+		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+		wb.initializeDragHandlers();
 	};
-}
 
-function getFiles(evt){
-	evt.stopPropagation();
-	evt.preventDefault();
-	var files = evt.dataTransfer.files;
-	if ( files.length > 0 ){
-        // we only support dropping one file for now
-        var file = files[0];
-        loadScriptsFromFile(file);
-    }
-}
-
-Event.on('.workspace', 'click', '.disclosure', function(evt){
-	var block = wb.closest(evt.wbTarget, '.block');
-	if (block.dataset.closed){
-		delete block.dataset.closed;
-	}else{
-		block.dataset.closed = true;
+	function handleDragover(evt){
+	    // Stop Firefox from grabbing the file prematurely
+	    evt.stopPropagation();
+	    evt.preventDefault();
+	    evt.dataTransfer.dropEffect = 'copy';
 	}
-});
 
-Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-Event.on('.workspace', 'keypress', 'input', wb.resize);
-Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
-Event.on(document.body, 'wb-script-loaded', null, function(evt){console.log('script loaded');});
+
+
+	Event.on('.workspace', 'click', '.disclosure', function(evt){
+		var block = wb.closest(evt.wbTarget, '.block');
+		if (block.dataset.closed){
+			delete block.dataset.closed;
+		}else{
+			block.dataset.closed = true;
+		}
+	});
+
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on('.workspace', 'change', 'input, select', function(evt){
+		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+
+	});
+	Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
+	Event.on(document.body, 'wb-script-loaded', null, function(evt){
+		wb.scriptModified = false;
+		if (wb.view === 'result'){
+			// console.log('run script because we are awesome');
+			window.addEventListener('load', function(){
+				// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
+				wb.runCurrentScripts();
+			}, false);
+		// }else{
+		// 	console.log('do not run script for some odd reason: %s', wb.view);
+		}
+		// clear undo/redo stack
+		wb.scriptLoaded = true;
+		console.log('script loaded');
+	});
+
+	Event.on(document.body, 'wb-modified', null, function(evt){
+		// still need modified events for changing input values
+		if (!wb.scriptLoaded) return;
+		if (!wb.scriptModified){
+			wb.scriptModified = true;
+			wb.historySwitchState(wb.view, true);
+		}
+	});
+
+	window.addEventListener('popstate', function(evt){
+		Event.trigger(document.body, 'wb-state-change');
+	}, false);
+
+	// Kick off some initialization work
+	Event.trigger(document.body, 'wb-state-change');
 })(wb);
 
 /*end workspace.js*/
@@ -3801,28 +3840,3 @@ wb.menu({
 }
 );
 /*end languages/arduino/variables.json*/
-
-/*begin launch.js*/
-// Minimal script to run on load
-// Loads stored state from localStorage
-// Detects mode from URL for different embed views
-
-switch(wb.view){
-    case 'editor':
-    case 'blocks':
-    case 'result':
-        switchMode(wb.view);
-        break;
-    default:
-        switchMode('editor');
-        break;
-}
-
-function switchMode(mode){
-    var loader = document.querySelector('#block_menu_load');
-    loader.parentElement.removeChild(loader);
-    document.body.className = mode;
-    wb.loadCurrentScripts(q);
-}
-
-/*end launch.js*/

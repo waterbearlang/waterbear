@@ -99,7 +99,7 @@
             idx++;
         }
         return idx;
-    }
+    };
 
     wb.find = function find(elem, selector){
         return elem.querySelector(selector);
@@ -127,7 +127,7 @@
             }
         }
         return null;
-    }
+    };
 
     wb.elem = function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -210,7 +210,7 @@
         };
         window[id] = handler;
         document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
-    }
+    };
 
     /* adapted from code here: http://javascriptexample.net/ajax01.php */
     wb.ajax = function(url, success, failure){
@@ -227,10 +227,10 @@
                     }
                 }
             }
-        }
+        };
         req.open('GET', url, true);
         req.send(null);
-    }
+    };
 
 
 })(this);

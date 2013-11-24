@@ -8,7 +8,6 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="viewport" content="height=device-height, initial-scale=1.0" />
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
 	<!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
 	<!--script src="/lib/modernizr-1.6.min.js"></script-->
@@ -22,60 +21,66 @@
 
 		<nav id="nav" role="navigation">
 			<h1 class="title">Waterbear </h1>
-			<ul id="menu">
+			<ul class="menu">
 				<li>
-					<a class="clear_scripts" href="#">New</a>
+					<button class="clear_scripts">New</button>
 				</li>
 				<li>
-					<a class="load_from_gist" href="#">Open Gist</a>
+					<button class="load_from_gist">Open Gist</button>
 					<ul id="recent_gists"></ul>
 				</li>
 				<li>
-					<a class="restore_scripts" href="#">Open File</a>
+					<button class="restore_scripts">Open File</button>
 				</li>
 				<li>
-					<a class="save_scripts" href="#">Save Gist</a>
+					<button class="save_scripts">Save Gist</button>
 				</li>
 				<li>
-					<a class="download_scripts" href="#">Save File</a>
+					<button class="download_scripts">Save File</button>
 				</li>
 				<li>
-					<a href="#">Examples</a>
+					<button class="show-examples">Examples</button>
 				</li>
 				<li>
-					<a class="runScripts" href="#">Run</a>
+					<button class="run-scripts">Run</button>
 				</li>
 				<li>
-					<a class="undoAction" href="#">Undo</a>
+					<button class="undoAction">Undo</button>
 				</li>
 				<li>
-					<a class="redoAction" href="#">Redo</a>
+					<button class="redoAction">Redo</button>
 				</li>
 				<li>
-					<a class="cmenuEnable" href="#"><i class="icon-list-alt"></i> Enable Context Menus</a>
+					<button class="cmenuEnable"><i class="icon-list-alt"></i> Enable Context Menus</button>
 				</li>
 			</ul>
 		</nav>
 		<div class="menu_buttons">
-			<a href="#nav">Show menu</a>
-			<a href="#">Hide menu</a>
+			<button class="show-menu">Show menu</button>
+			<button class="hide-menu">Hide menu</button>
 		</div>
 		<div id="block_menu"></div>
 		<div class="workspace blockview">
 			<div class="tabbar">
-				<div class="scripts_workspace_tab chrome_tab selected">Script Blocks</div>
-				<div class="scripts_text_view_tab chrome_tab">Script Text</div>
+				<button class="scripts_workspace_tab chrome_tab selected">Script Blocks</button>
+				<button class="scripts_text_view_tab chrome_tab">Script Text</button>
 			</div>
 			<div class="scripts_text_view"></div>
 		</div>
 	</div>
 	<div class="content result">
-		<div class="menubar">
-			<button class="edit_script ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Edit</span></button>
-			<button class="clear_canvas ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Clear</span></button>
-			<button class="runScripts ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">Restart</span></button>
-		</div>
-		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.com/iframerunner/index2.html"></iframe></div>
+		<ul class="menu">
+			<li>
+				<button class="edit-script">Edit</button>
+			</li>
+			<li>
+				<button class="clear-canvas">Clear</button>
+			</li>
+			<li>
+				<button class="run-scripts">Restart</button>
+			</li>
+		</ul>
+		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
 	</div>
 	<svg><text></text></svg>
 	<script src="dist/javascript.js"></script>

@@ -75,6 +75,7 @@
     }
 
     function reset(){
+        // console.log('reset dragTarget to null');
         dragTarget = null;
         dragAction = {undo: undoDrag, redo: redoDrag};
         potentialDropTargets = [];
@@ -100,6 +101,7 @@
             // console.log('not a drag handle');
             return undefined;
         }
+        // console.log('initDrag');
         var target = wb.closest(eT, '.block');
         if (target){
             if (wb.matches(target, '.scripts_workspace')){
@@ -153,6 +155,7 @@
         if (dragTarget.dataset.isTemplateBlock){
             dragTarget.classList.remove('dragIndication');
             var parent = dragTarget.parentElement;
+            // console.log('set drag target to clone of old drag target');
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             dragAction.target = dragTarget;
 			// If we're dragging from the menu, there's no source to track for undo/redo
@@ -267,6 +270,7 @@
                 // dropTarget.parent().append(dragTarget);
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget block to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.insertBefore(dragTarget, dropCursor());
@@ -276,6 +280,7 @@
                 // Insert a value block into a socket
                 if(copyBlock) {
                 	revertDrop();
+                    // console.log('clone dragTarget value to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.appendChild(dragTarget);
@@ -427,8 +432,10 @@ function pasteCommand(evt) {
 }
 
     function resetDragStyles() {
-        dragTarget.classList.remove('dragActive');
-        dragTarget.classList.remove('dragIndication');
+        if (dragTarget){
+            dragTarget.classList.remove('dragActive');
+            dragTarget.classList.remove('dragIndication');
+        }
         potentialDropTargets.forEach(function(elem){
             elem.classList.remove('dropTarget');
         });
@@ -588,6 +595,7 @@ function pasteCommand(evt) {
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed
+        console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
     		resetDragStyles();
 	    	revertDrop();
@@ -600,14 +608,15 @@ function pasteCommand(evt) {
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
+        console.log('initializeDragHandlers');
         if (Event.isTouch){
-            Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);

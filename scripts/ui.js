@@ -4,6 +4,7 @@
 
 function tabSelect(event){
     var target = event.wbTarget;
+    event.preventDefault();
     document.querySelector('.tabbar .selected').classList.remove('selected');
     target.classList.add('selected');
     if (wb.matches(target, '.scripts_workspace_tab')){
@@ -16,6 +17,7 @@ function tabSelect(event){
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 function accordion(event){
+    event.preventDefault();
     var open = document.querySelector('#block_menu .open');
     if (open){
         open.classList.remove('open');
@@ -25,7 +27,6 @@ function accordion(event){
 }
 
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-
 
 function showWorkspace(mode){
     console.log('showWorkspace');
@@ -113,6 +114,7 @@ function addUndoAction(action) {
 	currentAction++;
 	document.querySelector('.undoAction').style.display = '';
 	document.querySelector('.redoAction').style.display = 'none';
+	console.log('undo stack: %s', undoActions.length);
 }
 
 wb.history = {
@@ -410,90 +412,19 @@ var block_cmenu = {
 	//cancel: {name: 'Cancel', callback: dummyCallback},
 }
 
-// $.contextMenu({
-//     selector: '.scripts_workspace .block',
-//     items: {
-//         //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
-//         //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
-//         //expand: {'name': 'Expand', callback: expandCommand},
-//         //collapse: {'name': 'Collapse', callback: collapseCommand},
-//         cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
-//         copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
-//         copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
-//         //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//    selector: '.scripts_workspace',
-//    items: {
-//        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//        cancel: {'name': 'Cancel', callback: cancelCommand}
-//    }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .value > input',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteExpressionCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .contained',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteStepCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-
-// TODO: add event handler to enable/disable, hide/show items based on state of block
-
-// Handle Context menu for touch devices:
 // Test drawn from modernizr
-
 function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
 initContextMenus();
-// if (is_touch_device()){
-//     $.tappable({
-//         container: '.blockmenu, .workspace',
-//         selector: '.block',
-//         callback: function(){
-//             console.info('long tap detected');
-//             console.info(this);
-//             this.contextMenu();
-//         },
-//         touchDelay: 150
-//     });
-// }
-
-// var menu_built = false;
-// var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     return edit_menu(title, specs);
-	// switch(wb.view){
-	// 	case 'result': return run_menu(title, specs);
-	// 	case 'blocks': return edit_menu(title, specs);
-	// 	case 'editor': return edit_menu(title, specs);
-	// 	default: return edit_menu(title, specs);
-	// }
 };
-
-if (wb.view === 'result'){
-    console.log('listen for script load');
-    Event.once(document.body, 'wb-script-loaded', null, runCurrentScripts);
-}
-
 
 function edit_menu(title, specs, show){
 	menu_built = true;

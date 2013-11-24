@@ -167,6 +167,7 @@
         }else{
             removeStep(event);
         }
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'removed'});
     }
 
     function addBlock(event){
@@ -176,6 +177,7 @@
         }else{
             addStep(event);
         }
+        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
 
     function removeStep(event){
@@ -557,6 +559,7 @@
 			parent.dataset.locals = JSON.stringify(parentLocals);
 
 			wb.find(parent, '.name').textContent = nameTemplate;
+    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
 		}
 		var action = {
 			undo: function() {

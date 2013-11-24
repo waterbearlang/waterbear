@@ -41,10 +41,15 @@ function assetUrls(){
 
 function runCurrentScripts(event){
     var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    document.body.className = 'result';
     wb.runScript( wb.prettyScript(blocks) );
 }
-Event.on('.runScripts', 'click', null, runCurrentScripts);
+wb.runCurrentScripts = runCurrentScripts;
+
+Event.on('.run-scripts', 'click', null, function(){
+    document.body.className = 'result';
+    wb.historySwitchState('result');
+    runCurrentScripts();
+});
 
 window.addEventListener('load', function(event){
     console.log('iframe ready');
@@ -74,8 +79,8 @@ wb.runScript = function(script){
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
-Event.on('.clear_canvas', 'click', null, clearStage);
-Event.on('.editScript', 'click', null, clearStage);
+Event.on('.clear-stage', 'click', null, clearStage);
+Event.on('.edit-script', 'click', null, clearStage);
 
 
 

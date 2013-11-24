@@ -8,19 +8,19 @@ var path = require('path');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix' /*'demo'*/],
+    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
     minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
     demo: ['javascript', 'demo']
 };
 
 var styles = {
-    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css'],
-    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
+    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/fonts/fontawesome.css'],
+    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
+    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/fonts/fontawesome.css'],
+    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/fonts/fontawesome.css']
 }
 
-var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace', 'blockprefs'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'ui', 'workspace', 'blockprefs'];
 
 var libs = {
     arduino: [],
@@ -41,36 +41,6 @@ function clear(){
     }
 };
 
-function compressJS(code){
-    var ast = UglifyJS.parse(code);
-    ast.figure_out_scope();
-    var compressor = UglifyJS.Compressor({warnings: false});
-    ast = ast.transform(compressor);
-    return ast.print_to_string();
-}
-
-function minimize(directory){
-    var files = fs.readdirSync(directory);
-    var src, dest;
-    files.forEach(function(filename){
-        src = path.join(directory, filename);
-        if (endswith(filename, '.css')){
-            dest = src.replace(/\.css$/, '.min.css');
-            fs.writeFileSync(dest, cleanCSS.process(fs.readFileSync(src, 'utf8')));
-            // fs.writeFileSync(dest, cleanCSS.process(fs.readFileSync(src, 'utf8')));
-        }else if (endswith(filename, '.js')){
-            try{
-                dest = src.replace(/\.js$/, '.min.js');
-                fs.writeFileSync(dest, compressJS(fs.readFileSync(src, 'utf8')));
-            }catch(e){
-                console.log('Error minifying file %s', filename);
-                console.trace(e);
-                // console.log('\tline: %s, col: %s', e.line, e.col);
-                return;
-            }
-        }
-    });
-}
 
 function cat(src, dest){
     fs.appendFileSync(dest, '\n/*begin ' + path.basename(src).replace(/\\/g, '/') + '*/\n');
@@ -120,11 +90,7 @@ function build(){
         if (lang === 'javascript' || lang === 'minecraftjs'){
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }
-        // minimize dist files
-        // add launch to kick it all off
-        cat('scripts/launch.js', dest + '.js');
     });
-    //minimize('dist');
 };
 
 build();

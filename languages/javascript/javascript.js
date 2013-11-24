@@ -46,9 +46,8 @@ function runCurrentScripts(){
 wb.runCurrentScripts = runCurrentScripts;
 
 Event.on('.run-scripts', 'click', null, function(){
-    document.body.className = 'result';
+    event.preventDefault();
     wb.historySwitchState('result');
-    runCurrentScripts();
 });
 
 window.addEventListener('load', function(event){

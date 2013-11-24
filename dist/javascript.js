@@ -6221,7 +6221,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "271c8b4c-b045-4ff9-8ad5-9608ea204b09",
-            "script": "\"rgb({{1}},{{2}},{{3}})\"",
+            "script": "\"rgb(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \")\"",
             "type": "color",
             "help": "returns a color",
             "sockets": [

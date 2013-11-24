@@ -2235,7 +2235,6 @@ function loadScriptsFromGist(gist){
 	}
 	loadScriptsFromObject(JSON.parse(file));
 }
-window.fromgist = loadScriptsFromGist;
 
 function loadScriptsFromExample(name){
 	wb.ajax('examples/' + name + '.json', function(exampleJson){

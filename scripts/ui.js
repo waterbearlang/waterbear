@@ -4,6 +4,7 @@
 
 function tabSelect(event){
     var target = event.wbTarget;
+    event.preventDefault();
     document.querySelector('.tabbar .selected').classList.remove('selected');
     target.classList.add('selected');
     if (wb.matches(target, '.scripts_workspace_tab')){
@@ -16,6 +17,7 @@ function tabSelect(event){
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 function accordion(event){
+    event.preventDefault();
     var open = document.querySelector('#block_menu .open');
     if (open){
         open.classList.remove('open');
@@ -25,7 +27,6 @@ function accordion(event){
 }
 
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-
 
 function showWorkspace(mode){
     console.log('showWorkspace');

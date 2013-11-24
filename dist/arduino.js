@@ -1652,6 +1652,7 @@ function uuid(){
 
 function tabSelect(event){
     var target = event.wbTarget;
+    event.preventDefault();
     document.querySelector('.tabbar .selected').classList.remove('selected');
     target.classList.add('selected');
     if (wb.matches(target, '.scripts_workspace_tab')){
@@ -1664,6 +1665,7 @@ function tabSelect(event){
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 function accordion(event){
+    event.preventDefault();
     var open = document.querySelector('#block_menu .open');
     if (open){
         open.classList.remove('open');
@@ -1673,7 +1675,6 @@ function accordion(event){
 }
 
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-
 
 function showWorkspace(mode){
     console.log('showWorkspace');
@@ -2039,6 +2040,9 @@ function edit_menu(title, specs, show){
 	var language = location.pathname.match(/\/(.*)\.html/)[1];
 
 	function clearScripts(event, force){
+		if (event){
+		    event.preventDefault();
+		}
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
@@ -2047,13 +2051,15 @@ function edit_menu(title, specs, show){
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, clearScripts);
-	Event.on('.edit-script', 'click', null, function(){
+	Event.on('.edit-script', 'click', null, function(event){
+	    event.preventDefault();
 		document.body.className = 'editor';
 		wb.historySwitchState('editor');
 		wb.loadCurrentScripts(wb.queryParams);
 	});
 
-	Event.on('.goto_stage', 'click', null, function(){
+	Event.on('.goto_stage', 'click', null, function(event){
+	    event.preventDefault();
 		document.body.className = 'result';
 		wb.historySwitchState('result');
 	});
@@ -2089,7 +2095,8 @@ function saveCurrentScripts(){
 window.onunload = saveCurrentScripts;
 
 // Save script to gist;
-function saveCurrentScriptsToGist(){
+function saveCurrentScriptsToGist(event){
+    event.preventDefault();
 	console.log("Saving to Gist");
 	var title = prompt("Save to an anonymous Gist titled: ");
 
@@ -2156,6 +2163,7 @@ function scriptsToString(title, description){
 
 
 function createDownloadUrl(evt){
+    evt.preventDefault();
 	var URL = window.webkitURL || window.URL;
 	var file = new Blob([scriptsToString()], {type: 'application/json'});
 	var reader = new FileReader();
@@ -2177,14 +2185,16 @@ Event.on('.load_from_gist', 'click', null, loadScriptsFromGistId);
 Event.on('.restore_scripts', 'click', null, loadScriptsFromFilesystem);
 
 
-function loadScriptsFromGistId(){
+function loadScriptsFromGistId(event){
+    event.preventDefault();
 	var gistID = prompt("What Gist would you like to load? Please enter the ID of the Gist: ");
 	ajax.get("https://api.github.com/gists/"+gistID, function(data){
 		loadScriptsFromGist({data:JSON.parse(data)});
 	});
 }
 
-function loadScriptsFromFilesystem(){
+function loadScriptsFromFilesystem(event){
+    event.preventDefault();
 	var input = document.createElement('input');
 	input.setAttribute('type', 'file');
 	input.setAttribute('accept', 'application/json');
@@ -2400,9 +2410,6 @@ Event.on(document.body, 'wb-modified', null, function(evt){
 window.addEventListener('popstate', function(evt){
 	console.log('popstate(%o)', evt.state);
 	console.log('queryParams:', wb.urlToQueryParams(location.href));
-
-	// var state = JSON.parse(evt.state);
-	// console.log('popstate: %o', state);
 }, false);
 
 	// Kick off some initialization work

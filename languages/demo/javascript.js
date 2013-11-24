@@ -45,7 +45,7 @@ function runCurrentScripts(event){
 }
 wb.runCurrentScripts = runCurrentScripts;
 
-Event.on('.runScripts', 'click', null, function(){
+Event.on('.run-scripts', 'click', null, function(){
     document.body.className = 'result';
     wb.historySwitchState('result');
     runCurrentScripts();
@@ -79,8 +79,8 @@ wb.runScript = function(script){
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
-Event.on('.clear_canvas', 'click', null, clearStage);
-Event.on('.editScript', 'click', null, clearStage);
+Event.on('.clear-stage', 'click', null, clearStage);
+Event.on('.edit-script', 'click', null, clearStage);
 
 
 

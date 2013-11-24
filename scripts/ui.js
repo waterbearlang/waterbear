@@ -348,71 +348,12 @@ var block_cmenu = {
 	//cancel: {name: 'Cancel', callback: dummyCallback},
 }
 
-// $.contextMenu({
-//     selector: '.scripts_workspace .block',
-//     items: {
-//         //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
-//         //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
-//         //expand: {'name': 'Expand', callback: expandCommand},
-//         //collapse: {'name': 'Collapse', callback: collapseCommand},
-//         cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
-//         copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
-//         copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
-//         //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//    selector: '.scripts_workspace',
-//    items: {
-//        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//        cancel: {'name': 'Cancel', callback: cancelCommand}
-//    }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .value > input',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteExpressionCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .contained',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteStepCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-
-// TODO: add event handler to enable/disable, hide/show items based on state of block
-
-// Handle Context menu for touch devices:
 // Test drawn from modernizr
-
 function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
 initContextMenus();
-// if (is_touch_device()){
-//     $.tappable({
-//         container: '.blockmenu, .workspace',
-//         selector: '.block',
-//         callback: function(){
-//             console.info('long tap detected');
-//             console.info(this);
-//             this.contextMenu();
-//         },
-//         touchDelay: 150
-//     });
-// }
-
-// var menu_built = false;
-// var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){

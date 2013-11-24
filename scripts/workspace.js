@@ -11,7 +11,7 @@
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, clearScripts);
-	Event.on('.edit_script', 'click', null, function(){
+	Event.on('.edit-script', 'click', null, function(){
 		document.body.className = 'editor';
 		wb.historySwitchState('editor');
 		wb.loadCurrentScripts(wb.queryParams);
@@ -79,8 +79,6 @@ function saveCurrentScriptsToGist(){
     }));
 }
 
-window.onload = loadRecentGists;
-
 function loadRecentGists() {
 	var localGists = localStorage['__' + language + '_recent_gists'];
 	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
@@ -104,6 +102,7 @@ function loadRecentGists() {
 		});
 	};
 }
+window.addEventListener('load', loadRecentGists, false);
 
 
 function scriptsToString(title, description){
@@ -352,6 +351,7 @@ Event.on(document.body, 'wb-script-loaded', null, function(evt){
 	wb.scriptLoaded = true;
 	console.log('script loaded');
 });
+
 Event.on(document.body, 'wb-modified', null, function(evt){
 	// still need modified events for changing input values
 	if (!wb.scriptLoaded) return;
@@ -360,9 +360,13 @@ Event.on(document.body, 'wb-modified', null, function(evt){
 		wb.historySwitchState(wb.view, true);
 	}
 });
+
 window.addEventListener('popstate', function(evt){
-	var state = JSON.parse(evt.state);
-	console.log('popstate: %o', state);
+	console.log('popstate(%o)', evt.state);
+	console.log('queryParams:', wb.urlToQueryParams(location.href));
+
+	// var state = JSON.parse(evt.state);
+	// console.log('popstate: %o', state);
 }, false);
 
 	// Kick off some initialization work

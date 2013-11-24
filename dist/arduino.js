@@ -550,6 +550,7 @@ global.ajax = ajax;
             // console.log('not a drag handle');
             return undefined;
         }
+        // console.log('initDrag');
         var target = wb.closest(eT, '.block');
         if (target){
             if (wb.matches(target, '.scripts_workspace')){
@@ -985,14 +986,15 @@ global.ajax = ajax;
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
+        console.log('initializeDragHandlers');
         if (Event.isTouch){
-            Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
@@ -1994,83 +1996,18 @@ var block_cmenu = {
 	//cancel: {name: 'Cancel', callback: dummyCallback},
 }
 
-// $.contextMenu({
-//     selector: '.scripts_workspace .block',
-//     items: {
-//         //clone: {'name': 'Clone', icon: 'add', callback: cloneCommand},
-//         //edit: {'name': 'Edit', icon: 'edit', callback: editCommand},
-//         //expand: {'name': 'Expand', callback: expandCommand},
-//         //collapse: {'name': 'Collapse', callback: collapseCommand},
-//         cut: {'name': 'Cut block', icon: 'cut', callback: cutBlockCommand},
-//         copy: {'name': 'Copy block', icon: 'copy', callback: copyBlockCommand},
-//         copySubscript: {'name': 'Copy subscript', callback: copySubscriptCommand},
-//         //paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//    selector: '.scripts_workspace',
-//    items: {
-//        paste: {'name': 'Paste', icon: 'paste', callback: pasteCommand},
-//        cancel: {'name': 'Cancel', callback: cancelCommand}
-//    }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .value > input',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteExpressionCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-// $.contextMenu({
-//     selector: '.scripts_workspace .contained',
-//     items: {
-//         paste: {'name': 'Paste', icon: 'paste', callback: pasteStepCommand},
-//         cancel: {'name': 'Cancel', callback: cancelCommand}
-//     }
-// });
-//
-
-// TODO: add event handler to enable/disable, hide/show items based on state of block
-
-// Handle Context menu for touch devices:
 // Test drawn from modernizr
-
 function is_touch_device() {
   return !!('ontouchstart' in window);
 }
 
 initContextMenus();
-// if (is_touch_device()){
-//     $.tappable({
-//         container: '.blockmenu, .workspace',
-//         selector: '.block',
-//         callback: function(){
-//             console.info('long tap detected');
-//             console.info(this);
-//             this.contextMenu();
-//         },
-//         touchDelay: 150
-//     });
-// }
-
-// var menu_built = false;
-// var saved_menus = [];
 
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     return edit_menu(title, specs);
-	// switch(wb.view){
-	// 	case 'result': return run_menu(title, specs);
-	// 	case 'blocks': return edit_menu(title, specs);
-	// 	case 'editor': return edit_menu(title, specs);
-	// 	default: return edit_menu(title, specs);
-	// }
 };
 
 function edit_menu(title, specs, show){
@@ -2110,7 +2047,7 @@ function edit_menu(title, specs, show){
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, clearScripts);
-	Event.on('.edit_script', 'click', null, function(){
+	Event.on('.edit-script', 'click', null, function(){
 		document.body.className = 'editor';
 		wb.historySwitchState('editor');
 		wb.loadCurrentScripts(wb.queryParams);
@@ -2178,8 +2115,6 @@ function saveCurrentScriptsToGist(){
     }));
 }
 
-window.onload = loadRecentGists;
-
 function loadRecentGists() {
 	var localGists = localStorage['__' + language + '_recent_gists'];
 	var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
@@ -2203,6 +2138,7 @@ function loadRecentGists() {
 		});
 	};
 }
+window.addEventListener('load', loadRecentGists, false);
 
 
 function scriptsToString(title, description){
@@ -2439,18 +2375,19 @@ Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loade
 Event.on(document.body, 'wb-script-loaded', null, function(evt){
 	wb.scriptModified = false;
 	if (wb.view === 'result'){
-		console.log('run script because we are awesome');
+		// console.log('run script because we are awesome');
 		window.addEventListener('load', function(){
-			console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
+			// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
 			wb.runCurrentScripts();
 		}, false);
-	}else{
-		console.log('do not run script for some odd reason: %s', wb.view);
+	// }else{
+	// 	console.log('do not run script for some odd reason: %s', wb.view);
 	}
 	// clear undo/redo stack
 	wb.scriptLoaded = true;
 	console.log('script loaded');
 });
+
 Event.on(document.body, 'wb-modified', null, function(evt){
 	// still need modified events for changing input values
 	if (!wb.scriptLoaded) return;
@@ -2459,9 +2396,13 @@ Event.on(document.body, 'wb-modified', null, function(evt){
 		wb.historySwitchState(wb.view, true);
 	}
 });
+
 window.addEventListener('popstate', function(evt){
-	var state = JSON.parse(evt.state);
-	console.log('popstate: %o', state);
+	console.log('popstate(%o)', evt.state);
+	console.log('queryParams:', wb.urlToQueryParams(location.href));
+
+	// var state = JSON.parse(evt.state);
+	// console.log('popstate: %o', state);
 }, false);
 
 	// Kick off some initialization work

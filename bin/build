@@ -14,10 +14,10 @@ var plugins = {
 };
 
 var styles = {
-    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css'],
-    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css']
+    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/fonts/fontawesome.css'],
+    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
+    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/fonts/fontawesome.css'],
+    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/fonts/fontawesome.css']
 }
 
 var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'ui', 'workspace', 'blockprefs'];

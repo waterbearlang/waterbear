@@ -1,7 +1,7 @@
 // This returns a Version 4 (random) UUID
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
-(function(global)){
+(function(global){
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);

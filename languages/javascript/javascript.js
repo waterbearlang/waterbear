@@ -5,7 +5,6 @@
  *
  */
 
-
 // Add some utilities
 wb.wrap = function(script){
     return [
@@ -39,15 +38,20 @@ function assetUrls(){
     }).join(',') + ']';
 }
 
-function runCurrentScripts(event){
+function runCurrentScripts(){
+    // console.log('runCurrentScripts');
     var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    document.body.className = 'result';
     wb.runScript( wb.prettyScript(blocks) );
 }
-Event.on('.runScripts', 'click', null, runCurrentScripts);
+wb.runCurrentScripts = runCurrentScripts;
+
+Event.on('.run-scripts', 'click', null, function(){
+    event.preventDefault();
+    wb.historySwitchState('result');
+});
 
 window.addEventListener('load', function(event){
-    console.log('iframe ready');
+    console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
     wb.iframeready = true;
     if (wb.iframewaiting){
         wb.iframewaiting();
@@ -56,6 +60,7 @@ window.addEventListener('load', function(event){
 }, false);
 
 wb.runScript = function(script){
+    // console.log('script: %s', script);
     var run = function(){
         wb.script = script;
         var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
@@ -74,8 +79,8 @@ wb.runScript = function(script){
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
 }
-Event.on('.clear_canvas', 'click', null, clearStage);
-Event.on('.editScript', 'click', null, clearStage);
+Event.on('.clear-stage', 'click', null, clearStage);
+Event.on('.edit-script', 'click', null, clearStage);
 
 
 

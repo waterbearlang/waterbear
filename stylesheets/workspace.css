@@ -72,7 +72,7 @@ body.blocks .workspace{
 	width: 100%;
 }
 
-.menubar, .tabbar{
+.tabbar{
 	height: 36px;
 	padding-left: 36px;
 	padding-right: 36px;

@@ -101,6 +101,7 @@
             // console.log('not a drag handle');
             return undefined;
         }
+        // console.log('initDrag');
         var target = wb.closest(eT, '.block');
         if (target){
             if (wb.matches(target, '.scripts_workspace')){
@@ -536,14 +537,15 @@
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
+        console.log('initializeDragHandlers');
         if (Event.isTouch){
-            Event.on('.scripts_workspace .contained, .block-menu', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
             Event.on('.content', 'touchend', null, endDrag);
             // TODO: A way to cancel the drag?
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
-            Event.on('.scripts_workspace .contained, .block-menu', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);

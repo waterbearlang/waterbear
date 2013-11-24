@@ -1,0 +1,391 @@
+{
+    "name": "Math",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
+            "type": "number",
+            "script": "({{1}} + {{2}})",
+            "help": "Adds two values",
+            "sockets": [
+                {
+                    "name": "addition",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "+",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "406d4e12-7dhd-4fg4-9bpe-0a69d968b3c",
+            "type": "number",
+            "script": "{{1}} += {{2}};",
+            "help": "Combines addition with assignment. First argument must be a variable",
+            "sockets": [
+                {
+                    "name": "add assign",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "+=",
+                    "type": "any",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "406d4e12-7db0-4fn4-9bne-9b86bd94be3c",
+            "type": "string",
+            "script": "({{1}} + {{2}})",
+            "help": "Concatenates string values",
+            "sockets": [
+                {
+                    "name": "concatena",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "+",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d7082309-9f02-4cf9-bcd5-d0cac243bff9",
+            "type": "number",
+            "script": "({{1}} - {{2}})",
+            "help": "Subtracts one value from another and may also be used to negate a value",
+            "sockets": [
+                {
+                    "name": "minus",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "-",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "bd3879e6-e440-49cb-b10b-52d744846341",
+            "type": "any",
+            "script": "({{1}} * {{2}})",
+            "help": "Multiplies the values of the two parameters",
+            "sockets": [
+                {
+                    "name": "multiply",
+                    "type": "any",
+                    "value": "0"
+                },
+                {
+                    "name": "*",
+                    "type": "any",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+            "type": "number",
+            "script": "({{1}} / {{2}})",
+            "help": "Divides the value of the second parameter by the value of the first parameter",
+            "sockets": [
+                {
+                    "name": "divide",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "/",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a2647515-2f14-4d0f-84b1-p0e288823630",
+            "type": "number",
+            "script": "({{1}} % {{2}})",
+            "help": "Calculates the remainer when one number is divided by another",
+            "sockets": [
+                {
+                    "name": "modulo",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "%",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+            "type": "number",
+            "script": "random({{1}}, {{2}})",
+            "help": "Generates random numbers",
+            "sockets": [
+                {
+                    "name": "random",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
+            "type": "number",
+            "script": "round({{1}})",
+            "help": "Calculates the integer closest to the value parameter",
+            "sockets": [
+                {
+                    "name": "round",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c38383df-a765-422e-b215-7d1cfb7557a1",
+            "type": "number",
+            "script": "abs({{1}})",
+            "help": "Calculates the absolute value (magnitude) of a number",
+            "sockets": [
+                {
+                    "name": "absolute",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
+            "type": "number",
+            "script": "pow({{1}}, {{2}})",
+            "help": "Facilitates exponential expressions",
+            "sockets": [
+                {
+                    "name": "pow",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "^",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
+            "type": "number",
+            "script": "sqrt({{1}})",
+            "help": "Calculates the square root of a number",
+            "sockets": [
+                {
+                    "name": "square root",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+            "type": "number",
+            "script": "floor({{1}})",
+            "help": "Calculates the closest int value that is less than or equal to the value of the parameter",
+            "sockets": [
+                {
+                    "name": "floor",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4945df27-f4f3-490b-94ae-67c7081f744b",
+            "type": "number",
+            "script": "ceil({{1}})",
+            "help": "Calculates the closest int value that is greater than or equal to the value of the parameter",
+            "sockets": [
+                {
+                    "name": "ceiling",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
+            "type": "number",
+            "script": "cos(radians({{1}}))",
+            "help": "Calculates the cosine of an angle",
+            "sockets": [
+                {
+                    "name": "cosine",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1a8f6a28-14e9-4400-8e80-31217309ebc9",
+            "type": "number",
+            "script": "sin(radians({{1}}))",
+            "help": "Calculates the sine of an angle",
+            "sockets": [
+                {
+                    "name": "sine",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541",
+            "type": "number",
+            "script": "tan(radians({{1}}))",
+            "help": "Calculates the ratio of the sine and cosine of an angle",
+            "sockets": [
+                {
+                    "name": "tangent",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "type": "number",
+            "script": "degrees(acos({{1}}))",
+            "help": "The inverse of cos(), returns the arc cosine of a value",
+            "sockets": [
+                {
+                    "name": "arccosine degrees",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "type": "number",
+            "script": "degrees(asin({{1}}))",
+            "help": "The inverse of sin(), returns the arc sine of a value",
+            "sockets": [
+                {
+                    "name": "arcsine degrees",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0p5eeo69-148e-4e4a-a514-5179af86b615",
+            "type": "number",
+            "script": "degrees(atan({{1}}))",
+            "help": "The inverse of tan(), returns the arc tangent of a value",
+            "sockets": [
+                {
+                    "name": "arctangent degrees",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1f53e062-118e-4e4a-a514-5f79a8874e15",
+            "type": "number",
+            "script": "degrees({{1}})",
+            "help": "Converts a radian measurement to its corresponding value in degrees",
+            "sockets": [
+                {
+                    "name": "degrees",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1f5ee064-148e-4e4a-a514-179a886keqw",
+            "type": "number",
+            "script": "radians({{1}})",
+            "help": "Converts a degree measurement to its corresponding value in radians",
+            "sockets": [
+                {
+                    "name": "radians",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
+            "script": "PI;",
+            "type": "number",
+            "help": "pi is the ratio of a circle's circumference to its diameter",
+            "sockets": [
+                {
+                    "name": "pi"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
+            "script": "TWO_PI",
+            "type": "number",
+            "help": "Two pi (tau) is 2 times pi, a generally more useful number",
+            "sockets": [
+                {
+                    "name": "two pi"
+                }
+            ]
+        },
+    ]
+}

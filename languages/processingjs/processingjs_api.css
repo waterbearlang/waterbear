@@ -1,0 +1,243 @@
+.container {
+  box-shadow: 0px 0px 30px #888;
+  margin-bottom: 4em;
+}
+
+.done {
+    color: black;
+}
+
+.header {
+  background-color: #0077B5;
+  line-height: 0;
+}
+
+.tagline {
+  padding-left: 1em;
+  color: #0077B5;
+  font-family: "lucida console", verdana;
+  line-height: 2;
+}
+
+/* The amount of CSS needed for the navbar is terrifying. I am sorry. */
+.navbar {
+  background-color: #000000;
+  line-height: 0;
+  position: relative;
+  width: 940px;
+  height: 78px;
+}
+
+.navbar ul {
+  list-style: none outside none;
+  position: absolute;
+  bottom: 0;
+  left: 1em;
+  margin: 0;
+}
+
+.navbar ul li {
+  display: inline;
+  position: relative;
+  line-height: 1.2;
+}
+
+.navbar ul li a span {
+  position: relative;
+  color: #909090;
+  background-color: white;
+  background-image:    -moz-linear-gradient(white, rgb(213, 213, 213));
+  background-image: -webkit-linear-gradient(white, rgb(213, 213, 213));
+  background-image:      -o-linear-gradient(white, rgb(213, 213, 213));
+  background-image:     -ms-linear-gradient(white, rgb(213, 213, 213));
+  background-image:         linear-gradient(white, rgb(213, 213, 213));
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#d5d5d5');
+  padding: 0.25em 0.75em;
+  bottom: 0.25em;
+  margin: 0 0.1em;
+  border-radius: 0.3em 0.3em 0 0;
+}
+
+.navbar ul li a:hover, .navbar ul li a:focus {
+  text-decoration: none;
+}
+
+.navbar ul li a:hover span, .navbar ul li a:focus span {
+  position: relative;
+  color: #00a7fd;
+  padding-bottom: 1em;
+  bottom: 1em;
+}
+
+.navbar ul a.selected {
+  text-decoration: none;
+}
+
+.navbar ul a.selected span {
+  position: relative;
+  color: #00a7fd;
+  background-color: white;
+  background-image: none;
+  padding-bottom: 1em;
+  bottom: 1em;
+}
+
+.navbar .viewsource {
+  color: white;
+  position: absolute;
+  bottom: 1em;
+  right: 0.5em;
+}
+
+.footer {
+  font-size: 0.85em;
+  color: #aaa;
+  padding-left: 1em;
+}
+
+a {
+  color: #0075B2;
+}
+
+a:hover, a:focus {
+  color: #00a7fd;
+}
+
+.page {
+  padding: 2em 0 2em 2em;
+}
+
+.home-exhibition {
+  float: left;
+  width: 190px;
+}
+
+.home-exhibition span a img {
+  border-radius: 0.5em;
+}
+
+.sidebar {
+  border-left: 1px dotted #0073AF;
+  padding-left: 1.3em;
+}
+
+.sidebar h3 a {
+  text-decoration: none;
+}
+
+.sidebar ul li {
+  list-style-type: circle;
+  color: #0075B2;
+}
+
+.sidebar ul li:hover {
+  list-style-type: disc;
+  color: #00a7fd;
+}
+
+.blog-archives li abbr {
+  float: right;
+}
+
+.exhibition span {
+  width: 210px;
+  height: 250px;
+  float: left;
+}
+
+.exhibition span a img {
+  border-radius: 0.5em;
+}
+
+.exhibition span p {
+  width: 180px;
+}
+
+.reference .category {
+  margin-bottom: 2em;
+}
+
+.reference .category a {
+  display: block;
+}
+
+.reference .category a.warning {
+  color: red;
+}
+
+.reference .category b {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.reference .category h5 {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 0.9em;
+  line-height: 2em;
+  margin-top:0.5em;
+}
+
+.example200px {
+  float: right;
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #999999;
+  box-shadow: 0px 0px 5px #999;
+  margin-left: 10px;
+}
+
+.demo-screens .section.wild > a {
+  margin-right: 0px;
+  margin-bottom: 1em;
+  height: auto;
+  float: none;
+}
+
+.demo-screens .section > a span {
+  display: block;
+}
+
+.demo-screens .section > a {
+  display: block;
+  float: left;
+  width: 200px;
+  height: 300px;
+  margin-right: 50px;
+}
+
+.clear {
+  clear: both;
+  height: 0;
+  line-height: 0;
+}
+
+.learning-demo canvas {
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid #999999;
+  box-shadow: 0px 0px 5px #999;
+}
+
+.tweet_list {
+  border-radius: 0.5em;
+  margin: 0;
+  overflow-y: hidden;
+  background-color: #E0E0E0;
+}
+
+ul.tweet_list li,ul.tweet_list li:hover {
+  color: #404040;
+}
+
+.tweet_list li {
+  padding: 0.5em;
+}
+
+.tweet_list .tweet_even {
+  background-color: #EFEFEF;
+}
+
+.tweet_list .tweet_avatar {
+  padding-right: .5em; float: left;
+}

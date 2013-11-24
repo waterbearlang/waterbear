@@ -4086,7 +4086,7 @@ function edit_menu(title, specs, show){
 	}
 
 	function loadScriptsFromExample(name){
-		wb.ajax('examples/' + name + '.json', function(exampleJson){
+		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(xhr, status){
 			console.error('Error in wb.ajax: %s', status);

@@ -21,11 +21,6 @@
 		wb.loadCurrentScripts(wb.queryParams);
 	});
 
-	Event.on('.goto_stage', 'click', null, function(event){
-	    event.preventDefault();
-		document.body.className = 'result';
-		wb.historySwitchState('result');
-	});
 
 // Load and Save Section
 

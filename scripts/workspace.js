@@ -9,6 +9,8 @@
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
+			wb.scriptModified = false;
+			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 		}
@@ -17,6 +19,23 @@
 	Event.on('.edit-script', 'click', null, function(event){
 	    event.preventDefault();
 		wb.historySwitchState('editor');
+	});
+
+	Event.on('.content', 'click', '.load-example', function(evt){
+		var path = event.target.dataset.href;
+		if (wb.scriptModified){
+			if (confirm('Throw out the current script?')){
+				wb.scriptModified = false;
+				wb.loaded = false;
+				history.pushState(null, '', path);
+				Event.trigger(document.body, 'wb-state-change');
+			}
+		}else{
+			wb.scriptModified = false;
+			wb.loaded = false;
+			history.pushState(null, '', path);
+			Event.trigger(document.body, 'wb-state-change');
+		}
 	});
 
 	var handleStateChange = function handleStateChange(evt){
@@ -140,10 +159,10 @@
 		wb.scriptModified = false;
 		if (wb.view === 'result'){
 			// console.log('run script because we are awesome');
-			window.addEventListener('load', function(){
-				// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
-				wb.runCurrentScripts();
-			}, false);
+			// window.addEventListener('load', function(){
+			// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
+			// 	wb.runCurrentScripts();
+			// }, false);
 		// }else{
 		// 	console.log('do not run script for some odd reason: %s', wb.view);
 		}

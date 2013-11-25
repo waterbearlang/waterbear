@@ -20,6 +20,8 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 	display:inline-block;
 	min-width:60px;
 	border: 0;
+	border-top: 1px solid black;
+	margin: 0;
 }
 ul.menu > li > button {
 	text-align:center;

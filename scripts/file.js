@@ -127,10 +127,10 @@
 	function loadScriptsFromObject(fileObject){
 	    // console.info('file format version: %s', fileObject.waterbearVersion);
 	    // console.info('restoring to workspace %s', fileObject.workspace);
-	    if (!fileObject) return createWorkspace();
+	    if (!fileObject) return wb.createWorkspace();
 	    var blocks = fileObject.blocks.map(wb.Block);
 	    if (!blocks.length){
-	    	return createWorkspace();
+	    	return wb.createWorkspace();
 	    }
 	    if (blocks.length > 1){
 	    	console.log('not really expecting multiple blocks here right now');
@@ -169,7 +169,7 @@
 	}
 
 	wb.loadCurrentScripts = function(queryParsed){
-		// console.log('loadCurrentScripts(%o)', queryParsed);
+		console.log('loadCurrentScripts(%o)', queryParsed);
 		if (wb.loaded) return;
 		if (queryParsed.gist){
 			console.log("Loading gist %s", queryParsed.gist);
@@ -187,7 +187,7 @@
 			}
 		}else{
 			console.log('no script to load, starting a new script');
-			createWorkspace('Workspace');
+			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
 		Event.trigger(document.body, 'wb-loaded');

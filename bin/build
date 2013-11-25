@@ -14,6 +14,14 @@ var plugins = {
     processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
 };
 
+var pluginlibs = {
+    arduino: [],
+    javascript: [],
+    minecraftjs: [],
+    demo: [],
+    processingjs: ['processing-1.4.1']
+}
+
 var styles = {
     arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/fonts/fontawesome.css'],
     javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
@@ -29,7 +37,7 @@ var libs = {
     javascript: ['beautify', 'highlight', 'highlight-javascript'],
     minecraftjs: ['beautify', 'highlight', 'highlight-javascript'],
     demo: ['beautify', 'highlight', 'highlight-javascript'],
-    processingjs: ['beautify', 'highlight', 'highlight-javascript']
+    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1']
 };
 
 
@@ -91,6 +99,7 @@ function build(){
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
         // Build runtime support
         if (lang === 'javascript' || lang === 'minecraftjs' || lang === 'processingjs'){
+            pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }
     });

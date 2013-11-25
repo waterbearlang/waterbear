@@ -40,7 +40,7 @@
             // console.log(wb.wrap(script));
             var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
             var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/processingjs_runtime.js';
-            console.log('trying to load library %s from outer window', runtimeUrl);
+            // console.log('trying to load library %s from outer window', runtimeUrl);
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };

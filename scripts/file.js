@@ -187,7 +187,7 @@
 			}
 		}else{
 			console.log('no script to load, starting a new script');
-			createWorkspace('Workspace');
+			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
 		Event.trigger(document.body, 'wb-loaded');

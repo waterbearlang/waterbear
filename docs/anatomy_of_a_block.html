@@ -24,13 +24,13 @@
     <body>
         <h1>Anatomy of a block</h1>
         <section>
-            <h2>Trigger or Step Block</h2>
-            <p>A trigger is the starting point for a sequential script, a step is one piece of the sequence. The primary difference is that triggers lack flaps to snap to, as they are always the first block in a sequence, while steps always follow other blocks. A block may contain other blocks: step blocks nested in either .next or .contained, and value blocks nested in .socket. When value blocks are nested, they replace the input element of the socket.</p>
+            <h2>Event Handler or Step Block</h2>
+            <p>An event handler is the starting point for a sequential script, a step is one piece of the sequence. The primary difference is that triggers lack flaps to snap to, as they are always the first block in a sequence. Context blocks may contain other blocks: step blocks nested in either .next or .contained, and value blocks nested in .socket. When value blocks are nested, they replace the input element of the socket.</p>
             <div class="wrapper">
-                <h3>&lt;div class="wrapper trigger|step [group]"&gt;</h3>
-                <div class="block">
-                    <h3>&lt;div class="block"&gt;</h3>
-                    <div class="labelblock">
+                <h3>&lt;div class="block eventhandler|step [group] step context"&gt;</h3>
+                    <div class="label">
+                        <div class="socket">
+                            <span class="name">[name text]</span>
                         <h3>&lt;p&gt;</h3>
                             <p><em>[A block may have zero or more input sockets]</em></p>
                             <div class="label">

@@ -159,10 +159,10 @@
 		wb.scriptModified = false;
 		if (wb.view === 'result'){
 			// console.log('run script because we are awesome');
-			window.addEventListener('load', function(){
-				// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
-				wb.runCurrentScripts();
-			}, false);
+			// window.addEventListener('load', function(){
+			// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
+			// 	wb.runCurrentScripts();
+			// }, false);
 		// }else{
 		// 	console.log('do not run script for some odd reason: %s', wb.view);
 		}

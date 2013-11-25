@@ -1,0 +1,53 @@
+.input, .input .holder{
+    background-color: hsl(296, 65%, 77%);
+    border-color: hsl(296, 65%, 57%);
+}
+
+.structure, .structure .holder{
+    border-color: hsl(120, 81%, 49%);
+    background-color: hsl(120, 81%, 85%);
+}
+
+.movingstructure, .movingstructure .holder{
+    border-color: hsl(150, 81%, 49%);
+    background-color: hsl(150, 81%, 85%);
+}
+.environment, .environment .holder{
+    border-color: hsl(250, 65%, 79%);
+    background-color: hsl(250, 62%, 89%);
+}
+
+.colors, .colors .holder{
+    border-color: hsl(200,98%,56%);
+    background-color: hsl(200,98%,76%);
+}
+
+.control, .control .holder{
+    border-color: hsl(75, 90%, 66%);
+    background-color: hsl(75, 90%, 76%);
+}
+
+.math, .math .holder{
+    border-color: hsl(185, 60%, 79%);
+    background-color: hsl(170, 55%, 89%);
+}
+
+.points, .points .holder{
+    border-color: hsl(90, 65%, 79%);
+    background-color: hsl(90, 62%, 89%);
+}
+
+.shape, .shape .holder{
+    border-color: hsl(25, 100%, 63%);
+    background-color: hsl(25, 100%, 83%);
+}
+
+.transform, .transform .holder{
+    border-color: hsl(240, 65%, 83%);
+    background-color: hsl(240, 65%, 93%);
+}
+
+.any, .any .holder{
+    border-color: gray;
+}
+

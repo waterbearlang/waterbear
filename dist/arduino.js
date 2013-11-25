@@ -1780,10 +1780,10 @@ global.ajax = ajax;
 	function loadScriptsFromObject(fileObject){
 	    // console.info('file format version: %s', fileObject.waterbearVersion);
 	    // console.info('restoring to workspace %s', fileObject.workspace);
-	    if (!fileObject) return createWorkspace();
+	    if (!fileObject) return wb.createWorkspace();
 	    var blocks = fileObject.blocks.map(wb.Block);
 	    if (!blocks.length){
-	    	return createWorkspace();
+	    	return wb.createWorkspace();
 	    }
 	    if (blocks.length > 1){
 	    	console.log('not really expecting multiple blocks here right now');
@@ -1822,7 +1822,7 @@ global.ajax = ajax;
 	}
 
 	wb.loadCurrentScripts = function(queryParsed){
-		// console.log('loadCurrentScripts(%o)', queryParsed);
+		console.log('loadCurrentScripts(%o)', queryParsed);
 		if (wb.loaded) return;
 		if (queryParsed.gist){
 			console.log("Loading gist %s", queryParsed.gist);
@@ -1840,7 +1840,7 @@ global.ajax = ajax;
 			}
 		}else{
 			console.log('no script to load, starting a new script');
-			createWorkspace('Workspace');
+			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
 		Event.trigger(document.body, 'wb-loaded');
@@ -2278,6 +2278,8 @@ function edit_menu(title, specs, show){
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
+			wb.scriptModified = false;
+			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 		}
@@ -2286,6 +2288,23 @@ function edit_menu(title, specs, show){
 	Event.on('.edit-script', 'click', null, function(event){
 	    event.preventDefault();
 		wb.historySwitchState('editor');
+	});
+
+	Event.on('.content', 'click', '.load-example', function(evt){
+		var path = event.target.dataset.href;
+		if (wb.scriptModified){
+			if (confirm('Throw out the current script?')){
+				wb.scriptModified = false;
+				wb.loaded = false;
+				history.pushState(null, '', path);
+				Event.trigger(document.body, 'wb-state-change');
+			}
+		}else{
+			wb.scriptModified = false;
+			wb.loaded = false;
+			history.pushState(null, '', path);
+			Event.trigger(document.body, 'wb-state-change');
+		}
 	});
 
 	var handleStateChange = function handleStateChange(evt){

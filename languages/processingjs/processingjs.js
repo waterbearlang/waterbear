@@ -5,59 +5,19 @@
  *
  */
 
- var load = function (pjs_code) {
-   var previewFrame = document.getElementById('preview_iframe');
-   var preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
+(function(wb, Event){
 
-    var preamble = "<script src=\"http://processingjs.org/js/processing.min.js\"><\/script><canvas id=\"processing-canvas\"><\/canvas><script type=\"text/processing\" data-processing-target=\"processing-canvas\">";
-    var postamble = "<\/script>";
- 
- preview.open();
-    preview.write(preamble + pjs_code + postamble);
- preview.close();
- 
-};
+    // Add some utilities
+    wb.wrap = function(script){
+        return Processing.compile(script).sourceCode;
+    }
 
-// Add some utilities
-wb.wrap = function(script){
-    return [
-        'var global = new Global();',
-        '(function(){', 
-            'var local = new Local();', 
-            // 'try{',
-                'local.canvas = document.createElement("canvas");',
-                'local.canvas.setAttribute("width", global.stage_width);',
-                'local.canvas.setAttribute("height", global.stage_height);',
-                'global.stage.appendChild(local.canvas);',
-                'local.canvas.focus()',
-                'local.ctx = local.canvas.getContext("2d");',
-                'local.ctx.textAlign = "center";',
-                'var main = function(){',
-                    script,
-                '}',
-                'global.preloadAssets(' + assetUrls() + ', main);',
-            // '}catch(e){',
-                // 'alert(e);',
-            // '}',
-        '})()'
-    ].join('\n');
-}
-
-function assetUrls(){
-    return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
-        // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
-        var source = document.getElementById(asset.dataset.localSource);
-        return wb.getSocketValue(wb.getSockets(source)[0]);
-    }).join(',') + ']';
-}
-
-function runCurrentScripts(event){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    document.body.className = 'result';
-    wb.runScript( wb.prettyScript(blocks) );
-    load( wb.prettyScript(blocks) );
-}
-Event.on('.runScripts', 'click', null, runCurrentScripts);
+    function runCurrentScripts(){
+        // console.log('runCurrentScripts');
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        wb.runScript( wb.prettyScript(blocks) );
+    }
+    wb.runCurrentScripts = runCurrentScripts;
 
 window.addEventListener('load', function(event){
     console.log('iframe ready');
@@ -133,3 +93,4 @@ Event.on('.socket input', 'click', null, function(event){
     event.wbTarget.select();
 });
 
+})(wb, Event);

@@ -2631,6 +2631,77 @@ global.ajax = ajax;
     		this.target.remove();
     	}
     }
+    
+function copyCommand(evt) {
+	console.log("Copying a block!");
+	console.log(this);
+	action = {
+		copied: wb.cloneBlock(this),
+		oldPasteboard: pasteboard,
+		undo: function() {
+			pasteboard = this.oldPasteboard;
+		},
+		redo: function() {
+			pasteboard = this.copied;
+		},
+	}
+	wb.history.add(action);
+	action.redo();
+}
+
+function cutCommand(evt) {
+	console.log("Cutting a block!");
+	action = {
+		removed: this,
+		// Storing parent and next sibling in case removing the node from the DOM clears them
+		parent: this.parentNode,
+		before: this.nextSibling,
+		oldPasteboard: pasteboard,
+		undo: function() {console.log(this);
+			if(wb.matches(this.removed,'.step')) {
+				this.parent.insertBefore(this.removed, this.before);
+				Event.trigger(this.removed, 'wb-add');
+			} else {
+				this.parent.appendChild(this.removed);
+				Event.trigger(this.removed, 'wb-add');
+			}
+			pasteboard = this.oldPasteboard;
+		},
+		redo: function() {
+			Event.trigger(this.removed, 'wb-remove');
+			this.removed.remove();
+			pasteboard = this.removed;
+		},
+	}
+	wb.history.add(action);
+	action.redo();
+}
+
+function pasteCommand(evt) {
+	console.log(pasteboard);
+	action = {
+		pasted: wb.cloneBlock(pasteboard),
+		into: cmenu_target.parentNode,
+		before: cmenu_target.nextSibling,
+		undo: function() {
+			Event.trigger(this.pasted, 'wb-remove');
+			this.pasted.remove();
+		},
+		redo: function() {
+			if(wb.matches(pasteboard,'.step')) {
+				console.log("Pasting a step!");
+				this.into.insertBefore(this.pasted,this.before);
+				Event.trigger(this.pasted, 'wb-add');
+			} else {
+				console.log("Pasting an expression!");
+				cmenu_target.appendChild(this.pasted);
+				Event.trigger(this.pasted, 'wb-add');
+			}
+		},
+	}
+	wb.history.add(action);
+	action.redo();
+}
 
     function resetDragStyles() {
         if (dragTarget){
@@ -3411,29 +3482,42 @@ global.ajax = ajax;
         Event.off(input, 'keydown', maybeUpdateName);
         var nameSpan = input.previousSibling;
         var newName = input.value;
+        var oldName = input.parentElement.textContent;
         // if (!input.parentElement) return; // already removed it, not sure why we're getting multiple blurs
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
-        console.log('now update all instances too');
-        var source = wb.closest(nameSpan, '.block');
-        var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-        instances.forEach(function(elem){
-            wb.find(elem, '.name').textContent = newName;
-        });
+        function propagateChange(newName) {
+			console.log('now update all instances too');
+			var source = wb.closest(nameSpan, '.block');
+			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+			instances.forEach(function(elem){
+				wb.find(elem, '.name').textContent = newName;
+			});
 
-        //Change name of parent
-        var parent = document.getElementById(source.dataset.localSource);
-        var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-        nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+			//Change name of parent
+			var parent = document.getElementById(source.dataset.localSource);
+			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-        //Change locals name of parent
-        var parentLocals = JSON.parse(parent.dataset.locals);
-        var localSocket = parentLocals[0].sockets[0];
-        localSocket.name = newName;
-        parent.dataset.locals = JSON.stringify(parentLocals);
+			//Change locals name of parent
+			var parentLocals = JSON.parse(parent.dataset.locals);
+			var localSocket = parentLocals[0].sockets[0];
+			localSocket.name = newName;
+			parent.dataset.locals = JSON.stringify(parentLocals);
 
-        wb.find(parent, '.name').textContent = nameTemplate;
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+			wb.find(parent, '.name').textContent = nameTemplate;
+    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+		}
+		var action = {
+			undo: function() {
+				propagateChange(oldName);
+			},
+			redo: function() {
+				propagateChange(newName);
+			},
+		}
+		wb.history.add(action);
+		action.redo();
     }
 
     function cancelUpdateName(event){
@@ -3778,13 +3862,27 @@ function undoLastAction() {
 	if(currentAction <= 0) return; // No action to undo!
 	currentAction--;
 	undoActions[currentAction].undo();
+	if(currentAction <= 0) {
+		document.querySelector('.undoAction').style.display = 'none';
+	}
+	document.querySelector('.redoAction').style.display = '';
 }
+
+Event.on('.undoAction', 'click', null, undoLastAction);
+document.querySelector('.undoAction').style.display = 'none';
 
 function redoLastAction() {
 	if(currentAction >= undoActions.length) return; // No action to redo!
 	undoActions[currentAction].redo();
 	currentAction++;
+	if(currentAction >= undoActions.length) {
+		document.querySelector('.redoAction').style.display = 'none';
+	}
+	document.querySelector('.undoAction').style.display = '';
 }
+
+Event.on('.redoAction', 'click', null, redoLastAction);
+document.querySelector('.redoAction').style.display = 'none';
 
 function addUndoAction(action) {
 	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
@@ -3801,6 +3899,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
+	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.redoAction').style.display = 'none';
 	console.log('undo stack: %s', undoActions.length);
 }
 
@@ -3809,6 +3909,55 @@ wb.history = {
 	undo: undoLastAction,
 	redo: redoLastAction,
 }
+
+function changeSocket(event) {
+	console.log("Changed a socket!");
+	var oldValue = event.target.getAttribute('data-oldvalue');
+	var newValue = event.target.value;
+	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	console.log("New value:", newValue);
+	console.log("Old value:", oldValue);
+	event.target.setAttribute('data-oldvalue', newValue);
+	var action = {
+		undo: function() {
+			event.target.value = oldValue;
+			event.target.setAttribute('data-oldvalue', oldValue);
+		},
+		redo: function() {
+			event.target.value = newValue;
+			event.target.setAttribute('data-oldvalue', newValue);
+		}
+	}
+	wb.history.add(action);
+}
+
+Event.on(document.body, 'change', 'input', changeSocket);
+
+/* TODO list of undoable actions:
+ -  Moving a step from position A to position B
+ -  Adding a new block at position X
+ -  Moving an expression from slot A to slot B
+ -  Adding a new expression to slot X
+ -  Editing the value in slot X (eg, using the colour picker, typing in a string, etc)
+ -  Renaming a local expression/variable
+ -  Deleting a step from position X
+ -  Deleting an expression from slot X
+ Break them down:
+1. Replacing the block in the clipboard with a new block
+2. Editing the literal value in slot X
+3. Inserting a step at position X
+4. Removing a step at position X
+5. Inserting an expression into slot X
+6. Removing an expression from slot X
+ More detail:
+ - Copy is 1
+ - Cut is 1 and 4 or 1 and 6
+ - Paste is 3 or 5
+ - Drag-in is 3 or 5
+ - Drag-around is 4 and 3 or 6 and 5
+ - Drag-out is 4 or 6
+ - Drag-copy is 3 or 5
+*/
 
 // Context Menu
 //
@@ -4043,9 +4192,7 @@ function enableContextMenu(evt) {
 var block_cmenu = {
 	//expand: {name: 'Expand All', callback: dummyCallback},
 	//collapse: {name: 'Collapse All', callback: dummyCallback},
-	undo: {name: 'Undo', callback: undoLastAction, enabled: function() {return currentAction > 0}},
-	redo: {name: 'Redo', callback: redoLastAction, enabled: function() {return currentAction < undoActions.length}},
-	cut: {name: 'Cut', callback: cutCommand, startGroup: true},
+	cut: {name: 'Cut', callback: cutCommand},
 	copy: {name: 'Copy', callback: copyCommand},
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},

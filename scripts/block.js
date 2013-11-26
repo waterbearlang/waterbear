@@ -535,29 +535,42 @@
         Event.off(input, 'keydown', maybeUpdateName);
         var nameSpan = input.previousSibling;
         var newName = input.value;
+        var oldName = input.parentElement.textContent;
         // if (!input.parentElement) return; // already removed it, not sure why we're getting multiple blurs
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
-        console.log('now update all instances too');
-        var source = wb.closest(nameSpan, '.block');
-        var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-        instances.forEach(function(elem){
-            wb.find(elem, '.name').textContent = newName;
-        });
+        function propagateChange(newName) {
+			console.log('now update all instances too');
+			var source = wb.closest(nameSpan, '.block');
+			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+			instances.forEach(function(elem){
+				wb.find(elem, '.name').textContent = newName;
+			});
 
-        //Change name of parent
-        var parent = document.getElementById(source.dataset.localSource);
-        var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-        nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+			//Change name of parent
+			var parent = document.getElementById(source.dataset.localSource);
+			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-        //Change locals name of parent
-        var parentLocals = JSON.parse(parent.dataset.locals);
-        var localSocket = parentLocals[0].sockets[0];
-        localSocket.name = newName;
-        parent.dataset.locals = JSON.stringify(parentLocals);
+			//Change locals name of parent
+			var parentLocals = JSON.parse(parent.dataset.locals);
+			var localSocket = parentLocals[0].sockets[0];
+			localSocket.name = newName;
+			parent.dataset.locals = JSON.stringify(parentLocals);
 
-        wb.find(parent, '.name').textContent = nameTemplate;
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+			wb.find(parent, '.name').textContent = nameTemplate;
+    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+		}
+		var action = {
+			undo: function() {
+				propagateChange(oldName);
+			},
+			redo: function() {
+				propagateChange(newName);
+			},
+		}
+		wb.history.add(action);
+		action.redo();
     }
 
     function cancelUpdateName(event){

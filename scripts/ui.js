@@ -75,13 +75,27 @@ function undoLastAction() {
 	if(currentAction <= 0) return; // No action to undo!
 	currentAction--;
 	undoActions[currentAction].undo();
+	if(currentAction <= 0) {
+		document.querySelector('.undoAction').style.display = 'none';
+	}
+	document.querySelector('.redoAction').style.display = '';
 }
+
+Event.on('.undoAction', 'click', null, undoLastAction);
+document.querySelector('.undoAction').style.display = 'none';
 
 function redoLastAction() {
 	if(currentAction >= undoActions.length) return; // No action to redo!
 	undoActions[currentAction].redo();
 	currentAction++;
+	if(currentAction >= undoActions.length) {
+		document.querySelector('.redoAction').style.display = 'none';
+	}
+	document.querySelector('.undoAction').style.display = '';
 }
+
+Event.on('.redoAction', 'click', null, redoLastAction);
+document.querySelector('.redoAction').style.display = 'none';
 
 function addUndoAction(action) {
 	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
@@ -98,6 +112,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
+	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.redoAction').style.display = 'none';
 	console.log('undo stack: %s', undoActions.length);
 }
 
@@ -106,6 +122,55 @@ wb.history = {
 	undo: undoLastAction,
 	redo: redoLastAction,
 }
+
+function changeSocket(event) {
+	console.log("Changed a socket!");
+	var oldValue = event.target.getAttribute('data-oldvalue');
+	var newValue = event.target.value;
+	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	console.log("New value:", newValue);
+	console.log("Old value:", oldValue);
+	event.target.setAttribute('data-oldvalue', newValue);
+	var action = {
+		undo: function() {
+			event.target.value = oldValue;
+			event.target.setAttribute('data-oldvalue', oldValue);
+		},
+		redo: function() {
+			event.target.value = newValue;
+			event.target.setAttribute('data-oldvalue', newValue);
+		}
+	}
+	wb.history.add(action);
+}
+
+Event.on(document.body, 'change', 'input', changeSocket);
+
+/* TODO list of undoable actions:
+ -  Moving a step from position A to position B
+ -  Adding a new block at position X
+ -  Moving an expression from slot A to slot B
+ -  Adding a new expression to slot X
+ -  Editing the value in slot X (eg, using the colour picker, typing in a string, etc)
+ -  Renaming a local expression/variable
+ -  Deleting a step from position X
+ -  Deleting an expression from slot X
+ Break them down:
+1. Replacing the block in the clipboard with a new block
+2. Editing the literal value in slot X
+3. Inserting a step at position X
+4. Removing a step at position X
+5. Inserting an expression into slot X
+6. Removing an expression from slot X
+ More detail:
+ - Copy is 1
+ - Cut is 1 and 4 or 1 and 6
+ - Paste is 3 or 5
+ - Drag-in is 3 or 5
+ - Drag-around is 4 and 3 or 6 and 5
+ - Drag-out is 4 or 6
+ - Drag-copy is 3 or 5
+*/
 
 // Context Menu
 //
@@ -340,9 +405,7 @@ function enableContextMenu(evt) {
 var block_cmenu = {
 	//expand: {name: 'Expand All', callback: dummyCallback},
 	//collapse: {name: 'Collapse All', callback: dummyCallback},
-	undo: {name: 'Undo', callback: undoLastAction, enabled: function() {return currentAction > 0}},
-	redo: {name: 'Redo', callback: redoLastAction, enabled: function() {return currentAction < undoActions.length}},
-	cut: {name: 'Cut', callback: cutCommand, startGroup: true},
+	cut: {name: 'Cut', callback: cutCommand},
 	copy: {name: 'Copy', callback: copyCommand},
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},

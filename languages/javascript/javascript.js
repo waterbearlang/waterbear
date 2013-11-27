@@ -46,7 +46,6 @@
     wb.runCurrentScripts = runCurrentScripts;
 
     Event.on('.run-scripts', 'click', null, function(){
-        event.preventDefault();
         wb.historySwitchState('result');
     });
 

@@ -4242,9 +4242,6 @@ function edit_menu(title, specs, show){
 	wb.language = location.pathname.match(/\/(.*)\.html/)[1];
 
 	wb.clearScripts = function clearScripts(event, force){
-		if (event){
-		    event.preventDefault();
-		}
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
@@ -4256,12 +4253,11 @@ function edit_menu(title, specs, show){
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
 	Event.on('.edit-script', 'click', null, function(event){
-	    event.preventDefault();
 		wb.historySwitchState('editor');
 	});
 
 	Event.on('.content', 'click', '.load-example', function(evt){
-		var path = event.target.dataset.href;
+		var path = evt.target.dataset.href;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;

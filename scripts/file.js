@@ -47,29 +47,32 @@
 	    	}
 	    }));
 	};
-
+	//populate the gist submenu with recent gists
 	wb.loadRecentGists = function loadRecentGists() {
 		var localGists = localStorage['__' + wb.language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
 		var gistContainer = document.querySelector("#recent_gists");
 		gistContainer.innerHTML = '';
+
 		for (var i = 0; i < gistArray.length; i++) {
-			var node = document.createElement("li");
-			var a = document.createElement('a');
-			var linkText = document.createTextNode(gistArray[i]);
-
-			a.appendChild(linkText)
-			//a.href = wb.language + ".html?gist=" + gistArray[i];
-
-			node.appendChild(a);
-			gistContainer.appendChild(node);
+			//add a new button to the gist sub-menu
 			var gist = gistArray[i];
-			console.log(gist);
-			a.addEventListener('click', function () {
-				loadScriptsFromGistId(parseInt(gist));
-				return false;
+			var node = document.createElement("li");
+			var button = document.createElement('button');
+			var buttonText = document.createTextNode("#" + gist);
+
+			button.appendChild(buttonText);
+			button.classList.add('load-gist');
+			button.dataset.href = wb.language + ".html?gist=" + gist;
+			button.dataset.gist = gist;
+
+			node.appendChild(button);
+			gistContainer.appendChild(node);
+
+			button.addEventListener('click', function(){
+				wb.loadScriptsFromGistId(this.dataset.gist);
 			});
-		};
+		}
 	};
 
 
@@ -104,9 +107,10 @@
 		evt.preventDefault();
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(event){
-	    event.preventDefault();
-		var gistID = prompt("What Gist would you like to load? Please enter the ID of the Gist: ");
+	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+		//we may get an event passed to this function so make sure we have a valid id or ask for one
+		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+		console.log("Loading gist " + id);
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
 		});
@@ -205,7 +209,7 @@
 			wb.clearScripts(null, true);
 			var saved = JSON.parse(evt.target.result);
 			loadScriptsFromObject(saved);
-			wb.scriptModified = true;	
+			wb.scriptModified = true;
 		};
 	}
 

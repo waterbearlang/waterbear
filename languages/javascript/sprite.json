@@ -269,6 +269,22 @@
         },
         {
             "blocktype": "step",
+            "id": "30d3103b-6657-4233-bd57-47bd5050704b",
+            "help": "set the movement vector of a sprite (speed and steer)",
+            "script": "{{1}}.movementDirection = {{2}};",
+            "sockets": [
+                {
+                    "name": "set sprite",
+                    "type": "sprite"
+                },
+                {
+                    "name": "movement vector",
+                    "type": "vector"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
             "script": "{{1}}.stageBounce(global.stage_width, global.stage_height);",
@@ -363,8 +379,8 @@
         {
             "blocktype": "expression",
             "id": "36DD3165-1168-4345-9198-E9B230FF84A3",
-            "script": "{{1}}.movementDirection",
-            "type": "number",
+            "script": "{{1}}.facingDirection",
+            "type": "vector",
             "sockets": [
                 {
                     "name": "sprite",
@@ -380,7 +396,7 @@
             "blocktype": "expression",
             "id": "495336f3-68ed-4bc7-a145-11756803876b",
             "script": "{{1}}.movementDirection",
-            "type": "number",
+            "type": "vector",
             "sockets": [
                 {
                     "name": "sprite",

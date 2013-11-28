@@ -8,7 +8,7 @@ var path = require('path');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
+    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'shape', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
     minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
     demo: ['javascript', 'demo'],
     processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
@@ -16,7 +16,7 @@ var plugins = {
 
 var pluginlibs = {
     arduino: [],
-    javascript: [],
+    javascript: ['SAT'],
     minecraftjs: [],
     demo: [],
     processingjs: ['processing-1.4.1']

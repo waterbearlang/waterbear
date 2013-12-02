@@ -52,7 +52,6 @@
     }
 
     Event.on('.run-scripts', 'click', null, function(){
-        event.preventDefault();
         wb.historySwitchState('result');
     });
 

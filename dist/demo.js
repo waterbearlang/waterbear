@@ -3874,7 +3874,11 @@ function undoLastAction() {
 }
 
 Event.on('.undoAction', 'click', null, undoLastAction);
-document.querySelector('.undoAction').style.display = 'none';
+try{
+	document.querySelector('.undoAction').style.display = 'none';
+}catch(e){
+	// some languages do not yet support undo/redo
+}
 
 function redoLastAction() {
 	if(currentAction >= undoActions.length) return; // No action to redo!
@@ -3887,7 +3891,11 @@ function redoLastAction() {
 }
 
 Event.on('.redoAction', 'click', null, redoLastAction);
-document.querySelector('.redoAction').style.display = 'none';
+try{
+	document.querySelector('.redoAction').style.display = 'none';
+}catch(e){
+	// some languages do not yet support undo/redo
+}
 
 function addUndoAction(action) {
 	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {

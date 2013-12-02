@@ -1,0 +1,9 @@
+.vectors, .vectors .holder{
+    border-color: hsl(55, 81%, 49%);
+    background-color: hsl(55, 81%, 85%);
+}
+
+.vector, .vector .holder{
+    border-color: hsl(65, 81%, 49%);
+    background-color: hsl(65, 81%, 85%);
+}

@@ -37,10 +37,28 @@
                 {
                     "name": "tone",
                     "type": "number",
-                    "value": 400
+                    "value": 440
                 },
                 {
                     "name": "Hz"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "60984C26-0854-4075-994B-9573B3F48E95",
+            "help": "set the note of the voice",
+            "script": "(function(voice, note){voice.setNote(note); voice.updateTone();})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "note",
+                    "type": "choice",
+                    "options": "notes",
+                    "value": "A4"
                 }
             ]
         },

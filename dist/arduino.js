@@ -1801,7 +1801,7 @@ function pasteCommand(evt) {
 			node.appendChild(a);
 			gistContainer.appendChild(node);
 			var gist = gistArray[i];
-			console.log(gist);
+			console.log('loading gist %s', gist);
 			a.addEventListener('click', function () {
 				loadScriptsFromGistId(parseInt(gist));
 				return false;
@@ -1906,7 +1906,7 @@ function pasteCommand(evt) {
 	}
 
 	wb.loadCurrentScripts = function(queryParsed){
-		console.log('loadCurrentScripts(%o)', queryParsed);
+		console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
 			console.log("Loading gist %s", queryParsed.gist);
@@ -2465,7 +2465,14 @@ function edit_menu(title, specs, show){
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
 	    if (wb.view === 'result' && wb.runCurrentScripts){
+	    	console.log('running current scripts');
 	    	wb.runCurrentScripts();
+	    }else{
+	    	if (wb.view === 'result'){
+		    	console.log('we want to run current scripts, but cannot');
+		    }else{
+		    	console.log('we do not care about current scripts, so there');
+		    }
 	    }
 	}
 	Event.on(document.body, 'wb-state-change', null, handleStateChange);
@@ -2481,7 +2488,7 @@ function edit_menu(title, specs, show){
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -2593,11 +2600,15 @@ function edit_menu(title, specs, show){
 	});
 
 	window.addEventListener('popstate', function(evt){
+		console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
 	// Kick off some initialization work
-	Event.trigger(document.body, 'wb-state-change');
+	window.addEventListener('load', function(){
+		console.log('window loaded');
+		Event.trigger(document.body, 'wb-state-change');
+	}, false);
 })(wb);
 
 /*end workspace.js*/

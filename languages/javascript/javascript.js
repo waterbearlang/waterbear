@@ -40,6 +40,10 @@
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
+        if (!wb.scriptLoaded){
+            Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
+            return;
+        }
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
@@ -49,7 +53,7 @@
         wb.historySwitchState('result');
     });
 
-    window.addEventListener('load', function(event){
+    document.querySelector('.stageframe').addEventListener('load', function(event){
         console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
         wb.iframeready = true;
         if (wb.iframewaiting){

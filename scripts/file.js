@@ -64,7 +64,7 @@
 			node.appendChild(a);
 			gistContainer.appendChild(node);
 			var gist = gistArray[i];
-			console.log(gist);
+			console.log('loading gist %s', gist);
 			a.addEventListener('click', function () {
 				loadScriptsFromGistId(parseInt(gist));
 				return false;
@@ -169,7 +169,7 @@
 	}
 
 	wb.loadCurrentScripts = function(queryParsed){
-		console.log('loadCurrentScripts(%o)', queryParsed);
+		console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
 			console.log("Loading gist %s", queryParsed.gist);

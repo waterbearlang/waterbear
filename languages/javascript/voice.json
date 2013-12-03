@@ -62,7 +62,7 @@
                 }
             ]
         },
-                {
+        {
             "blocktype": "step",
             "id": "a133f0ad-27e6-444c-898a-66410c447a07",
             "help": "set the volume of the voice",
@@ -76,6 +76,26 @@
                     "name": "volume",
                     "type": "number",
                     "value": 1
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "A64A4BC7-4E93-47B4-910B-F185BC42E366",
+            "help": "set the tempo of the voice, for determining the length of a quarter note",
+            "script": "(function(voice, tempo){voice.tempo = tempo; voice.updateTone();})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "tempo quarter note =",
+                    "type": "number",
+                    "value": 120
+                },
+                {
+                	"name": "beats per minute"
                 }
             ]
         },
@@ -144,6 +164,73 @@
                 {
                     "name": "seconds"
                 }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "1F98BD7B-8E13-4334-854B-6B9C1B31C99D",
+            "script": "(function(voice, note, len, dots){voice.push(note,len,dots);})({{1}},{{2}},{{3}},{{4}});",
+            "help": "schedule a note to be played as part of a song",
+            "sockets": [
+                {
+                    "name": "schedule voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "to play note",
+                    "type": "choice",
+                    "options": "notes",
+                    "value": "A4"
+                },
+                {
+                    "name": "as ",
+                    "type": "choice",
+                    "options": "durations",
+                    "value": "quarter note"
+                },
+                {
+                    "name": "dotted",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "24875971-7CB4-46A6-8A53-D966424A3E70",
+            "script": "(function(voice, note, len, dots){voice.push(note,len,dots);})({{1}},'none',{{2}},{{3}});",
+            "help": "schedule a note to be played as part of a song",
+            "sockets": [
+                {
+                    "name": "schedule voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "to rest for a ",
+                    "type": "choice",
+                    "options": "durations",
+                    "value": "quarter note"
+                },
+                {
+                    "name": "dotted",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "34788069-BF4F-46DB-88DC-FC437F484A80",
+            "script": "(function(voice){voice.play();})({{1}});",
+            "help": "play the scheduled song",
+            "sockets": [
+                {
+                    "name": "play voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "stored song",
+                },
             ]
         },
         {

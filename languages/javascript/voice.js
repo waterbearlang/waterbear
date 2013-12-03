@@ -33,6 +33,10 @@ wb.choiceLists.notes = [
 	// Octave 8
 	'C8'
 ];
+wb.choiceLists.durations = [
+	'double whole note', 'whole note', 'half note', 'quarter note', 'eighth note',
+	'sixteenth note', 'thirty-second note', 'sixty-fourth note'
+];
 wb.choiceLists.types.push('voice');
 wb.choiceLists.rettypes.push('voice');
 

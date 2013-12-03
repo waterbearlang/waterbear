@@ -5,8 +5,10 @@ function Voice(){
     this.gain;      // The gain node for controlling volume
     var context = window.AudioContext || window.webkitAudioContext;
     this.context = new context();
+    this.tempo = 100;
     this.frequency = 400;   // Frequency to be used by oscillator
     this.volume = 0.3;      // Volume to be used by the gain node
+    this.playlist = [];
 };
 
 // Turn on the oscillator, routed through a gain node for volume
@@ -38,8 +40,8 @@ Voice.prototype.stopOsc = function() {
 // Ensure a playing tone is updated when values change
 Voice.prototype.updateTone = function() {
     if (this.on) {
-        stopOsc();
-        startOsc();
+        this.stopOsc();
+        this.startOsc();
     }
 };
 
@@ -47,6 +49,54 @@ Voice.prototype.updateTone = function() {
 Voice.prototype.setNote = function(note) {
 	var noteIndex = Voice.notes.indexOf(note);
 	this.frequency = 440 * Math.pow(2, (noteIndex - Voice.refNote) / 12);
+}
+
+Voice.prototype.push = function(note, len, dots) {
+	this.playlist.push({pitch: note, duration: len, dotted: dots});
+}
+
+Voice.prototype.pushRest = function(len, dots) {
+	this.playlist.push({pitch: "none", duration: len, dotted: dots});
+}
+
+Voice.prototype.play = function() {
+	var note = this.playlist.shift();
+	if(note.pitch == "none") {
+		if(this.on) this.stopOsc();
+	} else {
+		this.setNote(note.pitch);
+		if(this.on) this.updateTone();
+		else this.startOsc();
+	}
+	var timeout = this.durationOf(note.duration, note.dotted);
+	if(this.playlist.length > 0) {
+		var me = this;
+		setTimeout(function() {me.play();}, timeout);
+	} else {
+		var me = this;
+		setTimeout(function() {me.stopOsc();}, timeout);
+	}
+}
+
+// Calculate the duration from the tempo, and a note type, and a number of dots
+Voice.prototype.durationOf = function(note, dots) {
+	var qn_len = 60 / this.tempo;
+	var len;
+	if(note == 'double whole note') len = qn_len * 8;
+	else if(note == 'whole note') len = qn_len * 4;
+	else if(note == 'half note') len = qn_len * 2;
+	else if(note == 'quarter note') len = qn_len;
+	else if(note == 'eighth note') len = qn_len / 2;
+	else if(note == 'sixteenth note') len = qn_len / 4;
+	else if(note == 'thirty-second note') len = qn_len / 8;
+	else if(note == 'sixty-fourth note') len = qn_len / 16;
+	while(dots > 0) {
+		dots--;
+		len *= 1.5;
+	}
+	len *= 1000; // Convert from seconds to ms
+	console.log("Calculated voice duration:",note,dots,this.tempo,len);
+	return len;
 }
 
 // Must be identical to the list in voice.js

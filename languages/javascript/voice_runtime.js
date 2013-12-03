@@ -81,18 +81,19 @@ Voice.prototype.play = function() {
 // Calculate the duration from the tempo, and a note type, and a number of dots
 Voice.prototype.durationOf = function(note, dots) {
 	var qn_len = 60 / this.tempo;
-	var len;
-	if(note == 'double whole note') len = qn_len * 8;
-	else if(note == 'whole note') len = qn_len * 4;
-	else if(note == 'half note') len = qn_len * 2;
-	else if(note == 'quarter note') len = qn_len;
-	else if(note == 'eighth note') len = qn_len / 2;
-	else if(note == 'sixteenth note') len = qn_len / 4;
-	else if(note == 'thirty-second note') len = qn_len / 8;
-	else if(note == 'sixty-fourth note') len = qn_len / 16;
+	var base_len;
+	if(note == 'double whole note') base_len = qn_len * 8;
+	else if(note == 'whole note') base_len = qn_len * 4;
+	else if(note == 'half note') base_len = qn_len * 2;
+	else if(note == 'quarter note') base_len = qn_len;
+	else if(note == 'eighth note') base_len = qn_len / 2;
+	else if(note == 'sixteenth note') base_len = qn_len / 4;
+	else if(note == 'thirty-second note') base_len = qn_len / 8;
+	else if(note == 'sixty-fourth note') base_len = qn_len / 16;
+	var len = base_len;
 	while(dots > 0) {
+		len += base_len / Math.pow(2,dots);
 		dots--;
-		len *= 1.5;
 	}
 	len *= 1000; // Convert from seconds to ms
 	console.log("Calculated voice duration:",note,dots,this.tempo,len);

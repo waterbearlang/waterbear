@@ -1935,6 +1935,7 @@ function pasteCommand(evt) {
 	};
 
 	function loadScriptsFromFile(file){
+		console.log(file);
 		fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");

@@ -176,7 +176,7 @@
         {
             "blocktype": "step",
             "id": "ebe1b968-f117-468d-91cb-1e67c5776030",
-            "script": "var local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
+            "script": "local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
             "help": "fill and stroke...",
             "sockets": [
                 {

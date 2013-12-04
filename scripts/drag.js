@@ -64,7 +64,7 @@
     var potentialDropTargets;
     var selectedSocket;
     var dragAction = {};
-    var templateDrag;
+    var templateDrag, localDrag;
 
     var _dropCursor;
 
@@ -89,6 +89,7 @@
         cloned = false;
         scope = null;
         templateDrag = false;
+        localDrag = false;
     }
     reset();
 
@@ -117,8 +118,9 @@
                 templateDrag = true;
             }
         	dragAction.target = target;
-            if (target.parentElement.classList.contains('local')){
+            if (target.parentElement.classList.contains('locals')){
                 target.dataset.isLocal = 'true';
+                localDrag = true;
             }
             //dragTarget.classList.add("dragIndication");
             startPosition = wb.rect(target);
@@ -165,7 +167,7 @@
 			dragAction.fromParent = dragAction.fromBefore = null;
             // Event.trigger(dragTarget, 'wb-clone'); // not in document, won't bubble to document.body
             dragTarget.classList.add('dragIndication');
-            if (dragTarget.dataset.isLocal){
+            if (localDrag){
                 scope = wb.closest(parent, '.context');
             }else{
                 scope = null;

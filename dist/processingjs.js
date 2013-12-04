@@ -12543,6 +12543,7 @@ global.ajax = ajax;
     var potentialDropTargets;
     var selectedSocket;
     var dragAction = {};
+    var templateDrag, localDrag;
 
     var _dropCursor;
 
@@ -12566,6 +12567,8 @@ global.ajax = ajax;
         dragging = false;
         cloned = false;
         scope = null;
+        templateDrag = false;
+        localDrag = false;
     }
     reset();
 
@@ -12591,10 +12594,12 @@ global.ajax = ajax;
             dragTarget = target;
             if (target.parentElement.classList.contains('block-menu')){
                 target.dataset.isTemplateBlock = 'true';
+                templateDrag = true;
             }
         	dragAction.target = target;
-            if (target.parentElement.classList.contains('local')){
+            if (target.parentElement.classList.contains('locals')){
                 target.dataset.isLocal = 'true';
+                localDrag = true;
             }
             //dragTarget.classList.add("dragIndication");
             startPosition = wb.rect(target);
@@ -12641,7 +12646,7 @@ global.ajax = ajax;
 			dragAction.fromParent = dragAction.fromBefore = null;
             // Event.trigger(dragTarget, 'wb-clone'); // not in document, won't bubble to document.body
             dragTarget.classList.add('dragIndication');
-            if (dragTarget.dataset.isLocal){
+            if (localDrag){
                 scope = wb.closest(parent, '.context');
             }else{
                 scope = null;
@@ -12739,15 +12744,18 @@ global.ajax = ajax;
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
-        	// If we're dragging to the menu, there's no destination to track for undo/redo
-        	dragAction.toParent = dragAction.toBefore = null;
-        	wb.history.add(dragAction);
+            // Add history action if the source block was in the workspace
+            if(!templateDrag) {
+	        	// If we're dragging to the menu, there's no destination to track for undo/redo
+    	    	dragAction.toParent = dragAction.toBefore = null;
+        		wb.history.add(dragAction);
+        	}
         }else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
-                if(copyBlock) {
+                if(copyBlock && !templateDrag) {
                     // FIXME: This results in two blocks if you copy-drag back to the starting socket
                 	revertDrop();
                     // console.log('clone dragTarget block to dragTarget');
@@ -12758,7 +12766,7 @@ global.ajax = ajax;
                 Event.trigger(dragTarget, 'wb-add');
             }else{
                 // Insert a value block into a socket
-                if(copyBlock) {
+                if(copyBlock && !templateDrag) {
                 	revertDrop();
                     // console.log('clone dragTarget value to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
@@ -12839,77 +12847,6 @@ global.ajax = ajax;
     		this.target.remove();
     	}
     }
-    
-function copyCommand(evt) {
-	console.log("Copying a block in drag.js !");
-	console.log(this);
-	action = {
-		copied: wb.cloneBlock(this),
-		oldPasteboard: pasteboard,
-		undo: function() {
-			pasteboard = this.oldPasteboard;
-		},
-		redo: function() {
-			pasteboard = this.copied;
-		},
-	}
-	wb.history.add(action);
-	action.redo();
-}
-
-// function cutCommand(evt) {
-// 	console.log("Cutting a block!");
-// 	action = {
-// 		removed: this,
-// 		// Storing parent and next sibling in case removing the node from the DOM clears them
-// 		parent: this.parentNode,
-// 		before: this.nextSibling,
-// 		oldPasteboard: pasteboard,
-// 		undo: function() {console.log(this);
-// 			if(wb.matches(this.removed,'.step')) {
-// 				this.parent.insertBefore(this.removed, this.before);
-// 				Event.trigger(this.removed, 'wb-add');
-// 			} else {
-// 				this.parent.appendChild(this.removed);
-// 				Event.trigger(this.removed, 'wb-add');
-// 			}
-// 			pasteboard = this.oldPasteboard;
-// 		},
-// 		redo: function() {
-// 			Event.trigger(this.removed, 'wb-remove');
-// 			this.removed.remove();
-// 			pasteboard = this.removed;
-// 		},
-// 	}
-// 	wb.history.add(action);
-// 	action.redo();
-// }
-
-// function pasteCommand(evt) {
-// 	console.log(pasteboard);
-// 	action = {
-// 		pasted: wb.cloneBlock(pasteboard),
-// 		into: cmenu_target.parentNode,
-// 		before: cmenu_target.nextSibling,
-// 		undo: function() {
-// 			Event.trigger(this.pasted, 'wb-remove');
-// 			this.pasted.remove();
-// 		},
-// 		redo: function() {
-// 			if(wb.matches(pasteboard,'.step')) {
-// 				console.log("Pasting a step!");
-// 				this.into.insertBefore(this.pasted,this.before);
-// 				Event.trigger(this.pasted, 'wb-add');
-// 			} else {
-// 				console.log("Pasting an expression!");
-// 				cmenu_target.appendChild(this.pasted);
-// 				Event.trigger(this.pasted, 'wb-add');
-// 			}
-// 		},
-// 	}
-// 	wb.history.add(action);
-// 	action.redo();
-// }
 
     function resetDragStyles() {
         if (dragTarget){
@@ -14361,7 +14298,7 @@ function handleContextMenu(evt) {
 	//if(!show_context) return;
 	console.log(evt.clientX, evt.clientY);
 	console.log(evt.wbTarget);
-	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
+	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -14476,6 +14413,7 @@ function edit_menu(title, specs, show){
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);

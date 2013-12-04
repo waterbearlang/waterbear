@@ -64,6 +64,7 @@
     var potentialDropTargets;
     var selectedSocket;
     var dragAction = {};
+    var templateDrag;
 
     var _dropCursor;
 
@@ -87,6 +88,7 @@
         dragging = false;
         cloned = false;
         scope = null;
+        templateDrag = false;
     }
     reset();
 
@@ -112,6 +114,7 @@
             dragTarget = target;
             if (target.parentElement.classList.contains('block-menu')){
                 target.dataset.isTemplateBlock = 'true';
+                templateDrag = true;
             }
         	dragAction.target = target;
             if (target.parentElement.classList.contains('local')){
@@ -260,9 +263,12 @@
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
-        	// If we're dragging to the menu, there's no destination to track for undo/redo
-        	dragAction.toParent = dragAction.toBefore = null;
-        	wb.history.add(dragAction);
+            // Add history action if the source block was in the workspace
+            if(!templateDrag) {
+	        	// If we're dragging to the menu, there's no destination to track for undo/redo
+    	    	dragAction.toParent = dragAction.toBefore = null;
+        		wb.history.add(dragAction);
+        	}
         }else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){

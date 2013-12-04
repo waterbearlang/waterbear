@@ -203,10 +203,10 @@ function collapseCommand(key, opt){
 }
 
 function copyCommand(evt) {
-	console.log("Copying a block!");
+	console.log("Copying a block in ui.js!");
 	console.log(this);
 	action = {
-		copied: wb.cloneBlock(this),
+		copied: this,
 		oldPasteboard: pasteboard,
 		undo: function() {
 			pasteboard = this.oldPasteboard;

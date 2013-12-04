@@ -355,7 +355,7 @@ function handleContextMenu(evt) {
 	//if(!show_context) return;
 	console.log(evt.clientX, evt.clientY);
 	console.log(evt.wbTarget);
-	if(cmenu_disabled || wb.matches(evt.wbTarget, '#block_menu *')) return;
+	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);

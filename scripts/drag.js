@@ -269,6 +269,7 @@
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
                 if(copyBlock) {
+                    // FIXME: This results in two blocks if you copy-drag back to the starting socket
                 	revertDrop();
                     // console.log('clone dragTarget block to dragTarget');
                 	dragTarget = wb.cloneBlock(dragTarget);
@@ -361,7 +362,7 @@
     }
     
 function copyCommand(evt) {
-	console.log("Copying a block!");
+	console.log("Copying a block in drag.js !");
 	console.log(this);
 	action = {
 		copied: wb.cloneBlock(this),
@@ -377,59 +378,59 @@ function copyCommand(evt) {
 	action.redo();
 }
 
-function cutCommand(evt) {
-	console.log("Cutting a block!");
-	action = {
-		removed: this,
-		// Storing parent and next sibling in case removing the node from the DOM clears them
-		parent: this.parentNode,
-		before: this.nextSibling,
-		oldPasteboard: pasteboard,
-		undo: function() {console.log(this);
-			if(wb.matches(this.removed,'.step')) {
-				this.parent.insertBefore(this.removed, this.before);
-				Event.trigger(this.removed, 'wb-add');
-			} else {
-				this.parent.appendChild(this.removed);
-				Event.trigger(this.removed, 'wb-add');
-			}
-			pasteboard = this.oldPasteboard;
-		},
-		redo: function() {
-			Event.trigger(this.removed, 'wb-remove');
-			this.removed.remove();
-			pasteboard = this.removed;
-		},
-	}
-	wb.history.add(action);
-	action.redo();
-}
+// function cutCommand(evt) {
+// 	console.log("Cutting a block!");
+// 	action = {
+// 		removed: this,
+// 		// Storing parent and next sibling in case removing the node from the DOM clears them
+// 		parent: this.parentNode,
+// 		before: this.nextSibling,
+// 		oldPasteboard: pasteboard,
+// 		undo: function() {console.log(this);
+// 			if(wb.matches(this.removed,'.step')) {
+// 				this.parent.insertBefore(this.removed, this.before);
+// 				Event.trigger(this.removed, 'wb-add');
+// 			} else {
+// 				this.parent.appendChild(this.removed);
+// 				Event.trigger(this.removed, 'wb-add');
+// 			}
+// 			pasteboard = this.oldPasteboard;
+// 		},
+// 		redo: function() {
+// 			Event.trigger(this.removed, 'wb-remove');
+// 			this.removed.remove();
+// 			pasteboard = this.removed;
+// 		},
+// 	}
+// 	wb.history.add(action);
+// 	action.redo();
+// }
 
-function pasteCommand(evt) {
-	console.log(pasteboard);
-	action = {
-		pasted: wb.cloneBlock(pasteboard),
-		into: cmenu_target.parentNode,
-		before: cmenu_target.nextSibling,
-		undo: function() {
-			Event.trigger(this.pasted, 'wb-remove');
-			this.pasted.remove();
-		},
-		redo: function() {
-			if(wb.matches(pasteboard,'.step')) {
-				console.log("Pasting a step!");
-				this.into.insertBefore(this.pasted,this.before);
-				Event.trigger(this.pasted, 'wb-add');
-			} else {
-				console.log("Pasting an expression!");
-				cmenu_target.appendChild(this.pasted);
-				Event.trigger(this.pasted, 'wb-add');
-			}
-		},
-	}
-	wb.history.add(action);
-	action.redo();
-}
+// function pasteCommand(evt) {
+// 	console.log(pasteboard);
+// 	action = {
+// 		pasted: wb.cloneBlock(pasteboard),
+// 		into: cmenu_target.parentNode,
+// 		before: cmenu_target.nextSibling,
+// 		undo: function() {
+// 			Event.trigger(this.pasted, 'wb-remove');
+// 			this.pasted.remove();
+// 		},
+// 		redo: function() {
+// 			if(wb.matches(pasteboard,'.step')) {
+// 				console.log("Pasting a step!");
+// 				this.into.insertBefore(this.pasted,this.before);
+// 				Event.trigger(this.pasted, 'wb-add');
+// 			} else {
+// 				console.log("Pasting an expression!");
+// 				cmenu_target.appendChild(this.pasted);
+// 				Event.trigger(this.pasted, 'wb-add');
+// 			}
+// 		},
+// 	}
+// 	wb.history.add(action);
+// 	action.redo();
+// }
 
     function resetDragStyles() {
         if (dragTarget){

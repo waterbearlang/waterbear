@@ -30,7 +30,7 @@
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        seqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
+        _nextSeqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
     }
 
     var blockRegistry = {};
@@ -400,12 +400,18 @@
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
         delete blockdesc.id;
-        if (!blockdesc.isLocal){
-            delete blockdesc.seqNum;
+        ////////////////////
+        // Why were we deleting seqNum here?
+        // I think it was from back when menu template blocks had sequence numbers
+        // /////////////////
+        // if (!blockdesc.isLocal){
+        //     delete blockdesc.seqNum;
+        // }
+        if (blockdesc.isTemplateBlock){
+            blockdesc.scriptId = block.id;            
         }
         delete blockdesc.isTemplateBlock;
-        delete blockdesc.isLocal;
-        blockdesc.scriptId = block.id;
+        delete blockdesc.isLocal;        
         return Block(blockdesc);
     }
 

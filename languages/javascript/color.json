@@ -67,7 +67,7 @@
         {
             "blocktype": "expression",
             "id": "13236aef-cccd-42b3-a041-e26528174323",
-            "script": "\"rgba({{1}},{{2}},{{3}},{{4}})\"",
+            "script": "\"rgba(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \",\" + {{4}} + \")\"",
             "type": "color",
             "help": "returns a semi-opaque color",
             "sockets": [

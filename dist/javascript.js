@@ -3758,6 +3758,7 @@ function pasteCommand(evt) {
 	};
 
 	function loadScriptsFromFile(file){
+		console.log(file);
 		fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
@@ -4741,7 +4742,38 @@ wb.choiceLists.rettypes.push('sprite');
  *
  */
 
-
+// Based on an 88-key piano
+wb.choiceLists.notes = [
+	// Octave 0
+	'A0','A♯0/B♭0','B0',
+	// Octave 1
+	'C1','C♯1/D♭1','D1','D♯1/E♭1','E1',
+	'F1','F♯1/G♭1','G1','G♯1/A♭1','A1','A♯1/B♭1','B1',
+	// Octave 2
+	'C2','C♯2/D♭2','D2','D♯2/E♭2','E2',
+	'F2','F♯2/G♭2','G2','G♯2/A♭2','A2','A♯2/B♭2','B2',
+	// Octave 3
+	'C3','C♯3/D♭3','D3','D♯3/E♭3','E3',
+	'F3','F♯3/G♭3','G3','G♯3/A♭3','A3','A♯3/B♭3','B3',
+	// Octave 4
+	'C4 (Middle C)','C♯4/D♭4','D4','D♯4/E♭4','E4',
+	'F4','F♯4/G♭4','G4','G♯4/A♭4','A4','A♯4/B♭4','B4',
+	// Octave 5
+	'C5','C♯5/D♭5','D5','D♯5/E♭5','E5',
+	'F5','F♯5/G♭5','G5','G♯5/A♭5','A5','A♯5/B♭5','B5',
+	// Octave 6
+	'C6','C♯6/D♭6','D6','D♯6/E♭6','E6',
+	'F6','F♯6/G♭6','G6','G♯6/A♭6','A6','A♯6/B♭6','B6',
+	// Octave 7
+	'C7','C♯7/D♭7','D7','D♯7/E♭7','E7',
+	'F7','F♯7/G♭7','G7','G♯7/A♭7','A7','A♯7/B♭7','B7',
+	// Octave 8
+	'C8'
+];
+wb.choiceLists.durations = [
+	'double whole note', 'whole note', 'half note', 'quarter note', 'eighth note',
+	'sixteenth note', 'thirty-second note', 'sixty-fourth note'
+];
 wb.choiceLists.types.push('voice');
 wb.choiceLists.rettypes.push('voice');
 
@@ -5762,14 +5794,32 @@ wb.menu({
                 {
                     "name": "tone",
                     "type": "number",
-                    "value": 400
+                    "value": 440
                 },
                 {
                     "name": "Hz"
                 }
             ]
         },
+        {
+            "blocktype": "step",
+            "id": "60984C26-0854-4075-994B-9573B3F48E95",
+            "help": "set the note of the voice",
+            "script": "(function(voice, note){voice.setNote(note); voice.updateTone();})({{1}}, {{2}});",
+            "sockets": [
                 {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "note",
+                    "type": "choice",
+                    "options": "notes",
+                    "value": "A4"
+                }
+            ]
+        },
+        {
             "blocktype": "step",
             "id": "a133f0ad-27e6-444c-898a-66410c447a07",
             "help": "set the volume of the voice",
@@ -5783,6 +5833,26 @@ wb.menu({
                     "name": "volume",
                     "type": "number",
                     "value": 1
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "A64A4BC7-4E93-47B4-910B-F185BC42E366",
+            "help": "set the tempo of the voice, for determining the length of a quarter note",
+            "script": "(function(voice, tempo){voice.tempo = tempo; voice.updateTone();})({{1}}, {{2}});",
+            "sockets": [
+                {
+                    "name": "set voice",
+                    "type": "voice",
+                },
+                {
+                    "name": "tempo quarter note =",
+                    "type": "number",
+                    "value": 120
+                },
+                {
+                	"name": "beats per minute"
                 }
             ]
         },
@@ -5851,6 +5921,73 @@ wb.menu({
                 {
                     "name": "seconds"
                 }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "1F98BD7B-8E13-4334-854B-6B9C1B31C99D",
+            "script": "(function(voice, note, len, dots){voice.push(note,len,dots);})({{1}},{{2}},{{3}},{{4}});",
+            "help": "schedule a note to be played as part of a song",
+            "sockets": [
+                {
+                    "name": "schedule voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "to play note",
+                    "type": "choice",
+                    "options": "notes",
+                    "value": "A4"
+                },
+                {
+                    "name": "as ",
+                    "type": "choice",
+                    "options": "durations",
+                    "value": "quarter note"
+                },
+                {
+                    "name": "dotted",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "24875971-7CB4-46A6-8A53-D966424A3E70",
+            "script": "(function(voice, note, len, dots){voice.push(note,len,dots);})({{1}},'none',{{2}},{{3}});",
+            "help": "schedule a note to be played as part of a song",
+            "sockets": [
+                {
+                    "name": "schedule voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "to rest for a ",
+                    "type": "choice",
+                    "options": "durations",
+                    "value": "quarter note"
+                },
+                {
+                    "name": "dotted",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "34788069-BF4F-46DB-88DC-FC437F484A80",
+            "script": "(function(voice){voice.play();})({{1}});",
+            "help": "play the scheduled song",
+            "sockets": [
+                {
+                    "name": "play voice",
+                    "type": "voice"
+                },
+                {
+                    "name": "stored song",
+                },
             ]
         },
         {
@@ -6489,7 +6626,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "13236aef-cccd-42b3-a041-e26528174323",
-            "script": "\"rgba({{1}},{{2}},{{3}},{{4}})\"",
+            "script": "\"rgba(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \",\" + {{4}} + \")\"",
             "type": "color",
             "help": "returns a semi-opaque color",
             "sockets": [
@@ -8750,7 +8887,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "ebe1b968-f117-468d-91cb-1e67c5776030",
-            "script": "var local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
+            "script": "local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
             "help": "fill and stroke...",
             "sockets": [
                 {

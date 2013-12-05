@@ -208,6 +208,7 @@
 		reader.onload = function (evt){
 			wb.clearScripts(null, true);
 			var saved = JSON.parse(evt.target.result);
+			wb.loaded = true;
 			loadScriptsFromObject(saved);
 			wb.scriptModified = true;
 		};

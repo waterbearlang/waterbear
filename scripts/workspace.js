@@ -1,6 +1,6 @@
 (function(wb){
 
-	wb.language = location.pathname.match(/\/(.*)\.html/)[1];
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
 	wb.clearScripts = function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -19,7 +19,8 @@
 	});
 
 	Event.on('.content', 'click', '.load-example', function(evt){
-		var path = evt.target.dataset.href;
+		var path = location.href.split('?')[0];
+		path += "?example=" + evt.target.dataset.example;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;

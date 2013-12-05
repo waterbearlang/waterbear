@@ -168,7 +168,7 @@
 		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(xhr, status){
-			console.error('Error in wb.ajax: %s', status);
+			console.error('Error in wb.ajax:', status);
 		});
 	}
 

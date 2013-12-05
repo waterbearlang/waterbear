@@ -8,7 +8,7 @@
 
 	//save the state of the settings link
 	var closed = true;
-	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var language = wb.language;
 	var settings_link;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {

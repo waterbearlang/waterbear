@@ -2383,8 +2383,7 @@ function edit_menu(title, specs, show){
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
-			localStorage.clear(); // Otherwise the script will return upon reloading
-			// There might be a more precise way to do this, though?
+			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);

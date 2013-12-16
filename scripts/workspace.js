@@ -50,13 +50,13 @@
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
 	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	console.log('running current scripts');
+	    	// console.log('running current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
 	    	if (wb.view === 'result'){
-		    	console.log('we want to run current scripts, but cannot');
+		    	// console.log('we want to run current scripts, but cannot');
 		    }else{
-		    	console.log('we do not care about current scripts, so there');
+		    	// console.log('we do not care about current scripts, so there');
 		    }
 	    }
 	}
@@ -73,7 +73,7 @@
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -102,7 +102,7 @@
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
-	    console.log('createWorkspace');
+	    // console.log('createWorkspace');
 		var id = uuid();
 		var workspace = wb.Block({
 			group: 'scripts_workspace',
@@ -158,7 +158,9 @@
 		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
 
 	});
-	Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
+	// Event.on(document.body, 'wb-loaded', null, function(evt){
+	// 	console.log('menu loaded');
+	// });
 	Event.on(document.body, 'wb-script-loaded', null, function(evt){
 		wb.scriptModified = false;
 		if (wb.view === 'result'){
@@ -172,7 +174,7 @@
 		}
 		// clear undo/redo stack
 		wb.scriptLoaded = true;
-		console.log('script loaded');
+		// console.log('script loaded');
 	});
 
 	Event.on(document.body, 'wb-modified', null, function(evt){
@@ -185,13 +187,13 @@
 	});
 
 	window.addEventListener('popstate', function(evt){
-		console.log('popstate event');
+		// console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
-		console.log('window loaded');
+		// console.log('window loaded');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 })(wb);

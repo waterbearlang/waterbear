@@ -1197,6 +1197,7 @@ function PolySprite(pos,color,points){
     this.movementDirection = new SAT.Vector(0, 0);
     this.movementDegrees = 0;
     this.facingDirection = new SAT.Vector(0, 0);
+    this.facingDegrees = 0;
     this.speed = 0;
     this.polygon = new SAT.Polygon();
     this.polygon.pos = new SAT.Vector(pos.x,pos.y);
@@ -1206,12 +1207,10 @@ function PolySprite(pos,color,points){
     this.calculateBoundingBox();
 };
 
-function RectSprite(size,pos,color){
-    var rect = new PolySprite(pos,color,[]);
-    rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
-    rect.polygon.average = rect.polygon.calculateAverage();
-    rect.calculateBoundingBox();
-    return rect;
+function createRectSprite(size,pos,color){
+    var posVector = new SAT.Vector(pos.x, pos.y);
+    var points = new SAT.Box(posVector, size.w, size.h).toPolygon().points;
+    return new PolySprite(posVector, color, points);
 };
 
 window.PolySprite = PolySprite;
@@ -1264,15 +1263,17 @@ PolySprite.prototype.setFacingDirectionBy = function(degrees,internalCall){
     if(this.autosteer && !internalCall){
         this.setMovementDirectionBy(degrees, true);
     }
-    this.setFacingDirection(this.facingDirection + degrees);
+    this.facingDegreess += degrees;
+    this.calculateFacingVector();
 }
 PolySprite.prototype.setFacingDirection = function(degrees, internalCall){
     if(this.autosteer && !internalCall){
         this.setMovementDirection(degrees, true);
     }
-    var lastDirection = this.facingDirection;
-    this.facingDirection = degrees;
-    this.polygon.rotate(degrees - lastDirection);
+    var lastDegrees = this.facingDegrees;
+    this.facingDegrees = degrees;
+    this.calculateFacingVector();
+    this.polygon.rotate(degrees - lastDegrees);
     this.polygon.recalc();
 }
 
@@ -1295,6 +1296,11 @@ PolySprite.prototype.setMovementDirection = function(degrees, internalCall){
 PolySprite.prototype.calculateMovementVector = function(){
     this.movementDirection.x = Math.cos(this.movementDegrees*Math.PI/180)*this.speed;
     this.movementDirection.y = Math.sin(this.movementDegrees*Math.PI/180)*this.speed;
+};
+
+PolySprite.prototype.calculateFacingVector = function(){
+    this.facingDirection.x = Math.cos(this.facingDegrees*Math.PI/180);
+    this.facingDirection.y = Math.sin(this.facingDegrees*Math.PI/180);
 };
 
 PolySprite.prototype.calculateMovementDegrees = function() {

@@ -29,7 +29,7 @@ function accordion(event){
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 function showWorkspace(mode){
-    console.log('showWorkspace');
+    // console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
     var scriptsWorkspace = document.querySelector('.scripts_workspace');
     if (!scriptsWorkspace) return;
@@ -107,7 +107,7 @@ try{
 
 function addUndoAction(action) {
 	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
-		console.log("Tried to add invalid action!");
+		console.error("Tried to add invalid action!");
 		return;
 	}
 	if(currentAction < undoActions.length) {
@@ -122,7 +122,7 @@ function addUndoAction(action) {
 	currentAction++;
 	document.querySelector('.undoAction').style.display = '';
 	document.querySelector('.redoAction').style.display = 'none';
-	console.log('undo stack: %s', undoActions.length);
+	// console.log('undo stack: %s', undoActions.length);
 }
 
 wb.history = {
@@ -132,12 +132,12 @@ wb.history = {
 }
 
 function changeSocket(event) {
-	console.log("Changed a socket!");
+	// console.log("Changed a socket!");
 	var oldValue = event.target.getAttribute('data-oldvalue');
 	var newValue = event.target.value;
 	if(oldValue == undefined) oldValue = event.target.defaultValue;
-	console.log("New value:", newValue);
-	console.log("Old value:", oldValue);
+	// console.log("New value:", newValue);
+	// console.log("Old value:", oldValue);
 	event.target.setAttribute('data-oldvalue', newValue);
 	var action = {
 		undo: function() {
@@ -203,8 +203,8 @@ function collapseCommand(key, opt){
 }
 
 function copyCommand(evt) {
-	console.log("Copying a block in ui.js!");
-	console.log(this);
+	// console.log("Copying a block in ui.js!");
+	// console.log(this);
 	action = {
 		copied: this,
 		oldPasteboard: pasteboard,
@@ -220,14 +220,15 @@ function copyCommand(evt) {
 }
 
 function cutCommand(evt) {
-	console.log("Cutting a block!");
+	// console.log("Cutting a block!");
 	action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
 		before: this.nextSibling,
 		oldPasteboard: pasteboard,
-		undo: function() {console.log(this);
+		undo: function() {
+			// console.log(this);
 			if(wb.matches(this.removed,'.step')) {
 				this.parent.insertBefore(this.removed, this.before);
 			} else {
@@ -247,7 +248,7 @@ function cutCommand(evt) {
 }
 
 function pasteCommand(evt) {
-	console.log(pasteboard);
+	// console.log(pasteboard);
 	action = {
 		pasted: wb.cloneBlock(pasteboard),
 		into: cmenu_target.parentNode,
@@ -258,10 +259,10 @@ function pasteCommand(evt) {
 		},
 		redo: function() {
 			if(wb.matches(pasteboard,'.step')) {
-				console.log("Pasting a step!");
+				// console.log("Pasting a step!");
 				this.into.insertBefore(this.pasted,this.before);
 			} else {
-				console.log("Pasting an expression!");
+				// console.log("Pasting an expression!");
 				cmenu_target.appendChild(this.pasted);
 			}
 			Event.trigger(this.pasted, 'wb-add');
@@ -305,8 +306,8 @@ function initContextMenus() {
 }
 
 function buildContextMenu(options) {
-	console.log('building context menu');
-	console.log(options);
+	// console.log('building context menu');
+	// console.log(options);
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
@@ -339,7 +340,7 @@ function stackTrace() {
 	var e = new Error('stack trace');
 	var stack = e.stack.replace(/@.*\//gm, '@')
 		.split('\n');
-	console.log(stack);
+	// console.log(stack);
 }
 
 function closeContextMenu(evt) {
@@ -350,11 +351,11 @@ function closeContextMenu(evt) {
 }
 
 function handleContextMenu(evt) {
-	console.log('handling context menu');
+	// console.log('handling context menu');
 	stackTrace();
 	//if(!show_context) return;
-	console.log(evt.clientX, evt.clientY);
-	console.log(evt.wbTarget);
+	// console.log(evt.clientX, evt.clientY);
+	// console.log(evt.wbTarget);
 	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
@@ -368,7 +369,7 @@ function handleContextMenu(evt) {
 function setContextMenuTarget(target) {
 	cmenu_target = target;
 	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
-		console.log(cmenu_target);
+		// console.log(cmenu_target);
 		cmenu_target = cmenu_target.parentNode;
 		if(cmenu_target.tagName == 'BODY') {
 			console.error("Something went wrong with determining the context menu target!");
@@ -379,7 +380,7 @@ function setContextMenuTarget(target) {
 }
 
 function showContextMenu(atX, atY) {
-	console.log('showing context menu');
+	// console.log('showing context menu');
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.style.display = 'block';
 	contextDiv.style.left = atX + 'px';
@@ -388,7 +389,7 @@ function showContextMenu(atX, atY) {
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		console.log(cmenu_target);
+		// console.log(cmenu_target);
 		fcn.call(cmenu_target,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';

@@ -11,7 +11,7 @@
 
 	wb.saveCurrentScripts = function saveCurrentScripts(){
 		if (!wb.scriptModified){
-			console.log('nothing to save');
+			// console.log('nothing to save');
 			// nothing to save
 			return;
 		}
@@ -23,7 +23,7 @@
 	// Save script to gist;
 	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
-		console.log("Saving to Gist");
+		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
 
 		ajax.post("https://api.github.com/gists", function(data){
@@ -110,7 +110,7 @@
 	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
-		console.log("Loading gist " + id);
+		// console.log("Loading gist " + id);
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
 		});
@@ -137,8 +137,8 @@
 	    	return wb.createWorkspace();
 	    }
 	    if (blocks.length > 1){
-	    	console.log('not really expecting multiple blocks here right now');
-	    	console.log(blocks);
+	    	console.error('not really expecting multiple blocks here right now');
+	    	console.error(blocks);
 	    }
 	    blocks.forEach(function(block){
 	    	wb.wireUpWorkspace(block);
@@ -158,7 +158,7 @@
 			}
 		});
 		if (!file){
-			console.log('no json file found in gist: %o', gist);
+			console.error('no json file found in gist: %o', gist);
 			return;
 		}
 		loadScriptsFromObject(JSON.parse(file));
@@ -173,24 +173,24 @@
 	}
 
 	wb.loadCurrentScripts = function(queryParsed){
-		console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
+		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			console.log("Loading gist %s", queryParsed.gist);
+			// console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			console.log('loading example %s', queryParsed.example);
+			// console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			console.log('loading current script from local storage');
+			// console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			console.log('no script to load, starting a new script');
+			// console.log('no script to load, starting a new script');
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;

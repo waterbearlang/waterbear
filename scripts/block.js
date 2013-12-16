@@ -56,8 +56,8 @@
         try{
             return blockRegistry[id].script;
         }catch(e){
-            console.log('Error: could not get script for %o', id);
-            console.log('Hey look: %o', document.getElementById(id));
+            console.error('Error: could not get script for %o', id);
+            console.error('Hey look: %o', document.getElementById(id));
             return '';
         }
     }
@@ -499,6 +499,13 @@
 
     var codeFromBlock = function(block){
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
+        if (!scriptTemplate){
+            // If there is no scriptTemplate, things have gone horribly wrong, probably from 
+            // a block being removed from the language rather than hidden
+            wb.findAll('.block[data-scriptId=' + block.dataset.scriptId).forEach(function(elem){
+                elem.style.backgroundColor = 'red';
+            });
+        }
         var childValues = [];
         var label = wb.findChild(block, '.label');
         var expressionValues = wb.findChildren(label, '.socket')
@@ -535,7 +542,7 @@
     }
 
     function updateName(event){
-        console.log('updateName on %o', event);
+        // console.log('updateName on %o', event);
         var input = event.wbTarget;
         Event.off(input, 'blur', updateName);
         Event.off(input, 'keydown', maybeUpdateName);
@@ -546,7 +553,7 @@
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			console.log('now update all instances too');
+			// console.log('now update all instances too');
 			var source = wb.closest(nameSpan, '.block');
 			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
 			instances.forEach(function(elem){

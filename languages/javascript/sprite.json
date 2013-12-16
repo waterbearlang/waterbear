@@ -30,7 +30,7 @@
         {
             "blocktype": "step",
             "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
-            "script": "local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});",
+            "script": "local.sprite## = createRectSprite({{1}}, {{2}}, {{3}});",
             "locals": [
                 {
                     "blocktype": "expression",

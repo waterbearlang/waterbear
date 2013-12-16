@@ -2056,7 +2056,7 @@ global.ajax = ajax;
                     if (child.nodeName){
                         e.appendChild(child);
                     }else if (Array.isArray(child)){
-                        console.log('DEPRECATED array arg to elem: use sub-elem instead');
+                        console.error('DEPRECATED array arg to elem: use sub-elem instead');
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string
@@ -2508,7 +2508,7 @@ global.ajax = ajax;
                 container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
             }else if(currPos.right > offset.right){
                 var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                console.log('maxHorizontalScroll: %s', maxHorizontalScroll);
+                // console.log('maxHorizontalScroll: %s', maxHorizontalScroll);
                 container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
             }
         }
@@ -2805,7 +2805,7 @@ global.ajax = ajax;
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed
-        console.log('cancel drag of %o', dragTarget);
+        // console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
     		resetDragStyles();
 	    	revertDrop();
@@ -2818,7 +2818,7 @@ global.ajax = ajax;
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
-        console.log('initializeDragHandlers');
+        // console.log('initializeDragHandlers');
         if (Event.isTouch){
             Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
@@ -2941,8 +2941,8 @@ global.ajax = ajax;
         try{
             return blockRegistry[id].script;
         }catch(e){
-            console.log('Error: could not get script for %o', id);
-            console.log('Hey look: %o', document.getElementById(id));
+            console.error('Error: could not get script for %o', id);
+            console.error('Hey look: %o', document.getElementById(id));
             return '';
         }
     }
@@ -3384,6 +3384,13 @@ global.ajax = ajax;
 
     var codeFromBlock = function(block){
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
+        if (!scriptTemplate){
+            // If there is no scriptTemplate, things have gone horribly wrong, probably from 
+            // a block being removed from the language rather than hidden
+            wb.findAll('.block[data-scriptId=' + block.dataset.scriptId).forEach(function(elem){
+                elem.style.backgroundColor = 'red';
+            });
+        }
         var childValues = [];
         var label = wb.findChild(block, '.label');
         var expressionValues = wb.findChildren(label, '.socket')
@@ -3420,7 +3427,7 @@ global.ajax = ajax;
     }
 
     function updateName(event){
-        console.log('updateName on %o', event);
+        // console.log('updateName on %o', event);
         var input = event.wbTarget;
         Event.off(input, 'blur', updateName);
         Event.off(input, 'keydown', maybeUpdateName);
@@ -3431,7 +3438,7 @@ global.ajax = ajax;
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			console.log('now update all instances too');
+			// console.log('now update all instances too');
 			var source = wb.closest(nameSpan, '.block');
 			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
 			instances.forEach(function(elem){
@@ -3515,7 +3522,7 @@ global.ajax = ajax;
 
 	wb.saveCurrentScripts = function saveCurrentScripts(){
 		if (!wb.scriptModified){
-			console.log('nothing to save');
+			// console.log('nothing to save');
 			// nothing to save
 			return;
 		}
@@ -3527,7 +3534,7 @@ global.ajax = ajax;
 	// Save script to gist;
 	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
-		console.log("Saving to Gist");
+		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
 
 		ajax.post("https://api.github.com/gists", function(data){
@@ -3614,7 +3621,7 @@ global.ajax = ajax;
 	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
-		console.log("Loading gist " + id);
+		// console.log("Loading gist " + id);
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
 		});
@@ -3641,8 +3648,8 @@ global.ajax = ajax;
 	    	return wb.createWorkspace();
 	    }
 	    if (blocks.length > 1){
-	    	console.log('not really expecting multiple blocks here right now');
-	    	console.log(blocks);
+	    	console.error('not really expecting multiple blocks here right now');
+	    	console.error(blocks);
 	    }
 	    blocks.forEach(function(block){
 	    	wb.wireUpWorkspace(block);
@@ -3662,7 +3669,7 @@ global.ajax = ajax;
 			}
 		});
 		if (!file){
-			console.log('no json file found in gist: %o', gist);
+			console.error('no json file found in gist: %o', gist);
 			return;
 		}
 		loadScriptsFromObject(JSON.parse(file));
@@ -3677,24 +3684,24 @@ global.ajax = ajax;
 	}
 
 	wb.loadCurrentScripts = function(queryParsed){
-		console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
+		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			console.log("Loading gist %s", queryParsed.gist);
+			// console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			console.log('loading example %s', queryParsed.example);
+			// console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			console.log('loading current script from local storage');
+			// console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			console.log('no script to load, starting a new script');
+			// console.log('no script to load, starting a new script');
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -3765,7 +3772,7 @@ function accordion(event){
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 function showWorkspace(mode){
-    console.log('showWorkspace');
+    // console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
     var scriptsWorkspace = document.querySelector('.scripts_workspace');
     if (!scriptsWorkspace) return;
@@ -3843,7 +3850,7 @@ try{
 
 function addUndoAction(action) {
 	if(!action.hasOwnProperty('redo') || !action.hasOwnProperty('undo')) {
-		console.log("Tried to add invalid action!");
+		console.error("Tried to add invalid action!");
 		return;
 	}
 	if(currentAction < undoActions.length) {
@@ -3858,7 +3865,7 @@ function addUndoAction(action) {
 	currentAction++;
 	document.querySelector('.undoAction').style.display = '';
 	document.querySelector('.redoAction').style.display = 'none';
-	console.log('undo stack: %s', undoActions.length);
+	// console.log('undo stack: %s', undoActions.length);
 }
 
 wb.history = {
@@ -3868,12 +3875,12 @@ wb.history = {
 }
 
 function changeSocket(event) {
-	console.log("Changed a socket!");
+	// console.log("Changed a socket!");
 	var oldValue = event.target.getAttribute('data-oldvalue');
 	var newValue = event.target.value;
 	if(oldValue == undefined) oldValue = event.target.defaultValue;
-	console.log("New value:", newValue);
-	console.log("Old value:", oldValue);
+	// console.log("New value:", newValue);
+	// console.log("Old value:", oldValue);
 	event.target.setAttribute('data-oldvalue', newValue);
 	var action = {
 		undo: function() {
@@ -3939,8 +3946,8 @@ function collapseCommand(key, opt){
 }
 
 function copyCommand(evt) {
-	console.log("Copying a block in ui.js!");
-	console.log(this);
+	// console.log("Copying a block in ui.js!");
+	// console.log(this);
 	action = {
 		copied: this,
 		oldPasteboard: pasteboard,
@@ -3956,14 +3963,15 @@ function copyCommand(evt) {
 }
 
 function cutCommand(evt) {
-	console.log("Cutting a block!");
+	// console.log("Cutting a block!");
 	action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
 		before: this.nextSibling,
 		oldPasteboard: pasteboard,
-		undo: function() {console.log(this);
+		undo: function() {
+			// console.log(this);
 			if(wb.matches(this.removed,'.step')) {
 				this.parent.insertBefore(this.removed, this.before);
 			} else {
@@ -3983,7 +3991,7 @@ function cutCommand(evt) {
 }
 
 function pasteCommand(evt) {
-	console.log(pasteboard);
+	// console.log(pasteboard);
 	action = {
 		pasted: wb.cloneBlock(pasteboard),
 		into: cmenu_target.parentNode,
@@ -3994,10 +4002,10 @@ function pasteCommand(evt) {
 		},
 		redo: function() {
 			if(wb.matches(pasteboard,'.step')) {
-				console.log("Pasting a step!");
+				// console.log("Pasting a step!");
 				this.into.insertBefore(this.pasted,this.before);
 			} else {
-				console.log("Pasting an expression!");
+				// console.log("Pasting an expression!");
 				cmenu_target.appendChild(this.pasted);
 			}
 			Event.trigger(this.pasted, 'wb-add');
@@ -4041,8 +4049,8 @@ function initContextMenus() {
 }
 
 function buildContextMenu(options) {
-	console.log('building context menu');
-	console.log(options);
+	// console.log('building context menu');
+	// console.log(options);
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
@@ -4075,7 +4083,7 @@ function stackTrace() {
 	var e = new Error('stack trace');
 	var stack = e.stack.replace(/@.*\//gm, '@')
 		.split('\n');
-	console.log(stack);
+	// console.log(stack);
 }
 
 function closeContextMenu(evt) {
@@ -4086,11 +4094,11 @@ function closeContextMenu(evt) {
 }
 
 function handleContextMenu(evt) {
-	console.log('handling context menu');
+	// console.log('handling context menu');
 	stackTrace();
 	//if(!show_context) return;
-	console.log(evt.clientX, evt.clientY);
-	console.log(evt.wbTarget);
+	// console.log(evt.clientX, evt.clientY);
+	// console.log(evt.wbTarget);
 	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
@@ -4104,7 +4112,7 @@ function handleContextMenu(evt) {
 function setContextMenuTarget(target) {
 	cmenu_target = target;
 	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
-		console.log(cmenu_target);
+		// console.log(cmenu_target);
 		cmenu_target = cmenu_target.parentNode;
 		if(cmenu_target.tagName == 'BODY') {
 			console.error("Something went wrong with determining the context menu target!");
@@ -4115,7 +4123,7 @@ function setContextMenuTarget(target) {
 }
 
 function showContextMenu(atX, atY) {
-	console.log('showing context menu');
+	// console.log('showing context menu');
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.style.display = 'block';
 	contextDiv.style.left = atX + 'px';
@@ -4124,7 +4132,7 @@ function showContextMenu(atX, atY) {
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		console.log(cmenu_target);
+		// console.log(cmenu_target);
 		fcn.call(cmenu_target,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';
@@ -4246,13 +4254,13 @@ function edit_menu(title, specs, show){
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
 	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	console.log('running current scripts');
+	    	// console.log('running current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
 	    	if (wb.view === 'result'){
-		    	console.log('we want to run current scripts, but cannot');
+		    	// console.log('we want to run current scripts, but cannot');
 		    }else{
-		    	console.log('we do not care about current scripts, so there');
+		    	// console.log('we do not care about current scripts, so there');
 		    }
 	    }
 	}
@@ -4269,7 +4277,7 @@ function edit_menu(title, specs, show){
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -4298,7 +4306,7 @@ function edit_menu(title, specs, show){
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
-	    console.log('createWorkspace');
+	    // console.log('createWorkspace');
 		var id = uuid();
 		var workspace = wb.Block({
 			group: 'scripts_workspace',
@@ -4354,7 +4362,9 @@ function edit_menu(title, specs, show){
 		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
 
 	});
-	Event.on(document.body, 'wb-loaded', null, function(evt){console.log('menu loaded');});
+	// Event.on(document.body, 'wb-loaded', null, function(evt){
+	// 	console.log('menu loaded');
+	// });
 	Event.on(document.body, 'wb-script-loaded', null, function(evt){
 		wb.scriptModified = false;
 		if (wb.view === 'result'){
@@ -4368,7 +4378,7 @@ function edit_menu(title, specs, show){
 		}
 		// clear undo/redo stack
 		wb.scriptLoaded = true;
-		console.log('script loaded');
+		// console.log('script loaded');
 	});
 
 	Event.on(document.body, 'wb-modified', null, function(evt){
@@ -4381,13 +4391,13 @@ function edit_menu(title, specs, show){
 	});
 
 	window.addEventListener('popstate', function(evt){
-		console.log('popstate event');
+		// console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
-		console.log('window loaded');
+		// console.log('window loaded');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 })(wb);
@@ -4409,7 +4419,7 @@ function edit_menu(title, specs, show){
 	var settings_link;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {
-		console.log("adding settings link");
+		// console.log("adding settings link");
 		var block_menu = document.querySelector('#block_menu');
 		var settings_link = document.createElement('a');
 		settings_link.href = '#';
@@ -4437,7 +4447,7 @@ function edit_menu(title, specs, show){
 
 	//settings link has been clicked
 	function toggleCheckboxDisplay() {
-		console.log('toggle checkboxes called');
+		// console.log('toggle checkboxes called');
 		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
 		var block_menu = document.querySelector('#block_menu');
 		var display;
@@ -4481,7 +4491,7 @@ function edit_menu(title, specs, show){
 			var checked = el.checked;
 			toSave[id] = checked;
 		});
-		console.log("Saving block preferences", toSave);
+		// console.log("Saving block preferences", toSave);
 		localStorage['__' + language + '_hidden_blocks'] = JSON.stringify(toSave);
 	};
 
@@ -4490,7 +4500,7 @@ function edit_menu(title, specs, show){
 		var storedData = localStorage['__' + language + '_hidden_blocks'];
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
-		console.log("Loading block preferences", hiddenBlocks);
+		// console.log("Loading block preferences", hiddenBlocks);
 		for (key in hiddenBlocks) {
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);

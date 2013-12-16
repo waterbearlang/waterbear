@@ -12,7 +12,7 @@
 	var settings_link;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {
-		console.log("adding settings link");
+		// console.log("adding settings link");
 		var block_menu = document.querySelector('#block_menu');
 		var settings_link = document.createElement('a');
 		settings_link.href = '#';
@@ -40,7 +40,7 @@
 
 	//settings link has been clicked
 	function toggleCheckboxDisplay() {
-		console.log('toggle checkboxes called');
+		// console.log('toggle checkboxes called');
 		var checkboxes = document.querySelectorAll('.accordion-header input[type="checkbox"]');
 		var block_menu = document.querySelector('#block_menu');
 		var display;
@@ -84,7 +84,7 @@
 			var checked = el.checked;
 			toSave[id] = checked;
 		});
-		console.log("Saving block preferences", toSave);
+		// console.log("Saving block preferences", toSave);
 		localStorage['__' + language + '_hidden_blocks'] = JSON.stringify(toSave);
 	};
 
@@ -93,7 +93,7 @@
 		var storedData = localStorage['__' + language + '_hidden_blocks'];
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
-		console.log("Loading block preferences", hiddenBlocks);
+		// console.log("Loading block preferences", hiddenBlocks);
 		for (key in hiddenBlocks) {
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);

@@ -161,7 +161,7 @@
                     if (child.nodeName){
                         e.appendChild(child);
                     }else if (Array.isArray(child)){
-                        console.log('DEPRECATED array arg to elem: use sub-elem instead');
+                        console.error('DEPRECATED array arg to elem: use sub-elem instead');
                         e.appendChild(elem(child[0], child[1], child[2]));
                     }else{
                         // assumes child is a string

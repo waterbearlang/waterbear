@@ -236,7 +236,7 @@
                 container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
             }else if(currPos.right > offset.right){
                 var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                console.log('maxHorizontalScroll: %s', maxHorizontalScroll);
+                // console.log('maxHorizontalScroll: %s', maxHorizontalScroll);
                 container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
             }
         }
@@ -533,7 +533,7 @@
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed
-        console.log('cancel drag of %o', dragTarget);
+        // console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
     		resetDragStyles();
 	    	revertDrop();
@@ -546,7 +546,7 @@
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
-        console.log('initializeDragHandlers');
+        // console.log('initializeDragHandlers');
         if (Event.isTouch){
             Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);

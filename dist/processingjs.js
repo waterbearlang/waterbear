@@ -13886,7 +13886,7 @@ global.ajax = ajax;
 		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(xhr, status){
-			console.error('Error in wb.ajax: %s', status);
+			console.error('Error in wb.ajax:', status);
 		});
 	}
 
@@ -13926,6 +13926,7 @@ global.ajax = ajax;
 		reader.onload = function (evt){
 			wb.clearScripts(null, true);
 			var saved = JSON.parse(evt.target.result);
+			wb.loaded = true;
 			loadScriptsFromObject(saved);
 			wb.scriptModified = true;
 		};
@@ -14411,7 +14412,7 @@ function edit_menu(title, specs, show){
 /*begin workspace.js*/
 (function(wb){
 
-	wb.language = location.pathname.match(/\/(.*)\.html/)[1];
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
 	wb.clearScripts = function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -14430,7 +14431,8 @@ function edit_menu(title, specs, show){
 	});
 
 	Event.on('.content', 'click', '.load-example', function(evt){
-		var path = evt.target.dataset.href;
+		var path = location.href.split('?')[0];
+		path += "?example=" + evt.target.dataset.example;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
@@ -14622,7 +14624,7 @@ function edit_menu(title, specs, show){
 
 	//save the state of the settings link
 	var closed = true;
-	var language = location.pathname.match(/\/(.*)\.html/)[1];
+	var language = wb.language;
 	var settings_link;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {

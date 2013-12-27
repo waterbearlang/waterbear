@@ -56,12 +56,6 @@ PolySprite.prototype.calculateBoundingBox = function(){
 };
 
 PolySprite.prototype.collides = function(sprite) {
-    if (!this.polygon){
-        console.log('no polygon for this: %o', this);
-    }
-    if (!sprite.polygon){
-        console.log('no polygon for sprite %o', sprite);
-    }
     return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
 };
 

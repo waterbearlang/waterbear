@@ -28,7 +28,7 @@
                     "name": "set camera position to"
                 },
                 {
-                    "type": "position",
+                    "type": "position"
                 }
             ],
             "script": "client.setCameraPosition({{1}}.x, {{1}}.y, {{1}}.z);",

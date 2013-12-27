@@ -90,7 +90,7 @@
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){

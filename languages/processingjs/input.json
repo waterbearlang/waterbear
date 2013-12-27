@@ -5,6 +5,7 @@
             "blocktype": "expression",
             "id": "01124271-6dc0-4j82-81kc-4si0i88c3907",
             "script": "mouseButton",
+            "type": "boolean",
             "help": "Tracks if the mouse button is pressed and which button is pressed",
             "sockets": [
                 {
@@ -16,6 +17,7 @@
             "blocktype": "expression",
             "id": "01124271-6dc0-4482-813c-4320331c3f07",
             "script": "mousePressed",
+            "type": "boolean",
             "help": "Variable storing if a mouse button is pressed",
             "sockets": [
                 {
@@ -152,6 +154,7 @@
             "blocktype": "expression",
             "id": "01124271-6dc0-4a82-81cc-4swb3a8v39e7",
             "script": "key",
+            "type": "string",
             "help": "Contains the value of the most recently pressed key on the keyboard",
             "sockets": [
                 {
@@ -163,6 +166,7 @@
             "blocktype": "expression",
             "id": "81926274-63cn-4d82-e1cc-4s533a8v39e7",
             "script": "keyCode",
+            "type": "number",
             "help": "Used to detect special keys ",
             "sockets": [
                 {
@@ -174,6 +178,7 @@
             "blocktype": "expression",
             "id": "8192ib74-63an-4de2-e1gc-4m5b3l8vcpe0",
             "script": "keyPressed",
+            "type": "boolean",
             "help": "True if any key is pressed and false if no keys are pressed",
             "sockets": [
                 {
@@ -213,7 +218,7 @@
                     "name": "key typed"
                 }
             ]
-        },
+        }
     ]
 }
 

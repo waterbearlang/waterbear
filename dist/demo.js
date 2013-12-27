@@ -2867,6 +2867,7 @@ global.ajax = ajax;
   var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
 
   function isUuid(value){
+    if (!value) return false;
     return UUID_TEST.test(value);
   }
 
@@ -2975,7 +2976,7 @@ global.ajax = ajax;
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){

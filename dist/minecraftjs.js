@@ -2867,6 +2867,7 @@ global.ajax = ajax;
   var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
 
   function isUuid(value){
+    if (!value) return false;
     return UUID_TEST.test(value);
   }
 
@@ -2975,7 +2976,7 @@ global.ajax = ajax;
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
@@ -4939,11 +4940,10 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
+            "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
             "sockets": [
                 {
-                    "name": "Say"
-                },
-                {
+                    "name": "Say",
                     "type": "string",
                     "value": "hi"
                 },
@@ -4958,6 +4958,7 @@ wb.menu({
         
         {
             "blocktype": "step",
+            "id": "de9bb25d-481d-43e8-88b1-c9f56160f85e",
             "sockets": [
                 {
                     "name": "Save Checkpoint"
@@ -4970,6 +4971,7 @@ wb.menu({
         
         {
             "blocktype": "step",
+            "id": "e5aa0ed8-035c-4349-bfdb-405ea9e72eec",
             "sockets": [
                 {
                     "name": "Restore Checkpoint"
@@ -5013,7 +5015,8 @@ wb.menu({
                         {
                             "name": "Player Position as text"
                         }
-                    ],"script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
+                    ],
+                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
                     "type": "string"
                 }
             ],
@@ -5025,7 +5028,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Player Position"
-                },
+                }
             ], 
             "type":"position",
             "script": "playerposition",
@@ -5036,17 +5039,12 @@ wb.menu({
             "id": "5474d53a-b671-4392-b299-d10339ad12af",
             "sockets": [
                 {
-                    "name": "Create Position##"
-                },
-                {   "name": "from"
-                },
-                {
+                    "name": "Create Position## from",
                     "type": "position",
                     "block": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9"
                 },
-                {   "name": "offset by"
-                },
-                {
+                {   
+                    "name": "offset by",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5064,7 +5062,6 @@ wb.menu({
                     "type": "position"
                 }
             ],
-            
             "help": "Create new position relative to Player position"
         },
         {
@@ -5111,7 +5108,7 @@ wb.menu({
                     "name": "z",
                     "type": "number",
                     "value": "0"
-                },
+                }
             ], 
             "type":"position",
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
@@ -5123,7 +5120,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Centre Position"
-                },
+                }
             ], 
             "type":"position",
             "script": "zeros",
@@ -5135,9 +5132,7 @@ wb.menu({
             "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
             "sockets": [
                 {
-                    "name": "Create Position## from"
-                },
-                {
+                    "name": "Create Position## from",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5149,7 +5144,7 @@ wb.menu({
                     "sockets": [
                         {
                             "name": "Position##"
-                        },
+                        }
                     ],  
                     
                     "script": "position##",
@@ -5168,9 +5163,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "equals"
-                },
-                {
+                    "name": "equals",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5184,16 +5177,12 @@ wb.menu({
             "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
             "sockets": [
                 {
-                    "name": "Create Position## from"
-                },
-                {
+                    "name": "Create Position## from",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "offset by"
-                },
-                {
+                    "name": "offset by",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5205,7 +5194,7 @@ wb.menu({
                     "sockets": [
                         {
                             "name": "Position##"
-                        },
+                        }
                     ],  
                     
                     "script": "position##",
@@ -5220,9 +5209,7 @@ wb.menu({
             "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
             "sockets": [
                 {
-                    "name": "Get ground position from"
-                },
-                {
+                    "name": "Get ground position from",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5247,13 +5234,10 @@ wb.menu({
             "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
             "sockets": [
                 {
-                    "name": "x from"
-                },
-                {
-                    
+                    "name": "x from",                    
                     "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
+                }
             ],  
             "script": "{{1}}.x",
             "type": "number",
@@ -5264,13 +5248,10 @@ wb.menu({
             "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
             "sockets": [
                 {
-                    "name": "y from"
-                },
-                {
-                    
+                    "name": "y from",
                     "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
+                }
             ],  
             "script": "{{1}}.y",
             "type": "number",
@@ -5281,13 +5262,10 @@ wb.menu({
             "id": "96c32f90-7234-4463-b18d-d528271bf224",
             "sockets": [
                 {
-                    "name": "z from"
-                },
-                {
-                    
+                    "name": "z from",
                     "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
+                }
             ],  
             "script": "{{1}}.z",
             "type": "number",
@@ -5303,8 +5281,8 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "as text",
-                },
+                    "name": "as text"
+                }
             ],  
             "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
             "type": "string",
@@ -5322,6 +5300,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "context",
+            "id": "b8020f54-43d2-4207-8529-336eb035898c",
             "sockets": [
                     {
                         "name": "get Block Type at "
@@ -5466,7 +5445,7 @@ wb.menu({
                     "name": "set camera position to"
                 },
                 {
-                    "type": "position",
+                    "type": "position"
                 }
             ],
             "script": "client.setCameraPosition({{1}}.x, {{1}}.y, {{1}}.z);",
@@ -5825,12 +5804,10 @@ wb.menu({
             "id": "f51d2d51-d5b4-4fef-a79b-b750694bcc1a",
             "sockets": [
                 {
-                    "name": "Create Number## from"
-                },
-                {
+                    "name": "Create Number## from",
                     "type": "number",
                     "value": "0"
-                },
+                }
             ],  
             "script": "var number## = {{1}};",
             "locals": [
@@ -5839,7 +5816,7 @@ wb.menu({
                     "sockets": [
                         {
                             "name": "Number##"
-                        },
+                        }
                     ],  
                     "script": "number##",
                     "type": "number"
@@ -5853,9 +5830,10 @@ wb.menu({
             "id": "f08f2d43-23e8-47a9-8bf5-7904af9313da",
             "sockets": [
                 {
+                    "name": "new number",
                     "type": "number",
                     "value": "0"
-                },
+                }
             ],  
             "script": "{{1}}",
             "help": "create a new named number"

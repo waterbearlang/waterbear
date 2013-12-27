@@ -2867,6 +2867,7 @@ global.ajax = ajax;
   var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
 
   function isUuid(value){
+    if (!value) return false;
     return UUID_TEST.test(value);
   }
 
@@ -2975,7 +2976,7 @@ global.ajax = ajax;
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
@@ -4888,7 +4889,7 @@ wb.menu({
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
-                    "name": "each frame",
+                    "name": "each frame"
                 }
             ]
         },
@@ -5728,7 +5729,7 @@ wb.menu({
             "help": "create a simple voice to play tones",
             "sockets": [
                 {
-                    "name": "voice##",
+                    "name": "voice##"
                 }
             ]
         },
@@ -5740,7 +5741,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "tone",
@@ -5760,7 +5761,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "note",
@@ -5778,7 +5779,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "volume",
@@ -5795,7 +5796,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "tempo quarter note =",
@@ -5937,8 +5938,8 @@ wb.menu({
                     "type": "voice"
                 },
                 {
-                    "name": "stored song",
-                },
+                    "name": "stored song"
+                }
             ]
         },
         {
@@ -7051,7 +7052,6 @@ wb.menu({
             "blocktype": "step",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
             "script": "global.preloadImage('##', {{1}});",
-            "type": "image",
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
@@ -8478,7 +8478,7 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "expression",
+            "blocktype": "step",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
             "script": "prompt({{1}})",
             "locals": [

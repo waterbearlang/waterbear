@@ -33,7 +33,7 @@
                     "name": "rotate",
                     "type": "number",
                     "value": 30
-                },
+                }
             ]
         },
         {
@@ -51,8 +51,8 @@
                     "name": "y",
                     "type": "number",
                     "value": 20
-                },
+                }
             ]
-        },
+        }
     ]
 }

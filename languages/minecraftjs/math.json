@@ -6,12 +6,10 @@
             "id": "f51d2d51-d5b4-4fef-a79b-b750694bcc1a",
             "sockets": [
                 {
-                    "name": "Create Number## from"
-                },
-                {
+                    "name": "Create Number## from",
                     "type": "number",
                     "value": "0"
-                },
+                }
             ],  
             "script": "var number## = {{1}};",
             "locals": [
@@ -20,7 +18,7 @@
                     "sockets": [
                         {
                             "name": "Number##"
-                        },
+                        }
                     ],  
                     "script": "number##",
                     "type": "number"
@@ -34,9 +32,10 @@
             "id": "f08f2d43-23e8-47a9-8bf5-7904af9313da",
             "sockets": [
                 {
+                    "name": "new number",
                     "type": "number",
                     "value": "0"
-                },
+                }
             ],  
             "script": "{{1}}",
             "help": "create a new named number"

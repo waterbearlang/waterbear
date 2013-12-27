@@ -13074,6 +13074,7 @@ global.ajax = ajax;
   var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
 
   function isUuid(value){
+    if (!value) return false;
     return UUID_TEST.test(value);
   }
 
@@ -13182,7 +13183,7 @@ global.ajax = ajax;
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
@@ -14908,7 +14909,7 @@ wb.menu({
             "help": "Stops Processing from continuously executing the code within draw()",
             "sockets": [
                 {
-                    "name": "noLoop",
+                    "name": "noLoop"
                 }
             ]
         },
@@ -14919,10 +14920,10 @@ wb.menu({
             "help": "Causes Processing to continuously execute the code within draw()",
             "sockets": [
                 {
-                    "name": "loop",
+                    "name": "loop"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -14992,9 +14993,9 @@ wb.menu({
                     "name": "print",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
-        },
+        }
     ]
 }
 
@@ -15095,6 +15096,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "9AED48C9-A90B-49FB-9C1b-3r63eFs313F",
             "script": "{{1}} += {{2}};",
+            "type": "number",
             "help": "First argument must be a variable",
             "sockets": [
                 {
@@ -15119,7 +15121,7 @@ wb.menu({
                     "name": "if",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
         {
@@ -15129,8 +15131,8 @@ wb.menu({
             "help": "It specifies a block of code to execute when the expression in if() is false",
             "sockets": [
                 {
-                    "name": "else",
-                },
+                    "name": "else"
+                }
             ]
         },
         {
@@ -15143,7 +15145,7 @@ wb.menu({
                     "name": "else if",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
 
@@ -15180,7 +15182,7 @@ wb.menu({
                     "name": "while",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
         {
@@ -15295,7 +15297,7 @@ wb.menu({
                     "value": "0"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15593,7 +15595,7 @@ wb.menu({
                     "value": "75"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15608,6 +15610,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "01124271-6dc0-4j82-81kc-4si0i88c3907",
             "script": "mouseButton",
+            "type": "boolean",
             "help": "Tracks if the mouse button is pressed and which button is pressed",
             "sockets": [
                 {
@@ -15619,6 +15622,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "01124271-6dc0-4482-813c-4320331c3f07",
             "script": "mousePressed",
+            "type": "boolean",
             "help": "Variable storing if a mouse button is pressed",
             "sockets": [
                 {
@@ -15755,6 +15759,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "01124271-6dc0-4a82-81cc-4swb3a8v39e7",
             "script": "key",
+            "type": "string",
             "help": "Contains the value of the most recently pressed key on the keyboard",
             "sockets": [
                 {
@@ -15766,6 +15771,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "81926274-63cn-4d82-e1cc-4s533a8v39e7",
             "script": "keyCode",
+            "type": "number",
             "help": "Used to detect special keys ",
             "sockets": [
                 {
@@ -15777,6 +15783,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "8192ib74-63an-4de2-e1gc-4m5b3l8vcpe0",
             "script": "keyPressed",
+            "type": "boolean",
             "help": "True if any key is pressed and false if no keys are pressed",
             "sockets": [
                 {
@@ -15816,7 +15823,7 @@ wb.menu({
                     "name": "key typed"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15848,7 +15855,7 @@ wb.menu({
                 {
                     "name": "background color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -15861,7 +15868,7 @@ wb.menu({
                 {
                     "name": "fill color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -15874,7 +15881,7 @@ wb.menu({
                 {
                     "name": "stroke color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -15885,7 +15892,7 @@ wb.menu({
             "help": "Disables filling geometry",
             "sockets": [
                 {
-                    "name": "noFill",
+                    "name": "noFill"
                 }
             ]
         },
@@ -15896,7 +15903,7 @@ wb.menu({
             "help": "Disables drawing the stroke (outline)",
             "sockets": [
                 {
-                    "name": "noStroke",
+                    "name": "noStroke"
                 }
             ]
         },
@@ -15918,7 +15925,7 @@ wb.menu({
                     "value": "255"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15951,7 +15958,6 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "406d4e12-7dhd-4fg4-9bpe-0a69d968b3c",
-            "type": "number",
             "script": "{{1}} += {{2}};",
             "help": "Combines addition with assignment. First argument must be a variable",
             "sockets": [
@@ -16314,7 +16320,7 @@ wb.menu({
                     "name": "two pi"
                 }
             ]
-        },
+        }
     ]
 }
 );
@@ -16356,7 +16362,7 @@ wb.menu({
                     "name": "rotate",
                     "type": "number",
                     "value": 30
-                },
+                }
             ]
         },
         {
@@ -16374,9 +16380,9 @@ wb.menu({
                     "name": "y",
                     "type": "number",
                     "value": 20
-                },
+                }
             ]
-        },
+        }
     ]
 }
 );

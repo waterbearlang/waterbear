@@ -22,7 +22,7 @@
                 {
                     "name": "background color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -35,7 +35,7 @@
                 {
                     "name": "fill color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -48,7 +48,7 @@
                 {
                     "name": "stroke color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -59,7 +59,7 @@
             "help": "Disables filling geometry",
             "sockets": [
                 {
-                    "name": "noFill",
+                    "name": "noFill"
                 }
             ]
         },
@@ -70,7 +70,7 @@
             "help": "Disables drawing the stroke (outline)",
             "sockets": [
                 {
-                    "name": "noStroke",
+                    "name": "noStroke"
                 }
             ]
         },
@@ -92,7 +92,7 @@
                     "value": "255"
                 }
             ]
-        },
+        }
     ]
 }
 

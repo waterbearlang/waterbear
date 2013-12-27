@@ -3,11 +3,10 @@
     "blocks": [
         {
             "blocktype": "step",
+            "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
             "sockets": [
                 {
-                    "name": "Say"
-                },
-                {
+                    "name": "Say",
                     "type": "string",
                     "value": "hi"
                 },
@@ -22,6 +21,7 @@
         
         {
             "blocktype": "step",
+            "id": "de9bb25d-481d-43e8-88b1-c9f56160f85e",
             "sockets": [
                 {
                     "name": "Save Checkpoint"
@@ -34,6 +34,7 @@
         
         {
             "blocktype": "step",
+            "id": "e5aa0ed8-035c-4349-bfdb-405ea9e72eec",
             "sockets": [
                 {
                     "name": "Restore Checkpoint"

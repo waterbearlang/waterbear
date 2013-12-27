@@ -1253,12 +1253,6 @@ PolySprite.prototype.calculateBoundingBox = function(){
 };
 
 PolySprite.prototype.collides = function(sprite) {
-    if (!this.polygon){
-        console.log('no polygon for this: %o', this);
-    }
-    if (!sprite.polygon){
-        console.log('no polygon for sprite %o', sprite);
-    }
     return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
 };
 
@@ -1436,7 +1430,7 @@ Voice.prototype.startOsc = function() {
     this.osc = this.context.createOscillator();
     this.osc.type = 0; // Sine wave
     this.osc.frequency.value = this.frequency;
-    console.log('oscillator: %o', this.osc);
+    // console.log('oscillator: %o', this.osc);
     this.osc.start(0);
     
     this.gain = this.context.createGain();
@@ -1514,7 +1508,7 @@ Voice.prototype.durationOf = function(note, dots) {
 		dots--;
 	}
 	len *= 1000; // Convert from seconds to ms
-	console.log("Calculated voice duration:",note,dots,this.tempo,len);
+	// console.log("Calculated voice duration:",note,dots,this.tempo,len);
 	return len;
 }
 

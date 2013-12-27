@@ -4,6 +4,7 @@
     "blocks": [
         {
             "blocktype": "context",
+            "id": "b8020f54-43d2-4207-8529-336eb035898c",
             "sockets": [
                     {
                         "name": "get Block Type at "

@@ -20,7 +20,7 @@
             "help": "create a simple voice to play tones",
             "sockets": [
                 {
-                    "name": "voice##",
+                    "name": "voice##"
                 }
             ]
         },
@@ -32,7 +32,7 @@
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "tone",
@@ -52,7 +52,7 @@
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "note",
@@ -70,7 +70,7 @@
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "volume",
@@ -87,7 +87,7 @@
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "tempo quarter note =",
@@ -229,8 +229,8 @@
                     "type": "voice"
                 },
                 {
-                    "name": "stored song",
-                },
+                    "name": "stored song"
+                }
             ]
         },
         {

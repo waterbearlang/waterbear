@@ -23,7 +23,6 @@
         {
             "blocktype": "step",
             "id": "406d4e12-7dhd-4fg4-9bpe-0a69d968b3c",
-            "type": "number",
             "script": "{{1}} += {{2}};",
             "help": "Combines addition with assignment. First argument must be a variable",
             "sockets": [
@@ -386,6 +385,6 @@
                     "name": "two pi"
                 }
             ]
-        },
+        }
     ]
 }

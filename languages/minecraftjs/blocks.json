@@ -4,11 +4,10 @@
     "blocks": [
         {
             "blocktype": "context",
+            "id": "b8020f54-43d2-4207-8529-336eb035898c",
             "sockets": [
                     {
-                        "name": "get Block Type at "
-                    },
-                    {
+                        "name": "get Block Type at",
                         "type": "position",
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
@@ -33,6 +32,7 @@
             "id": "a7c17404-8555-42be-877e-9d01d7647604",
             "sockets": [
                     {
+                    "name": "block",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
@@ -47,16 +47,12 @@
             "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
             "sockets": [
                 {
-                    "name": "set Block at"
-                },
-                {
+                    "name": "set Block at",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "to"
-                },
-                {
+                    "name": "to",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
@@ -71,23 +67,17 @@
             "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
             "sockets": [
                 {
-                    "name": "set Blocks between"
-                },
-                {
+                    "name": "set Blocks between",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "and"
-                },
-                {
+                    "name": "and",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "to"
-                },
-                {
+                    "name": "to",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
@@ -101,9 +91,7 @@
             "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
             "sockets": [
                 {
-                    "name": "block type name"
-                },
-                {
+                    "name": "block type name",
                     "type": "number",
                     "value": "0"
                 }

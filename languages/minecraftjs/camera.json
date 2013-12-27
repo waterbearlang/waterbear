@@ -8,9 +8,7 @@
             "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
             "sockets": [
                 {
-                    "name": "set camera mode to"
-                },
-                {
+                    "name": "set camera mode to",
                     "type": "choice",
                     "options": "cameramode",
                     "value": "choice"
@@ -25,10 +23,8 @@
             "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
             "sockets": [
                 {
-                    "name": "set camera position to"
-                },
-                {
-                    "type": "position",
+                    "name": "set camera position to",
+                    "type": "position"
                 }
             ],
             "script": "client.setCameraPosition({{1}}.x, {{1}}.y, {{1}}.z);",

@@ -13071,9 +13071,10 @@ global.ajax = ajax;
   }
 
   // Constants
-  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
+  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{11}[a-zA-Z0-9]?/;
 
   function isUuid(value){
+    if (!value) return false;
     return UUID_TEST.test(value);
   }
 
@@ -13182,7 +13183,7 @@ global.ajax = ajax;
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
@@ -14908,7 +14909,7 @@ wb.menu({
             "help": "Stops Processing from continuously executing the code within draw()",
             "sockets": [
                 {
-                    "name": "noLoop",
+                    "name": "noLoop"
                 }
             ]
         },
@@ -14919,10 +14920,10 @@ wb.menu({
             "help": "Causes Processing to continuously execute the code within draw()",
             "sockets": [
                 {
-                    "name": "loop",
+                    "name": "loop"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -14992,9 +14993,9 @@ wb.menu({
                     "name": "print",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
-        },
+        }
     ]
 }
 
@@ -15095,6 +15096,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "9AED48C9-A90B-49FB-9C1b-3r63eFs313F",
             "script": "{{1}} += {{2}};",
+            "type": "number",
             "help": "First argument must be a variable",
             "sockets": [
                 {
@@ -15119,7 +15121,7 @@ wb.menu({
                     "name": "if",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
         {
@@ -15129,8 +15131,8 @@ wb.menu({
             "help": "It specifies a block of code to execute when the expression in if() is false",
             "sockets": [
                 {
-                    "name": "else",
-                },
+                    "name": "else"
+                }
             ]
         },
         {
@@ -15143,7 +15145,7 @@ wb.menu({
                     "name": "else if",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
 
@@ -15180,7 +15182,7 @@ wb.menu({
                     "name": "while",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
         {
@@ -15295,7 +15297,7 @@ wb.menu({
                     "value": "0"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15593,7 +15595,7 @@ wb.menu({
                     "value": "75"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15608,6 +15610,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "01124271-6dc0-4j82-81kc-4si0i88c3907",
             "script": "mouseButton",
+            "type": "boolean",
             "help": "Tracks if the mouse button is pressed and which button is pressed",
             "sockets": [
                 {
@@ -15619,6 +15622,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "01124271-6dc0-4482-813c-4320331c3f07",
             "script": "mousePressed",
+            "type": "boolean",
             "help": "Variable storing if a mouse button is pressed",
             "sockets": [
                 {
@@ -15755,6 +15759,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "01124271-6dc0-4a82-81cc-4swb3a8v39e7",
             "script": "key",
+            "type": "string",
             "help": "Contains the value of the most recently pressed key on the keyboard",
             "sockets": [
                 {
@@ -15766,6 +15771,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "81926274-63cn-4d82-e1cc-4s533a8v39e7",
             "script": "keyCode",
+            "type": "number",
             "help": "Used to detect special keys ",
             "sockets": [
                 {
@@ -15777,6 +15783,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "8192ib74-63an-4de2-e1gc-4m5b3l8vcpe0",
             "script": "keyPressed",
+            "type": "boolean",
             "help": "True if any key is pressed and false if no keys are pressed",
             "sockets": [
                 {
@@ -15816,7 +15823,7 @@ wb.menu({
                     "name": "key typed"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15848,7 +15855,7 @@ wb.menu({
                 {
                     "name": "background color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -15861,7 +15868,7 @@ wb.menu({
                 {
                     "name": "fill color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -15874,7 +15881,7 @@ wb.menu({
                 {
                     "name": "stroke color",
                     "type": "color",
-                    "value": "#0000000",
+                    "value": "#0000000"
                 }
             ]
         },
@@ -15885,7 +15892,7 @@ wb.menu({
             "help": "Disables filling geometry",
             "sockets": [
                 {
-                    "name": "noFill",
+                    "name": "noFill"
                 }
             ]
         },
@@ -15896,7 +15903,7 @@ wb.menu({
             "help": "Disables drawing the stroke (outline)",
             "sockets": [
                 {
-                    "name": "noStroke",
+                    "name": "noStroke"
                 }
             ]
         },
@@ -15918,7 +15925,7 @@ wb.menu({
                     "value": "255"
                 }
             ]
-        },
+        }
     ]
 }
 
@@ -15931,7 +15938,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
+            "id": "0ee12a6a-51a5-46b0-b1f6-db3731d99fc5",
             "type": "number",
             "script": "({{1}} + {{2}})",
             "help": "Adds two values",
@@ -15951,7 +15958,6 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "406d4e12-7dhd-4fg4-9bpe-0a69d968b3c",
-            "type": "number",
             "script": "{{1}} += {{2}};",
             "help": "Combines addition with assignment. First argument must be a variable",
             "sockets": [
@@ -15988,7 +15994,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "d7082309-9f02-4cf9-bcd5-d0cac243bff9",
+            "id": "eff1fb37-b0f5-4dac-9964-11e32dc8572a",
             "type": "number",
             "script": "({{1}} - {{2}})",
             "help": "Subtracts one value from another and may also be used to negate a value",
@@ -16007,7 +16013,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "bd3879e6-e440-49cb-b10b-52d744846341",
+            "id": "78147ed0-78d2-4ff1-a7bb-079921a00768",
             "type": "any",
             "script": "({{1}} * {{2}})",
             "help": "Multiplies the values of the two parameters",
@@ -16026,7 +16032,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+            "id": "07ebe81b-64a7-44e8-9d6f-7a4980fb2588",
             "type": "number",
             "script": "({{1}} / {{2}})",
             "help": "Divides the value of the second parameter by the value of the first parameter",
@@ -16064,7 +16070,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+            "id": "247888a8-47a1-42a1-9018-55e307fd6a4e",
             "type": "number",
             "script": "random({{1}}, {{2}})",
             "help": "Generates random numbers",
@@ -16083,7 +16089,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
+            "id": "7a20f5d9-86dc-40cf-86a0-63ba565d78c1",
             "type": "number",
             "script": "round({{1}})",
             "help": "Calculates the integer closest to the value parameter",
@@ -16097,7 +16103,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "c38383df-a765-422e-b215-7d1cfb7557a1",
+            "id": "004040ab-5954-40ec-9dac-0918ef1d5d42",
             "type": "number",
             "script": "abs({{1}})",
             "help": "Calculates the absolute value (magnitude) of a number",
@@ -16111,7 +16117,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
+            "id": "7864b7f4-b6fb-46ff-ba8f-6c29160b141e",
             "type": "number",
             "script": "pow({{1}}, {{2}})",
             "help": "Facilitates exponential expressions",
@@ -16130,7 +16136,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
+            "id": "b64d1ea4-f3c9-4499-8104-9d0acf85a7a5",
             "type": "number",
             "script": "sqrt({{1}})",
             "help": "Calculates the square root of a number",
@@ -16144,7 +16150,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+            "id": "fa7d53e9-2cf9-4acc-9d04-f941f98ff2b1",
             "type": "number",
             "script": "floor({{1}})",
             "help": "Calculates the closest int value that is less than or equal to the value of the parameter",
@@ -16158,7 +16164,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "4945df27-f4f3-490b-94ae-67c7081f744b",
+            "id": "7fb957cb-4cb2-462e-8aa5-66a03ff4a35c",
             "type": "number",
             "script": "ceil({{1}})",
             "help": "Calculates the closest int value that is greater than or equal to the value of the parameter",
@@ -16172,7 +16178,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
+            "id": "e2c9f20d-c17c-4fdb-bffc-561e7c373665",
             "type": "number",
             "script": "cos(radians({{1}}))",
             "help": "Calculates the cosine of an angle",
@@ -16189,7 +16195,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "1a8f6a28-14e9-4400-8e80-31217309ebc9",
+            "id": "28887223-5e67-4332-98d4-8e0ee53f037d",
             "type": "number",
             "script": "sin(radians({{1}}))",
             "help": "Calculates the sine of an angle",
@@ -16206,7 +16212,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541",
+            "id": "194d6757-e04e-48d6-9cc1-d9071be47007",
             "type": "number",
             "script": "tan(radians({{1}}))",
             "help": "Calculates the ratio of the sine and cosine of an angle",
@@ -16223,7 +16229,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "id": "42a91ce7-184b-4853-9653-32f6f28e5e0f",
             "type": "number",
             "script": "degrees(acos({{1}}))",
             "help": "The inverse of cos(), returns the arc cosine of a value",
@@ -16237,7 +16243,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "id": "655b85f4-9090-4590-9c64-3887d29272d2",
             "type": "number",
             "script": "degrees(asin({{1}}))",
             "help": "The inverse of sin(), returns the arc sine of a value",
@@ -16293,7 +16299,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
+            "id": "b30761f4-b43c-4714-8ace-e6d1fe204da4",
             "script": "PI;",
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
@@ -16305,7 +16311,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
+            "id": "350e69fc-950b-4a9e-8d00-f598262cb6c6",
             "script": "TWO_PI",
             "type": "number",
             "help": "Two pi (tau) is 2 times pi, a generally more useful number",
@@ -16314,10 +16320,9 @@ wb.menu({
                     "name": "two pi"
                 }
             ]
-        },
+        }
     ]
-}
-);
+});
 /*end languages/processingjs/math.json*/
 
 /*begin languages/processingjs/transform.json*/
@@ -16348,7 +16353,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "916c79df-40f1-4280-a0p3-6d0df954d87e",
+            "id": "e3d6a995-4ae9-495b-bdd6-ee907d0c7915",
             "script": "rotate({{1}});",
             "help": "Rotates an object the amount specified by the angle parameter",
             "sockets": [
@@ -16356,7 +16361,7 @@ wb.menu({
                     "name": "rotate",
                     "type": "number",
                     "value": 30
-                },
+                }
             ]
         },
         {
@@ -16374,10 +16379,9 @@ wb.menu({
                     "name": "y",
                     "type": "number",
                     "value": 20
-                },
+                }
             ]
-        },
+        }
     ]
-}
-);
+});
 /*end languages/processingjs/transform.json*/

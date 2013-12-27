@@ -27,7 +27,8 @@
                         {
                             "name": "Player Position as text"
                         }
-                    ],"script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
+                    ],
+                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
                     "type": "string"
                 }
             ],
@@ -39,7 +40,7 @@
             "sockets": [
                 {
                     "name": "Player Position"
-                },
+                }
             ], 
             "type":"position",
             "script": "playerposition",
@@ -50,17 +51,12 @@
             "id": "5474d53a-b671-4392-b299-d10339ad12af",
             "sockets": [
                 {
-                    "name": "Create Position##"
-                },
-                {   "name": "from"
-                },
-                {
+                    "name": "Create Position## from",
                     "type": "position",
                     "block": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9"
                 },
-                {   "name": "offset by"
-                },
-                {
+                {   
+                    "name": "offset by",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -78,7 +74,6 @@
                     "type": "position"
                 }
             ],
-            
             "help": "Create new position relative to Player position"
         },
         {
@@ -86,9 +81,7 @@
             "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
             "sockets": [
                 {
-                    "name": "Move Player to"
-                },
-                {
+                    "name": "Move Player to",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }

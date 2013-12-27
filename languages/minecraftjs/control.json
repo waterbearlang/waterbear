@@ -3,7 +3,7 @@
     "blocks": [
         {
             "blocktype": "eventhandler",
-            "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
+            "id": "d36cd27a-98d9-4574-8e68-db267b7a2bb4",
             "script": "[[1]]",
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
@@ -14,7 +14,7 @@
         },
         {
             "blocktype": "context",
-            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
+            "id": "771a7f8f-ed82-4a92-b255-2f9c4b6fa614",
             "script": "if({{1}}){[[1]]}",
             "help": "run the following blocks only if the condition is true",
             "sockets": [
@@ -27,7 +27,7 @@
         },
         {
             "blocktype": "context",
-            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
+            "id": "9bcb76ff-0965-4bdb-9ead-fcad46bbbd1f",
             "script": "if( ! {{1}} ){ [[1]]} }",
             "help": "run the  blocks if the condition is not true",
             "sockets": [
@@ -40,7 +40,7 @@
         },
         {
             "blocktype": "context",
-            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
+            "id": "7972f6ee-f653-486c-aa99-81d8930a4d35",
             "script": "while(!({{1}})){[[1]]}",
             "help": "repeat forever until condition is true",
             "sockets": [
@@ -53,7 +53,7 @@
         },
         {
             "blocktype": "eventhandler",
-            "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+            "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -81,7 +81,7 @@
         },
         {
             "blocktype": "step",
-            "id": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+            "id": "1a1cee1b-fd60-4c4f-87ca-09e394fe8f67",
             "script": "variable## = {{1}};",
             "locals": [
                 {
@@ -106,7 +106,7 @@
         },
         {
             "blocktype": "step",
-            "id": "b4036693-8645-4852-a4de-9e96565f9aec",
+            "id": "ece22a99-cbf3-48d8-bab8-4d93ae8a6712",
             "script": "{{1}} = {{2}};",
             "help": "first argument must be a variable",
             "sockets": [
@@ -124,7 +124,7 @@
         },
         {
             "blocktype": "context",
-            "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
+            "id": "9a148b21-c609-4f98-9ae3-19d2e4e1ddef",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",
             "help": "pause before running the following blocks",
             "sockets": [
@@ -140,7 +140,7 @@
         },
         {
             "blocktype": "context",
-            "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+            "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
             "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
             "help": "repeat the contained blocks so many times",
             "locals": [
@@ -165,7 +165,7 @@
         },
         {
             "blocktype": "context",
-            "id": "b1e43170-800a-4e9b-af82-0ed5c62c47a0",
+            "id": "c457444d-c599-4241-bead-5dc9d6e649a4",
             "script": "while({{1}}){[[1]]}",
             "help": "repeat until the condition is false",
             "sockets": [
@@ -176,6 +176,5 @@
                 }
             ]
         }
-        
     ]
 }

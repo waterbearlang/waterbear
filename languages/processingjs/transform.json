@@ -25,7 +25,7 @@
         },
         {
             "blocktype": "step",
-            "id": "916c79df-40f1-4280-a0p3-6d0df954d87e",
+            "id": "e3d6a995-4ae9-495b-bdd6-ee907d0c7915",
             "script": "rotate({{1}});",
             "help": "Rotates an object the amount specified by the angle parameter",
             "sockets": [
@@ -33,7 +33,7 @@
                     "name": "rotate",
                     "type": "number",
                     "value": 30
-                },
+                }
             ]
         },
         {
@@ -51,8 +51,8 @@
                     "name": "y",
                     "type": "number",
                     "value": 20
-                },
+                }
             ]
-        },
+        }
     ]
 }

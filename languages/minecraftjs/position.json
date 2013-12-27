@@ -19,7 +19,7 @@
                     "name": "z",
                     "type": "number",
                     "value": "0"
-                },
+                }
             ], 
             "type":"position",
             "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
@@ -31,7 +31,7 @@
             "sockets": [
                 {
                     "name": "Centre Position"
-                },
+                }
             ], 
             "type":"position",
             "script": "zeros",
@@ -43,9 +43,7 @@
             "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
             "sockets": [
                 {
-                    "name": "Create Position## from"
-                },
-                {
+                    "name": "Create Position## from",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -57,7 +55,7 @@
                     "sockets": [
                         {
                             "name": "Position##"
-                        },
+                        }
                     ],  
                     
                     "script": "position##",
@@ -72,13 +70,12 @@
             "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
             "sockets": [
                 {
+                    "name": "position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "equals"
-                },
-                {
+                    "name": "equals position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -92,16 +89,12 @@
             "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
             "sockets": [
                 {
-                    "name": "Create Position## from"
-                },
-                {
+                    "name": "Create Position## from",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "offset by"
-                },
-                {
+                    "name": "offset by",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -113,7 +106,7 @@
                     "sockets": [
                         {
                             "name": "Position##"
-                        },
+                        }
                     ],  
                     
                     "script": "position##",
@@ -128,9 +121,7 @@
             "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
             "sockets": [
                 {
-                    "name": "Get ground position from"
-                },
-                {
+                    "name": "Get ground position from",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -155,13 +146,10 @@
             "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
             "sockets": [
                 {
-                    "name": "x from"
-                },
-                {
-                    
+                    "name": "x from",                    
                     "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
+                }
             ],  
             "script": "{{1}}.x",
             "type": "number",
@@ -172,13 +160,10 @@
             "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
             "sockets": [
                 {
-                    "name": "y from"
-                },
-                {
-                    
+                    "name": "y from",
                     "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
+                }
             ],  
             "script": "{{1}}.y",
             "type": "number",
@@ -189,13 +174,10 @@
             "id": "96c32f90-7234-4463-b18d-d528271bf224",
             "sockets": [
                 {
-                    "name": "z from"
-                },
-                {
-                    
+                    "name": "z from",
                     "type": "position",
                     "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
+                }
             ],  
             "script": "{{1}}.z",
             "type": "number",
@@ -211,8 +193,8 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "as text",
-                },
+                    "name": "as text"
+                }
             ],  
             "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
             "type": "string",

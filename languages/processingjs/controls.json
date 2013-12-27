@@ -91,6 +91,7 @@
             "blocktype": "expression",
             "id": "9AED48C9-A90B-49FB-9C1b-3r63eFs313F",
             "script": "{{1}} += {{2}};",
+            "type": "number",
             "help": "First argument must be a variable",
             "sockets": [
                 {
@@ -115,7 +116,7 @@
                     "name": "if",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
         {
@@ -125,8 +126,8 @@
             "help": "It specifies a block of code to execute when the expression in if() is false",
             "sockets": [
                 {
-                    "name": "else",
-                },
+                    "name": "else"
+                }
             ]
         },
         {
@@ -139,7 +140,7 @@
                     "name": "else if",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
 
@@ -176,7 +177,7 @@
                     "name": "while",
                     "type": "any",
                     "value": null
-                },
+                }
             ]
         },
         {
@@ -291,7 +292,7 @@
                     "value": "0"
                 }
             ]
-        },
+        }
     ]
 }
 

@@ -2,7 +2,7 @@
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "expression",
+            "blocktype": "step",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
             "script": "prompt({{1}})",
             "locals": [

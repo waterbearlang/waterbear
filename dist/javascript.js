@@ -2864,9 +2864,10 @@ global.ajax = ajax;
   }
 
   // Constants
-  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
+  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{11}[a-zA-Z0-9]?/;
 
   function isUuid(value){
+    if (!value) return false;
     return UUID_TEST.test(value);
   }
 
@@ -2975,7 +2976,7 @@ global.ajax = ajax;
                     var names = ['block', obj.group, obj.blocktype];
                     if(obj.blocktype === "expression"){
                         names.push(obj.type);
-                        names.push(obj.type+'s');
+                        names.push(obj.type+'s'); // FIXME, this is a horrible hack for CSS
                     }else if (obj.blocktype === 'context'){
                         names.push('step');
                     }else if (obj.blocktype === 'eventhandler'){
@@ -4888,7 +4889,7 @@ wb.menu({
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
-                    "name": "each frame",
+                    "name": "each frame"
                 }
             ]
         },
@@ -5728,7 +5729,7 @@ wb.menu({
             "help": "create a simple voice to play tones",
             "sockets": [
                 {
-                    "name": "voice##",
+                    "name": "voice##"
                 }
             ]
         },
@@ -5740,7 +5741,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "tone",
@@ -5760,7 +5761,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "note",
@@ -5778,7 +5779,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "volume",
@@ -5795,7 +5796,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set voice",
-                    "type": "voice",
+                    "type": "voice"
                 },
                 {
                     "name": "tempo quarter note =",
@@ -5937,8 +5938,8 @@ wb.menu({
                     "type": "voice"
                 },
                 {
-                    "name": "stored song",
-                },
+                    "name": "stored song"
+                }
             ]
         },
         {
@@ -7051,7 +7052,6 @@ wb.menu({
             "blocktype": "step",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
             "script": "global.preloadImage('##', {{1}});",
-            "type": "image",
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
@@ -7596,7 +7596,7 @@ wb.menu({
                     "type": "vector"
                 }
             ]
-        },  
+        },
         {
             "blocktype": "step",
             "id": "d6204ed1-3b28-41af-8574-fac393df75f1",
@@ -7645,7 +7645,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "D7374103-3C03-40E8-A215-45BEFF97F0BC",
+            "id": "f7937709-f449-4480-927d-3bcfe33d2f65",
             "script": "{{2}}.project({{1}});",
             "help": "Project the first vector onto the second",
             "sockets": [
@@ -8478,7 +8478,7 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "expression",
+            "blocktype": "step",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
             "script": "prompt({{1}})",
             "locals": [
@@ -8712,7 +8712,6 @@ wb.menu({
                 {
                     "name": "and color",
                     "type": "color",
-                    "value": "#000000",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
             ]
@@ -9141,7 +9140,6 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
-            "id": "0f9e96f3-52d3-4ace-afdf-c598c1bd31ed",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
             "help": "transform by an arbitrary matrix [a,b,c,d,e,f]",
             "sockets": [
@@ -9150,11 +9148,12 @@ wb.menu({
                     "type": "array",
                     "value": null
                 }
-            ]
+            ],
+            "id": "b65e02c5-b990-4ceb-ab18-2593337103d9"
         },
         {
             "blocktype": "step",
-            "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
+            "id": "e4787583-77ce-4d45-a863-50dcb4e87af0",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
             "help": "set transform to an arbitrary array [a,b,c,d,e,f]",
             "sockets": [
@@ -9166,6 +9165,5 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/matrix.json*/

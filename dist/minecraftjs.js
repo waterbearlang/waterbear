@@ -4755,7 +4755,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "eventhandler",
-            "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
+            "id": "d36cd27a-98d9-4574-8e68-db267b7a2bb4",
             "script": "[[1]]",
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
@@ -4766,7 +4766,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "20ba3e08-74c0-428e-b612-53545de63ce0",
+            "id": "771a7f8f-ed82-4a92-b255-2f9c4b6fa614",
             "script": "if({{1}}){[[1]]}",
             "help": "run the following blocks only if the condition is true",
             "sockets": [
@@ -4779,7 +4779,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "6dddaf61-caf0-4976-a3f1-9d9c3bbbf5a4",
+            "id": "9bcb76ff-0965-4bdb-9ead-fcad46bbbd1f",
             "script": "if( ! {{1}} ){ [[1]]} }",
             "help": "run the  blocks if the condition is not true",
             "sockets": [
@@ -4792,7 +4792,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
+            "id": "7972f6ee-f653-486c-aa99-81d8930a4d35",
             "script": "while(!({{1}})){[[1]]}",
             "help": "repeat forever until condition is true",
             "sockets": [
@@ -4805,7 +4805,7 @@ wb.menu({
         },
         {
             "blocktype": "eventhandler",
-            "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+            "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4833,7 +4833,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+            "id": "1a1cee1b-fd60-4c4f-87ca-09e394fe8f67",
             "script": "variable## = {{1}};",
             "locals": [
                 {
@@ -4858,7 +4858,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "b4036693-8645-4852-a4de-9e96565f9aec",
+            "id": "ece22a99-cbf3-48d8-bab8-4d93ae8a6712",
             "script": "{{1}} = {{2}};",
             "help": "first argument must be a variable",
             "sockets": [
@@ -4876,7 +4876,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "66b33236-c9ce-4b6c-9b69-e8c4fdadbf52",
+            "id": "9a148b21-c609-4f98-9ae3-19d2e4e1ddef",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",
             "help": "pause before running the following blocks",
             "sockets": [
@@ -4892,7 +4892,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+            "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
             "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
             "help": "repeat the contained blocks so many times",
             "locals": [
@@ -4917,7 +4917,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "b1e43170-800a-4e9b-af82-0ed5c62c47a0",
+            "id": "c457444d-c599-4241-bead-5dc9d6e649a4",
             "script": "while({{1}}){[[1]]}",
             "help": "repeat until the condition is false",
             "sockets": [
@@ -4928,10 +4928,8 @@ wb.menu({
                 }
             ]
         }
-        
     ]
-}
-);
+});
 /*end languages/minecraftjs/control.json*/
 
 /*begin languages/minecraftjs/game.json*/
@@ -5462,7 +5460,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
-            "id": "e6a297e9-1255-4701-91d8-80548489ee9a",
+            "id": "555172b9-1077-4205-a403-3b301be14055",
             "script": "local.array## = [];",
             "help": "Create an empty array",
             "locals": [
@@ -5485,7 +5483,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "83d67170-4ba7-45ac-95ae-bb2f314c3ae0",
+            "id": "8e2d5fba-b674-4d1e-8137-db49da44acf2",
             "script": "local.array## = {{1}}.slice();",
             "help": "create a new array with the contents of another array",
             "locals": [
@@ -5510,7 +5508,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "3e56f9c1-29b9-4d0c-99bd-05ccabfa29c2",
+            "id": "9e8bf11e-4fe6-4028-932d-a7c3c4231060",
             "script": "{{1}}[{{2}}]",
             "type": "any",
             "help": "get an item from an index in the array",
@@ -5529,7 +5527,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "5b1cc330-b9b1-4062-b8d4-e5032c7a5776",
+            "id": "df795450-aa4a-4acd-b96d-230617611f83",
             "script": "{{1}}.join({{2}})",
             "type": "string",
             "help": "join items of an array into a string, each item separated by given string",
@@ -5548,7 +5546,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "3fab2b88-430a-401e-88b2-2703d614780a",
+            "id": "4f66c164-2873-4313-a54a-2771b6a04e92",
             "script": "{{1}}.push({{2}});",
             "help": "add any object to an array",
             "sockets": [
@@ -5566,7 +5564,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "bf3ed213-4435-4152-bb2c-573ce1721036",
+            "id": "c6f26489-46d8-481c-ba6d-07739ca7c267",
             "script": "{{1}}.length",
             "type": "number",
             "help": "get the length of an array",
@@ -5583,7 +5581,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "f4870f0f-1dbb-4bc7-b8e3-3a00af613689",
+            "id": "ed5a1051-cc8e-47e0-aa9f-c0b852dda6fa",
             "script": "{{1}}.splice({{2}}, 1)[0]",
             "type": "any",
             "help": "remove item at index from an array",
@@ -5602,7 +5600,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "e137e1a3-fe66-4d15-ae2a-596050acb6a7",
+            "id": "56a4997d-7a67-4b85-9983-9d7c64ac2bad",
             "script": "{{1}}.pop()",
             "type": "any",
             "help": "remove and return the last item from an array",
@@ -5619,7 +5617,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "00685267-c279-4fc1-bdbd-a07742a76b1e",
+            "id": "b9a43234-d090-4db9-9ebf-bc4e45dff90f",
             "script": "{{1}}.shift()",
             "type": "any",
             "help": "remove and return the first item from an array",
@@ -5636,7 +5634,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "b4f115d3-fc52-4d75-a363-5119de21e97c",
+            "id": "6d706cdf-9311-4034-8bd8-6ce0c2340e56",
             "script": "{{1}}.slice().reverse()",
             "type": "array",
             "help": "reverse a copy of array",
@@ -5653,7 +5651,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "0931d219-707c-41dd-92e6-b1a7c2a0f6b3",
+            "id": "43415751-34cb-478b-952b-3954718cb0d3",
             "script": "{{1}}.concat({{2}});",
             "type": "array",
             "help": "a new array formed by joining the arrays",
@@ -5672,7 +5670,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
+            "id": "2cf51b08-8c8a-44e8-8227-39a6f13da423",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
             "locals": [
                 {
@@ -5711,8 +5709,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/minecraftjs/array.json*/
 
 /*begin languages/minecraftjs/boolean.json*/
@@ -5721,7 +5718,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "770756e8-3a10-4993-b02e-3d1333c98958",
+            "id": "2ef48097-a439-42aa-9fe3-be6fb14ef3a7",
             "type": "boolean",
             "script": "({{1}} && {{2}})",
             "help": "both operands are true",
@@ -5740,7 +5737,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a56c0d03-5c5c-4459-9aaf-cbbea6eb3abf",
+            "id": "d10041ac-027e-4a11-b4f9-941d2e538aa7",
             "type": "boolean",
             "script": "({{1}} || {{2}})",
             "help": "either or both operands are true",
@@ -5759,7 +5756,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "cb9ddee8-5ee1-423b-9559-6d2cbb379b80",
+            "id": "d121063d-83c9-4fd6-b738-27b31c995323",
             "type": "boolean",
             "script": "({{1}} ? !{{2}} : {{2}})",
             "help": "either, but not both, operands are true",
@@ -5778,7 +5775,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "138a6840-37cc-4e2d-b44a-af32e673ba56",
+            "id": "4de248e4-e41f-44ca-a869-edd9b0a048b2",
             "type": "boolean",
             "script": "(! {{1}})",
             "help": "operand is false",
@@ -5791,8 +5788,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/minecraftjs/boolean.json*/
 
 /*begin languages/minecraftjs/math.json*/
@@ -5808,7 +5804,7 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
-            ],  
+            ],
             "script": "var number## = {{1}};",
             "locals": [
                 {
@@ -5817,7 +5813,7 @@ wb.menu({
                         {
                             "name": "Number##"
                         }
-                    ],  
+                    ],
                     "script": "number##",
                     "type": "number"
                 }
@@ -5834,14 +5830,13 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
-            ],  
+            ],
             "script": "{{1}}",
             "help": "create a new named number"
         },
-        
         {
             "blocktype": "expression",
-            "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
+            "id": "15a39af7-940e-4f29-88ba-38b67913599f",
             "type": "number",
             "script": "({{1}} + {{2}})",
             "help": "sum of the two operands",
@@ -5860,7 +5855,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "d7082309-9f02-4cf9-bcd5-d0cac243bff9",
+            "id": "3d74da37-7c18-47e3-bbdc-e4f7706c81f6",
             "type": "number",
             "script": "({{1}} - {{2}})",
             "help": "difference of the two operands",
@@ -5879,7 +5874,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "bd3879e6-e440-49cb-b10b-52d744846341",
+            "id": "ded5d055-7ae1-465a-ad82-003f171b9dc7",
             "type": "number",
             "script": "({{1}} * {{2}})",
             "help": "product of the two operands",
@@ -5898,7 +5893,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+            "id": "0e68e0f3-c6f4-40b1-a2cb-431dd0cd574d",
             "type": "number",
             "script": "({{1}} / {{2}})",
             "help": "quotient of the two operands",
@@ -5917,7 +5912,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+            "id": "7d9bf923-baa2-4606-8c44-0247022c2408",
             "type": "boolean",
             "script": "({{1}} === {{2}})",
             "help": "two operands are equal",
@@ -5936,7 +5931,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
+            "id": "74992263-4356-48ba-9afe-16e9323f4efa",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
             "help": "first operand is less than second operand",
@@ -5955,7 +5950,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
+            "id": "44d41058-f20e-4c8d-9d35-95e1fcfb8121",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
             "help": "first operand is greater than second operand",
@@ -5974,7 +5969,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+            "id": "fa03d3e2-0c28-4c35-a5e4-ed1b17d831a0",
             "type": "number",
             "script": "randint({{1}}, {{2}})",
             "help": "random number between two numbers (inclusive)",
@@ -5993,7 +5988,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
+            "id": "2e897518-31d8-4cc2-bd6e-2ede0b3136d0",
             "type": "number",
             "script": "({{1}} % {{2}})",
             "help": "modulus of a number is the remainder after whole number division",
@@ -6012,7 +6007,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
+            "id": "5e341dc5-f328-4b81-bbb7-aed3ffc81e01",
             "type": "number",
             "script": "Math.round({{1}})",
             "help": "rounds to the nearest whole number",
@@ -6026,7 +6021,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "c38383df-a765-422e-b215-7d1cfb7557a1",
+            "id": "ca74d36c-1879-4b41-b04b-587ca56b9a77",
             "type": "number",
             "script": "Math.abs({{1}})",
             "help": "converts a negative number to positive, leaves positive alone",
@@ -6040,7 +6035,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "id": "802a9575-523b-4b6a-961d-e6aed148bdd4",
             "type": "number",
             "script": "rad2deg(Math.acos({{1}}))",
             "help": "inverse of cosine",
@@ -6054,7 +6049,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "id": "441f5159-878a-4109-8030-8d8f9504977e",
             "type": "number",
             "script": "rad2deg(Math.asin({{1}}))",
             "help": "inverse of sine",
@@ -6068,7 +6063,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
+            "id": "834c4446-6c32-444a-9c3d-cad449eff941",
             "type": "number",
             "script": "rad2deg(Math.atan({{1}}))",
             "help": "inverse of tangent",
@@ -6082,7 +6077,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+            "id": "2ce4d35d-3c82-4f5e-9e27-894939291ad3",
             "type": "number",
             "script": "Math.ceil({{1}})",
             "help": "rounds up to nearest whole number",
@@ -6096,7 +6091,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
+            "id": "db690432-b321-434e-9044-b1188e581f99",
             "type": "number",
             "script": "Math.cos(deg2rad({{1}}))",
             "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
@@ -6113,7 +6108,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "1a8f6a28-14e9-4400-8e80-31217309ebc9",
+            "id": "9f89f604-2498-4149-9fc7-8bb19391e37d",
             "type": "number",
             "script": "Math.sin(deg2rad({{1}}))",
             "help": "ratio of the length of the opposite side to the length of the hypotenuse",
@@ -6130,7 +6125,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "fcecb61b-7fd9-4a92-b6cb-77d0a2fc8541",
+            "id": "d940a5b5-ba8a-49f0-b836-5e460e258a42",
             "type": "number",
             "script": "Math.tan(deg2rad({{1}}))",
             "help": "ratio of the length of the opposite side to the length of the adjacent side",
@@ -6147,7 +6142,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
+            "id": "f2127de3-d601-49fa-9ebf-79ae34c576bd",
             "type": "number",
             "script": "Math.pow({{1}}, {{2}})",
             "help": "multiply a number by itself the given number of times",
@@ -6166,7 +6161,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
+            "id": "df79282c-43bc-43dc-8d29-2dea29d33f00",
             "type": "number",
             "script": "Math.sqrt({{1}})",
             "help": "the square root is the same as taking the to the power of 1/2",
@@ -6180,7 +6175,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
+            "id": "4b357bdd-630c-4574-96e7-518fb7998702",
             "script": "Math.PI;",
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
@@ -6192,7 +6187,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
+            "id": "bdbfe741-bfb9-44fc-873d-e0513b02b87a",
             "script": "Math.PI * 2",
             "type": "number",
             "help": "tau is 2 times pi, a generally more useful number",
@@ -6203,8 +6198,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/minecraftjs/math.json*/
 
 /*begin languages/minecraftjs/string.json*/
@@ -6213,7 +6207,7 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "cdf5fa88-0d87-45d1-bf02-9ee4ec4c5565",
+            "id": "453e26ad-8bcc-4b48-a173-2d5eb4b15af3",
             "script": "{{1}}.split({{2}})",
             "type": "array",
             "help": "create an array by splitting the named string on the given string",
@@ -6232,7 +6226,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "e1951d04-dc2f-459e-9d7a-4796f29169ea",
+            "id": "9c1110e8-6722-4baf-a1f2-8b5a1a9ccee2",
             "type": "string",
             "script": "({{1}} + {{2}})",
             "help": "returns a string by joining together two strings",
@@ -6251,7 +6245,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
+            "id": "fb943e76-3829-4819-8161-f5b5e829f227",
             "script": "{{1}}[{{2}}]",
             "type": "string",
             "help": "get the single character string at the given index of named string",
@@ -6270,7 +6264,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "c1eda8ae-b77c-4f5f-9b9f-c11b65235765",
+            "id": "e6ef4aef-5342-4ceb-b050-ad3554d77c45",
             "script": "{{1}}.length",
             "type": "number",
             "help": "get the length of named string",
@@ -6287,7 +6281,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "cc005f19-e1b9-4f74-8fd0-91faccedd370",
+            "id": "88d791fe-a035-45ac-882f-bd96b30a73bf",
             "script": "{{1}}.indexOf({{2}})",
             "type": "number",
             "help": "get the index of the substring within the named string",
@@ -6306,7 +6300,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "8b536c13-4c56-471e-83ac-cf8648602df4",
+            "id": "93b4b160-e2e2-438a-a8f0-bf2ceb69aaf3",
             "script": "{{1}}.replace({{2}}, {{3}})",
             "type": "string",
             "help": "get a new string by replacing a substring with a new string",
@@ -6330,7 +6324,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "8eaacf8a-18eb-4f21-a1ab-a356326f7eae",
+            "id": "6377e5c8-4788-478b-96a6-6388bbed87ec",
             "script": "{{1}}.toString()",
             "type": "string",
             "help": "convert any object to a string",
@@ -6344,7 +6338,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
+            "id": "ddbb51d2-a627-406b-82ff-a7ff3d1d82ed",
             "script": "// {{1}};\n",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
@@ -6357,7 +6351,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "2f178d61-e619-47d0-b9cf-fcb52625c2a3",
+            "id": "5331ce50-0113-4595-b4d5-69e241f2019b",
             "script": "window.alert({{1}});",
             "help": "pop up an alert window with string",
             "sockets": [
@@ -6370,7 +6364,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "8496b7af-129f-48eb-b15b-8803b7617493",
+            "id": "e01e82db-4849-4dcd-b82e-0c5f8e801ba8",
             "script": "console.log({{1}});",
             "help": "Send any object as a message to the console",
             "sockets": [
@@ -6383,7 +6377,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "8bfaf131-d169-4cf4-afe4-1d7f02a55341",
+            "id": "27f62d38-a1a2-481f-b7ea-35aae955575b",
             "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
             "help": "send a message to the console with a format string and multiple objects",
             "sockets": [
@@ -6401,7 +6395,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "06ddcfee-76b7-4be4-856d-44cda3fb109b",
+            "id": "efe8c097-a91f-42f7-a92f-50ad32a969db",
             "script": "global.keys",
             "help": "for debugging",
             "type": "object",
@@ -6412,6 +6406,5 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/minecraftjs/string.json*/

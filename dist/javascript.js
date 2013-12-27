@@ -7596,7 +7596,7 @@ wb.menu({
                     "type": "vector"
                 }
             ]
-        },  
+        },
         {
             "blocktype": "step",
             "id": "d6204ed1-3b28-41af-8574-fac393df75f1",
@@ -7645,7 +7645,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "D7374103-3C03-40E8-A215-45BEFF97F0BC",
+            "id": "f7937709-f449-4480-927d-3bcfe33d2f65",
             "script": "{{2}}.project({{1}});",
             "help": "Project the first vector onto the second",
             "sockets": [
@@ -9154,7 +9154,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
+            "id": "e4787583-77ce-4d45-a863-50dcb4e87af0",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
             "help": "set transform to an arbitrary array [a,b,c,d,e,f]",
             "sockets": [

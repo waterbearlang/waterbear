@@ -16,7 +16,7 @@
         },
         {
             "blocktype": "step",
-            "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
+            "id": "e4787583-77ce-4d45-a863-50dcb4e87af0",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
             "help": "set transform to an arbitrary array [a,b,c,d,e,f]",
             "sockets": [

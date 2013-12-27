@@ -82,7 +82,7 @@
                     "type": "vector"
                 }
             ]
-        },  
+        },
         {
             "blocktype": "step",
             "id": "d6204ed1-3b28-41af-8574-fac393df75f1",
@@ -131,7 +131,7 @@
         },
         {
             "blocktype": "step",
-            "id": "D7374103-3C03-40E8-A215-45BEFF97F0BC",
+            "id": "f7937709-f449-4480-927d-3bcfe33d2f65",
             "script": "{{2}}.project({{1}});",
             "help": "Project the first vector onto the second",
             "sockets": [

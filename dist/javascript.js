@@ -9136,5 +9136,35 @@ wb.menu({
 /*end languages/javascript/text.json*/
 
 /*begin languages/javascript/matrix.json*/
-wb.menu({"name":"Matrix","blocks":[{"blocktype":"step","script":"if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});","help":"transform by an arbitrary matrix [a,b,c,d,e,f]","sockets":[{"name":"transform by 6-matrix","type":"array","value":null}]},{"blocktype":"step","id":"64e785e8-147a-4a9f-8439-cdba5f148ea1","script":"if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});","help":"set transform to an arbitrary array [a,b,c,d,e,f]","sockets":[{"name":"set transform to 6-matrix","type":"array","value":null}]}]});
+wb.menu({
+    "name": "Matrix",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
+            "help": "transform by an arbitrary matrix [a,b,c,d,e,f]",
+            "sockets": [
+                {
+                    "name": "transform by 6-matrix",
+                    "type": "array",
+                    "value": null
+                }
+            ],
+            "id": "b65e02c5-b990-4ceb-ab18-2593337103d9"
+        },
+        {
+            "blocktype": "step",
+            "id": "64e785e8-147a-4a9f-8439-cdba5f148ea1",
+            "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.setTransform.apply(local.ctx, {{1}});",
+            "help": "set transform to an arbitrary array [a,b,c,d,e,f]",
+            "sockets": [
+                {
+                    "name": "set transform to 6-matrix",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        }
+    ]
+});
 /*end languages/javascript/matrix.json*/

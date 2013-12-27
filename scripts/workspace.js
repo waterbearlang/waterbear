@@ -10,6 +10,7 @@
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			wb.history.clear();
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}

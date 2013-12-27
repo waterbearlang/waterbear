@@ -3742,65 +3742,8 @@ global.ajax = ajax;
 
 /*end file.js*/
 
-/*begin ui.js*/
+/*begin undo.js*/
 (function(wb){
-
-// UI Chrome Section
-
-function tabSelect(event){
-    var target = event.wbTarget;
-    event.preventDefault();
-    document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.add('selected');
-    if (wb.matches(target, '.scripts_workspace_tab')){
-        showWorkspace('block');
-    }else if (wb.matches(target, '.scripts_text_view_tab')){
-        showWorkspace('text');
-        updateScriptsView();
-    }
-}
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
-
-function accordion(event){
-    event.preventDefault();
-    var open = document.querySelector('#block_menu .open');
-    if (open){
-        open.classList.remove('open');
-    }
-    if (open && open === event.wbTarget.nextSibling) return;
-    event.wbTarget.nextSibling.classList.add('open');
-}
-
-Event.on('#block_menu', 'click', '.accordion-header', accordion);
-
-function showWorkspace(mode){
-    // console.log('showWorkspace');
-    var workspace = document.querySelector('.workspace');
-    var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    if (!scriptsWorkspace) return;
-    var scriptsTextView = document.querySelector('.scripts_text_view');
-    if (mode === 'block'){
-	    scriptsWorkspace.style.display = '';
-	    scriptsTextView.style.display = 'none';
-        workspace.classList.remove('textview');
-        workspace.classList.add('blockview');
-    }else if (mode === 'text'){
-    	scriptsWorkspace.style.display = 'none';
-    	scriptsTextView.style.display = '';
-        workspace.classList.remove('blockview');
-        workspace.classList.add('textview');
-    }
-}
-// Expose this to dragging and saving functionality
-wb.showWorkspace = showWorkspace;
-
-function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    var view = wb.find(document.body, '.workspace .scripts_text_view');
-    wb.writeScript(blocks, view);
-}
-window.updateScriptsView = updateScriptsView;
-
 // Undo list
 
 // Undo actions must support two methods:
@@ -3816,6 +3759,17 @@ var undoActions = [];
 // When currentAction == undoActions.length, there are no actions available to redo
 var currentAction = 0;
 
+function clearUndoStack(){
+	undoActions.length = 0;
+	currentAction = 0;
+	try{
+		document.querySelector('.undoAction').style.display = 'none';
+		document.querySelector('.redoAction').style.display = 'none';
+	}catch(e){
+		// don't worry if undo ui is not available yet
+	}
+}
+
 function undoLastAction() {
 	if(currentAction <= 0) return; // No action to undo!
 	currentAction--;
@@ -3826,7 +3780,6 @@ function undoLastAction() {
 	document.querySelector('.redoAction').style.display = '';
 }
 
-Event.on('.undoAction', 'click', null, undoLastAction);
 try{
 	document.querySelector('.undoAction').style.display = 'none';
 }catch(e){
@@ -3843,7 +3796,6 @@ function redoLastAction() {
 	document.querySelector('.undoAction').style.display = '';
 }
 
-Event.on('.redoAction', 'click', null, redoLastAction);
 try{
 	document.querySelector('.redoAction').style.display = 'none';
 }catch(e){
@@ -3874,7 +3826,73 @@ wb.history = {
 	add: addUndoAction,
 	undo: undoLastAction,
 	redo: redoLastAction,
+	clear: clearUndoStack
 }
+
+Event.on('.undoAction', 'click', null, undoLastAction);
+Event.on('.redoAction', 'click', null, redoLastAction);
+Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
+
+})(wb);
+/*end undo.js*/
+
+/*begin ui.js*/
+(function(wb){
+
+// UI Chrome Section
+
+function tabSelect(event){
+    var target = event.wbTarget;
+    event.preventDefault();
+    document.querySelector('.tabbar .selected').classList.remove('selected');
+    target.classList.add('selected');
+    if (wb.matches(target, '.scripts_workspace_tab')){
+        showWorkspace('block');
+    }else if (wb.matches(target, '.scripts_text_view_tab')){
+        showWorkspace('text');
+        updateScriptsView();
+    }
+}
+
+function accordion(event){
+    event.preventDefault();
+    var open = document.querySelector('#block_menu .open');
+    if (open){
+        open.classList.remove('open');
+    }
+    if (open && open === event.wbTarget.nextSibling) return;
+    event.wbTarget.nextSibling.classList.add('open');
+}
+
+
+function showWorkspace(mode){
+    // console.log('showWorkspace');
+    var workspace = document.querySelector('.workspace');
+    var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    if (!scriptsWorkspace) return;
+    var scriptsTextView = document.querySelector('.scripts_text_view');
+    if (mode === 'block'){
+	    scriptsWorkspace.style.display = '';
+	    scriptsTextView.style.display = 'none';
+        workspace.classList.remove('textview');
+        workspace.classList.add('blockview');
+    }else if (mode === 'text'){
+    	scriptsWorkspace.style.display = 'none';
+    	scriptsTextView.style.display = '';
+        workspace.classList.remove('blockview');
+        workspace.classList.add('textview');
+    }
+}
+// Expose this to dragging and saving functionality
+wb.showWorkspace = showWorkspace;
+
+function updateScriptsView(){
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    wb.writeScript(blocks, view);
+}
+window.updateScriptsView = updateScriptsView;
+
 
 function changeSocket(event) {
 	// console.log("Changed a socket!");
@@ -3897,7 +3915,6 @@ function changeSocket(event) {
 	wb.history.add(action);
 }
 
-Event.on(document.body, 'change', 'input', changeSocket);
 
 /* TODO list of undoable actions:
  -  Moving a step from position A to position B
@@ -4043,12 +4060,6 @@ function cmenuitem_enabled(menuitem) {
 	return true;
 }
 
-function initContextMenus() {
-	Event.on(document.body, 'contextmenu', null, handleContextMenu);
-	Event.on(document.body, 'mouseup', null, closeContextMenu);
-	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
-	document.querySelector('.cmenuEnable').style.display = 'none';
-}
 
 function buildContextMenu(options) {
 	// console.log('building context menu');
@@ -4198,6 +4209,19 @@ function edit_menu(title, specs, show){
     });
 }
 
+function initContextMenus() {
+	Event.on(document.body, 'contextmenu', null, handleContextMenu);
+	Event.on(document.body, 'mouseup', null, closeContextMenu);
+	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
+	document.querySelector('.cmenuEnable').style.display = 'none';
+}
+
+
+Event.on(document.body, 'change', 'input', changeSocket);
+Event.on('#block_menu', 'click', '.accordion-header', accordion);
+Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+
 })(wb);
 
 
@@ -4216,6 +4240,7 @@ function edit_menu(title, specs, show){
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			wb.history.clear();
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}

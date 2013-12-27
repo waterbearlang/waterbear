@@ -3742,65 +3742,8 @@ global.ajax = ajax;
 
 /*end file.js*/
 
-/*begin ui.js*/
+/*begin undo.js*/
 (function(wb){
-
-// UI Chrome Section
-
-function tabSelect(event){
-    var target = event.wbTarget;
-    event.preventDefault();
-    document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.add('selected');
-    if (wb.matches(target, '.scripts_workspace_tab')){
-        showWorkspace('block');
-    }else if (wb.matches(target, '.scripts_text_view_tab')){
-        showWorkspace('text');
-        updateScriptsView();
-    }
-}
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
-
-function accordion(event){
-    event.preventDefault();
-    var open = document.querySelector('#block_menu .open');
-    if (open){
-        open.classList.remove('open');
-    }
-    if (open && open === event.wbTarget.nextSibling) return;
-    event.wbTarget.nextSibling.classList.add('open');
-}
-
-Event.on('#block_menu', 'click', '.accordion-header', accordion);
-
-function showWorkspace(mode){
-    // console.log('showWorkspace');
-    var workspace = document.querySelector('.workspace');
-    var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    if (!scriptsWorkspace) return;
-    var scriptsTextView = document.querySelector('.scripts_text_view');
-    if (mode === 'block'){
-	    scriptsWorkspace.style.display = '';
-	    scriptsTextView.style.display = 'none';
-        workspace.classList.remove('textview');
-        workspace.classList.add('blockview');
-    }else if (mode === 'text'){
-    	scriptsWorkspace.style.display = 'none';
-    	scriptsTextView.style.display = '';
-        workspace.classList.remove('blockview');
-        workspace.classList.add('textview');
-    }
-}
-// Expose this to dragging and saving functionality
-wb.showWorkspace = showWorkspace;
-
-function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    var view = wb.find(document.body, '.workspace .scripts_text_view');
-    wb.writeScript(blocks, view);
-}
-window.updateScriptsView = updateScriptsView;
-
 // Undo list
 
 // Undo actions must support two methods:
@@ -3875,6 +3818,69 @@ wb.history = {
 	undo: undoLastAction,
 	redo: redoLastAction,
 }
+
+})(wb);
+/*end undo.js*/
+
+/*begin ui.js*/
+(function(wb){
+
+// UI Chrome Section
+
+function tabSelect(event){
+    var target = event.wbTarget;
+    event.preventDefault();
+    document.querySelector('.tabbar .selected').classList.remove('selected');
+    target.classList.add('selected');
+    if (wb.matches(target, '.scripts_workspace_tab')){
+        showWorkspace('block');
+    }else if (wb.matches(target, '.scripts_text_view_tab')){
+        showWorkspace('text');
+        updateScriptsView();
+    }
+}
+Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+function accordion(event){
+    event.preventDefault();
+    var open = document.querySelector('#block_menu .open');
+    if (open){
+        open.classList.remove('open');
+    }
+    if (open && open === event.wbTarget.nextSibling) return;
+    event.wbTarget.nextSibling.classList.add('open');
+}
+
+Event.on('#block_menu', 'click', '.accordion-header', accordion);
+
+function showWorkspace(mode){
+    // console.log('showWorkspace');
+    var workspace = document.querySelector('.workspace');
+    var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    if (!scriptsWorkspace) return;
+    var scriptsTextView = document.querySelector('.scripts_text_view');
+    if (mode === 'block'){
+	    scriptsWorkspace.style.display = '';
+	    scriptsTextView.style.display = 'none';
+        workspace.classList.remove('textview');
+        workspace.classList.add('blockview');
+    }else if (mode === 'text'){
+    	scriptsWorkspace.style.display = 'none';
+    	scriptsTextView.style.display = '';
+        workspace.classList.remove('blockview');
+        workspace.classList.add('textview');
+    }
+}
+// Expose this to dragging and saving functionality
+wb.showWorkspace = showWorkspace;
+
+function updateScriptsView(){
+    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    wb.writeScript(blocks, view);
+}
+window.updateScriptsView = updateScriptsView;
+
 
 function changeSocket(event) {
 	// console.log("Changed a socket!");

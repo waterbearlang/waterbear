@@ -1184,6 +1184,13 @@ Global.prototype.preloadImage = preloadImage; // called by script block to set u
 /*end languages/javascript/asset_runtime.js*/
 
 /*begin languages/javascript/control_runtime.js*/
+    // Polyfill for built-in functionality, just to get rid of namespaces in older
+    // browsers, or to emulate it for browsers that don't have requestAnimationFrame yet
+    window.requestAnimationFrame = window.requestAnimationFrame ||
+                                   window.mozRequestAnimationFrame || 
+                                   window.msRequestAnimationFrame || 
+                                   window.webkitRequestAnimationFrame || 
+                                   function(fn){ setTimeout(fn, 20); };
 
 /*end languages/javascript/control_runtime.js*/
 
@@ -1208,9 +1215,11 @@ function PolySprite(pos,color,points){
 };
 
 function createRectSprite(size,pos,color){
-    var posVector = new SAT.Vector(pos.x, pos.y);
-    var points = new SAT.Box(posVector, size.w, size.h).toPolygon().points;
-    return new PolySprite(posVector, color, points);
+     var rect = new PolySprite(pos,color,[]);
+     rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+     rect.polygon.average = rect.polygon.calculateAverage();
+     rect.calculateBoundingBox();
+     return rect;
 };
 
 window.PolySprite = PolySprite;
@@ -1244,6 +1253,12 @@ PolySprite.prototype.calculateBoundingBox = function(){
 };
 
 PolySprite.prototype.collides = function(sprite) {
+    if (!this.polygon){
+        console.log('no polygon for this: %o', this);
+    }
+    if (!sprite.polygon){
+        console.log('no polygon for sprite %o', sprite);
+    }
     return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
 };
 

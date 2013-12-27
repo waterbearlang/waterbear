@@ -18,9 +18,11 @@ function PolySprite(pos,color,points){
 };
 
 function createRectSprite(size,pos,color){
-    var posVector = new SAT.Vector(pos.x, pos.y);
-    var points = new SAT.Box(posVector, size.w, size.h).toPolygon().points;
-    return new PolySprite(posVector, color, points);
+     var rect = new PolySprite(pos,color,[]);
+     rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+     rect.polygon.average = rect.polygon.calculateAverage();
+     rect.calculateBoundingBox();
+     return rect;
 };
 
 window.PolySprite = PolySprite;
@@ -54,6 +56,12 @@ PolySprite.prototype.calculateBoundingBox = function(){
 };
 
 PolySprite.prototype.collides = function(sprite) {
+    if (!this.polygon){
+        console.log('no polygon for this: %o', this);
+    }
+    if (!sprite.polygon){
+        console.log('no polygon for sprite %o', sprite);
+    }
     return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
 };
 

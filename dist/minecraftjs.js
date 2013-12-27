@@ -2864,7 +2864,7 @@ global.ajax = ajax;
   }
 
   // Constants
-  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
+  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{11}[a-zA-Z0-9]?/;
 
   function isUuid(value){
     if (!value) return false;
@@ -5067,9 +5067,7 @@ wb.menu({
             "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
             "sockets": [
                 {
-                    "name": "Move Player to"
-                },
-                {
+                    "name": "Move Player to",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5157,11 +5155,12 @@ wb.menu({
             "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
             "sockets": [
                 {
+                    "name": "position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "equals",
+                    "name": "equals position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
@@ -5301,9 +5300,7 @@ wb.menu({
             "id": "b8020f54-43d2-4207-8529-336eb035898c",
             "sockets": [
                     {
-                        "name": "get Block Type at "
-                    },
-                    {
+                        "name": "get Block Type at",
                         "type": "position",
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
@@ -5328,6 +5325,7 @@ wb.menu({
             "id": "a7c17404-8555-42be-877e-9d01d7647604",
             "sockets": [
                     {
+                    "name": "block",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
@@ -5342,16 +5340,12 @@ wb.menu({
             "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
             "sockets": [
                 {
-                    "name": "set Block at"
-                },
-                {
+                    "name": "set Block at",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "to"
-                },
-                {
+                    "name": "to",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
@@ -5366,23 +5360,17 @@ wb.menu({
             "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
             "sockets": [
                 {
-                    "name": "set Blocks between"
-                },
-                {
+                    "name": "set Blocks between",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "and"
-                },
-                {
+                    "name": "and",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "to"
-                },
-                {
+                    "name": "to",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
@@ -5396,9 +5384,7 @@ wb.menu({
             "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
             "sockets": [
                 {
-                    "name": "block type name"
-                },
-                {
+                    "name": "block type name",
                     "type": "number",
                     "value": "0"
                 }
@@ -5423,9 +5409,7 @@ wb.menu({
             "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
             "sockets": [
                 {
-                    "name": "set camera mode to"
-                },
-                {
+                    "name": "set camera mode to",
                     "type": "choice",
                     "options": "cameramode",
                     "value": "choice"
@@ -5440,9 +5424,7 @@ wb.menu({
             "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
             "sockets": [
                 {
-                    "name": "set camera position to"
-                },
-                {
+                    "name": "set camera position to",
                     "type": "position"
                 }
             ],

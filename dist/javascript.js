@@ -2864,7 +2864,7 @@ global.ajax = ajax;
   }
 
   // Constants
-  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
+  var UUID_TEST = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{11}[a-zA-Z0-9]?/;
 
   function isUuid(value){
     if (!value) return false;
@@ -8712,7 +8712,6 @@ wb.menu({
                 {
                     "name": "and color",
                     "type": "color",
-                    "value": "#000000",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
             ]

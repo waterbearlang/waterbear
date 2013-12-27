@@ -81,9 +81,7 @@
             "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
             "sockets": [
                 {
-                    "name": "Move Player to"
-                },
-                {
+                    "name": "Move Player to",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }

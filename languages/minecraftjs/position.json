@@ -70,11 +70,12 @@
             "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
             "sockets": [
                 {
+                    "name": "position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
                 {
-                    "name": "equals",
+                    "name": "equals position",
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }

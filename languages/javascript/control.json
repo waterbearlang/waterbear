@@ -44,16 +44,11 @@
                     "type": "number"
                 }
             ],
-            "script": "(function(){local.count##=0;setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+            "script": "(function(){local.count##=0;requestAnimationFrame(function eachFrame(){local.count##++;[[1]];requestAnimationFrame(eachFrame);})})();",
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
-                    "name": "repeat",
-                    "type": "number",
-                    "value": "30"
-                },
-                {
-                    "name": "times a second"
+                    "name": "each frame",
                 }
             ]
         },

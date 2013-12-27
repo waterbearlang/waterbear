@@ -3,7 +3,6 @@
     "blocks": [
         {
             "blocktype": "step",
-            "id": "0f9e96f3-52d3-4ace-afdf-c598c1bd31ed",
             "script": "if ({{1}}.length !== 6){alert(\"Array must have 6 numbers\"); return false;}local.ctx.transform.apply(local.ctx, {{1}});",
             "help": "transform by an arbitrary matrix [a,b,c,d,e,f]",
             "sockets": [
@@ -12,7 +11,8 @@
                     "type": "array",
                     "value": null
                 }
-            ]
+            ],
+            "id": "b65e02c5-b990-4ceb-ab18-2593337103d9"
         },
         {
             "blocktype": "step",

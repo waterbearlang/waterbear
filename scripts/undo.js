@@ -14,6 +14,17 @@ var undoActions = [];
 // When currentAction == undoActions.length, there are no actions available to redo
 var currentAction = 0;
 
+function clearUndoStack(){
+	undoActions.length = 0;
+	currentAction = 0;
+	try{
+		document.querySelector('.undoAction').style.display = 'none';
+		document.querySelector('.redoAction').style.display = 'none';
+	}catch(e){
+		// don't worry if undo ui is not available yet
+	}
+}
+
 function undoLastAction() {
 	if(currentAction <= 0) return; // No action to undo!
 	currentAction--;
@@ -24,7 +35,6 @@ function undoLastAction() {
 	document.querySelector('.redoAction').style.display = '';
 }
 
-Event.on('.undoAction', 'click', null, undoLastAction);
 try{
 	document.querySelector('.undoAction').style.display = 'none';
 }catch(e){
@@ -41,7 +51,6 @@ function redoLastAction() {
 	document.querySelector('.undoAction').style.display = '';
 }
 
-Event.on('.redoAction', 'click', null, redoLastAction);
 try{
 	document.querySelector('.redoAction').style.display = 'none';
 }catch(e){
@@ -72,6 +81,11 @@ wb.history = {
 	add: addUndoAction,
 	undo: undoLastAction,
 	redo: redoLastAction,
+	clear: clearUndoStack
 }
+
+Event.on('.undoAction', 'click', null, undoLastAction);
+Event.on('.redoAction', 'click', null, redoLastAction);
+Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 })(wb);

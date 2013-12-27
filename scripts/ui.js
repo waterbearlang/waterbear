@@ -14,7 +14,6 @@ function tabSelect(event){
         updateScriptsView();
     }
 }
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 function accordion(event){
     event.preventDefault();
@@ -26,7 +25,6 @@ function accordion(event){
     event.wbTarget.nextSibling.classList.add('open');
 }
 
-Event.on('#block_menu', 'click', '.accordion-header', accordion);
 
 function showWorkspace(mode){
     // console.log('showWorkspace');
@@ -78,7 +76,6 @@ function changeSocket(event) {
 	wb.history.add(action);
 }
 
-Event.on(document.body, 'change', 'input', changeSocket);
 
 /* TODO list of undoable actions:
  -  Moving a step from position A to position B
@@ -224,12 +221,6 @@ function cmenuitem_enabled(menuitem) {
 	return true;
 }
 
-function initContextMenus() {
-	Event.on(document.body, 'contextmenu', null, handleContextMenu);
-	Event.on(document.body, 'mouseup', null, closeContextMenu);
-	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
-	document.querySelector('.cmenuEnable').style.display = 'none';
-}
 
 function buildContextMenu(options) {
 	// console.log('building context menu');
@@ -378,6 +369,19 @@ function edit_menu(title, specs, show){
         submenu.appendChild(wb.Block(spec));
     });
 }
+
+function initContextMenus() {
+	Event.on(document.body, 'contextmenu', null, handleContextMenu);
+	Event.on(document.body, 'mouseup', null, closeContextMenu);
+	Event.on('.cmenuEnable', 'click', null, enableContextMenu);
+	document.querySelector('.cmenuEnable').style.display = 'none';
+}
+
+
+Event.on(document.body, 'change', 'input', changeSocket);
+Event.on('#block_menu', 'click', '.accordion-header', accordion);
+Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
 
 })(wb);
 

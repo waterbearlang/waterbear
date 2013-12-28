@@ -12,7 +12,7 @@ if(window.DeviceOrientationEvent) {
 }
 
 function processData(event) {
-
+    console.log('caught device orientation event');
     var left_right = event.gamma;
     var front_back = event.beta;
 
@@ -38,11 +38,11 @@ function processData(event) {
     }
 };
 
-$('body').bind("waterbear_close", function() {
-    $.each( accelerometer._tasks, function(i, j){
-        clearInterval( j );
-    } );
-});
+// Event.on('body', 'waterbear_close', null, function(){
+//     accelerometer.tasks.forEach(function(task){
+//         clearInterval(task);
+//     });
+// });
 
 global.accelerometer = accelerometer;
 

@@ -4566,9 +4566,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
     // Add some utilities
     wb.wrap = function(script){
         return [
-            'var global = new Global();',
             '(function(){', 
-                'var local = new Local();', 
                 // 'try{',
                     'local.canvas = document.createElement("canvas");',
                     'local.canvas.setAttribute("width", global.stage_width);',
@@ -4852,6 +4850,13 @@ wb.choiceLists.rettypes.push('vector');
 /*begin languages/javascript/sensing.js*/
 
 /*end languages/javascript/sensing.js*/
+
+/*begin languages/javascript/motion.js*/
+// set up choices
+wb.choiceLists.directions = ["upright", "downright", "downleft", "upleft", "up", "down", "right", "left"];
+wb.choiceLists.types.push('motion');
+wb.choiceLists.rettypes.push('motion');
+/*end languages/javascript/motion.js*/
 
 /*begin languages/javascript/shape.js*/
 
@@ -8762,6 +8767,41 @@ wb.menu({
 }
 );
 /*end languages/javascript/sensing.json*/
+
+/*begin languages/javascript/motion.json*/
+wb.menu({
+    "name": "Motion",
+    "blocks": [
+    	{
+    		"blocktype": "expression",
+    		"id": "f1a792df-9508-4ad5-90f8-aa9cd60d46bc",
+    		"type": "string",
+    		"script": "global.accelerometer.direction",
+    		"help": "which way is the device moving?",
+    		"sockets": [
+    			{
+	    			"name": "tilt direction"
+	    		}
+    		]
+    	},
+    	{
+    		"blocktype": "eventhandler",
+    		"id": "74f8f7c0-f2f9-4ea4-9888-49110785b26d",
+    		"script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+    		"help": "handler for accelerometer events",
+    		"sockets": [
+    			{
+    				"name": "when device turned",
+    				"type": "choice",
+    				"options": "directions"
+    			}
+    		]
+    	}
+    ]
+}
+
+);
+/*end languages/javascript/motion.json*/
 
 /*begin languages/javascript/shape.json*/
 wb.menu({

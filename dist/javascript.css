@@ -2600,6 +2600,14 @@ a .icon-flip-vertical:before {
 
 /*end languages/javascript/sensing.css*/
 
+/*begin languages/javascript/motion.css*/
+.motion, .motion .holder{
+    border-color: hsl(175, 65%, 79%);
+    background-color: hsl(175, 62%, 89%);
+}
+
+/*end languages/javascript/motion.css*/
+
 /*begin languages/javascript/shape.css*/
 .shapes, .shapes .holder{
     border-color: hsl(25, 100%, 63%);

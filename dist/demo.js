@@ -4713,7 +4713,6 @@ wb.menu({
             "locals": [
                 {
                     "blocktype": "eventhandler",
-                    "id": "5046dc28-2a33-4120-b442-90d015faf563",
                     "script": "function handler_##(){/* handle asynchronous callback*/}",
                     "help": "making these event handlers prevents having blocks follow them",
                     "sockets": [

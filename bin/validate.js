@@ -21,6 +21,7 @@
 //
 //  TODO: 
 //		* Re-enable warnings on missing help
+// 	    * Implement validateLocal
 
 var uuid = require('../scripts/uuid').uuid;
 var isUuid = require('../scripts/uuid').isUuid;
@@ -63,18 +64,11 @@ function validateJson(filename, text){
 }
 
 function validateBlock(block){
-	// blocktype is a mandatory string, one of ''
 	var newUuid = null;
-	if (['expression', 'step', 'eventhandler', 'context', 'asset'].indexOf(block.blocktype) < 0){
-		throw new Error('A block must have a blocktype: ' + JSON.stringify(block));
-	}
-	if (typeof block.id !== 'string'){
+	validateAnyBlock(block);
+	if (!(typeof block.id === 'string' && isUuid(block.id))){
 		newUuid = uuid();
 		block.id = newUuid;
-		// console.warn('adding id to block: ' + JSON.stringify(block));
-	}
-	if (!isUuid(block.id)){
-		console.warn('id %s does not match uuid spec', block.id);
 	}
 	if (allBlocks[block.id]){
 		newUuid = uuid();
@@ -82,6 +76,22 @@ function validateBlock(block){
 		console.warn('found block with duplicate id, updating with new id: ' + JSON.stringify(block));
 	}
 	allBlocks[block.id] = true;
+	if (['step', 'context', 'eventhandler'].indexOf(block.blocktype) > -1){
+		if (block.locals){
+			if (!Array.isArray(block.locals)){
+				throw new Error('Block locals must be an array: ' + JSON.stringify(block));
+			}
+			block.locals.forEach(validateLocal);
+		}
+	}
+	return newUuid;
+}
+
+function validateAnyBlock(block){
+	// blocktype is a mandatory string, one of ''
+	if (['expression', 'step', 'eventhandler', 'context', 'asset'].indexOf(block.blocktype) < 0){
+		throw new Error('A block must have a blocktype: ' + JSON.stringify(block));
+	}
 	if (typeof block.script !== 'string'){
 		throw new Error('A block must have a script template: ' + JSON.stringify(block));
 	}
@@ -100,15 +110,9 @@ function validateBlock(block){
 		throw new Error('A block has to have at least one socket: ' + JSON.stringify(block));
 	}
 	block.sockets.forEach(validateSocket);
-	return newUuid;
 }
 
 function validateStep(block){
-	if (block.locals){
-		if (!Array.isArray(block.locals)){
-			throw new Error('Block locals must be an array: ' + JSON.stringify(block));
-		}
-	}
 	if (block.type){
 		throw new Error('Step blocks cannot have a type: ' + JSON.stringify(block));
 	}
@@ -120,6 +124,18 @@ function validateExpression(block){
 	}
 	if (typeof block.type !== 'string'){
 		throw new Error('Expressions must have a type: ' + JSON.stringify(block));
+	}
+}
+
+function validateLocal(block){
+	// Locals are like regular blocks except they cannot
+	// have locals themselves and they cannot have IDs
+	validateAnyBlock(block);
+	if (block.locals){
+		throw new Error('Local blocks cannot have locals: ' + JSON.stringify(block));
+	}
+	if (block.id !== undefined){
+		throw new Error('Local blocks cannot have ids: ' + JSON.stringify(block));
 	}
 }
 

@@ -1,0 +1,31 @@
+{
+    "name": "Motion",
+    "blocks": [
+    	{
+    		"blocktype": "expression",
+    		"id": "f1a792df-9508-4ad5-90f8-aa9cd60d46bc",
+    		"type": "string",
+    		"script": "global.accelerometer.direction",
+    		"help": "which way is the device moving?",
+    		"sockets": [
+    			{
+	    			"name": "tilt direction"
+	    		}
+    		]
+    	},
+    	{
+    		"blocktype": "eventhandler",
+    		"id": "74f8f7c0-f2f9-4ea4-9888-49110785b26d",
+    		"script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+    		"help": "handler for accelerometer events",
+    		"sockets": [
+    			{
+    				"name": "when device turned",
+    				"type": "choice",
+    				"options": "directions"
+    			}
+    		]
+    	}
+    ]
+}
+

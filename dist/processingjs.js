@@ -13761,7 +13761,7 @@ global.ajax = ajax;
 	    	"public": true,
 	    	"files": {
 	    		"script.json": {
-	    			"content": scriptsToString()
+	    			"content": scriptsToString(title)
 	    		},
 	    	}
 	    }));
@@ -13811,13 +13811,14 @@ global.ajax = ajax;
 
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
+	    var title = prompt("Save file as: ");
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString()], {type: 'application/json'});
 		var reader = new FileReader();
 		var a = document.createElement('a');
 		reader.onloadend = function(){
 			a.href = reader.result;
-			a.download = 'script.json';
+			a.download = title + '.json';
 			a.target = '_blank';
 			document.body.appendChild(a);
 			a.click();

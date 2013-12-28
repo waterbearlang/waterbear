@@ -21,7 +21,6 @@
 //
 //  TODO: 
 //		* Re-enable warnings on missing help
-// 	    * Implement validateLocal
 
 var uuid = require('../scripts/uuid').uuid;
 var isUuid = require('../scripts/uuid').isUuid;

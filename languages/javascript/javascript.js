@@ -8,9 +8,7 @@
     // Add some utilities
     wb.wrap = function(script){
         return [
-            'var global = new Global();',
             '(function(){', 
-                'var local = new Local();', 
                 // 'try{',
                     'local.canvas = document.createElement("canvas");',
                     'local.canvas.setAttribute("width", global.stage_width);',

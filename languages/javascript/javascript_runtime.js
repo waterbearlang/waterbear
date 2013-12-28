@@ -332,4 +332,8 @@ if(typeof(console) == "undefined") {
 } else {
     // console.log provided by Firefox + Firebug
 }
+
+var global = new Global();
+var local = new Local();
+
 console.log('runtime ready');

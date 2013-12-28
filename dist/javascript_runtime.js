@@ -1151,10 +1151,12 @@ var loaded = 0;
 var toload = 0;
 
 function preloadAssets(assetUrls, callback){
+	// console.log('preloading %o', assetUrls);
 	if (!assetUrls.length){
 		return callback();
 	}
 	load = function() {
+		// console.log('loaded');
 		loaded++;
 	    if (loaded >= toload){
 	    	callback();
@@ -1163,22 +1165,35 @@ function preloadAssets(assetUrls, callback){
     assetUrls.forEach(function(url, idx){
     	toload++;
     	assets[url] = getAssetType(url);
-	    assets[url].onload = load;
-	    assets[url].onerror = load;
-	    assets[url].onabort = load;
+	    assets[url].addEventListener('load', load,false);
+	    assets[url].addEventListener('canplay', load, false);
+	    assets[url].addEventListener('error', load, false);
+	    assets[url].addEventListener('abort', load, false);
     	assets[url].src = url;
  	});
 }
 
 
 var images = Global.prototype.images = {};
+var audio = Global.prototype.audio = {};
+var video = Global.prototype.video = {};
 
 function preloadImage(seqNum, url){
 	images[seqNum] = assets[url];
 }
 
+function preloadAudio(seqNum, url){
+	audio[seqNum] = assets[url];
+}
+
+function preloadVideo(seqNum, url){
+	video[seqNum] = assets[url];
+}
+
 Global.prototype.preloadAssets = preloadAssets; // called by runtime automatically
 Global.prototype.preloadImage = preloadImage; // called by script block to set up convenient name
+Global.prototype.preloadAudio = preloadAudio;
+Global.prototype.preloadVideo = preloadVideo;
 
 })();
 /*end languages/javascript/asset_runtime.js*/
@@ -1543,6 +1558,10 @@ Voice.notes = [
 Voice.refNote = Voice.notes.indexOf('A4');
 
 /*end languages/javascript/voice_runtime.js*/
+
+/*begin languages/javascript/sound_runtime.js*/
+
+/*end languages/javascript/sound_runtime.js*/
 
 /*begin languages/javascript/array_runtime.js*/
 

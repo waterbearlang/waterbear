@@ -2457,6 +2457,14 @@ a .icon-flip-vertical:before {
 }
 /*end languages/javascript/voice.css*/
 
+/*begin languages/javascript/sound.css*/
+.sound, .sound .holder{
+    border-color: hsl(225, 65%, 79%);
+    background-color: hsl(225, 62%, 89%);
+}
+
+/*end languages/javascript/sound.css*/
+
 /*begin languages/javascript/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);

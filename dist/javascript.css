@@ -2616,6 +2616,14 @@ a .icon-flip-vertical:before {
 
 /*end languages/javascript/shape.css*/
 
+/*begin languages/javascript/geolocation.css*/
+.geolocation, .location, .geolocation .holder, .location .holder{
+    border-color: hsl(205, 65%, 79%);
+    background-color: hsl(205, 62%, 89%);
+}
+
+/*end languages/javascript/geolocation.css*/
+
 /*begin languages/javascript/size.css*/
 .sizes, .sizes .holder{
     border-color: hsl(15,100%,63%);

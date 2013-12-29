@@ -1627,7 +1627,6 @@ function Vector(x,y) {
 
 var accelerometer = {};
 accelerometer.direction = "";
-accelerometer._tasks = [];
 
 if(window.DeviceOrientationEvent) {
     // always follow direction changes
@@ -1663,12 +1662,6 @@ function processData(event) {
     }
 };
 
-// Event.on('body', 'waterbear_close', null, function(){
-//     accelerometer.tasks.forEach(function(task){
-//         clearInterval(task);
-//     });
-// });
-
 global.accelerometer = accelerometer;
 
 })(global);
@@ -1677,6 +1670,75 @@ global.accelerometer = accelerometer;
 /*begin languages/javascript/shape_runtime.js*/
 
 /*end languages/javascript/shape_runtime.js*/
+
+/*begin languages/javascript/geolocation_runtime.js*/
+(function(global){
+
+var location = {};
+
+if (navigator.geolocation){
+  location.watchPosition = function watchPosition(cb){
+    navigator.geolocation.watchPosition(
+      function(data) {
+        location.currentLocation = data.coords; // sets latitude and longitude
+        cb();
+      }, 
+      function(){
+        console.warn('Sorry, no position available');
+      }
+    );
+  };
+}else{
+  location.watchPosition = function watchPosition(cb){
+    console.warn('Sorry, geolocation services not available');
+  };
+}
+
+if (navigator.geolocation){
+  location.whenWithinXOf = function whenWithinXOf(distance, loc, cb){
+    navigator.geolocation.watchPosition(
+      function(data) {
+        location.currentLocation = data.coords; // sets latitude and longitude
+        if (location.distance(loc, data.coords) < distance){
+          cb();
+        }
+      }, 
+      function(){
+        console.warn('Sorry, no position available');
+      }
+    );
+  };
+}else{
+  location.whenWithinXOf = function whenWithinXOf(distance, loc, cb){
+    console.warn('Sorry, geolocation services not available');
+  };
+}
+
+
+// taken from http://www.movable-type.co.uk/scripts/latlong.html
+location.distance = function distance( coord1, coord2 ) {
+
+    var lat1 = coord1.latitude;
+    var lon1 = coord1.longitude;
+
+    var lat2 = coord2.latitude;
+    var lon2 = coord2.longitude;
+
+    var R = 6371; // km
+    return Math.acos(Math.sin(lat1)*Math.sin(lat2) + 
+                  Math.cos(lat1)*Math.cos(lat2) *
+                  Math.cos(lon2-lon1)) * R;
+};
+
+location.currentLocation = {
+  latitude: 0,
+  longitude: 0
+};
+
+global.location = location;
+
+})(global);
+/*end languages/javascript/geolocation_runtime.js*/
 
 /*begin languages/javascript/size_runtime.js*/
 

@@ -2,7 +2,6 @@
 
 var accelerometer = {};
 accelerometer.direction = "";
-accelerometer._tasks = [];
 
 if(window.DeviceOrientationEvent) {
     // always follow direction changes
@@ -37,12 +36,6 @@ function processData(event) {
         accelerometer.direction = "left";
     }
 };
-
-// Event.on('body', 'waterbear_close', null, function(){
-//     accelerometer.tasks.forEach(function(task){
-//         clearInterval(task);
-//     });
-// });
 
 global.accelerometer = accelerometer;
 

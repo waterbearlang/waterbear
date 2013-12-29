@@ -1,0 +1,4 @@
+.geolocation, .location, .geolocation .holder, .location .holder{
+    border-color: hsl(205, 65%, 79%);
+    background-color: hsl(205, 62%, 89%);
+}

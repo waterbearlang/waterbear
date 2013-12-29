@@ -1678,10 +1678,8 @@ var location = {};
 
 if (navigator.geolocation){
   location.watchPosition = function watchPosition(cb){
-    console.log('should be prompting for permissions now');
     navigator.geolocation.watchPosition(
       function(data) {
-        console.log('position updated');
         location.currentLocation = data.coords; // sets latitude and longitude
         cb();
       }, 

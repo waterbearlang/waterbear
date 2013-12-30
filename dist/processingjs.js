@@ -13827,9 +13827,12 @@ global.ajax = ajax;
 		evt.preventDefault();
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+	wb.loadScriptsFromGistId = function loadScriptsFromGistId(event_or_id){
+		if (event_or_id.target){
+			event_or_id.preventDefault();
+		}
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
-		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+		var gistID = isNaN(parseInt(event_or_id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
@@ -14441,6 +14444,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
 	wb.clearScripts = function clearScripts(event, force){
+		event.preventDefault();
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);

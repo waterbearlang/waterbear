@@ -3,6 +3,7 @@
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
 	wb.clearScripts = function clearScripts(event, force){
+		event.preventDefault();
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);

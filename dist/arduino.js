@@ -2589,6 +2589,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	// });
 	Event.on(document.body, 'wb-script-loaded', null, function(evt){
 		wb.scriptModified = false;
+		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
 			console.log('run script because we are awesome');
 			if (wb.windowLoaded){
@@ -2605,7 +2606,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		// 	console.log('do not run script for some odd reason: %s', wb.view);
 		}
 		// clear undo/redo stack
-		wb.scriptLoaded = true;
 		console.log('script loaded');
 	});
 

@@ -2212,12 +2212,8 @@ global.ajax = ajax;
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isPointerEvent = function(event){
+    var isMouseEvent = function isMouseEvent(event){
         switch(event.type){
-            case 'touchstart':
-            case 'touchmove':
-            case 'touchend':
-            case 'tap':
             case 'mousedown':
             case 'mousemove':
             case 'mouseup':
@@ -2226,16 +2222,35 @@ global.ajax = ajax;
             default:
                 return false;
         }
-    }
+    };
+    var isTouchEvent = function isTouchEvent(event){
+        switch(event.type){
+            case 'touchstart':
+            case 'touchmove':
+            case 'touchend':
+            case 'tap':
+                return true;
+            default:
+                return false;
+        }
+    };
+
+    var isPointerEvent = function isPointerEvent(event){
+        return isTouchEvent(event) || isMouseEvent(event);
+    };
 
     // Treat mouse events and single-finger touch events similarly
     var blend = function(event){
         if (isPointerEvent(event)){
-            if (isTouch){
-                if (event.touches.length > 1){
+            if (isTouchEvent(event)){
+                var touch = null;
+                if (event.touches.length === 1){
+                    touch = event.touches[0];
+                }else if (event.changedTouches.length === 1){
+                    touch = event.changedTouches[0];
+                }else{
                     return event;
                 }
-                var touch = event.touches[0];
                 event.wbTarget = touch.target;
                 event.wbPageX = touch.pageX;
                 event.wbPageY = touch.pageY;
@@ -3620,12 +3635,9 @@ global.ajax = ajax;
 		evt.preventDefault();
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(event_or_id){
-		if (event_or_id.target){
-			event_or_id.preventDefault();
-		}
+	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
-		var gistID = isNaN(parseInt(event_or_id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
@@ -3633,7 +3645,6 @@ global.ajax = ajax;
 	};
 
 	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
-	    event.preventDefault();
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
@@ -4237,7 +4248,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
 	wb.clearScripts = function clearScripts(event, force){
-		event.preventDefault();
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);

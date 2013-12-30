@@ -862,7 +862,7 @@ ul.menu li, ul.menu ul.sub-menu li {
 	display: inline-block;
 }
 /*Link Appearance*/
-ul.menu li a, ul.menu li ul.sub-menu li a {
+ul.menu li button, ul.menu li ul.sub-menu li button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;
@@ -873,10 +873,10 @@ ul.menu li a, ul.menu li ul.sub-menu li a {
 	border-top: 1px solid black;
 	margin: 0;
 }
-ul.menu > li > a {
+ul.menu > li > button {
 	text-align:center;
 }
-ul.menu li a:hover, ul.menu li ul.sub-menu li a:hover {
+ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
 	background:#555;
 }
 /*Make the parent of sub-menu relative*/
@@ -892,10 +892,10 @@ ul.menu li ul.sub-menu {
 	width: 100px;
 	z-index:1000;
 }
-ul.menu li ul.sub-menu li a {
+ul.menu li ul.sub-menu li button {
 	min-width:200px;
 }
-ul.menu li ul.sub-menu li a.disabled {
+ul.menu li ul.sub-menu li button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {
@@ -913,7 +913,7 @@ ul.menu li:hover ul.sub-menu {
 	.menu_buttons {
 		display:block;
 	}
-	#nav li, #nav li a {
+	#nav li, #nav li button {
 		width:100%;
 
 	}

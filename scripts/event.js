@@ -77,12 +77,8 @@
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isPointerEvent = function(event){
+    var isMouseEvent = function isMouseEvent(event){
         switch(event.type){
-            case 'touchstart':
-            case 'touchmove':
-            case 'touchend':
-            case 'tap':
             case 'mousedown':
             case 'mousemove':
             case 'mouseup':
@@ -91,16 +87,35 @@
             default:
                 return false;
         }
-    }
+    };
+    var isTouchEvent = function isTouchEvent(event){
+        switch(event.type){
+            case 'touchstart':
+            case 'touchmove':
+            case 'touchend':
+            case 'tap':
+                return true;
+            default:
+                return false;
+        }
+    };
+
+    var isPointerEvent = function isPointerEvent(event){
+        return isTouchEvent(event) || isMouseEvent(event);
+    };
 
     // Treat mouse events and single-finger touch events similarly
     var blend = function(event){
         if (isPointerEvent(event)){
-            if (isTouch){
-                if (event.touches.length > 1){
+            if (isTouchEvent(event)){
+                var touch = null;
+                if (event.touches.length === 1){
+                    touch = event.touches[0];
+                }else if (event.changedTouches.length === 1){
+                    touch = event.changedTouches[0];
+                }else{
                     return event;
                 }
-                var touch = event.touches[0];
                 event.wbTarget = touch.target;
                 event.wbPageX = touch.pageX;
                 event.wbPageY = touch.pageY;

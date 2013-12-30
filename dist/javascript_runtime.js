@@ -1647,6 +1647,7 @@ accelerometer.whenTurned = function whenTurned(direction, cb){
 }
 
 function processData(event) {
+    console.log('caught device orientation event: %o',);
     var left_right = event.gamma;
     var front_back = event.beta;
 

@@ -16,7 +16,7 @@
     	{
     		"blocktype": "eventhandler",
     		"id": "74f8f7c0-f2f9-4ea4-9888-49110785b26d",
-    		"script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+    		"script": "global.accelerometer.whenTurned({{1}}, function(){[[1]]});",
     		"help": "handler for accelerometer events",
     		"sockets": [
     			{

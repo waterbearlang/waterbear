@@ -1626,8 +1626,7 @@ function Vector(x,y) {
 (function(global){
 
 var accelerometer = {
-    direction = "",
-    turnListeners = {}
+    direction: ""
 };
 
 var turnListeners = {};
@@ -1648,7 +1647,7 @@ accelerometer.whenTurned = function whenTurned(direction, cb){
 }
 
 function processData(event) {
-    console.log('caught device orientation event');
+    console.log('caught device orientation event: %o', event);
     var left_right = event.gamma;
     var front_back = event.beta;
 

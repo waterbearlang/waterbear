@@ -2406,6 +2406,7 @@ global.ajax = ajax;
             }
         	dragAction.target = target;
             if (target.parentElement.classList.contains('locals')){
+                // console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
@@ -2424,7 +2425,7 @@ global.ajax = ajax;
                 startIndex = wb.indexOf(target);
             }
         }else{
-            console.log('not a valid drag target');
+            console.warn('not a valid drag target');
             dragTarget = null;
         }
         return false;
@@ -2536,6 +2537,7 @@ global.ajax = ajax;
         timer = null;
         if (!dragging) {return undefined;}
         handleDrop(end.altKey || end.ctrlKey);
+        console.log('resetting');
         reset();
         return false;
     }
@@ -6184,7 +6186,7 @@ wb.menu({
             "blocktype": "step",
             "id": "3fab2b88-430a-401e-88b2-2703d614780a",
             "script": "{{1}}.push({{2}});",
-            "help": "add any object to an array",
+            "help": "add any object to the end of an array",
             "sockets": [
                 {
                     "name": "array",
@@ -6193,6 +6195,24 @@ wb.menu({
                 },
                 {
                     "name": "append",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "77edf0e9-e5df-4294-81ef-bfa363cda3ee",
+            "script": "{{1}}.unshift({{2}});",
+            "help": "add any object to the beginning of an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "prepend",
                     "type": "any",
                     "value": null
                 }
@@ -6423,7 +6443,42 @@ wb.menu({
                     "value": null
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "de9f5ebd-2408-4c72-9705-786b1eec2b14",
+            "type": "boolean",
+            "script": "!({{1}}%2)",
+            "help": "true when the parameter is even",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": 2
+                },
+                {
+                    "name": "is even"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0ac50ac9-2af6-4073-83cf-4f79b4bde163",
+            "type": "boolean",
+            "script": "!!({{1}}%2)",
+            "help": "true when the parameter is odd",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": 1
+                },
+                {
+                    "name": "is odd"
+                }
+            ]
         }
+
     ]
 }
 );

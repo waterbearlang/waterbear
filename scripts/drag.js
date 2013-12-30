@@ -119,6 +119,7 @@
             }
         	dragAction.target = target;
             if (target.parentElement.classList.contains('locals')){
+                // console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
@@ -137,7 +138,7 @@
                 startIndex = wb.indexOf(target);
             }
         }else{
-            console.log('not a valid drag target');
+            console.warn('not a valid drag target');
             dragTarget = null;
         }
         return false;
@@ -249,6 +250,7 @@
         timer = null;
         if (!dragging) {return undefined;}
         handleDrop(end.altKey || end.ctrlKey);
+        console.log('resetting');
         reset();
         return false;
     }

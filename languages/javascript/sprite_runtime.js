@@ -77,6 +77,8 @@ PolySprite.prototype.setFacingDirectionBy = function(degrees,internalCall){
     }
     this.facingDegreess += degrees;
     this.calculateFacingVector();
+    this.polygon.rotate(degrees);
+    this.polygon.recalc();
 }
 PolySprite.prototype.setFacingDirection = function(degrees, internalCall){
     if(this.autosteer && !internalCall){

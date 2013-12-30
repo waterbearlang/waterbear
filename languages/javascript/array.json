@@ -91,7 +91,7 @@
             "blocktype": "step",
             "id": "3fab2b88-430a-401e-88b2-2703d614780a",
             "script": "{{1}}.push({{2}});",
-            "help": "add any object to an array",
+            "help": "add any object to the end of an array",
             "sockets": [
                 {
                     "name": "array",
@@ -100,6 +100,24 @@
                 },
                 {
                     "name": "append",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "77edf0e9-e5df-4294-81ef-bfa363cda3ee",
+            "script": "{{1}}.unshift({{2}});",
+            "help": "add any object to the beginning of an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "prepend",
                     "type": "any",
                     "value": null
                 }

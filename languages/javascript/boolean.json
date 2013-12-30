@@ -71,6 +71,41 @@
                     "value": null
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "de9f5ebd-2408-4c72-9705-786b1eec2b14",
+            "type": "boolean",
+            "script": "!({{1}}%2)",
+            "help": "true when the parameter is even",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": 2
+                },
+                {
+                    "name": "is even"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0ac50ac9-2af6-4073-83cf-4f79b4bde163",
+            "type": "boolean",
+            "script": "!!({{1}}%2)",
+            "help": "true when the parameter is odd",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": 1
+                },
+                {
+                    "name": "is odd"
+                }
+            ]
         }
+
     ]
 }

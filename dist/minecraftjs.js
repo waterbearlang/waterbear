@@ -4415,8 +4415,10 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		if (wb.view === 'result'){
 			console.log('run script because we are awesome');
 			if (wb.windowLoaded){
+				console.log('run scripts directly');
 				wb.runCurrentScripts();
 			}else{
+				console.log('run scripts when the iframe is ready');
 				window.addEventListener('load', function(){
 				// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
 				 	wb.runCurrentScripts();

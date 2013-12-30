@@ -4620,10 +4620,15 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
         if (!wb.scriptLoaded){
+            console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
             return;
+        }else{
+            console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        console.log('And this is the script we shall endeavor to run:');
+        console.log(wb.prettyScript(blocks));
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;

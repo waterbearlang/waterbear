@@ -4415,7 +4415,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		if (wb.view === 'result'){
 			console.log('run script because we are awesome');
 			if (wb.windowLoaded){
-				wb.runCurrentScript();
+				wb.runCurrentScripts();
 			}else{
 				window.addEventListener('load', function(){
 				// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);

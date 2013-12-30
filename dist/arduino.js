@@ -2590,7 +2590,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	Event.on(document.body, 'wb-script-loaded', null, function(evt){
 		wb.scriptModified = false;
 		if (wb.view === 'result'){
-			// console.log('run script because we are awesome');
+			console.log('run script because we are awesome');
 			window.addEventListener('load', function(){
 			// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
 			 	wb.runCurrentScripts();
@@ -2600,7 +2600,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		}
 		// clear undo/redo stack
 		wb.scriptLoaded = true;
-		// console.log('script loaded');
+		console.log('script loaded');
 	});
 
 	Event.on(document.body, 'wb-modified', null, function(evt){
@@ -2619,7 +2619,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
-		// console.log('window loaded');
+		console.log('window loaded');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 })(wb);

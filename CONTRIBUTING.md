@@ -1,6 +1,6 @@
 # Contributing to Mobile Boilerplate
 
-♥ [Mobile Boilerplate](http://mobileboilerplate.com) and want to get involved?
+♥ [Waterbear](http://waterbearlang.com) and want to get involved?
 Thanks! There are plenty of ways you can help!
 
 
@@ -9,7 +9,7 @@ Thanks! There are plenty of ways you can help!
 A bug is a _demonstrable problem_ that is caused by the code in the
 repository.
 
-Please read the following guidelines before you [report an issue](https://github.com/h5bp/mobile-boilerplate/issues):
+Please read the following guidelines before you [report an issue](https://github.com/waterbearlang/waterbear/issues):
 
 1. **Use the GitHub issue search** &mdash; check if the issue has already been
    reported. If it has been, please comment on the existing issue.
@@ -24,7 +24,7 @@ Please read the following guidelines before you [report an issue](https://github
 
 4. **Include a live example** &mdash; provide a link to your reduced test case
    when appropriate (e.g. if the issue is related to (front-end technologies).
-   Please use [jsFiddle](http://jsfiddle.net) to host examples.
+   Please use [jsBin](http://jsbin.com) to host examples.
 
 Please try to be as detailed as possible in your report too. What is your
 environment? What steps will reproduce the issue? What browser(s) and OS
@@ -52,7 +52,7 @@ details will help people to assess and fix any potential bugs.
 A good bug report shouldn't leave people needing to chase you up to get further
 information that is required to assess or fix the bug.
 
-**[File a bug report](https://github.com/h5bp/mobile-boilerplate/issues)**
+**[File a bug report](https://github.com/waterbearlang/waterbear/issues)**
 
 
 ## Pull requests
@@ -70,10 +70,10 @@ project:
 1. [Fork](http://help.github.com/fork-a-repo/) the project.
 
 2. Clone your fork (`git clone
-   https://github.com/<your-username>/mobile-boilerplate.git`).
+   https://github.com/<your-username>/waterbear.git`).
 
 3. Add an `upstream` remote (`git remote add upstream
-   https://github.com/h5bp/mobile-boilerplate.git`).
+   https://github.com/waterbearlang/waterbear.git`).
 
 4. Get the latest changes from upstream (e.g. `git pull upstream
    <dev-branch>`).
@@ -99,3 +99,5 @@ project:
 
 10. [Open a Pull Request](https://help.github.com/articles/using-pull-requests) with a
     clear title and description. Please mention which browsers you tested in.
+
+(This file is originally from the excellent HTML5 Mobile Boilerplate project and was written primarily by @necolas, used with the permission of @h5bp)

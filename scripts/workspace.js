@@ -39,6 +39,7 @@
 
 	var handleStateChange = function handleStateChange(evt){
 		// hide loading spinner if needed
+		console.log('handleStateChange');
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){

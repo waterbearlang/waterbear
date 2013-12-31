@@ -11,12 +11,12 @@
 	<!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
 	<!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
 	<!--script src="/lib/modernizr-1.6.min.js"></script-->
-	<style>
-		html,body{
-			height: 100%;
-			width: 100%;
-		}
-	</style>
+	<script>
+		var wb = {
+			scriptModified: true,
+			iframeReady: false
+		};
+	</script>
 </head>
 <body>
 	<div id="context_menu"></div>
@@ -24,6 +24,7 @@
 		Loading...
 	</div>
 	<div class="content editor">
+
 		<nav id="nav" role="navigation">
 			<h1 class="title">Waterbear </h1>
 			<ul class="menu">
@@ -32,7 +33,7 @@
 				</li>
 				<li>
 					<button class="load_from_gist">Open Gist</button>
-					<ul id="recent_gists"></ul>
+					<ul class="sub-menu" id="recent_gists"></ul>
 				</li>
 				<li>
 					<button class="restore_scripts">Open File</button>
@@ -46,19 +47,23 @@
 				<li>
 					<button class="show-examples">Examples</button>
 					<ul class="sub-menu">
-						<li><button class="load-example" data-example="ellipses">Ellipses</button></li>
-						<li><button class="load-example" data-example="lines">Lines</button></li>
-						<li><button class="load-example" data-example="mouse_click">Mouse Click</button></li>
-						<li><button class="load-example" data-example="mouse_rectangles">Mouse Rectangle</button></li>
-						<li><button class="load-example" data-example="nofill">No Fill</button></li>
-						<li><button class="load-example" data-example="rectangle">Rectangle</button></li>
-						<li><button class="load-example" data-example="transform">Transform</button></li>
-						<li><button class="load-example" data-example="transform_color">Transform Color</button></li>
-						<li><button class="load-example" data-example="variables">Variables</button></li>
+						<li><button class="load-example" data-example="blacklight_worms">Blacklight Worms</button></li>
+						<li><button class="load-example" data-example="breakout">Breakout</button></li>
+						<li><button class="load-example" data-example="pong">Pong</button></li>
+						<li><button class="load-example" data-example="random_circles">Random Circles</button></li>
+						<li><button class="load-example" data-example="londonderry">Music</button></li>
+						<li><button class="load-example" data-example="rotating_boxes">Rotating Boxes</button></li>
+
 					</ul>
 				</li>
 				<li>
 					<button class="run-scripts">Run</button>
+				</li>
+				<li>
+					<button class="undoAction">Undo</button>
+				</li>
+				<li>
+					<button class="redoAction">Redo</button>
 				</li>
 				<li>
 					<button class="cmenuEnable"><i class="icon-list-alt"></i>Enable Context Menus</button>
@@ -91,8 +96,20 @@
 			</li>
 		</ul>
 		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
+		<script>
+			var iframe = document.querySelector('.stageframe');
+			if (location.host.indexOf('local') > -1){
+				iframe.src = '/iframerunner.html';
+			}
+			function receiveMessage(event){
+				wb.iframeReady = event.data === 'ready' ? true : false;
+			}
+			window.addEventListener('message', receiveMessage, false);
+
+		</script>
+
 	</div>
 	<svg><text></text></svg>
-    <script src="dist/processingjs.js"></script>
+	<script src="dist/processingjs.js"></script>
 </body>
-    
+</html>

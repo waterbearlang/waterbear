@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Waterbear: Code Garden</title>
-	<link href="dist/minecraftjs.css" rel="stylesheet" />
+	<link href="dist/<?language?>.css" rel="stylesheet" />
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -47,7 +47,7 @@
 				<li>
 					<button class="show-examples">Examples</button>
 					<ul class="sub-menu">
-
+<?examples?>
 					</ul>
 				</li>
 				<li>
@@ -89,21 +89,9 @@
 				<button class="run-scripts">Restart</button>
 			</li>
 		</ul>
-		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
-		<script>
-			var iframe = document.querySelector('.stageframe');
-			if (location.host.indexOf('local') > -1){
-				iframe.src = '/iframerunner.html';
-			}
-			function receiveMessage(event){
-				wb.iframeReady = event.data === 'ready' ? true : false;
-			}
-			window.addEventListener('message', receiveMessage, false);
-
-		</script>
-
+<?stage?>
 	</div>
 	<svg><text></text></svg>
-	<script src="dist/minecraftjs.js"></script>
+	<script src="dist/<?language?>.js"></script>
 </body>
 </html>

@@ -7,6 +7,8 @@ var validateJson = require('./validate').validateJson;
 // var cleanCSS = require('clean-css');
 // var UglifyJS = require('uglify-js');
 
+var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
+
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
     javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
@@ -97,17 +99,30 @@ function build(){
         libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
         styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
         scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
+
         // Build CSS
         concat(src, dest + '.css', files, '.css');
+
         // Build Waterbear support
         concat(src, dest + '.js', files, '.js');
+
         // Build Waterbear blocks
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
+
         // Build runtime support
         if (lang === 'javascript' || lang === 'minecraftjs' || lang === 'processingjs'){
             pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }
+
+        // Build HTML file
+        var examples = fs.readFileSync('template/' + lang + '.examples');
+        var stage = fs.readFileSync('template/' + lang + '.stage');
+        var html = htmlTemplate.replace(/<\?examples\?>/g, examples)
+                               .replace(/<\?stage\?>/g, stage)
+                               .replace(/<\?language\?>/g, lang);
+        fs.writeFileSync(lang + '.html', html, 'utf8')
+
     });
 };
 

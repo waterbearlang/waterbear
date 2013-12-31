@@ -1844,9 +1844,6 @@ global.ajax = ajax;
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-	var wb = {
-		scriptModified: true
-	};
 
 	// Source: http://stackoverflow.com/a/13984429
 	wb.urlToQueryParams = function(url){
@@ -4414,12 +4411,12 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
-			console.log('run script because we are awesome');
+			// console.log('run script because we are awesome');
 			if (wb.windowLoaded){
-				console.log('run scripts directly');
+				// console.log('run scripts directly');
 				wb.runCurrentScripts();
 			}else{
-				console.log('run scripts when the iframe is ready');
+				// console.log('run scripts when the iframe is ready');
 				window.addEventListener('load', function(){
 				// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
 				 	wb.runCurrentScripts();
@@ -4627,8 +4624,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
             console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        console.log('And this is the script we shall endeavor to run:');
-        console.log(wb.prettyScript(blocks));
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
@@ -4637,14 +4632,15 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
         wb.historySwitchState('result');
     });
 
-    document.querySelector('.stageframe').addEventListener('load', function(event){
-        console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
-        wb.iframeready = true;
-        if (wb.iframewaiting){
-            wb.iframewaiting();
-        }
-        wb.iframewaiting = null;
-    }, false);
+    if (!wb.iframeReady){
+        document.querySelector('.stageframe').addEventListener('load', function(event){
+            console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
+            if (wb.iframewaiting){
+                wb.iframewaiting();
+            }
+            wb.iframewaiting = null;
+        }, false);
+    }
 
     wb.runScript = function(script){
         // console.log('script: %s', script);
@@ -4656,7 +4652,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
-        if (wb.iframeready){
+        if (wb.iframeReady){
             run();
         }else{
             wb.iframewaiting = run;

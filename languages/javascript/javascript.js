@@ -46,8 +46,6 @@
             console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        console.log('And this is the script we shall endeavor to run:');
-        console.log(wb.prettyScript(blocks));
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
@@ -56,14 +54,15 @@
         wb.historySwitchState('result');
     });
 
-    document.querySelector('.stageframe').addEventListener('load', function(event){
-        console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
-        wb.iframeready = true;
-        if (wb.iframewaiting){
-            wb.iframewaiting();
-        }
-        wb.iframewaiting = null;
-    }, false);
+    if (!wb.iframeReady){
+        document.querySelector('.stageframe').addEventListener('load', function(event){
+            console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
+            if (wb.iframewaiting){
+                wb.iframewaiting();
+            }
+            wb.iframewaiting = null;
+        }, false);
+    }
 
     wb.runScript = function(script){
         // console.log('script: %s', script);
@@ -75,7 +74,7 @@
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
-        if (wb.iframeready){
+        if (wb.iframeReady){
             run();
         }else{
             wb.iframewaiting = run;

@@ -1844,9 +1844,6 @@ global.ajax = ajax;
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-	var wb = {
-		scriptModified: true
-	};
 
 	// Source: http://stackoverflow.com/a/13984429
 	wb.urlToQueryParams = function(url){
@@ -4414,12 +4411,12 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
-			console.log('run script because we are awesome');
+			// console.log('run script because we are awesome');
 			if (wb.windowLoaded){
-				console.log('run scripts directly');
+				// console.log('run scripts directly');
 				wb.runCurrentScripts();
 			}else{
-				console.log('run scripts when the iframe is ready');
+				// console.log('run scripts when the iframe is ready');
 				window.addEventListener('load', function(){
 				// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
 				 	wb.runCurrentScripts();

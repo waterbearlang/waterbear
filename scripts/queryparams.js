@@ -1,9 +1,6 @@
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-	var wb = {
-		scriptModified: true
-	};
 
 	// Source: http://stackoverflow.com/a/13984429
 	wb.urlToQueryParams = function(url){

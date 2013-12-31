@@ -14,83 +14,13 @@ The look and feel of Waterbear differs from Scratch, which is implemented in Squ
 
 Waterbear is pre-alpha software, very raw, and in constant flux right now.
 
-## Installation
+For further info:
 
-Waterbear is pure Javascript. No server-side component is needed.
+* [Getting Started](https://github.com/waterbearlang/waterbear/wiki/Getting-Started)
+* [Similar Projects](https://github.com/waterbearlang/waterbear/wiki/Similar-Projects)
+* [Contributors and Acknowledgements](https://github.com/waterbearlang/waterbear/wiki/Contributors-and-Acknowledgements)
+* [Preview of next release](http://beta.waterbearlang.com/)
 
-## Demos
-
-* http://waterbearlang.com/garden.html?plugin=javascript|canvas|sprite&gist=4142529 (Simple) Draw random circles
-* http://waterbearlang.com/garden.html?plugin=javascript|canvas|sprite&gist=4385862 (Medium) Bouncing rectangles with trails
-
-## Dependencies:
-
-* jQuery
-* jQuery UI
-* json2
-* mustache
-* yepnope
-* prefixfree
-
-### jQuery Plugins
-
-* autoGrowInput
-* bPopup
-* hotkeys
-* querystring
-
-### Code formatting
-
-* beautify
-* highlight
-
-### To work around lack of support for context menus:
-
-* http://aanandprasad.com/articles/jquery-tappable/
-* http://medialize.github.com/jQuery-contextMenu/
-
-## Demo
-
-There is a demo of a recent build (not guaranteed to be working at any given time) of waterbear here: <a href="http://waterbearlang.com/">waterbear.livingcode.org</a>, if you would like a (very early) sneak preview.
-
-## Where to get help
-
-The best way to get help right now is to email me: [dethe ATGLYPH livingcode DOTGLYPH org]. As the project progresses I will set up a mailing list or forum, buglist, etc.  The documentation for Waterbear will live here: <a href="docs/">Waterbear Documentation</a>. You can follow this project on twitter at <a href="http://twitter.com/waterbearlang">@waterbearlang</a>.
-
-## Acknowledgements
-
-* My kids, for helping test so many programming environments and being my best critics
-* Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real
-* Scratch, the primary source of inspiration for this project
-* Basic
-* Quartz Composer
-* NodeBox
-* Processing
-* Processing.js
-* Raphael
-* Crafty
-
-## Related Projects
-
-* Scratch http://scratch.mit.edu/
-* Alice 3D: http://www.alice.org/
-* Design Blocks: http://www.kickstarter.com/projects/evhan55/designblocks-visual-programming-for-artists
-* Open Blocks: http://education.mit.edu/openblocks
-* StarLogo: http://education.mit.edu/projects/starlogo-tng
-* Google App Inventor: http://appinventor.googlelabs.com/about/
-
-
-## Contributors
-
-* Dethe Elza (https://github.com/dethe)
-* Martyn Eggleton (https://github.com/stretchyboy)
-* Blake Bourque (https://github.com/TechplexEngineer)
-* Chistopher de Beer (http://github.com/christopherdebeer)
-* Atul Varma (http://github.com/toolness/)
-
-## TODO
-
-* Set up a waterbear presence on StackOverflow
 
 ## License
 

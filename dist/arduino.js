@@ -2433,6 +2433,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 			wb.history.clear();
 			delete localStorage['__' + wb.language + '_current_scripts'];
+			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace
+			// For now will resort to the horrible hack of refreshing the page
+			location.reload();
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);

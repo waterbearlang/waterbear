@@ -6,4 +6,4 @@ The motivation is to reduce syntax errors in the same way that garbage collectio
 
 The look and feel of Waterbear differs from Scratch, which is implemented in Squeak Smalltalk's Morphic environment. Waterbear blocks are intended to use web technologies naturally, without trying to force them into a different paradigm. In other words, this project is attempting to create blocks in a web-centric way. Waterbear is designed to be easy to use on both desktop/laptop browsers and on iPads and smart phones.
 
-Waterbear is pre-alpha software, very raw, and in constant flux right now.
+Waterbear is beta software and under active development as we work to improve the interface, organize the blocks, and build curriculum around it.

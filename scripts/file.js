@@ -105,7 +105,6 @@
 			a.click();
 		};
 		reader.readAsDataURL(file);
-		evt.preventDefault();
 	};
 
 	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){

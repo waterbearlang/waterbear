@@ -4,7 +4,7 @@
         {
             "blocktype": "step",
             "id": "01e39af1-679d-4b4d-b30e-a093a2687063",
-            "script": "local.ctx.shadowColor = {{1}}",
+            "script": "local.ctx.shadowColor = {{1}};",
             "help": "set the shadow color",
             "sockets": [
                 {

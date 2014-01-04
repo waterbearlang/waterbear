@@ -188,7 +188,7 @@
         {
             "blocktype": "step",
             "id": "278b0b41-895c-4786-9c09-d745ae5501af",
-            "script": "local.ctx.shadowBlur = {{1}}",
+            "script": "local.ctx.shadowBlur = {{1}};",
             "help": "set the shadow blur radius",
             "sockets": [
                 {

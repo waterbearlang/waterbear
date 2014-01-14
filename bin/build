@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+console.log("Starting")
+
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
@@ -92,12 +94,15 @@ function concat(src, dest, files, ext, suffix, before, after){
 
 function build(){
     clear();
+    var errors = false;
     Object.keys(plugins).forEach(function(lang){
+        console.log(" == "+lang+" == ");
         var files = plugins[lang];
         var src = path.join('languages', lang);
         var dest = path.join('dist', lang);
         libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
         styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+
         scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
 
         // Build CSS
@@ -122,8 +127,14 @@ function build(){
                                .replace(/<\?stage\?>/g, stage)
                                .replace(/<\?language\?>/g, lang);
         fs.writeFileSync(lang + '.html', html, 'utf8')
-
+        console.log(" == "+lang+" complete == ");
     });
+
+    if (!errors) {
+        console.log("Success: The build completed successfully.");
+    } else {
+        console.error("FAILURE: The build completed with errors. Check the messages above.");
+    }
 };
 
 build();

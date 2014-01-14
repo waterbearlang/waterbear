@@ -112,8 +112,9 @@ function validateAnyBlock(block){
 }
 
 function validateStep(block){
-	if (block.type && block.type != "void"){
-		throw new Error('Step blocks cannot have a type: ' + JSON.stringify(block));
+	if (typeof block.type != 'undefined' && block.type != "void")
+	{
+		throw new Error('Step blocks must have type void: ' + JSON.stringify(block));
 	}
 }
 

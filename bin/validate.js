@@ -95,7 +95,7 @@ function validateAnyBlock(block){
 		throw new Error('A block must have a script template: ' + JSON.stringify(block));
 	}
 	if (typeof block.help !== 'string'){
-		//console.warn('A block should have a help string: ' + JSON.stringify(block));
+		console.warn('A block should have a help string: ' + JSON.stringify(block));
 	}
 	if (['step', 'context', 'eventhandler'].indexOf(block.blocktype) < 0){
 		validateExpression(block);
@@ -112,7 +112,7 @@ function validateAnyBlock(block){
 }
 
 function validateStep(block){
-	if (block.type){
+	if (block.type && block.type != "void"){
 		throw new Error('Step blocks cannot have a type: ' + JSON.stringify(block));
 	}
 }

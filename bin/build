@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+console.log("Starting")
+
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
@@ -29,7 +31,7 @@ var styles = {
     arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
     javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
     minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css','stylesheets/menu.css',  'stylesheets/fonts/fontawesome.css'],
+    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
     processingjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css']
 }
 
@@ -57,6 +59,8 @@ function clear(){
 
 
 function cat(src, dest){
+    if (!fs.existsSync(src))
+        return;
     fs.appendFileSync(dest, '\n/*begin ' + path.basename(src).replace(/\\/g, '/') + '*/\n');
     fs.appendFileSync(dest, fs.readFileSync(src, 'utf8'));
     fs.appendFileSync(dest, '\n/*end ' + path.basename(src).replace(/\\/g, '/') + '*/\n');
@@ -92,12 +96,23 @@ function concat(src, dest, files, ext, suffix, before, after){
 
 function build(){
     clear();
+    var errors = false;
     Object.keys(plugins).forEach(function(lang){
+        console.log(" == "+lang+" == ");
         var files = plugins[lang];
         var src = path.join('languages', lang);
         var dest = path.join('dist', lang);
-        libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
+        if (typeof libs[lang] != "undefined") {
+            libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
+        }
+        if (typeof styles[lang] == "undefined") {
+            console.error("No styles are included. Please check the styles array.");
+            console.error(" == "+lang+" FAILED == ");
+            errors = true;
+            return -1;
+        }
         styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+
         scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
 
         // Build CSS
@@ -116,14 +131,33 @@ function build(){
         }
 
         // Build HTML file
-        var examples = fs.readFileSync('template/' + lang + '.examples');
-        var stage = fs.readFileSync('template/' + lang + '.stage');
+        var tplExamplePath = 'template/' + lang + '.examples';
+        var examples = "";
+        if (fs.existsSync(tplExamplePath))
+        {
+            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
+            examples = fs.readFileSync(tplExamplePath);
+        }
+
+        var tplStagePath = 'template/' + lang + '.stage';
+        var stage = fs.readFileSync('template/' + "javascript" + '.stage');
+        if (fs.existsSync(tplStagePath))
+        {
+            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
+            stage = fs.readFileSync(tplStagePath);
+        }
         var html = htmlTemplate.replace(/<\?examples\?>/g, examples)
                                .replace(/<\?stage\?>/g, stage)
                                .replace(/<\?language\?>/g, lang);
         fs.writeFileSync(lang + '.html', html, 'utf8')
-
+        console.log(" == "+lang+" complete == ");
     });
+
+    if (!errors) {
+        console.log("Success: The build completed successfully.");
+    } else {
+        console.error("FAILURE: The build completed with errors. Check the messages above.");
+    }
 };
 
 build();

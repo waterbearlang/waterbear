@@ -133,18 +133,20 @@ function build(){
         // Build HTML file
         var tplExamplePath = 'template/' + lang + '.examples';
         var examples = "";
-        if (fs.existsSync(tplExamplePath))
-        {
-            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
+        if (fs.existsSync(tplExamplePath)) {
             examples = fs.readFileSync(tplExamplePath);
+        }
+        else {
+            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
         }
 
         var tplStagePath = 'template/' + lang + '.stage';
         var stage = fs.readFileSync('template/' + "javascript" + '.stage');
-        if (fs.existsSync(tplStagePath))
-        {
-            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
+        if (fs.existsSync(tplStagePath)) {
             stage = fs.readFileSync(tplStagePath);
+        }
+        else {
+            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
         }
         var html = htmlTemplate.replace(/<\?examples\?>/g, examples)
                                .replace(/<\?stage\?>/g, stage)
@@ -154,7 +156,7 @@ function build(){
     });
 
     if (!errors) {
-        console.log("Success: The build completed successfully.");
+        console.log("Success: The build completed successfully."); //@todo this is a bit misleading
     } else {
         console.error("FAILURE: The build completed with errors. Check the messages above.");
     }

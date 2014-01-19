@@ -4651,11 +4651,13 @@ wb.runScript = function(script){
         messagebox = document.querySelector('#messagebox');
         
     }
-    messagebox.innerHTML = "Sending Code to Raspberry Pi";
+    messagebox.innerHTML = "Running Code on Raspberry Pi";
     
     
     
-    wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
+    //wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
+    
+    wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code Complete"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
     
     //var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
     //console.log('trying to load library %s', runtimeUrl);
@@ -4916,7 +4918,7 @@ wb.menu({
         {
             "blocktype": "context",
             "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
-            "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
+            "script": "for(count## = 1; count## <= {{1}}; count## ++){[[1]]}",
             "help": "repeat the contained blocks so many times",
             "locals": [
                 {

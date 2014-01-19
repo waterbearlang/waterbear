@@ -141,7 +141,7 @@
         {
             "blocktype": "context",
             "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
-            "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
+            "script": "for(count## = 1; count## <= {{1}}; count## ++){[[1]]}",
             "help": "repeat the contained blocks so many times",
             "locals": [
                 {

@@ -4580,54 +4580,15 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 /*end blockprefs.js*/
 
-/*begin languages/minecraftjs/minecraftjs.js*/
-
+/*begin languages/node/node.js*/
 /*
- *    MINECRAFTJS PLUGIN
+ *    NODE PLUGIN
  *
- *    Support for writing Javascript for Minecraft using Waterbear
- *
+ *    Support for writing Javascript for NODE.js using Waterbear
+ *    will include Minecraft and RPi-GPIO and othe RPi stuff
  */
 
 
-// Add some utilities
-
-/*
-
-$('.run-scripts').click(function(){
-     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-     var code = blocks.prettyScript();
-     var query = $.param({'code':code});
-     
-     $.ajax({
-      url: '/run?',
-      data: query,
-      success: function(){alert("Code running on RPi");},
-      error: function(){alert("Code failed / server not running on RPi");}
-     });
-     
-     
-});
-
-// Add some utilities
-jQuery.fn.extend({
-    prettyScript: function(){
-        var script = this.map(function(){
-            return $(this).extract_script();
-        }).get().join('');
-        
-        script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js'); \n var client = new Minecraft('localhost', 4711, function() {\n"+script+"\n});";
-        
-        return js_beautify(script);
-    },
-    writeScript: function(view){
-      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
-      hljs.highlightBlock(view.children()[0]);
-    }
-});
-
-// End UI section
-*/
 
 wb.wrap = function(script){
     //return 'try{' + script + '}catch(e){console,log(e);}})()';
@@ -4713,7 +4674,7 @@ wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
             return wb.codeFromBlock(elem);
         }).join(''));
-    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    //script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
     return script;
 };
 
@@ -4751,62 +4712,73 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end languages/minecraftjs/minecraftjs.js*/
+/* TODO : 
+https://npmjs.org/package/omxcontrol
+https://npmjs.org/package/omxdirector
+https://npmjs.org/package/piglow
+https://npmjs.org/package/raspicam
 
-/*begin languages/minecraftjs/control.js*/
 
-/*end languages/minecraftjs/control.js*/
+*/
 
-/*begin languages/minecraftjs/game.js*/
+/*end languages/node/node.js*/
 
-/*end languages/minecraftjs/game.js*/
+/*begin languages/node/control.js*/
 
-/*begin languages/minecraftjs/player.js*/
+/*end languages/node/control.js*/
 
-/*end languages/minecraftjs/player.js*/
+/*begin languages/node/piface.js*/
+//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
+wb.choiceLists.pifacein = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
+wb.choiceLists.pifacebutton = [0,1 ,2 ,3];
+wb.choiceLists.pifacerelays = [0,1 ];
+wb.choiceLists.pifaceout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
+wb.choiceLists.pifaceonoff = ["0", "1"];
 
-/*begin languages/minecraftjs/position.js*/
 
-wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
-wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
-/*end languages/minecraftjs/position.js*/
+wb.prettyScript = function(elements){
+    var script = js_beautify(elements.map(function(elem){
+            return wb.codeFromBlock(elem);
+        }).join(''));
+    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\npfio.deinit();";
+    return script;
+};
 
-/*begin languages/minecraftjs/blocks.js*/
+/**/
 
-wb.choiceLists.blocks = ["AIR", "STONE", "GRASS", "DIRT", "COBBLESTONE", "WOOD_PLANKS", "SAPLING", "BEDROCK", "WATER_FLOWING", "WATER_STATIONARY", "LAVA_FLOWING", "LAVA_STATIONARY", "SAND", "GRAVEL", "GOLD_ORE", "IRON_ORE", "COAL_ORE", "WOOD", "LEAVES", "GLASS", "LAPIS_LAZULI_ORE", "LAPIS_LAZULI_BLOCK", "SANDSTONE", "BED", "COBWEB", "GRASS_TALL", "WOOL", "FLOWER_YELLOW", "FLOWER_CYAN", "MUSHROOM_BROWN", "MUSHROOM_RED", "GOLD_BLOCK", "IRON_BLOCK", "STONE_SLAB_DOUBLE", "STONE_SLAB", "BRICK_BLOCK", "TNT", "BOOKSHELF", "MOSS_STONE", "OBSIDIAN", "TORCH", "FIRE", "STAIRS_WOOD", "CHEST", "DIAMOND_ORE", "DIAMOND_BLOCK", "CRAFTING_TABLE", "FARMLAND", "FURNACE_INACTIVE", "FURNACE_ACTIVE", "DOOR_WOOD", "LADDER", "STAIRS_COBBLESTONE", "DOOR_IRON", "REDSTONE_ORE", "SNOW", "ICE", "SNOW_BLOCK", "CACTUS", "CLAY", "SUGAR_CANE", "FENCE", "GLOWSTONE_BLOCK", "BEDROCK_INVISIBLE", "GLASS_PANE", "MELON", "FENCE_GATE", "GLOWING_OBSIDIAN", "NETHER_REACTOR_CORE"];
 
-wb.choiceLists.types = wb.choiceLists.types.concat(['block']);
-wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['block']);
-/*end languages/minecraftjs/blocks.js*/
 
-/*begin languages/minecraftjs/camera.js*/
 
-wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
-/*end languages/minecraftjs/camera.js*/
+/*pfio.digital_write(0,1); // (pin, state)
+var foo = pfio.digital_read(0); // (pin; returns state)
+*/
 
-/*begin languages/minecraftjs/array.js*/
+//pfio.deinit();
+/*end languages/node/piface.js*/
 
-/*end languages/minecraftjs/array.js*/
+/*begin languages/node/array.js*/
 
-/*begin languages/minecraftjs/boolean.js*/
+/*end languages/node/array.js*/
 
-/*end languages/minecraftjs/boolean.js*/
+/*begin languages/node/boolean.js*/
 
-/*begin languages/minecraftjs/math.js*/
+/*end languages/node/boolean.js*/
 
-/*end languages/minecraftjs/math.js*/
+/*begin languages/node/math.js*/
 
-/*begin languages/minecraftjs/string.js*/
+/*end languages/node/math.js*/
 
-/*end languages/minecraftjs/string.js*/
+/*begin languages/node/string.js*/
 
-/*begin languages/minecraftjs/control.json*/
+/*end languages/node/string.js*/
+
+/*begin languages/node/control.json*/
 wb.menu({
     "name": "Control",
     "blocks": [
         {
             "blocktype": "eventhandler",
-            "id": "e48ab5df-e0d1-4a5e-87fb-8beb0aaf45e5",
+            "id": "d36cd27a-98d9-4574-8e68-db267b7a2bb4",
             "script": "[[1]]",
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
@@ -4817,7 +4789,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "68e0fe1d-0fc3-4e3b-a631-ba513b9ff8de",
+            "id": "771a7f8f-ed82-4a92-b255-2f9c4b6fa614",
             "script": "if({{1}}){[[1]]}",
             "help": "run the following blocks only if the condition is true",
             "sockets": [
@@ -4830,7 +4802,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "403be625-ad16-46b1-ba07-ce9f20282f65",
+            "id": "9bcb76ff-0965-4bdb-9ead-fcad46bbbd1f",
             "script": "if( ! {{1}} ){ [[1]]} }",
             "help": "run the  blocks if the condition is not true",
             "sockets": [
@@ -4843,7 +4815,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "6d985eff-ed0f-4841-b7b9-7f4d22806dfb",
+            "id": "7972f6ee-f653-486c-aa99-81d8930a4d35",
             "script": "while(!({{1}})){[[1]]}",
             "help": "repeat forever until condition is true",
             "sockets": [
@@ -4856,7 +4828,7 @@ wb.menu({
         },
         {
             "blocktype": "eventhandler",
-            "id": "7a261525-9f39-436e-ada3-8cfbaca9b949",
+            "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -4884,7 +4856,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "8c358fe5-630d-40a0-82be-6522d0c932e6",
+            "id": "1a1cee1b-fd60-4c4f-87ca-09e394fe8f67",
             "script": "variable## = {{1}};",
             "locals": [
                 {
@@ -4909,7 +4881,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "1d830dff-bbb2-4bd4-be11-9fd41cffeabd",
+            "id": "ece22a99-cbf3-48d8-bab8-4d93ae8a6712",
             "script": "{{1}} = {{2}};",
             "help": "first argument must be a variable",
             "sockets": [
@@ -4927,7 +4899,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "cf5c7555-79cd-4138-9c7c-f5e7ccee6ddb",
+            "id": "9a148b21-c609-4f98-9ae3-19d2e4e1ddef",
             "script": "setTimeout(function(){[[1]]},1000*{{1}});",
             "help": "pause before running the following blocks",
             "sockets": [
@@ -4943,7 +4915,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "3231af12-07bf-4e48-a2e7-d1962731096c",
+            "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
             "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
             "help": "repeat the contained blocks so many times",
             "locals": [
@@ -4968,7 +4940,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "a2d9c401-0ca1-4fcc-9478-225cd272aea5",
+            "id": "c457444d-c599-4241-bead-5dc9d6e649a4",
             "script": "while({{1}}){[[1]]}",
             "help": "repeat until the condition is false",
             "sockets": [
@@ -4981,519 +4953,65 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/control.json*/
+/*end languages/node/control.json*/
 
-/*begin languages/minecraftjs/game.json*/
+/*begin languages/node/piface.json*/
 wb.menu({
-    "name": "Game",
-    "blocks": [
-        {
-            "blocktype": "step",
-            "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
-            "sockets": [
-                {
-                    "name": "Say",
-                    "type": "string",
-                    "value": "hi"
-                },
-                {
-                    "name": "in chat"
-                }
-                
-            ],
-            "script": "client.chat({{1}});",
-            "help": "Send a message as chat"
-        },
-        
-        {
-            "blocktype": "step",
-            "id": "de9bb25d-481d-43e8-88b1-c9f56160f85e",
-            "sockets": [
-                {
-                    "name": "Save Checkpoint"
-                }
-            ],
-            "script": "client.saveCheckpoint();",
-            "help": "Save Checkpoint"
-        },
-        
-        
-        {
-            "blocktype": "step",
-            "id": "e5aa0ed8-035c-4349-bfdb-405ea9e72eec",
-            "sockets": [
-                {
-                    "name": "Restore Checkpoint"
-                }
-            ],
-            "script": "client.restoreCheckpoint();",
-            "help": "Restore Last Checkpoint"
-        }
-    ]
-}
-);
-/*end languages/minecraftjs/game.json*/
-
-/*begin languages/minecraftjs/player.json*/
-wb.menu({
-    "name": "Player",
-    "blocks": [
-        {
-            "blocktype": "context",
-            "id": "fe8f0ff3-1f52-4866-bbf0-bc3c7a850e11",
-            "sockets": [
-                {
-                    "name": "Get Player Tile Position"
-                }
-            ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Player Position"
-                        }
-                    ],
-                    "script": "playerposition",
-                    "type": "position"
-                },
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Player Position as text"
-                        }
-                    ],
-                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
-                    "type": "string"
-                }
-            ],
-            "help": "Get the tile that the player is on"
-        },
-        {
-            "blocktype": "expression",
-            "id": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9",
-            "sockets": [
-                {
-                    "name": "Player Position"
-                }
-            ], 
-            "type":"position",
-            "script": "playerposition",
-            "help": "position"
-        }, 
-        {
-            "blocktype": "step",
-            "id": "5474d53a-b671-4392-b299-d10339ad12af",
-            "sockets": [
-                {
-                    "name": "Create Position## from",
-                    "type": "position",
-                    "block": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9"
-                },
-                {   
-                    "name": "offset by",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],
-            "script": "var posA## = {{1}};var posB## = {{2}};var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Position##"
-                        }
-                    ],
-                    "script": "position##",
-                    "type": "position"
-                }
-            ],
-            "help": "Create new position relative to Player position"
-        },
-        {
-            "blocktype": "step",
-            "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
-            "sockets": [
-                {
-                    "name": "Move Player to",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],
-            "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
-            "help": "Move Player to x, y, z of position"
-        }
-        
-    
-    ]
-}
-);
-/*end languages/minecraftjs/player.json*/
-
-/*begin languages/minecraftjs/position.json*/
-wb.menu({
-    "name": "Position",
+    "name": "PiFace",
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+            "id": "bd7cb398-f6ff-41fb-b1a4-0ffdaa6135c3",
+            "script": "pfio.digital_read({{1}})",
+            "type" : "boolean",
+            "help": "Use a Pin as an Digital Input",
             "sockets": [
                 {
-                    "name": "x",
-                    "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "y",
-                    "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "z",
-                    "type": "number",
-                    "value": "0"
-                }
-            ], 
-            "type":"position",
-            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
-            "help": "A position: x is across, y is up and z is depth"
-        },
-        {
-            "blocktype": "expression",
-            "id": "590c8aef-a755-4df5-8930-b430db5a3c3d",
-            "sockets": [
-                {
-                    "name": "Centre Position"
-                }
-            ], 
-            "type":"position",
-            "script": "zeros",
-            "help": "position"
-        },
-        
-        {
-            "blocktype": "step",
-            "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
-            "sockets": [
-                {
-                    "name": "Create Position## from",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],  
-            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = posA##;",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Position##"
-                        }
-                    ],  
-                    
-                    "script": "position##",
-                    "type": "position"
-                }
-            ],
-            
-            "help": "create new position"
-        },
-        {
-            "blocktype": "expression",
-            "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
-            "sockets": [
-                {
-                    "name": "position",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
-                {
-                    "name": "equals position",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],  
-            "script": "({{1}}.x === {{2}}.x && {{1}}.y === {{2}}.y && {{1}}.z === {{2}}.z);",
-            "type": "boolean",
-            "help": "are 2 positions the same"
-        },
-        {
-            "blocktype": "step",
-            "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
-            "sockets": [
-                {
-                    "name": "Create Position## from",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
-                {
-                    "name": "offset by",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],  
-            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Position##"
-                        }
-                    ],  
-                    
-                    "script": "position##",
-                    "type": "position"
-                }
-            ],
-            
-            "help": "create new position by adding 2 others"
-        },
-        {
-            "blocktype": "context",
-            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
-            "sockets": [
-                {
-                    "name": "Get ground position from",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],
-            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "Ground Position"
-                        }
-                    ],
-                    "script": "groundposition",
-                    "type": "position"
-                }
-            ],
-            "help": "get height of blocks at position"
-        },
-        {
-            "blocktype": "expression",
-            "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
-            "sockets": [
-                {
-                    "name": "x from",                    
-                    "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],  
-            "script": "{{1}}.x",
-            "type": "number",
-            "help": "the x (across) part of the postion"
-        },
-        {
-            "blocktype": "expression",
-            "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
-            "sockets": [
-                {
-                    "name": "y from",
-                    "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],  
-            "script": "{{1}}.y",
-            "type": "number",
-            "help": "the y (up) part of the postion"
-        },
-        {
-            "blocktype": "expression",
-            "id": "96c32f90-7234-4463-b18d-d528271bf224",
-            "sockets": [
-                {
-                    "name": "z from",
-                    "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                }
-            ],  
-            "script": "{{1}}.z",
-            "type": "number",
-            "help": "the z (depth) part of the postion"
-        },
-        {
-            "blocktype": "expression",
-            "id": "3fa57ab7-bfed-4d36-8307-0ba11eda25f0",
-            "sockets": [
-                {
-                    "name": "position",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
-                {
-                    "name": "as text"
-                }
-            ],  
-            "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
-            "type": "string",
-            "help": "Position as text"
-        }
-    ]
-}
-);
-/*end languages/minecraftjs/position.json*/
-
-/*begin languages/minecraftjs/blocks.json*/
-wb.menu({
-    "name": "Blocks",
-    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
-    "blocks": [
-        {
-            "blocktype": "context",
-            "id": "b8020f54-43d2-4207-8529-336eb035898c",
-            "sockets": [
-                    {
-                        "name": "get Block Type at",
-                        "type": "position",
-                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                    }
-                ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                            {
-                                "name": "block##"
-                            }
-                        ],
-                    "script": "parseInt(block##)",
-                    "type": "number"
-                }
-            ],
-            "help": "get block type at x, y, z"
-        },
-        {
-            "blocktype": "expression",
-            "id": "a7c17404-8555-42be-877e-9d01d7647604",
-            "sockets": [
-                    {
-                    "name": "block",
+                    "name": "Input",
                     "type": "choice",
-                    "options": "blocks",
+                    "options": "pifacein",
                     "value": "choice"
+                },
+                {
+                    "name": "is ON"
                 }
-                ],
-            "script": "{{1}}",
-            "type": "number",
-            "help": "a blocktype"
+            ]
         },
         {
             "blocktype": "step",
-            "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
+            "id": "7af3be43-d4a7-4556-9e16-8d26c90f7072",
+            "script": "pfio.digital_write({{1}},{{2}});",
+            "help": "Turn",
             "sockets": [
                 {
-                    "name": "set Block at",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "name": "Set output",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
                 },
                 {
                     "name": "to",
-                    "type": "choice",
-                    "options": "blocks",
-                    "value": "choice"
-                }
-            ],
-            "script": "client.setBlock({{1}}.x, {{1}}.y, {{1}}.z, client.blocks[{{2}}]);",
-            "help": "set block at position"
-        },
-        {
-            "blocktype": "step",
-            "id": "3969a128-5e8d-4320-9f91-73bebf81820f",
-            "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
-            "sockets": [
-                {
-                    "name": "set Blocks between",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
-                {
-                    "name": "and",
-                    "type": "position",
-                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                },
-                {
-                    "name": "to",
-                    "type": "choice",
-                    "options": "blocks",
-                    "value": "choice"
-                }
-            ],
-            "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
-            "help": "set blocks in a 3D rectangle between the first and second postions to .."
-        },
-        {
-            "blocktype": "expression",
-            "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
-            "sockets": [
-                {
-                    "name": "block type name",
-                    "type": "number",
-                    "value": "0"
-                }
-            ],
-            "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
-            "type": "string",
-            "help": "name of a blocktype by number"
-        }
-    ]
-}
-);
-/*end languages/minecraftjs/blocks.json*/
-
-/*begin languages/minecraftjs/camera.json*/
-wb.menu({
-    "name": "Camera",
-    "blocks": [
-      
-      
-        {
-            "blocktype": "step",
-            "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
-            "sockets": [
-                {
-                    "name": "set camera mode to",
-                    "type": "choice",
-                    "options": "cameramode",
-                    "value": "choice"
+                    "type": "boolean",
+                    "value": null,
+                    "atype": "choice",
+                    "aoptions": "pifaceonoff",
+                    "avalue": "choice"
                 }
                 
-            ],
-            "script": "client.setCameraMode({{1}});",
-            "help": "set camera mode"
-        },
-        {
-            "blocktype": "step",
-            "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
-            "sockets": [
-                {
-                    "name": "set camera position to",
-                    "type": "position"
-                }
-            ],
-            "script": "client.setCameraPosition({{1}}.x, {{1}}.y, {{1}}.z);",
-            "help": "set camera position to a position"
+            ]
         }
     ]
 }
 );
-/*end languages/minecraftjs/camera.json*/
+/*end languages/node/piface.json*/
 
-/*begin languages/minecraftjs/array.json*/
+/*begin languages/node/array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
         {
             "blocktype": "step",
-            "id": "0e0bf77c-960c-4dc5-a644-d9080c44be28",
+            "id": "555172b9-1077-4205-a403-3b301be14055",
             "script": "local.array## = [];",
             "help": "Create an empty array",
             "locals": [
@@ -5516,7 +5034,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "c42b2723-86f5-4083-a421-34e9586abdb8",
+            "id": "8e2d5fba-b674-4d1e-8137-db49da44acf2",
             "script": "local.array## = {{1}}.slice();",
             "help": "create a new array with the contents of another array",
             "locals": [
@@ -5541,7 +5059,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "fc8f4a8b-9a8f-4d03-9ec7-0d222128d3af",
+            "id": "9e8bf11e-4fe6-4028-932d-a7c3c4231060",
             "script": "{{1}}[{{2}}]",
             "type": "any",
             "help": "get an item from an index in the array",
@@ -5560,7 +5078,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "615ff4a0-986b-49da-9019-9389fe5c9035",
+            "id": "df795450-aa4a-4acd-b96d-230617611f83",
             "script": "{{1}}.join({{2}})",
             "type": "string",
             "help": "join items of an array into a string, each item separated by given string",
@@ -5579,7 +5097,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "003732ef-5a5f-480e-aaf8-46574620ad3d",
+            "id": "4f66c164-2873-4313-a54a-2771b6a04e92",
             "script": "{{1}}.push({{2}});",
             "help": "add any object to an array",
             "sockets": [
@@ -5597,7 +5115,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "c97ff1b8-026e-4f36-b2ca-aa18471a06f2",
+            "id": "c6f26489-46d8-481c-ba6d-07739ca7c267",
             "script": "{{1}}.length",
             "type": "number",
             "help": "get the length of an array",
@@ -5614,7 +5132,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "4e84552a-2fcc-490a-b5f1-280c130efa76",
+            "id": "ed5a1051-cc8e-47e0-aa9f-c0b852dda6fa",
             "script": "{{1}}.splice({{2}}, 1)[0]",
             "type": "any",
             "help": "remove item at index from an array",
@@ -5633,7 +5151,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "15be9d77-a613-417a-a797-3edc19339e01",
+            "id": "56a4997d-7a67-4b85-9983-9d7c64ac2bad",
             "script": "{{1}}.pop()",
             "type": "any",
             "help": "remove and return the last item from an array",
@@ -5650,7 +5168,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "e0c665cb-f251-4a2a-b6aa-8a2707434a9d",
+            "id": "b9a43234-d090-4db9-9ebf-bc4e45dff90f",
             "script": "{{1}}.shift()",
             "type": "any",
             "help": "remove and return the first item from an array",
@@ -5667,7 +5185,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "4bf3ea85-2abe-4c3a-807f-a6ab5214991c",
+            "id": "6d706cdf-9311-4034-8bd8-6ce0c2340e56",
             "script": "{{1}}.slice().reverse()",
             "type": "array",
             "help": "reverse a copy of array",
@@ -5684,7 +5202,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "b1cbd554-b501-4586-b7ba-4664ca835c37",
+            "id": "43415751-34cb-478b-952b-3954718cb0d3",
             "script": "{{1}}.concat({{2}});",
             "type": "array",
             "help": "a new array formed by joining the arrays",
@@ -5703,7 +5221,7 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "e1c7ecfb-0547-419b-af4a-82cc91bd233b",
+            "id": "2cf51b08-8c8a-44e8-8227-39a6f13da423",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
             "locals": [
                 {
@@ -5743,15 +5261,15 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/array.json*/
+/*end languages/node/array.json*/
 
-/*begin languages/minecraftjs/boolean.json*/
+/*begin languages/node/boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "4c13d659-2f94-4bd3-aaaa-23ab14a77fc8",
+            "id": "2ef48097-a439-42aa-9fe3-be6fb14ef3a7",
             "type": "boolean",
             "script": "({{1}} && {{2}})",
             "help": "both operands are true",
@@ -5762,7 +5280,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "and",
+                    "name": "AND",
                     "type": "boolean",
                     "value": null
                 }
@@ -5770,7 +5288,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "7731e039-6eac-48a9-883f-bb974bdb7654",
+            "id": "d10041ac-027e-4a11-b4f9-941d2e538aa7",
             "type": "boolean",
             "script": "({{1}} || {{2}})",
             "help": "either or both operands are true",
@@ -5781,7 +5299,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "or",
+                    "name": "OR",
                     "type": "boolean",
                     "value": null
                 }
@@ -5789,7 +5307,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "8760ad39-68ae-4787-90ca-382329a16f09",
+            "id": "d121063d-83c9-4fd6-b738-27b31c995323",
             "type": "boolean",
             "script": "({{1}} ? !{{2}} : {{2}})",
             "help": "either, but not both, operands are true",
@@ -5800,7 +5318,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "xor",
+                    "name": "XOR",
                     "type": "boolean",
                     "value": null
                 }
@@ -5808,13 +5326,13 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "8aec9496-b664-472f-80c3-e35344d6472c",
+            "id": "4de248e4-e41f-44ca-a869-edd9b0a048b2",
             "type": "boolean",
             "script": "(! {{1}})",
             "help": "operand is false",
             "sockets": [
                 {
-                    "name": "not",
+                    "name": "NOT",
                     "type": "boolean",
                     "value": null
                 }
@@ -5822,15 +5340,15 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/boolean.json*/
+/*end languages/node/boolean.json*/
 
-/*begin languages/minecraftjs/math.json*/
+/*begin languages/node/math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
         {
             "blocktype": "step",
-            "id": "bfff120f-482c-45e8-b7bb-ace2d0940dd5",
+            "id": "f51d2d51-d5b4-4fef-a79b-b750694bcc1a",
             "sockets": [
                 {
                     "name": "Create Number## from",
@@ -5856,7 +5374,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "type": "number",
-            "id": "5d3bcd0f-9e14-4c43-8501-601b0e19c3be",
+            "id": "f08f2d43-23e8-47a9-8bf5-7904af9313da",
             "sockets": [
                 {
                     "name": "new number",
@@ -5869,7 +5387,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "9730dc5a-c103-4c0b-8e65-ef23f3aa7844",
+            "id": "15a39af7-940e-4f29-88ba-38b67913599f",
             "type": "number",
             "script": "({{1}} + {{2}})",
             "help": "sum of the two operands",
@@ -5888,7 +5406,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "769f7006-6fde-46b2-ba49-408153440842",
+            "id": "3d74da37-7c18-47e3-bbdc-e4f7706c81f6",
             "type": "number",
             "script": "({{1}} - {{2}})",
             "help": "difference of the two operands",
@@ -5907,7 +5425,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "15ee19ec-b2e2-4a28-8131-02a5071bb6ff",
+            "id": "ded5d055-7ae1-465a-ad82-003f171b9dc7",
             "type": "number",
             "script": "({{1}} * {{2}})",
             "help": "product of the two operands",
@@ -5926,7 +5444,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "7e852f0f-25d3-438f-b3c5-9f3d683fe3c8",
+            "id": "0e68e0f3-c6f4-40b1-a2cb-431dd0cd574d",
             "type": "number",
             "script": "({{1}} / {{2}})",
             "help": "quotient of the two operands",
@@ -5945,7 +5463,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "4508b05f-bef2-49fe-8386-1da5a9cffc69",
+            "id": "7d9bf923-baa2-4606-8c44-0247022c2408",
             "type": "boolean",
             "script": "({{1}} === {{2}})",
             "help": "two operands are equal",
@@ -5964,7 +5482,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "f9379dd7-4d3d-4c98-8b40-0f888c870870",
+            "id": "74992263-4356-48ba-9afe-16e9323f4efa",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
             "help": "first operand is less than second operand",
@@ -5983,7 +5501,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "34edfca1-71f1-4ea1-9eda-a6a90e30388d",
+            "id": "44d41058-f20e-4c8d-9d35-95e1fcfb8121",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
             "help": "first operand is greater than second operand",
@@ -6002,7 +5520,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "ceecc038-66e5-443e-9932-bf46884debf3",
+            "id": "fa03d3e2-0c28-4c35-a5e4-ed1b17d831a0",
             "type": "number",
             "script": "randint({{1}}, {{2}})",
             "help": "random number between two numbers (inclusive)",
@@ -6021,7 +5539,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "0bdf3794-4112-4b6a-8079-6f2514095dd8",
+            "id": "2e897518-31d8-4cc2-bd6e-2ede0b3136d0",
             "type": "number",
             "script": "({{1}} % {{2}})",
             "help": "modulus of a number is the remainder after whole number division",
@@ -6040,7 +5558,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "67ad2a47-fa0a-4f8b-8e4a-cdc948738579",
+            "id": "5e341dc5-f328-4b81-bbb7-aed3ffc81e01",
             "type": "number",
             "script": "Math.round({{1}})",
             "help": "rounds to the nearest whole number",
@@ -6054,7 +5572,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a5b3a29d-3ce9-42f0-9d10-d3d388a5368f",
+            "id": "ca74d36c-1879-4b41-b04b-587ca56b9a77",
             "type": "number",
             "script": "Math.abs({{1}})",
             "help": "converts a negative number to positive, leaves positive alone",
@@ -6068,7 +5586,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "017ca7e9-f15c-497a-aa61-f99eb736db5b",
+            "id": "802a9575-523b-4b6a-961d-e6aed148bdd4",
             "type": "number",
             "script": "rad2deg(Math.acos({{1}}))",
             "help": "inverse of cosine",
@@ -6082,7 +5600,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "51537972-3204-473b-9e12-9f052d712d25",
+            "id": "441f5159-878a-4109-8030-8d8f9504977e",
             "type": "number",
             "script": "rad2deg(Math.asin({{1}}))",
             "help": "inverse of sine",
@@ -6096,7 +5614,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "b439f8bf-817f-4915-8051-6fefe66773fc",
+            "id": "834c4446-6c32-444a-9c3d-cad449eff941",
             "type": "number",
             "script": "rad2deg(Math.atan({{1}}))",
             "help": "inverse of tangent",
@@ -6110,7 +5628,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "6e52c6e7-ee82-4d23-9ad6-46b978795900",
+            "id": "2ce4d35d-3c82-4f5e-9e27-894939291ad3",
             "type": "number",
             "script": "Math.ceil({{1}})",
             "help": "rounds up to nearest whole number",
@@ -6124,7 +5642,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "fdf8ab48-977f-4b47-88e2-2668a5361022",
+            "id": "db690432-b321-434e-9044-b1188e581f99",
             "type": "number",
             "script": "Math.cos(deg2rad({{1}}))",
             "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
@@ -6141,7 +5659,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "83c2adb7-5706-4762-84cc-faa5cee9b7b3",
+            "id": "9f89f604-2498-4149-9fc7-8bb19391e37d",
             "type": "number",
             "script": "Math.sin(deg2rad({{1}}))",
             "help": "ratio of the length of the opposite side to the length of the hypotenuse",
@@ -6158,7 +5676,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "05b844c2-7df8-4804-80de-551b0de0a9fa",
+            "id": "d940a5b5-ba8a-49f0-b836-5e460e258a42",
             "type": "number",
             "script": "Math.tan(deg2rad({{1}}))",
             "help": "ratio of the length of the opposite side to the length of the adjacent side",
@@ -6175,7 +5693,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "5576b35b-46d3-44ac-91cb-04eb64a37177",
+            "id": "f2127de3-d601-49fa-9ebf-79ae34c576bd",
             "type": "number",
             "script": "Math.pow({{1}}, {{2}})",
             "help": "multiply a number by itself the given number of times",
@@ -6194,7 +5712,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "d87d4698-2a06-4fc8-81d6-fee1b2a3d763",
+            "id": "df79282c-43bc-43dc-8d29-2dea29d33f00",
             "type": "number",
             "script": "Math.sqrt({{1}})",
             "help": "the square root is the same as taking the to the power of 1/2",
@@ -6208,7 +5726,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "74e532b9-0589-4f12-9f19-e97a52170c4d",
+            "id": "4b357bdd-630c-4574-96e7-518fb7998702",
             "script": "Math.PI;",
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
@@ -6220,7 +5738,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "6f22dad7-82d8-408f-9d3c-39b2e1b0d4e7",
+            "id": "bdbfe741-bfb9-44fc-873d-e0513b02b87a",
             "script": "Math.PI * 2",
             "type": "number",
             "help": "tau is 2 times pi, a generally more useful number",
@@ -6232,15 +5750,15 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/math.json*/
+/*end languages/node/math.json*/
 
-/*begin languages/minecraftjs/string.json*/
+/*begin languages/node/string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "5a2cb821-a799-47d7-a749-f1e97c850831",
+            "id": "453e26ad-8bcc-4b48-a173-2d5eb4b15af3",
             "script": "{{1}}.split({{2}})",
             "type": "array",
             "help": "create an array by splitting the named string on the given string",
@@ -6259,7 +5777,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "6641dec9-bd73-4f0d-aaee-8e15b27a47e0",
+            "id": "9c1110e8-6722-4baf-a1f2-8b5a1a9ccee2",
             "type": "string",
             "script": "({{1}} + {{2}})",
             "help": "returns a string by joining together two strings",
@@ -6278,7 +5796,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "55571242-f1c8-46c9-ad85-2d79b482f456",
+            "id": "fb943e76-3829-4819-8161-f5b5e829f227",
             "script": "{{1}}[{{2}}]",
             "type": "string",
             "help": "get the single character string at the given index of named string",
@@ -6297,7 +5815,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "08d455f9-6ea1-41ef-a49a-af7400baacc0",
+            "id": "e6ef4aef-5342-4ceb-b050-ad3554d77c45",
             "script": "{{1}}.length",
             "type": "number",
             "help": "get the length of named string",
@@ -6314,7 +5832,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "59ff7f3a-b0f3-445e-9efe-7297d7649ca9",
+            "id": "88d791fe-a035-45ac-882f-bd96b30a73bf",
             "script": "{{1}}.indexOf({{2}})",
             "type": "number",
             "help": "get the index of the substring within the named string",
@@ -6333,7 +5851,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "16b4b2e8-b80e-425a-8a74-cad8c6bc800b",
+            "id": "93b4b160-e2e2-438a-a8f0-bf2ceb69aaf3",
             "script": "{{1}}.replace({{2}}, {{3}})",
             "type": "string",
             "help": "get a new string by replacing a substring with a new string",
@@ -6357,7 +5875,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "2c364a65-84f0-445b-bd41-607dfe42dc49",
+            "id": "6377e5c8-4788-478b-96a6-6388bbed87ec",
             "script": "{{1}}.toString()",
             "type": "string",
             "help": "convert any object to a string",
@@ -6371,7 +5889,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "a6812d38-b353-4f36-a273-ea9abe90fd50",
+            "id": "ddbb51d2-a627-406b-82ff-a7ff3d1d82ed",
             "script": "// {{1}};\n",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
@@ -6384,7 +5902,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "0c1f9064-0c4f-460c-afa6-139ac7e9692c",
+            "id": "5331ce50-0113-4595-b4d5-69e241f2019b",
             "script": "window.alert({{1}});",
             "help": "pop up an alert window with string",
             "sockets": [
@@ -6397,7 +5915,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "328aff9b-3063-4d89-823d-8e9af9237de5",
+            "id": "e01e82db-4849-4dcd-b82e-0c5f8e801ba8",
             "script": "console.log({{1}});",
             "help": "Send any object as a message to the console",
             "sockets": [
@@ -6410,7 +5928,7 @@ wb.menu({
         },
         {
             "blocktype": "step",
-            "id": "368cfb26-b401-410c-974c-47070fc0af8f",
+            "id": "27f62d38-a1a2-481f-b7ea-35aae955575b",
             "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
             "help": "send a message to the console with a format string and multiple objects",
             "sockets": [
@@ -6428,7 +5946,7 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "0f8c2e1a-0103-44d5-94ed-3261f03e2bc2",
+            "id": "efe8c097-a91f-42f7-a92f-50ad32a969db",
             "script": "global.keys",
             "help": "for debugging",
             "type": "object",
@@ -6440,4 +5958,4 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/string.json*/
+/*end languages/node/string.json*/

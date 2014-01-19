@@ -1,0 +1,46 @@
+{
+    "name": "PiFace",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "bd7cb398-f6ff-41fb-b1a4-0ffdaa6135c3",
+            "script": "pfio.digital_read({{1}})",
+            "type" : "boolean",
+            "help": "Use a Pin as an Digital Input",
+            "sockets": [
+                {
+                    "name": "Input",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                },
+                {
+                    "name": "is ON"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "7af3be43-d4a7-4556-9e16-8d26c90f7072",
+            "script": "pfio.digital_write({{1}},{{2}});",
+            "help": "Turn",
+            "sockets": [
+                {
+                    "name": "Set output",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                },
+                {
+                    "name": "to",
+                    "type": "boolean",
+                    "value": null,
+                    "atype": "choice",
+                    "aoptions": "pifaceonoff",
+                    "avalue": "choice"
+                }
+                
+            ]
+        }
+    ]
+}

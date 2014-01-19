@@ -4785,7 +4785,7 @@ wb.menu({
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
                 {
-                    "name": "when program runs"
+                    "name": "When program runs"
                 }
             ]
         },
@@ -4796,7 +4796,7 @@ wb.menu({
             "help": "run the following blocks only if the condition is true",
             "sockets": [
                 {
-                    "name": "if",
+                    "name": "If",
                     "type": "boolean",
                     "value": null
                 }
@@ -4809,7 +4809,7 @@ wb.menu({
             "help": "run the  blocks if the condition is not true",
             "sockets": [
                 {
-                    "name": "if not",
+                    "name": "If not",
                     "type": "boolean",
                     "value": null
                 }
@@ -4822,7 +4822,7 @@ wb.menu({
             "help": "repeat forever until condition is true",
             "sockets": [
                 {
-                    "name": "repeat until",
+                    "name": "Repeat until",
                     "type": "boolean",
                     "value": null
                 }
@@ -4847,7 +4847,7 @@ wb.menu({
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
-                    "name": "repeat",
+                    "name": "Repeat",
                     "type": "number",
                     "value": "2"
                 },
@@ -4875,7 +4875,7 @@ wb.menu({
             "help": "create a reference to re-use the any",
             "sockets": [
                 {
-                    "name": "variable",
+                    "name": "Variable",
                     "type": "any",
                     "value": null
                 }
@@ -4888,7 +4888,7 @@ wb.menu({
             "help": "first argument must be a variable",
             "sockets": [
                 {
-                    "name": "set variable",
+                    "name": "Set variable",
                     "type": "any",
                     "value": null
                 },
@@ -4906,7 +4906,7 @@ wb.menu({
             "help": "pause before running the following blocks",
             "sockets": [
                 {
-                    "name": "wait",
+                    "name": "Wait",
                     "type": "number",
                     "value": "1"
                 },
@@ -4934,7 +4934,7 @@ wb.menu({
             ],
             "sockets": [
                 {
-                    "name": "repeat",
+                    "name": "Repeat",
                     "type": "number",
                     "value": "10"
                 }
@@ -4947,7 +4947,7 @@ wb.menu({
             "help": "repeat until the condition is false",
             "sockets": [
                 {
-                    "name": "forever if",
+                    "name": "Forever if",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -4965,7 +4965,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "bd7cb398-f6ff-41fb-b1a4-0ffdaa6135c3",
             "script": "pfio.digital_read({{1}})",
-            "type" : "boolean",
+            "type": "boolean",
             "help": "Use a Pin as an Digital Input",
             "sockets": [
                 {
@@ -4980,8 +4980,20 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
+            "script": "pfio.read_input()",
+            "type": "int",
+            "help": "8 Pins as a Digital Input",
+            "sockets": [
+                {
+                    "name": "All Inputs as number"
+                }
+            ]
+        },
+        {
             "blocktype": "step",
-            "id": "7af3be43-d4a7-4556-9e16-8d26c90f7072",
+            "id": "77bdb006-723d-4b9e-bb73-6673fcc8bed0",
             "script": "pfio.digital_write({{1}},{{2}});",
             "help": "Turn",
             "sockets": [
@@ -4999,12 +5011,23 @@ wb.menu({
                     "aoptions": "pifaceonoff",
                     "avalue": "choice"
                 }
-                
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "cd648a1f-4e16-473e-8716-e3b32d6046c8",
+            "script": "pfio.write_output({{1}});",
+            "help": "Turn",
+            "sockets": [
+                {
+                    "name": "Set outputs to",
+                    "type": "int",
+                    "value": "0"
+                }
             ]
         }
     ]
-}
-);
+});
 /*end languages/node/piface.json*/
 
 /*begin languages/node/array.json*/
@@ -5747,6 +5770,77 @@ wb.menu({
             "sockets": [
                 {
                     "name": "tau"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a25bdd5e-6847-4275-9b7f-bc147acd5f31",
+            "type": "int",
+            "script": "({{1}} && {{2}})",
+            "help": "Bitwise AND of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "AND",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0e4219de-1d1b-42ef-9dfa-ac090fddde02",
+            "type": "int",
+            "script": "({{1}} | {{2}})",
+            "help": "Bitwise OR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 9
+                },
+                {
+                    "name": "OR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c383c0e3-dbe0-4104-b200-8dd569ea241c",
+            "type": "int",
+            "script": "({{1}} ^ {{2}})",
+            "help": "Bitwise XOR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "XOR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "64a12634-f17b-410b-a5e1-a2f6e0b91689",
+            "type": "int",
+            "script": "(~ {{1}})",
+            "help": "Bitwise NOT number",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "int",
+                    "value": 0
                 }
             ]
         }

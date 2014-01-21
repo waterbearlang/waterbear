@@ -1,1 +1,499 @@
-7405289
+{
+  "title": "variables",
+  "description": "simple processingjs example demoing variables",
+  "date": 1384125720954,
+  "waterbearVersion": "2.0",
+  "blocks": [
+    {
+      "blocktype": "context",
+      "group": "scripts_workspace",
+      "id": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+      "help": "Drag your script blocks here",
+      "scopeId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+      "scriptId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+      "sockets": [
+        {
+          "name": "Workspace"
+        }
+      ],
+      "seqNum": "1",
+      "script": "[[1]]",
+      "contained": [
+        {
+          "blocktype": "eventhandler",
+          "group": "structure",
+          "id": "73a2f85f-07b9-46ad-9b51-ea797ad0f953",
+          "help": "Setup the Processing Canvas",
+          "scopeId": "0",
+          "scriptId": "1cf8132a-4996-45db-b482-4e3302003c1",
+          "sockets": [
+            {
+              "name": "setup"
+            }
+          ],
+          "seqNum": "8",
+          "script": "void setup(){[[1]]}",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "structure",
+              "id": "3807234c-6429-49cf-ad34-26426dc714fc",
+              "help": "Set canvas size",
+              "scopeId": "0",
+              "scriptId": "71eb3271-6dc0-4a82-81cc-4c50d2ac19e7",
+              "sockets": [
+                {
+                  "name": "size X",
+                  "type": "number",
+                  "value": "800",
+                  "uValue": "800"
+                },
+                {
+                  "name": "Y",
+                  "type": "number",
+                  "value": "400",
+                  "uValue": "500"
+                }
+              ],
+              "seqNum": "9",
+              "script": "size({{1}}, {{2}});"
+            },
+            {
+              "blocktype": "step",
+              "group": "colors",
+              "id": "67d943fc-f8c0-42d8-8700-b866a289db72",
+              "help": "Set background color",
+              "scopeId": "0",
+              "scriptId": "01123271-3dc0-6a82-01cc-mc50dlwcb9e7",
+              "sockets": [
+                {
+                  "name": "background color",
+                  "type": "color",
+                  "value": "#0000000",
+                  "uValue": "#000000",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "colors",
+                    "id": "a04deca0-af5e-4efb-a633-43ca4a7b24ab",
+                    "help": "Returns a random RBG color",
+                    "scopeId": "0",
+                    "scriptId": "da9a266b-8ec0-4b97-bd79-b8pc0s4996f",
+                    "sockets": [
+                      {
+                        "name": "random color"
+                      }
+                    ],
+                    "seqNum": "14",
+                    "script": "color(random(0,255), random(0,255), random(0,255))",
+                    "type": "color"
+                  }
+                }
+              ],
+              "seqNum": "11",
+              "script": "background(color({{1}}));"
+            },
+            {
+              "blocktype": "step",
+              "group": "shape",
+              "id": "7576d2ff-3782-4a0c-9fb3-2fe7be29b3bd",
+              "help": "Draws a point, a coordinate in space at the dimension of one pixel",
+              "scopeId": "0",
+              "scriptId": "71eb32s1-6cc0-4322-82sc-mh50di3jns2",
+              "sockets": [
+                {
+                  "name": "stroke weight",
+                  "type": "number",
+                  "value": "12",
+                  "uValue": "300"
+                }
+              ],
+              "seqNum": "2",
+              "script": "strokeWeight({{1}});"
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "control",
+          "id": "87f0f45b-c3d8-400a-bc42-6a18f57b6e08",
+          "help": "Create a integer variable reference to re-use",
+          "scopeId": "0",
+          "scriptId": "079b2b89-41c2-4d00-8n21-rcf62146960",
+          "sockets": [
+            {
+              "name": "int variable value",
+              "type": "number",
+              "uValue": "0"
+            }
+          ],
+          "seqNum": "20",
+          "script": "int variable## = {{1}};",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "script": "variable##",
+              "type": "number",
+              "sockets": [
+                {
+                  "name": "variable##"
+                }
+              ],
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "control",
+              "seqNum": "20",
+              "scopeId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+              "scriptId": "6cb4bc39-bc25-44ac-aa3a-854efea10253",
+              "id": "6cb4bc39-bc25-44ac-aa3a-854efea10253",
+              "localSource": "87f0f45b-c3d8-400a-bc42-6a18f57b6e08"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "structure",
+          "id": "66053472-438d-4248-beb1-baaa91bf9c5d",
+          "help": "Main draw loop",
+          "scopeId": "0",
+          "scriptId": "1cf8132a-4996-45db-b482-4336198e3ca",
+          "sockets": [
+            {
+              "name": "draw"
+            }
+          ],
+          "seqNum": "19",
+          "script": "void draw(){[[1]]}",
+          "contained": [
+            {
+              "blocktype": "context",
+              "group": "control",
+              "id": "aa1707c7-0a11-40b0-b0b7-553ba03256b8",
+              "help": "Controls a sequence of repetitions",
+              "scopeId": "0",
+              "scriptId": "1cf8132a-4996-45db-b482-4lkshre13c1",
+              "sockets": [
+                {
+                  "name": "for init",
+                  "type": "any",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "control",
+                    "id": "bcc1c8f1-54f9-4d41-bbab-161310fa5a7d",
+                    "help": "",
+                    "scopeId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+                    "scriptId": "6cb4bc39-bc25-44ac-aa3a-854efea10253",
+                    "sockets": [
+                      {
+                        "name": "variable##",
+                        "uName": "variable 20"
+                      }
+                    ],
+                    "seqNum": "20",
+                    "script": "variable##",
+                    "localSource": "87f0f45b-c3d8-400a-bc42-6a18f57b6e08",
+                    "type": "number"
+                  }
+                },
+                {
+                  "name": "test",
+                  "type": "any",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "control",
+                    "id": "dc3e637e-8698-4efd-98d5-a35fcfd70ed4",
+                    "help": "Tests if the value on the left is less than the value on the right or if the values are equivalent",
+                    "scopeId": "0",
+                    "scriptId": "d753757b-a7d4-4d84-99f1-cb9bou7e62da",
+                    "sockets": [
+                      {
+                        "name": "",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "control",
+                          "id": "64054067-1c4d-49d7-bdb6-5930043a2a03",
+                          "help": "",
+                          "scopeId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+                          "scriptId": "6cb4bc39-bc25-44ac-aa3a-854efea10253",
+                          "sockets": [
+                            {
+                              "name": "variable##",
+                              "uName": "variable 20"
+                            }
+                          ],
+                          "seqNum": "20",
+                          "script": "variable##",
+                          "localSource": "87f0f45b-c3d8-400a-bc42-6a18f57b6e08",
+                          "type": "number"
+                        }
+                      },
+                      {
+                        "name": "<=",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "200",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "environment",
+                          "id": "0a7370d9-0388-440d-a78e-487a6041e0d0",
+                          "help": "System variable which stores the height of the display window",
+                          "scopeId": "0",
+                          "scriptId": "da2c8203-bf80-4647-a762-928d477b5a27",
+                          "sockets": [
+                            {
+                              "name": "height"
+                            }
+                          ],
+                          "seqNum": "13",
+                          "script": "height",
+                          "type": "number"
+                        }
+                      }
+                    ],
+                    "seqNum": "22",
+                    "script": "({{1}} <= {{2}})",
+                    "type": "boolean"
+                  }
+                },
+                {
+                  "name": "update",
+                  "type": "any",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "control",
+                    "id": "e092e353-58eb-462d-8c55-52188fdbd75d",
+                    "help": "First argument must be a variable",
+                    "scopeId": "0",
+                    "scriptId": "9AED48C9-A90B-49FB-9C1b-3r63eFs313F",
+                    "sockets": [
+                      {
+                        "name": "update variable",
+                        "type": "any",
+                        "uValue": "",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "control",
+                          "id": "029d4c5a-9969-4dce-b573-e7f220bfb548",
+                          "help": "",
+                          "scopeId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+                          "scriptId": "6cb4bc39-bc25-44ac-aa3a-854efea10253",
+                          "sockets": [
+                            {
+                              "name": "variable##",
+                              "uName": "variable 20"
+                            }
+                          ],
+                          "seqNum": "20",
+                          "script": "variable##",
+                          "localSource": "87f0f45b-c3d8-400a-bc42-6a18f57b6e08",
+                          "type": "number"
+                        }
+                      },
+                      {
+                        "name": "by",
+                        "type": "any",
+                        "value": "1",
+                        "uValue": "1"
+                      }
+                    ],
+                    "seqNum": "1",
+                    "script": "{{1}} += {{2}};"
+                  }
+                }
+              ],
+              "seqNum": "21",
+              "script": "for( {{1}}; {{2}}; {{3}}) { [[4]] }",
+              "contained": [
+                {
+                  "blocktype": "step",
+                  "group": "colors",
+                  "id": "395e8507-7b04-4843-b83d-2f18e218287c",
+                  "help": "Sets the color used to draw lines and borders around shapes",
+                  "scopeId": "0",
+                  "scriptId": "01983271-6dc0-wa82-81cc-4c50d88cb0e",
+                  "sockets": [
+                    {
+                      "name": "stroke color",
+                      "type": "color",
+                      "value": "#0000000",
+                      "uValue": "#000000",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "colors",
+                        "id": "384d9cea-6f7c-4457-92e8-f0757c355989",
+                        "help": "Returns a random RBG color",
+                        "scopeId": "0",
+                        "scriptId": "da9a266b-8ec0-4b97-bd79-b8pc0s4996f",
+                        "sockets": [
+                          {
+                            "name": "random color"
+                          }
+                        ],
+                        "seqNum": "7",
+                        "script": "color(random(0,255), random(0,255), random(0,255))",
+                        "type": "color"
+                      }
+                    }
+                  ],
+                  "seqNum": "6",
+                  "script": "stroke(color({{1}}));"
+                },
+                {
+                  "blocktype": "step",
+                  "group": "shape",
+                  "id": "94a73e86-afa7-4ee9-868c-64bd2c3455a4",
+                  "help": "Draws a point, a coordinate in space at the dimension of one pixel",
+                  "scopeId": "0",
+                  "scriptId": "71eb32s1-6cc0-4322-82sc-4c50779c57e7",
+                  "sockets": [
+                    {
+                      "name": "point x",
+                      "type": "number",
+                      "value": "30",
+                      "uValue": "30",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "math",
+                        "id": "7b870455-585a-4857-96f4-6facc195e110",
+                        "help": "Generates random numbers",
+                        "scopeId": "0",
+                        "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
+                        "sockets": [
+                          {
+                            "name": "random",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "0"
+                          },
+                          {
+                            "name": "",
+                            "type": "number",
+                            "value": "10",
+                            "uValue": "10",
+                            "uBlock": {
+                              "blocktype": "expression",
+                              "group": "environment",
+                              "id": "f33baf8a-f7ca-4f32-9be2-57a983c2ac53",
+                              "help": "System variable which stores the width of the display window",
+                              "scopeId": "0",
+                              "scriptId": "nadc82i3-bf70-4617-a732-920d497b5a27",
+                              "sockets": [
+                                {
+                                  "name": "width"
+                                }
+                              ],
+                              "seqNum": "4",
+                              "script": "width",
+                              "type": "number"
+                            }
+                          }
+                        ],
+                        "seqNum": "2",
+                        "script": "random({{1}}, {{2}})",
+                        "type": "number"
+                      }
+                    },
+                    {
+                      "name": "y",
+                      "type": "number",
+                      "value": "20",
+                      "uValue": "250"
+                    }
+                  ],
+                  "seqNum": "2",
+                  "script": "point({{1}}, {{2}});"
+                }
+              ]
+            },
+            {
+              "blocktype": "step",
+              "group": "control",
+              "id": "30c7e7f7-8cf8-409e-9c75-e44becdd03e0",
+              "help": "First argument must be a variable",
+              "scopeId": "0",
+              "scriptId": "b4036693-8645-4852-a4de-9e96565f92ec",
+              "sockets": [
+                {
+                  "name": "set variable",
+                  "type": "any",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "control",
+                    "id": "9a00653e-b63e-4d1d-b821-dbcc4cc1a4f5",
+                    "help": "",
+                    "scopeId": "28a47267-9f74-4a7c-8a79-040b5b986c22",
+                    "scriptId": "6cb4bc39-bc25-44ac-aa3a-854efea10253",
+                    "sockets": [
+                      {
+                        "name": "variable##",
+                        "uName": "variable 20"
+                      }
+                    ],
+                    "seqNum": "20",
+                    "script": "variable##",
+                    "localSource": "87f0f45b-c3d8-400a-bc42-6a18f57b6e08",
+                    "type": "number"
+                  }
+                },
+                {
+                  "name": "to",
+                  "type": "any",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "math",
+                    "id": "d45f1eee-8002-4bb3-aeaf-55856d74b248",
+                    "help": "Generates random numbers",
+                    "scopeId": "0",
+                    "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
+                    "sockets": [
+                      {
+                        "name": "random",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0"
+                      },
+                      {
+                        "name": "",
+                        "type": "number",
+                        "value": "10",
+                        "uValue": "10",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "environment",
+                          "id": "f04a957f-edcd-4204-95d6-0e629133994c",
+                          "help": "System variable which stores the width of the display window",
+                          "scopeId": "0",
+                          "scriptId": "nadc82i3-bf70-4617-a732-920d497b5a27",
+                          "sockets": [
+                            {
+                              "name": "width"
+                            }
+                          ],
+                          "seqNum": "18",
+                          "script": "width",
+                          "type": "number"
+                        }
+                      }
+                    ],
+                    "seqNum": "17",
+                    "script": "random({{1}}, {{2}})",
+                    "type": "number"
+                  }
+                }
+              ],
+              "seqNum": "16",
+              "script": "{{1}} = {{2}};"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

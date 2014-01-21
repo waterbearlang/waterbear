@@ -93,7 +93,7 @@
                     "id": "fe91d038-b17e-467d-bc08-1e7d5a5de5db",
                     "help": "Generates random numbers",
                     "scopeId": "0",
-                    "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                    "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
                     "sockets": [
                       {
                         "name": "random",

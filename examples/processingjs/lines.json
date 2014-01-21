@@ -213,7 +213,7 @@
                     "id": "59a90cde-f888-4f4d-a414-0cd20638c38b",
                     "help": "Generates random numbers",
                     "scopeId": "0",
-                    "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                    "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
                     "sockets": [
                       {
                         "name": "random",
@@ -260,7 +260,7 @@
                     "id": "cd7b1758-fadd-4ec3-9216-8a11ff4f60cd",
                     "help": "Generates random numbers",
                     "scopeId": "0",
-                    "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                    "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
                     "sockets": [
                       {
                         "name": "random",

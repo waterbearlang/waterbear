@@ -362,7 +362,7 @@
                         "id": "7b870455-585a-4857-96f4-6facc195e110",
                         "help": "Generates random numbers",
                         "scopeId": "0",
-                        "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                        "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
                         "sockets": [
                           {
                             "name": "random",
@@ -451,7 +451,7 @@
                     "id": "d45f1eee-8002-4bb3-aeaf-55856d74b248",
                     "help": "Generates random numbers",
                     "scopeId": "0",
-                    "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                    "scriptId": "247888a8-47a1-42a1-9018-55e307fd6a4e",
                     "sockets": [
                       {
                         "name": "random",

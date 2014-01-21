@@ -38,10 +38,10 @@ input{
 	position: relative;
 	width: 100%;
 	height: 100%;
-	display: none;
+	/*display: none;*/
 }
 
-body.editor .editor, body.blocks .editor{
+/*body.editor .editor, body.blocks .editor{
 	display: block;
 }
 
@@ -188,12 +188,12 @@ body.editor #block_menu{
 	pointer-events: auto;
 }
 
-
+*/
 .hidden{
 	display: none;
 }
 
-#color_popup{
+/*#color_popup{
 	background-color: green;
 	padding: 5px 10px 15px 10px;
 }
@@ -203,7 +203,7 @@ body.editor #block_menu{
 	height: 300px;
 	background-color: blue;
 }
-
+*/
 /* Description of saves */
 .description{
 	font-size: .8em;
@@ -213,7 +213,7 @@ body.editor #block_menu{
 /* These additions should only change the appearance of the tabs*/
 
 
-.chrome_tab {
+/*.chrome_tab {
 	margin-left: 5px;
 	position: relative;
 	border: 1px solid #666;
@@ -233,13 +233,13 @@ body.editor #block_menu{
 	border-color: #333;
 	font-weight: bold;
 }
-
+*/
 /* Lists of scripts to scroll. Used in demo & restore dialog*/
-.scrollList{
+/*.scrollList{
 	max-height: 300px;
 	overflow-y:scroll;
 }
-
+*/
 /* ACCORDION */
 
 #block_menu{

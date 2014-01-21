@@ -1,0 +1,42 @@
+.content{
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row /* works with row or column */
+   flex-direction: row;
+/*   -webkit-align-items: center;
+   align-items: center;
+   -webkit-justify-content: center;
+   justify-content: center;
+*/}
+
+#nav{
+	height: 30px;
+	flex: 0 0 30px;
+}
+
+.workspace{
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	-flex-direction: column;
+}
+
+.tutorial{
+	flex: 1 1 auto;
+}
+
+.scratch-space{
+	flex: 1 1 auto;
+}
+
+.workspace_script{
+	flex: 3 0 auto;
+}
+
+.scripts_text_view{
+
+}
+
+.scripts_workspace{
+
+}

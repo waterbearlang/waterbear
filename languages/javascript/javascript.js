@@ -46,6 +46,10 @@
             console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
+        // update size of frame
+        var iframe = document.querySelector('.stageframe');
+        iframe.style.width =  iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
@@ -84,6 +88,7 @@
     function clearStage(event){
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
+    wb.clearStage = clearStage;
     Event.on('.clear-stage', 'click', null, clearStage);
     Event.on('.edit-script', 'click', null, clearStage);
 

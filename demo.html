@@ -23,6 +23,12 @@
 		<img src="images/logo.png" />
 		<h1 class="title">demo playground</h1>
 	</div>
+	<nav class="mobilenav">
+		<button class="show-files">Files</button>
+		<button class="show-blocks">Blocks</button>
+		<button class="show-script">Script</button>
+		<button class="show-result">Result</button>
+	</nav>
 	<nav class="nav" role="navigation">
 		<ul class="menu">
 			<li>
@@ -61,15 +67,18 @@
 			</li>
 		</ul>
 	</nav>
-	<div class="menu_buttons">
-		<button class="show-menu">Show menu</button>
-		<button class="hide-menu">Hide menu</button>
-	</div>
 	<div id="context_menu"></div>
 	<div id="block_menu_load">
 		Loading...
 	</div>
 	<div class="content">
+		<div class="files">
+			<button class="clear_scripts">New</button>
+			<button class="load_from_gist">Open Gist</button>
+			<button class="restore_scripts">Open File</button>
+			<button class="save_scripts">Save Gist</button>
+			<button class="download_scripts">Save File</button>
+		</div>
 		<div id="block_menu"></div>
 		<div class="workspace">
 			<div class="tutorial hidden">Tutorial goes here</div>

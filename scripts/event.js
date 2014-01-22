@@ -7,7 +7,7 @@
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler){
+    var on = function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -22,7 +22,7 @@
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
-            listener = function(event){
+            listener = function listener(event){
                 blend(event); // normalize between touch and mouse events
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
@@ -37,14 +37,20 @@
                     event.wbTarget = wb.closest(event.wbTarget, selector);
                     handler(event);
                 }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
+                }
             };
         }else{
-            listener = function(event){
+            listener = function listener(event){
                 blend(event);
                 if (!event.wbValid){
                     return;
                 }
                 handler(event);
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
+                }
             };
         }
         elem.addEventListener(eventname, listener, false);
@@ -56,11 +62,7 @@
     }
 
     var once = function(elem, eventname, selector, handler){
-        var listener = function listener(event){
-            handler(event);
-            Event.off(elem, eventname, listener);
-        };
-        return Event.on(elem, eventname, selector, listener);
+        return Event.on(elem, eventname, selector, handler, true);
     }
 
     var trigger = function(elemOrSelector, eventname, data){

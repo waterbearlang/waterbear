@@ -376,18 +376,13 @@ body{
    display: flex;
    -webkit-flex-direction: row; /* works with row or column */
    flex-direction: row;
-/*   -webkit-align-items: center;
-   align-items: center;
-   -webkit-justify-content: center;
-   justify-content: center;
-*/}
+}
 
 .titlebar{
 	flex: 0 0 50px;
 }
 
 .nav{
-	/*height: 30px;*/
 	flex: 0 0 30px;
 }
 
@@ -438,6 +433,67 @@ body{
 .scripts_text_view{
 	flex: 1 0 0;
 	overflow: auto;
+}
+
+@media all and (max-width:360px) {
+	.nav, h1.title, .scripts_text_view{
+		display: none;
+	}
+	.mobilenav{
+		flex: 0 0 30px;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-direction: row;
+		flex-direction: row;
+		order: 4;
+	}
+	.mobilenav button{
+		flex: 1 0 auto;
+		background-color: #FFF;
+		color: #111111;
+	}
+	.mobilenav button.current-button{
+		background-color: #111111;
+		color: #FFF;
+		pointer-events: none;
+	}
+	.content{
+		display: block;
+		position: relative;
+		overflow: hidden;
+	}
+	#block_menu, .workspace, .results, .files{
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		top: 0;
+		left: 100%;
+		transition-property: left;
+	}
+	.workspace{
+		left: 0;
+	}
+	.stage{
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+	}
+	.files button{
+		width: 100%;
+		height: 30px;
+		font-size: 24px;
+		line-height: 30px;
+		text-align: center;
+	}
+}
+
+@media all and (min-width:361px) {
+	.mobilenav, .files{
+		display: none;
+	}
 }
 
 
@@ -861,9 +917,6 @@ ul.menu li:hover ul.sub-menu {
 	.nav{
 		display:none;
 	}
-	.menu_buttons {
-		display:block;
-	}
 	.nav li, .nav li button {
 		width:100%;
 
@@ -877,11 +930,7 @@ ul.menu li:hover ul.sub-menu {
 	display:block;
 }
 
-/* Hide nav on result and blocks pages */
-/*body.result nav, body.blocks nav {
-	display:none;
-}
-*/
+
 /*end menu.css*/
 
 /*begin fontawesome.css*/

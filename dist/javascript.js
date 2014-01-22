@@ -2139,7 +2139,7 @@ global.ajax = ajax;
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler){
+    var on = function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -2154,7 +2154,7 @@ global.ajax = ajax;
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
-            listener = function(event){
+            listener = function listener(event){
                 blend(event); // normalize between touch and mouse events
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
@@ -2169,14 +2169,20 @@ global.ajax = ajax;
                     event.wbTarget = wb.closest(event.wbTarget, selector);
                     handler(event);
                 }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
+                }
             };
         }else{
-            listener = function(event){
+            listener = function listener(event){
                 blend(event);
                 if (!event.wbValid){
                     return;
                 }
                 handler(event);
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
+                }
             };
         }
         elem.addEventListener(eventname, listener, false);
@@ -2188,11 +2194,7 @@ global.ajax = ajax;
     }
 
     var once = function(elem, eventname, selector, handler){
-        var listener = function listener(event){
-            handler(event);
-            Event.off(elem, eventname, listener);
-        };
-        return Event.on(elem, eventname, selector, listener);
+        return Event.on(elem, eventname, selector, handler, true);
     }
 
     var trigger = function(elemOrSelector, eventname, data){
@@ -4232,14 +4234,67 @@ function initContextMenus() {
 	document.querySelector('.cmenuEnable').style.display = 'none';
 }
 
+// functions to show various mobile views
+
+function handleShowButton(button, newView){
+	// stop result
+	wb.clearStage();
+	// enable previous button, disable current button
+	var currentButton = document.querySelector('.current-button');
+	if (currentButton){
+		currentButton.classList.remove('current-button');
+	}
+	button.classList.add('current-button');
+	//slide old view out, slide new view in
+	var oldView = document.querySelector('.current-view');
+	oldView.classList.remove('current-view');
+	oldView.style.transitionDuration = '0.5s';
+	oldView.style.left = '-100%';
+	newView.classList.add('current-view');
+	newView.style.transitionDuration = '0.5s';
+	newView.style.left = '0';
+	Event.once(document.body, 'transitionend', null, function(){
+		console.log('transitionend: %o', oldView);
+		oldView.style.transitionDuration = '0s';
+		oldView.style.left = '100%';
+	});
+}
+
+function showFiles(evt){
+	handleShowButton(evt.target, document.querySelector('.files'));
+}
+
+function showBlocks(evt){
+	handleShowButton(evt.target, document.querySelector('#block_menu'));
+}
+
+function showScript(evt){
+	handleShowButton(evt.target, document.querySelector('.workspace'));
+}
+
+function showResult(evt){
+	handleShowButton(evt.target, document.querySelector('.results'));
+	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
+}
 
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
-Event.on(document.body, 'change', 'input', updateScriptsView);
-Event.on(document.body, 'wb-modified', null, updateScriptsView);
-
+if (document.body.clientWidth < 361){
+	// console.log('mobile view');
+	Event.on('.show-files', 'click', null, showFiles);
+	Event.on('.show-blocks', 'click', null, showBlocks);
+	Event.on('.show-script', 'click', null, showScript);
+	Event.on('.show-result', 'click', null, showResult);
+	document.querySelector('.show-script').classList.add('current-button');
+	document.querySelector('.workspace').classList.add('current-view');
+}
+if (document.body.clientWidth > 360){
+	// console.log('desktop view');
+	Event.on(document.body, 'change', 'input', updateScriptsView);
+	Event.on(document.body, 'wb-modified', null, updateScriptsView);
+}
 
 })(wb);
 
@@ -4633,6 +4688,10 @@ Event.on(document.body, 'wb-modified', null, updateScriptsView);
             console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
+        // update size of frame
+        var iframe = document.querySelector('.stageframe');
+        iframe.style.width =  iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
@@ -4671,6 +4730,7 @@ Event.on(document.body, 'wb-modified', null, updateScriptsView);
     function clearStage(event){
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
+    wb.clearStage = clearStage;
     Event.on('.clear-stage', 'click', null, clearStage);
     Event.on('.edit-script', 'click', null, clearStage);
 

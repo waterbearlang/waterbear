@@ -4593,7 +4593,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 wb.wrap = function(script){
     //return 'try{' + script + '}catch(e){console,log(e);}})()';
     return script;
-}
+};
 
 function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
@@ -4655,14 +4655,25 @@ wb.runScript = function(script){
     
     
     
-    //wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
+    wb.ajax.jsonp("../run", query, function(msg){
+      console.log("msg =", msg);
+      messagebox.innerHTML = "Code running on RPi"+ msg[pid];
+      //window.setTimeout(function(){messagebox.innerHTML="";}, 5000);
+      console.log("success",msg);
+    },
+    function(msg){
+      console.log("msg =", msg);
+      messagebox.innerHTML = "Code failed / server not running on RPi";
+      window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+      console.log("error",msg);
+    });
     
-    wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code Complete"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
+    //wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code Complete"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
     
     //var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
     //console.log('trying to load library %s', runtimeUrl);
     //document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: //runtimeUrl, script: wb.wrap(script)}), '*');
-}
+};
 
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
@@ -4742,7 +4753,10 @@ wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
             return wb.codeFromBlock(elem);
         }).join(''));
-    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\npfio.deinit();";
+    /*process.on('SIGINT', function() {
+        console.log('Got SIGINT.  Press Control-D to exit.');
+      });*/
+    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){pfio.deinit(); process.exit();});process.on('EXIT',function(){pfio.deinit();});";
     return script;
 };
 

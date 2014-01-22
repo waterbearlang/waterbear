@@ -10,7 +10,10 @@ wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
             return wb.codeFromBlock(elem);
         }).join(''));
-    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\npfio.deinit();";
+    /*process.on('SIGINT', function() {
+        console.log('Got SIGINT.  Press Control-D to exit.');
+      });*/
+    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){pfio.deinit(); process.exit();});process.on('EXIT',function(){pfio.deinit();});";
     return script;
 };
 

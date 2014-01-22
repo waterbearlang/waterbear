@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Waterbear: Code Garden</title>
+	<title>Waterbear minecraftjs playground</title>
 	<link href="dist/minecraftjs.css" rel="stylesheet" />
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -19,77 +19,63 @@
 	</script>
 </head>
 <body>
+	<div class="titlebar">
+		<img src="images/logo.png" />
+		<h1 class="title">minecraftjs playground</h1>
+	</div>
+	<nav class="nav" role="navigation">
+		<ul class="menu">
+			<li>
+				<button class="clear_scripts">New</button>
+			</li>
+			<li>
+				<button class="load_from_gist">Open Gist</button>
+				<ul class="sub-menu" id="recent_gists"></ul>
+			</li>
+			<li>
+				<button class="restore_scripts">Open File</button>
+			</li>
+			<li>
+				<button class="save_scripts">Save Gist</button>
+			</li>
+			<li>
+				<button class="download_scripts">Save File</button>
+			</li>
+			<li>
+				<button class="show-examples">Examples</button>
+				<ul class="sub-menu">
+					
+				</ul>
+			</li>
+			<li>
+				<button class="run-scripts">Run</button>
+			</li>
+			<li>
+				<button class="undoAction">Undo</button>
+			</li>
+			<li>
+				<button class="redoAction">Redo</button>
+			</li>
+			<li>
+				<button class="cmenuEnable"><i class="icon-list-alt"></i>Enable Context Menus</button>
+			</li>
+		</ul>
+	</nav>
+	<div class="menu_buttons">
+		<button class="show-menu">Show menu</button>
+		<button class="hide-menu">Hide menu</button>
+	</div>
 	<div id="context_menu"></div>
 	<div id="block_menu_load">
 		Loading...
 	</div>
-	<div class="content editor">
-
-		<nav id="nav" role="navigation">
-			<h1 class="title">Waterbear </h1>
-			<ul class="menu">
-				<li>
-					<button class="clear_scripts">New</button>
-				</li>
-				<li>
-					<button class="load_from_gist">Open Gist</button>
-					<ul class="sub-menu" id="recent_gists"></ul>
-				</li>
-				<li>
-					<button class="restore_scripts">Open File</button>
-				</li>
-				<li>
-					<button class="save_scripts">Save Gist</button>
-				</li>
-				<li>
-					<button class="download_scripts">Save File</button>
-				</li>
-				<li>
-					<button class="show-examples">Examples</button>
-					<ul class="sub-menu">
-
-					</ul>
-				</li>
-				<li>
-					<button class="run-scripts">Run</button>
-				</li>
-				<li>
-					<button class="undoAction">Undo</button>
-				</li>
-				<li>
-					<button class="redoAction">Redo</button>
-				</li>
-				<li>
-					<button class="cmenuEnable"><i class="icon-list-alt"></i>Enable Context Menus</button>
-				</li>
-			</ul>
-		</nav>
-		<div class="menu_buttons">
-			<button class="show-menu">Show menu</button>
-			<button class="hide-menu">Hide menu</button>
-		</div>
+	<div class="content">
 		<div id="block_menu"></div>
-		<div class="workspace blockview">
-			<div class="tabbar">
-				<button class="scripts_workspace_tab chrome_tab selected">Script Blocks</button>
-				<button class="scripts_text_view_tab chrome_tab">Script Text</button>
-			</div>
-			<div class="scripts_text_view"></div>
+		<div class="workspace">
+			<div class="tutorial hidden">Tutorial goes here</div>
+			<div class="scratch-space hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
-	</div>
-	<div class="content result">
-		<ul class="menu">
-			<li>
-				<button class="edit-script">Edit</button>
-			</li>
-			<li>
-				<button class="clear-canvas">Clear</button>
-			</li>
-			<li>
-				<button class="run-scripts">Restart</button>
-			</li>
-		</ul>
-		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
+				<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
 		<script>
 			var iframe = document.querySelector('.stageframe');
 			if (location.host.indexOf('local') > -1){

@@ -27,6 +27,7 @@ function accordion(event){
 
 
 function showWorkspace(mode){
+	return;
     // console.log('showWorkspace');
     var workspace = document.querySelector('.workspace');
     var scriptsWorkspace = document.querySelector('.scripts_workspace');
@@ -48,8 +49,8 @@ function showWorkspace(mode){
 wb.showWorkspace = showWorkspace;
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    var blocks = wb.findAll(document.body, '.scripts_workspace');
+    var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
 }
 window.updateScriptsView = updateScriptsView;
@@ -381,6 +382,9 @@ function initContextMenus() {
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+Event.on(document.body, 'change', 'input', updateScriptsView);
+Event.on(document.body, 'wb-modified', null, updateScriptsView);
 
 
 })(wb);

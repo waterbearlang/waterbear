@@ -28,11 +28,11 @@ var pluginlibs = {
 }
 
 var styles = {
-    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    processingjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css']
+    arduino: ['stylesheets/workspace.css', 'stylesheets/layout.css', 'stylesheets/blocks.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
+    javascript: ['stylesheets/workspace.css', 'stylesheets/layout.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
+    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/layout.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
+    demo: ['stylesheets/workspace.css', 'stylesheets/layout.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
+    processingjs: ['stylesheets/workspace.css', 'stylesheets/layout.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css']
 }
 
 var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs'];

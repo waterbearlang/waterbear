@@ -1,7 +1,14 @@
+body{
+	display: -webkit-flex;
+	display: flex;
+   -webkit-flex-direction: column; /* works with row or column */
+   flex-direction: column;
+}
+
 .content{
    display: -webkit-flex;
    display: flex;
-   -webkit-flex-direction: row /* works with row or column */
+   -webkit-flex-direction: row; /* works with row or column */
    flex-direction: row;
 /*   -webkit-align-items: center;
    align-items: center;
@@ -9,12 +16,21 @@
    justify-content: center;
 */}
 
-#nav{
-	height: 30px;
+.titlebar{
+	flex: 0 0 50px;
+}
+
+.nav{
+	/*height: 30px;*/
 	flex: 0 0 30px;
 }
 
+#block_menu{
+	flex: 0 0 300px;
+}
+
 .workspace{
+	flex: 1 0 0;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: column;
@@ -23,20 +39,38 @@
 
 .tutorial{
 	flex: 1 1 auto;
+	background-color: #001f3f;
 }
 
 .scratch-space{
 	flex: 1 1 auto;
-}
-
-.workspace_script{
-	flex: 3 0 auto;
-}
-
-.scripts_text_view{
-
+	background-color: #3d9970;
 }
 
 .scripts_workspace{
-
+	flex: 3 0 auto;
+	overflow: auto;
 }
+
+.results{
+	flex: 0 0 400px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.stage{
+	flex: 1 0 0;
+}
+
+.stageframe{
+	width: 100%;
+	height: 100%;
+}
+
+.scripts_text_view{
+	flex: 1 0 0;
+	overflow: auto;
+}
+

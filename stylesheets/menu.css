@@ -57,26 +57,27 @@ ul.menu li:hover ul.sub-menu {
 }
 /* Mobile nav */
 @media (max-width: 600px) {
-	#nav{
+	.nav{
 		display:none;
 	}
 	.menu_buttons {
 		display:block;
 	}
-	#nav li, #nav li button {
+	.nav li, .nav li button {
 		width:100%;
 
 	}
-	#nav li {
+	.nav li {
 		border-top:1px solid black;
 	}
 }
 
-#nav:target {
+.nav:target {
 	display:block;
 }
 
 /* Hide nav on result and blocks pages */
-body.result nav, body.blocks nav {
+/*body.result nav, body.blocks nav {
 	display:none;
 }
+*/

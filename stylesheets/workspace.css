@@ -296,12 +296,16 @@ a.disabled {
 }
 h1.title {
 	margin:0;
-	float: left;
-	display: block;
+	display: inline;
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
 	text-shadow: 0 2px 0 #000;
+}
+
+.titlebar{
+	background-color: #111111;
+	color: #FFFFFF;
 }
 
 @media (max-width: 600px) {

@@ -40,10 +40,10 @@ input{
 	position: relative;
 	width: 100%;
 	height: 100%;
-	display: none;
+	/*display: none;*/
 }
 
-body.editor .editor, body.blocks .editor{
+/*body.editor .editor, body.blocks .editor{
 	display: block;
 }
 
@@ -190,12 +190,12 @@ body.editor #block_menu{
 	pointer-events: auto;
 }
 
-
+*/
 .hidden{
 	display: none;
 }
 
-#color_popup{
+/*#color_popup{
 	background-color: green;
 	padding: 5px 10px 15px 10px;
 }
@@ -205,7 +205,7 @@ body.editor #block_menu{
 	height: 300px;
 	background-color: blue;
 }
-
+*/
 /* Description of saves */
 .description{
 	font-size: .8em;
@@ -215,7 +215,7 @@ body.editor #block_menu{
 /* These additions should only change the appearance of the tabs*/
 
 
-.chrome_tab {
+/*.chrome_tab {
 	margin-left: 5px;
 	position: relative;
 	border: 1px solid #666;
@@ -235,13 +235,13 @@ body.editor #block_menu{
 	border-color: #333;
 	font-weight: bold;
 }
-
+*/
 /* Lists of scripts to scroll. Used in demo & restore dialog*/
-.scrollList{
+/*.scrollList{
 	max-height: 300px;
 	overflow-y:scroll;
 }
-
+*/
 /* ACCORDION */
 
 #block_menu{
@@ -298,12 +298,16 @@ a.disabled {
 }
 h1.title {
 	margin:0;
-	float: left;
-	display: block;
+	display: inline;
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
 	text-shadow: 0 2px 0 #000;
+}
+
+.titlebar{
+	background-color: #111111;
+	color: #FFFFFF;
 }
 
 @media (max-width: 600px) {
@@ -358,6 +362,86 @@ h1.title {
 }
 
 /*end workspace.css*/
+
+/*begin layout.css*/
+body{
+	display: -webkit-flex;
+	display: flex;
+   -webkit-flex-direction: column; /* works with row or column */
+   flex-direction: column;
+}
+
+.content{
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row; /* works with row or column */
+   flex-direction: row;
+/*   -webkit-align-items: center;
+   align-items: center;
+   -webkit-justify-content: center;
+   justify-content: center;
+*/}
+
+.titlebar{
+	flex: 0 0 50px;
+}
+
+.nav{
+	/*height: 30px;*/
+	flex: 0 0 30px;
+}
+
+#block_menu{
+	flex: 0 0 300px;
+}
+
+.workspace{
+	flex: 1 0 0;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	-flex-direction: column;
+}
+
+.tutorial{
+	flex: 1 1 auto;
+	background-color: #001f3f;
+}
+
+.scratch-space{
+	flex: 1 1 auto;
+	background-color: #3d9970;
+}
+
+.scripts_workspace{
+	flex: 3 0 auto;
+	overflow: auto;
+}
+
+.results{
+	flex: 0 0 400px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.stage{
+	flex: 1 0 0;
+}
+
+.stageframe{
+	width: 100%;
+	height: 100%;
+}
+
+.scripts_text_view{
+	flex: 1 0 0;
+	overflow: auto;
+}
+
+
+/*end layout.css*/
 
 /*begin blocks.css*/
 /* Styles for steps and containers */
@@ -907,30 +991,30 @@ ul.menu li:hover ul.sub-menu {
 }
 /* Mobile nav */
 @media (max-width: 600px) {
-	#nav{
+	.nav{
 		display:none;
 	}
 	.menu_buttons {
 		display:block;
 	}
-	#nav li, #nav li button {
+	.nav li, .nav li button {
 		width:100%;
 
 	}
-	#nav li {
+	.nav li {
 		border-top:1px solid black;
 	}
 }
 
-#nav:target {
+.nav:target {
 	display:block;
 }
 
 /* Hide nav on result and blocks pages */
-body.result nav, body.blocks nav {
+/*body.result nav, body.blocks nav {
 	display:none;
 }
-
+*/
 /*end menu.css*/
 
 /*begin fontawesome.css*/

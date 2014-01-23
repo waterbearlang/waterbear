@@ -6248,10 +6248,8 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "value": null,
+                    "suffix": "length"
                 }
             ]
         },

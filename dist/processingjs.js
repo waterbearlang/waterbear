@@ -12738,13 +12738,14 @@ global.ajax = ajax;
         return false;
     }
 
-    function endDrag(end){
-        console.log('endDrag(%o) dragging: %s', end, dragging);
+    function endDrag(event){
+        console.log('endDrag(%o) dragging: %s', event, dragging);
+        if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
-        if (!dragging) {return undefined;}
-        handleDrop(end.altKey || end.ctrlKey);
+        handleDrop(event.altKey || event.ctrlKey);
         reset();
+        event.preventDefault();
         return false;
     }
 

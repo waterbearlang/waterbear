@@ -207,11 +207,11 @@ body.editor #block_menu{
 }
 */
 /* Description of saves */
-.description{
+/*.description{
 	font-size: .8em;
 	color: #515151;
 }
-
+*/
 /* These additions should only change the appearance of the tabs*/
 
 
@@ -245,15 +245,15 @@ body.editor #block_menu{
 /* ACCORDION */
 
 #block_menu{
-	position: relative;
+	/*position: relative;*/
 	cursor: pointer;
 	margin-top: 1px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	/*-moz-border-radius: 4px;*/
+	/*-webkit-border-radius: 4px;*/
+	/*border-radius: 4px;*/
 	border-width: 0;
-	border-style: solid;
-	font-weight: normal;
+	/*border-style: solid;*/
+	/*font-weight: normal;*/
 	color: #252323;
 	margin: 0;
 	padding: 0;
@@ -302,7 +302,8 @@ h1.title {
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
-	text-shadow: 0 2px 0 #000;
+	vertical-align: top;
+	line-height: 34px;
 }
 
 .titlebar{
@@ -379,11 +380,11 @@ body{
 }
 
 .titlebar{
-	flex: 0 0 50px;
+	flex: 0 0 34px;
 }
 
 .nav{
-	flex: 0 0 30px;
+	flex: 0 0 34px;
 }
 
 #block_menu{
@@ -877,7 +878,6 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 	display:inline-block;
 	min-width:60px;
 	border: 0;
-	border-top: 1px solid black;
 	margin: 0;
 }
 ul.menu > li > button {
@@ -894,13 +894,14 @@ ul.menu li {
 ul.menu li ul.sub-menu {
 	display:none;
 	position: absolute;
-	top: 35px;
+	top: 32px;
 	left: 0;
 	width: 100px;
 	z-index:1000;
 }
 ul.menu li ul.sub-menu li button {
 	min-width:200px;
+	border-top: 1px solid black;
 }
 ul.menu li ul.sub-menu li button.disabled {
 	background:#777;
@@ -963,8 +964,8 @@ ul.menu li:hover ul.sub-menu {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('fontawesome-webfont.eot');
-  src: url('fontawesome-webfont.eot') format('embedded-opentype'), url('fontawesome-webfont.woff') format('woff'), url('fontawesome-webfont.ttf') format('truetype'), url('fontawesome-webfont.svg#fontawesomeregular') format('svg');
+  src: url('../stylesheets/font/fontawesome-webfont.eot');
+  src: url('../stylesheets/font/fontawesome-webfont.eot') format('embedded-opentype'), url('../stylesheets/font/fontawesome-webfont.woff') format('woff'), url('../stylesheets/font/fontawesome-webfont.ttf') format('truetype'), url('../stylesheets/font/fontawesome-webfont.svg#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }

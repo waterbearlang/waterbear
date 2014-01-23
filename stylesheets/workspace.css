@@ -205,11 +205,11 @@ body.editor #block_menu{
 }
 */
 /* Description of saves */
-.description{
+/*.description{
 	font-size: .8em;
 	color: #515151;
 }
-
+*/
 /* These additions should only change the appearance of the tabs*/
 
 
@@ -243,15 +243,15 @@ body.editor #block_menu{
 /* ACCORDION */
 
 #block_menu{
-	position: relative;
+	/*position: relative;*/
 	cursor: pointer;
 	margin-top: 1px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	/*-moz-border-radius: 4px;*/
+	/*-webkit-border-radius: 4px;*/
+	/*border-radius: 4px;*/
 	border-width: 0;
-	border-style: solid;
-	font-weight: normal;
+	/*border-style: solid;*/
+	/*font-weight: normal;*/
 	color: #252323;
 	margin: 0;
 	padding: 0;
@@ -300,7 +300,8 @@ h1.title {
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
-	text-shadow: 0 2px 0 #000;
+	vertical-align: top;
+	line-height: 34px;
 }
 
 .titlebar{

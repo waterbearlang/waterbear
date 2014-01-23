@@ -20,7 +20,6 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 	display:inline-block;
 	min-width:60px;
 	border: 0;
-	border-top: 1px solid black;
 	margin: 0;
 }
 ul.menu > li > button {
@@ -37,13 +36,14 @@ ul.menu li {
 ul.menu li ul.sub-menu {
 	display:none;
 	position: absolute;
-	top: 35px;
+	top: 32px;
 	left: 0;
 	width: 100px;
 	z-index:1000;
 }
 ul.menu li ul.sub-menu li button {
 	min-width:200px;
+	border-top: 1px solid black;
 }
 ul.menu li ul.sub-menu li button.disabled {
 	background:#777;

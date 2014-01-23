@@ -13,11 +13,11 @@ body{
 }
 
 .titlebar{
-	flex: 0 0 50px;
+	flex: 0 0 34px;
 }
 
 .nav{
-	flex: 0 0 30px;
+	flex: 0 0 34px;
 }
 
 #block_menu{

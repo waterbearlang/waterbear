@@ -10,13 +10,11 @@
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "split on",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -48,13 +46,12 @@
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "character at",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -68,10 +65,7 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "suffix": "length"
                 }
             ]
         },
@@ -84,13 +78,11 @@
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "indexOf",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -103,18 +95,15 @@
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "replace",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "with",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -127,8 +116,7 @@
             "sockets": [
                 {
                     "name": "to string",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -140,8 +128,7 @@
             "sockets": [
                 {
                     "name": "comment",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -153,8 +140,7 @@
             "sockets": [
                 {
                     "name": "alert",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -166,8 +152,7 @@
             "sockets": [
                 {
                     "name": "console log",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -179,13 +164,11 @@
             "sockets": [
                 {
                     "name": "console log format",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "arguments",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },

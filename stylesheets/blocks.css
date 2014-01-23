@@ -27,9 +27,10 @@
 
 .socket{
   position: relative;
-  display: inline-block;
+  display: block;
   height:100%;
   vertical-align:middle;
+  text-align: right;
 }
 .socket > *{
   height:100%;
@@ -77,8 +78,10 @@
   white-space: nowrap;
   cursor: pointer;
   min-width: 75px;
+  max-width: 300px;
   float: left;
   clear: left;
+  overflow-x: visible;
 }
 
 .locals .expression{
@@ -302,6 +305,7 @@
 }
 .block.scripts_workspace{
     width: 100%;
+    max-width: 100%;
     border: 0;
 }
 .block.scripts_workspace:before{

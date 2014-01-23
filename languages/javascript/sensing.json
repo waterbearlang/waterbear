@@ -22,10 +22,8 @@
                 {
                     "name": "ask",
                     "type": "string",
-                    "value": "What's your name?"
-                },
-                {
-                    "name": "and wait"
+                    "value": "What's your name?",
+                    "suffix": "and wait"
                 }
             ]
         },
@@ -76,10 +74,8 @@
                     "name": "key",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
-                {
-                    "name": "pressed?"
+                    "value": "choice",
+                    "suffix": "pressed?"
                 }
             ]
         },

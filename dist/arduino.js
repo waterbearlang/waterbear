@@ -2041,18 +2041,18 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 // UI Chrome Section
 
-function tabSelect(event){
-    var target = event.wbTarget;
-    event.preventDefault();
-    document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.add('selected');
-    if (wb.matches(target, '.scripts_workspace_tab')){
-        showWorkspace('block');
-    }else if (wb.matches(target, '.scripts_text_view_tab')){
-        showWorkspace('text');
-        updateScriptsView();
-    }
-}
+// function tabSelect(event){
+//     var target = event.wbTarget;
+//     event.preventDefault();
+//     document.querySelector('.tabbar .selected').classList.remove('selected');
+//     target.classList.add('selected');
+//     if (wb.matches(target, '.scripts_workspace_tab')){
+//         showWorkspace('block');
+//     }else if (wb.matches(target, '.scripts_text_view_tab')){
+//         showWorkspace('text');
+//         updateScriptsView();
+//     }
+// }
 
 function accordion(event){
     event.preventDefault();
@@ -2068,21 +2068,21 @@ function accordion(event){
 function showWorkspace(mode){
 	return;
     // console.log('showWorkspace');
-    var workspace = document.querySelector('.workspace');
-    var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    if (!scriptsWorkspace) return;
-    var scriptsTextView = document.querySelector('.scripts_text_view');
-    if (mode === 'block'){
-	    scriptsWorkspace.style.display = '';
-	    scriptsTextView.style.display = 'none';
-        workspace.classList.remove('textview');
-        workspace.classList.add('blockview');
-    }else if (mode === 'text'){
-    	scriptsWorkspace.style.display = 'none';
-    	scriptsTextView.style.display = '';
-        workspace.classList.remove('blockview');
-        workspace.classList.add('textview');
-    }
+    // var workspace = document.querySelector('.workspace');
+    // var scriptsWorkspace = document.querySelector('.scripts_workspace');
+    // if (!scriptsWorkspace) return;
+    // var scriptsTextView = document.querySelector('.scripts_text_view');
+    // if (mode === 'block'){
+	   //  scriptsWorkspace.style.display = '';
+	   //  scriptsTextView.style.display = 'none';
+    //     workspace.classList.remove('textview');
+    //     workspace.classList.add('blockview');
+    // }else if (mode === 'text'){
+    // 	scriptsWorkspace.style.display = 'none';
+    // 	scriptsTextView.style.display = '';
+    //     workspace.classList.remove('blockview');
+    //     workspace.classList.add('textview');
+    // }
 }
 // Expose this to dragging and saving functionality
 wb.showWorkspace = showWorkspace;
@@ -2462,7 +2462,7 @@ function showResult(evt){
 
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+// Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 if (document.body.clientWidth < 361){
 	// console.log('mobile view');
@@ -2509,7 +2509,8 @@ if (document.body.clientWidth > 360){
 		wb.historySwitchState('editor');
 	});
 
-	Event.on('.content', 'click', '.load-example', function(evt){
+	Event.on(document.body, 'click', '.load-example', function(evt){
+		console.log('load example ' + evt.target.dataset.example);
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
 		if (wb.scriptModified){

@@ -2382,6 +2382,7 @@ global.ajax = ajax;
 
 
     function initDrag(event){
+        console.log('initDrag(%o)', event);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget; // <- WB
@@ -2433,6 +2434,7 @@ global.ajax = ajax;
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
 		// Track source for undo/redo
@@ -2459,7 +2461,7 @@ global.ajax = ajax;
             }
             cloned = true;
             // Make sure the workspace is available to drag to
-            wb.showWorkspace('block');
+            wb.showWorkspace('block'); // not needed with new layout?
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere
@@ -2472,7 +2474,7 @@ global.ajax = ajax;
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
         // WB-Specific
-        document.querySelector('.content.editor').appendChild(dragTarget);
+        document.body.appendChild(dragTarget);
         // WB-Specific
         if (cloned){
             // call this here so it can bubble to document.body
@@ -2496,6 +2498,7 @@ global.ajax = ajax;
     function drag(event){
         if (!dragTarget) {return undefined;}
         if (!currentPosition) {startDrag(event);}
+        console.log('drag(%o)', event);
         event.preventDefault();
         // update the variables, distance, button pressed
         var nextPosition = {left: event.wbPageX, top: event.wbPageY}; // <- WB
@@ -2529,6 +2532,7 @@ global.ajax = ajax;
     }
 
     function endDrag(end){
+        console.log('endDrag(%o) dragging: %s', end, dragging);
         clearTimeout(timer);
         timer = null;
         if (!dragging) {return undefined;}
@@ -2538,6 +2542,7 @@ global.ajax = ajax;
     }
 
     function handleDrop(copyBlock){
+        console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -2846,7 +2851,7 @@ global.ajax = ajax;
         }else{
             Event.on('.content', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
-            Event.on('.content', 'mouseup', null, endDrag);
+            Event.on(document.body, 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
@@ -4254,7 +4259,7 @@ function handleShowButton(button, newView){
 	newView.style.transitionDuration = '0.5s';
 	newView.style.left = '0';
 	Event.once(document.body, 'transitionend', null, function(){
-		console.log('transitionend: %o', oldView);
+		// console.log('transitionend: %o', oldView);
 		oldView.style.transitionDuration = '0s';
 		oldView.style.left = '100%';
 	});

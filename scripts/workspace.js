@@ -23,6 +23,7 @@
 	});
 
 	Event.on('.content', 'click', '.load-example', function(evt){
+		console.log('load example ' + evt.target.dataset.example);
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
 		if (wb.scriptModified){

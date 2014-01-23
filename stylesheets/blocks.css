@@ -27,7 +27,7 @@
 
 .socket{
   position: relative;
-  display: inline-block;
+  display: block;
   height:100%;
   vertical-align:middle;
 }

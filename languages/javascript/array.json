@@ -133,10 +133,8 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "value": null,
+                    "suffix": "length"
                 }
             ]
         },
@@ -169,10 +167,8 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "pop"
+                    "value": null,
+                    "suffix": "pop"
                 }
             ]
         },

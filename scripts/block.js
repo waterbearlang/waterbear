@@ -268,6 +268,7 @@
         // type and value are optional, but if you have one you must have the other
         // If the type is choice it must also have a options for the list of values
         // that can be found in the wb.choiceLists
+        // A socket may also have a suffix, text after the value
         // A socket may also have a block, the id of a default block
         // A socket may also have a uValue, if it has been set by the user, over-rides value
         // A socket may also have a uName if it has been set by the user, over-rides name
@@ -313,6 +314,10 @@
                 addExpression({'wbTarget': newBlock});
             }
         }
+        if (desc.suffix){
+            socket.dataset.suffix = desc.suffix;
+            socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
+        }
         return socket;
     }
 
@@ -333,6 +338,9 @@
         }
         if (socket.dataset.block){
             desc.block = socket.dataset.block;
+        }
+        if (socket.dataset.suffix){
+            desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
         var uName = wb.findChild(socket, '.name').textContent;
@@ -606,7 +614,6 @@
             input.blur();
         }
     }
-
 
     // Export methods
     wb.Block = Block;

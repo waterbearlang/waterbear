@@ -22,7 +22,7 @@
 		wb.historySwitchState('editor');
 	});
 
-	Event.on('.content', 'click', '.load-example', function(evt){
+	Event.on(document.body, 'click', '.load-example', function(evt){
 		console.log('load example ' + evt.target.dataset.example);
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;

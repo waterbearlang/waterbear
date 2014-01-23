@@ -22,10 +22,8 @@
                     "name": "when",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
-                {
-                    "name": "key pressed"
+                    "value": "choice",
+                    "suffix": "key pressed"
                 }
             ]
         },
@@ -78,7 +76,7 @@
                 {
                     "name": "times a second until",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -102,8 +100,7 @@
             "sockets": [
                 {
                     "name": "variable variable##",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -115,13 +112,11 @@
             "sockets": [
                 {
                     "name": "set variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "to",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -133,8 +128,7 @@
             "sockets": [
                 {
                     "name": "increment variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "by",
@@ -180,7 +174,7 @@
                 {
                     "name": "repeat",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -193,10 +187,8 @@
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -213,8 +205,7 @@
                 },
                 {
                     "name": "message with data",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -227,10 +218,8 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -255,10 +244,8 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data"
+                    "value": "ping",
+                    "suffix": "message with data"
                 }
             ]
         },
@@ -283,8 +270,7 @@
             "sockets": [
                 {
                     "name": "if",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -296,8 +282,7 @@
             "sockets": [
                 {
                     "name": "if not",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -309,8 +294,7 @@
             "sockets": [
                 {
                     "name": "repeat until",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         }

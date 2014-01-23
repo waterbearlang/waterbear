@@ -4939,10 +4939,8 @@ wb.menu({
                     "name": "when",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
-                {
-                    "name": "key pressed"
+                    "value": "choice",
+                    "suffix": "key pressed"
                 }
             ]
         },
@@ -4995,7 +4993,7 @@ wb.menu({
                 {
                     "name": "times a second until",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -5019,8 +5017,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "variable variable##",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -5032,13 +5029,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "to",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -5050,8 +5045,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "increment variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "by",
@@ -5097,7 +5091,7 @@ wb.menu({
                 {
                     "name": "repeat",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -5110,10 +5104,8 @@ wb.menu({
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -5130,8 +5122,7 @@ wb.menu({
                 },
                 {
                     "name": "message with data",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -5144,10 +5135,8 @@ wb.menu({
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -5172,10 +5161,8 @@ wb.menu({
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data"
+                    "value": "ping",
+                    "suffix": "message with data"
                 }
             ]
         },
@@ -5200,8 +5187,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "if",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -5213,8 +5199,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "if not",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -5226,8 +5211,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "repeat until",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         }
@@ -5261,8 +5245,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "clear stage to image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 }
             ]
         },
@@ -5309,8 +5292,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5322,8 +5304,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -5343,16 +5324,13 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -5364,8 +5342,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -5385,8 +5362,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
@@ -5406,8 +5382,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Autosteer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "",
@@ -5425,13 +5400,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "collides with sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5443,13 +5416,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "bounce sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "off of sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5461,18 +5432,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by x",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 },
                 {
                     "name": "y",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 }
             ]
         },
@@ -5484,8 +5452,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5542,10 +5509,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stop sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -5557,10 +5522,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "slide sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -5572,10 +5535,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "wrap sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "around edge of stage"
+                    "type": "sprite",
+                    "suffix": "around edge of stage"
                 }
             ]
         },
@@ -5587,13 +5548,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -5605,8 +5564,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Color sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to color",
@@ -5624,10 +5582,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "facing direction"
+                    "suffix": "facing direction"
                 }
             ]
         },
@@ -5640,10 +5595,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "movement direction"
+                    "suffix": "movement direction"
                 }
             ]
         },
@@ -5656,10 +5608,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "center"
+                    "suffix": "center"
                 }
             ]
         },
@@ -5672,10 +5621,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
+                    "suffix": "speed"
                 }
             ]
         },
@@ -5688,10 +5634,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
+                    "suffix": "horizontal speed"
                 }
             ]
         },
@@ -5704,10 +5647,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
+                    "suffix": "vertical speed"
                 }
             ]
         },
@@ -5721,10 +5661,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "left"
+                    "suffix": "left"
                 }
             ]
         },
@@ -5738,10 +5675,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "right"
+                    "suffix": "right"
                 }
             ]
         },
@@ -5755,10 +5689,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "top"
+                    "suffix": "top"
                 }
             ]
         },
@@ -5771,10 +5702,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "bottom"
+                    "suffix": "bottom"
                 }
             ]
         }
@@ -5822,10 +5750,8 @@ wb.menu({
                 {
                     "name": "tone",
                     "type": "number",
-                    "value": 440
-                },
-                {
-                    "name": "Hz"
+                    "value": 440,
+                    "suffix": "Hz"
                 }
             ]
         },
@@ -5877,10 +5803,8 @@ wb.menu({
                 {
                     "name": "tempo quarter note =",
                     "type": "number",
-                    "value": 120
-                },
-                {
-                	"name": "beats per minute"
+                    "value": 120,
+                    "suffix": "beats per minute"
                 }
             ]
         },
@@ -5894,10 +5818,7 @@ wb.menu({
                 {
                     "name": "voice",
                     "type": "voice",
-                    "value": null
-                },
-                {
-                    "name": "Hz"
+                    "suffix": "Hz"
                 }
             ]
         },
@@ -5909,10 +5830,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "turn voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "on"
+                    "type": "voice",
+                    "suffix": "on"
                 }
             ]
         },
@@ -5924,10 +5843,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "turn voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "off"
+                    "type": "voice",
+                    "suffix": "off"
                 }
             ]
         },
@@ -5944,10 +5861,8 @@ wb.menu({
                 {
                     "name": "for ",
                     "type": "number",
-                    "value": 2
-                },
-                {
-                    "name": "seconds"
+                    "value": 2,
+                    "suffix": "seconds"
                 }
             ]
         },
@@ -6011,10 +5926,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "play voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "stored song"
+                    "type": "voice",
+                    "suffix": "stored song"
                 }
             ]
         },
@@ -6028,10 +5941,7 @@ wb.menu({
                 {
                     "name": "voice",
                     "type": "voice",
-                    "value": null
-                },
-                {
-                    "name": "is on?"
+                    "suffix": "is on?"
                 }
             ]
         }
@@ -6050,8 +5960,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "load audio## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [
@@ -6159,8 +6068,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "new array with array##",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -6173,13 +6081,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "item",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6192,8 +6099,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "join with",
@@ -6210,13 +6116,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "append",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -6228,13 +6132,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "prepend",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -6248,7 +6150,6 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null,
                     "suffix": "length"
                 }
             ]
@@ -6262,13 +6163,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "remove item",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6282,7 +6182,6 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null,
                     "suffix": "pop"
                 }
             ]
@@ -6297,10 +6196,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "shift"
+                    "suffix": "shift"
                 }
             ]
         },
@@ -6314,10 +6210,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "reversed"
+                    "suffix": "reversed"
                 }
             ]
         },
@@ -6330,13 +6223,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "concat",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -6373,10 +6264,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "for each"
+                    "suffix": "for each"
                 }
             ]
         }
@@ -6398,13 +6286,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "and",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6417,13 +6303,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "or",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6436,13 +6320,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "xor",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6455,8 +6337,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "not",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6470,10 +6351,8 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": 2
-                },
-                {
-                    "name": "is even"
+                    "value": 2,
+                    "suffix": "is even"
                 }
             ]
         },
@@ -6487,10 +6366,8 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "is odd"
+                    "value": 1,
+                    "suffix": "is odd"
                 }
             ]
         }
@@ -6546,7 +6423,7 @@ wb.menu({
                 {
                     "name": "global alpha",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -6573,12 +6450,12 @@ wb.menu({
                 {
                     "name": "scale x",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -6591,10 +6468,8 @@ wb.menu({
                 {
                     "name": "rotate by",
                     "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -6607,12 +6482,12 @@ wb.menu({
                 {
                     "name": "translate by x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6625,7 +6500,7 @@ wb.menu({
                 {
                     "name": "line width",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 }
             ]
         },
@@ -6666,7 +6541,7 @@ wb.menu({
                 {
                     "name": "mitre limit",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -6679,12 +6554,12 @@ wb.menu({
                 {
                     "name": "shadow offset x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6697,7 +6572,7 @@ wb.menu({
                 {
                     "name": "shadow blur",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         }
@@ -6718,8 +6593,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "shadow color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -6759,17 +6633,17 @@ wb.menu({
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6783,22 +6657,22 @@ wb.menu({
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "alpha",
                     "type": "number",
-                    "value": "0.1"
+                    "value": 0.1
                 }
             ]
         },
@@ -6812,17 +6686,17 @@ wb.menu({
                 {
                     "name": "color with hue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "saturation",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "brightness",
                     "type": "number",
-                    "value": "0]"
+                    "value": 0
                 }
             ]
         },
@@ -6846,8 +6720,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 }
             ]
         },
@@ -6859,8 +6732,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 }
             ]
         },
@@ -6872,8 +6744,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke pattern",
-                    "type": "pattern",
-                    "value": null
+                    "type": "pattern"
                 }
             ]
         },
@@ -6885,8 +6756,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill pattern",
-                    "type": "pattern",
-                    "value": null
+                    "type": "pattern"
                 }
             ]
         },
@@ -6910,23 +6780,21 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create radial gradient from point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius1",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "to point2",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius2",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6950,13 +6818,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create linear gradient from point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "to point2",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -6968,13 +6834,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "add color stop to gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 },
                 {
                     "name": "at offset",
                     "type": "number",
-                    "value": "0.5"
+                    "value": 0.5
                 },
                 {
                     "name": "with color",
@@ -7003,8 +6868,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create pattern## from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "repeats",
@@ -7031,13 +6895,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7049,13 +6911,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "in rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -7067,18 +6927,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "to rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -7102,8 +6959,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create ImageData ImageData## with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
@@ -7127,8 +6983,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create ImageData ImageData## from imageData",
-                    "type": "imageData",
-                    "value": null
+                    "type": "imageData"
                 }
             ]
         },
@@ -7152,8 +7007,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "get imageData## for rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -7165,13 +7019,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7183,18 +7035,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7207,10 +7056,7 @@ wb.menu({
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -7223,10 +7069,7 @@ wb.menu({
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -7239,10 +7082,7 @@ wb.menu({
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -7253,8 +7093,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [
@@ -7279,10 +7118,7 @@ wb.menu({
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -7295,10 +7131,7 @@ wb.menu({
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -7311,10 +7144,7 @@ wb.menu({
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "url"
+                    "suffix": "url"
                 }
             ]
         }
@@ -7337,12 +7167,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "+",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7356,12 +7186,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "-",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7375,12 +7205,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "*",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7394,12 +7224,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "/",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7413,12 +7243,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "=",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7432,12 +7262,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "<",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7451,12 +7281,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": ">",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7470,12 +7300,12 @@ wb.menu({
                 {
                     "name": "pick random",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7489,12 +7319,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "mod",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7508,7 +7338,7 @@ wb.menu({
                 {
                     "name": "round",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7522,7 +7352,7 @@ wb.menu({
                 {
                     "name": "absolute of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7536,7 +7366,7 @@ wb.menu({
                 {
                     "name": "arccosine degrees of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7550,7 +7380,7 @@ wb.menu({
                 {
                     "name": "arcsine degrees of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7564,7 +7394,7 @@ wb.menu({
                 {
                     "name": "arctangent degrees of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7578,7 +7408,7 @@ wb.menu({
                 {
                     "name": "floor of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7592,7 +7422,7 @@ wb.menu({
                 {
                     "name": "ceiling of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7606,10 +7436,8 @@ wb.menu({
                 {
                     "name": "cosine of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -7623,10 +7451,8 @@ wb.menu({
                 {
                     "name": "sine of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -7640,10 +7466,8 @@ wb.menu({
                 {
                     "name": "tangent of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -7657,12 +7481,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "to the power of",
                     "type": "number",
-                    "value": "2"
+                    "value": 2
                 }
             ]
         },
@@ -7676,7 +7500,7 @@ wb.menu({
                 {
                     "name": "square root of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7734,15 +7558,14 @@ wb.menu({
                 {
                     "name": "vector##",
                     "type": "number",
-                    "value": 0
+                    "value": 0,
+                    "suffix": "x,"
                 },
                 {
-                    "name": "x, ",
+                    "name": "",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "y"
+                    "value": 0,
+                    "suffix": "y"
                 }
             ]
         },
@@ -7896,18 +7719,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "= value",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -7920,13 +7740,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "value at key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -7963,10 +7781,7 @@ wb.menu({
                 {
                     "name": "for each item in",
                     "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "do"
+                    "suffix": "do"
                 }
             ]
         }
@@ -7988,13 +7803,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "split on",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8026,13 +7839,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "character at",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -8046,10 +7858,7 @@ wb.menu({
                 {
                     "name": "string",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "suffix": "length"
                 }
             ]
         },
@@ -8062,13 +7871,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "indexOf",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8081,18 +7888,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "replace",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "with",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8105,8 +7909,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "to string",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8118,8 +7921,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "comment",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8131,8 +7933,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "alert",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8144,8 +7945,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "console log",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8157,13 +7957,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "console log format",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "arguments",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -8207,8 +8005,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8220,8 +8017,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "line to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8233,13 +8029,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "quadradic curve to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with control point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8251,18 +8045,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "bezier curve to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with control points",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "and",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8274,18 +8065,16 @@ wb.menu({
             "sockets": [
                 {
                     "name": "arc to point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -8297,28 +8086,26 @@ wb.menu({
             "sockets": [
                 {
                     "name": "arc with origin",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius",
-                    "type": "number",
-                    "value": "1"
+                    "type": "number"
                 },
                 {
                     "name": "start angle",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "deg, end angle",
                     "type": "number",
-                    "value": "45"
+                    "value": 45
                 },
                 {
                     "name": "deg",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -8330,8 +8117,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -8343,13 +8129,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -8374,10 +8159,7 @@ wb.menu({
                 {
                     "name": "is point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "in path?"
+                    "suffix": "in path?"
                 }
             ]
         }
@@ -8400,12 +8182,12 @@ wb.menu({
                 {
                     "name": "point at x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -8418,8 +8200,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "point from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -8445,10 +8226,7 @@ wb.menu({
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "x"
+                    "suffix": "x"
                 }
             ]
         },
@@ -8462,10 +8240,7 @@ wb.menu({
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "y"
+                    "suffix": "y"
                 }
             ]
         },
@@ -8479,10 +8254,7 @@ wb.menu({
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         }
@@ -8504,22 +8276,22 @@ wb.menu({
                 {
                     "name": "rect at x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "with width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -8531,13 +8303,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "rect at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
@@ -8549,8 +8319,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "rect from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -8563,10 +8332,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "position"
+                    "suffix": "position"
                 }
             ]
         },
@@ -8579,10 +8345,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "size"
+                    "suffix": "size"
                 }
             ]
         },
@@ -8595,10 +8358,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -8611,10 +8371,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "x"
+                    "suffix": "x"
                 }
             ]
         },
@@ -8627,10 +8384,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "y"
+                    "suffix": "y"
                 }
             ]
         },
@@ -8643,10 +8397,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -8659,10 +8410,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         }
@@ -8696,10 +8444,8 @@ wb.menu({
                 {
                     "name": "ask",
                     "type": "string",
-                    "value": "What's your name?"
-                },
-                {
-                    "name": "and wait"
+                    "value": "What's your name?",
+                    "suffix": "and wait"
                 }
             ]
         },
@@ -8750,10 +8496,8 @@ wb.menu({
                     "name": "key",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
-                {
-                    "name": "pressed?"
+                    "value": "choice",
+                    "suffix": "pressed?"
                 }
             ]
         },
@@ -8904,8 +8648,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "clear rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -8917,13 +8660,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -8940,7 +8682,7 @@ wb.menu({
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "30"
+                    "value": 30
                 },
                 {
                     "name": "and color",
@@ -8957,13 +8699,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -8974,18 +8715,16 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "and color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -8997,13 +8736,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke and fill circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -9015,8 +8753,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -9027,13 +8764,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "with color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -9044,13 +8779,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "with color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -9062,8 +8795,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -9076,22 +8808,22 @@ wb.menu({
                 {
                     "name": "fill and stroke rect x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         }
@@ -9247,12 +8979,12 @@ wb.menu({
                 {
                     "name": "size with width",
                     "type": "number",
-                    "value": "32"
+                    "value": 32
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "32"
+                    "value": 32
                 }
             ]
         },
@@ -9264,8 +8996,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "size from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -9278,10 +9009,7 @@ wb.menu({
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -9294,10 +9022,7 @@ wb.menu({
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -9310,10 +9035,7 @@ wb.menu({
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         }
@@ -9335,7 +9057,7 @@ wb.menu({
                 {
                     "name": "font",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "",
@@ -9386,18 +9108,17 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -9409,23 +9130,22 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -9437,18 +9157,17 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -9460,23 +9179,22 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -9489,10 +9207,7 @@ wb.menu({
                 {
                     "name": "text",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         }
@@ -9512,8 +9227,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "transform by 6-matrix",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ],
             "id": "b65e02c5-b990-4ceb-ab18-2593337103d9"
@@ -9526,8 +9240,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set transform to 6-matrix",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         }

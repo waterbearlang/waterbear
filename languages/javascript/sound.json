@@ -8,8 +8,7 @@
             "sockets": [
                 {
                     "name": "load audio## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [

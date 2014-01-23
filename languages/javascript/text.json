@@ -10,7 +10,7 @@
                 {
                     "name": "font",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "",
@@ -61,18 +61,17 @@
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -84,23 +83,22 @@
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -112,18 +110,17 @@
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -135,23 +132,22 @@
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -164,10 +160,7 @@
                 {
                     "name": "text",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         }

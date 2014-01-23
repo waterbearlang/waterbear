@@ -10,12 +10,12 @@
                 {
                     "name": "size with width",
                     "type": "number",
-                    "value": "32"
+                    "value": 32
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "32"
+                    "value": 32
                 }
             ]
         },
@@ -27,8 +27,7 @@
             "sockets": [
                 {
                     "name": "size from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -41,10 +40,7 @@
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -57,10 +53,7 @@
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -73,10 +66,7 @@
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         }

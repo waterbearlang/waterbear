@@ -14612,6 +14612,14 @@ if (document.body.clientWidth > 360){
 		Event.trigger(document.body, 'wb-state-change');
 	}
 
+	function toggleTutorial(){
+		document.querySelector('.tutorial').classList.toggle('hidden');
+	}
+
+	function toggleScratchpad(){
+		document.querySelector('.scratchpad').classList.toggle('hidden');
+	}
+
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
 
@@ -14619,7 +14627,8 @@ if (document.body.clientWidth > 360){
 	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
 	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
 	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-
+	Event.on('.toggle-tutorial', 'click', null, toggleTutorial);
+	Event.on('.toggle-scratchpad', 'click', null, toggleScratchpad);
 
 	wb.loaded = false;
 

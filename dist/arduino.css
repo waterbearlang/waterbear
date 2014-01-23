@@ -401,10 +401,10 @@ body{
 
 .tutorial{
 	flex: 1 1 auto;
-	background-color: #001f3f;
+	background-color: #7fdbff;
 }
 
-.scratch-space{
+.scratchpad{
 	flex: 1 1 auto;
 	background-color: #3d9970;
 }

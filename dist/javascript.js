@@ -8673,9 +8673,9 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "context",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-            "script": "prompt({{1}})",
+            "script": "local.answer## = prompt({{1}});[[1]]",
             "locals": [
                 {
                     "blocktype": "expression",

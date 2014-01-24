@@ -15849,7 +15849,7 @@ wb.menu({
             "help": "Called once every time a key is pressed",
             "sockets": [
                 {
-                    "name": "key pressed"
+                    "name": "when key pressed"
                 }
             ]
         },

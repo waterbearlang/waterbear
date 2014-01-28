@@ -71,7 +71,7 @@
                     "value": "0"
                 },
                 {
-                    "name": "*",
+                    "name": "×",
                     "type": "number",
                     "value": "0"
                 }
@@ -90,7 +90,7 @@
                     "value": "0"
                 },
                 {
-                    "name": "/",
+                    "name": "÷",
                     "type": "number",
                     "value": "0"
                 }
@@ -270,7 +270,7 @@
             "help": "converts a negative number to positive, leaves positive alone",
             "sockets": [
                 {
-                    "name": "absolute of",
+                    "name": "absolute value of",
                     "type": "number",
                     "value": "10"
                 }
@@ -421,7 +421,7 @@
             "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
             "type": "number",
             "script": "Math.sqrt({{1}})",
-            "help": "the square root is the same as taking the to the power of 1/2",
+            "help": "the square root is the same as taking the power of 1/2",
             "sockets": [
                 {
                     "name": "square root of",

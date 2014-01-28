@@ -986,8 +986,8 @@ ul.menu li:hover ul.sub-menu {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../stylesheets/font/fontawesome-webfont.eot');
-  src: url('../stylesheets/font/fontawesome-webfont.eot') format('embedded-opentype'), url('../stylesheets/font/fontawesome-webfont.woff') format('woff'), url('../stylesheets/font/fontawesome-webfont.ttf') format('truetype'), url('../stylesheets/font/fontawesome-webfont.svg#fontawesomeregular') format('svg');
+  src: url('../stylesheets/fonts/fontawesome-webfont.eot');
+  src: url('../stylesheets/fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('../stylesheets/fonts/fontawesome-webfont.woff') format('woff'), url('../stylesheets/fonts/fontawesome-webfont.ttf') format('truetype'), url('../stylesheets/fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }

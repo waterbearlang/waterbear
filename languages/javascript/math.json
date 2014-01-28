@@ -3,6 +3,25 @@
     "blocks": [
         {
             "blocktype": "expression",
+            "id": "CC2FD987-1EFC-483C-BDA3-71C839E4BAC4",
+            "type": "number",
+            "script": "({{1}}E{{2}})",
+            "help": "scientific notation",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "× 10 ^",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
             "type": "number",
             "script": "({{1}} + {{2}})",
@@ -98,6 +117,25 @@
         },
         {
             "blocktype": "expression",
+            "id": "11f59515-8061-4c96-a358-4944ad58cd18",
+            "type": "boolean",
+            "script": "({{1}} !== {{2}})",
+            "help": "two operands are not equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≠",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
@@ -117,6 +155,25 @@
         },
         {
             "blocktype": "expression",
+            "id": "A6725EBC-C1A2-4BB4-8A34-396F2CC5D833",
+            "type": "boolean",
+            "script": "({{1}} <= {{2}})",
+            "help": "first operand is less than or equal to second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≤",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
@@ -129,6 +186,25 @@
                 },
                 {
                     "name": ">",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "75B859E7-9244-45DE-BA08-C3D09F67069F",
+            "type": "boolean",
+            "script": "({{1}} >= {{2}})",
+            "help": "first operand is greater than or equal to second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≥",
                     "type": "number",
                     "value": "0"
                 }
@@ -356,8 +432,39 @@
         },
         {
             "blocktype": "expression",
+            "id": "30513651-eab2-4f85-9ec5-725df5d62851",
+            "type": "number",
+            "script": "(Math.log({{2}})/Math.log({{1}}))",
+            "help": "logarithm",
+            "sockets": [
+                {
+                    "name": "log base",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "of",
+                    "type": "number",
+                    "value": "1"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "93708036-080B-49FE-942E-E65CBC72BE44",
+            "script": "Math.E",
+            "type": "number",
+            "help": "base of natural logarithm",
+            "sockets": [
+                {
+                    "name": "e"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
-            "script": "Math.PI;",
+            "script": "Math.PI",
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
             "sockets": [
@@ -369,7 +476,7 @@
         {
             "blocktype": "expression",
             "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
-            "script": "Math.PI * 2",
+            "script": "(Math.PI * 2)",
             "type": "number",
             "help": "tau is 2 times pi, a generally more useful number",
             "sockets": [

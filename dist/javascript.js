@@ -4012,6 +4012,31 @@ function copyCommand(evt) {
 	action.redo();
 }
 
+function deleteCommand(evt) {
+	// console.log("Deleting a block!");
+	action = {
+		removed: this,
+		// Storing parent and next sibling in case removing the node from the DOM clears them
+		parent: this.parentNode,
+		before: this.nextSibling,
+		undo: function() {
+			// console.log(this);
+			if(wb.matches(this.removed,'.step')) {
+				this.parent.insertBefore(this.removed, this.before);
+			} else {
+				this.parent.appendChild(this.removed);
+			}
+			Event.trigger(this.removed, 'wb-add');
+		},
+		redo: function() {
+			Event.trigger(this.removed, 'wb-remove');
+			this.removed.remove();
+		},
+	}
+	wb.history.add(action);
+	action.redo();
+}
+
 function cutCommand(evt) {
 	// console.log("Cutting a block!");
 	action = {
@@ -4206,6 +4231,7 @@ var block_cmenu = {
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
+        delete: {name: 'Delete', callback: deleteCommand},
 }
 
 // Test drawn from modernizr
@@ -8504,9 +8530,9 @@ wb.menu({
     "name": "Sensing",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "context",
             "id": "916c79df-40f1-4280-a093-6d9dfe54d87e",
-            "script": "prompt({{1}})",
+            "script": "local.answer## = prompt({{1}});[[1]]",
             "locals": [
                 {
                     "blocktype": "expression",

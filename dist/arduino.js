@@ -2524,12 +2524,12 @@ if (document.body.clientWidth > 360){
 
 	wb.clearScripts = function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
-			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			var workspace = document.querySelector('.scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
 			wb.loaded = false;
 			createWorkspace('Workspace');
-			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			document.querySelector('.scripts_text_view').innerHTML = '';
 			wb.history.clear();
 			delete localStorage['__' + wb.language + '_current_scripts'];
 			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace

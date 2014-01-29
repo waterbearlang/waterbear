@@ -348,6 +348,44 @@
         },
         {
             "blocktype": "expression",
+            "id": "24A7ACF3-13A7-4150-8740-CB9F2B963789",
+            "type": "number",
+            "script": "gcd({{1}},{{2}})",
+            "help": "greatest common divisor - the largest number that is a factor of both arguments",
+            "sockets": [
+                {
+                    "name": "gcd of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "E764FF62-BB0D-477E-85A2-8C0EA050904E",
+            "type": "number",
+            "script": "lcm({{1}},{{2}})",
+            "help": "least common multiple - the smallest number divisible by both arguments",
+            "sockets": [
+                {
+                    "name": "lcm of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
             "type": "number",
             "script": "Math.cos(deg2rad({{1}}))",

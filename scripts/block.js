@@ -303,8 +303,7 @@
             var newBlock = null;
             if(desc.uValue){
                 //No block value
-            }
-            if (desc.uBlock){
+            } else if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);

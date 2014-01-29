@@ -104,7 +104,7 @@
 	<script>
 		var iframe = document.querySelector('.stageframe');
 		if (location.host.indexOf('local') > -1){
-			iframe.src = '/iframerunner.html';
+			iframe.src = 'iframerunner.html';
 		}
 		function receiveMessage(event){
 			wb.iframeReady = event.data === 'ready' ? true : false;
@@ -115,7 +115,6 @@
 		window.addEventListener('resize', function(evt){
 			iframe.style.height = iframe.parentElement.clientHeight + 'px';			
 		}, false);
-
 	</script>
 
 	</div>

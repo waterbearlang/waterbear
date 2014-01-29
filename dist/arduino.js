@@ -1393,7 +1393,7 @@ global.ajax = ajax;
                 // console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);
-            }else if (desc.block){
+            }else if (desc.block && !desc.uValue){
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
             if (newBlock){
@@ -1564,7 +1564,7 @@ global.ajax = ajax;
             default:
                 value = obj.uValue || obj.value || '';
         }
-        var input = elem('input', {type: type, value: value});
+        var input = elem('input', {type: type, value: value, 'data-oldvalue': value});
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || 
@@ -1765,7 +1765,7 @@ global.ajax = ajax;
 	    			"content": scriptsToString(title)
 	    		},
 	    	}
-	    }));
+	    }), null, '    ');
 	};
 	//populate the gist submenu with recent gists
 	wb.loadRecentGists = function loadRecentGists() {
@@ -1806,7 +1806,7 @@ global.ajax = ajax;
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		});
+		}, null, '    ');
 	}
 
 

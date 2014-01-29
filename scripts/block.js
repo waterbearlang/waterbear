@@ -301,9 +301,7 @@
         }
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
-            if (desc.uValue){
-                //no block value
-            } else if (desc.uBlock){
+            if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);

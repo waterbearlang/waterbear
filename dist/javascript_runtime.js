@@ -863,7 +863,7 @@ Local.prototype.delete = function(type, name){
 function Global(){
     this.timer = new Timer();
     this.keys = {};
-    this.stage = document.getElementsByClassName('stage')[0];
+    this.stage = document.querySelector('.stage');
     this.mouse_x = -1;
     this.mouse_y = -1;
     this.stage_width = this.stage.clientWidth;
@@ -879,15 +879,16 @@ Global.prototype.subscribeMouseEvents = function(){
     var self = this;
     this.stage.addEventListener('mousedown', function(evt){
         self.mouse_down = true;
-    });
+    }, false);
     this.stage.addEventListener('mousemove', function(evt){
-        self.mouse_x = evt.offsetX;
-        self.mouse_y = evt.offsetY;
-    });
+        // console.log(evt);
+        self.mouse_x = evt.clientX;
+        self.mouse_y = evt.clientY;
+    }, false);
     this.stage.setAttribute('style', 'overflow: hidden');
     document.body.addEventListener('mouseup', function(evt){
         self.mouse_down = false;
-    });
+    }, false);
 };
 
 Global.prototype.specialKeys = {

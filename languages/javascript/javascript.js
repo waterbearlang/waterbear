@@ -45,7 +45,7 @@
         }else{
             console.log('ready to run script, let us proceed to the running of said script');
         }
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        var blocks = wb.findAll(document.body, '.scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;

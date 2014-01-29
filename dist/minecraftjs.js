@@ -3208,7 +3208,7 @@ global.ajax = ajax;
                 // console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);
-            }else if (desc.block){
+            }else if (desc.block && !desc.uValue){
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
             if (newBlock){
@@ -3379,7 +3379,7 @@ global.ajax = ajax;
             default:
                 value = obj.uValue || obj.value || '';
         }
-        var input = elem('input', {type: type, value: value});
+        var input = elem('input', {type: type, value: value, 'data-oldvalue': value});
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || 
@@ -3580,7 +3580,7 @@ global.ajax = ajax;
 	    			"content": scriptsToString(title)
 	    		},
 	    	}
-	    }));
+	    }), null, '    ');
 	};
 	//populate the gist submenu with recent gists
 	wb.loadRecentGists = function loadRecentGists() {
@@ -3621,7 +3621,7 @@ global.ajax = ajax;
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		});
+		}, null, '    ');
 	}
 
 
@@ -4003,6 +4003,31 @@ function copyCommand(evt) {
 	action.redo();
 }
 
+function deleteCommand(evt) {
+	// console.log("Deleting a block!");
+	action = {
+		removed: this,
+		// Storing parent and next sibling in case removing the node from the DOM clears them
+		parent: this.parentNode,
+		before: this.nextSibling,
+		undo: function() {
+			// console.log(this);
+			if(wb.matches(this.removed,'.step')) {
+				this.parent.insertBefore(this.removed, this.before);
+			} else {
+				this.parent.appendChild(this.removed);
+			}
+			Event.trigger(this.removed, 'wb-add');
+		},
+		redo: function() {
+			Event.trigger(this.removed, 'wb-remove');
+			this.removed.remove();
+		},
+	}
+	wb.history.add(action);
+	action.redo();
+}
+
 function cutCommand(evt) {
 	// console.log("Cutting a block!");
 	action = {
@@ -4197,6 +4222,7 @@ var block_cmenu = {
 	//copySubscript: {name: 'Copy Subscript', callback: dummyCallback},
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
+        delete: {name: 'Delete', callback: deleteCommand},
 }
 
 // Test drawn from modernizr

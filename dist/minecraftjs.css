@@ -377,7 +377,6 @@ h1.title {
   display: none;
 }
 
-
 .holder {
   display: inline-block;
   position: relative;
@@ -465,6 +464,7 @@ h1.title {
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
   padding-top: 10px;
+  margin-top: 15px;
 }
 
 .label {

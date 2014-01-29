@@ -55,7 +55,7 @@
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "value": "255"
                 },
                 {
                     "name": "blue",

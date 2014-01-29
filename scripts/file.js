@@ -45,7 +45,7 @@
 	    			"content": scriptsToString(title)
 	    		},
 	    	}
-	    }));
+	    }), null, '    ');
 	};
 	//populate the gist submenu with recent gists
 	wb.loadRecentGists = function loadRecentGists() {
@@ -86,7 +86,7 @@
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		});
+		}, null, '    ');
 	}
 
 

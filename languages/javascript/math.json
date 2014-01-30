@@ -386,6 +386,44 @@
         },
         {
             "blocktype": "expression",
+            "id": "F3A723AF-B17C-4549-AC7F-2FFF451A2B1E",
+            "type": "number",
+            "script": "Math.max({{1}},{{2}})",
+            "help": "the larger of the two arguments",
+            "sockets": [
+                {
+                    "name": "maximum of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "FEA46803-0FEF-418E-9B7B-C289BE50A060",
+            "type": "number",
+            "script": "Math.min({{1}},{{2}})",
+            "help": "the smaller of the two arguments",
+            "sockets": [
+                {
+                    "name": "minimum of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "5178A7D0-9D89-49EC-AA53-D3FA9AEDA6A4",
             "type": "number",
             "script": "gamma({{1}}+1)",

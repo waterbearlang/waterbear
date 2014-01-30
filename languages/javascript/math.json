@@ -386,6 +386,20 @@
         },
         {
             "blocktype": "expression",
+            "id": "5178A7D0-9D89-49EC-AA53-D3FA9AEDA6A4",
+            "type": "number",
+            "script": "gamma({{1}}+1)",
+            "help": "the product of all numbers less than or equal to the input - technically, Γ(n+1)",
+            "sockets": [
+                {
+                    "name": "factorial of",
+                    "type": "number",
+                    "value": "5"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
             "type": "number",
             "script": "Math.cos(deg2rad({{1}}))",

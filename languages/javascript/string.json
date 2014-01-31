@@ -209,6 +209,120 @@
         },
         {
             "blocktype": "expression",
+            "id": "DBA355CF-0F3A-4BA1-BBD7-2F8BDCE8C3CC",
+            "type": "boolean",
+            "script": "({{1}} === {{2}})",
+            "help": "two strings are equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "=",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "46391AF0-3002-4A58-85BA-C670FE743219",
+            "type": "boolean",
+            "script": "({{1}} !== {{2}})",
+            "help": "two strings are not equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "≠",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "C9B4EC06-0C82-458F-AB99-E5BB620269D7",
+            "type": "boolean",
+            "script": "({{1}} < {{2}})",
+            "help": "first string precedes second string in lexicographical ordering",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "<",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "085AD019-E831-4501-A058-34A7A1E6744D",
+            "type": "boolean",
+            "script": "({{1}} <= {{2}})",
+            "help": "first precedes or is equal to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "≤",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "684A6EDF-7351-4DCF-AE93-EEA4AF1B41A5",
+            "type": "boolean",
+            "script": "({{1}} > {{2}})",
+            "help": "second string precedes first string in lexicographical ordering",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": ">",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "149FFB1E-4143-4724-BBBA-EEE133F517A7",
+            "type": "boolean",
+            "script": "({{1}} >= {{2}})",
+            "help": "first string succeeds or is equal to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "≥",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "D8EF192D-16BD-42AA-98A0-C6C2236392F7",
             "script": "levenshtein({{1}},{{2}})",
             "type": "number",

@@ -9,12 +9,12 @@
             "help": "create an array by splitting the named string on the given string",
             "sockets": [
                 {
-                    "name": "string",
+                    "name": "split string",
                     "type": "string",
                     "value": null
                 },
                 {
-                    "name": "split on",
+                    "name": "on separator",
                     "type": "string",
                     "value": null
                 }
@@ -83,12 +83,12 @@
             "help": "get the index of the substring within the named string",
             "sockets": [
                 {
-                    "name": "string",
+                    "name": "search string",
                     "type": "string",
                     "value": null
                 },
                 {
-                    "name": "indexOf",
+                    "name": "for substring",
                     "type": "string",
                     "value": null
                 }
@@ -102,7 +102,7 @@
             "help": "get a new string by replacing a substring with a new string",
             "sockets": [
                 {
-                    "name": "string",
+                    "name": "in string",
                     "type": "string",
                     "value": null
                 },
@@ -135,7 +135,7 @@
         {
             "blocktype": "step",
             "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
-            "script": "/* {{1}}; */",
+            "script": "/* {{1}} */",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
                 {

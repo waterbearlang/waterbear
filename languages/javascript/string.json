@@ -60,6 +60,76 @@
         },
         {
             "blocktype": "expression",
+            "id": "304A88C6-FFF3-4DA5-9522-6DAF99E89F10",
+            "script": "{{1}}[{{1}}.length-{{2}}]",
+            "type": "string",
+            "help": "get the single character string at the given index from the end of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "character at",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                	"name": "from the end"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "6BA0B0CF-6F22-4384-8A16-630C745FA3D3",
+            "script": "{{1}}.substr({{2}},{{3}})",
+            "type": "string",
+            "help": "get the substring of specified length starting at the given index of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "substring at",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "of length",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "A41F840C-C64A-4047-9EBD-CF7152EA5D7B",
+            "script": "{{1}}.slice({{2}},{{3}}+1)",
+            "type": "string",
+            "help": "get the substring starting at the given index of named string and ending at the second given index",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "substring from",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "c1eda8ae-b77c-4f5f-9b9f-c11b65235765",
             "script": "{{1}}.length",
             "type": "number",
@@ -84,6 +154,25 @@
             "sockets": [
                 {
                     "name": "search string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "for substring",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "037BB272-ADA5-41E4-BE9E-5FACA42F02C8",
+            "script": "{{1}}.contains({{2}})",
+            "type": "boolean",
+            "help": "check for the substring within the named string",
+            "sockets": [
+                {
+                    "name": "test string",
                     "type": "string",
                     "value": null
                 },

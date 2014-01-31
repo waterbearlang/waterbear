@@ -86,6 +86,10 @@ wb.history = {
 
 Event.on('.undoAction', 'click', null, undoLastAction);
 Event.on('.redoAction', 'click', null, redoLastAction);
+//begin short-cut implementation for redo and undo
+Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
+Events.bind(document, 'keystroke.Ctrl+X', redoLastAction);
+//end short cut 
 Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 })(wb);

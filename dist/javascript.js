@@ -3203,7 +3203,7 @@ global.ajax = ajax;
         }
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
-            if (desc.uValue){
+            if(desc.uValue){
                 //No block value
             } else if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
@@ -3248,10 +3248,11 @@ global.ajax = ajax;
         var holder = wb.findChild(socket, '.holder');
         if (holder){
             var input = wb.findChild(holder, 'input, select');
-            desc.uValue = input.value;
-            var block = wb.findChild(holder, '.block');
+            // var block = wb.findChild(holder, '.block');
             if (wb.matches(holder.lastElementChild, '.block')){
                 desc.uBlock = blockDesc(holder.lastElementChild);
+            }else{
+                desc.uValue = input.value;
             }
         }
         return desc;
@@ -3334,6 +3335,9 @@ global.ajax = ajax;
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
+        if (type === 'image'){
+            type = '_image'; // avoid getting input type="image"
+        }
         switch(type){
             case 'any':
                 value = obj.uValue || obj.value || ''; break;
@@ -3351,8 +3355,6 @@ global.ajax = ajax;
                 value = obj.uValue || obj.value || new Date().toISOString(); break;
             case 'url':
                 value = obj.uValue || obj.value || 'http://waterbearlang.com/'; break;
-            case 'image':
-                value = obj.uValue || obj.value || ''; break;
             case 'phone':
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
@@ -3377,6 +3379,7 @@ global.ajax = ajax;
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || 
+              type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
         }
@@ -3391,7 +3394,7 @@ global.ajax = ajax;
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color'){
+            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -7050,8 +7053,33 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
+            "id": "7c40299d-ca48-4aba-a326-45ccb5f9d37b",
+            "script": "local.image##=new Image();local.image##.src={{1}};",
+            "help": "Create a new image from a URL",
+            "sockets": [
+                {
+                    "name": "load image##",
+                    "type": "url"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "asset",
+                    "type": "image",
+                    "script": "local.image##",
+                    "help": "reference to an image",
+                    "sockets": [
+                        {
+                            "name": "image##"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
-            "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);",
+            "script": "local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y);",
             "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
             "sockets": [
                 {
@@ -7354,6 +7382,25 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "expression",
+            "id": "CC2FD987-1EFC-483C-BDA3-71C839E4BAC4",
+            "type": "number",
+            "script": "({{1}}E{{2}})",
+            "help": "scientific notation",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "× 10 ^",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
             "type": "number",
             "script": "({{1}} + {{2}})",
@@ -7403,7 +7450,7 @@ wb.menu({
                     "value": "0"
                 },
                 {
-                    "name": "*",
+                    "name": "×",
                     "type": "number",
                     "value": "0"
                 }
@@ -7422,7 +7469,7 @@ wb.menu({
                     "value": "0"
                 },
                 {
-                    "name": "/",
+                    "name": "÷",
                     "type": "number",
                     "value": "0"
                 }
@@ -7449,6 +7496,25 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "11f59515-8061-4c96-a358-4944ad58cd18",
+            "type": "boolean",
+            "script": "({{1}} !== {{2}})",
+            "help": "two operands are not equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≠",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
@@ -7468,6 +7534,25 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "A6725EBC-C1A2-4BB4-8A34-396F2CC5D833",
+            "type": "boolean",
+            "script": "({{1}} <= {{2}})",
+            "help": "first operand is less than or equal to second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≤",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
@@ -7480,6 +7565,25 @@ wb.menu({
                 },
                 {
                     "name": ">",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "75B859E7-9244-45DE-BA08-C3D09F67069F",
+            "type": "boolean",
+            "script": "({{1}} >= {{2}})",
+            "help": "first operand is greater than or equal to second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≥",
                     "type": "number",
                     "value": "0"
                 }
@@ -7545,7 +7649,7 @@ wb.menu({
             "help": "converts a negative number to positive, leaves positive alone",
             "sockets": [
                 {
-                    "name": "absolute of",
+                    "name": "absolute value of",
                     "type": "number",
                     "value": "10"
                 }
@@ -7618,6 +7722,96 @@ wb.menu({
                     "name": "ceiling of",
                     "type": "number",
                     "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "24A7ACF3-13A7-4150-8740-CB9F2B963789",
+            "type": "number",
+            "script": "gcd({{1}},{{2}})",
+            "help": "greatest common divisor - the largest number that is a factor of both arguments",
+            "sockets": [
+                {
+                    "name": "gcd of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "E764FF62-BB0D-477E-85A2-8C0EA050904E",
+            "type": "number",
+            "script": "lcm({{1}},{{2}})",
+            "help": "least common multiple - the smallest number divisible by both arguments",
+            "sockets": [
+                {
+                    "name": "lcm of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "F3A723AF-B17C-4549-AC7F-2FFF451A2B1E",
+            "type": "number",
+            "script": "Math.max({{1}},{{2}})",
+            "help": "the larger of the two arguments",
+            "sockets": [
+                {
+                    "name": "maximum of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "FEA46803-0FEF-418E-9B7B-C289BE50A060",
+            "type": "number",
+            "script": "Math.min({{1}},{{2}})",
+            "help": "the smaller of the two arguments",
+            "sockets": [
+                {
+                    "name": "minimum of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5178A7D0-9D89-49EC-AA53-D3FA9AEDA6A4",
+            "type": "number",
+            "script": "gamma({{1}}+1)",
+            "help": "the product of all numbers less than or equal to the input - technically, Γ(n+1)",
+            "sockets": [
+                {
+                    "name": "factorial of",
+                    "type": "number",
+                    "value": "5"
                 }
             ]
         },
@@ -7696,7 +7890,7 @@ wb.menu({
             "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
             "type": "number",
             "script": "Math.sqrt({{1}})",
-            "help": "the square root is the same as taking the to the power of 1/2",
+            "help": "the square root is the same as taking the power of 1/2",
             "sockets": [
                 {
                     "name": "square root of",
@@ -7707,8 +7901,39 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "30513651-eab2-4f85-9ec5-725df5d62851",
+            "type": "number",
+            "script": "(Math.log({{2}})/Math.log({{1}}))",
+            "help": "logarithm",
+            "sockets": [
+                {
+                    "name": "log base",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "of",
+                    "type": "number",
+                    "value": "1"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "93708036-080B-49FE-942E-E65CBC72BE44",
+            "script": "Math.E",
+            "type": "number",
+            "help": "base of natural logarithm",
+            "sockets": [
+                {
+                    "name": "e"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
-            "script": "Math.PI;",
+            "script": "Math.PI",
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
             "sockets": [
@@ -7720,7 +7945,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
-            "script": "Math.PI * 2",
+            "script": "(Math.PI * 2)",
             "type": "number",
             "help": "tau is 2 times pi, a generally more useful number",
             "sockets": [

@@ -13410,7 +13410,7 @@ global.ajax = ajax;
         }
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
-            if (desc.uValue){
+            if(desc.uValue){
                 //No block value
             } else if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
@@ -13455,10 +13455,11 @@ global.ajax = ajax;
         var holder = wb.findChild(socket, '.holder');
         if (holder){
             var input = wb.findChild(holder, 'input, select');
-            desc.uValue = input.value;
-            var block = wb.findChild(holder, '.block');
+            // var block = wb.findChild(holder, '.block');
             if (wb.matches(holder.lastElementChild, '.block')){
                 desc.uBlock = blockDesc(holder.lastElementChild);
+            }else{
+                desc.uValue = input.value;
             }
         }
         return desc;
@@ -13541,6 +13542,9 @@ global.ajax = ajax;
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
+        if (type === 'image'){
+            type = '_image'; // avoid getting input type="image"
+        }
         switch(type){
             case 'any':
                 value = obj.uValue || obj.value || ''; break;
@@ -13558,8 +13562,6 @@ global.ajax = ajax;
                 value = obj.uValue || obj.value || new Date().toISOString(); break;
             case 'url':
                 value = obj.uValue || obj.value || 'http://waterbearlang.com/'; break;
-            case 'image':
-                value = obj.uValue || obj.value || ''; break;
             case 'phone':
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
@@ -13584,6 +13586,7 @@ global.ajax = ajax;
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || 
+              type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
         }
@@ -13598,7 +13601,7 @@ global.ajax = ajax;
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color'){
+            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');

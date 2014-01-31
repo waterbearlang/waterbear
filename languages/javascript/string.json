@@ -209,6 +209,25 @@
         },
         {
             "blocktype": "expression",
+            "id": "D8EF192D-16BD-42AA-98A0-C6C2236392F7",
+            "script": "levenshtein({{1}},{{2}})",
+            "type": "number",
+            "help": "calculate how much two strings are different",
+            "sockets": [
+                {
+                    "name": "difference of strings",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "and",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "8eaacf8a-18eb-4f21-a1ab-a356326f7eae",
             "script": "{{1}}.toString()",
             "type": "string",

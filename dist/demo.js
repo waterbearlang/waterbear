@@ -3203,7 +3203,11 @@ global.ajax = ajax;
         }
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
+<<<<<<< HEAD
             if(desc.uValue){
+=======
+            if (desc.uValue){
+>>>>>>> need to run bin/build
                 //No block value
             } else if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);

@@ -13410,14 +13410,15 @@ global.ajax = ajax;
         }
         if (!blockdesc.isTemplateBlock){
             var newBlock = null;
-            if(desc.uValue){
-                //No block value
-            } else if (desc.uBlock){
+            if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
+                delete desc.uValue;
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);
             }else if (desc.block && !desc.uValue){
                 newBlock = cloneBlock(document.getElementById(desc.block));
+            }else if (desc.block && desc.uValue){
+                console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
                 holder.appendChild(newBlock);
@@ -13429,6 +13430,7 @@ global.ajax = ajax;
 
 
     function socketDesc(socket){
+        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
         var desc = {
             name: socket.dataset.name,
         }
@@ -13446,6 +13448,7 @@ global.ajax = ajax;
             desc.block = socket.dataset.block;
         }
         // User-specified settings
+        if (isTemplate) return desc;
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name')
         

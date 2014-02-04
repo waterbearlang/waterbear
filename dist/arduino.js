@@ -1391,10 +1391,13 @@ global.ajax = ajax;
             var newBlock = null;
             if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
+                delete desc.uValue;
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);
             }else if (desc.block && !desc.uValue){
                 newBlock = cloneBlock(document.getElementById(desc.block));
+            }else if (desc.block && desc.uValue){
+                console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
                 holder.appendChild(newBlock);
@@ -1410,6 +1413,7 @@ global.ajax = ajax;
 
 
     function socketDesc(socket){
+        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
         var desc = {
             name: socket.dataset.name,
         }
@@ -1430,6 +1434,7 @@ global.ajax = ajax;
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
+        if (isTemplate) return desc;
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name')
         
@@ -1439,10 +1444,11 @@ global.ajax = ajax;
         var holder = wb.findChild(socket, '.holder');
         if (holder){
             var input = wb.findChild(holder, 'input, select');
-            desc.uValue = input.value;
-            var block = wb.findChild(holder, '.block');
+            // var block = wb.findChild(holder, '.block');
             if (wb.matches(holder.lastElementChild, '.block')){
                 desc.uBlock = blockDesc(holder.lastElementChild);
+            }else{
+                desc.uValue = input.value;
             }
         }
         return desc;
@@ -1525,6 +1531,9 @@ global.ajax = ajax;
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
+        if (type === 'image'){
+            type = '_image'; // avoid getting input type="image"
+        }
         switch(type){
             case 'any':
                 value = obj.uValue || obj.value || ''; break;
@@ -1542,8 +1551,6 @@ global.ajax = ajax;
                 value = obj.uValue || obj.value || new Date().toISOString(); break;
             case 'url':
                 value = obj.uValue || obj.value || 'http://waterbearlang.com/'; break;
-            case 'image':
-                value = obj.uValue || obj.value || ''; break;
             case 'phone':
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
@@ -1568,6 +1575,7 @@ global.ajax = ajax;
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || 
+              type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
         }
@@ -1582,7 +1590,7 @@ global.ajax = ajax;
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color'){
+            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -2038,9 +2046,17 @@ wb.history = {
 
 Event.on('.undoAction', 'click', null, undoLastAction);
 Event.on('.redoAction', 'click', null, redoLastAction);
+//begin short-cut implementation for redo and undo
+Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
+Events.bind(document, 'keystroke.Ctrl+X', redoLastAction);
+//for mac user, cmd added 
+Events.bind(document, 'keystroke.meta+Z', undoLastAction);
+Events.bind(document, 'keystroke.meta+X', redoLastAction);
+//end short cut 
 Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 })(wb);
+
 /*end undo.js*/
 
 /*begin ui.js*/

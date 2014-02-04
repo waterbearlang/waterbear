@@ -1822,6 +1822,23 @@ hljs.LANGUAGES.javascript = {
 
 /*end highlight-javascript.js*/
 
+/*begin events.min.js*/
+/*
+|------------------------------------------------
+| Events.js
+|------------------------------------------------
+|
+| A super-awesome JavaScript event handler library.
+|
+| @author     James Brumond
+| @version    0.2.3-beta
+| @copyright  Copyright 2011 James Brumond
+| @license    Dual licensed under MIT and GPL
+|
+*/
+var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=document.readyState==="complete";if(!a){function b(){a=!0}window.addEventListener?window.addEventListener("load",b,!1):window.attachEvent&&window.attachEvent("onload",b)}return function(){return a}}(),e={mouseenter:{attachesTo:"mouseover",eventTest:function(a){return!withinElement(a,a.originalTarget(),"fromElement")}},mouseleave:{attachesTo:"mouseout",eventTest:function(a){return!withinElement(a,a.originalTarget(),"toElement")}},hashchange:{bind:function(a,b){f.addEventListener(b)},unbind:function(a,b){f.removeEventListener(b)},invoke:function(a){f.dispatchEvent()}},keystroke:{attachesTo:"keydown",eventTest:function(a){return g.runTest(a,a.getNamespace().split(".")[0])}}},f=new function(){var b=this,c=25,d=[],e=function(){var a=(location+"").match(/^[^#]*(#.+)$/);return a?a[1]:""},f=function(a){a[0]!=="#"&&(a="#"+a),location.hash=a},g=function(){var a=!1;return function(b){typeof b=="boolean"&&(a=b);return a}}(),h=function(b,c){return a.buildEventObject("hashchange",{},merge({oldURL:b,newURL:location+""},c||{}))},i=function(a){var b;for(var c=0,e=d.length;c<e;c++)b=d[c].call(window,a);a.returnValue!=null&&(b=a.returnValue);return b},j=function(){var a=e(),d=location+"",f=!1,h=null;return{start:function(){f||(f=!0,h=window.setInterval(function(){var c=e();c!==a&&(a=c,g()||b.dispatchEvent(d),d=location+"")},c))},stop:function(){f&&(f=!1,window.clearInterval(h))}}}(),k=function(a){var a=a||window.event,b=a._isEmulated||!1;!g()&&!b&&(g(!0),j.stop());return i(a)};b.init=function(){attachListener(window,"hashchange",k),g()||j.start()},b.addEventListener=function(a){d.push(a)},b.removeEventListener=function(a){var b=[];for(var c=0,e=d.length;c<e;c++)d[c]!==a&&b.push(d[c]);d=b},b.dispatchEvent=function(a){return i(h(location+"",a))}},g=function(){var a={type:"keydown",propagate:!1,disable_in_input:!0,target:document,keycode:!1},b={"`":"~",1:"!",2:"@",3:"#",4:"$",5:"%",6:"^",7:"&",8:"*",9:"(",0:")","-":"_","=":"+",";":":","'":'"',",":"<",".":">","/":"?","\\":"|"},c={esc:27,escape:27,tab:9,space:32,"return":13,enter:13,backspace:8,scrolllock:145,scroll_lock:145,scroll:145,capslock:20,caps_lock:20,caps:20,numlock:144,num_lock:144,num:144,pause:19,"break":19,insert:45,home:36,"delete":46,end:35,pageup:33,page_up:33,pu:33,pagedown:34,page_down:34,pd:34,left:37,up:38,right:39,down:40,f1:112,f2:113,f3:114,f4:115,f5:116,f6:117,f7:118,f8:119,f9:120,f10:121,f11:122,f12:123},d=function(){return{shift:{wanted:!1,pressed:!1},ctrl:{wanted:!1,pressed:!1},alt:{wanted:!1,pressed:!1},meta:{wanted:!1,pressed:!1}}},e=function(a,e,f){var g,h,i,j,k,l;if(f.disable_in_input){i=a.currentTarget;if(i&&i.tagName&&(i.tagName.toLowerCase()==="input"||i.tagName.toLowerCase()==="textarea")&&i!==f.target)return}a.keyCode?k=a.keyCode:a.which&&(k=a.which),j=String.fromCharCode(k).toLowerCase(),k===188&&(j=","),k===190&&(j="."),g=e.split("+"),h=0,l=d(),a.ctrlKey&&(l.ctrl.pressed=!0),a.shiftKey&&(l.shift.pressed=!0),a.altKey&&(l.alt.pressed=!0),a.metaKey&&(l.meta.pressed=!0);for(var m=0;m<g.length;m++){var n=g[m];n==="ctrl"||n==="control"?(h++,l.ctrl.wanted=!0):n==="shift"?(h++,l.shift.wanted=!0):n==="alt"?(h++,l.alt.wanted=!0):n==="meta"?(h++,l.meta.wanted=!0):n.length>1?c[n]===k&&h++:f.keycode?f.keycode===k&&h++:j===n?h++:b[j]&&a.shiftKey&&(j=b[j],j===n&&h++)}return h===g.length&&l.ctrl.pressed===l.ctrl.wanted&&l.shift.pressed===l.shift.wanted&&l.alt.pressed===l.alt.wanted&&l.meta.pressed===l.meta.wanted};return{runTest:function(b,c,d){var d=d||{};for(var f in a)a.hasOwnProperty(f)&&d[f]===undefined&&(d[f]=a[f]);return e(b,c.toLowerCase(),d)},defaults:a}}(),h=function(){var a=function(a){if(typeof this=="undefined"||typeof a=="undefined"||typeof this[a]=="undefined")return!1;return this[a]!==this.constructor.prototype[a]};return function(b){try{b.prototype.hasOwnProperty=a;if(typeof b.hasOwnProperty!="function")throw 0}catch(c){b.hasOwnProperty=a}}}();EventController=function(a,b){var c=this,d=!1,a=a,b=b,e=null;typeof a.hasOwnProperty!="function"&&h(a),c.target=c.srcElement=b;for(var f in a)a.hasOwnProperty(f)&&typeof a[f]!="function"&&(c[f]=a[f]);c.getNamespace=function(){return e},c._setNamespace=function(a){e=a},c.mousePosition=function(){var b=0,c=0;if(a.pageX||a.pageY)b=a.pageX,c=a.pageY;else if(a.clientX||a.clientY)b=a.clientX+document.body.scrollLeft+document.documentElement.scrollLeft,c=a.clientY+document.body.scrollTop+document.documentElement.scrollTop;return{x:b,y:c}},c.eventObject=function(){return a},c.originalTarget=function(){return b},c.stopPropagation=function(){typeof a.stopPropagation=="function"&&a.stopPropagation(),a.cancelBubble=!0},c.cancelDefault=function(){d||(d=!0,typeof a.preventDefault=="function"&&a.preventDefault(),a.returnValue=!1)},c.isDefaultCanceled=function(){return d}},EventFunction=function(a,b){var c=this,b=b;a=a||undefined;if(typeof a!="function")return undefined;c.call=function(b,c){return a.call(b,c)}},EventWrapper=function(a,b){var c=this,a=a||null,b=b||null,d={},f=!1,g=!1,h=function(a){var b=d;for(var c=0,e=a.length;c<e;c++){var f=a[c];typeof b[f]!="object"&&(b[f]={}),b=b[f]}typeof b["."]!="object"&&(b["."]=[]);return b};c.registerFunction=function(a,b){var d=h(b);d["."].push(new EventFunction(a,c))},c.removeNamespace=function(a){if(a&&a.length){var b=a.pop(),c=h(a);c[b]={}}else d={}},c.run=function(c,f){var f=f||new EventController(c,a),g=[],h=b in e&&e[b].eventTest?e[b].eventTest:function(){return!0},i=function(b){var c=null;for(var d in b)if(b.hasOwnProperty(d)){f._setNamespace(g.join("."));if(d==="."){if(h(f))for(var e=0,j=b[d].length;e<j;e++)c=b[d][e].call(a,f),c===!1&&f.cancelDefault()}else g.push(d),c=i(b[d]),g.pop()}return c},j=i(d);return f.isDefaultCanceled()?!1:j};if(b in e){var i=e[b],j=!!i.bind&&!!i.unbind,k=function(a){return c.run(a||window.event)};c.bindEvent=function(){g||(g=!0,j?i.bind(a,k):attachListener(a,i.attachesTo,k))},c.unbindEvent=function(){g&&(g=!1,j?i.unbind(a,k):detachListener(a,i.attachesTo,k))}}else{var k=function(a){return c.run(a||window.event)};c.bindEvent=function(){g||(g=!0,attachListener(a,b,k))},c.unbindEvent=function(){g&&(g=!1,detachListener(a,b,k))}}c.bindEvent()},EventHandler=function(a){var c=this,a=a||null,d={};b.push(c),c.getTarget=function(){return a},c.registerEvent=function(b,c){if(typeof b!="string"||typeof c!="function")return!1;var e=b.split("."),f;b=e.shift(),f=e,startsWithOn.test(b)&&(b=b.substring(2)),d[b]===undefined&&(d[b]=new EventWrapper(a,b)),d[b].registerFunction(c,f)},c.removeEvent=function(a){var a=a||!1,b;if(typeof a!="string")return!1;if(a==="*"){for(var c in d)d.hasOwnProperty(c)&&d[c].removeNamespace(!1);return!0}b=a.split("."),a=b.shift(),d[a].removeNamespace(b)}},startsWithOn=/^on/,startsWithDOM=/^DOM/,attachListener=function(a,b,c){if(a.addEventListener)startsWithOn.test(b)&&(b=b.substring(2)),a.addEventListener(b,c,!1);else if(a.attachEvent)!startsWithDOM.test(b)&&!startsWithOn.test(b)&&(b="on"+b),a.attachEvent(b,c);else throw new YourBrowserFailsError("Could not attach event listener")},detachListener=function(a,b,c){if(a.removeEventListener)startsWithOn.test(b)&&(b=b.substring(2)),a.removeEventListener(b,c,!1);else if(a.detachEvent)!startsWithDOM.test(b)&&!startsWithOn.test(b)&&(b="on"+b),a.detachEvent(b,c);else throw new YourBrowserFailsError("Could not detach event listener")},invokeListener=function(b,c,d){var e;if(b.dispatchEvent)startsWithOn.test(c)&&(c=c.substring(2)),e=a.buildEventObject(b,c,d),b.dispatchEvent(e);else if(b.fireEvent)!startsWithDOM.test(c)&&!startsWithOn.test(c)&&(c="on"+c),e=a.buildEventObject(b,c,d),b.fireEvent(c,e);else throw new YourBrowserFailsError("Could not invoke event listener")},getEventTarget=function(a,b){var c=!1;a.target?c=a.target:a.srcElement&&(c=a.srcElement),!c&&a.srcElement===null&&(c=b||window),c.nodeType==3&&(c=c.parentNode);return c},withinElement=function(a,b,c){var d=a.relatedTarget,e;d==null&&(d=a[c]||null);try{while(d&&d!==b)d=d.parentNode;e=d===b}catch(f){e=!1}return e},getHandlerByTarget=function(a){for(var c=0;c<b.length;c++)if(b[c].getTarget()===a)return b[c];return!1},getEventHandler=function(a){var b=getHandlerByTarget(a);return b?b:new EventHandler(a)},merge=function(){var a=Array.prototype.slice.call(arguments,0),b={};for(var c=0,d=a.length;c<d;c++)for(var e in a[c])a[c].hasOwnProperty(e)&&(b[e]=a[c][e]);return b},contains=function(a,b){for(var c=0,d=b.length;c<d;c++)if(b[c]===a)return!0;return!1},a.version=function(){return c},a.ready=function(){var a=[],b=!1;return function(c){d()?c():(a.push(c),b||Events.bind(window,"load",function(){for(var b=0,c=a.length;b<c;b++)a[b]()}))}}(),a.log=function(){var a=null,b=function(){a==null&&(typeof window.console!="undefined"?typeof window.console.log.apply=="function"?a=function(){window.console.log.apply(window.console,arguments)}:a=function(){window.console.log(arguments)}:typeof console!="undefined"?a=function(){console.log.apply(console,arguments)}:a=function(){});return a};return function(){var a=Array.prototype.slice.call(arguments,0);typeof a[0]=="string"&&(a[0]="["+Date()+"] - "+a[0]),b().apply(this,a)}}(),a.bind=function(a,b,c){var d=getEventHandler(a);return d.registerEvent(b,c)},a.unbind=function(a,b){var c=getEventHandler(a);return c.removeEvent(b)},a.specialEvents={exists:function(a){return e[a]!=null},add:function(a,b){e[a]==null&&(e[a]=b)},edit:function(a,b){if(e[a]!=null)for(var c in b)b.hasOwnProperty(c)&&(e[a][c]=b[c])},del:function(a){e[a]!=null&&(e[a]=null)}},a.invoke=function(a,b,c){return invokeListener(a,b,c)},a.buildEventObject=function(){var a={HTMLEvents:["abort","blur","change","error","focus","load","reset","resize","scroll","select","submit","unload","hashchange"],UIEvents:["DOMActivate","DOMFocusIn","DOMFocusOut"],KeyEvents:["keydown","keypress","keyup"],MouseEvents:["click","mousedown","mousemove","mouseout","mouseover","mouseup"],MutationEvents:["DOMAttrModified","DOMNodeInserted","DOMNodeRemoved","DOMCharacterDataModified","DOMNodeInsertedIntoDocument","DOMNodeRemovedFromDocument","DOMSubtreeModified"]},b=function(b){var c="Events";for(var d in a)if(a.hasOwnProperty(d)&&contains(b,a[d])){d==="KeyEvents"&&!window.KeyEvent&&(d="UIEvents");if(document.implementation.hasFeature(d,"2.0")||window[d.substring(0,d.length-1)])d="Events";c=d;break}return c},c={useDefaults:!1,bubbles:!0,cancelable:!1},d={winObj:window,detail:1},e={winObj:window,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,keyCode:0,charCode:0},f={winObj:window,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,button:0,relatedTarget:null},g={relatedNode:null,prevValue:null,newValue:null,attrName:null,attrChange:null};return document.createEvent?function(a,h,i){var j=b(event),k=document.createEvent(j),l=h,h=h||{};if(typeof l!="object"||h.useDefaults)j="Events";switch(j){case"Events":case"HTMLEvents":h=merge(c,h),k.initEvent(a,h.bubbles,h.cancelable);break;case"UIEvents":h=merge(c,d,h),k.initUIEvent(a,h.bubbles,h.cancelable,h.winObj,h.detail);break;case"KeyEvents":h=merge(c,e,h),k.initKeyEvent(a,h.bubbles,h.cancelable,h.winObj,h.ctrlKey,h.altKey,h.shiftKey,h.metaKey,h.keyCode,h.charCode);break;case"MouseEvents":h=merge(c,f,h),k.initMouseEvent(a,h.bubbles,h.cancelable,h.winObj,h.screenX,h.screenY,h.clientX,h.clientY,h.ctrlKey,h.altKey,h.shiftKey,h.metaKey,h.button,h.relatedTarget);break;case"MutationEvents":h=merge(c,g,h),k.initMutationEvent(a,h.bubbles,h.cancelable,h.relatedNode,h.prevValue,h.newValue,h.attrName,h.attrChange)}for(var m in i)i.hasOwnProperty(m)&&(k[m]=i[m]);return k}:document.createEventObject?function(a,b,d){var e=document.createEventObject(),b=merge(c,b||{},d);for(var f in b)b.hasOwnProperty(f)&&(e[f]=b[f]);return e}:function(a,b,d){return merge({type:a,timeStamp:(new Date).getTime(),target:target,srcElement:target,currentTarget:target,defaultPrevented:!1},c,b||{},d||{},{bubbles:!1})}}(),f.init()};typeof window.YourBrowserFailsError=="undefined"&&(window.YourBrowserFailsError=function(a){if(!this instanceof YourBrowserFailsError)return new YourBrowserFailsError(a);var b=function(){var a;try{(0)()}catch(b){a=b}return a}();this.name="YourBrowserFailsError",this.message=a,this.stack=b.stack||b.stacktrace||"Could not get a stack. MORE FAILS!!"});
+/*end events.min.js*/
+
 /*begin ajax.js*/
 (function(global){
 function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
@@ -3214,10 +3231,13 @@ global.ajax = ajax;
             var newBlock = null;
             if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
+                delete desc.uValue;
                 newBlock = Block(desc.uBlock);
                 // console.log('created instance: %o', newBlock);
             }else if (desc.block && !desc.uValue){
                 newBlock = cloneBlock(document.getElementById(desc.block));
+            }else if (desc.block && desc.uValue){
+                console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
                 holder.appendChild(newBlock);
@@ -3233,6 +3253,7 @@ global.ajax = ajax;
 
 
     function socketDesc(socket){
+        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
         var desc = {
             name: socket.dataset.name,
         }
@@ -3253,6 +3274,7 @@ global.ajax = ajax;
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
+        if (isTemplate) return desc;
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name')
         
@@ -3262,10 +3284,11 @@ global.ajax = ajax;
         var holder = wb.findChild(socket, '.holder');
         if (holder){
             var input = wb.findChild(holder, 'input, select');
-            desc.uValue = input.value;
-            var block = wb.findChild(holder, '.block');
+            // var block = wb.findChild(holder, '.block');
             if (wb.matches(holder.lastElementChild, '.block')){
                 desc.uBlock = blockDesc(holder.lastElementChild);
+            }else{
+                desc.uValue = input.value;
             }
         }
         return desc;
@@ -3348,6 +3371,9 @@ global.ajax = ajax;
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
+        if (type === 'image'){
+            type = '_image'; // avoid getting input type="image"
+        }
         switch(type){
             case 'any':
                 value = obj.uValue || obj.value || ''; break;
@@ -3365,8 +3391,6 @@ global.ajax = ajax;
                 value = obj.uValue || obj.value || new Date().toISOString(); break;
             case 'url':
                 value = obj.uValue || obj.value || 'http://waterbearlang.com/'; break;
-            case 'image':
-                value = obj.uValue || obj.value || ''; break;
             case 'phone':
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
@@ -3391,6 +3415,7 @@ global.ajax = ajax;
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || 
+              type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
         }
@@ -3405,7 +3430,7 @@ global.ajax = ajax;
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color'){
+            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -3861,9 +3886,17 @@ wb.history = {
 
 Event.on('.undoAction', 'click', null, undoLastAction);
 Event.on('.redoAction', 'click', null, redoLastAction);
+//begin short-cut implementation for redo and undo
+Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
+Events.bind(document, 'keystroke.Ctrl+X', redoLastAction);
+//for mac user, cmd added 
+Events.bind(document, 'keystroke.meta+Z', undoLastAction);
+Events.bind(document, 'keystroke.meta+X', redoLastAction);
+//end short cut 
 Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 })(wb);
+
 /*end undo.js*/
 
 /*begin ui.js*/
@@ -6995,8 +7028,33 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
+            "id": "7c40299d-ca48-4aba-a326-45ccb5f9d37b",
+            "script": "local.image##=new Image();local.image##.src={{1}};",
+            "help": "Create a new image from a URL",
+            "sockets": [
+                {
+                    "name": "load image##",
+                    "type": "url"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "asset",
+                    "type": "image",
+                    "script": "local.image##",
+                    "help": "reference to an image",
+                    "sockets": [
+                        {
+                            "name": "image##"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
-            "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);",
+            "script": "local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y);",
             "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
             "sockets": [
                 {
@@ -7265,6 +7323,25 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "expression",
+            "id": "CC2FD987-1EFC-483C-BDA3-71C839E4BAC4",
+            "type": "number",
+            "script": "({{1}}E{{2}})",
+            "help": "scientific notation",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "× 10 ^",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
             "type": "number",
             "script": "({{1}} + {{2}})",
@@ -7314,7 +7391,7 @@ wb.menu({
                     "value": 0
                 },
                 {
-                    "name": "*",
+                    "name": "×",
                     "type": "number",
                     "value": 0
                 }
@@ -7333,7 +7410,7 @@ wb.menu({
                     "value": 0
                 },
                 {
-                    "name": "/",
+                    "name": "÷",
                     "type": "number",
                     "value": 0
                 }
@@ -7360,6 +7437,25 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "11f59515-8061-4c96-a358-4944ad58cd18",
+            "type": "boolean",
+            "script": "({{1}} !== {{2}})",
+            "help": "two operands are not equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≠",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
             "type": "boolean",
             "script": "({{1}} < {{2}})",
@@ -7379,6 +7475,25 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "A6725EBC-C1A2-4BB4-8A34-396F2CC5D833",
+            "type": "boolean",
+            "script": "({{1}} <= {{2}})",
+            "help": "first operand is less than or equal to second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≤",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
             "type": "boolean",
             "script": "({{1}} > {{2}})",
@@ -7393,6 +7508,25 @@ wb.menu({
                     "name": ">",
                     "type": "number",
                     "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "75B859E7-9244-45DE-BA08-C3D09F67069F",
+            "type": "boolean",
+            "script": "({{1}} >= {{2}})",
+            "help": "first operand is greater than or equal to second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "≥",
+                    "type": "number",
+                    "value": "0"
                 }
             ]
         },
@@ -7456,7 +7590,7 @@ wb.menu({
             "help": "converts a negative number to positive, leaves positive alone",
             "sockets": [
                 {
-                    "name": "absolute of",
+                    "name": "absolute value of",
                     "type": "number",
                     "value": 10
                 }
@@ -7534,6 +7668,96 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "24A7ACF3-13A7-4150-8740-CB9F2B963789",
+            "type": "number",
+            "script": "gcd({{1}},{{2}})",
+            "help": "greatest common divisor - the largest number that is a factor of both arguments",
+            "sockets": [
+                {
+                    "name": "gcd of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "E764FF62-BB0D-477E-85A2-8C0EA050904E",
+            "type": "number",
+            "script": "lcm({{1}},{{2}})",
+            "help": "least common multiple - the smallest number divisible by both arguments",
+            "sockets": [
+                {
+                    "name": "lcm of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "F3A723AF-B17C-4549-AC7F-2FFF451A2B1E",
+            "type": "number",
+            "script": "Math.max({{1}},{{2}})",
+            "help": "the larger of the two arguments",
+            "sockets": [
+                {
+                    "name": "maximum of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "FEA46803-0FEF-418E-9B7B-C289BE50A060",
+            "type": "number",
+            "script": "Math.min({{1}},{{2}})",
+            "help": "the smaller of the two arguments",
+            "sockets": [
+                {
+                    "name": "minimum of",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5178A7D0-9D89-49EC-AA53-D3FA9AEDA6A4",
+            "type": "number",
+            "script": "gamma({{1}}+1)",
+            "help": "the product of all numbers less than or equal to the input - technically, Γ(n+1)",
+            "sockets": [
+                {
+                    "name": "factorial of",
+                    "type": "number",
+                    "value": "5"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "ce4bf2bc-a06a-47f4-ac05-df2213d087a5",
             "type": "number",
             "script": "Math.cos(deg2rad({{1}}))",
@@ -7601,7 +7825,7 @@ wb.menu({
             "id": "668798a3-f15e-4839-b4b3-da5db380aa5a",
             "type": "number",
             "script": "Math.sqrt({{1}})",
-            "help": "the square root is the same as taking the to the power of 1/2",
+            "help": "the square root is the same as taking the power of 1/2",
             "sockets": [
                 {
                     "name": "square root of",
@@ -7612,8 +7836,39 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "30513651-eab2-4f85-9ec5-725df5d62851",
+            "type": "number",
+            "script": "(Math.log({{2}})/Math.log({{1}}))",
+            "help": "logarithm",
+            "sockets": [
+                {
+                    "name": "log base",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "of",
+                    "type": "number",
+                    "value": "1"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "93708036-080B-49FE-942E-E65CBC72BE44",
+            "script": "Math.E",
+            "type": "number",
+            "help": "base of natural logarithm",
+            "sockets": [
+                {
+                    "name": "e"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "a34c51d9-bfa0-49ad-8e7d-b653611836d3",
-            "script": "Math.PI;",
+            "script": "Math.PI",
             "type": "number",
             "help": "pi is the ratio of a circle's circumference to its diameter",
             "sockets": [
@@ -7625,7 +7880,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "da2c8203-bf80-4617-a762-92dd4d7bfa27",
-            "script": "Math.PI * 2",
+            "script": "(Math.PI * 2)",
             "type": "number",
             "help": "tau is 2 times pi, a generally more useful number",
             "sockets": [

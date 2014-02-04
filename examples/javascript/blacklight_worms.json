@@ -106,7 +106,6 @@
                   "type": "size",
                   "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
                   "uName": "rectangle sprite 210",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sizes",
@@ -119,7 +118,6 @@
                         "name": "size with width",
                         "type": "number",
                         "value": "32",
-                        "uValue": "32",
                         "uBlock": {
                           "blocktype": "expression",
                           "group": "math",
@@ -150,7 +148,6 @@
                         "name": "height",
                         "type": "number",
                         "value": "32",
-                        "uValue": "32",
                         "uBlock": {
                           "blocktype": "expression",
                           "group": "math",
@@ -187,7 +184,6 @@
                   "name": "big at",
                   "type": "point",
                   "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "points",
@@ -209,7 +205,6 @@
                   "name": "with color",
                   "type": "color",
                   "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
-                  "uValue": "#000000",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "color",
@@ -262,7 +257,6 @@
                 {
                   "name": "set sprite",
                   "type": "sprite",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sprites",
@@ -285,7 +279,6 @@
                 {
                   "name": "direction",
                   "type": "number",
-                  "uValue": "0",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "math",
@@ -327,7 +320,6 @@
                 {
                   "name": "set sprite",
                   "type": "sprite",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sprites",
@@ -351,7 +343,6 @@
                   "name": "speed",
                   "type": "number",
                   "value": "3",
-                  "uValue": "3",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "math",
@@ -393,7 +384,6 @@
                 {
                   "name": "array",
                   "type": "array",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "arrays",
@@ -416,7 +406,6 @@
                 {
                   "name": "append",
                   "type": "any",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sprites",
@@ -495,7 +484,6 @@
                   "name": "clear stage to color",
                   "type": "color",
                   "block": "13236aef-cccd-42b3-a041-e26528174323",
-                  "uValue": "#000000",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "color",
@@ -549,7 +537,6 @@
                 {
                   "name": "array",
                   "type": "array",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "arrays",
@@ -627,7 +614,6 @@
                     {
                       "name": "draw sprite",
                       "type": "sprite",
-                      "uValue": "",
                       "uBlock": {
                         "blocktype": "expression",
                         "group": "arrays",
@@ -661,7 +647,6 @@
                     {
                       "name": "move",
                       "type": "sprite",
-                      "uValue": "",
                       "uBlock": {
                         "blocktype": "expression",
                         "group": "arrays",
@@ -695,7 +680,6 @@
                     {
                       "name": "bounce",
                       "type": "sprite",
-                      "uValue": "",
                       "uBlock": {
                         "blocktype": "expression",
                         "group": "arrays",

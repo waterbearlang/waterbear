@@ -294,7 +294,6 @@
               "type": "size",
               "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
               "uName": "rectangle level1",
-              "uValue": "",
               "suffix": "big",
               "uBlock": {
                 "blocktype": "expression",
@@ -326,7 +325,6 @@
               "name": "at",
               "type": "point",
               "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "points",
@@ -357,7 +355,6 @@
               "name": "with color",
               "type": "color",
               "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
-              "uValue": "#000000",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "color",
@@ -427,7 +424,6 @@
               "type": "size",
               "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
               "uName": "rectangle level2",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "sizes",
@@ -458,7 +454,6 @@
               "name": "big at",
               "type": "point",
               "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "points",
@@ -489,7 +484,6 @@
               "name": "with color",
               "type": "color",
               "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
-              "uValue": "#000000",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "color",
@@ -559,7 +553,6 @@
               "type": "size",
               "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
               "uName": "rectangle level3",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "sizes",
@@ -590,7 +583,6 @@
               "name": "big at",
               "type": "point",
               "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "points",
@@ -621,7 +613,6 @@
               "name": "with color",
               "type": "color",
               "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
-              "uValue": "#000000",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "color",
@@ -729,7 +720,6 @@
                   "type": "size",
                   "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
                   "uName": "rectangle e",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sizes",
@@ -760,7 +750,6 @@
                   "name": "big at",
                   "type": "point",
                   "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "points",
@@ -782,7 +771,6 @@
                   "name": "with color",
                   "type": "color",
                   "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
-                  "uValue": "#000000",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "color",
@@ -850,7 +838,6 @@
                 {
                   "name": "array",
                   "type": "array",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "arrays",
@@ -873,7 +860,6 @@
                 {
                   "name": "append",
                   "type": "any",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sprites",
@@ -950,7 +936,6 @@
                   "type": "size",
                   "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
                   "uName": "rectangle feed",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "sizes",
@@ -981,7 +966,6 @@
                   "name": "big at",
                   "type": "point",
                   "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "points",
@@ -994,7 +978,6 @@
                         "name": "point at x",
                         "type": "number",
                         "value": "0",
-                        "uValue": "10",
                         "uBlock": {
                           "blocktype": "expression",
                           "group": "math",
@@ -1025,7 +1008,6 @@
                         "name": "y",
                         "type": "number",
                         "value": "0",
-                        "uValue": "",
                         "uBlock": {
                           "blocktype": "expression",
                           "group": "math",
@@ -1062,7 +1044,6 @@
                   "name": "with color",
                   "type": "color",
                   "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
-                  "uValue": "#000000",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "color",
@@ -1130,7 +1111,6 @@
                 {
                   "name": "array",
                   "type": "array",
-                  "uValue": "",
                   "uBlock": {
                     "blocktype": "expression",
                     "group": "arrays",

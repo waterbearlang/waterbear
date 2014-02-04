@@ -209,6 +209,30 @@
         },
         {
             "blocktype": "expression",
+            "id": "3047CA98-2E78-4D0B-BD88-6F4D1B3E8420",
+            "script": "{{1}}.replace({{2}}g, {{3}})",
+            "type": "string",
+            "help": "get a new string by replacing a pattern with a new string using regular expressions",
+            "sockets": [
+                {
+                    "name": "in string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "replace pattern",
+                    "type": "regex",
+                    "value": null
+                },
+                {
+                    "name": "with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "DBA355CF-0F3A-4BA1-BBD7-2F8BDCE8C3CC",
             "type": "boolean",
             "script": "({{1}} === {{2}})",

@@ -13552,6 +13552,8 @@ global.ajax = ajax;
                 value = obj.uValue || obj.value || 0; break;
             case 'string':
                 value = obj.uValue || obj.value || ''; break;
+            case 'regex':
+                value = obj.uValue || obj.value || /.*/; break;
             case 'color':
                 value = obj.uValue || obj.value || '#000000'; break;
             case 'date':
@@ -13585,7 +13587,7 @@ global.ajax = ajax;
         var input = elem('input', {type: type, value: value, 'data-oldvalue': value});
 
         //Only enable editing for the appropriate types
-        if (!(type === "string" || type === "any" || 
+        if (!(type === "string" || type === "any" || type === 'regex' ||
               type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
@@ -13606,6 +13608,11 @@ global.ajax = ajax;
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
                 value = '"' + value + '"';
+            } else if (type === 'regex'){
+                if (value[0] === '/'){value = value.slice(1);}
+                if (value[value.length-1] === '/'){value = value.slice(0,-1);}
+                value = value.replace(/\//g, '\\/');
+                value = '/' + value + '/';
             }
             return value;
         }

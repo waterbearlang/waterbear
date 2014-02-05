@@ -1,7 +1,7 @@
 {
     "title": "",
     "description": "",
-    "date": 1391133086293,
+    "date": 1391570393123,
     "waterbearVersion": "2.0",
     "blocks": [
         {
@@ -2154,13 +2154,13 @@
                                             "name": "by x",
                                             "type": "number",
                                             "value": "1",
-                                            "uValue": "1/10"
+                                            "uValue": ".1"
                                         },
                                         {
                                             "name": "and y",
                                             "type": "number",
                                             "value": "1",
-                                            "uValue": "1/10"
+                                            "uValue": ".1"
                                         }
                                     ],
                                     "seqNum": "125",
@@ -2779,7 +2779,7 @@
                                             "name": "and y",
                                             "type": "number",
                                             "value": "1",
-                                            "uValue": "-1/2"
+                                            "uValue": "-.5"
                                         }
                                     ],
                                     "seqNum": "69",

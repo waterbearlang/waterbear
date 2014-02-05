@@ -88,10 +88,10 @@ Event.on('.undoAction', 'click', null, undoLastAction);
 Event.on('.redoAction', 'click', null, redoLastAction);
 //begin short-cut implementation for redo and undo
 Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
-Events.bind(document, 'keystroke.Ctrl+X', redoLastAction);
+Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
 //for mac user, cmd added 
 Events.bind(document, 'keystroke.meta+Z', undoLastAction);
-Events.bind(document, 'keystroke.meta+X', redoLastAction);
+Events.bind(document, 'keystroke.meta+Y', redoLastAction);
 //end short cut 
 Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 

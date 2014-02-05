@@ -233,6 +233,48 @@
         },
         {
             "blocktype": "expression",
+            "id": "1D76122E-1E5D-4A19-AA5E-267B41A788FA",
+            "script": "{{1}}.trim()",
+            "type": "string",
+            "help": "remove trailing and leading whitespace",
+            "sockets": [
+                {
+                    "name": "trim whitespace from",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "85CA02CB-229F-4DF5-8400-4AFA2BA8E627",
+            "script": "{{1}}.toUpperCase()",
+            "type": "string",
+            "help": "change to uppercase",
+            "sockets": [
+                {
+                    "name": "to uppercase",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5AD79C7C-321E-4588-B05D-DB1FEF86B82D",
+            "script": "{{1}}.toLowerCase()",
+            "type": "string",
+            "help": "change to lowercase",
+            "sockets": [
+                {
+                    "name": "to lowercase",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "DBA355CF-0F3A-4BA1-BBD7-2F8BDCE8C3CC",
             "type": "boolean",
             "script": "({{1}} === {{2}})",

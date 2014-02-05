@@ -232,6 +232,109 @@
             ]
         },
         {
+            "blocktype": "context",
+            "id": "C86C6CEA-8707-4CA2-B349-1DE30238B005",
+            "script": "{{1}} = {{1}}.replace({{2}}g, function() {_m = arguments[0]; _L = arguments.length; _n = arguments[_L-2]; _s = arguments[_L-1]; _r = ''; [[1]] return _r;});",
+            "help": "replace all occurrences of a pattern with a new string using regular expressions - the new string overwrites the original",
+            "sockets": [
+                {
+                    "name": "in string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "replace pattern",
+                    "type": "regex",
+                    "value": null
+                },
+                {
+                    "name": "according to these rules:"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "match"
+                        }
+                    ],
+                    "script": "_m",
+                    "help": "The matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "offset"
+                        }
+                    ],
+                    "script": "_n",
+                    "help": "The offset of the match within the string",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "prefix"
+                        }
+                    ],
+                    "script": "_s.slice(0,_n)",
+                    "help": "The portion of the string before the matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "suffix"
+                        }
+                    ],
+                    "script": "_s.slice(_n+_m.length)",
+                    "help": "The portion of the string after the matched substring",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "string"
+                        }
+                    ],
+                    "script": "_s",
+                    "help": "The entire string being searched (before any replacements have been made)",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "submatch",
+                            "type": "number",
+                            "value": 0
+                        }
+                    ],
+                    "script": "arguments[Math.min(Math.max({{1}},1),_L-3)]",
+                    "help": "A submatch of the matched string",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "result = ",
+                            "type": "string",
+                            "value": null
+                        }
+                    ],
+                    "script": "_r = {{1}}",
+                    "help": "The value to replace the matched substring with"
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "1D76122E-1E5D-4A19-AA5E-267B41A788FA",
             "script": "{{1}}.trim()",

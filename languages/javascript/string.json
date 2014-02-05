@@ -335,6 +335,97 @@
             ]
         },
         {
+            "blocktype": "context",
+            "id": "8873F12B-62F0-43F8-9E8D-86DBAADF1FC0",
+            "script": "(function(re,str) {while((_match = re.exec(str)) !== null) {[[1]]}})({{2}}g,{{1}});",
+            "help": "process substrings of a string that match a particular pattern",
+            "sockets": [
+                {
+                    "name": "in string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "for each substring matching pattern",
+                    "type": "regex",
+                    "value": null
+                },
+                {
+                    "name": "according to these rules:"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "match"
+                        }
+                    ],
+                    "script": "_match[0]",
+                    "help": "The matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "offset"
+                        }
+                    ],
+                    "script": "_match.index",
+                    "help": "The offset of the match within the string",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "prefix"
+                        }
+                    ],
+                    "script": "_match.input.slice(0,_match.index)",
+                    "help": "The portion of the string before the matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "suffix"
+                        }
+                    ],
+                    "script": "_match.input.slice(_match.index+_match[0].length)",
+                    "help": "The portion of the string after the matched substring",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "string"
+                        }
+                    ],
+                    "script": "_match.input",
+                    "help": "The entire string being searched (before any replacements have been made)",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "submatch",
+                            "type": "number",
+                            "value": 0
+                        }
+                    ],
+                    "script": "match[Math.min(Math.max({{1}},0),_match.length-1)]",
+                    "help": "A submatch of the matched string",
+                    "type": "number"
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "1D76122E-1E5D-4A19-AA5E-267B41A788FA",
             "script": "{{1}}.trim()",

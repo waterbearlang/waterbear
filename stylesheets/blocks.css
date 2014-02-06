@@ -31,6 +31,9 @@
   vertical-align:middle;
   text-align: right;
 }
+.scripts_workspace > .label >  .socket{
+  text-align: left;
+}
 .socket > *{
   height:100%;
   vertical-align:middle;

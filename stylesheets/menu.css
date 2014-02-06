@@ -1,6 +1,7 @@
 /* Menu system */
 ul.menu {
 	background:#666;
+	text-align: left;h
 }
 /*Initialize*/
 ul.menu, ul.menu ul.sub-menu {

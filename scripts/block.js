@@ -153,9 +153,9 @@
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        /*if (!obj.isTemplateBlock){
-             console.log('instantiated block %o from description %o', block, obj);
-         }*/
+        //if (!obj.isTemplateBlock){
+        //     console.log('instantiated block %o from description %o', block, obj);
+        //}
         return block;
     }
 

@@ -178,7 +178,7 @@
     }
 
     function addBlock(event){
-        //event.stopPropagation();
+        event.stopPropagation();
         if (wb.matches(event.wbTarget, '.expression')){
             addExpression(event);
         }else{

@@ -23,7 +23,7 @@
 	Event.on('.content', 'click', '.load-example', function(evt){
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
-		if (scriptModified){
+		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
 				wb.loaded = false;
@@ -40,7 +40,7 @@
 
 	var handleStateChange = function handleStateChange(evt){
 		// hide loading spinner if needed
-		//console.log('handleStateChange');
+		console.log('handleStateChange');
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
@@ -77,7 +77,7 @@
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -204,6 +204,7 @@
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
+		console.log('window loaded');
 		wb.windowLoaded = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);

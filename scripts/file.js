@@ -178,21 +178,21 @@
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			console.log("Loading gist %s", queryParsed.gist);
+			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			console.log('loading example %s', queryParsed.example);
+			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			console.log('loading current script from local storage');
+			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			console.log('no script to load, starting a new script');	
+			//console.log('no script to load, starting a new script');	
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;

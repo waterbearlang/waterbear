@@ -28,7 +28,7 @@
                 //     console.log(event);
                 // }
                 if (!event.wbValid){
-                    // console.log('event %s is not valid', eventname);
+                    // console.log('event is not valid');
                     return;
                 }
                 if (wb.matches(event.wbTarget, selector)){
@@ -71,7 +71,7 @@
             elem = document.querySelector(elem);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
-        // console.log('dispatching %s for %o', eventname, elem);
+        //console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     };
 

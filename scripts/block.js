@@ -36,6 +36,12 @@
     var blockRegistry = {};
     wb.blockRegistry = blockRegistry;
 
+    var resetSeqNum = function(){
+        _nextSeqNum = 0;
+        blockRegistry = {};
+        wb.blockRegistry = blockRegistry;
+    }
+
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
@@ -147,9 +153,9 @@
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        // if (!obj.isTemplateBlock){
+        //if (!obj.isTemplateBlock){
         //     console.log('instantiated block %o from description %o', block, obj);
-        // }
+        //}
         return block;
     }
 
@@ -288,7 +294,7 @@
             socket.dataset.options = desc.options;
         }
         // if (!blockdesc.isTemplateBlock){
-        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        //      console.log('socket seq num: %s', blockdesc.seqNum);
         // }
         socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
@@ -300,18 +306,22 @@
             socket.dataset.block = desc.block;
         }
         if (!blockdesc.isTemplateBlock){
+            //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
             if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
                 delete desc.uValue;
                 newBlock = Block(desc.uBlock);
-                // console.log('created instance: %o', newBlock);
-            }else if (desc.block && !desc.uValue){
+                //console.log('created instance: %o', newBlock);
+            } else if (desc.block && ! desc.uValue){
+                //console.log('desc.block');
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }else if (desc.block && desc.uValue){
+                // for debugging only
                 console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
+                //console.log('appending new block');
                 holder.appendChild(newBlock);
                 addExpression({'wbTarget': newBlock});
             }
@@ -627,6 +637,7 @@
     wb.Block = Block;
     wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
+    wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;

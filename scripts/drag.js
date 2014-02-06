@@ -90,6 +90,12 @@
         scope = null; // <- WB
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
+        blockMenu = document.querySelector('#block_menu');
+        workspace = null;
+        selectedSocket = null;
+        _dropCursor = null;
+        startParent = null;
+        startSibling = null;
     }
     reset();
 
@@ -115,13 +121,14 @@
             dragTarget = target;
             // WB-Specific
             if (target.parentElement.classList.contains('block-menu')){
+                //console.log('target parent: %o', target.parentElement);
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
             }
         	dragAction.target = target;
             // WB-Specific
             if (target.parentElement.classList.contains('locals')){
-                // console.log('target parent: %o', target.parentElement);
+                //console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
@@ -197,11 +204,11 @@
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
+        console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
         });
-
         // start timer for drag events
         timer = setTimeout(hitTest, dragTimeout);
         return false;
@@ -565,8 +572,5 @@
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
-
-
-
 })(this);
 

@@ -135,6 +135,23 @@
         },
         {
             "blocktype": "step",
+            "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};local.ctx.save();local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "fill round rect",
+                    "type": "rect",
+                    "value": null
+                },
+                {
+                    "name": "with border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
             "sockets": [

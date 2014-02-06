@@ -2177,7 +2177,7 @@ global.ajax = ajax;
                 //     console.log(event);
                 // }
                 if (!event.wbValid){
-                    // console.log('event %s is not valid', eventname);
+                    // console.log('event is not valid');
                     return;
                 }
                 if (wb.matches(event.wbTarget, selector)){
@@ -2222,7 +2222,7 @@ global.ajax = ajax;
             elem = document.querySelector(elem);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
-        // console.log('dispatching %s for %o', eventname, elem);
+        //console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     };
 
@@ -2393,6 +2393,12 @@ global.ajax = ajax;
         scope = null; // <- WB
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
+        blockMenu = document.querySelector('#block_menu');
+        workspace = null;
+        selectedSocket = null;
+        _dropCursor = null;
+        startParent = null;
+        startSibling = null;
     }
     reset();
 
@@ -2419,13 +2425,14 @@ global.ajax = ajax;
             dragTarget = target;
             // WB-Specific
             if (target.parentElement.classList.contains('block-menu')){
+                //console.log('target parent: %o', target.parentElement);
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
             }
         	dragAction.target = target;
             // WB-Specific
             if (target.parentElement.classList.contains('locals')){
-                // console.log('target parent: %o', target.parentElement);
+                //console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
@@ -2502,11 +2509,11 @@ global.ajax = ajax;
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
+        console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
         });
-
         // start timer for drag events
         timer = setTimeout(hitTest, dragTimeout);
         return false;
@@ -2874,9 +2881,6 @@ global.ajax = ajax;
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
-
-
-
 })(this);
 
 
@@ -2962,6 +2966,12 @@ global.ajax = ajax;
 
     var blockRegistry = {};
     wb.blockRegistry = blockRegistry;
+
+    var resetSeqNum = function(){
+        _nextSeqNum = 0;
+        blockRegistry = {};
+        wb.blockRegistry = blockRegistry;
+    }
 
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
@@ -3074,9 +3084,9 @@ global.ajax = ajax;
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        // if (!obj.isTemplateBlock){
+        //if (!obj.isTemplateBlock){
         //     console.log('instantiated block %o from description %o', block, obj);
-        // }
+        //}
         return block;
     }
 
@@ -3216,7 +3226,7 @@ global.ajax = ajax;
             socket.dataset.options = desc.options;
         }
         // if (!blockdesc.isTemplateBlock){
-        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        //      console.log('socket seq num: %s', blockdesc.seqNum);
         // }
         socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
@@ -3228,18 +3238,22 @@ global.ajax = ajax;
             socket.dataset.block = desc.block;
         }
         if (!blockdesc.isTemplateBlock){
+            //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
             if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
                 delete desc.uValue;
                 newBlock = Block(desc.uBlock);
-                // console.log('created instance: %o', newBlock);
-            }else if (desc.block && !desc.uValue){
+                //console.log('created instance: %o', newBlock);
+            } else if (desc.block && ! desc.uValue){
+                //console.log('desc.block');
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }else if (desc.block && desc.uValue){
+                // for debugging only
                 console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
+                //console.log('appending new block');
                 holder.appendChild(newBlock);
                 addExpression({'wbTarget': newBlock});
             }
@@ -3381,6 +3395,8 @@ global.ajax = ajax;
                 value = obj.uValue || obj.value || 0; break;
             case 'string':
                 value = obj.uValue || obj.value || ''; break;
+            case 'regex':
+                value = obj.uValue || obj.value || /.*/; break;
             case 'color':
                 value = obj.uValue || obj.value || '#000000'; break;
             case 'date':
@@ -3414,7 +3430,7 @@ global.ajax = ajax;
         var input = elem('input', {type: type, value: value, 'data-oldvalue': value});
 
         //Only enable editing for the appropriate types
-        if (!(type === "string" || type === "any" || 
+        if (!(type === "string" || type === "any" || type === 'regex' ||
               type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
@@ -3435,6 +3451,11 @@ global.ajax = ajax;
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
                 value = '"' + value + '"';
+            } else if (type === 'regex'){
+                if (value[0] === '/'){value = value.slice(1);}
+                if (value[value.length-1] === '/'){value = value.slice(0,-1);}
+                value = value.replace(/\//g, '\\/');
+                value = '/' + value + '/';
             }
             return value;
         }
@@ -3554,6 +3575,7 @@ global.ajax = ajax;
     wb.Block = Block;
     wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
+    wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
@@ -3593,7 +3615,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3610,7 +3631,7 @@ global.ajax = ajax;
 	    	"public": true,
 	    	"files": {
 	    		"script.json": {
-	    			"content": scriptsToString(title)
+	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
 	    }), null, '    ');
@@ -3643,31 +3664,41 @@ global.ajax = ajax;
 		}
 	};
 
-
-	function scriptsToString(title, description){
+	//Potential FIXME: I feel that title should be the filename, but uName || name
+	//determines what is shown in the workspace.
+	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
+		if (!name){ name = 'Workspace';}
 		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		return JSON.stringify({
+		var json = {
 			title: title,
 			description: description,
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		}, null, '    ');
+		};
+
+		if(json.blocks[0].sockets[0].name){
+			json.blocks[0].sockets[0].name = name;
+		}else if(json.blocks[0].sockets[0].uName){
+			json.blocks[0].sockets[0].uName = name;
+		}
+
+		return JSON.stringify(json, null, '    ');
 	}
 
 
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
-	    var title = prompt("Save file as: ");
+	    var name = prompt("Save file as: ");
 		var URL = window.webkitURL || window.URL;
-		var file = new Blob([scriptsToString()], {type: 'application/json'});
+		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
 		var a = document.createElement('a');
 		reader.onloadend = function(){
 			a.href = reader.result;
-			a.download = title + '.json';
+			a.download = name + '.json';
 			a.target = '_blank';
 			document.body.appendChild(a);
 			a.click();
@@ -3743,21 +3774,21 @@ global.ajax = ajax;
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			// console.log("Loading gist %s", queryParsed.gist);
+			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			// console.log('loading example %s', queryParsed.example);
+			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			// console.log('loading current script from local storage');
+			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			// console.log('no script to load, starting a new script');
+			//console.log('no script to load, starting a new script');	
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -3888,10 +3919,10 @@ Event.on('.undoAction', 'click', null, undoLastAction);
 Event.on('.redoAction', 'click', null, redoLastAction);
 //begin short-cut implementation for redo and undo
 Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
-Events.bind(document, 'keystroke.Ctrl+X', redoLastAction);
+Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
 //for mac user, cmd added 
 Events.bind(document, 'keystroke.meta+Z', undoLastAction);
-Events.bind(document, 'keystroke.meta+X', redoLastAction);
+Events.bind(document, 'keystroke.meta+Y', redoLastAction);
 //end short cut 
 Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
@@ -4387,10 +4418,8 @@ if (document.body.clientWidth > 360){
 			createWorkspace('Workspace');
 			document.querySelector('.scripts_text_view').innerHTML = '';
 			wb.history.clear();
+			wb.resetSeqNum();
 			delete localStorage['__' + wb.language + '_current_scripts'];
-			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace
-			// For now will resort to the horrible hack of refreshing the page
-			location.reload();
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
@@ -4456,7 +4485,7 @@ if (document.body.clientWidth > 360){
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -4532,8 +4561,6 @@ if (document.body.clientWidth > 360){
 	    evt.preventDefault();
 	    evt.dataTransfer.dropEffect = 'copy';
 	}
-
-
 
 	Event.on('.workspace', 'click', '.disclosure', function(evt){
 		var block = wb.closest(evt.wbTarget, '.block');
@@ -8163,11 +8190,11 @@ wb.menu({
             "help": "create an array by splitting the named string on the given string",
             "sockets": [
                 {
-                    "name": "string",
+                    "name": "split string",
                     "type": "string"
                 },
                 {
-                    "name": "split on",
+                    "name": "on separator",
                     "type": "string"
                 }
             ]
@@ -8211,6 +8238,76 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "304A88C6-FFF3-4DA5-9522-6DAF99E89F10",
+            "script": "{{1}}[{{1}}.length-{{2}}]",
+            "type": "string",
+            "help": "get the single character string at the given index from the end of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "character at",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                	"name": "from the end"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "6BA0B0CF-6F22-4384-8A16-630C745FA3D3",
+            "script": "{{1}}.substr({{2}},{{3}})",
+            "type": "string",
+            "help": "get the substring of specified length starting at the given index of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "substring at",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "of length",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "A41F840C-C64A-4047-9EBD-CF7152EA5D7B",
+            "script": "{{1}}.slice({{2}},{{3}}+1)",
+            "type": "string",
+            "help": "get the substring starting at the given index of named string and ending at the second given index",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "substring from",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "c1eda8ae-b77c-4f5f-9b9f-c11b65235765",
             "script": "{{1}}.length",
             "type": "number",
@@ -8231,11 +8328,28 @@ wb.menu({
             "help": "get the index of the substring within the named string",
             "sockets": [
                 {
-                    "name": "string",
+                    "name": "search string",
                     "type": "string"
                 },
                 {
-                    "name": "indexOf",
+                    "name": "for substring",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "037BB272-ADA5-41E4-BE9E-5FACA42F02C8",
+            "script": "{{1}}.contains({{2}})",
+            "type": "boolean",
+            "help": "check for the substring within the named string",
+            "sockets": [
+                {
+                    "name": "test string",
+                    "type": "string"
+                },
+                {
+                    "name": "for substring",
                     "type": "string"
                 }
             ]
@@ -8248,16 +8362,211 @@ wb.menu({
             "help": "get a new string by replacing a substring with a new string",
             "sockets": [
                 {
-                    "name": "string",
-                    "type": "string"
-                },
-                {
                     "name": "replace",
                     "type": "string"
                 },
                 {
                     "name": "with",
                     "type": "string"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "3047CA98-2E78-4D0B-BD88-6F4D1B3E8420",
+            "script": "{{1}}.replace({{2}}g, {{3}})",
+            "type": "string",
+            "help": "get a new string by replacing a pattern with a new string using regular expressions",
+            "sockets": [
+                {
+                    "name": "in string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "replace pattern",
+                    "type": "regex",
+                    "value": null
+                },
+                {
+                    "name": "with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1D76122E-1E5D-4A19-AA5E-267B41A788FA",
+            "script": "{{1}}.trim()",
+            "type": "string",
+            "help": "remove trailing and leading whitespace",
+            "sockets": [
+                {
+                    "name": "trim whitespace from",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "85CA02CB-229F-4DF5-8400-4AFA2BA8E627",
+            "script": "{{1}}.toUpperCase()",
+            "type": "string",
+            "help": "change to uppercase",
+            "sockets": [
+                {
+                    "name": "to uppercase",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5AD79C7C-321E-4588-B05D-DB1FEF86B82D",
+            "script": "{{1}}.toLowerCase()",
+            "type": "string",
+            "help": "change to lowercase",
+            "sockets": [
+                {
+                    "name": "to lowercase",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DBA355CF-0F3A-4BA1-BBD7-2F8BDCE8C3CC",
+            "type": "boolean",
+            "script": "({{1}} === {{2}})",
+            "help": "two strings are equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "=",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "46391AF0-3002-4A58-85BA-C670FE743219",
+            "type": "boolean",
+            "script": "({{1}} !== {{2}})",
+            "help": "two strings are not equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "≠",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "C9B4EC06-0C82-458F-AB99-E5BB620269D7",
+            "type": "boolean",
+            "script": "({{1}} < {{2}})",
+            "help": "first string precedes second string in lexicographical ordering",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "<",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "085AD019-E831-4501-A058-34A7A1E6744D",
+            "type": "boolean",
+            "script": "({{1}} <= {{2}})",
+            "help": "first precedes or is equal to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "≤",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "684A6EDF-7351-4DCF-AE93-EEA4AF1B41A5",
+            "type": "boolean",
+            "script": "({{1}} > {{2}})",
+            "help": "second string precedes first string in lexicographical ordering",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": ">",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "149FFB1E-4143-4724-BBBA-EEE133F517A7",
+            "type": "boolean",
+            "script": "({{1}} >= {{2}})",
+            "help": "first string succeeds or is equal to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "≥",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D8EF192D-16BD-42AA-98A0-C6C2236392F7",
+            "script": "levenshtein({{1}},{{2}})",
+            "type": "number",
+            "help": "calculate how much two strings are different",
+            "sockets": [
+                {
+                    "name": "difference of strings",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "and",
+                    "type": "string",
+                    "value": null
                 }
             ]
         },
@@ -8277,7 +8586,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "48bb8639-0092-4384-b5a0-3a772699dea9",
-            "script": "/* {{1}}; */",
+            "script": "/* {{1}} */",
             "help": "this is a comment and will not be run by the program",
             "sockets": [
                 {
@@ -9130,6 +9439,23 @@ wb.menu({
                 {
                     "name": "with color",
                     "type": "color"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};local.ctx.save();local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "fill round rect",
+                    "type": "rect",
+                    "value": null
+                },
+                {
+                    "name": "with border-radius",
+                    "type": "number",
+                    "value": 0
                 }
             ]
         },

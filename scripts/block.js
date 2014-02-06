@@ -36,6 +36,12 @@
     var blockRegistry = {};
     wb.blockRegistry = blockRegistry;
 
+    var resetSeqNum = function(){
+        _nextSeqNum = 0;
+        blockRegistry = {};
+        wb.blockRegistry = blockRegistry;
+    }
+
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
@@ -147,9 +153,9 @@
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        // if (!obj.isTemplateBlock){
+        //if (!obj.isTemplateBlock){
         //     console.log('instantiated block %o from description %o', block, obj);
-        // }
+        //}
         return block;
     }
 
@@ -289,7 +295,7 @@
             socket.dataset.options = desc.options;
         }
         // if (!blockdesc.isTemplateBlock){
-        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        //      console.log('socket seq num: %s', blockdesc.seqNum);
         // }
         socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
@@ -301,18 +307,22 @@
             socket.dataset.block = desc.block;
         }
         if (!blockdesc.isTemplateBlock){
+            //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
             if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
                 delete desc.uValue;
                 newBlock = Block(desc.uBlock);
-                // console.log('created instance: %o', newBlock);
-            }else if (desc.block && !desc.uValue){
+                //console.log('created instance: %o', newBlock);
+            } else if (desc.block && ! desc.uValue){
+                //console.log('desc.block');
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }else if (desc.block && desc.uValue){
+                // for debugging only
                 console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
+                //console.log('appending new block');
                 holder.appendChild(newBlock);
                 addExpression({'wbTarget': newBlock});
             }
@@ -454,6 +464,8 @@
                 value = obj.uValue || obj.value || 0; break;
             case 'string':
                 value = obj.uValue || obj.value || ''; break;
+            case 'regex':
+                value = obj.uValue || obj.value || /.*/; break;
             case 'color':
                 value = obj.uValue || obj.value || '#000000'; break;
             case 'date':
@@ -487,7 +499,7 @@
         var input = elem('input', {type: type, value: value, 'data-oldvalue': value});
 
         //Only enable editing for the appropriate types
-        if (!(type === "string" || type === "any" || 
+        if (!(type === "string" || type === "any" || type === 'regex' ||
               type === "url"    || type === "phone" ||
               type === "number" || type === "color")) {
             input.readOnly = true;
@@ -508,6 +520,11 @@
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
                 value = '"' + value + '"';
+            } else if (type === 'regex'){
+                if (value[0] === '/'){value = value.slice(1);}
+                if (value[value.length-1] === '/'){value = value.slice(0,-1);}
+                value = value.replace(/\//g, '\\/');
+                value = '/' + value + '/';
             }
             return value;
         }
@@ -627,6 +644,7 @@
     wb.Block = Block;
     wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
+    wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;

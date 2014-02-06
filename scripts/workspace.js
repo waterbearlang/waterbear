@@ -11,10 +11,8 @@
 			createWorkspace('Workspace');
 			document.querySelector('.scripts_text_view').innerHTML = '';
 			wb.history.clear();
+			wb.resetSeqNum();
 			delete localStorage['__' + wb.language + '_current_scripts'];
-			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace
-			// For now will resort to the horrible hack of refreshing the page
-			location.reload();
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
@@ -80,7 +78,7 @@
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -156,8 +154,6 @@
 	    evt.preventDefault();
 	    evt.dataTransfer.dropEffect = 'copy';
 	}
-
-
 
 	Event.on('.workspace', 'click', '.disclosure', function(evt){
 		var block = wb.closest(evt.wbTarget, '.block');

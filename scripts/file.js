@@ -76,25 +76,28 @@
 	};
 
 
-	function scriptsToString(title, description){
+	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
+		if (!name){ name = 'Workspace';}
 		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		return JSON.stringify({
+		var json = {
 			title: title,
 			description: description,
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		}, null, '    ');
+		};
+		json.blocks[0].sockets[0].name = name;
+		return JSON.stringify(json, null, '    ');
 	}
 
 
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
-	    var title = prompt("Save file as: ");
+	    var name = prompt("Save file as: ");
 		var URL = window.webkitURL || window.URL;
-		var file = new Blob([scriptsToString()], {type: 'application/json'});
+		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
 		var a = document.createElement('a');
 		reader.onloadend = function(){
@@ -175,21 +178,21 @@
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			// console.log("Loading gist %s", queryParsed.gist);
+			console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			// console.log('loading example %s', queryParsed.example);
+			console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			// console.log('loading current script from local storage');
+			console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			// console.log('no script to load, starting a new script');
+			console.log('no script to load, starting a new script');	
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;

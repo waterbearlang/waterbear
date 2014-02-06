@@ -11,10 +11,8 @@
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 			wb.history.clear();
+			wb.resetSeqNum();
 			delete localStorage['__' + wb.language + '_current_scripts'];
-			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace
-			// For now will resort to the horrible hack of refreshing the page
-			location.reload();
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
@@ -25,7 +23,7 @@
 	Event.on('.content', 'click', '.load-example', function(evt){
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
-		if (wb.scriptModified){
+		if (scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
 				wb.loaded = false;
@@ -42,7 +40,7 @@
 
 	var handleStateChange = function handleStateChange(evt){
 		// hide loading spinner if needed
-		console.log('handleStateChange');
+		//console.log('handleStateChange');
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
@@ -79,7 +77,7 @@
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -196,6 +194,7 @@
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
+		console.log('Exiting wb-modified event');
 	});
 
 	window.addEventListener('popstate', function(evt){
@@ -205,7 +204,6 @@
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
-		console.log('window loaded');
 		wb.windowLoaded = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);

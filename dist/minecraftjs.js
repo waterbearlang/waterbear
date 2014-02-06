@@ -2160,7 +2160,7 @@ global.ajax = ajax;
                 //     console.log(event);
                 // }
                 if (!event.wbValid){
-                    // console.log('event %s is not valid', eventname);
+                    // console.log('event is not valid');
                     return;
                 }
                 if (wb.matches(event.wbTarget, selector)){
@@ -2203,7 +2203,7 @@ global.ajax = ajax;
             elem = document.querySelector(elem);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
-        // console.log('dispatching %s for %o', eventname, elem);
+        //console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     };
 
@@ -2374,6 +2374,12 @@ global.ajax = ajax;
         scope = null; // <- WB
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
+        blockMenu = document.querySelector('#block_menu');
+        workspace = null;
+        selectedSocket = null;
+        _dropCursor = null;
+        startParent = null;
+        startSibling = null;
     }
     reset();
 
@@ -2399,13 +2405,14 @@ global.ajax = ajax;
             dragTarget = target;
             // WB-Specific
             if (target.parentElement.classList.contains('block-menu')){
+                console.log('target parent: %o', target.parentElement);
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
             }
         	dragAction.target = target;
             // WB-Specific
             if (target.parentElement.classList.contains('locals')){
-                // console.log('target parent: %o', target.parentElement);
+                console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
@@ -2481,11 +2488,11 @@ global.ajax = ajax;
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
+        console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
         });
-
         // start timer for drag events
         timer = setTimeout(hitTest, dragTimeout);
         return false;
@@ -2849,9 +2856,6 @@ global.ajax = ajax;
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
     };
-
-
-
 })(this);
 
 
@@ -2937,6 +2941,13 @@ global.ajax = ajax;
 
     var blockRegistry = {};
     wb.blockRegistry = blockRegistry;
+
+    var resetSeqNum = function(){
+        _nextSeqNum = 0;
+        blockRegistry = {};
+        wb.blockRegistry = blockRegistry;
+        console.log('_nextSeqNum is: ' + _nextSeqNum);
+    }
 
     var registerBlock = function(blockdesc){
         if (blockdesc.seqNum){
@@ -3049,9 +3060,9 @@ global.ajax = ajax;
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        // if (!obj.isTemplateBlock){
-        //     console.log('instantiated block %o from description %o', block, obj);
-        // }
+        if (!obj.isTemplateBlock){
+             //console.log('instantiated block %o from description %o', block, obj);
+         }
         return block;
     }
 
@@ -3073,7 +3084,7 @@ global.ajax = ajax;
     }
 
     function addBlock(event){
-        event.stopPropagation();
+        //event.stopPropagation();
         if (wb.matches(event.wbTarget, '.expression')){
             addExpression(event);
         }else{
@@ -3190,7 +3201,7 @@ global.ajax = ajax;
             socket.dataset.options = desc.options;
         }
         // if (!blockdesc.isTemplateBlock){
-        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        //      console.log('socket seq num: %s', blockdesc.seqNum);
         // }
         socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
@@ -3202,17 +3213,20 @@ global.ajax = ajax;
             socket.dataset.block = desc.block;
         }
         if (!blockdesc.isTemplateBlock){
+            //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
-            if(desc.uValue){
+            if (desc.uValue){
                 //No block value
             } else if (desc.uBlock){
-                // console.log('trying to instantiate %o', desc.uBlock);
+                //console.log('trying to instantiate %o', desc.uBlock);
                 newBlock = Block(desc.uBlock);
-                // console.log('created instance: %o', newBlock);
-            }else if (desc.block && !desc.uValue){
+                //console.log('created instance: %o', newBlock);
+            } else if (desc.block){
+                //console.log('desc.block');
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }
             if (newBlock){
+                //console.log('appending new block');
                 holder.appendChild(newBlock);
                 addExpression({'wbTarget': newBlock});
             }
@@ -3519,6 +3533,7 @@ global.ajax = ajax;
     wb.Block = Block;
     wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
+    wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
     wb.addBlockHandler = addBlock;
@@ -3609,25 +3624,28 @@ global.ajax = ajax;
 	};
 
 
-	function scriptsToString(title, description){
+	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
+		if (!name){ name = 'Workspace';}
 		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		return JSON.stringify({
+		var json = {
 			title: title,
 			description: description,
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		}, null, '    ');
+		};
+		json.blocks[0].sockets[0].name = name;
+		return JSON.stringify(json, null, '    ');
 	}
 
 
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
-	    var title = prompt("Save file as: ");
+	    var name = prompt("Save file as: ");
 		var URL = window.webkitURL || window.URL;
-		var file = new Blob([scriptsToString()], {type: 'application/json'});
+		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
 		var a = document.createElement('a');
 		reader.onloadend = function(){
@@ -3708,21 +3726,21 @@ global.ajax = ajax;
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			// console.log("Loading gist %s", queryParsed.gist);
+			console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			// console.log('loading example %s', queryParsed.example);
+			console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			// console.log('loading current script from local storage');
+			console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			// console.log('no script to load, starting a new script');
+			console.log('no script to load, starting a new script');	
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -4287,10 +4305,8 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 			wb.history.clear();
+			wb.resetSeqNum();
 			delete localStorage['__' + wb.language + '_current_scripts'];
-			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace
-			// For now will resort to the horrible hack of refreshing the page
-			location.reload();
 		}
 	}
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
@@ -4301,7 +4317,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	Event.on('.content', 'click', '.load-example', function(evt){
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
-		if (wb.scriptModified){
+		if (scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
 				wb.loaded = false;
@@ -4318,7 +4334,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	var handleStateChange = function handleStateChange(evt){
 		// hide loading spinner if needed
-		console.log('handleStateChange');
+		//console.log('handleStateChange');
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
@@ -4355,7 +4371,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -4472,6 +4488,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
+		console.log('Exiting wb-modified event');
 	});
 
 	window.addEventListener('popstate', function(evt){
@@ -4481,7 +4498,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
-		console.log('window loaded');
 		wb.windowLoaded = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);

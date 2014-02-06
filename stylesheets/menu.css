@@ -1,7 +1,6 @@
 /* Menu system */
 ul.menu {
 	background:#666;
-	text-align: left;h
 }
 /*Initialize*/
 ul.menu, ul.menu ul.sub-menu {
@@ -25,6 +24,9 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 }
 ul.menu > li > button {
 	text-align:center;
+}
+ul.submenu button{
+	text-align: left;
 }
 ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
 	background:#555;

@@ -167,10 +167,15 @@ input{
 	user-select: text;
 }
 
-.scripts_text_view, .stage, .tutorial, .scratchpad, .scripts_workspace{
+.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace{
 	margin: 5px;
 	border: 2px outset #333;
 	padding: 10px;	
+}
+
+.stage{
+	margin: 5px;
+	border: 2px outset #333;
 }
 
 
@@ -496,9 +501,11 @@ body{
   vertical-align:middle;
   text-align: right;
 }
+
 .scripts_workspace > .label >  .socket{
   text-align: left;
 }
+
 .socket > *{
   height:100%;
   vertical-align:middle;
@@ -827,7 +834,6 @@ body{
 /* Menu system */
 ul.menu {
 	background:#666;
-	text-align: left;h
 }
 /*Initialize*/
 ul.menu, ul.menu ul.sub-menu {
@@ -851,6 +857,9 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 }
 ul.menu > li > button {
 	text-align:center;
+}
+ul.submenu button{
+	text-align: left;
 }
 ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
 	background:#555;

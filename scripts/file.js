@@ -108,7 +108,7 @@
 		var a = document.createElement('a');
 		reader.onloadend = function(){
 			a.href = reader.result;
-			a.download = title + '.json';
+			a.download = name + '.json';
 			a.target = '_blank';
 			document.body.appendChild(a);
 			a.click();

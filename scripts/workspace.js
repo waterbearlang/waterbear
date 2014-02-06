@@ -194,7 +194,6 @@
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
-		console.log('Exiting wb-modified event');
 	});
 
 	window.addEventListener('popstate', function(evt){

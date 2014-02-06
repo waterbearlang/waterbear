@@ -145,8 +145,6 @@
 	    evt.dataTransfer.dropEffect = 'copy';
 	}
 
-
-
 	Event.on('.workspace', 'click', '.disclosure', function(evt){
 		var block = wb.closest(evt.wbTarget, '.block');
 		if (block.dataset.closed){

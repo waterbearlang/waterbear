@@ -40,7 +40,6 @@
         _nextSeqNum = 0;
         blockRegistry = {};
         wb.blockRegistry = blockRegistry;
-        console.log('_nextSeqNum is: ' + _nextSeqNum);
     }
 
     var registerBlock = function(blockdesc){
@@ -154,9 +153,9 @@
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        if (!obj.isTemplateBlock){
-             //console.log('instantiated block %o from description %o', block, obj);
-         }
+        /*if (!obj.isTemplateBlock){
+             console.log('instantiated block %o from description %o', block, obj);
+         }*/
         return block;
     }
 

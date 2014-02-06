@@ -1123,7 +1123,6 @@ global.ajax = ajax;
         _nextSeqNum = 0;
         blockRegistry = {};
         wb.blockRegistry = blockRegistry;
-        console.log('_nextSeqNum is: ' + _nextSeqNum);
     }
 
     var registerBlock = function(blockdesc){
@@ -1237,9 +1236,9 @@ global.ajax = ajax;
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        if (!obj.isTemplateBlock){
-             //console.log('instantiated block %o from description %o', block, obj);
-         }
+        /*if (!obj.isTemplateBlock){
+             console.log('instantiated block %o from description %o', block, obj);
+         }*/
         return block;
     }
 
@@ -1261,7 +1260,7 @@ global.ajax = ajax;
     }
 
     function addBlock(event){
-        //event.stopPropagation();
+        event.stopPropagation();
         if (wb.matches(event.wbTarget, '.expression')){
             addExpression(event);
         }else{
@@ -1750,7 +1749,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -1767,7 +1765,7 @@ global.ajax = ajax;
 	    	"public": true,
 	    	"files": {
 	    		"script.json": {
-	    			"content": scriptsToString(title)
+	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
 	    }), null, '    ');
@@ -1800,7 +1798,8 @@ global.ajax = ajax;
 		}
 	};
 
-
+	//Potential FIXME: I feel that title should be the filename, but uName || name
+	//determines what is shown in the workspace.
 	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
@@ -1813,7 +1812,13 @@ global.ajax = ajax;
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
 		};
-		json.blocks[0].sockets[0].name = name;
+
+		if(json.blocks[0].sockets[0].name){
+			json.blocks[0].sockets[0].name = name;
+		}else if(json.blocks[0].sockets[0].uName){
+			json.blocks[0].sockets[0].uName = name;
+		}
+
 		return JSON.stringify(json, null, '    ');
 	}
 
@@ -1903,21 +1908,21 @@ global.ajax = ajax;
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
-			console.log("Loading gist %s", queryParsed.gist);
+			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
 			});
 		}else if (queryParsed.example){
-			console.log('loading example %s', queryParsed.example);
+			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			console.log('loading current script from local storage');
+			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			console.log('no script to load, starting a new script');	
+			//console.log('no script to load, starting a new script');	
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -2494,7 +2499,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	Event.on('.content', 'click', '.load-example', function(evt){
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
-		if (scriptModified){
+		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
 				wb.loaded = false;
@@ -2511,7 +2516,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	var handleStateChange = function handleStateChange(evt){
 		// hide loading spinner if needed
-		//console.log('handleStateChange');
+		console.log('handleStateChange');
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
@@ -2548,7 +2553,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	// Load and Save Section
 
 	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -2616,8 +2621,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	    evt.dataTransfer.dropEffect = 'copy';
 	}
 
-
-
 	Event.on('.workspace', 'click', '.disclosure', function(evt){
 		var block = wb.closest(evt.wbTarget, '.block');
 		if (block.dataset.closed){
@@ -2665,7 +2668,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
-		console.log('Exiting wb-modified event');
 	});
 
 	window.addEventListener('popstate', function(evt){
@@ -2675,6 +2677,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	// Kick off some initialization work
 	window.addEventListener('load', function(){
+		console.log('window loaded');
 		wb.windowLoaded = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);

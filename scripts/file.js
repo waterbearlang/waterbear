@@ -25,7 +25,6 @@
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -42,7 +41,7 @@
 	    	"public": true,
 	    	"files": {
 	    		"script.json": {
-	    			"content": scriptsToString(title)
+	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
 	    }), null, '    ');
@@ -75,7 +74,8 @@
 		}
 	};
 
-
+	//Potential FIXME: I feel that title should be the filename, but uName || name
+	//determines what is shown in the workspace.
 	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
@@ -88,7 +88,13 @@
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
 		};
-		json.blocks[0].sockets[0].name = name;
+
+		if(json.blocks[0].sockets[0].name){
+			json.blocks[0].sockets[0].name = name;
+		}else if(json.blocks[0].sockets[0].uName){
+			json.blocks[0].sockets[0].uName = name;
+		}
+
 		return JSON.stringify(json, null, '    ');
 	}
 

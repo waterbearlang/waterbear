@@ -3600,7 +3600,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-		console.log('title: %s', title);
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3678,7 +3677,6 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
-	    console.log('name: %s', name);
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -9706,9 +9704,46 @@ wb.menu({
                     "value": "10"
                 }
             ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e93b909e-19f8-4f80-8308-ae896bd63189",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.fillStyle = color##; local.ctx.fill();",
+            "help": "fill the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "fill polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();",
+            "help": "stroke the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "stroke polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/shape.json*/
 
 /*begin languages/javascript/geolocation.json*/

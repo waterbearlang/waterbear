@@ -13807,7 +13807,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-		console.log('title: %s', title);
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -13885,7 +13884,6 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
-	    console.log('name: %s', name);
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();

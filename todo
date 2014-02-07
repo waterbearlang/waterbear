@@ -1,0 +1,3 @@
+- fill polygon [array of points] with color [color]
+- stroke polygon [array of points] with color [color]
+

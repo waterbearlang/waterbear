@@ -369,7 +369,6 @@
     	if(this.toParent != null) {
             // WB-Specific
     		if(wb.matches(this.target,'.step')) {
-                console.log('WHAT IS THIS.TOBEFORE: %o', this.toBefore);
     			this.toParent.insertBefore(this.target, this.toBefore);
     		} else {
     			this.toParent.appendChild(this.target);

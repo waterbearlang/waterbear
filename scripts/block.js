@@ -319,7 +319,7 @@
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }else if (desc.block && desc.uValue){
                 // for debugging only
-                console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
+                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
                 //console.log('appending new block');

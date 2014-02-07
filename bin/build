@@ -37,7 +37,7 @@ var styles = {
     processingjs: ['highlight-github']
 }
 
-var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
 
 var libs = {
     arduino: [],

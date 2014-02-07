@@ -213,8 +213,8 @@ body{
 }
 
 .workspace{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
+	-webkit-flex: 3 0 0;
+	flex: 3 0 0;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: column;
@@ -234,14 +234,14 @@ body{
 }
 
 .scripts_workspace{
-	-webkit-flex: 3 0 auto;
-	flex: 3 0 auto;
+	-webkit-flex: 3 1 auto;
+	flex: 3 1 auto;
 	overflow: auto;
 }
 
 .results{
-	-webkit-flex: 0 0 400px;
-	flex: 0 0 400px;
+	-webkit-flex: 1 1 400px;
+	flex: 1 1 400px;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: column;
@@ -249,8 +249,8 @@ body{
 }
 
 .stage{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
+	-webkit-flex: 1 1 0;
+	flex: 1 1 0;
 }
 
 .stageframe{
@@ -259,8 +259,8 @@ body{
 }
 
 .scripts_text_view{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
+	-webkit-flex: 1 1 0;
+	flex: 1 1 0;
 	overflow: auto;
 }
 

@@ -53,7 +53,7 @@ function updateScriptsView(){
     var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
 }
-window.updateScriptsView = updateScriptsView;
+wb.updateScriptsView = updateScriptsView; 
 
 
 function changeSocket(event) {

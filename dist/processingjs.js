@@ -12142,6 +12142,7 @@ global.ajax = ajax;
     };
 
     wb.show = function(elem){
+        if (window.getComputedStyle(elem).display !== 'none') return;
         elem.style.display = elem.dataset.display || 'block';
         delete elem.dataset.display;
     };
@@ -13457,7 +13458,7 @@ global.ajax = ajax;
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }else if (desc.block && desc.uValue){
                 // for debugging only
-                console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
+                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
                 //console.log('appending new block');
@@ -14193,7 +14194,7 @@ function updateScriptsView(){
     var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
 }
-window.updateScriptsView = updateScriptsView;
+wb.updateScriptsView = updateScriptsView; 
 
 
 function changeSocket(event) {
@@ -14669,14 +14670,25 @@ if (document.body.clientWidth > 360){
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
 	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// console.log('running current scripts');
-	    	wb.runCurrentScripts();
+	    	// This bothers me greatly: runs with the console.log, but not without it
+	    	console.log('running current scripts');
+	    	runFullSize();
 	    }else{
 	    	if (wb.view === 'result'){
 		    	// console.log('we want to run current scripts, but cannot');
 		    }else{
+		    	runWithLayout();
 		    	// console.log('we do not care about current scripts, so there');
 		    }
+	    }
+	    if (wb.toggleState.scripts_text_view){
+	    	wb.updateScriptsView();
+	    }
+	    if (wb.toggleState.stage){
+	    	// console.log('run current scripts');
+	    	wb.runCurrentScripts();
+	    }else{
+	    	wb.clearStage();
 	    }
 	}
 	Event.on(document.body, 'wb-state-change', null, handleStateChange);
@@ -14707,13 +14719,6 @@ if (document.body.clientWidth > 360){
 		Event.trigger(document.body, 'wb-state-change');
 	}
 
-	function toggleTutorial(){
-		document.querySelector('.tutorial').classList.toggle('hidden');
-	}
-
-	function toggleScratchpad(){
-		document.querySelector('.scratchpad').classList.toggle('hidden');
-	}
 
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
@@ -14722,8 +14727,6 @@ if (document.body.clientWidth > 360){
 	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
 	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
 	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-	Event.on('.toggle-tutorial', 'click', null, toggleTutorial);
-	Event.on('.toggle-scratchpad', 'click', null, toggleScratchpad);
 
 	wb.loaded = false;
 
@@ -14817,6 +14820,64 @@ if (document.body.clientWidth > 360){
 			wb.historySwitchState(wb.view, true);
 		}
 	});
+
+	function runFullSize(){
+		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+			wb.hide(wb.find(document.body, sel));
+		});
+		wb.show(wb.find(document.body, '.stage'));
+	}
+
+	function runWithLayout(){
+		['#block_menu', '.workspace'].forEach(function(sel){
+			wb.show(wb.find(document.body, sel));
+		});
+		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+		});
+	}
+
+	function toggleComponent(evt){
+		var component = wb.find(document.body, '.' + evt.detail.name);
+		evt.detail.state ? wb.show(component) : wb.hide(component);
+		var results = wb.find(document.body, '.results');
+		// Special cases
+		switch(evt.detail.name){
+			case 'stage':
+				if (evt.detail.state){
+					wb.show(results);
+					wb.runCurrentScripts();
+				}else{
+					wb.clearStage();
+					if (!wb.toggleState.scripts_text_view){
+						wb.hide(results);
+					}
+				}
+				break;
+			case 'scripts_text_view':
+				if (evt.detail.state){
+					wb.show(results);
+					wb.updateScriptsView();
+				}else{
+					if (!wb.toggleState.stage){
+						wb.hide(results);
+					}
+				}
+				break;
+			case 'tutorial':
+			case 'scratchpad':
+			case 'scripts_workspace':
+				if (! (wb.toggleState.tutorial || wb.toggleState.scratchpad || wb.toggleState.scripts_workspace)){
+					wb.hide(wb.find(document.body, '.workspace'));
+				}else{
+					wb.show(wb.find(document.body, '.workspace'));
+				}
+			default:
+				// do nothing
+		}
+	}
+
+	Event.on(document.body, 'wb-toggle', null, toggleComponent);
 
 	window.addEventListener('popstate', function(evt){
 		// console.log('popstate event');
@@ -14954,6 +15015,58 @@ if (document.body.clientWidth > 360){
 })(wb);
 
 /*end blockprefs.js*/
+
+/*begin menu.js*/
+(function(wb, Event){
+
+	var toggleState = {};
+	if (localStorage.toggleState){
+		toggleState = JSON.parse(localStorage.toggleState);
+	}
+
+	function handleToggle(evt){
+		var button = evt.target;
+		var name = button.dataset.target;
+		var isOn = !getState(name);
+		toggleState[name] = isOn;
+		if (isOn){
+			button.classList.remove('icon-unchecked');
+			button.classList.add('icon-check');
+		}else{
+			button.classList.add('icon-unchecked');
+			button.classList.remove('icon-check');
+		}
+		Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
+		localStorage.toggleState = JSON.stringify(toggleState);
+	}
+
+	Event.on(document.body, 'click', '.toggle', handleToggle);
+
+	function getState(name){
+		if (toggleState[name] === undefined){
+			toggleState[name] = true;
+		}
+		return toggleState[name];
+	}
+
+	// initialize toggle states
+	window.addEventListener('load', function(evt){
+		wb.findAll(document.body, '.toggle').forEach(function(button){
+			var name = button.dataset.target;
+			var isOn = getState(name);
+			if (isOn){
+				button.classList.add('icon-check');
+			}else{
+				button.classList.add('icon-unchecked');
+			}
+			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
+		});
+	}, false);
+
+	wb.toggleState = toggleState; // treat as read-only
+
+})(wb, Event);
+/*end menu.js*/
 
 /*begin languages/processingjs/processingjs.js*/
 /*

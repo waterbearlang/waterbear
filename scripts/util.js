@@ -26,6 +26,7 @@
     };
 
     wb.show = function(elem){
+        if (window.getComputedStyle(elem).display !== 'none') return;
         elem.style.display = elem.dataset.display || 'block';
         delete elem.dataset.display;
     };

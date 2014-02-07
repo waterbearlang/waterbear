@@ -12812,10 +12812,11 @@ global.ajax = ajax;
             }
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
+
+            //CLARIFY: What does this block do? dragAction.toBefore.nextElementSibling is always null
             // if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
             // 	// Sometimes the "next sibling" ends up being the cursor
             // 	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
-            //     console.log('DRAGACTION.TOBEFORE IS CURRENTLY %o', dragAction.toBefore);
             // }
             wb.history.add(dragAction);
         }else{
@@ -12876,7 +12877,6 @@ global.ajax = ajax;
     	if(this.toParent != null) {
             // WB-Specific
     		if(wb.matches(this.target,'.step')) {
-                console.log('WHAT IS THIS.TOBEFORE: %o', this.toBefore);
     			this.toParent.insertBefore(this.target, this.toBefore);
     		} else {
     			this.toParent.appendChild(this.target);

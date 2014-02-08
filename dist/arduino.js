@@ -295,7 +295,6 @@ global.ajax = ajax;
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
 
-
     wb.makeArray = makeArray;
     wb.reposition = reposition;
     wb.hide = hide;

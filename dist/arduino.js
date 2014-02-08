@@ -521,6 +521,7 @@ global.ajax = ajax;
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad = document.querySelector('.scratchpad');
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -552,6 +553,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	scratchpad = document.querySelector('.scratchpad');
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -563,7 +565,7 @@ global.ajax = ajax;
 
 
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget; // <- WB
@@ -616,7 +618,7 @@ global.ajax = ajax;
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
-        console.log('startDrag(%o)', event);
+        // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
 		// Track source for undo/redo
@@ -667,7 +669,7 @@ global.ajax = ajax;
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
-        console.log(potentialDropTargets.length);
+        // console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -680,7 +682,7 @@ global.ajax = ajax;
     function drag(event){
         if (!dragTarget) {return undefined;}
         if (!currentPosition) {startDrag(event);}
-        console.log('drag(%o)', event);
+        // console.log('drag(%o)', event);
         event.preventDefault();
         // update the variables, distance, button pressed
         var nextPosition = {left: event.wbPageX, top: event.wbPageY}; // <- WB
@@ -714,7 +716,7 @@ global.ajax = ajax;
     }
 
     function endDrag(event){
-        console.log('endDrag(%o) dragging: %s', event, dragging);
+        // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
@@ -725,7 +727,7 @@ global.ajax = ajax;
     }
 
     function handleDrop(copyBlock){
-        console.log('handleDrop(%o)', copyBlock);
+        // console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -744,7 +746,30 @@ global.ajax = ajax;
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-        }else if (dropTarget){
+        } else if (wb.overlap(dragTarget, scratchpad)) {
+	    console.log(dragTarget);
+	    var scratchPadStyle = scratchpad.getBoundingClientRect();
+	    var newOriginX = scratchPadStyle.left;
+	    var newOriginY = scratchPadStyle.top;
+    
+	    var blockStyle = dragTarget.getBoundingClientRect();
+	    var oldX = blockStyle.left;
+	    var oldY = blockStyle.top;
+
+	    dragTarget.style.position = "absolute";
+	    dragTarget.style.left = oldX - newOriginX;
+	    dragTarget.style.top = oldY - newOriginY;
+	    scratchpad.appendChild(dragTarget);
+
+            //when dragging from workspace to scratchpad, this keeps workspace from
+	    //moving around when block in scratchpad is moved.
+            dragTarget.parentElement.removeChild(dragTarget); 
+            Event.trigger(dragTarget, 'wb-add');
+	    return;
+	}
+	
+	
+	else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
@@ -883,7 +908,7 @@ global.ajax = ajax;
 
     function positionExpressionDropCursor(){
         if (!potentialDropTargets.length){
-            console.log('no drop targets found');
+            // console.log('no drop targets found');
             return;
         }
         var targets = potentialDropTargets.map(function(target){

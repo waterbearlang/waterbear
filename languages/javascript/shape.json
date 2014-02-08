@@ -145,7 +145,7 @@
         {
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
-            "script": "var rect## = {{1}};var borderRadius## = {{2}};local.ctx.save();local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
             "sockets": [
                 {
                     "name": "fill round rect",
@@ -156,6 +156,11 @@
                     "name": "with border-radius",
                     "type": "number",
                     "value": 0
+                },
+                {
+                    "name": "and color",
+                    "type": "color",
+                    "value": null
                 }
             ]
         },
@@ -214,6 +219,42 @@
                     "name": "height",
                     "type": "number",
                     "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e93b909e-19f8-4f80-8308-ae896bd63189",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.fillStyle = color##; local.ctx.fill();local.ctx.restore();",
+            "help": "fill the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "fill polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();local.ctx.restore()",
+            "help": "stroke the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "stroke polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
                 }
             ]
         }

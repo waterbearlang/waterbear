@@ -3593,6 +3593,7 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
+		if ( !title ) return;
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3670,6 +3671,7 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
+	    if( !name ) return;
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -3767,6 +3769,7 @@ global.ajax = ajax;
 			}
 		}else{
 			//console.log('no script to load, starting a new script');	
+			wb.scriptLoaded = true;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -5716,7 +5719,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "movement direction"
+                    "name": "movement vector"
                 }
             ]
         },
@@ -9627,7 +9630,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
-            "script": "var rect## = {{1}};var borderRadius## = {{2}};local.ctx.save();local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
             "sockets": [
                 {
                     "name": "fill round rect",
@@ -9638,6 +9641,11 @@ wb.menu({
                     "name": "with border-radius",
                     "type": "number",
                     "value": 0
+                },
+                {
+                    "name": "and color",
+                    "type": "color",
+                    "value": null
                 }
             ]
         },
@@ -9698,9 +9706,46 @@ wb.menu({
                     "value": "10"
                 }
             ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e93b909e-19f8-4f80-8308-ae896bd63189",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.fillStyle = color##; local.ctx.fill();local.ctx.restore();",
+            "help": "fill the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "fill polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();local.ctx.restore()",
+            "help": "stroke the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "stroke polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/shape.json*/
 
 /*begin languages/javascript/geolocation.json*/

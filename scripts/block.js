@@ -18,24 +18,23 @@
 
     var elem = wb.elem;
 
-
-    var _nextSeqNum = 0;
+    var nextSeqNum = 0;
     var blockRegistry = {};
 
     function newSeqNum(){
-        _nextSeqNum++;
-        return _nextSeqNum;
+        nextSeqNum++;
+        return nextSeqNum;
     };
 
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        _nextSeqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
+        nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
     function resetSeqNum(){
-        _nextSeqNum = 0;
+        nextSeqNum = 0;
         blockRegistry = {};
         wb.blockRegistry = blockRegistry;
     }

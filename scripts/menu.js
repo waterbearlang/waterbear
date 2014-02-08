@@ -31,7 +31,8 @@
 	}
 
 	// initialize toggle states
-	window.addEventListener('load', function(evt){
+
+	function initializeToggleStates(evt){
 		wb.findAll(document.body, '.toggle').forEach(function(button){
 			var name = button.dataset.target;
 			var isOn = getState(name);
@@ -42,7 +43,9 @@
 			}
 			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
 		});
-	}, false);
+	}
+
+	Event.once(document.body, 'wb-workspace-initialized', null, initializeToggleStates);
 
 	wb.toggleState = toggleState; // treat as read-only
 

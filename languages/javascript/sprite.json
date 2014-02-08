@@ -372,7 +372,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "suffix": "movement direction"
+                    "suffix": "movement vector"
                 }
             ]
         },

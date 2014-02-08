@@ -37,7 +37,7 @@
     }
 
     function runCurrentScripts(){
-        // console.log('runCurrentScripts');
+        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);

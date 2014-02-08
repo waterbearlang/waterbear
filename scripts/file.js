@@ -45,7 +45,9 @@
 	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
-	    }), null, '    ');
+	    }), function(statusCode, statusText, msg){
+            alert("Can't save to gist:\n" + statusCode + " (" + statusText + " ) " + msg);
+        });
 	};
 	//populate the gist submenu with recent gists
 	wb.loadRecentGists = function loadRecentGists() {

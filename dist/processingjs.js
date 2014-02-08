@@ -12711,6 +12711,7 @@ global.ajax = ajax;
         // get position and append target to .content, adjust offsets
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+        dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
         // WB-Specific
         document.querySelector('.content.editor').appendChild(dragTarget);
         // WB-Specific

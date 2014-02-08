@@ -574,7 +574,7 @@
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.content', 'mousedown', '.block', initDrag);
-            Event.on('.content', 'mousemove', null, drag);
+            Event.on(document, 'mousemove', null, drag);
             Event.on(document.body, 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);

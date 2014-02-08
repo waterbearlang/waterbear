@@ -2605,10 +2605,12 @@ global.ajax = ajax;
             }
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
-            if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
-            	// Sometimes the "next sibling" ends up being the cursor
-            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
-            }
+
+            //CLARIFY: What does this block do? dragAction.toBefore.nextElementSibling is always null
+            // if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
+            // 	// Sometimes the "next sibling" ends up being the cursor
+            // 	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+            // }
             wb.history.add(dragAction);
         }else{
             if (cloned){
@@ -3600,6 +3602,7 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
+		if ( !title ) return;
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3677,6 +3680,7 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
+	    if( !name ) return;
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -3774,6 +3778,7 @@ global.ajax = ajax;
 			}
 		}else{
 			//console.log('no script to load, starting a new script');	
+			wb.scriptLoaded = true;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -4350,6 +4355,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
+	
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
 	Event.on('.edit-script', 'click', null, function(event){
 		wb.historySwitchState('editor');

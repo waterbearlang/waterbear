@@ -15,6 +15,7 @@
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
+	
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
 	Event.on('.edit-script', 'click', null, function(event){
 		wb.historySwitchState('editor');

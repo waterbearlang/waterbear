@@ -13791,229 +13791,232 @@ global.ajax = ajax;
 
 (function(wb){
 
-    wb.saveCurrentScripts = function saveCurrentScripts(){
-        if (!wb.scriptModified){
-            // console.log('nothing to save');
-            // nothing to save
-            return;
-        }
-        wb.showWorkspace('block');
-        document.querySelector('#block_menu').scrollIntoView();
-        localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
-    };
+	wb.saveCurrentScripts = function saveCurrentScripts(){
+		if (!wb.scriptModified){
+			// console.log('nothing to save');
+			// nothing to save
+			return;
+		}
+		wb.showWorkspace('block');
+		document.querySelector('#block_menu').scrollIntoView();
+		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
+	};
 
-    // Save script to gist;
-    wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
-        event.preventDefault();
-        // console.log("Saving to Gist");
-        var title = prompt("Save to an anonymous Gist titled: ");
-        ajax.post("https://api.github.com/gists", function(data){
-            //var raw_url = JSON.parse(data).files["script.json"].raw_url;
-            var gistID = JSON.parse(data).url.split("/").pop();
-            prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+	// Save script to gist;
+	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	    event.preventDefault();
+		// console.log("Saving to Gist");
+		var title = prompt("Save to an anonymous Gist titled: ");
+		ajax.post("https://api.github.com/gists", function(data){
+	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
+	        var gistID = JSON.parse(data).url.split("/").pop();
+	        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
-            //save gist id to local storage
-            var localGists = localStorage['__' + wb.language + '_recent_gists'];
-            var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-            gistArray.push(gistID);
-            localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
+	        //save gist id to local storage
+	        var localGists = localStorage['__' + wb.language + '_recent_gists'];
+	        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+	        gistArray.push(gistID);
+	        localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
 
-        }, JSON.stringify({
-            "description": title,
-            "public": true,
-            "files": {
-                "script.json": {
-                    "content": scriptsToString(title, '', title)
-                },
-            }
-        }), null, '    ');
-    };
-    //populate the gist submenu with recent gists
-    wb.loadRecentGists = function loadRecentGists() {
-        var localGists = localStorage['__' + wb.language + '_recent_gists'];
-        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-        var gistContainer = document.querySelector("#recent_gists");
-        gistContainer.innerHTML = '';
+	    }, JSON.stringify({
+	    	"description": title,
+	    	"public": true,
+	    	"files": {
+	    		"script.json": {
+	    			"content": scriptsToString(title, '', title)
+	    		},
+	    	}
+	    }), null, '    ');
+	};
+	//populate the gist submenu with recent gists
+	wb.loadRecentGists = function loadRecentGists() {
+		var localGists = localStorage['__' + wb.language + '_recent_gists'];
+		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
+		var gistContainer = document.querySelector("#recent_gists");
+		gistContainer.innerHTML = '';
 
-        for (var i = 0; i < gistArray.length; i++) {
-            //add a new button to the gist sub-menu
-            var gist = gistArray[i];
-            var node = document.createElement("li");
-            var button = document.createElement('button');
-            var buttonText = document.createTextNode("#" + gist);
+		for (var i = 0; i < gistArray.length; i++) {
+			//add a new button to the gist sub-menu
+			var gist = gistArray[i];
+			var node = document.createElement("li");
+			var button = document.createElement('button');
+			var buttonText = document.createTextNode("#" + gist);
 
-            button.appendChild(buttonText);
-            button.classList.add('load-gist');
-            button.dataset.href = wb.language + ".html?gist=" + gist;
-            button.dataset.gist = gist;
+			button.appendChild(buttonText);
+			button.classList.add('load-gist');
+			button.dataset.href = wb.language + ".html?gist=" + gist;
+			button.dataset.gist = gist;
 
-            node.appendChild(button);
-            gistContainer.appendChild(node);
+			node.appendChild(button);
+			gistContainer.appendChild(node);
 
-            button.addEventListener('click', function(){
-                wb.loadScriptsFromGistId(this.dataset.gist);
-            });
-        }
-    };
+			button.addEventListener('click', function(){
+				wb.loadScriptsFromGistId(this.dataset.gist);
+			});
+		}
+	};
 
-    //Potential FIXME: I feel that title should be the filename, but uName || name
-    //determines what is shown in the workspace.
-    function scriptsToString(title, description, name){
-        if (!title){ title = ''; }
-        if (!description){ description = ''; }
-        if (!name){ name = 'Workspace';}
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        var json = {
-            title: title,
-            description: description,
-            date: Date.now(),
-            waterbearVersion: '2.0',
-            blocks: blocks.map(wb.blockDesc)
-        };
+	//Potential FIXME: I feel that title should be the filename, but uName || name
+	//determines what is shown in the workspace.
+	function scriptsToString(title, description, name){
+		if (!title){ title = ''; }
+		if (!description){ description = ''; }
+		if (!name){ name = 'Workspace';}
+		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+		var json = {
+			title: title,
+			description: description,
+			date: Date.now(),
+			waterbearVersion: '2.0',
+			blocks: blocks.map(wb.blockDesc)
+		};
 
-        if(json.blocks[0].sockets[0].name){
-            json.blocks[0].sockets[0].name = name;
-        }else if(json.blocks[0].sockets[0].uName){
-            json.blocks[0].sockets[0].uName = name;
-        }
+		if(json.blocks[0].sockets[0].name){
+			json.blocks[0].sockets[0].name = name;
+		}else if(json.blocks[0].sockets[0].uName){
+			json.blocks[0].sockets[0].uName = name;
+		}
 
-        return JSON.stringify(json, null, '    ');
-    }
+		return JSON.stringify(json, null, '    ');
+	}
 
 
-    wb.createDownloadUrl = function createDownloadUrl(evt){
-        evt.preventDefault();
-        var name = prompt("Save file as: ");
-        var URL = window.webkitURL || window.URL;
-        var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
-        var reader = new FileReader();
-        var a = document.createElement('a');
-        reader.onloadend = function(){
-            a.href = reader.result;
-            a.download = name + '.json';
-            a.target = '_blank';
-            document.body.appendChild(a);
-            a.click();
-        };
-        reader.readAsDataURL(file);
-    };
+	wb.createDownloadUrl = function createDownloadUrl(evt){
+	    evt.preventDefault();
+	    var name = prompt("Save file as: ");
+		var URL = window.webkitURL || window.URL;
+		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
+		var reader = new FileReader();
+		var a = document.createElement('a');
+		reader.onloadend = function(){
+			a.href = reader.result;
+			a.download = name + '.json';
+			a.target = '_blank';
+			document.body.appendChild(a);
+			a.click();
+		};
+		reader.readAsDataURL(file);
+	};
 
-    wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
-        //we may get an event passed to this function so make sure we have a valid id or ask for one
-        var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
-        // console.log("Loading gist " + id);
-        ajax.get("https://api.github.com/gists/"+gistID, function(data){
-            loadScriptsFromGist({data:JSON.parse(data)});
-        });
-    };
+	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+		//we may get an event passed to this function so make sure we have a valid id or ask for one
+		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+		// console.log("Loading gist " + id);
+		ajax.get("https://api.github.com/gists/"+gistID, function(data){
+			loadScriptsFromGist({data:JSON.parse(data)});
+		});
+	};
 
-    wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
-        var input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'application/json');
-        input.addEventListener('change', function(evt){
-            var file = input.files[0];
-            loadScriptsFromFile(file);
-        });
-        input.click();
-    };
+	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+		var input = document.createElement('input');
+		input.setAttribute('type', 'file');
+		input.setAttribute('accept', 'application/json');
+		input.addEventListener('change', function(evt){
+			var file = input.files[0];
+			loadScriptsFromFile(file);
+		});
+		input.click();
+	};
 
-    function loadScriptsFromObject(fileObject){
-        // console.info('file format version: %s', fileObject.waterbearVersion);
-        // console.info('restoring to workspace %s', fileObject.workspace);
-        if (!fileObject) return wb.createWorkspace();
-        var blocks = fileObject.blocks.map(wb.Block);
-        if (!blocks.length){
-            return wb.createWorkspace();
-        }
-        if (blocks.length > 1){
-            console.error('not really expecting multiple blocks here right now');
-            console.error(blocks);
-        }
-        blocks.forEach(function(block){
-            wb.wireUpWorkspace(block);
-            Event.trigger(block, 'wb-add');
-        });
-        wb.loaded = true;
-        Event.trigger(document.body, 'wb-script-loaded');
-    }
+	function loadScriptsFromObject(fileObject){
+	    // console.info('file format version: %s', fileObject.waterbearVersion);
+	    // console.info('restoring to workspace %s', fileObject.workspace);
+	    if (!fileObject) return wb.createWorkspace();
+	    var blocks = fileObject.blocks.map(wb.Block);
+	    if (!blocks.length){
+	    	return wb.createWorkspace();
+	    }
+	    if (blocks.length > 1){
+	    	console.error('not really expecting multiple blocks here right now');
+	    	console.error(blocks);
+	    }
+	    blocks.forEach(function(block){
+	    	wb.wireUpWorkspace(block);
+	    	Event.trigger(block, 'wb-add');
+	    });
+	    wb.loaded = true;
+	    Event.trigger(document.body, 'wb-script-loaded');
+	}
 
-    function loadScriptsFromGist(gist){
-        var keys = Object.keys(gist.data.files);
-        var file;
-        keys.forEach(function(key){
-            if (/.*\.json/.test(key)){
-                // it's a json file
-                file = gist.data.files[key].content;
-            }
-        });
-        if (!file){
-            console.error('no json file found in gist: %o', gist);
-            return;
-        }
-        loadScriptsFromObject(JSON.parse(file));
-    }
+	function loadScriptsFromGist(gist){
+		var keys = Object.keys(gist.data.files);
+		var file;
+		keys.forEach(function(key){
+			if (/.*\.json/.test(key)){
+				// it's a json file
+				file = gist.data.files[key].content;
+			}
+		});
+		if (!file){
+			console.error('no json file found in gist: %o', gist);
+			return;
+		}
+		loadScriptsFromObject(JSON.parse(file));
+	}
 
-    function loadScriptsFromExample(name){
-        wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
-            loadScriptsFromObject(JSON.parse(exampleJson));
-        }, function(xhr, status){
-            console.error('Error in wb.ajax:', status);
-        });
-    }
+	function loadScriptsFromExample(name){
+		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+			loadScriptsFromObject(JSON.parse(exampleJson));
+		}, function(xhr, status){
+			console.error('Error in wb.ajax:', status);
+		});
+	}
 
-    wb.loadCurrentScripts = function(queryParsed){
-        // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
-        if (wb.loaded) return;
-        if (queryParsed.gist){
-            //console.log("Loading gist %s", queryParsed.gist);
-            ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
-                loadScriptsFromGist({data:JSON.parse(data)});
-            });
-        }else if (queryParsed.example){
-            //console.log('loading example %s', queryParsed.example);
-            loadScriptsFromExample(queryParsed.example);
-        }else if (localStorage['__' + wb.language + '_current_scripts']){
-            //console.log('loading current script from local storage');
-            var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
-            if (fileObject){
-                loadScriptsFromObject(fileObject);
-            }
-        }else{
-            //console.log('no script to load, starting a new script');  
-            wb.createWorkspace('Workspace');
-        }
-        wb.loaded = true;
-        Event.trigger(document.body, 'wb-loaded'); //call no longer exists
-    };
+	wb.loadCurrentScripts = function(queryParsed){
+		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
+		if (wb.loaded) return;
+		if (queryParsed.gist){
+			//console.log("Loading gist %s", queryParsed.gist);
+			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
+				loadScriptsFromGist({data:JSON.parse(data)});
+			});
+		}else if (queryParsed.example){
+			//console.log('loading example %s', queryParsed.example);
+			loadScriptsFromExample(queryParsed.example);
+            var path = location.href.split('?')[0];
+		    path += "?example=" + queryParsed.example;
+            history.pushState(null, '', path);
+		}else if (localStorage['__' + wb.language + '_current_scripts']){
+			//console.log('loading current script from local storage');
+			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
+			if (fileObject){
+				loadScriptsFromObject(fileObject);
+			}
+		}else{
+			//console.log('no script to load, starting a new script');	
+			wb.createWorkspace('Workspace');
+		}
+		wb.loaded = true;
+		Event.trigger(document.body, 'wb-loaded'); //call no longer exists
+	};
 
-    function loadScriptsFromFile(file){
-        fileName = file.name;
-        if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-            console.error("File not a JSON file");
-            return;
-        }
-        var reader = new FileReader();
-        reader.readAsText( file );
-        reader.onload = function (evt){
-            wb.clearScripts(null, true);
-            var saved = JSON.parse(evt.target.result);
-            wb.loaded = true;
-            loadScriptsFromObject(saved);
-            wb.scriptModified = true;
-        };
-    }
+	function loadScriptsFromFile(file){
+		fileName = file.name;
+		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+			console.error("File not a JSON file");
+			return;
+		}
+		var reader = new FileReader();
+		reader.readAsText( file );
+		reader.onload = function (evt){
+			wb.clearScripts(null, true);
+			var saved = JSON.parse(evt.target.result);
+			wb.loaded = true;
+			loadScriptsFromObject(saved);
+			wb.scriptModified = true;
+		};
+	}
 
-    wb.getFiles = function getFiles(evt){
-        evt.stopPropagation();
-        evt.preventDefault();
-        var files = evt.dataTransfer.files;
-        if ( files.length > 0 ){
-            // we only support dropping one file for now
-            var file = files[0];
-            loadScriptsFromFile(file);
-        }
-    }
+	wb.getFiles = function getFiles(evt){
+		evt.stopPropagation();
+		evt.preventDefault();
+		var files = evt.dataTransfer.files;
+		if ( files.length > 0 ){
+	        // we only support dropping one file for now
+	        var file = files[0];
+	        loadScriptsFromFile(file);
+	    }
+	}
 
 
 })(wb);
@@ -14542,213 +14545,214 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 /*begin workspace.js*/
 (function(wb){
 
-    wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
-    wb.clearScripts = function clearScripts(event, force){
-        if (force || confirm('Throw out the current script?')){
+	wb.clearScripts = function clearScripts(event, force){
+		if (force || confirm('Throw out the current script?')){
             var path = location.href.split('?')[0];
-            var workspace = document.querySelector('.workspace > .scripts_workspace')
-            workspace.parentElement.removeChild(workspace);
-            wb.scriptModified = false;
-            wb.loaded = false;
-            createWorkspace('Workspace');
-            document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
-            wb.history.clear();
-            wb.resetSeqNum();
-            history.pushState(null, '', path);
-            delete localStorage['__' + wb.language + '_current_scripts'];
-        }
-    }
-    Event.on('.clear_scripts', 'click', null, wb.clearScripts);
-    Event.on('.edit-script', 'click', null, function(event){
-        wb.historySwitchState('editor');
+			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			workspace.parentElement.removeChild(workspace);
+			wb.scriptModified = false;
+			wb.loaded = false;
+			createWorkspace('Workspace');
+			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			wb.history.clear();
+			wb.resetSeqNum();
+			history.pushState(null, '', path);
+			delete localStorage['__' + wb.language + '_current_scripts'];
+		}
+	}
+	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
+	Event.on('.edit-script', 'click', null, function(event){
+		wb.historySwitchState('editor');
+	});
+
+	Event.on('.content', 'click', '.load-example', function(evt){
+		var path = location.href.split('?')[0];
+		path += "?example=" + evt.target.dataset.example;
+		if (wb.scriptModified){
+			if (confirm('Throw out the current script?')){
+				wb.scriptModified = false;
+				wb.loaded = false;
+			    history.pushState(null, '', path);
+				Event.trigger(document.body, 'wb-state-change');
+			}
+		}else{
+			wb.scriptModified = false;
+			wb.loaded = false;
+			history.pushState(null, '', path);
+			Event.trigger(document.body, 'wb-state-change');
+		}
     });
 
-    Event.on('.content', 'click', '.load-example', function(evt){
-        var path = location.href.split('?')[0];
-        path += "?example=" + evt.target.dataset.example;
-        if (wb.scriptModified){
-            if (confirm('Throw out the current script?')){
-                wb.scriptModified = false;
-                wb.loaded = false;
-                history.pushState(null, '', path);
-                Event.trigger(document.body, 'wb-state-change');
-            }
-        }else{
-            wb.scriptModified = false;
-            wb.loaded = false;
-            history.pushState(null, '', path);
-            Event.trigger(document.body, 'wb-state-change');
-        }
-    });
+	var handleStateChange = function handleStateChange(evt){
+		// hide loading spinner if needed
+		console.log('handleStateChange');
+		hideLoader();
+		wb.queryParams = wb.urlToQueryParams(location.href);
+		if (wb.queryParams.view === 'result'){
+			document.body.className = 'result';
+			wb.view = 'result';
+		}else{
+			document.body.className = 'editor';
+			wb.view = 'editor';
+		}
+		// handle loading example, gist, currentScript, etc. if needed
+	    wb.loadCurrentScripts(wb.queryParams);
+	    // If we go to the result and can run the result inline, do it
+	    if (wb.view === 'result' && wb.runCurrentScripts){
+	    	// console.log('running current scripts');
+	    	wb.runCurrentScripts();
+	    }else{
+	    	if (wb.view === 'result'){
+		    	// console.log('we want to run current scripts, but cannot');
+		    }else{
+		    	// console.log('we do not care about current scripts, so there');
+		    }
+	    }
+	}
+	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 
-    var handleStateChange = function handleStateChange(evt){
-        // hide loading spinner if needed
-        console.log('handleStateChange');
-        hideLoader();
-        wb.queryParams = wb.urlToQueryParams(location.href);
-        if (wb.queryParams.view === 'result'){
-            document.body.className = 'result';
-            wb.view = 'result';
-        }else{
-            document.body.className = 'editor';
-            wb.view = 'editor';
-        }
-        // handle loading example, gist, currentScript, etc. if needed
-        wb.loadCurrentScripts(wb.queryParams);
-        // If we go to the result and can run the result inline, do it
-        if (wb.view === 'result' && wb.runCurrentScripts){
-            // console.log('running current scripts');
-            wb.runCurrentScripts();
-        }else{
-            if (wb.view === 'result'){
-                // console.log('we want to run current scripts, but cannot');
-            }else{
-                // console.log('we do not care about current scripts, so there');
-            }
-        }
-    }
-    Event.on(document.body, 'wb-state-change', null, handleStateChange);
-
-    var hideLoader = function hideLoader(){
-        var loader = document.querySelector('#block_menu_load');
-        if (loader){
-            loader.parentElement.removeChild(loader);
-        }       
-    }
+	var hideLoader = function hideLoader(){
+	    var loader = document.querySelector('#block_menu_load');
+	    if (loader){
+	        loader.parentElement.removeChild(loader);
+	    }		
+	}
 
 
-    // Load and Save Section
+	// Load and Save Section
 
-    wb.historySwitchState = function historySwitchState(state, clearFiles){
-        //console.log('historySwitchState(%o, %s)', state, !!clearFiles);
-        var params = wb.urlToQueryParams(location.href);
-        if (state !== 'result'){
-            delete params['view'];
-        }else{
-            params.view = state;
-        }
-        if (clearFiles){
-            delete params['gist'];
-            delete params['example'];
-        }
-        history.pushState(null, '', wb.queryParamsToUrl(params));
-        Event.trigger(document.body, 'wb-state-change');
-    }
+	wb.historySwitchState = function historySwitchState(state, clearFiles){
+		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+		var params = wb.urlToQueryParams(location.href);
+		if (state !== 'result'){
+			delete params['view'];
+		}else{
+			params.view = state;
+		}
+		if (clearFiles){
+			delete params['gist'];
+			delete params['example'];
+		}
+		history.pushState(null, '', wb.queryParamsToUrl(params));
+		Event.trigger(document.body, 'wb-state-change');
+	}
 
-    window.addEventListener('unload', wb.saveCurrentScripts, false);
-    window.addEventListener('load', wb.loadRecentGists, false);
+	window.addEventListener('unload', wb.saveCurrentScripts, false);
+	window.addEventListener('load', wb.loadRecentGists, false);
 
-    Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
-    Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
-    Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
-    Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-
-
-    wb.loaded = false;
+	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
 
 
-    // Allow saved scripts to be dropped in
-    function createWorkspace(name){
-        // console.log('createWorkspace');
-        var id = uuid();
-        var workspace = wb.Block({
-            group: 'scripts_workspace',
-            id: id,
-            scriptId: id,
-            scopeId: id,
-            blocktype: 'context',
-            sockets: [
-            {
-                name: name
-            }
-            ],
-            script: '[[1]]',
-            isTemplateBlock: false,
-            help: 'Drag your script blocks here'
-        });
-        wb.wireUpWorkspace(workspace);
-    }
-    wb.createWorkspace = createWorkspace;
+	wb.loaded = false;
 
-    wb.wireUpWorkspace = function wireUpWorkspace(workspace){
-        workspace.addEventListener('drop', wb.getFiles, false);
-        workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
-        wb.findAll(document, '.scripts_workspace').forEach(function(ws){
-            ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
-        });
-        document.querySelector('.workspace').appendChild(workspace);
-        workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-        wb.initializeDragHandlers();
-    };
 
-    function handleDragover(evt){
-        // Stop Firefox from grabbing the file prematurely
-        evt.stopPropagation();
-        evt.preventDefault();
-        evt.dataTransfer.dropEffect = 'copy';
-    }
+	// Allow saved scripts to be dropped in
+	function createWorkspace(name){
+	    // console.log('createWorkspace');
+		var id = uuid();
+		var workspace = wb.Block({
+			group: 'scripts_workspace',
+			id: id,
+			scriptId: id,
+			scopeId: id,
+			blocktype: 'context',
+			sockets: [
+			{
+				name: name
+			}
+			],
+			script: '[[1]]',
+			isTemplateBlock: false,
+			help: 'Drag your script blocks here'
+		});
+		wb.wireUpWorkspace(workspace);
+	}
+	wb.createWorkspace = createWorkspace;
 
-    Event.on('.workspace', 'click', '.disclosure', function(evt){
-        var block = wb.closest(evt.wbTarget, '.block');
-        if (block.dataset.closed){
-            delete block.dataset.closed;
-        }else{
-            block.dataset.closed = true;
-        }
-    });
+	wb.wireUpWorkspace = function wireUpWorkspace(workspace){
+		workspace.addEventListener('drop', wb.getFiles, false);
+		workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+	    });
+		document.querySelector('.workspace').appendChild(workspace);
+		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+		wb.initializeDragHandlers();
+	};
 
-    Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-    Event.on('.workspace', 'keypress', 'input', wb.resize);
-    Event.on('.workspace', 'change', 'input, select', function(evt){
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+	function handleDragover(evt){
+	    // Stop Firefox from grabbing the file prematurely
+	    evt.stopPropagation();
+	    evt.preventDefault();
+	    evt.dataTransfer.dropEffect = 'copy';
+	}
 
-    });
-    //Event.on(document.body, 'wb-loaded', null, function(evt){
-    //  console.log('menu loaded');
-    //});
-    Event.on(document.body, 'wb-script-loaded', null, function(evt){
-        wb.scriptModified = false;
-        wb.scriptLoaded = true;
-        if (wb.view === 'result'){
-            // console.log('run script because we are awesome');
-            if (wb.windowLoaded){
-                // console.log('run scripts directly');
-                wb.runCurrentScripts();
-            }else{
-                // console.log('run scripts when the iframe is ready');
-                window.addEventListener('load', function(){
-                //  // console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
-                    wb.runCurrentScripts();
-                 }, false);
-            }
-        // }else{
-        //  console.log('do not run script for some odd reason: %s', wb.view);
-        }
-        // clear undo/redo stack
-        console.log('script loaded');
-    });
+	Event.on('.workspace', 'click', '.disclosure', function(evt){
+		var block = wb.closest(evt.wbTarget, '.block');
+		if (block.dataset.closed){
+			delete block.dataset.closed;
+		}else{
+			block.dataset.closed = true;
+		}
+	});
 
-    Event.on(document.body, 'wb-modified', null, function(evt){
-        // still need modified events for changing input values
-        if (!wb.scriptLoaded) return;
-        if (!wb.scriptModified){
-            wb.scriptModified = true;
-            wb.historySwitchState(wb.view, true);
-        }
-    });
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on('.workspace', 'change', 'input, select', function(evt){
+		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
 
-    window.addEventListener('popstate', function(evt){
-        // console.log('popstate event');
-        Event.trigger(document.body, 'wb-state-change');
-    }, false);
+	});
+	//Event.on(document.body, 'wb-loaded', null, function(evt){
+	//	console.log('menu loaded');
 
-    // Kick off some initialization work
-    window.addEventListener('load', function(){
-        console.log('window loaded');
-        wb.windowLoaded = true;
-        Event.trigger(document.body, 'wb-state-change');
-    }, false);
+	//});
+	Event.on(document.body, 'wb-script-loaded', null, function(evt){
+		wb.scriptModified = false;
+		wb.scriptLoaded = true;
+		if (wb.view === 'result'){
+			// console.log('run script because we are awesome');
+			if (wb.windowLoaded){
+				// console.log('run scripts directly');
+				wb.runCurrentScripts();
+			}else{
+				// console.log('run scripts when the iframe is ready');
+				window.addEventListener('load', function(){
+				// 	// console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
+				 	wb.runCurrentScripts();
+				 }, false);
+			}
+		// }else{
+		// 	console.log('do not run script for some odd reason: %s', wb.view);
+		}
+		// clear undo/redo stack
+		console.log('script loaded');
+	});
+
+	Event.on(document.body, 'wb-modified', null, function(evt){
+		// still need modified events for changing input values
+		if (!wb.scriptLoaded) return;
+		if (!wb.scriptModified){
+			wb.scriptModified = true;
+			wb.historySwitchState(wb.view, true);
+		}
+	});
+
+	window.addEventListener('popstate', function(evt){
+		// console.log('popstate event');
+		Event.trigger(document.body, 'wb-state-change');
+	}, false);
+
+	// Kick off some initialization work
+	window.addEventListener('load', function(){
+		console.log('window loaded');
+		wb.windowLoaded = true;
+		Event.trigger(document.body, 'wb-state-change');
+	}, false);
 })(wb);
 
 /*end workspace.js*/

@@ -282,7 +282,6 @@ function endDragInScratchpad(event){
         resetDragStyles(); // <- WB
         // WB-Specific
 	if (wb.overlap(dragTarget, blockMenu)){
-	    alert("Bye");
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
@@ -293,7 +292,6 @@ function endDragInScratchpad(event){
         		wb.history.add(dragAction);
         	}
         }else if (wb.overlap(dragTarget, scratchpad)){ 
-	    alert('Hi');
 	    //dragTarget.style.top = "100px";
 	    //dragTarget.style.left = "500px";
 	    var scratchPadStyle = scratchpad.getBoundingClientRect();

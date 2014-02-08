@@ -901,10 +901,6 @@ ul.menu li:hover ul.sub-menu {
 	display:block;
 }
 
-#login {
-	float: right;
-}
-
 .menu_buttons {
 	display:none;
 }

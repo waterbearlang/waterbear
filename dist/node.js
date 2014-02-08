@@ -4656,11 +4656,32 @@ wb.runScript = function(script){
     
     
     wb.ajax.jsonp("../run", query, function(msg){
-      console.log("msg =", msg);
-      messagebox.innerHTML = "Code running on RPi"+ msg[pid];
+        
+      console.log("run success msg =", msg);
+      if(msg.status === "running")
+      {
+        messagebox.innerHTML = "Code running on RPi <span id=\"nodeprocessid\">"+ msg.pid+"</span>";
+        
+        //do status check call  
+      }
+      else if(msg.status === "success")
+      {
+        messagebox.innerHTML = "Code Completed";
+        window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+      }
+      else if(msg.status === "error")
+      {
+        
+        messagebox.innerHTML = "Code failed / server not running on RPi";
+        window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+      }
+      
+      
+        
       //window.setTimeout(function(){messagebox.innerHTML="";}, 5000);
       console.log("success",msg);
     },
+    
     function(msg){
       console.log("msg =", msg);
       messagebox.innerHTML = "Code failed / server not running on RPi";

@@ -280,6 +280,11 @@
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
+	window.addEventListener('load', function(evt){
+		console.log('load event');
+		Event.trigger(document.body, 'wb-state-change');
+	})
+
 	// Kick off some initialization work
 	Event.once(document.body, 'wb-workspace-initialized', null, function initHistory(){
 		console.log('workspace ready');

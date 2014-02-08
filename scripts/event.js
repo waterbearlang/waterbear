@@ -14,8 +14,8 @@
             });
         }
         if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem); 
-            debugger;
+            console.error('first argument must be element: %o', elem);
+            throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }

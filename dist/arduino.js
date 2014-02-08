@@ -321,8 +321,8 @@ global.ajax = ajax;
             });
         }
         if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem); 
-            debugger;
+            console.error('first argument must be element: %o', elem);
+            throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
@@ -1032,7 +1032,7 @@ global.ajax = ajax;
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
         Event.on('.content', 'mousedown', '.block', initDrag);
-        Event.on(document, 'mousemove', null, drag);
+        Event.on(document.body, 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
         Event.on(document.body, 'keyup', null, cancelDrag);
     };
@@ -2844,6 +2844,11 @@ if (document.body.clientWidth > 360){
 		console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
+
+	window.addEventListener('load', function(evt){
+		console.log('load event');
+		Event.trigger(document.body, 'wb-state-change');
+	})
 
 	// Kick off some initialization work
 	Event.once(document.body, 'wb-workspace-initialized', null, function initHistory(){

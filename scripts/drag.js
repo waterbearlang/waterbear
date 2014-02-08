@@ -571,7 +571,7 @@
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
         Event.on('.content', 'mousedown', '.block', initDrag);
-        Event.on(document, 'mousemove', null, drag);
+        Event.on(document.body, 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
         Event.on(document.body, 'keyup', null, cancelDrag);
     };

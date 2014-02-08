@@ -13920,6 +13920,9 @@ global.ajax = ajax;
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
 		});
+        var path = location.href.split('?')[0];
+        path += "?gist=" + gistID;
+        history.pushState(null, '', path);
 	};
 
 	function loadScriptsFromFilesystem(event){

@@ -9,18 +9,18 @@
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
-	var settings_link;
+	var settingsLink;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {
 		// console.log("adding settings link");
 		var block_menu = document.querySelector('#block_menu');
-		var settings_link = document.createElement('a');
-		settings_link.href = '#';
-		settings_link.style.float = 'right';
-		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
-		settings_link.addEventListener('click', toggleCheckboxDisplay);
-		block_menu.appendChild(settings_link);
-		return settings_link;
+		var settingsLink = document.createElement('a');
+		settingsLink.href = '#';
+		settingsLink.style.float = 'right';
+		settingsLink.appendChild(document.createTextNode('Show/Hide blocks'));
+		settingsLink.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settingsLink);
+		return settingsLink;
 	}
 
 	//create the checkboxes next to the headers
@@ -48,12 +48,12 @@
 		if (closed) {
 			closed = false;
 			display = 'inline';
-			settings_link.innerHTML = 'Save';
+			settingsLink.innerHTML = 'Save';
 		} else {
 			//save was clicked
 			closed = true;
 			display = 'none'
-			settings_link.innerHTML = 'Show/Hide blocks';
+			settingsLink.innerHTML = 'Show/Hide blocks';
 			//save the settings
 			saveSettings();
 		}
@@ -108,7 +108,7 @@
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
-		settings_link = addSettingsLink();
+		settingsLink = addSettingsLink();
 		createCheckboxes();
 		loadSettings();
 	}

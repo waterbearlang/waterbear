@@ -3,7 +3,7 @@
 (function(global){
 
 	// Source: http://stackoverflow.com/a/13984429
-	wb.urlToQueryParams = function(url){
+	function urlToQueryParams(url){
 	    var qparams = {},
 	        parts = (url||'').split('?'),
 	        qparts, qpart,
@@ -23,7 +23,7 @@
 	    return qparams;
 	};
 
-	wb.queryParamsToUrl = function(params){
+	function queryParamsToUrl(params){
 		var base = location.href.split('?')[0];
 		var keys = Object.keys(params);
 		var parts = [];
@@ -41,5 +41,8 @@
 		}
 		return base + '?' + parts.join('&');
 	}
+
+	wb.urlToQueryParams = urlToQueryParams;
+	wb.queryParamsToUrl = queryParamsToUrl;
 	global.wb = wb;
 })(this);

@@ -556,6 +556,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	scratchpad= document.querySelector('.scratchpad');
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -757,6 +758,7 @@ function endDragInScratchpad(event){
         	}
         }else if (wb.overlap(dragTarget, scratchpad)){ 
 	    alert('Hi');
+	    scratchpad.appendChild(dragTarget);
 	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){

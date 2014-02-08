@@ -294,6 +294,7 @@ function endDragInScratchpad(event){
         	}
         }else if (wb.overlap(dragTarget, scratchpad)){ 
 	    alert('Hi');
+	    scratchpad.appendChild(dragTarget);
 	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){

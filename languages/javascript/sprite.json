@@ -404,7 +404,7 @@
                     "value": null
                 },
                 {
-                    "name": "movement direction"
+                    "name": "movement vector"
                 }
             ]
         },

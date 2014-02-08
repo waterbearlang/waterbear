@@ -60,6 +60,7 @@
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -91,6 +92,7 @@
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	scratchpad= document.querySelector('.scratchpad');
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -262,6 +264,12 @@
         event.preventDefault();
         return false;
     }
+    
+function endDragInScratchpad(event){
+        console.log('endDragInScratchpad(%o) dragging: %s', event, dragging);
+        return false;
+    }
+
 
     function handleDrop(copyBlock){
         console.log('handleDrop(%o)', copyBlock);
@@ -273,7 +281,8 @@
            // 4. Move back to start position if not a clone (maybe not?)
         resetDragStyles(); // <- WB
         // WB-Specific
-        if (wb.overlap(dragTarget, blockMenu)){
+	if (wb.overlap(dragTarget, blockMenu)){
+	    alert("Bye");
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
@@ -283,7 +292,9 @@
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-        }else if (dropTarget){
+        }else if (wb.overlap(dragTarget, scratchpad)){ 
+	    alert('Hi');
+	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
@@ -573,6 +584,7 @@
         }else{
             Event.on('.content', 'mousedown', '.block', initDrag);
             Event.on('.content', 'mousemove', null, drag);
+	    //Event.on('.scratchpad', '', null, endDragInScratchpad);
             Event.on(document.body, 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);

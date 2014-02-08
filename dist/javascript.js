@@ -9636,7 +9636,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
-            "script": "var rect## = {{1}};var borderRadius## = {{2}};local.ctx.save();local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
             "sockets": [
                 {
                     "name": "fill round rect",
@@ -9647,6 +9647,11 @@ wb.menu({
                     "name": "with border-radius",
                     "type": "number",
                     "value": 0
+                },
+                {
+                    "name": "and color",
+                    "type": "color",
+                    "value": null
                 }
             ]
         },
@@ -9709,7 +9714,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/shape.json*/
 
 /*begin languages/javascript/geolocation.json*/

@@ -13,7 +13,7 @@ wb.prettyScript = function(elements){
     /*process.on('SIGINT', function() {
         console.log('Got SIGINT.  Press Control-D to exit.');
       });*/
-    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){pfio.deinit(); process.exit();});process.on('EXIT',function(){pfio.deinit();});";
+    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){pfio.write_output(0);pfio.deinit(); process.exit();});process.on('EXIT',function(){pfio.write_output(0);pfio.deinit();});";
     return script;
 };
 

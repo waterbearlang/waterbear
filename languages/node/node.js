@@ -43,22 +43,21 @@ wb.ajax = {
         }
     };
 
+
+document.querySelector('.stop-scripts').style.display = 'none';
+    
+wb.resetrun = function(message){
+    messagebox.innerHTML = message;
+    window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+    document.querySelector('.run-scripts').style.display = 'inline-block';
+    document.querySelector('.stop-scripts').style.display = 'none';
+    Event.remove('.stop-scripts', 'click');
+
+}    
+    
 wb.runScript = function(script){
-  
-    var params = {'code':script};
-  
-    var keys = Object.keys(params);
-    var parts = [];
-    keys.forEach(function(key){
-      if (Array.isArray(params[key])){
-        params[key].forEach(function(value){
-          parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
-        });
-      }else{
-        parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
-      }
-    });
-    var query = parts.join('&');
+
+    var oSocket = new WebSocket("ws://192.168.1.101:8080/");
     
     var messagebox = document.querySelector('#messagebox');
     if(messagebox === null || messagebox.length === 0)
@@ -68,53 +67,64 @@ wb.runScript = function(script){
         messagebox = document.querySelector('#messagebox');
         
     }
-    messagebox.innerHTML = "Running Code on Raspberry Pi";
     
-    
-    
-    wb.ajax.jsonp("../run", query, function(msg){
-        
-      console.log("run success msg =", msg);
-      if(msg.status === "running")
-      {
-        messagebox.innerHTML = "Code running on RPi <span id=\"nodeprocessid\">"+ msg.pid+"</span>";
-        
-        //do status check call  
-      }
-      else if(msg.status === "recieved")
-      {
-        messagebox.innerHTML = "Code Recieved";
-      }
-      else if(msg.status === "success")
-      {
-        messagebox.innerHTML = "Code Completed";
+    messagebox.innerHTML = "Connecting to Raspberry Pi";
+    oSocket.onerror = function(event) {
+        messagebox.innerHTML = "Error Communicating with RPi";
         window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-      }
-      else if(msg.status === "error")
-      {
-        
-        messagebox.innerHTML = "Code failed / server not running on RPi";
-        window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-      }
-      
-      
-        
-      //window.setTimeout(function(){messagebox.innerHTML="";}, 5000);
-      console.log("success",msg);
-    },
+        oSocket.close();
+    };
     
-    function(msg){
-      console.log("msg =", msg);
-      messagebox.innerHTML = "Code failed / server not running on RPi";
-      window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-      console.log("error",msg);
-    });
+    oSocket.onopen = function (event) {
+        oSocket.send(JSON.stringify({"command":"run","code":script})); 
+    };
     
-    //wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code Complete"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
-    
-    //var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
-    //console.log('trying to load library %s', runtimeUrl);
-    //document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: //runtimeUrl, script: wb.wrap(script)}), '*');
+    oSocket.onmessage = function(event) {
+        console.log("event =", event);
+        var msg = JSON.parse(event.data);
+        console.log("onmessage msg =", msg);
+        switch(msg.type) {
+            case "recieved":
+                messagebox.innerHTML = "Code recieved on RPi";
+                break;
+            case "running":
+                messagebox.innerHTML = "Code running on RPi "+ msg.pid;
+                document.querySelector('.run-scripts').style.display = 'none';
+                document.querySelector('.stop-scripts').style.display = 'inline-block';
+                
+                Event.on('.stop-scripts', 'click', null, function(){
+                    oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
+                });
+
+                break;
+            case "completed":
+                wb.resetrun("Code Completed Successfully");
+                //messagebox.innerHTML = "Code Completed Successfully";
+                //window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+                oSocket.close();
+                break;
+            case "exit":
+                wb.resetrun("Code Exited");
+                //messagebox.innerHTML = "Code Exited";
+                //window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+                oSocket.close();
+                break;
+            case "error":
+                wb.resetrun("Code Failed " + msg.data);
+                //messagebox.innerHTML = "Code Failed" + msg.data;
+                //window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+                oSocket.close();
+                break;
+            case "sterr":
+                messagebox.innerHTML = "Error Recieved " + msg.data;
+                break;    
+            case "stdout":
+                messagebox.innerHTML = "Data Recieved " + msg.data;
+                console.log("msg.data =", msg.data);
+                break;    
+        }
+  
+    };
 };
 
 function clearStage(event){

@@ -1930,14 +1930,11 @@ global.ajax = ajax;
     };
 
     wb.hide = function(elem){
-        elem.dataset.display = elem.style.display;
-        elem.style.display = 'none';
+        elem.classList.add('hidden');
     };
 
     wb.show = function(elem){
-        if (window.getComputedStyle(elem).display !== 'none') return;
-        elem.style.display = elem.dataset.display || 'block';
-        delete elem.dataset.display;
+        elem.classList.remove('hidden');
     };
 
     var svgtext = document.querySelector('svg text');

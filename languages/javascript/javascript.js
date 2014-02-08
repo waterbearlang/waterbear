@@ -37,7 +37,7 @@
     }
 
     function runCurrentScripts(){
-        // console.log('runCurrentScripts');
+        console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -45,12 +45,18 @@
         }else{
             console.log('ready to run script, let us proceed to the running of said script');
         }
+        console.log(1);
         var blocks = wb.findAll(document.body, '.scripts_workspace');
         // update size of frame
+        console.log(2);
         var iframe = document.querySelector('.stageframe');
+        console.log(3);
         iframe.style.width =  iframe.parentElement.clientWidth + 'px';
+        console.log(4);
         iframe.style.height = iframe.parentElement.clientHeight + 'px';
+        console.log(5);
         wb.runScript( wb.prettyScript(blocks) );
+        console.log(6);
     }
     wb.runCurrentScripts = runCurrentScripts;
 

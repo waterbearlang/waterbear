@@ -60,11 +60,7 @@
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
-<<<<<<< HEAD
-    var scratchpad = document.querySelector('.scratchpad');
-=======
     var scratchpad= document.querySelector('.scratchpad'); // <- WB
->>>>>>> c1c9317a678a45196dcf02519813286c90e5dc04
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};

@@ -122,6 +122,7 @@
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
+		if( !gistID ) return;
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
 		});

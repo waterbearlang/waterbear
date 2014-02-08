@@ -1760,7 +1760,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-		console.log('title: %s', title);
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -1838,7 +1837,6 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
-	    console.log('name: %s', name);
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -2455,19 +2453,22 @@ initContextMenus();
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return edit_menu(title, specs);
+    var help = blockspec.help !== undefined ? blockspec.help : '';
+    return edit_menu(title, specs, help);
 };
 
-function edit_menu(title, specs, show){
+function edit_menu(title, specs, help, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
+        submenu.appendChild(description);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;

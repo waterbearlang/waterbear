@@ -30,8 +30,8 @@ body{
 }
 
 .workspace{
-	-webkit-flex: 1 1 0;
-	flex: 1 1 0;
+	-webkit-flex: 3 0 0;
+	flex: 3 0 0;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: column;
@@ -58,7 +58,7 @@ body{
 
 .results{
 	-webkit-flex: 0 0 400px;
-	flex: 0 0 400px;
+	flex: 1 1 400px;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: column;

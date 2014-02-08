@@ -4529,7 +4529,7 @@ if (document.body.clientWidth > 360){
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
-	    // console.log('createWorkspace');
+	    console.log('createWorkspace');
 		var id = uuid();
 		var workspace = wb.Block({
 			group: 'scripts_workspace',
@@ -4558,8 +4558,11 @@ if (document.body.clientWidth > 360){
 	    });
 		document.querySelector('.workspace').appendChild(workspace);
 		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-		wb.initializeDragHandlers();
+		// wb.initializeDragHandlers();
+		Event.trigger(document.body, 'wb-workspace-initialized');
 	};
+
+	Event.once(document.body, 'wb-workspace-initialized', null, wb.initializeDragHandlers);
 
 	function handleDragover(evt){
 	    // Stop Firefox from grabbing the file prematurely
@@ -4635,6 +4638,7 @@ if (document.body.clientWidth > 360){
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
+		if (!component) return;
 		evt.detail.state ? wb.show(component) : wb.hide(component);
 		var results = wb.find(document.body, '.results');
 		// Special cases
@@ -4642,7 +4646,6 @@ if (document.body.clientWidth > 360){
 			case 'stage':
 				if (evt.detail.state){
 					wb.show(results);
-					wb.runCurrentScripts();
 				}else{
 					wb.clearStage();
 					if (!wb.toggleState.scripts_text_view){
@@ -4670,22 +4673,30 @@ if (document.body.clientWidth > 360){
 				}
 			default:
 				// do nothing
+				break;
 		}
+		if (wb.toggleState.stage){
+			// restart script on any toggle
+			// so it runs at the new size
+			wb.runCurrentScripts();
+		}
+
 	}
 
 	Event.on(document.body, 'wb-toggle', null, toggleComponent);
 
 	window.addEventListener('popstate', function(evt){
-		// console.log('popstate event');
+		console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
 	// Kick off some initialization work
-	window.addEventListener('load', function(){
-		console.log('window loaded');
+	Event.once(document.body, 'wb-workspace-initialized', null, function initHistory(){
+		console.log('workspace ready');
 		wb.windowLoaded = true;
+		wb.workspaceInitialized = true;
 		Event.trigger(document.body, 'wb-state-change');
-	}, false);
+	});
 })(wb);
 
 /*end workspace.js*/
@@ -4846,7 +4857,8 @@ if (document.body.clientWidth > 360){
 	}
 
 	// initialize toggle states
-	window.addEventListener('load', function(evt){
+
+	function initializeToggleStates(evt){
 		wb.findAll(document.body, '.toggle').forEach(function(button){
 			var name = button.dataset.target;
 			var isOn = getState(name);
@@ -4857,7 +4869,9 @@ if (document.body.clientWidth > 360){
 			}
 			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
 		});
-	}, false);
+	}
+
+	Event.once(document.body, 'wb-workspace-initialized', null, initializeToggleStates);
 
 	wb.toggleState = toggleState; // treat as read-only
 
@@ -4904,7 +4918,7 @@ if (document.body.clientWidth > 360){
     }
 
     function runCurrentScripts(){
-        console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
+        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -4912,18 +4926,12 @@ if (document.body.clientWidth > 360){
         }else{
             console.log('ready to run script, let us proceed to the running of said script');
         }
-        console.log(1);
         var blocks = wb.findAll(document.body, '.scripts_workspace');
         // update size of frame
-        console.log(2);
         var iframe = document.querySelector('.stageframe');
-        console.log(3);
         iframe.style.width =  iframe.parentElement.clientWidth + 'px';
-        console.log(4);
         iframe.style.height = iframe.parentElement.clientHeight + 'px';
-        console.log(5);
         wb.runScript( wb.prettyScript(blocks) );
-        console.log(6);
     }
     wb.runCurrentScripts = runCurrentScripts;
 

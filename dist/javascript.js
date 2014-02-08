@@ -2563,7 +2563,7 @@ global.ajax = ajax;
         if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
-        handleDrop(event.altKey || event.ctrlKey);
+        handleDrop(event,event.altKey || event.ctrlKey);
         reset();
         event.preventDefault();
         return false;
@@ -2575,7 +2575,7 @@ function endDragInScratchpad(event){
     }
 
 
-    function handleDrop(copyBlock){
+    function handleDrop(event,copyBlock){
         console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
@@ -2599,6 +2599,9 @@ function endDragInScratchpad(event){
         }else if (wb.overlap(dragTarget, scratchpad)){ 
 	    alert('Hi');
 	    scratchpad.appendChild(dragTarget);
+	    dragTarget.style.position= 'absolute';
+	    dragTarget.style.top= event.x; //- scratchpad.style.top;
+	    dragTarget.style.left= event.y; //- scratchpad.style.left; 
 	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){

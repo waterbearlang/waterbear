@@ -5728,7 +5728,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "movement direction"
+                    "name": "movement vector"
                 }
             ]
         },

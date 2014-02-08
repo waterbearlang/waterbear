@@ -276,6 +276,7 @@
         resetDragStyles(); // <- WB
         // WB-Specific
 	if (wb.overlap(dragTarget, blockMenu)){
+	    alert("Bye");
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
@@ -286,6 +287,8 @@
         		wb.history.add(dragAction);
         	}
         }else if (wb.overlap(dragTarget, scratchpad)){ 
+	    alert('Hi');
+
 	    var scratchPadStyle = scratchpad.getBoundingClientRect();
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
@@ -300,7 +303,7 @@
 	    scratchpad.appendChild(dragTarget);
 
             //when dragging from workspace to scratchpad, this keeps workspace from
-	    //moving around when block in scratchpad is moved.
+	    //moving around when dragged block is moved in scratchpad
             dragTarget.parentElement.removeChild(dragTarget); 
             Event.trigger(dragTarget, 'wb-add');
 	    return;
@@ -331,12 +334,10 @@
             }
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
-
-            //CLARIFY: What does this block do? dragAction.toBefore.nextElementSibling is always null
-            // if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
-            // 	// Sometimes the "next sibling" ends up being the cursor
-            // 	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
-            // }
+            if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+            }
             wb.history.add(dragAction);
         }else{
             if (cloned){
@@ -575,19 +576,18 @@
     	// Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
-    		resetDragStyles();
-	    	revertDrop();
-			clearTimeout(timer);
-			timer = null;
-			reset();
-			return false;
-	    }
+    	    resetDragStyles();
+	    revertDrop();
+	    clearTimeout(timer);
+	    timer = null;
+	    reset();
+	    return false;
+	}
     }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
         // console.log('initializeDragHandlers');
-<<<<<<< HEAD
         if (Event.isTouch){
             Event.on('.content', 'touchstart', '.block', initDrag);
             Event.on('.content', 'touchmove', null, drag);
@@ -602,16 +602,6 @@
             Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
         }
-=======
-        Event.on('.content', 'touchstart', '.block', initDrag);
-        Event.on('.content', 'touchmove', null, drag);
-        Event.on('.content', 'touchend', null, endDrag);
-        // TODO: A way to cancel touch drag?
-        Event.on('.content', 'mousedown', '.block', initDrag);
-        Event.on(document.body, 'mousemove', null, drag);
-        Event.on(document.body, 'mouseup', null, endDrag);
-        Event.on(document.body, 'keyup', null, cancelDrag);
->>>>>>> 5386289047d6de1fc11745aa5987ffe062bbd11e
     };
 })(this);
 

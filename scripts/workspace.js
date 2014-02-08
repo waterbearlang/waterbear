@@ -4,6 +4,7 @@
 
     wb.clearScripts = function clearScripts(event, force){
         if (force || confirm('Throw out the current script?')){
+            var path = location.href.split('?')[0];
             var workspace = document.querySelector('.workspace > .scripts_workspace')
             workspace.parentElement.removeChild(workspace);
             wb.scriptModified = false;
@@ -12,6 +13,7 @@
             document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
             wb.history.clear();
             wb.resetSeqNum();
+            history.pushState(null, '', path);
             delete localStorage['__' + wb.language + '_current_scripts'];
         }
     }

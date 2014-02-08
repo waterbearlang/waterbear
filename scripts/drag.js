@@ -264,12 +264,6 @@
         event.preventDefault();
         return false;
     }
-    
-function endDragInScratchpad(event){
-        console.log('endDragInScratchpad(%o) dragging: %s', event, dragging);
-        return false;
-    }
-
 
     function handleDrop(event,copyBlock){
         console.log('handleDrop(%o)', copyBlock);
@@ -292,25 +286,23 @@ function endDragInScratchpad(event){
         		wb.history.add(dragAction);
         	}
         }else if (wb.overlap(dragTarget, scratchpad)){ 
-	    //dragTarget.style.top = "100px";
-	    //dragTarget.style.left = "500px";
 	    var scratchPadStyle = scratchpad.getBoundingClientRect();
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
-	    
-	    
+    
 	    var blockStyle = dragTarget.getComputedRect();
-	    
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
-	    console.log("oldX " + oldX);
-	    console.log("oldY " + oldY);
-	    console.log("newOriginX " + newOriginX);
-	    console.log("newOriginY " + newOriginY);
+
 	    dragTarget.style.position = "absolute";
 	    dragTarget.style.left = oldX - newOriginX;
 	    dragTarget.style.top = oldY - newOriginY;
 	    scratchpad.appendChild(dragTarget);
+
+            //when dragging from workspace to scratchpad, this keeps workspace from
+	    //moving around when block in scratchpad is moved.
+            dragTarget.parentElement.removeChild(dragTarget); 
+            Event.trigger(dragTarget, 'wb-add');
 	    return;
 	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');

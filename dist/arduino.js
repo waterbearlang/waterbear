@@ -765,10 +765,12 @@ global.ajax = ajax;
             }
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
-            if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
-            	// Sometimes the "next sibling" ends up being the cursor
-            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
-            }
+
+            //CLARIFY: What does this block do? dragAction.toBefore.nextElementSibling is always null
+            // if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
+            // 	// Sometimes the "next sibling" ends up being the cursor
+            // 	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+            // }
             wb.history.add(dragAction);
         }else{
             if (cloned){
@@ -2513,6 +2515,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
+	
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
 	Event.on('.edit-script', 'click', null, function(event){
 		wb.historySwitchState('editor');

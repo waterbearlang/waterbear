@@ -60,6 +60,7 @@
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad = document.querySelector('.scratchpad');
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -91,6 +92,7 @@
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	scratchpad = document.querySelector('.scratchpad');
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -283,7 +285,30 @@
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-        }else if (dropTarget){
+        } else if (wb.overlap(dragTarget, scratchpad)) {
+	    console.log(dragTarget);
+	    var scratchPadStyle = scratchpad.getBoundingClientRect();
+	    var newOriginX = scratchPadStyle.left;
+	    var newOriginY = scratchPadStyle.top;
+    
+	    var blockStyle = dragTarget.getBoundingClientRect();
+	    var oldX = blockStyle.left;
+	    var oldY = blockStyle.top;
+
+	    dragTarget.style.position = "absolute";
+	    dragTarget.style.left = oldX - newOriginX;
+	    dragTarget.style.top = oldY - newOriginY;
+	    scratchpad.appendChild(dragTarget);
+
+            //when dragging from workspace to scratchpad, this keeps workspace from
+	    //moving around when block in scratchpad is moved.
+            dragTarget.parentElement.removeChild(dragTarget); 
+            Event.trigger(dragTarget, 'wb-add');
+	    return;
+	}
+	
+	
+	else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step

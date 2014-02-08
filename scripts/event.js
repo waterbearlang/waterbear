@@ -7,7 +7,7 @@
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler){
+    function on(elem, eventname, selector, handler){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -51,11 +51,11 @@
         return listener;
     };
 
-    var off = function(elem, eventname, handler){
+    function off(elem, eventname, handler){
         elem.removeEventListener(eventname, handler);
     }
 
-    var once = function(elem, eventname, selector, handler){
+    function once(elem, eventname, selector, handler){
         var listener = function listener(event){
             handler(event);
             Event.off(elem, eventname, listener);
@@ -63,7 +63,7 @@
         return Event.on(elem, eventname, selector, listener);
     }
 
-    var trigger = function(elemOrSelector, eventname, data){
+    function trigger(elemOrSelector, eventname, data){
         var elem;
         if (elemOrSelector.nodeName){
             elem = elemOrSelector;
@@ -77,7 +77,7 @@
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isMouseEvent = function isMouseEvent(event){
+    function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
             case 'mousemove':
@@ -88,7 +88,7 @@
                 return false;
         }
     };
-    var isTouchEvent = function isTouchEvent(event){
+    function isTouchEvent(event){
         switch(event.type){
             case 'touchstart':
             case 'touchmove':
@@ -100,12 +100,12 @@
         }
     };
 
-    var isPointerEvent = function isPointerEvent(event){
+    function isPointerEvent(event){
         return isTouchEvent(event) || isMouseEvent(event);
     };
 
     // Treat mouse events and single-finger touch events similarly
-    var blend = function(event){
+    function blend(event){
         if (isPointerEvent(event)){
             if (isTouchEvent(event)){
                 var touch = null;

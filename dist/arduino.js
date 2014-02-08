@@ -23,7 +23,7 @@ global.ajax = ajax;
 (function(global){
 
 	// Source: http://stackoverflow.com/a/13984429
-	wb.urlToQueryParams = function(url){
+	function urlToQueryParams(url){
 	    var qparams = {},
 	        parts = (url||'').split('?'),
 	        qparts, qpart,
@@ -43,7 +43,7 @@ global.ajax = ajax;
 	    return qparams;
 	};
 
-	wb.queryParamsToUrl = function(params){
+	function queryParamsToUrl(params){
 		var base = location.href.split('?')[0];
 		var keys = Object.keys(params);
 		var parts = [];
@@ -61,6 +61,9 @@ global.ajax = ajax;
 		}
 		return base + '?' + parts.join('&');
 	}
+
+	wb.urlToQueryParams = urlToQueryParams;
+	wb.queryParamsToUrl = queryParamsToUrl;
 	global.wb = wb;
 })(this);
 
@@ -78,35 +81,35 @@ global.ajax = ajax;
     // TODO
     // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
-    wb.makeArray = function makeArray(arrayLike){
+    function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
     };
 
-    wb.reposition = function reposition(elem, position){
+    function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
     };
 
-    wb.hide = function(elem){
+    function hide(elem){
         elem.dataset.display = elem.style.display;
         elem.style.display = 'none';
     };
 
-    wb.show = function(elem){
+    function show(elem){
         elem.style.display = elem.dataset.display || 'block';
         delete elem.dataset.display;
     };
 
-    var svgtext = document.querySelector('svg text');
-    wb.resize = function(input){
+    var svgText = document.querySelector('svg text');
+    function resize(input){
         if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value || '';
-        var textbox = svgtext.getBBox();
+        svgText.textContent = input.value || '';
+        var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
     };
 
@@ -114,12 +117,12 @@ global.ajax = ajax;
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };
 
-    wb.dist = function dist(p1, p2, m1, m2){
+    function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
     };
 
 
-    wb.overlapRect = function overlapRect(r1, r2){ // determine area of overlap between two rects
+    function overlapRect(r1, r2){ // determine area of overlap between two rects
         if (r1.left > r2.right){ return 0; }
         if (r1.right < r2.left){ return 0; }
         if (r1.top > r2.bottom){ return 0; }
@@ -128,24 +131,24 @@ global.ajax = ajax;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
     };
 
-    wb.rect = function rect(elem){
+    function rect(elem){
         return elem.getBoundingClientRect();
     };
 
-    wb.overlap = function overlap(elem1, elem2){
+    function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
     };
 
-    wb.area = function area(elem){
+    function area(elem){
         return elem.clientWidth * elem.clientHeight;
     };
 
-    wb.containedBy = function containedBy(target, container){
+    function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
     };
 
-    wb.closest = function closest(elem, selector){
+    function closest(elem, selector){
         if (elem.jquery){
             elem = elem[0];
         }
@@ -161,7 +164,7 @@ global.ajax = ajax;
         return null;
     };
 
-    wb.indexOf = function indexOf(elem){
+    function indexOf(elem){
         var idx = 0;
         while(elem.previousSiblingElement){
             elem = elem.previousSiblingElement;
@@ -170,21 +173,21 @@ global.ajax = ajax;
         return idx;
     };
 
-    wb.find = function find(elem, selector){
+    function find(elem, selector){
         return elem.querySelector(selector);
     };
 
-    wb.findAll = function findAll(elem, selector){
+    function findAll(elem, selector){
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
-    wb.findChildren = function findChildren(elem, selector){
+    function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
     };
 
-    wb.findChild = function(elem, selector){
+    function findChild(elem, selector){
         if (arguments.length !== 2){
             throw new Exception('This is the culprit');
         }
@@ -198,7 +201,7 @@ global.ajax = ajax;
         return null;
     };
 
-    wb.elem = function elem(name, attributes, children){
+   function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
         // attributes can be null or undefined, or an object of key/values to set
         // children can be text or an array. If an array, can contain strings or arrays of [name, attributes, children]
@@ -267,7 +270,7 @@ global.ajax = ajax;
     // AJAX utilities
 
     var jsonpHandlers = {};
-    wb.jsonp = function(url, callback){
+    function jsonp(url, callback){
         var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
         var handler = function(data){
             // remove jsonp 
@@ -282,7 +285,7 @@ global.ajax = ajax;
     };
 
     /* adapted from code here: http://javascriptexample.net/ajax01.php */
-    wb.ajax = function(url, success, failure){
+    function ajax(url, success, failure){
         var req = new XMLHttpRequest();
         req.onreadystatechange = function() {
             var cType;
@@ -301,7 +304,26 @@ global.ajax = ajax;
         req.send(null);
     };
 
-
+    wb.makeArray = makeArray;
+    wb.reposition = reposition;
+    wb.hide = hide;
+    wb.show = show;
+    wb.resize = resize;
+    wb.dist = dist;
+    wb.overlapRect = overlapRect;
+    wb.rect = rect;
+    wb.overlap = overlap;
+    wb.area = area;
+    wb.containedBy = containedBy;
+    wb.closest = closest;
+    wb.indexOf = indexOf;
+    wb.find = find;
+    wb.findAll = findAll;
+    wb.findChildren = findChildren;
+    wb.findChild = findChild;
+    wb.elem = elem;
+    wb.jsonp = jsonp;
+    wb.ajax = ajax;
 })(this);
 
 /*end util.js*/
@@ -316,7 +338,7 @@ global.ajax = ajax;
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler){
+    function on(elem, eventname, selector, handler){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -360,11 +382,11 @@ global.ajax = ajax;
         return listener;
     };
 
-    var off = function(elem, eventname, handler){
+    function off(elem, eventname, handler){
         elem.removeEventListener(eventname, handler);
     }
 
-    var once = function(elem, eventname, selector, handler){
+    function once(elem, eventname, selector, handler){
         var listener = function listener(event){
             handler(event);
             Event.off(elem, eventname, listener);
@@ -372,7 +394,7 @@ global.ajax = ajax;
         return Event.on(elem, eventname, selector, listener);
     }
 
-    var trigger = function(elemOrSelector, eventname, data){
+    function trigger(elemOrSelector, eventname, data){
         var elem;
         if (elemOrSelector.nodeName){
             elem = elemOrSelector;
@@ -386,7 +408,7 @@ global.ajax = ajax;
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isMouseEvent = function isMouseEvent(event){
+    function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
             case 'mousemove':
@@ -397,7 +419,7 @@ global.ajax = ajax;
                 return false;
         }
     };
-    var isTouchEvent = function isTouchEvent(event){
+    function isTouchEvent(event){
         switch(event.type){
             case 'touchstart':
             case 'touchmove':
@@ -409,12 +431,12 @@ global.ajax = ajax;
         }
     };
 
-    var isPointerEvent = function isPointerEvent(event){
+    function isPointerEvent(event){
         return isTouchEvent(event) || isMouseEvent(event);
     };
 
     // Treat mouse events and single-finger touch events similarly
-    var blend = function(event){
+    function blend(event){
         if (isPointerEvent(event)){
             if (isTouchEvent(event)){
                 var touch = null;
@@ -665,7 +687,6 @@ global.ajax = ajax;
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
-        console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -1103,31 +1124,28 @@ global.ajax = ajax;
 
     var elem = wb.elem;
 
+    var nextSeqNum = 0;
+    var blockRegistry = {};
 
-    var _nextSeqNum = 0;
-
-    var newSeqNum = function(){
-        _nextSeqNum++;
-        return _nextSeqNum;
+    function newSeqNum(){
+        nextSeqNum++;
+        return nextSeqNum;
     };
 
-    var registerSeqNum = function(seqNum){
+    function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        _nextSeqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
+        nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
-    var blockRegistry = {};
-    wb.blockRegistry = blockRegistry;
-
-    var resetSeqNum = function(){
-        _nextSeqNum = 0;
+    function resetSeqNum(){
+        nextSeqNum = 0;
         blockRegistry = {};
         wb.blockRegistry = blockRegistry;
     }
 
-    var registerBlock = function(blockdesc){
+    function registerBlock(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
         }else if (!blockdesc.isTemplateBlock){
@@ -1139,11 +1157,11 @@ global.ajax = ajax;
         blockRegistry[blockdesc.id] = blockdesc;
     }
 
-    var getHelp = function(id){
+    function getHelp(id){
         return blockRegistry[id] ? blockRegistry[id].help : '';
     }
 
-    var getScript = function(id){
+    function getScript(id){
         try{
             return blockRegistry[id].script;
         }catch(e){
@@ -1153,23 +1171,21 @@ global.ajax = ajax;
         }
     }
 
-    var getSockets = function(block){
+    function getSockets(block){
         return wb.findChildren(wb.findChild(block, '.label'), '.socket');
     }
 
-    var getSocketValue = function(socket){
+    function getSocketValue (socket){
         return socketValue(wb.findChild(socket, '.holder'));
     }
 
-    var createSockets = function(obj){
+    function createSockets(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
         });
     }
 
     var Block = function(obj){
-        // FIXME:
-        // Handle customized names (sockets)
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -1246,10 +1262,7 @@ global.ajax = ajax;
 
     // Block Event Handlers
 
-    Event.on(document.body, 'wb-remove', '.block', removeBlock);
-    Event.on(document.body, 'wb-add', '.block', addBlock);
-    Event.on(document.body, 'wb-clone', '.block', onClone);
-    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -1345,12 +1358,6 @@ global.ajax = ajax;
         if (event.stopPropagation){
             event.stopPropagation();
         }
-    }
-
-    function onClone(event){
-        // a block has been cloned. Praise The Loa!
-        var block = event.wbTarget;
-        // console.log('block cloned %o', block);
     }
 
     var Socket = function(desc, blockdesc){
@@ -1586,7 +1593,7 @@ global.ajax = ajax;
         return input;
     }
 
-    var socketValue = function(holder){
+    function socketValue(holder){
         if (holder.children.length > 1){
             return codeFromBlock(wb.findChild(holder, '.block'));
         }else{
@@ -1607,7 +1614,7 @@ global.ajax = ajax;
         }
     }
 
-    var codeFromBlock = function(block){
+    function codeFromBlock(block){
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -1717,6 +1724,11 @@ global.ajax = ajax;
         }
     }
 
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    wb.blockRegistry = blockRegistry;
 
     // Export methods
     wb.Block = Block;
@@ -1725,7 +1737,6 @@ global.ajax = ajax;
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
-    wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
     wb.getSockets = getSockets;
     wb.getSocketValue = getSocketValue;
@@ -1746,7 +1757,7 @@ global.ajax = ajax;
 
 (function(wb){
 
-	wb.saveCurrentScripts = function saveCurrentScripts(){
+	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
 			// nothing to save
@@ -1758,7 +1769,7 @@ global.ajax = ajax;
 	};
 
 	// Save script to gist;
-	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
@@ -1785,7 +1796,7 @@ global.ajax = ajax;
 	    }), null, '    ');
 	};
 	//populate the gist submenu with recent gists
-	wb.loadRecentGists = function loadRecentGists() {
+	function loadRecentGists() {
 		var localGists = localStorage['__' + wb.language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
 		var gistContainer = document.querySelector("#recent_gists");
@@ -1837,7 +1848,7 @@ global.ajax = ajax;
 	}
 
 
-	wb.createDownloadUrl = function createDownloadUrl(evt){
+	function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
 	    if( !name ) return;
@@ -1855,7 +1866,7 @@ global.ajax = ajax;
 		reader.readAsDataURL(file);
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+	function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
@@ -1864,7 +1875,7 @@ global.ajax = ajax;
 		});
 	};
 
-	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+	function loadScriptsFromFilesystem(event){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
@@ -1919,7 +1930,7 @@ global.ajax = ajax;
 		});
 	}
 
-	wb.loadCurrentScripts = function(queryParsed){
+	function loadCurrentScripts(queryParsed){
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
@@ -1962,7 +1973,7 @@ global.ajax = ajax;
 		};
 	}
 
-	wb.getFiles = function getFiles(evt){
+	function getFiles(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
 		var files = evt.dataTransfer.files;
@@ -1973,6 +1984,14 @@ global.ajax = ajax;
 	    }
 	}
 
+	wb.saveCurrentScripts = saveCurrentScripts;
+	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
+	wb.loadRecentGists = loadRecentGists;
+	wb.createDownloadUrl = createDownloadUrl;
+	wb.loadScriptsFromGistId = loadScriptsFromGistId;
+	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
+	wb.loadCurrentScripts = loadCurrentScripts;
+	wb.getFiles = getFiles;
 
 })(wb);
 
@@ -2128,7 +2147,7 @@ function showWorkspace(mode){
     }
 }
 // Expose this to dragging and saving functionality
-wb.showWorkspace = showWorkspace;
+
 
 function updateScriptsView(){
     var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
@@ -2282,8 +2301,8 @@ function pasteCommand(evt) {
 	// console.log(pasteboard);
 	action = {
 		pasted: wb.cloneBlock(pasteboard),
-		into: cmenu_target.parentNode,
-		before: cmenu_target.nextSibling,
+		into: cmenuTarget.parentNode,
+		before: cmenuTarget.nextSibling,
 		undo: function() {
 			Event.trigger(this.pasted, 'wb-remove');
 			this.pasted.remove();
@@ -2294,7 +2313,7 @@ function pasteCommand(evt) {
 				this.into.insertBefore(this.pasted,this.before);
 			} else {
 				// console.log("Pasting an expression!");
-				cmenu_target.appendChild(this.pasted);
+				cmenuTarget.appendChild(this.pasted);
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
@@ -2305,20 +2324,20 @@ function pasteCommand(evt) {
 
 function canPaste() {
 	if(!pasteboard) return false;
-	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
-	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
 	return false;
 }
 
 var pasteboard = null;
-var current_cmenu = null;
-var show_context = false;
-var cmenu_disabled = false;
-var cmenu_target = null;
+var cmenuCurrent = null;
+var showContext = false;
+var cmenuDisabled = false;
+var cmenuTarget = null;
 
 function cmenuitem_enabled(menuitem) {
 	if(menuitem.enabled) {
@@ -2378,10 +2397,10 @@ function closeContextMenu(evt) {
 function handleContextMenu(evt) {
 	// console.log('handling context menu');
 	stackTrace();
-	//if(!show_context) return;
+	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -2392,13 +2411,13 @@ function handleContextMenu(evt) {
 }
 
 function setContextMenuTarget(target) {
-	cmenu_target = target;
-	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
-		// console.log(cmenu_target);
-		cmenu_target = cmenu_target.parentNode;
-		if(cmenu_target.tagName == 'BODY') {
+	cmenuTarget = target;
+	while(!wb.matches(cmenuTarget, '.block') && !wb.matches(cmenuTarget, '.holder')) {
+		// console.log(cmenuTarget);
+		cmenuTarget = cmenuTarget.parentNode;
+		if(cmenuTarget.tagName == 'BODY') {
 			console.error("Something went wrong with determining the context menu target!");
-			cmenu_target = null;
+			cmenuTarget = null;
 			contextDiv.style.display = 'none';
 		}
 	}
@@ -2414,8 +2433,8 @@ function showContextMenu(atX, atY) {
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		// console.log(cmenu_target);
-		fcn.call(cmenu_target,evt);
+		// console.log(cmenuTarget);
+		fcn.call(cmenuTarget,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';
 		evt.preventDefault();
@@ -2423,7 +2442,7 @@ function cmenuCallback(fcn) {
 }
 
 function disableContextMenu(evt) {
-	cmenu_disabled = true;
+	cmenuDisabled = true;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = '';
 	var contextDiv = document.getElementById('context_menu');
@@ -2431,7 +2450,7 @@ function disableContextMenu(evt) {
 }
 
 function enableContextMenu(evt) {
-	cmenu_disabled = false;
+	cmenuDisabled = false;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = 'none';
 }
@@ -2455,7 +2474,7 @@ function is_touch_device() {
 initContextMenus();
 
 // Build the Blocks menu, this is a public method
-wb.menu = function(blockspec){
+function menu(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     return edit_menu(title, specs);
@@ -2491,6 +2510,8 @@ Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
+wb.showWorkspace = showWorkspace;
+wb.menu = menu;
 
 })(wb);
 
@@ -2500,13 +2521,12 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 /*begin workspace.js*/
 (function(wb){
 
-	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
-
-	wb.clearScripts = function clearScripts(event, force){
+	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
+			wb.scriptLoaded = false;
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
@@ -2516,14 +2536,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		}
 	}
 	
-	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
-	Event.on('.edit-script', 'click', null, function(event){
-		wb.historySwitchState('editor');
-	});
-
-	Event.on('.content', 'click', '.load-example', function(evt){
+	function loadExample(event){
 		var path = location.href.split('?')[0];
-		path += "?example=" + evt.target.dataset.example;
+		path += "?example=" + event.target.dataset.example;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
@@ -2537,9 +2552,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			history.pushState(null, '', path);
 			Event.trigger(document.body, 'wb-state-change');
 		}
-	});
+	}
 
-	var handleStateChange = function handleStateChange(evt){
+	function handleStateChange(event){
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
@@ -2565,19 +2580,15 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		    }
 	    }
 	}
-	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 
-	var hideLoader = function hideLoader(){
+	function hideLoader(){
 	    var loader = document.querySelector('#block_menu_load');
 	    if (loader){
 	        loader.parentElement.removeChild(loader);
 	    }		
 	}
 
-
-	// Load and Save Section
-
-	wb.historySwitchState = function historySwitchState(state, clearFiles){
+	function historySwitchState(state, clearFiles){
 		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
@@ -2595,15 +2606,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
-
-	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
-	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
-	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
-	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-
-
-	wb.loaded = false;
-
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
@@ -2626,11 +2628,10 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		});
 		wb.wireUpWorkspace(workspace);
 	}
-	wb.createWorkspace = createWorkspace;
-
-	wb.wireUpWorkspace = function wireUpWorkspace(workspace){
+	
+	function wireUpWorkspace(workspace){
 		workspace.addEventListener('drop', wb.getFiles, false);
-		workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+		workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
 		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
 	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
 	    });
@@ -2639,32 +2640,23 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		wb.initializeDragHandlers();
 	};
 
-	function handleDragover(evt){
+	function handleDragover(event){
 	    // Stop Firefox from grabbing the file prematurely
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	    evt.dataTransfer.dropEffect = 'copy';
+	    event.stopPropagation();
+	    event.preventDefault();
+	    event.dataTransfer.dropEffect = 'copy';
 	}
 
-	Event.on('.workspace', 'click', '.disclosure', function(evt){
-		var block = wb.closest(evt.wbTarget, '.block');
+	function disclosure(event){
+		var block = wb.closest(event.wbTarget, '.block');
 		if (block.dataset.closed){
 			delete block.dataset.closed;
 		}else{
 			block.dataset.closed = true;
 		}
-	});
+	}
 
-	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-	Event.on('.workspace', 'keypress', 'input', wb.resize);
-	Event.on('.workspace', 'change', 'input, select', function(evt){
-		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
-
-	});
-	// Event.on(document.body, 'wb-loaded', null, function(evt){
-	// 	console.log('menu loaded');
-	// });
-	Event.on(document.body, 'wb-script-loaded', null, function(evt){
+	function handleScriptLoad(event){
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
@@ -2684,18 +2676,18 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		}
 		// clear undo/redo stack
 		console.log('script loaded');
-	});
+	}
 
-	Event.on(document.body, 'wb-modified', null, function(evt){
+	function handleScriptModify(event){
 		// still need modified events for changing input values
 		if (!wb.scriptLoaded) return;
 		if (!wb.scriptModified){
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
-	});
+	}
 
-	window.addEventListener('popstate', function(evt){
+	window.addEventListener('popstate', function(event){
 		// console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
@@ -2706,6 +2698,32 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		wb.windowLoaded = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
+
+	Event.on('.clear_scripts', 'click', null, clearScripts);
+	Event.on('.edit-script', 'click', null, function(event){
+		wb.historySwitchState('editor');
+	});
+	Event.on('.content', 'click', '.load-example', loadExample);
+	Event.on(document.body, 'wb-state-change', null, handleStateChange);
+	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+	Event.on('.workspace', 'click', '.disclosure', disclosure);
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on('.workspace', 'change', 'input, select', function(event){
+		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+	});
+	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
+	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+	wb.loaded = false;
+	wb.clearScripts = clearScripts;
+	wb.historySwitchState = historySwitchState;
+	wb.createWorkspace = createWorkspace;
+	wb.wireUpWorkspace = wireUpWorkspace;
 })(wb);
 
 /*end workspace.js*/
@@ -2722,18 +2740,18 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
-	var settings_link;
+	var settingsLink;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {
 		// console.log("adding settings link");
 		var block_menu = document.querySelector('#block_menu');
-		var settings_link = document.createElement('a');
-		settings_link.href = '#';
-		settings_link.style.float = 'right';
-		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
-		settings_link.addEventListener('click', toggleCheckboxDisplay);
-		block_menu.appendChild(settings_link);
-		return settings_link;
+		var settingsLink = document.createElement('a');
+		settingsLink.href = '#';
+		settingsLink.style.float = 'right';
+		settingsLink.appendChild(document.createTextNode('Show/Hide blocks'));
+		settingsLink.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settingsLink);
+		return settingsLink;
 	}
 
 	//create the checkboxes next to the headers
@@ -2761,12 +2779,12 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		if (closed) {
 			closed = false;
 			display = 'inline';
-			settings_link.innerHTML = 'Save';
+			settingsLink.innerHTML = 'Save';
 		} else {
 			//save was clicked
 			closed = true;
 			display = 'none'
-			settings_link.innerHTML = 'Show/Hide blocks';
+			settingsLink.innerHTML = 'Show/Hide blocks';
 			//save the settings
 			saveSettings();
 		}
@@ -2821,7 +2839,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
-		settings_link = addSettingsLink();
+		settingsLink = addSettingsLink();
 		createCheckboxes();
 		loadSettings();
 	}

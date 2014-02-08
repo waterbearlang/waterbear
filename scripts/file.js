@@ -9,7 +9,7 @@
 
 (function(wb){
 
-	wb.saveCurrentScripts = function saveCurrentScripts(){
+	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
 			// nothing to save
@@ -21,7 +21,7 @@
 	};
 
 	// Save script to gist;
-	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
@@ -50,7 +50,7 @@
         });
 	};
 	//populate the gist submenu with recent gists
-	wb.loadRecentGists = function loadRecentGists() {
+	function loadRecentGists() {
 		var localGists = localStorage['__' + wb.language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
 		var gistContainer = document.querySelector("#recent_gists");
@@ -102,7 +102,7 @@
 	}
 
 
-	wb.createDownloadUrl = function createDownloadUrl(evt){
+	function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
 	    if( !name ) return;
@@ -120,7 +120,7 @@
 		reader.readAsDataURL(file);
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+	function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
@@ -129,7 +129,7 @@
 		});
 	};
 
-	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+	function loadScriptsFromFilesystem(event){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
@@ -184,7 +184,7 @@
 		});
 	}
 
-	wb.loadCurrentScripts = function(queryParsed){
+	function loadCurrentScripts(queryParsed){
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
 		if (queryParsed.gist){
@@ -227,7 +227,7 @@
 		};
 	}
 
-	wb.getFiles = function getFiles(evt){
+	function getFiles(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
 		var files = evt.dataTransfer.files;
@@ -238,5 +238,13 @@
 	    }
 	}
 
+	wb.saveCurrentScripts = saveCurrentScripts;
+	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
+	wb.loadRecentGists = loadRecentGists;
+	wb.createDownloadUrl = createDownloadUrl;
+	wb.loadScriptsFromGistId = loadScriptsFromGistId;
+	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
+	wb.loadCurrentScripts = loadCurrentScripts;
+	wb.getFiles = getFiles;
 
 })(wb);

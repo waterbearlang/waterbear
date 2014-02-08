@@ -102,7 +102,7 @@
 
 
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget; // <- WB
@@ -155,7 +155,7 @@
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
-        console.log('startDrag(%o)', event);
+        // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
 		// Track source for undo/redo
@@ -206,7 +206,7 @@
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
-        console.log(potentialDropTargets.length);
+        // console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -219,7 +219,7 @@
     function drag(event){
         if (!dragTarget) {return undefined;}
         if (!currentPosition) {startDrag(event);}
-        console.log('drag(%o)', event);
+        // console.log('drag(%o)', event);
         event.preventDefault();
         // update the variables, distance, button pressed
         var nextPosition = {left: event.wbPageX, top: event.wbPageY}; // <- WB
@@ -253,7 +253,7 @@
     }
 
     function endDrag(event){
-        console.log('endDrag(%o) dragging: %s', event, dragging);
+        // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
@@ -264,7 +264,7 @@
     }
 
     function handleDrop(copyBlock){
-        console.log('handleDrop(%o)', copyBlock);
+        // console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -422,7 +422,7 @@
 
     function positionExpressionDropCursor(){
         if (!potentialDropTargets.length){
-            console.log('no drop targets found');
+            // console.log('no drop targets found');
             return;
         }
         var targets = potentialDropTargets.map(function(target){

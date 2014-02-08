@@ -1863,6 +1863,7 @@ global.ajax = ajax;
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
+		if( !gistID ) return;
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
 	    }, function(statusCode, x){
@@ -1928,6 +1929,7 @@ global.ajax = ajax;
 	function loadCurrentScripts(queryParsed){
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
+		wb.scriptLoaded = false;
 		if (queryParsed.gist){
 			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){

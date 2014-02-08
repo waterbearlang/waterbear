@@ -5001,6 +5001,7 @@ wb.choiceLists.rettypes.push('motion');
 
 /*begin languages/javascript/control.json*/
 wb.menu({
+    "sectionkey": "controls",
     "name": "Controls",
     "blocks": [
         {
@@ -5323,6 +5324,7 @@ wb.menu({
 
 /*begin languages/javascript/sprite.json*/
 wb.menu({
+    "sectionkey": "sprites",
     "name": "Sprites",
     "blocks": [
         {
@@ -5869,6 +5871,7 @@ wb.menu({
 
 /*begin languages/javascript/voice.json*/
 wb.menu({
+    "sectionkey": "music",
     "name": "Music",
     "blocks": [
         {
@@ -6126,6 +6129,7 @@ wb.menu({
 
 /*begin languages/javascript/sound.json*/
 wb.menu({
+    "sectionkey": "sound",
     "name": "Sound",
     "blocks": [
         {
@@ -6199,6 +6203,7 @@ wb.menu({
 
 /*begin languages/javascript/array.json*/
 wb.menu({
+    "sectionkey": "arrays",
     "name": "Arrays",
     "blocks": [
         {
@@ -6476,6 +6481,7 @@ wb.menu({
 
 /*begin languages/javascript/boolean.json*/
 wb.menu({
+    "sectionkey": "boolean",
     "name": "Boolean",
     "blocks": [
         {
@@ -6591,6 +6597,7 @@ wb.menu({
 
 /*begin languages/javascript/canvas.json*/
 wb.menu({
+    "sectionkey": "canvas",
     "name": "Canvas",
     "blocks": [
         {
@@ -6797,6 +6804,7 @@ wb.menu({
 
 /*begin languages/javascript/color.json*/
 wb.menu({
+    "sectionkey": "color",
     "name": "Color",
     "blocks": [
         {
@@ -7110,6 +7118,7 @@ wb.menu({
 
 /*begin languages/javascript/image.json*/
 wb.menu({
+    "sectionkey": "images",
     "name": "Images",
     "blocks": [
         {
@@ -7439,6 +7448,7 @@ wb.menu({
 
 /*begin languages/javascript/math.json*/
 wb.menu({
+    "sectionkey": "math",
     "name": "Math",
     "blocks": [
         {
@@ -8022,6 +8032,7 @@ wb.menu({
 
 /*begin languages/javascript/vector.json*/
 wb.menu({
+    "sectionkey": "vectors",
     "name": "Vectors",
     "blocks": [
         {
@@ -8174,6 +8185,7 @@ wb.menu({
 
 /*begin languages/javascript/object.json*/
 wb.menu({
+    "sectionkey": "objects",
     "name": "Objects",
     "blocks": [
         {
@@ -8288,6 +8300,7 @@ wb.menu({
 
 /*begin languages/javascript/string.json*/
 wb.menu({
+    "sectionkey": "strings",
     "name": "Strings",
     "blocks": [
         {
@@ -8785,6 +8798,7 @@ wb.menu({
 
 /*begin languages/javascript/path.json*/
 wb.menu({
+    "sectionkey": "paths",
     "name": "Paths",
     "blocks": [
         {
@@ -8987,6 +9001,7 @@ wb.menu({
 
 /*begin languages/javascript/point.json*/
 wb.menu({
+    "sectionkey": "points",
     "name": "Points",
     "blocks": [
         {
@@ -9092,6 +9107,7 @@ wb.menu({
 
 /*begin languages/javascript/rect.json*/
 wb.menu({
+    "sectionkey": "rects",
     "name": "Rects",
     "blocks": [
         {
@@ -9272,6 +9288,7 @@ wb.menu({
 
 /*begin languages/javascript/sensing.json*/
 wb.menu({
+    "sectionkey": "sensing",
     "name": "Sensing",
     "blocks": [
         {
@@ -9458,6 +9475,7 @@ wb.menu({
 
 /*begin languages/javascript/motion.json*/
 wb.menu({
+    "sectionkey": "motion",
     "name": "Motion",
     "blocks": [
     	{
@@ -9493,6 +9511,7 @@ wb.menu({
 
 /*begin languages/javascript/shape.json*/
 wb.menu({
+    "sectionkey": "shapes",
     "name": "Shapes",
     "blocks": [
         {
@@ -9759,6 +9778,7 @@ wb.menu({
 
 /*begin languages/javascript/geolocation.json*/
 wb.menu({
+    "sectionkey": "geolocation",
     "name": "Geolocation",
     "blocks": [
         {
@@ -9893,6 +9913,7 @@ wb.menu({
 
 /*begin languages/javascript/size.json*/
 wb.menu({
+    "sectionkey": "sizes",
     "name": "Sizes",
     "blocks": [
         {
@@ -9981,6 +10002,7 @@ wb.menu({
 
 /*begin languages/javascript/text.json*/
 wb.menu({
+    "sectionkey": "text",
     "name": "Text",
     "blocks": [
         {
@@ -10160,6 +10182,7 @@ wb.menu({
 
 /*begin languages/javascript/matrix.json*/
 wb.menu({
+    "sectionkey": "matrix",
     "name": "Matrix",
     "blocks": [
         {

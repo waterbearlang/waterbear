@@ -1760,7 +1760,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-		console.log('title: %s', title);
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -1838,7 +1837,6 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
-	    console.log('name: %s', name);
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -1928,6 +1926,9 @@ global.ajax = ajax;
 		}else if (queryParsed.example){
 			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
+            var path = location.href.split('?')[0];
+		    path += "?example=" + queryParsed.example;
+            history.pushState(null, '', path);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
 			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
@@ -1939,7 +1940,7 @@ global.ajax = ajax;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
-		Event.trigger(document.body, 'wb-loaded');
+		Event.trigger(document.body, 'wb-loaded'); //call no longer exists
 	};
 
 	function loadScriptsFromFile(file){
@@ -2501,6 +2502,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	wb.clearScripts = function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
+            var path = location.href.split('?')[0];
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
@@ -2509,6 +2511,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
 			wb.history.clear();
 			wb.resetSeqNum();
+			history.pushState(null, '', path);
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
@@ -2524,7 +2527,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
 				wb.loaded = false;
-				history.pushState(null, '', path);
+			    history.pushState(null, '', path);
 				Event.trigger(document.body, 'wb-state-change');
 			}
 		}else{
@@ -2533,7 +2536,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			history.pushState(null, '', path);
 			Event.trigger(document.body, 'wb-state-change');
 		}
-	});
+    });
 
 	var handleStateChange = function handleStateChange(evt){
 		// hide loading spinner if needed
@@ -2657,9 +2660,10 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
 
 	});
-	// Event.on(document.body, 'wb-loaded', null, function(evt){
-	// 	console.log('menu loaded');
-	// });
+	//Event.on(document.body, 'wb-loaded', null, function(evt){
+	//	console.log('menu loaded');
+
+	//});
 	Event.on(document.body, 'wb-script-loaded', null, function(evt){
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;

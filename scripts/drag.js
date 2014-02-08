@@ -294,18 +294,26 @@ function endDragInScratchpad(event){
         	}
         }else if (wb.overlap(dragTarget, scratchpad)){ 
 	    alert('Hi');
-	    scratchpad.appendChild(dragTarget);
-<<<<<<< HEAD
+	    //dragTarget.style.top = "100px";
+	    //dragTarget.style.left = "500px";
+	    var scratchPadStyle = scratchpad.getBoundingClientRect();
+	    var newOriginX = scratchPadStyle.left;
+	    var newOriginY = scratchPadStyle.top;
+	    
+	    
+	    var blockStyle = dragTarget.getComputedRect();
+	    
+	    var oldX = blockStyle.left;
+	    var oldY = blockStyle.top;
+	    console.log("oldX " + oldX);
+	    console.log("oldY " + oldY);
+	    console.log("newOriginX " + newOriginX);
+	    console.log("newOriginY " + newOriginY);
 	    dragTarget.style.position = "absolute";
-	    //dragTarget.style.display = "block";
-	    dragTarget.style.top = "100px";
-	    dragTarget.style.left = "500px";
+	    dragTarget.style.left = oldX - newOriginX;
+	    dragTarget.style.top = oldY - newOriginY;
+	    scratchpad.appendChild(dragTarget);
 	    return;
-=======
-	    dragTarget.style.position= 'absolute';
-	    dragTarget.style.top= event.x; //- scratchpad.style.top;
-	    dragTarget.style.left= event.y; //- scratchpad.style.left; 
->>>>>>> a9c489b397c11ac471bc9474356e22734c074437
 	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){

@@ -12806,6 +12806,11 @@ function endDragInScratchpad(event){
         }else if (wb.overlap(dragTarget, scratchpad)){ 
 	    alert('Hi');
 	    scratchpad.appendChild(dragTarget);
+	    dragTarget.style.position = "absolute";
+	    //dragTarget.style.display = "block";
+	    dragTarget.style.top = "100px";
+	    dragTarget.style.left = "500px";
+	    return;
 	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){

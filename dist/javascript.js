@@ -1930,11 +1930,14 @@ global.ajax = ajax;
     };
 
     wb.hide = function(elem){
-        elem.classList.add('hidden');
+        elem.dataset.display = elem.style.display;
+        elem.style.display = 'none';
     };
 
     wb.show = function(elem){
-        elem.classList.remove('hidden');
+        if (window.getComputedStyle(elem).display !== 'none') return;
+        elem.style.display = elem.dataset.display || 'block';
+        delete elem.dataset.display;
     };
 
     var svgtext = document.querySelector('svg text');
@@ -2161,8 +2164,8 @@ global.ajax = ajax;
             });
         }
         if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem);
-            throw new Error('first argument must be element');
+            console.error('first argument must be element: %o', elem); 
+            debugger;
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
@@ -2361,6 +2364,7 @@ global.ajax = ajax;
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -2392,6 +2396,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	scratchpad= document.querySelector('.scratchpad');
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -2558,13 +2563,13 @@ global.ajax = ajax;
         if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
-        handleDrop(event.altKey || event.ctrlKey);
+        handleDrop(event,event.altKey || event.ctrlKey);
         reset();
         event.preventDefault();
         return false;
     }
 
-    function handleDrop(copyBlock){
+    function handleDrop(event,copyBlock){
         console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
@@ -2574,7 +2579,8 @@ global.ajax = ajax;
            // 4. Move back to start position if not a clone (maybe not?)
         resetDragStyles(); // <- WB
         // WB-Specific
-        if (wb.overlap(dragTarget, blockMenu)){
+	if (wb.overlap(dragTarget, blockMenu)){
+	    alert("Bye");
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
@@ -2584,7 +2590,32 @@ global.ajax = ajax;
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-        }else if (dropTarget){
+        }else if (wb.overlap(dragTarget, scratchpad)){ 
+	    alert('Hi');
+
+	    var scratchPadStyle = scratchpad.getBoundingClientRect();
+	    var newOriginX = scratchPadStyle.left;
+	    var newOriginY = scratchPadStyle.top;
+    
+	    var blockStyle = dragTarget.getComputedRect();
+	    var oldX = blockStyle.left;
+	    var oldY = blockStyle.top;
+
+	    //dragTarget.style.position = "absolute";
+	    dragTarget.style.left = oldX - newOriginX;
+	    dragTarget.style.top = oldY - newOriginY;
+	    scratchpad.appendChild(dragTarget);
+
+            //when dragging from workspace to scratchpad, this keeps workspace from
+	    //moving around when block in scratchpad is moved.
+            dragTarget.parentElement.removeChild(dragTarget); 
+            if(!templateDrag) {
+	        	// If we're dragging to the menu, there's no destination to track for undo/redo
+    	    	dragAction.toParent = dragAction.toBefore = null;
+        		wb.history.add(dragAction);
+        	}
+	    return;
+	}else if (dropTarget){
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
@@ -2611,12 +2642,10 @@ global.ajax = ajax;
             }
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
-
-            //CLARIFY: What does this block do? dragAction.toBefore.nextElementSibling is always null
-            // if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
-            // 	// Sometimes the "next sibling" ends up being the cursor
-            // 	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
-            // }
+            if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+            }
             wb.history.add(dragAction);
         }else{
             if (cloned){
@@ -2867,14 +2896,20 @@ global.ajax = ajax;
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
         // console.log('initializeDragHandlers');
-        Event.on('.content', 'touchstart', '.block', initDrag);
-        Event.on('.content', 'touchmove', null, drag);
-        Event.on('.content', 'touchend', null, endDrag);
-        // TODO: A way to cancel touch drag?
-        Event.on('.content', 'mousedown', '.block', initDrag);
-        Event.on(document.body, 'mousemove', null, drag);
-        Event.on(document.body, 'mouseup', null, endDrag);
-        Event.on(document.body, 'keyup', null, cancelDrag);
+        if (Event.isTouch){
+            Event.on('.content', 'touchstart', '.block', initDrag);
+            Event.on('.content', 'touchmove', null, drag);
+            Event.on('.content', 'touchend', null, endDrag);
+            // TODO: A way to cancel the drag?
+            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
+        }else{
+            Event.on('.content', 'mousedown', '.block', initDrag);
+            Event.on('.content', 'mousemove', null, drag);
+	    //Event.on('.scratchpad', '', null, endDragInScratchpad);
+            Event.on(document.body, 'mouseup', null, endDrag);
+            Event.on(document.body, 'keyup', null, cancelDrag);
+            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
+        }
     };
 })(this);
 
@@ -3610,7 +3645,6 @@ global.ajax = ajax;
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-		if ( !title ) return;
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3688,7 +3722,6 @@ global.ajax = ajax;
 	wb.createDownloadUrl = function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
-	    if( !name ) return;
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -3786,7 +3819,6 @@ global.ajax = ajax;
 			}
 		}else{
 			//console.log('no script to load, starting a new script');	
-			wb.scriptLoaded = true;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -4420,7 +4452,6 @@ if (document.body.clientWidth > 360){
 			delete localStorage['__' + wb.language + '_current_scripts'];
 		}
 	}
-	
 	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
 	Event.on('.edit-script', 'click', null, function(event){
 		wb.historySwitchState('editor');
@@ -4524,7 +4555,7 @@ if (document.body.clientWidth > 360){
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
-	    console.log('createWorkspace');
+	    // console.log('createWorkspace');
 		var id = uuid();
 		var workspace = wb.Block({
 			group: 'scripts_workspace',
@@ -4553,11 +4584,8 @@ if (document.body.clientWidth > 360){
 	    });
 		document.querySelector('.workspace').appendChild(workspace);
 		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-		// wb.initializeDragHandlers();
-		Event.trigger(document.body, 'wb-workspace-initialized');
+		wb.initializeDragHandlers();
 	};
-
-	Event.once(document.body, 'wb-workspace-initialized', null, wb.initializeDragHandlers);
 
 	function handleDragover(evt){
 	    // Stop Firefox from grabbing the file prematurely
@@ -4633,7 +4661,6 @@ if (document.body.clientWidth > 360){
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
-		if (!component) return;
 		evt.detail.state ? wb.show(component) : wb.hide(component);
 		var results = wb.find(document.body, '.results');
 		// Special cases
@@ -4641,6 +4668,7 @@ if (document.body.clientWidth > 360){
 			case 'stage':
 				if (evt.detail.state){
 					wb.show(results);
+					wb.runCurrentScripts();
 				}else{
 					wb.clearStage();
 					if (!wb.toggleState.scripts_text_view){
@@ -4668,35 +4696,22 @@ if (document.body.clientWidth > 360){
 				}
 			default:
 				// do nothing
-				break;
 		}
-		if (wb.toggleState.stage){
-			// restart script on any toggle
-			// so it runs at the new size
-			wb.runCurrentScripts();
-		}
-
 	}
 
 	Event.on(document.body, 'wb-toggle', null, toggleComponent);
 
 	window.addEventListener('popstate', function(evt){
-		console.log('popstate event');
+		// console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
-	window.addEventListener('load', function(evt){
-		console.log('load event');
-		Event.trigger(document.body, 'wb-state-change');
-	})
-
 	// Kick off some initialization work
-	Event.once(document.body, 'wb-workspace-initialized', null, function initHistory(){
-		console.log('workspace ready');
+	window.addEventListener('load', function(){
+		console.log('window loaded');
 		wb.windowLoaded = true;
-		wb.workspaceInitialized = true;
 		Event.trigger(document.body, 'wb-state-change');
-	});
+	}, false);
 })(wb);
 
 /*end workspace.js*/
@@ -4857,8 +4872,7 @@ if (document.body.clientWidth > 360){
 	}
 
 	// initialize toggle states
-
-	function initializeToggleStates(evt){
+	window.addEventListener('load', function(evt){
 		wb.findAll(document.body, '.toggle').forEach(function(button){
 			var name = button.dataset.target;
 			var isOn = getState(name);
@@ -4869,9 +4883,7 @@ if (document.body.clientWidth > 360){
 			}
 			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
 		});
-	}
-
-	Event.once(document.body, 'wb-workspace-initialized', null, initializeToggleStates);
+	}, false);
 
 	wb.toggleState = toggleState; // treat as read-only
 
@@ -4918,7 +4930,7 @@ if (document.body.clientWidth > 360){
     }
 
     function runCurrentScripts(){
-        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
+        // console.log('runCurrentScripts');
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -5891,7 +5903,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "suffix": "movement vector"
+                    "suffix": "movement direction"
                 }
             ]
         },
@@ -9575,7 +9587,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
-            "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};local.ctx.save();local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
             "sockets": [
                 {
                     "name": "fill round rect",
@@ -9586,11 +9598,6 @@ wb.menu({
                     "name": "with border-radius",
                     "type": "number",
                     "value": 0
-                },
-                {
-                    "name": "and color",
-                    "type": "color",
-                    "value": null
                 }
             ]
         },
@@ -9646,42 +9653,6 @@ wb.menu({
                     "name": "height",
                     "type": "number",
                     "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "e93b909e-19f8-4f80-8308-ae896bd63189",
-            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.fillStyle = color##; local.ctx.fill();local.ctx.restore();",
-            "help": "fill the polygon defined by array of points",
-            "sockets": [
-                {
-                    "name": "fill polygon ",
-                    "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "with color",
-                    "type": "color",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
-            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();local.ctx.restore()",
-            "help": "stroke the polygon defined by array of points",
-            "sockets": [
-                {
-                    "name": "stroke polygon ",
-                    "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "with color",
-                    "type": "color",
-                    "value": null
                 }
             ]
         }

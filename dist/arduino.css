@@ -54,7 +54,7 @@ input{
 
 
 .hidden{
-	display: none !important;
+	display: none;
 }
 
 
@@ -218,29 +218,30 @@ body{
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: column;
-	flex-direction: column;
+	-flex-direction: column;
 }
 
 .tutorial{
-	-webkit-flex: 1 1 0;
-	flex: 1 1 0;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 	background-color: #7fdbff;
 }
 
 .scratchpad{
-	-webkit-flex: 1 1 0;
-	flex: 1 1 0;
+	/*overflow: scroll;*/
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 	background-color: #3d9970;
 }
 
 .scripts_workspace{
-	-webkit-flex: 3 0 0;
-	flex: 3 0 0;
+	-webkit-flex: 3 1 auto;
+	flex: 3 1 auto;
 	overflow: auto;
 }
 
 .results{
-	-webkit-flex: 0 0 400px;
+	-webkit-flex: 1 1 400px;
 	flex: 1 1 400px;
 	display: -webkit-flex;
 	display: flex;
@@ -249,8 +250,8 @@ body{
 }
 
 .stage{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
+	-webkit-flex: 1 1 0;
+	flex: 1 1 0;
 }
 
 .stageframe{
@@ -259,8 +260,8 @@ body{
 }
 
 .scripts_text_view{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
+	-webkit-flex: 1 1 0;
+	flex: 1 1 0;
 	overflow: auto;
 }
 
@@ -641,9 +642,8 @@ body{
 
 .block.scripts_workspace{
     width: 100%;
-    height: calc(100% - 36px); /* 36px refers to height of tabbar class */
+    height: 95%;
     margin: 0px;
-    padding: 0px;
 }
 .block.scripts_workspace{
     width: 100%;

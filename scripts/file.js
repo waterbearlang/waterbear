@@ -45,7 +45,9 @@
 	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
-	    }), null, '    ');
+	    }), function(statusCode, x){
+            alert("Can't save to Gist:\n" + statusCode + " (" + x.statusText + ") ");
+        });
 	};
 	//populate the gist submenu with recent gists
 	wb.loadRecentGists = function loadRecentGists() {
@@ -124,6 +126,8 @@
 		// console.log("Loading gist " + id);
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
+	    }, function(statusCode, x){
+            alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
 		});
 	};
 
@@ -175,10 +179,10 @@
 	}
 
 	function loadScriptsFromExample(name){
-		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
-		}, function(xhr, status){
-			console.error('Error in wb.ajax:', status);
+		}, function(statusCode, xhr){
+			console.error(statusCode + xhr);
 		});
 	}
 
@@ -189,6 +193,8 @@
 			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
+	        }, function(statusCode, x){
+              alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
 			});
 		}else if (queryParsed.example){
 			//console.log('loading example %s', queryParsed.example);

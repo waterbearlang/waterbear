@@ -290,22 +290,13 @@
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-<<<<<<< HEAD
         } else if (wb.overlap(dragTarget, scratchpad)) {
 	    console.log(dragTarget);
-=======
-        }else if (wb.overlap(dragTarget, scratchpad)){ 
-
->>>>>>> c1c9317a678a45196dcf02519813286c90e5dc04
 	    var scratchPadStyle = scratchpad.getBoundingClientRect();
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
-    
-<<<<<<< HEAD
-	    var blockStyle = dragTarget.getBoundingClientRect();
-=======
+
 	    var blockStyle = dragTarget.getComputedRect();
->>>>>>> c1c9317a678a45196dcf02519813286c90e5dc04
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
 
@@ -315,9 +306,8 @@
 	    scratchpad.appendChild(dragTarget);
 
             //when dragging from workspace to scratchpad, this keeps workspace from
-<<<<<<< HEAD
 	    //moving around when block in scratchpad is moved.
-            dragTarget.parentElement.removeChild(dragTarget); 
+            //dragTarget.parentElement.removeChild(dragTarget); 
             Event.trigger(dragTarget, 'wb-add');
 	    return;
 	}

@@ -12568,11 +12568,7 @@ global.ajax = ajax;
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
-<<<<<<< HEAD
-    var scratchpad = document.querySelector('.scratchpad');
-=======
     var scratchpad= document.querySelector('.scratchpad'); // <- WB
->>>>>>> c1c9317a678a45196dcf02519813286c90e5dc04
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -12804,7 +12800,7 @@ global.ajax = ajax;
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
 
-	    var blockStyle = dragTarget.getComputedRect();
+	    var blockStyle = dragTarget.getBoundingClientRect();
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
 
@@ -12822,13 +12818,7 @@ global.ajax = ajax;
 	
 	
 	else if (dropTarget){
-=======
 	    //moving around when dragged block is moved in scratchpad
-            dragTarget.parentElement.removeChild(dragTarget); 
-            Event.trigger(dragTarget, 'wb-add');
-	    return;
-	}else if (dropTarget){
->>>>>>> c1c9317a678a45196dcf02519813286c90e5dc04
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step

@@ -1234,6 +1234,17 @@ function PolySprite(pos,color,points){
     this.calculateBoundingBox();
 };
 
+function createImageSprite(size,pos,image){
+     var rect = new PolySprite(pos, null,[]);
+	 rect.image = image;
+	 rect.size = size;
+	 rect.pos = pos;
+     rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+     rect.polygon.average = rect.polygon.calculateAverage();
+     rect.calculateBoundingBox();
+     return rect;
+};
+
 function createRectSprite(size,pos,color){
      var rect = new PolySprite(pos,color,[]);
      rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
@@ -1253,7 +1264,24 @@ PolySprite.prototype.draw = function(ctx){
         ctx.lineTo(this.polygon.points[i].x + this.polygon.pos.x, this.polygon.points[i].y + this.polygon.pos.y);
     };
     ctx.closePath();
-    ctx.fill();
+    if (this.image != null && this.image != 'undefined'){
+		ctx.drawImage(this.image,this.pos.x,this.pos.y,this.size.w,this.size.h);
+	}
+	else{
+		ctx.fillStyle = this.color;	
+		ctx.fill();
+		}
+};
+
+function isSpriteClicked(sprite){
+	if(global.mouse_down){
+		var pos = {x: global.mouse_x, y: global.mouse_y};
+		var color = null;
+		var size = {w: 1, h: 1};
+		var detRect = createRectSprite(size, pos, color);
+		return detRect.collides(sprite);
+	}	
+	return false;
 };
 
 PolySprite.prototype.calculateBoundingBox = function(){

@@ -294,7 +294,7 @@
                     ],
                     "script": "_s.slice(_n+_m.length)",
                     "help": "The portion of the string after the matched substring",
-                    "type": "number"
+                    "type": "string"
                 },
                 {
                     "blocktype": "expression",
@@ -305,7 +305,7 @@
                     ],
                     "script": "_s",
                     "help": "The entire string being searched (before any replacements have been made)",
-                    "type": "number"
+                    "type": "string"
                 },
                 {
                     "blocktype": "expression",
@@ -318,7 +318,7 @@
                     ],
                     "script": "arguments[Math.min(Math.max({{1}},1),_L-3)]",
                     "help": "A submatch of the matched string",
-                    "type": "number"
+                    "type": "string"
                 },
                 {
                     "blocktype": "step",
@@ -397,7 +397,7 @@
                     ],
                     "script": "_match.input.slice(_match.index+_match[0].length)",
                     "help": "The portion of the string after the matched substring",
-                    "type": "number"
+                    "type": "string"
                 },
                 {
                     "blocktype": "expression",
@@ -408,7 +408,7 @@
                     ],
                     "script": "_match.input",
                     "help": "The entire string being searched (before any replacements have been made)",
-                    "type": "number"
+                    "type": "string"
                 },
                 {
                     "blocktype": "expression",
@@ -421,7 +421,7 @@
                     ],
                     "script": "match[Math.min(Math.max({{1}},0),_match.length-1)]",
                     "help": "A submatch of the matched string",
-                    "type": "number"
+                    "type": "string"
                 }
             ]
         },

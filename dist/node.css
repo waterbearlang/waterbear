@@ -2447,6 +2447,42 @@ a .icon-flip-vertical:before {
 
 /*end languages/node/mc_game.css*/
 
+/*begin languages/node/mc_player.css*/
+.player, .player .holder{
+    border-color: hsl(264,62%,79%);
+    background-color: hsl(264,62%,89%);
+}
+
+
+/*end languages/node/mc_player.css*/
+
+/*begin languages/node/mc_position.css*/
+.position, .position .holder{
+    border-color: hsl(115, 65%, 79%);
+    background-color: hsl(115, 62%, 89%);
+}
+
+
+/*end languages/node/mc_position.css*/
+
+/*begin languages/node/mc_blocks.css*/
+.blocks, .blocks .holder{
+    border-color: hsl(195, 65%, 79%);
+    background-color: hsl(195, 62%, 89%);
+}
+
+
+/*end languages/node/mc_blocks.css*/
+
+/*begin languages/node/mc_camera.css*/
+.camera, .camera .holder{
+    border-color: hsl(164,65%,83%);
+    background-color: hsl(164, 65%, 93%);
+}
+
+
+/*end languages/node/mc_camera.css*/
+
 /*begin languages/node/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);

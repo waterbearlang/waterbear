@@ -762,19 +762,19 @@ global.ajax = ajax;
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
 
-	    var blockStyle = dragTarget.getComputedRect();
+	    var blockStyle = dragTarget.getBoundingClientRect();
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
 
-	    dragTarget.style.position = "absolute";
+	    dragTarget.style.position = "fixed";
 	    dragTarget.style.left = oldX - newOriginX;
-	    dragTarget.style.top = oldY - newOriginY;
+	    dragTarget.style.top =  oldY - newOriginY;
 	    scratchpad.appendChild(dragTarget);
 
             //when dragging from workspace to scratchpad, this keeps workspace from
 	    //moving around when block in scratchpad is moved.
             //dragTarget.parentElement.removeChild(dragTarget); 
-            Event.trigger(dragTarget, 'wb-add');
+            //Event.trigger(dragTarget, 'wb-add');
 	    return;
 	}
 	

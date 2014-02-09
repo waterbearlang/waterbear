@@ -361,14 +361,10 @@ body{
 }
 
 .scratchpad{
-<<<<<<< HEAD
 	/*overflow: scroll;*/
+	position:relative;
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-=======
-	-webkit-flex: 1 1 0;
-	flex: 1 1 0;
->>>>>>> 5386289047d6de1fc11745aa5987ffe062bbd11e
 	background-color: #3d9970;
 }
 

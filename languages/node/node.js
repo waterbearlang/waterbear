@@ -12,6 +12,9 @@ wb.wrap = function(script){
     return script;
 };
 
+wb.requiredjs={"before":{}, "after":{}};
+
+
 function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );        
@@ -51,12 +54,13 @@ wb.resetrun = function(message){
     window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
     document.querySelector('.run-scripts').style.display = 'inline-block';
     document.querySelector('.stop-scripts').style.display = 'none';
-    Event.remove('.stop-scripts', 'click');
+    //Event.remove('.stop-scripts', 'click');
 
-}    
+};
     
 wb.runScript = function(script){
 
+    // TODO : workout the ws address from the page address
     var oSocket = new WebSocket("ws://192.168.1.101:8080/");
     
     var messagebox = document.querySelector('#messagebox');
@@ -92,27 +96,22 @@ wb.runScript = function(script){
                 document.querySelector('.run-scripts').style.display = 'none';
                 document.querySelector('.stop-scripts').style.display = 'inline-block';
                 
-                Event.on('.stop-scripts', 'click', null, function(){
-                    oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
+                //Event.on('.stop-scripts', 'click', null, function(){
+                Event.once('.stop-scripts', 'click', null, function(){
+                      oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
                 });
 
                 break;
             case "completed":
                 wb.resetrun("Code Completed Successfully");
-                //messagebox.innerHTML = "Code Completed Successfully";
-                //window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
                 oSocket.close();
                 break;
             case "exit":
                 wb.resetrun("Code Exited");
-                //messagebox.innerHTML = "Code Exited";
-                //window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
                 oSocket.close();
                 break;
             case "error":
                 wb.resetrun("Code Failed " + msg.data);
-                //messagebox.innerHTML = "Code Failed" + msg.data;
-                //window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
                 oSocket.close();
                 break;
             case "sterr":
@@ -134,13 +133,80 @@ Event.on('.clear-stage', 'click', null, clearStage);
 Event.on('.edit-script', 'click', null, clearStage);
 
 
+    
+    wb.groupsFromBlock = function(block){
+        var group = block.dataset.group;
+        var values = [];
+        var childValues = [];
+        if(typeof group !== "undefined")
+        {
+            values.push(group);
+        }
+
+        if (wb.matches(block, '.context')){
+            var children = wb.findChildren(wb.findChild(block, '.contained'), '.block');            
+            childValues = children.map(wb.groupsFromBlock);
+            childValues.forEach(function(ar){
+                values = values.concat(ar);
+            });
+        }
+        return values;
+    };
+    
+    wb.getGroupsFromElements = function(elements)
+    {
+        var blockgroups = elements.map(function(elem){
+                return wb.groupsFromBlock(elem);
+            });
+      
+        var groups = [];
+        blockgroups.forEach(function(ar){
+                    groups = groups.concat(ar);             
+            });
+        
+        var uniquegroups = [];
+        var usedgroups = {};
+        groups.forEach(function(group){
+            if(typeof usedgroups[group] === "undefined")
+            {
+                usedgroups[group] = group;
+                uniquegroups.push(group);             
+            }
+        });
+        return uniquegroups;
+    
+    };
 
 wb.prettyScript = function(elements){
-    var script = js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
-        }).join(''));
+    
+    var groups = wb.getGroupsFromElements(elements);    
+    
+    var before = groups.map(function(group){
+            var req = wb.requiredjs.before[group];
+            if(typeof req !== "undefined")
+            {
+                return req;
+            }
+            return "";
+    }).join(" ")+ "\n// Your code starts here\n";
+    
+    var after = "\n//Your code ends here\n"+groups.map(function(group){
+            var req = wb.requiredjs.after[group];
+            if(typeof req !== "undefined")
+            {
+                return req;
+            }
+            return "";
+    }).join(" ");
+    
+    var script = elements.map(function(elem){
+        return wb.codeFromBlock(elem);
+    }).join('');
+    
+    var pretty = js_beautify(before+script+after);
+    
     //script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
-    return script;
+    return pretty;
 };
 
 wb.writeScript = function(elements, view){

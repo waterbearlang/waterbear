@@ -6,24 +6,15 @@ wb.choiceLists.pifaceout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
 wb.choiceLists.pifaceonoff = ["0", "1"];
 
 
-wb.prettyScript = function(elements){
+
+wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
+wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+
+
+/*wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
             return wb.codeFromBlock(elem);
         }).join(''));
-    /*process.on('SIGINT', function() {
-        console.log('Got SIGINT.  Press Control-D to exit.');
-      });*/
-    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){pfio.write_output(0);pfio.deinit(); process.exit();});process.on('EXIT',function(){pfio.write_output(0);pfio.deinit();});";
+    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
     return script;
-};
-
-/**/
-
-
-
-
-/*pfio.digital_write(0,1); // (pin, state)
-var foo = pfio.digital_read(0); // (pin; returns state)
-*/
-
-//pfio.deinit();
+};*/

@@ -2484,8 +2484,7 @@ function edit_menu(title, specs, show){
 function initLanguageFiles(){
 
     listFiles = ['languages/javascript/localizations/es/array.json'];
-
-
+    
     listFiles.forEach(function(){
         wb.ajax('languages/javascript/localizations/es/array.json', function(exampleJson){
             console.log(JSON.parse(exampleJson));
@@ -2493,8 +2492,6 @@ function initLanguageFiles(){
             console.error('Error in wb.ajax:', status);
         });
     });
-
-    
 }
 
 function initContextMenus() {

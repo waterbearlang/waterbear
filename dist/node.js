@@ -4878,6 +4878,29 @@ wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.l
 
 /*end languages/node/mc_game.js*/
 
+/*begin languages/node/mc_player.js*/
+
+/*end languages/node/mc_player.js*/
+
+/*begin languages/node/mc_position.js*/
+
+wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
+/*end languages/node/mc_position.js*/
+
+/*begin languages/node/mc_blocks.js*/
+
+wb.choiceLists.blocks = ["AIR", "STONE", "GRASS", "DIRT", "COBBLESTONE", "WOOD_PLANKS", "SAPLING", "BEDROCK", "WATER_FLOWING", "WATER_STATIONARY", "LAVA_FLOWING", "LAVA_STATIONARY", "SAND", "GRAVEL", "GOLD_ORE", "IRON_ORE", "COAL_ORE", "WOOD", "LEAVES", "GLASS", "LAPIS_LAZULI_ORE", "LAPIS_LAZULI_BLOCK", "SANDSTONE", "BED", "COBWEB", "GRASS_TALL", "WOOL", "FLOWER_YELLOW", "FLOWER_CYAN", "MUSHROOM_BROWN", "MUSHROOM_RED", "GOLD_BLOCK", "IRON_BLOCK", "STONE_SLAB_DOUBLE", "STONE_SLAB", "BRICK_BLOCK", "TNT", "BOOKSHELF", "MOSS_STONE", "OBSIDIAN", "TORCH", "FIRE", "STAIRS_WOOD", "CHEST", "DIAMOND_ORE", "DIAMOND_BLOCK", "CRAFTING_TABLE", "FARMLAND", "FURNACE_INACTIVE", "FURNACE_ACTIVE", "DOOR_WOOD", "LADDER", "STAIRS_COBBLESTONE", "DOOR_IRON", "REDSTONE_ORE", "SNOW", "ICE", "SNOW_BLOCK", "CACTUS", "CLAY", "SUGAR_CANE", "FENCE", "GLOWSTONE_BLOCK", "BEDROCK_INVISIBLE", "GLASS_PANE", "MELON", "FENCE_GATE", "GLOWING_OBSIDIAN", "NETHER_REACTOR_CORE"];
+
+wb.choiceLists.types = wb.choiceLists.types.concat(['block']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['block']);
+/*end languages/node/mc_blocks.js*/
+
+/*begin languages/node/mc_camera.js*/
+
+wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
+/*end languages/node/mc_camera.js*/
+
 /*begin languages/node/array.js*/
 
 /*end languages/node/array.js*/
@@ -5214,6 +5237,459 @@ wb.menu({
 }
 );
 /*end languages/node/mc_game.json*/
+
+/*begin languages/node/mc_player.json*/
+wb.menu({
+    "name": "Player",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "fe8f0ff3-1f52-4866-bbf0-bc3c7a850e11",
+            "sockets": [
+                {
+                    "name": "Get Player Tile Position"
+                }
+            ],
+            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Player Position"
+                        }
+                    ],
+                    "script": "playerposition",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Player Position as text"
+                        }
+                    ],
+                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
+                    "type": "string"
+                }
+            ],
+            "help": "Get the tile that the player is on"
+        },
+        {
+            "blocktype": "expression",
+            "id": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9",
+            "sockets": [
+                {
+                    "name": "Player Position"
+                }
+            ], 
+            "type":"position",
+            "script": "playerposition",
+            "help": "position"
+        }, 
+        {
+            "blocktype": "step",
+            "id": "5474d53a-b671-4392-b299-d10339ad12af",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9"
+                },
+                {   
+                    "name": "offset by",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "var posA## = {{1}};var posB## = {{2}};var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "Create new position relative to Player position"
+        },
+        {
+            "blocktype": "step",
+            "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
+            "sockets": [
+                {
+                    "name": "Move Player to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
+            "help": "Move Player to x, y, z of position"
+        }
+        
+    
+    ]
+}
+);
+/*end languages/node/mc_player.json*/
+
+/*begin languages/node/mc_position.json*/
+wb.menu({
+    "name": "Position",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+            "sockets": [
+                {
+                    "name": "x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "z",
+                    "type": "number",
+                    "value": "0"
+                }
+            ], 
+            "type":"position",
+            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
+            "help": "A position: x is across, y is up and z is depth"
+        },
+        {
+            "blocktype": "expression",
+            "id": "590c8aef-a755-4df5-8930-b430db5a3c3d",
+            "sockets": [
+                {
+                    "name": "Centre Position"
+                }
+            ], 
+            "type":"position",
+            "script": "zeros",
+            "help": "position"
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = posA##;",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],  
+                    
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            
+            "help": "create new position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
+            "sockets": [
+                {
+                    "name": "position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "equals position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "({{1}}.x === {{2}}.x && {{1}}.y === {{2}}.y && {{1}}.z === {{2}}.z);",
+            "type": "boolean",
+            "help": "are 2 positions the same"
+        },
+        {
+            "blocktype": "step",
+            "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "offset by",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],  
+                    
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            
+            "help": "create new position by adding 2 others"
+        },
+        {
+            "blocktype": "context",
+            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
+            "sockets": [
+                {
+                    "name": "Get ground position from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Ground Position"
+                        }
+                    ],
+                    "script": "groundposition",
+                    "type": "position"
+                }
+            ],
+            "help": "get height of blocks at position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
+            "sockets": [
+                {
+                    "name": "x from",                    
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "{{1}}.x",
+            "type": "number",
+            "help": "the x (across) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
+            "sockets": [
+                {
+                    "name": "y from",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "{{1}}.y",
+            "type": "number",
+            "help": "the y (up) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "96c32f90-7234-4463-b18d-d528271bf224",
+            "sockets": [
+                {
+                    "name": "z from",
+                    "type": "position",
+                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],  
+            "script": "{{1}}.z",
+            "type": "number",
+            "help": "the z (depth) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "3fa57ab7-bfed-4d36-8307-0ba11eda25f0",
+            "sockets": [
+                {
+                    "name": "position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "as text"
+                }
+            ],  
+            "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
+            "type": "string",
+            "help": "Position as text"
+        }
+    ]
+}
+);
+/*end languages/node/mc_position.json*/
+
+/*begin languages/node/mc_blocks.json*/
+wb.menu({
+    "name": "Blocks",
+    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "b8020f54-43d2-4207-8529-336eb035898c",
+            "sockets": [
+                    {
+                        "name": "get Block Type at",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    }
+                ],
+            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "block##"
+                            }
+                        ],
+                    "script": "parseInt(block##)",
+                    "type": "number"
+                }
+            ],
+            "help": "get block type at x, y, z"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a7c17404-8555-42be-877e-9d01d7647604",
+            "sockets": [
+                    {
+                    "name": "block",
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+                ],
+            "script": "{{1}}",
+            "type": "number",
+            "help": "a blocktype"
+        },
+        {
+            "blocktype": "step",
+            "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
+            "sockets": [
+                {
+                    "name": "set Block at",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+            ],
+            "script": "client.setBlock({{1}}.x, {{1}}.y, {{1}}.z, client.blocks[{{2}}]);",
+            "help": "set block at position"
+        },
+        {
+            "blocktype": "step",
+            "id": "3969a128-5e8d-4320-9f91-73bebf81820f",
+            "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
+            "sockets": [
+                {
+                    "name": "set Blocks between",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "and",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+            ],
+            "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
+            "help": "set blocks in a 3D rectangle between the first and second postions to .."
+        },
+        {
+            "blocktype": "expression",
+            "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
+            "sockets": [
+                {
+                    "name": "block type name",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
+            "type": "string",
+            "help": "name of a blocktype by number"
+        }
+    ]
+}
+);
+/*end languages/node/mc_blocks.json*/
+
+/*begin languages/node/mc_camera.json*/
+wb.menu({
+    "name": "Camera",
+    "blocks": [
+      
+      
+        {
+            "blocktype": "step",
+            "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
+            "sockets": [
+                {
+                    "name": "set camera mode to",
+                    "type": "choice",
+                    "options": "cameramode",
+                    "value": "choice"
+                }
+                
+            ],
+            "script": "client.setCameraMode({{1}});",
+            "help": "set camera mode"
+        },
+        {
+            "blocktype": "step",
+            "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
+            "sockets": [
+                {
+                    "name": "set camera position to",
+                    "type": "position"
+                }
+            ],
+            "script": "client.setCameraPosition({{1}}.x, {{1}}.y, {{1}}.z);",
+            "help": "set camera position to a position"
+        }
+    ]
+}
+);
+/*end languages/node/mc_camera.json*/
 
 /*begin languages/node/array.json*/
 wb.menu({

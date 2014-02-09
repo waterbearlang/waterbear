@@ -11,7 +11,7 @@
                         {
                             "name": "spanisharray##"
                         }
-                    ],
+                    ]
                 }
             ],
             "sockets": [
@@ -29,12 +29,12 @@
                         {
                             "name": "spanisharray##"
                         }
-                    ],
+                    ]
                 }
             ],
             "sockets": [
                 {
-                    "name": "spanishnew array with array##",
+                    "name": "spanishnew array with array##"
                 }
             ]
         },
@@ -43,10 +43,10 @@
             "help": "get an item from an index in the array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
-                    "name": "spanishitem",
+                    "name": "spanishitem"
                 }
             ]
         },
@@ -55,10 +55,10 @@
             "help": "join items of an array into a string, each item separated by given string",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
-                    "name": "spanishjoin with",
+                    "name": "spanishjoin with"
                 }
             ]
         },
@@ -67,10 +67,10 @@
             "help": "add any object to the end of an array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
-                    "name": "spanishappend",
+                    "name": "spanishappend"
                 }
             ]
         },
@@ -79,10 +79,10 @@
             "help": "add any object to the beginning of an array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
-                    "name": "spanishprepend",
+                    "name": "spanishprepend"
                 }
             ]
         },
@@ -91,7 +91,7 @@
             "help": "get the length of an array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
                     "name": "spanishlength"
@@ -103,10 +103,10 @@
             "help": "remove item at index from an array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
-                    "name": "spanishremove item",
+                    "name": "spanishremove item"
                 }
             ]
         },
@@ -115,7 +115,7 @@
             "help": "remove and return the last item from an array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
                     "name": "spanishpop"
@@ -127,7 +127,7 @@
             "help": "remove and return the first item from an array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
                     "name": "spanishshift"
@@ -139,7 +139,7 @@
             "help": "reverse a copy of array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
                     "name": "spanishreversed"
@@ -151,10 +151,10 @@
             "help": "a new array formed by joining the arrays",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
-                    "name": "spanishconcat",
+                    "name": "spanishconcat"
                 }
             ]
         },
@@ -167,7 +167,7 @@
                             "name": "spanishindex"
                         }
                     ],
-                    "help": "index of current item in array",
+                    "help": "index of current item in array"
                 },
                 {
                     "sockets": [
@@ -175,13 +175,13 @@
                             "name": "spanishitem"
                         }
                     ],
-                    "help": "the current item in the iteration",
+                    "help": "the current item in the iteration"
                 }
             ],
             "help": "run the blocks with each item of a named array",
             "sockets": [
                 {
-                    "name": "spanisharray",
+                    "name": "spanisharray"
                 },
                 {
                     "name": "spanishfor each"

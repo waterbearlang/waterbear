@@ -14501,6 +14501,8 @@ function is_touch_device() {
 
 initContextMenus();
 
+initLanguageFiles();
+
 // Build the Blocks menu, this is a public method
 wb.menu = function(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
@@ -14524,6 +14526,22 @@ function edit_menu(title, specs, show){
         spec.isTemplateBlock = true;
         submenu.appendChild(wb.Block(spec));
     });
+}
+
+function initLanguageFiles(){
+
+    listFiles = ['languages/javascript/localizations/es/array.json'];
+
+
+    listFiles.forEach(function(){
+        wb.ajax('languages/javascript/localizations/es/array.json', function(exampleJson){
+            console.log(JSON.parse(exampleJson));
+        }, function(xhr, status){
+            console.error('Error in wb.ajax:', status);
+        });
+    });
+
+    
 }
 
 function initContextMenus() {

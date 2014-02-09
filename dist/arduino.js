@@ -762,7 +762,7 @@ global.ajax = ajax;
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
 
-	    var blockStyle = dragTarget.getBoundingClientRect();
+	    var blockStyle = dragTarget.getComputedRect();
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
 

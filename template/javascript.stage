@@ -1,12 +1,9 @@
 	<div class="results">
-		<div class="stage"><iframe class="stageframe" seamless="seamless" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
+		<div class="stage"><iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
 		<div class="scripts_text_view"></div>
 	</div>
 	<script>
 		var iframe = document.querySelector('.stageframe');
-		if (location.host.indexOf('local') > -1){
-			iframe.src = 'iframerunner.html';
-		}
 		function receiveMessage(event){
 			wb.iframeReady = event.data === 'ready' ? true : false;
 		}

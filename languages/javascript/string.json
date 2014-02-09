@@ -234,7 +234,7 @@
         {
             "blocktype": "context",
             "id": "C86C6CEA-8707-4CA2-B349-1DE30238B005",
-            "script": "{{1}} = {{1}}.replace({{2}}g, function() {_m = arguments[0]; _L = arguments.length; _n = arguments[_L-2]; _s = arguments[_L-1]; _r = ''; [[1]] return _r;});",
+            "script": "{{1}} = {{1}}.replace({{2}}g, function() {local.match## = new PatternMatch(arguments); local.match##.replacement = ''; [[1]] return local.match##.replacement;});",
             "help": "replace all occurrences of a pattern with a new string using regular expressions - the new string overwrites the original",
             "sockets": [
                 {
@@ -256,10 +256,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "match"
+                            "name": "match##"
                         }
                     ],
-                    "script": "_m",
+                    "script": "local.match##.match",
                     "help": "The matched substring",
                     "type": "string"
                 },
@@ -267,10 +267,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "offset"
+                            "name": "offset##"
                         }
                     ],
-                    "script": "_n",
+                    "script": "local.match##.offset",
                     "help": "The offset of the match within the string",
                     "type": "number"
                 },
@@ -278,10 +278,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "prefix"
+                            "name": "prefix##"
                         }
                     ],
-                    "script": "_s.slice(0,_n)",
+                    "script": "local.match##.prefix",
                     "help": "The portion of the string before the matched substring",
                     "type": "string"
                 },
@@ -289,10 +289,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "suffix"
+                            "name": "suffix##"
                         }
                     ],
-                    "script": "_s.slice(_n+_m.length)",
+                    "script": "local.match##.suffix",
                     "help": "The portion of the string after the matched substring",
                     "type": "string"
                 },
@@ -300,10 +300,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "string"
+                            "name": "string##"
                         }
                     ],
-                    "script": "_s",
+                    "script": "local.match##.string",
                     "help": "The entire string being searched (before any replacements have been made)",
                     "type": "string"
                 },
@@ -314,9 +314,12 @@
                             "name": "submatch",
                             "type": "number",
                             "value": 0
+                        },
+                        {
+                        	"name": "of match##"
                         }
                     ],
-                    "script": "arguments[Math.min(Math.max({{1}},1),_L-3)]",
+                    "script": "local.match##.submatches[{{1}}]",
                     "help": "A submatch of the matched string",
                     "type": "string"
                 },
@@ -324,12 +327,12 @@
                     "blocktype": "step",
                     "sockets": [
                         {
-                            "name": "result = ",
+                            "name": "result## = ",
                             "type": "string",
                             "value": null
                         }
                     ],
-                    "script": "_r = {{1}}",
+                    "script": "local.match##.replacement = {{1}}",
                     "help": "The value to replace the matched substring with"
                 }
             ]
@@ -337,7 +340,7 @@
         {
             "blocktype": "context",
             "id": "8873F12B-62F0-43F8-9E8D-86DBAADF1FC0",
-            "script": "(function(re,str) {while((_match = re.exec(str)) !== null) {[[1]]}})({{2}}g,{{1}});",
+            "script": "(function(re,str) {while((_match = re.exec(str)) !== null) {local.match## = new PatternMatch(_match); [[1]]}})({{2}}g,{{1}});",
             "help": "process substrings of a string that match a particular pattern",
             "sockets": [
                 {
@@ -359,10 +362,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "match"
+                            "name": "match##"
                         }
                     ],
-                    "script": "_match[0]",
+                    "script": "local.match##.match",
                     "help": "The matched substring",
                     "type": "string"
                 },
@@ -370,10 +373,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "offset"
+                            "name": "offset##"
                         }
                     ],
-                    "script": "_match.index",
+                    "script": "local.match##.offset",
                     "help": "The offset of the match within the string",
                     "type": "number"
                 },
@@ -381,10 +384,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "prefix"
+                            "name": "prefix##"
                         }
                     ],
-                    "script": "_match.input.slice(0,_match.index)",
+                    "script": "local.match##.prefix",
                     "help": "The portion of the string before the matched substring",
                     "type": "string"
                 },
@@ -392,10 +395,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "suffix"
+                            "name": "suffix##"
                         }
                     ],
-                    "script": "_match.input.slice(_match.index+_match[0].length)",
+                    "script": "local.match##.suffix",
                     "help": "The portion of the string after the matched substring",
                     "type": "string"
                 },
@@ -403,10 +406,10 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "string"
+                            "name": "string##"
                         }
                     ],
-                    "script": "_match.input",
+                    "script": "local.match##.string",
                     "help": "The entire string being searched (before any replacements have been made)",
                     "type": "string"
                 },
@@ -417,9 +420,12 @@
                             "name": "submatch",
                             "type": "number",
                             "value": 0
+                        },
+                        {
+                        	"name": "of match##"
                         }
                     ],
-                    "script": "match[Math.min(Math.max({{1}},0),_match.length-1)]",
+                    "script": "local.match##.submatches[{{1}}]",
                     "help": "A submatch of the matched string",
                     "type": "string"
                 }

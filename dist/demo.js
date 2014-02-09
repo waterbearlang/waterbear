@@ -2902,20 +2902,14 @@ global.ajax = ajax;
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
         // console.log('initializeDragHandlers');
-        if (Event.isTouch){
-            Event.on('.content', 'touchstart', '.block', initDrag);
-            Event.on('.content', 'touchmove', null, drag);
-            Event.on('.content', 'touchend', null, endDrag);
-            // TODO: A way to cancel the drag?
-            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
-        }else{
-            Event.on('.content', 'mousedown', '.block', initDrag);
-            Event.on('.content', 'mousemove', null, drag);
-	    //Event.on('.scratchpad', '', null, endDragInScratchpad);
-            Event.on(document.body, 'mouseup', null, endDrag);
-            Event.on(document.body, 'keyup', null, cancelDrag);
-            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-        }
+        Event.on('.content', 'touchstart', '.block', initDrag);
+        Event.on('.content', 'touchmove', null, drag);
+        Event.on('.content', 'touchend', null, endDrag);
+        // TODO: A way to cancel touch drag?
+        Event.on('.content', 'mousedown', '.block', initDrag);
+        Event.on('.content', 'mousemove', null, drag);
+        Event.on(document.body, 'mouseup', null, endDrag);
+        Event.on(document.body, 'keyup', null, cancelDrag);
     };
 })(this);
 

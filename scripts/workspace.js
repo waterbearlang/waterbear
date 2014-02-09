@@ -3,6 +3,8 @@
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
+            var path = location.href.split('?')[0];
+            history.pushState(null, '', path);
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
 			wb.scriptLoaded = false;

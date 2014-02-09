@@ -231,7 +231,7 @@
                 }
             ]
         },
-        {
+          {
 			"blocktype": "expression",
             "id": "f874f2af-c15e-44d2-9728-c14a774f22fb",
             "script": "isSpriteClicked({{1}})",

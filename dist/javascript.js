@@ -5673,7 +5673,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/sprite.json*/
 
 /*begin languages/javascript/voice.json*/
@@ -6596,6 +6597,78 @@ wb.menu({
                     "name": "shadow blur",
                     "type": "number",
                     "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
+            "help": "clear...",
+            "id": "cf17a61d-8c7a-4829-a476-0b650efda3e4",
+            "sockets": [
+                {
+                    "name": "clear rect",
+                    "type": "shape",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
+            "help": "circle...",
+            "id": "b4e05d48-32e4-4e0b-832c-b2433ffda2e2",
+            "sockets": [
+                {
+                    "name": "stroke circle at point",
+                    "type": "point",
+                    "value": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
+            "help": "fill...",
+            "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
+            "sockets": [
+                {
+                    "name": "fill shape",
+                    "type": "shape",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; Shape.strokeShape(shape##, color##, width##);",
+            "help": "stroke...",
+            "id": "90b70122-340f-46a7-9753-9c39022c00ac",
+            "sockets": [
+                {
+                    "name": "stroke shape",
+                    "type": "shape",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                },
+                {
+                    "name": "and width",
+                    "type": "number",
+                    "value": 1
                 }
             ]
         }
@@ -8904,6 +8977,7 @@ wb.menu({
     "name": "Rects",
     "blocks": [
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "67924ef4-71eb-4793-9599-d8605b14320a",
             "script": "{x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}} }",
@@ -8932,6 +9006,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "24b44fea-7be1-472a-a203-2a0d97515311",
             "script": "{x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h}",
@@ -8950,6 +9025,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "68c9cfd0-d06b-41ae-9eac-d762126f6bd7",
             "script": "{x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] };",
@@ -8963,6 +9039,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "aed385a0-7439-4b36-ad3e-fd07c562523a",
             "script": "{x: {{1}}.x, y: {{1}}.y}",
@@ -8979,6 +9056,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "453db037-c418-467b-8808-52d84c7a3273",
             "script": "{w: {{1}}.w, h: {{1}}.h}",
@@ -9305,6 +9383,7 @@ wb.menu({
     "name": "Shapes",
     "blocks": [
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
             "help": "clear...",
@@ -9318,6 +9397,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();",
             "help": "circle...",
@@ -9336,6 +9416,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
             "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
@@ -9358,6 +9439,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
             "help": "circle...",
@@ -9376,6 +9458,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.strokeStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();local.ctx.restore();",
             "id": "8a091a21-1fa9-49b6-a622-696c38556a2e",
@@ -9398,6 +9481,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();",
             "help": "circle...",
@@ -9416,6 +9500,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);",
             "help": "fill...",
@@ -9429,6 +9514,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "7a342b2b-f169-4071-8771-34394cc07393",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
@@ -9446,6 +9532,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
             "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
@@ -9468,6 +9555,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
@@ -9485,6 +9573,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "b28a6aeb-bbad-4828-8ff1-2f846e556e1a",
             "script": "var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);",
@@ -9498,6 +9587,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "ebe1b968-f117-468d-91cb-1e67c5776030",
             "script": "local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
@@ -9544,6 +9634,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
             "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();local.ctx.restore()",
@@ -9557,6 +9648,111 @@ wb.menu({
                 {
                     "name": "with color",
                     "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8219fa9f-caeb-42cf-a3e5-9cd5066b707c",
+            "script": "{type: 'circle', x: {{1}}, y: {{2}}, r: {{3}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "circle at x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "957e8a12-b933-4489-ba55-8d9a08d511a5",
+            "script": "{type: 'poly', points: {{1}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "polygon with points ",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7c7e116b-3035-43d7-9230-4d1b6cc4a7dd",
+            "script": "{type: 'rect', x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}}, r:{{5}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect at x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "with width",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a51afa9e-f6be-444c-a591-1ca0d0ab697f",
+            "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect at point",
+                    "type": "point",
+                    "value": null
+                },
+                {
+                    "name": "with size",
+                    "type": "size",
+                    "value": null
+                },
+                {
+                    "name": "border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "b2b9d08f-5d21-4742-a1fd-3f118c254c17",
+            "script": "{type: 'rect', x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] }, r:{{1}}[4];",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect from array",
+                    "type": "array",
                     "value": null
                 }
             ]

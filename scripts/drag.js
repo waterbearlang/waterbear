@@ -192,6 +192,7 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+        dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
         // WB-Specific
         document.querySelector('.content.editor').appendChild(dragTarget);
         // WB-Specific
@@ -204,7 +205,6 @@
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
-        console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -568,7 +568,7 @@
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.content', 'mousedown', '.block', initDrag);
-            Event.on('.content', 'mousemove', null, drag);
+            Event.on(document, 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);

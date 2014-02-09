@@ -64,6 +64,41 @@
         },
         {
             "blocktype": "step",
+            "id": "c876f5e8-87e9-4dc5-a6ee-8cf8e0188988",
+            "script": "local.sprite## = createImageSprite({{1}}, {{2}}, {{3}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple image sprite",
+            "sockets": [
+                {
+                    "name": "image sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with image",
+                    "type": "image",
+                    "block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
             "script": "{{1}}.draw(local.ctx);",
             "help": "draw the sprite at its current location",
@@ -193,6 +228,22 @@
                     "name": "collides with sprite",
                     "type": "sprite",
                     "value": null
+                }
+            ]
+        },
+        {
+			"blocktype": "expression",
+            "id": "f874f2af-c15e-44d2-9728-c14a774f22fb",
+            "script": "isSpriteClicked({{1}})",
+            "type": "boolean",
+            "help": "test for click",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite"
+                },
+                {
+                    "name": "is clicked?"
                 }
             ]
         },

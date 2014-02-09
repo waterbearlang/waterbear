@@ -2610,6 +2610,8 @@ if (document.body.clientWidth > 360){
 	Event.on(document.body, 'wb-modified', null, updateScriptsView);
 }
 
+wb.menu = menu;
+
 })(wb);
 
 

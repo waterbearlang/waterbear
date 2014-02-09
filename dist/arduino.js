@@ -656,8 +656,6 @@ global.ajax = ajax;
                 scope = null;
             }
             cloned = true;
-            // Make sure the workspace is available to drag to
-            wb.showWorkspace('block'); // not needed with new layout?
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere
@@ -1794,7 +1792,6 @@ global.ajax = ajax;
 			// nothing to save
 			return;
 		}
-		wb.showWorkspace('block');
 		document.querySelector('#block_menu').scrollIntoView();
 		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
 	};
@@ -2146,18 +2143,6 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 // UI Chrome Section
 
-// function tabSelect(event){
-//     var target = event.wbTarget;
-//     event.preventDefault();
-//     document.querySelector('.tabbar .selected').classList.remove('selected');
-//     target.classList.add('selected');
-//     if (wb.matches(target, '.scripts_workspace_tab')){
-//         showWorkspace('block');
-//     }else if (wb.matches(target, '.scripts_text_view_tab')){
-//         showWorkspace('text');
-//         updateScriptsView();
-//     }
-// }
 
 function accordion(event){
     event.preventDefault();
@@ -2170,26 +2155,6 @@ function accordion(event){
 }
 
 
-function showWorkspace(mode){
-	return;
-    // console.log('showWorkspace');
-    // var workspace = document.querySelector('.workspace');
-    // var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    // if (!scriptsWorkspace) return;
-    // var scriptsTextView = document.querySelector('.scripts_text_view');
-    // if (mode === 'block'){
-	   //  scriptsWorkspace.style.display = '';
-	   //  scriptsTextView.style.display = 'none';
-    //     workspace.classList.remove('textview');
-    //     workspace.classList.add('blockview');
-    // }else if (mode === 'text'){
-    // 	scriptsWorkspace.style.display = 'none';
-    // 	scriptsTextView.style.display = '';
-    //     workspace.classList.remove('blockview');
-    //     workspace.classList.add('textview');
-    // }
-}
-// Expose this to dragging and saving functionality
 
 
 function updateScriptsView(){

@@ -86,6 +86,7 @@
     }
 
     function clearStage(event){
+        wb.iframeReady = false;
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     wb.clearStage = clearStage;

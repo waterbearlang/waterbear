@@ -183,8 +183,6 @@
                 scope = null;
             }
             cloned = true;
-            // Make sure the workspace is available to drag to
-            wb.showWorkspace('block'); // not needed with new layout?
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere

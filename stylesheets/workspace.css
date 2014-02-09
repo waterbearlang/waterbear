@@ -51,8 +51,8 @@ input{
 }
 
 
-.hidden{
-	display: none !important;
+.hidden, .block.hidden{
+	display: none;
 }
 
 

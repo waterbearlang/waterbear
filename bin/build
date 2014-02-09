@@ -14,7 +14,7 @@ var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
     javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
-    node: ['node','control', 'piface', 'array', 'boolean', 'math', 'string'], /*'minecraftjs','mc_game', 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
+    node: ['node','control', 'piface',"mc_game", 'array', 'boolean', 'math', 'string'], /*'minecraftjs','mc_game', 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
     minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
     demo: ['javascript', 'demo'],
     processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],

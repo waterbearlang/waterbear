@@ -2438,6 +2438,15 @@ a .icon-flip-vertical:before {
 
 /*end languages/node/piface.css*/
 
+/*begin languages/node/mc_game.css*/
+.minecraftgame, .minecraftgame .holder{
+    border-color: hsl(156, 90%, 66%);
+    background-color: hsl(156, 85%, 70%);
+}
+
+
+/*end languages/node/mc_game.css*/
+
 /*begin languages/node/array.css*/
 .arrays, .arrays .holder{
     border-color: hsl(195, 65%, 79%);

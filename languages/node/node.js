@@ -180,8 +180,11 @@ Event.on('.edit-script', 'click', null, clearStage);
 wb.prettyScript = function(elements){
     
     var groups = wb.getGroupsFromElements(elements);    
+    console.log("groups =", groups);
     
     var before = groups.map(function(group){
+            console.log("before group =", group);
+            
             var req = wb.requiredjs.before[group];
             if(typeof req !== "undefined")
             {
@@ -190,7 +193,12 @@ wb.prettyScript = function(elements){
             return "";
     }).join(" ")+ "\n// Your code starts here\n";
     
+    
+            console.log("wb.requiredjs.before =", wb.requiredjs.before);
+    console.log("before =", before);
+    
     var after = "\n//Your code ends here\n"+groups.map(function(group){
+            
             var req = wb.requiredjs.after[group];
             if(typeof req !== "undefined")
             {
@@ -202,6 +210,10 @@ wb.prettyScript = function(elements){
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
     }).join('');
+    
+    
+            console.log("wb.requiredjs.after =", wb.requiredjs.after);
+    console.log("after =", after);
     
     var pretty = js_beautify(before+script+after);
     

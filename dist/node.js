@@ -4763,8 +4763,11 @@ Event.on('.edit-script', 'click', null, clearStage);
 wb.prettyScript = function(elements){
     
     var groups = wb.getGroupsFromElements(elements);    
+    console.log("groups =", groups);
     
     var before = groups.map(function(group){
+            console.log("before group =", group);
+            
             var req = wb.requiredjs.before[group];
             if(typeof req !== "undefined")
             {
@@ -4773,7 +4776,12 @@ wb.prettyScript = function(elements){
             return "";
     }).join(" ")+ "\n// Your code starts here\n";
     
+    
+            console.log("wb.requiredjs.before =", wb.requiredjs.before);
+    console.log("before =", before);
+    
     var after = "\n//Your code ends here\n"+groups.map(function(group){
+            
             var req = wb.requiredjs.after[group];
             if(typeof req !== "undefined")
             {
@@ -4785,6 +4793,10 @@ wb.prettyScript = function(elements){
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
     }).join('');
+    
+    
+            console.log("wb.requiredjs.after =", wb.requiredjs.after);
+    console.log("after =", after);
     
     var pretty = js_beautify(before+script+after);
     
@@ -4854,15 +4866,17 @@ wb.choiceLists.pifaceonoff = ["0", "1"];
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
 wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
 
-
-/*wb.prettyScript = function(elements){
-    var script = js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
-        }).join(''));
-    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
-    return script;
-};*/
 /*end languages/node/piface.js*/
+
+/*begin languages/node/mc_game.js*/
+   
+
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');";
+
+wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+
+
+/*end languages/node/mc_game.js*/
 
 /*begin languages/node/array.js*/
 
@@ -5135,6 +5149,71 @@ wb.menu({
     ]
 });
 /*end languages/node/piface.json*/
+
+/*begin languages/node/mc_game.json*/
+wb.menu({
+    "name": "Minecraft Game",
+    "blocks": [
+        
+        {
+            "blocktype": "context",
+            "id": "72725388-7c3f-49ba-9b77-f71b1d2eb3d5",
+            "sockets": [
+                    {
+                        "name": "Connect To Minecraft"
+                    }
+                ],
+            "script": "var client = new Minecraft('localhost', 4711, function() {var zeros={x:0, y:0, z:0};[[1]]});",
+            "help": "All Minecraft things in here"
+        },
+        
+        
+        {
+            "blocktype": "step",
+            "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
+            "sockets": [
+                {
+                    "name": "Say",
+                    "type": "string",
+                    "value": "hi"
+                },
+                {
+                    "name": "in chat"
+                }
+                
+            ],
+            "script": "client.chat({{1}});",
+            "help": "Send a message as chat"
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "de9bb25d-481d-43e8-88b1-c9f56160f85e",
+            "sockets": [
+                {
+                    "name": "Save Checkpoint"
+                }
+            ],
+            "script": "client.saveCheckpoint();",
+            "help": "Save Checkpoint"
+        },
+        
+        
+        {
+            "blocktype": "step",
+            "id": "e5aa0ed8-035c-4349-bfdb-405ea9e72eec",
+            "sockets": [
+                {
+                    "name": "Restore Checkpoint"
+                }
+            ],
+            "script": "client.restoreCheckpoint();",
+            "help": "Restore Last Checkpoint"
+        }
+    ]
+}
+);
+/*end languages/node/mc_game.json*/
 
 /*begin languages/node/array.json*/
 wb.menu({

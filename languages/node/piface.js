@@ -9,12 +9,3 @@ wb.choiceLists.pifaceonoff = ["0", "1"];
 
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
 wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
-
-
-/*wb.prettyScript = function(elements){
-    var script = js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
-        }).join(''));
-    script = "var pfio = require('piface-node');\npfio.init();\n"+script+"\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
-    return script;
-};*/

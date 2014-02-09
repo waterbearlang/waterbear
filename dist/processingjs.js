@@ -12397,14 +12397,14 @@ global.ajax = ajax;
                     // console.log('event is not valid');
                     return;
                 }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
+                }
                 if (wb.matches(event.wbTarget, selector)){
                     handler(event);
                 }else if (wb.matches(event.wbTarget, selector + ' *')){
                     event.wbTarget = wb.closest(event.wbTarget, selector);
                     handler(event);
-                }
-                if (onceOnly){
-                    Event.off(elem, eventname, listener);
                 }
             };
         }else{
@@ -12413,10 +12413,10 @@ global.ajax = ajax;
                 if (!event.wbValid){
                     return;
                 }
-                handler(event);
                 if (onceOnly){
                     Event.off(elem, eventname, listener);
                 }
+                handler(event);
             };
         }
         elem.addEventListener(eventname, listener, false);

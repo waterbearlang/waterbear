@@ -274,7 +274,6 @@
         resetDragStyles(); // <- WB
         // WB-Specific
 	if (wb.overlap(dragTarget, blockMenu)){
-	    alert("Bye");
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);

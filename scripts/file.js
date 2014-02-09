@@ -130,6 +130,9 @@
 	    }, function(statusCode, x){
             alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
 		});
+        var path = location.href.split('?')[0];
+        path += "?gist=" + gistID;
+        history.pushState(null, '', path);
 	};
 
 	function loadScriptsFromFilesystem(event){

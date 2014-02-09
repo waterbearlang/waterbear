@@ -196,6 +196,7 @@
         // get position and append target to .content, adjust offsets
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+        dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
         // WB-Specific
         document.body.appendChild(dragTarget);
         // WB-Specific
@@ -208,7 +209,6 @@
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
-        // console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);

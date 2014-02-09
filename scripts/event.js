@@ -7,7 +7,7 @@
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler, onceOnly){
+    function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -57,7 +57,7 @@
         return listener;
     };
 
-    var off = function(elem, eventname, handler){
+    function off(elem, eventname, handler){
         elem.removeEventListener(eventname, handler);
     }
 
@@ -65,7 +65,7 @@
         return Event.on(elem, eventname, selector, handler, true);
     }
 
-    var trigger = function(elemOrSelector, eventname, data){
+    function trigger(elemOrSelector, eventname, data){
         var elem;
         if (elemOrSelector.nodeName){
             elem = elemOrSelector;
@@ -79,7 +79,7 @@
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isMouseEvent = function isMouseEvent(event){
+    function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
             case 'mousemove':
@@ -90,7 +90,7 @@
                 return false;
         }
     };
-    var isTouchEvent = function isTouchEvent(event){
+    function isTouchEvent(event){
         switch(event.type){
             case 'touchstart':
             case 'touchmove':
@@ -102,12 +102,12 @@
         }
     };
 
-    var isPointerEvent = function isPointerEvent(event){
+    function isPointerEvent(event){
         return isTouchEvent(event) || isMouseEvent(event);
     };
 
     // Treat mouse events and single-finger touch events similarly
-    var blend = function(event){
+    function blend(event){
         if (isPointerEvent(event)){
             if (isTouchEvent(event)){
                 var touch = null;

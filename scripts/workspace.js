@@ -1,12 +1,11 @@
 (function(wb){
 
-	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
-
-	wb.clearScripts = function clearScripts(event, force){
+	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
+			wb.scriptLoaded = false;
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.scripts_text_view').innerHTML = '';
@@ -16,15 +15,9 @@
 		}
 	}
 	
-	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
-	Event.on('.edit-script', 'click', null, function(event){
-		wb.historySwitchState('editor');
-	});
-
-	Event.on(document.body, 'click', '.load-example', function(evt){
-		console.log('load example ' + evt.target.dataset.example);
+	function loadExample(event){
 		var path = location.href.split('?')[0];
-		path += "?example=" + evt.target.dataset.example;
+		path += "?example=" + event.target.dataset.example;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
@@ -38,9 +31,9 @@
 			history.pushState(null, '', path);
 			Event.trigger(document.body, 'wb-state-change');
 		}
-	});
+	}
 
-	var handleStateChange = function handleStateChange(evt){
+	function handleStateChange(event){
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
@@ -77,19 +70,15 @@
 	    	wb.clearStage();
 	    }
 	}
-	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 
-	var hideLoader = function hideLoader(){
+	function hideLoader(){
 	    var loader = document.querySelector('#block_menu_load');
 	    if (loader){
 	        loader.parentElement.removeChild(loader);
 	    }		
 	}
 
-
-	// Load and Save Section
-
-	wb.historySwitchState = function historySwitchState(state, clearFiles){
+	function historySwitchState(state, clearFiles){
 		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
@@ -108,14 +97,6 @@
 
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
-
-	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
-	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
-	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
-	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-
-	wb.loaded = false;
-
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
@@ -138,11 +119,10 @@
 		});
 		wb.wireUpWorkspace(workspace);
 	}
-	wb.createWorkspace = createWorkspace;
-
-	wb.wireUpWorkspace = function wireUpWorkspace(workspace){
+	
+	function wireUpWorkspace(workspace){
 		workspace.addEventListener('drop', wb.getFiles, false);
-		workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+		workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
 		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
 	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
 	    });
@@ -152,34 +132,24 @@
 		Event.trigger(document.body, 'wb-workspace-initialized');
 	};
 
-	Event.once(document.body, 'wb-workspace-initialized', null, wb.initializeDragHandlers);
 
 	function handleDragover(evt){
 	    // Stop Firefox from grabbing the file prematurely
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	    evt.dataTransfer.dropEffect = 'copy';
+	    event.stopPropagation();
+	    event.preventDefault();
+	    event.dataTransfer.dropEffect = 'copy';
 	}
 
-	Event.on('.workspace', 'click', '.disclosure', function(evt){
-		var block = wb.closest(evt.wbTarget, '.block');
+	function disclosure(event){
+		var block = wb.closest(event.wbTarget, '.block');
 		if (block.dataset.closed){
 			delete block.dataset.closed;
 		}else{
 			block.dataset.closed = true;
 		}
-	});
+	}
 
-	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-	Event.on('.workspace', 'keypress', 'input', wb.resize);
-	Event.on('.workspace', 'change', 'input, select', function(evt){
-		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
-
-	});
-	// Event.on(document.body, 'wb-loaded', null, function(evt){
-	// 	console.log('menu loaded');
-	// });
-	Event.on(document.body, 'wb-script-loaded', null, function(evt){
+	function handleScriptLoad(event){
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
@@ -199,16 +169,16 @@
 		}
 		// clear undo/redo stack
 		console.log('script loaded');
-	});
+	}
 
-	Event.on(document.body, 'wb-modified', null, function(evt){
+	function handleScriptModify(event){
 		// still need modified events for changing input values
 		if (!wb.scriptLoaded) return;
 		if (!wb.scriptModified){
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
-	});
+	}
 
 	function runFullSize(){
 		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
@@ -291,5 +261,32 @@
 		wb.windowLoaded = true;
 		wb.workspaceInitialized = true;
 		Event.trigger(document.body, 'wb-state-change');
+	}, false);
+	Event.once(document.body, 'wb-workspace-initialized', null, wb.initializeDragHandlers);
+
+	Event.on('.clear_scripts', 'click', null, clearScripts);
+	Event.on('.edit-script', 'click', null, function(event){
+		wb.historySwitchState('editor');
 	});
+	Event.on('.content', 'click', '.load-example', loadExample);
+	Event.on(document.body, 'wb-state-change', null, handleStateChange);
+	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+	Event.on('.workspace', 'click', '.disclosure', disclosure);
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on('.workspace', 'change', 'input, select', function(event){
+		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+	});
+	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
+	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+	wb.loaded = false;
+	wb.clearScripts = clearScripts;
+	wb.historySwitchState = historySwitchState;
+	wb.createWorkspace = createWorkspace;
+	wb.wireUpWorkspace = wireUpWorkspace;
 })(wb);

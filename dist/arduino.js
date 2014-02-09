@@ -565,7 +565,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
-	scratchpad = document.querySelector('.scratchpad');
+	var scratchpad= document.querySelector('.scratchpad'); // <- WB
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -2581,6 +2581,8 @@ wb.menu = menu;
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.scripts_workspace')
+            var path = location.href.split('?')[0];
+            history.pushState(null, '', path);
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
 			wb.scriptLoaded = false;

@@ -4972,7 +4972,7 @@ wb.menu({
             ]
         },
         {
-            "blocktype": "eventhandler",
+            "blocktype": "context",
             "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
             "locals": [
                 {
@@ -4996,6 +4996,37 @@ wb.menu({
                 },
                 {
                     "name": "times a second"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "blocktype": "context",
+            "id": "89d08188-64e0-48a1-87ff-47719e35d0bb",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000*{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "Repeat every",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "seconds"
                 }
             ]
         },

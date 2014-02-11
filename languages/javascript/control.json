@@ -303,6 +303,30 @@
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "AB5EB656-EF22-4DD3-9B5B-9A5187DF2F2F",
+            "script": "(({{1}}) ? ({{2}}) : ({{3}}))",
+            "help": "select a result based on a condition",
+            "type": "any",
+            "sockets": [
+                {
+                    "name": "if",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "then",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "else",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
             "script": "while(!({{1}})){[[1]]}",

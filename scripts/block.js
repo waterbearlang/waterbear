@@ -18,31 +18,28 @@
 
     var elem = wb.elem;
 
+    var nextSeqNum = 0;
+    var blockRegistry = {};
 
-    var _nextSeqNum = 0;
-
-    var newSeqNum = function(){
-        _nextSeqNum++;
-        return _nextSeqNum;
+    function newSeqNum(){
+        nextSeqNum++;
+        return nextSeqNum;
     };
 
-    var registerSeqNum = function(seqNum){
+    function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        _nextSeqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
+        nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
-    var blockRegistry = {};
-    wb.blockRegistry = blockRegistry;
-
-    var resetSeqNum = function(){
-        _nextSeqNum = 0;
+    function resetSeqNum(){
+        nextSeqNum = 0;
         blockRegistry = {};
         wb.blockRegistry = blockRegistry;
     }
 
-    var registerBlock = function(blockdesc){
+    function registerBlock(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
         }else if (!blockdesc.isTemplateBlock){
@@ -54,11 +51,11 @@
         blockRegistry[blockdesc.id] = blockdesc;
     }
 
-    var getHelp = function(id){
+    function getHelp(id){
         return blockRegistry[id] ? blockRegistry[id].help : '';
     }
 
-    var getScript = function(id){
+    function getScript(id){
         try{
             return blockRegistry[id].script;
         }catch(e){
@@ -68,23 +65,21 @@
         }
     }
 
-    var getSockets = function(block){
+    function getSockets(block){
         return wb.findChildren(wb.findChild(block, '.label'), '.socket');
     }
 
-    var getSocketValue = function(socket){
+    function getSocketValue (socket){
         return socketValue(wb.findChild(socket, '.holder'));
     }
 
-    var createSockets = function(obj){
+    function createSockets(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
         });
     }
 
     var Block = function(obj){
-        // FIXME:
-        // Handle customized names (sockets)
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -161,10 +156,7 @@
 
     // Block Event Handlers
 
-    Event.on(document.body, 'wb-remove', '.block', removeBlock);
-    Event.on(document.body, 'wb-add', '.block', addBlock);
-    Event.on(document.body, 'wb-clone', '.block', onClone);
-    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -260,12 +252,6 @@
         if (event.stopPropagation){
             event.stopPropagation();
         }
-    }
-
-    function onClone(event){
-        // a block has been cloned. Praise The Loa!
-        var block = event.wbTarget;
-        // console.log('block cloned %o', block);
     }
 
     var Socket = function(desc, blockdesc){
@@ -501,7 +487,7 @@
         return input;
     }
 
-    var socketValue = function(holder){
+    function socketValue(holder){
         if (holder.children.length > 1){
             return codeFromBlock(wb.findChild(holder, '.block'));
         }else{
@@ -522,7 +508,7 @@
         }
     }
 
-    var codeFromBlock = function(block){
+    function codeFromBlock(block){
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -632,6 +618,11 @@
         }
     }
 
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    wb.blockRegistry = blockRegistry;
 
     // Export methods
     wb.Block = Block;
@@ -640,7 +631,6 @@
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
-    wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
     wb.getSockets = getSockets;
     wb.getSocketValue = getSocketValue;

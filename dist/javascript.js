@@ -1840,21 +1840,101 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*end events.min.js*/
 
 /*begin ajax.js*/
-(function(global){
-function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
-function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+(function (global) {
+    function $(e) {
+        if (typeof e == 'string') e = document.getElementById(e);
+        return e
+    };
 
-ajax={};
-ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
-ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
-ajax.send=function(u,f,m,a){var x=ajax.x();x.open(m,u,true);x.onreadystatechange=function(){if(x.readyState==4)f(x.responseText)};if(m=='POST')x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send(a)};
-ajax.get=function(url,func){ajax.send(url,func,'GET')};
-ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
-ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
-ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
-ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
-global.ajax = ajax;
+    function collect(a, f) {
+        var n = [];
+        for (var i = 0; i < a.length; i++) {
+            var v = f(a[i]);
+            if (v != null) n.push(v)
+        }
+        return n
+    };
+
+    ajax = {};
+    ajax.x = function () {
+        try {
+            return new ActiveXObject('Msxml2.XMLHTTP')
+        } catch (e) {
+            try {
+                return new ActiveXObject('Microsoft.XMLHTTP')
+            } catch (e) {
+                return new XMLHttpRequest()
+            }
+        }
+    };
+    ajax.serialize = function (f) {
+        var g = function (n) {
+            return f.getElementsByTagName(n)
+        };
+        var nv = function (e) {
+            if (e.name) return encodeURIComponent(e.name) + '=' + encodeURIComponent(e.value);
+            else return ''
+        };
+        var i = collect(g('input'), function (i) {
+            if ((i.type != 'radio' && i.type != 'checkbox') || i.checked) return nv(i)
+        });
+        var s = collect(g('select'), nv);
+        var t = collect(g('textarea'), nv);
+        return i.concat(s).concat(t).join('&');
+    };
+
+    ajax.send = function (u, f, m, a, e) {
+        var x = ajax.x();
+        x.open(m, u, true);
+        x.onreadystatechange = function () {
+            if (x.readyState == 4 && x.status < 400) {
+                cType = x.getResponseHeader("Content-Type");
+                f(x.responseText, cType);
+            } else if (x.readyState == 4) {
+                if (e == undefined) {
+                    console.log(x.status + " (" + x.statusText + ") ");
+                } else {
+                    e(x.status, x);
+                }
+            }
+        };
+        if (m == 'POST')
+            x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        x.send(a);
+    };
+
+    ajax.get = function (url, func, err) {
+        ajax.send(url, func, 'GET', {}, err)
+    };
+
+    ajax.gets = function (url) {
+        var x = ajax.x();
+        x.open('GET', url, false);
+        x.send(null);
+        return x.responseText
+    };
+
+    ajax.post = function (url, func, args, err) {
+        ajax.send(url, func, 'POST', args, err)
+    };
+
+    ajax.update = function (url, elm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.get(url, f)
+    };
+    ajax.submit = function (url, elm, frm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.post(url, f, ajax.serialize(frm))
+    };
+    global.ajax = ajax;
 })(this);
+
 /*end ajax.js*/
 
 /*begin queryparams.js*/
@@ -1863,7 +1943,7 @@ global.ajax = ajax;
 (function(global){
 
 	// Source: http://stackoverflow.com/a/13984429
-	wb.urlToQueryParams = function(url){
+	function urlToQueryParams(url){
 	    var qparams = {},
 	        parts = (url||'').split('?'),
 	        qparts, qpart,
@@ -1883,7 +1963,7 @@ global.ajax = ajax;
 	    return qparams;
 	};
 
-	wb.queryParamsToUrl = function(params){
+	function queryParamsToUrl(params){
 		var base = location.href.split('?')[0];
 		var keys = Object.keys(params);
 		var parts = [];
@@ -1901,6 +1981,9 @@ global.ajax = ajax;
 		}
 		return base + '?' + parts.join('&');
 	}
+
+	wb.urlToQueryParams = urlToQueryParams;
+	wb.queryParamsToUrl = queryParamsToUrl;
 	global.wb = wb;
 })(this);
 
@@ -1918,35 +2001,35 @@ global.ajax = ajax;
     // TODO
     // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
-    wb.makeArray = function makeArray(arrayLike){
+    function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
     };
 
-    wb.reposition = function reposition(elem, position){
+    function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
     };
 
-    wb.hide = function(elem){
+    function hide(elem){
         elem.dataset.display = elem.style.display;
         elem.style.display = 'none';
     };
 
-    wb.show = function(elem){
+    function show(elem){
         elem.style.display = elem.dataset.display || 'block';
         delete elem.dataset.display;
     };
 
-    var svgtext = document.querySelector('svg text');
-    wb.resize = function(input){
+    var svgText = document.querySelector('svg text');
+    function resize(input){
         if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value || '';
-        var textbox = svgtext.getBBox();
+        svgText.textContent = input.value || '';
+        var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
     };
 
@@ -1954,12 +2037,12 @@ global.ajax = ajax;
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };
 
-    wb.dist = function dist(p1, p2, m1, m2){
+    function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
     };
 
 
-    wb.overlapRect = function overlapRect(r1, r2){ // determine area of overlap between two rects
+    function overlapRect(r1, r2){ // determine area of overlap between two rects
         if (r1.left > r2.right){ return 0; }
         if (r1.right < r2.left){ return 0; }
         if (r1.top > r2.bottom){ return 0; }
@@ -1968,24 +2051,24 @@ global.ajax = ajax;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
     };
 
-    wb.rect = function rect(elem){
+    function rect(elem){
         return elem.getBoundingClientRect();
     };
 
-    wb.overlap = function overlap(elem1, elem2){
+    function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
     };
 
-    wb.area = function area(elem){
+    function area(elem){
         return elem.clientWidth * elem.clientHeight;
     };
 
-    wb.containedBy = function containedBy(target, container){
+    function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
     };
 
-    wb.closest = function closest(elem, selector){
+    function closest(elem, selector){
         if (elem.jquery){
             elem = elem[0];
         }
@@ -2001,7 +2084,7 @@ global.ajax = ajax;
         return null;
     };
 
-    wb.indexOf = function indexOf(elem){
+    function indexOf(elem){
         var idx = 0;
         while(elem.previousSiblingElement){
             elem = elem.previousSiblingElement;
@@ -2010,21 +2093,21 @@ global.ajax = ajax;
         return idx;
     };
 
-    wb.find = function find(elem, selector){
+    function find(elem, selector){
         return elem.querySelector(selector);
     };
 
-    wb.findAll = function findAll(elem, selector){
+    function findAll(elem, selector){
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
-    wb.findChildren = function findChildren(elem, selector){
+    function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
     };
 
-    wb.findChild = function(elem, selector){
+    function findChild(elem, selector){
         if (arguments.length !== 2){
             throw new Exception('This is the culprit');
         }
@@ -2038,7 +2121,7 @@ global.ajax = ajax;
         return null;
     };
 
-    wb.elem = function elem(name, attributes, children){
+   function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
         // attributes can be null or undefined, or an object of key/values to set
         // children can be text or an array. If an array, can contain strings or arrays of [name, attributes, children]
@@ -2104,43 +2187,24 @@ global.ajax = ajax;
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
 
-    // AJAX utilities
-
-    var jsonpHandlers = {};
-    wb.jsonp = function(url, callback){
-        var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
-        var handler = function(data){
-            // remove jsonp 
-            var script = document.getElementById(id);
-            script.parentElement.removeChild(script);
-            // remove self
-            delete window[id];
-            callback(data);
-        };
-        window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
-    };
-
-    /* adapted from code here: http://javascriptexample.net/ajax01.php */
-    wb.ajax = function(url, success, failure){
-        var req = new XMLHttpRequest();
-        req.onreadystatechange = function() {
-            var cType;
-            if (req.readyState === 4) {
-                if (req.status === 200) {
-                    cType = this.getResponseHeader("Content-Type");
-                    success(this.responseText, cType);
-                }else{
-                    if (failure){
-                        failure(this.status, this);
-                    }
-                }
-            }
-        };
-        req.open('GET', url, true);
-        req.send(null);
-    };
-
+    wb.makeArray = makeArray;
+    wb.reposition = reposition;
+    wb.hide = hide;
+    wb.show = show;
+    wb.resize = resize;
+    wb.dist = dist;
+    wb.overlapRect = overlapRect;
+    wb.rect = rect;
+    wb.overlap = overlap;
+    wb.area = area;
+    wb.containedBy = containedBy;
+    wb.closest = closest;
+    wb.indexOf = indexOf;
+    wb.find = find;
+    wb.findAll = findAll;
+    wb.findChildren = findChildren;
+    wb.findChild = findChild;
+    wb.elem = elem;
 
 })(this);
 
@@ -2156,7 +2220,7 @@ global.ajax = ajax;
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler){
+    function on(elem, eventname, selector, handler){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -2200,11 +2264,11 @@ global.ajax = ajax;
         return listener;
     };
 
-    var off = function(elem, eventname, handler){
+    function off(elem, eventname, handler){
         elem.removeEventListener(eventname, handler);
     }
 
-    var once = function(elem, eventname, selector, handler){
+    function once(elem, eventname, selector, handler){
         var listener = function listener(event){
             handler(event);
             Event.off(elem, eventname, listener);
@@ -2212,7 +2276,7 @@ global.ajax = ajax;
         return Event.on(elem, eventname, selector, listener);
     }
 
-    var trigger = function(elemOrSelector, eventname, data){
+    function trigger(elemOrSelector, eventname, data){
         var elem;
         if (elemOrSelector.nodeName){
             elem = elemOrSelector;
@@ -2226,7 +2290,7 @@ global.ajax = ajax;
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isMouseEvent = function isMouseEvent(event){
+    function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
             case 'mousemove':
@@ -2237,7 +2301,7 @@ global.ajax = ajax;
                 return false;
         }
     };
-    var isTouchEvent = function isTouchEvent(event){
+    function isTouchEvent(event){
         switch(event.type){
             case 'touchstart':
             case 'touchmove':
@@ -2249,12 +2313,12 @@ global.ajax = ajax;
         }
     };
 
-    var isPointerEvent = function isPointerEvent(event){
+    function isPointerEvent(event){
         return isTouchEvent(event) || isMouseEvent(event);
     };
 
     // Treat mouse events and single-finger touch events similarly
-    var blend = function(event){
+    function blend(event){
         if (isPointerEvent(event)){
             if (isTouchEvent(event)){
                 var touch = null;
@@ -2361,6 +2425,7 @@ global.ajax = ajax;
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -2392,6 +2457,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	var scratchpad= document.querySelector('.scratchpad'); // <- WB
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -2493,6 +2559,7 @@ global.ajax = ajax;
         // get position and append target to .content, adjust offsets
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+        dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
         // WB-Specific
         document.querySelector('.content.editor').appendChild(dragTarget);
         // WB-Specific
@@ -2505,7 +2572,6 @@ global.ajax = ajax;
         // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
         // WB-Specific
-        console.log(potentialDropTargets.length);
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -2869,7 +2935,7 @@ global.ajax = ajax;
             // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
         }else{
             Event.on('.content', 'mousedown', '.block', initDrag);
-            Event.on('.content', 'mousemove', null, drag);
+            Event.on(document.body, 'mousemove', null, drag);
             Event.on('.content', 'mouseup', null, endDrag);
             Event.on(document.body, 'keyup', null, cancelDrag);
             // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
@@ -2943,31 +3009,28 @@ global.ajax = ajax;
 
     var elem = wb.elem;
 
+    var nextSeqNum = 0;
+    var blockRegistry = {};
 
-    var _nextSeqNum = 0;
-
-    var newSeqNum = function(){
-        _nextSeqNum++;
-        return _nextSeqNum;
+    function newSeqNum(){
+        nextSeqNum++;
+        return nextSeqNum;
     };
 
-    var registerSeqNum = function(seqNum){
+    function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        _nextSeqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
+        nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
-    var blockRegistry = {};
-    wb.blockRegistry = blockRegistry;
-
-    var resetSeqNum = function(){
-        _nextSeqNum = 0;
+    function resetSeqNum(){
+        nextSeqNum = 0;
         blockRegistry = {};
         wb.blockRegistry = blockRegistry;
     }
 
-    var registerBlock = function(blockdesc){
+    function registerBlock(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
         }else if (!blockdesc.isTemplateBlock){
@@ -2979,11 +3042,11 @@ global.ajax = ajax;
         blockRegistry[blockdesc.id] = blockdesc;
     }
 
-    var getHelp = function(id){
+    function getHelp(id){
         return blockRegistry[id] ? blockRegistry[id].help : '';
     }
 
-    var getScript = function(id){
+    function getScript(id){
         try{
             return blockRegistry[id].script;
         }catch(e){
@@ -2993,23 +3056,21 @@ global.ajax = ajax;
         }
     }
 
-    var getSockets = function(block){
+    function getSockets(block){
         return wb.findChildren(wb.findChild(block, '.label'), '.socket');
     }
 
-    var getSocketValue = function(socket){
+    function getSocketValue (socket){
         return socketValue(wb.findChild(socket, '.holder'));
     }
 
-    var createSockets = function(obj){
+    function createSockets(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
         });
     }
 
     var Block = function(obj){
-        // FIXME:
-        // Handle customized names (sockets)
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -3086,10 +3147,7 @@ global.ajax = ajax;
 
     // Block Event Handlers
 
-    Event.on(document.body, 'wb-remove', '.block', removeBlock);
-    Event.on(document.body, 'wb-add', '.block', addBlock);
-    Event.on(document.body, 'wb-clone', '.block', onClone);
-    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -3185,12 +3243,6 @@ global.ajax = ajax;
         if (event.stopPropagation){
             event.stopPropagation();
         }
-    }
-
-    function onClone(event){
-        // a block has been cloned. Praise The Loa!
-        var block = event.wbTarget;
-        // console.log('block cloned %o', block);
     }
 
     var Socket = function(desc, blockdesc){
@@ -3426,7 +3478,7 @@ global.ajax = ajax;
         return input;
     }
 
-    var socketValue = function(holder){
+    function socketValue(holder){
         if (holder.children.length > 1){
             return codeFromBlock(wb.findChild(holder, '.block'));
         }else{
@@ -3447,7 +3499,7 @@ global.ajax = ajax;
         }
     }
 
-    var codeFromBlock = function(block){
+    function codeFromBlock(block){
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -3557,6 +3609,11 @@ global.ajax = ajax;
         }
     }
 
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    wb.blockRegistry = blockRegistry;
 
     // Export methods
     wb.Block = Block;
@@ -3565,7 +3622,6 @@ global.ajax = ajax;
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
-    wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
     wb.getSockets = getSockets;
     wb.getSocketValue = getSocketValue;
@@ -3586,7 +3642,7 @@ global.ajax = ajax;
 
 (function(wb){
 
-	wb.saveCurrentScripts = function saveCurrentScripts(){
+	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
 			// nothing to save
@@ -3598,10 +3654,11 @@ global.ajax = ajax;
 	};
 
 	// Save script to gist;
-	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
+		if ( !title ) return;
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3621,10 +3678,12 @@ global.ajax = ajax;
 	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
-	    }), null, '    ');
+	    }), function(statusCode, x){
+            alert("Can't save to Gist:\n" + statusCode + " (" + x.statusText + ") ");
+        });
 	};
 	//populate the gist submenu with recent gists
-	wb.loadRecentGists = function loadRecentGists() {
+	function loadRecentGists() {
 		var localGists = localStorage['__' + wb.language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
 		var gistContainer = document.querySelector("#recent_gists");
@@ -3676,9 +3735,10 @@ global.ajax = ajax;
 	}
 
 
-	wb.createDownloadUrl = function createDownloadUrl(evt){
+	function createDownloadUrl(evt){
 	    evt.preventDefault();
 	    var name = prompt("Save file as: ");
+	    if( !name ) return;
 		var URL = window.webkitURL || window.URL;
 		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
@@ -3693,16 +3753,22 @@ global.ajax = ajax;
 		reader.readAsDataURL(file);
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+	function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
+		if( !gistID ) return;
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
+	    }, function(statusCode, x){
+            alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
 		});
+        var path = location.href.split('?')[0];
+        path += "?gist=" + gistID;
+        history.pushState(null, '', path);
 	};
 
-	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+	function loadScriptsFromFilesystem(event){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
@@ -3750,20 +3816,23 @@ global.ajax = ajax;
 	}
 
 	function loadScriptsFromExample(name){
-		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
-		}, function(xhr, status){
-			console.error('Error in wb.ajax:', status);
+		}, function(statusCode, xhr){
+			console.error(statusCode + xhr);
 		});
 	}
 
-	wb.loadCurrentScripts = function(queryParsed){
+	function loadCurrentScripts(queryParsed){
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
+		wb.scriptLoaded = false;
 		if (queryParsed.gist){
 			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
+	        }, function(statusCode, x){
+              alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
 			});
 		}else if (queryParsed.example){
 			//console.log('loading example %s', queryParsed.example);
@@ -3800,7 +3869,7 @@ global.ajax = ajax;
 		};
 	}
 
-	wb.getFiles = function getFiles(evt){
+	function getFiles(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
 		var files = evt.dataTransfer.files;
@@ -3811,6 +3880,14 @@ global.ajax = ajax;
 	    }
 	}
 
+	wb.saveCurrentScripts = saveCurrentScripts;
+	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
+	wb.loadRecentGists = loadRecentGists;
+	wb.createDownloadUrl = createDownloadUrl;
+	wb.loadScriptsFromGistId = loadScriptsFromGistId;
+	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
+	wb.loadCurrentScripts = loadCurrentScripts;
+	wb.getFiles = getFiles;
 
 })(wb);
 
@@ -3966,7 +4043,7 @@ function showWorkspace(mode){
     }
 }
 // Expose this to dragging and saving functionality
-wb.showWorkspace = showWorkspace;
+
 
 function updateScriptsView(){
     var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
@@ -4120,8 +4197,8 @@ function pasteCommand(evt) {
 	// console.log(pasteboard);
 	action = {
 		pasted: wb.cloneBlock(pasteboard),
-		into: cmenu_target.parentNode,
-		before: cmenu_target.nextSibling,
+		into: cmenuTarget.parentNode,
+		before: cmenuTarget.nextSibling,
 		undo: function() {
 			Event.trigger(this.pasted, 'wb-remove');
 			this.pasted.remove();
@@ -4132,7 +4209,7 @@ function pasteCommand(evt) {
 				this.into.insertBefore(this.pasted,this.before);
 			} else {
 				// console.log("Pasting an expression!");
-				cmenu_target.appendChild(this.pasted);
+				cmenuTarget.appendChild(this.pasted);
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
@@ -4143,20 +4220,20 @@ function pasteCommand(evt) {
 
 function canPaste() {
 	if(!pasteboard) return false;
-	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
-	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
 	return false;
 }
 
 var pasteboard = null;
-var current_cmenu = null;
-var show_context = false;
-var cmenu_disabled = false;
-var cmenu_target = null;
+var cmenuCurrent = null;
+var showContext = false;
+var cmenuDisabled = false;
+var cmenuTarget = null;
 
 function cmenuitem_enabled(menuitem) {
 	if(menuitem.enabled) {
@@ -4216,10 +4293,10 @@ function closeContextMenu(evt) {
 function handleContextMenu(evt) {
 	// console.log('handling context menu');
 	stackTrace();
-	//if(!show_context) return;
+	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -4230,13 +4307,13 @@ function handleContextMenu(evt) {
 }
 
 function setContextMenuTarget(target) {
-	cmenu_target = target;
-	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
-		// console.log(cmenu_target);
-		cmenu_target = cmenu_target.parentNode;
-		if(cmenu_target.tagName == 'BODY') {
+	cmenuTarget = target;
+	while(!wb.matches(cmenuTarget, '.block') && !wb.matches(cmenuTarget, '.holder')) {
+		// console.log(cmenuTarget);
+		cmenuTarget = cmenuTarget.parentNode;
+		if(cmenuTarget.tagName == 'BODY') {
 			console.error("Something went wrong with determining the context menu target!");
-			cmenu_target = null;
+			cmenuTarget = null;
 			contextDiv.style.display = 'none';
 		}
 	}
@@ -4252,8 +4329,8 @@ function showContextMenu(atX, atY) {
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		// console.log(cmenu_target);
-		fcn.call(cmenu_target,evt);
+		// console.log(cmenuTarget);
+		fcn.call(cmenuTarget,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';
 		evt.preventDefault();
@@ -4261,7 +4338,7 @@ function cmenuCallback(fcn) {
 }
 
 function disableContextMenu(evt) {
-	cmenu_disabled = true;
+	cmenuDisabled = true;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = '';
 	var contextDiv = document.getElementById('context_menu');
@@ -4269,7 +4346,7 @@ function disableContextMenu(evt) {
 }
 
 function enableContextMenu(evt) {
-	cmenu_disabled = false;
+	cmenuDisabled = false;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = 'none';
 }
@@ -4293,7 +4370,7 @@ function is_touch_device() {
 initContextMenus();
 
 // Build the Blocks menu, this is a public method
-wb.menu = function(blockspec){
+function menu(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     var help = blockspec.help !== undefined ? blockspec.help : '';
@@ -4332,6 +4409,8 @@ Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
+wb.showWorkspace = showWorkspace;
+wb.menu = menu;
 
 })(wb);
 
@@ -4341,13 +4420,14 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 /*begin workspace.js*/
 (function(wb){
 
-	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
-
-	wb.clearScripts = function clearScripts(event, force){
+	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
-			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			var workspace = document.querySelector('.workspace > .scripts_workspace');
+            var path = location.href.split('?')[0];
+            history.pushState(null, '', path);
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
+			wb.scriptLoaded = false;
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
@@ -4357,14 +4437,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		}
 	}
 	
-	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
-	Event.on('.edit-script', 'click', null, function(event){
-		wb.historySwitchState('editor');
-	});
-
-	Event.on('.content', 'click', '.load-example', function(evt){
+	function loadExample(event){
 		var path = location.href.split('?')[0];
-		path += "?example=" + evt.target.dataset.example;
+		path += "?example=" + event.target.dataset.example;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
@@ -4378,9 +4453,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			history.pushState(null, '', path);
 			Event.trigger(document.body, 'wb-state-change');
 		}
-	});
+	}
 
-	var handleStateChange = function handleStateChange(evt){
+	function handleStateChange(event){
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
@@ -4406,19 +4481,15 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		    }
 	    }
 	}
-	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 
-	var hideLoader = function hideLoader(){
+	function hideLoader(){
 	    var loader = document.querySelector('#block_menu_load');
 	    if (loader){
 	        loader.parentElement.removeChild(loader);
 	    }		
 	}
 
-
-	// Load and Save Section
-
-	wb.historySwitchState = function historySwitchState(state, clearFiles){
+	function historySwitchState(state, clearFiles){
 		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
@@ -4436,15 +4507,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
-
-	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
-	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
-	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
-	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-
-
-	wb.loaded = false;
-
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
@@ -4467,11 +4529,10 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		});
 		wb.wireUpWorkspace(workspace);
 	}
-	wb.createWorkspace = createWorkspace;
-
-	wb.wireUpWorkspace = function wireUpWorkspace(workspace){
+	
+	function wireUpWorkspace(workspace){
 		workspace.addEventListener('drop', wb.getFiles, false);
-		workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+		workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
 		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
 	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
 	    });
@@ -4480,32 +4541,23 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		wb.initializeDragHandlers();
 	};
 
-	function handleDragover(evt){
+	function handleDragover(event){
 	    // Stop Firefox from grabbing the file prematurely
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	    evt.dataTransfer.dropEffect = 'copy';
+	    event.stopPropagation();
+	    event.preventDefault();
+	    event.dataTransfer.dropEffect = 'copy';
 	}
 
-	Event.on('.workspace', 'click', '.disclosure', function(evt){
-		var block = wb.closest(evt.wbTarget, '.block');
+	function disclosure(event){
+		var block = wb.closest(event.wbTarget, '.block');
 		if (block.dataset.closed){
 			delete block.dataset.closed;
 		}else{
 			block.dataset.closed = true;
 		}
-	});
+	}
 
-	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-	Event.on('.workspace', 'keypress', 'input', wb.resize);
-	Event.on('.workspace', 'change', 'input, select', function(evt){
-		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
-
-	});
-	// Event.on(document.body, 'wb-loaded', null, function(evt){
-	// 	console.log('menu loaded');
-	// });
-	Event.on(document.body, 'wb-script-loaded', null, function(evt){
+	function handleScriptLoad(event){
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
@@ -4525,18 +4577,18 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		}
 		// clear undo/redo stack
 		console.log('script loaded');
-	});
+	}
 
-	Event.on(document.body, 'wb-modified', null, function(evt){
+	function handleScriptModify(event){
 		// still need modified events for changing input values
 		if (!wb.scriptLoaded) return;
 		if (!wb.scriptModified){
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
-	});
+	}
 
-	window.addEventListener('popstate', function(evt){
+	window.addEventListener('popstate', function(event){
 		// console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
@@ -4547,6 +4599,32 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		wb.windowLoaded = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
+
+	Event.on('.clear_scripts', 'click', null, clearScripts);
+	Event.on('.edit-script', 'click', null, function(event){
+		wb.historySwitchState('editor');
+	});
+	Event.on('.content', 'click', '.load-example', loadExample);
+	Event.on(document.body, 'wb-state-change', null, handleStateChange);
+	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+	Event.on('.workspace', 'click', '.disclosure', disclosure);
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on('.workspace', 'change', 'input, select', function(event){
+		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+	});
+	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
+	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+	wb.loaded = false;
+	wb.clearScripts = clearScripts;
+	wb.historySwitchState = historySwitchState;
+	wb.createWorkspace = createWorkspace;
+	wb.wireUpWorkspace = wireUpWorkspace;
 })(wb);
 
 /*end workspace.js*/
@@ -4563,18 +4641,18 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
-	var settings_link;
+	var settingsLink;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {
 		// console.log("adding settings link");
 		var block_menu = document.querySelector('#block_menu');
-		var settings_link = document.createElement('a');
-		settings_link.href = '#';
-		settings_link.style.float = 'right';
-		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
-		settings_link.addEventListener('click', toggleCheckboxDisplay);
-		block_menu.appendChild(settings_link);
-		return settings_link;
+		var settingsLink = document.createElement('a');
+		settingsLink.href = '#';
+		settingsLink.style.float = 'right';
+		settingsLink.appendChild(document.createTextNode('Show/Hide blocks'));
+		settingsLink.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settingsLink);
+		return settingsLink;
 	}
 
 	//create the checkboxes next to the headers
@@ -4602,12 +4680,12 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		if (closed) {
 			closed = false;
 			display = 'inline';
-			settings_link.innerHTML = 'Save';
+			settingsLink.innerHTML = 'Save';
 		} else {
 			//save was clicked
 			closed = true;
 			display = 'none'
-			settings_link.innerHTML = 'Show/Hide blocks';
+			settingsLink.innerHTML = 'Show/Hide blocks';
 			//save the settings
 			saveSettings();
 		}
@@ -4662,7 +4740,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
-		settings_link = addSettingsLink();
+		settingsLink = addSettingsLink();
 		createCheckboxes();
 		loadSettings();
 	}
@@ -5391,6 +5469,41 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "c876f5e8-87e9-4dc5-a6ee-8cf8e0188988",
+            "script": "local.sprite## = createImageSprite({{1}}, {{2}}, {{3}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple image sprite",
+            "sockets": [
+                {
+                    "name": "image sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with image",
+                    "type": "image",
+                    "block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
             "script": "{{1}}.draw(local.ctx);",
             "help": "draw the sprite at its current location",
@@ -5520,6 +5633,22 @@ wb.menu({
                     "name": "collides with sprite",
                     "type": "sprite",
                     "value": null
+                }
+            ]
+        },
+          {
+			"blocktype": "expression",
+            "id": "f874f2af-c15e-44d2-9728-c14a774f22fb",
+            "script": "isSpriteClicked({{1}})",
+            "type": "boolean",
+            "help": "test for click",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite"
+                },
+                {
+                    "name": "is clicked?"
                 }
             ]
         },
@@ -5731,7 +5860,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "movement direction"
+                    "name": "movement vector"
                 }
             ]
         },
@@ -5867,7 +5996,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/sprite.json*/
 
 /*begin languages/javascript/voice.json*/
@@ -8905,6 +9035,7 @@ wb.menu({
     "help": "Rect blocks represent and manipulate rectangles represented by x,y coordinates for the top left corner of the rectangle, plus a size (width,height).",
     "blocks": [
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "67924ef4-71eb-4793-9599-d8605b14320a",
             "script": "{x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}} }",
@@ -8933,6 +9064,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "24b44fea-7be1-472a-a203-2a0d97515311",
             "script": "{x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h}",
@@ -8951,6 +9083,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "68c9cfd0-d06b-41ae-9eac-d762126f6bd7",
             "script": "{x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] };",
@@ -8964,6 +9097,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "aed385a0-7439-4b36-ad3e-fd07c562523a",
             "script": "{x: {{1}}.x, y: {{1}}.y}",
@@ -8980,6 +9114,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "453db037-c418-467b-8808-52d84c7a3273",
             "script": "{w: {{1}}.w, h: {{1}}.h}",
@@ -9309,6 +9444,7 @@ wb.menu({
     "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
     "blocks": [
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
             "help": "clear...",
@@ -9322,6 +9458,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();",
             "help": "circle...",
@@ -9340,6 +9477,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
             "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
@@ -9362,6 +9500,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
             "help": "circle...",
@@ -9380,6 +9519,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.strokeStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();local.ctx.restore();",
             "id": "8a091a21-1fa9-49b6-a622-696c38556a2e",
@@ -9402,6 +9542,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();",
             "help": "circle...",
@@ -9420,6 +9561,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);",
             "help": "fill...",
@@ -9433,6 +9575,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "7a342b2b-f169-4071-8771-34394cc07393",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
@@ -9450,6 +9593,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
             "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
@@ -9472,6 +9616,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
@@ -9489,6 +9634,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "b28a6aeb-bbad-4828-8ff1-2f846e556e1a",
             "script": "var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);",
@@ -9502,6 +9648,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "ebe1b968-f117-468d-91cb-1e67c5776030",
             "script": "local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
@@ -9526,6 +9673,148 @@ wb.menu({
                     "name": "height",
                     "type": "number",
                     "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e93b909e-19f8-4f80-8308-ae896bd63189",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.fillStyle = color##; local.ctx.fill();local.ctx.restore();",
+            "help": "fill the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "fill polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "deprecated": true,
+            "blocktype": "step",
+            "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
+            "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();local.ctx.restore()",
+            "help": "stroke the polygon defined by array of points",
+            "sockets": [
+                {
+                    "name": "stroke polygon ",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8219fa9f-caeb-42cf-a3e5-9cd5066b707c",
+            "script": "{type: 'circle', x: {{1}}, y: {{2}}, r: {{3}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "circle at x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "957e8a12-b933-4489-ba55-8d9a08d511a5",
+            "script": "{type: 'poly', points: {{1}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "polygon with points ",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7c7e116b-3035-43d7-9230-4d1b6cc4a7dd",
+            "script": "{type: 'rect', x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}}, r:{{5}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect at x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "with width",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a51afa9e-f6be-444c-a591-1ca0d0ab697f",
+            "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect at point",
+                    "type": "point",
+                    "value": null
+                },
+                {
+                    "name": "with size",
+                    "type": "size",
+                    "value": null
+                },
+                {
+                    "name": "border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "b2b9d08f-5d21-4742-a1fd-3f118c254c17",
+            "script": "{type: 'rect', x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] }, r:{{1}}[4];",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect from array",
+                    "type": "array",
+                    "value": null
                 }
             ]
         }

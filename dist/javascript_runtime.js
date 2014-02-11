@@ -1234,6 +1234,17 @@ function PolySprite(pos,color,points){
     this.calculateBoundingBox();
 };
 
+function createImageSprite(size,pos,image){
+     var rect = new PolySprite(pos, null,[]);
+	 rect.image = image;
+	 rect.size = size;
+	 rect.pos = pos;
+     rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+     rect.polygon.average = rect.polygon.calculateAverage();
+     rect.calculateBoundingBox();
+     return rect;
+};
+
 function createRectSprite(size,pos,color){
      var rect = new PolySprite(pos,color,[]);
      rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
@@ -1253,7 +1264,24 @@ PolySprite.prototype.draw = function(ctx){
         ctx.lineTo(this.polygon.points[i].x + this.polygon.pos.x, this.polygon.points[i].y + this.polygon.pos.y);
     };
     ctx.closePath();
-    ctx.fill();
+    if (this.image != null && this.image != 'undefined'){
+		ctx.drawImage(this.image,this.pos.x,this.pos.y,this.size.w,this.size.h);
+	}
+	else{
+		ctx.fillStyle = this.color;	
+		ctx.fill();
+		}
+};
+
+function isSpriteClicked(sprite){
+	if(global.mouse_down){
+		var pos = {x: global.mouse_x, y: global.mouse_y};
+		var color = null;
+		var size = {w: 1, h: 1};
+		var detRect = createRectSprite(size, pos, color);
+		return detRect.collides(sprite);
+	}	
+	return false;
 };
 
 PolySprite.prototype.calculateBoundingBox = function(){
@@ -1429,6 +1457,7 @@ PolySprite.prototype.edgeWrap = function(stage_width, stage_height) {
         this.polygon.pos.y = 0;
     }
 }
+
 /*end languages/javascript/sprite_runtime.js*/
 
 /*begin languages/javascript/voice_runtime.js*/
@@ -1579,6 +1608,80 @@ Voice.refNote = Voice.notes.indexOf('A4');
 /*end languages/javascript/boolean_runtime.js*/
 
 /*begin languages/javascript/canvas_runtime.js*/
+Shape = {};
+
+window.Shape = Shape;
+
+Shape.drawCircle = function(shape) {
+    local.ctx.beginPath();
+    local.ctx.arc(shape.x,shape.y,shape.r,0,Math.PI*2,true);
+    local.ctx.closePath();
+}
+
+Shape.drawPolygon = function(shape) {
+    local.ctx.beginPath();
+    local.ctx.moveTo(shape.points[0].x, shape.points[0].y);
+    for (var i = 1; i < shape.points.length; i ++ )
+        local.ctx.lineTo(shape.points[i].x, shape.points[i].y);
+    local.ctx.closePath();
+}
+
+Shape.drawRect = function(shape) {
+    local.ctx.beginPath();
+    var w = Math.max(shape.r * 2, shape.w);
+    var h = Math.max(shape.r * 2, shape.h);
+    local.ctx.moveTo(shape.x + shape.r, shape.y);
+    local.ctx.arcTo(shape.x + w, shape.y, shape.x + w, shape.y + h, shape.r);
+    local.ctx.arcTo(shape.x + w, shape.y + h, shape.x, shape.y + h, shape.r);
+    local.ctx.arcTo(shape.x, shape.y + h, shape.x, shape.y, shape.r);
+    local.ctx.arcTo(shape.x, shape.y, shape.x + w, shape.y, shape.r);
+    local.ctx.closePath();
+
+}
+
+Shape.fillShape = function(shape, color) {
+
+    local.ctx.save();
+    local.ctx.fillStyle = color;
+    switch (shape.type) {
+        case "circle":
+            Shape.drawCircle(shape);
+            break;
+
+        case "poly":
+            Shape.drawPolygon(shape);
+            break;
+
+        case "rect":
+            Shape.drawRect(shape);
+            break;
+    }
+    local.ctx.fill();
+    local.ctx.restore();
+};
+
+Shape.strokeShape = function(shape, color, width) {
+    local.ctx.save();
+    local.ctx.strokeStyle = color;
+    local.ctx.lineWidth = width;
+
+    switch (shape.type) {
+        case "circle":
+            Shape.drawCircle(shape);
+            break;
+
+        case "poly":
+            Shape.drawPolygon(shape);
+            break;
+
+        case "rect":
+            Shape.drawRect(shape);
+            break;
+    }
+    local.ctx.stroke();
+    local.ctx.restore();
+
+};
 
 /*end languages/javascript/canvas_runtime.js*/
 

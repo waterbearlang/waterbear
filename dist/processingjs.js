@@ -14896,7 +14896,7 @@ wb.menu = menu;
 	Event.on('.edit-script', 'click', null, function(event){
 		wb.historySwitchState('editor');
 	});
-	Event.on('.content', 'click', '.load-example', loadExample);
+	Event.on(document.body, 'click', '.load-example', loadExample);
 	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
 	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);

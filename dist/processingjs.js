@@ -13983,6 +13983,7 @@ global.ajax = ajax;
 			}
 		}else{
 			//console.log('no script to load, starting a new script');	
+			wb.scriptLoaded = true;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;

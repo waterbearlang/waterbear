@@ -134,6 +134,14 @@ h1.title {
 	}
 }
 
+/* cursor for drag and drop */
+
+.drop-cursor {
+	height: 2px;
+	background-color: red;
+	width: 75%
+}
+
 /* Context menu */
 
 #context_menu {

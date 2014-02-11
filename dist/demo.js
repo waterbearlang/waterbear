@@ -4427,6 +4427,7 @@ wb.menu = menu;
 			wb.scriptModified = false;
 			wb.scriptLoaded = false;
 			wb.loaded = false;
+			wb.clearStage();
 			createWorkspace('Workspace');
 			document.querySelector('.scripts_text_view').innerHTML = '';
 			wb.history.clear();

@@ -92,7 +92,7 @@
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
-	scratchpad = document.querySelector('.scratchpad');
+	var scratchpad= document.querySelector('.scratchpad'); // <- WB
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;

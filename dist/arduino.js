@@ -544,7 +544,7 @@ global.ajax = ajax;
     // WB-specific
     function dropCursor(){
         if (!_dropCursor){
-            _dropCursor = document.querySelector('.dropCursor');
+            _dropCursor = document.querySelector('.drop-cursor');
         }
         return _dropCursor;
     }
@@ -2708,7 +2708,7 @@ wb.menu = menu;
 	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
 	    });
 		document.querySelector('.workspace').appendChild(workspace);
-		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
+		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
 		// wb.initializeDragHandlers();
 		Event.trigger(document.body, 'wb-workspace-initialized');
 	};

@@ -572,6 +572,10 @@
         return '.socket[data-type=' + name + '] > .holder';
     }
     
+    function dragFromScratchPad(event){
+	dragTarget = event.target;
+    }
+    
     function cancelDrag(event) {
     	// Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);

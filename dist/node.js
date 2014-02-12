@@ -4868,6 +4868,32 @@ wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Ca
 
 /*end languages/node/piface.js*/
 
+/*begin languages/node/firmata.js*/
+//arduino firmata  https://npmjs.org/search?q=firmata
+
+
+//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
+wb.choiceLists.firmatain = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
+wb.choiceLists.firmatabutton = [0,1 ,2 ,3];
+wb.choiceLists.firmatarelays = [0,1 ];
+wb.choiceLists.firmataout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
+wb.choiceLists.firmataonoff = ["0", "1"];
+
+wb.choiceLists.highlow = ['HIGH', 'LOW'];
+wb.choiceLists.inoutput= ['INPUT', 'OUTPUT'];
+wb.choiceLists.onoff = ['ON', 'OFF'];
+wb.choiceLists.logic = ['true', 'false'];
+wb.choiceLists.digitalpins = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,'A0','A1','A2','A3','A4','A5'];
+wb.choiceLists.analoginpins = ['A0','A1','A2','A3','A4','A5'];
+wb.choiceLists.pwmpins = [3, 5, 6, 9, 10, 11];
+wb.choiceLists.baud = [9600, 300, 1200, 2400, 4800, 14400, 19200, 28800, 38400, 57600, 115200];
+wb.choiceLists.analogrefs = ['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL'];
+
+wb.requiredjs.before.firmata = "var ArduinoFirmata = require('arduino-firmata');var arduino = new ArduinoFirmata();";
+wb.requiredjs.after.firmata =  "";
+
+/*end languages/node/firmata.js*/
+
 /*begin languages/node/mc_game.js*/
    
 
@@ -5203,6 +5229,173 @@ wb.menu({
     ]
 });
 /*end languages/node/piface.json*/
+
+/*begin languages/node/firmata.json*/
+wb.menu({
+    "name": "Firmata",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "0cadc709-e4eb-4aa4-9e1e-374fdf71dac3",
+            "sockets": [
+                {
+                    "name": "Connect To Firmata"
+                }
+            ],
+            "script": "arduino.connect();arduino.on('connect', function(){[[1]]});",
+            "help": "All Firmata things in here"
+        },
+        {
+            "blocktype": "step",
+            "id": "a7096d17-06bd-4986-a6de-4eeffc68ec88",
+            "script": "digital_output## = {{1}}; arduino.pinMode(digital_output##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create digital_output## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "digital_output##"
+                        },
+                        {
+                            "name": "to",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.digitalWrite(digital_output##, {{1}}, function(){});"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "0ff728fe-e833-4887-8c1c-16380100d007",
+            "script": "digital_input## = {{1}}; pinMode(digital_input##, INPUT);",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "digital_input##"
+                        }
+                    ],
+                    "script": "arduino.digitalRead(digital_input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create digital_input## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "value": "choice"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "5501b22e-e6ae-4a86-8c67-b8d3e60d7fff",
+            "script": "analog_output## = {{1}}; arduino.pinMode(analog_output##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create analog_output## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "analog_output##"
+                        },
+                        {
+                            "name": "to",
+                            "type": "int",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.analogWrite(analog_output##, {{1}}, function(){});"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "b335d921-f23c-4a2c-b35a-9407ccd6d60c",
+            "script": "servo## = {{1}}; arduino.pinMode(servo##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to servo",
+            "sockets": [
+                {
+                    "name": "Create servo## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "servo##"
+                        },
+                        {
+                            "name": "to angle",
+                            "type": "int",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.servoWrite(servo##, {{1}}, function(){});"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "9d686235-2644-475d-a21a-b5c1df89185f",
+            "script": "analog_input## = {{1}}; pinMode(analog_input##, INPUT);",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "analog_input##"
+                        }
+                    ],
+                    "script": "arduino.analogRead(analog_input##)",
+                    "help": "The value on analog input pin",
+                    "type": "int"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create analog_input## on Pin",
+                    "type": "choice",
+                    "options": "analoginpins",
+                    "value": "choice"
+                }
+            ]
+        }
+        
+    ]
+});
+/*end languages/node/firmata.json*/
 
 /*begin languages/node/mc_game.json*/
 wb.menu({

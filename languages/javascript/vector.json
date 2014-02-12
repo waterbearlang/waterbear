@@ -23,15 +23,14 @@
                 {
                     "name": "vector##",
                     "type": "number",
-                    "value": 0
+                    "value": 0,
+                    "suffix": "x,"
                 },
                 {
-                    "name": "x, ",
+                    "name": "",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "y"
+                    "value": 0,
+                    "suffix": "y"
                 }
             ]
         },

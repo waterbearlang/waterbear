@@ -45,8 +45,7 @@
             "sockets": [
                 {
                     "name": "new array with array##",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -59,13 +58,12 @@
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "item",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -78,8 +76,7 @@
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "join with",
@@ -96,13 +93,11 @@
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "append",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -114,13 +109,11 @@
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "prepend",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -134,10 +127,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "suffix": "length"
                 }
             ]
         },
@@ -150,13 +140,12 @@
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "remove item",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -170,10 +159,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "pop"
+                    "suffix": "pop"
                 }
             ]
         },
@@ -187,10 +173,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "shift"
+                    "suffix": "shift"
                 }
             ]
         },
@@ -204,10 +187,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "reversed"
+                    "suffix": "reversed"
                 }
             ]
         },
@@ -220,13 +200,11 @@
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "concat",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -263,10 +241,7 @@
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "for each"
+                    "suffix": "for each"
                 }
             ]
         }

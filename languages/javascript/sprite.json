@@ -23,8 +23,7 @@
             "sockets": [
                 {
                     "name": "clear stage to image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 }
             ]
         },
@@ -106,8 +105,7 @@
             "sockets": [
                 {
                     "name": "draw sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -119,8 +117,7 @@
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -140,16 +137,13 @@
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -161,8 +155,7 @@
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -182,8 +175,7 @@
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
@@ -203,8 +195,7 @@
             "sockets": [
                 {
                     "name": "Autosteer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "",
@@ -222,13 +213,11 @@
             "sockets": [
                 {
                     "name": "sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "collides with sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -256,13 +245,11 @@
             "sockets": [
                 {
                     "name": "bounce sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "off of sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -274,18 +261,15 @@
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by x",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 },
                 {
                     "name": "y",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 }
             ]
         },
@@ -297,8 +281,7 @@
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -355,10 +338,8 @@
             "sockets": [
                 {
                     "name": "stop sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -370,10 +351,8 @@
             "sockets": [
                 {
                     "name": "slide sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -385,10 +364,8 @@
             "sockets": [
                 {
                     "name": "wrap sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "around edge of stage"
+                    "type": "sprite",
+                    "suffix": "around edge of stage"
                 }
             ]
         },
@@ -400,13 +377,11 @@
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -418,8 +393,7 @@
             "sockets": [
                 {
                     "name": "Color sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to color",
@@ -437,10 +411,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "facing direction"
+                    "suffix": "facing direction"
                 }
             ]
         },
@@ -453,10 +424,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "movement vector"
+                    "suffix": "movement vector"
                 }
             ]
         },
@@ -469,10 +437,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "center"
+                    "suffix": "center"
                 }
             ]
         },
@@ -485,10 +450,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
+                    "suffix": "speed"
                 }
             ]
         },
@@ -501,10 +463,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
+                    "suffix": "horizontal speed"
                 }
             ]
         },
@@ -517,10 +476,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
+                    "suffix": "vertical speed"
                 }
             ]
         },
@@ -534,10 +490,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "left"
+                    "suffix": "left"
                 }
             ]
         },
@@ -551,10 +504,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "right"
+                    "suffix": "right"
                 }
             ]
         },
@@ -568,10 +518,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "top"
+                    "suffix": "top"
                 }
             ]
         },
@@ -584,10 +531,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "bottom"
+                    "suffix": "bottom"
                 }
             ]
         }

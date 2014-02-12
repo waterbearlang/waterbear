@@ -9,8 +9,7 @@
             "sockets": [
                 {
                     "name": "transform by 6-matrix",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ],
             "id": "b65e02c5-b990-4ceb-ab18-2593337103d9"
@@ -23,8 +22,7 @@
             "sockets": [
                 {
                     "name": "set transform to 6-matrix",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         }

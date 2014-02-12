@@ -11,13 +11,11 @@
             "sockets": [
                 {
                     "name": "split string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "on separator",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -49,13 +47,12 @@
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "character at",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -139,10 +136,7 @@
                 {
                     "name": "string",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "suffix": "length"
                 }
             ]
         },
@@ -155,13 +149,11 @@
             "sockets": [
                 {
                     "name": "search string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "for substring",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -174,13 +166,11 @@
             "sockets": [
                 {
                     "name": "test string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "for substring",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -192,19 +182,12 @@
             "help": "get a new string by replacing a substring with a new string",
             "sockets": [
                 {
-                    "name": "in string",
-                    "type": "string",
-                    "value": null
-                },
-                {
                     "name": "replace",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "with",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -416,8 +399,7 @@
             "sockets": [
                 {
                     "name": "to string",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -429,8 +411,7 @@
             "sockets": [
                 {
                     "name": "comment",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -442,8 +423,7 @@
             "sockets": [
                 {
                     "name": "alert",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -455,8 +435,7 @@
             "sockets": [
                 {
                     "name": "console log",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -468,13 +447,11 @@
             "sockets": [
                 {
                     "name": "console log format",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "arguments",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },

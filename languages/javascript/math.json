@@ -31,12 +31,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "+",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -50,12 +50,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "-",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -69,12 +69,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "×",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -88,12 +88,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "÷",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -107,12 +107,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "=",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -145,12 +145,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "<",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -183,12 +183,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": ">",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -221,12 +221,12 @@
                 {
                     "name": "pick random",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -240,12 +240,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "mod",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -259,7 +259,7 @@
                 {
                     "name": "round",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -273,7 +273,7 @@
                 {
                     "name": "absolute value of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -287,7 +287,7 @@
                 {
                     "name": "arccosine degrees of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -301,7 +301,7 @@
                 {
                     "name": "arcsine degrees of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -315,7 +315,7 @@
                 {
                     "name": "arctangent degrees of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -329,7 +329,7 @@
                 {
                     "name": "floor of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -343,7 +343,7 @@
                 {
                     "name": "ceiling of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -447,10 +447,8 @@
                 {
                     "name": "cosine of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -464,10 +462,8 @@
                 {
                     "name": "sine of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -481,10 +477,8 @@
                 {
                     "name": "tangent of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -498,12 +492,12 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "to the power of",
                     "type": "number",
-                    "value": "2"
+                    "value": 2
                 }
             ]
         },
@@ -517,7 +511,7 @@
                 {
                     "name": "square root of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },

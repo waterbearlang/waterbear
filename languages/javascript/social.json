@@ -22,8 +22,7 @@
             "sockets": [
                 {
                     "name": "get tweet for",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         }

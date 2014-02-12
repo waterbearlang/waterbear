@@ -12,22 +12,22 @@
                 {
                     "name": "rect at x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "with width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -40,13 +40,11 @@
             "sockets": [
                 {
                     "name": "rect at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
@@ -59,8 +57,7 @@
             "sockets": [
                 {
                     "name": "rect from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -74,10 +71,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "position"
+                    "suffix": "position"
                 }
             ]
         },
@@ -91,10 +85,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "size"
+                    "suffix": "size"
                 }
             ]
         },
@@ -107,10 +98,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -123,10 +111,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "x"
+                    "suffix": "x"
                 }
             ]
         },
@@ -139,10 +124,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "y"
+                    "suffix": "y"
                 }
             ]
         },
@@ -155,10 +137,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -171,10 +150,7 @@
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         }

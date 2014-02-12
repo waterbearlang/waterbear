@@ -26,10 +26,16 @@
 
 .socket{
   position: relative;
-  display: inline-block;
+  display: block;
   height:100%;
   vertical-align:middle;
+  text-align: right;
 }
+
+.scripts_workspace > .label >  .socket{
+  text-align: left;
+}
+
 .socket > *{
   height:100%;
   vertical-align:middle;
@@ -76,8 +82,10 @@
   white-space: nowrap;
   cursor: pointer;
   min-width: 75px;
+  max-width: 300px;
   float: left;
   clear: left;
+  overflow-x: visible;
 }
 
 .locals .expression{
@@ -302,6 +310,7 @@
 }
 .block.scripts_workspace{
     width: 100%;
+    max-width: 100%;
     border: 0;
 }
 .block.scripts_workspace:before{
@@ -345,7 +354,4 @@
 #block_menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;
-}
-#block_menu .accordion-header.hidden {
-	display:none;
 }

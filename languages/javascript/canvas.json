@@ -44,7 +44,7 @@
                 {
                     "name": "global alpha",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -71,12 +71,12 @@
                 {
                     "name": "scale x",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -89,10 +89,8 @@
                 {
                     "name": "rotate by",
                     "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -105,12 +103,12 @@
                 {
                     "name": "translate by x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -123,7 +121,7 @@
                 {
                     "name": "line width",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 }
             ]
         },
@@ -164,7 +162,7 @@
                 {
                     "name": "mitre limit",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -177,12 +175,12 @@
                 {
                     "name": "shadow offset x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -195,7 +193,7 @@
                 {
                     "name": "shadow blur",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },

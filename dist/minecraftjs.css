@@ -226,6 +226,12 @@ input{
 	display: block
 }
 
+.accordion-description{
+	padding: 0em 0em 1em 0em;
+	font-size: .9em;
+	margin-left: -15px; /* i hate this */
+}
+
 /* SVG is in place for text-sizing only */
 
 svg{

@@ -1,5 +1,6 @@
 {
     "name": "Matrix",
+    "help": "Matrix blocks can be used to store more complex tranformations on the canvas",
     "blocks": [
         {
             "blocktype": "step",

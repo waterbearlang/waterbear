@@ -1,5 +1,6 @@
 {
     "name": "Shapes",
+    "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
     "blocks": [
         {
             "deprecated": true,

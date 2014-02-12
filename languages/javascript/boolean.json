@@ -1,5 +1,6 @@
 {
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",

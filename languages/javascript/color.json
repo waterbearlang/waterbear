@@ -1,5 +1,6 @@
 {
     "name": "Color",
+    "help": "Color blocks are for creating, converting, and manipulating colors",
     "blocks": [
         {
             "blocktype": "step",

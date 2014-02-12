@@ -1,5 +1,6 @@
 {
     "name": "Sensing",
+    "help": "Sensing blocks are for getting information from the environment, like user responses, mouse clicks, keyboard presses, and the size of the drawing area.",
     "blocks": [
         {
             "blocktype": "context",

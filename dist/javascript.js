@@ -1840,47 +1840,99 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*end events.min.js*/
 
 /*begin ajax.js*/
-(function(global){
-function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
-function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+(function (global) {
+    function $(e) {
+        if (typeof e == 'string') e = document.getElementById(e);
+        return e
+    };
 
-ajax={};
-ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
-ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
+    function collect(a, f) {
+        var n = [];
+        for (var i = 0; i < a.length; i++) {
+            var v = f(a[i]);
+            if (v != null) n.push(v)
+        }
+        return n
+    };
 
-ajax.send=function(u,f,m,a,e){
-    var x=ajax.x();
-    x.open(m,u,true);
-    x.onreadystatechange=function(){
-        if (x.readyState==4&&x.status<400) {
-            cType = x.getResponseHeader("Content-Type");
-            f(x.responseText, cType); 
-        } else if (x.readyState==4) { 
-            if(e==undefined) {
-                console.log(x.status + " (" + x.statusText + ") " );
-            } else {
-                e(x.status, x);
+    ajax = {};
+    ajax.x = function () {
+        try {
+            return new ActiveXObject('Msxml2.XMLHTTP')
+        } catch (e) {
+            try {
+                return new ActiveXObject('Microsoft.XMLHTTP')
+            } catch (e) {
+                return new XMLHttpRequest()
             }
         }
     };
-    if (m=='POST')
-        x.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-    x.send(a);
-};
+    ajax.serialize = function (f) {
+        var g = function (n) {
+            return f.getElementsByTagName(n)
+        };
+        var nv = function (e) {
+            if (e.name) return encodeURIComponent(e.name) + '=' + encodeURIComponent(e.value);
+            else return ''
+        };
+        var i = collect(g('input'), function (i) {
+            if ((i.type != 'radio' && i.type != 'checkbox') || i.checked) return nv(i)
+        });
+        var s = collect(g('select'), nv);
+        var t = collect(g('textarea'), nv);
+        return i.concat(s).concat(t).join('&');
+    };
 
-ajax.get=function(url, func, err){
-    ajax.send(url,func,'GET', {}, err)
-};
+    ajax.send = function (u, f, m, a, e) {
+        var x = ajax.x();
+        x.open(m, u, true);
+        x.onreadystatechange = function () {
+            if (x.readyState == 4 && x.status < 400) {
+                cType = x.getResponseHeader("Content-Type");
+                f(x.responseText, cType);
+            } else if (x.readyState == 4) {
+                if (e == undefined) {
+                    console.log(x.status + " (" + x.statusText + ") ");
+                } else {
+                    e(x.status, x);
+                }
+            }
+        };
+        if (m == 'POST')
+            x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        x.send(a);
+    };
 
-ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
+    ajax.get = function (url, func, err) {
+        ajax.send(url, func, 'GET', {}, err)
+    };
 
-ajax.post=function(url, func, args, err){
-    ajax.send(url,func,'POST',args, err)
-};
+    ajax.gets = function (url) {
+        var x = ajax.x();
+        x.open('GET', url, false);
+        x.send(null);
+        return x.responseText
+    };
 
-ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
-ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
-global.ajax = ajax;
+    ajax.post = function (url, func, args, err) {
+        ajax.send(url, func, 'POST', args, err)
+    };
+
+    ajax.update = function (url, elm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.get(url, f)
+    };
+    ajax.submit = function (url, elm, frm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.post(url, f, ajax.serialize(frm))
+    };
+    global.ajax = ajax;
 })(this);
 
 /*end ajax.js*/
@@ -4318,19 +4370,22 @@ initContextMenus();
 function menu(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return edit_menu(title, specs);
+    var help = blockspec.help !== undefined ? blockspec.help : '';
+    return edit_menu(title, specs, help);
 };
 
-function edit_menu(title, specs, show){
+function edit_menu(title, specs, help, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
+        submenu.appendChild(description);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;
@@ -5227,6 +5282,7 @@ wb.choiceLists.rettypes.push('motion');
 /*begin languages/javascript/control.json*/
 wb.menu({
     "name": "Controls",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -5514,6 +5570,30 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "AB5EB656-EF22-4DD3-9B5B-9A5187DF2F2F",
+            "script": "(({{1}}) ? ({{2}}) : ({{3}}))",
+            "help": "select a result based on a condition",
+            "type": "any",
+            "sockets": [
+                {
+                    "name": "if",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "then",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "else",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
             "script": "while(!({{1}})){[[1]]}",
@@ -5533,6 +5613,7 @@ wb.menu({
 /*begin languages/javascript/sprite.json*/
 wb.menu({
     "name": "Sprites",
+    "help": "Sprites are graphics that can be repositioned, rotated, and have a vector of motion. They can also check for collision with other Sprites.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6075,6 +6156,7 @@ wb.menu({
 /*begin languages/javascript/voice.json*/
 wb.menu({
     "name": "Music",
+    "help": "Music blocks are for creating and manipulating sound programmatically, generating the sounds rather than playing back a recorded audio file (see the Sound menu for that).",
     "blocks": [
         {
             "blocktype": "step",
@@ -6314,6 +6396,7 @@ wb.menu({
 /*begin languages/javascript/sound.json*/
 wb.menu({
     "name": "Sound",
+    "help": "Sound blocks can load and play sound files (wav, mp3, ogg) if those files are supported by your browser.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6386,6 +6469,7 @@ wb.menu({
 /*begin languages/javascript/array.json*/
 wb.menu({
     "name": "Arrays",
+    "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6638,6 +6722,7 @@ wb.menu({
 /*begin languages/javascript/boolean.json*/
 wb.menu({
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",
@@ -6739,285 +6824,10 @@ wb.menu({
 );
 /*end languages/javascript/boolean.json*/
 
-/*begin languages/javascript/canvas.json*/
-wb.menu({
-    "name": "Canvas",
-    "blocks": [
-        {
-            "blocktype": "context",
-            "script": "local.ctx.save();[[1]];local.ctx.restore();",
-            "help": "save the current state, run the contained steps, then restore the saved state",
-            "id": "9e514499-05a6-4b76-ad4b-1ea888181a8b",
-            "sockets": [
-                {
-                    "name": "with local state"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "script": "local.ctx.stroke();",
-            "help": "stroke...",
-            "id": "99d5828c-ccdd-47db-9abe-f67a8c065fe6",
-            "sockets": [
-                {
-                    "name": "stroke"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "script": "local.ctx.fill();",
-            "help": "fill...",
-            "id": "d540bb5f-7711-4133-a631-53821daeb593",
-            "sockets": [
-                {
-                    "name": "fill"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "c7e2e322-921a-4a96-9c86-9dbbaf54eb53",
-            "script": "local.ctx.globalAlpha = {{1}};",
-            "help": "set the global alpha",
-            "sockets": [
-                {
-                    "name": "global alpha",
-                    "type": "number",
-                    "value": 1.0
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "0237bbab-d62a-4ff9-afb8-4a64bc98dbc3",
-            "script": "local.ctx.globalCompositOperator = {{1}};",
-            "help": "set the global composite operator",
-            "sockets": [
-                {
-                    "name": "global composite operator",
-                    "type": "choice",
-                    "options": "globalCompositeOperators",
-                    "value": "choice"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "96085392-9a2d-4857-85f1-af2af72cf800",
-            "script": "local.ctx.scale({{1}},{{2}});",
-            "help": "change the scale of subsequent drawing",
-            "sockets": [
-                {
-                    "name": "scale x",
-                    "type": "number",
-                    "value": 1.0
-                },
-                {
-                    "name": "y",
-                    "type": "number",
-                    "value": 1.0
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "5e6ce8f8-d5a2-454e-8e88-d5155fb0eef0",
-            "script": "local.ctx.rotate(deg2rad({{1}}));",
-            "help": "rotate...",
-            "sockets": [
-                {
-                    "name": "rotate by",
-                    "type": "number",
-                    "value": 0,
-                    "suffix": "degrees"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "df0ffca8-dd43-45aa-8b9f-b7d588090cd5",
-            "script": "local.ctx.translate({{1}},{{2}});",
-            "help": "translate...",
-            "sockets": [
-                {
-                    "name": "translate by x",
-                    "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "y",
-                    "type": "number",
-                    "value": 0
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "d297afc2-3941-4977-a6af-d7f4e222b467",
-            "script": "local.ctx.lineWidth = {{1}};",
-            "help": "set line width",
-            "sockets": [
-                {
-                    "name": "line width",
-                    "type": "number",
-                    "value": 1
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "b538aadd-e90d-4d0d-bc12-95b7df9c2a61",
-            "script": "local.ctx.lineCap = {{1}};",
-            "help": "set line cap",
-            "sockets": [
-                {
-                    "name": "line cap",
-                    "type": "choice",
-                    "options": "linecap",
-                    "value": "choice"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "4b3f5315-295c-46d7-baf2-e791c707cf4f",
-            "script": "local.ctx.lineJoin = {{1}};",
-            "help": "set line join",
-            "sockets": [
-                {
-                    "name": "line join",
-                    "type": "choice",
-                    "options": "linejoin",
-                    "value": "choice"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "c3aec6b2-ccb1-4e24-b00f-0736214f44c3",
-            "script": "local.ctx.mitreLimit = {{1}};",
-            "help": "set mitre limit",
-            "sockets": [
-                {
-                    "name": "mitre limit",
-                    "type": "number",
-                    "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "f28b6498-87f7-4b39-bf16-81644a2a1996",
-            "script": "local.ctx.shadowOffsetX = {{1}}; local.ctx.shadowOffsetY = {{2}}",
-            "help": "set the offsets for shadow",
-            "sockets": [
-                {
-                    "name": "shadow offset x",
-                    "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "y",
-                    "type": "number",
-                    "value": 0
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "id": "278b0b41-895c-4786-9c09-d745ae5501af",
-            "script": "local.ctx.shadowBlur = {{1}};",
-            "help": "set the shadow blur radius",
-            "sockets": [
-                {
-                    "name": "shadow blur",
-                    "type": "number",
-                    "value": 0
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
-            "help": "clear...",
-            "id": "cf17a61d-8c7a-4829-a476-0b650efda3e4",
-            "sockets": [
-                {
-                    "name": "clear rect",
-                    "type": "shape",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
-            "help": "circle...",
-            "id": "b4e05d48-32e4-4e0b-832c-b2433ffda2e2",
-            "sockets": [
-                {
-                    "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "with radius",
-                    "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
-            "help": "fill...",
-            "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
-            "sockets": [
-                {
-                    "name": "fill shape",
-                    "type": "shape",
-                    "value": null
-                },
-                {
-                    "name": "with color",
-                    "type": "color",
-                    "value": null
-                }
-            ]
-        },
-        {
-            "blocktype": "step",
-            "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; Shape.strokeShape(shape##, color##, width##);",
-            "help": "stroke...",
-            "id": "90b70122-340f-46a7-9753-9c39022c00ac",
-            "sockets": [
-                {
-                    "name": "stroke shape",
-                    "type": "shape",
-                    "value": null
-                },
-                {
-                    "name": "with color",
-                    "type": "color",
-                    "value": null
-                },
-                {
-                    "name": "and width",
-                    "type": "number",
-                    "value": 1
-                }
-            ]
-        }
-    ]
-}
-);
-/*end languages/javascript/canvas.json*/
-
 /*begin languages/javascript/color.json*/
 wb.menu({
     "name": "Color",
+    "help": "Color blocks are for creating, converting, and manipulating colors",
     "blocks": [
         {
             "blocktype": "step",
@@ -7320,6 +7130,7 @@ wb.menu({
 /*begin languages/javascript/image.json*/
 wb.menu({
     "name": "Images",
+    "help": "Image blocks are for loading image files to use in other blocks and for manipulating images. See Sprite and Canvas menus.",
     "blocks": [
         {
             "blocktype": "step",
@@ -7615,6 +7426,7 @@ wb.menu({
 /*begin languages/javascript/math.json*/
 wb.menu({
     "name": "Math",
+    "help": "Math blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "expression",
@@ -8192,6 +8004,7 @@ wb.menu({
 /*begin languages/javascript/vector.json*/
 wb.menu({
     "name": "Vectors",
+    "help": "Vector blocks have a direction and a magnitude, which can represent speed of movement for a Sprite. Vectors can be added to or subtracted from other Vectors, among other things.",
     "blocks": [
         {
             "blocktype": "step",
@@ -8343,6 +8156,7 @@ wb.menu({
 /*begin languages/javascript/object.json*/
 wb.menu({
     "name": "Objects",
+    "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
     "blocks": [
         {
             "blocktype": "step",
@@ -8449,6 +8263,7 @@ wb.menu({
 /*begin languages/javascript/string.json*/
 wb.menu({
     "name": "Strings",
+    "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [
         {
             "blocktype": "expression",
@@ -8923,6 +8738,7 @@ wb.menu({
 /*begin languages/javascript/path.json*/
 wb.menu({
     "name": "Paths",
+    "help": "Path blocks are for construction more complex shapes for drawing, masking, and other uses.",
     "blocks": [
         {
             "blocktype": "context",
@@ -9109,6 +8925,7 @@ wb.menu({
 /*begin languages/javascript/point.json*/
 wb.menu({
     "name": "Points",
+    "help": "Point blocks represent and manipulate x,y coordinates.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -9204,6 +9021,7 @@ wb.menu({
 /*begin languages/javascript/rect.json*/
 wb.menu({
     "name": "Rects",
+    "help": "Rect blocks represent and manipulate rectangles represented by x,y coordinates for the top left corner of the rectangle, plus a size (width,height).",
     "blocks": [
         {
             "deprecated": true,
@@ -9365,6 +9183,7 @@ wb.menu({
 /*begin languages/javascript/sensing.json*/
 wb.menu({
     "name": "Sensing",
+    "help": "Sensing blocks are for getting information from the environment, like user responses, mouse clicks, keyboard presses, and the size of the drawing area.",
     "blocks": [
         {
             "blocktype": "context",
@@ -9547,6 +9366,7 @@ wb.menu({
 /*begin languages/javascript/motion.json*/
 wb.menu({
     "name": "Motion",
+    "help": "Motion blocks are for detecting the motion of devices equipped with accelerometers",
     "blocks": [
     	{
     		"blocktype": "expression",
@@ -9582,6 +9402,7 @@ wb.menu({
 /*begin languages/javascript/shape.json*/
 wb.menu({
     "name": "Shapes",
+    "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
     "blocks": [
         {
             "deprecated": true,
@@ -9954,6 +9775,7 @@ wb.menu({
 /*begin languages/javascript/geolocation.json*/
 wb.menu({
     "name": "Geolocation",
+    "help": "Geolocation blocks are for getting your position on Earth",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -10088,6 +9910,7 @@ wb.menu({
 /*begin languages/javascript/size.json*/
 wb.menu({
     "name": "Sizes",
+    "help": "Size blocks represent a width and height. They are often used as components of Rects.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -10166,6 +9989,7 @@ wb.menu({
 /*begin languages/javascript/text.json*/
 wb.menu({
     "name": "Text",
+    "help": "Text blocks represent and manipulate the way text is drawn to the screen, things like alignment, font, and size.",
     "blocks": [
         {
             "blocktype": "step",
@@ -10338,6 +10162,7 @@ wb.menu({
 /*begin languages/javascript/matrix.json*/
 wb.menu({
     "name": "Matrix",
+    "help": "Matrix blocks can be used to store more complex tranformations on the canvas",
     "blocks": [
         {
             "blocktype": "step",

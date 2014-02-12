@@ -1,5 +1,6 @@
 {
     "name": "Text",
+    "help": "Text blocks represent and manipulate the way text is drawn to the screen, things like alignment, font, and size.",
     "blocks": [
         {
             "blocktype": "step",

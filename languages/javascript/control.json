@@ -1,5 +1,6 @@
 {
     "name": "Controls",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -283,6 +284,30 @@
                 {
                     "name": "if not",
                     "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "AB5EB656-EF22-4DD3-9B5B-9A5187DF2F2F",
+            "script": "(({{1}}) ? ({{2}}) : ({{3}}))",
+            "help": "select a result based on a condition",
+            "type": "any",
+            "sockets": [
+                {
+                    "name": "if",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "then",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "else",
+                    "type": "any",
+                    "value": null
                 }
             ]
         },

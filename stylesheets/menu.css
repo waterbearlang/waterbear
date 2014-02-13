@@ -25,7 +25,7 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 ul.menu > li > button {
 	text-align:center;
 }
-ul.submenu button{
+ul.sub-menu button{
 	text-align: left;
 }
 ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {

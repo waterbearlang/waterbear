@@ -56,6 +56,10 @@ ul.menu li ul.sub-menu li button.disabled {
 ul.menu li:hover ul.sub-menu {
 	display:block;
 }
+ul.menu li ul.sub-menu li.separator button {
+	border-top-width: 2px;
+}
+	
 
 /*sub sub menu*/
 ul.menu li ul.sub-menu li ul.sub-menu {

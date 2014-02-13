@@ -352,6 +352,7 @@
 }
 
 #block_menu .accordion-header.hidden,
+#block_menu.settings .accordion-body,
 #block_menu .accordion-header.hidden + .accordion-body {
 	display: none;
 }

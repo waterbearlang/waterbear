@@ -234,9 +234,12 @@ input{
 
 /* SVG is in place for text-sizing only */
 
-svg{
-	position:absolute;
+.sekrit-svg{
+	position: absolute;
 	left: -1000px; /* cannot use with display: none */
+	top: 0; /* because it was screwing up layout even hidden */
+	width: 400px;
+	height: 100px;
 }
 
 svg text{

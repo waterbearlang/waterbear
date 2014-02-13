@@ -203,7 +203,7 @@
 		}else if (queryParsed.example){
 			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
-		}else if (localStorage['__' + wb.language + '_current_scripts']){
+        }else if (localStorage['__' + wb.language + '_current_scripts']){
 			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
@@ -230,8 +230,12 @@
 			wb.clearScripts(null, true);
 			var saved = JSON.parse(evt.target.result);
 			wb.loaded = true;
+            wb.scriptLoaded = true;
 			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+			wb.scriptModified = false;
+            var path = location.href.split('?')[0];
+            path += "?local=" + fileName;
+            history.pushState(null, '', path);
 		};
 	}
 

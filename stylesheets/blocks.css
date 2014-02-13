@@ -351,6 +351,11 @@
   display: none;
 }
 
+#block_menu .accordion-header.hidden,
+#block_menu .accordion-header.hidden + .accordion-body {
+	display: none;
+}
+
 #block_menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;

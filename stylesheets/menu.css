@@ -41,8 +41,10 @@ ul.menu li ul.sub-menu {
 	position: absolute;
 	top: 32px;
 	left: 0;
-	width: 100px;
 	z-index:1000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 400px;
 }
 ul.menu li ul.sub-menu li button {
 	min-width:200px;

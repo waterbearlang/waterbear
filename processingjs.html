@@ -31,38 +31,43 @@
 	<nav class="nav" role="navigation">
 		<ul class="menu">
 			<li>
-				<button class="clear_scripts">New</button>
-			</li>
-			<li>
-				<button class="load_from_gist">Open Gist</button>
-				<ul class="sub-menu" id="recent_gists"></ul>
-			</li>
-			<li>
-				<button class="restore_scripts">Open File</button>
-			</li>
-			<li>
-				<button class="save_scripts">Save Gist</button>
-			</li>
-			<li>
-				<button class="download_scripts">Save File</button>
-			</li>
-			<li>
-				<button class="show-examples">Examples</button>
+				<button class="show-file">File&#x25BE;</button>
 				<ul class="sub-menu">
-											<li><button class="load-example" data-example="ellipses">Ellipses</button></li>
-						<li><button class="load-example" data-example="lines">Lines</button></li>
-						<li><button class="load-example" data-example="mouse_click">Mouse Click</button></li>
-						<li><button class="load-example" data-example="mouse_rectangles">Mouse Rectangles</button></li>
-						<li><button class="load-example" data-example="nofill">No Fill</button></li>
-						<li><button class="load-example" data-example="rectangle">Rectangle</button></li>
-						<li><button class="load-example" data-example="transform">Transform</button></li>
-						<li><button class="load-example" data-example="transform_color">Transform Color</button></li>
-						<li><button class="load-example" data-example="variables">Variables</button></li>
+					<li>
+						<button class="clear_scripts">New</button>
+					</li>
+					<li class='separator'>
+						<button class="load_from_gist">Open Gist</button>
+						<ul class="sub-menu" id="recent_gists"></ul>
+					</li>
+					<li>
+						<button class="restore_scripts">Open File</button>
+					</li>
+					<li class='separator'>
+						<button class="save_scripts">Save Gist</button>
+					</li>
+					<li>
+						<button class="download_scripts">Save File</button>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<button class="show-examples">Examples&#x25BE;</button>
+				<ul class="sub-menu">
+					<li><button class="load-example" data-example="ellipses">Ellipses</button></li>
+<li><button class="load-example" data-example="lines">Lines</button></li>
+<li><button class="load-example" data-example="mouse_click">Mouse Click</button></li>
+<li><button class="load-example" data-example="mouse_rectangles">Mouse Rectangles</button></li>
+<li><button class="load-example" data-example="nofill">No Fill</button></li>
+<li><button class="load-example" data-example="rectangle">Rectangle</button></li>
+<li><button class="load-example" data-example="transform">Transform</button></li>
+<li><button class="load-example" data-example="transform_color">Transform Color</button></li>
+<li><button class="load-example" data-example="variables">Variables</button></li>
 
 				</ul>
 			</li>
 			<li>
-				<button class="views">View</button>
+				<button class="views">View&#x25BE;</button>
 				<ul class="sub-menu">
 					<li>
 						<button class="toggle" data-target="blocks-menu">Blocks Menu</button>
@@ -82,7 +87,7 @@
 					<li>
 						<button class="toggle" data-target="scripts_text_view">Text Script</button>
 					</li>
-					<li>
+					<li class='separator'>
 						<button class="run-scripts">Run Full Size</button>
 					</li>
 				</ul>
@@ -115,18 +120,18 @@
 			<div class="tutorial hidden">Tutorial goes here</div>
 			<div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
-				<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
-		<script>
-			var iframe = document.querySelector('.stageframe');
-			if (location.host.indexOf('local') > -1){
-				iframe.src = '/iframerunner.html';
-			}
-			function receiveMessage(event){
-				wb.iframeReady = event.data === 'ready' ? true : false;
-			}
-			window.addEventListener('message', receiveMessage, false);
+		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
+<script>
+	var iframe = document.querySelector('.stageframe');
+	if (location.host.indexOf('local') > -1){
+		iframe.src = '/iframerunner.html';
+	}
+	function receiveMessage(event){
+		wb.iframeReady = event.data === 'ready' ? true : false;
+	}
+	window.addEventListener('message', receiveMessage, false);
 
-		</script>
+</script>
 
 	</div>
 	<svg><text></text></svg>

@@ -2937,6 +2937,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return '.socket[data-type=' + name + '] > .holder';
     }
     
+    function dragFromScratchPad(event){
+	dragTarget = event.target;
+    }
+    
     function cancelDrag(event) {
     	// Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);

@@ -92,6 +92,7 @@
 		if (clearFiles){
 			delete params['gist'];
 			delete params['example'];
+            delete params['local'];
 		}
 		history.pushState(null, '', wb.queryParamsToUrl(params));
 		Event.trigger(document.body, 'wb-state-change');

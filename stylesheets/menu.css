@@ -57,6 +57,27 @@ ul.menu li:hover ul.sub-menu {
 	display:block;
 }
 
+/*sub sub menu*/
+ul.menu li ul.sub-menu li ul.sub-menu {
+	display:none;
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	width: 100px;
+	z-index:1000;
+	border-left: solid 1px;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button {
+	min-width:200px;
+	border-top: 1px solid black;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button.disabled {
+	background:#777;
+}
+ul.menu li ul.sub-menu li:hover ul.sub-menu {
+	display:block;
+}
+
 .menu_buttons {
 	display:none;
 }

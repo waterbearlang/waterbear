@@ -25,7 +25,7 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 ul.menu > li > button {
 	text-align:center;
 }
-ul.submenu button{
+ul.sub-menu button{
 	text-align: left;
 }
 ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
@@ -41,8 +41,10 @@ ul.menu li ul.sub-menu {
 	position: absolute;
 	top: 32px;
 	left: 0;
-	width: 100px;
 	z-index:1000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 400px;
 }
 ul.menu li ul.sub-menu li button {
 	min-width:200px;
@@ -52,6 +54,31 @@ ul.menu li ul.sub-menu li button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {
+	display:block;
+}
+ul.menu li ul.sub-menu li.separator button {
+	border-top-width: 2px;
+}
+	
+
+/*sub sub menu*/
+ul.menu li ul.sub-menu li ul.sub-menu {
+	display:none;
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	width: 100px;
+	z-index:1000;
+	border-left: solid 1px;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button {
+	min-width:200px;
+	border-top: 1px solid black;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button.disabled {
+	background:#777;
+}
+ul.menu li ul.sub-menu li:hover ul.sub-menu {
 	display:block;
 }
 

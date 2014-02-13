@@ -1,16 +1,16 @@
-	<div class="results">
-		<div class="stage"><iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
-		<div class="scripts_text_view"></div>
-	</div>
-	<script>
-		var iframe = document.querySelector('.stageframe');
-		function receiveMessage(event){
-			wb.iframeReady = event.data === 'ready' ? true : false;
-		}
-		window.addEventListener('message', receiveMessage, false);
-		// Work around Chrome bug with iframes in flexbox
-		iframe.style.height = iframe.parentElement.clientHeight + 'px';
-		window.addEventListener('resize', function(evt){
-			iframe.style.height = iframe.parentElement.clientHeight + 'px';			
-		}, false);
-	</script>
+<div class="results">
+	<div class="stage"><iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
+	<div class="scripts_text_view"></div>
+</div>
+<script>
+	var iframe = document.querySelector('.stageframe');
+	function receiveMessage(event){
+		wb.iframeReady = event.data === 'ready' ? true : false;
+	}
+	window.addEventListener('message', receiveMessage, false);
+	// Work around Chrome bug with iframes in flexbox
+	iframe.style.height = iframe.parentElement.clientHeight + 'px';
+	window.addEventListener('resize', function(evt){
+		iframe.style.height = iframe.parentElement.clientHeight + 'px';			
+	}, false);
+</script>

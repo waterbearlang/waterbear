@@ -31,43 +31,48 @@
 	<nav class="nav" role="navigation">
 		<ul class="menu">
 			<li>
-				<button class="clear_scripts">New</button>
-			</li>
-			<li>
-				<button class="load_from_gist">Open Gist</button>
-				<ul class="sub-menu" id="recent_gists"></ul>
-			</li>
-			<li>
-				<button class="restore_scripts">Open File</button>
-			</li>
-			<li>
-				<button class="save_scripts">Save Gist</button>
-			</li>
-			<li>
-				<button class="download_scripts">Save File</button>
-			</li>
-			<li>
-				<button class="show-examples">Examples</button>
+				<button class="show-file">File&#x25BE;</button>
 				<ul class="sub-menu">
-											<li><button class="load-example" data-example="blacklight_worms">Blacklight Worms</button></li>
-						<li><button class="load-example" data-example="breakout">Breakout</button></li>
-						<li><button class="load-example" data-example="pong">Pong</button></li>
-						<li><button class="load-example" data-example="random_circles">Random Circles</button></li>
-						<li><button class="load-example" data-example="londonderry">Londonderry</button></li>
-						<li><button class="load-example" data-example="rotating_boxes">Rotating Boxes</button></li>
-						<li><button class="load-example" data-example="dance">Dance</button></li>
-						<li><button class="load-example" data-example="airgame">Air Game</button></li>
-						<li><button class="load-example" data-example="move_image">Image follows mouse</button></li>
-						<li><button class="load-example" data-example="tic_tac_toe">Tic Tac Toe</button></li>
-						<li><button class="load-example" data-example="snake">Snake</button></li>
-						<li><button class="load-example" data-example="fibonacci">Fibonacci</button></li>
-						<li><button class="load-example" data-example="rotating">Recursive Square</button></li>
-						<li><button class="load-example" data-example="eyes">Eyes</button></li>
+					<li>
+						<button class="clear_scripts">New</button>
+					</li>
+					<li class='separator'>
+						<button class="load_from_gist">Open Gist</button>
+						<ul class="sub-menu" id="recent_gists"></ul>
+					</li>
+					<li>
+						<button class="restore_scripts">Open File</button>
+					</li>
+					<li class='separator'>
+						<button class="save_scripts">Save Gist</button>
+					</li>
+					<li>
+						<button class="download_scripts">Save File</button>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<button class="show-examples">Examples&#x25BE;</button>
+				<ul class="sub-menu">
+					<li><button class="load-example" data-example="blacklight_worms">Blacklight Worms</button></li>
+<li><button class="load-example" data-example="breakout">Breakout</button></li>
+<li><button class="load-example" data-example="pong">Pong</button></li>
+<li><button class="load-example" data-example="random_circles">Random Circles</button></li>
+<li><button class="load-example" data-example="londonderry">Londonderry</button></li>
+<li><button class="load-example" data-example="rotating_boxes">Rotating Boxes</button></li>
+<li><button class="load-example" data-example="dance">Dance</button></li>
+<li><button class="load-example" data-example="airgame">Air Game</button></li>
+<li><button class="load-example" data-example="move_image">Image follows mouse</button></li>
+<li><button class="load-example" data-example="tic_tac_toe">Tic Tac Toe</button></li>
+<li><button class="load-example" data-example="snake">Snake</button></li>
+<li><button class="load-example" data-example="fibonacci">Fibonacci</button></li>
+<li><button class="load-example" data-example="rotating">Recursive Square</button></li>
+<li><button class="load-example" data-example="eyes">Eyes</button></li>
 
 				</ul>
 			</li>
 			<li>
-				<button class="views">View</button>
+				<button class="views">View&#x25BE;</button>
 				<ul class="sub-menu">
 					<li>
 						<button class="toggle" data-target="blocks-menu">Blocks Menu</button>
@@ -87,7 +92,7 @@
 					<li>
 						<button class="toggle" data-target="scripts_text_view">Text Script</button>
 					</li>
-					<li>
+					<li class='separator'>
 						<button class="run-scripts">Run Full Size</button>
 					</li>
 				</ul>
@@ -120,22 +125,22 @@
 			<div class="tutorial hidden">Tutorial goes here</div>
 			<div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
-			<div class="results">
-		<div class="stage"><iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
-		<div class="scripts_text_view"></div>
-	</div>
-	<script>
-		var iframe = document.querySelector('.stageframe');
-		function receiveMessage(event){
-			wb.iframeReady = event.data === 'ready' ? true : false;
-		}
-		window.addEventListener('message', receiveMessage, false);
-		// Work around Chrome bug with iframes in flexbox
-		iframe.style.height = iframe.parentElement.clientHeight + 'px';
-		window.addEventListener('resize', function(evt){
-			iframe.style.height = iframe.parentElement.clientHeight + 'px';			
-		}, false);
-	</script>
+		<div class="results">
+	<div class="stage"><iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
+	<div class="scripts_text_view"></div>
+</div>
+<script>
+	var iframe = document.querySelector('.stageframe');
+	function receiveMessage(event){
+		wb.iframeReady = event.data === 'ready' ? true : false;
+	}
+	window.addEventListener('message', receiveMessage, false);
+	// Work around Chrome bug with iframes in flexbox
+	iframe.style.height = iframe.parentElement.clientHeight + 'px';
+	window.addEventListener('resize', function(evt){
+		iframe.style.height = iframe.parentElement.clientHeight + 'px';			
+	}, false);
+</script>
 
 	</div>
 	<svg><text></text></svg>

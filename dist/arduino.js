@@ -180,7 +180,7 @@
         elem.classList.remove('hidden');
     };
 
-    var svgText = document.querySelector('.resize-test');
+    var svgText = document.querySelector('.resize-tester');
     function resize(input){
         if (!input) return;
         if (input.wbTarget){

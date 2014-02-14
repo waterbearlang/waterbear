@@ -14,12 +14,15 @@
 // registerSeqNum(int) make sure we don't re-use sequence numbers
 // Socket(json) -> Socket element
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
     var elem = wb.elem;
 
     var nextSeqNum = 0;
-    var blockRegistry = {};
+    var blockRegistry = {}; /* populated in function "registerBlock", which is
+                               called by the Block() function below*/
 
     function newSeqNum(){
         nextSeqNum++;

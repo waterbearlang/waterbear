@@ -3,6 +3,8 @@
 // Minimal support for non-DOM (custom) events
 // Normalized between mouse and touch events
 // Waterbear specific: events have wb-target which is always a block element
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 
 (function(global){
     "use strict";

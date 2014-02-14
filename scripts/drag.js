@@ -1,3 +1,6 @@
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
+
 (function(global){
 
     // After trying to find a decent drag-and-drop library which could handle
@@ -58,7 +61,8 @@
     var dragging;
     var currentPosition;
     var scope;
-    var workspace; // <- WB
+    var workspace; // <- WB. The Workspace block is created with the function
+		   // createWorkspace() in the workspace.js file.
     var blockMenu = document.querySelector('#block_menu'); // <- WB
     var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;

@@ -34,7 +34,6 @@ Support for various generic UI features in the IDE: buttons, accordion view, tab
 ## util.js
 
 Simple utility methods and helpers. Some jQuery-ish replacements.
-
 * wb.makeArray(arrayLike): turns an array-like into a true array
 * wb.reposition(elem, pos): moves an absolutely positioned element
 * wb.hide(elem)
@@ -55,6 +54,7 @@ Simple utility methods and helpers. Some jQuery-ish replacements.
 * wb.elem(name, attributes, children): utility for dynamically creating DOM elements and structures
 * wb.matches(elem, selector): does elem match selector?
 * wb.jsonp(url, callback): minimal support for jsonp, should probably be replaced by a better library
+## Note: global variable wb is initialized in the HTML before any javascript files are loaded (in template/template.html)
 
 ## uuid.js
 

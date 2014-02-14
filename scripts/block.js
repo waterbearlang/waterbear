@@ -15,7 +15,7 @@
 // Socket(json) -> Socket element
 
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;

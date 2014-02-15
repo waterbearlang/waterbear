@@ -97,7 +97,7 @@
                 }
             ]
         },
-        {
+		{
             "blocktype": "step",
             "id": "43b28edf-c77f-422f-be5b-5217c9da93c9",
             "script": "local.sprite## = createTextSprite({{1}}, {{2}}, {{3}}, {{4}}, {{5}});",

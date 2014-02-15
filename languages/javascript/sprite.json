@@ -99,6 +99,51 @@
         },
         {
             "blocktype": "step",
+            "id": "43b28edf-c77f-422f-be5b-5217c9da93c9",
+            "script": "local.sprite## = createTextSprite({{1}}, {{2}}, {{3}}, {{4}}, {{5}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple text sprite",
+            "sockets": [
+                {
+                    "name": "text sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with block color",
+                    "type": "color",
+                    "block": ""
+                },
+				{
+                    "name": "with text",
+                    "type": "string",
+                    "block": ""
+                },
+				{
+                    "name": "with text color",
+                    "type": "color",
+                    "block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
             "script": "{{1}}.draw(local.ctx);",
             "help": "draw the sprite at its current location",

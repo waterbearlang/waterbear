@@ -28,6 +28,18 @@ function createImageSprite(size,pos,image){
      return rect;
 };
 
+function createTextSprite(size,pos,bColor,text,tColor){
+     var rect = new PolySprite(pos, bColor,[]);
+	 rect.size = size;
+	 rect.pos = pos;
+	 rect.text = text;
+	 rect.tColor = tColor;
+	 rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+	 rect.polygon.average = rect.polygon.calculateAverage();
+     rect.calculateBoundingBox();
+     return rect;
+};
+
 function createRectSprite(size,pos,color){
      var rect = new PolySprite(pos,color,[]);
      rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
@@ -47,10 +59,22 @@ PolySprite.prototype.draw = function(ctx){
         ctx.lineTo(this.polygon.points[i].x + this.polygon.pos.x, this.polygon.points[i].y + this.polygon.pos.y);
     };
     ctx.closePath();
+	//if the sprite is image sprite 
     if (this.image != null && this.image != 'undefined'){
 		ctx.drawImage(this.image,this.pos.x,this.pos.y,this.size.w,this.size.h);
 	}
-	else{
+	//else if the sprite is text sprite
+	else if(this.text != null && this.text != 'undefined'){
+		//console.log("in else if");
+		ctx.fillStyle = this.color;	
+		ctx.fill();
+		ctx.textAlign="center"; 
+		var height = this.size.h * 0.6;
+		ctx.font = String(height) +"px Arial";
+		ctx.fillStyle = this.tColor;	
+		ctx.fillText(this.text,this.pos.x + (this.size.w *0.5),this.pos.y + (this.size.h *0.6), this.size.w *0.8);	
+	}
+	else{ 
 		ctx.fillStyle = this.color;	
 		ctx.fill();
 		}

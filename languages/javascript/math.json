@@ -667,6 +667,126 @@
                     "name": "tau"
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "076E0F96-52EA-466E-84BC-FE41A2399510",
+            "type": "number",
+            "script": "({{1}} & {{2}})",
+            "help": "bitwise AND of the two operands - useful to select only specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "74C039B2-988F-4571-8AEB-C79F772D8F2D",
+            "type": "number",
+            "script": "({{1}} | {{2}})",
+            "help": "bitwise OR of the two operands - useful to set specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DA40D6D3-0052-4187-92EB-2F4C0A64C39F",
+            "type": "number",
+            "script": "({{1}} ^ {{2}})",
+            "help": "bitwise XOR of the two operands - useful to toggle specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "xor",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D58C0616-1CE4-4588-90C5-B57E1221E831",
+            "type": "number",
+            "script": "({{1}} &~ {{2}})",
+            "help": "bitwise NAND of the two operands - useful to unset specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "nand",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "43109945-DA0A-4B16-84A5-17727C0EF994",
+            "type": "number",
+            "script": "({{1}} << Math.floor({{2}}))",
+            "help": "left bit shift",
+            "sockets": [
+                {
+                    "name": "bit shift",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "left by",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "bits"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4EE8184B-52A8-40E8-ACC6-C7D21BA90742",
+            "type": "number",
+            "script": "({{1}} >> Math.floor({{2}}))",
+            "help": "right bit shift",
+            "sockets": [
+                {
+                    "name": "bit shift",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "right by",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "bits"
+                }
+            ]
         }
     ]
 }

@@ -30,6 +30,20 @@
         },
         {
             "blocktype": "eventhandler",
+            "id": "f13fcf60-a7e4-4672-9ff8-06197a65af94",
+            "script": "document.addEventListener({{1}}, function(event){ [[1]]; console.log({{1}});});",
+            "help": "this trigger will run the attached blocks every time the chosen mouse event happens",
+            "sockets": [
+                {
+                    "name": "when",
+                    "type": "choice",
+                    "options": "pointerEvents",
+                    "value": "choice"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
             "id": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
             "locals": [
                 {

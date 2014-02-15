@@ -5140,7 +5140,9 @@ wb.menu = menu;
 /*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/control.js*/
-
+wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup"];
+wb.choiceLists.types.push('control');
+wb.choiceLists.rettypes.push('control');
 /*end languages/javascript/control.js*/
 
 /*begin languages/javascript/sprite.js*/
@@ -5349,6 +5351,20 @@ wb.menu({
                     "options": "keys",
                     "value": "choice",
                     "suffix": "key pressed"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "f13fcf60-a7e4-4672-9ff8-06197a65af94",
+            "script": "document.addEventListener({{1}}, function(event){ [[1]]; console.log({{1}});});",
+            "help": "this trigger will run the attached blocks every time the chosen mouse event happens",
+            "sockets": [
+                {
+                    "name": "when",
+                    "type": "choice",
+                    "options": "pointerEvents",
+                    "value": "choice"
                 }
             ]
         },
@@ -5648,8 +5664,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/control.json*/
 
 /*begin languages/javascript/sprite.json*/

@@ -1255,26 +1255,26 @@ function Sprite(type, color){
 };
 
 function createImageSprite(size,pos,image){
-     var img = createRectSprite(size,pos);
-     img.size = size;
-     img.image = image;
-     return img;
+    var img = createRectSprite(size,pos);
+    img.size = size;
+    img.image = image;
+    return img;
 };
 
 function createTextSprite(size,pos,bColor,text,tColor){
-var txt = createRectSprite(size,pos,bColor);
-	 txt.size = size;
-	 txt.text = text;
-	 txt.tColor = tColor;
-     return txt;
+    var txt = createRectSprite(size,pos,bColor);
+    txt.size = size;
+    txt.text = text;
+    txt.tColor = tColor;
+    return txt;
 };
 
 function createRectSprite(size,pos,color){
-     var rect = new Sprite('polygon', color);
-     rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
-     rect.polygon.average = rect.polygon.calculateAverage();
-     rect.calculateBoundingBox();
-     return rect;
+    var rect = new Sprite('polygon', color);
+    rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+    rect.polygon.average = rect.polygon.calculateAverage();
+    rect.calculateBoundingBox();
+    return rect;
 };
 
 function createPolygonSprite(points,color){
@@ -1355,11 +1355,13 @@ Sprite.prototype.draw = function(ctx){
         ctx.fill();
     }
     if(this.text != null){
-	    ctx.textAlign="center"; 
-	    var height = this.size.h * 0.6;
-	    ctx.font = String(height) +"px Arial";
-	    ctx.fillStyle = this.tColor;	
-	    ctx.fillText(this.text,this.getPos().x + (this.size.w *0.5),this.getPos().y + (this.size.h *0.6), this.size.w *0.8);	
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.textAlign="center";
+        var height = this.size.h * 0.6;
+        ctx.font = String(height) +"px Arial";
+        ctx.fillStyle = this.tColor;
+        ctx.fillText(this.text,this.getPos().x + (this.size.w *0.5),this.getPos().y + (this.size.h *0.6), this.size.w *0.8);
     }
 };
 

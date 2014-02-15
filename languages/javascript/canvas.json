@@ -1,5 +1,6 @@
 {
     "name": "Canvas",
+    "help": "Canvas blocks are blocks that are about drawing on the canvas but don't fit elsewhere. Also look at the Sprites, Shapes, and Path menus.",
     "blocks": [
         {
             "blocktype": "context",
@@ -43,7 +44,7 @@
                 {
                     "name": "global alpha",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -70,12 +71,12 @@
                 {
                     "name": "scale x",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -88,10 +89,8 @@
                 {
                     "name": "rotate by",
                     "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -104,12 +103,12 @@
                 {
                     "name": "translate by x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -122,7 +121,7 @@
                 {
                     "name": "line width",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 }
             ]
         },
@@ -163,7 +162,7 @@
                 {
                     "name": "mitre limit",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -176,12 +175,12 @@
                 {
                     "name": "shadow offset x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -194,7 +193,79 @@
                 {
                     "name": "shadow blur",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
+            "help": "clear...",
+            "id": "cf17a61d-8c7a-4829-a476-0b650efda3e4",
+            "sockets": [
+                {
+                    "name": "clear rect",
+                    "type": "shape",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
+            "help": "circle...",
+            "id": "b4e05d48-32e4-4e0b-832c-b2433ffda2e2",
+            "sockets": [
+                {
+                    "name": "stroke circle at point",
+                    "type": "point",
+                    "value": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
+            "help": "fill...",
+            "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
+            "sockets": [
+                {
+                    "name": "fill shape",
+                    "type": "shape",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; Shape.strokeShape(shape##, color##, width##);",
+            "help": "stroke...",
+            "id": "90b70122-340f-46a7-9753-9c39022c00ac",
+            "sockets": [
+                {
+                    "name": "stroke shape",
+                    "type": "shape",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                },
+                {
+                    "name": "and width",
+                    "type": "number",
+                    "value": 1
                 }
             ]
         }

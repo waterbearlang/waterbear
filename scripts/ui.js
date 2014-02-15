@@ -1,19 +1,9 @@
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 // UI Chrome Section
 
-function tabSelect(event){
-    var target = event.wbTarget;
-    event.preventDefault();
-    document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.add('selected');
-    if (wb.matches(target, '.scripts_workspace_tab')){
-        showWorkspace('block');
-    }else if (wb.matches(target, '.scripts_text_view_tab')){
-        showWorkspace('text');
-        updateScriptsView();
-    }
-}
 
 function accordion(event){
     event.preventDefault();
@@ -26,33 +16,14 @@ function accordion(event){
 }
 
 
-function showWorkspace(mode){
-    // console.log('showWorkspace');
-    var workspace = document.querySelector('.workspace');
-    var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    if (!scriptsWorkspace) return;
-    var scriptsTextView = document.querySelector('.scripts_text_view');
-    if (mode === 'block'){
-	    scriptsWorkspace.style.display = '';
-	    scriptsTextView.style.display = 'none';
-        workspace.classList.remove('textview');
-        workspace.classList.add('blockview');
-    }else if (mode === 'text'){
-    	scriptsWorkspace.style.display = 'none';
-    	scriptsTextView.style.display = '';
-        workspace.classList.remove('blockview');
-        workspace.classList.add('textview');
-    }
-}
-// Expose this to dragging and saving functionality
-wb.showWorkspace = showWorkspace;
+
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    var blocks = wb.findAll(document.body, '.scripts_workspace');
+    var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
 }
-window.updateScriptsView = updateScriptsView;
+wb.updateScriptsView = updateScriptsView; 
 
 
 function changeSocket(event) {
@@ -199,8 +170,8 @@ function pasteCommand(evt) {
 	// console.log(pasteboard);
 	action = {
 		pasted: wb.cloneBlock(pasteboard),
-		into: cmenu_target.parentNode,
-		before: cmenu_target.nextSibling,
+		into: cmenuTarget.parentNode,
+		before: cmenuTarget.nextSibling,
 		undo: function() {
 			Event.trigger(this.pasted, 'wb-remove');
 			this.pasted.remove();
@@ -211,7 +182,7 @@ function pasteCommand(evt) {
 				this.into.insertBefore(this.pasted,this.before);
 			} else {
 				// console.log("Pasting an expression!");
-				cmenu_target.appendChild(this.pasted);
+				cmenuTarget.appendChild(this.pasted);
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
@@ -222,20 +193,20 @@ function pasteCommand(evt) {
 
 function canPaste() {
 	if(!pasteboard) return false;
-	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
-	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
 	return false;
 }
 
 var pasteboard = null;
-var current_cmenu = null;
-var show_context = false;
-var cmenu_disabled = false;
-var cmenu_target = null;
+var cmenuCurrent = null;
+var showContext = false;
+var cmenuDisabled = false;
+var cmenuTarget = null;
 
 function cmenuitem_enabled(menuitem) {
 	if(menuitem.enabled) {
@@ -295,10 +266,10 @@ function closeContextMenu(evt) {
 function handleContextMenu(evt) {
 	// console.log('handling context menu');
 	stackTrace();
-	//if(!show_context) return;
+	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -309,13 +280,13 @@ function handleContextMenu(evt) {
 }
 
 function setContextMenuTarget(target) {
-	cmenu_target = target;
-	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
-		// console.log(cmenu_target);
-		cmenu_target = cmenu_target.parentNode;
-		if(cmenu_target.tagName == 'BODY') {
+	cmenuTarget = target;
+	while(!wb.matches(cmenuTarget, '.block') && !wb.matches(cmenuTarget, '.holder')) {
+		// console.log(cmenuTarget);
+		cmenuTarget = cmenuTarget.parentNode;
+		if(cmenuTarget.tagName == 'BODY') {
 			console.error("Something went wrong with determining the context menu target!");
-			cmenu_target = null;
+			cmenuTarget = null;
 			contextDiv.style.display = 'none';
 		}
 	}
@@ -331,8 +302,8 @@ function showContextMenu(atX, atY) {
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		// console.log(cmenu_target);
-		fcn.call(cmenu_target,evt);
+		// console.log(cmenuTarget);
+		fcn.call(cmenuTarget,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';
 		evt.preventDefault();
@@ -340,7 +311,7 @@ function cmenuCallback(fcn) {
 }
 
 function disableContextMenu(evt) {
-	cmenu_disabled = true;
+	cmenuDisabled = true;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = '';
 	var contextDiv = document.getElementById('context_menu');
@@ -348,7 +319,7 @@ function disableContextMenu(evt) {
 }
 
 function enableContextMenu(evt) {
-	cmenu_disabled = false;
+	cmenuDisabled = false;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = 'none';
 }
@@ -372,22 +343,25 @@ function is_touch_device() {
 initContextMenus();
 
 // Build the Blocks menu, this is a public method
-wb.menu = function(blockspec){
+function menu(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return edit_menu(title, specs);
+    var help = blockspec.help !== undefined ? blockspec.help : '';
+    return edit_menu(title, specs, help);
 };
 
-function edit_menu(title, specs, show){
+function edit_menu(title, specs, help, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
+        submenu.appendChild(description);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;
@@ -403,11 +377,69 @@ function initContextMenus() {
 	document.querySelector('.cmenuEnable').style.display = 'none';
 }
 
+// functions to show various mobile views
+
+function handleShowButton(button, newView){
+	// stop result
+	wb.clearStage();
+	// enable previous button, disable current button
+	var currentButton = document.querySelector('.current-button');
+	if (currentButton){
+		currentButton.classList.remove('current-button');
+	}
+	button.classList.add('current-button');
+	//slide old view out, slide new view in
+	var oldView = document.querySelector('.current-view');
+	oldView.classList.remove('current-view');
+	oldView.style.transitionDuration = '0.5s';
+	oldView.style.left = '-100%';
+	newView.classList.add('current-view');
+	newView.style.transitionDuration = '0.5s';
+	newView.style.left = '0';
+	Event.once(document.body, 'transitionend', null, function(){
+		// console.log('transitionend: %o', oldView);
+		oldView.style.transitionDuration = '0s';
+		oldView.style.left = '100%';
+	});
+}
+
+function showFiles(evt){
+	handleShowButton(evt.target, document.querySelector('.files'));
+}
+
+function showBlocks(evt){
+	handleShowButton(evt.target, document.querySelector('#block_menu'));
+}
+
+function showScript(evt){
+	handleShowButton(evt.target, document.querySelector('.workspace'));
+}
+
+function showResult(evt){
+	handleShowButton(evt.target, document.querySelector('.results'));
+	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
+}
 
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+// Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
+if (document.body.clientWidth < 361){
+	// console.log('mobile view');
+	Event.on('.show-files', 'click', null, showFiles);
+	Event.on('.show-blocks', 'click', null, showBlocks);
+	Event.on('.show-script', 'click', null, showScript);
+	Event.on('.show-result', 'click', null, showResult);
+	document.querySelector('.show-script').classList.add('current-button');
+	document.querySelector('.workspace').classList.add('current-view');
+}
+if (document.body.clientWidth > 360){
+	// console.log('desktop view');
+	Event.on(document.body, 'change', 'input', updateScriptsView);
+	Event.on(document.body, 'wb-modified', null, updateScriptsView);
+}
+
+wb.menu = menu;
 
 })(wb);
 

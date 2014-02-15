@@ -1,8 +1,14 @@
-						<li><button class="load-example" data-example="blacklight_worms">Blacklight Worms</button></li>
-						<li><button class="load-example" data-example="breakout">Breakout</button></li>
-						<li><button class="load-example" data-example="pong">Pong</button></li>
-						<li><button class="load-example" data-example="random_circles">Random Circles</button></li>
-						<li><button class="load-example" data-example="londonderry">Music</button></li>
-						<li><button class="load-example" data-example="rotating_boxes">Rotating Boxes</button></li>
-						<li><button class="load-example" data-example="dance">Dance</button></li>
-						<li><button class="load-example" data-example="airgame">Air Game</button></li>
+<li><button class="load-example" data-example="blacklight_worms">Blacklight Worms</button></li>
+<li><button class="load-example" data-example="breakout">Breakout</button></li>
+<li><button class="load-example" data-example="pong">Pong</button></li>
+<li><button class="load-example" data-example="random_circles">Random Circles</button></li>
+<li><button class="load-example" data-example="londonderry">Londonderry</button></li>
+<li><button class="load-example" data-example="rotating_boxes">Rotating Boxes</button></li>
+<li><button class="load-example" data-example="dance">Dance</button></li>
+<li><button class="load-example" data-example="airgame">Air Game</button></li>
+<li><button class="load-example" data-example="move_image">Image follows mouse</button></li>
+<li><button class="load-example" data-example="tic_tac_toe">Tic Tac Toe</button></li>
+<li><button class="load-example" data-example="snake">Snake</button></li>
+<li><button class="load-example" data-example="fibonacci">Fibonacci</button></li>
+<li><button class="load-example" data-example="rotating">Recursive Square</button></li>
+<li><button class="load-example" data-example="eyes">Eyes</button></li>

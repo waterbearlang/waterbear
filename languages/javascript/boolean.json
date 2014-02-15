@@ -1,5 +1,6 @@
 {
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",
@@ -10,13 +11,11 @@
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "and",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -29,13 +28,11 @@
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "or",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -48,13 +45,11 @@
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "xor",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -67,8 +62,7 @@
             "sockets": [
                 {
                     "name": "not",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -82,10 +76,8 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": 2
-                },
-                {
-                    "name": "is even"
+                    "value": 2,
+                    "suffix": "is even"
                 }
             ]
         },
@@ -99,10 +91,8 @@
                 {
                     "name": "",
                     "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "is odd"
+                    "value": 1,
+                    "suffix": "is odd"
                 }
             ]
         }

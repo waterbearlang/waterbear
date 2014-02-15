@@ -12,10 +12,6 @@
   cursor: -moz-grab;
 }
 
-.block .disclosure {
-	cursor: pointer;
-}
-
 .block .socket input,
 .block .socket select {
 	cursor: auto;
@@ -351,6 +347,7 @@
   margin-right: 1em;
   margin-left -1em;
   display: inline-block;
+  cursor: pointer;
 }
 
 .disclosure:before{

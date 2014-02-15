@@ -8276,6 +8276,28 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "3889BB61-FC62-4BED-B0EC-792AF636EC18",
+            "type": "string",
+            "script": "{{1}}.repeat({{2}})",
+            "help": "returns a string by joining together copies of the original string",
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "string",
+                    "value": "hello"
+                },
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "2"
+                },
+                {
+                    "name": "times"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
             "script": "{{1}}[{{2}}]",
             "type": "string",
@@ -8624,10 +8646,67 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "55FC2AC3-7C0E-43CD-BDDE-8E890073EDAC",
+            "type": "boolean",
+            "script": "{{1}}.startsWith({{2}})",
+            "help": "first string starts with to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "starts with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "2F3963B1-1FAC-402A-B5B6-86927DCD3241",
+            "type": "boolean",
+            "script": "{{1}}.endsWith({{2}})",
+            "help": "first string ends with to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "ends with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "73A7E675-E152-454A-9B60-A7C3D54F603C",
+            "type": "boolean",
+            "script": "{{2}}.test({{1}})",
+            "help": "first string matches the given regular expression",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "matches pattern",
+                    "type": "regex",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "D8EF192D-16BD-42AA-98A0-C6C2236392F7",
             "script": "levenshtein({{1}},{{2}})",
             "type": "number",
-            "help": "calculate how much two strings are different",
+            "help": "calculate how much two strings are different using Levenshtein difference",
             "sockets": [
                 {
                     "name": "difference of strings",

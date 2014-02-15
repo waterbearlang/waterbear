@@ -28,6 +28,7 @@
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
             "script": "local.sprite## = createRectSprite({{1}}, {{2}}, {{3}});",
@@ -139,6 +140,36 @@
                     "name": "with text color",
                     "type": "color",
                     "block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "6e0689f9-c731-4874-9ba8-5228c1ff335a",
+            "script": "local.sprite## = createSprite({{1}}, {{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "shape sprite##",
+                    "type": "shape",
+                    "block": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "block": null
                 }
             ]
         },
@@ -430,7 +461,7 @@
                 }
             ]
         },
-    {
+        {
             "blocktype": "step",
             "id": "badee0b6-8f7c-4cbd-9173-f450c765045d",
             "script": "{{1}}.color = {{2}};",
@@ -473,7 +504,7 @@
                 }
             ]
         },
-         {
+        {
             "blocktype": "expression",
             "id": "86aa39be-5419-4abb-9765-e63f824608f0",
             "script": "{{1}}.polygon.average",

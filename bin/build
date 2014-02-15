@@ -27,22 +27,24 @@ var pluginlibs = {
     processingjs: ['processing-1.4.1']
 }
 
+var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome']
+
 var styles = {
-    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    processingjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css']
+    arduino: [],
+    javascript: ['highlight-github'],
+    minecraftjs: ['highlight-github'],
+    demo: ['highlight-github'],
+    processingjs: ['highlight-github']
 }
 
-var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
 
 var libs = {
     arduino: [],
-    javascript: ['beautify', 'highlight', 'highlight-javascript'],
-    minecraftjs: ['beautify', 'highlight', 'highlight-javascript'],
-    demo: ['beautify', 'highlight', 'highlight-javascript'],
-    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1']
+    javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    minecraftjs: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
 };
 
 
@@ -111,7 +113,9 @@ function build(){
             errors = true;
             return -1;
         }
-        styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+        styles[lang].concat(universalStyles)
+            .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
+            .forEach(function(stylename){cat(stylename, dest + '.css'); });
 
         scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
 

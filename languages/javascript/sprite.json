@@ -1,5 +1,6 @@
 {
     "name": "Sprites",
+    "help": "Sprites are graphics that can be repositioned, rotated, and have a vector of motion. They can also check for collision with other Sprites.",
     "blocks": [
         {
             "blocktype": "step",
@@ -22,12 +23,12 @@
             "sockets": [
                 {
                     "name": "clear stage to image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
             "script": "local.sprite## = createRectSprite({{1}}, {{2}}, {{3}});",
@@ -64,14 +65,123 @@
         },
         {
             "blocktype": "step",
+            "id": "c876f5e8-87e9-4dc5-a6ee-8cf8e0188988",
+            "script": "local.sprite## = createImageSprite({{1}}, {{2}}, {{3}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple image sprite",
+            "sockets": [
+                {
+                    "name": "image sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with image",
+                    "type": "image",
+                    "block": ""
+                }
+            ]
+        },
+		{
+            "blocktype": "step",
+            "id": "43b28edf-c77f-422f-be5b-5217c9da93c9",
+            "script": "local.sprite## = createTextSprite({{1}}, {{2}}, {{3}}, {{4}}, {{5}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple text sprite",
+            "sockets": [
+                {
+                    "name": "text sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with block color",
+                    "type": "color",
+                    "block": ""
+                },
+				{
+                    "name": "with text",
+                    "type": "string",
+                    "block": ""
+                },
+				{
+                    "name": "with text color",
+                    "type": "color",
+                    "block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "6e0689f9-c731-4874-9ba8-5228c1ff335a",
+            "script": "local.sprite## = createSprite({{1}}, {{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "shape sprite##",
+                    "type": "shape",
+                    "block": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "block": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
             "script": "{{1}}.draw(local.ctx);",
             "help": "draw the sprite at its current location",
             "sockets": [
                 {
                     "name": "draw sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -83,8 +193,7 @@
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -104,16 +213,13 @@
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -125,8 +231,7 @@
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -146,8 +251,7 @@
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
@@ -167,8 +271,7 @@
             "sockets": [
                 {
                     "name": "Autosteer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "",
@@ -186,13 +289,27 @@
             "sockets": [
                 {
                     "name": "sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "collides with sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
+                }
+            ]
+        },
+          {
+			"blocktype": "expression",
+            "id": "f874f2af-c15e-44d2-9728-c14a774f22fb",
+            "script": "isSpriteClicked({{1}})",
+            "type": "boolean",
+            "help": "test for click",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite"
+                },
+                {
+                    "name": "is clicked?"
                 }
             ]
         },
@@ -204,13 +321,11 @@
             "sockets": [
                 {
                     "name": "bounce sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "off of sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -222,18 +337,15 @@
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by x",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 },
                 {
                     "name": "y",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 }
             ]
         },
@@ -245,8 +357,7 @@
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -303,10 +414,8 @@
             "sockets": [
                 {
                     "name": "stop sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -318,10 +427,8 @@
             "sockets": [
                 {
                     "name": "slide sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -333,10 +440,8 @@
             "sockets": [
                 {
                     "name": "wrap sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "around edge of stage"
+                    "type": "sprite",
+                    "suffix": "around edge of stage"
                 }
             ]
         },
@@ -348,17 +453,15 @@
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
-    {
+        {
             "blocktype": "step",
             "id": "badee0b6-8f7c-4cbd-9173-f450c765045d",
             "script": "{{1}}.color = {{2}};",
@@ -366,8 +469,7 @@
             "sockets": [
                 {
                     "name": "Color sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to color",
@@ -385,10 +487,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "facing direction"
+                    "suffix": "facing direction"
                 }
             ]
         },
@@ -401,14 +500,11 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "movement direction"
+                    "suffix": "movement vector"
                 }
             ]
         },
-         {
+        {
             "blocktype": "expression",
             "id": "86aa39be-5419-4abb-9765-e63f824608f0",
             "script": "{{1}}.polygon.average",
@@ -417,10 +513,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "center"
+                    "suffix": "center"
                 }
             ]
         },
@@ -433,10 +526,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
+                    "suffix": "speed"
                 }
             ]
         },
@@ -449,10 +539,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
+                    "suffix": "horizontal speed"
                 }
             ]
         },
@@ -465,10 +552,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
+                    "suffix": "vertical speed"
                 }
             ]
         },
@@ -482,10 +566,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "left"
+                    "suffix": "left"
                 }
             ]
         },
@@ -499,10 +580,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "right"
+                    "suffix": "right"
                 }
             ]
         },
@@ -516,10 +594,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "top"
+                    "suffix": "top"
                 }
             ]
         },
@@ -532,10 +607,7 @@
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "bottom"
+                    "suffix": "bottom"
                 }
             ]
         }

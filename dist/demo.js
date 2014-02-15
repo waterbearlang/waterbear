@@ -1822,31 +1822,130 @@ hljs.LANGUAGES.javascript = {
 
 /*end highlight-javascript.js*/
 
-/*begin ajax.js*/
-(function(global){
-function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
-function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+/*begin events.min.js*/
+/*
+|------------------------------------------------
+| Events.js
+|------------------------------------------------
+|
+| A super-awesome JavaScript event handler library.
+|
+| @author     James Brumond
+| @version    0.2.3-beta
+| @copyright  Copyright 2011 James Brumond
+| @license    Dual licensed under MIT and GPL
+|
+*/
+var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=document.readyState==="complete";if(!a){function b(){a=!0}window.addEventListener?window.addEventListener("load",b,!1):window.attachEvent&&window.attachEvent("onload",b)}return function(){return a}}(),e={mouseenter:{attachesTo:"mouseover",eventTest:function(a){return!withinElement(a,a.originalTarget(),"fromElement")}},mouseleave:{attachesTo:"mouseout",eventTest:function(a){return!withinElement(a,a.originalTarget(),"toElement")}},hashchange:{bind:function(a,b){f.addEventListener(b)},unbind:function(a,b){f.removeEventListener(b)},invoke:function(a){f.dispatchEvent()}},keystroke:{attachesTo:"keydown",eventTest:function(a){return g.runTest(a,a.getNamespace().split(".")[0])}}},f=new function(){var b=this,c=25,d=[],e=function(){var a=(location+"").match(/^[^#]*(#.+)$/);return a?a[1]:""},f=function(a){a[0]!=="#"&&(a="#"+a),location.hash=a},g=function(){var a=!1;return function(b){typeof b=="boolean"&&(a=b);return a}}(),h=function(b,c){return a.buildEventObject("hashchange",{},merge({oldURL:b,newURL:location+""},c||{}))},i=function(a){var b;for(var c=0,e=d.length;c<e;c++)b=d[c].call(window,a);a.returnValue!=null&&(b=a.returnValue);return b},j=function(){var a=e(),d=location+"",f=!1,h=null;return{start:function(){f||(f=!0,h=window.setInterval(function(){var c=e();c!==a&&(a=c,g()||b.dispatchEvent(d),d=location+"")},c))},stop:function(){f&&(f=!1,window.clearInterval(h))}}}(),k=function(a){var a=a||window.event,b=a._isEmulated||!1;!g()&&!b&&(g(!0),j.stop());return i(a)};b.init=function(){attachListener(window,"hashchange",k),g()||j.start()},b.addEventListener=function(a){d.push(a)},b.removeEventListener=function(a){var b=[];for(var c=0,e=d.length;c<e;c++)d[c]!==a&&b.push(d[c]);d=b},b.dispatchEvent=function(a){return i(h(location+"",a))}},g=function(){var a={type:"keydown",propagate:!1,disable_in_input:!0,target:document,keycode:!1},b={"`":"~",1:"!",2:"@",3:"#",4:"$",5:"%",6:"^",7:"&",8:"*",9:"(",0:")","-":"_","=":"+",";":":","'":'"',",":"<",".":">","/":"?","\\":"|"},c={esc:27,escape:27,tab:9,space:32,"return":13,enter:13,backspace:8,scrolllock:145,scroll_lock:145,scroll:145,capslock:20,caps_lock:20,caps:20,numlock:144,num_lock:144,num:144,pause:19,"break":19,insert:45,home:36,"delete":46,end:35,pageup:33,page_up:33,pu:33,pagedown:34,page_down:34,pd:34,left:37,up:38,right:39,down:40,f1:112,f2:113,f3:114,f4:115,f5:116,f6:117,f7:118,f8:119,f9:120,f10:121,f11:122,f12:123},d=function(){return{shift:{wanted:!1,pressed:!1},ctrl:{wanted:!1,pressed:!1},alt:{wanted:!1,pressed:!1},meta:{wanted:!1,pressed:!1}}},e=function(a,e,f){var g,h,i,j,k,l;if(f.disable_in_input){i=a.currentTarget;if(i&&i.tagName&&(i.tagName.toLowerCase()==="input"||i.tagName.toLowerCase()==="textarea")&&i!==f.target)return}a.keyCode?k=a.keyCode:a.which&&(k=a.which),j=String.fromCharCode(k).toLowerCase(),k===188&&(j=","),k===190&&(j="."),g=e.split("+"),h=0,l=d(),a.ctrlKey&&(l.ctrl.pressed=!0),a.shiftKey&&(l.shift.pressed=!0),a.altKey&&(l.alt.pressed=!0),a.metaKey&&(l.meta.pressed=!0);for(var m=0;m<g.length;m++){var n=g[m];n==="ctrl"||n==="control"?(h++,l.ctrl.wanted=!0):n==="shift"?(h++,l.shift.wanted=!0):n==="alt"?(h++,l.alt.wanted=!0):n==="meta"?(h++,l.meta.wanted=!0):n.length>1?c[n]===k&&h++:f.keycode?f.keycode===k&&h++:j===n?h++:b[j]&&a.shiftKey&&(j=b[j],j===n&&h++)}return h===g.length&&l.ctrl.pressed===l.ctrl.wanted&&l.shift.pressed===l.shift.wanted&&l.alt.pressed===l.alt.wanted&&l.meta.pressed===l.meta.wanted};return{runTest:function(b,c,d){var d=d||{};for(var f in a)a.hasOwnProperty(f)&&d[f]===undefined&&(d[f]=a[f]);return e(b,c.toLowerCase(),d)},defaults:a}}(),h=function(){var a=function(a){if(typeof this=="undefined"||typeof a=="undefined"||typeof this[a]=="undefined")return!1;return this[a]!==this.constructor.prototype[a]};return function(b){try{b.prototype.hasOwnProperty=a;if(typeof b.hasOwnProperty!="function")throw 0}catch(c){b.hasOwnProperty=a}}}();EventController=function(a,b){var c=this,d=!1,a=a,b=b,e=null;typeof a.hasOwnProperty!="function"&&h(a),c.target=c.srcElement=b;for(var f in a)a.hasOwnProperty(f)&&typeof a[f]!="function"&&(c[f]=a[f]);c.getNamespace=function(){return e},c._setNamespace=function(a){e=a},c.mousePosition=function(){var b=0,c=0;if(a.pageX||a.pageY)b=a.pageX,c=a.pageY;else if(a.clientX||a.clientY)b=a.clientX+document.body.scrollLeft+document.documentElement.scrollLeft,c=a.clientY+document.body.scrollTop+document.documentElement.scrollTop;return{x:b,y:c}},c.eventObject=function(){return a},c.originalTarget=function(){return b},c.stopPropagation=function(){typeof a.stopPropagation=="function"&&a.stopPropagation(),a.cancelBubble=!0},c.cancelDefault=function(){d||(d=!0,typeof a.preventDefault=="function"&&a.preventDefault(),a.returnValue=!1)},c.isDefaultCanceled=function(){return d}},EventFunction=function(a,b){var c=this,b=b;a=a||undefined;if(typeof a!="function")return undefined;c.call=function(b,c){return a.call(b,c)}},EventWrapper=function(a,b){var c=this,a=a||null,b=b||null,d={},f=!1,g=!1,h=function(a){var b=d;for(var c=0,e=a.length;c<e;c++){var f=a[c];typeof b[f]!="object"&&(b[f]={}),b=b[f]}typeof b["."]!="object"&&(b["."]=[]);return b};c.registerFunction=function(a,b){var d=h(b);d["."].push(new EventFunction(a,c))},c.removeNamespace=function(a){if(a&&a.length){var b=a.pop(),c=h(a);c[b]={}}else d={}},c.run=function(c,f){var f=f||new EventController(c,a),g=[],h=b in e&&e[b].eventTest?e[b].eventTest:function(){return!0},i=function(b){var c=null;for(var d in b)if(b.hasOwnProperty(d)){f._setNamespace(g.join("."));if(d==="."){if(h(f))for(var e=0,j=b[d].length;e<j;e++)c=b[d][e].call(a,f),c===!1&&f.cancelDefault()}else g.push(d),c=i(b[d]),g.pop()}return c},j=i(d);return f.isDefaultCanceled()?!1:j};if(b in e){var i=e[b],j=!!i.bind&&!!i.unbind,k=function(a){return c.run(a||window.event)};c.bindEvent=function(){g||(g=!0,j?i.bind(a,k):attachListener(a,i.attachesTo,k))},c.unbindEvent=function(){g&&(g=!1,j?i.unbind(a,k):detachListener(a,i.attachesTo,k))}}else{var k=function(a){return c.run(a||window.event)};c.bindEvent=function(){g||(g=!0,attachListener(a,b,k))},c.unbindEvent=function(){g&&(g=!1,detachListener(a,b,k))}}c.bindEvent()},EventHandler=function(a){var c=this,a=a||null,d={};b.push(c),c.getTarget=function(){return a},c.registerEvent=function(b,c){if(typeof b!="string"||typeof c!="function")return!1;var e=b.split("."),f;b=e.shift(),f=e,startsWithOn.test(b)&&(b=b.substring(2)),d[b]===undefined&&(d[b]=new EventWrapper(a,b)),d[b].registerFunction(c,f)},c.removeEvent=function(a){var a=a||!1,b;if(typeof a!="string")return!1;if(a==="*"){for(var c in d)d.hasOwnProperty(c)&&d[c].removeNamespace(!1);return!0}b=a.split("."),a=b.shift(),d[a].removeNamespace(b)}},startsWithOn=/^on/,startsWithDOM=/^DOM/,attachListener=function(a,b,c){if(a.addEventListener)startsWithOn.test(b)&&(b=b.substring(2)),a.addEventListener(b,c,!1);else if(a.attachEvent)!startsWithDOM.test(b)&&!startsWithOn.test(b)&&(b="on"+b),a.attachEvent(b,c);else throw new YourBrowserFailsError("Could not attach event listener")},detachListener=function(a,b,c){if(a.removeEventListener)startsWithOn.test(b)&&(b=b.substring(2)),a.removeEventListener(b,c,!1);else if(a.detachEvent)!startsWithDOM.test(b)&&!startsWithOn.test(b)&&(b="on"+b),a.detachEvent(b,c);else throw new YourBrowserFailsError("Could not detach event listener")},invokeListener=function(b,c,d){var e;if(b.dispatchEvent)startsWithOn.test(c)&&(c=c.substring(2)),e=a.buildEventObject(b,c,d),b.dispatchEvent(e);else if(b.fireEvent)!startsWithDOM.test(c)&&!startsWithOn.test(c)&&(c="on"+c),e=a.buildEventObject(b,c,d),b.fireEvent(c,e);else throw new YourBrowserFailsError("Could not invoke event listener")},getEventTarget=function(a,b){var c=!1;a.target?c=a.target:a.srcElement&&(c=a.srcElement),!c&&a.srcElement===null&&(c=b||window),c.nodeType==3&&(c=c.parentNode);return c},withinElement=function(a,b,c){var d=a.relatedTarget,e;d==null&&(d=a[c]||null);try{while(d&&d!==b)d=d.parentNode;e=d===b}catch(f){e=!1}return e},getHandlerByTarget=function(a){for(var c=0;c<b.length;c++)if(b[c].getTarget()===a)return b[c];return!1},getEventHandler=function(a){var b=getHandlerByTarget(a);return b?b:new EventHandler(a)},merge=function(){var a=Array.prototype.slice.call(arguments,0),b={};for(var c=0,d=a.length;c<d;c++)for(var e in a[c])a[c].hasOwnProperty(e)&&(b[e]=a[c][e]);return b},contains=function(a,b){for(var c=0,d=b.length;c<d;c++)if(b[c]===a)return!0;return!1},a.version=function(){return c},a.ready=function(){var a=[],b=!1;return function(c){d()?c():(a.push(c),b||Events.bind(window,"load",function(){for(var b=0,c=a.length;b<c;b++)a[b]()}))}}(),a.log=function(){var a=null,b=function(){a==null&&(typeof window.console!="undefined"?typeof window.console.log.apply=="function"?a=function(){window.console.log.apply(window.console,arguments)}:a=function(){window.console.log(arguments)}:typeof console!="undefined"?a=function(){console.log.apply(console,arguments)}:a=function(){});return a};return function(){var a=Array.prototype.slice.call(arguments,0);typeof a[0]=="string"&&(a[0]="["+Date()+"] - "+a[0]),b().apply(this,a)}}(),a.bind=function(a,b,c){var d=getEventHandler(a);return d.registerEvent(b,c)},a.unbind=function(a,b){var c=getEventHandler(a);return c.removeEvent(b)},a.specialEvents={exists:function(a){return e[a]!=null},add:function(a,b){e[a]==null&&(e[a]=b)},edit:function(a,b){if(e[a]!=null)for(var c in b)b.hasOwnProperty(c)&&(e[a][c]=b[c])},del:function(a){e[a]!=null&&(e[a]=null)}},a.invoke=function(a,b,c){return invokeListener(a,b,c)},a.buildEventObject=function(){var a={HTMLEvents:["abort","blur","change","error","focus","load","reset","resize","scroll","select","submit","unload","hashchange"],UIEvents:["DOMActivate","DOMFocusIn","DOMFocusOut"],KeyEvents:["keydown","keypress","keyup"],MouseEvents:["click","mousedown","mousemove","mouseout","mouseover","mouseup"],MutationEvents:["DOMAttrModified","DOMNodeInserted","DOMNodeRemoved","DOMCharacterDataModified","DOMNodeInsertedIntoDocument","DOMNodeRemovedFromDocument","DOMSubtreeModified"]},b=function(b){var c="Events";for(var d in a)if(a.hasOwnProperty(d)&&contains(b,a[d])){d==="KeyEvents"&&!window.KeyEvent&&(d="UIEvents");if(document.implementation.hasFeature(d,"2.0")||window[d.substring(0,d.length-1)])d="Events";c=d;break}return c},c={useDefaults:!1,bubbles:!0,cancelable:!1},d={winObj:window,detail:1},e={winObj:window,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,keyCode:0,charCode:0},f={winObj:window,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,button:0,relatedTarget:null},g={relatedNode:null,prevValue:null,newValue:null,attrName:null,attrChange:null};return document.createEvent?function(a,h,i){var j=b(event),k=document.createEvent(j),l=h,h=h||{};if(typeof l!="object"||h.useDefaults)j="Events";switch(j){case"Events":case"HTMLEvents":h=merge(c,h),k.initEvent(a,h.bubbles,h.cancelable);break;case"UIEvents":h=merge(c,d,h),k.initUIEvent(a,h.bubbles,h.cancelable,h.winObj,h.detail);break;case"KeyEvents":h=merge(c,e,h),k.initKeyEvent(a,h.bubbles,h.cancelable,h.winObj,h.ctrlKey,h.altKey,h.shiftKey,h.metaKey,h.keyCode,h.charCode);break;case"MouseEvents":h=merge(c,f,h),k.initMouseEvent(a,h.bubbles,h.cancelable,h.winObj,h.screenX,h.screenY,h.clientX,h.clientY,h.ctrlKey,h.altKey,h.shiftKey,h.metaKey,h.button,h.relatedTarget);break;case"MutationEvents":h=merge(c,g,h),k.initMutationEvent(a,h.bubbles,h.cancelable,h.relatedNode,h.prevValue,h.newValue,h.attrName,h.attrChange)}for(var m in i)i.hasOwnProperty(m)&&(k[m]=i[m]);return k}:document.createEventObject?function(a,b,d){var e=document.createEventObject(),b=merge(c,b||{},d);for(var f in b)b.hasOwnProperty(f)&&(e[f]=b[f]);return e}:function(a,b,d){return merge({type:a,timeStamp:(new Date).getTime(),target:target,srcElement:target,currentTarget:target,defaultPrevented:!1},c,b||{},d||{},{bubbles:!1})}}(),f.init()};typeof window.YourBrowserFailsError=="undefined"&&(window.YourBrowserFailsError=function(a){if(!this instanceof YourBrowserFailsError)return new YourBrowserFailsError(a);var b=function(){var a;try{(0)()}catch(b){a=b}return a}();this.name="YourBrowserFailsError",this.message=a,this.stack=b.stack||b.stacktrace||"Could not get a stack. MORE FAILS!!"});
+/*end events.min.js*/
 
-ajax={};
-ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
-ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
-ajax.send=function(u,f,m,a){var x=ajax.x();x.open(m,u,true);x.onreadystatechange=function(){if(x.readyState==4)f(x.responseText)};if(m=='POST')x.setRequestHeader('Content-type','application/x-www-form-urlencoded');x.send(a)};
-ajax.get=function(url,func){ajax.send(url,func,'GET')};
-ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
-ajax.post=function(url,func,args){ajax.send(url,func,'POST',args)};
-ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
-ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
-global.ajax = ajax;
+/*begin ajax.js*/
+(function (global) {
+    function $(e) {
+        if (typeof e == 'string') e = document.getElementById(e);
+        return e
+    };
+
+    function collect(a, f) {
+        var n = [];
+        for (var i = 0; i < a.length; i++) {
+            var v = f(a[i]);
+            if (v != null) n.push(v)
+        }
+        return n
+    };
+
+    ajax = {};
+    ajax.x = function () {
+        try {
+            return new ActiveXObject('Msxml2.XMLHTTP')
+        } catch (e) {
+            try {
+                return new ActiveXObject('Microsoft.XMLHTTP')
+            } catch (e) {
+                return new XMLHttpRequest()
+            }
+        }
+    };
+    ajax.serialize = function (f) {
+        var g = function (n) {
+            return f.getElementsByTagName(n)
+        };
+        var nv = function (e) {
+            if (e.name) return encodeURIComponent(e.name) + '=' + encodeURIComponent(e.value);
+            else return ''
+        };
+        var i = collect(g('input'), function (i) {
+            if ((i.type != 'radio' && i.type != 'checkbox') || i.checked) return nv(i)
+        });
+        var s = collect(g('select'), nv);
+        var t = collect(g('textarea'), nv);
+        return i.concat(s).concat(t).join('&');
+    };
+
+    ajax.send = function (u, f, m, a, e) {
+        var x = ajax.x();
+        x.open(m, u, true);
+        x.onreadystatechange = function () {
+            if (x.readyState == 4 && x.status < 400) {
+                cType = x.getResponseHeader("Content-Type");
+                f(x.responseText, cType);
+            } else if (x.readyState == 4) {
+                if (e == undefined) {
+                    console.log(x.status + " (" + x.statusText + ") ");
+                } else {
+                    e(x.status, x);
+                }
+            }
+        };
+        if (m == 'POST')
+            x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        x.send(a);
+    };
+
+    ajax.get = function (url, func, err) {
+        ajax.send(url, func, 'GET', {}, err)
+    };
+
+    ajax.gets = function (url) {
+        var x = ajax.x();
+        x.open('GET', url, false);
+        x.send(null);
+        return x.responseText
+    };
+
+    ajax.post = function (url, func, args, err) {
+        ajax.send(url, func, 'POST', args, err)
+    };
+
+    ajax.update = function (url, elm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.get(url, f)
+    };
+    ajax.submit = function (url, elm, frm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.post(url, f, ajax.serialize(frm))
+    };
+    global.ajax = ajax;
 })(this);
+
 /*end ajax.js*/
 
 /*begin queryparams.js*/
-// Sets up wb namespace (wb === waterbear)
+// Sets up wb namespace (wb === waterbear). Global variable wb
+// is initialized in the HTML before any javascript files are
+// loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
 
 	// Source: http://stackoverflow.com/a/13984429
-	wb.urlToQueryParams = function(url){
+	function urlToQueryParams(url){
 	    var qparams = {},
 	        parts = (url||'').split('?'),
 	        qparts, qpart,
@@ -1866,7 +1965,7 @@ global.ajax = ajax;
 	    return qparams;
 	};
 
-	wb.queryParamsToUrl = function(params){
+	function queryParamsToUrl(params){
 		var base = location.href.split('?')[0];
 		var keys = Object.keys(params);
 		var parts = [];
@@ -1884,12 +1983,17 @@ global.ajax = ajax;
 		}
 		return base + '?' + parts.join('&');
 	}
+
+	wb.urlToQueryParams = urlToQueryParams;
+	wb.queryParamsToUrl = queryParamsToUrl;
 	global.wb = wb;
 })(this);
 
 /*end queryparams.js*/
 
 /*begin util.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(global){
     //
     //
@@ -1901,35 +2005,33 @@ global.ajax = ajax;
     // TODO
     // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
-    wb.makeArray = function makeArray(arrayLike){
+    function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
     };
 
-    wb.reposition = function reposition(elem, position){
+    function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
     };
 
-    wb.hide = function(elem){
-        elem.dataset.display = elem.style.display;
-        elem.style.display = 'none';
+    function hide(elem){
+        elem.classList.add('hidden');
     };
 
-    wb.show = function(elem){
-        elem.style.display = elem.dataset.display || 'block';
-        delete elem.dataset.display;
+    function show(elem){
+        elem.classList.remove('hidden');
     };
 
-    var svgtext = document.querySelector('svg text');
-    wb.resize = function(input){
+    var svgText = document.querySelector('.resize-tester');
+    function resize(input){
         if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value || '';
-        var textbox = svgtext.getBBox();
+        svgText.textContent = input.value || '';
+        var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
     };
 
@@ -1937,12 +2039,12 @@ global.ajax = ajax;
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };
 
-    wb.dist = function dist(p1, p2, m1, m2){
+    function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
     };
 
 
-    wb.overlapRect = function overlapRect(r1, r2){ // determine area of overlap between two rects
+    function overlapRect(r1, r2){ // determine area of overlap between two rects
         if (r1.left > r2.right){ return 0; }
         if (r1.right < r2.left){ return 0; }
         if (r1.top > r2.bottom){ return 0; }
@@ -1951,24 +2053,24 @@ global.ajax = ajax;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
     };
 
-    wb.rect = function rect(elem){
+    function rect(elem){
         return elem.getBoundingClientRect();
     };
 
-    wb.overlap = function overlap(elem1, elem2){
+    function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
     };
 
-    wb.area = function area(elem){
+    function area(elem){
         return elem.clientWidth * elem.clientHeight;
     };
 
-    wb.containedBy = function containedBy(target, container){
+    function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
     };
 
-    wb.closest = function closest(elem, selector){
+    function closest(elem, selector){
         if (elem.jquery){
             elem = elem[0];
         }
@@ -1984,7 +2086,7 @@ global.ajax = ajax;
         return null;
     };
 
-    wb.indexOf = function indexOf(elem){
+    function indexOf(elem){
         var idx = 0;
         while(elem.previousSiblingElement){
             elem = elem.previousSiblingElement;
@@ -1993,21 +2095,21 @@ global.ajax = ajax;
         return idx;
     };
 
-    wb.find = function find(elem, selector){
+    function find(elem, selector){
         return elem.querySelector(selector);
     };
 
-    wb.findAll = function findAll(elem, selector){
+    function findAll(elem, selector){
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
-    wb.findChildren = function findChildren(elem, selector){
+    function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
     };
 
-    wb.findChild = function(elem, selector){
+    function findChild(elem, selector){
         if (arguments.length !== 2){
             throw new Exception('This is the culprit');
         }
@@ -2021,7 +2123,7 @@ global.ajax = ajax;
         return null;
     };
 
-    wb.elem = function elem(name, attributes, children){
+   function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
         // attributes can be null or undefined, or an object of key/values to set
         // children can be text or an array. If an array, can contain strings or arrays of [name, attributes, children]
@@ -2087,43 +2189,24 @@ global.ajax = ajax;
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
 
-    // AJAX utilities
-
-    var jsonpHandlers = {};
-    wb.jsonp = function(url, callback){
-        var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
-        var handler = function(data){
-            // remove jsonp 
-            var script = document.getElementById(id);
-            script.parentElement.removeChild(script);
-            // remove self
-            delete window[id];
-            callback(data);
-        };
-        window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
-    };
-
-    /* adapted from code here: http://javascriptexample.net/ajax01.php */
-    wb.ajax = function(url, success, failure){
-        var req = new XMLHttpRequest();
-        req.onreadystatechange = function() {
-            var cType;
-            if (req.readyState === 4) {
-                if (req.status === 200) {
-                    cType = this.getResponseHeader("Content-Type");
-                    success(this.responseText, cType);
-                }else{
-                    if (failure){
-                        failure(this.status, this);
-                    }
-                }
-            }
-        };
-        req.open('GET', url, true);
-        req.send(null);
-    };
-
+    wb.makeArray = makeArray;
+    wb.reposition = reposition;
+    wb.hide = hide;
+    wb.show = show;
+    wb.resize = resize;
+    wb.dist = dist;
+    wb.overlapRect = overlapRect;
+    wb.rect = rect;
+    wb.overlap = overlap;
+    wb.area = area;
+    wb.containedBy = containedBy;
+    wb.closest = closest;
+    wb.indexOf = indexOf;
+    wb.find = find;
+    wb.findAll = findAll;
+    wb.findChildren = findChildren;
+    wb.findChild = findChild;
+    wb.elem = elem;
 
 })(this);
 
@@ -2135,33 +2218,38 @@ global.ajax = ajax;
 // Minimal support for non-DOM (custom) events
 // Normalized between mouse and touch events
 // Waterbear specific: events have wb-target which is always a block element
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 
 (function(global){
     "use strict";
 
-    var on = function on(elem, eventname, selector, handler){
+    function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
         if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem); 
-            debugger;
+            console.error('first argument must be element: %o', elem);
+            throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
-            listener = function(event){
+            listener = function listener(event){
                 blend(event); // normalize between touch and mouse events
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
                 // }
                 if (!event.wbValid){
-                    // console.log('event %s is not valid', eventname);
+                    // console.log('event is not valid');
                     return;
+                }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
                 }
                 if (wb.matches(event.wbTarget, selector)){
                     handler(event);
@@ -2171,10 +2259,13 @@ global.ajax = ajax;
                 }
             };
         }else{
-            listener = function(event){
+            listener = function listener(event){
                 blend(event);
                 if (!event.wbValid){
                     return;
+                }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
                 }
                 handler(event);
             };
@@ -2183,19 +2274,15 @@ global.ajax = ajax;
         return listener;
     };
 
-    var off = function(elem, eventname, handler){
+    function off(elem, eventname, handler){
         elem.removeEventListener(eventname, handler);
     }
 
     var once = function(elem, eventname, selector, handler){
-        var listener = function listener(event){
-            handler(event);
-            Event.off(elem, eventname, listener);
-        };
-        return Event.on(elem, eventname, selector, listener);
+        return Event.on(elem, eventname, selector, handler, true);
     }
 
-    var trigger = function(elemOrSelector, eventname, data){
+    function trigger(elemOrSelector, eventname, data){
         var elem;
         if (elemOrSelector.nodeName){
             elem = elemOrSelector;
@@ -2203,13 +2290,13 @@ global.ajax = ajax;
             elem = document.querySelector(elem);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
-        // console.log('dispatching %s for %o', eventname, elem);
+        //console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     };
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in global);
-    var isMouseEvent = function isMouseEvent(event){
+    function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
             case 'mousemove':
@@ -2220,7 +2307,7 @@ global.ajax = ajax;
                 return false;
         }
     };
-    var isTouchEvent = function isTouchEvent(event){
+    function isTouchEvent(event){
         switch(event.type){
             case 'touchstart':
             case 'touchmove':
@@ -2232,12 +2319,12 @@ global.ajax = ajax;
         }
     };
 
-    var isPointerEvent = function isPointerEvent(event){
+    function isPointerEvent(event){
         return isTouchEvent(event) || isMouseEvent(event);
     };
 
     // Treat mouse events and single-finger touch events similarly
-    var blend = function(event){
+    function blend(event){
         if (isPointerEvent(event)){
             if (isTouchEvent(event)){
                 var touch = null;
@@ -2282,6 +2369,9 @@ global.ajax = ajax;
 /*end event.js*/
 
 /*begin drag.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
+
 (function(global){
 
     // After trying to find a decent drag-and-drop library which could handle
@@ -2342,8 +2432,10 @@ global.ajax = ajax;
     var dragging;
     var currentPosition;
     var scope;
-    var workspace; // <- WB
+    var workspace; // <- WB. The Workspace block is created with the function
+		   // createWorkspace() in the workspace.js file.
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -2354,7 +2446,7 @@ global.ajax = ajax;
     // WB-specific
     function dropCursor(){
         if (!_dropCursor){
-            _dropCursor = document.querySelector('.dropCursor');
+            _dropCursor = document.querySelector('.drop-cursor');
         }
         return _dropCursor;
     }
@@ -2374,12 +2466,20 @@ global.ajax = ajax;
         scope = null; // <- WB
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
+        blockMenu = document.querySelector('#block_menu');
+	var scratchpad= document.querySelector('.scratchpad'); // <- WB
+        workspace = null;
+        selectedSocket = null;
+        _dropCursor = null;
+        startParent = null;
+        startSibling = null;
     }
     reset();
 
 
 
     function initDrag(event){
+        // console.log('initDrag(%o)', event);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget; // <- WB
@@ -2399,13 +2499,14 @@ global.ajax = ajax;
             dragTarget = target;
             // WB-Specific
             if (target.parentElement.classList.contains('block-menu')){
+                //console.log('target parent: %o', target.parentElement);
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
             }
         	dragAction.target = target;
             // WB-Specific
             if (target.parentElement.classList.contains('locals')){
-                // console.log('target parent: %o', target.parentElement);
+                //console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
@@ -2431,6 +2532,7 @@ global.ajax = ajax;
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
 		// Track source for undo/redo
@@ -2456,8 +2558,6 @@ global.ajax = ajax;
                 scope = null;
             }
             cloned = true;
-            // Make sure the workspace is available to drag to
-            wb.showWorkspace('block');
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere
@@ -2469,8 +2569,9 @@ global.ajax = ajax;
         // get position and append target to .content, adjust offsets
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
+        dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
         // WB-Specific
-        document.querySelector('.content.editor').appendChild(dragTarget);
+        document.body.appendChild(dragTarget);
         // WB-Specific
         if (cloned){
             // call this here so it can bubble to document.body
@@ -2485,7 +2586,6 @@ global.ajax = ajax;
             elem.classList.add('dropTarget');
             return wb.rect(elem);
         });
-
         // start timer for drag events
         timer = setTimeout(hitTest, dragTimeout);
         return false;
@@ -2494,6 +2594,7 @@ global.ajax = ajax;
     function drag(event){
         if (!dragTarget) {return undefined;}
         if (!currentPosition) {startDrag(event);}
+        // console.log('drag(%o)', event);
         event.preventDefault();
         // update the variables, distance, button pressed
         var nextPosition = {left: event.wbPageX, top: event.wbPageY}; // <- WB
@@ -2526,16 +2627,19 @@ global.ajax = ajax;
         return false;
     }
 
-    function endDrag(end){
+    function endDrag(event){
+        // console.log('endDrag(%o) dragging: %s', event, dragging);
+        if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
-        if (!dragging) {return undefined;}
-        handleDrop(end.altKey || end.ctrlKey);
+        handleDrop(event,event.altKey || event.ctrlKey);
         reset();
+        event.preventDefault();
         return false;
     }
 
-    function handleDrop(copyBlock){
+    function handleDrop(event,copyBlock){
+        // console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -2544,7 +2648,7 @@ global.ajax = ajax;
            // 4. Move back to start position if not a clone (maybe not?)
         resetDragStyles(); // <- WB
         // WB-Specific
-        if (wb.overlap(dragTarget, blockMenu)){
+	if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
@@ -2554,7 +2658,31 @@ global.ajax = ajax;
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-        }else if (dropTarget){
+        } else if (wb.overlap(dragTarget, scratchpad)) {
+	    console.log(dragTarget);
+	    var scratchPadStyle = scratchpad.getBoundingClientRect();
+	    var newOriginX = scratchPadStyle.left;
+	    var newOriginY = scratchPadStyle.top;
+
+	    var blockStyle = dragTarget.getBoundingClientRect();
+	    var oldX = blockStyle.left;
+	    var oldY = blockStyle.top;
+
+	    dragTarget.style.position = "fixed";
+	    dragTarget.style.left = oldX - newOriginX;
+	    dragTarget.style.top =  oldY - newOriginY;
+	    scratchpad.appendChild(dragTarget);
+
+            //when dragging from workspace to scratchpad, this keeps workspace from
+	    //moving around when block in scratchpad is moved.
+            //dragTarget.parentElement.removeChild(dragTarget); 
+            //Event.trigger(dragTarget, 'wb-add');
+	    return;
+	}
+	
+	
+	else if (dropTarget){
+	    //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
@@ -2691,7 +2819,7 @@ global.ajax = ajax;
 
     function positionExpressionDropCursor(){
         if (!potentialDropTargets.length){
-            console.log('no drop targets found');
+            // console.log('no drop targets found');
             return;
         }
         var targets = potentialDropTargets.map(function(target){
@@ -2819,39 +2947,35 @@ global.ajax = ajax;
         return '.socket[data-type=' + name + '] > .holder';
     }
     
+    function dragFromScratchPad(event){
+	dragTarget = event.target;
+    }
+    
     function cancelDrag(event) {
     	// Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
-    		resetDragStyles();
-	    	revertDrop();
-			clearTimeout(timer);
-			timer = null;
-			reset();
-			return false;
-	    }
+    	    resetDragStyles();
+	    revertDrop();
+	    clearTimeout(timer);
+	    timer = null;
+	    reset();
+	    return false;
+	}
     }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
         // console.log('initializeDragHandlers');
-        if (Event.isTouch){
-            Event.on('.content', 'touchstart', '.block', initDrag);
-            Event.on('.content', 'touchmove', null, drag);
-            Event.on('.content', 'touchend', null, endDrag);
-            // TODO: A way to cancel the drag?
-            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
-        }else{
-            Event.on('.content', 'mousedown', '.block', initDrag);
-            Event.on('.content', 'mousemove', null, drag);
-            Event.on('.content', 'mouseup', null, endDrag);
-            Event.on(document.body, 'keyup', null, cancelDrag);
-            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-        }
+        Event.on('.content', 'touchstart', '.block', initDrag);
+        Event.on('.content', 'touchmove', null, drag);
+        Event.on('.content', 'touchend', null, endDrag);
+        // TODO: A way to cancel touch drag?
+        Event.on('.content', 'mousedown', '.block', initDrag);
+        Event.on('.content', 'mousemove', null, drag);
+        Event.on(document.body, 'mouseup', null, endDrag);
+        Event.on(document.body, 'keyup', null, cancelDrag);
     };
-
-
-
 })(this);
 
 
@@ -2916,29 +3040,35 @@ global.ajax = ajax;
 // registerSeqNum(int) make sure we don't re-use sequence numbers
 // Socket(json) -> Socket element
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
     var elem = wb.elem;
 
+    var nextSeqNum = 0;
+    var blockRegistry = {}; /* populated in function "registerBlock", which is
+                               called by the Block() function below*/
 
-    var _nextSeqNum = 0;
-
-    var newSeqNum = function(){
-        _nextSeqNum++;
-        return _nextSeqNum;
+    function newSeqNum(){
+        nextSeqNum++;
+        return nextSeqNum;
     };
 
-    var registerSeqNum = function(seqNum){
+    function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
         if (!seqNum) return;
-        _nextSeqNum = Math.max(parseInt(seqNum, 10), _nextSeqNum);
+        nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
-    var blockRegistry = {};
-    wb.blockRegistry = blockRegistry;
+    function resetSeqNum(){
+        nextSeqNum = 0;
+        blockRegistry = {};
+        wb.blockRegistry = blockRegistry;
+    }
 
-    var registerBlock = function(blockdesc){
+    function registerBlock(blockdesc){
         if (blockdesc.seqNum){
             registerSeqNum(blockdesc.seqNum);
         }else if (!blockdesc.isTemplateBlock){
@@ -2950,11 +3080,11 @@ global.ajax = ajax;
         blockRegistry[blockdesc.id] = blockdesc;
     }
 
-    var getHelp = function(id){
+    function getHelp(id){
         return blockRegistry[id] ? blockRegistry[id].help : '';
     }
 
-    var getScript = function(id){
+    function getScript(id){
         try{
             return blockRegistry[id].script;
         }catch(e){
@@ -2964,23 +3094,21 @@ global.ajax = ajax;
         }
     }
 
-    var getSockets = function(block){
+    function getSockets(block){
         return wb.findChildren(wb.findChild(block, '.label'), '.socket');
     }
 
-    var getSocketValue = function(socket){
+    function getSocketValue (socket){
         return socketValue(wb.findChild(socket, '.holder'));
     }
 
-    var createSockets = function(obj){
+    function createSockets(obj){
         return obj.sockets.map(function(socket_descriptor){
             return Socket(socket_descriptor, obj);
         });
     }
 
     var Block = function(obj){
-        // FIXME:
-        // Handle customized names (sockets)
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -3049,18 +3177,15 @@ global.ajax = ajax;
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
         }
-        // if (!obj.isTemplateBlock){
+        //if (!obj.isTemplateBlock){
         //     console.log('instantiated block %o from description %o', block, obj);
-        // }
+        //}
         return block;
     }
 
     // Block Event Handlers
 
-    Event.on(document.body, 'wb-remove', '.block', removeBlock);
-    Event.on(document.body, 'wb-add', '.block', addBlock);
-    Event.on(document.body, 'wb-clone', '.block', onClone);
-    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -3158,18 +3283,13 @@ global.ajax = ajax;
         }
     }
 
-    function onClone(event){
-        // a block has been cloned. Praise The Loa!
-        var block = event.wbTarget;
-        // console.log('block cloned %o', block);
-    }
-
     var Socket = function(desc, blockdesc){
         // desc is a socket descriptor object, block is the owner block descriptor
         // Sockets are described by text, type, and (default) value
         // type and value are optional, but if you have one you must have the other
         // If the type is choice it must also have a options for the list of values
         // that can be found in the wb.choiceLists
+        // A socket may also have a suffix, text after the value
         // A socket may also have a block, the id of a default block
         // A socket may also have a uValue, if it has been set by the user, over-rides value
         // A socket may also have a uName if it has been set by the user, over-rides name
@@ -3190,7 +3310,7 @@ global.ajax = ajax;
             socket.dataset.options = desc.options;
         }
         // if (!blockdesc.isTemplateBlock){
-        //     console.log('socket seq num: %s', blockdesc.seqNum);
+        //      console.log('socket seq num: %s', blockdesc.seqNum);
         // }
         socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
@@ -3202,26 +3322,36 @@ global.ajax = ajax;
             socket.dataset.block = desc.block;
         }
         if (!blockdesc.isTemplateBlock){
+            //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
-            if(desc.uValue){
-                //No block value
-            } else if (desc.uBlock){
+            if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
+                delete desc.uValue;
                 newBlock = Block(desc.uBlock);
-                // console.log('created instance: %o', newBlock);
-            }else if (desc.block && !desc.uValue){
+                //console.log('created instance: %o', newBlock);
+            } else if (desc.block && ! desc.uValue){
+                //console.log('desc.block');
                 newBlock = cloneBlock(document.getElementById(desc.block));
+            }else if (desc.block && desc.uValue){
+                // for debugging only
+                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
+                //console.log('appending new block');
                 holder.appendChild(newBlock);
                 addExpression({'wbTarget': newBlock});
             }
+        }
+        if (desc.suffix){
+            socket.dataset.suffix = desc.suffix;
+            socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
     }
 
 
     function socketDesc(socket){
+        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
         var desc = {
             name: socket.dataset.name,
         }
@@ -3238,7 +3368,11 @@ global.ajax = ajax;
         if (socket.dataset.block){
             desc.block = socket.dataset.block;
         }
+        if (socket.dataset.suffix){
+            desc.suffix = socket.dataset.suffix;
+        }
         // User-specified settings
+        if (isTemplate) return desc;
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name')
         
@@ -3390,7 +3524,7 @@ global.ajax = ajax;
         return input;
     }
 
-    var socketValue = function(holder){
+    function socketValue(holder){
         if (holder.children.length > 1){
             return codeFromBlock(wb.findChild(holder, '.block'));
         }else{
@@ -3411,7 +3545,7 @@ global.ajax = ajax;
         }
     }
 
-    var codeFromBlock = function(block){
+    function codeFromBlock(block){
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -3521,14 +3655,19 @@ global.ajax = ajax;
         }
     }
 
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    wb.blockRegistry = blockRegistry;
 
     // Export methods
     wb.Block = Block;
     wb.blockDesc = blockDesc;
     wb.registerSeqNum = registerSeqNum;
+    wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
     wb.codeFromBlock = codeFromBlock;
-    wb.addBlockHandler = addBlock;
     wb.changeName = changeName;
     wb.getSockets = getSockets;
     wb.getSocketValue = getSocketValue;
@@ -3546,26 +3685,30 @@ global.ajax = ajax;
 // * Loading and saving to LocalStorage (including currentScript)
 // * Loading examples
 // * etc.
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
-	wb.saveCurrentScripts = function saveCurrentScripts(){
+	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
 			// nothing to save
 			return;
 		}
-		wb.showWorkspace('block');
 		document.querySelector('#block_menu').scrollIntoView();
 		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
 	};
 
 	// Save script to gist;
-	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-
+		if ( !title ) return;
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -3582,13 +3725,15 @@ global.ajax = ajax;
 	    	"public": true,
 	    	"files": {
 	    		"script.json": {
-	    			"content": scriptsToString(title)
+	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
-	    }), null, '    ');
+	    }), function(statusCode, x){
+            alert("Can't save to Gist:\n" + statusCode + " (" + x.statusText + ") ");
+        });
 	};
 	//populate the gist submenu with recent gists
-	wb.loadRecentGists = function loadRecentGists() {
+	function loadRecentGists() {
 		var localGists = localStorage['__' + wb.language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
 		var gistContainer = document.querySelector("#recent_gists");
@@ -3615,31 +3760,42 @@ global.ajax = ajax;
 		}
 	};
 
-
-	function scriptsToString(title, description){
+	//Potential FIXME: I feel that title should be the filename, but uName || name
+	//determines what is shown in the workspace.
+	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
+		if (!name){ name = 'Workspace';}
 		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		return JSON.stringify({
+		var json = {
 			title: title,
 			description: description,
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		}, null, '    ');
+		};
+
+		if(json.blocks[0].sockets[0].name){
+			json.blocks[0].sockets[0].name = name;
+		}else if(json.blocks[0].sockets[0].uName){
+			json.blocks[0].sockets[0].uName = name;
+		}
+
+		return JSON.stringify(json, null, '    ');
 	}
 
 
-	wb.createDownloadUrl = function createDownloadUrl(evt){
+	function createDownloadUrl(evt){
 	    evt.preventDefault();
-	    var title = prompt("Save file as: ");
+	    var name = prompt("Save file as: ");
+	    if( !name ) return;
 		var URL = window.webkitURL || window.URL;
-		var file = new Blob([scriptsToString()], {type: 'application/json'});
+		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
 		var a = document.createElement('a');
 		reader.onloadend = function(){
 			a.href = reader.result;
-			a.download = title + '.json';
+			a.download = name + '.json';
 			a.target = '_blank';
 			document.body.appendChild(a);
 			a.click();
@@ -3647,16 +3803,22 @@ global.ajax = ajax;
 		reader.readAsDataURL(file);
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+	function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
+		if( !gistID ) return;
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
+	    }, function(statusCode, x){
+            alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
 		});
+        var path = location.href.split('?')[0];
+        path += "?gist=" + gistID;
+        history.pushState(null, '', path);
 	};
 
-	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+	function loadScriptsFromFilesystem(event){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
@@ -3704,32 +3866,36 @@ global.ajax = ajax;
 	}
 
 	function loadScriptsFromExample(name){
-		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
-		}, function(xhr, status){
-			console.error('Error in wb.ajax:', status);
+		}, function(statusCode, xhr){
+			console.error(statusCode + xhr);
 		});
 	}
 
-	wb.loadCurrentScripts = function(queryParsed){
+	function loadCurrentScripts(queryParsed){
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
+		wb.scriptLoaded = false;
 		if (queryParsed.gist){
-			// console.log("Loading gist %s", queryParsed.gist);
+			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
+	        }, function(statusCode, x){
+              alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
 			});
 		}else if (queryParsed.example){
-			// console.log('loading example %s', queryParsed.example);
+			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			// console.log('loading current script from local storage');
+			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			// console.log('no script to load, starting a new script');
+			//console.log('no script to load, starting a new script');	
+			wb.scriptLoaded = true;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -3753,7 +3919,7 @@ global.ajax = ajax;
 		};
 	}
 
-	wb.getFiles = function getFiles(evt){
+	function getFiles(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
 		var files = evt.dataTransfer.files;
@@ -3764,12 +3930,22 @@ global.ajax = ajax;
 	    }
 	}
 
+	wb.saveCurrentScripts = saveCurrentScripts;
+	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
+	wb.loadRecentGists = loadRecentGists;
+	wb.createDownloadUrl = createDownloadUrl;
+	wb.loadScriptsFromGistId = loadScriptsFromGistId;
+	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
+	wb.loadCurrentScripts = loadCurrentScripts;
+	wb.getFiles = getFiles;
 
 })(wb);
 
 /*end file.js*/
 
 /*begin undo.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 // Undo list
 
@@ -3858,28 +4034,26 @@ wb.history = {
 
 Event.on('.undoAction', 'click', null, undoLastAction);
 Event.on('.redoAction', 'click', null, redoLastAction);
+//begin short-cut implementation for redo and undo
+Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
+Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
+//for mac user, cmd added 
+Events.bind(document, 'keystroke.meta+Z', undoLastAction);
+Events.bind(document, 'keystroke.meta+Y', redoLastAction);
+//end short cut 
 Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 })(wb);
+
 /*end undo.js*/
 
 /*begin ui.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 // UI Chrome Section
 
-function tabSelect(event){
-    var target = event.wbTarget;
-    event.preventDefault();
-    document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.add('selected');
-    if (wb.matches(target, '.scripts_workspace_tab')){
-        showWorkspace('block');
-    }else if (wb.matches(target, '.scripts_text_view_tab')){
-        showWorkspace('text');
-        updateScriptsView();
-    }
-}
 
 function accordion(event){
     event.preventDefault();
@@ -3892,33 +4066,14 @@ function accordion(event){
 }
 
 
-function showWorkspace(mode){
-    // console.log('showWorkspace');
-    var workspace = document.querySelector('.workspace');
-    var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    if (!scriptsWorkspace) return;
-    var scriptsTextView = document.querySelector('.scripts_text_view');
-    if (mode === 'block'){
-	    scriptsWorkspace.style.display = '';
-	    scriptsTextView.style.display = 'none';
-        workspace.classList.remove('textview');
-        workspace.classList.add('blockview');
-    }else if (mode === 'text'){
-    	scriptsWorkspace.style.display = 'none';
-    	scriptsTextView.style.display = '';
-        workspace.classList.remove('blockview');
-        workspace.classList.add('textview');
-    }
-}
-// Expose this to dragging and saving functionality
-wb.showWorkspace = showWorkspace;
+
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    var blocks = wb.findAll(document.body, '.scripts_workspace');
+    var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
 }
-window.updateScriptsView = updateScriptsView;
+wb.updateScriptsView = updateScriptsView; 
 
 
 function changeSocket(event) {
@@ -4065,8 +4220,8 @@ function pasteCommand(evt) {
 	// console.log(pasteboard);
 	action = {
 		pasted: wb.cloneBlock(pasteboard),
-		into: cmenu_target.parentNode,
-		before: cmenu_target.nextSibling,
+		into: cmenuTarget.parentNode,
+		before: cmenuTarget.nextSibling,
 		undo: function() {
 			Event.trigger(this.pasted, 'wb-remove');
 			this.pasted.remove();
@@ -4077,7 +4232,7 @@ function pasteCommand(evt) {
 				this.into.insertBefore(this.pasted,this.before);
 			} else {
 				// console.log("Pasting an expression!");
-				cmenu_target.appendChild(this.pasted);
+				cmenuTarget.appendChild(this.pasted);
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
@@ -4088,20 +4243,20 @@ function pasteCommand(evt) {
 
 function canPaste() {
 	if(!pasteboard) return false;
-	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.step') && !wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
-	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenu_target,'.holder')) {
+	if(wb.matches(pasteboard,'.expression') && wb.matches(cmenuTarget,'.holder')) {
 		return true;
 	}
 	return false;
 }
 
 var pasteboard = null;
-var current_cmenu = null;
-var show_context = false;
-var cmenu_disabled = false;
-var cmenu_target = null;
+var cmenuCurrent = null;
+var showContext = false;
+var cmenuDisabled = false;
+var cmenuTarget = null;
 
 function cmenuitem_enabled(menuitem) {
 	if(menuitem.enabled) {
@@ -4161,10 +4316,10 @@ function closeContextMenu(evt) {
 function handleContextMenu(evt) {
 	// console.log('handling context menu');
 	stackTrace();
-	//if(!show_context) return;
+	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenu_disabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -4175,13 +4330,13 @@ function handleContextMenu(evt) {
 }
 
 function setContextMenuTarget(target) {
-	cmenu_target = target;
-	while(!wb.matches(cmenu_target, '.block') && !wb.matches(cmenu_target, '.holder')) {
-		// console.log(cmenu_target);
-		cmenu_target = cmenu_target.parentNode;
-		if(cmenu_target.tagName == 'BODY') {
+	cmenuTarget = target;
+	while(!wb.matches(cmenuTarget, '.block') && !wb.matches(cmenuTarget, '.holder')) {
+		// console.log(cmenuTarget);
+		cmenuTarget = cmenuTarget.parentNode;
+		if(cmenuTarget.tagName == 'BODY') {
 			console.error("Something went wrong with determining the context menu target!");
-			cmenu_target = null;
+			cmenuTarget = null;
 			contextDiv.style.display = 'none';
 		}
 	}
@@ -4197,8 +4352,8 @@ function showContextMenu(atX, atY) {
 
 function cmenuCallback(fcn) {
 	return function(evt) {
-		// console.log(cmenu_target);
-		fcn.call(cmenu_target,evt);
+		// console.log(cmenuTarget);
+		fcn.call(cmenuTarget,evt);
 		var contextDiv = document.getElementById('context_menu');
 		contextDiv.style.display = 'none';
 		evt.preventDefault();
@@ -4206,7 +4361,7 @@ function cmenuCallback(fcn) {
 }
 
 function disableContextMenu(evt) {
-	cmenu_disabled = true;
+	cmenuDisabled = true;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = '';
 	var contextDiv = document.getElementById('context_menu');
@@ -4214,7 +4369,7 @@ function disableContextMenu(evt) {
 }
 
 function enableContextMenu(evt) {
-	cmenu_disabled = false;
+	cmenuDisabled = false;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = 'none';
 }
@@ -4238,22 +4393,25 @@ function is_touch_device() {
 initContextMenus();
 
 // Build the Blocks menu, this is a public method
-wb.menu = function(blockspec){
+function menu(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return edit_menu(title, specs);
+    var help = blockspec.help !== undefined ? blockspec.help : '';
+    return edit_menu(title, specs, help);
 };
 
-function edit_menu(title, specs, show){
+function edit_menu(title, specs, help, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
+        submenu.appendChild(description);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;
@@ -4269,11 +4427,69 @@ function initContextMenus() {
 	document.querySelector('.cmenuEnable').style.display = 'none';
 }
 
+// functions to show various mobile views
+
+function handleShowButton(button, newView){
+	// stop result
+	wb.clearStage();
+	// enable previous button, disable current button
+	var currentButton = document.querySelector('.current-button');
+	if (currentButton){
+		currentButton.classList.remove('current-button');
+	}
+	button.classList.add('current-button');
+	//slide old view out, slide new view in
+	var oldView = document.querySelector('.current-view');
+	oldView.classList.remove('current-view');
+	oldView.style.transitionDuration = '0.5s';
+	oldView.style.left = '-100%';
+	newView.classList.add('current-view');
+	newView.style.transitionDuration = '0.5s';
+	newView.style.left = '0';
+	Event.once(document.body, 'transitionend', null, function(){
+		// console.log('transitionend: %o', oldView);
+		oldView.style.transitionDuration = '0s';
+		oldView.style.left = '100%';
+	});
+}
+
+function showFiles(evt){
+	handleShowButton(evt.target, document.querySelector('.files'));
+}
+
+function showBlocks(evt){
+	handleShowButton(evt.target, document.querySelector('#block_menu'));
+}
+
+function showScript(evt){
+	handleShowButton(evt.target, document.querySelector('.workspace'));
+}
+
+function showResult(evt){
+	handleShowButton(evt.target, document.querySelector('.results'));
+	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
+}
 
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+// Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
+if (document.body.clientWidth < 361){
+	// console.log('mobile view');
+	Event.on('.show-files', 'click', null, showFiles);
+	Event.on('.show-blocks', 'click', null, showBlocks);
+	Event.on('.show-script', 'click', null, showScript);
+	Event.on('.show-result', 'click', null, showResult);
+	document.querySelector('.show-script').classList.add('current-button');
+	document.querySelector('.workspace').classList.add('current-view');
+}
+if (document.body.clientWidth > 360){
+	// console.log('desktop view');
+	Event.on(document.body, 'change', 'input', updateScriptsView);
+	Event.on(document.body, 'wb-modified', null, updateScriptsView);
+}
+
+wb.menu = menu;
 
 })(wb);
 
@@ -4281,33 +4497,34 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 /*end ui.js*/
 
 /*begin workspace.js*/
+//The Workspace block is created with the function createWorkspace() in
+//this file. The createWorkspace() function is called in file.js
+
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
-	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
-
-	wb.clearScripts = function clearScripts(event, force){
+	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
-			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			var workspace = document.querySelector('.scripts_workspace')
+            var path = location.href.split('?')[0];
+            history.pushState(null, '', path);
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
+			wb.scriptLoaded = false;
 			wb.loaded = false;
+			wb.clearStage();
 			createWorkspace('Workspace');
-			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			document.querySelector('.scripts_text_view').innerHTML = '';
 			wb.history.clear();
+			wb.resetSeqNum();
 			delete localStorage['__' + wb.language + '_current_scripts'];
-			// FIXME: I'm not sure why clearing the script breaks dropping into the workspace
-			// For now will resort to the horrible hack of refreshing the page
-			location.reload();
 		}
 	}
-	Event.on('.clear_scripts', 'click', null, wb.clearScripts);
-	Event.on('.edit-script', 'click', null, function(event){
-		wb.historySwitchState('editor');
-	});
-
-	Event.on('.content', 'click', '.load-example', function(evt){
+	
+	function loadExample(event){
 		var path = location.href.split('?')[0];
-		path += "?example=" + evt.target.dataset.example;
+		path += "?example=" + event.target.dataset.example;
 		if (wb.scriptModified){
 			if (confirm('Throw out the current script?')){
 				wb.scriptModified = false;
@@ -4321,9 +4538,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 			history.pushState(null, '', path);
 			Event.trigger(document.body, 'wb-state-change');
 		}
-	});
+	}
 
-	var handleStateChange = function handleStateChange(evt){
+	function handleStateChange(event){
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
@@ -4339,30 +4556,37 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
 	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// console.log('running current scripts');
-	    	wb.runCurrentScripts();
+	    	// This bothers me greatly: runs with the console.log, but not without it
+	    	console.log('running current scripts');
+	    	runFullSize();
 	    }else{
 	    	if (wb.view === 'result'){
 		    	// console.log('we want to run current scripts, but cannot');
 		    }else{
+		    	runWithLayout();
 		    	// console.log('we do not care about current scripts, so there');
 		    }
 	    }
+	    if (wb.toggleState.scripts_text_view){
+	    	wb.updateScriptsView();
+	    }
+	    if (wb.toggleState.stage){
+	    	// console.log('run current scripts');
+	    	wb.runCurrentScripts();
+	    }else{
+	    	wb.clearStage();
+	    }
 	}
-	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 
-	var hideLoader = function hideLoader(){
+	function hideLoader(){
 	    var loader = document.querySelector('#block_menu_load');
 	    if (loader){
 	        loader.parentElement.removeChild(loader);
 	    }		
 	}
 
-
-	// Load and Save Section
-
-	wb.historySwitchState = function historySwitchState(state, clearFiles){
-		// console.log('historySwitchState(%o, %s)', state, !!clearFiles);
+	function historySwitchState(state, clearFiles){
+		//console.log('historySwitchState(%o, %s)', state, !!clearFiles);
 		var params = wb.urlToQueryParams(location.href);
 		if (state !== 'result'){
 			delete params['view'];
@@ -4377,21 +4601,13 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		Event.trigger(document.body, 'wb-state-change');
 	}
 
+
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
 
-	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
-	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
-	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
-	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
-
-
-	wb.loaded = false;
-
-
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
-	    // console.log('createWorkspace');
+	    console.log('createWorkspace');
 		var id = uuid();
 		var workspace = wb.Block({
 			group: 'scripts_workspace',
@@ -4410,47 +4626,37 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		});
 		wb.wireUpWorkspace(workspace);
 	}
-	wb.createWorkspace = createWorkspace;
-
-	wb.wireUpWorkspace = function wireUpWorkspace(workspace){
+	
+	function wireUpWorkspace(workspace){
 		workspace.addEventListener('drop', wb.getFiles, false);
-		workspace.addEventListener('dragover', function(evt){evt.preventDefault();}, false);
+		workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
 		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
 	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
 	    });
 		document.querySelector('.workspace').appendChild(workspace);
-		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-		wb.initializeDragHandlers();
+		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
+		// wb.initializeDragHandlers();
+		Event.trigger(document.body, 'wb-workspace-initialized');
 	};
+
 
 	function handleDragover(evt){
 	    // Stop Firefox from grabbing the file prematurely
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	    evt.dataTransfer.dropEffect = 'copy';
+	    event.stopPropagation();
+	    event.preventDefault();
+	    event.dataTransfer.dropEffect = 'copy';
 	}
 
-
-
-	Event.on('.workspace', 'click', '.disclosure', function(evt){
-		var block = wb.closest(evt.wbTarget, '.block');
+	function disclosure(event){
+		var block = wb.closest(event.wbTarget, '.block');
 		if (block.dataset.closed){
 			delete block.dataset.closed;
 		}else{
 			block.dataset.closed = true;
 		}
-	});
+	}
 
-	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
-	Event.on('.workspace', 'keypress', 'input', wb.resize);
-	Event.on('.workspace', 'change', 'input, select', function(evt){
-		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
-
-	});
-	// Event.on(document.body, 'wb-loaded', null, function(evt){
-	// 	console.log('menu loaded');
-	// });
-	Event.on(document.body, 'wb-script-loaded', null, function(evt){
+	function handleScriptLoad(event){
 		wb.scriptModified = false;
 		wb.scriptLoaded = true;
 		if (wb.view === 'result'){
@@ -4470,28 +4676,126 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		}
 		// clear undo/redo stack
 		console.log('script loaded');
-	});
+	}
 
-	Event.on(document.body, 'wb-modified', null, function(evt){
+	function handleScriptModify(event){
 		// still need modified events for changing input values
 		if (!wb.scriptLoaded) return;
 		if (!wb.scriptModified){
 			wb.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
-	});
+	}
+
+	function runFullSize(){
+		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+			wb.hide(wb.find(document.body, sel));
+		});
+		wb.show(wb.find(document.body, '.stage'));
+	}
+
+	function runWithLayout(){
+		['#block_menu', '.workspace'].forEach(function(sel){
+			wb.show(wb.find(document.body, sel));
+		});
+		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+		});
+	}
+
+	function toggleComponent(evt){
+		var component = wb.find(document.body, '.' + evt.detail.name);
+		if (!component) return;
+		evt.detail.state ? wb.show(component) : wb.hide(component);
+		var results = wb.find(document.body, '.results');
+		// Special cases
+		switch(evt.detail.name){
+			case 'stage':
+				if (evt.detail.state){
+					wb.show(results);
+				}else{
+					wb.clearStage();
+					if (!wb.toggleState.scripts_text_view){
+						wb.hide(results);
+					}
+				}
+				break;
+			case 'scripts_text_view':
+				if (evt.detail.state){
+					wb.show(results);
+					wb.updateScriptsView();
+				}else{
+					if (!wb.toggleState.stage){
+						wb.hide(results);
+					}
+				}
+				break;
+			case 'tutorial':
+			case 'scratchpad':
+			case 'scripts_workspace':
+				if (! (wb.toggleState.tutorial || wb.toggleState.scratchpad || wb.toggleState.scripts_workspace)){
+					wb.hide(wb.find(document.body, '.workspace'));
+				}else{
+					wb.show(wb.find(document.body, '.workspace'));
+				}
+			default:
+				// do nothing
+				break;
+		}
+		if (wb.toggleState.stage){
+			// restart script on any toggle
+			// so it runs at the new size
+			wb.runCurrentScripts();
+		}
+
+	}
+
+	Event.on(document.body, 'wb-toggle', null, toggleComponent);
 
 	window.addEventListener('popstate', function(evt){
-		// console.log('popstate event');
+		console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
+	window.addEventListener('load', function(evt){
+		console.log('load event');
+		Event.trigger(document.body, 'wb-state-change');
+	})
+
 	// Kick off some initialization work
-	window.addEventListener('load', function(){
-		console.log('window loaded');
+	Event.once(document.body, 'wb-workspace-initialized', null, function initHistory(){
+		console.log('workspace ready');
 		wb.windowLoaded = true;
+		wb.workspaceInitialized = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
+	Event.once(document.body, 'wb-workspace-initialized', null, wb.initializeDragHandlers);
+
+	Event.on('.clear_scripts', 'click', null, clearScripts);
+	Event.on('.edit-script', 'click', null, function(event){
+		wb.historySwitchState('editor');
+	});
+	Event.on(document.body, 'click', '.load-example', loadExample);
+	Event.on(document.body, 'wb-state-change', null, handleStateChange);
+	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
+	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
+	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
+	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+	Event.on('.workspace', 'click', '.disclosure', disclosure);
+	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+	Event.on('.workspace', 'keypress', 'input', wb.resize);
+	Event.on('.workspace', 'change', 'input, select', function(event){
+		Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+	});
+	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
+	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+
+	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+	wb.loaded = false;
+	wb.clearScripts = clearScripts;
+	wb.historySwitchState = historySwitchState;
+	wb.createWorkspace = createWorkspace;
+	wb.wireUpWorkspace = wireUpWorkspace;
 })(wb);
 
 /*end workspace.js*/
@@ -4502,24 +4806,29 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 // Allows the user to hide groups of blocks within the interface
 // Settings are stored in LocalStorage and retreived each
 // time the page is loaded.
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
-	var settings_link;
+	var settingsLink;
 	//add a link to show the show/hide block link
 	function addSettingsLink(callback) {
 		// console.log("adding settings link");
 		var block_menu = document.querySelector('#block_menu');
-		var settings_link = document.createElement('a');
-		settings_link.href = '#';
-		settings_link.style.float = 'right';
-		settings_link.appendChild(document.createTextNode('Show/Hide blocks'));
-		settings_link.addEventListener('click', toggleCheckboxDisplay);
-		block_menu.appendChild(settings_link);
-		return settings_link;
+		var settingsLink = document.createElement('a');
+		settingsLink.href = '#';
+		settingsLink.style.float = 'right';
+		settingsLink.appendChild(document.createTextNode('Show/Hide blocks'));
+		settingsLink.addEventListener('click', toggleCheckboxDisplay);
+		block_menu.appendChild(settingsLink);
+		return settingsLink;
 	}
 
 	//create the checkboxes next to the headers
@@ -4547,12 +4856,12 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		if (closed) {
 			closed = false;
 			display = 'inline';
-			settings_link.innerHTML = 'Save';
+			settingsLink.innerHTML = 'Save';
 		} else {
 			//save was clicked
 			closed = true;
 			display = 'none'
-			settings_link.innerHTML = 'Show/Hide blocks';
+			settingsLink.innerHTML = 'Show/Hide blocks';
 			//save the settings
 			saveSettings();
 		}
@@ -4607,7 +4916,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
-		settings_link = addSettingsLink();
+		settingsLink = addSettingsLink();
 		createCheckboxes();
 		loadSettings();
 	}
@@ -4617,6 +4926,67 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 })(wb);
 
 /*end blockprefs.js*/
+
+/*begin menu.js*/
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
+
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
+(function(wb, Event){
+
+	var toggleState = {};
+	if (localStorage.toggleState){
+		toggleState = JSON.parse(localStorage.toggleState);
+	}
+
+	function handleToggle(evt){
+		var button = evt.target;
+		var name = button.dataset.target;
+		var isOn = !getState(name);
+		toggleState[name] = isOn;
+		if (isOn){
+			button.classList.remove('icon-unchecked');
+			button.classList.add('icon-check');
+		}else{
+			button.classList.add('icon-unchecked');
+			button.classList.remove('icon-check');
+		}
+		Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
+		localStorage.toggleState = JSON.stringify(toggleState);
+	}
+
+	Event.on(document.body, 'click', '.toggle', handleToggle);
+
+	function getState(name){
+		if (toggleState[name] === undefined){
+			toggleState[name] = true;
+		}
+		return toggleState[name];
+	}
+
+	// initialize toggle states
+
+	function initializeToggleStates(evt){
+		wb.findAll(document.body, '.toggle').forEach(function(button){
+			var name = button.dataset.target;
+			var isOn = getState(name);
+			if (isOn){
+				button.classList.add('icon-check');
+			}else{
+				button.classList.add('icon-unchecked');
+			}
+			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
+		});
+	}
+
+	Event.once(document.body, 'wb-workspace-initialized', null, initializeToggleStates);
+
+	wb.toggleState = toggleState; // treat as read-only
+
+})(wb, Event);
+/*end menu.js*/
 
 /*begin languages/demo/javascript.js*/
 /*

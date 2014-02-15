@@ -8115,48 +8115,6 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
-            "type": "number",
-            "script": "rad2deg(Math.acos({{1}}))",
-            "help": "inverse of cosine",
-            "sockets": [
-                {
-                    "name": "arccosine degrees of",
-                    "type": "number",
-                    "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
-            "type": "number",
-            "script": "rad2deg(Math.asin({{1}}))",
-            "help": "inverse of sine",
-            "sockets": [
-                {
-                    "name": "arcsine degrees of",
-                    "type": "number",
-                    "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
-            "type": "number",
-            "script": "rad2deg(Math.atan({{1}}))",
-            "help": "inverse of tangent",
-            "sockets": [
-                {
-                    "name": "arctangent degrees of",
-                    "type": "number",
-                    "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
             "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
             "type": "number",
             "script": "Math.floor({{1}})",
@@ -8320,6 +8278,141 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "type": "number",
+            "script": "rad2deg(Math.acos({{1}}))",
+            "help": "inverse of cosine",
+            "sockets": [
+                {
+                    "name": "arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "type": "number",
+            "script": "rad2deg(Math.asin({{1}}))",
+            "help": "inverse of sine",
+            "sockets": [
+                {
+                    "name": "arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
+            "type": "number",
+            "script": "rad2deg(Math.atan({{1}}))",
+            "help": "inverse of tangent",
+            "sockets": [
+                {
+                    "name": "arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "52AA07F8-7C71-4BE1-902A-3F3AC88822B0",
+            "type": "number",
+            "script": "Math.cosh(deg2rad({{1}}))",
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "hyperbolic cosine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D5D68651-B6A1-44EE-8246-87060C62860F",
+            "type": "number",
+            "script": "Math.sinh(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "hyperbolic sine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "72442F9D-0AA5-4A0E-A3E0-7D6E46A944CF",
+            "type": "number",
+            "script": "Math.tanh(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the adjacent side",
+            "sockets": [
+                {
+                    "name": "hyperbolic tangent of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8BCC0FB3-878C-4BA8-A4A1-A73C6FE9F71B",
+            "type": "number",
+            "script": "rad2deg(Math.acosh({{1}}))",
+            "help": "inverse of hyperbolic cosine",
+            "sockets": [
+                {
+                    "name": "hyperbolic arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "03A6DA1C-F1AB-499C-A97E-0F59E0A6A371",
+            "type": "number",
+            "script": "rad2deg(Math.asinh({{1}}))",
+            "help": "inverse of hyperbolic sine",
+            "sockets": [
+                {
+                    "name": "hyperbolic arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "A114C2B7-3334-4DCB-9418-F1BB40F8604D",
+            "type": "number",
+            "script": "rad2deg(Math.atanh({{1}}))",
+            "help": "inverse of hyperbolic tangent",
+            "sockets": [
+                {
+                    "name": "hyperbolic arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
             "type": "number",
             "script": "Math.pow({{1}}, {{2}})",
@@ -8403,6 +8496,126 @@ wb.menu({
             "sockets": [
                 {
                     "name": "tau"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "076E0F96-52EA-466E-84BC-FE41A2399510",
+            "type": "number",
+            "script": "({{1}} & {{2}})",
+            "help": "bitwise AND of the two operands - useful to select only specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "74C039B2-988F-4571-8AEB-C79F772D8F2D",
+            "type": "number",
+            "script": "({{1}} | {{2}})",
+            "help": "bitwise OR of the two operands - useful to set specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DA40D6D3-0052-4187-92EB-2F4C0A64C39F",
+            "type": "number",
+            "script": "({{1}} ^ {{2}})",
+            "help": "bitwise XOR of the two operands - useful to toggle specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "xor",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D58C0616-1CE4-4588-90C5-B57E1221E831",
+            "type": "number",
+            "script": "({{1}} &~ {{2}})",
+            "help": "bitwise NAND of the two operands - useful to unset specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "nand",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "43109945-DA0A-4B16-84A5-17727C0EF994",
+            "type": "number",
+            "script": "({{1}} << Math.floor({{2}}))",
+            "help": "left bit shift",
+            "sockets": [
+                {
+                    "name": "bit shift",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "left by",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "bits"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4EE8184B-52A8-40E8-ACC6-C7D21BA90742",
+            "type": "number",
+            "script": "({{1}} >> Math.floor({{2}}))",
+            "help": "right bit shift",
+            "sockets": [
+                {
+                    "name": "bit shift",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "right by",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "bits"
                 }
             ]
         }

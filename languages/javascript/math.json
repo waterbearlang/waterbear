@@ -489,6 +489,99 @@
         },
         {
             "blocktype": "expression",
+            "id": "52AA07F8-7C71-4BE1-902A-3F3AC88822B0",
+            "type": "number",
+            "script": "Math.cosh(deg2rad({{1}}))",
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "hyperbolic cosine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D5D68651-B6A1-44EE-8246-87060C62860F",
+            "type": "number",
+            "script": "Math.sinh(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "hyperbolic sine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "72442F9D-0AA5-4A0E-A3E0-7D6E46A944CF",
+            "type": "number",
+            "script": "Math.tanh(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the adjacent side",
+            "sockets": [
+                {
+                    "name": "hyperbolic tangent of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8BCC0FB3-878C-4BA8-A4A1-A73C6FE9F71B",
+            "type": "number",
+            "script": "rad2deg(Math.acosh({{1}}))",
+            "help": "inverse of hyperbolic cosine",
+            "sockets": [
+                {
+                    "name": "hyperbolic arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "03A6DA1C-F1AB-499C-A97E-0F59E0A6A371",
+            "type": "number",
+            "script": "rad2deg(Math.asinh({{1}}))",
+            "help": "inverse of hyperbolic sine",
+            "sockets": [
+                {
+                    "name": "hyperbolic arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "A114C2B7-3334-4DCB-9418-F1BB40F8604D",
+            "type": "number",
+            "script": "rad2deg(Math.atanh({{1}}))",
+            "help": "inverse of hyperbolic tangent",
+            "sockets": [
+                {
+                    "name": "hyperbolic arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "8a4a81d8-de25-46f0-b610-97d4f6fffbff",
             "type": "number",
             "script": "Math.pow({{1}}, {{2}})",

@@ -278,48 +278,6 @@
         },
         {
             "blocktype": "expression",
-            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
-            "type": "number",
-            "script": "rad2deg(Math.acos({{1}}))",
-            "help": "inverse of cosine",
-            "sockets": [
-                {
-                    "name": "arccosine degrees of",
-                    "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
-            "type": "number",
-            "script": "rad2deg(Math.asin({{1}}))",
-            "help": "inverse of sine",
-            "sockets": [
-                {
-                    "name": "arcsine degrees of",
-                    "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
-            "type": "number",
-            "script": "rad2deg(Math.atan({{1}}))",
-            "help": "inverse of tangent",
-            "sockets": [
-                {
-                    "name": "arctangent degrees of",
-                    "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
             "id": "46bcac2d-eb76-417c-81af-cb894a54a86c",
             "type": "number",
             "script": "Math.floor({{1}})",
@@ -484,6 +442,48 @@
                 },
                 {
                     "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "type": "number",
+            "script": "rad2deg(Math.acos({{1}}))",
+            "help": "inverse of cosine",
+            "sockets": [
+                {
+                    "name": "arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "type": "number",
+            "script": "rad2deg(Math.asin({{1}}))",
+            "help": "inverse of sine",
+            "sockets": [
+                {
+                    "name": "arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
+            "type": "number",
+            "script": "rad2deg(Math.atan({{1}}))",
+            "help": "inverse of tangent",
+            "sockets": [
+                {
+                    "name": "arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
                 }
             ]
         },

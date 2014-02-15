@@ -363,6 +363,20 @@ body{
   position: relative;
 }
 
+.block, .block * {
+  cursor: move;
+  cursor: -moz-grab;
+}
+
+.block .disclosure {
+	cursor: pointer;
+}
+
+.block .socket input,
+.block .socket select {
+	cursor: auto;
+}
+
 .scripts_workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }
@@ -873,7 +887,7 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
   font-style: normal;
   text-decoration: inherit;
   -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
+  margin-right: .3em;
 }
 [class^="icon-"]:before,
 [class*=" icon-"]:before {

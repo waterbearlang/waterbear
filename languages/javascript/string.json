@@ -392,7 +392,7 @@
             "id": "D8EF192D-16BD-42AA-98A0-C6C2236392F7",
             "script": "levenshtein({{1}},{{2}})",
             "type": "number",
-            "help": "calculate how much two strings are different",
+            "help": "calculate how much two strings are different using Levenshtein difference",
             "sockets": [
                 {
                     "name": "difference of strings",

@@ -41,6 +41,28 @@
         },
         {
             "blocktype": "expression",
+            "id": "3889BB61-FC62-4BED-B0EC-792AF636EC18",
+            "type": "string",
+            "script": "{{1}}.repeat({{2}})",
+            "help": "returns a string by joining together copies of the original string",
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "string",
+                    "value": "hello"
+                },
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "2"
+                },
+                {
+                    "name": "times"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
             "script": "{{1}}[{{2}}]",
             "type": "string",

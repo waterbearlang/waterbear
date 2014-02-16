@@ -1,6 +1,7 @@
 {
     "sectionkey": "paths",
     "name": "Paths",
+    "help": "Path blocks are for construction more complex shapes for drawing, masking, and other uses.",
     "blocks": [
         {
             "blocktype": "context",
@@ -21,8 +22,7 @@
             "sockets": [
                 {
                     "name": "move to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -34,8 +34,7 @@
             "sockets": [
                 {
                     "name": "line to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -47,13 +46,11 @@
             "sockets": [
                 {
                     "name": "quadradic curve to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with control point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -65,18 +62,15 @@
             "sockets": [
                 {
                     "name": "bezier curve to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with control points",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "and",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -88,18 +82,16 @@
             "sockets": [
                 {
                     "name": "arc to point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -111,28 +103,26 @@
             "sockets": [
                 {
                     "name": "arc with origin",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius",
-                    "type": "number",
-                    "value": "1"
+                    "type": "number"
                 },
                 {
                     "name": "start angle",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "deg, end angle",
                     "type": "number",
-                    "value": "45"
+                    "value": 45
                 },
                 {
                     "name": "deg",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -144,8 +134,7 @@
             "sockets": [
                 {
                     "name": "rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -157,13 +146,12 @@
             "sockets": [
                 {
                     "name": "circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -188,10 +176,7 @@
                 {
                     "name": "is point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "in path?"
+                    "suffix": "in path?"
                 }
             ]
         }

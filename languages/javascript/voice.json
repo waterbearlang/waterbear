@@ -1,6 +1,7 @@
 {
     "sectionkey": "music",
     "name": "Music",
+    "help": "Music blocks are for creating and manipulating sound programmatically, generating the sounds rather than playing back a recorded audio file (see the Sound menu for that).",
     "blocks": [
         {
             "blocktype": "step",
@@ -38,10 +39,8 @@
                 {
                     "name": "tone",
                     "type": "number",
-                    "value": 440
-                },
-                {
-                    "name": "Hz"
+                    "value": 440,
+                    "suffix": "Hz"
                 }
             ]
         },
@@ -93,10 +92,8 @@
                 {
                     "name": "tempo quarter note =",
                     "type": "number",
-                    "value": 120
-                },
-                {
-                	"name": "beats per minute"
+                    "value": 120,
+                    "suffix": "beats per minute"
                 }
             ]
         },
@@ -110,10 +107,7 @@
                 {
                     "name": "voice",
                     "type": "voice",
-                    "value": null
-                },
-                {
-                    "name": "Hz"
+                    "suffix": "Hz"
                 }
             ]
         },
@@ -125,10 +119,8 @@
             "sockets": [
                 {
                     "name": "turn voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "on"
+                    "type": "voice",
+                    "suffix": "on"
                 }
             ]
         },
@@ -140,10 +132,8 @@
             "sockets": [
                 {
                     "name": "turn voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "off"
+                    "type": "voice",
+                    "suffix": "off"
                 }
             ]
         },
@@ -160,10 +150,8 @@
                 {
                     "name": "for ",
                     "type": "number",
-                    "value": 2
-                },
-                {
-                    "name": "seconds"
+                    "value": 2,
+                    "suffix": "seconds"
                 }
             ]
         },
@@ -227,10 +215,8 @@
             "sockets": [
                 {
                     "name": "play voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "stored song"
+                    "type": "voice",
+                    "suffix": "stored song"
                 }
             ]
         },
@@ -244,10 +230,7 @@
                 {
                     "name": "voice",
                     "type": "voice",
-                    "value": null
-                },
-                {
-                    "name": "is on?"
+                    "suffix": "is on?"
                 }
             ]
         }

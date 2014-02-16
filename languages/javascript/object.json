@@ -1,6 +1,7 @@
 {
     "sectionkey": "objects",
     "name": "Objects",
+    "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
     "blocks": [
         {
             "blocktype": "step",
@@ -33,18 +34,15 @@
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "= value",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -57,13 +55,11 @@
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "value at key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -100,10 +96,7 @@
                 {
                     "name": "for each item in",
                     "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "do"
+                    "suffix": "do"
                 }
             ]
         }

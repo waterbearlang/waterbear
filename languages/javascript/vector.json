@@ -1,6 +1,7 @@
 {
     "sectionkey": "vectors",
     "name": "Vectors",
+    "help": "Vector blocks have a direction and a magnitude, which can represent speed of movement for a Sprite. Vectors can be added to or subtracted from other Vectors, among other things.",
     "blocks": [
         {
             "blocktype": "step",
@@ -23,15 +24,14 @@
                 {
                     "name": "vector##",
                     "type": "number",
-                    "value": 0
+                    "value": 0,
+                    "suffix": "x,"
                 },
                 {
-                    "name": "x, ",
+                    "name": "",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "y"
+                    "value": 0,
+                    "suffix": "y"
                 }
             ]
         },

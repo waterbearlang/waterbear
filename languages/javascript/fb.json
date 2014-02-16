@@ -1,6 +1,7 @@
 {
     "sectionkey": "facebook",
     "name": "Facebook",
+    "help": "Blocks for interacting with Facebook",
     "blocks": [
         {
             "blocktype": "step",
@@ -9,8 +10,7 @@
             "sockets": [
                 {
                     "name": "share",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -44,8 +44,7 @@
             "sockets": [
                 {
                     "name": "name of",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -57,8 +56,7 @@
             "sockets": [
                 {
                     "name": "image of",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -70,8 +68,7 @@
             "sockets": [
                 {
                     "name": "images url of",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -83,8 +80,7 @@
             "sockets": [
                 {
                     "name": "friend with name like",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -95,8 +91,7 @@
             "sockets": [
                 {
                     "name": "checkin at",
-                    "type": "location",
-                    "value": null
+                    "type": "location"
                 }
             ]
         }

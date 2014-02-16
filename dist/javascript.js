@@ -1840,53 +1840,107 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*end events.min.js*/
 
 /*begin ajax.js*/
-(function(global){
-function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
-function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
+(function (global) {
+    function $(e) {
+        if (typeof e == 'string') e = document.getElementById(e);
+        return e
+    };
 
-ajax={};
-ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
-ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
+    function collect(a, f) {
+        var n = [];
+        for (var i = 0; i < a.length; i++) {
+            var v = f(a[i]);
+            if (v != null) n.push(v)
+        }
+        return n
+    };
 
-ajax.send=function(u,f,m,a,e){
-    var x=ajax.x();
-    x.open(m,u,true);
-    x.onreadystatechange=function(){
-        if (x.readyState==4&&x.status<400) {
-            cType = x.getResponseHeader("Content-Type");
-            f(x.responseText, cType); 
-        } else if (x.readyState==4) { 
-            if(e==undefined) {
-                console.log(x.status + " (" + x.statusText + ") " );
-            } else {
-                e(x.status, x);
+    ajax = {};
+    ajax.x = function () {
+        try {
+            return new ActiveXObject('Msxml2.XMLHTTP')
+        } catch (e) {
+            try {
+                return new ActiveXObject('Microsoft.XMLHTTP')
+            } catch (e) {
+                return new XMLHttpRequest()
             }
         }
     };
-    if (m=='POST')
-        x.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-    x.send(a);
-};
+    ajax.serialize = function (f) {
+        var g = function (n) {
+            return f.getElementsByTagName(n)
+        };
+        var nv = function (e) {
+            if (e.name) return encodeURIComponent(e.name) + '=' + encodeURIComponent(e.value);
+            else return ''
+        };
+        var i = collect(g('input'), function (i) {
+            if ((i.type != 'radio' && i.type != 'checkbox') || i.checked) return nv(i)
+        });
+        var s = collect(g('select'), nv);
+        var t = collect(g('textarea'), nv);
+        return i.concat(s).concat(t).join('&');
+    };
 
-ajax.get=function(url, func, err){
-    ajax.send(url,func,'GET', {}, err)
-};
+    ajax.send = function (u, f, m, a, e) {
+        var x = ajax.x();
+        x.open(m, u, true);
+        x.onreadystatechange = function () {
+            if (x.readyState == 4 && x.status < 400) {
+                cType = x.getResponseHeader("Content-Type");
+                f(x.responseText, cType);
+            } else if (x.readyState == 4) {
+                if (e == undefined) {
+                    console.log(x.status + " (" + x.statusText + ") ");
+                } else {
+                    e(x.status, x);
+                }
+            }
+        };
+        if (m == 'POST')
+            x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        x.send(a);
+    };
 
-ajax.gets=function(url){var x=ajax.x();x.open('GET',url,false);x.send(null);return x.responseText};
+    ajax.get = function (url, func, err) {
+        ajax.send(url, func, 'GET', {}, err)
+    };
 
-ajax.post=function(url, func, args, err){
-    ajax.send(url,func,'POST',args, err)
-};
+    ajax.gets = function (url) {
+        var x = ajax.x();
+        x.open('GET', url, false);
+        x.send(null);
+        return x.responseText
+    };
 
-ajax.update=function(url,elm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.get(url,f)};
-ajax.submit=function(url,elm,frm){var e=$(elm);var f=function(r){e.innerHTML=r};ajax.post(url,f,ajax.serialize(frm))};
-global.ajax = ajax;
+    ajax.post = function (url, func, args, err) {
+        ajax.send(url, func, 'POST', args, err)
+    };
+
+    ajax.update = function (url, elm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.get(url, f)
+    };
+    ajax.submit = function (url, elm, frm) {
+        var e = $(elm);
+        var f = function (r) {
+            e.innerHTML = r
+        };
+        ajax.post(url, f, ajax.serialize(frm))
+    };
+    global.ajax = ajax;
 })(this);
 
 /*end ajax.js*/
 
 /*begin queryparams.js*/
-// Sets up wb namespace (wb === waterbear)
+// Sets up wb namespace (wb === waterbear). Global variable wb
+// is initialized in the HTML before any javascript files are
+// loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
 
@@ -1938,6 +1992,8 @@ global.ajax = ajax;
 /*end queryparams.js*/
 
 /*begin util.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(global){
     //
     //
@@ -1961,16 +2017,14 @@ global.ajax = ajax;
     };
 
     function hide(elem){
-        elem.dataset.display = elem.style.display;
-        elem.style.display = 'none';
+        elem.classList.add('hidden');
     };
 
     function show(elem){
-        elem.style.display = elem.dataset.display || 'block';
-        delete elem.dataset.display;
+        elem.classList.remove('hidden');
     };
 
-    var svgText = document.querySelector('svg text');
+    var svgText = document.querySelector('.resize-tester');
     function resize(input){
         if (!input) return;
         if (input.wbTarget){
@@ -2164,26 +2218,28 @@ global.ajax = ajax;
 // Minimal support for non-DOM (custom) events
 // Normalized between mouse and touch events
 // Waterbear specific: events have wb-target which is always a block element
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 
 (function(global){
     "use strict";
 
-    function on(elem, eventname, selector, handler){
+    function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
         if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem); 
-            debugger;
+            console.error('first argument must be element: %o', elem);
+            throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
-            listener = function(event){
+            listener = function listener(event){
                 blend(event); // normalize between touch and mouse events
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
@@ -2191,6 +2247,9 @@ global.ajax = ajax;
                 if (!event.wbValid){
                     // console.log('event is not valid');
                     return;
+                }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
                 }
                 if (wb.matches(event.wbTarget, selector)){
                     handler(event);
@@ -2200,10 +2259,13 @@ global.ajax = ajax;
                 }
             };
         }else{
-            listener = function(event){
+            listener = function listener(event){
                 blend(event);
                 if (!event.wbValid){
                     return;
+                }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
                 }
                 handler(event);
             };
@@ -2216,12 +2278,8 @@ global.ajax = ajax;
         elem.removeEventListener(eventname, handler);
     }
 
-    function once(elem, eventname, selector, handler){
-        var listener = function listener(event){
-            handler(event);
-            Event.off(elem, eventname, listener);
-        };
-        return Event.on(elem, eventname, selector, listener);
+    var once = function(elem, eventname, selector, handler){
+        return Event.on(elem, eventname, selector, handler, true);
     }
 
     function trigger(elemOrSelector, eventname, data){
@@ -2311,6 +2369,9 @@ global.ajax = ajax;
 /*end event.js*/
 
 /*begin drag.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
+
 (function(global){
 
     // After trying to find a decent drag-and-drop library which could handle
@@ -2371,8 +2432,10 @@ global.ajax = ajax;
     var dragging;
     var currentPosition;
     var scope;
-    var workspace; // <- WB
+    var workspace; // <- WB. The Workspace block is created with the function
+		   // createWorkspace() in the workspace.js file.
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
@@ -2383,7 +2446,7 @@ global.ajax = ajax;
     // WB-specific
     function dropCursor(){
         if (!_dropCursor){
-            _dropCursor = document.querySelector('.dropCursor');
+            _dropCursor = document.querySelector('.drop-cursor');
         }
         return _dropCursor;
     }
@@ -2404,6 +2467,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	var scratchpad= document.querySelector('.scratchpad'); // <- WB
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -2415,6 +2479,7 @@ global.ajax = ajax;
 
 
     function initDrag(event){
+        // console.log('initDrag(%o)', event);
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
         var eT = event.wbTarget; // <- WB
@@ -2467,6 +2532,7 @@ global.ajax = ajax;
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
 		// Track source for undo/redo
@@ -2492,8 +2558,6 @@ global.ajax = ajax;
                 scope = null;
             }
             cloned = true;
-            // Make sure the workspace is available to drag to
-            wb.showWorkspace('block');
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
             // FIXME: Need to handle this somewhere
@@ -2507,7 +2571,7 @@ global.ajax = ajax;
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
         dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
         // WB-Specific
-        document.querySelector('.content.editor').appendChild(dragTarget);
+        document.body.appendChild(dragTarget);
         // WB-Specific
         if (cloned){
             // call this here so it can bubble to document.body
@@ -2530,6 +2594,7 @@ global.ajax = ajax;
     function drag(event){
         if (!dragTarget) {return undefined;}
         if (!currentPosition) {startDrag(event);}
+        // console.log('drag(%o)', event);
         event.preventDefault();
         // update the variables, distance, button pressed
         var nextPosition = {left: event.wbPageX, top: event.wbPageY}; // <- WB
@@ -2562,16 +2627,19 @@ global.ajax = ajax;
         return false;
     }
 
-    function endDrag(end){
+    function endDrag(event){
+        // console.log('endDrag(%o) dragging: %s', event, dragging);
+        if (!dragging) {return undefined;}
         clearTimeout(timer);
         timer = null;
-        if (!dragging) {return undefined;}
-        handleDrop(end.altKey || end.ctrlKey);
+        handleDrop(event,event.altKey || event.ctrlKey);
         reset();
+        event.preventDefault();
         return false;
     }
 
-    function handleDrop(copyBlock){
+    function handleDrop(event,copyBlock){
+        // console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -2580,7 +2648,7 @@ global.ajax = ajax;
            // 4. Move back to start position if not a clone (maybe not?)
         resetDragStyles(); // <- WB
         // WB-Specific
-        if (wb.overlap(dragTarget, blockMenu)){
+	if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
@@ -2590,7 +2658,31 @@ global.ajax = ajax;
     	    	dragAction.toParent = dragAction.toBefore = null;
         		wb.history.add(dragAction);
         	}
-        }else if (dropTarget){
+        } else if (wb.overlap(dragTarget, scratchpad)) {
+	    console.log(dragTarget);
+	    var scratchPadStyle = scratchpad.getBoundingClientRect();
+	    var newOriginX = scratchPadStyle.left;
+	    var newOriginY = scratchPadStyle.top;
+
+	    var blockStyle = dragTarget.getBoundingClientRect();
+	    var oldX = blockStyle.left;
+	    var oldY = blockStyle.top;
+
+	    dragTarget.style.position = "fixed";
+	    dragTarget.style.left = oldX - newOriginX;
+	    dragTarget.style.top =  oldY - newOriginY;
+	    scratchpad.appendChild(dragTarget);
+
+            //when dragging from workspace to scratchpad, this keeps workspace from
+	    //moving around when block in scratchpad is moved.
+            //dragTarget.parentElement.removeChild(dragTarget); 
+            //Event.trigger(dragTarget, 'wb-add');
+	    return;
+	}
+	
+	
+	else if (dropTarget){
+	    //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
@@ -2617,12 +2709,10 @@ global.ajax = ajax;
             }
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
-
-            //CLARIFY: What does this block do? dragAction.toBefore.nextElementSibling is always null
-            // if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
-            // 	// Sometimes the "next sibling" ends up being the cursor
-            // 	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
-            // }
+            if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
+            	// Sometimes the "next sibling" ends up being the cursor
+            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+            }
             wb.history.add(dragAction);
         }else{
             if (cloned){
@@ -2729,7 +2819,7 @@ global.ajax = ajax;
 
     function positionExpressionDropCursor(){
         if (!potentialDropTargets.length){
-            console.log('no drop targets found');
+            // console.log('no drop targets found');
             return;
         }
         var targets = potentialDropTargets.map(function(target){
@@ -2857,35 +2947,34 @@ global.ajax = ajax;
         return '.socket[data-type=' + name + '] > .holder';
     }
     
+    function dragFromScratchPad(event){
+	dragTarget = event.target;
+    }
+    
     function cancelDrag(event) {
     	// Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
     	if(event.keyCode == 27) {
-    		resetDragStyles();
-	    	revertDrop();
-			clearTimeout(timer);
-			timer = null;
-			reset();
-			return false;
-	    }
+    	    resetDragStyles();
+	    revertDrop();
+	    clearTimeout(timer);
+	    timer = null;
+	    reset();
+	    return false;
+	}
     }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
         // console.log('initializeDragHandlers');
-        if (Event.isTouch){
-            Event.on('.content', 'touchstart', '.block', initDrag);
-            Event.on('.content', 'touchmove', null, drag);
-            Event.on('.content', 'touchend', null, endDrag);
-            // TODO: A way to cancel the drag?
-            // Event.on('.scripts_workspace', 'tap', '.socket', selectSocket);
-        }else{
-            Event.on('.content', 'mousedown', '.block', initDrag);
-            Event.on(document, 'mousemove', null, drag);
-            Event.on('.content', 'mouseup', null, endDrag);
-            Event.on(document.body, 'keyup', null, cancelDrag);
-            // Event.on('.scripts_workspace', 'click', '.socket', selectSocket);
-        }
+        Event.on('.content', 'touchstart', '.block', initDrag);
+        Event.on('.content', 'touchmove', null, drag);
+        Event.on('.content', 'touchend', null, endDrag);
+        // TODO: A way to cancel touch drag?
+        Event.on('.content', 'mousedown', '.block', initDrag);
+        Event.on('.content', 'mousemove', null, drag);
+        Event.on(document.body, 'mouseup', null, endDrag);
+        Event.on(document.body, 'keyup', null, cancelDrag);
     };
 })(this);
 
@@ -2951,12 +3040,15 @@ global.ajax = ajax;
 // registerSeqNum(int) make sure we don't re-use sequence numbers
 // Socket(json) -> Socket element
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
     var elem = wb.elem;
 
     var nextSeqNum = 0;
-    var blockRegistry = {};
+    var blockRegistry = {}; /* populated in function "registerBlock", which is
+                               called by the Block() function below*/
 
     function newSeqNum(){
         nextSeqNum++;
@@ -3197,6 +3289,7 @@ global.ajax = ajax;
         // type and value are optional, but if you have one you must have the other
         // If the type is choice it must also have a options for the list of values
         // that can be found in the wb.choiceLists
+        // A socket may also have a suffix, text after the value
         // A socket may also have a block, the id of a default block
         // A socket may also have a uValue, if it has been set by the user, over-rides value
         // A socket may also have a uName if it has been set by the user, over-rides name
@@ -3241,13 +3334,17 @@ global.ajax = ajax;
                 newBlock = cloneBlock(document.getElementById(desc.block));
             }else if (desc.block && desc.uValue){
                 // for debugging only
-                console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
+                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
             }
             if (newBlock){
                 //console.log('appending new block');
                 holder.appendChild(newBlock);
                 addExpression({'wbTarget': newBlock});
             }
+        }
+        if (desc.suffix){
+            socket.dataset.suffix = desc.suffix;
+            socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
     }
@@ -3270,6 +3367,9 @@ global.ajax = ajax;
         }
         if (socket.dataset.block){
             desc.block = socket.dataset.block;
+        }
+        if (socket.dataset.suffix){
+            desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
         if (isTemplate) return desc;
@@ -3585,7 +3685,12 @@ global.ajax = ajax;
 // * Loading and saving to LocalStorage (including currentScript)
 // * Loading examples
 // * etc.
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 	function saveCurrentScripts(){
@@ -3594,7 +3699,6 @@ global.ajax = ajax;
 			// nothing to save
 			return;
 		}
-		wb.showWorkspace('block');
 		document.querySelector('#block_menu').scrollIntoView();
 		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
 	};
@@ -3840,6 +3944,8 @@ global.ajax = ajax;
 /*end file.js*/
 
 /*begin undo.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 // Undo list
 
@@ -3942,22 +4048,12 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 /*end undo.js*/
 
 /*begin ui.js*/
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 // UI Chrome Section
 
-function tabSelect(event){
-    var target = event.wbTarget;
-    event.preventDefault();
-    document.querySelector('.tabbar .selected').classList.remove('selected');
-    target.classList.add('selected');
-    if (wb.matches(target, '.scripts_workspace_tab')){
-        showWorkspace('block');
-    }else if (wb.matches(target, '.scripts_text_view_tab')){
-        showWorkspace('text');
-        updateScriptsView();
-    }
-}
 
 function accordion(event){
     event.preventDefault();
@@ -3970,33 +4066,14 @@ function accordion(event){
 }
 
 
-function showWorkspace(mode){
-    // console.log('showWorkspace');
-    var workspace = document.querySelector('.workspace');
-    var scriptsWorkspace = document.querySelector('.scripts_workspace');
-    if (!scriptsWorkspace) return;
-    var scriptsTextView = document.querySelector('.scripts_text_view');
-    if (mode === 'block'){
-	    scriptsWorkspace.style.display = '';
-	    scriptsTextView.style.display = 'none';
-        workspace.classList.remove('textview');
-        workspace.classList.add('blockview');
-    }else if (mode === 'text'){
-    	scriptsWorkspace.style.display = 'none';
-    	scriptsTextView.style.display = '';
-        workspace.classList.remove('blockview');
-        workspace.classList.add('textview');
-    }
-}
-// Expose this to dragging and saving functionality
 
 
 function updateScriptsView(){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    var view = wb.find(document.body, '.workspace .scripts_text_view');
+    var blocks = wb.findAll(document.body, '.scripts_workspace');
+    var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
 }
-window.updateScriptsView = updateScriptsView;
+wb.updateScriptsView = updateScriptsView; 
 
 
 function changeSocket(event) {
@@ -4321,19 +4398,22 @@ initLanguageFiles();
 function menu(blockspec){
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
-    return edit_menu(title, specs);
+    var help = blockspec.help !== undefined ? blockspec.help : '';
+    return edit_menu(title, specs, help);
 };
 
-function edit_menu(title, specs, show){
+function edit_menu(title, specs, help, show){
 	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
+        submenu.appendChild(description);
     }
     specs.forEach(function(spec, idx){
         spec.group = group;
@@ -4362,12 +4442,68 @@ function initContextMenus() {
 	document.querySelector('.cmenuEnable').style.display = 'none';
 }
 
+// functions to show various mobile views
+
+function handleShowButton(button, newView){
+	// stop result
+	wb.clearStage();
+	// enable previous button, disable current button
+	var currentButton = document.querySelector('.current-button');
+	if (currentButton){
+		currentButton.classList.remove('current-button');
+	}
+	button.classList.add('current-button');
+	//slide old view out, slide new view in
+	var oldView = document.querySelector('.current-view');
+	oldView.classList.remove('current-view');
+	oldView.style.transitionDuration = '0.5s';
+	oldView.style.left = '-100%';
+	newView.classList.add('current-view');
+	newView.style.transitionDuration = '0.5s';
+	newView.style.left = '0';
+	Event.once(document.body, 'transitionend', null, function(){
+		// console.log('transitionend: %o', oldView);
+		oldView.style.transitionDuration = '0s';
+		oldView.style.left = '100%';
+	});
+}
+
+function showFiles(evt){
+	handleShowButton(evt.target, document.querySelector('.files'));
+}
+
+function showBlocks(evt){
+	handleShowButton(evt.target, document.querySelector('#block_menu'));
+}
+
+function showScript(evt){
+	handleShowButton(evt.target, document.querySelector('.workspace'));
+}
+
+function showResult(evt){
+	handleShowButton(evt.target, document.querySelector('.results'));
+	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
+}
 
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
-Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+// Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
-wb.showWorkspace = showWorkspace;
+if (document.body.clientWidth < 361){
+	// console.log('mobile view');
+	Event.on('.show-files', 'click', null, showFiles);
+	Event.on('.show-blocks', 'click', null, showBlocks);
+	Event.on('.show-script', 'click', null, showScript);
+	Event.on('.show-result', 'click', null, showResult);
+	document.querySelector('.show-script').classList.add('current-button');
+	document.querySelector('.workspace').classList.add('current-view');
+}
+if (document.body.clientWidth > 360){
+	// console.log('desktop view');
+	Event.on(document.body, 'change', 'input', updateScriptsView);
+	Event.on(document.body, 'wb-modified', null, updateScriptsView);
+}
+
 wb.menu = menu;
 
 })(wb);
@@ -4376,17 +4512,25 @@ wb.menu = menu;
 /*end ui.js*/
 
 /*begin workspace.js*/
+//The Workspace block is created with the function createWorkspace() in
+//this file. The createWorkspace() function is called in file.js
+
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
-			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			var workspace = document.querySelector('.scripts_workspace')
+            var path = location.href.split('?')[0];
+            history.pushState(null, '', path);
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
 			wb.scriptLoaded = false;
 			wb.loaded = false;
+			wb.clearStage();
 			createWorkspace('Workspace');
-			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
+			document.querySelector('.scripts_text_view').innerHTML = '';
 			wb.history.clear();
 			wb.resetSeqNum();
 			delete localStorage['__' + wb.language + '_current_scripts'];
@@ -4427,14 +4571,25 @@ wb.menu = menu;
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
 	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// console.log('running current scripts');
-	    	wb.runCurrentScripts();
+	    	// This bothers me greatly: runs with the console.log, but not without it
+	    	console.log('running current scripts');
+	    	runFullSize();
 	    }else{
 	    	if (wb.view === 'result'){
 		    	// console.log('we want to run current scripts, but cannot');
 		    }else{
+		    	runWithLayout();
 		    	// console.log('we do not care about current scripts, so there');
 		    }
+	    }
+	    if (wb.toggleState.scripts_text_view){
+	    	wb.updateScriptsView();
+	    }
+	    if (wb.toggleState.stage){
+	    	// console.log('run current scripts');
+	    	wb.runCurrentScripts();
+	    }else{
+	    	wb.clearStage();
 	    }
 	}
 
@@ -4461,12 +4616,13 @@ wb.menu = menu;
 		Event.trigger(document.body, 'wb-state-change');
 	}
 
+
 	window.addEventListener('unload', wb.saveCurrentScripts, false);
 	window.addEventListener('load', wb.loadRecentGists, false);
 
 	// Allow saved scripts to be dropped in
 	function createWorkspace(name){
-	    // console.log('createWorkspace');
+	    console.log('createWorkspace');
 		var id = uuid();
 		var workspace = wb.Block({
 			group: 'scripts_workspace',
@@ -4493,11 +4649,13 @@ wb.menu = menu;
 	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
 	    });
 		document.querySelector('.workspace').appendChild(workspace);
-		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'dropCursor'}));
-		wb.initializeDragHandlers();
+		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
+		// wb.initializeDragHandlers();
+		Event.trigger(document.body, 'wb-workspace-initialized');
 	};
 
-	function handleDragover(event){
+
+	function handleDragover(evt){
 	    // Stop Firefox from grabbing the file prematurely
 	    event.stopPropagation();
 	    event.preventDefault();
@@ -4544,23 +4702,95 @@ wb.menu = menu;
 		}
 	}
 
-	window.addEventListener('popstate', function(event){
-		// console.log('popstate event');
+	function runFullSize(){
+		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+			wb.hide(wb.find(document.body, sel));
+		});
+		wb.show(wb.find(document.body, '.stage'));
+	}
+
+	function runWithLayout(){
+		['#block_menu', '.workspace'].forEach(function(sel){
+			wb.show(wb.find(document.body, sel));
+		});
+		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+		});
+	}
+
+	function toggleComponent(evt){
+		var component = wb.find(document.body, '.' + evt.detail.name);
+		if (!component) return;
+		evt.detail.state ? wb.show(component) : wb.hide(component);
+		var results = wb.find(document.body, '.results');
+		// Special cases
+		switch(evt.detail.name){
+			case 'stage':
+				if (evt.detail.state){
+					wb.show(results);
+				}else{
+					wb.clearStage();
+					if (!wb.toggleState.scripts_text_view){
+						wb.hide(results);
+					}
+				}
+				break;
+			case 'scripts_text_view':
+				if (evt.detail.state){
+					wb.show(results);
+					wb.updateScriptsView();
+				}else{
+					if (!wb.toggleState.stage){
+						wb.hide(results);
+					}
+				}
+				break;
+			case 'tutorial':
+			case 'scratchpad':
+			case 'scripts_workspace':
+				if (! (wb.toggleState.tutorial || wb.toggleState.scratchpad || wb.toggleState.scripts_workspace)){
+					wb.hide(wb.find(document.body, '.workspace'));
+				}else{
+					wb.show(wb.find(document.body, '.workspace'));
+				}
+			default:
+				// do nothing
+				break;
+		}
+		if (wb.toggleState.stage){
+			// restart script on any toggle
+			// so it runs at the new size
+			wb.runCurrentScripts();
+		}
+
+	}
+
+	Event.on(document.body, 'wb-toggle', null, toggleComponent);
+
+	window.addEventListener('popstate', function(evt){
+		console.log('popstate event');
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
 
+	window.addEventListener('load', function(evt){
+		console.log('load event');
+		Event.trigger(document.body, 'wb-state-change');
+	})
+
 	// Kick off some initialization work
-	window.addEventListener('load', function(){
-		console.log('window loaded');
+	Event.once(document.body, 'wb-workspace-initialized', null, function initHistory(){
+		console.log('workspace ready');
 		wb.windowLoaded = true;
+		wb.workspaceInitialized = true;
 		Event.trigger(document.body, 'wb-state-change');
 	}, false);
+	Event.once(document.body, 'wb-workspace-initialized', null, wb.initializeDragHandlers);
 
 	Event.on('.clear_scripts', 'click', null, clearScripts);
 	Event.on('.edit-script', 'click', null, function(event){
 		wb.historySwitchState('editor');
 	});
-	Event.on('.content', 'click', '.load-example', loadExample);
+	Event.on(document.body, 'click', '.load-example', loadExample);
 	Event.on(document.body, 'wb-state-change', null, handleStateChange);
 	Event.on('.save_scripts', 'click', null, wb.saveCurrentScriptsToGist);
 	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
@@ -4591,7 +4821,12 @@ wb.menu = menu;
 // Allows the user to hide groups of blocks within the interface
 // Settings are stored in LocalStorage and retreived each
 // time the page is loaded.
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 	//save the state of the settings link
@@ -4707,6 +4942,67 @@ wb.menu = menu;
 
 /*end blockprefs.js*/
 
+/*begin menu.js*/
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
+
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
+(function(wb, Event){
+
+	var toggleState = {};
+	if (localStorage.toggleState){
+		toggleState = JSON.parse(localStorage.toggleState);
+	}
+
+	function handleToggle(evt){
+		var button = evt.target;
+		var name = button.dataset.target;
+		var isOn = !getState(name);
+		toggleState[name] = isOn;
+		if (isOn){
+			button.classList.remove('icon-unchecked');
+			button.classList.add('icon-check');
+		}else{
+			button.classList.add('icon-unchecked');
+			button.classList.remove('icon-check');
+		}
+		Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
+		localStorage.toggleState = JSON.stringify(toggleState);
+	}
+
+	Event.on(document.body, 'click', '.toggle', handleToggle);
+
+	function getState(name){
+		if (toggleState[name] === undefined){
+			toggleState[name] = true;
+		}
+		return toggleState[name];
+	}
+
+	// initialize toggle states
+
+	function initializeToggleStates(evt){
+		wb.findAll(document.body, '.toggle').forEach(function(button){
+			var name = button.dataset.target;
+			var isOn = getState(name);
+			if (isOn){
+				button.classList.add('icon-check');
+			}else{
+				button.classList.add('icon-unchecked');
+			}
+			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
+		});
+	}
+
+	Event.once(document.body, 'wb-workspace-initialized', null, initializeToggleStates);
+
+	wb.toggleState = toggleState; // treat as read-only
+
+})(wb, Event);
+/*end menu.js*/
+
 /*begin languages/javascript/javascript.js*/
 /*
  *    JAVASCRIPT PLUGIN
@@ -4747,7 +5043,7 @@ wb.menu = menu;
     }
 
     function runCurrentScripts(){
-        // console.log('runCurrentScripts');
+        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -4756,6 +5052,10 @@ wb.menu = menu;
             console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
+        // update size of frame
+        var iframe = document.querySelector('.stageframe');
+        iframe.style.width =  iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
@@ -4792,8 +5092,10 @@ wb.menu = menu;
     }
 
     function clearStage(event){
+        wb.iframeReady = false;
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
+    wb.clearStage = clearStage;
     Event.on('.clear-stage', 'click', null, clearStage);
     Event.on('.edit-script', 'click', null, clearStage);
 
@@ -4853,7 +5155,9 @@ wb.menu = menu;
 /*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/control.js*/
-
+wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup"];
+wb.choiceLists.types.push('control');
+wb.choiceLists.rettypes.push('control');
 /*end languages/javascript/control.js*/
 
 /*begin languages/javascript/sprite.js*/
@@ -5038,6 +5342,7 @@ wb.choiceLists.rettypes.push('motion');
 wb.menu({
     "sectionkey": "controls",
     "name": "Controls",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -5060,10 +5365,22 @@ wb.menu({
                     "name": "when",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
+                    "value": "choice",
+                    "suffix": "key pressed"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "f13fcf60-a7e4-4672-9ff8-06197a65af94",
+            "script": "document.addEventListener({{1}}, function(event){ [[1]]; console.log({{1}});});",
+            "help": "this trigger will run the attached blocks every time the chosen mouse event happens",
+            "sockets": [
                 {
-                    "name": "key pressed"
+                    "name": "when",
+                    "type": "choice",
+                    "options": "pointerEvents",
+                    "value": "choice"
                 }
             ]
         },
@@ -5116,7 +5433,7 @@ wb.menu({
                 {
                     "name": "times a second until",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -5140,8 +5457,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "variable variable##",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -5153,13 +5469,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "to",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -5171,8 +5485,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "increment variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "by",
@@ -5218,7 +5531,7 @@ wb.menu({
                 {
                     "name": "repeat",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -5231,10 +5544,8 @@ wb.menu({
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -5251,8 +5562,7 @@ wb.menu({
                 },
                 {
                     "name": "message with data",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -5265,10 +5575,8 @@ wb.menu({
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -5293,10 +5601,8 @@ wb.menu({
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data"
+                    "value": "ping",
+                    "suffix": "message with data"
                 }
             ]
         },
@@ -5321,8 +5627,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "if",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -5334,7 +5639,30 @@ wb.menu({
             "sockets": [
                 {
                     "name": "if not",
+                    "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "AB5EB656-EF22-4DD3-9B5B-9A5187DF2F2F",
+            "script": "(({{1}}) ? ({{2}}) : ({{3}}))",
+            "help": "select a result based on a condition",
+            "type": "any",
+            "sockets": [
+                {
+                    "name": "if",
                     "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "then",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "else",
+                    "type": "any",
                     "value": null
                 }
             ]
@@ -5347,20 +5675,19 @@ wb.menu({
             "sockets": [
                 {
                     "name": "repeat until",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/control.json*/
 
 /*begin languages/javascript/sprite.json*/
 wb.menu({
     "sectionkey": "sprites",
     "name": "Sprites",
+    "help": "Sprites are graphics that can be repositioned, rotated, and have a vector of motion. They can also check for collision with other Sprites.",
     "blocks": [
         {
             "blocktype": "step",
@@ -5383,12 +5710,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "clear stage to image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "eb889480-c381-4cfa-a6ee-7c6928c08817",
             "script": "local.sprite## = createRectSprite({{1}}, {{2}}, {{3}});",
@@ -5425,14 +5752,123 @@ wb.menu({
         },
         {
             "blocktype": "step",
+            "id": "c876f5e8-87e9-4dc5-a6ee-8cf8e0188988",
+            "script": "local.sprite## = createImageSprite({{1}}, {{2}}, {{3}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple image sprite",
+            "sockets": [
+                {
+                    "name": "image sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with image",
+                    "type": "image",
+                    "block": ""
+                }
+            ]
+        },
+		{
+            "blocktype": "step",
+            "id": "43b28edf-c77f-422f-be5b-5217c9da93c9",
+            "script": "local.sprite## = createTextSprite({{1}}, {{2}}, {{3}}, {{4}}, {{5}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple text sprite",
+            "sockets": [
+                {
+                    "name": "text sprite##",
+                    "type": "size",
+                    "block": ""
+                },
+                {
+                    "name": "big at",
+                    "type": "point",
+                    "block": ""
+                },
+                {
+                    "name": "with block color",
+                    "type": "color",
+                    "block": ""
+                },
+				{
+                    "name": "with text",
+                    "type": "string",
+                    "block": ""
+                },
+				{
+                    "name": "with text color",
+                    "type": "color",
+                    "block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "6e0689f9-c731-4874-9ba8-5228c1ff335a",
+            "script": "local.sprite## = createSprite({{1}}, {{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "sprite##"
+                        }
+                    ],
+                    "script": "local.sprite##",
+                    "type": "sprite"
+                }
+            ],
+            "help": "create a simple rectangle sprite",
+            "sockets": [
+                {
+                    "name": "shape sprite##",
+                    "type": "shape",
+                    "block": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "block": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
             "script": "{{1}}.draw(local.ctx);",
             "help": "draw the sprite at its current location",
             "sockets": [
                 {
                     "name": "draw sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5444,8 +5880,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -5465,16 +5900,13 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Turn sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -5486,8 +5918,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by",
@@ -5507,8 +5938,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Steer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
@@ -5528,8 +5958,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Autosteer sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "",
@@ -5547,13 +5976,27 @@ wb.menu({
             "sockets": [
                 {
                     "name": "sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "collides with sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
+                }
+            ]
+        },
+          {
+			"blocktype": "expression",
+            "id": "f874f2af-c15e-44d2-9728-c14a774f22fb",
+            "script": "isSpriteClicked({{1}})",
+            "type": "boolean",
+            "help": "test for click",
+            "sockets": [
+                {
+                    "name": "sprite",
+                    "type": "sprite"
+                },
+                {
+                    "name": "is clicked?"
                 }
             ]
         },
@@ -5565,13 +6008,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "bounce sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "off of sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5583,18 +6024,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "by x",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 },
                 {
                     "name": "y",
-                    "type": "number",
-                    "value": null
+                    "type": "number"
                 }
             ]
         },
@@ -5606,8 +6044,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 }
             ]
         },
@@ -5664,10 +6101,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stop sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -5679,10 +6114,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "slide sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "at edge of stage"
+                    "type": "sprite",
+                    "suffix": "at edge of stage"
                 }
             ]
         },
@@ -5694,10 +6127,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "wrap sprite ",
-                    "type": "sprite"
-                },
-                {
-                    "name": "around edge of stage"
+                    "type": "sprite",
+                    "suffix": "around edge of stage"
                 }
             ]
         },
@@ -5709,17 +6140,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
-    {
+        {
             "blocktype": "step",
             "id": "badee0b6-8f7c-4cbd-9173-f450c765045d",
             "script": "{{1}}.color = {{2}};",
@@ -5727,8 +6156,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Color sprite",
-                    "type": "sprite",
-                    "value": null
+                    "type": "sprite"
                 },
                 {
                     "name": "to color",
@@ -5746,10 +6174,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "facing direction"
+                    "suffix": "facing direction"
                 }
             ]
         },
@@ -5762,14 +6187,11 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "movement vector"
+                    "suffix": "movement vector"
                 }
             ]
         },
-         {
+        {
             "blocktype": "expression",
             "id": "86aa39be-5419-4abb-9765-e63f824608f0",
             "script": "{{1}}.polygon.average",
@@ -5778,10 +6200,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "center"
+                    "suffix": "center"
                 }
             ]
         },
@@ -5794,10 +6213,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "speed"
+                    "suffix": "speed"
                 }
             ]
         },
@@ -5810,10 +6226,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "horizontal speed"
+                    "suffix": "horizontal speed"
                 }
             ]
         },
@@ -5826,10 +6239,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "vertical speed"
+                    "suffix": "vertical speed"
                 }
             ]
         },
@@ -5843,10 +6253,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "left"
+                    "suffix": "left"
                 }
             ]
         },
@@ -5860,10 +6267,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "right"
+                    "suffix": "right"
                 }
             ]
         },
@@ -5877,10 +6281,7 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "top"
+                    "suffix": "top"
                 }
             ]
         },
@@ -5893,21 +6294,20 @@ wb.menu({
                 {
                     "name": "sprite",
                     "type": "sprite",
-                    "value": null
-                },
-                {
-                    "name": "bottom"
+                    "suffix": "bottom"
                 }
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/sprite.json*/
 
 /*begin languages/javascript/voice.json*/
 wb.menu({
     "sectionkey": "music",
     "name": "Music",
+    "help": "Music blocks are for creating and manipulating sound programmatically, generating the sounds rather than playing back a recorded audio file (see the Sound menu for that).",
     "blocks": [
         {
             "blocktype": "step",
@@ -5945,10 +6345,8 @@ wb.menu({
                 {
                     "name": "tone",
                     "type": "number",
-                    "value": 440
-                },
-                {
-                    "name": "Hz"
+                    "value": 440,
+                    "suffix": "Hz"
                 }
             ]
         },
@@ -6000,10 +6398,8 @@ wb.menu({
                 {
                     "name": "tempo quarter note =",
                     "type": "number",
-                    "value": 120
-                },
-                {
-                	"name": "beats per minute"
+                    "value": 120,
+                    "suffix": "beats per minute"
                 }
             ]
         },
@@ -6017,10 +6413,7 @@ wb.menu({
                 {
                     "name": "voice",
                     "type": "voice",
-                    "value": null
-                },
-                {
-                    "name": "Hz"
+                    "suffix": "Hz"
                 }
             ]
         },
@@ -6032,10 +6425,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "turn voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "on"
+                    "type": "voice",
+                    "suffix": "on"
                 }
             ]
         },
@@ -6047,10 +6438,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "turn voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "off"
+                    "type": "voice",
+                    "suffix": "off"
                 }
             ]
         },
@@ -6067,10 +6456,8 @@ wb.menu({
                 {
                     "name": "for ",
                     "type": "number",
-                    "value": 2
-                },
-                {
-                    "name": "seconds"
+                    "value": 2,
+                    "suffix": "seconds"
                 }
             ]
         },
@@ -6134,10 +6521,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "play voice",
-                    "type": "voice"
-                },
-                {
-                    "name": "stored song"
+                    "type": "voice",
+                    "suffix": "stored song"
                 }
             ]
         },
@@ -6151,10 +6536,7 @@ wb.menu({
                 {
                     "name": "voice",
                     "type": "voice",
-                    "value": null
-                },
-                {
-                    "name": "is on?"
+                    "suffix": "is on?"
                 }
             ]
         }
@@ -6166,6 +6548,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "sound",
     "name": "Sound",
+    "help": "Sound blocks can load and play sound files (wav, mp3, ogg) if those files are supported by your browser.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6174,8 +6557,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "load audio## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [
@@ -6240,6 +6622,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "arrays",
     "name": "Arrays",
+    "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6284,8 +6667,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "new array with array##",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -6298,13 +6680,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "item",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6317,8 +6698,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "join with",
@@ -6335,13 +6715,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "append",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -6353,13 +6731,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "prepend",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -6373,10 +6749,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "suffix": "length"
                 }
             ]
         },
@@ -6389,13 +6762,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "remove item",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6409,10 +6781,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "pop"
+                    "suffix": "pop"
                 }
             ]
         },
@@ -6426,10 +6795,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "shift"
+                    "suffix": "shift"
                 }
             ]
         },
@@ -6443,10 +6809,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "reversed"
+                    "suffix": "reversed"
                 }
             ]
         },
@@ -6459,13 +6822,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 },
                 {
                     "name": "concat",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -6502,10 +6863,7 @@ wb.menu({
                 {
                     "name": "array",
                     "type": "array",
-                    "value": null
-                },
-                {
-                    "name": "for each"
+                    "suffix": "for each"
                 }
             ]
         }
@@ -6518,6 +6876,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "boolean",
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",
@@ -6528,13 +6887,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "and",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6547,13 +6904,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "or",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6566,13 +6921,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 },
                 {
                     "name": "xor",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6585,8 +6938,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "not",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -6600,10 +6952,8 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": 2
-                },
-                {
-                    "name": "is even"
+                    "value": 2,
+                    "suffix": "is even"
                 }
             ]
         },
@@ -6617,10 +6967,8 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "is odd"
+                    "value": 1,
+                    "suffix": "is odd"
                 }
             ]
         }
@@ -6634,6 +6982,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "canvas",
     "name": "Canvas",
+    "help": "Canvas blocks are blocks that are about drawing on the canvas but don't fit elsewhere. Also look at the Sprites, Shapes, and Path menus.",
     "blocks": [
         {
             "blocktype": "context",
@@ -6677,7 +7026,7 @@ wb.menu({
                 {
                     "name": "global alpha",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -6704,12 +7053,12 @@ wb.menu({
                 {
                     "name": "scale x",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -6722,10 +7071,8 @@ wb.menu({
                 {
                     "name": "rotate by",
                     "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "degrees"
+                    "value": 0,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -6738,12 +7085,12 @@ wb.menu({
                 {
                     "name": "translate by x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6756,7 +7103,7 @@ wb.menu({
                 {
                     "name": "line width",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 }
             ]
         },
@@ -6797,7 +7144,7 @@ wb.menu({
                 {
                     "name": "mitre limit",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -6810,12 +7157,12 @@ wb.menu({
                 {
                     "name": "shadow offset x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6828,7 +7175,79 @@ wb.menu({
                 {
                     "name": "shadow blur",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
+            "help": "clear...",
+            "id": "cf17a61d-8c7a-4829-a476-0b650efda3e4",
+            "sockets": [
+                {
+                    "name": "clear rect",
+                    "type": "shape",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
+            "help": "circle...",
+            "id": "b4e05d48-32e4-4e0b-832c-b2433ffda2e2",
+            "sockets": [
+                {
+                    "name": "stroke circle at point",
+                    "type": "point",
+                    "value": null
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
+            "help": "fill...",
+            "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
+            "sockets": [
+                {
+                    "name": "fill shape",
+                    "type": "shape",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; Shape.strokeShape(shape##, color##, width##);",
+            "help": "stroke...",
+            "id": "90b70122-340f-46a7-9753-9c39022c00ac",
+            "sockets": [
+                {
+                    "name": "stroke shape",
+                    "type": "shape",
+                    "value": null
+                },
+                {
+                    "name": "with color",
+                    "type": "color",
+                    "value": null
+                },
+                {
+                    "name": "and width",
+                    "type": "number",
+                    "value": 1
                 }
             ]
         }
@@ -6841,6 +7260,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "color",
     "name": "Color",
+    "help": "Color blocks are for creating, converting, and manipulating colors",
     "blocks": [
         {
             "blocktype": "step",
@@ -6850,8 +7270,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "shadow color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -6891,17 +7310,17 @@ wb.menu({
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "255"
+                    "value": 0
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -6915,22 +7334,22 @@ wb.menu({
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "alpha",
                     "type": "number",
-                    "value": "0.1"
+                    "value": 0.1
                 }
             ]
         },
@@ -6944,17 +7363,17 @@ wb.menu({
                 {
                     "name": "color with hue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "saturation",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "brightness",
                     "type": "number",
-                    "value": "0]"
+                    "value": 0
                 }
             ]
         },
@@ -6978,8 +7397,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 }
             ]
         },
@@ -6991,8 +7409,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 }
             ]
         },
@@ -7004,8 +7421,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke pattern",
-                    "type": "pattern",
-                    "value": null
+                    "type": "pattern"
                 }
             ]
         },
@@ -7017,8 +7433,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill pattern",
-                    "type": "pattern",
-                    "value": null
+                    "type": "pattern"
                 }
             ]
         },
@@ -7042,23 +7457,21 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create radial gradient from point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius1",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "to point2",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius2",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7082,13 +7495,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create linear gradient from point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "to point2",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7100,13 +7511,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "add color stop to gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 },
                 {
                     "name": "at offset",
                     "type": "number",
-                    "value": "0.5"
+                    "value": 0.5
                 },
                 {
                     "name": "with color",
@@ -7135,8 +7545,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create pattern## from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "repeats",
@@ -7155,6 +7564,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "images",
     "name": "Images",
+    "help": "Image blocks are for loading image files to use in other blocks and for manipulating images. See Sprite and Canvas menus.",
     "blocks": [
         {
             "blocktype": "step",
@@ -7189,13 +7599,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7207,13 +7615,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "in rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -7225,18 +7631,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "to rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -7260,8 +7663,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create ImageData ImageData## with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
@@ -7285,8 +7687,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create ImageData ImageData## from imageData",
-                    "type": "imageData",
-                    "value": null
+                    "type": "imageData"
                 }
             ]
         },
@@ -7310,8 +7711,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "get imageData## for rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -7323,13 +7723,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7341,18 +7739,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -7365,10 +7760,7 @@ wb.menu({
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -7381,10 +7773,7 @@ wb.menu({
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -7397,10 +7786,7 @@ wb.menu({
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -7411,8 +7797,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [
@@ -7437,10 +7822,7 @@ wb.menu({
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -7453,10 +7835,7 @@ wb.menu({
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -7469,10 +7848,7 @@ wb.menu({
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "url"
+                    "suffix": "url"
                 }
             ]
         }
@@ -7485,6 +7861,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "math",
     "name": "Math",
+    "help": "Math blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "expression",
@@ -7515,12 +7892,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "+",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7534,12 +7911,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "-",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7553,12 +7930,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "×",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7572,12 +7949,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "÷",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7591,12 +7968,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "=",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7629,12 +8006,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "<",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7667,12 +8044,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": ">",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7705,12 +8082,12 @@ wb.menu({
                 {
                     "name": "pick random",
                     "type": "number",
-                    "value": "1"
+                    "value": 1
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7724,12 +8101,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "mod",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7743,7 +8120,7 @@ wb.menu({
                 {
                     "name": "round",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -7757,49 +8134,7 @@ wb.menu({
                 {
                     "name": "absolute value of",
                     "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
-            "type": "number",
-            "script": "rad2deg(Math.acos({{1}}))",
-            "help": "inverse of cosine",
-            "sockets": [
-                {
-                    "name": "arccosine degrees of",
-                    "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
-            "type": "number",
-            "script": "rad2deg(Math.asin({{1}}))",
-            "help": "inverse of sine",
-            "sockets": [
-                {
-                    "name": "arcsine degrees of",
-                    "type": "number",
-                    "value": "10"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
-            "type": "number",
-            "script": "rad2deg(Math.atan({{1}}))",
-            "help": "inverse of tangent",
-            "sockets": [
-                {
-                    "name": "arctangent degrees of",
-                    "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7813,7 +8148,7 @@ wb.menu({
                 {
                     "name": "floor of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7827,7 +8162,7 @@ wb.menu({
                 {
                     "name": "ceiling of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -7931,10 +8266,8 @@ wb.menu({
                 {
                     "name": "cosine of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -7948,10 +8281,8 @@ wb.menu({
                 {
                     "name": "sine of",
                     "type": "number",
-                    "value": "10"
-                },
-                {
-                    "name": "degrees"
+                    "value": 10,
+                    "suffix": "degrees"
                 }
             ]
         },
@@ -7965,10 +8296,143 @@ wb.menu({
                 {
                     "name": "tangent of",
                     "type": "number",
+                    "value": 10,
+                    "suffix": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "9bf66bb0-c182-42e5-b3a7-cf10de26b08c",
+            "type": "number",
+            "script": "rad2deg(Math.acos({{1}}))",
+            "help": "inverse of cosine",
+            "sockets": [
+                {
+                    "name": "arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "92f79a75-e3f4-4fc7-8f17-bf586aef180b",
+            "type": "number",
+            "script": "rad2deg(Math.asin({{1}}))",
+            "help": "inverse of sine",
+            "sockets": [
+                {
+                    "name": "arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1f5ee069-148e-4e4a-a514-5179af86be15",
+            "type": "number",
+            "script": "rad2deg(Math.atan({{1}}))",
+            "help": "inverse of tangent",
+            "sockets": [
+                {
+                    "name": "arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "52AA07F8-7C71-4BE1-902A-3F3AC88822B0",
+            "type": "number",
+            "script": "Math.cosh(deg2rad({{1}}))",
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "hyperbolic cosine of",
+                    "type": "number",
                     "value": "10"
                 },
                 {
                     "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D5D68651-B6A1-44EE-8246-87060C62860F",
+            "type": "number",
+            "script": "Math.sinh(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "hyperbolic sine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "72442F9D-0AA5-4A0E-A3E0-7D6E46A944CF",
+            "type": "number",
+            "script": "Math.tanh(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the adjacent side",
+            "sockets": [
+                {
+                    "name": "hyperbolic tangent of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8BCC0FB3-878C-4BA8-A4A1-A73C6FE9F71B",
+            "type": "number",
+            "script": "rad2deg(Math.acosh({{1}}))",
+            "help": "inverse of hyperbolic cosine",
+            "sockets": [
+                {
+                    "name": "hyperbolic arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "03A6DA1C-F1AB-499C-A97E-0F59E0A6A371",
+            "type": "number",
+            "script": "rad2deg(Math.asinh({{1}}))",
+            "help": "inverse of hyperbolic sine",
+            "sockets": [
+                {
+                    "name": "hyperbolic arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "A114C2B7-3334-4DCB-9418-F1BB40F8604D",
+            "type": "number",
+            "script": "rad2deg(Math.atanh({{1}}))",
+            "help": "inverse of hyperbolic tangent",
+            "sockets": [
+                {
+                    "name": "hyperbolic arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
                 }
             ]
         },
@@ -7982,12 +8446,12 @@ wb.menu({
                 {
                     "name": "",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "to the power of",
                     "type": "number",
-                    "value": "2"
+                    "value": 2
                 }
             ]
         },
@@ -8001,7 +8465,7 @@ wb.menu({
                 {
                     "name": "square root of",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -8059,6 +8523,126 @@ wb.menu({
                     "name": "tau"
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "076E0F96-52EA-466E-84BC-FE41A2399510",
+            "type": "number",
+            "script": "({{1}} & {{2}})",
+            "help": "bitwise AND of the two operands - useful to select only specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "and",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "74C039B2-988F-4571-8AEB-C79F772D8F2D",
+            "type": "number",
+            "script": "({{1}} | {{2}})",
+            "help": "bitwise OR of the two operands - useful to set specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "or",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "DA40D6D3-0052-4187-92EB-2F4C0A64C39F",
+            "type": "number",
+            "script": "({{1}} ^ {{2}})",
+            "help": "bitwise XOR of the two operands - useful to toggle specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "xor",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "D58C0616-1CE4-4588-90C5-B57E1221E831",
+            "type": "number",
+            "script": "({{1}} &~ {{2}})",
+            "help": "bitwise NAND of the two operands - useful to unset specific bits",
+            "sockets": [
+                {
+                    "name": "bitwise",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "nand",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "43109945-DA0A-4B16-84A5-17727C0EF994",
+            "type": "number",
+            "script": "({{1}} << Math.floor({{2}}))",
+            "help": "left bit shift",
+            "sockets": [
+                {
+                    "name": "bit shift",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "left by",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "bits"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4EE8184B-52A8-40E8-ACC6-C7D21BA90742",
+            "type": "number",
+            "script": "({{1}} >> Math.floor({{2}}))",
+            "help": "right bit shift",
+            "sockets": [
+                {
+                    "name": "bit shift",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "right by",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "bits"
+                }
+            ]
         }
     ]
 }
@@ -8069,6 +8653,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "vectors",
     "name": "Vectors",
+    "help": "Vector blocks have a direction and a magnitude, which can represent speed of movement for a Sprite. Vectors can be added to or subtracted from other Vectors, among other things.",
     "blocks": [
         {
             "blocktype": "step",
@@ -8091,15 +8676,14 @@ wb.menu({
                 {
                     "name": "vector##",
                     "type": "number",
-                    "value": 0
+                    "value": 0,
+                    "suffix": "x,"
                 },
                 {
-                    "name": "x, ",
+                    "name": "",
                     "type": "number",
-                    "value": 0
-                },
-                {
-                    "name": "y"
+                    "value": 0,
+                    "suffix": "y"
                 }
             ]
         },
@@ -8222,6 +8806,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "objects",
     "name": "Objects",
+    "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
     "blocks": [
         {
             "blocktype": "step",
@@ -8254,18 +8839,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "= value",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8278,13 +8860,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "value at key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8321,10 +8901,7 @@ wb.menu({
                 {
                     "name": "for each item in",
                     "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "do"
+                    "suffix": "do"
                 }
             ]
         }
@@ -8337,6 +8914,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "strings",
     "name": "Strings",
+    "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [
         {
             "blocktype": "expression",
@@ -8347,13 +8925,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "split string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "on separator",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8378,6 +8954,28 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "3889BB61-FC62-4BED-B0EC-792AF636EC18",
+            "type": "string",
+            "script": "{{1}}.repeat({{2}})",
+            "help": "returns a string by joining together copies of the original string",
+            "sockets": [
+                {
+                    "name": "repeat",
+                    "type": "string",
+                    "value": "hello"
+                },
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "2"
+                },
+                {
+                    "name": "times"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "e71d4b0b-f32e-4b02-aa9d-5cbe76a8abcb",
             "script": "{{1}}[{{2}}]",
             "type": "string",
@@ -8385,13 +8983,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "character at",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -8475,10 +9072,7 @@ wb.menu({
                 {
                     "name": "string",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "length"
+                    "suffix": "length"
                 }
             ]
         },
@@ -8491,13 +9085,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "search string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "for substring",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8510,13 +9102,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "test string",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "for substring",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8528,19 +9118,12 @@ wb.menu({
             "help": "get a new string by replacing a substring with a new string",
             "sockets": [
                 {
-                    "name": "in string",
-                    "type": "string",
-                    "value": null
-                },
-                {
                     "name": "replace",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "with",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8726,10 +9309,67 @@ wb.menu({
         },
         {
             "blocktype": "expression",
+            "id": "55FC2AC3-7C0E-43CD-BDDE-8E890073EDAC",
+            "type": "boolean",
+            "script": "{{1}}.startsWith({{2}})",
+            "help": "first string starts with to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "starts with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "2F3963B1-1FAC-402A-B5B6-86927DCD3241",
+            "type": "boolean",
+            "script": "{{1}}.endsWith({{2}})",
+            "help": "first string ends with to second string",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "ends with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "73A7E675-E152-454A-9B60-A7C3D54F603C",
+            "type": "boolean",
+            "script": "{{2}}.test({{1}})",
+            "help": "first string matches the given regular expression",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "matches pattern",
+                    "type": "regex",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
             "id": "D8EF192D-16BD-42AA-98A0-C6C2236392F7",
             "script": "levenshtein({{1}},{{2}})",
             "type": "number",
-            "help": "calculate how much two strings are different",
+            "help": "calculate how much two strings are different using Levenshtein difference",
             "sockets": [
                 {
                     "name": "difference of strings",
@@ -8752,8 +9392,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "to string",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8765,8 +9404,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "comment",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8778,8 +9416,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "alert",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         },
@@ -8791,8 +9428,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "console log",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -8804,13 +9440,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "console log format",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "arguments",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -8835,6 +9469,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "paths",
     "name": "Paths",
+    "help": "Path blocks are for construction more complex shapes for drawing, masking, and other uses.",
     "blocks": [
         {
             "blocktype": "context",
@@ -8855,8 +9490,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "move to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8868,8 +9502,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "line to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8881,13 +9514,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "quadradic curve to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with control point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8899,18 +9530,15 @@ wb.menu({
             "sockets": [
                 {
                     "name": "bezier curve to point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with control points",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "and",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -8922,18 +9550,16 @@ wb.menu({
             "sockets": [
                 {
                     "name": "arc to point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "1.0"
+                    "value": 1.0
                 }
             ]
         },
@@ -8945,28 +9571,26 @@ wb.menu({
             "sockets": [
                 {
                     "name": "arc with origin",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius",
-                    "type": "number",
-                    "value": "1"
+                    "type": "number"
                 },
                 {
                     "name": "start angle",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "deg, end angle",
                     "type": "number",
-                    "value": "45"
+                    "value": 45
                 },
                 {
                     "name": "deg",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -8978,8 +9602,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -8991,13 +9614,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -9022,10 +9644,7 @@ wb.menu({
                 {
                     "name": "is point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "in path?"
+                    "suffix": "in path?"
                 }
             ]
         }
@@ -9038,6 +9657,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "points",
     "name": "Points",
+    "help": "Point blocks represent and manipulate x,y coordinates.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -9049,12 +9669,12 @@ wb.menu({
                 {
                     "name": "point at x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -9067,8 +9687,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "point from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -9094,10 +9713,7 @@ wb.menu({
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "x"
+                    "suffix": "x"
                 }
             ]
         },
@@ -9111,10 +9727,7 @@ wb.menu({
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "y"
+                    "suffix": "y"
                 }
             ]
         },
@@ -9128,10 +9741,7 @@ wb.menu({
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         }
@@ -9144,8 +9754,10 @@ wb.menu({
 wb.menu({
     "sectionkey": "rects",
     "name": "Rects",
+    "help": "Rect blocks represent and manipulate rectangles represented by x,y coordinates for the top left corner of the rectangle, plus a size (width,height).",
     "blocks": [
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "67924ef4-71eb-4793-9599-d8605b14320a",
             "script": "{x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}} }",
@@ -9154,26 +9766,27 @@ wb.menu({
                 {
                     "name": "rect at x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "with width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "24b44fea-7be1-472a-a203-2a0d97515311",
             "script": "{x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h}",
@@ -9181,17 +9794,16 @@ wb.menu({
             "sockets": [
                 {
                     "name": "rect at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "68c9cfd0-d06b-41ae-9eac-d762126f6bd7",
             "script": "{x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] };",
@@ -9199,12 +9811,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "rect from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "aed385a0-7439-4b36-ad3e-fd07c562523a",
             "script": "{x: {{1}}.x, y: {{1}}.y}",
@@ -9213,14 +9825,12 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "position"
+                    "suffix": "position"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "expression",
             "id": "453db037-c418-467b-8808-52d84c7a3273",
             "script": "{w: {{1}}.w, h: {{1}}.h}",
@@ -9229,10 +9839,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "size"
+                    "suffix": "size"
                 }
             ]
         },
@@ -9245,10 +9852,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -9261,10 +9865,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "x"
+                    "suffix": "x"
                 }
             ]
         },
@@ -9277,10 +9878,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "y"
+                    "suffix": "y"
                 }
             ]
         },
@@ -9293,10 +9891,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -9309,10 +9904,7 @@ wb.menu({
                 {
                     "name": "rect",
                     "type": "rect",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         }
@@ -9325,6 +9917,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "sensing",
     "name": "Sensing",
+    "help": "Sensing blocks are for getting information from the environment, like user responses, mouse clicks, keyboard presses, and the size of the drawing area.",
     "blocks": [
         {
             "blocktype": "context",
@@ -9347,10 +9940,8 @@ wb.menu({
                 {
                     "name": "ask",
                     "type": "string",
-                    "value": "What's your name?"
-                },
-                {
-                    "name": "and wait"
+                    "value": "What's your name?",
+                    "suffix": "and wait"
                 }
             ]
         },
@@ -9401,10 +9992,8 @@ wb.menu({
                     "name": "key",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
-                {
-                    "name": "pressed?"
+                    "value": "choice",
+                    "suffix": "pressed?"
                 }
             ]
         },
@@ -9512,6 +10101,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "motion",
     "name": "Motion",
+    "help": "Motion blocks are for detecting the motion of devices equipped with accelerometers",
     "blocks": [
     	{
     		"blocktype": "expression",
@@ -9548,8 +10138,10 @@ wb.menu({
 wb.menu({
     "sectionkey": "shapes",
     "name": "Shapes",
+    "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
     "blocks": [
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
             "help": "clear...",
@@ -9557,12 +10149,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "clear rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();",
             "help": "circle...",
@@ -9570,17 +10162,17 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
             "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
@@ -9593,7 +10185,7 @@ wb.menu({
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "30"
+                    "value": 30
                 },
                 {
                     "name": "and color",
@@ -9603,6 +10195,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
             "help": "circle...",
@@ -9610,39 +10203,38 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.strokeStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();local.ctx.restore();",
             "id": "8a091a21-1fa9-49b6-a622-696c38556a2e",
             "sockets": [
                 {
                     "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "and color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();",
             "help": "circle...",
@@ -9650,17 +10242,17 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke and fill circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "script": "var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);",
             "help": "fill...",
@@ -9668,29 +10260,28 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "7a342b2b-f169-4071-8771-34394cc07393",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
             "sockets": [
                 {
                     "name": "fill rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "with color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
             "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
@@ -9713,23 +10304,23 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
             "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
             "sockets": [
                 {
                     "name": "stroke rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "with color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "b28a6aeb-bbad-4828-8ff1-2f846e556e1a",
             "script": "var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);",
@@ -9737,12 +10328,12 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "ebe1b968-f117-468d-91cb-1e67c5776030",
             "script": "local.ctx.fillRect({{1}},{{2}},{{3}},{{4}});local.ctx.strokeRect({{1}},{{2}},{{3}},{{4}});",
@@ -9751,22 +10342,22 @@ wb.menu({
                 {
                     "name": "fill and stroke rect x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -9789,6 +10380,7 @@ wb.menu({
             ]
         },
         {
+            "deprecated": true,
             "blocktype": "step",
             "id": "c0416416-9a75-4202-b3cf-54b03f9a28ee",
             "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.strokeStyle = color##; local.ctx.stroke();local.ctx.restore()",
@@ -9805,6 +10397,111 @@ wb.menu({
                     "value": null
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8219fa9f-caeb-42cf-a3e5-9cd5066b707c",
+            "script": "{type: 'circle', x: {{1}}, y: {{2}}, r: {{3}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "circle at x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "957e8a12-b933-4489-ba55-8d9a08d511a5",
+            "script": "{type: 'poly', points: {{1}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "polygon with points ",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7c7e116b-3035-43d7-9230-4d1b6cc4a7dd",
+            "script": "{type: 'rect', x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}}, r:{{5}}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect at x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "with width",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "height",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a51afa9e-f6be-444c-a591-1ca0d0ab697f",
+            "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}}",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect at point",
+                    "type": "point",
+                    "value": null
+                },
+                {
+                    "name": "with size",
+                    "type": "size",
+                    "value": null
+                },
+                {
+                    "name": "border-radius",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "b2b9d08f-5d21-4742-a1fd-3f118c254c17",
+            "script": "{type: 'rect', x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] }, r:{{1}}[4];",
+            "type": "shape",
+            "sockets": [
+                {
+                    "name": "rect from array",
+                    "type": "array",
+                    "value": null
+                }
+            ]
         }
     ]
 }
@@ -9815,6 +10512,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "geolocation",
     "name": "Geolocation",
+    "help": "Geolocation blocks are for getting your position on Earth",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -9950,6 +10648,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "sizes",
     "name": "Sizes",
+    "help": "Size blocks represent a width and height. They are often used as components of Rects.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -9960,12 +10659,12 @@ wb.menu({
                 {
                     "name": "size with width",
                     "type": "number",
-                    "value": "32"
+                    "value": 32
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "32"
+                    "value": 32
                 }
             ]
         },
@@ -9977,8 +10676,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "size from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -9991,10 +10689,7 @@ wb.menu({
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -10007,10 +10702,7 @@ wb.menu({
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -10023,10 +10715,7 @@ wb.menu({
                 {
                     "name": "size",
                     "type": "size",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         }
@@ -10039,6 +10728,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "text",
     "name": "Text",
+    "help": "Text blocks represent and manipulate the way text is drawn to the screen, things like alignment, font, and size.",
     "blocks": [
         {
             "blocktype": "step",
@@ -10049,7 +10739,7 @@ wb.menu({
                 {
                     "name": "font",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "",
@@ -10100,18 +10790,17 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -10123,23 +10812,22 @@ wb.menu({
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -10151,18 +10839,17 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -10174,23 +10861,22 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -10203,10 +10889,7 @@ wb.menu({
                 {
                     "name": "text",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         }
@@ -10219,6 +10902,7 @@ wb.menu({
 wb.menu({
     "sectionkey": "matrix",
     "name": "Matrix",
+    "help": "Matrix blocks can be used to store more complex tranformations on the canvas",
     "blocks": [
         {
             "blocktype": "step",
@@ -10227,8 +10911,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "transform by 6-matrix",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ],
             "id": "b65e02c5-b990-4ceb-ab18-2593337103d9"
@@ -10241,8 +10924,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set transform to 6-matrix",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         }

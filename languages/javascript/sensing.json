@@ -1,6 +1,7 @@
 {
     "sectionkey": "sensing",
     "name": "Sensing",
+    "help": "Sensing blocks are for getting information from the environment, like user responses, mouse clicks, keyboard presses, and the size of the drawing area.",
     "blocks": [
         {
             "blocktype": "context",
@@ -23,10 +24,8 @@
                 {
                     "name": "ask",
                     "type": "string",
-                    "value": "What's your name?"
-                },
-                {
-                    "name": "and wait"
+                    "value": "What's your name?",
+                    "suffix": "and wait"
                 }
             ]
         },
@@ -77,10 +76,8 @@
                     "name": "key",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
-                {
-                    "name": "pressed?"
+                    "value": "choice",
+                    "suffix": "pressed?"
                 }
             ]
         },

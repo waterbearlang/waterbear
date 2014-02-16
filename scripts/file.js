@@ -6,7 +6,12 @@
 // * Loading and saving to LocalStorage (including currentScript)
 // * Loading examples
 // * etc.
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
 	function saveCurrentScripts(){
@@ -15,7 +20,6 @@
 			// nothing to save
 			return;
 		}
-		wb.showWorkspace('block');
 		document.querySelector('#block_menu').scrollIntoView();
 		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
 	};

@@ -1,6 +1,7 @@
 {
     "sectionkey": "twitter",
     "name": "Twitter",
+    "help": "Social blocks are intended for working with social networking sites",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -22,8 +23,7 @@
             "sockets": [
                 {
                     "name": "get tweet for",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ]
         }

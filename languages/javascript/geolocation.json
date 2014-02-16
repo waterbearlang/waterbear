@@ -1,6 +1,7 @@
 {
     "sectionkey": "geolocation",
     "name": "Geolocation",
+    "help": "Geolocation blocks are for getting your position on Earth",
     "blocks": [
         {
             "blocktype": "eventhandler",

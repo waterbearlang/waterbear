@@ -1,6 +1,7 @@
 {
     "sectionkey": "controls",
     "name": "Controls",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -23,10 +24,22 @@
                     "name": "when",
                     "type": "choice",
                     "options": "keys",
-                    "value": "choice"
-                },
+                    "value": "choice",
+                    "suffix": "key pressed"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "f13fcf60-a7e4-4672-9ff8-06197a65af94",
+            "script": "document.addEventListener({{1}}, function(event){ [[1]]; console.log({{1}});});",
+            "help": "this trigger will run the attached blocks every time the chosen mouse event happens",
+            "sockets": [
                 {
-                    "name": "key pressed"
+                    "name": "when",
+                    "type": "choice",
+                    "options": "pointerEvents",
+                    "value": "choice"
                 }
             ]
         },
@@ -79,7 +92,7 @@
                 {
                     "name": "times a second until",
                     "type": "boolean",
-                    "value": "true"
+                    "value": true
                 }
             ]
         },
@@ -103,8 +116,7 @@
             "sockets": [
                 {
                     "name": "variable variable##",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -116,13 +128,11 @@
             "sockets": [
                 {
                     "name": "set variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "to",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -134,8 +144,7 @@
             "sockets": [
                 {
                     "name": "increment variable",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "by",
@@ -181,7 +190,7 @@
                 {
                     "name": "repeat",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -194,10 +203,8 @@
                 {
                     "name": "broadcast",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -214,8 +221,7 @@
                 },
                 {
                     "name": "message with data",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -228,10 +234,8 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ack"
-                },
-                {
-                    "name": "message"
+                    "value": "ack",
+                    "suffix": "message"
                 }
             ]
         },
@@ -256,10 +260,8 @@
                 {
                     "name": "when I receive",
                     "type": "string",
-                    "value": "ping"
-                },
-                {
-                    "name": "message with data"
+                    "value": "ping",
+                    "suffix": "message with data"
                 }
             ]
         },
@@ -284,8 +286,7 @@
             "sockets": [
                 {
                     "name": "if",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         },
@@ -297,7 +298,30 @@
             "sockets": [
                 {
                     "name": "if not",
+                    "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "AB5EB656-EF22-4DD3-9B5B-9A5187DF2F2F",
+            "script": "(({{1}}) ? ({{2}}) : ({{3}}))",
+            "help": "select a result based on a condition",
+            "type": "any",
+            "sockets": [
+                {
+                    "name": "if",
                     "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "then",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "else",
+                    "type": "any",
                     "value": null
                 }
             ]
@@ -310,8 +334,7 @@
             "sockets": [
                 {
                     "name": "repeat until",
-                    "type": "boolean",
-                    "value": null
+                    "type": "boolean"
                 }
             ]
         }

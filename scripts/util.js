@@ -1,3 +1,5 @@
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(global){
     //
     //
@@ -21,16 +23,14 @@
     };
 
     function hide(elem){
-        elem.dataset.display = elem.style.display;
-        elem.style.display = 'none';
+        elem.classList.add('hidden');
     };
 
     function show(elem){
-        elem.style.display = elem.dataset.display || 'block';
-        delete elem.dataset.display;
+        elem.classList.remove('hidden');
     };
 
-    var svgText = document.querySelector('svg text');
+    var svgText = document.querySelector('.resize-tester');
     function resize(input){
         if (!input) return;
         if (input.wbTarget){

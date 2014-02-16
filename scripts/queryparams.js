@@ -1,4 +1,6 @@
-// Sets up wb namespace (wb === waterbear)
+// Sets up wb namespace (wb === waterbear). Global variable wb
+// is initialized in the HTML before any javascript files are
+// loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
 

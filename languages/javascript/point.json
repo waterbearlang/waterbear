@@ -1,6 +1,7 @@
 {
     "sectionkey": "points",
     "name": "Points",
+    "help": "Point blocks represent and manipulate x,y coordinates.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -12,12 +13,12 @@
                 {
                     "name": "point at x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -30,8 +31,7 @@
             "sockets": [
                 {
                     "name": "point from array",
-                    "type": "array",
-                    "value": null
+                    "type": "array"
                 }
             ]
         },
@@ -57,10 +57,7 @@
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "x"
+                    "suffix": "x"
                 }
             ]
         },
@@ -74,10 +71,7 @@
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "y"
+                    "suffix": "y"
                 }
             ]
         },
@@ -91,10 +85,7 @@
                 {
                     "name": "point",
                     "type": "point",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         }

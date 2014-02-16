@@ -25,6 +25,16 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
+                            "name": "Player Stood on Position"
+                        }
+                    ],
+                    "script": "playerposition.minus(v(0,1,0))",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
                             "name": "Player Position as text"
                         }
                     ],
@@ -61,7 +71,7 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var position## = {{1}}.offset({{2}});",
+            "script": "var position## = {{1}}.plus({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",

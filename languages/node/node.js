@@ -110,7 +110,7 @@ wb.runScript = function(script){
                 oSocket.close();
                 break;
             case "error":
-                wb.resetrun("Code Failed " + msg.data);
+                wb.resetrun("Code Failed " + msg.data.toString());
                 oSocket.close();
                 break;
             case "sterr":
@@ -118,7 +118,7 @@ wb.runScript = function(script){
                 break;    
             case "stdout":
                 messagebox.innerHTML = "Data Recieved ";// + msg.data;
-                console.log("msg.data =", msg.data);
+                console.log("msg.data =", msg.data.toString());
                 break;    
         }
   

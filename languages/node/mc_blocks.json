@@ -11,7 +11,7 @@
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlockV({{1}}, function(block##){[[1]]});",
+            "script": "client.getBlock({{1}}, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -67,7 +67,7 @@
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlockV({{1}}, client.blocks[{{2}}]);",
+            "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
             "help": "set block at position"
         },
         {
@@ -93,7 +93,7 @@
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlocksV({{1}}, {{2}}, client.blocks[{{3}}]);",
+            "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
             "help": "set blocks in a 3D rectangle between the first and second postions to .."
         },
         {

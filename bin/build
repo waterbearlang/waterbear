@@ -125,7 +125,7 @@ function build(){
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
 
         // Build runtime support
-        if (lang === 'javascript' || lang === 'node' || lang === 'processingjs'){
+        if (lang === 'javascript' || lang === 'processingjs'){
             pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }

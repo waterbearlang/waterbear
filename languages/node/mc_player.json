@@ -9,7 +9,7 @@
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTileV(function(playerposition){[[1]]});",
+            "script": "client.getTile(function(playerposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -96,7 +96,7 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.setTileV({{1}});",
+            "script": "client.setTile({{1}});",
             "help": "Move Player to position"
         }
         

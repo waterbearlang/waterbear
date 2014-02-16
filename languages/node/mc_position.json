@@ -121,7 +121,7 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeightV({{1}}, function(groundposition){[[1]]});",
+            "script": "client.getHeight({{1}}, function(groundposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",

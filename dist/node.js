@@ -4693,7 +4693,7 @@ wb.runScript = function(script){
                 oSocket.close();
                 break;
             case "error":
-                wb.resetrun("Code Failed " + msg.data);
+                wb.resetrun("Code Failed " + msg.data.toString());
                 oSocket.close();
                 break;
             case "sterr":
@@ -4701,7 +4701,7 @@ wb.runScript = function(script){
                 break;    
             case "stdout":
                 messagebox.innerHTML = "Data Recieved ";// + msg.data;
-                console.log("msg.data =", msg.data);
+                console.log("msg.data =", msg.data.toString());
                 break;    
         }
   
@@ -4883,7 +4883,7 @@ wb.requiredjs.after.firmata =  "";
 /*begin languages/node/mc_game.js*/
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\n//require('./waterbear/dist/node_runtime.js');";
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
 
 wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 
@@ -5537,7 +5537,7 @@ wb.menu({
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTileV(function(playerposition){[[1]]});",
+            "script": "client.getTile(function(playerposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5547,6 +5547,16 @@ wb.menu({
                         }
                     ],
                     "script": "playerposition",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Player Stood on Position"
+                        }
+                    ],
+                    "script": "playerposition.minus(v(0,1,0))",
                     "type": "position"
                 },
                 {
@@ -5589,7 +5599,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var position## = {{1}}.offset({{2}});",
+            "script": "var position## = {{1}}.plus({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5614,7 +5624,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.setTileV({{1}});",
+            "script": "client.setTile({{1}});",
             "help": "Move Player to position"
         }
         
@@ -5723,7 +5733,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var position## = {{1}}.offset({{2}});",
+            "script": "var position## = {{1}}.plus({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5748,7 +5758,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeightV({{1}}, function(groundposition){[[1]]});",
+            "script": "client.getHeight({{1}}, function(groundposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5927,6 +5937,30 @@ wb.menu({
                 }
             ],
             "help": "create new position by adding a distance and direction"
+        },
+        {
+            "blocktype": "expression",
+            "type":"boolean",
+            "id": "635a2e41-94d8-4f63-b20b-8e9340c0f2c5",
+            "sockets": [
+                {
+                    "name": "Is",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "between",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "and",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "({{1}}.min({{2}}).equal({{2}}) && {{1}}.max({{3}}).equal({{3}}))",
+            "help": "is 1st point between 2nd and 3rd"
         }
     ]
 });
@@ -5946,7 +5980,7 @@ wb.menu({
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlockV({{1}}, function(block##){[[1]]});",
+            "script": "client.getBlock({{1}}, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -6002,7 +6036,7 @@ wb.menu({
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlockV({{1}}, client.blocks[{{2}}]);",
+            "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
             "help": "set block at position"
         },
         {
@@ -6028,7 +6062,7 @@ wb.menu({
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlocksV({{1}}, {{2}}, client.blocks[{{3}}]);",
+            "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
             "help": "set blocks in a 3D rectangle between the first and second postions to .."
         },
         {

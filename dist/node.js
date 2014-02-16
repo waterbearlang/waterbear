@@ -4591,7 +4591,6 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 
 wb.wrap = function(script){
-    //return 'try{' + script + '}catch(e){console,log(e);}})()';
     return script;
 };
 
@@ -4644,7 +4643,10 @@ wb.resetrun = function(message){
 wb.runScript = function(script){
 
     // TODO : workout the ws address from the page address
-    var oSocket = new WebSocket("ws://192.168.1.101:8080/");
+    var aHost = window.location.host.split(":");
+    var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
+    
+    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
     
     var messagebox = document.querySelector('#messagebox');
     if(messagebox === null || messagebox.length === 0)
@@ -4667,9 +4669,7 @@ wb.runScript = function(script){
     };
     
     oSocket.onmessage = function(event) {
-        console.log("event =", event);
         var msg = JSON.parse(event.data);
-        console.log("onmessage msg =", msg);
         switch(msg.type) {
             case "recieved":
                 messagebox.innerHTML = "Code recieved on RPi";
@@ -4679,7 +4679,6 @@ wb.runScript = function(script){
                 document.querySelector('.run-scripts').style.display = 'none';
                 document.querySelector('.stop-scripts').style.display = 'inline-block';
                 
-                //Event.on('.stop-scripts', 'click', null, function(){
                 Event.once('.stop-scripts', 'click', null, function(){
                       oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
                 });
@@ -4701,7 +4700,7 @@ wb.runScript = function(script){
                 messagebox.innerHTML = "Error Recieved " + msg.data;
                 break;    
             case "stdout":
-                messagebox.innerHTML = "Data Recieved " + msg.data;
+                messagebox.innerHTML = "Data Recieved ";// + msg.data;
                 console.log("msg.data =", msg.data);
                 break;    
         }
@@ -4763,40 +4762,27 @@ Event.on('.edit-script', 'click', null, clearStage);
 wb.prettyScript = function(elements){
     
     var groups = wb.getGroupsFromElements(elements);    
-    console.log("groups =", groups);
-    
     var before = groups.map(function(group){
-            console.log("before group =", group);
-            
-            var req = wb.requiredjs.before[group];
-            if(typeof req !== "undefined")
-            {
-                return req;
-            }
-            return "";
+        var req = wb.requiredjs.before[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
     }).join(" ")+ "\n// Your code starts here\n";
     
-    
-            console.log("wb.requiredjs.before =", wb.requiredjs.before);
-    console.log("before =", before);
-    
     var after = "\n//Your code ends here\n"+groups.map(function(group){
-            
-            var req = wb.requiredjs.after[group];
-            if(typeof req !== "undefined")
-            {
-                return req;
-            }
-            return "";
+        var req = wb.requiredjs.after[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
     }).join(" ");
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
     }).join('');
-    
-    
-            console.log("wb.requiredjs.after =", wb.requiredjs.after);
-    console.log("after =", after);
     
     var pretty = js_beautify(before+script+after);
     
@@ -4897,10 +4883,16 @@ wb.requiredjs.after.firmata =  "";
 /*begin languages/node/mc_game.js*/
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');";
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\n//require('./waterbear/dist/node_runtime.js');";
 
 wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 
+
+// TODO : fix blocktypes to number or text not both
+// TODO : find direction code and loops
+// TODO : find distance code
+// TODO : write in area detect
+// TODO : research the eventsBlockHits
 
 /*end languages/node/mc_game.js*/
 
@@ -4912,6 +4904,24 @@ wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.l
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
+wb.choiceLists.directions= ['up', 'down', 'north', 'south','east','west','none'];
+
+
+
+/*,
+        {
+            "blocktype": "expression",
+            "id": "9ec42170-3575-4993-85b1-a51d515e3463",
+            "sockets": [
+                {
+                    "name": "Temp Position"
+                }
+            ],
+            "type": "position",
+            "script": "tempposition",
+            "help": "position"
+        }
+        */
 /*end languages/node/mc_position.js*/
 
 /*begin languages/node/mc_blocks.js*/
@@ -5147,7 +5157,7 @@ wb.menu({
             "help": "repeat until the condition is false",
             "sockets": [
                 {
-                    "name": "Forever if",
+                    "name": "Repeat While",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -5173,9 +5183,6 @@ wb.menu({
                     "type": "choice",
                     "options": "pifacein",
                     "value": "choice"
-                },
-                {
-                    "name": "is ON"
                 }
             ]
         },
@@ -5184,10 +5191,10 @@ wb.menu({
             "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
             "script": "pfio.read_input()",
             "type": "int",
-            "help": "8 Pins as a Digital Input",
+            "help": "All 8 Pins as a Digital Input",
             "sockets": [
                 {
-                    "name": "All Inputs as number"
+                    "name": "Inputs as number"
                 }
             ]
         },
@@ -5200,16 +5207,13 @@ wb.menu({
                 {
                     "name": "Set output",
                     "type": "choice",
-                    "options": "pifacein",
+                    "options": "pifaceout",
                     "value": "choice"
                 },
                 {
                     "name": "to",
                     "type": "boolean",
-                    "value": null,
-                    "atype": "choice",
-                    "aoptions": "pifaceonoff",
-                    "avalue": "choice"
+                    "value": null
                 }
             ]
         },
@@ -5225,7 +5229,66 @@ wb.menu({
                     "value": "0"
                 }
             ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "c18294d2-8df0-4d3f-8f80-3f24f46b17c3",
+            "script": "output## = {{1}};",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create output## using Output Pin",
+                    "type": "choice",
+                    "options": "pifaceout",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "output##"
+                        },
+                        {
+                            "name": "=",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "pfio.digital_write(output##,{{1}});"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "353a7962-7318-470d-8b19-09c5568ba413",
+            "script": "input## = {{1}};",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "input##"
+                        }
+                    ],
+                    "script": "pfio.digital_read(input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create input## using Input Pin",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                }
+            ]
         }
+        
     ]
 });
 /*end languages/node/piface.json*/
@@ -5410,7 +5473,7 @@ wb.menu({
                         "name": "Connect To Minecraft"
                     }
                 ],
-            "script": "var client = new Minecraft('localhost', 4711, function() {var zeros={x:0, y:0, z:0};[[1]]});",
+            "script": "var client = new Minecraft('localhost', 4711, function() {[[1]]});",
             "help": "All Minecraft things in here"
         },
         
@@ -5421,7 +5484,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Say",
-                    "type": "string",
+                    "type": "any",
                     "value": "hi"
                 },
                 {
@@ -5429,7 +5492,7 @@ wb.menu({
                 }
                 
             ],
-            "script": "client.chat({{1}});",
+            "script": "client.chat({{1}}.toString());",
             "help": "Send a message as chat"
         },
         
@@ -5474,7 +5537,7 @@ wb.menu({
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]});",
+            "script": "client.getTileV(function(playerposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5493,7 +5556,7 @@ wb.menu({
                             "name": "Player Position as text"
                         }
                     ],
-                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
+                    "script": "playerposition.toString()",
                     "type": "string"
                 }
             ],
@@ -5526,7 +5589,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var posA## = {{1}};var posB## = {{2}};var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            "script": "var position## = {{1}}.offset({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5551,8 +5614,8 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
-            "help": "Move Player to x, y, z of position"
+            "script": "client.setTileV({{1}});",
+            "help": "Move Player to position"
         }
         
     
@@ -5584,9 +5647,9 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
-            ], 
-            "type":"position",
-            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
+            ],
+            "type": "position",
+            "script": "v({{1}}, {{2}} , {{3}})",
             "help": "A position: x is across, y is up and z is depth"
         },
         {
@@ -5596,12 +5659,11 @@ wb.menu({
                 {
                     "name": "Centre Position"
                 }
-            ], 
-            "type":"position",
-            "script": "zeros",
+            ],
+            "type": "position",
+            "script": "v()",
             "help": "position"
         },
-        
         {
             "blocktype": "step",
             "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
@@ -5611,8 +5673,8 @@ wb.menu({
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
-            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = posA##;",
+            ],
+            "script": "var position## = {{1}}.clone();",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5620,13 +5682,11 @@ wb.menu({
                         {
                             "name": "Position##"
                         }
-                    ],  
-                    
+                    ],
                     "script": "position##",
                     "type": "position"
                 }
             ],
-            
             "help": "create new position"
         },
         {
@@ -5643,8 +5703,8 @@ wb.menu({
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
-            "script": "({{1}}.x === {{2}}.x && {{1}}.y === {{2}}.y && {{1}}.z === {{2}}.z);",
+            ],
+            "script": "({{1}}.equal({{2}})",
             "type": "boolean",
             "help": "are 2 positions the same"
         },
@@ -5662,8 +5722,8 @@ wb.menu({
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
-            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            ],
+            "script": "var position## = {{1}}.offset({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5671,13 +5731,11 @@ wb.menu({
                         {
                             "name": "Position##"
                         }
-                    ],  
-                    
+                    ],
                     "script": "position##",
                     "type": "position"
                 }
             ],
-            
             "help": "create new position by adding 2 others"
         },
         {
@@ -5690,7 +5748,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]});",
+            "script": "client.getHeightV({{1}}, function(groundposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5710,11 +5768,11 @@ wb.menu({
             "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
             "sockets": [
                 {
-                    "name": "x from",                    
+                    "name": "x from",
                     "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
+            ],
             "script": "{{1}}.x",
             "type": "number",
             "help": "the x (across) part of the postion"
@@ -5726,9 +5784,9 @@ wb.menu({
                 {
                     "name": "y from",
                     "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
+            ],
             "script": "{{1}}.y",
             "type": "number",
             "help": "the y (up) part of the postion"
@@ -5740,9 +5798,9 @@ wb.menu({
                 {
                     "name": "z from",
                     "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
+            ],
             "script": "{{1}}.z",
             "type": "number",
             "help": "the z (depth) part of the postion"
@@ -5759,42 +5817,156 @@ wb.menu({
                 {
                     "name": "as text"
                 }
-            ],  
-            "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
+            ],
+            "script": "{{1}}.toString()",
             "type": "string",
             "help": "Position as text"
+        },
+        {
+            "blocktype": "step",
+            "id": "e28a420d-9b94-4480-ad0f-ebe4e68134b0",
+            "sockets": [
+                {
+                    "name": "Set",
+                    "type": "position",
+                    "block": "590c8aef-a755-4df5-8930-b430db5a3c3d"
+                },
+                {
+                    "name": "to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.update({{2}});",
+            "help": "Set position variable to a new postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "d453a2dc-cebc-47dd-b421-09d450bd7e88",
+            "sockets": [
+                {
+                    "name": "Distance from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.distanceTo({{2}})",
+            "type":"number",
+            "help": "the distance between 2 positions"
+        },
+        {
+            "blocktype": "context",
+            "id": "10ec4498-1aa8-44ff-9620-b338a2cdc3cb",
+            "sockets": [
+                {
+                    "name": "For each direction from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "block(s)"
+                }
+            ],
+            "script": "client.directions.forEach(function(dir, idx){var position##=client.directioncalcs[dir]({{1}},{{2}});[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "Go around each direction"
+        },
+        {
+            "blocktype": "step",
+            "id": "4072476e-cdc4-43b1-b36b-a8c5829c113c",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "offset by",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": " ",
+                    "type": "choice",
+                    "options": "directions",
+                    "value": "choice"
+                }
+            ],
+            "script": "var position##=client.directioncalcs[{{3}}]({{1}},{{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position by adding a distance and direction"
         }
     ]
-}
-);
+});
 /*end languages/node/mc_position.json*/
 
 /*begin languages/node/mc_blocks.json*/
 wb.menu({
     "name": "Blocks",
-    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
     "blocks": [
         {
             "blocktype": "context",
-            "id": "b8020f54-43d2-4207-8529-336eb035898c",
+            "id": "c500a7f0-7117-40ea-9139-b161e19f190b",
             "sockets": [
                     {
-                        "name": "get Block Type at",
+                        "name": "Get Block Type at",
                         "type": "position",
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
+            "script": "client.getBlockV({{1}}, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                             {
-                                "name": "block##"
+                                "name": "Block Type Number"
                             }
                         ],
-                    "script": "parseInt(block##)",
+                    "script": "block##",
                     "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "Block Type Name"
+                            }
+                        ],
+                    "script": "client.getBlockName(block##)",
+                    "type": "string"
                 }
             ],
             "help": "get block type at x, y, z"
@@ -5804,13 +5976,13 @@ wb.menu({
             "id": "a7c17404-8555-42be-877e-9d01d7647604",
             "sockets": [
                     {
-                    "name": "block",
+                    "name":"block",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
                 }
                 ],
-            "script": "{{1}}",
+            "script": "client.blocks[{{1}}]",
             "type": "number",
             "help": "a blocktype"
         },
@@ -5830,7 +6002,7 @@ wb.menu({
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlock({{1}}.x, {{1}}.y, {{1}}.z, client.blocks[{{2}}]);",
+            "script": "client.setBlockV({{1}}, client.blocks[{{2}}]);",
             "help": "set block at position"
         },
         {
@@ -5840,6 +6012,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set Blocks between",
+                
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
@@ -5855,7 +6028,7 @@ wb.menu({
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
+            "script": "client.setBlocksV({{1}}, {{2}}, client.blocks[{{3}}]);",
             "help": "set blocks in a 3D rectangle between the first and second postions to .."
         },
         {
@@ -5868,7 +6041,7 @@ wb.menu({
                     "value": "0"
                 }
             ],
-            "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
+            "script": "client.getBlockName({{1}})",
             "type": "string",
             "help": "name of a blocktype by number"
         }

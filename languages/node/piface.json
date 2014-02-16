@@ -13,9 +13,6 @@
                     "type": "choice",
                     "options": "pifacein",
                     "value": "choice"
-                },
-                {
-                    "name": "is ON"
                 }
             ]
         },
@@ -24,10 +21,10 @@
             "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
             "script": "pfio.read_input()",
             "type": "int",
-            "help": "8 Pins as a Digital Input",
+            "help": "All 8 Pins as a Digital Input",
             "sockets": [
                 {
-                    "name": "All Inputs as number"
+                    "name": "Inputs as number"
                 }
             ]
         },
@@ -40,16 +37,13 @@
                 {
                     "name": "Set output",
                     "type": "choice",
-                    "options": "pifacein",
+                    "options": "pifaceout",
                     "value": "choice"
                 },
                 {
                     "name": "to",
                     "type": "boolean",
-                    "value": null,
-                    "atype": "choice",
-                    "aoptions": "pifaceonoff",
-                    "avalue": "choice"
+                    "value": null
                 }
             ]
         },
@@ -65,6 +59,65 @@
                     "value": "0"
                 }
             ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "c18294d2-8df0-4d3f-8f80-3f24f46b17c3",
+            "script": "output## = {{1}};",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create output## using Output Pin",
+                    "type": "choice",
+                    "options": "pifaceout",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "output##"
+                        },
+                        {
+                            "name": "=",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "pfio.digital_write(output##,{{1}});"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "353a7962-7318-470d-8b19-09c5568ba413",
+            "script": "input## = {{1}};",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "input##"
+                        }
+                    ],
+                    "script": "pfio.digital_read(input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create input## using Input Pin",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                }
+            ]
         }
+        
     ]
 }

@@ -8,7 +8,6 @@
 
 
 wb.wrap = function(script){
-    //return 'try{' + script + '}catch(e){console,log(e);}})()';
     return script;
 };
 
@@ -61,7 +60,10 @@ wb.resetrun = function(message){
 wb.runScript = function(script){
 
     // TODO : workout the ws address from the page address
-    var oSocket = new WebSocket("ws://192.168.1.101:8080/");
+    var aHost = window.location.host.split(":");
+    var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
+    
+    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
     
     var messagebox = document.querySelector('#messagebox');
     if(messagebox === null || messagebox.length === 0)
@@ -84,9 +86,7 @@ wb.runScript = function(script){
     };
     
     oSocket.onmessage = function(event) {
-        console.log("event =", event);
         var msg = JSON.parse(event.data);
-        console.log("onmessage msg =", msg);
         switch(msg.type) {
             case "recieved":
                 messagebox.innerHTML = "Code recieved on RPi";
@@ -96,7 +96,6 @@ wb.runScript = function(script){
                 document.querySelector('.run-scripts').style.display = 'none';
                 document.querySelector('.stop-scripts').style.display = 'inline-block';
                 
-                //Event.on('.stop-scripts', 'click', null, function(){
                 Event.once('.stop-scripts', 'click', null, function(){
                       oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
                 });
@@ -118,7 +117,7 @@ wb.runScript = function(script){
                 messagebox.innerHTML = "Error Recieved " + msg.data;
                 break;    
             case "stdout":
-                messagebox.innerHTML = "Data Recieved " + msg.data;
+                messagebox.innerHTML = "Data Recieved ";// + msg.data;
                 console.log("msg.data =", msg.data);
                 break;    
         }
@@ -180,40 +179,27 @@ Event.on('.edit-script', 'click', null, clearStage);
 wb.prettyScript = function(elements){
     
     var groups = wb.getGroupsFromElements(elements);    
-    console.log("groups =", groups);
-    
     var before = groups.map(function(group){
-            console.log("before group =", group);
-            
-            var req = wb.requiredjs.before[group];
-            if(typeof req !== "undefined")
-            {
-                return req;
-            }
-            return "";
+        var req = wb.requiredjs.before[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
     }).join(" ")+ "\n// Your code starts here\n";
     
-    
-            console.log("wb.requiredjs.before =", wb.requiredjs.before);
-    console.log("before =", before);
-    
     var after = "\n//Your code ends here\n"+groups.map(function(group){
-            
-            var req = wb.requiredjs.after[group];
-            if(typeof req !== "undefined")
-            {
-                return req;
-            }
-            return "";
+        var req = wb.requiredjs.after[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
     }).join(" ");
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
     }).join('');
-    
-    
-            console.log("wb.requiredjs.after =", wb.requiredjs.after);
-    console.log("after =", after);
     
     var pretty = js_beautify(before+script+after);
     

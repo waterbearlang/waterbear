@@ -201,7 +201,7 @@
             "help": "repeat until the condition is false",
             "sockets": [
                 {
-                    "name": "Forever if",
+                    "name": "Repeat While",
                     "type": "boolean",
                     "value": "false"
                 }

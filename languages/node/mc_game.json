@@ -10,7 +10,7 @@
                         "name": "Connect To Minecraft"
                     }
                 ],
-            "script": "var client = new Minecraft('localhost', 4711, function() {var zeros={x:0, y:0, z:0};[[1]]});",
+            "script": "var client = new Minecraft('localhost', 4711, function() {[[1]]});",
             "help": "All Minecraft things in here"
         },
         
@@ -21,7 +21,7 @@
             "sockets": [
                 {
                     "name": "Say",
-                    "type": "string",
+                    "type": "any",
                     "value": "hi"
                 },
                 {
@@ -29,7 +29,7 @@
                 }
                 
             ],
-            "script": "client.chat({{1}});",
+            "script": "client.chat({{1}}.toString());",
             "help": "Send a message as chat"
         },
         

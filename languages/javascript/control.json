@@ -31,7 +31,7 @@
         {
             "blocktype": "eventhandler",
             "id": "f13fcf60-a7e4-4672-9ff8-06197a65af94",
-            "script": "document.addEventListener({{1}}, function(event){ [[1]]; console.log({{1}});});",
+            "script": "document.addEventListener({{1}}, function(event){ [[1]]; });",
             "help": "this trigger will run the attached blocks every time the chosen mouse event happens",
             "sockets": [
                 {

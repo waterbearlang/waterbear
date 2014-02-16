@@ -2668,9 +2668,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
 
-	    dragTarget.style.position = "fixed";
-	    dragTarget.style.left = oldX - newOriginX;
-	    dragTarget.style.top =  oldY - newOriginY;
+	    dragTarget.style.position = "absolute";
+	    dragTarget.style.left = (oldX - newOriginX) + "px";
+	    dragTarget.style.top = (oldY - newOriginY) + "px";
 	    scratchpad.appendChild(dragTarget);
 
             //when dragging from workspace to scratchpad, this keeps workspace from
@@ -2971,7 +2971,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
+	Event.on('.scratchpad', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousedown', '.block', initDrag);
+	Event.on('.scratchpad', 'mousemove', null, drag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
         Event.on(document.body, 'keyup', null, cancelDrag);

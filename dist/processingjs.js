@@ -14601,8 +14601,12 @@ initContextMenus();
 
 initLanguageFiles();
 
+languageData = {};
+
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
+    languageData[blockspec.sectionkey] = blockspec;
+
     var title = blockspec.name.replace(/\W/g, '');
     var specs = blockspec.blocks;
     var help = blockspec.help !== undefined ? blockspec.help : '';
@@ -14632,7 +14636,7 @@ function edit_menu(title, specs, help, show){
 function initLanguageFiles(){
 
     listFiles = ['languages/javascript/localizations/es/array.json'];
-    
+
     listFiles.forEach(function(){
         wb.ajax('languages/javascript/localizations/es/array.json', function(exampleJson){
             console.log(JSON.parse(exampleJson));

@@ -5359,7 +5359,19 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "f13fcf60-a7e4-4672-9ff8-06197a65af94",
-            "script": "document.addEventListener({{1}}, function(event){ [[1]]; });",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "event##"
+                        }
+                    ],
+                    "script": "local.event##",
+                    "type": "object"
+                }
+            ],
+            "script": "document.addEventListener({{1}}, function(event){local.event##=event;[[1]]; });",
             "help": "this trigger will run the attached blocks every time the chosen mouse event happens",
             "sockets": [
                 {

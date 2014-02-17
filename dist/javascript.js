@@ -5259,6 +5259,10 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
 
 /*end languages/javascript/math.js*/
 
+/*begin languages/javascript/random.js*/
+
+/*end languages/javascript/random.js*/
+
 /*begin languages/javascript/vector.js*/
 /*
  *    Vector Plugin
@@ -8063,25 +8067,6 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
-            "type": "number",
-            "script": "randint({{1}}, {{2}})",
-            "help": "random number between two numbers (inclusive)",
-            "sockets": [
-                {
-                    "name": "pick random",
-                    "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "to",
-                    "type": "number",
-                    "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
             "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
             "type": "number",
             "script": "({{1}} % {{2}})",
@@ -8637,6 +8622,91 @@ wb.menu({
 }
 );
 /*end languages/javascript/math.json*/
+
+/*begin languages/javascript/random.json*/
+wb.menu({
+	"name": "Random",
+	"help": "Various forms of randomness for your code",
+	"blocks": [
+        {
+            "blocktype": "expression",
+            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+            "type": "number",
+            "script": "randint({{1}}, {{2}})",
+            "help": "random number between two numbers (inclusive)",
+            "sockets": [
+                {
+                    "name": "pick random integer from",
+                    "type": "number",
+                    "value": 1
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": 10
+                }
+            ]
+        },
+        {
+        	"blocktype": "expression",
+        	"id": "4bc09592-ed3c-4a0c-b0bd-8e520d5385b6",
+        	"type": "number",
+        	"script": "noise({{1}},{{2}},{{3}})",
+        	"help": "generates Perlin noise from 3 dimensions",
+        	"sockets": [
+        		{
+        			"name": "noise from x",
+        			"type": "number",
+        			"value": 0.001
+        		},
+        		{
+        			"name": "y",
+        			"type": "number",
+        			"value": 0.002
+        		},
+        		{
+        			"name": "z",
+        			"type": "number",
+        			"value": 0.003
+        		}
+        	]
+        },
+        {
+        	"blocktype": "expression",
+        	"id": "24bd9687-b29d-45af-9a00-b7961bcbd65d",
+        	"type": "number",
+        	"script": "noise({{1}},{{2}},1)",
+        	"help": "generates Perlin noise from 2 dimensions",
+        	"sockets": [
+        		{
+        			"name": "noise from x",
+        			"type": "number",
+        			"value": 0.001
+        		},
+        		{
+        			"name": "y",
+        			"type": "number",
+        			"value": 0.002
+        		}
+        	]
+        },
+        {
+        	"blocktype": "expression",
+        	"id": "e3a04097-3fb2-44f8-abe4-2047e15fab21",
+        	"type": "number",
+        	"script": "noise({{1}},1,1)",
+        	"help": "generates Perlin noise from 1 dimension",
+        	"sockets": [
+        		{
+        			"name": "noise from x",
+        			"type": "number",
+        			"value": 0.001
+        		}
+        	]
+        }
+	]
+});
+/*end languages/javascript/random.json*/
 
 /*begin languages/javascript/vector.json*/
 wb.menu({

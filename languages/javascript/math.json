@@ -213,25 +213,6 @@
         },
         {
             "blocktype": "expression",
-            "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
-            "type": "number",
-            "script": "randint({{1}}, {{2}})",
-            "help": "random number between two numbers (inclusive)",
-            "sockets": [
-                {
-                    "name": "pick random",
-                    "type": "number",
-                    "value": 1
-                },
-                {
-                    "name": "to",
-                    "type": "number",
-                    "value": 10
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
             "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
             "type": "number",
             "script": "({{1}} % {{2}})",

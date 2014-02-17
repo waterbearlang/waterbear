@@ -2574,6 +2574,14 @@ a .icon-flip-vertical:before {
 
 /*end languages/javascript/math.css*/
 
+/*begin languages/javascript/random.css*/
+.random, .random .holder{
+    border-color: hsl(85, 65%, 79%);
+    background-color: hsl(85, 62%, 89%);
+}
+
+/*end languages/javascript/random.css*/
+
 /*begin languages/javascript/vector.css*/
 .vectors, .vectors .holder{
     border-color: hsl(55, 81%, 49%);

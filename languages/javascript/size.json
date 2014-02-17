@@ -14,9 +14,21 @@
                     "value": 32
                 },
                 {
+                    "name": "",
+                    "type": "choice",
+                    "options": "unit",
+                    "value": "px"
+                },
+                {
                     "name": "height",
                     "type": "number",
                     "value": 32
+                },
+                {
+                    "name": "",
+                    "type": "choice",
+                    "options": "unit",
+                    "value": "px"
                 }
             ]
         },

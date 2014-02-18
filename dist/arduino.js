@@ -650,23 +650,24 @@
 	//For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
-        /*if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
+        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
-        }*/
+        }
 	
 	var target = null;
 	console.log("about to go into scratchpad");
 	if (eT.classList.contains('scratchpad')) {
 	    console.log("Starting drag in scratchpad");
+	    console.log(event.target);
 	    if (event.target.classList.contains('block')) {
 		console.log("The event has block");
 		target = event.target;
+	    } else {
+		console.log("didn't click on a block");
 	    }
 	} else {
 	    target = wb.closest(eT, '.block'); // <- WB
-	    console.log("THe event doesn't have block");
-	    console.log(target);
 	}
 	//This throws an error when block is in scratchpad
         if (target){
@@ -1128,7 +1129,7 @@
     function registerScratchSpace() {
 	var workspace = document.querySelector('.workspace');
 	var mainWorkspace = document.querySelector('scripts_workspace');
-	var id = uuid();
+	var id = "23423443";
 	var sBlock = wb.Block({
 			group: 'scripts_scratchspace',
 			id: id,
@@ -1136,9 +1137,6 @@
 			scopeId: id,
 			blocktype: 'context',
 			sockets: [
-			{
-				name: name
-			}
 			],
 			script: '[[1]]',
 			isTemplateBlock: false,
@@ -1169,7 +1167,7 @@
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
-	//Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+	Event.on('.content', 'mousedown', '.scratchpad', initDrag);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

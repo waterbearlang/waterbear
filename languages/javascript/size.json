@@ -5,7 +5,7 @@
         {
             "blocktype": "expression",
             "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
-            "script": "{w: {{1}}, h: {{2}} }",
+            "script": "{w: {{1}}, h: {{3}}, wUnit: {{2}}, hUnit: {{4}}}",
             "type": "size",
             "sockets": [
                 {
@@ -16,8 +16,9 @@
                 {
                     "name": "",
                     "type": "choice",
+                    "value": "choice",
                     "options": "unit",
-                    "value": "px"
+                    "uValue": "px"
                 },
                 {
                     "name": "height",
@@ -27,8 +28,9 @@
                 {
                     "name": "",
                     "type": "choice",
+                    "value": "choice",
                     "options": "unit",
-                    "value": "px"
+                    "uValue": "px"
                 }
             ]
         },

@@ -78,3 +78,11 @@ function noise(x, y, z) {
                                      grad(p[BB+1], x-1, y-1, z-1 )))));
 }
 
+function choice(list){
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function removeChoice(list){
+  return list.splice(Math.floor(Math.random() * list.length), 1);
+}
+

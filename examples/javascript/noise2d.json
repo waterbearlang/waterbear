@@ -1,6 +1,6 @@
 {
-    "title": "",
-    "description": "",
+    "title": "Noise 2D",
+    "description": "Static demo of Perlin Noise",
     "date": 1392595598143,
     "waterbearVersion": "2.0",
     "blocks": [

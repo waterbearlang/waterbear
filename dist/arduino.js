@@ -240,6 +240,7 @@
             }
             if (!elem.parentElement){
                 throw new Error('Element has no parent, is it in the tree? %o', elem);
+                //return null;
             }
             elem = elem.parentElement;
         }
@@ -639,17 +640,37 @@
 
 
     function initDrag(event){
-        // console.log('initDrag(%o)', event);
+         console.log('initDrag(%o)', event);
+	 
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
+	
         var eT = event.wbTarget; // <- WB
+	console.log(eT);
+	//For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
-            // console.log('not a drag handle');
+            console.log('not a drag handle');
             return undefined;
         }
-        var target = wb.closest(eT, '.block'); // <- WB
+	
+	var target = null;
+	console.log("about to go into scratchpad");
+	if (eT.classList.contains('scratchpad')) {
+	    console.log("Starting drag in scratchpad");
+	    console.log(event.target);
+	    var clickedBlock = getClickedBlock(scratchpad, event);
+	    if (clickedBlock != false) {
+		console.log("The event has block");
+		target = clickedBlock;
+	    } else {
+		console.log("didn't click on a block");
+	    }
+	} else {
+	    target = wb.closest(eT, '.block'); // <- WB
+	}
+	//This throws an error when block is in scratchpad
         if (target){
             // WB-Specific
             if (wb.matches(target, '.scripts_workspace')){
@@ -819,7 +840,6 @@
         		wb.history.add(dragAction);
         	}
         } else if (wb.overlap(dragTarget, scratchpad)) {
-	    console.log(dragTarget);
 	    var scratchPadStyle = scratchpad.getBoundingClientRect();
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
@@ -828,15 +848,15 @@
 	    var oldX = blockStyle.left;
 	    var oldY = blockStyle.top;
 
-	    dragTarget.style.position = "fixed";
-	    dragTarget.style.left = oldX - newOriginX;
-	    dragTarget.style.top =  oldY - newOriginY;
+	    dragTarget.style.position = "absolute";
+	    dragTarget.style.left = (oldX - newOriginX) + "px";
+	    dragTarget.style.top = (oldY - newOriginY) + "px";
 	    scratchpad.appendChild(dragTarget);
 
             //when dragging from workspace to scratchpad, this keeps workspace from
 	    //moving around when block in scratchpad is moved.
             //dragTarget.parentElement.removeChild(dragTarget); 
-            //Event.trigger(dragTarget, 'wb-add');
+            Event.trigger(dragTarget, 'wb-add');
 	    return;
 	}
 	
@@ -1107,8 +1127,25 @@
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function dragFromScratchPad(event){
-	dragTarget = event.target;
+    function registerScratchSpace() {
+	var workspace = document.querySelector('.workspace');
+	var mainWorkspace = document.querySelector('scripts_workspace');
+	var id = "23423443";
+	var sBlock = wb.Block({
+			group: 'scripts_scratchspace',
+			id: id,
+			scriptId: id,
+			scopeId: id,
+			blocktype: 'context',
+			sockets: [
+			],
+			script: '[[1]]',
+			isTemplateBlock: false,
+			help: 'Place script blocks here for quick access'
+		});
+	
+	workspace.insertBefore(sBlock, mainWorkspace);
+	
     }
     
     function cancelDrag(event) {
@@ -1123,6 +1160,28 @@
 	    return false;
 	}
     }
+    
+    function getClickedBlock(element, event) {
+	var children = element.childNodes;
+	//console.log(children);
+	var x = event.clientX;
+	var y = event.clientY;
+	
+	console.log("Mouse x " + x);
+	console.log("Mouse y" + y);
+	
+	for (var i = 0; i < children.length; i++){
+	    console.log(children[i]);
+	    if (children[i].nodeType != 3) {
+	    var r = children[i].getBoundingClientRect();
+	    console.log(r);
+	    if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
+		return children[i];
+	    }
+	    }
+	}
+	return false;
+    }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -1131,6 +1190,7 @@
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
+	Event.on('.content', 'mousedown', '.scratchpad', initDrag);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

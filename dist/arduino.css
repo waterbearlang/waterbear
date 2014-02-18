@@ -245,7 +245,7 @@ body{
 }
 
 .scratchpad{
-	/*overflow: scroll;*/
+	overflow: scroll;
 	position:relative;
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;

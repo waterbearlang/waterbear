@@ -86,6 +86,7 @@
             }
             if (!elem.parentElement){
                 throw new Error('Element has no parent, is it in the tree? %o', elem);
+                //return null;
             }
             elem = elem.parentElement;
         }

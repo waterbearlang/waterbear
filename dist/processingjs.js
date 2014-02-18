@@ -12287,6 +12287,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
             if (!elem.parentElement){
                 throw new Error('Element has no parent, is it in the tree? %o', elem);
+                //return null;
             }
             elem = elem.parentElement;
         }
@@ -12686,17 +12687,35 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 
     function initDrag(event){
-        // console.log('initDrag(%o)', event);
+         console.log('initDrag(%o)', event);
+	 
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
+	
         var eT = event.wbTarget; // <- WB
+	console.log(eT);
+	//For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
-        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
-            // console.log('not a drag handle');
+        /*if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
+            console.log('not a drag handle');
             return undefined;
-        }
-        var target = wb.closest(eT, '.block'); // <- WB
+        }*/
+	
+	var target = null;
+	console.log("about to go into scratchpad");
+	if (eT.classList.contains('scratchpad')) {
+	    console.log("Starting drag in scratchpad");
+	    if (event.target.classList.contains('block')) {
+		console.log("The event has block");
+		target = event.target;
+	    }
+	} else {
+	    target = wb.closest(eT, '.block'); // <- WB
+	    console.log("THe event doesn't have block");
+	    console.log(target);
+	}
+	//This throws an error when block is in scratchpad
         if (target){
             // WB-Specific
             if (wb.matches(target, '.scripts_workspace')){
@@ -12866,7 +12885,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         		wb.history.add(dragAction);
         	}
         } else if (wb.overlap(dragTarget, scratchpad)) {
-	    console.log(dragTarget);
 	    var scratchPadStyle = scratchpad.getBoundingClientRect();
 	    var newOriginX = scratchPadStyle.left;
 	    var newOriginY = scratchPadStyle.top;
@@ -13156,6 +13174,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     
     function dragFromScratchPad(event){
 	dragTarget = event.target;
+	
+	
     }
     
     function cancelDrag(event) {
@@ -13178,9 +13198,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
-	Event.on('.scratchpad', 'mousedown', '.block', initDrag);
+	Event.on('.content', 'mousedown', '.scratchpad', initDrag);
         Event.on('.content', 'mousedown', '.block', initDrag);
-	Event.on('.scratchpad', 'mousemove', null, drag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
         Event.on(document.body, 'keyup', null, cancelDrag);

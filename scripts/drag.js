@@ -128,9 +128,10 @@
 	if (eT.classList.contains('scratchpad')) {
 	    console.log("Starting drag in scratchpad");
 	    console.log(event.target);
-	    if (event.target.classList.contains('block')) {
+	    var clickedBlock = getClickedBlock(scratchpad, event);
+	    if (clickedBlock != false) {
 		console.log("The event has block");
-		target = event.target;
+		target = clickedBlock;
 	    } else {
 		console.log("didn't click on a block");
 	    }
@@ -626,6 +627,28 @@
 	    reset();
 	    return false;
 	}
+    }
+    
+    function getClickedBlock(element, event) {
+	var children = element.childNodes;
+	//console.log(children);
+	var x = event.clientX;
+	var y = event.clientY;
+	
+	console.log("Mouse x " + x);
+	console.log("Mouse y" + y);
+	
+	for (var i = 0; i < children.length; i++){
+	    console.log(children[i]);
+	    if (children[i].nodeType != 3) {
+	    var r = children[i].getBoundingClientRect();
+	    console.log(r);
+	    if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
+		return children[i];
+	    }
+	    }
+	}
+	return false;
     }
 
     // Initialize event handlers

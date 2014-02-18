@@ -34,7 +34,7 @@ function createTextSprite(size,pos,bColor,text,tColor){
 
 function createRectSprite(size,pos,color){
     var rect = new Sprite('polygon', color);
-    rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h, size.wUnit, size.hUnit).toPolygon();
+    rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
     rect.polygon.average = rect.polygon.calculateAverage();
     rect.calculateBoundingBox();
     return rect;

@@ -2,6 +2,18 @@
 	"name": "Random",
 	"help": "Various forms of randomness for your code",
 	"blocks": [
+		{
+			"blocktype": "expression",
+			"id": "12488f92-1fc4-41fe-a882-95c5d5fe72dd",
+			"type": "number",
+			"script": "Math.random()",
+			"help": "returns a random number between 0.0 and 1.0",
+			"sockets": [
+				{
+					"name": "random float"
+				}
+			]
+		},
         {
             "blocktype": "expression",
             "id": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
@@ -75,6 +87,32 @@
         			"name": "noise from x",
         			"type": "number",
         			"value": 0.001
+        		}
+        	]
+        },
+        {
+        	"blocktype": "expression",
+        	"id": "649ec162-8584-4aeb-b75d-2e55f0551015",
+        	"type": "any",
+        	"script": "choice({{1}})",
+        	"help": "returns a random item from an array, without changing the array",
+        	"sockets": [
+        		{
+        			"name": "choose item from",
+        			"type": "array"
+        		}
+        	]
+        },
+        {
+        	"blocktype": "expression",
+        	"id": "f444a3cd-2f1c-48e7-a2df-a2881e7a18fb",
+        	"type": "any",
+        	"script": "removeChoice({{1}})",
+        	"help": "removes a random item from a array and returns the array",
+        	"sockets": [
+        		{
+        			"name": "remove random item from",
+        			"type": "array"
         		}
         	]
         }

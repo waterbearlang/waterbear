@@ -9022,6 +9022,26 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "cd07f8d6-d2cb-475b-b1fb-1ee8392e0b14",
+            "script": "{{1}}[{{2}}].apply({{1}},{{3}}});",
+            "help": "call instance method",
+            "sockets": [
+                {
+                    "name": "object",
+                    "type": "any"
+                },
+                {
+                    "name": "method name",
+                    "type": "string"
+                },
+                {
+                    "name": "arguments",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "322da80d-d8e2-4261-bab7-6ff0ae89e5f4",
             "script": "Object.keys({{1}}).forEach(function(key){local.key = key; local.item = {{1}}[key]; [[1]] });",
@@ -9059,8 +9079,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/object.json*/
 
 /*begin languages/javascript/string.json*/

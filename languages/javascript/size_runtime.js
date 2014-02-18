@@ -14,27 +14,19 @@
 function convertSidelengthUnits(x, unit, isWidth) {
   switch(unit) {
     case "px":
-      //alert("px")
       return x;
     case "em":
-      //alert("em");
       return x;
     case "pt":
-      //alert("pt");
       return x;
     case "%":
       if(isWidth){
-        //alert((global.stage_width*x)/100);
-        //alert(isWidth);
         return (global.stage_width*x)/100;
       }
       else {
-        //alert((global.stage_height*x)/100);
-        //alert(isWidth);
         return (global.stage_height*x)/100;
       }
     default: //i.e. if no units are specified. May be same as "px", need to confirm
-      //alert("default");
       return x; 
   }
 }

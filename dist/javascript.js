@@ -5200,7 +5200,7 @@ wb.menu = menu;
 /*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/control.js*/
-wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup"];
+wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup", "click", "dblclick", "contextmenu"];
 wb.choiceLists.types.push('control');
 wb.choiceLists.rettypes.push('control');
 /*end languages/javascript/control.js*/

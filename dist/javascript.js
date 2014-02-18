@@ -9022,7 +9022,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "cd07f8d6-d2cb-475b-b1fb-1ee8392e0b14",
-            "script": "{{1}}[{{2}}].apply({{1}},{{3}}});",
+            "script": "{{1}}[{{2}}].apply({{1}},{{3}});",
             "help": "call instance method",
             "sockets": [
                 {

@@ -593,15 +593,12 @@
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function dragFromScratchPad(event){
-	dragTarget = event.target;
-	
-	
-    }
-    
-    var id = uuid();
-    var sBlock = wb.Block({
-			group: 'scripts_workspace',
+    function registerScratchSpace() {
+	var workspace = document.querySelector('.workspace');
+	var mainWorkspace = document.querySelector('scripts_workspace');
+	var id = uuid();
+	var sBlock = wb.Block({
+			group: 'scripts_scratchspace',
 			id: id,
 			scriptId: id,
 			scopeId: id,
@@ -613,8 +610,12 @@
 			],
 			script: '[[1]]',
 			isTemplateBlock: false,
-			help: 'Drag your script blocks here'
+			help: 'Place script blocks here for quick access'
 		});
+	
+	workspace.insertBefore(sBlock, mainWorkspace);
+	
+    }
     
     function cancelDrag(event) {
     	// Cancel if escape key pressed

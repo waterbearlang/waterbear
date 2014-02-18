@@ -1125,9 +1125,27 @@
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function dragFromScratchPad(event){
-	dragTarget = event.target;
+    function registerScratchSpace() {
+	var workspace = document.querySelector('.workspace');
+	var mainWorkspace = document.querySelector('scripts_workspace');
+	var id = uuid();
+	var sBlock = wb.Block({
+			group: 'scripts_scratchspace',
+			id: id,
+			scriptId: id,
+			scopeId: id,
+			blocktype: 'context',
+			sockets: [
+			{
+				name: name
+			}
+			],
+			script: '[[1]]',
+			isTemplateBlock: false,
+			help: 'Place script blocks here for quick access'
+		});
 	
+	workspace.insertBefore(sBlock, mainWorkspace);
 	
     }
     
@@ -1151,7 +1169,7 @@
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
-	Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+	//Event.on('.content', 'mousedown', '.scratchpad', initDrag);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

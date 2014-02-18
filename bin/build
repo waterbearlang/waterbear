@@ -117,7 +117,9 @@ function build(){
             .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
             .forEach(function(stylename){cat(stylename, dest + '.css'); });
 
-        scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
+        scripts.forEach(function(scriptname){
+            cat('scripts/' + scriptname + '.js', dest + '.js'); 
+        });
 
         // Build CSS
         concat(src, dest + '.css', files, '.css');
@@ -127,6 +129,8 @@ function build(){
 
         // Build Waterbear blocks
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
+
+        cat('scripts/' + 'l10n' + '.js', dest + '.js'); 
 
         // Build runtime support
         if (lang === 'javascript' || lang === 'minecraftjs' || lang === 'processingjs'){

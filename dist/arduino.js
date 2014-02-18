@@ -2552,19 +2552,30 @@ function is_touch_device() {
 
 initContextMenus();
 
-initLanguageFiles();
+defaultLangData = {};
 
-languageData = {};
+initLanguageFiles();
 
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
-    languageData[blockspec.sectionkey] = blockspec;
-
-    var title = blockspec.name.replace(/\W/g, '');
-    var specs = blockspec.blocks;
-    var help = blockspec.help !== undefined ? blockspec.help : '';
-    return edit_menu(title, specs, help);
+    defaultLangData[blockspec.sectionkey] = blockspec;
+    console.log("load %s", blockspec.name);
 };
+
+function populateMenu() {
+	for (var key in defaultLangData) {
+    	var blockspec = defaultLangData[key];
+
+        // console.log(blockspec);
+        // console.log(localizationData[blockspec.sectionkey]);
+
+		var title = blockspec.name.replace(/\W/g, '');
+        var specs = blockspec.blocks;
+        var help = blockspec.help !== undefined ? blockspec.help : '';
+        edit_menu(title, specs, help);
+	}
+    console.log("done populating menu");
+}
 
 function edit_menu(title, specs, help, show){
 	menu_built = true;
@@ -2586,17 +2597,23 @@ function edit_menu(title, specs, help, show){
     });
 }
 
-function initLanguageFiles(){
+localizationData = {};
 
+function initLanguageFiles(){
     listFiles = ['languages/javascript/localizations/es/array.json'];
 
-    listFiles.forEach(function(){
-        wb.ajax('languages/javascript/localizations/es/array.json', function(exampleJson){
-            console.log(JSON.parse(exampleJson));
+    listFiles.forEach(function(path, idx){
+        ajax.get(path, function(exampleJson){
+            var lang = JSON.parse(exampleJson);
+            defaultLangData[lang.sectionkey] = lang;
         }, function(xhr, status){
-            console.error('Error in wb.ajax:', status);
+            console.error('Error in ajax.get:', status);
         });
     });
+
+    console.log("done loading ajax");
+
+    //throw event that I'm done loading the files.
 }
 
 function initContextMenus() {
@@ -2669,6 +2686,7 @@ if (document.body.clientWidth > 360){
 }
 
 wb.menu = menu;
+wb.populateMenu = populateMenu;
 
 })(wb);
 
@@ -4298,3 +4316,56 @@ wb.menu({
 }
 );
 /*end languages/arduino/variables.json*/
+
+/*begin l10n.js*/
+wb.populateMenu();
+
+
+(function(wb){
+
+console.log("Populating Menu");
+
+function overwriteAttributes(oldObj, newObj) {
+ 
+    var oldObjQueue = [];
+    var newObjQueue = [];
+    oldObjQueue.push(oldObj);
+    newObjQueue.push(newObj);
+
+    while (oldObjQueue.length && newObjQueue.length) {
+
+        // pop object to investigate. 
+        var currOldObj = oldObjQueue.pop();
+        var currNewObj = newObjQueue.pop();
+
+        // Objects: get strings values of keys in current object     
+        // Arrays:  get the integer values of all indexes into array 
+        //          (this is obviously 0...n)     
+        // 
+        // This isn't the cleanest approach, but it keeps me from creating
+        // a more complex structure with typeof array or typeof object
+        var keys = Object.keys(currNewObj);
+
+        // iterate through all keys 
+        for (var idx in keys) {
+            var key = keys[idx];
+
+            if (typeof currNewObj[key] === "object" && currNewObj[key] !== null) {
+
+                // if it's an object, queue it to dive into it later
+                newObjQueue.push(currNewObj[key]);
+                oldObjQueue.push(currOldObj[key]);
+
+            } else {
+
+                // if anything but object, overwrite value from new object in old object 
+                currOldObj[key] = currNewObj[key];
+            }
+        }
+    }
+}
+
+wb.overwriteAttributes = overwriteAttributes;
+
+})(wb);
+/*end l10n.js*/

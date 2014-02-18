@@ -1,6 +1,7 @@
 {
     "sectionkey": "arrays",
     "name": "Arrays",
+    "help": "spanish description",
     "blocks": [
         {
             "id": "e6a297e9-1255-4701-91d8-80548489ee9a",

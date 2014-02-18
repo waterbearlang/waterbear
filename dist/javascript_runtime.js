@@ -788,12 +788,16 @@ var SAT = window['SAT'] = {};
 function Timer(){
     this.time = 0;
     this.start_time = Date.now();
+    this.listeners = [];
     this.update_time();
 }
 
 Timer.prototype.update_time = function(){
     var self = this;
     this.time = Math.round(Date.now() - this.start_time);
+    this.listeners.forEach(function(listener){
+        listener();
+    })
     setTimeout(function(){self.update_time()}, 1000);
 };
 
@@ -805,6 +809,10 @@ Timer.prototype.reset = function(){
 Timer.prototype.value = function(){
     return this.time;
 };
+
+Timer.prototype.registerListener = function(fn){
+    this.listeners.push(fn);
+}
 
 
 // Encapsulate workspace-specific state to allow one block to build on the next
@@ -873,6 +881,18 @@ function Global(){
     this.mouse_down = false;
     this.subscribeMouseEvents();
     this.subscribeKeyboardEvents();
+    var g = this;
+    this.timer.registerListener(function(){
+        if (g.stage_width !== g.stage.clientWidth || g.stage_height !== g.stage.clientHeight){
+            g.stage_width = g.stage.clientWidth;
+            g.stage_height = g.stage.clientHeight;
+            g.stage_center_x = g.stage_width / 2;
+            g.stage_center_y = g.stage_height / 2;
+            local.canvas.setAttribute("width", global.stage_width);
+            local.canvas.setAttribute("height", global.stage_width);
+            console.log('updated stage size: %s, %s', global.stage_width, global.stage_height);
+        }
+    })
 };
 
 Global.prototype.subscribeMouseEvents = function(){
@@ -966,15 +986,7 @@ function range(start, end, step){
 }
 
 
-function randint(start, stop){
-    // return an integer between start and stop, inclusive
-    if (stop === undefined){
-        stop = start;
-        start = 0;
-    }
-    var factor = stop - start + 1;
-    return Math.floor(Math.random() * factor) + start;
-}
+
 
 function angle(shape){
     // return the angle of rotation
@@ -1219,104 +1231,225 @@ Global.prototype.preloadVideo = preloadVideo;
 
 // This uses and embeds code from https://github.com/jriecken/sat-js
 
-function PolySprite(pos,color,points){
+function Sprite(type, color){
     this.color = color;
+    this.type = type;
     this.movementDirection = new SAT.Vector(0, 0);
     this.movementDegrees = 0;
     this.facingDirection = new SAT.Vector(0, 0);
     this.facingDegrees = 0;
     this.speed = 0;
-    this.polygon = new SAT.Polygon();
-    this.polygon.pos = new SAT.Vector(pos.x,pos.y);
-    this.polygon.points = points;
-    this.polygon.average = this.polygon.calculateAverage();
     this.autosteer = false;
-    this.calculateBoundingBox();
+    this.circle = null;
+    this.polygon = null;
+    this.image = null;
+    this.text = null;
+};
+
+function createImageSprite(size,pos,image){
+    var img = createRectSprite(size,pos);
+    img.size = size;
+    img.image = image;
+    return img;
+};
+
+function createTextSprite(size,pos,bColor,text,tColor){
+    var txt = createRectSprite(size,pos,bColor);
+    txt.size = size;
+    txt.text = text;
+    txt.tColor = tColor;
+    return txt;
 };
 
 function createRectSprite(size,pos,color){
-     var rect = new PolySprite(pos,color,[]);
-     rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
-     rect.polygon.average = rect.polygon.calculateAverage();
-     rect.calculateBoundingBox();
-     return rect;
+    var rect = new Sprite('polygon', color);
+    rect.polygon = new SAT.Box(new SAT.Vector(pos.x,pos.y), size.w, size.h).toPolygon();
+    rect.polygon.average = rect.polygon.calculateAverage();
+    rect.calculateBoundingBox();
+    return rect;
 };
 
-window.PolySprite = PolySprite;
-
-PolySprite.prototype.draw = function(ctx){
-    //rotation
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.moveTo(this.polygon.points[0].x + this.polygon.pos.x, this.polygon.points[0].y + this.polygon.pos.y);
-    for (var i = this.polygon.points.length - 1; i >= 1; i--) {
-        ctx.lineTo(this.polygon.points[i].x + this.polygon.pos.x, this.polygon.points[i].y + this.polygon.pos.y);
-    };
-    ctx.closePath();
-    ctx.fill();
-};
-
-PolySprite.prototype.calculateBoundingBox = function(){
-    var minX, maxX, minY, maxY;
-    var points = this.polygon.points;
-    for(var i=0; i < points.length; i++){
-        
-        minX = (points[i].x < minX || minX == null) ? points[i].x : minX;
-        maxX = (points[i].x > maxX || maxX == null) ? points[i].x : maxX;
-        minY = (points[i].y < minY || minY == null) ? points[i].y : minY;
-        maxY = (points[i].y > maxY || maxY == null) ? points[i].y : maxY;
+function createPolygonSprite(points,color){
+    var poly = new Sprite('polygon', color);
+    var vPoints = [];
+    for (var i = 0; i < points.length; i++){
+        vPoints.push(new SAT.Vector(points[i].x, points[i].y));
     }
-    this.x = minX + this.polygon.pos.x;
-    this.y = minY + this.polygon.pos.y;
-    this.w = maxX - minX;
-    this.h = maxY - minY;
+    poly.polygon = new SAT.Polygon(new SAT.Vector(0, 0), vPoints);
+    poly.polygon.average = poly.polygon.calculateAverage();
+    poly.calculateBoundingBox();
+    return poly;
 };
 
-PolySprite.prototype.collides = function(sprite) {
-    return SAT.testPolygonPolygon(this.polygon,sprite.polygon);
+function createCircleSprite(x, y, r, color){
+    var cir = new Sprite('circle', color);
+    cir.circle = new SAT.Circle(new SAT.Vector(x, y), r);
+    cir.calculateBoundingBox();
+    return cir;
 };
 
-PolySprite.prototype.bounceOff = function(sprite) {
-    var response = new SAT.Response();
-    if (SAT.testPolygonPolygon(this.polygon, sprite.polygon, response)) {
-        this.movementDirection.reflectN(response.overlapN);
+function createSprite(shape, color){
+    switch (shape.type){
+        case 'rect':
+            return createRectSprite({w: shape.w, h: shape}, {x: shape.x, y: shape.y}, color);
+
+        case 'circle':
+            return createCircleSprite(shape.x, shape.y, shape.r, color);
+
+        case 'poly':
+            return createPolygonSprite(shape.points, color);
+    }
+};
+
+window.Sprite = Sprite;
+
+Sprite.prototype.isPolygon = function(){
+    return this.type === 'polygon';
+};
+
+Sprite.prototype.getPos = function(){
+    if(this.polygon != null){
+        return this.polygon.pos;
+    }else if(this.circle != null){
+        return this.circle.pos;
     }
 }
 
-PolySprite.prototype.setSpeed = function(speed){
+Sprite.prototype.setPos = function(x, y){
+    if(this.polygon != null){
+        this.polygon.pos.x = x != null ? x : this.polygon.pos.x;
+        this.polygon.pos.y = y != null ? y : this.polygon.pos.y;
+        this.polygon.average = this.polygon.calculateAverage();
+    }else if(this.circle != null){
+        this.circle.pos.x = x != null ? x : this.circle.pos.x;
+        this.circle.pos.y = y != null ? y : this.circle.pos.y;
+    }
+    this.calculateBoundingBox();
+}
+
+Sprite.prototype.draw = function(ctx){
+    //rotation
+    if(this.image != null){
+        ctx.drawImage(this.image,this.getPos().x,this.getPos().y,this.size.w,this.size.h);
+    }else{
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        if(this.isPolygon()){
+            ctx.moveTo(this.polygon.points[0].x + this.polygon.pos.x, this.polygon.points[0].y + this.polygon.pos.y);
+            for (var i = this.polygon.points.length - 1; i >= 1; i--){
+                ctx.lineTo(this.polygon.points[i].x + this.polygon.pos.x, this.polygon.points[i].y + this.polygon.pos.y);
+            };
+        }else{
+            ctx.arc(this.circle.pos.x,this.circle.pos.y,this.circle.r,0,Math.PI*2,true);
+        }
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    if(this.text != null){
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.textAlign="center";
+        var height = this.size.h * 0.6;
+        ctx.font = String(height) +"px Arial";
+        ctx.fillStyle = this.tColor;
+        ctx.fillText(this.text,this.getPos().x + (this.size.w *0.5),this.getPos().y + (this.size.h *0.6), this.size.w *0.8);
+    }
+};
+
+function isSpriteClicked(sprite){
+    if(global.mouse_down){
+        var pos = {x: global.mouse_x, y: global.mouse_y};
+        var color = null;
+        var size = {w: 1, h: 1};
+        var detRect = createRectSprite(size, pos, color);
+        return detRect.collides(sprite);
+    }
+    return false;
+};
+
+Sprite.prototype.calculateBoundingBox = function(){
+    if(this.isPolygon()){
+        var minX, maxX, minY, maxY;
+        var points = this.polygon.points;
+        for(var i=0; i < points.length; i++){
+
+            minX = (points[i].x < minX || minX == null) ? points[i].x : minX;
+            maxX = (points[i].x > maxX || maxX == null) ? points[i].x : maxX;
+            minY = (points[i].y < minY || minY == null) ? points[i].y : minY;
+            maxY = (points[i].y > maxY || maxY == null) ? points[i].y : maxY;
+        }
+        this.x = minX + this.polygon.pos.x;
+        this.y = minY + this.polygon.pos.y;
+        this.w = maxX - minX;
+        this.h = maxY - minY;
+    }else{
+        this.x = this.circle.pos.x - this.circle.r;
+        this.y = this.circle.pos.y - this.circle.r;
+        this.w = this.circle.r * 2;
+        this.h = this.circle.r * 2;
+    }
+};
+
+Sprite.prototype.collides = function(sprite, response){
+    if(this.isPolygon() && sprite.isPolygon()){
+        return SAT.testPolygonPolygon(this.polygon, sprite.polygon, response);
+    }else if(this.isPolygon()){
+        return SAT.testPolygonCircle(this.polygon, sprite.circle, response);
+    }else if(sprite.isPolygon()){
+        return SAT.testCirclePolygon(this.circle,sprite.polygon, response);
+    }else{
+        return SAT.testCircleCircle(this.circle, sprite.circle, response);
+    }
+};
+
+Sprite.prototype.bounceOff = function(sprite){
+    var response = new SAT.Response();
+    if(this.collides(sprite, response)){
+        this.movementDirection.reflectN(response.overlapN);
+    }
+};
+
+Sprite.prototype.setSpeed = function(speed){
     this.speed = speed;
     this.calculateMovementVector();
 };
 
-PolySprite.prototype.setFacingDirectionBy = function(degrees,internalCall){
+Sprite.prototype.setFacingDirectionBy = function(degrees,internalCall){
     if(this.autosteer && !internalCall){
         this.setMovementDirectionBy(degrees, true);
     }
-    this.facingDegreess += degrees;
+    this.facingDegrees += degrees;
     this.calculateFacingVector();
-    this.polygon.rotate(degrees);
-    this.polygon.recalc();
+    if(this.isPolygon()){
+        this.polygon.rotate(degrees);
+        this.polygon.recalc();
+    }
+    this.calculateBoundingBox();
 }
-PolySprite.prototype.setFacingDirection = function(degrees, internalCall){
+Sprite.prototype.setFacingDirection = function(degrees, internalCall){
     if(this.autosteer && !internalCall){
         this.setMovementDirection(degrees, true);
     }
     var lastDegrees = this.facingDegrees;
     this.facingDegrees = degrees;
     this.calculateFacingVector();
-    this.polygon.rotate(degrees - lastDegrees);
-    this.polygon.recalc();
-}
+    if(this.isPolygon()){
+        this.polygon.rotate(degrees - lastDegrees);
+        this.polygon.recalc();
+    }
+    this.calculateBoundingBox()
+};
 
-PolySprite.prototype.setMovementDirectionBy = function(degrees,internalCall){
+Sprite.prototype.setMovementDirectionBy = function(degrees,internalCall){
     if(this.autosteer && !internalCall){
         this.setFacingDirectionBy(degrees, true);
     }
     this.movementDegrees += degrees;
     this.calculateMovementVector();
-}
+};
 
-PolySprite.prototype.setMovementDirection = function(degrees, internalCall){
+Sprite.prototype.setMovementDirection = function(degrees, internalCall){
     if(this.autosteer && !internalCall){
         this.setFacingDirection(degrees, true);
     }
@@ -1324,111 +1457,116 @@ PolySprite.prototype.setMovementDirection = function(degrees, internalCall){
     this.calculateMovementVector();
 };
 
-PolySprite.prototype.calculateMovementVector = function(){
+Sprite.prototype.calculateMovementVector = function(){
     this.movementDirection.x = Math.cos(this.movementDegrees*Math.PI/180)*this.speed;
     this.movementDirection.y = Math.sin(this.movementDegrees*Math.PI/180)*this.speed;
 };
 
-PolySprite.prototype.calculateFacingVector = function(){
+Sprite.prototype.calculateFacingVector = function(){
     this.facingDirection.x = Math.cos(this.facingDegrees*Math.PI/180);
     this.facingDirection.y = Math.sin(this.facingDegrees*Math.PI/180);
 };
 
-PolySprite.prototype.calculateMovementDegrees = function() {
+Sprite.prototype.calculateMovementDegrees = function(){
     this.movementDegrees = Math.Atan2(this.movementDirection.x,this.movementDirection.y) * (Math.PI / 180);
-}
-
-//move a sprite by its own speed and direction
-PolySprite.prototype.move = function(){
-    this.polygon.pos.add(this.movementDirection);
-    this.polygon.average = this.polygon.calculateAverage();
-    this.calculateBoundingBox();
-    this.polygon.recalc();
-}
-
-PolySprite.prototype.moveRelative = function(x,y){
-    this.polygon.pos.x += x;
-    this.polygon.pos.y += y;
-    this.polygon.average = this.polygon.calculateAverage();
-    this.calculateBoundingBox();
-    this.polygon.recalc();
 };
 
-PolySprite.prototype.moveAbsolute = function(x,y){
-    this.polygon.pos.x = x;
-    this.polygon.pos.y = y;
-    this.polygon.average = this.polygon.calculateAverage();
-    this.calculateBoundingBox();
-    this.polygon.recalc();
+//move a sprite by its own speed and direction
+Sprite.prototype.move = function(){
+    var x = this.getPos().x + this.movementDirection.x;
+    var y = this.getPos().y + this.movementDirection.y;
+    this.setPos(x, y);
+};
+
+Sprite.prototype.moveRelative = function(x,y){
+    this.setPos(this.getPos().x + x, this.getPos().y + y);
+};
+
+Sprite.prototype.moveAbsolute = function(x,y){
+    this.setPos(x, y);
 };
 
 // Bounce the sprite off the edge of the stage
-PolySprite.prototype.stageBounce = function(stage_width, stage_height) {
+Sprite.prototype.stageBounce = function(stage_width, stage_height){
     if(this.x<0){
         this.movementDirection.reflectN(new SAT.Vector(1,0));
-    } else if ((this.x+this.w) > stage_width) {
+    }else if((this.x+this.w) > stage_width){
         this.movementDirection.reflectN(new SAT.Vector(-1,0));
     }
     if(this.y<0){
         this.movementDirection.reflectN(new SAT.Vector(0,1));
-    } else if ((this.y+this.h) > stage_height){
+    }else if((this.y+this.h) > stage_height){
         this.movementDirection.reflectN(new SAT.Vector(0,-1));
     }
 };
 
+Sprite.prototype.getBounds = function(stage_width, stage_height){
+    var baseX = this.getPos().x - this.x, baseY = this.getPos().y - this.y;
+    return {
+        'up'    : baseY,
+        'down'  : stage_height - this.h + baseY,
+        'left'  : baseX,
+        'right' : stage_width - this.w + baseX
+    };
+}
+
 // Stop the sprite if it hits the edge of the stage
-PolySprite.prototype.edgeStop = function(stage_width, stage_height) {
+Sprite.prototype.edgeStop = function(stage_width, stage_height){
+    var bounds = this.getBounds(stage_width, stage_height);
     if(this.x < 0){
-        this.polygon.pos.x = 0;
+        this.setPos(bounds.left, null);
         this.setSpeed(0);
-    } else if ((this.x + this.w) > stage_width){
-        this.polygon.pos.x = (stage_width - this.w);
+    }else if((this.x + this.w) > stage_width){
+        this.setPos(bounds.right, null);
         this.setSpeed(0);
     }
     if(this.y < 0){
-        this.polygon.pos.y = 0;
+        this.setPos(null, bounds.up);
         this.setSpeed(0);
-    } else if((this.polygon.pos.y + this.h) > stage_height){
-        this.polygon.pos.y = (stage_height - this.h);
+    }else if((this.y + this.h) > stage_height){
+        this.setPos(null, bounds.down);
         this.setSpeed(0);
     }
 }
 
 // If the sprite moves to the edge of the screen, slide it along that edge
-PolySprite.prototype.edgeSlide = function(stage_width, stage_height) {
+Sprite.prototype.edgeSlide = function(stage_width, stage_height){
+    var bounds = this.getBounds(stage_width, stage_height);
     if(this.x < 0){
-        this.polygon.pos.x = 0;
+        this.setPos(bounds.left, null);
         this.movementDirection.x = 0;
         this.calculateMovementDegrees;
-    } else if ((this.x + this.w) > stage_width){
-        this.polygon.pos.x = (stage_width - this.w);
+    }else if((this.x + this.w) > stage_width){
+        this.setPos(bounds.right, null);
         this.movementDirection.x = 0;
         this.calculateMovementDegrees;
     }
     if(this.y < 0){
-        this.polygon.pos.y = 0;
-        this.movementDirection.y=0;
+        this.setPos(null, bounds.up);
+        this.movementDirection.y = 0;
         this.calculateMovementDegrees;
-    } else if((this.y + this.h) > stage_height){
-        this.polygon.pos.y = (stage_height-this.h);
-        this.movementDirection.y=0;
+    }else if((this.y + this.h) > stage_height){
+        this.setPos(null, bounds.down);
+        this.movementDirection.y = 0;
         this.calculateMovementDegrees;
     }
 }
 
 // Wrap around the edge of the stage
-PolySprite.prototype.edgeWrap = function(stage_width, stage_height) {
-    if(this.x < 0) {
-        this.polygon.pos.x = (stage_width - this.w);
-    } else if((this.x + this.w) > stage_width) {
-        this.polygon.pos.x = 0;
+Sprite.prototype.edgeWrap = function(stage_width, stage_height){
+    var bounds = this.getBounds(stage_width, stage_height);
+    if(this.x < 0){
+        this.setPos(bounds.right, null);
+    }else if((this.x + this.w) > stage_width){
+        this.setPos(bounds.left, null);
     }
-    if(this.y < 0) {
-        this.polygon.pos.y = (stage_height - this.h);
-    } else if((this.y + this.h) > stage_height) {
-        this.polygon.pos.y = 0;
+    if(this.y < 0){
+        this.setPos(null, bounds.down);
+    }else if((this.y + this.h) > stage_height){
+        this.setPos(null, bounds.up);
     }
 }
+
 /*end languages/javascript/sprite_runtime.js*/
 
 /*begin languages/javascript/voice_runtime.js*/
@@ -1579,6 +1717,80 @@ Voice.refNote = Voice.notes.indexOf('A4');
 /*end languages/javascript/boolean_runtime.js*/
 
 /*begin languages/javascript/canvas_runtime.js*/
+Shape = {};
+
+window.Shape = Shape;
+
+Shape.drawCircle = function(shape) {
+    local.ctx.beginPath();
+    local.ctx.arc(shape.x,shape.y,shape.r,0,Math.PI*2,true);
+    local.ctx.closePath();
+}
+
+Shape.drawPolygon = function(shape) {
+    local.ctx.beginPath();
+    local.ctx.moveTo(shape.points[0].x, shape.points[0].y);
+    for (var i = 1; i < shape.points.length; i ++ )
+        local.ctx.lineTo(shape.points[i].x, shape.points[i].y);
+    local.ctx.closePath();
+}
+
+Shape.drawRect = function(shape) {
+    local.ctx.beginPath();
+    var w = Math.max(shape.r * 2, shape.w);
+    var h = Math.max(shape.r * 2, shape.h);
+    local.ctx.moveTo(shape.x + shape.r, shape.y);
+    local.ctx.arcTo(shape.x + w, shape.y, shape.x + w, shape.y + h, shape.r);
+    local.ctx.arcTo(shape.x + w, shape.y + h, shape.x, shape.y + h, shape.r);
+    local.ctx.arcTo(shape.x, shape.y + h, shape.x, shape.y, shape.r);
+    local.ctx.arcTo(shape.x, shape.y, shape.x + w, shape.y, shape.r);
+    local.ctx.closePath();
+
+}
+
+Shape.fillShape = function(shape, color) {
+
+    local.ctx.save();
+    local.ctx.fillStyle = color;
+    switch (shape.type) {
+        case "circle":
+            Shape.drawCircle(shape);
+            break;
+
+        case "poly":
+            Shape.drawPolygon(shape);
+            break;
+
+        case "rect":
+            Shape.drawRect(shape);
+            break;
+    }
+    local.ctx.fill();
+    local.ctx.restore();
+};
+
+Shape.strokeShape = function(shape, color, width) {
+    local.ctx.save();
+    local.ctx.strokeStyle = color;
+    local.ctx.lineWidth = width;
+
+    switch (shape.type) {
+        case "circle":
+            Shape.drawCircle(shape);
+            break;
+
+        case "poly":
+            Shape.drawPolygon(shape);
+            break;
+
+        case "rect":
+            Shape.drawRect(shape);
+            break;
+    }
+    local.ctx.stroke();
+    local.ctx.restore();
+
+};
 
 /*end languages/javascript/canvas_runtime.js*/
 
@@ -1631,6 +1843,98 @@ function gamma(n) {
 
 /*end languages/javascript/math_runtime.js*/
 
+/*begin languages/javascript/random_runtime.js*/
+
+function randint(start, stop){
+    // return an integer between start and stop, inclusive
+    if (stop === undefined){
+        stop = start;
+        start = 0;
+    }
+    var factor = stop - start + 1;
+    return Math.floor(Math.random() * factor) + start;
+}
+
+// This is a port of Ken Perlin's Java code. The
+// original Java code is at http://cs.nyu.edu/%7Eperlin/noise/.
+// Note that in this version, a number from 0 to 1 is returned.
+// Original JS port from http://asserttrue.blogspot.ca/2011/12/perlin-noise-in-javascript_31.html,
+// but heavily modified by Dethe for 1 and 2 dimensional noise
+
+function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+function lerp( t, a, b) { return a + t * (b - a); }
+function grad(hash, x, y, z) {
+  var h = hash & 15;                      // CONVERT LO 4 BITS OF HASH CODE
+  var u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
+         v = h<4 ? y : h==12||h==14 ? x : z;
+  return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
+} 
+function scale(n) { return (1 + n)/2; }
+
+// permutations
+var p = [ 151,160,137,91,90,15,
+   131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+   190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+   88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+   77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+   102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+   135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+   5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+   223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+   129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+   251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+   49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+   138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,
+   151,160,137,91,90,15,
+   131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+   190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+   88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+   77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+   102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+   135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+   5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+   223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+   129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+   251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+   49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+   138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+];
+
+function noise(x, y, z) {
+
+      var X = Math.floor(x) & 255,                  // FIND UNIT CUBE THAT
+          Y = Math.floor(y) & 255,                  // CONTAINS POINT.
+          Z = Math.floor(z) & 255;
+      x -= Math.floor(x);                                // FIND RELATIVE X,Y,Z
+      y -= Math.floor(y);                                // OF POINT IN CUBE.
+      z -= Math.floor(z);
+      var    u = fade(x),                                // COMPUTE FADE CURVES
+             v = fade(y),                                // FOR EACH OF X,Y,Z.
+             w = fade(z);
+      var A = p[X  ]+Y, AA = p[A]+Z, AB = p[A+1]+Z,      // HASH COORDINATES OF
+          B = p[X+1]+Y, BA = p[B]+Z, BB = p[B+1]+Z;      // THE 8 CUBE CORNERS,
+
+      return scale(lerp(w, lerp(v, lerp(u, grad(p[AA  ], x  , y  , z   ),  // AND ADD
+                                     grad(p[BA  ], x-1, y  , z   )), // BLENDED
+                             lerp(u, grad(p[AB  ], x  , y-1, z   ),  // RESULTS
+                                     grad(p[BB  ], x-1, y-1, z   ))),// FROM  8
+                     lerp(v, lerp(u, grad(p[AA+1], x  , y  , z-1 ),  // CORNERS
+                                     grad(p[BA+1], x-1, y  , z-1 )), // OF CUBE
+                             lerp(u, grad(p[AB+1], x  , y-1, z-1 ),
+                                     grad(p[BB+1], x-1, y-1, z-1 )))));
+}
+
+function choice(list){
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function removeChoice(list){
+  return list.splice(Math.floor(Math.random() * list.length), 1);
+}
+
+
+/*end languages/javascript/random_runtime.js*/
+
 /*begin languages/javascript/vector_runtime.js*/
 function Vector(x,y) {
     this.x = x;
@@ -1643,6 +1947,26 @@ function Vector(x,y) {
 /*end languages/javascript/object_runtime.js*/
 
 /*begin languages/javascript/string_runtime.js*/
+
+// This was built directly from the formal definition of Levenshtein distance found on Wikipedia
+// It's possible there's a more efficient way of doing it?
+function levenshtein(a,b) {
+	function indicator(i,j) {
+		if(a[i-1] == b[j-1])
+			return 0;
+		return 1;
+	}
+	function helper(i,j) {
+		if(Math.min(i,j) == 0)
+			return Math.max(i,j);
+		return Math.min(
+			helper(i-1,j) + 1,
+			helper(i,j-1) + 1,
+			helper(i-1,j-1) + indicator(i,j)
+		);
+	}
+	return helper(a.length,b.length);
+}
 
 /*end languages/javascript/string_runtime.js*/
 

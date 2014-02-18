@@ -856,7 +856,7 @@
             //when dragging from workspace to scratchpad, this keeps workspace from
 	    //moving around when block in scratchpad is moved.
             //dragTarget.parentElement.removeChild(dragTarget); 
-            //Event.trigger(dragTarget, 'wb-add');
+            Event.trigger(dragTarget, 'wb-add');
 	    return;
 	}
 	

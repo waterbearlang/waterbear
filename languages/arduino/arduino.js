@@ -4,11 +4,6 @@
 
 // expose these globally so the Block/Label methods can find them
 window.choiceLists = {
-    /*keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
-        .split('').concat(['up', 'down', 'left', 'right',
-        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
-        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
-        'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),*/
     boolean: ['true', 'false'],
     highlow: ['HIGH', 'LOW'],
     inoutput: ['INPUT', 'OUTPUT'],
@@ -38,17 +33,21 @@ wb.writeScript = function(elements, view){
     view.innerHTML = '<pre class="language-arduino">' + code + '</pre>';
 };
 
+wb.runCurrentScripts = function(){ /* do nothing */ };
+wb.clearStage = functions(){ /* do nothing */ };
 
-jQuery.fn.extend({
-  wrapScript: function(){
-      // wrap the top-level script to prevent leaking into globals
-      var script = this.map(function(){return wb.Block.model(this).code();}).get().join('\n\n');
-      return script;
-  },
-  writeScript: function(view){
-      view.html('<code><pre class="script_view">' + this.wrapScript() +  '</pre></code>');
-  }
-});
+
+wb.wrapScript = function(){
+        var blocks = wb.findAll(document.body, '.scripts_workspace');
+        // update size of frame
+        return blocks.map(function(elem){
+          return wb.codeFromBlock(elem);
+        }).join('\n\n');
+};
+
+wb.writeScript = function(view){
+  view.textContent(this.wrapScript());
+};
 
 
 function clearScriptsDefault(event, force){
@@ -56,8 +55,7 @@ function clearScriptsDefault(event, force){
   loadDefaultScript();
 }
 
-
-$('.clearScripts').click(clearScriptsDefault);
+document.querySelector('.clearScripts').setEventListener('click', clearScriptsDefault, false);
 
 
 

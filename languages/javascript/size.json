@@ -5,7 +5,7 @@
         {
             "blocktype": "expression",
             "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
-            "script": "{w: {{1}}, h: {{3}}, wUnit: {{2}}, hUnit: {{4}}}",
+            "script": "{w: convertSidelengthUnits({{1}}, {{2}}, true), h: convertSidelengthUnits({{3}}, {{4}}, false)}",
             "type": "size",
             "sockets": [
                 {

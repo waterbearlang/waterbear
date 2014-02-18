@@ -2696,7 +2696,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             //when dragging from workspace to scratchpad, this keeps workspace from
 	    //moving around when block in scratchpad is moved.
             //dragTarget.parentElement.removeChild(dragTarget); 
-            //Event.trigger(dragTarget, 'wb-add');
+            Event.trigger(dragTarget, 'wb-add');
 	    return;
 	}
 	
@@ -4126,8 +4126,6 @@ function accordion(event){
 }
 
 
-
-
 function updateScriptsView(){
     var blocks = wb.findAll(document.body, '.scripts_workspace');
     var view = wb.find(document.body, '.scripts_text_view');
@@ -5200,7 +5198,7 @@ wb.menu = menu;
 /*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/control.js*/
-wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup"];
+wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup", "click", "dblclick", "contextmenu"];
 wb.choiceLists.types.push('control');
 wb.choiceLists.rettypes.push('control');
 /*end languages/javascript/control.js*/
@@ -7559,7 +7557,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "a0783aab-194c-4059-8f8e-4afd93ec1ca5",
-            "script": "{{1}}.addColorStop({{2}}, {{3}}",
+            "script": "{{1}}.addColorStop({{2}}, {{3}});",
             "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
             "sockets": [
                 {
@@ -9022,6 +9020,26 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "cd07f8d6-d2cb-475b-b1fb-1ee8392e0b14",
+            "script": "{{1}}[{{2}}].apply({{1}},{{3}}});",
+            "help": "call instance method",
+            "sockets": [
+                {
+                    "name": "object",
+                    "type": "any"
+                },
+                {
+                    "name": "method name",
+                    "type": "string"
+                },
+                {
+                    "name": "arguments",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "322da80d-d8e2-4261-bab7-6ff0ae89e5f4",
             "script": "Object.keys({{1}}).forEach(function(key){local.key = key; local.item = {{1}}[key]; [[1]] });",
@@ -9059,8 +9077,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/object.json*/
 
 /*begin languages/javascript/string.json*/

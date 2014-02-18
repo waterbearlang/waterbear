@@ -40,7 +40,7 @@ var styles = {
 var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
 
 var libs = {
-    arduino: [],
+    arduino: ['events.min'],
     javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     minecraftjs: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],

@@ -49,7 +49,8 @@ body{
 	position:relative;
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-	background-color: #3d9970;
+	background-color: #FFF;
+	color: rgba(0,0,0,0.4);
 }
 
 .scripts_workspace{

@@ -9077,7 +9077,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/object.json*/
 
 /*begin languages/javascript/string.json*/

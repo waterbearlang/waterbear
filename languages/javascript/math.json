@@ -38,6 +38,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "addition",
+                "plus",
+                "sum"
             ]
         },
         {
@@ -57,6 +62,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "subtraction",
+                "minus",
+                "difference"
             ]
         },
         {
@@ -76,6 +86,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "multiplication",
+                "times",
+                "product"
             ]
         },
         {
@@ -95,6 +110,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "division",
+                "divide",
+                "quotient"
             ]
         },
         {

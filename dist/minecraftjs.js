@@ -2496,16 +2496,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
 	
 	var target = null;
-	console.log("about to go into scratchpad");
 	if (eT.classList.contains('scratchpad')) {
-	    console.log("Starting drag in scratchpad");
-	    console.log(event.target);
 	    var clickedBlock = getClickedBlock(scratchpad, event);
 	    if (clickedBlock != false) {
 		console.log("The event has block");
 		target = clickedBlock;
 	    } else {
-		console.log("didn't click on a block");
+		return undefined;
 	    }
 	} else {
 	    target = wb.closest(eT, '.block'); // <- WB

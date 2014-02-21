@@ -880,8 +880,9 @@ body{
 }
 
 #search_text {
+  padding: 0 2px;
   height: 24px;
-  width: calc(100% - 16px - 8px);
+  width: calc(100% - 16px - 8px - 4px);
 }
 
 #search_button {

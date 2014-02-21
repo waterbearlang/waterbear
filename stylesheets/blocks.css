@@ -383,6 +383,7 @@
 
 #search form input {
   border: 0;
+  outline: 0;
   background-color: transparent;
   display: table-cell;
   vertical-align: middle;

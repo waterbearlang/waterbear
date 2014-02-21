@@ -14736,12 +14736,12 @@ function showResult(evt){
 
 function highlightSearch(event) {
 	var form = document.querySelector('#search > form');
-  form.style.border = "1px solid #FFA500";
+	form.style.border = "1px solid #FFA500";
 }
 
 function unhighlightSearch(event) {
 	var form = document.querySelector('#search > form');
-  form.style.border = "1px solid #CCC";
+	form.style.border = "1px solid #CCC";
 }
 
 Event.on(document.body, 'change', 'input', changeSocket);

@@ -1,0 +1,17 @@
+{
+    "name": "Fancy Friday",
+    "help": "Minigame API!",
+    "blocks": [
+        {
+            "blocktype": "eventhandler",
+            "id": "e6a297e9-1255-4701-91d8-80548489ee97",
+            "script": "//MINIGAMES STUFF",
+            "help": "This does minigame stuff",
+            "sockets": [
+                {
+                    "name": "name of minigame"
+                }
+            ]
+        }
+    ]
+}

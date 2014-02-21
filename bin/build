@@ -13,7 +13,7 @@ var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
+    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix', 'fancy_friday'],
     minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
     demo: ['javascript', 'demo'],
     processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],

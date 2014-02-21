@@ -2698,3 +2698,11 @@ a .icon-flip-vertical:before {
 }
 
 /*end languages/javascript/matrix.css*/
+
+/*begin languages/javascript/fancy_friday.css*/
+.fancy_friday, .fancy_friday .holder{
+    border-color: hsl(120, 81%, 49%);
+    background-color: hsl(120, 81%, 85%)
+}
+
+/*end languages/javascript/fancy_friday.css*/

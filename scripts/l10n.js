@@ -1,12 +1,19 @@
-wb.populateMenu();
-
+if (wb.onePartDone) {
+    // console.log("l10n TRUE");
+    wb.populateMenu();
+} else {
+    // console.log("l10n FALSE");
+    wb.onePartDone = true;
+}
 
 (function(wb){
 
-console.log("Populating Menu");
-
+/* old Obj will be overwritten by newObj */
 function overwriteAttributes(oldObj, newObj) {
  
+    if (!newObj || ! oldObj)
+        return;
+
     var oldObjQueue = [];
     var newObjQueue = [];
     oldObjQueue.push(oldObj);

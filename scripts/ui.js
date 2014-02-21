@@ -340,29 +340,36 @@ function is_touch_device() {
 
 initContextMenus();
 
-defaultLangData = {};
+defaultLangData  = {};
+localizationData = {};
 
+var onePartDone = false;
+wb.onePartDone = onePartDone;
+
+/* will be set true by either code in l10n.js or initLanguageFiles() */
 initLanguageFiles();
 
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
     defaultLangData[blockspec.sectionkey] = blockspec;
-    console.log("load %s", blockspec.name);
+    // console.log("load %s", blockspec.name);conso
 };
 
 function populateMenu() {
+
 	for (var key in defaultLangData) {
     	var blockspec = defaultLangData[key];
+        var l10ndata = localizationData[blockspec.sectionkey];
 
-        // console.log(blockspec);
-        // console.log(localizationData[blockspec.sectionkey]);
+        // console.log(l10ndata);
+
+        wb.overwriteAttributes(blockspec, l10ndata);
 
 		var title = blockspec.name.replace(/\W/g, '');
         var specs = blockspec.blocks;
         var help = blockspec.help !== undefined ? blockspec.help : '';
         edit_menu(title, specs, help);
 	}
-    console.log("done populating menu");
 }
 
 function edit_menu(title, specs, help, show){
@@ -385,23 +392,32 @@ function edit_menu(title, specs, help, show){
     });
 }
 
-localizationData = {};
-
 function initLanguageFiles(){
+    var ajaxDone = false;
+
     listFiles = ['languages/javascript/localizations/es/array.json'];
 
     listFiles.forEach(function(path, idx){
         ajax.get(path, function(exampleJson){
             var lang = JSON.parse(exampleJson);
-            defaultLangData[lang.sectionkey] = lang;
+            localizationData[lang.sectionkey] = lang;
+            // console.log("Wrote some data to localizationData");
+
+            if ( idx === (listFiles.length - 1 )) {
+                if (wb.onePartDone) {
+                    // console.log("AJAX TRUE");
+                    populateMenu();
+                } else {
+                    // console.log("AJAX FALSE");
+                    wb.onePartDone = true;
+                }
+            }
+
         }, function(xhr, status){
             console.error('Error in ajax.get:', status);
         });
+
     });
-
-    console.log("done loading ajax");
-
-    //throw event that I'm done loading the files.
 }
 
 function initContextMenus() {
@@ -475,6 +491,6 @@ if (document.body.clientWidth > 360){
 
 wb.menu = menu;
 wb.populateMenu = populateMenu;
+wb.onePartDone = onePartDone;
 
 })(wb);
-

@@ -128,11 +128,11 @@ Sprite.prototype.draw = function(ctx){
         var height = this.size.h * 0.6;
         ctx.font = String(height) +"px Arial";
         ctx.fillStyle = this.tColor;
-		ctx.save();
-		ctx.translate(this.getPos().x ,this.getPos().y );
-		ctx.rotate( this.facingDegrees *Math.PI/180);
+        ctx.save();
+	ctx.translate(this.getPos().x ,this.getPos().y );
+	ctx.rotate( this.facingDegrees *Math.PI/180);
         ctx.fillText(this.text,this.size.w *0.5,this.size.h *0.6, this.size.w *0.8);
-		ctx.restore();
+	ctx.restore();
     }
 };
 

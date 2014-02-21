@@ -1,17 +1,60 @@
 {
     "name": "Fancy Friday",
-    "help": "Minigame API!",
+    "help": "Minigame API",
     "blocks": [
         {
             "blocktype": "eventhandler",
             "id": "e6a297e9-1255-4701-91d8-80548489ee97",
-            "script": "//MINIGAMES STUFF",
-            "help": "This does minigame stuff",
+            "script": "{{1}}.Tinygame.onplay = function() {[[1]]}",
+            "help": "This sets what should happen when a minigame is played",
             "sockets": [
                 {
-                    "name": "name of minigame"
+                    "name": "When",
+                    "type": "any",
+                    "suffix": "runs"
+                }
+            ]
+        },
+        {
+            "blocktype": "eventhandler",
+            "id": "e6a297e9-1255-4701-91d8-80548489ee98",
+            "script": "{{1}}.Tinygame.onoutoftime = function() {[[1]]}",
+            "help": "This sets what should happen when a minigame ends",
+            "sockets": [
+                {
+                    "name": "When",
+                    "type": "any",
+                    "suffix": "ends"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e6a297e9-1255-4701-91d8-80548489ee99",
+            "script": "{{1}}.Tinygame.win();",
+            "help": "This will signal that the minigame has been won",
+            "sockets": [
+                {
+                    "name": "Signal",
+                    "type": "any",
+                    "suffix": "has been won"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e6a297e9-1255-4701-91d8-80548489ef00",
+            "script": "{{1}}.Tinygame.lose();",
+            "help": "This will signal that the minigame has been won",
+            "sockets": [
+                {
+                    "name": "Signal",
+                    "type": "any",
+                    "suffix": "has been lost"
                 }
             ]
         }
+
+
     ]
 }

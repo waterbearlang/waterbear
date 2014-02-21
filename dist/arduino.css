@@ -224,9 +224,13 @@ body{
 	flex: 0 0 37px;
 }
 
-#block_menu{
+#block_menu_wrapper {
 	-webkit-flex: 0 0 300px;
 	flex: 0 0 300px;
+}
+
+#block_menu {
+	height: calc(100% - 24px);
 }
 
 .workspace{
@@ -318,7 +322,7 @@ body{
 		position: relative;
 		overflow: hidden;
 	}
-	#block_menu, .workspace, .results, .files{
+	#block_menu_wrapper, .workspace, .results, .files{
 		display: block;
 		position: absolute;
 		width: 100%;

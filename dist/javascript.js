@@ -4513,7 +4513,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu'));
+	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
 }
 
 function showScript(evt){

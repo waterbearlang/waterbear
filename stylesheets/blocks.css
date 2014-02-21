@@ -378,28 +378,16 @@
 #search form {
   border: 1px solid #CCC;
   width: calc(100% - 2px);
-  display: table;
-}
-
-#search form input {
-  border: 0;
-  outline: 0;
-  background-color: transparent;
-  display: table-cell;
-  vertical-align: middle;
 }
 
 #search_text {
-  padding: 0 2px;
+  padding-left: 24px;
+  border: 0;
+  outline: 0;
   height: 24px;
-  width: calc(100% - 16px - 8px - 4px);
-}
-
-#search_button {
-  margin: 4px;
-  height: 16px;
-  width: 16px;
+  width: calc(100% - 24px);
   background-image: url('http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Search_font_awesome.svg/512px-Search_font_awesome.svg.png');
-  background-size: 100%;
-  opacity: 0.4;
+  background-position: 4px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
 }

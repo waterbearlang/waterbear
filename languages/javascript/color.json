@@ -247,7 +247,7 @@
         {
             "blocktype": "step",
             "id": "a0783aab-194c-4059-8f8e-4afd93ec1ca5",
-            "script": "{{1}}.addColorStop({{2}}, {{3}}",
+            "script": "{{1}}.addColorStop({{2}}, {{3}});",
             "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
             "sockets": [
                 {

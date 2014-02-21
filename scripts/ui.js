@@ -16,8 +16,6 @@ function accordion(event){
 }
 
 
-
-
 function updateScriptsView(){
     var blocks = wb.findAll(document.body, '.scripts_workspace');
     var view = wb.find(document.body, '.scripts_text_view');

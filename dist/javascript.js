@@ -2496,16 +2496,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
 	
 	var target = null;
-	console.log("about to go into scratchpad");
 	if (eT.classList.contains('scratchpad')) {
-	    console.log("Starting drag in scratchpad");
-	    console.log(event.target);
 	    var clickedBlock = getClickedBlock(scratchpad, event);
 	    if (clickedBlock != false) {
 		console.log("The event has block");
 		target = clickedBlock;
 	    } else {
-		console.log("didn't click on a block");
+		return undefined;
 	    }
 	} else {
 	    target = wb.closest(eT, '.block'); // <- WB
@@ -4126,8 +4123,6 @@ function accordion(event){
 }
 
 
-
-
 function updateScriptsView(){
     var blocks = wb.findAll(document.body, '.scripts_workspace');
     var view = wb.find(document.body, '.scripts_text_view');
@@ -5237,7 +5232,7 @@ wb.populateMenu = populateMenu;
 /*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/control.js*/
-wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup"];
+wb.choiceLists.pointerEvents = ["mousecancel", "mousedown", "mouseenter", "mouseleave", "mouseout", "mousemove", "mouseover", "mouseup", "click", "dblclick", "contextmenu"];
 wb.choiceLists.types.push('control');
 wb.choiceLists.rettypes.push('control');
 /*end languages/javascript/control.js*/
@@ -7605,7 +7600,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "a0783aab-194c-4059-8f8e-4afd93ec1ca5",
-            "script": "{{1}}.addColorStop({{2}}, {{3}}",
+            "script": "{{1}}.addColorStop({{2}}, {{3}});",
             "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
             "sockets": [
                 {
@@ -9068,6 +9063,26 @@ wb.menu({
                 {
                     "name": "value at key",
                     "type": "string"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "cd07f8d6-d2cb-475b-b1fb-1ee8392e0b14",
+            "script": "{{1}}[{{2}}].apply({{1}},{{3}});",
+            "help": "call instance method",
+            "sockets": [
+                {
+                    "name": "object",
+                    "type": "any"
+                },
+                {
+                    "name": "method name",
+                    "type": "string"
+                },
+                {
+                    "name": "arguments",
+                    "type": "array"
                 }
             ]
         },

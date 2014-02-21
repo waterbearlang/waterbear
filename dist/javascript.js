@@ -4525,9 +4525,24 @@ function showResult(evt){
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 
+/* Search filter */
+
+function highlightSearch(event) {
+	var form = document.querySelector('#search > form');
+  form.style.border = "1px solid #FFA500";
+}
+
+function unhighlightSearch(event) {
+	var form = document.querySelector('#search > form');
+  form.style.border = "1px solid #CCC";
+}
+
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+Event.on('#search_text', 'focus', null, highlightSearch);
+Event.on('#search_text', 'blur', null, unhighlightSearch);
 
 if (document.body.clientWidth < 361){
 	// console.log('mobile view');
@@ -7945,6 +7960,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "addition",
+                "plus",
+                "sum"
             ]
         },
         {
@@ -7964,6 +7984,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "subtraction",
+                "minus",
+                "difference"
             ]
         },
         {
@@ -7983,6 +8008,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "multiplication",
+                "times",
+                "product"
             ]
         },
         {
@@ -8002,6 +8032,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "division",
+                "divide",
+                "quotient"
             ]
         },
         {

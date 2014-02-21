@@ -220,8 +220,8 @@ body{
 }
 
 .nav{
-	-webkit-flex: 0 0 34px;
-	flex: 0 0 34px;
+	-webkit-flex: 0 0 37px;
+	flex: 0 0 37px;
 }
 
 #block_menu{
@@ -728,6 +728,35 @@ body{
 #block_menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;
+}
+
+/* Search filter */
+
+#search form {
+  border: 1px solid #CCC;
+  width: calc(100% - 2px);
+  display: table;
+}
+
+#search form input {
+  border: 0;
+  background-color: transparent;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#search_text {
+  height: 24px;
+  width: calc(100% - 16px - 8px);
+}
+
+#search_button {
+  margin: 4px;
+  height: 16px;
+  width: 16px;
+  background-image: url('http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Search_font_awesome.svg/512px-Search_font_awesome.svg.png');
+  background-size: 100%;
+  opacity: 0.4;
 }
 
 /*end blocks.css*/

@@ -874,16 +874,33 @@ body{
   width: calc(100% - 2px);
 }
 
-#search_text {
-  padding-left: 24px;
+#search form > * {
   border: 0;
   outline: 0;
   height: 24px;
-  width: calc(100% - 24px);
-  background-image: url('http://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Search_font_awesome.svg/512px-Search_font_awesome.svg.png');
-  background-position: 4px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
+  display: inline-block;
+  background-color: transparent;
+}
+
+#search form label {
+  width: 20px;
+  text-align: center;
+  color: #CCC;
+}
+
+#search form label i {
+  margin: auto;
+  vertical-align: middle;
+}
+
+#search_text {
+  width: calc(100% - 40px - 8px); /* 8px = gap between inline blocks */
+}
+
+#search_clear {
+  font-family: 'FontAwesome';
+  width: 20px;
+  color: #CCC;
 }
 
 /*end blocks.css*/

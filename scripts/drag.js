@@ -642,6 +642,44 @@
         }
         return false;
     }
+    
+    
+    //This function arranges the blocks into a grid. Future functions could
+    //sort the blocks by type, frequency of use, or other such metrics
+    function arrangeScratchPad() {
+	var PADDING = 5;
+	
+	var scratchPadRect = scratchpad.getBoundingClientRect();
+	
+	var width = scratchPadRect.width;
+	var xOrigin = scratchPadRect.x;
+	var yOrigin = scratchPadRect.y;
+	
+	var x = xOrigin;
+	var y = yOrigin;
+	
+	var children = scratchpad.childNodes;
+	
+	for (var i = 0; i < children.length; i++) {
+	    if (children[i].nodeType != 3) {
+		var r = children[i];
+		
+		var rBounding = r.getBoundingClientRect();
+		
+		r.style.top = y + "px";
+		r.style.left = x + "px";
+		
+		x += rBounding.width + PADDING;
+		
+		if (xOrigin >= width) {
+		    x = xOrigin;
+		    y += rBounding.height + PADDING;
+		}
+	    }
+	}
+	
+	
+    }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){

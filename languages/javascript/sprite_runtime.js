@@ -101,7 +101,11 @@ Sprite.prototype.setPos = function(x, y){
 Sprite.prototype.draw = function(ctx){
     //rotation
     if(this.image != null){
-        ctx.drawImage(this.image,this.getPos().x,this.getPos().y,this.size.w,this.size.h);
+    	ctx.save();
+    	ctx.translate(this.getPos().x,this.getPos().y);
+    	ctx.rotate( this.facingDegrees *Math.PI/180);
+    	ctx.drawImage(this.image, 0, 0,this.size.w,this.size.h);
+    	ctx.restore();
     }else{
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -118,13 +122,17 @@ Sprite.prototype.draw = function(ctx){
         ctx.fill();
     }
     if(this.text != null){
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.textAlign="center";
-        var height = this.size.h * 0.6;
-        ctx.font = String(height) +"px Arial";
-        ctx.fillStyle = this.tColor;
-        ctx.fillText(this.text,this.getPos().x + (this.size.w *0.5),this.getPos().y + (this.size.h *0.6), this.size.w *0.8);
+    	ctx.fillStyle = this.color;
+    	ctx.fill();
+    	ctx.textAlign="center";
+    	var height = this.size.h * 0.6;
+    	ctx.font = String(height) +"px Arial";
+    	ctx.fillStyle = this.tColor;
+    	ctx.save();
+    	ctx.translate(this.getPos().x ,this.getPos().y );
+    	ctx.rotate( this.facingDegrees *Math.PI/180);
+    	ctx.fillText(this.text,this.size.w *0.5,this.size.h *0.6, this.size.w *0.8);
+    	ctx.restore();
     }
 };
 

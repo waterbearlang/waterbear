@@ -3714,64 +3714,33 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function filterBlock(event) {
-      var term = document.getElementById('search_text').value.trim();
+      var query = document.getElementById('search_text').value.trim();
+      var cats = document.querySelectorAll('.block-menu');
+     
+      /* TODO: Should use class list instead of inline style */
+      for (var i = 0; i < cats.length; i++) {
+          var hasMatch = false;
+          var blocks = cats[i].getElementsByClassName('block');
 
-      if (term == '') {
-          [].forEach.call(
-              document.querySelectorAll('.accordion-body'),
-              function(element) {
-                  element.previousSibling.removeAttribute('style');
-                  element.removeAttribute('style');
-              }
-          );
+          for (var j = 0; j < blocks.length; j++) {
+              var attr = blocks[j].getAttribute('data-keywords');
 
-          [].forEach.call(
-              document.querySelectorAll('.block'),
-              function(element) {
-                  element.removeAttribute('style');
-              }
-          );
-
-          return;
-      }
-
-      [].forEach.call(
-          document.querySelectorAll('.block'),
-          function(element) {
-              element.style.display = 'none';
-          }
-      );
-      
-      [].forEach.call(
-          document.querySelectorAll('.block[data-keywords*=' + term + ']'),
-          function(element) {
-              element.style.display = 'block';
-          }
-      );
-
-      [].forEach.call(
-          document.querySelectorAll('.accordion-body'),
-          function(element) {
-              var visible = false;
-
-              [].forEach.call(
-                  element.querySelectorAll(".block"),
-                  function(child) {
-                      if (child.style.display == 'block') {
-                          visible = true;
-                      }
-                  }
-              );
-
-              if (!visible) {
-                  element.previousSibling.style.display = 'none';
-                  element.style.display = 'none';
+              if (!query || (attr != null && attr.indexOf(query) != -1)) {
+                  hasMatch = true;
+                  blocks[j].removeAttribute('style');
               } else {
-                  element.previousSibling.removeAttribute('style');
-                  element.removeAttribute('style');
+                  blocks[j].style.display = 'none';
               }
           }
-      );
+
+          if (!query || hasMatch) {
+              cats[i].previousSibling.removeAttribute('style');
+              cats[i].removeAttribute('style');
+          } else {
+              cats[i].previousSibling.style.display = 'none';
+              cats[i].style.display = 'none';
+          }
+      }
     }
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);

@@ -113,6 +113,7 @@
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
+                'data-keywords': JSON.stringify(obj.keywords),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
@@ -629,9 +630,72 @@
         }
     }
 
+    function filterBlock(event) {
+      var term = document.getElementById('search_text').value.trim();
+
+      if (term == '') {
+          [].forEach.call(
+              document.querySelectorAll('.accordion-body'),
+              function(element) {
+                  element.previousSibling.removeAttribute('style');
+                  element.removeAttribute('style');
+              }
+          );
+
+          [].forEach.call(
+              document.querySelectorAll('.block'),
+              function(element) {
+                  element.removeAttribute('style');
+              }
+          );
+
+          return;
+      }
+
+      [].forEach.call(
+          document.querySelectorAll('.block'),
+          function(element) {
+              element.style.display = 'none';
+          }
+      );
+      
+      [].forEach.call(
+          document.querySelectorAll('.block[data-keywords*=' + term + ']'),
+          function(element) {
+              element.style.display = 'block';
+          }
+      );
+
+      [].forEach.call(
+          document.querySelectorAll('.accordion-body'),
+          function(element) {
+              var visible = false;
+
+              [].forEach.call(
+                  element.querySelectorAll(".block"),
+                  function(child) {
+                      if (child.style.display == 'block') {
+                          visible = true;
+                      }
+                  }
+              );
+
+              if (!visible) {
+                  element.previousSibling.style.display = 'none';
+                  element.style.display = 'none';
+              } else {
+                  element.previousSibling.removeAttribute('style');
+                  element.removeAttribute('style');
+              }
+          }
+      );
+    }
+
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    Event.on('#search_text', 'keyup', null, filterBlock);
 
     wb.blockRegistry = blockRegistry;
 

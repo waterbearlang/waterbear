@@ -27,10 +27,22 @@ body{
 #block_menu_wrapper {
 	-webkit-flex: 0 0 300px;
 	flex: 0 0 300px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+#search {
+	height: 24px;
+	-webkit-flex: 0 0 24px;
+	flex: 0 0 24px;
 }
 
 #block_menu {
 	height: calc(100% - 24px);
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 .workspace{

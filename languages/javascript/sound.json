@@ -1,5 +1,6 @@
 {
     "name": "Sound",
+    "help": "Sound blocks can load and play sound files (wav, mp3, ogg) if those files are supported by your browser.",
     "blocks": [
         {
             "blocktype": "step",
@@ -8,8 +9,7 @@
             "sockets": [
                 {
                     "name": "load audio## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [

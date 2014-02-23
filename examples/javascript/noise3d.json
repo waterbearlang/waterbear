@@ -1,0 +1,568 @@
+{
+    "title": "Noise 3D",
+    "description": "Animated demo of Perlin noise, with 3rd dimension used for time",
+    "date": 1392602309947,
+    "waterbearVersion": "2.0",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "group": "scripts_workspace",
+            "id": "76021d47-095b-4e96-b0e6-0e161d76d3be",
+            "help": "Drag your script blocks here",
+            "scopeId": "76021d47-095b-4e96-b0e6-0e161d76d3be",
+            "scriptId": "76021d47-095b-4e96-b0e6-0e161d76d3be",
+            "sockets": [
+                {
+                    "name": "noise3d"
+                }
+            ],
+            "seqNum": "2",
+            "script": "[[1]]",
+            "contained": [
+                {
+                    "blocktype": "eventhandler",
+                    "group": "controls",
+                    "id": "5ac29ecf-ed80-4eed-858e-b572d54fd34c",
+                    "help": "this trigger will run the attached blocks periodically",
+                    "scopeId": "0",
+                    "scriptId": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+                    "sockets": [
+                        {
+                            "name": "each frame"
+                        }
+                    ],
+                    "seqNum": "20",
+                    "script": "(function(){local.count##=0;requestAnimationFrame(function eachFrame(){local.count##++;[[1]];requestAnimationFrame(eachFrame);})})();",
+                    "locals": [
+                        {
+                            "blocktype": "expression",
+                            "sockets": [
+                                {
+                                    "name": "count##"
+                                }
+                            ],
+                            "script": "local.count##",
+                            "type": "number",
+                            "isTemplateBlock": true,
+                            "isLocal": true,
+                            "group": "controls",
+                            "seqNum": "20",
+                            "scopeId": "5ac29ecf-ed80-4eed-858e-b572d54fd34c",
+                            "scriptId": "3d2d0305-d84b-4127-a92b-5c7adb08dafd",
+                            "id": "3d2d0305-d84b-4127-a92b-5c7adb08dafd",
+                            "localSource": "5ac29ecf-ed80-4eed-858e-b572d54fd34c"
+                        }
+                    ],
+                    "contained": [
+                        {
+                            "blocktype": "context",
+                            "group": "controls",
+                            "id": "474ef3c9-9d84-4978-9e40-30cfbd222d33",
+                            "help": "repeat the contained blocks so many times",
+                            "scopeId": "0",
+                            "scriptId": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+                            "sockets": [
+                                {
+                                    "name": "repeat",
+                                    "type": "number",
+                                    "value": "10",
+                                    "uValue": "50"
+                                }
+                            ],
+                            "seqNum": "3",
+                            "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+                            "locals": [
+                                {
+                                    "blocktype": "expression",
+                                    "sockets": [
+                                        {
+                                            "name": "x"
+                                        }
+                                    ],
+                                    "script": "local.count##",
+                                    "type": "number",
+                                    "isTemplateBlock": true,
+                                    "isLocal": true,
+                                    "group": "controls",
+                                    "seqNum": "3",
+                                    "scopeId": "474ef3c9-9d84-4978-9e40-30cfbd222d33",
+                                    "scriptId": "d605629b-91f7-40e5-9a43-4ef78131b9ca",
+                                    "id": "d605629b-91f7-40e5-9a43-4ef78131b9ca",
+                                    "localSource": "474ef3c9-9d84-4978-9e40-30cfbd222d33"
+                                }
+                            ],
+                            "contained": [
+                                {
+                                    "blocktype": "context",
+                                    "group": "controls",
+                                    "id": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                    "help": "repeat the contained blocks so many times",
+                                    "scopeId": "0",
+                                    "scriptId": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+                                    "sockets": [
+                                        {
+                                            "name": "repeat",
+                                            "type": "number",
+                                            "value": "10",
+                                            "uValue": "50"
+                                        }
+                                    ],
+                                    "seqNum": "4",
+                                    "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+                                    "locals": [
+                                        {
+                                            "blocktype": "expression",
+                                            "sockets": [
+                                                {
+                                                    "name": "y"
+                                                }
+                                            ],
+                                            "script": "local.count##",
+                                            "type": "number",
+                                            "isTemplateBlock": true,
+                                            "isLocal": true,
+                                            "group": "controls",
+                                            "seqNum": "4",
+                                            "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                            "scriptId": "7fcd2ef2-0960-4d41-8d8f-cb1acc9d2a6f",
+                                            "id": "7fcd2ef2-0960-4d41-8d8f-cb1acc9d2a6f",
+                                            "localSource": "d2678189-70d6-4635-bef9-ef71b02e6fef"
+                                        }
+                                    ],
+                                    "contained": [
+                                        {
+                                            "blocktype": "step",
+                                            "group": "controls",
+                                            "id": "f9fa95cf-7b54-45a1-a2dd-7fa251fee1a5",
+                                            "help": "create a reference to re-use the any",
+                                            "scopeId": "0",
+                                            "scriptId": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+                                            "sockets": [
+                                                {
+                                                    "name": "variable variable##",
+                                                    "type": "any",
+                                                    "uName": "variable brightness",
+                                                    "uBlock": {
+                                                        "blocktype": "expression",
+                                                        "group": "math",
+                                                        "id": "e1a55845-3edb-4af6-ba4b-169acbde744c",
+                                                        "help": "rounds down to nearest whole number",
+                                                        "scopeId": "0",
+                                                        "scriptId": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+                                                        "sockets": [
+                                                            {
+                                                                "name": "floor of",
+                                                                "type": "number",
+                                                                "value": "10",
+                                                                "uBlock": {
+                                                                    "blocktype": "expression",
+                                                                    "group": "math",
+                                                                    "id": "f8e2be95-d0ad-426e-b26a-23721cdf2efa",
+                                                                    "help": "product of the two operands",
+                                                                    "scopeId": "0",
+                                                                    "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "",
+                                                                            "type": "number",
+                                                                            "uBlock": {
+                                                                                "blocktype": "expression",
+                                                                                "group": "random",
+                                                                                "id": "632443a3-8c60-4ef1-8457-065b18c51840",
+                                                                                "help": "generates Perlin noise from 3 dimensions",
+                                                                                "scopeId": "0",
+                                                                                "scriptId": "4bc09592-ed3c-4a0c-b0bd-8e520d5385b6",
+                                                                                "sockets": [
+                                                                                    {
+                                                                                        "name": "noise from x",
+                                                                                        "type": "number",
+                                                                                        "value": "0.001",
+                                                                                        "uBlock": {
+                                                                                            "blocktype": "expression",
+                                                                                            "group": "math",
+                                                                                            "id": "b2749887-3d1f-49a4-b500-9b0af909b008",
+                                                                                            "help": "quotient of the two operands",
+                                                                                            "scopeId": "0",
+                                                                                            "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+                                                                                            "sockets": [
+                                                                                                {
+                                                                                                    "name": "",
+                                                                                                    "type": "number",
+                                                                                                    "uBlock": {
+                                                                                                        "blocktype": "expression",
+                                                                                                        "group": "controls",
+                                                                                                        "id": "74dda3ac-c3e6-4c42-a84d-f28292df564c",
+                                                                                                        "help": "",
+                                                                                                        "scopeId": "474ef3c9-9d84-4978-9e40-30cfbd222d33",
+                                                                                                        "scriptId": "d605629b-91f7-40e5-9a43-4ef78131b9ca",
+                                                                                                        "sockets": [
+                                                                                                            {
+                                                                                                                "name": "x"
+                                                                                                            }
+                                                                                                        ],
+                                                                                                        "seqNum": "3",
+                                                                                                        "script": "local.count##",
+                                                                                                        "localSource": "474ef3c9-9d84-4978-9e40-30cfbd222d33",
+                                                                                                        "type": "number"
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "÷",
+                                                                                                    "type": "number",
+                                                                                                    "uValue": "10"
+                                                                                                }
+                                                                                            ],
+                                                                                            "seqNum": "24",
+                                                                                            "script": "({{1}} / {{2}})",
+                                                                                            "type": "number"
+                                                                                        }
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "y",
+                                                                                        "type": "number",
+                                                                                        "value": "0.002",
+                                                                                        "uBlock": {
+                                                                                            "blocktype": "expression",
+                                                                                            "group": "math",
+                                                                                            "id": "aaa77c70-aae8-43ab-b2cd-a292edee91f9",
+                                                                                            "help": "quotient of the two operands",
+                                                                                            "scopeId": "0",
+                                                                                            "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+                                                                                            "sockets": [
+                                                                                                {
+                                                                                                    "name": "",
+                                                                                                    "type": "number",
+                                                                                                    "uBlock": {
+                                                                                                        "blocktype": "expression",
+                                                                                                        "group": "controls",
+                                                                                                        "id": "5f5a1cec-7241-4c12-b298-a4946ddacff6",
+                                                                                                        "help": "",
+                                                                                                        "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                                                        "scriptId": "7fcd2ef2-0960-4d41-8d8f-cb1acc9d2a6f",
+                                                                                                        "sockets": [
+                                                                                                            {
+                                                                                                                "name": "y"
+                                                                                                            }
+                                                                                                        ],
+                                                                                                        "seqNum": "4",
+                                                                                                        "script": "local.count##",
+                                                                                                        "localSource": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                                                        "type": "number"
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "÷",
+                                                                                                    "type": "number",
+                                                                                                    "uValue": "10"
+                                                                                                }
+                                                                                            ],
+                                                                                            "seqNum": "23",
+                                                                                            "script": "({{1}} / {{2}})",
+                                                                                            "type": "number"
+                                                                                        }
+                                                                                    },
+                                                                                    {
+                                                                                        "name": "z",
+                                                                                        "type": "number",
+                                                                                        "value": "0.003",
+                                                                                        "uBlock": {
+                                                                                            "blocktype": "expression",
+                                                                                            "group": "math",
+                                                                                            "id": "846bdbb3-0db6-4bf0-96a5-004ac739bfb2",
+                                                                                            "help": "quotient of the two operands",
+                                                                                            "scopeId": "0",
+                                                                                            "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+                                                                                            "sockets": [
+                                                                                                {
+                                                                                                    "name": "",
+                                                                                                    "type": "number",
+                                                                                                    "uBlock": {
+                                                                                                        "blocktype": "expression",
+                                                                                                        "group": "controls",
+                                                                                                        "id": "506ca582-4967-44f7-b096-ecf83d5057b0",
+                                                                                                        "help": "",
+                                                                                                        "scopeId": "5ac29ecf-ed80-4eed-858e-b572d54fd34c",
+                                                                                                        "scriptId": "3d2d0305-d84b-4127-a92b-5c7adb08dafd",
+                                                                                                        "sockets": [
+                                                                                                            {
+                                                                                                                "name": "count##",
+                                                                                                                "uName": "count 20"
+                                                                                                            }
+                                                                                                        ],
+                                                                                                        "seqNum": "20",
+                                                                                                        "script": "local.count##",
+                                                                                                        "localSource": "5ac29ecf-ed80-4eed-858e-b572d54fd34c",
+                                                                                                        "type": "number"
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "÷",
+                                                                                                    "type": "number",
+                                                                                                    "uValue": "10"
+                                                                                                }
+                                                                                            ],
+                                                                                            "seqNum": "25",
+                                                                                            "script": "({{1}} / {{2}})",
+                                                                                            "type": "number"
+                                                                                        }
+                                                                                    }
+                                                                                ],
+                                                                                "seqNum": "22",
+                                                                                "script": "noise({{1}},{{2}},{{3}})",
+                                                                                "type": "number"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "name": "×",
+                                                                            "type": "number",
+                                                                            "uValue": "255"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "12",
+                                                                    "script": "({{1}} * {{2}})",
+                                                                    "type": "number"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "seqNum": "19",
+                                                        "script": "Math.floor({{1}})",
+                                                        "type": "number"
+                                                    }
+                                                }
+                                            ],
+                                            "seqNum": "11",
+                                            "script": "local.variable## = {{1}};",
+                                            "locals": [
+                                                {
+                                                    "blocktype": "expression",
+                                                    "script": "local.variable##",
+                                                    "type": "any",
+                                                    "sockets": [
+                                                        {
+                                                            "name": "brightness"
+                                                        }
+                                                    ],
+                                                    "isTemplateBlock": true,
+                                                    "isLocal": true,
+                                                    "group": "controls",
+                                                    "seqNum": "11",
+                                                    "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                    "scriptId": "e1d053fd-9b0b-4c6d-8fe1-0dcda0ef26fb",
+                                                    "id": "e1d053fd-9b0b-4c6d-8fe1-0dcda0ef26fb",
+                                                    "localSource": "f9fa95cf-7b54-45a1-a2dd-7fa251fee1a5"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "blocktype": "step",
+                                            "group": "shapes",
+                                            "id": "fae27e13-c069-4b69-9063-e97d48d176f4",
+                                            "help": "",
+                                            "scopeId": "0",
+                                            "scriptId": "e399d950-4d91-49aa-ac42-bfc58299633c",
+                                            "sockets": [
+                                                {
+                                                    "name": "fill circle at point",
+                                                    "type": "point",
+                                                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+                                                    "uBlock": {
+                                                        "blocktype": "expression",
+                                                        "group": "points",
+                                                        "id": "298082a2-be55-4bfd-97dc-ebb3283da475",
+                                                        "help": "create a new point",
+                                                        "scopeId": "0",
+                                                        "scriptId": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+                                                        "sockets": [
+                                                            {
+                                                                "name": "point at x",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "blocktype": "expression",
+                                                                    "group": "math",
+                                                                    "id": "cd315176-ca6d-4202-91f2-621c779f18af",
+                                                                    "help": "product of the two operands",
+                                                                    "scopeId": "0",
+                                                                    "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "",
+                                                                            "type": "number",
+                                                                            "uBlock": {
+                                                                                "blocktype": "expression",
+                                                                                "group": "controls",
+                                                                                "id": "ecd188f9-f913-4dfd-942a-e95328f6c638",
+                                                                                "help": "",
+                                                                                "scopeId": "474ef3c9-9d84-4978-9e40-30cfbd222d33",
+                                                                                "scriptId": "d605629b-91f7-40e5-9a43-4ef78131b9ca",
+                                                                                "sockets": [
+                                                                                    {
+                                                                                        "name": "x"
+                                                                                    }
+                                                                                ],
+                                                                                "seqNum": "3",
+                                                                                "script": "local.count##",
+                                                                                "localSource": "474ef3c9-9d84-4978-9e40-30cfbd222d33",
+                                                                                "type": "number"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "name": "×",
+                                                                            "type": "number",
+                                                                            "uValue": "8"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "10",
+                                                                    "script": "({{1}} * {{2}})",
+                                                                    "type": "number"
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "y",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "blocktype": "expression",
+                                                                    "group": "math",
+                                                                    "id": "e35a0018-a22c-4308-a551-e020d06123da",
+                                                                    "help": "product of the two operands",
+                                                                    "scopeId": "0",
+                                                                    "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "",
+                                                                            "type": "number",
+                                                                            "uBlock": {
+                                                                                "blocktype": "expression",
+                                                                                "group": "controls",
+                                                                                "id": "83ac7142-e460-4102-a9ab-c3896a8d638b",
+                                                                                "help": "",
+                                                                                "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                                "scriptId": "7fcd2ef2-0960-4d41-8d8f-cb1acc9d2a6f",
+                                                                                "sockets": [
+                                                                                    {
+                                                                                        "name": "y"
+                                                                                    }
+                                                                                ],
+                                                                                "seqNum": "4",
+                                                                                "script": "local.count##",
+                                                                                "localSource": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                                "type": "number"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "name": "×",
+                                                                            "type": "number",
+                                                                            "uValue": "8"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "9",
+                                                                    "script": "({{1}} * {{2}})",
+                                                                    "type": "number"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "seqNum": "8",
+                                                        "script": "{x: {{1}}, y: {{2}} }",
+                                                        "type": "point"
+                                                    }
+                                                },
+                                                {
+                                                    "name": "with radius",
+                                                    "type": "number",
+                                                    "value": "30",
+                                                    "uValue": "4"
+                                                },
+                                                {
+                                                    "name": "and color",
+                                                    "type": "color",
+                                                    "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                                                    "uBlock": {
+                                                        "blocktype": "expression",
+                                                        "group": "color",
+                                                        "id": "9d059cd0-4cec-41a2-96ef-ed5656ce2cb4",
+                                                        "help": "returns a color",
+                                                        "scopeId": "0",
+                                                        "scriptId": "271c8b4c-b045-4ff9-8ad5-9608ea204b09",
+                                                        "sockets": [
+                                                            {
+                                                                "name": "color with red",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "blocktype": "expression",
+                                                                    "group": "controls",
+                                                                    "id": "7dc74be6-3acd-4daa-8189-ea8f034ed639",
+                                                                    "help": "",
+                                                                    "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                    "scriptId": "e1d053fd-9b0b-4c6d-8fe1-0dcda0ef26fb",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "brightness"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "11",
+                                                                    "script": "local.variable##",
+                                                                    "localSource": "f9fa95cf-7b54-45a1-a2dd-7fa251fee1a5",
+                                                                    "type": "any"
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "green",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "blocktype": "expression",
+                                                                    "group": "controls",
+                                                                    "id": "c98d3e12-783d-4725-8ee5-291ba55e1d29",
+                                                                    "help": "",
+                                                                    "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                    "scriptId": "e1d053fd-9b0b-4c6d-8fe1-0dcda0ef26fb",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "brightness"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "11",
+                                                                    "script": "local.variable##",
+                                                                    "localSource": "f9fa95cf-7b54-45a1-a2dd-7fa251fee1a5",
+                                                                    "type": "any"
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "blue",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "blocktype": "expression",
+                                                                    "group": "controls",
+                                                                    "id": "2fa1d8fb-e501-4cae-b779-545fb8edfccf",
+                                                                    "help": "",
+                                                                    "scopeId": "d2678189-70d6-4635-bef9-ef71b02e6fef",
+                                                                    "scriptId": "e1d053fd-9b0b-4c6d-8fe1-0dcda0ef26fb",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "brightness"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "11",
+                                                                    "script": "local.variable##",
+                                                                    "localSource": "f9fa95cf-7b54-45a1-a2dd-7fa251fee1a5",
+                                                                    "type": "any"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "seqNum": "17",
+                                                        "script": "\"rgb(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \")\"",
+                                                        "type": "color"
+                                                    }
+                                                }
+                                            ],
+                                            "seqNum": "5",
+                                            "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

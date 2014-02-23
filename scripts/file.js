@@ -6,26 +6,30 @@
 // * Loading and saving to LocalStorage (including currentScript)
 // * Loading examples
 // * etc.
+/* Note: LocalStorage is persistent, for things you want to have available
+   even if the user leaves the site or restarts their browser. SessionStorage
+   is volatile and will be deleted if they restart the browser.*/
 
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(wb){
 
-	wb.saveCurrentScripts = function saveCurrentScripts(){
+	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
 			// nothing to save
 			return;
 		}
-		wb.showWorkspace('block');
 		document.querySelector('#block_menu').scrollIntoView();
 		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
 	};
 
 	// Save script to gist;
-	wb.saveCurrentScriptsToGist = function saveCurrentScriptsToGist(event){
+	function saveCurrentScriptsToGist(event){
 	    event.preventDefault();
 		// console.log("Saving to Gist");
 		var title = prompt("Save to an anonymous Gist titled: ");
-
+		if ( !title ) return;
 		ajax.post("https://api.github.com/gists", function(data){
 	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
 	        var gistID = JSON.parse(data).url.split("/").pop();
@@ -42,13 +46,15 @@
 	    	"public": true,
 	    	"files": {
 	    		"script.json": {
-	    			"content": scriptsToString(title)
+	    			"content": scriptsToString(title, '', title)
 	    		},
 	    	}
-	    }));
+	    }), function(statusCode, x){
+            alert("Can't save to Gist:\n" + statusCode + " (" + x.statusText + ") ");
+        });
 	};
 	//populate the gist submenu with recent gists
-	wb.loadRecentGists = function loadRecentGists() {
+	function loadRecentGists() {
 		var localGists = localStorage['__' + wb.language + '_recent_gists'];
 		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
 		var gistContainer = document.querySelector("#recent_gists");
@@ -75,31 +81,42 @@
 		}
 	};
 
-
-	function scriptsToString(title, description){
+	//Potential FIXME: I feel that title should be the filename, but uName || name
+	//determines what is shown in the workspace.
+	function scriptsToString(title, description, name){
 		if (!title){ title = ''; }
 		if (!description){ description = ''; }
+		if (!name){ name = 'Workspace';}
 		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		return JSON.stringify({
+		var json = {
 			title: title,
 			description: description,
 			date: Date.now(),
 			waterbearVersion: '2.0',
 			blocks: blocks.map(wb.blockDesc)
-		});
+		};
+
+		if(json.blocks[0].sockets[0].name){
+			json.blocks[0].sockets[0].name = name;
+		}else if(json.blocks[0].sockets[0].uName){
+			json.blocks[0].sockets[0].uName = name;
+		}
+
+		return JSON.stringify(json, null, '    ');
 	}
 
 
-	wb.createDownloadUrl = function createDownloadUrl(evt){
+	function createDownloadUrl(evt){
 	    evt.preventDefault();
-	    var title = prompt("Save file as: ");
+	    var name = prompt("Save file as: ");
+	    if( !name ) return;
 		var URL = window.webkitURL || window.URL;
-		var file = new Blob([scriptsToString()], {type: 'application/json'});
+		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
 		var reader = new FileReader();
 		var a = document.createElement('a');
 		reader.onloadend = function(){
 			a.href = reader.result;
-			a.download = title + '.json';
+			a.download = name + '.json';
 			a.target = '_blank';
 			document.body.appendChild(a);
 			a.click();
@@ -107,16 +124,22 @@
 		reader.readAsDataURL(file);
 	};
 
-	wb.loadScriptsFromGistId = function loadScriptsFromGistId(id){
+	function loadScriptsFromGistId(id){
 		//we may get an event passed to this function so make sure we have a valid id or ask for one
 		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
 		// console.log("Loading gist " + id);
+		if( !gistID ) return;
 		ajax.get("https://api.github.com/gists/"+gistID, function(data){
 			loadScriptsFromGist({data:JSON.parse(data)});
+	    }, function(statusCode, x){
+            alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
 		});
+        var path = location.href.split('?')[0];
+        path += "?gist=" + gistID;
+        history.pushState(null, '', path);
 	};
 
-	wb.loadScriptsFromFilesystem = function loadScriptsFromFilesystem(event){
+	function loadScriptsFromFilesystem(event){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
@@ -164,32 +187,36 @@
 	}
 
 	function loadScriptsFromExample(name){
-		wb.ajax('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
-		}, function(xhr, status){
-			console.error('Error in wb.ajax:', status);
+		}, function(statusCode, xhr){
+			console.error(statusCode + xhr);
 		});
 	}
 
-	wb.loadCurrentScripts = function(queryParsed){
+	function loadCurrentScripts(queryParsed){
 		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
 		if (wb.loaded) return;
+		wb.scriptLoaded = false;
 		if (queryParsed.gist){
-			// console.log("Loading gist %s", queryParsed.gist);
+			//console.log("Loading gist %s", queryParsed.gist);
 			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
 				loadScriptsFromGist({data:JSON.parse(data)});
+	        }, function(statusCode, x){
+              alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
 			});
 		}else if (queryParsed.example){
-			// console.log('loading example %s', queryParsed.example);
+			//console.log('loading example %s', queryParsed.example);
 			loadScriptsFromExample(queryParsed.example);
 		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			// console.log('loading current script from local storage');
+			//console.log('loading current script from local storage');
 			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
 			if (fileObject){
 				loadScriptsFromObject(fileObject);
 			}
 		}else{
-			// console.log('no script to load, starting a new script');
+			//console.log('no script to load, starting a new script');	
+			wb.scriptLoaded = true;
 			wb.createWorkspace('Workspace');
 		}
 		wb.loaded = true;
@@ -213,7 +240,7 @@
 		};
 	}
 
-	wb.getFiles = function getFiles(evt){
+	function getFiles(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
 		var files = evt.dataTransfer.files;
@@ -224,5 +251,13 @@
 	    }
 	}
 
+	wb.saveCurrentScripts = saveCurrentScripts;
+	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
+	wb.loadRecentGists = loadRecentGists;
+	wb.createDownloadUrl = createDownloadUrl;
+	wb.loadScriptsFromGistId = loadScriptsFromGistId;
+	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
+	wb.loadCurrentScripts = loadCurrentScripts;
+	wb.getFiles = getFiles;
 
 })(wb);

@@ -5,6 +5,9 @@
  *    will include Minecraft and RPi-GPIO and othe RPi stuff
  */
 
+// A couple of do-nothing scripts for compatibility
+
+wb.clearStage = function(){};
 
 
 wb.wrap = function(script){
@@ -46,7 +49,6 @@ wb.ajax = {
     };
 
 
-document.querySelector('.stop-scripts').style.display = 'none';
     
 wb.resetrun = function(message){
     messagebox.innerHTML = message;

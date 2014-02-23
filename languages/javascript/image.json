@@ -1,21 +1,45 @@
 {
     "name": "Images",
+    "help": "Image blocks are for loading image files to use in other blocks and for manipulating images. See Sprite and Canvas menus.",
     "blocks": [
         {
             "blocktype": "step",
+            "id": "7c40299d-ca48-4aba-a326-45ccb5f9d37b",
+            "script": "local.image##=new Image();local.image##.src={{1}};",
+            "help": "Create a new image from a URL",
+            "sockets": [
+                {
+                    "name": "load image##",
+                    "type": "url"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "asset",
+                    "type": "image",
+                    "script": "local.image##",
+                    "help": "reference to an image",
+                    "sockets": [
+                        {
+                            "name": "image##"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
             "id": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
-            "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);",
+            "script": "local.ctx.drawImage({{1}},{{2}}.x,{{2}}.y);",
             "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -27,13 +51,11 @@
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "in rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -45,18 +67,15 @@
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "to rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -80,8 +99,7 @@
             "sockets": [
                 {
                     "name": "create ImageData ImageData## with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
@@ -105,8 +123,7 @@
             "sockets": [
                 {
                     "name": "create ImageData ImageData## from imageData",
-                    "type": "imageData",
-                    "value": null
+                    "type": "imageData"
                 }
             ]
         },
@@ -130,8 +147,7 @@
             "sockets": [
                 {
                     "name": "get imageData## for rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -143,13 +159,11 @@
             "sockets": [
                 {
                     "name": "draw imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -161,18 +175,15 @@
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -185,10 +196,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -201,10 +209,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -217,10 +222,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -231,8 +233,7 @@
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [
@@ -257,10 +258,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -273,10 +271,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -289,10 +284,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "url"
+                    "suffix": "url"
                 }
             ]
         }

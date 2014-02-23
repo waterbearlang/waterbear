@@ -1,3 +1,5 @@
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 (function(global){
     //
     //
@@ -9,35 +11,33 @@
     // TODO
     // Make these methods on HTMLDocument, HTMLElement, NodeList prototypes
 
-    wb.makeArray = function makeArray(arrayLike){
+    function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
     };
 
-    wb.reposition = function reposition(elem, position){
+    function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
     };
 
-    wb.hide = function(elem){
-        elem.dataset.display = elem.style.display;
-        elem.style.display = 'none';
+    function hide(elem){
+        elem.classList.add('hidden');
     };
 
-    wb.show = function(elem){
-        elem.style.display = elem.dataset.display || 'block';
-        delete elem.dataset.display;
+    function show(elem){
+        elem.classList.remove('hidden');
     };
 
-    var svgtext = document.querySelector('svg text');
-    wb.resize = function(input){
+    var svgText = document.querySelector('.resize-tester');
+    function resize(input){
         if (!input) return;
         if (input.wbTarget){
             input = input.wbTarget;
         }
-        svgtext.textContent = input.value || '';
-        var textbox = svgtext.getBBox();
+        svgText.textContent = input.value || '';
+        var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
     };
 
@@ -45,12 +45,12 @@
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
     // };
 
-    wb.dist = function dist(p1, p2, m1, m2){
+    function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
     };
 
 
-    wb.overlapRect = function overlapRect(r1, r2){ // determine area of overlap between two rects
+    function overlapRect(r1, r2){ // determine area of overlap between two rects
         if (r1.left > r2.right){ return 0; }
         if (r1.right < r2.left){ return 0; }
         if (r1.top > r2.bottom){ return 0; }
@@ -59,24 +59,24 @@
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
     };
 
-    wb.rect = function rect(elem){
+    function rect(elem){
         return elem.getBoundingClientRect();
     };
 
-    wb.overlap = function overlap(elem1, elem2){
+    function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
     };
 
-    wb.area = function area(elem){
+    function area(elem){
         return elem.clientWidth * elem.clientHeight;
     };
 
-    wb.containedBy = function containedBy(target, container){
+    function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
     };
 
-    wb.closest = function closest(elem, selector){
+    function closest(elem, selector){
         if (elem.jquery){
             elem = elem[0];
         }
@@ -86,13 +86,14 @@
             }
             if (!elem.parentElement){
                 throw new Error('Element has no parent, is it in the tree? %o', elem);
+                //return null;
             }
             elem = elem.parentElement;
         }
         return null;
     };
 
-    wb.indexOf = function indexOf(elem){
+    function indexOf(elem){
         var idx = 0;
         while(elem.previousSiblingElement){
             elem = elem.previousSiblingElement;
@@ -101,21 +102,29 @@
         return idx;
     };
 
-    wb.find = function find(elem, selector){
+    function find(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return elem.querySelector(selector);
     };
 
-    wb.findAll = function findAll(elem, selector){
+    function findAll(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
-    wb.findChildren = function findChildren(elem, selector){
+    function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
     };
 
-    wb.findChild = function(elem, selector){
+    function findChild(elem, selector){
         if (arguments.length !== 2){
             throw new Exception('This is the culprit');
         }
@@ -129,7 +138,7 @@
         return null;
     };
 
-    wb.elem = function elem(name, attributes, children){
+   function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
         // attributes can be null or undefined, or an object of key/values to set
         // children can be text or an array. If an array, can contain strings or arrays of [name, attributes, children]
@@ -195,42 +204,23 @@
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
 
-    // AJAX utilities
-
-    var jsonpHandlers = {};
-    wb.jsonp = function(url, callback){
-        var id = 'handler' + Math.floor(Math.random() * 0xFFFF);
-        var handler = function(data){
-            // remove jsonp 
-            var script = document.getElementById(id);
-            script.parentElement.removeChild(script);
-            // remove self
-            delete window[id];
-            callback(data);
-        };
-        window[id] = handler;
-        document.head.appendChild(wb.elem('script', {src: url + '?callback=' + id, id: id, language: 'text/json'}));
-    };
-
-    /* adapted from code here: http://javascriptexample.net/ajax01.php */
-    wb.ajax = function(url, success, failure){
-        var req = new XMLHttpRequest();
-        req.onreadystatechange = function() {
-            var cType;
-            if (req.readyState === 4) {
-                if (req.status === 200) {
-                    cType = this.getResponseHeader("Content-Type");
-                    success(this.responseText, cType);
-                }else{
-                    if (failure){
-                        failure(this.status, this);
-                    }
-                }
-            }
-        };
-        req.open('GET', url, true);
-        req.send(null);
-    };
-
+    wb.makeArray = makeArray;
+    wb.reposition = reposition;
+    wb.hide = hide;
+    wb.show = show;
+    wb.resize = resize;
+    wb.dist = dist;
+    wb.overlapRect = overlapRect;
+    wb.rect = rect;
+    wb.overlap = overlap;
+    wb.area = area;
+    wb.containedBy = containedBy;
+    wb.closest = closest;
+    wb.indexOf = indexOf;
+    wb.find = find;
+    wb.findAll = findAll;
+    wb.findChildren = findChildren;
+    wb.findChild = findChild;
+    wb.elem = elem;
 
 })(this);

@@ -7,6 +7,16 @@
   position: relative;
 }
 
+.block, .block * {
+  cursor: move;
+  cursor: -moz-grab;
+}
+
+.block .socket input,
+.block .socket select {
+	cursor: auto;
+}
+
 .scripts_workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }
@@ -14,7 +24,6 @@
 .submenu .seq-num{
   display: none;
 }
-
 
 .holder {
   display: inline-block;
@@ -27,10 +36,16 @@
 
 .socket{
   position: relative;
-  display: inline-block;
+  display: block;
   height:100%;
   vertical-align:middle;
+  text-align: right;
 }
+
+.scripts_workspace > .label >  .socket{
+  text-align: left;
+}
+
 .socket > *{
   height:100%;
   vertical-align:middle;
@@ -77,8 +92,10 @@
   white-space: nowrap;
   cursor: pointer;
   min-width: 75px;
+  max-width: 300px;
   float: left;
   clear: left;
+  overflow-x: visible;
 }
 
 .locals .expression{
@@ -297,11 +314,13 @@
 
 .block.scripts_workspace{
     width: 100%;
-    height: 95%;
+    height: calc(100% - 36px); /* 36px refers to height of tabbar class */
     margin: 0px;
+    padding: 0px;
 }
 .block.scripts_workspace{
     width: 100%;
+    max-width: 100%;
     border: 0;
 }
 .block.scripts_workspace:before{
@@ -328,6 +347,7 @@
   margin-right: 1em;
   margin-left -1em;
   display: inline-block;
+  cursor: pointer;
 }
 
 .disclosure:before{
@@ -338,14 +358,17 @@
   content: "▶"
 }
 
-.block_menu .disclosure{
+.block-menu .disclosure{
   display: none;
+}
+
+#block_menu .accordion-header.hidden,
+#block_menu.settings .accordion-body,
+#block_menu .accordion-header.hidden + .accordion-body {
+	display: none;
 }
 
 #block_menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;
-}
-#block_menu .accordion-header.hidden {
-	display:none;
 }

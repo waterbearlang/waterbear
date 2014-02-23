@@ -12,15 +12,6 @@
 	user-select: none;
 }
 
-.scripts_text_view {
-	-webkit-touch-callout: text;
-	-webkit-user-select: text;
-	-khtml-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
-	user-select: text;
-}
-
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
 	margin: 0;
 	padding: 0;
@@ -32,226 +23,51 @@ input{
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.scripts_text_view {
+	-webkit-touch-callout: text;
+	-webkit-user-select: text;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
+
+.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace{
+	margin: 5px;
+	border: 2px outset #333;
+	padding: 10px;	
+}
+
+.stage{
+	margin: 5px;
+	border: 2px outset #333;
+}
+
+
 /* Scratch-ish Layout Styles */
 
 .content{
 	position: relative;
-	width: 100%;
-	height: 100%;
+}
+
+
+.hidden, .block.hidden{
 	display: none;
 }
 
-body.editor .editor, body.blocks .editor{
-	display: block;
-}
-
-body.editor .result, body.blocks .result{
-	display: none;
-}
-
-body.result .editor{
-	display: none;
-}
-body.result .result{
-	display: block;
-}
-
-.workspace {
-	width: calc(100% - 300px);
-	height: calc(100% - 40px);
-	overflow: hidden;
-	pointer-events: none;
-}
-
-.workspace *{
-	pointer-events: auto;
-}
-
-body.blocks .workspace{
-	padding-left: 0;
-	width: 100%;
-}
-
-.tabbar{
-	height: 36px;
-	padding-left: 36px;
-	padding-right: 36px;
-}
-
-.scripts_workspace, .scripts_text_view {
-	width: 100%;
-	height: 80%;
-	display: none;
-	padding: 15px;
-	padding-top: 0;
-	overflow: scroll;
-}
-
-.scripts_workspace{
-	padding-top: 30px;
-	padding-bottom: 100px;
-}
-
-.workspace.blockview .scripts_workspace{
-	display: block;
-}
-
-.workspace.textview .scripts_text_view{
-	display: block;
-}
-
-#block_menu{
-	float: left;
-	width: 300px;
-	height: 100%;
-	overflow: auto;
-	display: none;
-}
-
-body.editor #block_menu{
-	display: block;
-}
-
-#block_menu .select{
-	padding: 3px 10px;
-	margin-bottom: 1px;
-	font-weight: bold;
-	color: #333;
-	background-color: #CCC;
-	border: 1px solid #333;
-	cursor: pointer;
-}
-
-#block_menu .selected{
-	color: #000;
-	background-color: #EEE;
-}
-
-.option{
-	position: relative;
-	overflow: hidden;
-	padding: 15px;
-}
-
-.option input {
-	cursor: pointer;
-}
-
-.submenu .block {
-	margin-bottom: 20px;
-}
-
-.dropCursor {
-	height: 2px;
-	background-color: red;
-	width: 75%
-	float: left;
-	clear: left;
-}
-
-.chrome_tab{
-	float: left;
-	margin-right: 5px;
-	position: relative;
-	bottom: -2px;
-	border: 1px solid #666;
-	border-bottom: 0px;
-	-webkit-border-top-right-radius: 4px;
-	-webkit-border-top-left-radius: 4px;
-	-moz-border-radius-topright: 4px;
-	-moz-border-radius-topleft: 4px;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
-	width: 24%;
-	background-color: #999;
-	color: #333;
-	z-index: 1;
-	cursor: pointer;
-}
-
-.chrome_tab.selected{
-	background-color: #FFF;
-	color: #000;
-	border-color: #333;
-}
-
-.stage {
-	position: absolute;
-	padding-top: 36px;
-	height: 100%;
-	width: 100%;
-	left: 0;
-	top: 0;
-	pointer-events: none;
-}
-.stage *{
-	pointer-events: auto;
-}
-
-
-.hidden{
-	display: none;
-}
-
-#color_popup{
-	background-color: green;
-	padding: 5px 10px 15px 10px;
-}
-
-#color_contents{
-	width: 300px;
-	height: 300px;
-	background-color: blue;
-}
-
-/* Description of saves */
-.description{
-	font-size: .8em;
-	color: #515151;
-}
-
-/* These additions should only change the appearance of the tabs*/
-
-
-.chrome_tab {
-	margin-left: 5px;
-	position: relative;
-	border: 1px solid #666;
-	border-bottom: 0px;
-	cursor: pointer;
-	width: 15%;
-	background-color: #999;
-	color: #F2F2F2;
-	z-index: 1;
-	padding: 5px;
-	margin-bottom: 4px;
-}
-
-.chrome_tab.selected {
-	background-color: #4D736D;
-	color: white;
-	border-color: #333;
-	font-weight: bold;
-}
-
-/* Lists of scripts to scroll. Used in demo & restore dialog*/
-.scrollList{
-	max-height: 300px;
-	overflow-y:scroll;
-}
 
 /* ACCORDION */
 
 #block_menu{
-	position: relative;
+	/*position: relative;*/
 	cursor: pointer;
 	margin-top: 1px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	/*-moz-border-radius: 4px;*/
+	/*-webkit-border-radius: 4px;*/
+	/*border-radius: 4px;*/
 	border-width: 0;
-	border-style: solid;
-	font-weight: normal;
+	/*border-style: solid;*/
+	/*font-weight: normal;*/
 	color: #252323;
 	margin: 0;
 	padding: 0;
@@ -275,13 +91,22 @@ body.editor #block_menu{
 	display: block
 }
 
+.accordion-description{
+	padding: 0em 0em 1em 0em;
+	font-size: .9em;
+	margin-left: -15px; /* i hate this */
+}
+
 /* SVG is in place for text-sizing only */
 
-svg{
-	position:absolute;
-	left: -1000px;
-	/*display: none;*/
+.sekrit-svg{
+	position: absolute;
+	left: -1000px; /* cannot use with display: none */
+	top: 0; /* because it was screwing up layout even hidden */
+	width: 400px;
+	height: 100px;
 }
+
 svg text{
 	/* This should be the same font used for <input> */
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -296,12 +121,17 @@ a.disabled {
 }
 h1.title {
 	margin:0;
-	float: left;
-	display: block;
+	display: inline;
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
-	text-shadow: 0 2px 0 #000;
+	vertical-align: top;
+	line-height: 34px;
+}
+
+.titlebar{
+	background-color: #111111;
+	color: #FFFFFF;
 }
 
 @media (max-width: 600px) {
@@ -309,6 +139,14 @@ h1.title {
 		background:#333;
 		width:100%;
 	}
+}
+
+/* cursor for drag and drop */
+
+.drop-cursor {
+	height: 2px;
+	background-color: red;
+	width: 75%
 }
 
 /* Context menu */

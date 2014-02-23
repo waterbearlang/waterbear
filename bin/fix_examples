@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var path = require('path');
+
+// This script is specifically to fix up processingjs examples, can modify it later to be more flexible if needed
+
+var nameIdMap = {};
+
+function languageBlockFiles(){
+	return fs.readdirSync('languages/processingjs').filter(function(filename){
+		return path.extname(filename) === '.json';
+	});
+}
+
+function languageBlocks(){
+	var blocks = {};
+	languageBlockFiles().forEach(function(filename){
+		var languageFile = fs.readFileSync('languages/processingjs/' + filename, {encoding: 'utf8'});
+		var languageBlocks = JSON.parse(languageFile).blocks;
+		languageBlocks.forEach(function(block){
+			var name = nameForBlock(block);
+			if (blocks[name]){
+				console.error('Unexpected duplicate name: %s in %s', name, filename);
+			}else{
+				blocks[name] = block.id;
+			}
+		});
+	});
+	return blocks;
+}
+
+function checkBlocks(langBlocks, filename){
+	var changed = false;
+	var exampleFile = fs.readFileSync('examples/processingjs/' + filename, {encoding: 'utf8'});
+	var exampleBlocks = JSON.parse(exampleFile);
+	function checkBlock(block){
+		var name = nameForBlock(block);
+		if (langBlocks[name]){
+			if (block.scriptId !== langBlocks[name]){
+				block.scriptId = langBlocks[name];
+				changed = true;
+				console.log('updated %s', name);
+			}
+		}else{
+			console.log('could not find an updated id for %s in %s', name, filename);
+		}
+		if (block.contained){
+			block.contained.forEach(checkBlock);
+		}
+		block.sockets.forEach(function(socket){
+			if (socket.uBlock){
+				checkBlock(socket.uBlock);
+			}
+		});
+	}
+	exampleBlocks.blocks.forEach(checkBlock);
+	if (changed){
+		console.log('saving updated %s', filename);
+		fs.writeFileSync('examples/processingjs/' + filename, JSON.stringify(exampleBlocks, null, '  '), {encoding: 'utf8'});
+	}else{
+		console.log('%s is unchanged', filename)
+	}
+}
+
+function exampleFiles(){
+	return fs.readdirSync('examples/processingjs');
+}
+
+function nameForBlock(block){
+	return block.sockets.map(function(socket){ return socket.name; }).join('');
+}
+
+function objToStrings(obj){
+	var keys = Object.keys(obj);
+	keys.sort();
+	return keys.map(function(key){
+		return key + ': ' + obj[key];
+	});
+}
+
+function checkAllBlocks(){
+	var blocks = languageBlocks();
+	exampleFiles().forEach(function(filename){
+		checkBlocks(blocks, filename);
+	})
+}
+
+// console.log(objToStrings(languageBlocks()).join('\n'));
+checkAllBlocks();

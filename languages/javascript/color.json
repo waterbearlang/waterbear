@@ -1,5 +1,6 @@
 {
     "name": "Color",
+    "help": "Color blocks are for creating, converting, and manipulating colors",
     "blocks": [
         {
             "blocktype": "step",
@@ -9,8 +10,7 @@
             "sockets": [
                 {
                     "name": "shadow color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -50,17 +50,17 @@
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -74,22 +74,22 @@
                 {
                     "name": "color with red",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "green",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "blue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "alpha",
                     "type": "number",
-                    "value": "0.1"
+                    "value": 0.1
                 }
             ]
         },
@@ -103,17 +103,17 @@
                 {
                     "name": "color with hue",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "saturation",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "brightness",
                     "type": "number",
-                    "value": "0]"
+                    "value": 0
                 }
             ]
         },
@@ -137,8 +137,7 @@
             "sockets": [
                 {
                     "name": "stroke gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 }
             ]
         },
@@ -150,8 +149,7 @@
             "sockets": [
                 {
                     "name": "fill gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 }
             ]
         },
@@ -163,8 +161,7 @@
             "sockets": [
                 {
                     "name": "stroke pattern",
-                    "type": "pattern",
-                    "value": null
+                    "type": "pattern"
                 }
             ]
         },
@@ -176,8 +173,7 @@
             "sockets": [
                 {
                     "name": "fill pattern",
-                    "type": "pattern",
-                    "value": null
+                    "type": "pattern"
                 }
             ]
         },
@@ -201,23 +197,21 @@
             "sockets": [
                 {
                     "name": "create radial gradient from point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius1",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "to point2",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "radius2",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -241,31 +235,28 @@
             "sockets": [
                 {
                     "name": "create linear gradient from point1",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "to point2",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
         {
             "blocktype": "step",
             "id": "a0783aab-194c-4059-8f8e-4afd93ec1ca5",
-            "script": "{{1}}.addColorStop({{2}}, {{3}}",
+            "script": "{{1}}.addColorStop({{2}}, {{3}});",
             "help": "creates an additional color stop, offset must be between 0.0 and 1.0",
             "sockets": [
                 {
                     "name": "add color stop to gradient",
-                    "type": "gradient",
-                    "value": null
+                    "type": "gradient"
                 },
                 {
                     "name": "at offset",
                     "type": "number",
-                    "value": "0.5"
+                    "value": 0.5
                 },
                 {
                     "name": "with color",
@@ -294,8 +285,7 @@
             "sockets": [
                 {
                     "name": "create pattern## from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "repeats",

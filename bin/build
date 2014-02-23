@@ -13,10 +13,9 @@ var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
-    node: ['node','control', 'piface',"firmata","mc_game",  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
-    demo: ['javascript', 'demo'],
-    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
+    node: ['node','control', 'piface', 'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
+    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
+    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform']
 };
 
 var pluginlibs = {
@@ -27,22 +26,24 @@ var pluginlibs = {
     processingjs: ['processing-1.4.1']
 }
 
+var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome']
+
 var styles = {
-    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    node: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    processingjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css']
+    arduino: [],
+    javascript: ['highlight-github'],
+    node: ['highlight-github'],
+    demo: ['highlight-github'],
+    processingjs: ['highlight-github']
 }
 
-var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
 
 var libs = {
-    arduino: [],
-    javascript: ['beautify', 'highlight', 'highlight-javascript'],
-    node: ['beautify', 'highlight', 'highlight-javascript'],
-    demo: ['beautify', 'highlight', 'highlight-javascript'],
-    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1']
+    arduino: ['events.min'],
+    javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
 };
 
 
@@ -111,7 +112,9 @@ function build(){
             errors = true;
             return -1;
         }
-        styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+        styles[lang].concat(universalStyles)
+            .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
+            .forEach(function(stylename){cat(stylename, dest + '.css'); });
 
         scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
 
@@ -133,18 +136,20 @@ function build(){
         // Build HTML file
         var tplExamplePath = 'template/' + lang + '.examples';
         var examples = "";
-        if (fs.existsSync(tplExamplePath))
-        {
-            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
+        if (fs.existsSync(tplExamplePath)) {
             examples = fs.readFileSync(tplExamplePath);
+        }
+        else {
+            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
         }
 
         var tplStagePath = 'template/' + lang + '.stage';
         var stage = fs.readFileSync('template/' + "javascript" + '.stage');
-        if (fs.existsSync(tplStagePath))
-        {
-            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
+        if (fs.existsSync(tplStagePath)) {
             stage = fs.readFileSync(tplStagePath);
+        }
+        else {
+            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
         }
         var html = htmlTemplate.replace(/<\?examples\?>/g, examples)
                                .replace(/<\?stage\?>/g, stage)
@@ -154,7 +159,7 @@ function build(){
     });
 
     if (!errors) {
-        console.log("Success: The build completed successfully.");
+        console.log("Success: The build completed successfully."); //@todo this is a bit misleading
     } else {
         console.error("FAILURE: The build completed with errors. Check the messages above.");
     }

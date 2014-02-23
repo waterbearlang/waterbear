@@ -378,7 +378,10 @@
 #search form {
   width: 100%;
   border: 1px solid #CCC;
+  display: inline-block;
+  display: -webkit-inline-flex;
   display: inline-flex;
+	-webkit-flex-direction: row;
   flex-direction: row;
 }
 
@@ -394,6 +397,8 @@
 }
 
 #search form label {
+  width: 20px;
+  -webkit-flex: 0 0 20px;
   flex: 0 0 20px;
   text-align: center;
   color: #CCC;
@@ -405,10 +410,14 @@
 }
 
 #search_text {
+  width: calc(100% - 40px);
+  -webkit-flex: 0 0 auto;
   flex: 1 1 auto;
 }
 
 #search_clear {
+  width: 20px;
+  -webkit-flex: 0 0 20px;
   flex: 0 0 20px;
   font-family: 'FontAwesome';
   color: #CCC;

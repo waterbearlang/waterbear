@@ -641,7 +641,7 @@
             searchTextNode.value = '';
         }
 
-        var query = searchTextNode.value.trim();
+        var query = searchTextNode.value.trim().toLowerCase();
 
         // Detect change to input
         if (oldQuery == query) {

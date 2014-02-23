@@ -3724,7 +3724,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             searchTextNode.value = '';
         }
 
-        var query = searchTextNode.value.trim();
+        var query = searchTextNode.value.trim().toLowerCase();
 
         // Detect change to input
         if (oldQuery == query) {
@@ -3769,7 +3769,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
                 // Find a match
                 var matchKeyword = false;
-                
+
                 for (var k = 0; k < keywords.length; k++) {
                     if (keywords[k].indexOf(query) == 0) {
                         matchKeyword = true;

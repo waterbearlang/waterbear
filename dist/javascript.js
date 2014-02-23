@@ -8037,6 +8037,9 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "exponent"
             ]
         },
         {
@@ -8152,6 +8155,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "equal"
             ]
         },
         {
@@ -8171,6 +8178,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "not equal"
             ]
         },
         {
@@ -8190,6 +8201,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "less than"
             ]
         },
         {
@@ -8209,6 +8224,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "less than or equal to"
             ]
         },
         {
@@ -8228,6 +8247,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "greater than"
             ]
         },
         {
@@ -8247,6 +8270,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "greater than or equal to"
             ]
         },
         {
@@ -8266,6 +8293,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "modulus",
+                "modulo"
             ]
         },
         {
@@ -8280,6 +8311,9 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "rounding"
             ]
         },
         {
@@ -8294,6 +8328,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "absolute value"
             ]
         },
         {
@@ -8308,6 +8345,10 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "floor",
+                "rounding"
             ]
         },
         {
@@ -8322,6 +8363,10 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "ceiling",
+                "rounding"
             ]
         },
         {
@@ -8341,6 +8386,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "gcd"
             ]
         },
         {
@@ -8360,6 +8408,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "lcm"
             ]
         },
         {
@@ -8379,6 +8430,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "maximum"
             ]
         },
         {
@@ -8398,6 +8452,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "minimum"
             ]
         },
         {
@@ -8412,6 +8469,9 @@ wb.menu({
                     "type": "number",
                     "value": "5"
                 }
+            ],
+            "keywords": [
+                "factorial"
             ]
         },
         {
@@ -8427,6 +8487,10 @@ wb.menu({
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "cosine"
             ]
         },
         {
@@ -8442,6 +8506,10 @@ wb.menu({
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "sine"
             ]
         },
         {
@@ -8457,6 +8525,10 @@ wb.menu({
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "tangent"
             ]
         },
         {
@@ -8471,6 +8543,11 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arccosine",
+                "cosine"
             ]
         },
         {
@@ -8485,6 +8562,11 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arcsine",
+                "sine"
             ]
         },
         {
@@ -8499,6 +8581,11 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arctangent",
+                "tangent"
             ]
         },
         {
@@ -8516,6 +8603,12 @@ wb.menu({
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "cosh",
+                "cosine"
             ]
         },
         {
@@ -8533,6 +8626,12 @@ wb.menu({
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "sinh",
+                "sine"
             ]
         },
         {
@@ -8550,6 +8649,12 @@ wb.menu({
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "tanh",
+                "tangent"
             ]
         },
         {
@@ -8564,6 +8669,13 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "acosh",
+                "arccosine",
+                "cosine"
             ]
         },
         {
@@ -8578,6 +8690,13 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "asinh",
+                "arcsine",
+                "sine"
             ]
         },
         {
@@ -8592,6 +8711,13 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "atanh",
+                "arctangent",
+                "tangent"
             ]
         },
         {
@@ -8611,6 +8737,10 @@ wb.menu({
                     "type": "number",
                     "value": 2
                 }
+            ],
+            "keywords": [
+                "power",
+                "exponent"
             ]
         },
         {
@@ -8625,6 +8755,10 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "square root"
             ]
         },
         {
@@ -8644,6 +8778,10 @@ wb.menu({
                     "type": "number",
                     "value": "1"
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "logarithm"
             ]
         },
         {
@@ -8656,6 +8794,10 @@ wb.menu({
                 {
                     "name": "e"
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "logarithm"
             ]
         },
         {
@@ -8668,6 +8810,11 @@ wb.menu({
                 {
                     "name": "pi"
                 }
+            ],
+            "keywords": [
+                "pi",
+                "circle",
+                "circumference"
             ]
         },
         {
@@ -8680,6 +8827,11 @@ wb.menu({
                 {
                     "name": "tau"
                 }
+            ],
+            "keywords": [
+                "pi",
+                "circle",
+                "circumference"
             ]
         },
         {
@@ -8699,6 +8851,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "and"
             ]
         },
         {
@@ -8718,6 +8874,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "or"
             ]
         },
         {
@@ -8737,6 +8897,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "xor"
             ]
         },
         {
@@ -8756,6 +8920,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "nand"
             ]
         },
         {
@@ -8778,6 +8946,10 @@ wb.menu({
                 {
                     "name": "bits"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "shift"
             ]
         },
         {
@@ -8800,6 +8972,10 @@ wb.menu({
                 {
                     "name": "bits"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "shift"
             ]
         }
     ]

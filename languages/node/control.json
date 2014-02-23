@@ -8,7 +8,7 @@
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
                 {
-                    "name": "when program runs"
+                    "name": "When program runs"
                 }
             ]
         },
@@ -19,7 +19,7 @@
             "help": "run the following blocks only if the condition is true",
             "sockets": [
                 {
-                    "name": "if",
+                    "name": "If",
                     "type": "boolean",
                     "value": null
                 }
@@ -32,7 +32,7 @@
             "help": "run the  blocks if the condition is not true",
             "sockets": [
                 {
-                    "name": "if not",
+                    "name": "If not",
                     "type": "boolean",
                     "value": null
                 }
@@ -45,14 +45,14 @@
             "help": "repeat forever until condition is true",
             "sockets": [
                 {
-                    "name": "repeat until",
+                    "name": "Repeat until",
                     "type": "boolean",
                     "value": null
                 }
             ]
         },
         {
-            "blocktype": "eventhandler",
+            "blocktype": "context",
             "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
             "locals": [
                 {
@@ -70,12 +70,43 @@
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
-                    "name": "repeat",
+                    "name": "Repeat",
                     "type": "number",
                     "value": "2"
                 },
                 {
                     "name": "times a second"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "blocktype": "context",
+            "id": "89d08188-64e0-48a1-87ff-47719e35d0bb",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000*{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "Repeat every",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "seconds"
                 }
             ]
         },
@@ -98,7 +129,7 @@
             "help": "create a reference to re-use the any",
             "sockets": [
                 {
-                    "name": "variable",
+                    "name": "Variable",
                     "type": "any",
                     "value": null
                 }
@@ -111,7 +142,7 @@
             "help": "first argument must be a variable",
             "sockets": [
                 {
-                    "name": "set variable",
+                    "name": "Set variable",
                     "type": "any",
                     "value": null
                 },
@@ -129,7 +160,7 @@
             "help": "pause before running the following blocks",
             "sockets": [
                 {
-                    "name": "wait",
+                    "name": "Wait",
                     "type": "number",
                     "value": "1"
                 },
@@ -141,7 +172,7 @@
         {
             "blocktype": "context",
             "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
-            "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
+            "script": "for(count## = 1; count## <= {{1}}; count## ++){[[1]]}",
             "help": "repeat the contained blocks so many times",
             "locals": [
                 {
@@ -157,7 +188,7 @@
             ],
             "sockets": [
                 {
-                    "name": "repeat",
+                    "name": "Repeat",
                     "type": "number",
                     "value": "10"
                 }
@@ -170,7 +201,7 @@
             "help": "repeat until the condition is false",
             "sockets": [
                 {
-                    "name": "forever if",
+                    "name": "Repeat While",
                     "type": "boolean",
                     "value": "false"
                 }

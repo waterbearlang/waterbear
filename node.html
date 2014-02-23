@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Waterbear minecraftjs playground</title>
-	<link href="dist/minecraftjs.css" rel="stylesheet" />
+	<title>Waterbear node playground</title>
+	<link href="dist/node.css" rel="stylesheet" />
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -20,7 +20,7 @@
 <body>
 	<div class="titlebar">
 		<img src="images/logo.png" />
-		<h1 class="title">minecraftjs playground</h1>
+		<h1 class="title">node playground</h1>
 	</div>
 	<nav class="mobilenav">
 		<button class="show-files">Files</button>
@@ -121,21 +121,12 @@
 			<div class="tutorial hidden">Tutorial goes here</div>
 			<div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
-		<div class="stage"><iframe class="stageframe" width="100%" height="100%" src="//waterbearlang.github.io/iframerunner/index2.html"></iframe></div>
-<script>
-	var iframe = document.querySelector('.stageframe');
-	if (location.host.indexOf('local') > -1){
-		iframe.src = '/iframerunner.html';
-	}
-	function receiveMessage(event){
-		wb.iframeReady = event.data === 'ready' ? true : false;
-	}
-	window.addEventListener('message', receiveMessage, false);
-
-</script>
+		<div class="results">
+	<div class="scripts_text_view"></div>
+</div>
 
 	</div>
 	<svg class="sekrit-svg"><text class="resize-tester"></text></svg>
-	<script src="dist/minecraftjs.js"></script>
+	<script src="dist/node.js"></script>
 </body>
 </html>

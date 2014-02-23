@@ -402,6 +402,77 @@
                     "name": "tau"
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a25bdd5e-6847-4275-9b7f-bc147acd5f31",
+            "type": "int",
+            "script": "({{1}} && {{2}})",
+            "help": "Bitwise AND of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "AND",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0e4219de-1d1b-42ef-9dfa-ac090fddde02",
+            "type": "int",
+            "script": "({{1}} | {{2}})",
+            "help": "Bitwise OR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 9
+                },
+                {
+                    "name": "OR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c383c0e3-dbe0-4104-b200-8dd569ea241c",
+            "type": "int",
+            "script": "({{1}} ^ {{2}})",
+            "help": "Bitwise XOR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "XOR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "64a12634-f17b-410b-a5e1-a2f6e0b91689",
+            "type": "int",
+            "script": "(~ {{1}})",
+            "help": "Bitwise NOT number",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
         }
     ]
 }

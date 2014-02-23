@@ -525,7 +525,7 @@
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
-            wb.findAll('.block[data-scriptId=' + block.dataset.scriptId).forEach(function(elem){
+            wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
                 elem.style.backgroundColor = 'red';
             });
         }

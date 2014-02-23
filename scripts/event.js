@@ -9,14 +9,21 @@
 (function(global){
     "use strict";
 
+    function isDomObject(e){
+        if (e === window) return true;
+        if (e === document) return true;
+        if (e.tagName) return true;
+        return false;
+    }
+
     function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem);
+        if (!isDomObject(elem)){ 
+            console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }

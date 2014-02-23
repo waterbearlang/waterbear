@@ -2097,10 +2097,18 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     };
 
     function find(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return elem.querySelector(selector);
     };
 
     function findAll(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
@@ -2225,14 +2233,21 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 (function(global){
     "use strict";
 
+    function isDomObject(e){
+        if (e === window) return true;
+        if (e === document) return true;
+        if (e.tagName) return true;
+        return false;
+    }
+
     function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem);
+        if (!isDomObject(elem)){ 
+            console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
@@ -2382,47 +2397,46 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     // Waterbear which does what we need. The last piece makes it waterbear-specific
     // but could potentially be factored out if another library supported all of the
     // rest (and didn't introduce new dependencies such as jQuery)
-
+    
     // FIXME: Remove references to waterbear
     // FIXME: Include mousetouch in garden
-
-
-// Goals:
-//
-// Drag any block from block menu to script canvas: clone and add to script canvas
-// Drag any block from anywhere besides menu to menu: delete block and contained blocks
-// Drag any attached block to canvas: detach and add to script canvas
-// Drag any block (from block menu, canvas, or attached) to a matching, open attachment point: add to that script at that point
-//    Triggers have no flap, so no attachment point
-//    Steps can only be attached to flap -> slot
-//    Values can only be attached to sockets of a compatible type
-// Drag any block to anywhere that is not the block menu or on a canvas: undo the drag
-
-// Drag Pseudocode
-//
-// Mouse Dragging:
-//
-// 1. On mousedown, test for potential drag target
-// 2. On mousemove, if mousedown and target, start dragging
-//     a) test for potential drop targets, remember them for hit testing
-//     b) hit test periodically (not on mouse move)
-//     c) clone element (if necessary)
-//     d) if dragging out of a socket, replace with input of proper type
-//     e) move drag target
-// 3. On mouseup, if dragging, stop
-//     a) test for drop, handle if necessary
-//     b) clean up temporary elements, remove or move back if not dropping
-//
-//
-// Touch dragging
-//
-// 1. On touchmove, test for potential drag target, start dragging
-//     a..d as above
-// 2. On touchend, if dragging, stop
-//    a..b as above
-
-// Key to touch is the timer function for handling movement and hit testing
-
+    
+    // Goals:
+    //
+    // Drag any block from block menu to script canvas: clone and add to script canvas
+    // Drag any block from anywhere besides menu to menu: delete block and contained blocks
+    // Drag any attached block to canvas: detach and add to script canvas
+    // Drag any block (from block menu, canvas, or attached) to a matching, open attachment point: add to that script at that point
+    //    Triggers have no flap, so no attachment point
+    //    Steps can only be attached to flap -> slot
+    //    Values can only be attached to sockets of a compatible type
+    // Drag any block to anywhere that is not the block menu or on a canvas: undo the drag
+    
+    // Drag Pseudocode
+    //
+    // Mouse Dragging:
+    //
+    // 1. On mousedown, test for potential drag target
+    // 2. On mousemove, if mousedown and target, start dragging
+    //     a) test for potential drop targets, remember them for hit testing
+    //     b) hit test periodically (not on mouse move)
+    //     c) clone element (if necessary)
+    //     d) if dragging out of a socket, replace with input of proper type
+    //     e) move drag target
+    // 3. On mouseup, if dragging, stop
+    //     a) test for drop, handle if necessary
+    //     b) clean up temporary elements, remove or move back if not dropping
+    //
+    //
+    // Touch dragging
+    //
+    // 1. On touchmove, test for potential drag target, start dragging
+    //     a..d as above
+    // 2. On touchend, if dragging, stop
+    //    a..b as above
+    
+    // Key to touch is the timer function for handling movement and hit testing
+    
     var dragTimeout = 20;
     var snapDist = 25; //In pixels
     var startParent;
@@ -2434,16 +2448,16 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var currentPosition;
     var scope;
     var workspace; // <- WB. The Workspace block is created with the function
-		   // createWorkspace() in the workspace.js file.
+           // createWorkspace() in the workspace.js file.
     var blockMenu = document.querySelector('#block_menu'); // <- WB
     var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
-
+    
     var _dropCursor; // <- WB
-
+    
     // WB-specific
     function dropCursor(){
         if (!_dropCursor){
@@ -2451,7 +2465,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
         return _dropCursor;
     }
-
+    
     function reset(){
         // console.log('reset dragTarget to null');
         dragTarget = null;
@@ -2468,7 +2482,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
-	var scratchpad= document.querySelector('.scratchpad'); // <- WB
+        var scratchpad= document.querySelector('.scratchpad'); // <- WB
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -2476,38 +2490,36 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         startSibling = null;
     }
     reset();
-
-
-
+    
     function initDrag(event){
-         console.log('initDrag(%o)', event);
-	 
+        console.log('initDrag(%o)', event);
+        
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-	
+        
         var eT = event.wbTarget; // <- WB
-	console.log(eT);
-	//For some reason this is the scratchpad
+        console.log(eT);
+        //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
         }
-	
-	var target = null;
-	if (eT.classList.contains('scratchpad')) {
-	    var clickedBlock = getClickedBlock(scratchpad, event);
-	    if (clickedBlock != false) {
-		console.log("The event has block");
-		target = clickedBlock;
-	    } else {
-		return undefined;
-	    }
-	} else {
-	    target = wb.closest(eT, '.block'); // <- WB
-	}
-	//This throws an error when block is in scratchpad
+        
+        var target = null;
+        if (eT.classList.contains('scratchpad')) {
+            var clickedBlock = getClickedBlock(scratchpad, event);
+            if (clickedBlock != false) {
+                console.log("The event has block");
+                target = clickedBlock;
+            } else {
+                return undefined;
+            }
+        } else {
+            target = wb.closest(eT, '.block'); // <- WB
+        }
+        //This throws an error when block is in scratchpad
         if (target){
             // WB-Specific
             if (wb.matches(target, '.scripts_workspace')){
@@ -2521,7 +2533,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
             }
-        	dragAction.target = target;
+            dragAction.target = target;
             // WB-Specific
             if (target.parentElement.classList.contains('locals')){
                 //console.log('target parent: %o', target.parentElement);
@@ -2537,8 +2549,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             startSibling = target.nextElementSibling;
             // WB-Specific
             if(startSibling && !wb.matches(startSibling, '.block')) {
-            	// Sometimes the "next sibling" ends up being the cursor
-            	startSibling = startSibling.nextElementSibling;
+                // Sometimes the "next sibling" ends up being the cursor
+                startSibling = startSibling.nextElementSibling;
             }
         }else{
             console.warn('not a valid drag target');
@@ -2553,10 +2565,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
-		// Track source for undo/redo
-		dragAction.target = dragTarget;
-		dragAction.fromParent = startParent;
-		dragAction.fromBefore = startSibling;
+        // Track source for undo/redo
+        dragAction.target = dragTarget;
+        dragAction.fromParent = startParent;
+        dragAction.fromBefore = startSibling;
         // target = clone target if in menu
         // FIXME: Set different listeners on menu blocks than on the script area
         // WB-Specific
@@ -2566,8 +2578,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             // console.log('set drag target to clone of old drag target');
             dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
             dragAction.target = dragTarget;
-			// If we're dragging from the menu, there's no source to track for undo/redo
-			dragAction.fromParent = dragAction.fromBefore = null;
+            // If we're dragging from the menu, there's no source to track for undo/redo
+            dragAction.fromParent = dragAction.fromBefore = null;
             // Event.trigger(dragTarget, 'wb-clone'); // not in document, won't bubble to document.body
             dragTarget.classList.add('dragIndication');
             if (localDrag){
@@ -2666,49 +2678,48 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
            // 4. Move back to start position if not a clone (maybe not?)
         resetDragStyles(); // <- WB
         // WB-Specific
-	if (wb.overlap(dragTarget, blockMenu)){
+        if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
             dragTarget.parentElement.removeChild(dragTarget);
             // Add history action if the source block was in the workspace
             if(!templateDrag) {
-	        	// If we're dragging to the menu, there's no destination to track for undo/redo
-    	    	dragAction.toParent = dragAction.toBefore = null;
-        		wb.history.add(dragAction);
-        	}
+                // If we're dragging to the menu, there's no destination to track for undo/redo
+                dragAction.toParent = dragAction.toBefore = null;
+                wb.history.add(dragAction);
+            }
         } else if (wb.overlap(dragTarget, scratchpad)) {
-	    var scratchPadStyle = scratchpad.getBoundingClientRect();
-	    var newOriginX = scratchPadStyle.left;
-	    var newOriginY = scratchPadStyle.top;
+            var scratchPadStyle = scratchpad.getBoundingClientRect();
+            var newOriginX = scratchPadStyle.left;
+            var newOriginY = scratchPadStyle.top;
 
-	    var blockStyle = dragTarget.getBoundingClientRect();
-	    var oldX = blockStyle.left;
-	    var oldY = blockStyle.top;
+            var blockStyle = dragTarget.getBoundingClientRect();
+            var oldX = blockStyle.left;
+            var oldY = blockStyle.top;
 
-	    dragTarget.style.position = "absolute";
-	    dragTarget.style.left = (oldX - newOriginX) + "px";
-	    dragTarget.style.top = (oldY - newOriginY) + "px";
-	    scratchpad.appendChild(dragTarget);
+            dragTarget.style.position = "absolute";
+            dragTarget.style.left = (oldX - newOriginX) + "px";
+            dragTarget.style.top = (oldY - newOriginY) + "px";
+            scratchpad.appendChild(dragTarget);
 
             //when dragging from workspace to scratchpad, this keeps workspace from
-	    //moving around when block in scratchpad is moved.
+            //moving around when block in scratchpad is moved.
             //dragTarget.parentElement.removeChild(dragTarget); 
             Event.trigger(dragTarget, 'wb-add');
-	    return;
-	}
-	
-	
-	else if (dropTarget){
-	    //moving around when dragged block is moved in scratchpad
+            return;
+        }
+        
+        else if (dropTarget){
+            //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
                 // dropTarget.parent().append(dragTarget);
                 if(copyBlock && !templateDrag) {
                     // FIXME: This results in two blocks if you copy-drag back to the starting socket
-                	revertDrop();
+                    revertDrop();
                     // console.log('clone dragTarget block to dragTarget');
-                	dragTarget = wb.cloneBlock(dragTarget);
+                    dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.insertBefore(dragTarget, dropCursor());
                 dragTarget.removeAttribute('style');
@@ -2716,9 +2727,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }else{
                 // Insert a value block into a socket
                 if(copyBlock && !templateDrag) {
-                	revertDrop();
+                    revertDrop();
                     // console.log('clone dragTarget value to dragTarget');
-                	dragTarget = wb.cloneBlock(dragTarget);
+                    dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.appendChild(dragTarget);
                 dragTarget.removeAttribute('style');
@@ -2727,8 +2738,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             dragAction.toParent = dragTarget.parentNode;
             dragAction.toBefore = dragTarget.nextElementSibling;
             if(dragAction.toBefore && !wb.matches(dragAction.toBefore, '.block')) {
-            	// Sometimes the "next sibling" ends up being the cursor
-            	dragAction.toBefore = dragAction.toBefore.nextElementSibling;
+                // Sometimes the "next sibling" ends up being the cursor
+                dragAction.toBefore = dragAction.toBefore.nextElementSibling;
             }
             wb.history.add(dragAction);
         }else{
@@ -2736,70 +2747,70 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 // remove cloned block (from menu)
                 dragTarget.parentElement.removeChild(dragTarget);
             }else{
-            	revertDrop();
+                revertDrop();
             }
         }
     }
     
     /* There's basically four types of drag actions
-- Drag-in – dragging a block from the menu to the workspace
- 	If fromParent is null, this is the type of drag that occurred.
- 	- To undo: remove the block from the workspace
- 	- To redo: re-insert the block into the workspace
-- Drag-around - dragging a block from one position to another in the workspace
-	Indicated by neither of fromParent and toParent being null.
-	- To undo: remove the block from the old position and re-insert it at the new position.
-	- To redo: remove the block from the old position and re-insert it at the new position.
-- Drag-out - dragging a block from the workspace to the menu (thus deleting it)
-	If toParent is null, this is the type of drag that occurred.
-	- To undo: re-insert the block into the workspace.
-	- To redo: remove the block from the workspace.
-- Drag-copy - dragging a block from one position to another in the workspace and duplicating it
-	At the undo/redo level, no distinction from drag-in is required.
-	- To undo: remove the block from the new location.
-	- To redo: re-insert the block at the new location.
-	
-	Note: If toBefore or fromBefore is null, that just means the location refers to the last
-	possible position (ie, the block was added to or removed from the end of a sequence). Thus,
-	we don't check those to determine what action to undo/redo.
- 	*/
+    - Drag-in – dragging a block from the menu to the workspace
+        If fromParent is null, this is the type of drag that occurred.
+        - To undo: remove the block from the workspace
+        - To redo: re-insert the block into the workspace
+    - Drag-around - dragging a block from one position to another in the workspace
+        Indicated by neither of fromParent and toParent being null.
+        - To undo: remove the block from the old position and re-insert it at the new position.
+        - To redo: remove the block from the old position and re-insert it at the new position.
+    - Drag-out - dragging a block from the workspace to the menu (thus deleting it)
+        If toParent is null, this is the type of drag that occurred.
+        - To undo: re-insert the block into the workspace.
+        - To redo: remove the block from the workspace.
+    - Drag-copy - dragging a block from one position to another in the workspace and duplicating it
+        At the undo/redo level, no distinction from drag-in is required.
+        - To undo: remove the block from the new location.
+        - To redo: re-insert the block at the new location.
+    
+    Note: If toBefore or fromBefore is null, that just means the location refers to the last
+    possible position (ie, the block was added to or removed from the end of a sequence). Thus,
+    we don't check those to determine what action to undo/redo.
+    */
     
     function undoDrag() {
-    	if(this.toParent != null) {
-    		// Remove the inserted block
+        if(this.toParent != null) {
+            // Remove the inserted block
             // WB-Specific
-    		Event.trigger(this.target, 'wb-remove');
-    		this.target.remove();
-    	}
-    	if(this.fromParent != null) {
-    		// Put back the removed block
-    		this.target.removeAttribute('style');
+            Event.trigger(this.target, 'wb-remove');
+            this.target.remove();
+        }
+        if(this.fromParent != null) {
+            // Put back the removed block
+            this.target.removeAttribute('style');
             // WB-Specific
-    		if(wb.matches(this.target,'.step')) {
-    			this.fromParent.insertBefore(this.target, this.fromBefore);
-    		} else {
-    			this.fromParent.appendChild(this.target);
-    		}
+            if(wb.matches(this.target,'.step')) {
+                this.fromParent.insertBefore(this.target, this.fromBefore);
+            } else {
+                this.fromParent.appendChild(this.target);
+            }
             // WB-Specific
-			Event.trigger(this.target, 'wb-add');
-    	}
+            Event.trigger(this.target, 'wb-add');
+        }
     }
     
     function redoDrag() {
-    	if(this.toParent != null) {
+        if(this.toParent != null) {
             // WB-Specific
-    		if(wb.matches(this.target,'.step')) {
-    			this.toParent.insertBefore(this.target, this.toBefore);
-    		} else {
-    			this.toParent.appendChild(this.target);
-    		}
-			Event.trigger(this.target, 'wb-add');
-    	}
-    	if(this.fromParent != null) {
+            if(wb.matches(this.target,'.step')) {
+                this.toParent.insertBefore(this.target, this.toBefore);
+            } else {
+                this.toParent.appendChild(this.target);
+            }
+            Event.trigger(this.target, 'wb-add');
+        }
+        if(this.fromParent != null) {
             // WB-Specific
-    		Event.trigger(this.target, 'wb-remove');
-    		this.target.remove();
-    	}
+            Event.trigger(this.target, 'wb-remove');
+            this.target.remove();
+        }
     }
 
     function resetDragStyles() {
@@ -2813,24 +2824,24 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
     
     function revertDrop() {
-		// Put blocks back where we got them from
-		if (startParent){
-			if (wb.matches(startParent, '.socket')){
-				// wb.findChildren(startParent, 'input').forEach(function(elem){
-				//     elem.hide();
-				// });
-			}
-			if(startSibling) {
-				startParent.insertBefore(dragTarget, startSibling);
-			} else {
-				startParent.appendChild(dragTarget);
-			}
-			dragTarget.removeAttribute('style');
-			startParent = null;
-		}else{
-			workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
-			wb.reposition(dragTarget, startPosition);
-		}
+        // Put blocks back where we got them from
+        if (startParent){
+            if (wb.matches(startParent, '.socket')){
+                // wb.findChildren(startParent, 'input').forEach(function(elem){
+                //     elem.hide();
+                // });
+            }
+            if(startSibling) {
+                startParent.insertBefore(dragTarget, startSibling);
+            } else {
+                startParent.appendChild(dragTarget);
+            }
+            dragTarget.removeAttribute('style');
+            startParent = null;
+        }else{
+            workspace.appendChild(dragTarget); // FIXME: We'll need an index into the canvas array
+            wb.reposition(dragTarget, startPosition);
+        }
         Event.trigger(dragTarget, 'wb-add');
     }
 
@@ -2965,59 +2976,96 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
     
     function registerScratchSpace() {
-	var workspace = document.querySelector('.workspace');
-	var mainWorkspace = document.querySelector('scripts_workspace');
-	var id = "23423443";
-	var sBlock = wb.Block({
-			group: 'scripts_scratchspace',
-			id: id,
-			scriptId: id,
-			scopeId: id,
-			blocktype: 'context',
-			sockets: [
-			],
-			script: '[[1]]',
-			isTemplateBlock: false,
-			help: 'Place script blocks here for quick access'
-		});
-	
-	workspace.insertBefore(sBlock, mainWorkspace);
-	
+        var workspace = document.querySelector('.workspace');
+        var mainWorkspace = document.querySelector('scripts_workspace');
+        var id = "23423443";
+        var sBlock = wb.Block({
+                group: 'scripts_scratchspace',
+                id: id,
+                scriptId: id,
+                scopeId: id,
+                blocktype: 'context',
+                sockets: [
+                ],
+                script: '[[1]]',
+                isTemplateBlock: false,
+                help: 'Place script blocks here for quick access'
+            });
+    
+        workspace.insertBefore(sBlock, mainWorkspace);
     }
     
     function cancelDrag(event) {
-    	// Cancel if escape key pressed
+        // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
-    	if(event.keyCode == 27) {
-    	    resetDragStyles();
-	    revertDrop();
-	    clearTimeout(timer);
-	    timer = null;
-	    reset();
-	    return false;
-	}
+        if(event.keyCode == 27) {
+            resetDragStyles();
+            revertDrop();
+            clearTimeout(timer);
+            timer = null;
+            reset();
+            return false;
+        }
     }
     
     function getClickedBlock(element, event) {
-	var children = element.childNodes;
-	//console.log(children);
-	var x = event.clientX;
-	var y = event.clientY;
+        var children = element.childNodes;
+        //console.log(children);
+        var x = event.clientX;
+        var y = event.clientY;
+    
+        console.log("Mouse x " + x);
+        console.log("Mouse y" + y);
+    
+        for (var i = 0; i < children.length; i++){
+            console.log(children[i]);
+            if (children[i].nodeType != 3) {
+                var r = children[i].getBoundingClientRect();
+                console.log(r);
+                if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
+                    return children[i];
+                }
+            }
+        }
+        return false;
+    }
+    
+    
+    //This function arranges the blocks into a grid. Future functions could
+    //sort the blocks by type, frequency of use, or other such metrics
+    function arrangeScratchPad() {
+	var PADDING = 5;
 	
-	console.log("Mouse x " + x);
-	console.log("Mouse y" + y);
+	var scratchPadRect = scratchpad.getBoundingClientRect();
 	
-	for (var i = 0; i < children.length; i++){
-	    console.log(children[i]);
+	var width = scratchPadRect.width;
+	var xOrigin = scratchPadRect.x;
+	var yOrigin = scratchPadRect.y;
+	
+	var x = xOrigin;
+	var y = yOrigin;
+	
+	var children = scratchpad.childNodes;
+	
+	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
-	    var r = children[i].getBoundingClientRect();
-	    console.log(r);
-	    if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
-		return children[i];
-	    }
+		var r = children[i];
+		
+		var rBounding = r.getBoundingClientRect();
+		
+		r.style.top = y + "px";
+		r.style.left = x + "px";
+		
+		x += rBounding.width + PADDING;
+		
+		if (xOrigin >= width) {
+		    x = xOrigin;
+		    y += rBounding.height + PADDING;
+		}
 	    }
 	}
-	return false;
+	
+	
     }
 
     // Initialize event handlers
@@ -3027,7 +3075,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
-	Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'mousedown', '.scratchpad', initDrag);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -3608,7 +3656,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
-            wb.findAll('.block[data-scriptId=' + block.dataset.scriptId).forEach(function(elem){
+            wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
                 elem.style.backgroundColor = 'red';
             });
         }
@@ -5154,59 +5202,29 @@ wb.menu = menu;
 })(wb, Event);
 /*end menu.js*/
 
-/*begin languages/minecraftjs/minecraftjs.js*/
-
+/*begin languages/node/node.js*/
 /*
- *    MINECRAFTJS PLUGIN
+ *    NODE PLUGIN
  *
- *    Support for writing Javascript for Minecraft using Waterbear
- *
+ *    Support for writing Javascript for NODE.js using Waterbear
+ *    will include Minecraft and RPi-GPIO and othe RPi stuff
  */
 
+// Remove stage menu item until menus get templatized
+var stageMenu = document.querySelector('[data-target=stage]').parentElement;
+stageMenu.parentElement.removeChild(stageMenu);
 
-// Add some utilities
+// A couple of do-nothing scripts for compatibility
+wb.runCurrentScripts = function(){ /* do nothing */ };
+wb.clearStage = function(){ /* do nothing */ };
 
-/*
-
-$('.run-scripts').click(function(){
-     var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
-     var code = blocks.prettyScript();
-     var query = $.param({'code':code});
-     
-     $.ajax({
-      url: '/run?',
-      data: query,
-      success: function(){alert("Code running on RPi");},
-      error: function(){alert("Code failed / server not running on RPi");}
-     });
-     
-     
-});
-
-// Add some utilities
-jQuery.fn.extend({
-    prettyScript: function(){
-        var script = this.map(function(){
-            return $(this).extract_script();
-        }).get().join('');
-        
-        script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js'); \n var client = new Minecraft('localhost', 4711, function() {\n"+script+"\n});";
-        
-        return js_beautify(script);
-    },
-    writeScript: function(view){
-      view.html('<pre class="language-javascript">' + this.prettyScript() + '</pre>');
-      hljs.highlightBlock(view.children()[0]);
-    }
-});
-
-// End UI section
-*/
 
 wb.wrap = function(script){
-    //return 'try{' + script + '}catch(e){console,log(e);}})()';
     return script;
-}
+};
+
+wb.requiredjs={"before":{}, "after":{}};
+
 
 function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
@@ -5239,22 +5257,24 @@ wb.ajax = {
         }
     };
 
+
+    
+wb.resetrun = function(message){
+    messagebox.innerHTML = message;
+    window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+    document.querySelector('.run-scripts').style.display = 'inline-block';
+    document.querySelector('.stop-scripts').style.display = 'none';
+    //Event.remove('.stop-scripts', 'click');
+
+};
+    
 wb.runScript = function(script){
-  
-    var params = {'code':script};
-  
-    var keys = Object.keys(params);
-    var parts = [];
-    keys.forEach(function(key){
-      if (Array.isArray(params[key])){
-        params[key].forEach(function(value){
-          parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
-        });
-      }else{
-        parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
-      }
-    });
-    var query = parts.join('&');
+
+    // TODO : workout the ws address from the page address
+    var aHost = window.location.host.split(":");
+    var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
+    
+    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
     
     var messagebox = document.querySelector('#messagebox');
     if(messagebox === null || messagebox.length === 0)
@@ -5264,16 +5284,57 @@ wb.runScript = function(script){
         messagebox = document.querySelector('#messagebox');
         
     }
-    messagebox.innerHTML = "Sending Code to Raspberry Pi";
     
+    messagebox.innerHTML = "Connecting to Raspberry Pi";
+    oSocket.onerror = function(event) {
+        messagebox.innerHTML = "Error Communicating with RPi";
+        window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+        oSocket.close();
+    };
     
+    oSocket.onopen = function (event) {
+        oSocket.send(JSON.stringify({"command":"run","code":script})); 
+    };
     
-    wb.ajax.jsonp("../run", query, function(msg){messagebox.innerHTML = "Code running on RPi"; window.setTimeout(function(){messagebox.innerHTML="";}, 5000);console.log("success",msg);}, function(){ messagebox.innerHTML = "Code failed / server not running on RPi"; window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);console.log("error",msg);});
-    
-    //var runtimeUrl = location.protocol + '//' + location.host + '/dist/javascript_runtime.min.js';
-    //console.log('trying to load library %s', runtimeUrl);
-    //document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: //runtimeUrl, script: wb.wrap(script)}), '*');
-}
+    oSocket.onmessage = function(event) {
+        var msg = JSON.parse(event.data);
+        switch(msg.type) {
+            case "recieved":
+                messagebox.innerHTML = "Code recieved on RPi";
+                break;
+            case "running":
+                messagebox.innerHTML = "Code running on RPi "+ msg.pid;
+                document.querySelector('.run-scripts').style.display = 'none';
+                document.querySelector('.stop-scripts').style.display = 'inline-block';
+                
+                Event.once('.stop-scripts', 'click', null, function(){
+                      oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
+                });
+
+                break;
+            case "completed":
+                wb.resetrun("Code Completed Successfully");
+                oSocket.close();
+                break;
+            case "exit":
+                wb.resetrun("Code Exited");
+                oSocket.close();
+                break;
+            case "error":
+                wb.resetrun("Code Failed " + msg.data.toString());
+                oSocket.close();
+                break;
+            case "sterr":
+                messagebox.innerHTML = "Error Recieved " + msg.data;
+                break;    
+            case "stdout":
+                messagebox.innerHTML = "Data Recieved ";// + msg.data;
+                console.log("msg.data =", msg.data.toString());
+                break;    
+        }
+  
+    };
+};
 
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
@@ -5282,13 +5343,79 @@ Event.on('.clear-stage', 'click', null, clearStage);
 Event.on('.edit-script', 'click', null, clearStage);
 
 
+    
+    wb.groupsFromBlock = function(block){
+        var group = block.dataset.group;
+        var values = [];
+        var childValues = [];
+        if(typeof group !== "undefined")
+        {
+            values.push(group);
+        }
+
+        if (wb.matches(block, '.context')){
+            var children = wb.findChildren(wb.findChild(block, '.contained'), '.block');            
+            childValues = children.map(wb.groupsFromBlock);
+            childValues.forEach(function(ar){
+                values = values.concat(ar);
+            });
+        }
+        return values;
+    };
+    
+    wb.getGroupsFromElements = function(elements)
+    {
+        var blockgroups = elements.map(function(elem){
+                return wb.groupsFromBlock(elem);
+            });
+      
+        var groups = [];
+        blockgroups.forEach(function(ar){
+                    groups = groups.concat(ar);             
+            });
+        
+        var uniquegroups = [];
+        var usedgroups = {};
+        groups.forEach(function(group){
+            if(typeof usedgroups[group] === "undefined")
+            {
+                usedgroups[group] = group;
+                uniquegroups.push(group);             
+            }
+        });
+        return uniquegroups;
+    
+    };
 
 wb.prettyScript = function(elements){
-    var script = js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
-        }).join(''));
-    script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
-    return script;
+    
+    var groups = wb.getGroupsFromElements(elements);    
+    var before = groups.map(function(group){
+        var req = wb.requiredjs.before[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
+    }).join(" ")+ "\n// Your code starts here\n";
+    
+    var after = "\n//Your code ends here\n"+groups.map(function(group){
+        var req = wb.requiredjs.after[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
+    }).join(" ");
+    
+    var script = elements.map(function(elem){
+        return wb.codeFromBlock(elem);
+    }).join('');
+    
+    var pretty = js_beautify(before+script+after);
+    
+    //script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    return pretty;
 };
 
 wb.writeScript = function(elements, view){
@@ -5325,56 +5452,136 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end languages/minecraftjs/minecraftjs.js*/
+/* TODO : 
+https://npmjs.org/package/omxcontrol
+https://npmjs.org/package/omxdirector
+https://npmjs.org/package/piglow
+https://npmjs.org/package/raspicam
 
-/*begin languages/minecraftjs/control.js*/
 
-/*end languages/minecraftjs/control.js*/
+*/
 
-/*begin languages/minecraftjs/game.js*/
+/*end languages/node/node.js*/
 
-/*end languages/minecraftjs/game.js*/
+/*begin languages/node/control.js*/
 
-/*begin languages/minecraftjs/player.js*/
+/*end languages/node/control.js*/
 
-/*end languages/minecraftjs/player.js*/
+/*begin languages/node/piface.js*/
+//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
+wb.choiceLists.pifacein = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
+wb.choiceLists.pifacebutton = [0,1 ,2 ,3];
+wb.choiceLists.pifacerelays = [0,1 ];
+wb.choiceLists.pifaceout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
+wb.choiceLists.pifaceonoff = ["0", "1"];
 
-/*begin languages/minecraftjs/position.js*/
+
+
+wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
+wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+
+/*end languages/node/piface.js*/
+
+/*begin languages/node/firmata.js*/
+//arduino firmata  https://npmjs.org/search?q=firmata
+
+
+//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
+wb.choiceLists.firmatain = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
+wb.choiceLists.firmatabutton = [0,1 ,2 ,3];
+wb.choiceLists.firmatarelays = [0,1 ];
+wb.choiceLists.firmataout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
+wb.choiceLists.firmataonoff = ["0", "1"];
+
+wb.choiceLists.highlow = ['HIGH', 'LOW'];
+wb.choiceLists.inoutput= ['INPUT', 'OUTPUT'];
+wb.choiceLists.onoff = ['ON', 'OFF'];
+wb.choiceLists.logic = ['true', 'false'];
+wb.choiceLists.digitalpins = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,'A0','A1','A2','A3','A4','A5'];
+wb.choiceLists.analoginpins = ['A0','A1','A2','A3','A4','A5'];
+wb.choiceLists.pwmpins = [3, 5, 6, 9, 10, 11];
+wb.choiceLists.baud = [9600, 300, 1200, 2400, 4800, 14400, 19200, 28800, 38400, 57600, 115200];
+wb.choiceLists.analogrefs = ['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL'];
+
+wb.requiredjs.before.firmata = "var ArduinoFirmata = require('arduino-firmata');var arduino = new ArduinoFirmata();";
+wb.requiredjs.after.firmata =  "";
+
+/*end languages/node/firmata.js*/
+
+/*begin languages/node/mc_game.js*/
+   
+
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
+
+wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+
+
+// TODO : fix blocktypes to number or text not both
+// TODO : find direction code and loops
+// TODO : find distance code
+// TODO : write in area detect
+// TODO : research the eventsBlockHits
+
+/*end languages/node/mc_game.js*/
+
+/*begin languages/node/mc_player.js*/
+
+/*end languages/node/mc_player.js*/
+
+/*begin languages/node/mc_position.js*/
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
-/*end languages/minecraftjs/position.js*/
+wb.choiceLists.directions= ['up', 'down', 'north', 'south','east','west','none'];
 
-/*begin languages/minecraftjs/blocks.js*/
+
+
+/*,
+        {
+            "blocktype": "expression",
+            "id": "9ec42170-3575-4993-85b1-a51d515e3463",
+            "sockets": [
+                {
+                    "name": "Temp Position"
+                }
+            ],
+            "type": "position",
+            "script": "tempposition",
+            "help": "position"
+        }
+        */
+/*end languages/node/mc_position.js*/
+
+/*begin languages/node/mc_blocks.js*/
 
 wb.choiceLists.blocks = ["AIR", "STONE", "GRASS", "DIRT", "COBBLESTONE", "WOOD_PLANKS", "SAPLING", "BEDROCK", "WATER_FLOWING", "WATER_STATIONARY", "LAVA_FLOWING", "LAVA_STATIONARY", "SAND", "GRAVEL", "GOLD_ORE", "IRON_ORE", "COAL_ORE", "WOOD", "LEAVES", "GLASS", "LAPIS_LAZULI_ORE", "LAPIS_LAZULI_BLOCK", "SANDSTONE", "BED", "COBWEB", "GRASS_TALL", "WOOL", "FLOWER_YELLOW", "FLOWER_CYAN", "MUSHROOM_BROWN", "MUSHROOM_RED", "GOLD_BLOCK", "IRON_BLOCK", "STONE_SLAB_DOUBLE", "STONE_SLAB", "BRICK_BLOCK", "TNT", "BOOKSHELF", "MOSS_STONE", "OBSIDIAN", "TORCH", "FIRE", "STAIRS_WOOD", "CHEST", "DIAMOND_ORE", "DIAMOND_BLOCK", "CRAFTING_TABLE", "FARMLAND", "FURNACE_INACTIVE", "FURNACE_ACTIVE", "DOOR_WOOD", "LADDER", "STAIRS_COBBLESTONE", "DOOR_IRON", "REDSTONE_ORE", "SNOW", "ICE", "SNOW_BLOCK", "CACTUS", "CLAY", "SUGAR_CANE", "FENCE", "GLOWSTONE_BLOCK", "BEDROCK_INVISIBLE", "GLASS_PANE", "MELON", "FENCE_GATE", "GLOWING_OBSIDIAN", "NETHER_REACTOR_CORE"];
 
 wb.choiceLists.types = wb.choiceLists.types.concat(['block']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['block']);
-/*end languages/minecraftjs/blocks.js*/
+/*end languages/node/mc_blocks.js*/
 
-/*begin languages/minecraftjs/camera.js*/
+/*begin languages/node/mc_camera.js*/
 
 wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
-/*end languages/minecraftjs/camera.js*/
+/*end languages/node/mc_camera.js*/
 
-/*begin languages/minecraftjs/array.js*/
+/*begin languages/node/array.js*/
 
-/*end languages/minecraftjs/array.js*/
+/*end languages/node/array.js*/
 
-/*begin languages/minecraftjs/boolean.js*/
+/*begin languages/node/boolean.js*/
 
-/*end languages/minecraftjs/boolean.js*/
+/*end languages/node/boolean.js*/
 
-/*begin languages/minecraftjs/math.js*/
+/*begin languages/node/math.js*/
 
-/*end languages/minecraftjs/math.js*/
+/*end languages/node/math.js*/
 
-/*begin languages/minecraftjs/string.js*/
+/*begin languages/node/string.js*/
 
-/*end languages/minecraftjs/string.js*/
+/*end languages/node/string.js*/
 
-/*begin languages/minecraftjs/control.json*/
+/*begin languages/node/control.json*/
 wb.menu({
     "name": "Control",
     "blocks": [
@@ -5385,7 +5592,7 @@ wb.menu({
             "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
                 {
-                    "name": "when program runs"
+                    "name": "When program runs"
                 }
             ]
         },
@@ -5396,7 +5603,7 @@ wb.menu({
             "help": "run the following blocks only if the condition is true",
             "sockets": [
                 {
-                    "name": "if",
+                    "name": "If",
                     "type": "boolean",
                     "value": null
                 }
@@ -5409,7 +5616,7 @@ wb.menu({
             "help": "run the  blocks if the condition is not true",
             "sockets": [
                 {
-                    "name": "if not",
+                    "name": "If not",
                     "type": "boolean",
                     "value": null
                 }
@@ -5422,14 +5629,14 @@ wb.menu({
             "help": "repeat forever until condition is true",
             "sockets": [
                 {
-                    "name": "repeat until",
+                    "name": "Repeat until",
                     "type": "boolean",
                     "value": null
                 }
             ]
         },
         {
-            "blocktype": "eventhandler",
+            "blocktype": "context",
             "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
             "locals": [
                 {
@@ -5447,12 +5654,43 @@ wb.menu({
             "help": "this trigger will run the attached blocks periodically",
             "sockets": [
                 {
-                    "name": "repeat",
+                    "name": "Repeat",
                     "type": "number",
                     "value": "2"
                 },
                 {
                     "name": "times a second"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "blocktype": "context",
+            "id": "89d08188-64e0-48a1-87ff-47719e35d0bb",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000*{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "Repeat every",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "seconds"
                 }
             ]
         },
@@ -5475,7 +5713,7 @@ wb.menu({
             "help": "create a reference to re-use the any",
             "sockets": [
                 {
-                    "name": "variable",
+                    "name": "Variable",
                     "type": "any",
                     "value": null
                 }
@@ -5488,7 +5726,7 @@ wb.menu({
             "help": "first argument must be a variable",
             "sockets": [
                 {
-                    "name": "set variable",
+                    "name": "Set variable",
                     "type": "any",
                     "value": null
                 },
@@ -5506,7 +5744,7 @@ wb.menu({
             "help": "pause before running the following blocks",
             "sockets": [
                 {
-                    "name": "wait",
+                    "name": "Wait",
                     "type": "number",
                     "value": "1"
                 },
@@ -5518,7 +5756,7 @@ wb.menu({
         {
             "blocktype": "context",
             "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
-            "script": "range({{1}}).forEach(function(count##, item){[[1]]});",
+            "script": "for(count## = 1; count## <= {{1}}; count## ++){[[1]]}",
             "help": "repeat the contained blocks so many times",
             "locals": [
                 {
@@ -5534,7 +5772,7 @@ wb.menu({
             ],
             "sockets": [
                 {
-                    "name": "repeat",
+                    "name": "Repeat",
                     "type": "number",
                     "value": "10"
                 }
@@ -5547,7 +5785,7 @@ wb.menu({
             "help": "repeat until the condition is false",
             "sockets": [
                 {
-                    "name": "forever if",
+                    "name": "Repeat While",
                     "type": "boolean",
                     "value": "false"
                 }
@@ -5555,19 +5793,326 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/control.json*/
+/*end languages/node/control.json*/
 
-/*begin languages/minecraftjs/game.json*/
+/*begin languages/node/piface.json*/
 wb.menu({
-    "name": "Game",
+    "name": "PiFace",
     "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "bd7cb398-f6ff-41fb-b1a4-0ffdaa6135c3",
+            "script": "pfio.digital_read({{1}})",
+            "type": "boolean",
+            "help": "Use a Pin as an Digital Input",
+            "sockets": [
+                {
+                    "name": "Input",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
+            "script": "pfio.read_input()",
+            "type": "int",
+            "help": "All 8 Pins as a Digital Input",
+            "sockets": [
+                {
+                    "name": "Inputs as number"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "77bdb006-723d-4b9e-bb73-6673fcc8bed0",
+            "script": "pfio.digital_write({{1}},{{2}});",
+            "help": "Turn",
+            "sockets": [
+                {
+                    "name": "Set output",
+                    "type": "choice",
+                    "options": "pifaceout",
+                    "value": "choice"
+                },
+                {
+                    "name": "to",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "cd648a1f-4e16-473e-8716-e3b32d6046c8",
+            "script": "pfio.write_output({{1}});",
+            "help": "Turn",
+            "sockets": [
+                {
+                    "name": "Set outputs to",
+                    "type": "int",
+                    "value": "0"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "c18294d2-8df0-4d3f-8f80-3f24f46b17c3",
+            "script": "output## = {{1}};",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create output## using Output Pin",
+                    "type": "choice",
+                    "options": "pifaceout",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "output##"
+                        },
+                        {
+                            "name": "=",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "pfio.digital_write(output##,{{1}});"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "353a7962-7318-470d-8b19-09c5568ba413",
+            "script": "input## = {{1}};",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "input##"
+                        }
+                    ],
+                    "script": "pfio.digital_read(input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create input## using Input Pin",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                }
+            ]
+        }
+        
+    ]
+});
+/*end languages/node/piface.json*/
+
+/*begin languages/node/firmata.json*/
+wb.menu({
+    "name": "Firmata",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "0cadc709-e4eb-4aa4-9e1e-374fdf71dac3",
+            "sockets": [
+                {
+                    "name": "Connect To Firmata"
+                }
+            ],
+            "script": "arduino.connect();arduino.on('connect', function(){[[1]]});",
+            "help": "All Firmata things in here"
+        },
+        {
+            "blocktype": "step",
+            "id": "a7096d17-06bd-4986-a6de-4eeffc68ec88",
+            "script": "digital_output## = {{1}}; arduino.pinMode(digital_output##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create digital_output## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "digital_output##"
+                        },
+                        {
+                            "name": "to",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.digitalWrite(digital_output##, {{1}}, function(){});"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "0ff728fe-e833-4887-8c1c-16380100d007",
+            "script": "digital_input## = {{1}}; pinMode(digital_input##, INPUT);",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "digital_input##"
+                        }
+                    ],
+                    "script": "arduino.digitalRead(digital_input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create digital_input## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "value": "choice"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "5501b22e-e6ae-4a86-8c67-b8d3e60d7fff",
+            "script": "analog_output## = {{1}}; arduino.pinMode(analog_output##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create analog_output## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "analog_output##"
+                        },
+                        {
+                            "name": "to",
+                            "type": "int",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.analogWrite(analog_output##, {{1}}, function(){});"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "b335d921-f23c-4a2c-b35a-9407ccd6d60c",
+            "script": "servo## = {{1}}; arduino.pinMode(servo##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to servo",
+            "sockets": [
+                {
+                    "name": "Create servo## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "servo##"
+                        },
+                        {
+                            "name": "to angle",
+                            "type": "int",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.servoWrite(servo##, {{1}}, function(){});"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "9d686235-2644-475d-a21a-b5c1df89185f",
+            "script": "analog_input## = {{1}}; pinMode(analog_input##, INPUT);",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "analog_input##"
+                        }
+                    ],
+                    "script": "arduino.analogRead(analog_input##)",
+                    "help": "The value on analog input pin",
+                    "type": "int"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create analog_input## on Pin",
+                    "type": "choice",
+                    "options": "analoginpins",
+                    "value": "choice"
+                }
+            ]
+        }
+        
+    ]
+});
+/*end languages/node/firmata.json*/
+
+/*begin languages/node/mc_game.json*/
+wb.menu({
+    "name": "Minecraft Game",
+    "blocks": [
+        
+        {
+            "blocktype": "context",
+            "id": "72725388-7c3f-49ba-9b77-f71b1d2eb3d5",
+            "sockets": [
+                    {
+                        "name": "Connect To Minecraft"
+                    }
+                ],
+            "script": "var client = new Minecraft('localhost', 4711, function() {[[1]]});",
+            "help": "All Minecraft things in here"
+        },
+        
+        
         {
             "blocktype": "step",
             "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
             "sockets": [
                 {
                     "name": "Say",
-                    "type": "string",
+                    "type": "any",
                     "value": "hi"
                 },
                 {
@@ -5575,7 +6120,7 @@ wb.menu({
                 }
                 
             ],
-            "script": "client.chat({{1}});",
+            "script": "client.chat({{1}}.toString());",
             "help": "Send a message as chat"
         },
         
@@ -5606,9 +6151,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/game.json*/
+/*end languages/node/mc_game.json*/
 
-/*begin languages/minecraftjs/player.json*/
+/*begin languages/node/mc_player.json*/
 wb.menu({
     "name": "Player",
     "blocks": [
@@ -5620,7 +6165,7 @@ wb.menu({
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]});",
+            "script": "client.getTile(function(playerposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5636,10 +6181,20 @@ wb.menu({
                     "blocktype": "expression",
                     "sockets": [
                         {
+                            "name": "Player Stood on Position"
+                        }
+                    ],
+                    "script": "playerposition.minus(v(0,1,0))",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
                             "name": "Player Position as text"
                         }
                     ],
-                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
+                    "script": "playerposition.toString()",
                     "type": "string"
                 }
             ],
@@ -5672,7 +6227,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var posA## = {{1}};var posB## = {{2}};var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            "script": "var position## = {{1}}.plus({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5697,17 +6252,17 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
-            "help": "Move Player to x, y, z of position"
+            "script": "client.setTile({{1}});",
+            "help": "Move Player to position"
         }
         
     
     ]
 }
 );
-/*end languages/minecraftjs/player.json*/
+/*end languages/node/mc_player.json*/
 
-/*begin languages/minecraftjs/position.json*/
+/*begin languages/node/mc_position.json*/
 wb.menu({
     "name": "Position",
     "blocks": [
@@ -5730,9 +6285,9 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
-            ], 
-            "type":"position",
-            "script": "{x:{{1}}, y:{{2}} , z:{{3}}}",
+            ],
+            "type": "position",
+            "script": "v({{1}}, {{2}} , {{3}})",
             "help": "A position: x is across, y is up and z is depth"
         },
         {
@@ -5742,12 +6297,11 @@ wb.menu({
                 {
                     "name": "Centre Position"
                 }
-            ], 
-            "type":"position",
-            "script": "zeros",
+            ],
+            "type": "position",
+            "script": "v()",
             "help": "position"
         },
-        
         {
             "blocktype": "step",
             "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
@@ -5757,8 +6311,8 @@ wb.menu({
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
-            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = posA##;",
+            ],
+            "script": "var position## = {{1}}.clone();",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5766,13 +6320,11 @@ wb.menu({
                         {
                             "name": "Position##"
                         }
-                    ],  
-                    
+                    ],
                     "script": "position##",
                     "type": "position"
                 }
             ],
-            
             "help": "create new position"
         },
         {
@@ -5789,8 +6341,8 @@ wb.menu({
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
-            "script": "({{1}}.x === {{2}}.x && {{1}}.y === {{2}}.y && {{1}}.z === {{2}}.z);",
+            ],
+            "script": "({{1}}.equal({{2}})",
             "type": "boolean",
             "help": "are 2 positions the same"
         },
@@ -5808,8 +6360,8 @@ wb.menu({
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
-            "script": "var posA## = {{1}}; var posB## = {{2}}; var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            ],
+            "script": "var position## = {{1}}.plus({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5817,13 +6369,11 @@ wb.menu({
                         {
                             "name": "Position##"
                         }
-                    ],  
-                    
+                    ],
                     "script": "position##",
                     "type": "position"
                 }
             ],
-            
             "help": "create new position by adding 2 others"
         },
         {
@@ -5836,7 +6386,7 @@ wb.menu({
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.getHeight({{1}}.x, {{1}}.z, function(height##){var groundposition = {x:{{1}}.x, y:parseInt(height##,10) , z:{{1}}.z}; [[1]]});",
+            "script": "client.getHeight({{1}}, function(groundposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5856,11 +6406,11 @@ wb.menu({
             "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
             "sockets": [
                 {
-                    "name": "x from",                    
+                    "name": "x from",
                     "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
+            ],
             "script": "{{1}}.x",
             "type": "number",
             "help": "the x (across) part of the postion"
@@ -5872,9 +6422,9 @@ wb.menu({
                 {
                     "name": "y from",
                     "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
+            ],
             "script": "{{1}}.y",
             "type": "number",
             "help": "the y (up) part of the postion"
@@ -5886,9 +6436,9 @@ wb.menu({
                 {
                     "name": "z from",
                     "type": "position",
-                    "block":"8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
-            ],  
+            ],
             "script": "{{1}}.z",
             "type": "number",
             "help": "the z (depth) part of the postion"
@@ -5905,42 +6455,180 @@ wb.menu({
                 {
                     "name": "as text"
                 }
-            ],  
-            "script": "\"x:\"+{{1}}.x.toString()+\", y:\"+{{1}}.y.toString()+\", z:\"+{{1}}.z.toString()",
+            ],
+            "script": "{{1}}.toString()",
             "type": "string",
             "help": "Position as text"
+        },
+        {
+            "blocktype": "step",
+            "id": "e28a420d-9b94-4480-ad0f-ebe4e68134b0",
+            "sockets": [
+                {
+                    "name": "Set",
+                    "type": "position",
+                    "block": "590c8aef-a755-4df5-8930-b430db5a3c3d"
+                },
+                {
+                    "name": "to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.update({{2}});",
+            "help": "Set position variable to a new postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "d453a2dc-cebc-47dd-b421-09d450bd7e88",
+            "sockets": [
+                {
+                    "name": "Distance from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.distanceTo({{2}})",
+            "type":"number",
+            "help": "the distance between 2 positions"
+        },
+        {
+            "blocktype": "context",
+            "id": "10ec4498-1aa8-44ff-9620-b338a2cdc3cb",
+            "sockets": [
+                {
+                    "name": "For each direction from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "block(s)"
+                }
+            ],
+            "script": "client.directions.forEach(function(dir, idx){var position##=client.directioncalcs[dir]({{1}},{{2}});[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "Go around each direction"
+        },
+        {
+            "blocktype": "step",
+            "id": "4072476e-cdc4-43b1-b36b-a8c5829c113c",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "offset by",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": " ",
+                    "type": "choice",
+                    "options": "directions",
+                    "value": "choice"
+                }
+            ],
+            "script": "var position##=client.directioncalcs[{{3}}]({{1}},{{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position by adding a distance and direction"
+        },
+        {
+            "blocktype": "expression",
+            "type":"boolean",
+            "id": "635a2e41-94d8-4f63-b20b-8e9340c0f2c5",
+            "sockets": [
+                {
+                    "name": "Is",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "between",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "and",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "({{1}}.min({{2}}).equal({{2}}) && {{1}}.max({{3}}).equal({{3}}))",
+            "help": "is 1st point between 2nd and 3rd"
         }
     ]
-}
-);
-/*end languages/minecraftjs/position.json*/
+});
+/*end languages/node/mc_position.json*/
 
-/*begin languages/minecraftjs/blocks.json*/
+/*begin languages/node/mc_blocks.json*/
 wb.menu({
     "name": "Blocks",
-    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
     "blocks": [
         {
             "blocktype": "context",
-            "id": "b8020f54-43d2-4207-8529-336eb035898c",
+            "id": "c500a7f0-7117-40ea-9139-b161e19f190b",
             "sockets": [
                     {
-                        "name": "get Block Type at",
+                        "name": "Get Block Type at",
                         "type": "position",
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
+            "script": "client.getBlock({{1}}, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                             {
-                                "name": "block##"
+                                "name": "Block Type Number"
                             }
                         ],
-                    "script": "parseInt(block##)",
+                    "script": "block##",
                     "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "Block Type Name"
+                            }
+                        ],
+                    "script": "client.getBlockName(block##)",
+                    "type": "string"
                 }
             ],
             "help": "get block type at x, y, z"
@@ -5950,13 +6638,13 @@ wb.menu({
             "id": "a7c17404-8555-42be-877e-9d01d7647604",
             "sockets": [
                     {
-                    "name": "block",
+                    "name":"block",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
                 }
                 ],
-            "script": "{{1}}",
+            "script": "client.blocks[{{1}}]",
             "type": "number",
             "help": "a blocktype"
         },
@@ -5976,7 +6664,7 @@ wb.menu({
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlock({{1}}.x, {{1}}.y, {{1}}.z, client.blocks[{{2}}]);",
+            "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
             "help": "set block at position"
         },
         {
@@ -5986,6 +6674,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set Blocks between",
+                
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
@@ -6001,7 +6690,7 @@ wb.menu({
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
+            "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
             "help": "set blocks in a 3D rectangle between the first and second postions to .."
         },
         {
@@ -6014,16 +6703,16 @@ wb.menu({
                     "value": "0"
                 }
             ],
-            "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
+            "script": "client.getBlockName({{1}})",
             "type": "string",
             "help": "name of a blocktype by number"
         }
     ]
 }
 );
-/*end languages/minecraftjs/blocks.json*/
+/*end languages/node/mc_blocks.json*/
 
-/*begin languages/minecraftjs/camera.json*/
+/*begin languages/node/mc_camera.json*/
 wb.menu({
     "name": "Camera",
     "blocks": [
@@ -6059,9 +6748,9 @@ wb.menu({
     ]
 }
 );
-/*end languages/minecraftjs/camera.json*/
+/*end languages/node/mc_camera.json*/
 
-/*begin languages/minecraftjs/array.json*/
+/*begin languages/node/array.json*/
 wb.menu({
     "name": "Arrays",
     "blocks": [
@@ -6317,9 +7006,9 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/array.json*/
+/*end languages/node/array.json*/
 
-/*begin languages/minecraftjs/boolean.json*/
+/*begin languages/node/boolean.json*/
 wb.menu({
     "name": "Boolean",
     "blocks": [
@@ -6336,7 +7025,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "and",
+                    "name": "AND",
                     "type": "boolean",
                     "value": null
                 }
@@ -6355,7 +7044,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "or",
+                    "name": "OR",
                     "type": "boolean",
                     "value": null
                 }
@@ -6374,7 +7063,7 @@ wb.menu({
                     "value": null
                 },
                 {
-                    "name": "xor",
+                    "name": "XOR",
                     "type": "boolean",
                     "value": null
                 }
@@ -6388,7 +7077,7 @@ wb.menu({
             "help": "operand is false",
             "sockets": [
                 {
-                    "name": "not",
+                    "name": "NOT",
                     "type": "boolean",
                     "value": null
                 }
@@ -6396,9 +7085,9 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/boolean.json*/
+/*end languages/node/boolean.json*/
 
-/*begin languages/minecraftjs/math.json*/
+/*begin languages/node/math.json*/
 wb.menu({
     "name": "Math",
     "blocks": [
@@ -6803,12 +7492,83 @@ wb.menu({
                     "name": "tau"
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a25bdd5e-6847-4275-9b7f-bc147acd5f31",
+            "type": "int",
+            "script": "({{1}} && {{2}})",
+            "help": "Bitwise AND of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "AND",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0e4219de-1d1b-42ef-9dfa-ac090fddde02",
+            "type": "int",
+            "script": "({{1}} | {{2}})",
+            "help": "Bitwise OR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 9
+                },
+                {
+                    "name": "OR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c383c0e3-dbe0-4104-b200-8dd569ea241c",
+            "type": "int",
+            "script": "({{1}} ^ {{2}})",
+            "help": "Bitwise XOR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "XOR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "64a12634-f17b-410b-a5e1-a2f6e0b91689",
+            "type": "int",
+            "script": "(~ {{1}})",
+            "help": "Bitwise NOT number",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
         }
     ]
 });
-/*end languages/minecraftjs/math.json*/
+/*end languages/node/math.json*/
 
-/*begin languages/minecraftjs/string.json*/
+/*begin languages/node/string.json*/
 wb.menu({
     "name": "Strings",
     "blocks": [
@@ -7014,4 +7774,4 @@ wb.menu({
         }
     ]
 });
-/*end languages/minecraftjs/string.json*/
+/*end languages/node/string.json*/

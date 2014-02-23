@@ -103,10 +103,18 @@
     };
 
     function find(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return elem.querySelector(selector);
     };
 
     function findAll(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 

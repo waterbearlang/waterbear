@@ -737,20 +737,25 @@ body{
 /* Search filter */
 
 #search form {
+  width: 100%;
   border: 1px solid #CCC;
-  width: calc(100% - 2px);
+  display: inline-flex;
+  flex-direction: row;
 }
 
 #search form > * {
   border: 0;
   outline: 0;
   height: 24px;
-  display: inline-block;
   background-color: transparent;
 }
 
+#search form datalist {
+  display: none;
+}
+
 #search form label {
-  width: 20px;
+  flex: 0 0 20px;
   text-align: center;
   color: #CCC;
 }
@@ -761,14 +766,15 @@ body{
 }
 
 #search_text {
-  width: calc(100% - 40px - 8px); /* 8px = gap between inline blocks */
+  flex: 1 1 auto;
 }
 
 #search_clear {
+  flex: 0 0 20px;
   font-family: 'FontAwesome';
-  width: 20px;
   color: #CCC;
 }
+
 
 /*end blocks.css*/
 

@@ -1890,41 +1890,104 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
     }
 
-    function filterBlock(event) {
-      var query = document.getElementById('search_text').value.trim();
-      var cats = document.querySelectorAll('.block-menu');
+    /** Search filter */
+
+    var oldQuery = '';
+
+    function searchBlock(event) {
+        var searchTextNode = document.getElementById('search_text');
+
+        if (event.target.id == 'search_clear') {
+            searchTextNode.value = '';
+        }
+
+        var query = searchTextNode.value.trim();
+
+        // Detect change to input
+        if (oldQuery == query) {
+            return;
+        } else {
+            oldQuery = query;
+        }
+
+        var cats = document.querySelectorAll('.accordion-body');
      
-      /* TODO: Should use class list instead of inline style */
-      for (var i = 0; i < cats.length; i++) {
-          var hasMatch = false;
-          var blocks = cats[i].getElementsByClassName('block');
+        // Clear suggestions
+        var suggestions = [];
+        var suggestionsNode = document.getElementById('search_suggestions');
+        while (suggestionsNode.firstChild) {
+            suggestionsNode.removeChild(suggestionsNode.firstChild);
+        }
 
-          for (var j = 0; j < blocks.length; j++) {
-              var attr = blocks[j].getAttribute('data-keywords');
+        for (var i = 0; i < cats.length; i++) {
+            var matchBlock = false;
+            var blocks = cats[i].getElementsByClassName('block');
 
-              if (!query || (attr != null && attr.indexOf(query) != -1)) {
-                  hasMatch = true;
-                  blocks[j].removeAttribute('style');
-              } else {
-                  blocks[j].style.display = 'none';
-              }
-          }
+            for (var j = 0; j < blocks.length; j++) {
+                // Show all blocks for empty query
+                if (!query) {
+                    matchBlock = true;
+                    blocks[j].removeAttribute('style');
+                    continue;
+                }
 
-          if (!query || hasMatch) {
-              cats[i].previousSibling.removeAttribute('style');
-              cats[i].removeAttribute('style');
-          } else {
-              cats[i].previousSibling.style.display = 'none';
-              cats[i].style.display = 'none';
-          }
-      }
+                // Construct an array of keywords
+                var keywords = [];
+
+                var groupAttr = blocks[j].getAttribute('data-group');
+                if (groupAttr) {
+                    keywords.push(groupAttr);
+                }
+
+                var keywordsAttr = blocks[j].getAttribute('data-keywords');
+                if (keywordsAttr) {
+                    keywords = keywords.concat(JSON.parse(keywordsAttr));
+                }
+
+                // Find a match
+                var matchKeyword = false;
+                
+                for (var k = 0; k < keywords.length; k++) {
+                    if (keywords[k].indexOf(query) == 0) {
+                        matchKeyword = true;
+
+                        if (suggestions.indexOf(keywords[k]) == -1) {
+                            suggestions.push(keywords[k]);
+
+                            var suggestionNode = document.createElement('option');
+                            suggestionNode.value = keywords[k];
+                            suggestionsNode.appendChild(suggestionNode);
+                        }
+                    }
+                }
+
+                // Show/hide blocks
+                if (matchKeyword) {
+                    matchBlock = true;
+                    blocks[j].removeAttribute('style');
+                } else {
+                    blocks[j].style.display = 'none';
+                }
+            }
+
+            // Show/hide categories
+            if (!query || matchBlock) {
+                cats[i].previousSibling.removeAttribute('style');
+                cats[i].removeAttribute('style');
+            } else {
+                cats[i].previousSibling.style.display = 'none';
+                cats[i].style.display = 'none';
+            }
+        }
     }
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
-    Event.on('#search_text', 'keyup', null, filterBlock);
+    Event.on('#search_text', 'keyup', null, searchBlock);
+    Event.on('#search_text', 'input', null, searchBlock);
+    Event.on('#search_clear', 'click', null, searchBlock);
 
     wb.blockRegistry = blockRegistry;
 

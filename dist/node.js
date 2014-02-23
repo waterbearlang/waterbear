@@ -5099,9 +5099,13 @@ wb.menu = menu;
  *    will include Minecraft and RPi-GPIO and othe RPi stuff
  */
 
-// A couple of do-nothing scripts for compatibility
+// Remove stage menu item until menus get templatized
+var stageMenu = document.querySelector('[data-target=stage]').parentElement;
+stageMenu.parentElement.removeChild(stageMenu);
 
-wb.clearStage = function(){};
+// A couple of do-nothing scripts for compatibility
+wb.runCurrentScripts = function(){ /* do nothing */ };
+wb.clearStage = function(){ /* do nothing */ };
 
 
 wb.wrap = function(script){

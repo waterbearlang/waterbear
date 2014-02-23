@@ -7,6 +7,15 @@
 
 (function(wb, Event){
 
+
+    // Remove stage menu item until menus get templatized
+    var stageMenu = document.querySelector('[data-target=stage]').parentElement;
+    stageMenu.parentElement.removeChild(stageMenu);
+
+    // A couple of do-nothing scripts for compatibility
+    wb.runCurrentScripts = function(){ /* do nothing */ };
+    wb.clearStage = function(){ /* do nothing */ };
+
     // Add some utilities
     wb.wrap = function(script){
         return [

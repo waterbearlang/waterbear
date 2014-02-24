@@ -9,9 +9,9 @@
             "sockets": [
                 {
                     "name": "set camera mode to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "cameramode",
-                    "value": "choice"
+                    "value": ""
                 }
                 
             ],

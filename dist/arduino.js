@@ -1879,11 +1879,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            //if(typeof holder.parentElement.dataset.options !== 'undefined')
-            {
-                // TODO : if there is a list and we have nonliterals in the list, do something
-                
-            }
+
             // DONE : #227
             if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
@@ -3628,9 +3624,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -3672,9 +3668,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -3712,9 +3708,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "analoginpins",
-                    "value": "choice"
+                    "value": "A0"
                 }
             ]
         },
@@ -3728,7 +3724,7 @@ wb.menu({
                 {
                     "name": "Analog Pin",
                     "type": "string",
-                    "value": null
+                    "value": 0
                 }
             ]
         },
@@ -3752,9 +3748,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ]
         },
@@ -4156,9 +4152,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Setup serial communication at",
-                    "type": "choice",
+                    "type": "number",
                     "options": "baud",
-                    "value": "choice"
+                    "value": "9600"
                 }
             ]
         },

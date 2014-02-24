@@ -42,9 +42,9 @@
             "sockets": [
                     {
                     "name":"block",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
                 ],
             "script": "client.blocks[{{1}}]",
@@ -62,9 +62,9 @@
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
@@ -88,9 +88,9 @@
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
@@ -103,7 +103,7 @@
                 {
                     "name": "block type name",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ],
             "script": "client.getBlockName({{1}})",

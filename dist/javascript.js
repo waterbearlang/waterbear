@@ -3702,11 +3702,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            //if(typeof holder.parentElement.dataset.options !== 'undefined')
-            {
-                // TODO : if there is a list and we have nonliterals in the list, do something
-                
-            }
+
             // DONE : #227
             if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
@@ -5531,9 +5527,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "when",
-                    "type": "choice",
+                    "type": "string",
                     "options": "keys",
-                    "value": "choice",
+                    "value": "a",
                     "suffix": "key pressed"
                 }
             ]
@@ -5558,9 +5554,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "when",
-                    "type": "choice",
+                    "type": "string",
                     "options": "pointerEvents",
-                    "value": "choice"
+                    "value": ""
                 }
             ]
         },
@@ -6540,7 +6536,7 @@ wb.menu({
                 },
                 {
                     "name": "note",
-                    "type": "choice",
+                    "type": "string",
                     "options": "notes",
                     "value": "A4"
                 }
@@ -6651,13 +6647,13 @@ wb.menu({
                 },
                 {
                     "name": "to play note",
-                    "type": "choice",
+                    "type": "string",
                     "options": "notes",
                     "value": "A4"
                 },
                 {
                     "name": "as ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "durations",
                     "value": "quarter note"
                 },
@@ -6680,7 +6676,7 @@ wb.menu({
                 },
                 {
                     "name": "to rest for a ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "durations",
                     "value": "quarter note"
                 },
@@ -7212,9 +7208,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "global composite operator",
-                    "type": "choice",
+                    "type": "string",
                     "options": "globalCompositeOperators",
-                    "value": "choice"
+                    "value": "source-over"
                 }
             ]
         },
@@ -7289,9 +7285,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "line cap",
-                    "type": "choice",
+                    "type": "string",
                     "options": "linecap",
-                    "value": "choice"
+                    "value": "round"
                 }
             ]
         },
@@ -7303,9 +7299,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "line join",
-                    "type": "choice",
+                    "type": "string",
                     "options": "linejoin",
-                    "value": "choice"
+                    "value": null
                 }
             ]
         },
@@ -7722,9 +7718,9 @@ wb.menu({
                 },
                 {
                     "name": "repeats",
-                    "type": "choice",
+                    "type": "string",
                     "options": "repetition",
-                    "value": "choice"
+                    "value": "repeat"
                 }
             ]
         }
@@ -10278,9 +10274,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "key",
-                    "type": "choice",
+                    "type": "string",
                     "options": "keys",
-                    "value": "choice",
+                    "value": "a",
                     "suffix": "pressed?"
                 }
             ]
@@ -10410,7 +10406,7 @@ wb.menu({
     		"sockets": [
     			{
     				"name": "when device turned",
-    				"type": "choice",
+    				"type": "string",
     				"options": "directions"
     			}
     		]
@@ -11026,9 +11022,9 @@ wb.menu({
                 },
                 {
                     "name": "",
-                    "type": "choice",
+                    "type": "string",
                     "options": "unit",
-                    "value": "choice"
+                    "value": "px"
                 },
                 {
                     "name": "",
@@ -11045,9 +11041,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "text align",
-                    "type": "choice",
+                    "type": "string",
                     "options": "align",
-                    "value": "choice"
+                    "value": "left"
                 }
             ]
         },
@@ -11059,9 +11055,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "text baseline",
-                    "type": "choice",
+                    "type": "string",
                     "options": "baseline",
-                    "value": "choice"
+                    "value": ""
                 }
             ]
         },

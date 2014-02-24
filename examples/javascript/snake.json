@@ -2853,7 +2853,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "keys",
                             "uValue": "left"
@@ -2919,7 +2919,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "keys",
                             "uValue": "right"
@@ -2985,7 +2985,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "keys",
                             "uValue": "up"
@@ -3051,7 +3051,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "keys",
                             "uValue": "down"
@@ -3117,7 +3117,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "keys",
                             "uValue": "esc"
@@ -3626,7 +3626,7 @@
                                         },
                                         {
                                             "name": "",
-                                            "type": "choice",
+                                            "type": "string",
                                             "value": "choice",
                                             "options": "unit",
                                             "uValue": "px"
@@ -3651,7 +3651,7 @@
                                     "sockets": [
                                         {
                                             "name": "text align",
-                                            "type": "choice",
+                                            "type": "string",
                                             "value": "choice",
                                             "options": "align",
                                             "uValue": "center"

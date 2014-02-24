@@ -13909,11 +13909,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            //if(typeof holder.parentElement.dataset.options !== 'undefined')
-            {
-                // TODO : if there is a list and we have nonliterals in the list, do something
-                
-            }
+
             // DONE : #227
             if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
@@ -16566,9 +16562,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "color mode",
-                    "type": "choice",
+                    "type": "string",
                     "options": "mode",
-                    "value": "choice"
+                    "value": ""
                 },
                 {
                     "name": "range",

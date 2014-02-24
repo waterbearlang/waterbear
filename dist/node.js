@@ -3702,11 +3702,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            //if(typeof holder.parentElement.dataset.options !== 'undefined')
-            {
-                // TODO : if there is a list and we have nonliterals in the list, do something
-                
-            }
+
             // DONE : #227
             if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
@@ -6601,9 +6597,9 @@ wb.menu({
             "sockets": [
                     {
                     "name":"block",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
                 ],
             "script": "client.blocks[{{1}}]",
@@ -6621,9 +6617,9 @@ wb.menu({
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
@@ -6647,9 +6643,9 @@ wb.menu({
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
@@ -6662,7 +6658,7 @@ wb.menu({
                 {
                     "name": "block type name",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ],
             "script": "client.getBlockName({{1}})",
@@ -6686,9 +6682,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set camera mode to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "cameramode",
-                    "value": "choice"
+                    "value": ""
                 }
                 
             ],

@@ -13,9 +13,9 @@
                 },
                 {
                     "name": "on",
-                    "type": "choice",
+                    "type": "string",
                     "options": "digitalinputpins",
-                    "value": "choice"
+                    "value": null
                 }
             ],
             "locals": [

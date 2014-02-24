@@ -12,7 +12,7 @@ ul.menu li, ul.menu ul.sub-menu li {
 	display: inline-block;
 }
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;

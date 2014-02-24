@@ -4658,22 +4658,22 @@ wb.menu = menu;
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
-	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// This bothers me greatly: runs with the console.log, but not without it
-	    	console.log('running current scripts');
-	    	runFullSize();
-	    }else{
-	    	if (wb.view === 'result'){
-		    	// console.log('we want to run current scripts, but cannot');
-		    }else{
-		    	runWithLayout();
-		    	// console.log('we do not care about current scripts, so there');
-		    }
-	    }
+	    // if (wb.view === 'result' && wb.runCurrentScripts){
+	    // 	// This bothers me greatly: runs with the console.log, but not without it
+	    // 	console.log('running current scripts');
+	    // 	runFullSize();
+	    // }else{
+	    // 	if (wb.view === 'result'){
+		   //  	// console.log('we want to run current scripts, but cannot');
+		   //  }else{
+		   //  	runWithLayout();
+		   //  	// console.log('we do not care about current scripts, so there');
+		   //  }
+	    // }
 	    if (wb.toggleState.scripts_text_view){
 	    	wb.updateScriptsView();
 	    }
-	    if (wb.toggleState.stage){
+	    if (wb.toggleState.stage || wb.view === 'result'){
 	    	// console.log('run current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
@@ -4790,21 +4790,21 @@ wb.menu = menu;
 		}
 	}
 
-	function runFullSize(){
-		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-			wb.hide(wb.find(document.body, sel));
-		});
-		wb.show(wb.find(document.body, '.stage'));
-	}
+	// function runFullSize(){
+	// 	['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+	// 		wb.hide(wb.find(document.body, sel));
+	// 	});
+	// 	wb.show(wb.find(document.body, '.stage'));
+	// }
 
-	function runWithLayout(){
-		['#block_menu', '.workspace'].forEach(function(sel){
-			wb.show(wb.find(document.body, sel));
-		});
-		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-		});
-	}
+	// function runWithLayout(){
+	// 	['#block_menu', '.workspace'].forEach(function(sel){
+	// 		wb.show(wb.find(document.body, sel));
+	// 	});
+	// 	['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+	// 		toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+	// 	});
+	// }
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
@@ -4892,6 +4892,12 @@ wb.menu = menu;
 	});
 	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
 	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+	Event.on('.run-scripts', 'click', null, function(){
+        wb.historySwitchState('result');
+    });
+    Event.on('.show-ide', 'click', null, function(){
+    	wb.historySwitchState('ide');
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;

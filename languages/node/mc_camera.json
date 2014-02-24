@@ -1,5 +1,6 @@
 {
     "name": "Camera",
+    "help": "Manipulating the Minecraft Camera",
     "blocks": [
       
       

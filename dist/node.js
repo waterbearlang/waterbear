@@ -5542,6 +5542,7 @@ wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
 /*begin languages/node/control.json*/
 wb.menu({
     "name": "Control",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -5756,6 +5757,7 @@ wb.menu({
 /*begin languages/node/piface.json*/
 wb.menu({
     "name": "PiFace",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiFace board.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -5882,6 +5884,7 @@ wb.menu({
 /*begin languages/node/firmata.json*/
 wb.menu({
     "name": "Firmata",
+    "help": "Physical Input and Output for the Raspberry Pi using an Arduino loaded with Firmata.",
     "blocks": [
         {
             "blocktype": "context",
@@ -6049,6 +6052,7 @@ wb.menu({
 /*begin languages/node/mc_game.json*/
 wb.menu({
     "name": "Minecraft Game",
+    "help": "Blocks which connect to and manipulate Minecraft Pi Edition",
     "blocks": [
         
         {
@@ -6114,6 +6118,7 @@ wb.menu({
 /*begin languages/node/mc_player.json*/
 wb.menu({
     "name": "Player",
+    "help": "Find and move Steve the Minecraft player",
     "blocks": [
         {
             "blocktype": "context",
@@ -6223,6 +6228,7 @@ wb.menu({
 /*begin languages/node/mc_position.json*/
 wb.menu({
     "name": "Position",
+    "help": "Find and change Minecraft Positions",
     "blocks": [
         {
             "blocktype": "expression",
@@ -6555,6 +6561,7 @@ wb.menu({
 /*begin languages/node/mc_blocks.json*/
 wb.menu({
     "name": "Blocks",
+    "help": "Find and set Minecraft Blocks",
     "blocks": [
         {
             "blocktype": "context",
@@ -6673,6 +6680,7 @@ wb.menu({
 /*begin languages/node/mc_camera.json*/
 wb.menu({
     "name": "Camera",
+    "help": "Manipulating the Minecraft Camera",
     "blocks": [
       
       
@@ -6711,6 +6719,7 @@ wb.menu({
 /*begin languages/node/array.json*/
 wb.menu({
     "name": "Arrays",
+    "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6969,6 +6978,7 @@ wb.menu({
 /*begin languages/node/boolean.json*/
 wb.menu({
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",
@@ -7048,6 +7058,7 @@ wb.menu({
 /*begin languages/node/math.json*/
 wb.menu({
     "name": "Math",
+    "help": "Math blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "step",
@@ -7529,6 +7540,7 @@ wb.menu({
 /*begin languages/node/string.json*/
 wb.menu({
     "name": "Strings",
+    "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [
         {
             "blocktype": "expression",

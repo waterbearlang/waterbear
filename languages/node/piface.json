@@ -1,5 +1,6 @@
 {
     "name": "PiFace",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiFace board.",
     "blocks": [
         {
             "blocktype": "expression",

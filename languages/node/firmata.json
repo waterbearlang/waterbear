@@ -1,5 +1,6 @@
 {
     "name": "Firmata",
+    "help": "Physical Input and Output for the Raspberry Pi using an Arduino loaded with Firmata.",
     "blocks": [
         {
             "blocktype": "context",

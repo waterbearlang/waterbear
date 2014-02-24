@@ -1,5 +1,6 @@
 {
     "name": "Position",
+    "help": "Find and change Minecraft Positions",
     "blocks": [
         {
             "blocktype": "expression",

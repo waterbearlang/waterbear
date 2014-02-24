@@ -1,5 +1,6 @@
 {
     "name": "Blocks",
+    "help": "Find and set Minecraft Blocks",
     "blocks": [
         {
             "blocktype": "context",

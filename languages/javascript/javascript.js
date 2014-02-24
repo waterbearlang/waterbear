@@ -54,9 +54,6 @@
     }
     wb.runCurrentScripts = runCurrentScripts;
 
-    Event.on('.run-scripts', 'click', null, function(){
-        wb.historySwitchState('result');
-    });
 
     if (!wb.iframeReady){
         document.querySelector('.stageframe').addEventListener('load', function(event){

@@ -14877,11 +14877,18 @@ wb.menu = menu;
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
@@ -15125,6 +15132,14 @@ wb.menu = menu;
     });
     Event.on('.show-ide', 'click', null, function(){
     	wb.historySwitchState('ide');
+    });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
     });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];

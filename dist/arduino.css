@@ -284,8 +284,21 @@ body{
 	overflow: auto;
 }
 
-#block_menu, .workspace, .results, .files{
+.blocks-menu, .workspace, .results, .files{
 	overflow: auto;
+}
+
+body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+	display: none;
+}
+body.result .stage{
+	display: block;
+}
+body.result ul.menu .show-ide{
+	display: inline-block;
+}
+ul.menu .show-ide{
+	display: none;
 }
 
 
@@ -747,7 +760,7 @@ ul.menu li, ul.menu ul.sub-menu li {
 	display: inline-block;
 }
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;

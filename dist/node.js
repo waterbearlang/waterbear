@@ -6508,12 +6508,12 @@ wb.menu({
                 },
                 {
                     "name": " ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "directions",
-                    "value": "choice"
+                    "value": "up"
                 }
             ],
-            "script": "var position##=client.directioncalcs.{{3}}({{1}},{{2}});",
+            "script": "var position##=client.directioncalcs[{{3}}]({{1}},{{2}});",
             "locals": [
                 {
                     "blocktype": "expression",

@@ -892,6 +892,17 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
 .menu button {
 	text-decoration: none;

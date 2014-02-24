@@ -91,7 +91,7 @@ body{
 body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
 	display: none;
 }
-body.result .stage{
+body.result .stage, body.result stage.hidden{
 	display: block;
 }
 body.result ul.menu .show-ide{

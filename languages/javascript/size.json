@@ -16,9 +16,8 @@
                 {
                     "name": "width units",
                     "type": "choice",
-                    "value": "choice",
-                    "options": "relativeUnit",
-                    "uValue": "px"
+                    "value": "px",
+                    "options": "relativeUnit"
                 },
                 {
                     "name": "height",
@@ -28,9 +27,8 @@
                 {
                     "name": "height units",
                     "type": "choice",
-                    "value": "choice",
-                    "options": "relativeUnit",
-                    "uValue": "px"
+                    "value": "px",
+                    "options": "relativeUnit"
                 }
             ]
         },
@@ -47,16 +45,14 @@
                 {
                     "name": "width units",
                     "type": "choice",
-                    "value": "choice",
-                    "options": "relativeUnit",
-                    "uValue": "px"
+                    "value": "px",
+                    "options": "relativeUnit"
                 },
                 {
                     "name": "height units",
                     "type": "choice",
-                    "value": "choice",
-                    "options": "relativeUnit",
-                    "uValue": "px"
+                    "value": "px",
+                    "options": "relativeUnit"
                 }
             ]
         },
@@ -74,9 +70,8 @@
                 {
                     "name": "width units",
                     "type": "choice",
-                    "value": "choice",
-                    "options": "relativeUnit",
-                    "uValue": "px"
+                    "value": "px",
+                    "options": "relativeUnit"
                 }
             ]
         },
@@ -94,9 +89,8 @@
                 {
                     "name": "height units",
                     "type": "choice",
-                    "value": "choice",
-                    "options": "relativeUnit",
-                    "uValue": "px"
+                    "value": "px",
+                    "options": "relativeUnit"
                 }
             ]
         },

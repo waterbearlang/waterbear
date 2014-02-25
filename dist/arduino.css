@@ -268,6 +268,10 @@ body{
 	flex-direction: column;
 }
 
+.results.hidden{
+	display: none;
+}
+
 .stage{
 	-webkit-flex: 1 0 0;
 	flex: 1 0 0;

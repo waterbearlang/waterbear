@@ -2845,14 +2845,21 @@ wb.menu = menu;
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
+		var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
 			document.body.classList.add('result');
 			document.body.classList.remove('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.add('disabled');
+			}
 			wb.view = 'result';
 		}else{
 			document.body.classList.remove('result');
 			document.body.classList.add('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.remove('disabled');
+			}
 			wb.view = 'editor';
 		}
 		if (wb.queryParams.embedded === 'true'){
@@ -3299,7 +3306,7 @@ wb.menu = menu;
 		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
-	Event.on(document.body, 'click', '.toggle', handleToggle);
+	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
 		if (toggleState[name] === undefined){

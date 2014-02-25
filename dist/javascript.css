@@ -404,6 +404,13 @@ body{
 .stage{
 	-webkit-flex: 1 0 0;
 	flex: 1 0 0;
+	position: relative;
+}
+
+.buttonmenu{
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 .stageframe{
@@ -995,6 +1002,48 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
 	display:block;
 }
 
+/* Button Menu in stage */
+
+
+.buttonmenu button{
+	padding-left: 10px;
+	visibility: hidden;
+}
+
+.buttonmenu:hover button{
+	visibility: visible;
+}
+
+.run-script{
+}
+
+.running .buttonmenu .run-script{
+	display: none;
+}
+
+.buttonmenu .stop-script{
+	display: none;
+}
+
+.running .buttonmenu .stop-script{
+	display: inline;
+}
+
+.buttonmenu .autorun-script-on{
+}
+
+.no-autorun .buttonmenu .autorun-script-on{
+	display: none;
+}
+
+.buttonmenu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .buttonmenu .autorun-script-off{
+	display: inline;
+}
+
 
 /*end menu.css*/
 
@@ -1049,6 +1098,7 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
   text-decoration: inherit;
   display: inline-block;
   speak: none;
+  margin-right: 4px;
 }
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {

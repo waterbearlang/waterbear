@@ -47,31 +47,38 @@
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
-	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// This bothers me greatly: runs with the console.log, but not without it
-	    	console.log('running current scripts');
-	    	runFullSize();
-	    }else{
-	    	if (wb.view === 'result'){
-		    	// console.log('we want to run current scripts, but cannot');
-		    }else{
-		    	runWithLayout();
-		    	// console.log('we do not care about current scripts, so there');
-		    }
-	    }
+	    // if (wb.view === 'result' && wb.runCurrentScripts){
+	    // 	// This bothers me greatly: runs with the console.log, but not without it
+	    // 	console.log('running current scripts');
+	    // 	runFullSize();
+	    // }else{
+	    // 	if (wb.view === 'result'){
+		   //  	// console.log('we want to run current scripts, but cannot');
+		   //  }else{
+		   //  	runWithLayout();
+		   //  	// console.log('we do not care about current scripts, so there');
+		   //  }
+	    // }
 	    if (wb.toggleState.scripts_text_view){
 	    	wb.updateScriptsView();
 	    }
-	    if (wb.toggleState.stage){
+	    if (wb.toggleState.stage || wb.view === 'result'){
 	    	// console.log('run current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
@@ -188,21 +195,21 @@
 		}
 	}
 
-	function runFullSize(){
-		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-			wb.hide(wb.find(document.body, sel));
-		});
-		wb.show(wb.find(document.body, '.stage'));
-	}
+	// function runFullSize(){
+	// 	['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+	// 		wb.hide(wb.find(document.body, sel));
+	// 	});
+	// 	wb.show(wb.find(document.body, '.stage'));
+	// }
 
-	function runWithLayout(){
-		['#block_menu', '.workspace'].forEach(function(sel){
-			wb.show(wb.find(document.body, sel));
-		});
-		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-		});
-	}
+	// function runWithLayout(){
+	// 	['#block_menu', '.workspace'].forEach(function(sel){
+	// 		wb.show(wb.find(document.body, sel));
+	// 	});
+	// 	['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+	// 		toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+	// 	});
+	// }
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
@@ -290,6 +297,20 @@
 	});
 	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
 	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+	Event.on('.run-scripts', 'click', null, function(){
+        wb.historySwitchState('result');
+    });
+    Event.on('.show-ide', 'click', null, function(){
+    	wb.historySwitchState('ide');
+    });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;

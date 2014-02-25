@@ -13,16 +13,15 @@ var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
+    node: ['node','control', 'piface', 'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
     javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
-    minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
-    demo: ['javascript', 'demo'],
-    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
+    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform']
 };
 
 var pluginlibs = {
     arduino: [],
     javascript: ['SAT'],
-    minecraftjs: [],
+    node: [],
     demo: [],
     processingjs: ['processing-1.4.1']
 }
@@ -32,7 +31,7 @@ var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontaweso
 var styles = {
     arduino: [],
     javascript: ['highlight-github'],
-    minecraftjs: ['highlight-github'],
+    node: ['highlight-github'],
     demo: ['highlight-github'],
     processingjs: ['highlight-github']
 }
@@ -42,7 +41,7 @@ var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 
 var libs = {
     arduino: ['events.min'],
     javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    minecraftjs: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
 };
@@ -129,7 +128,7 @@ function build(){
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
 
         // Build runtime support
-        if (lang === 'javascript' || lang === 'minecraftjs' || lang === 'processingjs'){
+        if (lang === 'javascript' || lang === 'processingjs'){
             pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }

@@ -1,28 +1,37 @@
 {
     "name": "Blocks",
-    "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",
     "blocks": [
         {
             "blocktype": "context",
-            "id": "b8020f54-43d2-4207-8529-336eb035898c",
+            "id": "c500a7f0-7117-40ea-9139-b161e19f190b",
             "sockets": [
                     {
-                        "name": "get Block Type at",
+                        "name": "Get Block Type at",
                         "type": "position",
                         "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                     }
                 ],
-            "script": "client.getBlock({{1}}.x, {{1}}.y, {{1}}.z, function(block##){[[1]]});",
+            "script": "client.getBlock({{1}}, function(block##){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                             {
-                                "name": "block##"
+                                "name": "Block Type Number"
                             }
                         ],
-                    "script": "parseInt(block##)",
+                    "script": "block##",
                     "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "Block Type Name"
+                            }
+                        ],
+                    "script": "client.getBlockName(block##)",
+                    "type": "string"
                 }
             ],
             "help": "get block type at x, y, z"
@@ -32,13 +41,13 @@
             "id": "a7c17404-8555-42be-877e-9d01d7647604",
             "sockets": [
                     {
-                    "name": "block",
+                    "name":"block",
                     "type": "choice",
                     "options": "blocks",
                     "value": "choice"
                 }
                 ],
-            "script": "{{1}}",
+            "script": "client.blocks[{{1}}]",
             "type": "number",
             "help": "a blocktype"
         },
@@ -58,7 +67,7 @@
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlock({{1}}.x, {{1}}.y, {{1}}.z, client.blocks[{{2}}]);",
+            "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
             "help": "set block at position"
         },
         {
@@ -68,6 +77,7 @@
             "sockets": [
                 {
                     "name": "set Blocks between",
+                
                     "type": "position",
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 },
@@ -83,7 +93,7 @@
                     "value": "choice"
                 }
             ],
-            "script": "client.setBlocks({{1}}.x, {{1}}.y, {{1}}.z, {{2}}.x, {{2}}.y, {{2}}.z, client.blocks[{{3}}]);",
+            "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
             "help": "set blocks in a 3D rectangle between the first and second postions to .."
         },
         {
@@ -96,7 +106,7 @@
                     "value": "0"
                 }
             ],
-            "script": "Object.keys(client.blocks).filter(function(element){return (client.blocks[element] === {{1}});})",
+            "script": "client.getBlockName({{1}})",
             "type": "string",
             "help": "name of a blocktype by number"
         }

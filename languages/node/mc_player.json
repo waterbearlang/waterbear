@@ -9,7 +9,7 @@
                     "name": "Get Player Tile Position"
                 }
             ],
-            "script": "client.getTile(function(data){console.log(\"data =\", data); var aData = data.toString().trim().split(\",\"); console.log(\"aData =\", aData); var playerposition = {x:parseInt(aData[0],10), y: parseInt(aData[1],10), z: parseInt(aData[2],10)}; [[1]]});",
+            "script": "client.getTile(function(playerposition){[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -25,10 +25,20 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
+                            "name": "Player Stood on Position"
+                        }
+                    ],
+                    "script": "playerposition.minus(v(0,1,0))",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
                             "name": "Player Position as text"
                         }
                     ],
-                    "script": "\"x:\"+playerposition.x.toString()+\", y:\"+playerposition.y.toString()+\", z:\"+playerposition.z.toString()",
+                    "script": "playerposition.toString()",
                     "type": "string"
                 }
             ],
@@ -61,7 +71,7 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "var posA## = {{1}};var posB## = {{2}};var position## = {x:(posA##.x+posB##.x), y:(posA##.y+posB##.y) , z:(posA##.z+posB##.z)};",
+            "script": "var position## = {{1}}.plus({{2}});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -86,8 +96,8 @@
                     "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
                 }
             ],
-            "script": "client.setTile({{1}}.x, {{1}}.y, {{1}}.z);",
-            "help": "Move Player to x, y, z of position"
+            "script": "client.setTile({{1}});",
+            "help": "Move Player to position"
         }
         
     

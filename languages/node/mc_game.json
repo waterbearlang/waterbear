@@ -1,13 +1,27 @@
 {
-    "name": "Game",
+    "name": "Minecraft Game",
     "blocks": [
+        
+        {
+            "blocktype": "context",
+            "id": "72725388-7c3f-49ba-9b77-f71b1d2eb3d5",
+            "sockets": [
+                    {
+                        "name": "Connect To Minecraft"
+                    }
+                ],
+            "script": "var client = new Minecraft('localhost', 4711, function() {[[1]]});",
+            "help": "All Minecraft things in here"
+        },
+        
+        
         {
             "blocktype": "step",
             "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
             "sockets": [
                 {
                     "name": "Say",
-                    "type": "string",
+                    "type": "any",
                     "value": "hi"
                 },
                 {
@@ -15,7 +29,7 @@
                 }
                 
             ],
-            "script": "client.chat({{1}});",
+            "script": "client.chat({{1}}.toString());",
             "help": "Send a message as chat"
         },
         

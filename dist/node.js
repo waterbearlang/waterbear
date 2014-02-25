@@ -2097,10 +2097,18 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     };
 
     function find(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return elem.querySelector(selector);
     };
 
     function findAll(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return wb.makeArray(elem.querySelectorAll(selector));
     };
 
@@ -2225,14 +2233,21 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 (function(global){
     "use strict";
 
+    function isDomObject(e){
+        if (e === window) return true;
+        if (e === document) return true;
+        if (e.tagName) return true;
+        return false;
+    }
+
     function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem);
+        if (!isDomObject(elem)){ 
+            console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
@@ -3203,6 +3218,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
         // }
+        if (!obj.isTemplateBlock){
+            updateFromTemplateBlock(obj);
+        }
         var block = elem(
             'div',
             {
@@ -3275,8 +3293,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     // Block Event Handlers
 
-    
-
     function removeBlock(event){
         event.stopPropagation();
         if (wb.matches(event.wbTarget, '.expression')){
@@ -3341,9 +3357,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                     spec.isTemplateBlock = true;
                     spec.isLocal = true;
                     spec.group = block.dataset.group;
-                    if (!spec.seqNum){
+                    // if (!spec.seqNum){
                         spec.seqNum = block.dataset.seqNum;
-                    }
+                    // }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
                     if(!spec.id){
@@ -3411,6 +3427,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (desc.block){
             socket.dataset.block = desc.block;
         }
+        socket.dataset.seqNum = blockdesc.seqNum;
         if (!blockdesc.isTemplateBlock){
             //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
@@ -3441,7 +3458,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 
     function socketDesc(socket){
-        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
+        var parentBlock = wb.closest(socket, '.block');
+        var isTemplate = !!parentBlock.dataset.isTemplateBlock;
         var desc = {
             name: socket.dataset.name,
         }
@@ -3466,7 +3484,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name')
         
-        if (desc.name !== uName){
+        if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
         var holder = wb.findChild(socket, '.holder');
@@ -3482,17 +3500,33 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return desc;
     }
 
+    function updateFromTemplateBlock(obj){
+        // Retrieve the things we don't need to duplicate in every instance block description
+        var tB = blockRegistry[obj.scriptId];
+        if (!tB){
+            console.error('Error: could not get template block for  for %o', obj);
+            return obj;
+        }
+        obj.blocktype = tB.blocktype;
+        obj.group = tB.group;
+        obj.help = tB.help;
+        obj.type = tB.type;
+    }
+
     function blockDesc(block){
         var label = wb.findChild(block, '.label');
         var sockets = wb.findChildren(label, '.socket');
         var desc = {
-            blocktype: block.dataset.blocktype,
-            group: block.dataset.group,
             id: block.id,
-            help: block.title,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        }
+        if (block.dataset.group === 'scripts_workspace'){
+            desc.blocktype = block.dataset.blocktype;
+            desc.group = block.dataset.group;
+            desc.help = block.dataset.help;
+            desc.type = block.dataset.type;            
         }
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
@@ -3508,9 +3542,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
         if (block.dataset.localSource){
             desc.localSource = block.dataset.localSource;
-        }
-        if (block.dataset.type){
-            desc.type = block.dataset.type;
         }
         if (block.dataset.locals){
             desc.locals = JSON.parse(block.dataset.locals);
@@ -3532,10 +3563,14 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         ////////////////////
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers
+        // UPDATE:
+        // No, it was because we want cloned blocks (and the locals they create) to get 
+        // new sequence numbers. But, if the block being clones is an instance of a local then we
+        // don't want to get a new sequence number.
         // /////////////////
-        // if (!blockdesc.isLocal){
-        //     delete blockdesc.seqNum;
-        // }
+        if (!block.dataset.localSource){
+            delete blockdesc.seqNum;
+        }
         if (blockdesc.isTemplateBlock){
             blockdesc.scriptId = block.id;            
         }
@@ -3640,7 +3675,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
-            wb.findAll('.block[data-scriptId=' + block.dataset.scriptId).forEach(function(elem){
+            wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
                 elem.style.backgroundColor = 'red';
             });
         }
@@ -3754,6 +3789,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     // Export methods
     wb.Block = Block;
     wb.blockDesc = blockDesc;
+    wb.socketDesc = socketDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
@@ -4634,31 +4670,38 @@ wb.menu = menu;
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
-	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// This bothers me greatly: runs with the console.log, but not without it
-	    	console.log('running current scripts');
-	    	runFullSize();
-	    }else{
-	    	if (wb.view === 'result'){
-		    	// console.log('we want to run current scripts, but cannot');
-		    }else{
-		    	runWithLayout();
-		    	// console.log('we do not care about current scripts, so there');
-		    }
-	    }
+	    // if (wb.view === 'result' && wb.runCurrentScripts){
+	    // 	// This bothers me greatly: runs with the console.log, but not without it
+	    // 	console.log('running current scripts');
+	    // 	runFullSize();
+	    // }else{
+	    // 	if (wb.view === 'result'){
+		   //  	// console.log('we want to run current scripts, but cannot');
+		   //  }else{
+		   //  	runWithLayout();
+		   //  	// console.log('we do not care about current scripts, so there');
+		   //  }
+	    // }
 	    if (wb.toggleState.scripts_text_view){
 	    	wb.updateScriptsView();
 	    }
-	    if (wb.toggleState.stage){
+	    if (wb.toggleState.stage || wb.view === 'result'){
 	    	// console.log('run current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
@@ -4775,21 +4818,21 @@ wb.menu = menu;
 		}
 	}
 
-	function runFullSize(){
-		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-			wb.hide(wb.find(document.body, sel));
-		});
-		wb.show(wb.find(document.body, '.stage'));
-	}
+	// function runFullSize(){
+	// 	['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+	// 		wb.hide(wb.find(document.body, sel));
+	// 	});
+	// 	wb.show(wb.find(document.body, '.stage'));
+	// }
 
-	function runWithLayout(){
-		['#block_menu', '.workspace'].forEach(function(sel){
-			wb.show(wb.find(document.body, sel));
-		});
-		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-		});
-	}
+	// function runWithLayout(){
+	// 	['#block_menu', '.workspace'].forEach(function(sel){
+	// 		wb.show(wb.find(document.body, sel));
+	// 	});
+	// 	['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+	// 		toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+	// 	});
+	// }
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
@@ -4877,6 +4920,20 @@ wb.menu = menu;
 	});
 	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
 	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+	Event.on('.run-scripts', 'click', null, function(){
+        wb.historySwitchState('result');
+    });
+    Event.on('.show-ide', 'click', null, function(){
+    	wb.historySwitchState('ide');
+    });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;
@@ -5076,84 +5133,139 @@ wb.menu = menu;
 })(wb, Event);
 /*end menu.js*/
 
-/*begin languages/demo/javascript.js*/
+/*begin languages/node/node.js*/
 /*
- *    JAVASCRIPT PLUGIN
+ *    NODE PLUGIN
  *
- *    Support for writing Javascript using Waterbear
- *
+ *    Support for writing Javascript for NODE.js using Waterbear
+ *    will include Minecraft and RPi-GPIO and othe RPi stuff
  */
 
+// Remove stage menu item until menus get templatized
+var stageMenu = document.querySelector('[data-target=stage]').parentElement;
+stageMenu.parentElement.removeChild(stageMenu);
 
-// Add some utilities
+// A couple of do-nothing scripts for compatibility
+wb.runCurrentScripts = function(){ /* do nothing */ };
+wb.clearStage = function(){ /* do nothing */ };
+
+
 wb.wrap = function(script){
-    return [
-        'var global = new Global();',
-        '(function(){', 
-            'var local = new Local();', 
-            // 'try{',
-                'local.canvas = document.createElement("canvas");',
-                'local.canvas.setAttribute("width", global.stage_width);',
-                'local.canvas.setAttribute("height", global.stage_height);',
-                'global.stage.appendChild(local.canvas);',
-                'local.canvas.focus()',
-                'local.ctx = local.canvas.getContext("2d");',
-                'local.ctx.textAlign = "center";',
-                'var main = function(){',
-                    script,
-                '}',
-                'global.preloadAssets(' + assetUrls() + ', main);',
-            // '}catch(e){',
-                // 'alert(e);',
-            // '}',
-        '})()'
-    ].join('\n');
-}
+    return script;
+};
 
-function assetUrls(){
-    return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
-        // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
-        var source = document.getElementById(asset.dataset.localSource);
-        return wb.getSocketValue(wb.getSockets(source)[0]);
-    }).join(',') + ']';
-}
+wb.requiredjs={"before":{}, "after":{}};
+
 
 function runCurrentScripts(event){
-    var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-    wb.runScript( wb.prettyScript(blocks) );
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        wb.runScript( wb.prettyScript(blocks) );        
 }
-wb.runCurrentScripts = runCurrentScripts;
+Event.on('.run-scripts', 'click', null, runCurrentScripts);
 
-Event.on('.run-scripts', 'click', null, function(){
-    document.body.className = 'result';
-    wb.historySwitchState('result');
-    runCurrentScripts();
-});
 
-window.addEventListener('load', function(event){
-    console.log('iframe ready');
-    wb.iframeready = true;
-    if (wb.iframewaiting){
-        wb.iframewaiting();
-    }
-    wb.iframewaiting = null;
-}, false);
-
-wb.runScript = function(script){
-    var run = function(){
-        wb.script = script;
-        var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-        var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-        // console.log('trying to load library %s', runtimeUrl);
-        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
-        document.querySelector('.stageframe').focus();
+wb.ajax = {
+        jsonp: function(url, data, success, error){
+            var callbackname = '_callback' + Math.round(Math.random() * 10000);
+            window[callbackname] = function(result){
+                delete window[callbackname];
+                success(result);
+            };
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState === 4){
+                    if (xhr.status === 200){
+                        // this is particularly unsafe code
+                        eval(xhr.responseText); // this should call window[callbackname]
+                    }else{
+                        delete window[callbackname];
+                        error(xhr);
+                    }
+                }
+            };
+            xhr.open('GET', url + '?' + data + '&callback=' + callbackname, true);
+            xhr.send();
+        }
     };
-    if (wb.iframeready){
-        run();
-    }else{
-        wb.iframewaiting = run;
+
+
+    
+wb.resetrun = function(message){
+    messagebox.innerHTML = message;
+    window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+    document.querySelector('.run-scripts').style.display = 'inline-block';
+    document.querySelector('.stop-scripts').style.display = 'none';
+    //Event.remove('.stop-scripts', 'click');
+
+};
+    
+wb.runScript = function(script){
+
+    // TODO : workout the ws address from the page address
+    var aHost = window.location.host.split(":");
+    var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
+    
+    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
+    
+    var messagebox = document.querySelector('#messagebox');
+    if(messagebox === null || messagebox.length === 0)
+    {
+        messagebox = wb.elem('div', {"id":"messagebox"});
+        document.querySelector('.tabbar').appendChild(messagebox);
+        messagebox = document.querySelector('#messagebox');
+        
     }
-}
+    
+    messagebox.innerHTML = "Connecting to Raspberry Pi";
+    oSocket.onerror = function(event) {
+        messagebox.innerHTML = "Error Communicating with RPi";
+        window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
+        oSocket.close();
+    };
+    
+    oSocket.onopen = function (event) {
+        oSocket.send(JSON.stringify({"command":"run","code":script})); 
+    };
+    
+    oSocket.onmessage = function(event) {
+        var msg = JSON.parse(event.data);
+        switch(msg.type) {
+            case "recieved":
+                messagebox.innerHTML = "Code recieved on RPi";
+                break;
+            case "running":
+                messagebox.innerHTML = "Code running on RPi "+ msg.pid;
+                document.querySelector('.run-scripts').style.display = 'none';
+                document.querySelector('.stop-scripts').style.display = 'inline-block';
+                
+                Event.once('.stop-scripts', 'click', null, function(){
+                      oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
+                });
+
+                break;
+            case "completed":
+                wb.resetrun("Code Completed Successfully");
+                oSocket.close();
+                break;
+            case "exit":
+                wb.resetrun("Code Exited");
+                oSocket.close();
+                break;
+            case "error":
+                wb.resetrun("Code Failed " + msg.data.toString());
+                oSocket.close();
+                break;
+            case "sterr":
+                messagebox.innerHTML = "Error Recieved " + msg.data;
+                break;    
+            case "stdout":
+                messagebox.innerHTML = "Data Recieved ";// + msg.data;
+                console.log("msg.data =", msg.data.toString());
+                break;    
+        }
+  
+    };
+};
 
 function clearStage(event){
     document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
@@ -5162,11 +5274,79 @@ Event.on('.clear-stage', 'click', null, clearStage);
 Event.on('.edit-script', 'click', null, clearStage);
 
 
+    
+    wb.groupsFromBlock = function(block){
+        var group = block.dataset.group;
+        var values = [];
+        var childValues = [];
+        if(typeof group !== "undefined")
+        {
+            values.push(group);
+        }
+
+        if (wb.matches(block, '.context')){
+            var children = wb.findChildren(wb.findChild(block, '.contained'), '.block');            
+            childValues = children.map(wb.groupsFromBlock);
+            childValues.forEach(function(ar){
+                values = values.concat(ar);
+            });
+        }
+        return values;
+    };
+    
+    wb.getGroupsFromElements = function(elements)
+    {
+        var blockgroups = elements.map(function(elem){
+                return wb.groupsFromBlock(elem);
+            });
+      
+        var groups = [];
+        blockgroups.forEach(function(ar){
+                    groups = groups.concat(ar);             
+            });
+        
+        var uniquegroups = [];
+        var usedgroups = {};
+        groups.forEach(function(group){
+            if(typeof usedgroups[group] === "undefined")
+            {
+                usedgroups[group] = group;
+                uniquegroups.push(group);             
+            }
+        });
+        return uniquegroups;
+    
+    };
 
 wb.prettyScript = function(elements){
-    return js_beautify(elements.map(function(elem){
+    
+    var groups = wb.getGroupsFromElements(elements);    
+    var before = groups.map(function(group){
+        var req = wb.requiredjs.before[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
+    }).join(" ")+ "\n// Your code starts here\n";
+    
+    var after = "\n//Your code ends here\n"+groups.map(function(group){
+        var req = wb.requiredjs.after[group];
+        if(typeof req !== "undefined")
+        {
+            return req;
+        }
+        return "";
+    }).join(" ");
+    
+    var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
-    }).join(''));
+    }).join('');
+    
+    var pretty = js_beautify(before+script+after);
+    
+    //script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
+    return pretty;
 };
 
 wb.writeScript = function(elements, view){
@@ -5179,19 +5359,14 @@ wb.writeScript = function(elements, view){
 // expose these globally so the Block/Label methods can find them
 wb.choiceLists = {
     boolean: ['true', 'false'],
-    keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
-        .split('').concat(['up', 'down', 'left', 'right',
-        'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',
-        'pause', 'capslock', 'esc', 'space', 'pageup', 'pagedown',
-        'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
-    blocktypes: ['step', 'expression', 'context', 'eventhandler', 'asset'],
+    blocktypes: ['step', 'expression', 'context', 'eventhandler'],
     types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
     rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
 };
 
 // Hints for building blocks
 //
-//
+//`
 // Expression blocks can nest, so don't end their scripts with semi-colons (i.e., if there is a "type" specified).
 //
 //
@@ -5208,77 +5383,2326 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/*end languages/demo/javascript.js*/
+/* TODO : 
+https://npmjs.org/package/omxcontrol
+https://npmjs.org/package/omxdirector
+https://npmjs.org/package/piglow
+https://npmjs.org/package/raspicam
 
-/*begin languages/demo/demo.js*/
-/* Add Demo type and toolkists list */
-wb.choiceLists.toolkits = ['Canvas', 'SVG', 'CSS', 'Flash', 'AIR', 'Charcoal', 'Stone Tablet'];
-wb.choiceLists.types.push('demo');
-wb.choiceLists.rettypes.push('demo');
-/*end languages/demo/demo.js*/
 
-/*begin languages/demo/demo.json*/
+*/
+
+/*end languages/node/node.js*/
+
+/*begin languages/node/control.js*/
+
+/*end languages/node/control.js*/
+
+/*begin languages/node/piface.js*/
+//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
+wb.choiceLists.pifacein = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
+wb.choiceLists.pifacebutton = [0,1 ,2 ,3];
+wb.choiceLists.pifacerelays = [0,1 ];
+wb.choiceLists.pifaceout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
+wb.choiceLists.pifaceonoff = ["0", "1"];
+
+
+
+wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
+wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+
+/*end languages/node/piface.js*/
+
+/*begin languages/node/firmata.js*/
+//arduino firmata  https://npmjs.org/search?q=firmata
+
+
+//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
+wb.choiceLists.firmatain = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
+wb.choiceLists.firmatabutton = [0,1 ,2 ,3];
+wb.choiceLists.firmatarelays = [0,1 ];
+wb.choiceLists.firmataout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
+wb.choiceLists.firmataonoff = ["0", "1"];
+
+wb.choiceLists.highlow = ['HIGH', 'LOW'];
+wb.choiceLists.inoutput= ['INPUT', 'OUTPUT'];
+wb.choiceLists.onoff = ['ON', 'OFF'];
+wb.choiceLists.logic = ['true', 'false'];
+wb.choiceLists.digitalpins = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,'A0','A1','A2','A3','A4','A5'];
+wb.choiceLists.analoginpins = ['A0','A1','A2','A3','A4','A5'];
+wb.choiceLists.pwmpins = [3, 5, 6, 9, 10, 11];
+wb.choiceLists.baud = [9600, 300, 1200, 2400, 4800, 14400, 19200, 28800, 38400, 57600, 115200];
+wb.choiceLists.analogrefs = ['DEFAULT', 'INTERNAL', 'INTERNAL1V1', 'INTERNAL2V56', 'EXTERNAL'];
+
+wb.requiredjs.before.firmata = "var ArduinoFirmata = require('arduino-firmata');var arduino = new ArduinoFirmata();";
+wb.requiredjs.after.firmata =  "";
+
+/*end languages/node/firmata.js*/
+
+/*begin languages/node/mc_game.js*/
+   
+
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
+
+wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+
+
+// TODO : fix blocktypes to number or text not both
+// TODO : find direction code and loops
+// TODO : find distance code
+// TODO : write in area detect
+// TODO : research the eventsBlockHits
+
+/*end languages/node/mc_game.js*/
+
+/*begin languages/node/mc_player.js*/
+
+/*end languages/node/mc_player.js*/
+
+/*begin languages/node/mc_position.js*/
+
+wb.choiceLists.types = wb.choiceLists.types.concat(['position']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['position']);
+wb.choiceLists.directions= ['up', 'down', 'north', 'south','east','west','none'];
+
+
+
+/*,
+        {
+            "blocktype": "expression",
+            "id": "9ec42170-3575-4993-85b1-a51d515e3463",
+            "sockets": [
+                {
+                    "name": "Temp Position"
+                }
+            ],
+            "type": "position",
+            "script": "tempposition",
+            "help": "position"
+        }
+        */
+/*end languages/node/mc_position.js*/
+
+/*begin languages/node/mc_blocks.js*/
+
+wb.choiceLists.blocks = ["AIR", "STONE", "GRASS", "DIRT", "COBBLESTONE", "WOOD_PLANKS", "SAPLING", "BEDROCK", "WATER_FLOWING", "WATER_STATIONARY", "LAVA_FLOWING", "LAVA_STATIONARY", "SAND", "GRAVEL", "GOLD_ORE", "IRON_ORE", "COAL_ORE", "WOOD", "LEAVES", "GLASS", "LAPIS_LAZULI_ORE", "LAPIS_LAZULI_BLOCK", "SANDSTONE", "BED", "COBWEB", "GRASS_TALL", "WOOL", "FLOWER_YELLOW", "FLOWER_CYAN", "MUSHROOM_BROWN", "MUSHROOM_RED", "GOLD_BLOCK", "IRON_BLOCK", "STONE_SLAB_DOUBLE", "STONE_SLAB", "BRICK_BLOCK", "TNT", "BOOKSHELF", "MOSS_STONE", "OBSIDIAN", "TORCH", "FIRE", "STAIRS_WOOD", "CHEST", "DIAMOND_ORE", "DIAMOND_BLOCK", "CRAFTING_TABLE", "FARMLAND", "FURNACE_INACTIVE", "FURNACE_ACTIVE", "DOOR_WOOD", "LADDER", "STAIRS_COBBLESTONE", "DOOR_IRON", "REDSTONE_ORE", "SNOW", "ICE", "SNOW_BLOCK", "CACTUS", "CLAY", "SUGAR_CANE", "FENCE", "GLOWSTONE_BLOCK", "BEDROCK_INVISIBLE", "GLASS_PANE", "MELON", "FENCE_GATE", "GLOWING_OBSIDIAN", "NETHER_REACTOR_CORE"];
+
+wb.choiceLists.types = wb.choiceLists.types.concat(['block']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['block']);
+/*end languages/node/mc_blocks.js*/
+
+/*begin languages/node/mc_camera.js*/
+
+wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
+/*end languages/node/mc_camera.js*/
+
+/*begin languages/node/array.js*/
+
+/*end languages/node/array.js*/
+
+/*begin languages/node/boolean.js*/
+
+/*end languages/node/boolean.js*/
+
+/*begin languages/node/math.js*/
+
+/*end languages/node/math.js*/
+
+/*begin languages/node/string.js*/
+
+/*end languages/node/string.js*/
+
+/*begin languages/node/control.json*/
 wb.menu({
-    "name": "Demo",
+    "name": "Control",
     "blocks": [
         {
             "blocktype": "eventhandler",
-            "id": "fc4f2ac2-ddc0-4ea2-bb97-b0ee3c89ba42",
-            "script": "/* do something asynchronous */\nmake_async_call_with_callback(handler_##);",
-            "help": "demonstrate an idea about asynch handlers",
+            "id": "d36cd27a-98d9-4574-8e68-db267b7a2bb4",
+            "script": "[[1]]",
+            "help": "this trigger will run its scripts once when the program starts",
             "sockets": [
-                {   
-                    "name": "Asynchronous call ##"
-                }
-            ],
-            "locals": [
                 {
-                    "blocktype": "eventhandler",
-                    "script": "function handler_##(){/* handle asynchronous callback*/}",
-                    "help": "making these event handlers prevents having blocks follow them",
-                    "sockets": [
-                        {
-                            "name": "Asynchronous callback ##"  
-                        }
-                    ]
+                    "name": "When program runs"
                 }
             ]
         },
         {
             "blocktype": "context",
-            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
-            "script": "/* do nothing */",
-            "help": "make a point",
+            "id": "771a7f8f-ed82-4a92-b255-2f9c4b6fa614",
+            "script": "if({{1}}){[[1]]}",
+            "help": "run the following blocks only if the condition is true",
             "sockets": [
                 {
-                    "name": "draw pattern at",
-                    "type": "point",
-                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
+                    "name": "If",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "9bcb76ff-0965-4bdb-9ead-fcad46bbbd1f",
+            "script": "if( ! {{1}} ){ [[1]]} }",
+            "help": "run the  blocks if the condition is not true",
+            "sockets": [
+                {
+                    "name": "If not",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "7972f6ee-f653-486c-aa99-81d8930a4d35",
+            "script": "while(!({{1}})){[[1]]}",
+            "help": "repeat forever until condition is true",
+            "sockets": [
+                {
+                    "name": "Repeat until",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "c671ef3f-a7d0-4921-825d-c879e70999de",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000/{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "Repeat",
+                    "type": "number",
+                    "value": "2"
                 },
                 {
-                    "name": "with toolkit",
+                    "name": "times a second"
+                }
+            ]
+        },
+        
+        
+        
+        {
+            "blocktype": "context",
+            "id": "89d08188-64e0-48a1-87ff-47719e35d0bb",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000*{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "Repeat every",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "seconds"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "1a1cee1b-fd60-4c4f-87ca-09e394fe8f67",
+            "script": "variable## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "script": "variable##",
+                    "type": "any",
+                    "sockets": [
+                        {
+                            "name": "variable##"
+                        }
+                    ]
+                }
+            ],
+            "help": "create a reference to re-use the any",
+            "sockets": [
+                {
+                    "name": "Variable",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "ece22a99-cbf3-48d8-bab8-4d93ae8a6712",
+            "script": "{{1}} = {{2}};",
+            "help": "first argument must be a variable",
+            "sockets": [
+                {
+                    "name": "Set variable",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "9a148b21-c609-4f98-9ae3-19d2e4e1ddef",
+            "script": "setTimeout(function(){[[1]]},1000*{{1}});",
+            "help": "pause before running the following blocks",
+            "sockets": [
+                {
+                    "name": "Wait",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "secs"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "2adb5300-2c32-41a2-907f-4cf7ecbf7eac",
+            "script": "for(count## = 1; count## <= {{1}}; count## ++){[[1]]}",
+            "help": "repeat the contained blocks so many times",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Repeat",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "c457444d-c599-4241-bead-5dc9d6e649a4",
+            "script": "while({{1}}){[[1]]}",
+            "help": "repeat until the condition is false",
+            "sockets": [
+                {
+                    "name": "Repeat While",
+                    "type": "boolean",
+                    "value": "false"
+                }
+            ]
+        }
+    ]
+});
+/*end languages/node/control.json*/
+
+/*begin languages/node/piface.json*/
+wb.menu({
+    "name": "PiFace",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "bd7cb398-f6ff-41fb-b1a4-0ffdaa6135c3",
+            "script": "pfio.digital_read({{1}})",
+            "type": "boolean",
+            "help": "Use a Pin as an Digital Input",
+            "sockets": [
+                {
+                    "name": "Input",
                     "type": "choice",
-                    "options": "toolkits",
-                    "value": "AIR"
+                    "options": "pifacein",
+                    "value": "choice"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
+            "script": "pfio.read_input()",
+            "type": "int",
+            "help": "All 8 Pins as a Digital Input",
+            "sockets": [
+                {
+                    "name": "Inputs as number"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "77bdb006-723d-4b9e-bb73-6673fcc8bed0",
+            "script": "pfio.digital_write({{1}},{{2}});",
+            "help": "Turn",
+            "sockets": [
+                {
+                    "name": "Set output",
+                    "type": "choice",
+                    "options": "pifaceout",
+                    "value": "choice"
+                },
+                {
+                    "name": "to",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "cd648a1f-4e16-473e-8716-e3b32d6046c8",
+            "script": "pfio.write_output({{1}});",
+            "help": "Turn",
+            "sockets": [
+                {
+                    "name": "Set outputs to",
+                    "type": "int",
+                    "value": "0"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "c18294d2-8df0-4d3f-8f80-3f24f46b17c3",
+            "script": "output## = {{1}};",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create output## using Output Pin",
+                    "type": "choice",
+                    "options": "pifaceout",
+                    "value": "choice"
                 }
             ],
             "locals": [
                 {
                     "blocktype": "step",
-                    "name": "binary",
-                    "script": "/* do nothing */",
-                    "help": "should only allow binary here",
                     "sockets": [
                         {
-                            "name": "binary",
-                            "type": "binary",
-                            "value": "01010101"
+                            "name": "output##"
+                        },
+                        {
+                            "name": "=",
+                            "type": "boolean",
+                            "value": null
                         }
-                    ]
+                    ],
+                    "script": "pfio.digital_write(output##,{{1}});"
                 }
             ]
+        },
+        {
+            "blocktype": "step",
+            "id": "353a7962-7318-470d-8b19-09c5568ba413",
+            "script": "input## = {{1}};",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "input##"
+                        }
+                    ],
+                    "script": "pfio.digital_read(input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create input## using Input Pin",
+                    "type": "choice",
+                    "options": "pifacein",
+                    "value": "choice"
+                }
+            ]
+        }
+        
+    ]
+});
+/*end languages/node/piface.json*/
+
+/*begin languages/node/firmata.json*/
+wb.menu({
+    "name": "Firmata",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "0cadc709-e4eb-4aa4-9e1e-374fdf71dac3",
+            "sockets": [
+                {
+                    "name": "Connect To Firmata"
+                }
+            ],
+            "script": "arduino.connect();arduino.on('connect', function(){[[1]]});",
+            "help": "All Firmata things in here"
+        },
+        {
+            "blocktype": "step",
+            "id": "a7096d17-06bd-4986-a6de-4eeffc68ec88",
+            "script": "digital_output## = {{1}}; arduino.pinMode(digital_output##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create digital_output## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "digital_output##"
+                        },
+                        {
+                            "name": "to",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.digitalWrite(digital_output##, {{1}}, function(){});"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "0ff728fe-e833-4887-8c1c-16380100d007",
+            "script": "digital_input## = {{1}}; pinMode(digital_input##, INPUT);",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "digital_input##"
+                        }
+                    ],
+                    "script": "arduino.digitalRead(digital_input##)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create digital_input## on Pin",
+                    "type": "choice",
+                    "options": "digitalpins",
+                    "value": "choice"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "5501b22e-e6ae-4a86-8c67-b8d3e60d7fff",
+            "script": "analog_output## = {{1}}; arduino.pinMode(analog_output##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create analog_output## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "analog_output##"
+                        },
+                        {
+                            "name": "to",
+                            "type": "int",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.analogWrite(analog_output##, {{1}}, function(){});"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "b335d921-f23c-4a2c-b35a-9407ccd6d60c",
+            "script": "servo## = {{1}}; arduino.pinMode(servo##, ArduinoFirmata.OUTPUT);",
+            "help": "Create a named pin set to servo",
+            "sockets": [
+                {
+                    "name": "Create servo## on Pin",
+                    "type": "choice",
+                    "options": "pwmpins",
+                    "value": "choice"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "servo##"
+                        },
+                        {
+                            "name": "to angle",
+                            "type": "int",
+                            "value": null
+                        }
+                    ],
+                    "script": "arduino.servoWrite(servo##, {{1}}, function(){});"
+                }
+            ]
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "9d686235-2644-475d-a21a-b5c1df89185f",
+            "script": "analog_input## = {{1}}; pinMode(analog_input##, INPUT);",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "analog_input##"
+                        }
+                    ],
+                    "script": "arduino.analogRead(analog_input##)",
+                    "help": "The value on analog input pin",
+                    "type": "int"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create analog_input## on Pin",
+                    "type": "choice",
+                    "options": "analoginpins",
+                    "value": "choice"
+                }
+            ]
+        }
+        
+    ]
+});
+/*end languages/node/firmata.json*/
+
+/*begin languages/node/mc_game.json*/
+wb.menu({
+    "name": "Minecraft Game",
+    "blocks": [
+        
+        {
+            "blocktype": "context",
+            "id": "72725388-7c3f-49ba-9b77-f71b1d2eb3d5",
+            "sockets": [
+                    {
+                        "name": "Connect To Minecraft"
+                    }
+                ],
+            "script": "var client = new Minecraft('localhost', 4711, function() {[[1]]});",
+            "help": "All Minecraft things in here"
+        },
+        
+        
+        {
+            "blocktype": "step",
+            "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
+            "sockets": [
+                {
+                    "name": "Say",
+                    "type": "any",
+                    "value": "hi"
+                },
+                {
+                    "name": "in chat"
+                }
+                
+            ],
+            "script": "client.chat({{1}}.toString());",
+            "help": "Send a message as chat"
+        },
+        
+        {
+            "blocktype": "step",
+            "id": "de9bb25d-481d-43e8-88b1-c9f56160f85e",
+            "sockets": [
+                {
+                    "name": "Save Checkpoint"
+                }
+            ],
+            "script": "client.saveCheckpoint();",
+            "help": "Save Checkpoint"
+        },
+        
+        
+        {
+            "blocktype": "step",
+            "id": "e5aa0ed8-035c-4349-bfdb-405ea9e72eec",
+            "sockets": [
+                {
+                    "name": "Restore Checkpoint"
+                }
+            ],
+            "script": "client.restoreCheckpoint();",
+            "help": "Restore Last Checkpoint"
         }
     ]
 }
 );
-/*end languages/demo/demo.json*/
+/*end languages/node/mc_game.json*/
+
+/*begin languages/node/mc_player.json*/
+wb.menu({
+    "name": "Player",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "fe8f0ff3-1f52-4866-bbf0-bc3c7a850e11",
+            "sockets": [
+                {
+                    "name": "Get Player Tile Position"
+                }
+            ],
+            "script": "client.getTile(function(playerposition){[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Player Position"
+                        }
+                    ],
+                    "script": "playerposition",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Player Stood on Position"
+                        }
+                    ],
+                    "script": "playerposition.minus(v(0,1,0))",
+                    "type": "position"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Player Position as text"
+                        }
+                    ],
+                    "script": "playerposition.toString()",
+                    "type": "string"
+                }
+            ],
+            "help": "Get the tile that the player is on"
+        },
+        {
+            "blocktype": "expression",
+            "id": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9",
+            "sockets": [
+                {
+                    "name": "Player Position"
+                }
+            ], 
+            "type":"position",
+            "script": "playerposition",
+            "help": "position"
+        }, 
+        {
+            "blocktype": "step",
+            "id": "5474d53a-b671-4392-b299-d10339ad12af",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "91db1ebb-a2c4-44b3-a897-72a8e9764ae9"
+                },
+                {   
+                    "name": "offset by",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "var position## = {{1}}.plus({{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "Create new position relative to Player position"
+        },
+        {
+            "blocktype": "step",
+            "id": "0ff6e19b-74ee-415e-805a-c46cd2e6ee6e",
+            "sockets": [
+                {
+                    "name": "Move Player to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "client.setTile({{1}});",
+            "help": "Move Player to position"
+        }
+        
+    
+    ]
+}
+);
+/*end languages/node/mc_player.json*/
+
+/*begin languages/node/mc_position.json*/
+wb.menu({
+    "name": "Position",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+            "sockets": [
+                {
+                    "name": "x",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "z",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "type": "position",
+            "script": "v({{1}}, {{2}} , {{3}})",
+            "help": "A position: x is across, y is up and z is depth"
+        },
+        {
+            "blocktype": "expression",
+            "id": "590c8aef-a755-4df5-8930-b430db5a3c3d",
+            "sockets": [
+                {
+                    "name": "Centre Position"
+                }
+            ],
+            "type": "position",
+            "script": "v()",
+            "help": "position"
+        },
+        {
+            "blocktype": "step",
+            "id": "0ae2eba9-582e-4a3a-92b2-0f8484397e90",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "var position## = {{1}}.clone();",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "abe5ebe0-a169-4ca4-8048-80633f7f19f9",
+            "sockets": [
+                {
+                    "name": "position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "equals position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "({{1}}.equal({{2}})",
+            "type": "boolean",
+            "help": "are 2 positions the same"
+        },
+        {
+            "blocktype": "step",
+            "id": "5dfa6369-b4bc-4bb3-9b98-839015d5f9ee",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "offset by",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "var position## = {{1}}.plus({{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position by adding 2 others"
+        },
+        {
+            "blocktype": "context",
+            "id": "2ab7b0ea-b646-4672-a2fe-310542b924aa",
+            "sockets": [
+                {
+                    "name": "Get ground position from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "client.getHeight({{1}}, function(groundposition){[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Ground Position"
+                        }
+                    ],
+                    "script": "groundposition",
+                    "type": "position"
+                }
+            ],
+            "help": "get height of blocks at position"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c95312f6-da99-4516-b43d-6f759c42b5c5",
+            "sockets": [
+                {
+                    "name": "x from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.x",
+            "type": "number",
+            "help": "the x (across) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "6facc3ac-a8d5-4503-89d9-0dff6ebc9fc6",
+            "sockets": [
+                {
+                    "name": "y from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.y",
+            "type": "number",
+            "help": "the y (up) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "96c32f90-7234-4463-b18d-d528271bf224",
+            "sockets": [
+                {
+                    "name": "z from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.z",
+            "type": "number",
+            "help": "the z (depth) part of the postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "3fa57ab7-bfed-4d36-8307-0ba11eda25f0",
+            "sockets": [
+                {
+                    "name": "position",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "as text"
+                }
+            ],
+            "script": "{{1}}.toString()",
+            "type": "string",
+            "help": "Position as text"
+        },
+        {
+            "blocktype": "step",
+            "id": "e28a420d-9b94-4480-ad0f-ebe4e68134b0",
+            "sockets": [
+                {
+                    "name": "Set",
+                    "type": "position",
+                    "block": "590c8aef-a755-4df5-8930-b430db5a3c3d"
+                },
+                {
+                    "name": "to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.update({{2}});",
+            "help": "Set position variable to a new postion"
+        },
+        {
+            "blocktype": "expression",
+            "id": "d453a2dc-cebc-47dd-b421-09d450bd7e88",
+            "sockets": [
+                {
+                    "name": "Distance from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "{{1}}.distanceTo({{2}})",
+            "type":"number",
+            "help": "the distance between 2 positions"
+        },
+        {
+            "blocktype": "context",
+            "id": "10ec4498-1aa8-44ff-9620-b338a2cdc3cb",
+            "sockets": [
+                {
+                    "name": "For each direction from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "by",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "block(s)"
+                }
+            ],
+            "script": "client.directions.forEach(function(dir, idx){var position##=client.directioncalcs[dir]({{1}},{{2}});[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "Go around each direction"
+        },
+        {
+            "blocktype": "step",
+            "id": "4072476e-cdc4-43b1-b36b-a8c5829c113c",
+            "sockets": [
+                {
+                    "name": "Create Position## from",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "offset by",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": " ",
+                    "type": "choice",
+                    "options": "directions",
+                    "value": "choice"
+                }
+            ],
+            "script": "var position##=client.directioncalcs[{{3}}]({{1}},{{2}});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Position##"
+                        }
+                    ],
+                    "script": "position##",
+                    "type": "position"
+                }
+            ],
+            "help": "create new position by adding a distance and direction"
+        },
+        {
+            "blocktype": "expression",
+            "type":"boolean",
+            "id": "635a2e41-94d8-4f63-b20b-8e9340c0f2c5",
+            "sockets": [
+                {
+                    "name": "Is",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "between",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "and",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                }
+            ],
+            "script": "({{1}}.min({{2}}).equal({{2}}) && {{1}}.max({{3}}).equal({{3}}))",
+            "help": "is 1st point between 2nd and 3rd"
+        }
+    ]
+});
+/*end languages/node/mc_position.json*/
+
+/*begin languages/node/mc_blocks.json*/
+wb.menu({
+    "name": "Blocks",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "c500a7f0-7117-40ea-9139-b161e19f190b",
+            "sockets": [
+                    {
+                        "name": "Get Block Type at",
+                        "type": "position",
+                        "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                    }
+                ],
+            "script": "client.getBlock({{1}}, function(block##){[[1]]});",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "Block Type Number"
+                            }
+                        ],
+                    "script": "block##",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                            {
+                                "name": "Block Type Name"
+                            }
+                        ],
+                    "script": "client.getBlockName(block##)",
+                    "type": "string"
+                }
+            ],
+            "help": "get block type at x, y, z"
+        },
+        {
+            "blocktype": "expression",
+            "id": "a7c17404-8555-42be-877e-9d01d7647604",
+            "sockets": [
+                    {
+                    "name":"block",
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+                ],
+            "script": "client.blocks[{{1}}]",
+            "type": "number",
+            "help": "a blocktype"
+        },
+        {
+            "blocktype": "step",
+            "id": "5ac8754e-6bbe-42a8-8504-707f1ca3848b",
+            "sockets": [
+                {
+                    "name": "set Block at",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+            ],
+            "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
+            "help": "set block at position"
+        },
+        {
+            "blocktype": "step",
+            "id": "3969a128-5e8d-4320-9f91-73bebf81820f",
+            "labels": ["set Blocks between [object] and [object] to [choice:blocks:STONE]"],
+            "sockets": [
+                {
+                    "name": "set Blocks between",
+                
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "and",
+                    "type": "position",
+                    "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
+                },
+                {
+                    "name": "to",
+                    "type": "choice",
+                    "options": "blocks",
+                    "value": "choice"
+                }
+            ],
+            "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
+            "help": "set blocks in a 3D rectangle between the first and second postions to .."
+        },
+        {
+            "blocktype": "expression",
+            "id": "7ab673d1-832b-4a0b-9dc9-0ac47892893b",
+            "sockets": [
+                {
+                    "name": "block type name",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "script": "client.getBlockName({{1}})",
+            "type": "string",
+            "help": "name of a blocktype by number"
+        }
+    ]
+}
+);
+/*end languages/node/mc_blocks.json*/
+
+/*begin languages/node/mc_camera.json*/
+wb.menu({
+    "name": "Camera",
+    "blocks": [
+      
+      
+        {
+            "blocktype": "step",
+            "id": "87a5c7ab-8381-4e9b-8038-fbb6e9b787a4",
+            "sockets": [
+                {
+                    "name": "set camera mode to",
+                    "type": "choice",
+                    "options": "cameramode",
+                    "value": "choice"
+                }
+                
+            ],
+            "script": "client.setCameraMode({{1}});",
+            "help": "set camera mode"
+        },
+        {
+            "blocktype": "step",
+            "id": "aa7f5980-fe60-41cc-94e0-094eb7df7043",
+            "sockets": [
+                {
+                    "name": "set camera position to",
+                    "type": "position"
+                }
+            ],
+            "script": "client.setCameraPosition({{1}}.x, {{1}}.y, {{1}}.z);",
+            "help": "set camera position to a position"
+        }
+    ]
+}
+);
+/*end languages/node/mc_camera.json*/
+
+/*begin languages/node/array.json*/
+wb.menu({
+    "name": "Arrays",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "555172b9-1077-4205-a403-3b301be14055",
+            "script": "local.array## = [];",
+            "help": "Create an empty array",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
+                    "script": "local.array##",
+                    "type": "array"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "new array##"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "8e2d5fba-b674-4d1e-8137-db49da44acf2",
+            "script": "local.array## = {{1}}.slice();",
+            "help": "create a new array with the contents of another array",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
+                    "script": "local.array##",
+                    "type": "array"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "new array with array##",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "9e8bf11e-4fe6-4028-932d-a7c3c4231060",
+            "script": "{{1}}[{{2}}]",
+            "type": "any",
+            "help": "get an item from an index in the array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "item",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "df795450-aa4a-4acd-b96d-230617611f83",
+            "script": "{{1}}.join({{2}})",
+            "type": "string",
+            "help": "join items of an array into a string, each item separated by given string",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "join with",
+                    "type": "string",
+                    "value": ", "
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "4f66c164-2873-4313-a54a-2771b6a04e92",
+            "script": "{{1}}.push({{2}});",
+            "help": "add any object to an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "append",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c6f26489-46d8-481c-ba6d-07739ca7c267",
+            "script": "{{1}}.length",
+            "type": "number",
+            "help": "get the length of an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "length"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "ed5a1051-cc8e-47e0-aa9f-c0b852dda6fa",
+            "script": "{{1}}.splice({{2}}, 1)[0]",
+            "type": "any",
+            "help": "remove item at index from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "remove item",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "56a4997d-7a67-4b85-9983-9d7c64ac2bad",
+            "script": "{{1}}.pop()",
+            "type": "any",
+            "help": "remove and return the last item from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "pop"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "b9a43234-d090-4db9-9ebf-bc4e45dff90f",
+            "script": "{{1}}.shift()",
+            "type": "any",
+            "help": "remove and return the first item from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "shift"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "6d706cdf-9311-4034-8bd8-6ce0c2340e56",
+            "script": "{{1}}.slice().reverse()",
+            "type": "array",
+            "help": "reverse a copy of array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "reversed"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "43415751-34cb-478b-952b-3954718cb0d3",
+            "script": "{{1}}.concat({{2}});",
+            "type": "array",
+            "help": "a new array formed by joining the arrays",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "concat",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "2cf51b08-8c8a-44e8-8227-39a6f13da423",
+            "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "index"
+                        }
+                    ],
+                    "script": "local.index",
+                    "help": "index of current item in array",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "item"
+                        }
+                    ],
+                    "script": "local.item",
+                    "help": "the current item in the iteration",
+                    "type": "any"
+                }
+            ],
+            "help": "run the blocks with each item of a named array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array",
+                    "value": null
+                },
+                {
+                    "name": "for each"
+                }
+            ]
+        }
+    ]
+});
+/*end languages/node/array.json*/
+
+/*begin languages/node/boolean.json*/
+wb.menu({
+    "name": "Boolean",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "2ef48097-a439-42aa-9fe3-be6fb14ef3a7",
+            "type": "boolean",
+            "script": "({{1}} && {{2}})",
+            "help": "both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "AND",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d10041ac-027e-4a11-b4f9-941d2e538aa7",
+            "type": "boolean",
+            "script": "({{1}} || {{2}})",
+            "help": "either or both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "OR",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d121063d-83c9-4fd6-b738-27b31c995323",
+            "type": "boolean",
+            "script": "({{1}} ? !{{2}} : {{2}})",
+            "help": "either, but not both, operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "XOR",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4de248e4-e41f-44ca-a869-edd9b0a048b2",
+            "type": "boolean",
+            "script": "(! {{1}})",
+            "help": "operand is false",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        }
+    ]
+});
+/*end languages/node/boolean.json*/
+
+/*begin languages/node/math.json*/
+wb.menu({
+    "name": "Math",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "f51d2d51-d5b4-4fef-a79b-b750694bcc1a",
+            "sockets": [
+                {
+                    "name": "Create Number## from",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "script": "var number## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Number##"
+                        }
+                    ],
+                    "script": "number##",
+                    "type": "number"
+                }
+            ],
+            "help": "create a new named number"
+        },
+        {
+            "blocktype": "expression",
+            "type": "number",
+            "id": "f08f2d43-23e8-47a9-8bf5-7904af9313da",
+            "sockets": [
+                {
+                    "name": "new number",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "script": "{{1}}",
+            "help": "create a new named number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "15a39af7-940e-4f29-88ba-38b67913599f",
+            "type": "number",
+            "script": "({{1}} + {{2}})",
+            "help": "sum of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "+",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "3d74da37-7c18-47e3-bbdc-e4f7706c81f6",
+            "type": "number",
+            "script": "({{1}} - {{2}})",
+            "help": "difference of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "-",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "ded5d055-7ae1-465a-ad82-003f171b9dc7",
+            "type": "number",
+            "script": "({{1}} * {{2}})",
+            "help": "product of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "*",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0e68e0f3-c6f4-40b1-a2cb-431dd0cd574d",
+            "type": "number",
+            "script": "({{1}} / {{2}})",
+            "help": "quotient of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "/",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7d9bf923-baa2-4606-8c44-0247022c2408",
+            "type": "boolean",
+            "script": "({{1}} === {{2}})",
+            "help": "two operands are equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "=",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "74992263-4356-48ba-9afe-16e9323f4efa",
+            "type": "boolean",
+            "script": "({{1}} < {{2}})",
+            "help": "first operand is less than second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "<",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "44d41058-f20e-4c8d-9d35-95e1fcfb8121",
+            "type": "boolean",
+            "script": "({{1}} > {{2}})",
+            "help": "first operand is greater than second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": ">",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "fa03d3e2-0c28-4c35-a5e4-ed1b17d831a0",
+            "type": "number",
+            "script": "randint({{1}}, {{2}})",
+            "help": "random number between two numbers (inclusive)",
+            "sockets": [
+                {
+                    "name": "pick random",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "2e897518-31d8-4cc2-bd6e-2ede0b3136d0",
+            "type": "number",
+            "script": "({{1}} % {{2}})",
+            "help": "modulus of a number is the remainder after whole number division",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "mod",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5e341dc5-f328-4b81-bbb7-aed3ffc81e01",
+            "type": "number",
+            "script": "Math.round({{1}})",
+            "help": "rounds to the nearest whole number",
+            "sockets": [
+                {
+                    "name": "round",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "ca74d36c-1879-4b41-b04b-587ca56b9a77",
+            "type": "number",
+            "script": "Math.abs({{1}})",
+            "help": "converts a negative number to positive, leaves positive alone",
+            "sockets": [
+                {
+                    "name": "absolute of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "802a9575-523b-4b6a-961d-e6aed148bdd4",
+            "type": "number",
+            "script": "rad2deg(Math.acos({{1}}))",
+            "help": "inverse of cosine",
+            "sockets": [
+                {
+                    "name": "arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "441f5159-878a-4109-8030-8d8f9504977e",
+            "type": "number",
+            "script": "rad2deg(Math.asin({{1}}))",
+            "help": "inverse of sine",
+            "sockets": [
+                {
+                    "name": "arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "834c4446-6c32-444a-9c3d-cad449eff941",
+            "type": "number",
+            "script": "rad2deg(Math.atan({{1}}))",
+            "help": "inverse of tangent",
+            "sockets": [
+                {
+                    "name": "arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "2ce4d35d-3c82-4f5e-9e27-894939291ad3",
+            "type": "number",
+            "script": "Math.ceil({{1}})",
+            "help": "rounds up to nearest whole number",
+            "sockets": [
+                {
+                    "name": "ceiling of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "db690432-b321-434e-9044-b1188e581f99",
+            "type": "number",
+            "script": "Math.cos(deg2rad({{1}}))",
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "cosine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "9f89f604-2498-4149-9fc7-8bb19391e37d",
+            "type": "number",
+            "script": "Math.sin(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "sine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d940a5b5-ba8a-49f0-b836-5e460e258a42",
+            "type": "number",
+            "script": "Math.tan(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the adjacent side",
+            "sockets": [
+                {
+                    "name": "tangent of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f2127de3-d601-49fa-9ebf-79ae34c576bd",
+            "type": "number",
+            "script": "Math.pow({{1}}, {{2}})",
+            "help": "multiply a number by itself the given number of times",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "to the power of",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "df79282c-43bc-43dc-8d29-2dea29d33f00",
+            "type": "number",
+            "script": "Math.sqrt({{1}})",
+            "help": "the square root is the same as taking the to the power of 1/2",
+            "sockets": [
+                {
+                    "name": "square root of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4b357bdd-630c-4574-96e7-518fb7998702",
+            "script": "Math.PI;",
+            "type": "number",
+            "help": "pi is the ratio of a circle's circumference to its diameter",
+            "sockets": [
+                {
+                    "name": "pi"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "bdbfe741-bfb9-44fc-873d-e0513b02b87a",
+            "script": "Math.PI * 2",
+            "type": "number",
+            "help": "tau is 2 times pi, a generally more useful number",
+            "sockets": [
+                {
+                    "name": "tau"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a25bdd5e-6847-4275-9b7f-bc147acd5f31",
+            "type": "int",
+            "script": "({{1}} && {{2}})",
+            "help": "Bitwise AND of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "AND",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0e4219de-1d1b-42ef-9dfa-ac090fddde02",
+            "type": "int",
+            "script": "({{1}} | {{2}})",
+            "help": "Bitwise OR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 9
+                },
+                {
+                    "name": "OR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c383c0e3-dbe0-4104-b200-8dd569ea241c",
+            "type": "int",
+            "script": "({{1}} ^ {{2}})",
+            "help": "Bitwise XOR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "XOR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "64a12634-f17b-410b-a5e1-a2f6e0b91689",
+            "type": "int",
+            "script": "(~ {{1}})",
+            "help": "Bitwise NOT number",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        }
+    ]
+});
+/*end languages/node/math.json*/
+
+/*begin languages/node/string.json*/
+wb.menu({
+    "name": "Strings",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "453e26ad-8bcc-4b48-a173-2d5eb4b15af3",
+            "script": "{{1}}.split({{2}})",
+            "type": "array",
+            "help": "create an array by splitting the named string on the given string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "split on",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "9c1110e8-6722-4baf-a1f2-8b5a1a9ccee2",
+            "type": "string",
+            "script": "({{1}} + {{2}})",
+            "help": "returns a string by joining together two strings",
+            "sockets": [
+                {
+                    "name": "concatenate",
+                    "type": "string",
+                    "value": "hello"
+                },
+                {
+                    "name": "with",
+                    "type": "string",
+                    "value": "world"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "fb943e76-3829-4819-8161-f5b5e829f227",
+            "script": "{{1}}[{{2}}]",
+            "type": "string",
+            "help": "get the single character string at the given index of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "character at",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "e6ef4aef-5342-4ceb-b050-ad3554d77c45",
+            "script": "{{1}}.length",
+            "type": "number",
+            "help": "get the length of named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "length"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "88d791fe-a035-45ac-882f-bd96b30a73bf",
+            "script": "{{1}}.indexOf({{2}})",
+            "type": "number",
+            "help": "get the index of the substring within the named string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "indexOf",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "93b4b160-e2e2-438a-a8f0-bf2ceb69aaf3",
+            "script": "{{1}}.replace({{2}}, {{3}})",
+            "type": "string",
+            "help": "get a new string by replacing a substring with a new string",
+            "sockets": [
+                {
+                    "name": "string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "replace",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "with",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "6377e5c8-4788-478b-96a6-6388bbed87ec",
+            "script": "{{1}}.toString()",
+            "type": "string",
+            "help": "convert any object to a string",
+            "sockets": [
+                {
+                    "name": "to string",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "ddbb51d2-a627-406b-82ff-a7ff3d1d82ed",
+            "script": "// {{1}};\n",
+            "help": "this is a comment and will not be run by the program",
+            "sockets": [
+                {
+                    "name": "comment",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "5331ce50-0113-4595-b4d5-69e241f2019b",
+            "script": "window.alert({{1}});",
+            "help": "pop up an alert window with string",
+            "sockets": [
+                {
+                    "name": "alert",
+                    "type": "string",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "e01e82db-4849-4dcd-b82e-0c5f8e801ba8",
+            "script": "console.log({{1}});",
+            "help": "Send any object as a message to the console",
+            "sockets": [
+                {
+                    "name": "console log",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "27f62d38-a1a2-481f-b7ea-35aae955575b",
+            "script": "var __a={{2}};__a.unshift({{1}});console.log.apply(console, __a);",
+            "help": "send a message to the console with a format string and multiple objects",
+            "sockets": [
+                {
+                    "name": "console log format",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "arguments",
+                    "type": "array",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "efe8c097-a91f-42f7-a92f-50ad32a969db",
+            "script": "global.keys",
+            "help": "for debugging",
+            "type": "object",
+            "sockets": [
+                {
+                    "name": "global keys object"
+                }
+            ]
+        }
+    ]
+});
+/*end languages/node/string.json*/

@@ -11,8 +11,19 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;

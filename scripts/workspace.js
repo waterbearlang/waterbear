@@ -311,6 +311,26 @@
     	var a = wb.elem('a', {href: url, target: '_blank'});
     	a.click();
     });
+    // autorun buttons
+    Event.on('.run-script', 'click', null, function(){
+    	document.body.classList.add('running');
+    	wb.runCurrentScripts(true);
+    });
+    Event.on('.stop-script', 'click', null, function(){
+    	document.body.classList.remove('running');
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-on', 'click', null, function(){
+    	// turn it off
+    	document.body.classList.add('no-autorun');
+    	wb.autorun = false;
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-off', 'click', null, function(){
+    	document.body.classList.remove('no-autorun');
+    	wb.autorun = true;
+    	wb.runCurrentScripts(true);
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;

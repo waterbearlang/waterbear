@@ -13,11 +13,12 @@
 	<script>
 		var wb = {
 			scriptModified: true,
-			iframeReady: false
+			iframeReady: false,
+			autorun: true
 		};
 	</script>
 </head>
-<body>
+<body class="autorun">
 	<div class="titlebar">
 		<img src="images/logo.png" />
 		<h1 class="title">javascript playground</h1>
@@ -133,7 +134,14 @@
 			<div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
 		<div class="results">
-	<div class="stage"><iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
+	<div class="stage">
+	<div class="buttonmenu">
+		<button class="icon-play run-script">Run</button>
+		<button class="icon-stop stop-script">Stop</button>
+		<button class="icon-check autorun-script-on">Autorun</button>
+		<button class="icon-unchecked autorun-script-off">Autorun</button>
+	</div>
+	<iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
 	<div class="scripts_text_view"></div>
 </div>
 <script>

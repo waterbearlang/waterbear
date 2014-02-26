@@ -11,6 +11,17 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
 .menu button {
 	text-decoration: none;
@@ -101,5 +112,47 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
 
 .nav:target {
 	display:block;
+}
+
+/* Button Menu in stage */
+
+
+.buttonmenu button{
+	padding-left: 10px;
+	visibility: hidden;
+}
+
+.buttonmenu:hover button{
+	visibility: visible;
+}
+
+.run-script{
+}
+
+.running .buttonmenu .run-script{
+	display: none;
+}
+
+.buttonmenu .stop-script{
+	display: none;
+}
+
+.running .buttonmenu .stop-script{
+	display: inline;
+}
+
+.buttonmenu .autorun-script-on{
+}
+
+.no-autorun .buttonmenu .autorun-script-on{
+	display: none;
+}
+
+.buttonmenu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .buttonmenu .autorun-script-off{
+	display: inline;
 }
 

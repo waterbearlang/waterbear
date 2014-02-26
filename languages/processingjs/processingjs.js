@@ -29,6 +29,12 @@
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
+        if (!(wb.autorun || force)){
+            // false alarm, we were notified of a script change, but user hasn't asked us to restart script
+            return;
+        }
+        document.body.classList.add('running');
+                
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
@@ -67,6 +73,7 @@
 
 
     function clearStage(event){
+        document.body.classList.remove('running');
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     Event.on('.clear_canvas', 'click', null, clearStage);

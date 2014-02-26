@@ -14926,11 +14926,18 @@ wb.menu = menu;
 		hideLoader();
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
@@ -15175,6 +15182,34 @@ wb.menu = menu;
     Event.on('.show-ide', 'click', null, function(){
     	wb.historySwitchState('ide');
     });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
+    });
+    // autorun buttons
+    Event.on('.run-script', 'click', null, function(){
+    	document.body.classList.add('running');
+    	wb.runCurrentScripts(true);
+    });
+    Event.on('.stop-script', 'click', null, function(){
+    	document.body.classList.remove('running');
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-on', 'click', null, function(){
+    	// turn it off
+    	document.body.classList.add('no-autorun');
+    	wb.autorun = false;
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-off', 'click', null, function(){
+    	document.body.classList.remove('no-autorun');
+    	wb.autorun = true;
+    	wb.runCurrentScripts(true);
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;
@@ -15406,6 +15441,12 @@ wb.menu = menu;
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
+        if (!(wb.autorun || force)){
+            // false alarm, we were notified of a script change, but user hasn't asked us to restart script
+            return;
+        }
+        document.body.classList.add('running');
+                
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
@@ -15444,6 +15485,7 @@ wb.menu = menu;
 
 
     function clearStage(event){
+        document.body.classList.remove('running');
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     Event.on('.clear_canvas', 'click', null, clearStage);

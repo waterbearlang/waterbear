@@ -660,6 +660,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         currentPosition = null;
         timer = null;
         dragging = false;
+        pointerDown = false;
         cloned = false; // <- WB
         scope = null; // <- WB
         templateDrag = false; // <- WB
@@ -675,13 +676,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     reset();
     
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        
+        pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        console.log(eT);
+        // console.log(eT);
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -745,6 +746,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (!pointerDown) {return undefined;}
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -841,6 +843,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function endDrag(event){
+        pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);

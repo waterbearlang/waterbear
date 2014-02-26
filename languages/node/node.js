@@ -9,6 +9,29 @@
 var stageMenu = document.querySelector('[data-target=stage]').parentElement;
 stageMenu.parentElement.removeChild(stageMenu);
 
+var menu = document.querySelector('.menu');
+console.log("menu =", menu);
+
+var newLi = document.createElement("li");
+var newBtn = document.createElement("button");
+newBtn.classList.add("run-scripts");
+newBtn.textContent = "Run";
+newLi.appendChild(newBtn);
+menu.appendChild(newLi);
+
+var newLi2 = document.createElement("li");
+var newBtn2 = document.createElement("button");
+newBtn2.classList.add("stop-scripts");
+newBtn2.textContent = "Stop";
+newLi2.appendChild(newBtn2);
+menu.appendChild(newLi2);
+
+document.querySelector('.stop-scripts').style.display = 'none';
+
+
+//menu.appendChild('<li><button class="run-scripts">Run</button></li><li><button class="stop-scripts">Stop</button></li>');
+                
+
 // A couple of do-nothing scripts for compatibility
 wb.runCurrentScripts = function(){ /* do nothing */ };
 wb.clearStage = function(){ /* do nothing */ };
@@ -65,18 +88,16 @@ wb.resetrun = function(message){
     
 wb.runScript = function(script){
 
-    // TODO : workout the ws address from the page address
     var aHost = window.location.host.split(":");
     var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
-    
-    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
     
     var messagebox = document.querySelector('#messagebox');
     if(messagebox === null || messagebox.length === 0)
     {
-        messagebox = wb.elem('div', {"id":"messagebox"});
-        document.querySelector('.tabbar').appendChild(messagebox);
-        messagebox = document.querySelector('#messagebox');
+        //messagebox = wb.elem('div', {"id":"messagebox"});
+        //document.querySelector('.menu').appendChild(messagebox);
+        //messagebox = document.querySelector('#messagebox');
+        messagebox = document.querySelector('.messagebox');
         
     }
     

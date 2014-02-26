@@ -1,3 +1,4 @@
 <div class="results">
+    <div class="messagebox"></div>
 	<div class="scripts_text_view"></div>
 </div>

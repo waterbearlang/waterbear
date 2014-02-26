@@ -1960,6 +1960,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
 			instances.forEach(function(elem){
 				wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
 			});
 
 			//Change name of parent

@@ -643,6 +643,7 @@
 			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
 			instances.forEach(function(elem){
 				wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
 			});
 
 			//Change name of parent

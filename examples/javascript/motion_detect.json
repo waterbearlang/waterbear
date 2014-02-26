@@ -105,7 +105,7 @@
               "sockets": [
                 {
                   "name": "text align",
-                  "type": "choice",
+                  "type": "string",
                   "value": "choice",
                   "options": "align",
                   "uValue": "center"
@@ -203,7 +203,7 @@
           "sockets": [
             {
               "name": "when device turned",
-              "type": "choice",
+              "type": "string",
               "options": "directions",
               "uValue": "up"
             }
@@ -244,7 +244,7 @@
           "sockets": [
             {
               "name": "when device turned",
-              "type": "choice",
+              "type": "string",
               "options": "directions",
               "uValue": "down"
             }
@@ -285,7 +285,7 @@
           "sockets": [
             {
               "name": "when device turned",
-              "type": "choice",
+              "type": "string",
               "options": "directions",
               "uValue": "left"
             }
@@ -326,7 +326,7 @@
           "sockets": [
             {
               "name": "when device turned",
-              "type": "choice",
+              "type": "string",
               "options": "directions",
               "uValue": "right"
             }

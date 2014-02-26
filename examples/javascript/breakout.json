@@ -954,26 +954,14 @@
                             "uValue": "98"
                           },
                           {
-                            "name": "width units",
-                            "type": "choice",
-                            "value": "px",
-                            "options": "relativeUnit"
-                          },
-                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "32"
-                          },
-                          {
-                            "name": "height units",
-                            "type": "choice",
-                            "value": "px",
-                            "options": "relativeUnit"
                           }
                         ],
                         "seqNum": "7",
-                        "script": "{w: convert({{1}}, \"px\", true), h: convert({{2}}, \"px\", false)}",
+                        "script": "{w: {{1}}, h: {{2}} }",
                         "type": "size"
                       }
                     },
@@ -1559,26 +1547,14 @@
                     "uValue": "128"
                   },
                   {
-                    "name": "width units",
-                    "type": "choice",
-                    "value": "px",
-                    "options": "relativeUnit"
-                  },
-                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "32"
-                  },
-                  {
-                    "name": "height units",
-                    "type": "choice",
-                    "value": "px",
-                    "options": "relativeUnit"
                   }
                 ],
                 "seqNum": "4",
-                "script": "{w: convert({{1}}, \"px\", true), h: convert({{2}}, \"px\", false)}",
+                "script": "{w: {{1}}, h: {{2}} }",
                 "type": "size"
               }
             },
@@ -1760,26 +1736,14 @@
                     "uValue": "16"
                   },
                   {
-                    "name": "width units",
-                    "type": "choice",
-                    "value": "px",
-                    "options": "relativeUnit"
-                  },
-                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "16"
-                  },
-                  {
-                    "name": "height units",
-                    "type": "choice",
-                    "value": "px",
-                    "options": "relativeUnit"
-                  },
+                  }
                 ],
                 "seqNum": "7",
-                "script": "{w: convert({{1}}, \"px\", true), h: convert({{2}}, \"px\", false)}",
+                "script": "{w: {{1}}, h: {{2}} }",
                 "type": "size"
               }
             },
@@ -1921,26 +1885,14 @@
                     "uValue": "200"
                   },
                   {
-                    "name": "width units",
-                    "type": "choice",
-                    "value": "px",
-                    "options": "relativeUnit"
-                  },
-                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "32"
-                  },
-                  {
-                    "name": "height units",
-                    "type": "choice",
-                    "value": "px",
-                    "options": "relativeUnit"
                   }
                 ],
                 "seqNum": "11",
-                "script": "{w: convert({{1}}, \"px\", true), h: convert({{2}}, \"px\", false)}",
+                "script": "{w: {{1}}, h: {{2}} }",
                 "type": "size"
               }
             },
@@ -2560,8 +2512,8 @@
                 },
                 {
                   "name": "",
-                  "type": "choice",
-                  "value": "choice",
+                  "type": "string",
+                  "value": "px",
                   "options": "unit",
                   "uValue": "px"
                 },
@@ -2760,8 +2712,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "left",
                         "options": "keys",
                         "uValue": "left"
                       },
@@ -3034,7 +2986,7 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
+                        "type": "string",
                         "value": "choice",
                         "options": "keys",
                         "uValue": "right"

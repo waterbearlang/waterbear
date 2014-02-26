@@ -2007,33 +2007,36 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
-    };
+    }
 
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
-    };
+    }
 
     function hide(elem){
         elem.classList.add('hidden');
-    };
+    }
 
     function show(elem){
         elem.classList.remove('hidden');
-    };
+    }
 
     var svgText = document.querySelector('.resize-tester');
     function resize(input){
-        if (!input) return;
+        if (!input)
+        {
+            return;
+        }
         if (input.wbTarget){
             input = input.wbTarget;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
-    };
+    }
 
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
@@ -2041,7 +2044,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
-    };
+    }
 
 
     function overlapRect(r1, r2){ // determine area of overlap between two rects
@@ -2051,24 +2054,24 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (r1.bottom < r2.top){ return 0; }
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
-    };
+    }
 
     function rect(elem){
         return elem.getBoundingClientRect();
-    };
+    }
 
     function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
-    };
+    }
 
     function area(elem){
         return elem.clientWidth * elem.clientHeight;
-    };
+    }
 
     function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
-    };
+    }
 
     function closest(elem, selector){
         if (elem.jquery){
@@ -2085,7 +2088,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = elem.parentElement;
         }
         return null;
-    };
+    }
 
     function indexOf(elem){
         var idx = 0;
@@ -2094,7 +2097,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             idx++;
         }
         return idx;
-    };
+    }
 
     function find(elem, selector){
         if (typeof(elem) === 'string'){
@@ -2102,7 +2105,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = document.body;
         }
         return elem.querySelector(selector);
-    };
+    }
 
     function findAll(elem, selector){
         if (typeof(elem) === 'string'){
@@ -2110,13 +2113,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = document.body;
         }
         return wb.makeArray(elem.querySelectorAll(selector));
-    };
+    }
 
     function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
-    };
+    }
 
     function findChild(elem, selector){
         if (arguments.length !== 2){
@@ -2130,7 +2133,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
         }
         return null;
-    };
+    }
 
    function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -2147,7 +2150,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
-                if (attributes[key] === null || attributes[key] === undefined) return;
+                if (attributes[key] === null || attributes[key] === undefined)
+                {
+                    return;
+                }
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
@@ -2158,7 +2164,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 }
             });
         }
-        if (children){
+        if (children !== null && children !== undefined){
             if (Array.isArray(children)){
                 children.forEach(function(child){
                     if (child.nodeName){
@@ -2182,7 +2188,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
         }
         return e;
-    };
+    }
 
 
     // Remove namespace for matches
@@ -2477,6 +2483,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         currentPosition = null;
         timer = null;
         dragging = false;
+        pointerDown = false;
         cloned = false; // <- WB
         scope = null; // <- WB
         templateDrag = false; // <- WB
@@ -2492,13 +2499,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     reset();
     
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        
+        pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        console.log(eT);
+        // console.log(eT);
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -2562,6 +2569,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (!pointerDown) {return undefined;}
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -2658,6 +2666,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function endDrag(event){
+        pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
@@ -3158,12 +3167,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function newSeqNum(){
         nextSeqNum++;
         return nextSeqNum;
-    };
+    }
 
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
-        if (!seqNum) return;
+        if (!seqNum)
+        {
+            return;
+        }
         nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
@@ -3289,7 +3301,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         //     console.log('instantiated block %o from description %o', block, obj);
         //}
         return block;
-    }
+    };
 
     // Block Event Handlers
 
@@ -3422,7 +3434,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
-            socket.appendChild(holder)
+            socket.appendChild(holder);
         }
         if (desc.block){
             socket.dataset.block = desc.block;
@@ -3454,15 +3466,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
-    }
+    };
 
 
     function socketDesc(socket){
         var parentBlock = wb.closest(socket, '.block');
         var isTemplate = !!parentBlock.dataset.isTemplateBlock;
         var desc = {
-            name: socket.dataset.name,
-        }
+            name: socket.dataset.name
+        };
         // optional defined settings
         if (socket.dataset.type){
             desc.type = socket.dataset.type;
@@ -3480,9 +3492,12 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
-        if (isTemplate) return desc;
+        if (isTemplate) 
+        {
+            return desc;
+        }
         var uName = wb.findChild(socket, '.name').textContent;
-        var uEle = wb.findChild(socket, '.name')
+        var uEle = wb.findChild(socket, '.name');
         
         if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
@@ -3521,13 +3536,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
-        }
+        };
+
         if (block.dataset.group === 'scripts_workspace'){
             desc.blocktype = block.dataset.blocktype;
             desc.group = block.dataset.group;
             desc.help = block.dataset.help;
             desc.type = block.dataset.type;            
         }
+
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
@@ -3591,6 +3608,52 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // return a block for block types
         var value;
         var type = obj.type;
+        
+        if(type === 'boolean')
+        {
+            obj.options = 'boolean';
+        }
+        
+        if(typeof obj.options !== 'undefined')
+        {
+            // DONE : #24
+            // DONE : #227
+            var choice = elem('select');
+            var list = wb.choiceLists[obj.options];
+            
+            if(Array.isArray(list))
+            {
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            else
+            {
+                var values = Object.keys(list);
+                
+                values.forEach(function(val){
+                    var option = elem('option', {"value":val}, list[val]);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == val){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            
+            return choice;
+        
+        }
+        
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -3620,19 +3683,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
                 value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
-            case 'boolean':
-                obj.options = 'boolean';
-            case 'choice':
-                var choice = elem('select');
-                wb.choiceLists[obj.options].forEach(function(opt){
-                    var option = elem('option', {}, opt);
-                    var value = obj.uValue || obj.value;
-                    if (value && value === opt){
-                        option.setAttribute('selected', 'selected');
-                    }
-                    choice.appendChild(option);
-                });
-                return choice;
             default:
                 value = obj.uValue || obj.value || '';
         }
@@ -3647,7 +3697,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
         wb.resize(input);
         return input;
-    }
+    };
 
     function socketValue(holder){
         if (holder.children.length > 1){
@@ -3655,7 +3705,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
+
+            // DONE : #227
+            if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -3700,7 +3752,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
         var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
         return _code2;
-    };
+    }
 
     function changeName(event){
         var nameSpan = event.wbTarget;
@@ -3753,8 +3805,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 			},
 			redo: function() {
 				propagateChange(newName);
-			},
-		}
+			}
+		};
 		wb.history.add(action);
 		action.redo();
     }
@@ -3773,7 +3825,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (event.keyCode === 0x1B /* escape */ ){
             event.preventDefault();
             input.value = input.previousSibling.textContent;
-            input.blur()
+            input.blur();
         }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
             event.preventDefault();
             input.blur();
@@ -4668,14 +4720,21 @@ wb.menu = menu;
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
+		var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
 			document.body.classList.add('result');
 			document.body.classList.remove('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.add('disabled');
+			}
 			wb.view = 'result';
 		}else{
 			document.body.classList.remove('result');
 			document.body.classList.add('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.remove('disabled');
+			}
 			wb.view = 'editor';
 		}
 		if (wb.queryParams.embedded === 'true'){
@@ -5122,7 +5181,7 @@ wb.menu = menu;
 		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
-	Event.on(document.body, 'click', '.toggle', handleToggle);
+	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
 		if (toggleState[name] === undefined){
@@ -5419,12 +5478,12 @@ https://npmjs.org/package/raspicam
 /*end languages/node/control.js*/
 
 /*begin languages/node/piface.js*/
-//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
-wb.choiceLists.pifacein = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
-wb.choiceLists.pifacebutton = [0,1 ,2 ,3];
-wb.choiceLists.pifacerelays = [0,1 ];
-wb.choiceLists.pifaceout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
-wb.choiceLists.pifaceonoff = ["0", "1"];
+wb.choiceLists.pifacein = {0:'Pin 0', 1:'Pin 1', 2:'Pin 2', 3:'Pin 3', 4:'Pin 4', 5:'Pin 5', 6:'Pin 6', 7:'Pin 7'};
+//wb.choiceLists.pifacein = [0, 1, 2, 3, 4, 5, 6, 7];
+wb.choiceLists.pifacebutton = [0, 1, 2, 3];
+wb.choiceLists.pifacerelays = [0, 1];
+wb.choiceLists.pifaceout = [0, 1, 2, 3, 4, 5, 6, 7];
+wb.choiceLists.pifaceonoff = [0, 1];
 
 
 
@@ -5436,13 +5495,6 @@ wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Ca
 /*begin languages/node/firmata.js*/
 //arduino firmata  https://npmjs.org/search?q=firmata
 
-
-//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
-wb.choiceLists.firmatain = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
-wb.choiceLists.firmatabutton = [0,1 ,2 ,3];
-wb.choiceLists.firmatarelays = [0,1 ];
-wb.choiceLists.firmataout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
-wb.choiceLists.firmataonoff = ["0", "1"];
 
 wb.choiceLists.highlow = ['HIGH', 'LOW'];
 wb.choiceLists.inoutput= ['INPUT', 'OUTPUT'];
@@ -5535,6 +5587,7 @@ wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
 /*begin languages/node/control.json*/
 wb.menu({
     "name": "Control",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -5749,6 +5802,7 @@ wb.menu({
 /*begin languages/node/piface.json*/
 wb.menu({
     "name": "PiFace",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiFace board.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -5759,9 +5813,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Input",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifacein",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -5769,7 +5823,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
             "script": "pfio.read_input()",
-            "type": "int",
+            "type": "number",
             "help": "All 8 Pins as a Digital Input",
             "sockets": [
                 {
@@ -5785,9 +5839,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Set output",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifaceout",
-                    "value": "choice"
+                    "value": 0
                 },
                 {
                     "name": "to",
@@ -5804,7 +5858,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Set outputs to",
-                    "type": "int",
+                    "type": "number",
                     "value": "0"
                 }
             ]
@@ -5818,9 +5872,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create output## using Output Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifaceout",
-                    "value": "choice"
+                    "value": 0
                 }
             ],
             "locals": [
@@ -5861,9 +5915,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create input## using Input Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifacein",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         }
@@ -5875,6 +5929,7 @@ wb.menu({
 /*begin languages/node/firmata.json*/
 wb.menu({
     "name": "Firmata",
+    "help": "Physical Input and Output for the Raspberry Pi using an Arduino loaded with Firmata.",
     "blocks": [
         {
             "blocktype": "context",
@@ -5895,9 +5950,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ],
             "locals": [
@@ -5938,9 +5993,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -5953,9 +6008,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ],
             "locals": [
@@ -5984,9 +6039,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create servo## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ],
             "locals": [
@@ -6028,9 +6083,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "analoginpins",
-                    "value": "choice"
+                    "value": "A0"
                 }
             ]
         }
@@ -6042,6 +6097,7 @@ wb.menu({
 /*begin languages/node/mc_game.json*/
 wb.menu({
     "name": "Minecraft Game",
+    "help": "Blocks which connect to and manipulate Minecraft Pi Edition",
     "blocks": [
         
         {
@@ -6107,6 +6163,7 @@ wb.menu({
 /*begin languages/node/mc_player.json*/
 wb.menu({
     "name": "Player",
+    "help": "Find and move Steve the Minecraft player",
     "blocks": [
         {
             "blocktype": "context",
@@ -6216,6 +6273,7 @@ wb.menu({
 /*begin languages/node/mc_position.json*/
 wb.menu({
     "name": "Position",
+    "help": "Find and change Minecraft Positions",
     "blocks": [
         {
             "blocktype": "expression",
@@ -6497,9 +6555,9 @@ wb.menu({
                 },
                 {
                     "name": " ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "directions",
-                    "value": "choice"
+                    "value": "up"
                 }
             ],
             "script": "var position##=client.directioncalcs[{{3}}]({{1}},{{2}});",
@@ -6548,6 +6606,7 @@ wb.menu({
 /*begin languages/node/mc_blocks.json*/
 wb.menu({
     "name": "Blocks",
+    "help": "Find and set Minecraft Blocks",
     "blocks": [
         {
             "blocktype": "context",
@@ -6590,9 +6649,9 @@ wb.menu({
             "sockets": [
                     {
                     "name":"block",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
                 ],
             "script": "client.blocks[{{1}}]",
@@ -6610,9 +6669,9 @@ wb.menu({
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
@@ -6636,9 +6695,9 @@ wb.menu({
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
@@ -6651,7 +6710,7 @@ wb.menu({
                 {
                     "name": "block type name",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ],
             "script": "client.getBlockName({{1}})",
@@ -6666,6 +6725,7 @@ wb.menu({
 /*begin languages/node/mc_camera.json*/
 wb.menu({
     "name": "Camera",
+    "help": "Manipulating the Minecraft Camera",
     "blocks": [
       
       
@@ -6675,9 +6735,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set camera mode to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "cameramode",
-                    "value": "choice"
+                    "value": ""
                 }
                 
             ],
@@ -6704,6 +6764,7 @@ wb.menu({
 /*begin languages/node/array.json*/
 wb.menu({
     "name": "Arrays",
+    "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
         {
             "blocktype": "step",
@@ -6962,6 +7023,7 @@ wb.menu({
 /*begin languages/node/boolean.json*/
 wb.menu({
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",
@@ -7041,6 +7103,7 @@ wb.menu({
 /*begin languages/node/math.json*/
 wb.menu({
     "name": "Math",
+    "help": "Math blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "step",
@@ -7522,6 +7585,7 @@ wb.menu({
 /*begin languages/node/string.json*/
 wb.menu({
     "name": "Strings",
+    "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [
         {
             "blocktype": "expression",

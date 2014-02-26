@@ -4934,6 +4934,26 @@ wb.menu = menu;
     	var a = wb.elem('a', {href: url, target: '_blank'});
     	a.click();
     });
+    // autorun buttons
+    Event.on('.run-script', 'click', null, function(){
+    	document.body.classList.add('running');
+    	wb.runCurrentScripts(true);
+    });
+    Event.on('.stop-script', 'click', null, function(){
+    	document.body.classList.remove('running');
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-on', 'click', null, function(){
+    	// turn it off
+    	document.body.classList.add('no-autorun');
+    	wb.autorun = false;
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-off', 'click', null, function(){
+    	document.body.classList.remove('no-autorun');
+    	wb.autorun = true;
+    	wb.runCurrentScripts(true);
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;
@@ -5172,8 +5192,13 @@ wb.menu = menu;
         }).join(',') + ']';
     }
 
-    function runCurrentScripts(){
+    function runCurrentScripts(force){
         // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
+        if (!(wb.autorun || force)){
+            // false alarm, we were notified of a script change, but user hasn't asked us to restart script
+            return;
+        }
+        document.body.classList.add('running');
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -5220,6 +5245,7 @@ wb.menu = menu;
 
     function clearStage(event){
         wb.iframeReady = false;
+        document.body.classList.remove('running');
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     wb.clearStage = clearStage;

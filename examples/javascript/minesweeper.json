@@ -3468,7 +3468,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "pointerEvents",
                             "uValue": "mouseup"
@@ -3566,7 +3566,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "pointerEvents",
                             "uValue": "contextmenu"
@@ -3642,7 +3642,7 @@
                     "sockets": [
                         {
                             "name": "when",
-                            "type": "choice",
+                            "type": "string",
                             "value": "choice",
                             "options": "pointerEvents",
                             "uValue": "mousedown"
@@ -7419,7 +7419,7 @@
                                                                                 },
                                                                                 {
                                                                                     "name": "",
-                                                                                    "type": "choice",
+                                                                                    "type": "string",
                                                                                     "value": "choice",
                                                                                     "options": "unit",
                                                                                     "uValue": "px"
@@ -10266,7 +10266,7 @@
                                                                                         },
                                                                                         {
                                                                                             "name": "",
-                                                                                            "type": "choice",
+                                                                                            "type": "string",
                                                                                             "value": "choice",
                                                                                             "options": "unit",
                                                                                             "uValue": "px"
@@ -12932,7 +12932,7 @@
                                                                 },
                                                                 {
                                                                     "name": "",
-                                                                    "type": "choice",
+                                                                    "type": "string",
                                                                     "value": "choice",
                                                                     "options": "unit",
                                                                     "uValue": "px"
@@ -14258,7 +14258,7 @@
                                                 },
                                                 {
                                                     "name": "",
-                                                    "type": "choice",
+                                                    "type": "string",
                                                     "value": "choice",
                                                     "options": "unit",
                                                     "uValue": "px"
@@ -15918,7 +15918,7 @@
                                                 },
                                                 {
                                                     "name": "",
-                                                    "type": "choice",
+                                                    "type": "string",
                                                     "value": "choice",
                                                     "options": "unit",
                                                     "uValue": "px"

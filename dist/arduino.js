@@ -184,33 +184,36 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
-    };
+    }
 
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
-    };
+    }
 
     function hide(elem){
         elem.classList.add('hidden');
-    };
+    }
 
     function show(elem){
         elem.classList.remove('hidden');
-    };
+    }
 
     var svgText = document.querySelector('.resize-tester');
     function resize(input){
-        if (!input) return;
+        if (!input)
+        {
+            return;
+        }
         if (input.wbTarget){
             input = input.wbTarget;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
-    };
+    }
 
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
@@ -218,7 +221,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
-    };
+    }
 
 
     function overlapRect(r1, r2){ // determine area of overlap between two rects
@@ -228,24 +231,24 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (r1.bottom < r2.top){ return 0; }
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
-    };
+    }
 
     function rect(elem){
         return elem.getBoundingClientRect();
-    };
+    }
 
     function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
-    };
+    }
 
     function area(elem){
         return elem.clientWidth * elem.clientHeight;
-    };
+    }
 
     function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
-    };
+    }
 
     function closest(elem, selector){
         if (elem.jquery){
@@ -262,7 +265,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = elem.parentElement;
         }
         return null;
-    };
+    }
 
     function indexOf(elem){
         var idx = 0;
@@ -271,7 +274,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             idx++;
         }
         return idx;
-    };
+    }
 
     function find(elem, selector){
         if (typeof(elem) === 'string'){
@@ -279,7 +282,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = document.body;
         }
         return elem.querySelector(selector);
-    };
+    }
 
     function findAll(elem, selector){
         if (typeof(elem) === 'string'){
@@ -287,13 +290,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = document.body;
         }
         return wb.makeArray(elem.querySelectorAll(selector));
-    };
+    }
 
     function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
-    };
+    }
 
     function findChild(elem, selector){
         if (arguments.length !== 2){
@@ -307,7 +310,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
         }
         return null;
-    };
+    }
 
    function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -324,7 +327,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
-                if (attributes[key] === null || attributes[key] === undefined) return;
+                if (attributes[key] === null || attributes[key] === undefined)
+                {
+                    return;
+                }
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
@@ -335,7 +341,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 }
             });
         }
-        if (children){
+        if (children !== null && children !== undefined){
             if (Array.isArray(children)){
                 children.forEach(function(child){
                     if (child.nodeName){
@@ -359,7 +365,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
         }
         return e;
-    };
+    }
 
 
     // Remove namespace for matches
@@ -654,6 +660,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         currentPosition = null;
         timer = null;
         dragging = false;
+        pointerDown = false;
         cloned = false; // <- WB
         scope = null; // <- WB
         templateDrag = false; // <- WB
@@ -669,13 +676,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     reset();
     
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        
+        pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        console.log(eT);
+        // console.log(eT);
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -739,6 +746,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (!pointerDown) {return undefined;}
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -835,6 +843,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function endDrag(event){
+        pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
@@ -1335,12 +1344,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function newSeqNum(){
         nextSeqNum++;
         return nextSeqNum;
-    };
+    }
 
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
-        if (!seqNum) return;
+        if (!seqNum)
+        {
+            return;
+        }
         nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
@@ -1466,7 +1478,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         //     console.log('instantiated block %o from description %o', block, obj);
         //}
         return block;
-    }
+    };
 
     // Block Event Handlers
 
@@ -1599,7 +1611,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
-            socket.appendChild(holder)
+            socket.appendChild(holder);
         }
         if (desc.block){
             socket.dataset.block = desc.block;
@@ -1631,15 +1643,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
-    }
+    };
 
 
     function socketDesc(socket){
         var parentBlock = wb.closest(socket, '.block');
         var isTemplate = !!parentBlock.dataset.isTemplateBlock;
         var desc = {
-            name: socket.dataset.name,
-        }
+            name: socket.dataset.name
+        };
         // optional defined settings
         if (socket.dataset.type){
             desc.type = socket.dataset.type;
@@ -1657,9 +1669,12 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
-        if (isTemplate) return desc;
+        if (isTemplate) 
+        {
+            return desc;
+        }
         var uName = wb.findChild(socket, '.name').textContent;
-        var uEle = wb.findChild(socket, '.name')
+        var uEle = wb.findChild(socket, '.name');
         
         if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
@@ -1698,13 +1713,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
-        }
+        };
+
         if (block.dataset.group === 'scripts_workspace'){
             desc.blocktype = block.dataset.blocktype;
             desc.group = block.dataset.group;
             desc.help = block.dataset.help;
             desc.type = block.dataset.type;            
         }
+
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
@@ -1768,6 +1785,52 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // return a block for block types
         var value;
         var type = obj.type;
+        
+        if(type === 'boolean')
+        {
+            obj.options = 'boolean';
+        }
+        
+        if(typeof obj.options !== 'undefined')
+        {
+            // DONE : #24
+            // DONE : #227
+            var choice = elem('select');
+            var list = wb.choiceLists[obj.options];
+            
+            if(Array.isArray(list))
+            {
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            else
+            {
+                var values = Object.keys(list);
+                
+                values.forEach(function(val){
+                    var option = elem('option', {"value":val}, list[val]);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == val){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            
+            return choice;
+        
+        }
+        
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -1797,19 +1860,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
                 value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
-            case 'boolean':
-                obj.options = 'boolean';
-            case 'choice':
-                var choice = elem('select');
-                wb.choiceLists[obj.options].forEach(function(opt){
-                    var option = elem('option', {}, opt);
-                    var value = obj.uValue || obj.value;
-                    if (value && value === opt){
-                        option.setAttribute('selected', 'selected');
-                    }
-                    choice.appendChild(option);
-                });
-                return choice;
             default:
                 value = obj.uValue || obj.value || '';
         }
@@ -1824,7 +1874,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
         wb.resize(input);
         return input;
-    }
+    };
 
     function socketValue(holder){
         if (holder.children.length > 1){
@@ -1832,7 +1882,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
+
+            // DONE : #227
+            if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -1877,7 +1929,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
         var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
         return _code2;
-    };
+    }
 
     function changeName(event){
         var nameSpan = event.wbTarget;
@@ -1903,37 +1955,38 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			// console.log('now update all instances too');
-			var source = wb.closest(nameSpan, '.block');
-			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-			instances.forEach(function(elem){
-				wb.find(elem, '.name').textContent = newName;
-			});
+            // console.log('now update all instances too');
+            var source = wb.closest(nameSpan, '.block');
+            var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+            instances.forEach(function(elem){
+                wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
+            });
 
-			//Change name of parent
-			var parent = document.getElementById(source.dataset.localSource);
-			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+            //Change name of parent
+            var parent = document.getElementById(source.dataset.localSource);
+            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-			//Change locals name of parent
-			var parentLocals = JSON.parse(parent.dataset.locals);
-			var localSocket = parentLocals[0].sockets[0];
-			localSocket.name = newName;
-			parent.dataset.locals = JSON.stringify(parentLocals);
+            //Change locals name of parent
+            var parentLocals = JSON.parse(parent.dataset.locals);
+            var localSocket = parentLocals[0].sockets[0];
+            localSocket.name = newName;
+            parent.dataset.locals = JSON.stringify(parentLocals);
 
-			wb.find(parent, '.name').textContent = nameTemplate;
-    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
-		}
-		var action = {
-			undo: function() {
-				propagateChange(oldName);
-			},
-			redo: function() {
-				propagateChange(newName);
-			},
-		}
-		wb.history.add(action);
-		action.redo();
+            wb.find(parent, '.name').textContent = nameTemplate;
+            Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+        }
+        var action = {
+            undo: function() {
+                propagateChange(oldName);
+            },
+            redo: function() {
+                propagateChange(newName);
+            }
+        };
+        wb.history.add(action);
+        action.redo();
     }
 
     function cancelUpdateName(event){
@@ -1950,7 +2003,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (event.keyCode === 0x1B /* escape */ ){
             event.preventDefault();
             input.value = input.previousSibling.textContent;
-            input.blur()
+            input.blur();
         }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
             event.preventDefault();
             input.blur();
@@ -3617,9 +3670,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -3661,9 +3714,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -3701,9 +3754,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "analoginpins",
-                    "value": "choice"
+                    "value": "A0"
                 }
             ]
         },
@@ -3717,7 +3770,7 @@ wb.menu({
                 {
                     "name": "Analog Pin",
                     "type": "string",
-                    "value": null
+                    "value": 0
                 }
             ]
         },
@@ -3741,9 +3794,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ]
         },
@@ -4145,9 +4198,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Setup serial communication at",
-                    "type": "choice",
+                    "type": "number",
                     "options": "baud",
-                    "value": "choice"
+                    "value": "9600"
                 }
             ]
         },

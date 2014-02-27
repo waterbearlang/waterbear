@@ -1,5 +1,6 @@
 {
     "name": "Firmata",
+    "help": "Physical Input and Output for the Raspberry Pi using an Arduino loaded with Firmata.",
     "blocks": [
         {
             "blocktype": "context",
@@ -20,9 +21,9 @@
             "sockets": [
                 {
                     "name": "Create digital_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ],
             "locals": [
@@ -63,9 +64,9 @@
             "sockets": [
                 {
                     "name": "Create digital_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -78,9 +79,9 @@
             "sockets": [
                 {
                     "name": "Create analog_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ],
             "locals": [
@@ -109,9 +110,9 @@
             "sockets": [
                 {
                     "name": "Create servo## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ],
             "locals": [
@@ -153,9 +154,9 @@
             "sockets": [
                 {
                     "name": "Create analog_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "analoginpins",
-                    "value": "choice"
+                    "value": "A0"
                 }
             ]
         }

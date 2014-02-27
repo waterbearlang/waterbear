@@ -9,9 +9,9 @@
             "sockets": [
                 {
                     "name": "Setup serial communication at",
-                    "type": "choice",
+                    "type": "number",
                     "options": "baud",
-                    "value": "choice"
+                    "value": "9600"
                 }
             ]
         },

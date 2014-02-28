@@ -5019,6 +5019,10 @@ wb.choiceLists.rettypes.push('motion');
 
 /*end languages/javascript/matrix.js*/
 
+/*begin languages/javascript/datablocks.js*/
+
+/*end languages/javascript/datablocks.js*/
+
 /*begin languages/javascript/control.json*/
 wb.menu({
     "name": "Controls",
@@ -10211,3 +10215,46 @@ wb.menu({
     ]
 });
 /*end languages/javascript/matrix.json*/
+
+/*begin languages/javascript/datablocks.json*/
+wb.menu({
+    "name": "DataBlock",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
+            "script": "/* do nothing */",
+            "help": "make a point",
+            "sockets": [
+                {
+                    "name": "draw pattern at",
+                    "type": "point",
+                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
+                },
+                {
+                    "name": "with toolkit",
+                    "type": "choice",
+                    "options": "toolkits",
+                    "value": "AIR"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "binary",
+                    "script": "/* do nothing */",
+                    "help": "should only allow binary here",
+                    "sockets": [
+                        {
+                            "name": "binary",
+                            "type": "binary",
+                            "value": "01010101"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+);
+/*end languages/javascript/datablocks.json*/

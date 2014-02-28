@@ -2504,15 +2504,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     reset();
     
     function initDrag(event){
-<<<<<<< HEAD:dist/minecraftjs.js
-        console.log('initDrag(%o)', event);
-        
-        // Called on mousedown or touchstart, we haven't started dragging yet
-        // DONE: Don't start drag on a text input or select using :input jquery selector
-        
-        var eT = event.wbTarget; // <- WB
-        console.log(eT);
-=======
         // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
@@ -2520,7 +2511,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
         // console.log(eT);
->>>>>>> master:dist/node.js
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -3052,8 +3042,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             }
         }
         return false;
-<<<<<<< HEAD:dist/minecraftjs.js
-=======
     }
     
     
@@ -3092,7 +3080,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 	}
 	
 	
->>>>>>> master:dist/node.js
     }
 
     // Initialize event handlers
@@ -7907,8 +7894,7 @@ wb.menu({
         }
     ]
 });
-<<<<<<< HEAD:dist/minecraftjs.js
-/*end languages/minecraftjs/string.json*/
+/*end languages/node/string.json*/
 
 /*begin l10n.js*/
 (function(wb){
@@ -7969,6 +7955,3 @@ if (wb.onePartDone) {
     wb.onePartDone = true;
 }
 /*end l10n.js*/
-=======
-/*end languages/node/string.json*/
->>>>>>> master:dist/node.js

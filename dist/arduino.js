@@ -681,15 +681,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     reset();
     
     function initDrag(event){
-<<<<<<< HEAD
-        console.log('initDrag(%o)', event);
-        
-        // Called on mousedown or touchstart, we haven't started dragging yet
-        // DONE: Don't start drag on a text input or select using :input jquery selector
-        
-        var eT = event.wbTarget; // <- WB
-        console.log(eT);
-=======
         // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
@@ -697,7 +688,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
         // console.log(eT);
->>>>>>> master
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -1229,8 +1219,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             }
         }
         return false;
-<<<<<<< HEAD
-=======
     }
     
     
@@ -1269,7 +1257,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 	}
 	
 	
->>>>>>> master
     }
 
     // Initialize event handlers

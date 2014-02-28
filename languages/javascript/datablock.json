@@ -5,9 +5,9 @@
             "blocktype": "context",
             "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
             "script": "/* do nothing */",
-            "help": "make a point",
+            "help": "make a GET Request",
             "sockets": [
-                 {
+                {
                     "name": "GET",
                     "type": "datablock",
                     "value": "HTTP"
@@ -24,6 +24,34 @@
                             "name": "request",
                             "type": "datablock",
                             "value": "get"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "4f564cea-057c-4b1c-8ea1-96d7f50c5436",
+            "script": "/* do nothing */",
+            "help": "make a POST Request",
+            "sockets": [
+                {
+                    "name": "POST",
+                    "type": "datablock",
+                    "value": "HTTP"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "datablock",
+                    "script": "/* do nothing */",
+                    "help": "should only request",
+                    "sockets": [
+                        {
+                            "name": "request",
+                            "type": "datablock",
+                            "value": "post"
                         }
                     ]
                 }

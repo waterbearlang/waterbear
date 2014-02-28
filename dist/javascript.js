@@ -10495,7 +10495,7 @@ wb.menu({
             "blocktype": "context",
             "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
             "script": "/* do nothing */",
-            "help": "make a point",
+            "help": "make a GET Request",
             "sockets": [
                  {
                     "name": "GET",
@@ -10514,6 +10514,34 @@ wb.menu({
                             "name": "request",
                             "type": "datablock",
                             "value": "get"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "",
+            "script": "/* do nothing */",
+            "help": "make a POST Request",
+            "sockets": [
+                 {
+                    "name": "POST",
+                    "type": "datablock",
+                    "value": "HTTP"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "datablock",
+                    "script": "/* do nothing */",
+                    "help": "should only request",
+                    "sockets": [
+                        {
+                            "name": "request",
+                            "type": "datablock",
+                            "value": "post"
                         }
                     ]
                 }

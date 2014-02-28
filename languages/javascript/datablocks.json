@@ -1,0 +1,33 @@
+{
+    "name": "DataBlock",
+    "blocks": [
+        {
+            "blocktype": "context",
+            "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
+            "script": "/* do nothing */",
+            "help": "make a point",
+            "sockets": [
+                 {
+                    "name": "GET",
+                    "type": "datablock",
+                    "value": "HTTP"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "name": "datablock",
+                    "script": "/* do nothing */",
+                    "help": "should only allow binary here",
+                    "sockets": [
+                        {
+                            "name": "binary",
+                            "type": "datablock",
+                            "value": "01010101"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

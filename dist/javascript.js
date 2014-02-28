@@ -10493,32 +10493,26 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "context",
-            "id": "47f89d2d-cd02-4a1c-a235-6f019af73773",
+            "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
             "script": "/* do nothing */",
             "help": "make a point",
             "sockets": [
-                {
-                    "name": "draw pattern at",
-                    "type": "point",
-                    "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
-                },
-                {
-                    "name": "with toolkit",
-                    "type": "choice",
-                    "options": "toolkits",
-                    "value": "AIR"
+                 {
+                    "name": "GET",
+                    "type": "datablock",
+                    "value": "HTTP"
                 }
             ],
             "locals": [
                 {
                     "blocktype": "step",
-                    "name": "binary",
+                    "name": "datablock",
                     "script": "/* do nothing */",
                     "help": "should only allow binary here",
                     "sockets": [
                         {
                             "name": "binary",
-                            "type": "binary",
+                            "type": "datablock",
                             "value": "01010101"
                         }
                     ]
@@ -10526,6 +10520,5 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/datablocks.json*/

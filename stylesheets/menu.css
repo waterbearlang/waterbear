@@ -39,7 +39,7 @@ ul.menu > li > button {
 ul.sub-menu button{
 	text-align: left;
 }
-ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
+ul.menu li button:not(.disabled):hover, ul.menu li ul.sub-menu li button:not(.disabled):hover {
 	background:#555;
 }
 /*Make the parent of sub-menu relative*/
@@ -61,7 +61,7 @@ ul.menu li ul.sub-menu li button {
 	min-width:200px;
 	border-top: 1px solid black;
 }
-ul.menu li ul.sub-menu li button.disabled {
+ul.menu button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {

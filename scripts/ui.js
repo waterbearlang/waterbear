@@ -351,18 +351,25 @@ initLanguageFiles();
 
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
+    var id_blocks = {};
+    var blocks = blockspec.blocks;
+
+    for (var key in blocks) {
+        var block = blocks[key];
+        id_blocks[block.id] = block;
+    }
+
+    blockspec.blocks = id_blocks;
     defaultLangData[blockspec.sectionkey] = blockspec;
-    // console.log("load %s", blockspec.name);conso
+
 };
 
 function populateMenu() {
-
+    console.log("populating");
 	for (var key in defaultLangData) {
-    	var blockspec = defaultLangData[key];
+        var blockspec = defaultLangData[key];
         var l10ndata = localizationData[blockspec.sectionkey];
-
-        // console.log(l10ndata);
-
+ 
         wb.overwriteAttributes(blockspec, l10ndata);
 
 		var title = blockspec.name.replace(/\W/g, '');
@@ -385,30 +392,69 @@ function edit_menu(title, specs, help, show){
         blockmenu.appendChild(submenu);
         submenu.appendChild(description);
     }
-    specs.forEach(function(spec, idx){
+    for (var key in specs) {
+        var spec = specs[key];
         spec.group = group;
         spec.isTemplateBlock = true;
         submenu.appendChild(wb.Block(spec));
-    });
+    }
 }
 
 function initLanguageFiles(){
     var ajaxDone = false;
 
-    listFiles = ['languages/javascript/localizations/es/array.json'];
+    // pulled from workspace.js, one file below in the dist/javascript.js
+    var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
-    listFiles.forEach(function(path, idx){
-        ajax.get(path, function(exampleJson){
-            var lang = JSON.parse(exampleJson);
+    //gets en, es, de, etc.
+    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
+    // var locale = "es";
+
+    var listFiles = l10nFiles[language][locale];
+
+    /* SOMETHING REALLY WEIRD HAPPENED HERE */
+    /* Here is my story 
+     * If I use wb.onePartDone, in the following if statement, then l10n.js AND this 
+     * statement both believe wb.onePartDone are false. Therefore, it blocks the 
+     * creation of blocks
+
+     * If I use just onePartDone, it works, l10n.js sees that it is now true, and 
+     * everything works
+     */
+
+    if (!listFiles) {
+        if (onePartDone) {
+            populateMenu();
+            // console.log("AJAX populating");
+        } else {
+            onePartDone = true;
+            // console.log("AJAX done");
+        }
+
+        return;
+    }
+
+    listFiles.forEach(function(name, idx){
+        ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
+            var lang = JSON.parse(json);
+
+            var id_blocks = {};
+            var blocks = lang.blocks;
+
+            for (var key in blocks) {
+                var block = blocks[key];
+                id_blocks[block.id] = block;
+            }
+
+            lang.blocks = id_blocks;
             localizationData[lang.sectionkey] = lang;
-            // console.log("Wrote some data to localizationData");
 
             if ( idx === (listFiles.length - 1 )) {
                 if (wb.onePartDone) {
-                    // console.log("AJAX TRUE");
+                    // console.log("AJAX populating");
                     populateMenu();
                 } else {
-                    // console.log("AJAX FALSE");
+                    // console.log("AJAX done");
                     wb.onePartDone = true;
                 }
             }

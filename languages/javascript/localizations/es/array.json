@@ -4,24 +4,6 @@
     "help": "spanish description",
     "blocks": [
         {
-            "id": "e6a297e9-1255-4701-91d8-80548489ee9a",
-            "help": "Create an empty array",
-            "locals": [
-                {
-                    "sockets": [
-                        {
-                            "name": "spanisharray##"
-                        }
-                    ]
-                }
-            ],
-            "sockets": [
-                {
-                    "name": "spanishnew array##"
-                }
-            ]
-        },
-        {
             "id": "83d67170-4ba7-45ac-95ae-bb2f314c3ae0",
             "help": "create a new array with the contents of another array",
             "locals": [
@@ -36,6 +18,24 @@
             "sockets": [
                 {
                     "name": "spanishnew array with array##"
+                }
+            ]
+        },
+        {
+            "id": "e6a297e9-1255-4701-91d8-80548489ee9a",
+            "help": "Create an empty array",
+            "locals": [
+                {
+                    "sockets": [
+                        {
+                            "name": "spanisharray##"
+                        }
+                    ]
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "spanishnew array##"
                 }
             ]
         }

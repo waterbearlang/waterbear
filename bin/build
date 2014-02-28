@@ -47,6 +47,12 @@ var libs = {
     processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
 };
 
+var localizations = {
+    javascript: {
+        es: ['array', 'boolean']
+    }
+};
+
 
 function clear(){
     if (fs.existsSync('dist')){
@@ -58,6 +64,10 @@ function clear(){
         fs.mkdirSync('dist');
     }
 };
+
+function append(str, dest){
+    fs.appendFileSync(dest, str);
+}
 
 
 function cat(src, dest){
@@ -117,6 +127,10 @@ function build(){
             .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
             .forEach(function(stylename){cat(stylename, dest + '.css'); });
 
+        // Add localization file string
+        fileStr = "\n\n/* list of files used for localization of blocks */\nvar l10nFiles = " + JSON.stringify(localizations) + ";\n\n";
+        append(fileStr, dest + '.js');
+
         scripts.forEach(function(scriptname){
             cat('scripts/' + scriptname + '.js', dest + '.js'); 
         });
@@ -130,6 +144,7 @@ function build(){
         // Build Waterbear blocks
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
 
+        // Attach l10n file to end of javascript dist
         cat('scripts/' + 'l10n' + '.js', dest + '.js'); 
 
         // Build runtime support

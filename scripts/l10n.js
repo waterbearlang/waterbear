@@ -1,11 +1,3 @@
-if (wb.onePartDone) {
-    // console.log("l10n TRUE");
-    wb.populateMenu();
-} else {
-    // console.log("l10n FALSE");
-    wb.onePartDone = true;
-}
-
 (function(wb){
 
 /* old Obj will be overwritten by newObj */
@@ -55,3 +47,11 @@ function overwriteAttributes(oldObj, newObj) {
 wb.overwriteAttributes = overwriteAttributes;
 
 })(wb);
+
+if (wb.onePartDone) {
+    // console.log("l10n populating");
+    wb.populateMenu();
+} else {
+    // console.log("l10n done");
+    wb.onePartDone = true;
+}

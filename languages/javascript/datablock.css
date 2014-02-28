@@ -1,4 +1,4 @@
-.datablocks, .datablocks .holder{
+.datablock, .datablock .holder{
     border-color: hsl(150, 65%, 79%);
     background-color: hsl(150, 62%, 89%);
 }

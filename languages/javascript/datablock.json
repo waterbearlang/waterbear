@@ -18,12 +18,12 @@
                     "blocktype": "step",
                     "name": "datablock",
                     "script": "/* do nothing */",
-                    "help": "should only allow binary here",
+                    "help": "should only req",
                     "sockets": [
                         {
-                            "name": "binary",
+                            "name": "request",
                             "type": "datablock",
-                            "value": "01010101"
+                            "value": "get"
                         }
                     ]
                 }

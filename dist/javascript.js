@@ -5043,9 +5043,9 @@ wb.choiceLists.rettypes.push('motion');
 
 /*end languages/javascript/matrix.js*/
 
-/*begin languages/javascript/datablocks.js*/
+/*begin languages/javascript/datablock.js*/
 
-/*end languages/javascript/datablocks.js*/
+/*end languages/javascript/datablock.js*/
 
 /*begin languages/javascript/control.json*/
 wb.menu({
@@ -10487,7 +10487,7 @@ wb.menu({
 });
 /*end languages/javascript/matrix.json*/
 
-/*begin languages/javascript/datablocks.json*/
+/*begin languages/javascript/datablock.json*/
 wb.menu({
     "name": "DataBlock",
     "blocks": [
@@ -10508,12 +10508,12 @@ wb.menu({
                     "blocktype": "step",
                     "name": "datablock",
                     "script": "/* do nothing */",
-                    "help": "should only allow binary here",
+                    "help": "should only req",
                     "sockets": [
                         {
-                            "name": "binary",
+                            "name": "request",
                             "type": "datablock",
-                            "value": "01010101"
+                            "value": "get"
                         }
                     ]
                 }
@@ -10521,4 +10521,4 @@ wb.menu({
         }
     ]
 });
-/*end languages/javascript/datablocks.json*/
+/*end languages/javascript/datablock.json*/

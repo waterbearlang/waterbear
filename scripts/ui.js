@@ -343,8 +343,8 @@ initContextMenus();
 defaultLangData  = {};
 localizationData = {};
 
-var onePartDone = false;
-wb.onePartDone = onePartDone;
+var l10nHalfDone = false;
+wb.l10nHalfDone = l10nHalfDone;
 
 /* will be set true by either code in l10n.js or initLanguageFiles() */
 initLanguageFiles();
@@ -367,10 +367,15 @@ function menu(blockspec){
 function populateMenu() {
     console.log("populating");
 	for (var key in defaultLangData) {
+
+        //default data
         var blockspec = defaultLangData[key];
-        var l10ndata = localizationData[blockspec.sectionkey];
+
+        //read in from localized file
+        var l10nData = localizationData[blockspec.sectionkey];
  
-        wb.overwriteAttributes(blockspec, l10ndata);
+        //overwrite attributes in blockspec
+        wb.overwriteAttributes(blockspec, l10nData);
 
 		var title = blockspec.name.replace(/\W/g, '');
         var specs = blockspec.blocks;
@@ -412,22 +417,23 @@ function initLanguageFiles(){
 
     var listFiles = l10nFiles[language][locale];
 
-    /* SOMETHING REALLY WEIRD HAPPENED HERE */
-    /* Here is my story 
-     * If I use wb.onePartDone, in the following if statement, then l10n.js AND this 
-     * statement both believe wb.onePartDone are false. Therefore, it blocks the 
-     * creation of blocks
+    /* SOMETHING REALLY WEIRD HAPPENED HERE 
+     * If I use wb.l10nHalfDone in the following if statement, then the value 
+     * doesn't propagate to l10n.js. If i use the local version everything
+     * works.
 
-     * If I use just onePartDone, it works, l10n.js sees that it is now true, and 
-     * everything works
+     * In the second if statement, within the ajax.get, I must use the 
+     * wb.l10nHalfDone version. 
+
+     * WHY?
      */
 
     if (!listFiles) {
-        if (onePartDone) {
+        if (l10nHalfDone) {
             populateMenu();
             // console.log("AJAX populating");
         } else {
-            onePartDone = true;
+            l10nHalfDone = true;
             // console.log("AJAX done");
         }
 
@@ -450,12 +456,12 @@ function initLanguageFiles(){
             localizationData[lang.sectionkey] = lang;
 
             if ( idx === (listFiles.length - 1 )) {
-                if (wb.onePartDone) {
+                if (wb.l10nHalfDone) {
                     // console.log("AJAX populating");
                     populateMenu();
                 } else {
                     // console.log("AJAX done");
-                    wb.onePartDone = true;
+                    wb.l10nHalfDone = true;
                 }
             }
 
@@ -537,6 +543,6 @@ if (document.body.clientWidth > 360){
 
 wb.menu = menu;
 wb.populateMenu = populateMenu;
-wb.onePartDone = onePartDone;
+wb.l10nHalfDone = l10nHalfDone;
 
 })(wb);

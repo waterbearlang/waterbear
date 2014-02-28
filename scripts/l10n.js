@@ -48,10 +48,10 @@ wb.overwriteAttributes = overwriteAttributes;
 
 })(wb);
 
-if (wb.onePartDone) {
+if (wb.l10nHalfDone) {
     // console.log("l10n populating");
     wb.populateMenu();
 } else {
     // console.log("l10n done");
-    wb.onePartDone = true;
+    wb.l10nHalfDone = true;
 }

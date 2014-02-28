@@ -238,6 +238,206 @@
             ]
         },
         {
+            "blocktype": "context",
+            "id": "C86C6CEA-8707-4CA2-B349-1DE30238B005",
+            "script": "{{1}} = {{1}}.replace({{2}}g, function() {local.match## = new PatternMatch(arguments); local.match##.replacement = ''; [[1]] return local.match##.replacement;});",
+            "help": "replace all occurrences of a pattern with a new string using regular expressions - the new string overwrites the original",
+            "sockets": [
+                {
+                    "name": "in string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "replace pattern",
+                    "type": "regex",
+                    "value": null
+                },
+                {
+                    "name": "according to these rules:"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "match##"
+                        }
+                    ],
+                    "script": "local.match##.match",
+                    "help": "The matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "offset##"
+                        }
+                    ],
+                    "script": "local.match##.offset",
+                    "help": "The offset of the match within the string",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "prefix##"
+                        }
+                    ],
+                    "script": "local.match##.prefix",
+                    "help": "The portion of the string before the matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "suffix##"
+                        }
+                    ],
+                    "script": "local.match##.suffix",
+                    "help": "The portion of the string after the matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "string##"
+                        }
+                    ],
+                    "script": "local.match##.string",
+                    "help": "The entire string being searched (before any replacements have been made)",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "submatch",
+                            "type": "number",
+                            "value": 0
+                        },
+                        {
+                        	"name": "of match##"
+                        }
+                    ],
+                    "script": "local.match##.submatches[{{1}}]",
+                    "help": "A submatch of the matched string",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "result## = ",
+                            "type": "string",
+                            "value": null
+                        }
+                    ],
+                    "script": "local.match##.replacement = {{1}}",
+                    "help": "The value to replace the matched substring with"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "8873F12B-62F0-43F8-9E8D-86DBAADF1FC0",
+            "script": "(function(re,str) {while((_match = re.exec(str)) !== null) {local.match## = new PatternMatch(_match); [[1]]}})({{2}}g,{{1}});",
+            "help": "process substrings of a string that match a particular pattern",
+            "sockets": [
+                {
+                    "name": "in string",
+                    "type": "string",
+                    "value": null
+                },
+                {
+                    "name": "for each substring matching pattern",
+                    "type": "regex",
+                    "value": null
+                },
+                {
+                    "name": "according to these rules:"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "match##"
+                        }
+                    ],
+                    "script": "local.match##.match",
+                    "help": "The matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "offset##"
+                        }
+                    ],
+                    "script": "local.match##.offset",
+                    "help": "The offset of the match within the string",
+                    "type": "number"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "prefix##"
+                        }
+                    ],
+                    "script": "local.match##.prefix",
+                    "help": "The portion of the string before the matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "suffix##"
+                        }
+                    ],
+                    "script": "local.match##.suffix",
+                    "help": "The portion of the string after the matched substring",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "string##"
+                        }
+                    ],
+                    "script": "local.match##.string",
+                    "help": "The entire string being searched (before any replacements have been made)",
+                    "type": "string"
+                },
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "submatch",
+                            "type": "number",
+                            "value": 0
+                        },
+                        {
+                        	"name": "of match##"
+                        }
+                    ],
+                    "script": "local.match##.submatches[{{1}}]",
+                    "help": "A submatch of the matched string",
+                    "type": "string"
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "1D76122E-1E5D-4A19-AA5E-267B41A788FA",
             "script": "{{1}}.trim()",

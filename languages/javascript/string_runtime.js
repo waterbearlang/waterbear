@@ -18,3 +18,33 @@ function levenshtein(a,b) {
 	}
 	return helper(a.length,b.length);
 }
+
+// A class representing a regex match
+function PatternMatch(match) {
+	if(match instanceof Array) {
+		// It's the result of RegExp.exec()
+		this.offset = match.index;
+		this.string = match.input;
+		this.match = match.shift();
+		this.submatches = match;
+	} else {
+		// It's the arguments list that String.replace() passed to a function
+		var len = match.length;
+		this.offset = match[len-2];
+		this.string = match[len-1];
+		this.match = match[0];
+		this.submatches = [];
+		for(var i = 1; i < len-2; i++) {
+			this.submatches.push(match[i]);
+		}
+	}
+}
+
+PatternMatch.prototype = {
+	get prefix() {
+		return this.string.slice(0,this.offset);
+	},
+	get suffix() {
+		return this.string.slice(this.offset+this.match.length);
+	},
+};

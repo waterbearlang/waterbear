@@ -1,4 +1,5 @@
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:

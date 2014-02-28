@@ -1,4 +1,5 @@
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS

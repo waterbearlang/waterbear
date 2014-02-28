@@ -1,8 +1,9 @@
 (function(global){
+'use strict';
 function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
 function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
 
-ajax={};
+var ajax={};
 ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
 ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
 
@@ -11,7 +12,7 @@ ajax.send=function(u,f,m,a,e){
     x.open(m,u,true);
     x.onreadystatechange=function(){
         if (x.readyState==4&&x.status<400) {
-            cType = x.getResponseHeader("Content-Type");
+            var cType = x.getResponseHeader("Content-Type");
             f(x.responseText, cType); 
         } else if (x.readyState==4) { 
             if(e==undefined) {

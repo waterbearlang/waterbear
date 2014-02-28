@@ -1,5 +1,5 @@
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 function tabSelect(event){
@@ -379,7 +379,7 @@ function menu(blockspec){
 };
 
 function edit_menu(title, specs, show){
-	menu_built = true;
+	var menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){

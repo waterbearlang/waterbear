@@ -1,10 +1,11 @@
 
 /*begin ajax.js*/
 (function(global){
+'use strict';
 function $(e){if(typeof e=='string')e=document.getElementById(e);return e};
 function collect(a,f){var n=[];for(var i=0;i<a.length;i++){var v=f(a[i]);if(v!=null)n.push(v)}return n};
 
-ajax={};
+var ajax={};
 ajax.x=function(){try{return new ActiveXObject('Msxml2.XMLHTTP')}catch(e){try{return new ActiveXObject('Microsoft.XMLHTTP')}catch(e){return new XMLHttpRequest()}}};
 ajax.serialize=function(f){var g=function(n){return f.getElementsByTagName(n)};var nv=function(e){if(e.name)return encodeURIComponent(e.name)+'='+encodeURIComponent(e.value);else return ''};var i=collect(g('input'),function(i){if((i.type!='radio'&&i.type!='checkbox')||i.checked)return nv(i)});var s=collect(g('select'),nv);var t=collect(g('textarea'),nv);return i.concat(s).concat(t).join('&');};
 
@@ -13,7 +14,7 @@ ajax.send=function(u,f,m,a,e){
     x.open(m,u,true);
     x.onreadystatechange=function(){
         if (x.readyState==4&&x.status<400) {
-            cType = x.getResponseHeader("Content-Type");
+            var cType = x.getResponseHeader("Content-Type");
             f(x.responseText, cType); 
         } else if (x.readyState==4) { 
             if(e==undefined) {
@@ -49,7 +50,7 @@ global.ajax = ajax;
 // Sets up wb namespace (wb === waterbear)
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-
+'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
 	    var qparams = {},
@@ -99,6 +100,7 @@ global.ajax = ajax;
 
 /*begin util.js*/
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -472,7 +474,7 @@ global.ajax = ajax;
 
 /*begin drag.js*/
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -528,16 +530,19 @@ global.ajax = ajax;
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
     var workspace; // <- WB
     var blockMenu = document.querySelector('#block_menu'); // <- WB
+    var scratchpad= document.querySelector('.scratchpad'); // <- WB
     var potentialDropTargets;
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
-
+    var startPosition;
+    var cloned;
     var _dropCursor; // <- WB
 
     // WB-specific
@@ -564,6 +569,7 @@ global.ajax = ajax;
         templateDrag = false; // <- WB
         localDrag = false; // <- WB
         blockMenu = document.querySelector('#block_menu');
+	var scratchpad= document.querySelector('.scratchpad'); // <- WB
         workspace = null;
         selectedSocket = null;
         _dropCursor = null;
@@ -1057,6 +1063,7 @@ global.ajax = ajax;
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
 (function(global){
+  'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);
@@ -1112,7 +1119,7 @@ global.ajax = ajax;
 // Socket(json) -> Socket element
 
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -1747,7 +1754,7 @@ global.ajax = ajax;
 // * etc.
 
 (function(wb){
-
+'use strict';
 	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
@@ -2001,6 +2008,7 @@ global.ajax = ajax;
 
 /*begin undo.js*/
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -2103,7 +2111,7 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 
 /*begin ui.js*/
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 function tabSelect(event){
@@ -2483,7 +2491,7 @@ function menu(blockspec){
 };
 
 function edit_menu(title, specs, show){
-	menu_built = true;
+	var menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
@@ -2522,10 +2530,13 @@ wb.menu = menu;
 
 /*begin workspace.js*/
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
-			var workspace = document.querySelector('.workspace > .scripts_workspace')
+			var workspace = document.querySelector('.workspace > .scripts_workspace');
+            var path = location.href.split('?')[0];
+            history.pushState(null, '', path);
 			workspace.parentElement.removeChild(workspace);
 			wb.scriptModified = false;
 			wb.scriptLoaded = false;
@@ -2738,7 +2749,7 @@ wb.menu = menu;
 // time the page is loaded.
 
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;

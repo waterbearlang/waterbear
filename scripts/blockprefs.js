@@ -5,7 +5,7 @@
 // time the page is loaded.
 
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;

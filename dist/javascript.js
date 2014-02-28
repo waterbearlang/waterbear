@@ -5044,7 +5044,13 @@ wb.choiceLists.rettypes.push('motion');
 /*end languages/javascript/matrix.js*/
 
 /*begin languages/javascript/datablock.js*/
+/* DataBlock Plugin for WaterBear */
 
+(function(window){
+'use strict';
+
+
+})(window);
 /*end languages/javascript/datablock.js*/
 
 /*begin languages/javascript/control.json*/
@@ -10494,10 +10500,10 @@ wb.menu({
         {
             "blocktype": "context",
             "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
-            "script": "/* do nothing */",
+            "script": "window.console.log(\"I'm doing stuff!\");",
             "help": "make a GET Request",
             "sockets": [
-                 {
+                {
                     "name": "GET",
                     "type": "datablock",
                     "value": "HTTP"
@@ -10521,11 +10527,11 @@ wb.menu({
         },
         {
             "blocktype": "context",
-            "id": "",
+            "id": "4f564cea-057c-4b1c-8ea1-96d7f50c5436",
             "script": "/* do nothing */",
             "help": "make a POST Request",
             "sockets": [
-                 {
+                {
                     "name": "POST",
                     "type": "datablock",
                     "value": "HTTP"

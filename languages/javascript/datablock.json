@@ -4,13 +4,13 @@
         {
             "blocktype": "context",
             "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
-            "script": "/* do nothing */",
+            "script": "window.console.log(\"I'm doing stuff!\");",
             "help": "make a GET Request",
             "sockets": [
                 {
                     "name": "GET",
                     "type": "datablock",
-                    "value": "HTTP"
+                    "value": "URL"
                 }
             ],
             "locals": [
@@ -38,7 +38,7 @@
                 {
                     "name": "POST",
                     "type": "datablock",
-                    "value": "HTTP"
+                    "value": "URL"
                 }
             ],
             "locals": [

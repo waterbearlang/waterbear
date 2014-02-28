@@ -1493,7 +1493,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "q"
@@ -1540,7 +1540,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "w"
@@ -1587,7 +1587,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "e"
@@ -1634,7 +1634,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "a"
@@ -1681,7 +1681,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "s"
@@ -1728,7 +1728,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "d"
@@ -1775,7 +1775,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "z"
@@ -1822,7 +1822,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "x"
@@ -1869,7 +1869,7 @@
           "sockets": [
             {
               "name": "when",
-              "type": "choice",
+              "type": "string",
               "value": "choice",
               "options": "keys",
               "uValue": "c"

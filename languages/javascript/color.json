@@ -290,9 +290,9 @@
                 },
                 {
                     "name": "repeats",
-                    "type": "choice",
+                    "type": "string",
                     "options": "repetition",
-                    "value": "choice"
+                    "value": "repeat"
                 }
             ]
         }

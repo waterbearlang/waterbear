@@ -16,9 +16,9 @@
                 },
                 {
                     "name": "",
-                    "type": "choice",
+                    "type": "string",
                     "options": "unit",
-                    "value": "choice"
+                    "value": "px"
                 },
                 {
                     "name": "",
@@ -35,9 +35,9 @@
             "sockets": [
                 {
                     "name": "text align",
-                    "type": "choice",
+                    "type": "string",
                     "options": "align",
-                    "value": "choice"
+                    "value": "left"
                 }
             ]
         },
@@ -49,9 +49,9 @@
             "sockets": [
                 {
                     "name": "text baseline",
-                    "type": "choice",
+                    "type": "string",
                     "options": "baseline",
-                    "value": "choice"
+                    "value": ""
                 }
             ]
         },

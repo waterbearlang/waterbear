@@ -164,14 +164,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "B3"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -218,14 +218,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "C4 (Middle C)"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -272,14 +272,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "D4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -326,14 +326,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "E4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "quarter note"
@@ -380,14 +380,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "D4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -434,14 +434,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "E4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -488,14 +488,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "A4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -542,14 +542,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "G4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -596,14 +596,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "E4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -650,14 +650,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "D4"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -704,14 +704,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "C4 (Middle C)"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "eighth note"
@@ -758,14 +758,14 @@
                 },
                 {
                   "name": "to play note",
-                  "type": "choice",
+                  "type": "string",
                   "value": "A4",
                   "options": "notes",
                   "uValue": "A3"
                 },
                 {
                   "name": "as ",
-                  "type": "choice",
+                  "type": "string",
                   "value": "quarter note",
                   "options": "durations",
                   "uValue": "quarter note"
@@ -879,14 +879,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "C4 (Middle C)"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -933,14 +933,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "E4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -987,14 +987,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "F4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1041,14 +1041,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "G4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "quarter note"
@@ -1095,14 +1095,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "A4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1149,14 +1149,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "G4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1203,14 +1203,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "E4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1257,14 +1257,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "C4 (Middle C)"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1311,14 +1311,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "E4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1365,14 +1365,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "D4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "half note"
@@ -1419,7 +1419,7 @@
             },
             {
               "name": "to rest for a ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1487,14 +1487,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "B3"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1541,14 +1541,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "C4 (Middle C)"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1595,14 +1595,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "D4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1649,14 +1649,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "E4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "quarter note"
@@ -1703,14 +1703,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "F4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1757,14 +1757,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "E4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1811,14 +1811,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "D4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1865,14 +1865,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "C4 (Middle C)"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1919,14 +1919,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "D4"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "eighth note"
@@ -1973,14 +1973,14 @@
             },
             {
               "name": "to play note",
-              "type": "choice",
+              "type": "string",
               "value": "A4",
               "options": "notes",
               "uValue": "C4 (Middle C)"
             },
             {
               "name": "as ",
-              "type": "choice",
+              "type": "string",
               "value": "quarter note",
               "options": "durations",
               "uValue": "half note"

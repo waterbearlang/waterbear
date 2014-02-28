@@ -1482,8 +1482,8 @@
                 },
                 {
                   "name": "",
-                  "type": "choice",
-                  "value": "choice",
+                  "type": "string",
+                  "value": "px",
                   "options": "unit",
                   "uValue": "px"
                 },
@@ -3887,8 +3887,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "a",
                         "options": "keys",
                         "uValue": "a"
                       },
@@ -4008,8 +4008,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "b",
                         "options": "keys",
                         "uValue": "b"
                       },
@@ -4129,8 +4129,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "c",
                         "options": "keys",
                         "uValue": "c"
                       },
@@ -5090,8 +5090,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "up",
                         "options": "keys",
                         "uValue": "up"
                       },
@@ -5207,8 +5207,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "down",
                         "options": "keys",
                         "uValue": "down"
                       },
@@ -5324,8 +5324,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "left",
                         "options": "keys",
                         "uValue": "left"
                       },
@@ -5441,7 +5441,7 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
+                        "type": "string",
                         "value": "choice",
                         "options": "keys",
                         "uValue": "right"

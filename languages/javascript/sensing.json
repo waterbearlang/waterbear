@@ -74,9 +74,9 @@
             "sockets": [
                 {
                     "name": "key",
-                    "type": "choice",
+                    "type": "string",
                     "options": "keys",
-                    "value": "choice",
+                    "value": "a",
                     "suffix": "pressed?"
                 }
             ]

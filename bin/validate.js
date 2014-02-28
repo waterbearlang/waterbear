@@ -165,9 +165,9 @@ function validateSocket(socket){
 		if (typeof socket.options !== 'string'){
 			throw new Error('Socket options must be strings that are named in the language js file: ' + JSON.stringify(socket));
 		}
-		if (socket.type !== 'choice'){
+		/*if (socket.type !== 'choice'){
 			throw new Error('Sockets with options must be of type "choice": ' + JSON.stringfy(socket));
-		}
+		}*/
 	}
 }
 

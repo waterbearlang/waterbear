@@ -11,8 +11,19 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;
@@ -28,7 +39,7 @@ ul.menu > li > button {
 ul.sub-menu button{
 	text-align: left;
 }
-ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
+ul.menu li button:not(.disabled):hover, ul.menu li ul.sub-menu li button:not(.disabled):hover {
 	background:#555;
 }
 /*Make the parent of sub-menu relative*/
@@ -50,7 +61,7 @@ ul.menu li ul.sub-menu li button {
 	min-width:200px;
 	border-top: 1px solid black;
 }
-ul.menu li ul.sub-menu li button.disabled {
+ul.menu button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {
@@ -101,5 +112,47 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
 
 .nav:target {
 	display:block;
+}
+
+/* Button Menu in stage */
+
+
+.buttonmenu button{
+	padding-left: 10px;
+	visibility: hidden;
+}
+
+.buttonmenu:hover button{
+	visibility: visible;
+}
+
+.run-script{
+}
+
+.running .buttonmenu .run-script{
+	display: none;
+}
+
+.buttonmenu .stop-script{
+	display: none;
+}
+
+.running .buttonmenu .stop-script{
+	display: inline;
+}
+
+.buttonmenu .autorun-script-on{
+}
+
+.no-autorun .buttonmenu .autorun-script-on{
+	display: none;
+}
+
+.buttonmenu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .buttonmenu .autorun-script-off{
+	display: inline;
 }
 

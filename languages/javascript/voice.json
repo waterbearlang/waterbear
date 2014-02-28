@@ -56,7 +56,7 @@
                 },
                 {
                     "name": "note",
-                    "type": "choice",
+                    "type": "string",
                     "options": "notes",
                     "value": "A4"
                 }
@@ -167,13 +167,13 @@
                 },
                 {
                     "name": "to play note",
-                    "type": "choice",
+                    "type": "string",
                     "options": "notes",
                     "value": "A4"
                 },
                 {
                     "name": "as ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "durations",
                     "value": "quarter note"
                 },
@@ -196,7 +196,7 @@
                 },
                 {
                     "name": "to rest for a ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "durations",
                     "value": "quarter note"
                 },

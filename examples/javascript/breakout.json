@@ -1888,7 +1888,7 @@
                     "name": "height",
                     "type": "number",
                     "value": "32",
-                    "uValue": "32"
+                    "uValue": "33"
                   }
                 ],
                 "seqNum": "11",
@@ -2512,8 +2512,8 @@
                 },
                 {
                   "name": "",
-                  "type": "choice",
-                  "value": "choice",
+                  "type": "string",
+                  "value": "px",
                   "options": "unit",
                   "uValue": "px"
                 },
@@ -2712,8 +2712,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "left",
                         "options": "keys",
                         "uValue": "left"
                       },
@@ -2986,7 +2986,7 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
+                        "type": "string",
                         "value": "choice",
                         "options": "keys",
                         "uValue": "right"

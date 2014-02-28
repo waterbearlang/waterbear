@@ -1127,7 +1127,7 @@
                                 },
                                 {
                                     "name": "",
-                                    "type": "choice",
+                                    "type": "string",
                                     "value": "choice",
                                     "options": "unit",
                                     "uValue": "px"

@@ -2012,33 +2012,36 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 
     function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
-    };
+    }
 
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
-    };
+    }
 
     function hide(elem){
         elem.classList.add('hidden');
-    };
+    }
 
     function show(elem){
         elem.classList.remove('hidden');
-    };
+    }
 
     var svgText = document.querySelector('.resize-tester');
     function resize(input){
-        if (!input) return;
+        if (!input)
+        {
+            return;
+        }
         if (input.wbTarget){
             input = input.wbTarget;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
-    };
+    }
 
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
@@ -2046,7 +2049,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 
     function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
-    };
+    }
 
 
     function overlapRect(r1, r2){ // determine area of overlap between two rects
@@ -2056,24 +2059,24 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         if (r1.bottom < r2.top){ return 0; }
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
-    };
+    }
 
     function rect(elem){
         return elem.getBoundingClientRect();
-    };
+    }
 
     function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
-    };
+    }
 
     function area(elem){
         return elem.clientWidth * elem.clientHeight;
-    };
+    }
 
     function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
-    };
+    }
 
     function closest(elem, selector){
         if (elem.jquery){
@@ -2090,7 +2093,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             elem = elem.parentElement;
         }
         return null;
-    };
+    }
 
     function indexOf(elem){
         var idx = 0;
@@ -2099,21 +2102,29 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             idx++;
         }
         return idx;
-    };
+    }
 
     function find(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return elem.querySelector(selector);
-    };
+    }
 
     function findAll(elem, selector){
+        if (typeof(elem) === 'string'){
+            selector = elem;
+            elem = document.body;
+        }
         return wb.makeArray(elem.querySelectorAll(selector));
-    };
+    }
 
     function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
-    };
+    }
 
     function findChild(elem, selector){
         if (arguments.length !== 2){
@@ -2127,7 +2138,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             }
         }
         return null;
-    };
+    }
 
    function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -2144,7 +2155,10 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
-                if (attributes[key] === null || attributes[key] === undefined) return;
+                if (attributes[key] === null || attributes[key] === undefined)
+                {
+                    return;
+                }
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
@@ -2155,7 +2169,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
                 }
             });
         }
-        if (children){
+        if (children !== null && children !== undefined){
             if (Array.isArray(children)){
                 children.forEach(function(child){
                     if (child.nodeName){
@@ -2179,7 +2193,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             }
         }
         return e;
-    };
+    }
 
 
     // Remove namespace for matches
@@ -2230,14 +2244,21 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 (function(global){
     "use strict";
 
+    function isDomObject(e){
+        if (e === window) return true;
+        if (e === document) return true;
+        if (e.tagName) return true;
+        return false;
+    }
+
     function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem);
+        if (!isDomObject(elem)){ 
+            console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
@@ -2467,6 +2488,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         currentPosition = null;
         timer = null;
         dragging = false;
+        pointerDown = false;
         cloned = false; // <- WB
         scope = null; // <- WB
         templateDrag = false; // <- WB
@@ -2482,6 +2504,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     reset();
     
     function initDrag(event){
+<<<<<<< HEAD
         console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
@@ -2489,6 +2512,15 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         
         var eT = event.wbTarget; // <- WB
         console.log(eT);
+=======
+        // console.log('initDrag(%o)', event);
+        
+        // Called on mousedown or touchstart, we haven't started dragging yet
+        // DONE: Don't start drag on a text input or select using :input jquery selector
+        pointerDown = true;
+        var eT = event.wbTarget; // <- WB
+        // console.log(eT);
+>>>>>>> master
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -2552,6 +2584,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (!pointerDown) {return undefined;}
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -2648,6 +2681,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     }
 
     function endDrag(event){
+        pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
@@ -3018,6 +3052,47 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             }
         }
         return false;
+<<<<<<< HEAD
+=======
+    }
+    
+    
+    //This function arranges the blocks into a grid. Future functions could
+    //sort the blocks by type, frequency of use, or other such metrics
+    function arrangeScratchPad() {
+	var PADDING = 5;
+	
+	var scratchPadRect = scratchpad.getBoundingClientRect();
+	
+	var width = scratchPadRect.width;
+	var xOrigin = scratchPadRect.x;
+	var yOrigin = scratchPadRect.y;
+	
+	var x = xOrigin;
+	var y = yOrigin;
+	
+	var children = scratchpad.childNodes;
+	
+	for (var i = 0; i < children.length; i++) {
+	    if (children[i].nodeType != 3) {
+		var r = children[i];
+		
+		var rBounding = r.getBoundingClientRect();
+		
+		r.style.top = y + "px";
+		r.style.left = x + "px";
+		
+		x += rBounding.width + PADDING;
+		
+		if (xOrigin >= width) {
+		    x = xOrigin;
+		    y += rBounding.height + PADDING;
+		}
+	    }
+	}
+	
+	
+>>>>>>> master
     }
 
     // Initialize event handlers
@@ -3110,12 +3185,15 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     function newSeqNum(){
         nextSeqNum++;
         return nextSeqNum;
-    };
+    }
 
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
-        if (!seqNum) return;
+        if (!seqNum)
+        {
+            return;
+        }
         nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
@@ -3170,6 +3248,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
         // }
+        if (!obj.isTemplateBlock){
+            updateFromTemplateBlock(obj);
+        }
         var block = elem(
             'div',
             {
@@ -3238,11 +3319,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         //     console.log('instantiated block %o from description %o', block, obj);
         //}
         return block;
-    }
+    };
 
     // Block Event Handlers
-
-    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -3308,9 +3387,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
                     spec.isTemplateBlock = true;
                     spec.isLocal = true;
                     spec.group = block.dataset.group;
-                    if (!spec.seqNum){
+                    // if (!spec.seqNum){
                         spec.seqNum = block.dataset.seqNum;
-                    }
+                    // }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
                     if(!spec.id){
@@ -3373,11 +3452,12 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
-            socket.appendChild(holder)
+            socket.appendChild(holder);
         }
         if (desc.block){
             socket.dataset.block = desc.block;
         }
+        socket.dataset.seqNum = blockdesc.seqNum;
         if (!blockdesc.isTemplateBlock){
             //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
@@ -3404,14 +3484,15 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
-    }
+    };
 
 
     function socketDesc(socket){
-        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
+        var parentBlock = wb.closest(socket, '.block');
+        var isTemplate = !!parentBlock.dataset.isTemplateBlock;
         var desc = {
-            name: socket.dataset.name,
-        }
+            name: socket.dataset.name
+        };
         // optional defined settings
         if (socket.dataset.type){
             desc.type = socket.dataset.type;
@@ -3429,11 +3510,14 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
-        if (isTemplate) return desc;
+        if (isTemplate) 
+        {
+            return desc;
+        }
         var uName = wb.findChild(socket, '.name').textContent;
-        var uEle = wb.findChild(socket, '.name')
+        var uEle = wb.findChild(socket, '.name');
         
-        if (desc.name !== uName){
+        if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
         var holder = wb.findChild(socket, '.holder');
@@ -3449,18 +3533,36 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         return desc;
     }
 
+    function updateFromTemplateBlock(obj){
+        // Retrieve the things we don't need to duplicate in every instance block description
+        var tB = blockRegistry[obj.scriptId];
+        if (!tB){
+            console.error('Error: could not get template block for  for %o', obj);
+            return obj;
+        }
+        obj.blocktype = tB.blocktype;
+        obj.group = tB.group;
+        obj.help = tB.help;
+        obj.type = tB.type;
+    }
+
     function blockDesc(block){
         var label = wb.findChild(block, '.label');
         var sockets = wb.findChildren(label, '.socket');
         var desc = {
-            blocktype: block.dataset.blocktype,
-            group: block.dataset.group,
             id: block.id,
-            help: block.title,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        };
+
+        if (block.dataset.group === 'scripts_workspace'){
+            desc.blocktype = block.dataset.blocktype;
+            desc.group = block.dataset.group;
+            desc.help = block.dataset.help;
+            desc.type = block.dataset.type;            
         }
+
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
@@ -3475,9 +3577,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         }
         if (block.dataset.localSource){
             desc.localSource = block.dataset.localSource;
-        }
-        if (block.dataset.type){
-            desc.type = block.dataset.type;
         }
         if (block.dataset.locals){
             desc.locals = JSON.parse(block.dataset.locals);
@@ -3499,10 +3598,14 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         ////////////////////
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers
+        // UPDATE:
+        // No, it was because we want cloned blocks (and the locals they create) to get 
+        // new sequence numbers. But, if the block being clones is an instance of a local then we
+        // don't want to get a new sequence number.
         // /////////////////
-        // if (!blockdesc.isLocal){
-        //     delete blockdesc.seqNum;
-        // }
+        if (!block.dataset.localSource){
+            delete blockdesc.seqNum;
+        }
         if (blockdesc.isTemplateBlock){
             blockdesc.scriptId = block.id;            
         }
@@ -3523,6 +3626,52 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         // return a block for block types
         var value;
         var type = obj.type;
+        
+        if(type === 'boolean')
+        {
+            obj.options = 'boolean';
+        }
+        
+        if(typeof obj.options !== 'undefined')
+        {
+            // DONE : #24
+            // DONE : #227
+            var choice = elem('select');
+            var list = wb.choiceLists[obj.options];
+            
+            if(Array.isArray(list))
+            {
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            else
+            {
+                var values = Object.keys(list);
+                
+                values.forEach(function(val){
+                    var option = elem('option', {"value":val}, list[val]);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == val){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            
+            return choice;
+        
+        }
+        
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -3552,19 +3701,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
                 value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
-            case 'boolean':
-                obj.options = 'boolean';
-            case 'choice':
-                var choice = elem('select');
-                wb.choiceLists[obj.options].forEach(function(opt){
-                    var option = elem('option', {}, opt);
-                    var value = obj.uValue || obj.value;
-                    if (value && value === opt){
-                        option.setAttribute('selected', 'selected');
-                    }
-                    choice.appendChild(option);
-                });
-                return choice;
             default:
                 value = obj.uValue || obj.value || '';
         }
@@ -3579,7 +3715,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 
         wb.resize(input);
         return input;
-    }
+    };
 
     function socketValue(holder){
         if (holder.children.length > 1){
@@ -3587,7 +3723,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
+
+            // DONE : #227
+            if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -3607,7 +3745,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
-            wb.findAll('.block[data-scriptId=' + block.dataset.scriptId).forEach(function(elem){
+            wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
                 elem.style.backgroundColor = 'red';
             });
         }
@@ -3632,7 +3770,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
         var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
         return _code2;
-    };
+    }
 
     function changeName(event){
         var nameSpan = event.wbTarget;
@@ -3658,37 +3796,38 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			// console.log('now update all instances too');
-			var source = wb.closest(nameSpan, '.block');
-			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-			instances.forEach(function(elem){
-				wb.find(elem, '.name').textContent = newName;
-			});
+            // console.log('now update all instances too');
+            var source = wb.closest(nameSpan, '.block');
+            var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+            instances.forEach(function(elem){
+                wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
+            });
 
-			//Change name of parent
-			var parent = document.getElementById(source.dataset.localSource);
-			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+            //Change name of parent
+            var parent = document.getElementById(source.dataset.localSource);
+            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-			//Change locals name of parent
-			var parentLocals = JSON.parse(parent.dataset.locals);
-			var localSocket = parentLocals[0].sockets[0];
-			localSocket.name = newName;
-			parent.dataset.locals = JSON.stringify(parentLocals);
+            //Change locals name of parent
+            var parentLocals = JSON.parse(parent.dataset.locals);
+            var localSocket = parentLocals[0].sockets[0];
+            localSocket.name = newName;
+            parent.dataset.locals = JSON.stringify(parentLocals);
 
-			wb.find(parent, '.name').textContent = nameTemplate;
-    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
-		}
-		var action = {
-			undo: function() {
-				propagateChange(oldName);
-			},
-			redo: function() {
-				propagateChange(newName);
-			},
-		}
-		wb.history.add(action);
-		action.redo();
+            wb.find(parent, '.name').textContent = nameTemplate;
+            Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+        }
+        var action = {
+            undo: function() {
+                propagateChange(oldName);
+            },
+            redo: function() {
+                propagateChange(newName);
+            }
+        };
+        wb.history.add(action);
+        action.redo();
     }
 
     function cancelUpdateName(event){
@@ -3705,7 +3844,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         if (event.keyCode === 0x1B /* escape */ ){
             event.preventDefault();
             input.value = input.previousSibling.textContent;
-            input.blur()
+            input.blur();
         }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
             event.preventDefault();
             input.blur();
@@ -3721,6 +3860,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     // Export methods
     wb.Block = Block;
     wb.blockDesc = blockDesc;
+    wb.socketDesc = socketDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
@@ -4023,8 +4163,8 @@ function clearUndoStack(){
 	undoActions.length = 0;
 	currentAction = 0;
 	try{
-		document.querySelector('.undoAction').style.display = 'none';
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
+		document.querySelector('.redoAction').classList.add('disabled');
 	}catch(e){
 		// don't worry if undo ui is not available yet
 	}
@@ -4035,15 +4175,15 @@ function undoLastAction() {
 	currentAction--;
 	undoActions[currentAction].undo();
 	if(currentAction <= 0) {
-		document.querySelector('.undoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
 	}
-	document.querySelector('.redoAction').style.display = '';
+	document.querySelector('.redoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.undoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function redoLastAction() {
@@ -4051,15 +4191,15 @@ function redoLastAction() {
 	undoActions[currentAction].redo();
 	currentAction++;
 	if(currentAction >= undoActions.length) {
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.redoAction').classList.add('disabled');
 	}
-	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.undoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.redoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function addUndoAction(action) {
@@ -4077,8 +4217,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
-	document.querySelector('.undoAction').style.display = '';
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.remove('disabled');
+	document.querySelector('.redoAction').classList.add('disabled');
 	// console.log('undo stack: %s', undoActions.length);
 }
 
@@ -4089,8 +4229,8 @@ wb.history = {
 	clear: clearUndoStack
 }
 
-Event.on('.undoAction', 'click', null, undoLastAction);
-Event.on('.redoAction', 'click', null, redoLastAction);
+Event.on('.undoAction', 'click', ':not(.disabled)', undoLastAction);
+Event.on('.redoAction', 'click', ':not(.disabled)', redoLastAction);
 //begin short-cut implementation for redo and undo
 Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
 Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
@@ -4698,33 +4838,47 @@ wb.onePartDone = onePartDone;
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
+		var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.add('disabled');
+			}
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.remove('disabled');
+			}
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
-	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// This bothers me greatly: runs with the console.log, but not without it
-	    	console.log('running current scripts');
-	    	runFullSize();
-	    }else{
-	    	if (wb.view === 'result'){
-		    	// console.log('we want to run current scripts, but cannot');
-		    }else{
-		    	runWithLayout();
-		    	// console.log('we do not care about current scripts, so there');
-		    }
-	    }
+	    // if (wb.view === 'result' && wb.runCurrentScripts){
+	    // 	// This bothers me greatly: runs with the console.log, but not without it
+	    // 	console.log('running current scripts');
+	    // 	runFullSize();
+	    // }else{
+	    // 	if (wb.view === 'result'){
+		   //  	// console.log('we want to run current scripts, but cannot');
+		   //  }else{
+		   //  	runWithLayout();
+		   //  	// console.log('we do not care about current scripts, so there');
+		   //  }
+	    // }
 	    if (wb.toggleState.scripts_text_view){
 	    	wb.updateScriptsView();
 	    }
-	    if (wb.toggleState.stage){
+	    if (wb.toggleState.stage || wb.view === 'result'){
 	    	// console.log('run current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
@@ -4841,21 +4995,21 @@ wb.onePartDone = onePartDone;
 		}
 	}
 
-	function runFullSize(){
-		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-			wb.hide(wb.find(document.body, sel));
-		});
-		wb.show(wb.find(document.body, '.stage'));
-	}
+	// function runFullSize(){
+	// 	['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+	// 		wb.hide(wb.find(document.body, sel));
+	// 	});
+	// 	wb.show(wb.find(document.body, '.stage'));
+	// }
 
-	function runWithLayout(){
-		['#block_menu', '.workspace'].forEach(function(sel){
-			wb.show(wb.find(document.body, sel));
-		});
-		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-		});
-	}
+	// function runWithLayout(){
+	// 	['#block_menu', '.workspace'].forEach(function(sel){
+	// 		wb.show(wb.find(document.body, sel));
+	// 	});
+	// 	['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+	// 		toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+	// 	});
+	// }
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
@@ -4943,6 +5097,40 @@ wb.onePartDone = onePartDone;
 	});
 	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
 	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+	Event.on('.run-scripts', 'click', null, function(){
+        wb.historySwitchState('result');
+    });
+    Event.on('.show-ide', 'click', null, function(){
+    	wb.historySwitchState('ide');
+    });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
+    });
+    // autorun buttons
+    Event.on('.run-script', 'click', null, function(){
+    	document.body.classList.add('running');
+    	wb.runCurrentScripts(true);
+    });
+    Event.on('.stop-script', 'click', null, function(){
+    	document.body.classList.remove('running');
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-on', 'click', null, function(){
+    	// turn it off
+    	document.body.classList.add('no-autorun');
+    	wb.autorun = false;
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-off', 'click', null, function(){
+    	document.body.classList.remove('no-autorun');
+    	wb.autorun = true;
+    	wb.runCurrentScripts(true);
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;
@@ -5111,7 +5299,7 @@ wb.onePartDone = onePartDone;
 		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
-	Event.on(document.body, 'click', '.toggle', handleToggle);
+	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
 		if (toggleState[name] === undefined){
@@ -5181,8 +5369,13 @@ wb.onePartDone = onePartDone;
         }).join(',') + ']';
     }
 
-    function runCurrentScripts(){
+    function runCurrentScripts(force){
         // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
+        if (!(wb.autorun || force)){
+            // false alarm, we were notified of a script change, but user hasn't asked us to restart script
+            return;
+        }
+        document.body.classList.add('running');
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -5199,9 +5392,6 @@ wb.onePartDone = onePartDone;
     }
     wb.runCurrentScripts = runCurrentScripts;
 
-    Event.on('.run-scripts', 'click', null, function(){
-        wb.historySwitchState('result');
-    });
 
     if (!wb.iframeReady){
         document.querySelector('.stageframe').addEventListener('load', function(event){
@@ -5232,6 +5422,7 @@ wb.onePartDone = onePartDone;
 
     function clearStage(event){
         wb.iframeReady = false;
+        document.body.classList.remove('running');
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     wb.clearStage = clearStage;
@@ -5506,9 +5697,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "when",
-                    "type": "choice",
+                    "type": "string",
                     "options": "keys",
-                    "value": "choice",
+                    "value": "a",
                     "suffix": "key pressed"
                 }
             ]
@@ -5533,9 +5724,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "when",
-                    "type": "choice",
+                    "type": "string",
                     "options": "pointerEvents",
-                    "value": "choice"
+                    "value": ""
                 }
             ]
         },
@@ -6518,7 +6709,7 @@ wb.menu({
                 },
                 {
                     "name": "note",
-                    "type": "choice",
+                    "type": "string",
                     "options": "notes",
                     "value": "A4"
                 }
@@ -6629,13 +6820,13 @@ wb.menu({
                 },
                 {
                     "name": "to play note",
-                    "type": "choice",
+                    "type": "string",
                     "options": "notes",
                     "value": "A4"
                 },
                 {
                     "name": "as ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "durations",
                     "value": "quarter note"
                 },
@@ -6658,7 +6849,7 @@ wb.menu({
                 },
                 {
                     "name": "to rest for a ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "durations",
                     "value": "quarter note"
                 },
@@ -7194,9 +7385,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "global composite operator",
-                    "type": "choice",
+                    "type": "string",
                     "options": "globalCompositeOperators",
-                    "value": "choice"
+                    "value": "source-over"
                 }
             ]
         },
@@ -7271,9 +7462,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "line cap",
-                    "type": "choice",
+                    "type": "string",
                     "options": "linecap",
-                    "value": "choice"
+                    "value": "round"
                 }
             ]
         },
@@ -7285,9 +7476,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "line join",
-                    "type": "choice",
+                    "type": "string",
                     "options": "linejoin",
-                    "value": "choice"
+                    "value": null
                 }
             ]
         },
@@ -7705,9 +7896,9 @@ wb.menu({
                 },
                 {
                     "name": "repeats",
-                    "type": "choice",
+                    "type": "string",
                     "options": "repetition",
-                    "value": "choice"
+                    "value": "repeat"
                 }
             ]
         }
@@ -10270,9 +10461,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "key",
-                    "type": "choice",
+                    "type": "string",
                     "options": "keys",
-                    "value": "choice",
+                    "value": "a",
                     "suffix": "pressed?"
                 }
             ]
@@ -10403,7 +10594,7 @@ wb.menu({
     		"sockets": [
     			{
     				"name": "when device turned",
-    				"type": "choice",
+    				"type": "string",
     				"options": "directions"
     			}
     		]
@@ -11023,9 +11214,9 @@ wb.menu({
                 },
                 {
                     "name": "",
-                    "type": "choice",
+                    "type": "string",
                     "options": "unit",
-                    "value": "choice"
+                    "value": "px"
                 },
                 {
                     "name": "",
@@ -11042,9 +11233,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "text align",
-                    "type": "choice",
+                    "type": "string",
                     "options": "align",
-                    "value": "choice"
+                    "value": "left"
                 }
             ]
         },
@@ -11056,9 +11247,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "text baseline",
-                    "type": "choice",
+                    "type": "string",
                     "options": "baseline",
-                    "value": "choice"
+                    "value": ""
                 }
             ]
         },

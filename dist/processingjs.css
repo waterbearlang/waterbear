@@ -401,9 +401,20 @@ body{
 	flex-direction: column;
 }
 
+.results.hidden{
+	display: none;
+}
+
 .stage{
 	-webkit-flex: 1 0 0;
 	flex: 1 0 0;
+	position: relative;
+}
+
+.buttonmenu{
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 .stageframe{
@@ -417,8 +428,21 @@ body{
 	overflow: auto;
 }
 
-#block_menu, .workspace, .results, .files{
+.blocks-menu, .workspace, .results, .files{
 	overflow: auto;
+}
+
+body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+	display: none;
+}
+body.result .stage, body.result stage.hidden{
+	display: block;
+}
+body.result ul.menu .show-ide{
+	display: inline-block;
+}
+ul.menu .show-ide{
+	display: none;
 }
 
 
@@ -879,8 +903,19 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;
@@ -896,7 +931,7 @@ ul.menu > li > button {
 ul.sub-menu button{
 	text-align: left;
 }
-ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
+ul.menu li button:not(.disabled):hover, ul.menu li ul.sub-menu li button:not(.disabled):hover {
 	background:#555;
 }
 /*Make the parent of sub-menu relative*/
@@ -918,7 +953,7 @@ ul.menu li ul.sub-menu li button {
 	min-width:200px;
 	border-top: 1px solid black;
 }
-ul.menu li ul.sub-menu li button.disabled {
+ul.menu button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {
@@ -969,6 +1004,48 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
 
 .nav:target {
 	display:block;
+}
+
+/* Button Menu in stage */
+
+
+.buttonmenu button{
+	padding-left: 10px;
+	visibility: hidden;
+}
+
+.buttonmenu:hover button{
+	visibility: visible;
+}
+
+.run-script{
+}
+
+.running .buttonmenu .run-script{
+	display: none;
+}
+
+.buttonmenu .stop-script{
+	display: none;
+}
+
+.running .buttonmenu .stop-script{
+	display: inline;
+}
+
+.buttonmenu .autorun-script-on{
+}
+
+.no-autorun .buttonmenu .autorun-script-on{
+	display: none;
+}
+
+.buttonmenu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .buttonmenu .autorun-script-off{
+	display: inline;
 }
 
 
@@ -1025,6 +1102,7 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
   text-decoration: inherit;
   display: inline-block;
   speak: none;
+  margin-right: 4px;
 }
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {

@@ -4861,10 +4861,11 @@ wb.menu = menu;
  *
  */
 
-
+(function(wb){
+	'use strict';
 wb.choiceLists.types.push('sprite');
 wb.choiceLists.rettypes.push('sprite');
-
+})(wb);
 
 /*end languages/javascript/sprite.js*/
 
@@ -4875,7 +4876,8 @@ wb.choiceLists.rettypes.push('sprite');
  *    Support for playing music/sounds using Waterbear
  *
  */
-
+(function(wb){
+	'use strict';
 // Based on an 88-key piano
 wb.choiceLists.notes = [
 	// Octave 0
@@ -4911,12 +4913,17 @@ wb.choiceLists.durations = [
 wb.choiceLists.types.push('voice');
 wb.choiceLists.rettypes.push('voice');
 
+})(wb);
+
 
 /*end languages/javascript/voice.js*/
 
 /*begin languages/javascript/sound.js*/
+(function(wb){
+	'use strict';
 wb.choiceLists.types.push('sound');
 wb.choiceLists.rettypes.push('sound');
+})(wb);
 /*end languages/javascript/sound.js*/
 
 /*begin languages/javascript/array.js*/
@@ -4935,8 +4942,9 @@ wb.choiceLists.rettypes.push('sound');
  *
  */
 
-
+(function(wb){
 // expose these globally so the Block/Label methods can find them
+'use strict';
 wb.choiceLists.unit = ['px', 'em', '%', 'pt'];
 wb.choiceLists.align = ['start', 'end', 'left', 'right', 'center'];
 wb.choiceLists.baseline = ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'];
@@ -4949,7 +4957,7 @@ wb.choiceLists.repetition = ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
 wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 
-
+})(wb);
 
 /*end languages/javascript/canvas.js*/
 
@@ -4973,10 +4981,11 @@ wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'sha
  *
  */
 
-
+(function(wb){
+'use strict';
 wb.choiceLists.types.push('vector');
 wb.choiceLists.rettypes.push('vector');
-
+})(wb);
 
 /*end languages/javascript/vector.js*/
 
@@ -5006,9 +5015,12 @@ wb.choiceLists.rettypes.push('vector');
 
 /*begin languages/javascript/motion.js*/
 // set up choices
+(function(wb) {
+'use strict';
 wb.choiceLists.directions = ["upright", "downright", "downleft", "upleft", "up", "down", "right", "left"];
 wb.choiceLists.types.push('motion');
 wb.choiceLists.rettypes.push('motion');
+})(wb);
 /*end languages/javascript/motion.js*/
 
 /*begin languages/javascript/shape.js*/

@@ -1,6 +1,8 @@
 
 // This was built directly from the formal definition of Levenshtein distance found on Wikipedia
 // It's possible there's a more efficient way of doing it?
+(function(window){
+	'use strict';
 function levenshtein(a,b) {
 	function indicator(i,j) {
 		if(a[i-1] == b[j-1])
@@ -18,3 +20,5 @@ function levenshtein(a,b) {
 	}
 	return helper(a.length,b.length);
 }
+window.levenshtein = levenshtein;
+})(window);

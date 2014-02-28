@@ -1,5 +1,6 @@
 (function(){
 // initialize empty object for fb data
+'use strict';
 var fb = {}
 fb.me = {};
 

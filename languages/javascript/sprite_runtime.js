@@ -1,7 +1,8 @@
 // Sprite Routines
 
 // This uses and embeds code from https://github.com/jriecken/sat-js
-
+(function(window){
+    'use strict';
 function PolySprite(pos,color,points){
     this.color = color;
     this.movementDirection = new SAT.Vector(0, 0);
@@ -36,6 +37,8 @@ function createRectSprite(size,pos,color){
      return rect;
 };
 
+window.createImageSprite = createImageSprite;
+window.createRectSprite = createRectSprite;
 window.PolySprite = PolySprite;
 
 PolySprite.prototype.draw = function(ctx){
@@ -240,3 +243,4 @@ PolySprite.prototype.edgeWrap = function(stage_width, stage_height) {
         this.polygon.pos.y = 0;
     }
 }
+})(window);

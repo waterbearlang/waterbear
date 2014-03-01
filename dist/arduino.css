@@ -239,7 +239,7 @@ body{
 	flex: 0 0 24px;
 }
 
-#block_menu {
+#block_menu, #search_results {
 	height: calc(100% - 24px);
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
@@ -311,7 +311,7 @@ body{
 	overflow: auto;
 }
 
-.blocks-menu, .workspace, .results, .files{
+#block_menu, #search_results, .workspace, .results, .files{
 	overflow: auto;
 }
 
@@ -820,6 +820,21 @@ ul.menu .show-ide{
   color: #CCC;
 }
 
+.search_result {
+  border-left-style: solid;
+  border-left-width: 4px;
+  padding: 12px;
+}
+
+.search_result .keyword {
+  display: block;
+  color: #999;
+  font-size: 0.8em;
+}
+
+.search_result .keyword .match {
+  color: darkgreen;
+}
 
 /*end blocks.css*/
 

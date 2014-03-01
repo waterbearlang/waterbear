@@ -39,7 +39,7 @@ body{
 	flex: 0 0 24px;
 }
 
-#block_menu {
+#block_menu, #search_results {
 	height: calc(100% - 24px);
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
@@ -111,7 +111,7 @@ body{
 	overflow: auto;
 }
 
-.blocks-menu, .workspace, .results, .files{
+#block_menu, #search_results, .workspace, .results, .files{
 	overflow: auto;
 }
 

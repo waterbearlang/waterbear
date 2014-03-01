@@ -2023,23 +2023,39 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var oldQuery = '';
 
     function searchBlock(event) {
+        // Clear input if the clear button is pressed
         var searchTextNode = document.getElementById('search_text');
 
         if (event.target.id == 'search_clear') {
             searchTextNode.value = '';
         }
 
+        // Proceed if the query is changed
         var query = searchTextNode.value.trim().toLowerCase();
 
-        // Detect change to input
         if (oldQuery == query) {
             return;
         } else {
             oldQuery = query;
         }
 
-        var cats = document.querySelectorAll('.accordion-body');
-     
+        var searchResultsNode = document.getElementById('search_results');
+        var blockMenuNode = document.getElementById('block_menu');
+
+        // For non-empty query, show all blocks; otherwise, hide all blocks
+        if (query) {
+            wb.show(searchResultsNode);
+            wb.hide(blockMenuNode);
+
+            while (searchResultsNode.firstChild) {
+                searchResultsNode.removeChild(searchResultsNode.firstChild);
+            }
+        } else {
+            wb.hide(searchResultsNode);
+            wb.show(blockMenuNode);
+            return;
+        }
+
         // Clear suggestions
         var suggestions = [];
         var suggestionsNode = document.getElementById('search_suggestions');
@@ -2047,24 +2063,18 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             suggestionsNode.removeChild(suggestionsNode.firstChild);
         }
 
-        for (var i = 0; i < cats.length; i++) {
-            var matchBlock = false;
-            var blocks = cats[i].getElementsByClassName('block');
+        var groups = document.querySelectorAll('.block-menu');
+     
+        for (var i = 0; i < groups.length; i++) {
+            var blocks = groups[i].getElementsByClassName('block');
 
             for (var j = 0; j < blocks.length; j++) {
-                // Show all blocks for empty query
-                if (!query) {
-                    matchBlock = true;
-                    blocks[j].removeAttribute('style');
-                    continue;
-                }
-
                 // Construct an array of keywords
                 var keywords = [];
 
-                var groupAttr = blocks[j].getAttribute('data-group');
-                if (groupAttr) {
-                    keywords.push(groupAttr);
+                var group = blocks[j].getAttribute('data-group');
+                if (group) {
+                    keywords.push(group);
                 }
 
                 var keywordsAttr = blocks[j].getAttribute('data-keywords');
@@ -2073,11 +2083,11 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 }
 
                 // Find a match
-                var matchKeyword = false;
+                var matchingKeywords = [];
 
                 for (var k = 0; k < keywords.length; k++) {
                     if (keywords[k].indexOf(query) == 0) {
-                        matchKeyword = true;
+                        matchingKeywords.push(keywords[k]);
 
                         if (suggestions.indexOf(keywords[k]) == -1) {
                             suggestions.push(keywords[k]);
@@ -2090,21 +2100,42 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 }
 
                 // Show/hide blocks
-                if (matchKeyword) {
-                    matchBlock = true;
-                    blocks[j].removeAttribute('style');
-                } else {
-                    blocks[j].style.display = 'none';
-                }
-            }
+                if (matchingKeywords.length > 0) {
+                    var resultNode = document.createElement('div');
+                    resultNode.classList.add('search_result');
+                    resultNode.classList.add(group);
+                    resultNode.style.backgroundColor = 'transparent';
 
-            // Show/hide categories
-            if (!query || matchBlock) {
-                cats[i].previousSibling.removeAttribute('style');
-                cats[i].removeAttribute('style');
-            } else {
-                cats[i].previousSibling.style.display = 'none';
-                cats[i].style.display = 'none';
+                    // Block
+                    resultNode.appendChild(blocks[j].cloneNode(true));
+
+                    // Fix result height
+                    var clearNode = document.createElement('div');
+                    clearNode.style.clear = 'both';
+                    resultNode.appendChild(clearNode);
+
+                    // Keyword name
+                    var keywordNode = document.createElement('span');
+                    keywordNode.classList.add('keyword');
+                    var keywordNodeContent = '<span class="keyword">';
+                    keywordNodeContent += '<span class="match">';
+                    keywordNodeContent += matchingKeywords[0].substr(0, query.length);
+                    keywordNodeContent += '</span>';
+                    keywordNodeContent += matchingKeywords[0].substr(query.length);
+
+                    for (var k = 1; k < matchingKeywords.length; k++) {
+                        keywordNodeContent += ', <span class="match">';
+                        keywordNodeContent += matchingKeywords[k].substr(0, query.length);
+                        keywordNodeContent += '</span>';
+                        keywordNodeContent += matchingKeywords[k].substr(query.length);
+                    }
+
+                    keywordNodeContent += '</span>';
+                    keywordNode.innerHTML = keywordNodeContent;
+                    resultNode.appendChild(keywordNode);
+
+                    searchResultsNode.appendChild(resultNode);
+                }
             }
         }
     }

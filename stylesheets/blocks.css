@@ -423,3 +423,18 @@
   color: #CCC;
 }
 
+.search_result {
+  border-left-style: solid;
+  border-left-width: 4px;
+  padding: 12px;
+}
+
+.search_result .keyword {
+  display: block;
+  color: #999;
+  font-size: 0.8em;
+}
+
+.search_result .keyword .match {
+  color: darkgreen;
+}

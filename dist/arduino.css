@@ -14,15 +14,6 @@
 	user-select: none;
 }
 
-.scripts_text_view {
-	-webkit-touch-callout: text;
-	-webkit-user-select: text;
-	-khtml-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
-	user-select: text;
-}
-
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,aside,section,hgroup,footer,nav,figure,header,article,input,textarea,p,blockquote,th,td {
 	margin: 0;
 	padding: 0;
@@ -34,226 +25,51 @@ input{
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.scripts_text_view {
+	-webkit-touch-callout: text;
+	-webkit-user-select: text;
+	-khtml-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+}
+
+.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace{
+	margin: 5px;
+	border: 2px outset #333;
+	padding: 10px;	
+}
+
+.stage{
+	margin: 5px;
+	border: 2px outset #333;
+}
+
+
 /* Scratch-ish Layout Styles */
 
 .content{
 	position: relative;
-	width: 100%;
-	height: 100%;
+}
+
+
+.hidden, .block.hidden{
 	display: none;
 }
 
-body.editor .editor, body.blocks .editor{
-	display: block;
-}
-
-body.editor .result, body.blocks .result{
-	display: none;
-}
-
-body.result .editor{
-	display: none;
-}
-body.result .result{
-	display: block;
-}
-
-.workspace {
-	width: calc(100% - 300px);
-	height: calc(100% - 40px);
-	overflow: hidden;
-	pointer-events: none;
-}
-
-.workspace *{
-	pointer-events: auto;
-}
-
-body.blocks .workspace{
-	padding-left: 0;
-	width: 100%;
-}
-
-.tabbar{
-	height: 36px;
-	padding-left: 36px;
-	padding-right: 36px;
-}
-
-.scripts_workspace, .scripts_text_view {
-	width: 100%;
-	height: 80%;
-	display: none;
-	padding: 15px;
-	padding-top: 0;
-	overflow: scroll;
-}
-
-.scripts_workspace{
-	padding-top: 30px;
-	padding-bottom: 100px;
-}
-
-.workspace.blockview .scripts_workspace{
-	display: block;
-}
-
-.workspace.textview .scripts_text_view{
-	display: block;
-}
-
-#block_menu{
-	float: left;
-	width: 300px;
-	height: 100%;
-	overflow: auto;
-	display: none;
-}
-
-body.editor #block_menu{
-	display: block;
-}
-
-#block_menu .select{
-	padding: 3px 10px;
-	margin-bottom: 1px;
-	font-weight: bold;
-	color: #333;
-	background-color: #CCC;
-	border: 1px solid #333;
-	cursor: pointer;
-}
-
-#block_menu .selected{
-	color: #000;
-	background-color: #EEE;
-}
-
-.option{
-	position: relative;
-	overflow: hidden;
-	padding: 15px;
-}
-
-.option input {
-	cursor: pointer;
-}
-
-.submenu .block {
-	margin-bottom: 20px;
-}
-
-.dropCursor {
-	height: 2px;
-	background-color: red;
-	width: 75%
-	float: left;
-	clear: left;
-}
-
-.chrome_tab{
-	float: left;
-	margin-right: 5px;
-	position: relative;
-	bottom: -2px;
-	border: 1px solid #666;
-	border-bottom: 0px;
-	-webkit-border-top-right-radius: 4px;
-	-webkit-border-top-left-radius: 4px;
-	-moz-border-radius-topright: 4px;
-	-moz-border-radius-topleft: 4px;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
-	width: 24%;
-	background-color: #999;
-	color: #333;
-	z-index: 1;
-	cursor: pointer;
-}
-
-.chrome_tab.selected{
-	background-color: #FFF;
-	color: #000;
-	border-color: #333;
-}
-
-.stage {
-	position: absolute;
-	padding-top: 36px;
-	height: 100%;
-	width: 100%;
-	left: 0;
-	top: 0;
-	pointer-events: none;
-}
-.stage *{
-	pointer-events: auto;
-}
-
-
-.hidden{
-	display: none;
-}
-
-#color_popup{
-	background-color: green;
-	padding: 5px 10px 15px 10px;
-}
-
-#color_contents{
-	width: 300px;
-	height: 300px;
-	background-color: blue;
-}
-
-/* Description of saves */
-.description{
-	font-size: .8em;
-	color: #515151;
-}
-
-/* These additions should only change the appearance of the tabs*/
-
-
-.chrome_tab {
-	margin-left: 5px;
-	position: relative;
-	border: 1px solid #666;
-	border-bottom: 0px;
-	cursor: pointer;
-	width: 15%;
-	background-color: #999;
-	color: #F2F2F2;
-	z-index: 1;
-	padding: 5px;
-	margin-bottom: 4px;
-}
-
-.chrome_tab.selected {
-	background-color: #4D736D;
-	color: white;
-	border-color: #333;
-	font-weight: bold;
-}
-
-/* Lists of scripts to scroll. Used in demo & restore dialog*/
-.scrollList{
-	max-height: 300px;
-	overflow-y:scroll;
-}
 
 /* ACCORDION */
 
 #block_menu{
-	position: relative;
+	/*position: relative;*/
 	cursor: pointer;
 	margin-top: 1px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
+	/*-moz-border-radius: 4px;*/
+	/*-webkit-border-radius: 4px;*/
+	/*border-radius: 4px;*/
 	border-width: 0;
-	border-style: solid;
-	font-weight: normal;
+	/*border-style: solid;*/
+	/*font-weight: normal;*/
 	color: #252323;
 	margin: 0;
 	padding: 0;
@@ -277,13 +93,22 @@ body.editor #block_menu{
 	display: block
 }
 
+.accordion-description{
+	padding: 0em 0em 1em 0em;
+	font-size: .9em;
+	margin-left: -15px; /* i hate this */
+}
+
 /* SVG is in place for text-sizing only */
 
-svg{
-	position:absolute;
-	left: -1000px;
-	/*display: none;*/
+.sekrit-svg{
+	position: absolute;
+	left: -1000px; /* cannot use with display: none */
+	top: 0; /* because it was screwing up layout even hidden */
+	width: 400px;
+	height: 100px;
 }
+
 svg text{
 	/* This should be the same font used for <input> */
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -298,12 +123,17 @@ a.disabled {
 }
 h1.title {
 	margin:0;
-	float: left;
-	display: block;
+	display: inline;
 	padding:7px;
 	font-size: 20px;
 	color: #fff;
-	text-shadow: 0 2px 0 #000;
+	vertical-align: top;
+	line-height: 34px;
+}
+
+.titlebar{
+	background-color: #111111;
+	color: #FFFFFF;
 }
 
 @media (max-width: 600px) {
@@ -311,6 +141,14 @@ h1.title {
 		background:#333;
 		width:100%;
 	}
+}
+
+/* cursor for drag and drop */
+
+.drop-cursor {
+	height: 2px;
+	background-color: red;
+	width: 75%
 }
 
 /* Context menu */
@@ -359,6 +197,187 @@ h1.title {
 
 /*end workspace.css*/
 
+/*begin layout.css*/
+body{
+	display: -webkit-flex;
+	display: flex;
+   -webkit-flex-direction: column; /* works with row or column */
+   flex-direction: column;
+}
+
+.content{
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row; /* works with row or column */
+   flex-direction: row;
+   -webkit-flex: 1 0 0;
+   flex: 1 0 0;
+}
+
+.titlebar{
+	-webkit-flex: 0 0 34px;
+	flex: 0 0 34px;
+}
+
+.nav{
+	-webkit-flex: 0 0 34px;
+	flex: 0 0 34px;
+}
+
+#block_menu{
+	-webkit-flex: 0 0 300px;
+	flex: 0 0 300px;
+}
+
+.workspace{
+	-webkit-flex: 3 0 0;
+	flex: 3 0 0;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.tutorial{
+	-webkit-flex: 1 1 0;
+	flex: 1 1 0;
+	background-color: #7fdbff;
+}
+
+.scratchpad{
+	overflow: scroll;
+	position:relative;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	background-color: #FFF;
+	color: rgba(0,0,0,0.4);
+}
+
+.scripts_workspace{
+	-webkit-flex: 3 0 0;
+	flex: 3 0 0;
+	overflow: auto;
+}
+
+.results{
+	-webkit-flex: 0 0 400px;
+	flex: 1 1 400px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.results.hidden{
+	display: none;
+}
+
+.stage{
+	-webkit-flex: 1 0 0;
+	flex: 1 0 0;
+	position: relative;
+}
+
+.buttonmenu{
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.stageframe{
+	width: 100%;
+	height: 100%;
+}
+
+.scripts_text_view{
+	-webkit-flex: 1 0 0;
+	flex: 1 0 0;
+	overflow: auto;
+}
+
+.blocks-menu, .workspace, .results, .files{
+	overflow: auto;
+}
+
+body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+	display: none;
+}
+body.result .stage, body.result stage.hidden{
+	display: block;
+}
+body.result ul.menu .show-ide{
+	display: inline-block;
+}
+ul.menu .show-ide{
+	display: none;
+}
+
+
+@media all and (max-width:360px) {
+	.nav, h1.title, .scripts_text_view{
+		display: none;
+	}
+	.mobilenav{
+		-webkit-flex: 0 0 30px;
+		flex: 0 0 30px;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-direction: row;
+		flex-direction: row;
+		order: 4;
+	}
+	.mobilenav button{
+		-webkit-flex: 1 0 auto;
+		flex: 1 0 auto;
+		background-color: #FFF;
+		color: #111111;
+	}
+	.mobilenav button.current-button{
+		background-color: #111111;
+		color: #FFF;
+		pointer-events: none;
+	}
+	.content{
+		display: block;
+		position: relative;
+		overflow: hidden;
+	}
+	#block_menu, .workspace, .results, .files{
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 100%;
+		transition-property: left;
+	}
+	.workspace{
+		left: 0;
+	}
+	.stage{
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+	}
+	.files button{
+		width: 100%;
+		height: 30px;
+		font-size: 24px;
+		line-height: 30px;
+		text-align: center;
+	}
+}
+
+@media all and (min-width:361px) {
+	.mobilenav, .files{
+		display: none;
+	}
+}
+
+
+/*end layout.css*/
+
 /*begin blocks.css*/
 /* Styles for steps and containers */
 *{
@@ -367,6 +386,16 @@ h1.title {
 
 .block, .socket, .autosocket{
   position: relative;
+}
+
+.block, .block * {
+  cursor: move;
+  cursor: -moz-grab;
+}
+
+.block .socket input,
+.block .socket select {
+	cursor: auto;
 }
 
 .scripts_workspace > .block, .submenu > .block{
@@ -388,10 +417,16 @@ h1.title {
 
 .socket{
   position: relative;
-  display: inline-block;
+  display: block;
   height:100%;
   vertical-align:middle;
+  text-align: right;
 }
+
+.scripts_workspace > .label >  .socket{
+  text-align: left;
+}
+
 .socket > *{
   height:100%;
   vertical-align:middle;
@@ -438,8 +473,10 @@ h1.title {
   white-space: nowrap;
   cursor: pointer;
   min-width: 75px;
+  max-width: 300px;
   float: left;
   clear: left;
+  overflow-x: visible;
 }
 
 .locals .expression{
@@ -664,6 +701,7 @@ h1.title {
 }
 .block.scripts_workspace{
     width: 100%;
+    max-width: 100%;
     border: 0;
 }
 .block.scripts_workspace:before{
@@ -690,6 +728,7 @@ h1.title {
   margin-right: 1em;
   margin-left -1em;
   display: inline-block;
+  cursor: pointer;
 }
 
 .disclosure:before{
@@ -700,16 +739,19 @@ h1.title {
   content: "▶"
 }
 
-.block_menu .disclosure{
+.block-menu .disclosure{
   display: none;
+}
+
+#block_menu .accordion-header.hidden,
+#block_menu.settings .accordion-body,
+#block_menu .accordion-header.hidden + .accordion-body {
+	display: none;
 }
 
 #block_menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;
-}
-#block_menu .accordion-header.hidden {
-	display:none;
 }
 
 /*end blocks.css*/
@@ -728,8 +770,19 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;
@@ -737,13 +790,15 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 	display:inline-block;
 	min-width:60px;
 	border: 0;
-	border-top: 1px solid black;
 	margin: 0;
 }
 ul.menu > li > button {
 	text-align:center;
 }
-ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
+ul.sub-menu button{
+	text-align: left;
+}
+ul.menu li button:not(.disabled):hover, ul.menu li ul.sub-menu li button:not(.disabled):hover {
 	background:#555;
 }
 /*Make the parent of sub-menu relative*/
@@ -754,18 +809,46 @@ ul.menu li {
 ul.menu li ul.sub-menu {
 	display:none;
 	position: absolute;
-	top: 35px;
+	top: 32px;
 	left: 0;
-	width: 100px;
 	z-index:1000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 400px;
 }
 ul.menu li ul.sub-menu li button {
 	min-width:200px;
+	border-top: 1px solid black;
 }
-ul.menu li ul.sub-menu li button.disabled {
+ul.menu button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {
+	display:block;
+}
+ul.menu li ul.sub-menu li.separator button {
+	border-top-width: 2px;
+}
+	
+
+/*sub sub menu*/
+ul.menu li ul.sub-menu li ul.sub-menu {
+	display:none;
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	width: 100px;
+	z-index:1000;
+	border-left: solid 1px;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button {
+	min-width:200px;
+	border-top: 1px solid black;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button.disabled {
+	background:#777;
+}
+ul.menu li ul.sub-menu li:hover ul.sub-menu {
 	display:block;
 }
 
@@ -774,29 +857,64 @@ ul.menu li:hover ul.sub-menu {
 }
 /* Mobile nav */
 @media (max-width: 600px) {
-	#nav{
+	.nav{
 		display:none;
 	}
-	.menu_buttons {
-		display:block;
-	}
-	#nav li, #nav li button {
+	.nav li, .nav li button {
 		width:100%;
 
 	}
-	#nav li {
+	.nav li {
 		border-top:1px solid black;
 	}
 }
 
-#nav:target {
+.nav:target {
 	display:block;
 }
 
-/* Hide nav on result and blocks pages */
-body.result nav, body.blocks nav {
-	display:none;
+/* Button Menu in stage */
+
+
+.buttonmenu button{
+	padding-left: 10px;
+	visibility: hidden;
 }
+
+.buttonmenu:hover button{
+	visibility: visible;
+}
+
+.run-script{
+}
+
+.running .buttonmenu .run-script{
+	display: none;
+}
+
+.buttonmenu .stop-script{
+	display: none;
+}
+
+.running .buttonmenu .stop-script{
+	display: inline;
+}
+
+.buttonmenu .autorun-script-on{
+}
+
+.no-autorun .buttonmenu .autorun-script-on{
+	display: none;
+}
+
+.buttonmenu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .buttonmenu .autorun-script-off{
+	display: inline;
+}
+
 
 /*end menu.css*/
 
@@ -830,8 +948,8 @@ body.result nav, body.blocks nav {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('fontawesome-webfont.eot');
-  src: url('fontawesome-webfont.eot') format('embedded-opentype'), url('fontawesome-webfont.woff') format('woff'), url('fontawesome-webfont.ttf') format('truetype'), url('fontawesome-webfont.svg#fontawesomeregular') format('svg');
+  src: url('../stylesheets/fonts/fontawesome-webfont.eot');
+  src: url('../stylesheets/fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('../stylesheets/fonts/fontawesome-webfont.woff') format('woff'), url('../stylesheets/fonts/fontawesome-webfont.ttf') format('truetype'), url('../stylesheets/fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -844,13 +962,14 @@ body.result nav, body.blocks nav {
   font-style: normal;
   text-decoration: inherit;
   -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
+  margin-right: .3em;
 }
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
   text-decoration: inherit;
   display: inline-block;
   speak: none;
+  margin-right: 4px;
 }
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {

@@ -82,9 +82,9 @@
             "sockets": [
                 {
                     "name": "color mode",
-                    "type": "choice",
+                    "type": "string",
                     "options": "mode",
-                    "value": "choice"
+                    "value": ""
                 },
                 {
                     "name": "range",

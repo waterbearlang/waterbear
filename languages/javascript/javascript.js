@@ -37,8 +37,13 @@
         }).join(',') + ']';
     }
 
-    function runCurrentScripts(){
-        // console.log('runCurrentScripts');
+    function runCurrentScripts(force){
+        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
+        if (!(wb.autorun || force)){
+            // false alarm, we were notified of a script change, but user hasn't asked us to restart script
+            return;
+        }
+        document.body.classList.add('running');
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
@@ -47,13 +52,14 @@
             console.log('ready to run script, let us proceed to the running of said script');
         }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
+        // update size of frame
+        var iframe = document.querySelector('.stageframe');
+        iframe.style.width =  iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
 
-    Event.on('.run-scripts', 'click', null, function(){
-        wb.historySwitchState('result');
-    });
 
     if (!wb.iframeReady){
         document.querySelector('.stageframe').addEventListener('load', function(event){
@@ -83,8 +89,11 @@
     }
 
     function clearStage(event){
+        wb.iframeReady = false;
+        document.body.classList.remove('running');
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
+    wb.clearStage = clearStage;
     Event.on('.clear-stage', 'click', null, clearStage);
     Event.on('.edit-script', 'click', null, clearStage);
 

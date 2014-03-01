@@ -5,12 +5,16 @@
 function Timer(){
     this.time = 0;
     this.start_time = Date.now();
+    this.listeners = [];
     this.update_time();
 }
 
 Timer.prototype.update_time = function(){
     var self = this;
     this.time = Math.round(Date.now() - this.start_time);
+    this.listeners.forEach(function(listener){
+        listener();
+    })
     setTimeout(function(){self.update_time()}, 1000);
 };
 
@@ -22,6 +26,10 @@ Timer.prototype.reset = function(){
 Timer.prototype.value = function(){
     return this.time;
 };
+
+Timer.prototype.registerListener = function(fn){
+    this.listeners.push(fn);
+}
 
 
 // Encapsulate workspace-specific state to allow one block to build on the next
@@ -90,6 +98,18 @@ function Global(){
     this.mouse_down = false;
     this.subscribeMouseEvents();
     this.subscribeKeyboardEvents();
+    var g = this;
+    this.timer.registerListener(function(){
+        if (g.stage_width !== g.stage.clientWidth || g.stage_height !== g.stage.clientHeight){
+            g.stage_width = g.stage.clientWidth;
+            g.stage_height = g.stage.clientHeight;
+            g.stage_center_x = g.stage_width / 2;
+            g.stage_center_y = g.stage_height / 2;
+            local.canvas.setAttribute("width", global.stage_width);
+            local.canvas.setAttribute("height", global.stage_width);
+            console.log('updated stage size: %s, %s', global.stage_width, global.stage_height);
+        }
+    })
 };
 
 Global.prototype.subscribeMouseEvents = function(){
@@ -183,15 +203,7 @@ function range(start, end, step){
 }
 
 
-function randint(start, stop){
-    // return an integer between start and stop, inclusive
-    if (stop === undefined){
-        stop = start;
-        start = 0;
-    }
-    var factor = stop - start + 1;
-    return Math.floor(Math.random() * factor) + start;
-}
+
 
 function angle(shape){
     // return the angle of rotation

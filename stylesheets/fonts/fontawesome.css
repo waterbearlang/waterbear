@@ -27,8 +27,8 @@
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('fontawesome-webfont.eot');
-  src: url('fontawesome-webfont.eot') format('embedded-opentype'), url('fontawesome-webfont.woff') format('woff'), url('fontawesome-webfont.ttf') format('truetype'), url('fontawesome-webfont.svg#fontawesomeregular') format('svg');
+  src: url('../stylesheets/fonts/fontawesome-webfont.eot');
+  src: url('../stylesheets/fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('../stylesheets/fonts/fontawesome-webfont.woff') format('woff'), url('../stylesheets/fonts/fontawesome-webfont.ttf') format('truetype'), url('../stylesheets/fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -41,13 +41,14 @@
   font-style: normal;
   text-decoration: inherit;
   -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
+  margin-right: .3em;
 }
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
   text-decoration: inherit;
   display: inline-block;
   speak: none;
+  margin-right: 4px;
 }
 /* makes the font 33% larger relative to the icon container */
 .icon-large:before {

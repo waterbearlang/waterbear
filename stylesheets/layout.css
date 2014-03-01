@@ -1,0 +1,177 @@
+body{
+	display: -webkit-flex;
+	display: flex;
+   -webkit-flex-direction: column; /* works with row or column */
+   flex-direction: column;
+}
+
+.content{
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row; /* works with row or column */
+   flex-direction: row;
+   -webkit-flex: 1 0 0;
+   flex: 1 0 0;
+}
+
+.titlebar{
+	-webkit-flex: 0 0 34px;
+	flex: 0 0 34px;
+}
+
+.nav{
+	-webkit-flex: 0 0 34px;
+	flex: 0 0 34px;
+}
+
+#block_menu{
+	-webkit-flex: 0 0 300px;
+	flex: 0 0 300px;
+}
+
+.workspace{
+	-webkit-flex: 3 0 0;
+	flex: 3 0 0;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.tutorial{
+	-webkit-flex: 1 1 0;
+	flex: 1 1 0;
+	background-color: #7fdbff;
+}
+
+.scratchpad{
+	overflow: scroll;
+	position:relative;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	background-color: #FFF;
+	color: rgba(0,0,0,0.4);
+}
+
+.scripts_workspace{
+	-webkit-flex: 3 0 0;
+	flex: 3 0 0;
+	overflow: auto;
+}
+
+.results{
+	-webkit-flex: 0 0 400px;
+	flex: 1 1 400px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+.results.hidden{
+	display: none;
+}
+
+.stage{
+	-webkit-flex: 1 0 0;
+	flex: 1 0 0;
+	position: relative;
+}
+
+.buttonmenu{
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.stageframe{
+	width: 100%;
+	height: 100%;
+}
+
+.scripts_text_view{
+	-webkit-flex: 1 0 0;
+	flex: 1 0 0;
+	overflow: auto;
+}
+
+.blocks-menu, .workspace, .results, .files{
+	overflow: auto;
+}
+
+body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+	display: none;
+}
+body.result .stage, body.result stage.hidden{
+	display: block;
+}
+body.result ul.menu .show-ide{
+	display: inline-block;
+}
+ul.menu .show-ide{
+	display: none;
+}
+
+
+@media all and (max-width:360px) {
+	.nav, h1.title, .scripts_text_view{
+		display: none;
+	}
+	.mobilenav{
+		-webkit-flex: 0 0 30px;
+		flex: 0 0 30px;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-direction: row;
+		flex-direction: row;
+		order: 4;
+	}
+	.mobilenav button{
+		-webkit-flex: 1 0 auto;
+		flex: 1 0 auto;
+		background-color: #FFF;
+		color: #111111;
+	}
+	.mobilenav button.current-button{
+		background-color: #111111;
+		color: #FFF;
+		pointer-events: none;
+	}
+	.content{
+		display: block;
+		position: relative;
+		overflow: hidden;
+	}
+	#block_menu, .workspace, .results, .files{
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 100%;
+		transition-property: left;
+	}
+	.workspace{
+		left: 0;
+	}
+	.stage{
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+	}
+	.files button{
+		width: 100%;
+		height: 30px;
+		font-size: 24px;
+		line-height: 30px;
+		text-align: center;
+	}
+}
+
+@media all and (min-width:361px) {
+	.mobilenav, .files{
+		display: none;
+	}
+}
+

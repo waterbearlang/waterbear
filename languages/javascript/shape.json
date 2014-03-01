@@ -1,5 +1,6 @@
 {
     "name": "Shapes",
+    "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
     "blocks": [
         {
             "deprecated": true,
@@ -10,8 +11,7 @@
             "sockets": [
                 {
                     "name": "clear rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -24,13 +24,12 @@
             "sockets": [
                 {
                     "name": "fill circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -48,7 +47,7 @@
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "30"
+                    "value": 30
                 },
                 {
                     "name": "and color",
@@ -66,13 +65,12 @@
             "sockets": [
                 {
                     "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -84,18 +82,16 @@
             "sockets": [
                 {
                     "name": "stroke circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "and color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -108,13 +104,12 @@
             "sockets": [
                 {
                     "name": "stroke and fill circle at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 },
                 {
                     "name": "with radius",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -127,8 +122,7 @@
             "sockets": [
                 {
                     "name": "fill rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -140,13 +134,11 @@
             "sockets": [
                 {
                     "name": "fill rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "with color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -181,13 +173,11 @@
             "sockets": [
                 {
                     "name": "stroke rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "with color",
-                    "type": "color",
-                    "value": null
+                    "type": "color"
                 }
             ]
         },
@@ -200,8 +190,7 @@
             "sockets": [
                 {
                     "name": "stroke rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -215,22 +204,22 @@
                 {
                     "name": "fill and stroke rect x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "height",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },

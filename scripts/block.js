@@ -17,7 +17,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -27,12 +27,15 @@
     function newSeqNum(){
         nextSeqNum++;
         return nextSeqNum;
-    };
+    }
 
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
-        if (!seqNum) return;
+        if (!seqNum)
+        {
+            return;
+        }
         nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
@@ -87,6 +90,9 @@
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
         // }
+        if (!obj.isTemplateBlock){
+            updateFromTemplateBlock(obj);
+        }
         var block = elem(
             'div',
             {
@@ -156,11 +162,9 @@
         //     console.log('instantiated block %o from description %o', block, obj);
         //}
         return block;
-    }
+    };
 
     // Block Event Handlers
-
-    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -226,9 +230,9 @@
                     spec.isTemplateBlock = true;
                     spec.isLocal = true;
                     spec.group = block.dataset.group;
-                    if (!spec.seqNum){
+                    // if (!spec.seqNum){
                         spec.seqNum = block.dataset.seqNum;
-                    }
+                    // }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
                     if(!spec.id){
@@ -291,11 +295,12 @@
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
-            socket.appendChild(holder)
+            socket.appendChild(holder);
         }
         if (desc.block){
             socket.dataset.block = desc.block;
         }
+        socket.dataset.seqNum = blockdesc.seqNum;
         if (!blockdesc.isTemplateBlock){
             //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
@@ -322,14 +327,15 @@
             socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
-    }
+    };
 
 
     function socketDesc(socket){
-        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
+        var parentBlock = wb.closest(socket, '.block');
+        var isTemplate = !!parentBlock.dataset.isTemplateBlock;
         var desc = {
-            name: socket.dataset.name,
-        }
+            name: socket.dataset.name
+        };
         // optional defined settings
         if (socket.dataset.type){
             desc.type = socket.dataset.type;
@@ -347,11 +353,14 @@
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
-        if (isTemplate) return desc;
+        if (isTemplate) 
+        {
+            return desc;
+        }
         var uName = wb.findChild(socket, '.name').textContent;
-        var uEle = wb.findChild(socket, '.name')
+        var uEle = wb.findChild(socket, '.name');
         
-        if (desc.name !== uName){
+        if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
         var holder = wb.findChild(socket, '.holder');
@@ -367,18 +376,36 @@
         return desc;
     }
 
+    function updateFromTemplateBlock(obj){
+        // Retrieve the things we don't need to duplicate in every instance block description
+        var tB = blockRegistry[obj.scriptId];
+        if (!tB){
+            console.error('Error: could not get template block for  for %o', obj);
+            return obj;
+        }
+        obj.blocktype = tB.blocktype;
+        obj.group = tB.group;
+        obj.help = tB.help;
+        obj.type = tB.type;
+    }
+
     function blockDesc(block){
         var label = wb.findChild(block, '.label');
         var sockets = wb.findChildren(label, '.socket');
         var desc = {
-            blocktype: block.dataset.blocktype,
-            group: block.dataset.group,
             id: block.id,
-            help: block.title,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        };
+
+        if (block.dataset.group === 'scripts_workspace'){
+            desc.blocktype = block.dataset.blocktype;
+            desc.group = block.dataset.group;
+            desc.help = block.dataset.help;
+            desc.type = block.dataset.type;            
         }
+
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
@@ -393,9 +420,6 @@
         }
         if (block.dataset.localSource){
             desc.localSource = block.dataset.localSource;
-        }
-        if (block.dataset.type){
-            desc.type = block.dataset.type;
         }
         if (block.dataset.locals){
             desc.locals = JSON.parse(block.dataset.locals);
@@ -417,10 +441,14 @@
         ////////////////////
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers
+        // UPDATE:
+        // No, it was because we want cloned blocks (and the locals they create) to get 
+        // new sequence numbers. But, if the block being clones is an instance of a local then we
+        // don't want to get a new sequence number.
         // /////////////////
-        // if (!blockdesc.isLocal){
-        //     delete blockdesc.seqNum;
-        // }
+        if (!block.dataset.localSource){
+            delete blockdesc.seqNum;
+        }
         if (blockdesc.isTemplateBlock){
             blockdesc.scriptId = block.id;            
         }
@@ -441,6 +469,52 @@
         // return a block for block types
         var value;
         var type = obj.type;
+        
+        if(type === 'boolean')
+        {
+            obj.options = 'boolean';
+        }
+        
+        if(typeof obj.options !== 'undefined')
+        {
+            // DONE : #24
+            // DONE : #227
+            var choice = elem('select');
+            var list = wb.choiceLists[obj.options];
+            
+            if(Array.isArray(list))
+            {
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            else
+            {
+                var values = Object.keys(list);
+                
+                values.forEach(function(val){
+                    var option = elem('option', {"value":val}, list[val]);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == val){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            
+            return choice;
+        
+        }
+        
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -470,19 +544,6 @@
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
                 value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
-            case 'boolean':
-                obj.options = 'boolean';
-            case 'choice':
-                var choice = elem('select');
-                wb.choiceLists[obj.options].forEach(function(opt){
-                    var option = elem('option', {}, opt);
-                    var value = obj.uValue || obj.value;
-                    if (value && value === opt){
-                        option.setAttribute('selected', 'selected');
-                    }
-                    choice.appendChild(option);
-                });
-                return choice;
             default:
                 value = obj.uValue || obj.value || '';
         }
@@ -497,7 +558,7 @@
 
         wb.resize(input);
         return input;
-    }
+    };
 
     function socketValue(holder){
         if (holder.children.length > 1){
@@ -505,7 +566,9 @@
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
+
+            // DONE : #227
+            if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -550,7 +613,7 @@
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
         var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
         return _code2;
-    };
+    }
 
     function changeName(event){
         var nameSpan = event.wbTarget;
@@ -576,37 +639,38 @@
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			// console.log('now update all instances too');
-			var source = wb.closest(nameSpan, '.block');
-			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-			instances.forEach(function(elem){
-				wb.find(elem, '.name').textContent = newName;
-			});
+            // console.log('now update all instances too');
+            var source = wb.closest(nameSpan, '.block');
+            var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+            instances.forEach(function(elem){
+                wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
+            });
 
-			//Change name of parent
-			var parent = document.getElementById(source.dataset.localSource);
-			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+            //Change name of parent
+            var parent = document.getElementById(source.dataset.localSource);
+            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-			//Change locals name of parent
-			var parentLocals = JSON.parse(parent.dataset.locals);
-			var localSocket = parentLocals[0].sockets[0];
-			localSocket.name = newName;
-			parent.dataset.locals = JSON.stringify(parentLocals);
+            //Change locals name of parent
+            var parentLocals = JSON.parse(parent.dataset.locals);
+            var localSocket = parentLocals[0].sockets[0];
+            localSocket.name = newName;
+            parent.dataset.locals = JSON.stringify(parentLocals);
 
-			wb.find(parent, '.name').textContent = nameTemplate;
-    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
-		}
-		var action = {
-			undo: function() {
-				propagateChange(oldName);
-			},
-			redo: function() {
-				propagateChange(newName);
-			},
-		}
-		wb.history.add(action);
-		action.redo();
+            wb.find(parent, '.name').textContent = nameTemplate;
+            Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+        }
+        var action = {
+            undo: function() {
+                propagateChange(oldName);
+            },
+            redo: function() {
+                propagateChange(newName);
+            }
+        };
+        wb.history.add(action);
+        action.redo();
     }
 
     function cancelUpdateName(event){
@@ -623,7 +687,7 @@
         if (event.keyCode === 0x1B /* escape */ ){
             event.preventDefault();
             input.value = input.previousSibling.textContent;
-            input.blur()
+            input.blur();
         }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
             event.preventDefault();
             input.blur();
@@ -734,6 +798,7 @@
     // Export methods
     wb.Block = Block;
     wb.blockDesc = blockDesc;
+    wb.socketDesc = socketDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;

@@ -84,9 +84,20 @@ body{
 	flex-direction: column;
 }
 
+.results.hidden{
+	display: none;
+}
+
 .stage{
 	-webkit-flex: 1 0 0;
 	flex: 1 0 0;
+	position: relative;
+}
+
+.buttonmenu{
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 .stageframe{
@@ -100,8 +111,21 @@ body{
 	overflow: auto;
 }
 
-#block_menu, .workspace, .results, .files{
+.blocks-menu, .workspace, .results, .files{
 	overflow: auto;
+}
+
+body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+	display: none;
+}
+body.result .stage, body.result stage.hidden{
+	display: block;
+}
+body.result ul.menu .show-ide{
+	display: inline-block;
+}
+ul.menu .show-ide{
+	display: none;
 }
 
 

@@ -1841,6 +1841,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 /*begin ajax.js*/
 (function (global) {
+    'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
         return e
@@ -1855,7 +1856,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return n
     };
 
-    ajax = {};
+    var ajax = {};
     ajax.x = function () {
         try {
             return new ActiveXObject('Msxml2.XMLHTTP')
@@ -1888,7 +1889,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         x.open(m, u, true);
         x.onreadystatechange = function () {
             if (x.readyState == 4 && x.status < 400) {
-                cType = x.getResponseHeader("Content-Type");
+                var cType = x.getResponseHeader("Content-Type");
                 f(x.responseText, cType);
             } else if (x.readyState == 4) {
                 if (e == undefined) {
@@ -1943,7 +1944,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-
+'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
 	    var qparams = {},
@@ -1995,6 +1996,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -2007,33 +2009,36 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
-    };
+    }
 
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
-    };
+    }
 
     function hide(elem){
         elem.classList.add('hidden');
-    };
+    }
 
     function show(elem){
         elem.classList.remove('hidden');
-    };
+    }
 
     var svgText = document.querySelector('.resize-tester');
     function resize(input){
-        if (!input) return;
+        if (!input)
+        {
+            return;
+        }
         if (input.wbTarget){
             input = input.wbTarget;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
-    };
+    }
 
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
@@ -2041,7 +2046,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
     function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
-    };
+    }
 
 
     function overlapRect(r1, r2){ // determine area of overlap between two rects
@@ -2051,24 +2056,24 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (r1.bottom < r2.top){ return 0; }
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
-    };
+    }
 
     function rect(elem){
         return elem.getBoundingClientRect();
-    };
+    }
 
     function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
-    };
+    }
 
     function area(elem){
         return elem.clientWidth * elem.clientHeight;
-    };
+    }
 
     function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
-    };
+    }
 
     function closest(elem, selector){
         if (elem.jquery){
@@ -2085,7 +2090,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = elem.parentElement;
         }
         return null;
-    };
+    }
 
     function indexOf(elem){
         var idx = 0;
@@ -2094,7 +2099,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             idx++;
         }
         return idx;
-    };
+    }
 
     function find(elem, selector){
         if (typeof(elem) === 'string'){
@@ -2102,7 +2107,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = document.body;
         }
         return elem.querySelector(selector);
-    };
+    }
 
     function findAll(elem, selector){
         if (typeof(elem) === 'string'){
@@ -2110,13 +2115,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             elem = document.body;
         }
         return wb.makeArray(elem.querySelectorAll(selector));
-    };
+    }
 
     function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
-    };
+    }
 
     function findChild(elem, selector){
         if (arguments.length !== 2){
@@ -2130,7 +2135,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
         }
         return null;
-    };
+    }
 
    function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -2147,7 +2152,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
-                if (attributes[key] === null || attributes[key] === undefined) return;
+                if (attributes[key] === null || attributes[key] === undefined)
+                {
+                    return;
+                }
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
@@ -2158,7 +2166,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 }
             });
         }
-        if (children){
+        if (children !== null && children !== undefined){
             if (Array.isArray(children)){
                 children.forEach(function(child){
                     if (child.nodeName){
@@ -2182,7 +2190,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             }
         }
         return e;
-    };
+    }
 
 
     // Remove namespace for matches
@@ -2389,7 +2397,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // are loaded (in template/template.html)
 
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -2444,6 +2452,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
@@ -2455,6 +2464,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
+    var startPosition;
+    var pointerDown;
+    var cloned;
     
     var _dropCursor; // <- WB
     
@@ -2477,6 +2489,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         currentPosition = null;
         timer = null;
         dragging = false;
+        pointerDown = false;
         cloned = false; // <- WB
         scope = null; // <- WB
         templateDrag = false; // <- WB
@@ -2492,13 +2505,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     reset();
     
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        
+        pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        console.log(eT);
+        // console.log(eT);
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -2562,6 +2575,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (!pointerDown) {return undefined;}
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -2658,6 +2672,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function endDrag(event){
+        pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
@@ -3091,6 +3106,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
 (function(global){
+  'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);
@@ -3148,7 +3164,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -3158,12 +3174,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function newSeqNum(){
         nextSeqNum++;
         return nextSeqNum;
-    };
+    }
 
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
-        if (!seqNum) return;
+        if (!seqNum)
+        {
+            return;
+        }
         nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
     }
 
@@ -3218,6 +3237,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
         // }
+        if (!obj.isTemplateBlock){
+            updateFromTemplateBlock(obj);
+        }
         var block = elem(
             'div',
             {
@@ -3287,11 +3309,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         //     console.log('instantiated block %o from description %o', block, obj);
         //}
         return block;
-    }
+    };
 
     // Block Event Handlers
-
-    
 
     function removeBlock(event){
         event.stopPropagation();
@@ -3357,9 +3377,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                     spec.isTemplateBlock = true;
                     spec.isLocal = true;
                     spec.group = block.dataset.group;
-                    if (!spec.seqNum){
+                    // if (!spec.seqNum){
                         spec.seqNum = block.dataset.seqNum;
-                    }
+                    // }
                     // add scopeid to local blocks
                     spec.scopeId = parent.id;
                     if(!spec.id){
@@ -3422,11 +3442,12 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (desc.type){
             socket.dataset.type = desc.type;
             var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
-            socket.appendChild(holder)
+            socket.appendChild(holder);
         }
         if (desc.block){
             socket.dataset.block = desc.block;
         }
+        socket.dataset.seqNum = blockdesc.seqNum;
         if (!blockdesc.isTemplateBlock){
             //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
@@ -3453,14 +3474,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
         }
         return socket;
-    }
+    };
 
 
     function socketDesc(socket){
-        var isTemplate = !!wb.closest(socket, '.block').dataset.isTemplateBlock;
+        var parentBlock = wb.closest(socket, '.block');
+        var isTemplate = !!parentBlock.dataset.isTemplateBlock;
         var desc = {
-            name: socket.dataset.name,
-        }
+            name: socket.dataset.name
+        };
         // optional defined settings
         if (socket.dataset.type){
             desc.type = socket.dataset.type;
@@ -3478,11 +3500,14 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             desc.suffix = socket.dataset.suffix;
         }
         // User-specified settings
-        if (isTemplate) return desc;
+        if (isTemplate) 
+        {
+            return desc;
+        }
         var uName = wb.findChild(socket, '.name').textContent;
-        var uEle = wb.findChild(socket, '.name')
+        var uEle = wb.findChild(socket, '.name');
         
-        if (desc.name !== uName){
+        if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
         var holder = wb.findChild(socket, '.holder');
@@ -3498,18 +3523,36 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return desc;
     }
 
+    function updateFromTemplateBlock(obj){
+        // Retrieve the things we don't need to duplicate in every instance block description
+        var tB = blockRegistry[obj.scriptId];
+        if (!tB){
+            console.error('Error: could not get template block for  for %o', obj);
+            return obj;
+        }
+        obj.blocktype = tB.blocktype;
+        obj.group = tB.group;
+        obj.help = tB.help;
+        obj.type = tB.type;
+    }
+
     function blockDesc(block){
         var label = wb.findChild(block, '.label');
         var sockets = wb.findChildren(label, '.socket');
         var desc = {
-            blocktype: block.dataset.blocktype,
-            group: block.dataset.group,
             id: block.id,
-            help: block.title,
             scopeId: block.dataset.scopeId,
             scriptId: block.dataset.scriptId,
             sockets: sockets.map(socketDesc)
+        };
+
+        if (block.dataset.group === 'scripts_workspace'){
+            desc.blocktype = block.dataset.blocktype;
+            desc.group = block.dataset.group;
+            desc.help = block.dataset.help;
+            desc.type = block.dataset.type;            
         }
+
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
@@ -3524,9 +3567,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
         if (block.dataset.localSource){
             desc.localSource = block.dataset.localSource;
-        }
-        if (block.dataset.type){
-            desc.type = block.dataset.type;
         }
         if (block.dataset.locals){
             desc.locals = JSON.parse(block.dataset.locals);
@@ -3548,10 +3588,14 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         ////////////////////
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers
+        // UPDATE:
+        // No, it was because we want cloned blocks (and the locals they create) to get 
+        // new sequence numbers. But, if the block being clones is an instance of a local then we
+        // don't want to get a new sequence number.
         // /////////////////
-        // if (!blockdesc.isLocal){
-        //     delete blockdesc.seqNum;
-        // }
+        if (!block.dataset.localSource){
+            delete blockdesc.seqNum;
+        }
         if (blockdesc.isTemplateBlock){
             blockdesc.scriptId = block.id;            
         }
@@ -3572,6 +3616,52 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // return a block for block types
         var value;
         var type = obj.type;
+        
+        if(type === 'boolean')
+        {
+            obj.options = 'boolean';
+        }
+        
+        if(typeof obj.options !== 'undefined')
+        {
+            // DONE : #24
+            // DONE : #227
+            var choice = elem('select');
+            var list = wb.choiceLists[obj.options];
+            
+            if(Array.isArray(list))
+            {
+                wb.choiceLists[obj.options].forEach(function(opt){
+                    var option = elem('option', {}, opt);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == opt){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            else
+            {
+                var values = Object.keys(list);
+                
+                values.forEach(function(val){
+                    var option = elem('option', {"value":val}, list[val]);
+                    var value = obj.uValue || obj.value;
+                    
+                    if (value !== undefined && value !== null && value == val){
+                        option.setAttribute('selected', 'selected');
+                    }
+                    
+                    choice.appendChild(option);
+                });
+            }
+            
+            return choice;
+        
+        }
+        
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -3601,19 +3691,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 value = obj.uValue || obj.value || '604-555-1212'; break;
             case 'email':
                 value = obj.uValue || obj.value || 'waterbear@waterbearlang.com'; break;
-            case 'boolean':
-                obj.options = 'boolean';
-            case 'choice':
-                var choice = elem('select');
-                wb.choiceLists[obj.options].forEach(function(opt){
-                    var option = elem('option', {}, opt);
-                    var value = obj.uValue || obj.value;
-                    if (value && value === opt){
-                        option.setAttribute('selected', 'selected');
-                    }
-                    choice.appendChild(option);
-                });
-                return choice;
             default:
                 value = obj.uValue || obj.value || '';
         }
@@ -3628,7 +3705,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
         wb.resize(input);
         return input;
-    }
+    };
 
     function socketValue(holder){
         if (holder.children.length > 1){
@@ -3636,7 +3713,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }else{
             var value = wb.findChild(holder, 'input, select').value;
             var type = holder.parentElement.dataset.type;
-            if (type === 'string' || type === 'choice' || type === 'color' || type === 'url'){
+
+            // DONE : #227
+            if (type === 'string' || type === 'color' || type === 'url'){
                 if (value[0] === '"'){value = value.slice(1);}
                 if (value[value.length-1] === '"'){value = value.slice(0,-1);}
                 value = value.replace(/"/g, '\\"');
@@ -3681,7 +3760,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
         var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
         return _code2;
-    };
+    }
 
     function changeName(event){
         var nameSpan = event.wbTarget;
@@ -3707,37 +3786,38 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			// console.log('now update all instances too');
-			var source = wb.closest(nameSpan, '.block');
-			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-			instances.forEach(function(elem){
-				wb.find(elem, '.name').textContent = newName;
-			});
+            // console.log('now update all instances too');
+            var source = wb.closest(nameSpan, '.block');
+            var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+            instances.forEach(function(elem){
+                wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
+            });
 
-			//Change name of parent
-			var parent = document.getElementById(source.dataset.localSource);
-			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+            //Change name of parent
+            var parent = document.getElementById(source.dataset.localSource);
+            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-			//Change locals name of parent
-			var parentLocals = JSON.parse(parent.dataset.locals);
-			var localSocket = parentLocals[0].sockets[0];
-			localSocket.name = newName;
-			parent.dataset.locals = JSON.stringify(parentLocals);
+            //Change locals name of parent
+            var parentLocals = JSON.parse(parent.dataset.locals);
+            var localSocket = parentLocals[0].sockets[0];
+            localSocket.name = newName;
+            parent.dataset.locals = JSON.stringify(parentLocals);
 
-			wb.find(parent, '.name').textContent = nameTemplate;
-    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
-		}
-		var action = {
-			undo: function() {
-				propagateChange(oldName);
-			},
-			redo: function() {
-				propagateChange(newName);
-			},
-		}
-		wb.history.add(action);
-		action.redo();
+            wb.find(parent, '.name').textContent = nameTemplate;
+            Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+        }
+        var action = {
+            undo: function() {
+                propagateChange(oldName);
+            },
+            redo: function() {
+                propagateChange(newName);
+            }
+        };
+        wb.history.add(action);
+        action.redo();
     }
 
     function cancelUpdateName(event){
@@ -3754,7 +3834,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         if (event.keyCode === 0x1B /* escape */ ){
             event.preventDefault();
             input.value = input.previousSibling.textContent;
-            input.blur()
+            input.blur();
         }else if(event.keyCode === 0x0D /* return or enter */ || event.keyCode === 0x09 /* tab */){
             event.preventDefault();
             input.blur();
@@ -3865,6 +3945,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     // Export methods
     wb.Block = Block;
     wb.blockDesc = blockDesc;
+    wb.socketDesc = socketDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.resetSeqNum = resetSeqNum;
     wb.cloneBlock = cloneBlock;
@@ -3893,7 +3974,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
@@ -4148,6 +4229,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -4167,8 +4249,8 @@ function clearUndoStack(){
 	undoActions.length = 0;
 	currentAction = 0;
 	try{
-		document.querySelector('.undoAction').style.display = 'none';
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
+		document.querySelector('.redoAction').classList.add('disabled');
 	}catch(e){
 		// don't worry if undo ui is not available yet
 	}
@@ -4179,15 +4261,15 @@ function undoLastAction() {
 	currentAction--;
 	undoActions[currentAction].undo();
 	if(currentAction <= 0) {
-		document.querySelector('.undoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
 	}
-	document.querySelector('.redoAction').style.display = '';
+	document.querySelector('.redoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.undoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function redoLastAction() {
@@ -4195,15 +4277,15 @@ function redoLastAction() {
 	undoActions[currentAction].redo();
 	currentAction++;
 	if(currentAction >= undoActions.length) {
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.redoAction').classList.add('disabled');
 	}
-	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.undoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.redoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function addUndoAction(action) {
@@ -4221,8 +4303,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
-	document.querySelector('.undoAction').style.display = '';
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.remove('disabled');
+	document.querySelector('.redoAction').classList.add('disabled');
 	// console.log('undo stack: %s', undoActions.length);
 }
 
@@ -4233,8 +4315,8 @@ wb.history = {
 	clear: clearUndoStack
 }
 
-Event.on('.undoAction', 'click', null, undoLastAction);
-Event.on('.redoAction', 'click', null, redoLastAction);
+Event.on('.undoAction', 'click', ':not(.disabled)', undoLastAction);
+Event.on('.redoAction', 'click', ':not(.disabled)', redoLastAction);
 //begin short-cut implementation for redo and undo
 Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
 Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
@@ -4252,7 +4334,7 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 
@@ -4600,7 +4682,6 @@ function menu(blockspec){
 };
 
 function edit_menu(title, specs, help, show){
-	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
@@ -4717,6 +4798,7 @@ wb.menu = menu;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -4758,33 +4840,47 @@ wb.menu = menu;
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
+		var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.add('disabled');
+			}
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.remove('disabled');
+			}
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
 	    // If we go to the result and can run the result inline, do it
-	    if (wb.view === 'result' && wb.runCurrentScripts){
-	    	// This bothers me greatly: runs with the console.log, but not without it
-	    	console.log('running current scripts');
-	    	runFullSize();
-	    }else{
-	    	if (wb.view === 'result'){
-		    	// console.log('we want to run current scripts, but cannot');
-		    }else{
-		    	runWithLayout();
-		    	// console.log('we do not care about current scripts, so there');
-		    }
-	    }
+	    // if (wb.view === 'result' && wb.runCurrentScripts){
+	    // 	// This bothers me greatly: runs with the console.log, but not without it
+	    // 	console.log('running current scripts');
+	    // 	runFullSize();
+	    // }else{
+	    // 	if (wb.view === 'result'){
+		   //  	// console.log('we want to run current scripts, but cannot');
+		   //  }else{
+		   //  	runWithLayout();
+		   //  	// console.log('we do not care about current scripts, so there');
+		   //  }
+	    // }
 	    if (wb.toggleState.scripts_text_view){
 	    	wb.updateScriptsView();
 	    }
-	    if (wb.toggleState.stage){
+	    if (wb.toggleState.stage || wb.view === 'result'){
 	    	// console.log('run current scripts');
 	    	wb.runCurrentScripts();
 	    }else{
@@ -4901,21 +4997,21 @@ wb.menu = menu;
 		}
 	}
 
-	function runFullSize(){
-		['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-			wb.hide(wb.find(document.body, sel));
-		});
-		wb.show(wb.find(document.body, '.stage'));
-	}
+	// function runFullSize(){
+	// 	['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
+	// 		wb.hide(wb.find(document.body, sel));
+	// 	});
+	// 	wb.show(wb.find(document.body, '.stage'));
+	// }
 
-	function runWithLayout(){
-		['#block_menu', '.workspace'].forEach(function(sel){
-			wb.show(wb.find(document.body, sel));
-		});
-		['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-			toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-		});
-	}
+	// function runWithLayout(){
+	// 	['#block_menu', '.workspace'].forEach(function(sel){
+	// 		wb.show(wb.find(document.body, sel));
+	// 	});
+	// 	['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
+	// 		toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
+	// 	});
+	// }
 
 	function toggleComponent(evt){
 		var component = wb.find(document.body, '.' + evt.detail.name);
@@ -5003,6 +5099,40 @@ wb.menu = menu;
 	});
 	Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
 	Event.on(document.body, 'wb-modified', null, handleScriptModify);
+	Event.on('.run-scripts', 'click', null, function(){
+        wb.historySwitchState('result');
+    });
+    Event.on('.show-ide', 'click', null, function(){
+    	wb.historySwitchState('ide');
+    });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
+    });
+    // autorun buttons
+    Event.on('.run-script', 'click', null, function(){
+    	document.body.classList.add('running');
+    	wb.runCurrentScripts(true);
+    });
+    Event.on('.stop-script', 'click', null, function(){
+    	document.body.classList.remove('running');
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-on', 'click', null, function(){
+    	// turn it off
+    	document.body.classList.add('no-autorun');
+    	wb.autorun = false;
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-off', 'click', null, function(){
+    	document.body.classList.remove('no-autorun');
+    	wb.autorun = true;
+    	wb.runCurrentScripts(true);
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;
@@ -5027,7 +5157,7 @@ wb.menu = menu;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
@@ -5116,7 +5246,7 @@ wb.menu = menu;
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
 		// console.log("Loading block preferences", hiddenBlocks);
-		for (key in hiddenBlocks) {
+		Object.keys(hiddenBlocks).forEach(function(key){
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);
 				if(h3 != null){
@@ -5125,8 +5255,8 @@ wb.menu = menu;
 					h3.classList.add('hidden');
 				}
 			}
-		}
-	};
+		});
+	}
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
@@ -5171,7 +5301,7 @@ wb.menu = menu;
 		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
-	Event.on(document.body, 'click', '.toggle', handleToggle);
+	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
 		if (toggleState[name] === undefined){
@@ -5468,12 +5598,12 @@ https://npmjs.org/package/raspicam
 /*end languages/node/control.js*/
 
 /*begin languages/node/piface.js*/
-//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
-wb.choiceLists.pifacein = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
-wb.choiceLists.pifacebutton = [0,1 ,2 ,3];
-wb.choiceLists.pifacerelays = [0,1 ];
-wb.choiceLists.pifaceout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
-wb.choiceLists.pifaceonoff = ["0", "1"];
+wb.choiceLists.pifacein = {0:'Pin 0', 1:'Pin 1', 2:'Pin 2', 3:'Pin 3', 4:'Pin 4', 5:'Pin 5', 6:'Pin 6', 7:'Pin 7'};
+//wb.choiceLists.pifacein = [0, 1, 2, 3, 4, 5, 6, 7];
+wb.choiceLists.pifacebutton = [0, 1, 2, 3];
+wb.choiceLists.pifacerelays = [0, 1];
+wb.choiceLists.pifaceout = [0, 1, 2, 3, 4, 5, 6, 7];
+wb.choiceLists.pifaceonoff = [0, 1];
 
 
 
@@ -5485,13 +5615,6 @@ wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Ca
 /*begin languages/node/firmata.js*/
 //arduino firmata  https://npmjs.org/search?q=firmata
 
-
-//wb.choiceLists.digitalinputpins = {"0":'Pin 0',"1":'Pin 1',"2":'Pin 2',"3":'Pin 3',"4":'Pin 4',"5":'Pin 5',"6":'Pin 6',"7":'Pin 7',"8":'Pin 8',"9":'Pin 9',"10":'Pin 10',"11":'Pin 11',"12":'Pin 12','A0':'Pin A0','A1':'Pin A1','A2':'Pin A2','A3':'Pin A3','A4':'Pin A4','A5':'A5'};
-wb.choiceLists.firmatain = ["0","1" ,"2" ,"3" ,"4" ,"5" ,"6" ,"7"];
-wb.choiceLists.firmatabutton = [0,1 ,2 ,3];
-wb.choiceLists.firmatarelays = [0,1 ];
-wb.choiceLists.firmataout = ["0", 1 ,2 ,3 ,4 ,5 ,6 ,7];
-wb.choiceLists.firmataonoff = ["0", "1"];
 
 wb.choiceLists.highlow = ['HIGH', 'LOW'];
 wb.choiceLists.inoutput= ['INPUT', 'OUTPUT'];
@@ -5584,6 +5707,7 @@ wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
 /*begin languages/node/control.json*/
 wb.menu({
     "name": "Control",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
         {
             "blocktype": "eventhandler",
@@ -5798,6 +5922,7 @@ wb.menu({
 /*begin languages/node/piface.json*/
 wb.menu({
     "name": "PiFace",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiFace board.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -5808,9 +5933,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Input",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifacein",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -5818,7 +5943,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
             "script": "pfio.read_input()",
-            "type": "int",
+            "type": "number",
             "help": "All 8 Pins as a Digital Input",
             "sockets": [
                 {
@@ -5834,9 +5959,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Set output",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifaceout",
-                    "value": "choice"
+                    "value": 0
                 },
                 {
                     "name": "to",
@@ -5853,7 +5978,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Set outputs to",
-                    "type": "int",
+                    "type": "number",
                     "value": "0"
                 }
             ]
@@ -5867,9 +5992,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create output## using Output Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifaceout",
-                    "value": "choice"
+                    "value": 0
                 }
             ],
             "locals": [
@@ -5910,9 +6035,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create input## using Input Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifacein",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         }
@@ -5924,6 +6049,7 @@ wb.menu({
 /*begin languages/node/firmata.json*/
 wb.menu({
     "name": "Firmata",
+    "help": "Physical Input and Output for the Raspberry Pi using an Arduino loaded with Firmata.",
     "blocks": [
         {
             "blocktype": "context",
@@ -5944,9 +6070,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ],
             "locals": [
@@ -5987,9 +6113,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create digital_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "digitalpins",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -6002,9 +6128,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_output## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ],
             "locals": [
@@ -6033,9 +6159,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create servo## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pwmpins",
-                    "value": "choice"
+                    "value": 3
                 }
             ],
             "locals": [
@@ -6077,9 +6203,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "Create analog_input## on Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "analoginpins",
-                    "value": "choice"
+                    "value": "A0"
                 }
             ]
         }
@@ -6091,6 +6217,7 @@ wb.menu({
 /*begin languages/node/mc_game.json*/
 wb.menu({
     "name": "Minecraft Game",
+    "help": "Blocks which connect to and manipulate Minecraft Pi Edition",
     "blocks": [
         
         {
@@ -6156,6 +6283,7 @@ wb.menu({
 /*begin languages/node/mc_player.json*/
 wb.menu({
     "name": "Player",
+    "help": "Find and move Steve the Minecraft player",
     "blocks": [
         {
             "blocktype": "context",
@@ -6265,6 +6393,7 @@ wb.menu({
 /*begin languages/node/mc_position.json*/
 wb.menu({
     "name": "Position",
+    "help": "Find and change Minecraft Positions",
     "blocks": [
         {
             "blocktype": "expression",
@@ -6546,9 +6675,9 @@ wb.menu({
                 },
                 {
                     "name": " ",
-                    "type": "choice",
+                    "type": "string",
                     "options": "directions",
-                    "value": "choice"
+                    "value": "up"
                 }
             ],
             "script": "var position##=client.directioncalcs[{{3}}]({{1}},{{2}});",
@@ -6597,6 +6726,7 @@ wb.menu({
 /*begin languages/node/mc_blocks.json*/
 wb.menu({
     "name": "Blocks",
+    "help": "Find and set Minecraft Blocks",
     "blocks": [
         {
             "blocktype": "context",
@@ -6639,9 +6769,9 @@ wb.menu({
             "sockets": [
                     {
                     "name":"block",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
                 ],
             "script": "client.blocks[{{1}}]",
@@ -6659,9 +6789,9 @@ wb.menu({
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlock({{1}}, client.blocks[{{2}}]);",
@@ -6685,9 +6815,9 @@ wb.menu({
                 },
                 {
                     "name": "to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "blocks",
-                    "value": "choice"
+                    "value": "AIR"
                 }
             ],
             "script": "client.setBlocks({{1}}, {{2}}, client.blocks[{{3}}]);",
@@ -6700,7 +6830,7 @@ wb.menu({
                 {
                     "name": "block type name",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ],
             "script": "client.getBlockName({{1}})",
@@ -6715,6 +6845,7 @@ wb.menu({
 /*begin languages/node/mc_camera.json*/
 wb.menu({
     "name": "Camera",
+    "help": "Manipulating the Minecraft Camera",
     "blocks": [
       
       
@@ -6724,9 +6855,9 @@ wb.menu({
             "sockets": [
                 {
                     "name": "set camera mode to",
-                    "type": "choice",
+                    "type": "string",
                     "options": "cameramode",
-                    "value": "choice"
+                    "value": ""
                 }
                 
             ],
@@ -6753,6 +6884,7 @@ wb.menu({
 /*begin languages/node/array.json*/
 wb.menu({
     "name": "Arrays",
+    "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
         {
             "blocktype": "step",
@@ -7011,6 +7143,7 @@ wb.menu({
 /*begin languages/node/boolean.json*/
 wb.menu({
     "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
             "blocktype": "expression",
@@ -7090,6 +7223,7 @@ wb.menu({
 /*begin languages/node/math.json*/
 wb.menu({
     "name": "Math",
+    "help": "Math blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "step",
@@ -7571,6 +7705,7 @@ wb.menu({
 /*begin languages/node/string.json*/
 wb.menu({
     "name": "Strings",
+    "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [
         {
             "blocktype": "expression",

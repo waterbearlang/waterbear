@@ -1,6 +1,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -13,33 +14,36 @@
 
     function makeArray(arrayLike){
         return Array.prototype.slice.call(arrayLike);
-    };
+    }
 
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
         elem.style.top = position.top + 'px';
         elem.style.left = position.left + 'px';
-    };
+    }
 
     function hide(elem){
         elem.classList.add('hidden');
-    };
+    }
 
     function show(elem){
         elem.classList.remove('hidden');
-    };
+    }
 
     var svgText = document.querySelector('.resize-tester');
     function resize(input){
-        if (!input) return;
+        if (!input)
+        {
+            return;
+        }
         if (input.wbTarget){
             input = input.wbTarget;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
         input.style.width = (textbox.width + 25) + 'px';
-    };
+    }
 
     // wb.mag = function mag(p1, p2){
     //     return Math.sqrt(Math.pow(p1.left - p2.left, 2) + Math.pow(p1.top - p2.top, 2));
@@ -47,7 +51,7 @@
 
     function dist(p1, p2, m1, m2){
         return Math.sqrt(Math.pow(p1 - m1, 2) + Math.pow(p2 - m2, 2));
-    };
+    }
 
 
     function overlapRect(r1, r2){ // determine area of overlap between two rects
@@ -57,24 +61,24 @@
         if (r1.bottom < r2.top){ return 0; }
         var max = Math.max, min = Math.min;
         return (max(r1.left, r2.left) - min(r1.right, r2.right)) * (max(r1.top, r2.top) - min(r1.bottom, r2.bottom));
-    };
+    }
 
     function rect(elem){
         return elem.getBoundingClientRect();
-    };
+    }
 
     function overlap(elem1, elem2){
         return wb.overlapRect(wb.rect(elem1), wb.rect(elem2));
-    };
+    }
 
     function area(elem){
         return elem.clientWidth * elem.clientHeight;
-    };
+    }
 
     function containedBy(target, container){
         var targetArea = Math.min(wb.area(target), wb.area(container) * 0.90);
         return target.overlap(container) >= targetArea;
-    };
+    }
 
     function closest(elem, selector){
         if (elem.jquery){
@@ -91,7 +95,7 @@
             elem = elem.parentElement;
         }
         return null;
-    };
+    }
 
     function indexOf(elem){
         var idx = 0;
@@ -100,7 +104,7 @@
             idx++;
         }
         return idx;
-    };
+    }
 
     function find(elem, selector){
         if (typeof(elem) === 'string'){
@@ -108,7 +112,7 @@
             elem = document.body;
         }
         return elem.querySelector(selector);
-    };
+    }
 
     function findAll(elem, selector){
         if (typeof(elem) === 'string'){
@@ -116,13 +120,13 @@
             elem = document.body;
         }
         return wb.makeArray(elem.querySelectorAll(selector));
-    };
+    }
 
     function findChildren(elem, selector){
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
-    };
+    }
 
     function findChild(elem, selector){
         if (arguments.length !== 2){
@@ -136,7 +140,7 @@
             }
         }
         return null;
-    };
+    }
 
    function elem(name, attributes, children){
         // name can be a jquery object, an element, or a string
@@ -153,7 +157,10 @@
         }
         if (attributes){
             Object.keys(attributes).forEach(function(key){
-                if (attributes[key] === null || attributes[key] === undefined) return;
+                if (attributes[key] === null || attributes[key] === undefined)
+                {
+                    return;
+                }
                 if (typeof attributes[key] === 'function'){
                     val = attributes[key](attributes);
                     if (val){
@@ -164,7 +171,7 @@
                 }
             });
         }
-        if (children){
+        if (children !== null && children !== undefined){
             if (Array.isArray(children)){
                 children.forEach(function(child){
                     if (child.nodeName){
@@ -188,7 +195,7 @@
             }
         }
         return e;
-    };
+    }
 
 
     // Remove namespace for matches

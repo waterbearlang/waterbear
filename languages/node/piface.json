@@ -1,5 +1,6 @@
 {
     "name": "PiFace",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiFace board.",
     "blocks": [
         {
             "blocktype": "expression",
@@ -10,9 +11,9 @@
             "sockets": [
                 {
                     "name": "Input",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifacein",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         },
@@ -20,7 +21,7 @@
             "blocktype": "expression",
             "id": "f6fee9db-64c8-42fc-9285-f8c99c069bfa",
             "script": "pfio.read_input()",
-            "type": "int",
+            "type": "number",
             "help": "All 8 Pins as a Digital Input",
             "sockets": [
                 {
@@ -36,9 +37,9 @@
             "sockets": [
                 {
                     "name": "Set output",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifaceout",
-                    "value": "choice"
+                    "value": 0
                 },
                 {
                     "name": "to",
@@ -55,7 +56,7 @@
             "sockets": [
                 {
                     "name": "Set outputs to",
-                    "type": "int",
+                    "type": "number",
                     "value": "0"
                 }
             ]
@@ -69,9 +70,9 @@
             "sockets": [
                 {
                     "name": "Create output## using Output Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifaceout",
-                    "value": "choice"
+                    "value": 0
                 }
             ],
             "locals": [
@@ -112,9 +113,9 @@
             "sockets": [
                 {
                     "name": "Create input## using Input Pin",
-                    "type": "choice",
+                    "type": "number",
                     "options": "pifacein",
-                    "value": "choice"
+                    "value": 0
                 }
             ]
         }

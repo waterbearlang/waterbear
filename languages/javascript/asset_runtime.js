@@ -1,5 +1,5 @@
-(function(){
-
+(function(window){
+'use strict';
 var assets = {};
 
 function getAssetType(url){
@@ -31,7 +31,7 @@ function preloadAssets(assetUrls, callback){
 	if (!assetUrls.length){
 		return callback();
 	}
-	load = function() {
+	var load = function() {
 		// console.log('loaded');
 		loaded++;
 	    if (loaded >= toload){
@@ -71,4 +71,4 @@ Global.prototype.preloadImage = preloadImage; // called by script block to set u
 Global.prototype.preloadAudio = preloadAudio;
 Global.prototype.preloadVideo = preloadVideo;
 
-})();
+})(window);

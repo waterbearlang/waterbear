@@ -1,4 +1,5 @@
 (function (global) {
+    'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
         return e
@@ -13,7 +14,7 @@
         return n
     };
 
-    ajax = {};
+    var ajax = {};
     ajax.x = function () {
         try {
             return new ActiveXObject('Msxml2.XMLHTTP')
@@ -46,7 +47,7 @@
         x.open(m, u, true);
         x.onreadystatechange = function () {
             if (x.readyState == 4 && x.status < 400) {
-                cType = x.getResponseHeader("Content-Type");
+                var cType = x.getResponseHeader("Content-Type");
                 f(x.responseText, cType);
             } else if (x.readyState == 4) {
                 if (e == undefined) {

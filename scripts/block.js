@@ -17,7 +17,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;

@@ -18,6 +18,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 /*begin ajax.js*/
 (function (global) {
+    'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
         return e
@@ -32,7 +33,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return n
     };
 
-    ajax = {};
+    var ajax = {};
     ajax.x = function () {
         try {
             return new ActiveXObject('Msxml2.XMLHTTP')
@@ -65,7 +66,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         x.open(m, u, true);
         x.onreadystatechange = function () {
             if (x.readyState == 4 && x.status < 400) {
-                cType = x.getResponseHeader("Content-Type");
+                var cType = x.getResponseHeader("Content-Type");
                 f(x.responseText, cType);
             } else if (x.readyState == 4) {
                 if (e == undefined) {
@@ -120,7 +121,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-
+'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
 	    var qparams = {},
@@ -172,6 +173,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -572,7 +574,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // are loaded (in template/template.html)
 
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -627,6 +629,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
@@ -638,6 +641,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
+    var startPosition;
+    var pointerDown;
+    var cloned;
     
     var _dropCursor; // <- WB
     
@@ -1277,6 +1283,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
 (function(global){
+  'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);
@@ -1334,7 +1341,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -2048,7 +2055,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
@@ -2303,6 +2310,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -2407,7 +2415,7 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 
@@ -2755,7 +2763,6 @@ function menu(blockspec){
 };
 
 function edit_menu(title, specs, help, show){
-	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
@@ -2857,6 +2864,7 @@ wb.menu = menu;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -3215,7 +3223,7 @@ wb.menu = menu;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
@@ -3304,7 +3312,7 @@ wb.menu = menu;
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
 		// console.log("Loading block preferences", hiddenBlocks);
-		for (key in hiddenBlocks) {
+		Object.keys(hiddenBlocks).forEach(function(key){
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);
 				if(h3 != null){
@@ -3313,8 +3321,8 @@ wb.menu = menu;
 					h3.classList.add('hidden');
 				}
 			}
-		}
-	};
+		});
+	}
 
 	//after initliazation, create the settings and checkboxes
 	function load(){

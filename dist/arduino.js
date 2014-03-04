@@ -2229,7 +2229,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	}
 
 	function loadScriptsFromExample(name){
-		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(statusCode, xhr){
 			console.error(statusCode + xhr);

@@ -187,7 +187,7 @@
 	}
 
 	function loadScriptsFromExample(name){
-		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(statusCode, xhr){
 			console.error(statusCode + xhr);

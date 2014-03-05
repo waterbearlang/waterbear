@@ -3029,14 +3029,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var x = event.clientX;
         var y = event.clientY;
     
-        console.log("Mouse x " + x);
-        console.log("Mouse y" + y);
-    
         for (var i = 0; i < children.length; i++){
-            console.log(children[i]);
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
-                console.log(r);
                 if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
                     return children[i];
                 }
@@ -3049,13 +3044,14 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchPad() {
+	console.log("ARRANGING SCRATCH PAD");
 	var PADDING = 5;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
+	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
@@ -3067,13 +3063,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		
+		console.log("X " + x);
+		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width) {
 		    x = xOrigin;
 		    y += rBounding.height + PADDING;
 		}
@@ -3091,6 +3087,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'dblclick', null, arrangeScratchPad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

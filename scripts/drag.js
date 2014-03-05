@@ -653,10 +653,10 @@
 	var PADDING = 5;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
+	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
@@ -668,13 +668,13 @@
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
 		r.style.top = y + "px";
 		r.style.left = x + "px";
 		console.log("X " + x);
+		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width) {
 		    x = xOrigin;
 		    y += rBounding.height + PADDING;
 		}

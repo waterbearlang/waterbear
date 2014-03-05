@@ -5554,7 +5554,7 @@ wb.requiredjs.after.firmata =  "";
 /*begin languages/node/mc_game.js*/
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('minecraft-pi-vec3');\nvar v= require('vec3');";
 
 wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 

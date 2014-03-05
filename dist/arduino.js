@@ -1222,7 +1222,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchPad() {
 	console.log("ARRANGING SCRATCH PAD");
-	var PADDING = 5;
+	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
 	console.log(scratchPadRect);
@@ -1234,21 +1234,27 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	var y = yOrigin;
 	
 	var children = scratchpad.childNodes;
+	var maxHeight = 0;
 	
 	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
+		if (rBounding.height > maxHeight) {
+		    maxHeight = rBounding.height;
+		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
 		console.log("X " + x);
 		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
-		if (x >= width) {
+		if (x >= width - 25) {
+		    //We are going into a new row.
 		    x = xOrigin;
-		    y += rBounding.height + PADDING;
+		    y += maxHeight + PADDING;
+		    maxHeight = 0;
 		}
 	    }
 	}

@@ -18,6 +18,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 /*begin ajax.js*/
 (function (global) {
+    'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
         return e
@@ -32,7 +33,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return n
     };
 
-    ajax = {};
+    var ajax = {};
     ajax.x = function () {
         try {
             return new ActiveXObject('Msxml2.XMLHTTP')
@@ -65,7 +66,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         x.open(m, u, true);
         x.onreadystatechange = function () {
             if (x.readyState == 4 && x.status < 400) {
-                cType = x.getResponseHeader("Content-Type");
+                var cType = x.getResponseHeader("Content-Type");
                 f(x.responseText, cType);
             } else if (x.readyState == 4) {
                 if (e == undefined) {
@@ -120,7 +121,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-
+'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
 	    var qparams = {},
@@ -172,6 +173,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -572,7 +574,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // are loaded (in template/template.html)
 
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -627,6 +629,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
@@ -638,6 +641,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
+    var startPosition;
+    var pointerDown;
+    var cloned;
     
     var _dropCursor; // <- WB
     
@@ -660,6 +666,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         currentPosition = null;
         timer = null;
         dragging = false;
+        pointerDown = false;
         cloned = false; // <- WB
         scope = null; // <- WB
         templateDrag = false; // <- WB
@@ -675,13 +682,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     reset();
     
     function initDrag(event){
-        console.log('initDrag(%o)', event);
+        // console.log('initDrag(%o)', event);
         
         // Called on mousedown or touchstart, we haven't started dragging yet
         // DONE: Don't start drag on a text input or select using :input jquery selector
-        
+        pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        console.log(eT);
+        // console.log(eT);
         //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
@@ -745,6 +752,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) {return undefined;}
+        if (!pointerDown) {return undefined;}
         // console.log('startDrag(%o)', event);
         dragTarget.classList.add("dragIndication");
         currentPosition = {left: event.wbPageX, top: event.wbPageY};
@@ -841,6 +849,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function endDrag(event){
+        pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!dragging) {return undefined;}
         clearTimeout(timer);
@@ -1197,14 +1206,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var x = event.clientX;
         var y = event.clientY;
     
-        console.log("Mouse x " + x);
-        console.log("Mouse y" + y);
-    
         for (var i = 0; i < children.length; i++){
-            console.log(children[i]);
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
-                console.log(r);
                 if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
                     return children[i];
                 }
@@ -1217,33 +1221,40 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchPad() {
-	var PADDING = 5;
+	console.log("ARRANGING SCRATCH PAD");
+	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
+	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
 	
 	var children = scratchpad.childNodes;
+	var maxHeight = 0;
 	
 	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
+		if (rBounding.height > maxHeight) {
+		    maxHeight = rBounding.height;
+		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		
+		console.log("X " + x);
+		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width - 25) {
+		    //We are going into a new row.
 		    x = xOrigin;
-		    y += rBounding.height + PADDING;
+		    y += maxHeight + PADDING;
+		    maxHeight = 0;
 		}
 	    }
 	}
@@ -1259,6 +1270,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'dblclick', null, arrangeScratchPad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -1274,6 +1286,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
 (function(global){
+  'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);
@@ -1331,7 +1344,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -1952,37 +1965,38 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         input.parentElement.removeChild(input);
         nameSpan.style.display = 'initial';
         function propagateChange(newName) {
-			// console.log('now update all instances too');
-			var source = wb.closest(nameSpan, '.block');
-			var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
-			instances.forEach(function(elem){
-				wb.find(elem, '.name').textContent = newName;
-			});
+            // console.log('now update all instances too');
+            var source = wb.closest(nameSpan, '.block');
+            var instances = wb.findAll(wb.closest(source, '.context'), '[data-local-source="' + source.dataset.localSource + '"]');
+            instances.forEach(function(elem){
+                wb.find(elem, '.name').textContent = newName;
+                wb.find(elem, '.socket').dataset.name = newName;
+            });
 
-			//Change name of parent
-			var parent = document.getElementById(source.dataset.localSource);
-			var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
-			nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
+            //Change name of parent
+            var parent = document.getElementById(source.dataset.localSource);
+            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
-			//Change locals name of parent
-			var parentLocals = JSON.parse(parent.dataset.locals);
-			var localSocket = parentLocals[0].sockets[0];
-			localSocket.name = newName;
-			parent.dataset.locals = JSON.stringify(parentLocals);
+            //Change locals name of parent
+            var parentLocals = JSON.parse(parent.dataset.locals);
+            var localSocket = parentLocals[0].sockets[0];
+            localSocket.name = newName;
+            parent.dataset.locals = JSON.stringify(parentLocals);
 
-			wb.find(parent, '.name').textContent = nameTemplate;
-    	    Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
-		}
-		var action = {
-			undo: function() {
-				propagateChange(oldName);
-			},
-			redo: function() {
-				propagateChange(newName);
-			}
-		};
-		wb.history.add(action);
-		action.redo();
+            wb.find(parent, '.name').textContent = nameTemplate;
+            Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'nameChanged'});
+        }
+        var action = {
+            undo: function() {
+                propagateChange(oldName);
+            },
+            redo: function() {
+                propagateChange(newName);
+            }
+        };
+        wb.history.add(action);
+        action.redo();
     }
 
     function cancelUpdateName(event){
@@ -2044,7 +2058,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
@@ -2218,7 +2232,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	}
 
 	function loadScriptsFromExample(name){
-		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(statusCode, xhr){
 			console.error(statusCode + xhr);
@@ -2299,6 +2313,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -2318,8 +2333,8 @@ function clearUndoStack(){
 	undoActions.length = 0;
 	currentAction = 0;
 	try{
-		document.querySelector('.undoAction').style.display = 'none';
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
+		document.querySelector('.redoAction').classList.add('disabled');
 	}catch(e){
 		// don't worry if undo ui is not available yet
 	}
@@ -2330,15 +2345,15 @@ function undoLastAction() {
 	currentAction--;
 	undoActions[currentAction].undo();
 	if(currentAction <= 0) {
-		document.querySelector('.undoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
 	}
-	document.querySelector('.redoAction').style.display = '';
+	document.querySelector('.redoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.undoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function redoLastAction() {
@@ -2346,15 +2361,15 @@ function redoLastAction() {
 	undoActions[currentAction].redo();
 	currentAction++;
 	if(currentAction >= undoActions.length) {
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.redoAction').classList.add('disabled');
 	}
-	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.undoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.redoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function addUndoAction(action) {
@@ -2372,8 +2387,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
-	document.querySelector('.undoAction').style.display = '';
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.remove('disabled');
+	document.querySelector('.redoAction').classList.add('disabled');
 	// console.log('undo stack: %s', undoActions.length);
 }
 
@@ -2384,8 +2399,8 @@ wb.history = {
 	clear: clearUndoStack
 }
 
-Event.on('.undoAction', 'click', null, undoLastAction);
-Event.on('.redoAction', 'click', null, redoLastAction);
+Event.on('.undoAction', 'click', ':not(.disabled)', undoLastAction);
+Event.on('.redoAction', 'click', ':not(.disabled)', redoLastAction);
 //begin short-cut implementation for redo and undo
 Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
 Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
@@ -2403,7 +2418,7 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 
@@ -2751,7 +2766,6 @@ function menu(blockspec){
 };
 
 function edit_menu(title, specs, help, show){
-	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
@@ -2853,6 +2867,7 @@ wb.menu = menu;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -2894,13 +2909,27 @@ wb.menu = menu;
 		// hide loading spinner if needed
 		console.log('handleStateChange');
 		hideLoader();
+		var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
 		wb.queryParams = wb.urlToQueryParams(location.href);
 		if (wb.queryParams.view === 'result'){
-			document.body.className = 'result';
+			document.body.classList.add('result');
+			document.body.classList.remove('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.add('disabled');
+			}
 			wb.view = 'result';
 		}else{
-			document.body.className = 'editor';
+			document.body.classList.remove('result');
+			document.body.classList.add('editor');
+			for(var i = 0; i < viewButtons.length; i++) {
+				viewButtons[i].classList.remove('disabled');
+			}
 			wb.view = 'editor';
+		}
+		if (wb.queryParams.embedded === 'true'){
+			document.body.classList.add('embedded');
+		}else{
+			document.body.classList.remove('embedded');
 		}
 		// handle loading example, gist, currentScript, etc. if needed
 	    wb.loadCurrentScripts(wb.queryParams);
@@ -3145,6 +3174,34 @@ wb.menu = menu;
     Event.on('.show-ide', 'click', null, function(){
     	wb.historySwitchState('ide');
     });
+    Event.on('.escape-embed', 'click', null, function(){
+    	// open this in a new window without embedded in the url
+    	var params = wb.urlToQueryParams(location.href);
+    	delete params.embedded;
+    	var url = wb.queryParamsToUrl(params);
+    	var a = wb.elem('a', {href: url, target: '_blank'});
+    	a.click();
+    });
+    // autorun buttons
+    Event.on('.run-script', 'click', null, function(){
+    	document.body.classList.add('running');
+    	wb.runCurrentScripts(true);
+    });
+    Event.on('.stop-script', 'click', null, function(){
+    	document.body.classList.remove('running');
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-on', 'click', null, function(){
+    	// turn it off
+    	document.body.classList.add('no-autorun');
+    	wb.autorun = false;
+    	wb.clearStage();
+    });
+    Event.on('.autorun-script-off', 'click', null, function(){
+    	document.body.classList.remove('no-autorun');
+    	wb.autorun = true;
+    	wb.runCurrentScripts(true);
+    });
 
 	wb.language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 	wb.loaded = false;
@@ -3169,7 +3226,7 @@ wb.menu = menu;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
@@ -3258,7 +3315,7 @@ wb.menu = menu;
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
 		// console.log("Loading block preferences", hiddenBlocks);
-		for (key in hiddenBlocks) {
+		Object.keys(hiddenBlocks).forEach(function(key){
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);
 				if(h3 != null){
@@ -3267,8 +3324,8 @@ wb.menu = menu;
 					h3.classList.add('hidden');
 				}
 			}
-		}
-	};
+		});
+	}
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
@@ -3313,7 +3370,7 @@ wb.menu = menu;
 		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
-	Event.on(document.body, 'click', '.toggle', handleToggle);
+	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
 		if (toggleState[name] === undefined){

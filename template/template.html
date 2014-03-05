@@ -13,11 +13,12 @@
 	<script>
 		var wb = {
 			scriptModified: true,
-			iframeReady: false
+			iframeReady: false,
+			autorun: true
 		};
 	</script>
 </head>
-<body>
+<body class="autorun">
 	<div class="titlebar">
 		<img src="images/logo.png" />
 		<h1 class="title"><?language?> playground</h1>
@@ -92,6 +93,9 @@
 			</li>
 			<li>
 				<button class="cmenuEnable"><i class="icon-list-alt"></i>Enable Context Menus</button>
+			</li>
+			<li class="escape">
+				<button class="escape-embed">Open in Waterbear</button>
 			</li>
 		</ul>
 	</nav>

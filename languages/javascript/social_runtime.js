@@ -1,5 +1,5 @@
-(function(){
-
+(function(window){
+'use strict';
     // FIXME: move ajax and other utils to runtime proper
     var ajax = {
         jsonp: function(url, data, success, error){
@@ -40,4 +40,4 @@
         ajax.jsonp( jsonTwitterFeed, args, success, error);
     };
 
-})();
+})(window);

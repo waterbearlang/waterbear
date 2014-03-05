@@ -27,7 +27,7 @@
 		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
-	Event.on(document.body, 'click', '.toggle', handleToggle);
+	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
 		if (toggleState[name] === undefined){

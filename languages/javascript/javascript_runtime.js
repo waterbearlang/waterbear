@@ -1,5 +1,7 @@
+(function(window){
+    'use strict';
 // Timer utility
-//console.log('Loaded runtime, defining utilities');
+//window.console.log('Loaded runtime, defining utilities');
 function Timer(){
     this.time = 0;
     this.start_time = Date.now();
@@ -190,7 +192,7 @@ function range(start, end, step){
     if (step === undefined){
         step = 1;
     }
-    var i,val;
+    var i,val, len;
     len = end - start;
     for (i = 0; i < len; i++){
         val = i * step + start;
@@ -230,7 +232,7 @@ function angle(shape){
  */
 
 // Declare namespace
-twinapex = {}
+var twinapex = {}
 
 twinapex.debug = {}
 
@@ -333,10 +335,10 @@ twinapex.debug.manageExceptions = function(func) {
 // - fake Firebug console.log for other browsers
 if(typeof(console) == "undefined") {
     // Install dummy functions, so that logging does not break the code if Firebug is not present
-    var console = {};
-    console.log = function(msg) {};
-    console.info = function(msg) {};
-    console.warn = function(msg) {};
+    window.console = {};
+    window.console.log = function(msg) {};
+    window.console.info = function(msg) {};
+    window.console.warn = function(msg) {};
 
     // TODO: Add IE Javascript console output
 
@@ -348,5 +350,16 @@ if(typeof(console) == "undefined") {
 
 var global = new Global();
 var local = new Local();
-
+window.Global = Global;
+window.Local = Local;
+window.global = global;
+window.local = local;
+window.Timer = Timer;
+window.twinapex = twinapex;
+window.rad2deg = rad2deg;
+window.deg2rad = deg2rad;
+window.range = range;
+window.randint = randint;
+window.angle = angle;
 console.log('runtime ready');
+})(window);

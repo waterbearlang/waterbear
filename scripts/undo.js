@@ -1,6 +1,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -20,8 +21,8 @@ function clearUndoStack(){
 	undoActions.length = 0;
 	currentAction = 0;
 	try{
-		document.querySelector('.undoAction').style.display = 'none';
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
+		document.querySelector('.redoAction').classList.add('disabled');
 	}catch(e){
 		// don't worry if undo ui is not available yet
 	}
@@ -32,15 +33,15 @@ function undoLastAction() {
 	currentAction--;
 	undoActions[currentAction].undo();
 	if(currentAction <= 0) {
-		document.querySelector('.undoAction').style.display = 'none';
+		document.querySelector('.undoAction').classList.add('disabled');
 	}
-	document.querySelector('.redoAction').style.display = '';
+	document.querySelector('.redoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.undoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function redoLastAction() {
@@ -48,15 +49,15 @@ function redoLastAction() {
 	undoActions[currentAction].redo();
 	currentAction++;
 	if(currentAction >= undoActions.length) {
-		document.querySelector('.redoAction').style.display = 'none';
+		document.querySelector('.redoAction').classList.add('disabled');
 	}
-	document.querySelector('.undoAction').style.display = '';
+	document.querySelector('.undoAction').classList.remove('disabled');
 }
 
 try{
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.redoAction').classList.add('disabled');
 }catch(e){
-	// some languages do not yet support undo/redo
+	return; // some languages do not yet support undo/redo
 }
 
 function addUndoAction(action) {
@@ -74,8 +75,8 @@ function addUndoAction(action) {
 	}
 	undoActions[currentAction] = action;
 	currentAction++;
-	document.querySelector('.undoAction').style.display = '';
-	document.querySelector('.redoAction').style.display = 'none';
+	document.querySelector('.undoAction').classList.remove('disabled');
+	document.querySelector('.redoAction').classList.add('disabled');
 	// console.log('undo stack: %s', undoActions.length);
 }
 
@@ -86,8 +87,8 @@ wb.history = {
 	clear: clearUndoStack
 }
 
-Event.on('.undoAction', 'click', null, undoLastAction);
-Event.on('.redoAction', 'click', null, redoLastAction);
+Event.on('.undoAction', 'click', ':not(.disabled)', undoLastAction);
+Event.on('.redoAction', 'click', ':not(.disabled)', redoLastAction);
 //begin short-cut implementation for redo and undo
 Events.bind(document, 'keystroke.Ctrl+Z', undoLastAction);
 Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);

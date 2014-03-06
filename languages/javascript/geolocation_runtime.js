@@ -1,5 +1,5 @@
 (function(global){
-
+'use strict';
 var location = {};
 
 if (navigator.geolocation){

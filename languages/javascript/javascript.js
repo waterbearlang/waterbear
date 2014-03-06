@@ -6,6 +6,7 @@
  */
 (function(wb,Event){
     // Add some utilities
+    'use strict';
     wb.wrap = function(script){
         return [
             '(function(){', 

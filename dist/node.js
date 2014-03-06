@@ -1846,6 +1846,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 
 /*begin ajax.js*/
 (function (global) {
+    'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
         return e
@@ -1860,7 +1861,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         return n
     };
 
-    ajax = {};
+    var ajax = {};
     ajax.x = function () {
         try {
             return new ActiveXObject('Msxml2.XMLHTTP')
@@ -1893,7 +1894,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         x.open(m, u, true);
         x.onreadystatechange = function () {
             if (x.readyState == 4 && x.status < 400) {
-                cType = x.getResponseHeader("Content-Type");
+                var cType = x.getResponseHeader("Content-Type");
                 f(x.responseText, cType);
             } else if (x.readyState == 4) {
                 if (e == undefined) {
@@ -1948,7 +1949,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-
+'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
 	    var qparams = {},
@@ -2000,6 +2001,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -2400,7 +2402,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // are loaded (in template/template.html)
 
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -2455,6 +2457,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
@@ -2466,6 +2469,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
+    var startPosition;
+    var pointerDown;
+    var cloned;
     
     var _dropCursor; // <- WB
     
@@ -3028,14 +3034,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         var x = event.clientX;
         var y = event.clientY;
     
-        console.log("Mouse x " + x);
-        console.log("Mouse y" + y);
-    
         for (var i = 0; i < children.length; i++){
-            console.log(children[i]);
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
-                console.log(r);
                 if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
                     return children[i];
                 }
@@ -3048,33 +3049,40 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchPad() {
-	var PADDING = 5;
+	console.log("ARRANGING SCRATCH PAD");
+	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
+	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
 	
 	var children = scratchpad.childNodes;
+	var maxHeight = 0;
 	
 	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
+		if (rBounding.height > maxHeight) {
+		    maxHeight = rBounding.height;
+		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		
+		console.log("X " + x);
+		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width - 25) {
+		    //We are going into a new row.
 		    x = xOrigin;
-		    y += rBounding.height + PADDING;
+		    y += maxHeight + PADDING;
+		    maxHeight = 0;
 		}
 	    }
 	}
@@ -3090,6 +3098,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'dblclick', null, arrangeScratchPad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -3105,6 +3114,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
 (function(global){
+  'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);
@@ -3162,7 +3172,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -3876,7 +3886,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
@@ -4050,7 +4060,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 	}
 
 	function loadScriptsFromExample(name){
-		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(statusCode, xhr){
 			console.error(statusCode + xhr);
@@ -4131,6 +4141,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -4235,7 +4246,7 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 
@@ -4619,7 +4630,6 @@ function populateMenu() {
 }
 
 function edit_menu(title, specs, help, show){
-	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
@@ -4789,6 +4799,7 @@ wb.l10nHalfDone = l10nHalfDone;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -5147,7 +5158,7 @@ wb.l10nHalfDone = l10nHalfDone;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
@@ -5236,7 +5247,7 @@ wb.l10nHalfDone = l10nHalfDone;
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
 		// console.log("Loading block preferences", hiddenBlocks);
-		for (key in hiddenBlocks) {
+		Object.keys(hiddenBlocks).forEach(function(key){
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);
 				if(h3 != null){
@@ -5245,8 +5256,8 @@ wb.l10nHalfDone = l10nHalfDone;
 					h3.classList.add('hidden');
 				}
 			}
-		}
-	};
+		});
+	}
 
 	//after initliazation, create the settings and checkboxes
 	function load(){
@@ -5334,6 +5345,31 @@ wb.l10nHalfDone = l10nHalfDone;
 var stageMenu = document.querySelector('[data-target=stage]').parentElement;
 stageMenu.parentElement.removeChild(stageMenu);
 
+var menu = document.querySelector('.menu');
+console.log("menu =", menu);
+
+var newLi = document.createElement("li");
+var newBtn = document.createElement("button");
+newBtn.classList.add("run-remote");
+newBtn.textContent = "Run";
+newLi.appendChild(newBtn);
+menu.appendChild(newLi);
+
+var newLi2 = document.createElement("li");
+var newBtn2 = document.createElement("button");
+newBtn2.classList.add("stop-remote");
+newBtn2.textContent = "Stop";
+newLi2.appendChild(newBtn2);
+menu.appendChild(newLi2);
+
+//document.querySelector('.stop-remote').style.display = 'none';
+//var stop = document.querySelector('.stop-remote');
+//console.log("stop =", stop);
+//wb.hide(stop);
+
+wb.hide(document.querySelector('.stop-remote'));
+
+
 // A couple of do-nothing scripts for compatibility
 wb.runCurrentScripts = function(){ /* do nothing */ };
 wb.clearStage = function(){ /* do nothing */ };
@@ -5350,7 +5386,7 @@ function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );        
 }
-Event.on('.run-scripts', 'click', null, runCurrentScripts);
+Event.on('.run-remote', 'click', null, runCurrentScripts);
 
 
 wb.ajax = {
@@ -5380,32 +5416,26 @@ wb.ajax = {
 
     
 wb.resetrun = function(message){
+    var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = message;
     window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-    document.querySelector('.run-scripts').style.display = 'inline-block';
-    document.querySelector('.stop-scripts').style.display = 'none';
-    //Event.remove('.stop-scripts', 'click');
+    //document.querySelector('.run-remote').style.display = 'inline-block';
+    //document.querySelector('.stop-remote').style.display = 'none';
+    wb.hide(document.querySelector('.stop-remote'));
+    wb.show(document.querySelector('.run-remote'));
+    
+    //Event.remove('.stop-remote', 'click');
 
 };
     
 wb.runScript = function(script){
 
-    // TODO : workout the ws address from the page address
     var aHost = window.location.host.split(":");
     var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
     
-    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
-    
-    var messagebox = document.querySelector('#messagebox');
-    if(messagebox === null || messagebox.length === 0)
-    {
-        messagebox = wb.elem('div', {"id":"messagebox"});
-        document.querySelector('.tabbar').appendChild(messagebox);
-        messagebox = document.querySelector('#messagebox');
-        
-    }
-    
+    var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = "Connecting to Raspberry Pi";
+    
     oSocket.onerror = function(event) {
         messagebox.innerHTML = "Error Communicating with RPi";
         window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
@@ -5413,7 +5443,13 @@ wb.runScript = function(script){
     };
     
     oSocket.onopen = function (event) {
+        messagebox.innerHTML = "Sending Code to RPi";
         oSocket.send(JSON.stringify({"command":"run","code":script})); 
+    };
+    
+    
+    oSocket.onclose = function (event) {
+        wb.resetrun("Communication Ended");
     };
     
     oSocket.onmessage = function(event) {
@@ -5424,10 +5460,13 @@ wb.runScript = function(script){
                 break;
             case "running":
                 messagebox.innerHTML = "Code running on RPi "+ msg.pid;
-                document.querySelector('.run-scripts').style.display = 'none';
-                document.querySelector('.stop-scripts').style.display = 'inline-block';
+                var runbutton= document.querySelector('.run-remote')
+                console.log("runbutton =", runbutton);
+                wb.hide(runbutton);
+                //document.querySelector('.stop-remote').style.display = 'inline-block';
+                wb.show(document.querySelector('.stop-remote'));
                 
-                Event.once('.stop-scripts', 'click', null, function(){
+                Event.once('.stop-remote', 'click', null, function(){
                       oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
                 });
 
@@ -5598,7 +5637,7 @@ wb.choiceLists.pifaceonoff = [0, 1];
 
 
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
-wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\"); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
 
 /*end languages/node/piface.js*/
 

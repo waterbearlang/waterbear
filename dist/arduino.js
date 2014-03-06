@@ -23,6 +23,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 
 /*begin ajax.js*/
 (function (global) {
+    'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
         return e
@@ -37,7 +38,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         return n
     };
 
-    ajax = {};
+    var ajax = {};
     ajax.x = function () {
         try {
             return new ActiveXObject('Msxml2.XMLHTTP')
@@ -70,7 +71,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         x.open(m, u, true);
         x.onreadystatechange = function () {
             if (x.readyState == 4 && x.status < 400) {
-                cType = x.getResponseHeader("Content-Type");
+                var cType = x.getResponseHeader("Content-Type");
                 f(x.responseText, cType);
             } else if (x.readyState == 4) {
                 if (e == undefined) {
@@ -125,7 +126,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
 (function(global){
-
+'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
 	    var qparams = {},
@@ -177,6 +178,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(global){
+    'use strict';
     //
     //
     // UTILITY FUNCTIONS
@@ -577,7 +579,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // are loaded (in template/template.html)
 
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -632,6 +634,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
@@ -643,6 +646,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
+    var startPosition;
+    var pointerDown;
+    var cloned;
     
     var _dropCursor; // <- WB
     
@@ -1205,14 +1211,9 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         var x = event.clientX;
         var y = event.clientY;
     
-        console.log("Mouse x " + x);
-        console.log("Mouse y" + y);
-    
         for (var i = 0; i < children.length; i++){
-            console.log(children[i]);
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
-                console.log(r);
                 if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
                     return children[i];
                 }
@@ -1225,33 +1226,40 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchPad() {
-	var PADDING = 5;
+	console.log("ARRANGING SCRATCH PAD");
+	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
+	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
 	
 	var children = scratchpad.childNodes;
+	var maxHeight = 0;
 	
 	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
+		if (rBounding.height > maxHeight) {
+		    maxHeight = rBounding.height;
+		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		
+		console.log("X " + x);
+		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width - 25) {
+		    //We are going into a new row.
 		    x = xOrigin;
-		    y += rBounding.height + PADDING;
+		    y += maxHeight + PADDING;
+		    maxHeight = 0;
 		}
 	    }
 	}
@@ -1267,6 +1275,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'dblclick', null, arrangeScratchPad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -1282,6 +1291,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
 (function(global){
+  'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
     var myHex = Math.random().toString(16).slice(2,2+length);
@@ -1339,7 +1349,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
     var elem = wb.elem;
 
     var nextSeqNum = 0;
@@ -2053,7 +2063,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	function saveCurrentScripts(){
 		if (!wb.scriptModified){
 			// console.log('nothing to save');
@@ -2227,7 +2237,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 	}
 
 	function loadScriptsFromExample(name){
-		ajax.get('examples/' + wb.language + '/' + name + '.json', function(exampleJson){
+		ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
 			loadScriptsFromObject(JSON.parse(exampleJson));
 		}, function(statusCode, xhr){
 			console.error(statusCode + xhr);
@@ -2308,6 +2318,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 // Undo list
 
 // Undo actions must support two methods:
@@ -2412,7 +2423,7 @@ Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 
@@ -2796,7 +2807,6 @@ function populateMenu() {
 }
 
 function edit_menu(title, specs, help, show){
-	menu_built = true;
     var group = title.toLowerCase().split(/\s+/).join('');
     var submenu = document.querySelector('.' + group + '+ .submenu');
     if (!submenu){
@@ -2966,6 +2976,7 @@ wb.l10nHalfDone = l10nHalfDone;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
@@ -3324,7 +3335,7 @@ wb.l10nHalfDone = l10nHalfDone;
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
@@ -3413,7 +3424,7 @@ wb.l10nHalfDone = l10nHalfDone;
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
 		// console.log("Loading block preferences", hiddenBlocks);
-		for (key in hiddenBlocks) {
+		Object.keys(hiddenBlocks).forEach(function(key){
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);
 				if(h3 != null){
@@ -3422,8 +3433,8 @@ wb.l10nHalfDone = l10nHalfDone;
 					h3.classList.add('hidden');
 				}
 			}
-		}
-	};
+		});
+	}
 
 	//after initliazation, create the settings and checkboxes
 	function load(){

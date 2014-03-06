@@ -12891,7 +12891,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function handleDrop(event,copyBlock){
-	event.preventDefault;
         // console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu

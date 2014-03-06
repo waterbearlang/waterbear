@@ -340,8 +340,8 @@ function is_touch_device() {
 
 initContextMenus();
 
-defaultLangData  = {};
-localizationData = {};
+var defaultLangData  = {};
+var localizationData = {};
 
 var l10nHalfDone = false;
 wb.l10nHalfDone = l10nHalfDone;
@@ -377,18 +377,19 @@ function populateMenu() {
         //overwrite attributes in blockspec
         wb.overwriteAttributes(blockspec, l10nData);
 
-		var title = blockspec.name.replace(/\W/g, '');
+		var title = blockspec.name;
+        var sectionKey = blockspec.sectionkey.replace(/\W/g, '');
         var specs = blockspec.blocks;
         var help = blockspec.help !== undefined ? blockspec.help : '';
-        edit_menu(title, specs, help);
+        edit_menu(title, sectionKey, specs, help);
 	}
 }
 
-function edit_menu(title, specs, help, show){
+function edit_menu(title, sectionKey, specs, help, show){
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = document.querySelector('.' + group + '+ .submenu');
+    var submenu = document.querySelector('.' + sectionKey + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
+        var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
@@ -398,7 +399,7 @@ function edit_menu(title, specs, help, show){
     }
     for (var key in specs) {
         var spec = specs[key];
-        spec.group = group;
+        spec.group = sectionKey;
         spec.isTemplateBlock = true;
         submenu.appendChild(wb.Block(spec));
     }
@@ -411,21 +412,10 @@ function initLanguageFiles(){
     var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
     //gets en, es, de, etc.
-    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
-    // var locale = "es";
+    // var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
+    var locale = "es";
 
     var listFiles = l10nFiles[language][locale];
-
-    /* SOMETHING REALLY WEIRD HAPPENED HERE 
-     * If I use wb.l10nHalfDone in the following if statement, then the value 
-     * doesn't propagate to l10n.js. If i use the local version everything
-     * works.
-
-     * In the second if statement, within the ajax.get, I must use the 
-     * wb.l10nHalfDone version. 
-
-     * WHY?
-     */
 
     if (!listFiles) {
         if (l10nHalfDone) {

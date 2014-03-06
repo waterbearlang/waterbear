@@ -688,8 +688,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // DONE: Don't start drag on a text input or select using :input jquery selector
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        // console.log(eT);
-        //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
@@ -1217,6 +1215,11 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return false;
     }
     
+    function moveToScratchPad(event){
+	cloneBlock = wb.cloneBlock(event.target);
+	//Add child to scratchpad
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
@@ -1271,6 +1274,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
     Event.on('.content', 'dblclick', null, arrangeScratchPad);
+    Event.on('.content', 'dblclick', '.block', moveToScratchPad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

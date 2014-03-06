@@ -1,5 +1,6 @@
 {
     "name": "Images",
+    "help": "Image blocks are for loading image files to use in other blocks and for manipulating images. See Sprite and Canvas menus.",
     "blocks": [
         {
             "blocktype": "step",
@@ -34,13 +35,11 @@
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -52,13 +51,11 @@
             "sockets": [
                 {
                     "name": "draw image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "in rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -70,18 +67,15 @@
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from image",
-                    "type": "image",
-                    "value": null
+                    "type": "image"
                 },
                 {
                     "name": "to rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -105,8 +99,7 @@
             "sockets": [
                 {
                     "name": "create ImageData ImageData## with size",
-                    "type": "size",
-                    "value": null
+                    "type": "size"
                 }
             ]
         },
@@ -130,8 +123,7 @@
             "sockets": [
                 {
                     "name": "create ImageData ImageData## from imageData",
-                    "type": "imageData",
-                    "value": null
+                    "type": "imageData"
                 }
             ]
         },
@@ -155,8 +147,7 @@
             "sockets": [
                 {
                     "name": "get imageData## for rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 }
             ]
         },
@@ -168,13 +159,11 @@
             "sockets": [
                 {
                     "name": "draw imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -186,18 +175,15 @@
             "sockets": [
                 {
                     "name": "draw a rect",
-                    "type": "rect",
-                    "value": null
+                    "type": "rect"
                 },
                 {
                     "name": "from imageData",
-                    "type": "imagedata",
-                    "value": null
+                    "type": "imagedata"
                 },
                 {
                     "name": "at point",
-                    "type": "point",
-                    "value": null
+                    "type": "point"
                 }
             ]
         },
@@ -210,10 +196,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -226,10 +209,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -242,10 +222,7 @@
                 {
                     "name": "imageData",
                     "type": "imagedata",
-                    "value": null
-                },
-                {
-                    "name": "as array"
+                    "suffix": "as array"
                 }
             ]
         },
@@ -256,8 +233,7 @@
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 }
             ],
             "locals": [
@@ -282,10 +258,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         },
@@ -298,10 +271,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "height"
+                    "suffix": "height"
                 }
             ]
         },
@@ -314,10 +284,7 @@
                 {
                     "name": "image",
                     "type": "image",
-                    "value": null
-                },
-                {
-                    "name": "url"
+                    "suffix": "url"
                 }
             ]
         }

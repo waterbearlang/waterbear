@@ -294,6 +294,7 @@
               "type": "size",
               "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
               "uName": "rectangle level1",
+              "suffix": "big",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "sizes",
@@ -321,7 +322,7 @@
               }
             },
             {
-              "name": "big at",
+              "name": "at",
               "type": "point",
               "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
               "uBlock": {
@@ -1481,8 +1482,8 @@
                 },
                 {
                   "name": "",
-                  "type": "choice",
-                  "value": "choice",
+                  "type": "string",
+                  "value": "px",
                   "options": "unit",
                   "uValue": "px"
                 },
@@ -3886,8 +3887,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "a",
                         "options": "keys",
                         "uValue": "a"
                       },
@@ -4007,8 +4008,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "b",
                         "options": "keys",
                         "uValue": "b"
                       },
@@ -4128,8 +4129,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "c",
                         "options": "keys",
                         "uValue": "c"
                       },
@@ -5089,8 +5090,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "up",
                         "options": "keys",
                         "uValue": "up"
                       },
@@ -5206,8 +5207,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "down",
                         "options": "keys",
                         "uValue": "down"
                       },
@@ -5323,8 +5324,8 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
-                        "value": "choice",
+                        "type": "string",
+                        "value": "left",
                         "options": "keys",
                         "uValue": "left"
                       },
@@ -5440,7 +5441,7 @@
                     "sockets": [
                       {
                         "name": "key",
-                        "type": "choice",
+                        "type": "string",
                         "value": "choice",
                         "options": "keys",
                         "uValue": "right"

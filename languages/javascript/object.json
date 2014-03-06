@@ -1,5 +1,6 @@
 {
     "name": "Objects",
+    "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
     "blocks": [
         {
             "blocktype": "step",
@@ -32,18 +33,15 @@
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "= value",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 }
             ]
         },
@@ -56,13 +54,31 @@
             "sockets": [
                 {
                     "name": "object",
-                    "type": "any",
-                    "value": null
+                    "type": "any"
                 },
                 {
                     "name": "value at key",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "cd07f8d6-d2cb-475b-b1fb-1ee8392e0b14",
+            "script": "{{1}}[{{2}}].apply({{1}},{{3}});",
+            "help": "call instance method",
+            "sockets": [
+                {
+                    "name": "object",
+                    "type": "any"
+                },
+                {
+                    "name": "method name",
+                    "type": "string"
+                },
+                {
+                    "name": "arguments",
+                    "type": "array"
                 }
             ]
         },
@@ -99,10 +115,7 @@
                 {
                     "name": "for each item in",
                     "type": "any",
-                    "value": null
-                },
-                {
-                    "name": "do"
+                    "suffix": "do"
                 }
             ]
         }

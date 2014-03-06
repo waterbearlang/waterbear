@@ -11,8 +11,19 @@ ul.menu li, ul.menu ul.sub-menu li {
 	list-style-type: none;
 	display: inline-block;
 }
+
+ul.menu li.escape{
+	display: none;
+	position: absolute;
+	right: 10px;
+}
+
+.embedded ul.menu li.escape{
+	display: inline-block;
+}
+
 /*Link Appearance*/
-ul.menu li button, ul.menu li ul.sub-menu li button {
+.menu button {
 	text-decoration: none;
 	color: #fff;
 	background: #666;
@@ -20,13 +31,15 @@ ul.menu li button, ul.menu li ul.sub-menu li button {
 	display:inline-block;
 	min-width:60px;
 	border: 0;
-	border-top: 1px solid black;
 	margin: 0;
 }
 ul.menu > li > button {
 	text-align:center;
 }
-ul.menu li button:hover, ul.menu li ul.sub-menu li button:hover {
+ul.sub-menu button{
+	text-align: left;
+}
+ul.menu li button:not(.disabled):hover, ul.menu li ul.sub-menu li button:not(.disabled):hover {
 	background:#555;
 }
 /*Make the parent of sub-menu relative*/
@@ -37,18 +50,46 @@ ul.menu li {
 ul.menu li ul.sub-menu {
 	display:none;
 	position: absolute;
-	top: 35px;
+	top: 32px;
 	left: 0;
-	width: 100px;
 	z-index:1000;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 400px;
 }
 ul.menu li ul.sub-menu li button {
 	min-width:200px;
+	border-top: 1px solid black;
 }
-ul.menu li ul.sub-menu li button.disabled {
+ul.menu button.disabled {
 	background:#777;
 }
 ul.menu li:hover ul.sub-menu {
+	display:block;
+}
+ul.menu li ul.sub-menu li.separator button {
+	border-top-width: 2px;
+}
+	
+
+/*sub sub menu*/
+ul.menu li ul.sub-menu li ul.sub-menu {
+	display:none;
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	width: 100px;
+	z-index:1000;
+	border-left: solid 1px;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button {
+	min-width:200px;
+	border-top: 1px solid black;
+}
+ul.menu li ul.sub-menu li ul.sub-menu li button.disabled {
+	background:#777;
+}
+ul.menu li ul.sub-menu li:hover ul.sub-menu {
 	display:block;
 }
 
@@ -57,26 +98,61 @@ ul.menu li:hover ul.sub-menu {
 }
 /* Mobile nav */
 @media (max-width: 600px) {
-	#nav{
+	.nav{
 		display:none;
 	}
-	.menu_buttons {
-		display:block;
-	}
-	#nav li, #nav li button {
+	.nav li, .nav li button {
 		width:100%;
 
 	}
-	#nav li {
+	.nav li {
 		border-top:1px solid black;
 	}
 }
 
-#nav:target {
+.nav:target {
 	display:block;
 }
 
-/* Hide nav on result and blocks pages */
-body.result nav, body.blocks nav {
-	display:none;
+/* Button Menu in stage */
+
+
+.buttonmenu button{
+	padding-left: 10px;
+	visibility: hidden;
 }
+
+.buttonmenu:hover button{
+	visibility: visible;
+}
+
+.run-script{
+}
+
+.running .buttonmenu .run-script{
+	display: none;
+}
+
+.buttonmenu .stop-script{
+	display: none;
+}
+
+.running .buttonmenu .stop-script{
+	display: inline;
+}
+
+.buttonmenu .autorun-script-on{
+}
+
+.no-autorun .buttonmenu .autorun-script-on{
+	display: none;
+}
+
+.buttonmenu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .buttonmenu .autorun-script-off{
+	display: inline;
+}
+

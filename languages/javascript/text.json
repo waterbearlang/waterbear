@@ -1,5 +1,6 @@
 {
     "name": "Text",
+    "help": "Text blocks represent and manipulate the way text is drawn to the screen, things like alignment, font, and size.",
     "blocks": [
         {
             "blocktype": "step",
@@ -10,13 +11,13 @@
                 {
                     "name": "font",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 },
                 {
                     "name": "",
-                    "type": "choice",
+                    "type": "string",
                     "options": "unit",
-                    "value": "choice"
+                    "value": "px"
                 },
                 {
                     "name": "",
@@ -33,9 +34,9 @@
             "sockets": [
                 {
                     "name": "text align",
-                    "type": "choice",
+                    "type": "string",
                     "options": "align",
-                    "value": "choice"
+                    "value": "left"
                 }
             ]
         },
@@ -47,9 +48,9 @@
             "sockets": [
                 {
                     "name": "text baseline",
-                    "type": "choice",
+                    "type": "string",
                     "options": "baseline",
-                    "value": "choice"
+                    "value": ""
                 }
             ]
         },
@@ -61,18 +62,17 @@
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -84,23 +84,22 @@
             "sockets": [
                 {
                     "name": "fill text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -112,18 +111,17 @@
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -135,23 +133,22 @@
             "sockets": [
                 {
                     "name": "stroke text",
-                    "type": "string",
-                    "value": null
+                    "type": "string"
                 },
                 {
                     "name": "x",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "y",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "max width",
                     "type": "number",
-                    "value": "10"
+                    "value": 10
                 }
             ]
         },
@@ -164,10 +161,7 @@
                 {
                     "name": "text",
                     "type": "string",
-                    "value": null
-                },
-                {
-                    "name": "width"
+                    "suffix": "width"
                 }
             ]
         }

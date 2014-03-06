@@ -1,5 +1,5 @@
 {
-  "title": "",
+  "title": "Blacklight Worms",
   "description": "",
   "date": 1379856182640,
   "waterbearVersion": "2.0",
@@ -130,13 +130,13 @@
                               "name": "pick random",
                               "type": "number",
                               "value": "1",
-                              "uValue": "10"
+                              "uValue": "11"
                             },
                             {
                               "name": "to",
                               "type": "number",
                               "value": "10",
-                              "uValue": "30"
+                              "uValue": "29"
                             }
                           ],
                           "seqNum": "223",

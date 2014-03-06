@@ -3,26 +3,35 @@
 // Minimal support for non-DOM (custom) events
 // Normalized between mouse and touch events
 // Waterbear specific: events have wb-target which is always a block element
+// global variable wb is initialized in the HTML before any javascript files
+// are loaded (in template/template.html)
 
 (function(global){
     "use strict";
 
-    function on(elem, eventname, selector, handler){
+    function isDomObject(e){
+        if (e === window) return true;
+        if (e === document) return true;
+        if (e.tagName) return true;
+        return false;
+    }
+
+    function on(elem, eventname, selector, handler, onceOnly){
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!elem.tagName){ 
-            console.error('first argument must be element: %o', elem); 
-            debugger;
+        if (!isDomObject(elem)){ 
+            console.error('first argument must be element, document, or window: %o', elem);
+            throw new Error('first argument must be element');
         }
         if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener;
         if (selector){
-            listener = function(event){
+            listener = function listener(event){
                 blend(event); // normalize between touch and mouse events
                 // if (eventname === 'mousedown'){
                 //     console.log(event);
@@ -30,6 +39,9 @@
                 if (!event.wbValid){
                     // console.log('event is not valid');
                     return;
+                }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
                 }
                 if (wb.matches(event.wbTarget, selector)){
                     handler(event);
@@ -39,10 +51,13 @@
                 }
             };
         }else{
-            listener = function(event){
+            listener = function listener(event){
                 blend(event);
                 if (!event.wbValid){
                     return;
+                }
+                if (onceOnly){
+                    Event.off(elem, eventname, listener);
                 }
                 handler(event);
             };
@@ -55,12 +70,8 @@
         elem.removeEventListener(eventname, handler);
     }
 
-    function once(elem, eventname, selector, handler){
-        var listener = function listener(event){
-            handler(event);
-            Event.off(elem, eventname, listener);
-        };
-        return Event.on(elem, eventname, selector, listener);
+    var once = function(elem, eventname, selector, handler){
+        return Event.on(elem, eventname, selector, handler, true);
     }
 
     function trigger(elemOrSelector, eventname, data){

@@ -13,34 +13,35 @@ var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript','asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix', , 'datablock'],
-    minecraftjs: ['minecraftjs', 'control', 'game', 'player', 'position', 'blocks',  'camera', 'array', 'boolean', 'math', 'string'],
-    demo: ['javascript', 'demo'],
-    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
+    node: ['node','control', 'piface', 'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
+    javascript: ['javascript', 'asset', 'datablock', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb',*/ 'text', 'matrix'],
+    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform']
 };
 
 var pluginlibs = {
     arduino: [],
     javascript: ['SAT'],
-    minecraftjs: [],
+    node: [],
     demo: [],
     processingjs: ['processing-1.4.1']
 }
 
+var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome']
+
 var styles = {
-    arduino: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    javascript: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    minecraftjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    demo: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css'],
-    processingjs: ['stylesheets/workspace.css', 'stylesheets/blocks.css', 'lib/highlight-github.css', 'stylesheets/menu.css', 'stylesheets/fonts/fontawesome.css']
+    arduino: [],
+    javascript: ['highlight-github'],
+    node: ['highlight-github'],
+    demo: ['highlight-github'],
+    processingjs: ['highlight-github']
 }
 
-var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs'];
+var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
 
 var libs = {
-    arduino: [],
+    arduino: ['events.min'],
     javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    minecraftjs: ['beautify', 'highlight', 'highlight-javascript','events.min'],
+    node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
 };
@@ -111,7 +112,9 @@ function build(){
             errors = true;
             return -1;
         }
-        styles[lang].forEach(function(stylename){cat(stylename, dest + '.css'); });
+        styles[lang].concat(universalStyles)
+            .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
+            .forEach(function(stylename){cat(stylename, dest + '.css'); });
 
         scripts.forEach(function(scriptname){cat('scripts/' + scriptname + '.js', dest + '.js'); });
 
@@ -125,7 +128,7 @@ function build(){
         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
 
         // Build runtime support
-        if (lang === 'javascript' || lang === 'minecraftjs' || lang === 'processingjs'){
+        if (lang === 'javascript' || lang === 'processingjs'){
             pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }

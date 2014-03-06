@@ -19,7 +19,7 @@ For further info:
 * [Getting Started](https://github.com/waterbearlang/waterbear/wiki/Getting-Started)
 * [Similar Projects](https://github.com/waterbearlang/waterbear/wiki/Similar-Projects)
 * [Contributors and Acknowledgements](https://github.com/waterbearlang/waterbear/wiki/Contributors-and-Acknowledgements)
-* [Preview of next release](http://beta.waterbearlang.com/)
+* [Preview of next release (beta site)](http://beta.waterbearlang.com/)
 
 
 ## License

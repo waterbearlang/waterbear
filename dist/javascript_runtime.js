@@ -1249,8 +1249,6 @@ Global.prototype.preloadVideo = preloadVideo;
 			return;
 		} 
 		this.data = window.ajax.gets(this.url); 
-		console.log("Data: %s", this.data);
-
 	}
 	window.DataBlock = DataBlock;
 	window.createDataBlock = createDataBlock;

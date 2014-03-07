@@ -12150,7 +12150,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // is initialized in the HTML before any javascript files are
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
-(function(global){
+(function(global, window){
 'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
@@ -12191,11 +12191,11 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 		}
 		return base + '?' + parts.join('&');
 	}
-
-	wb.urlToQueryParams = urlToQueryParams;
-	wb.queryParamsToUrl = queryParamsToUrl;
-	global.wb = wb;
-})(this);
+	if(window.wb === undefined) window.wb = {}; 
+	window.wb.urlToQueryParams = urlToQueryParams;
+	window.wb.queryParamsToUrl = queryParamsToUrl;
+	global.wb = window.wb;
+})(this, window);
 
 /*end queryparams.js*/
 

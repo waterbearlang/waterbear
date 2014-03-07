@@ -1,3 +1,4 @@
+require('');
 describe("A test suite", function() {
   beforeEach(function() {
   });

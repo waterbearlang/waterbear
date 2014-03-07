@@ -5380,13 +5380,7 @@ wb.menu = menu;
 /*end languages/javascript/asset.js*/
 
 /*begin languages/javascript/datablock.js*/
-/* DataBlock Plugin for WaterBear */
 
-(function(window){
-'use strict';
-
-
-})(window);
 /*end languages/javascript/datablock.js*/
 
 /*begin languages/javascript/control.js*/
@@ -5594,58 +5588,38 @@ wb.menu({
     "name": "DataBlock",
     "blocks": [
         {
-            "blocktype": "context",
-            "id": "3069ee63-d1bd-40d6-b41c-01fb4db46f76",
-            "script": "window.console.log(\"I'm doing stuff!\");",
-            "help": "make a GET Request",
-            "sockets": [
-                {
-                    "name": "GET",
-                    "type": "datablock",
-                    "value": "URL"
-                }
-            ],
+            "blocktype": "step",
+            "id": "744f4e58-b99e-4df5-9f1a-27c03c312811",
+            "script": "local.datablock## = createDataBlock({{1}});",
             "locals": [
                 {
-                    "blocktype": "step",
-                    "name": "datablock",
-                    "script": "/* do nothing */",
-                    "help": "should only req",
+                    "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "request",
-                            "type": "datablock",
-                            "value": "get"
+                            "name": "datablock##"
                         }
-                    ]
+                    ],
+                    "script": "local.datablock##",
+                    "type": "datablock"
+                }
+            ],
+            "help": "create a simple datablock",
+            "sockets": [
+                {
+                    "name": "datablock ## url",
+                    "type": "string"
                 }
             ]
         },
         {
-            "blocktype": "context",
-            "id": "4f564cea-057c-4b1c-8ea1-96d7f50c5436",
-            "script": "/* do nothing */",
-            "help": "make a POST Request",
+            "blocktype": "step",
+            "id": "332d17f7-01f1-400f-b011-d07a91caf0d9",
+            "script": "{{1}}.getData();",
+            "help": "retrieve data from website",
             "sockets": [
                 {
-                    "name": "POST",
-                    "type": "datablock",
-                    "value": "URL"
-                }
-            ],
-            "locals": [
-                {
-                    "blocktype": "step",
-                    "name": "datablock",
-                    "script": "/* do nothing */",
-                    "help": "should only request",
-                    "sockets": [
-                        {
-                            "name": "request",
-                            "type": "datablock",
-                            "value": "post"
-                        }
-                    ]
+                    "name": "retrieve data",
+                    "type": "datablock"
                 }
             ]
         }

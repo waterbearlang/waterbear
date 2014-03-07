@@ -75,7 +75,12 @@ function createSprite(shape, color){
 };
 
 window.createRectSprite = createRectSprite; // deprecated
+window.createTextSprite = createTextSprite;
+window.createImageSprite = createImageSprite;
+window.createPolygonSprite = createPolygonSprite;
+window.createCircleSprite = createCircleSprite;
 window.createSprite = createSprite;
+
 window.Sprite = Sprite;
 
 Sprite.prototype.isPolygon = function(){

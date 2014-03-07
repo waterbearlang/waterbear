@@ -1228,6 +1228,35 @@ Global.prototype.preloadVideo = preloadVideo;
 })(window);
 /*end languages/javascript/asset_runtime.js*/
 
+/*begin languages/javascript/datablock_runtime.js*/
+/* DataBlock Plugin for WaterBear */
+
+(function(window){
+	'use strict';
+	function DataBlock(url) {
+		this.url = url;
+		this.data = "";
+	}
+
+	function createDataBlock(url) {
+		var block = new DataBlock(url);
+		return block;
+	}
+
+	DataBlock.prototype.getData = function() {
+		if(this.url == null || this.url == undefined) {
+			alert("Please give a url");
+			return;
+		} 
+		this.data = window.ajax.gets(this.url); 
+		console.log("Data: %s", this.data);
+
+	}
+	window.DataBlock = DataBlock;
+	window.createDataBlock = createDataBlock;
+})(window);
+/*end languages/javascript/datablock_runtime.js*/
+
 /*begin languages/javascript/control_runtime.js*/
     // Polyfill for built-in functionality, just to get rid of namespaces in older
     // browsers, or to emulate it for browsers that don't have requestAnimationFrame yet
@@ -1319,7 +1348,12 @@ function createSprite(shape, color){
 };
 
 window.createRectSprite = createRectSprite; // deprecated
+window.createTextSprite = createTextSprite;
+window.createImageSprite = createImageSprite;
+window.createPolygonSprite = createPolygonSprite;
+window.createCircleSprite = createCircleSprite;
 window.createSprite = createSprite;
+
 window.Sprite = Sprite;
 
 Sprite.prototype.isPolygon = function(){

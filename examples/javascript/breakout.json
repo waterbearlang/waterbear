@@ -954,14 +954,26 @@
                             "uValue": "98"
                           },
                           {
+                            "name": "width units",
+                            "type": "choice",
+                            "value": "px",
+                            "options": "relativeUnit"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "32"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "choice",
+                            "value": "px",
+                            "options": "relativeUnit"
                           }
                         ],
                         "seqNum": "7",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -1547,14 +1559,26 @@
                     "uValue": "128"
                   },
                   {
+                    "name": "width units",
+                    "type": "choice",
+                    "value": "px",
+                    "options": "relativeUnit"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "32"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "choice",
+                    "value": "px",
+                    "options": "relativeUnit"
                   }
                 ],
                 "seqNum": "4",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },
@@ -1736,14 +1760,26 @@
                     "uValue": "16"
                   },
                   {
+                    "name": "width units",
+                    "type": "choice",
+                    "value": "px",
+                    "options": "relativeUnit"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "16"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "choice",
+                    "value": "px",
+                    "options": "relativeUnit"
                   }
                 ],
                 "seqNum": "7",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },
@@ -1885,14 +1921,26 @@
                     "uValue": "200"
                   },
                   {
+                    "name": "width units",
+                    "type": "choice",
+                    "value": "px",
+                    "options": "relativeUnit"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "32"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "choice",
+                    "value": "px",
+                    "options": "relativeUnit"
                   }
                 ],
                 "seqNum": "11",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },

@@ -229,7 +229,7 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ");
+    }).join(" ")+"\n process.on('SIGINT', process.exit);";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);

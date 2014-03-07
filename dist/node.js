@@ -2990,26 +2990,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function registerScratchSpace() {
-        var workspace = document.querySelector('.workspace');
-        var mainWorkspace = document.querySelector('scripts_workspace');
-        var id = "23423443";
-        var sBlock = wb.Block({
-                group: 'scripts_scratchspace',
-                id: id,
-                scriptId: id,
-                scopeId: id,
-                blocktype: 'context',
-                sockets: [
-                ],
-                script: '[[1]]',
-                isTemplateBlock: false,
-                help: 'Place script blocks here for quick access'
-            });
-    
-        workspace.insertBefore(sBlock, mainWorkspace);
-    }
-    
     function cancelDrag(event) {
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
@@ -3040,15 +3020,18 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return false;
     }
     
+    function menuToScratchpad(event) {
+	cloned = wb.cloneBlock(event.target);
+	scratchpad.appendChild(cloned);
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchPad() {
-	console.log("ARRANGING SCRATCH PAD");
+    function arrangeScratchpad(event) {
 	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
 	var xOrigin = 5;
 	var yOrigin = 5;
@@ -3069,8 +3052,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		console.log("X " + x);
-		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
 		if (x >= width - 25) {
@@ -3093,7 +3074,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
-    Event.on('.content', 'dblclick', null, arrangeScratchPad);
+    Event.on('.content', 'dblclick', null, arrangeScratchpad);
+    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -5456,7 +5438,7 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ");
+    }).join(" ")+"\n process.on('SIGINT', process.exit);";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
@@ -5528,7 +5510,7 @@ wb.choiceLists.pifaceonoff = [0, 1];
 
 
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
-wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\"); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+wb.requiredjs.after.piface =  "\nprocess.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
 
 /*end languages/node/piface.js*/
 
@@ -5554,9 +5536,9 @@ wb.requiredjs.after.firmata =  "";
 /*begin languages/node/mc_game.js*/
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('minecraft-pi-vec3');\nvar v= require('vec3');";
 
-wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+wb.requiredjs.after.minecraftgame =  "\nprocess.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 
 
 // TODO : fix blocktypes to number or text not both

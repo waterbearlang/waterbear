@@ -2990,26 +2990,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function registerScratchSpace() {
-        var workspace = document.querySelector('.workspace');
-        var mainWorkspace = document.querySelector('scripts_workspace');
-        var id = "23423443";
-        var sBlock = wb.Block({
-                group: 'scripts_scratchspace',
-                id: id,
-                scriptId: id,
-                scopeId: id,
-                blocktype: 'context',
-                sockets: [
-                ],
-                script: '[[1]]',
-                isTemplateBlock: false,
-                help: 'Place script blocks here for quick access'
-            });
-    
-        workspace.insertBefore(sBlock, mainWorkspace);
-    }
-    
     function cancelDrag(event) {
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
@@ -3040,15 +3020,18 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return false;
     }
     
+    function menuToScratchpad(event) {
+	cloned = wb.cloneBlock(event.target);
+	scratchpad.appendChild(cloned);
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchPad() {
-	console.log("ARRANGING SCRATCH PAD");
+    function arrangeScratchpad(event) {
 	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
 	var xOrigin = 5;
 	var yOrigin = 5;
@@ -3069,8 +3052,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		console.log("X " + x);
-		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
 		if (x >= width - 25) {
@@ -3093,7 +3074,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
-    Event.on('.content', 'dblclick', null, arrangeScratchPad);
+    Event.on('.content', 'dblclick', null, arrangeScratchpad);
+    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -5456,7 +5438,7 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ");
+    }).join(" ")+"\n process.on('SIGINT', process.exit);";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
@@ -5528,9 +5510,85 @@ wb.choiceLists.pifaceonoff = [0, 1];
 
 
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
-wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\"); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+wb.requiredjs.after.piface =  "\nprocess.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
 
 /*end languages/node/piface.js*/
+
+/*begin languages/node/pibrella_simple.js*/
+
+//PiBrella 
+/*
+gpio export 27 out
+gpio export 17 out
+gpio export 4 out
+gpio export 22 out
+gpio export 23 out
+gpio export 24 out
+gpio export 25 out
+gpio export 18 out
+
+gpio export 11 in
+gpio export 9 in
+gpio export 7 in
+gpio export 8 in
+gpio export 10 in
+
+gpio -g mode 11 down
+gpio -g mode 9 down
+gpio -g mode 7 down
+gpio -g mode 8 down
+gpio -g mode 10 down
+
+*/
+
+
+wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output A", 23:"Output B", 24:"Output C", 25:"Output D", 18: "Buzzer"}
+wb.choiceLists.pibrellain = {11:"Red Button", 9:"Input A", 7:"Input B", 8:"Input C", 10:"Input D"}
+
+wb.choiceLists.pibrellaedge = {'both': 'Change', 'rising':'Turn On', 'falling':'Turn Off'}
+
+
+//PB_PIN_BUZZER = 18
+
+
+wb.requiredjs.before.pibrella = "var Gpio = require('onoff').Gpio;\n";
+wb.requiredjs.after.pibrella =  "";
+
+
+/*Run the following commands to export GPIO #17 and #18:
+
+gpio export 17 out
+gpio export 18 in
+
+Step 2 - Run the application
+
+Now the application can be executed without superuser privileges. Note that unlike the initial led/button example, the applications exit function does not attempt to unexport the GPIOs when it terminates.
+
+var Gpio = require('onoff').Gpio,
+    led = new Gpio(17, 'out'),
+    button = new Gpio(18, 'in', 'both');
+
+button.watch(function(err, value) {
+    if (err) exit();
+    led.writeSync(value);
+});
+
+function exit() {
+    process.exit();
+}
+
+process.on('SIGINT', exit);
+
+Step 3 - Unxport GPIOs with gpio
+
+After the application has terminated, run the following commands to unexport GPIO #17 and #18:
+
+gpio unexport 17
+gpio unexport 18
+
+*/
+
+/*end languages/node/pibrella_simple.js*/
 
 /*begin languages/node/firmata.js*/
 //arduino firmata  https://npmjs.org/search?q=firmata
@@ -5554,9 +5612,9 @@ wb.requiredjs.after.firmata =  "";
 /*begin languages/node/mc_game.js*/
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('minecraft-pi-vec3');\nvar v= require('vec3');";
 
-wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+wb.requiredjs.after.minecraftgame =  "\nprocess.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 
 
 // TODO : fix blocktypes to number or text not both
@@ -5965,6 +6023,113 @@ wb.menu({
     ]
 });
 /*end languages/node/piface.json*/
+
+/*begin languages/node/pibrella_simple.json*/
+wb.menu({
+    "name": "PiBrella",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiBrella board.",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "cecd70c5-e733-4f36-83f3-aec34a70f75b",
+            "script": "output## = new Gpio({{1}}, 'out');",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create output## using",
+                    "type": "number",
+                    "options": "pibrellaout",
+                    "value": null
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "output##"
+                        },
+                        {
+                            "name": "=",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "output##.writeSync(({{1}})?1:0);"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "f2c60382-47b4-40d7-8117-c790a866c104",
+            "script": "input## = new Gpio({{1}}, 'in');",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "input##"
+                        }
+                    ],
+                    "script": "(input##.readSync() === 1)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create input## using Input Pin",
+                    "type": "number",
+                    "options": "pibrellain",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "e57b641a-3de8-4ecd-90bc-77a1277b8066",
+            "script": "watcher## = new Gpio({{1}}, 'in', {{2}}, {\"debounceTimeout\":{{3}}}); watcher##.watch(function(err, watcherval){[[1]]})",
+            "help": "Create a named pin set to input",
+            "sockets": [
+                {
+                    "name": "Watch for",
+                    "type": "number",
+                    "options": "pibrellain",
+                    "value": 11
+                },
+                {
+                    "name": "to",
+                    "type": "string",
+                    "options": "pibrellaedge",
+                    "value": "both"
+                },
+                {
+                    "name": "debounce",
+                    "type": "number",
+                    "value": 100,
+                    "suffix": "ms"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "value"
+                        }
+                    ],
+                    "script": "(watcherval === 1)",
+                    "help": "value from input",
+                    "type": "boolean"
+                }
+            ]
+        }
+        
+        
+    ]
+});
+/*end languages/node/pibrella_simple.json*/
 
 /*begin languages/node/firmata.json*/
 wb.menu({

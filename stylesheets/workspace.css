@@ -32,7 +32,7 @@ input{
 	user-select: text;
 }
 
-.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace{
+.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace, .remote{
 	margin: 5px;
 	border: 2px outset #333;
 	padding: 10px;	
@@ -52,7 +52,7 @@ input{
 
 
 .hidden, .block.hidden{
-	display: none;
+	display: none !important;
 }
 
 

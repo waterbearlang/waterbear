@@ -112,9 +112,9 @@ wb.runScript = function(script){
     };
     
     
-    oSocket.onclose = function (event) {
+    /*oSocket.onclose = function (event) {
         wb.resetrun("Communication Ended");
-    };
+    };*/
     
     oSocket.onmessage = function(event) {
         var msg = JSON.parse(event.data);
@@ -124,10 +124,8 @@ wb.runScript = function(script){
                 break;
             case "running":
                 messagebox.innerHTML = "Code running on RPi "+ msg.pid;
-                var runbutton= document.querySelector('.run-remote')
-                console.log("runbutton =", runbutton);
+                var runbutton= document.querySelector('.run-remote');
                 wb.hide(runbutton);
-                //document.querySelector('.stop-remote').style.display = 'inline-block';
                 wb.show(document.querySelector('.stop-remote'));
                 
                 Event.once('.stop-remote', 'click', null, function(){
@@ -229,7 +227,8 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ")+"\n process.on('SIGINT', process.exit);";
+    }).join(" ")+"\n process.on('SIGINT', function(){process.exit(0);});";
+    //"process.on('EXIT', function(){cosole.log(\"Ending\");});";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);

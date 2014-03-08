@@ -52,7 +52,26 @@
 )
 
 (define (merge lst1 lst2 acc)
+	(if (equal? () lst1)
+		(append acc lst2)
+		(if (equal? lst2 ())
+			(append acc lst2)
+			(let [ge  
+		)
+	)
 
 
+(define (factorial n)
+	(if (zero? n) 1
+		(* n (factorial (- n 1)))))
 
+(define (tail_rec_factorial n)
+	(fact_helper n 1)
+)
+
+(define (fact_helper n acc)
+	(if (zero? n)
+		acc
+		(fact_helper (- n 1) (* n acc))
+		)
 )

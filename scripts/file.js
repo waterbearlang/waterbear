@@ -224,7 +224,7 @@
 	};
 
 	function loadScriptsFromFile(file){
-		fileName = file.name;
+		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
 			return;

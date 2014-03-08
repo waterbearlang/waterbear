@@ -70,3 +70,17 @@
 			)
 		)
 )
+
+(define (fold_left f acc lst)
+	(if (equal? lst ())
+		acc
+		(fold_left f (f acc (car lst)) (cdr lst))
+		)
+)
+
+(define (fold_right f lst acc)
+	(if (equal? lst ())
+		acc
+		(fold_right f (cdr lst) (f (car lst) acc))
+	)
+)

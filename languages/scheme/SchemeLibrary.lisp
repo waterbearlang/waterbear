@@ -1,14 +1,3 @@
-(define x 5)
-
-(define sum (lambda x y) (+ x y))
-
-(define (sum1 x) (+ x 1))
-
-(define (greaterThan5 x) (if (> x 5) #t #f))
-
-(define (mergeSort l))
-
-(define (merge l1 l2))
 
 (define (listTraversal lst)
 (if (equal? () lst)
@@ -18,7 +7,6 @@
 	))
 
 (define (listRev lst)
-
 	(listRevHelper lst ()))
 
 (define (listRevHelper lst acc)
@@ -51,16 +39,6 @@
 	(rev_map_helper f lst ())
 )
 
-(define (merge lst1 lst2 acc)
-	(if (equal? () lst1)
-		(append acc lst2)
-		(if (equal? lst2 ())
-			(append acc lst2)
-			(let [ge  
-		)
-	)
-
-
 (define (factorial n)
 	(if (zero? n) 1
 		(* n (factorial (- n 1)))))
@@ -73,5 +51,22 @@
 	(if (zero? n)
 		acc
 		(fact_helper (- n 1) (* n acc))
+		)
+)
+
+(define (fibonacci n)
+     (if (< n 2) n
+         (+ (fibonacci (- n 1))
+            (fibonacci (- n 2)))))
+
+(define (dynamic_fib n)
+	(fib_helper n 0 1)
+)
+
+(define (fib_helper n prev1 prev2)
+	(if (equal? n 2) 
+			(+ prev1 prev2)
+			(fib_helper (- n 1) prev2 (+ prev2 prev1))
+			)
 		)
 )

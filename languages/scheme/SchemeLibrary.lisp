@@ -51,4 +51,8 @@
 	(rev_map_helper f lst ())
 )
 
-(define (fold_left f acc lst))
+(define (merge lst1 lst2 acc)
+
+
+
+)

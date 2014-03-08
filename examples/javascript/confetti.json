@@ -1,7 +1,7 @@
 {
     "title": "",
     "description": "",
-    "date": 1394316058680,
+    "date": 1394317350585,
     "waterbearVersion": "2.0",
     "blocks": [
         {
@@ -10,7 +10,7 @@
             "scriptId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
             "sockets": [
                 {
-                    "name": "Confetti"
+                    "name": "confetti2"
                 }
             ],
             "blocktype": "context",
@@ -270,32 +270,108 @@
                                                         "name": "point at x",
                                                         "type": "number",
                                                         "uBlock": {
-                                                            "id": "0e064b06-7ee3-4b3b-8ef1-91249ffdddeb",
+                                                            "id": "e830ab0d-a0b4-491e-af1d-52af03254e69",
                                                             "scopeId": "0",
-                                                            "scriptId": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
+                                                            "scriptId": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
                                                             "sockets": [
                                                                 {
-                                                                    "name": "mouse x"
+                                                                    "name": "",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "0e064b06-7ee3-4b3b-8ef1-91249ffdddeb",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "mouse x"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "573",
+                                                                        "script": "global.mouse_x"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "+",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "2c33a337-58e7-4dd7-8083-5da8c53d420b",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "pick random integer from",
+                                                                                "type": "number",
+                                                                                "value": "1",
+                                                                                "uValue": "-20"
+                                                                            },
+                                                                            {
+                                                                                "name": "to",
+                                                                                "type": "number",
+                                                                                "value": "10",
+                                                                                "uValue": "20"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "581",
+                                                                        "script": "randint({{1}}, {{2}})"
+                                                                    }
                                                                 }
                                                             ],
-                                                            "seqNum": "573",
-                                                            "script": "global.mouse_x"
+                                                            "seqNum": "579",
+                                                            "script": "({{1}} + {{2}})"
                                                         }
                                                     },
                                                     {
                                                         "name": "y",
                                                         "type": "number",
                                                         "uBlock": {
-                                                            "id": "5911149e-b5be-4ac3-a46f-9cd98fce5d57",
+                                                            "id": "9cbc33b8-09f0-46b2-921b-1d56d4f6e7ac",
                                                             "scopeId": "0",
-                                                            "scriptId": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
+                                                            "scriptId": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
                                                             "sockets": [
                                                                 {
-                                                                    "name": "mouse y"
+                                                                    "name": "",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "5911149e-b5be-4ac3-a46f-9cd98fce5d57",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "mouse y"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "574",
+                                                                        "script": "global.mouse_y"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "+",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "cc35c77a-468f-4ceb-995e-d46afeb9b4e3",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "pick random integer from",
+                                                                                "type": "number",
+                                                                                "value": "1",
+                                                                                "uValue": "-20"
+                                                                            },
+                                                                            {
+                                                                                "name": "to",
+                                                                                "type": "number",
+                                                                                "value": "10",
+                                                                                "uValue": "20"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "582",
+                                                                        "script": "randint({{1}}, {{2}})"
+                                                                    }
                                                                 }
                                                             ],
-                                                            "seqNum": "574",
-                                                            "script": "global.mouse_y"
+                                                            "seqNum": "580",
+                                                            "script": "({{1}} + {{2}})"
                                                         }
                                                     }
                                                 ],
@@ -504,7 +580,210 @@
                             ],
                             "contained": [
                                 {
-                                    "id": "3778b6eb-3440-4d4f-964c-16c2fe952be3",
+                                    "id": "a187405b-89e0-43f4-a553-34f52dccda32",
+                                    "scopeId": "0",
+                                    "scriptId": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
+                                    "sockets": [
+                                        {
+                                            "name": "move",
+                                            "type": "sprite",
+                                            "uBlock": {
+                                                "id": "c60ccacc-5c01-4569-bdb2-2e9f8b9180f6",
+                                                "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                                "sockets": [
+                                                    {
+                                                        "name": "item"
+                                                    }
+                                                ],
+                                                "seqNum": "577",
+                                                "script": "local.item",
+                                                "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                            }
+                                        },
+                                        {
+                                            "name": "by x",
+                                            "type": "number",
+                                            "uBlock": {
+                                                "id": "7cca2df7-5423-442c-8532-b6629dd01b5d",
+                                                "scopeId": "0",
+                                                "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                "sockets": [
+                                                    {
+                                                        "name": "pick random integer from",
+                                                        "type": "number",
+                                                        "value": "1",
+                                                        "uValue": "-1"
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "number",
+                                                        "value": "10",
+                                                        "uValue": "1"
+                                                    }
+                                                ],
+                                                "seqNum": "588",
+                                                "script": "randint({{1}}, {{2}})"
+                                            }
+                                        },
+                                        {
+                                            "name": "y",
+                                            "type": "number",
+                                            "uBlock": {
+                                                "id": "d94c1175-07f9-414f-94a4-308e5d990a1d",
+                                                "scopeId": "0",
+                                                "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                "sockets": [
+                                                    {
+                                                        "name": "pick random integer from",
+                                                        "type": "number",
+                                                        "value": "1",
+                                                        "uValue": "1"
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "number",
+                                                        "value": "10",
+                                                        "uValue": "4"
+                                                    }
+                                                ],
+                                                "seqNum": "585",
+                                                "script": "randint({{1}}, {{2}})"
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "584",
+                                    "script": "{{1}}.moveRelative({{2}},{{3}});"
+                                },
+                                {
+                                    "id": "5b70069f-a988-4430-a99d-4eb51f3f57bc",
+                                    "scopeId": "0",
+                                    "scriptId": "20ba3e08-74c0-428e-b612-53545de63ce0",
+                                    "sockets": [
+                                        {
+                                            "name": "if",
+                                            "type": "boolean",
+                                            "uBlock": {
+                                                "id": "9717a8ff-e12e-4b8c-b4df-bc42e547cfbc",
+                                                "scopeId": "0",
+                                                "scriptId": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
+                                                "sockets": [
+                                                    {
+                                                        "name": "",
+                                                        "type": "number",
+                                                        "uBlock": {
+                                                            "id": "c3fa50d5-6880-4817-bb65-876b747a8ee8",
+                                                            "scopeId": "0",
+                                                            "scriptId": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
+                                                            "sockets": [
+                                                                {
+                                                                    "name": "stage height"
+                                                                }
+                                                            ],
+                                                            "seqNum": "596",
+                                                            "script": "global.stage_height"
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "<",
+                                                        "type": "number",
+                                                        "uBlock": {
+                                                            "id": "a17082fb-cc96-4c83-ab43-b776b25f6c96",
+                                                            "scopeId": "0",
+                                                            "scriptId": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
+                                                            "sockets": [
+                                                                {
+                                                                    "name": "sprite",
+                                                                    "type": "sprite",
+                                                                    "suffix": "bottom",
+                                                                    "uBlock": {
+                                                                        "id": "f2f063e7-5821-41fb-816e-6d54cc7c2b95",
+                                                                        "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                                        "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "item"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "577",
+                                                                        "script": "local.item",
+                                                                        "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "seqNum": "595",
+                                                            "script": "({{1}}.y + {{1}}.h)"
+                                                        }
+                                                    }
+                                                ],
+                                                "seqNum": "591",
+                                                "script": "({{1}} < {{2}})"
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "589",
+                                    "script": "if({{1}}){[[1]]}",
+                                    "contained": [
+                                        {
+                                            "id": "3778b6eb-3440-4d4f-964c-16c2fe952be3",
+                                            "scopeId": "0",
+                                            "scriptId": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
+                                            "sockets": [
+                                                {
+                                                    "name": "draw sprite",
+                                                    "type": "sprite",
+                                                    "uBlock": {
+                                                        "id": "3b43a40e-2eb4-4dc8-94f3-8ac4609e8ee8",
+                                                        "scopeId": "0",
+                                                        "scriptId": "f4870f0f-1dbb-4bc7-b8e3-3a00af613689",
+                                                        "sockets": [
+                                                            {
+                                                                "name": "array",
+                                                                "type": "array",
+                                                                "uBlock": {
+                                                                    "id": "a160d696-8413-45a3-b4ea-4fac38856b07",
+                                                                    "scopeId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+                                                                    "scriptId": "a00e02ae-baf8-4118-9265-00ef9bd4d472",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "array##"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "575",
+                                                                    "script": "local.array##",
+                                                                    "localSource": "d3cfa8dc-a9b5-4ce4-a0d9-27366019845c"
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "remove item",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "id": "16fe7152-1b23-4da5-a676-5bdb32be140b",
+                                                                    "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                                    "scriptId": "fa4174ca-79fa-4127-a79f-482d2fcf6ca4",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "index"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "577",
+                                                                    "script": "local.index",
+                                                                    "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "seqNum": "598",
+                                                        "script": "{{1}}.splice({{2}}, 1)[0]"
+                                                    }
+                                                }
+                                            ],
+                                            "seqNum": "578",
+                                            "script": "{{1}}.draw(local.ctx);"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "3c2c272b-1138-4a17-8195-be14ecd88354",
                                     "scopeId": "0",
                                     "scriptId": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
                                     "sockets": [
@@ -512,7 +791,7 @@
                                             "name": "draw sprite",
                                             "type": "sprite",
                                             "uBlock": {
-                                                "id": "44e5b140-30a7-43fb-831b-cececc651f6f",
+                                                "id": "140181f5-04bf-4bbd-89b5-6dbb62ff30f3",
                                                 "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
                                                 "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
                                                 "sockets": [
@@ -526,7 +805,7 @@
                                             }
                                         }
                                     ],
-                                    "seqNum": "578",
+                                    "seqNum": "599",
                                     "script": "{{1}}.draw(local.ctx);"
                                 }
                             ]

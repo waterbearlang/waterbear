@@ -4074,7 +4074,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	};
 
 	function loadScriptsFromFile(file){
-		fileName = file.name;
+		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
 			return;
@@ -5931,6 +5931,24 @@ wb.menu({
                 {
                     "name": "clear stage to color",
                     "type": "color",
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "44d98663-d4fd-4fc8-8b65-0cde22deced6",
+            "script": "local.ctx.save();local.ctx.canvas.width = global.stage_width;local.ctx.canvas.height =  global.stage_height;var w = local.ctx.canvas.width;var h = local.ctx.canvas.height;var size = {{1}};local.ctx.beginPath();if (size <= 0){size = 0.1;};for (var x=0;x<=w;x+=size){local.ctx.moveTo(x,0);local.ctx.lineTo(x,h);};for (var y=0;y<=h;y+=size){local.ctx.moveTo(0,y);local.ctx.lineTo(w,y);};local.ctx.strokeStyle ={{2}};local.ctx.stroke();",
+            "help": "set a grid background",
+            "sockets": [
+                {
+                    "name": "set grid with interval",
+                    "type": "number",
+                    "block": ""
+                },
+                {
+                    "name": "with color",
+                    "type": "point",
                     "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
             ]

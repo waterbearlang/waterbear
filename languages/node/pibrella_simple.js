@@ -25,7 +25,7 @@ gpio -g mode 10 down
 */
 
 
-wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output A", 23:"Output B", 24:"Output C", 25:"Output D", 18: "Buzzer"}
+wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output E", 23:"Output F", 24:"Output G", 25:"Output H", 18: "Buzzer"}
 wb.choiceLists.pibrellain = {11:"Red Button", 9:"Input A", 7:"Input B", 8:"Input C", 10:"Input D"}
 
 wb.choiceLists.pibrellaedge = {'both': 'Change', 'rising':'Turn On', 'falling':'Turn Off'}

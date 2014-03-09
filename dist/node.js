@@ -5556,16 +5556,18 @@ gpio -g mode 10 down
 */
 
 
-wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output E", 23:"Output F", 24:"Output G", 25:"Output H", 18: "Buzzer"}
-wb.choiceLists.pibrellain = {11:"Red Button", 9:"Input A", 7:"Input B", 8:"Input C", 10:"Input D"}
+wb.choiceLists.pibrellaoutnames = {"Red_LED":"Red LED", "Amber_LED":"Amber LED", "Green_LED":"Green LED", "Output_E":"Output E", "Output_F":"Output F", "Output_G":"Output G", "Output_H":"Output H"};
+wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output E", 23:"Output F", 24:"Output G", 25:"Output H", 18: "Buzzer"};
 
-wb.choiceLists.pibrellaedge = {'both': 'Change', 'rising':'Turn On', 'falling':'Turn Off'}
+wb.choiceLists.pibrellainnames = {"Red_Button":"Red Button", "Input_A":"Input A", "Input_B":"Input B", "Input_C":"Input C", "Input_D":"Input D"};
+wb.choiceLists.pibrellain = {11:"Red Button", 9:"Input A", 7:"Input B", 8:"Input C", 10:"Input D"};
 
+
+wb.choiceLists.pibrellaedge = {'both': 'Change', 'rising':'Turn On', 'falling':'Turn Off'};
 
 //PB_PIN_BUZZER = 18
 
-
-wb.requiredjs.before.pibrella = "var Gpio = require('onoff').Gpio;\n";
+wb.requiredjs.before.pibrella = 'var Gpio = require("onoff").Gpio;\n var PiBrella_output = {"Red_LED":new Gpio(27, "out"), "Amber_LED":new Gpio(17, "out"), "Green_LED":new Gpio(4, "out"), "Output_E":new Gpio(22, "out"), "Output_F":new Gpio(23, "out"), "Output_G":new Gpio(24, "out"), "Output_H":new Gpio(25, "out")};var PiBrella_input = {"Red_Button":new Gpio(11, "in"), "Input_A":new Gpio(9, "in"), "Input_B":new Gpio(7, "in"), "Input_C":new Gpio(8, "in"), "Input_D":new Gpio(10, "in")};';
 wb.requiredjs.after.pibrella =  "";
 
 
@@ -6045,6 +6047,39 @@ wb.menu({
     "blocks": [
         {
             "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "Set",
+                    "type": "number",
+                    "options": "pibrellaoutnames",
+                    "value": null
+                },
+                {
+                    "name": " to ",
+                    "type": "boolean",
+                    "value": null
+                }
+            ],
+            "script": "PiBrella_output.{{1}}.writeSync(({{2}})?1:0);",
+            "id": "35082751-f847-400d-862c-b683c64fad1e"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c445469b-db11-4861-91b5-064a558a3735",
+            "sockets": [
+                {
+                    "name": "value of",
+                    "type": "number",
+                    "options": "pibrellainnames",
+                    "value": null
+                }
+            ],
+            "script": "(PiBrella_input.{{1}}.readSync() === 1)",
+            "help": "value from input",
+            "type": "boolean"
+        },
+        {
+            "blocktype": "step",
             "id": "cecd70c5-e733-4f36-83f3-aec34a70f75b",
             "script": "output## = new Gpio({{1}}, 'out');",
             "help": "Create a named pin set to output",
@@ -6103,7 +6138,7 @@ wb.menu({
         {
             "blocktype": "context",
             "id": "e57b641a-3de8-4ecd-90bc-77a1277b8066",
-            "script": "watcher## = new Gpio({{1}}, 'in', {{2}}, {\"debounceTimeout\":{{3}}}); watcher##.watch(function(err, watcherval){[[1]]})",
+            "script": "watcher## = new Gpio({{1}}, 'in', {{2}}, {\"debounceTimeout\":{{3}}}); watcher##.watch(function(err, watcherval){[[1]]});",
             "help": "Create a named pin set to input",
             "sockets": [
                 {
@@ -6139,8 +6174,6 @@ wb.menu({
                 }
             ]
         }
-        
-        
     ]
 });
 /*end languages/node/pibrella_simple.json*/

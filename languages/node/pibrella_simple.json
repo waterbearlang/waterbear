@@ -4,6 +4,39 @@
     "blocks": [
         {
             "blocktype": "step",
+            "sockets": [
+                {
+                    "name": "Set",
+                    "type": "number",
+                    "options": "pibrellaoutnames",
+                    "value": null
+                },
+                {
+                    "name": " to ",
+                    "type": "boolean",
+                    "value": null
+                }
+            ],
+            "script": "PiBrella_output.{{1}}.writeSync(({{2}})?1:0);",
+            "id": "35082751-f847-400d-862c-b683c64fad1e"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c445469b-db11-4861-91b5-064a558a3735",
+            "sockets": [
+                {
+                    "name": "value of",
+                    "type": "number",
+                    "options": "pibrellainnames",
+                    "value": null
+                }
+            ],
+            "script": "(PiBrella_input.{{1}}.readSync() === 1)",
+            "help": "value from input",
+            "type": "boolean"
+        },
+        {
+            "blocktype": "step",
             "id": "cecd70c5-e733-4f36-83f3-aec34a70f75b",
             "script": "output## = new Gpio({{1}}, 'out');",
             "help": "Create a named pin set to output",
@@ -62,7 +95,7 @@
         {
             "blocktype": "context",
             "id": "e57b641a-3de8-4ecd-90bc-77a1277b8066",
-            "script": "watcher## = new Gpio({{1}}, 'in', {{2}}, {\"debounceTimeout\":{{3}}}); watcher##.watch(function(err, watcherval){[[1]]})",
+            "script": "watcher## = new Gpio({{1}}, 'in', {{2}}, {\"debounceTimeout\":{{3}}}); watcher##.watch(function(err, watcherval){[[1]]});",
             "help": "Create a named pin set to input",
             "sockets": [
                 {
@@ -98,7 +131,5 @@
                 }
             ]
         }
-        
-        
     ]
 }

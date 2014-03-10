@@ -15,7 +15,9 @@ var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
     node: ['node','control', 'piface', "pibrella_simple",'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
     javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
-    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform']
+    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
+    python: ['python','control'] /*, 'piface', "pibrella_simple",'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
+    
 };
 
 var pluginlibs = {
@@ -23,7 +25,8 @@ var pluginlibs = {
     javascript: ['SAT'],
     node: [],
     demo: [],
-    processingjs: ['processing-1.4.1']
+    processingjs: ['processing-1.4.1'],
+    python: [],
 }
 
 var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome']
@@ -33,7 +36,9 @@ var styles = {
     javascript: ['highlight-github'],
     node: ['highlight-github'],
     demo: ['highlight-github'],
-    processingjs: ['highlight-github']
+    processingjs: ['highlight-github'],
+    python: [],
+    
 }
 
 var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
@@ -43,7 +48,8 @@ var libs = {
     javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
+    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min'],
+    python: ['events.min'],
 };
 
 

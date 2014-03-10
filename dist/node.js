@@ -5219,7 +5219,6 @@ var stageMenu = document.querySelector('[data-target=stage]').parentElement;
 stageMenu.parentElement.removeChild(stageMenu);
 
 var menu = document.querySelector('.menu');
-console.log("menu =", menu);
 
 var newLi = document.createElement("li");
 var newBtn = document.createElement("button");
@@ -5300,11 +5299,18 @@ wb.resetrun = function(message){
     //Event.remove('.stop-remote', 'click');
 
 };
+
+function stringFromData(dat){
+    var text = dat.map(function(chc){return String.fromCharCode(chc);}).join("");
+    return text;
+}
     
 wb.runScript = function(script){
 
     var aHost = window.location.host.split(":");
     var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
+    
+    oSocket.bConnected = false;
     
     var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = "Connecting to Raspberry Pi";
@@ -5312,31 +5318,40 @@ wb.runScript = function(script){
     oSocket.onerror = function(event) {
         messagebox.innerHTML = "Error Communicating with RPi";
         window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-        oSocket.close();
     };
     
     oSocket.onopen = function (event) {
         messagebox.innerHTML = "Sending Code to RPi";
         oSocket.send(JSON.stringify({"command":"run","code":script})); 
+        oSocket.bConnected = true;
     };
     
     
     oSocket.onclose = function (event) {
-        wb.resetrun("Communication Ended");
+        if(oSocket.bConnected)
+        {
+            if(event.code !== 1000)
+            {
+                wb.resetrun("Server Closed Unexpectedly");
+            }
+        }
+        else
+        {
+            wb.resetrun("Server Unavailable");
+        }
     };
     
     oSocket.onmessage = function(event) {
         var msg = JSON.parse(event.data);
+        //console.log("msg =", msg);
         switch(msg.type) {
             case "recieved":
                 messagebox.innerHTML = "Code recieved on RPi";
                 break;
             case "running":
                 messagebox.innerHTML = "Code running on RPi "+ msg.pid;
-                var runbutton= document.querySelector('.run-remote')
-                console.log("runbutton =", runbutton);
+                var runbutton= document.querySelector('.run-remote');
                 wb.hide(runbutton);
-                //document.querySelector('.stop-remote').style.display = 'inline-block';
                 wb.show(document.querySelector('.stop-remote'));
                 
                 Event.once('.stop-remote', 'click', null, function(){
@@ -5346,25 +5361,23 @@ wb.runScript = function(script){
                 break;
             case "completed":
                 wb.resetrun("Code Completed Successfully");
-                oSocket.close();
+                oSocket.close(1000, "Code Completed");
                 break;
             case "exit":
-                wb.resetrun("Code Exited");
-                oSocket.close();
+                wb.resetrun("Code Stopped");
+                oSocket.close(1000, "Code Stopped");
                 break;
             case "error":
                 wb.resetrun("Code Failed " + msg.data.toString());
-                oSocket.close();
+                oSocket.close(1000, "Code Failed");
                 break;
             case "sterr":
-                messagebox.innerHTML = "Error Recieved " + msg.data;
+                messagebox.innerHTML = "Error Recieved " + stringFromData(msg.data);
                 break;    
             case "stdout":
-                messagebox.innerHTML = "Data Recieved ";// + msg.data;
-                console.log("msg.data =", msg.data.toString());
+                messagebox.innerHTML = "Data Recieved " + stringFromData(msg.data);
                 break;    
         }
-  
     };
 };
 
@@ -5438,7 +5451,8 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ")+"\n process.on('SIGINT', process.exit);";
+    }).join(" ")+"\n process.on('SIGINT', function(){process.exit(0);});";
+    //"process.on('exit', function(){console.log(\"Ending\");});";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
@@ -5542,7 +5556,7 @@ gpio -g mode 10 down
 */
 
 
-wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output A", 23:"Output B", 24:"Output C", 25:"Output D", 18: "Buzzer"}
+wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output E", 23:"Output F", 24:"Output G", 25:"Output H", 18: "Buzzer"}
 wb.choiceLists.pibrellain = {11:"Red Button", 9:"Input A", 7:"Input B", 8:"Input C", 10:"Input D"}
 
 wb.choiceLists.pibrellaedge = {'both': 'Change', 'rising':'Turn On', 'falling':'Turn Off'}

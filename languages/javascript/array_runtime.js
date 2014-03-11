@@ -36,6 +36,6 @@ function stdev(arr){
     for(var i = 0; i < arr.length; i++){
         squares[i]= Math.pow((arr[i]-avg),2);    
     }
-    console.log("Stdev= %d", Math.sqrt(fastMean(squares)));
+    //console.log("Stdev= %d", Math.sqrt(fastMean(squares)));
     return Math.sqrt(fastMean(squares));
 }

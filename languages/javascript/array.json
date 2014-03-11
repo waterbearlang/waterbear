@@ -209,6 +209,32 @@
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "acf4e2d3-24b2-41c7-8452-bce733400248",
+            "script": "mean({{1}})",
+            "type": "number",
+            "help": "calculate the mean of a number array",
+            "sockets": [
+                {
+                    "name": "mean of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "e7424a86-3773-4759-828e-4dc33423a4da",
+            "script": "stdev({{1}})",
+            "type": "number",
+            "help": "calculate the standard deviation of a number array",
+            "sockets": [
+                {
+                    "name": "stdev of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",

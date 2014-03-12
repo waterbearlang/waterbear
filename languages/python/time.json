@@ -1,0 +1,20 @@
+{
+    "name": "Time",
+    "help": "Contains waiting and calculation times and dates.",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "1dad8917-056b-4258-9244-1702a7607333",
+            "script": "time.sleep({{1}})\n",
+            "help": "Suspend execution for the given number of seconds",
+            "sockets": [
+                {
+                    "name": "Sleep for ",
+                    "type": "number",
+                    "value": 1.5,
+                    "suffix": "seconds"
+                }
+            ]
+        }
+    ]
+}

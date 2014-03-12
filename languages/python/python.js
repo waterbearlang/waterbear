@@ -233,9 +233,9 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join("\n")+ "#Your code starts here\n";
+    }).join("\n")+ "\n\n#Your code starts here\n";
     
-    var after = "\n#Your code ends here\n"+groups.map(function(group){
+    var after = "\n#Your code ends here\n\n"+groups.map(function(group){
         var req = wb.requiredjs.after[group];
         if(typeof req !== "undefined")
         {

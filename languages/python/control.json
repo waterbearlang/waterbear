@@ -1,0 +1,209 @@
+{
+    "name": "Control",
+    "help": "Contains control flow, variables, setters, and messaging blocks.",
+    "blocks": [
+        {
+            "blocktype": "eventhandler",
+            "id": "2739b8c7-9a43-4f2b-929c-d6cfed20e38d",
+            "script": "[[1]]",
+            "help": "this trigger will run its scripts once when the program starts",
+            "sockets": [
+                {
+                    "name": "When program runs"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "526aa33e-c979-42af-bb8a-c87f18ccf22b",
+            "script": "if {{1}}:\n\t[[1]]\t\n",
+            "help": "run the following blocks only if the condition is true",
+            "sockets": [
+                {
+                    "name": "If",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "98714a9f-3cbc-42e0-b0f7-6ce8e3f0bf9d",
+            "script": "if not ({{1}}):\n\t[[1]]\t\n",
+            "help": "run the  blocks if the condition is not true",
+            "sockets": [
+                {
+                    "name": "If not",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "6aa3953c-bc0f-455f-b2bd-0ab262fefac4",
+            "script": "while not ({{1}}):\n\t[[1]]\t\n",
+            "help": "repeat forever until condition is true",
+            "sockets": [
+                {
+                    "name": "Repeat until",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "6db74c0d-dc5a-443f-b47a-3b5066be75ec",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "count##=0;(function(){setInterval(function(){count##++;[[1]]},1000/{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "NOT READY Repeat",
+                    "type": "number",
+                    "value": "2"
+                },
+                {
+                    "name": "times a second"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "2ead473d-0723-4529-ad89-d3b3ec3993ed",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "script": "var count##=0;(function(){setInterval(function(){count##++;[[1]]},1000*{{1}})})();",
+            "help": "this trigger will run the attached blocks periodically",
+            "sockets": [
+                {
+                    "name": "NOT READY Repeat every",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "seconds"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "3b724f00-3b9a-4df0-a889-491107889a16",
+            "script": "variable## = {{1}};",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "script": "variable##",
+                    "type": "any",
+                    "sockets": [
+                        {
+                            "name": "variable##"
+                        }
+                    ]
+                }
+            ],
+            "help": "create a reference to re-use the any",
+            "sockets": [
+                {
+                    "name": "NOT READY Variable",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "10b7bd6e-7d04-4e5f-bd21-00f60de19097",
+            "script": "{{1}} = {{2}};",
+            "help": "first argument must be a variable",
+            "sockets": [
+                {
+                    "name": "NOT READY Set variable",
+                    "type": "any",
+                    "value": null
+                },
+                {
+                    "name": "to",
+                    "type": "any",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "6633943b-baf7-4e33-84b6-4a28338bd0a5",
+            "script": "setTimeout(function(){[[1]]},1000*{{1}});",
+            "help": "pause before running the following blocks",
+            "sockets": [
+                {
+                    "name": "NOT READY Wait",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "secs"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "49e47c07-94fa-4638-8bac-55d73b1f691a",
+            "script": "for(count## = 1; count## <= {{1}}; count## ++){[[1]]}",
+            "help": "repeat the contained blocks so many times",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "count##"
+                        }
+                    ],
+                    "script": "count##",
+                    "type": "number"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "NOT READY Repeat",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "5207128e-ad6c-41d1-9fbd-cc8355dcedc9",
+            "script": "while {{1}}:\n\t[[1]]\t\n",
+            "help": "repeat until the condition is false",
+            "sockets": [
+                {
+                    "name": "Repeat While",
+                    "type": "boolean",
+                    "value": "false"
+                }
+            ]
+        }
+    ]
+}

@@ -3619,9 +3619,9 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join("\n")+ "#Your code starts here\n";
+    }).join("\n")+ "\n\n#Your code starts here\n";
     
-    var after = "\n#Your code ends here\n"+groups.map(function(group){
+    var after = "\n#Your code ends here\n\n"+groups.map(function(group){
         var req = wb.requiredjs.after[group];
         if(typeof req !== "undefined")
         {
@@ -3716,6 +3716,20 @@ https://npmjs.org/package/raspicam
 /*begin languages/python/control.js*/
 
 /*end languages/python/control.js*/
+
+/*begin languages/python/time.js*/
+wb.requiredjs.before.time = "import time";
+wb.requiredjs.after.time =  "";
+/*end languages/python/time.js*/
+
+/*begin languages/python/boolean.js*/
+
+/*end languages/python/boolean.js*/
+
+/*begin languages/python/math.js*/
+wb.requiredjs.before.math = "import random";
+wb.requiredjs.after.math =  "";
+/*end languages/python/math.js*/
 
 /*begin languages/python/control.json*/
 wb.menu({
@@ -3928,3 +3942,588 @@ wb.menu({
     ]
 });
 /*end languages/python/control.json*/
+
+/*begin languages/python/time.json*/
+wb.menu({
+    "name": "Time",
+    "help": "Contains waiting and calculation times and dates.",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "1dad8917-056b-4258-9244-1702a7607333",
+            "script": "time.sleep({{1}})\n",
+            "help": "Suspend execution for the given number of seconds",
+            "sockets": [
+                {
+                    "name": "Sleep for ",
+                    "type": "number",
+                    "value": 1.5,
+                    "suffix": "seconds"
+                }
+            ]
+        }
+    ]
+});
+/*end languages/python/time.json*/
+
+/*begin languages/python/boolean.json*/
+wb.menu({
+    "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "866f8946-c9f0-4fc8-bf74-5685a16568f9",
+            "type": "boolean",
+            "script": "({{1}} and {{2}})",
+            "help": "both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "AND",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "54411df2-4226-4ad9-a57a-870d968c4d86",
+            "type": "boolean",
+            "script": "({{1}} or {{2}})",
+            "help": "either or both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "OR",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "280e649c-b9dd-45ae-bbd7-5f8f1c925619",
+            "type": "boolean",
+            "script": "({{1}} xor {{2}})",
+            "help": "either, but not both, operands are true",
+            "sockets": [
+                {
+                    "name": "TO TEST",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "XOR",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "57492ef3-0c29-44e9-9ffa-42206c4dae07",
+            "type": "boolean",
+            "script": "(not {{1}})",
+            "help": "operand is false",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        }
+    ]
+});
+/*end languages/python/boolean.json*/
+
+/*begin languages/python/math.json*/
+wb.menu({
+    "name": "Math",
+    "help": "Math blocks are for manipulating numbers",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "d37d3b3b-f683-4852-8783-8f4c1c279640",
+            "sockets": [
+                {
+                    "name": "Create Number## from",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "script": "number## = {{1}}\n",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "Number##"
+                        }
+                    ],
+                    "script": "number##",
+                    "type": "number"
+                }
+            ],
+            "help": "create a new named number"
+        },
+        {
+            "blocktype": "expression",
+            "type": "number",
+            "id": "445c7560-1f38-45d6-bb0f-2ac6d0497a3a",
+            "sockets": [
+                {
+                    "name": "new number",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "script": "{{1}}",
+            "help": "create a new named number"
+        },
+        {
+            "blocktype": "expression",
+            "id": "c6d51ff6-a81a-4feb-a20c-c25f9cfbcb3a",
+            "type": "number",
+            "script": "({{1}} + {{2}})",
+            "help": "sum of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "+",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "81832a68-02ca-4980-8a26-51795882494c",
+            "type": "number",
+            "script": "({{1}} - {{2}})",
+            "help": "difference of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "-",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "a4d93901-ce98-43cf-b2e6-406efe831806",
+            "type": "number",
+            "script": "({{1}} * {{2}})",
+            "help": "product of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "*",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "ee43ffb9-9453-4b38-80da-72f9a130c290",
+            "type": "number",
+            "script": "({{1}} / {{2}})",
+            "help": "quotient of the two operands",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "/",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "20a514c9-81a0-43c4-8f73-30093b087a6c",
+            "type": "boolean",
+            "script": "({{1}} === {{2}})",
+            "help": "two operands are equal",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "=",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "245312d9-1473-4792-938f-c81912c56fc1",
+            "type": "boolean",
+            "script": "({{1}} < {{2}})",
+            "help": "first operand is less than second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "<",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7db3b4e3-b9ea-4e8d-b13f-2e460ac0b0b4",
+            "type": "boolean",
+            "script": "({{1}} > {{2}})",
+            "help": "first operand is greater than second operand",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": ">",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "6d1e2481-7e1f-41d7-8e34-3df0fd14ffed",
+            "type": "number",
+            "script": "random.randrange(randint({{1}}, {{2}})",
+            "help": "random number between two numbers (inclusive)",
+            "sockets": [
+                {
+                    "name": "pick random",
+                    "type": "number",
+                    "value": "1"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f339ab41-6d1e-4fbb-b490-783407a73d4c",
+            "type": "number",
+            "script": "({{1}} % {{2}})",
+            "help": "modulus of a number is the remainder after whole number division",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "mod",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8127a1c8-7591-4f48-b724-147ed28beda1",
+            "type": "number",
+            "script": "math.trunc({{1}})",
+            "help": "rounds to the nearest whole number",
+            "sockets": [
+                {
+                    "name": "round",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f6b7e8d2-773a-45fc-b6ed-33433ce27faf",
+            "type": "number",
+            "script": "math.abs({{1}})",
+            "help": "converts a negative number to positive, leaves positive alone",
+            "sockets": [
+                {
+                    "name": "absolute of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "b89ca8e0-0493-47ea-bdb0-6d2cc84ea6c4",
+            "type": "number",
+            "script": "rad2deg(math.acos({{1}}))",
+            "help": "inverse of cosine",
+            "sockets": [
+                {
+                    "name": "arccosine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "bfa4154e-270c-4494-997f-06984bf00dab",
+            "type": "number",
+            "script": "rad2deg(math.asin({{1}}))",
+            "help": "inverse of sine",
+            "sockets": [
+                {
+                    "name": "arcsine degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8ac9c0aa-c720-4a7f-90ac-aaaba7f0fa35",
+            "type": "number",
+            "script": "rad2deg(math.atan({{1}}))",
+            "help": "inverse of tangent",
+            "sockets": [
+                {
+                    "name": "arctangent degrees of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "50106710-964d-40e5-8a14-b9db37387cb9",
+            "type": "number",
+            "script": "math.ceil({{1}})",
+            "help": "rounds up to nearest whole number",
+            "sockets": [
+                {
+                    "name": "ceiling of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "4f62bf81-1313-4bf3-b4e0-c3fc34fb8269",
+            "type": "number",
+            "script": "math.cos(deg2rad({{1}}))",
+            "help": "ratio of the length of the adjacent side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "cosine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "e6343f43-e663-4233-9f7b-20910cfa79ca",
+            "type": "number",
+            "script": "math.sin(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the hypotenuse",
+            "sockets": [
+                {
+                    "name": "sine of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "422f6ba4-04f3-46f8-a024-f255da8a93ff",
+            "type": "number",
+            "script": "math.tan(deg2rad({{1}}))",
+            "help": "ratio of the length of the opposite side to the length of the adjacent side",
+            "sockets": [
+                {
+                    "name": "tangent of",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "degrees"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "36f9a66b-5a2a-49f3-bf08-7cc295a7641e",
+            "type": "number",
+            "script": "math.pow({{1}}, {{2}})",
+            "help": "multiply a number by itself the given number of times",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": "10"
+                },
+                {
+                    "name": "to the power of",
+                    "type": "number",
+                    "value": "2"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "ee9e2eae-741b-44e6-83d9-c6ba697333a7",
+            "type": "number",
+            "script": "math.sqrt({{1}})",
+            "help": "the square root is the same as taking the to the power of 1/2",
+            "sockets": [
+                {
+                    "name": "square root of",
+                    "type": "number",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d35219bf-367d-4796-aae7-24613c73aade",
+            "script": "math.PI;",
+            "type": "number",
+            "help": "pi is the ratio of a circle's circumference to its diameter",
+            "sockets": [
+                {
+                    "name": "pi"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0fcc650b-66b8-4829-b00c-8901de3d5763",
+            "script": "math.PI * 2",
+            "type": "number",
+            "help": "tau is 2 times pi, a generally more useful number",
+            "sockets": [
+                {
+                    "name": "tau"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "8fbc3bc5-b5af-4e4b-8e12-e51c0ce24e1a",
+            "type": "int",
+            "script": "({{1}} && {{2}})",
+            "help": "Bitwise AND of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "AND",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "865db280-620a-4427-bd63-12e12f512962",
+            "type": "int",
+            "script": "({{1}} | {{2}})",
+            "help": "Bitwise OR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 9
+                },
+                {
+                    "name": "OR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7656a3b3-c9b0-4a2d-ba49-2259c983cec6",
+            "type": "int",
+            "script": "({{1}} ^ {{2}})",
+            "help": "Bitwise XOR of 2 numbers",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "XOR",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "0fb17839-c5cf-4597-8f30-69e1c44bb2e2",
+            "type": "int",
+            "script": "(~ {{1}})",
+            "help": "Bitwise NOT number",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "int",
+                    "value": 0
+                }
+            ]
+        }
+    ]
+});
+/*end languages/python/math.json*/

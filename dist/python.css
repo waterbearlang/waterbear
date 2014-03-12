@@ -2414,3 +2414,33 @@ a .icon-flip-vertical:before {
 
 
 /*end languages/python/control.css*/
+
+/*begin languages/python/time.css*/
+.time, .time .holder{
+    border-color: hsl(95, 65%, 79%);
+    background-color: hsl(95, 62%, 89%);
+}
+
+/*end languages/python/time.css*/
+
+/*begin languages/python/boolean.css*/
+.boolean, .boolean .holder{
+    background-color: #FFAAAA;
+    border-color: red;
+}
+
+
+/*end languages/python/boolean.css*/
+
+/*begin languages/python/math.css*/
+.math, .math .holder{
+    border-color: hsl(264,62%,79%);
+    background-color: hsl(264,62%,89%);
+}
+
+.number, .number .holder{
+    border-color: blue;
+}
+
+
+/*end languages/python/math.css*/

@@ -1,0 +1,77 @@
+{
+    "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "866f8946-c9f0-4fc8-bf74-5685a16568f9",
+            "type": "boolean",
+            "script": "({{1}} and {{2}})",
+            "help": "both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "AND",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "54411df2-4226-4ad9-a57a-870d968c4d86",
+            "type": "boolean",
+            "script": "({{1}} or {{2}})",
+            "help": "either or both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "OR",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "280e649c-b9dd-45ae-bbd7-5f8f1c925619",
+            "type": "boolean",
+            "script": "({{1}} xor {{2}})",
+            "help": "either, but not both, operands are true",
+            "sockets": [
+                {
+                    "name": "TO TEST",
+                    "type": "boolean",
+                    "value": null
+                },
+                {
+                    "name": "XOR",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "57492ef3-0c29-44e9-9ffa-42206c4dae07",
+            "type": "boolean",
+            "script": "(not {{1}})",
+            "help": "operand is false",
+            "sockets": [
+                {
+                    "name": "NOT",
+                    "type": "boolean",
+                    "value": null
+                }
+            ]
+        }
+    ]
+}

@@ -90,7 +90,7 @@ for i in range(len(lines)):
                 md[op] = md.get(op, set()).union(val)
         mark_dict[previous[-1]] = md
 
-file1 = open("before.json.diff","w")
+file1 = open("before.diff.json","w")
 for i in range(len(lines)):
     line = lines[i]
     file1.write(line)
@@ -98,7 +98,7 @@ for i in range(len(lines)):
         w = re.match("(\s*)\S",line)
         w = w.group(1) if w else ""
         for op,s in mark_dict[i].iteritems():
-            file1.write('%s    "diff_%s": %s,\n' %(w, op, str(list(s))))
+            file1.write('%s    "diff_%s": %s,\n' %(w, "d" if op =="c" else op , str(list(s)).replace("'",'"')))
 file1.close()
         
 
@@ -129,7 +129,7 @@ for i in range(len(lines)):
                 md[op] = md.get(op, set()).union(val)
         mark_dict[previous[-1]] = md
 
-file2 = open("after.json.diff","w")
+file2 = open("after.diff.json","w")
 for i in range(len(lines)):
     line = lines[i]
     file2.write(line)
@@ -137,7 +137,7 @@ for i in range(len(lines)):
         w = re.match("(\s*)\S",line)
         w = w.group(1) if w else ""
         for op,s in mark_dict[i].iteritems():
-            file2.write('%s    "diff_%s": %s,\n' %(w, op, str(list(s))))
+            file2.write('%s    "diff_%s": %s,\n' %(w, "a" if op =="c" else op, str(list(s)).replace("'",'"')))
 file2.close()        
             
                 

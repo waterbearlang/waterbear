@@ -1417,6 +1417,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                         names.push('context');
                     }else if (obj.blocktype === 'asset'){
                         names.push('expression');
+                    }else if (obj.diff_c != null || obj.diff_d != null){
+                        names.push('diff_deleted');
+                    }else if (obj.diff_a != null){
+                        names.push('diff_added');
                     }
                     return names.join(' ');
                 },

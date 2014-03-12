@@ -9,6 +9,30 @@
 var stageMenu = document.querySelector('[data-target=stage]').parentElement;
 stageMenu.parentElement.removeChild(stageMenu);
 
+var menu = document.querySelector('.menu');
+
+var newLi = document.createElement("li");
+var newBtn = document.createElement("button");
+newBtn.classList.add("run-remote");
+newBtn.textContent = "Run";
+newLi.appendChild(newBtn);
+menu.appendChild(newLi);
+
+var newLi2 = document.createElement("li");
+var newBtn2 = document.createElement("button");
+newBtn2.classList.add("stop-remote");
+newBtn2.textContent = "Stop";
+newLi2.appendChild(newBtn2);
+menu.appendChild(newLi2);
+
+//document.querySelector('.stop-remote').style.display = 'none';
+//var stop = document.querySelector('.stop-remote');
+//console.log("stop =", stop);
+//wb.hide(stop);
+
+wb.hide(document.querySelector('.stop-remote'));
+
+
 // A couple of do-nothing scripts for compatibility
 wb.runCurrentScripts = function(){ /* do nothing */ };
 wb.clearStage = function(){ /* do nothing */ };
@@ -25,7 +49,7 @@ function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );        
 }
-Event.on('.run-scripts', 'click', null, runCurrentScripts);
+Event.on('.run-remote', 'click', null, runCurrentScripts);
 
 
 wb.ajax = {
@@ -55,79 +79,96 @@ wb.ajax = {
 
     
 wb.resetrun = function(message){
+    var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = message;
     window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-    document.querySelector('.run-scripts').style.display = 'inline-block';
-    document.querySelector('.stop-scripts').style.display = 'none';
-    //Event.remove('.stop-scripts', 'click');
+    //document.querySelector('.run-remote').style.display = 'inline-block';
+    //document.querySelector('.stop-remote').style.display = 'none';
+    wb.hide(document.querySelector('.stop-remote'));
+    wb.show(document.querySelector('.run-remote'));
+    
+    //Event.remove('.stop-remote', 'click');
 
 };
+
+function stringFromData(dat){
+    var text = dat.map(function(chc){return String.fromCharCode(chc);}).join("");
+    return text;
+}
     
 wb.runScript = function(script){
 
-    // TODO : workout the ws address from the page address
     var aHost = window.location.host.split(":");
     var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
     
-    //var oSocket = new WebSocket("ws://192.168.1.101:8080/");
+    oSocket.bConnected = false;
     
-    var messagebox = document.querySelector('#messagebox');
-    if(messagebox === null || messagebox.length === 0)
-    {
-        messagebox = wb.elem('div', {"id":"messagebox"});
-        document.querySelector('.tabbar').appendChild(messagebox);
-        messagebox = document.querySelector('#messagebox');
-        
-    }
-    
+    var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = "Connecting to Raspberry Pi";
+    
     oSocket.onerror = function(event) {
         messagebox.innerHTML = "Error Communicating with RPi";
         window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-        oSocket.close();
     };
     
     oSocket.onopen = function (event) {
+        messagebox.innerHTML = "Sending Code to RPi";
         oSocket.send(JSON.stringify({"command":"run","code":script})); 
+        oSocket.bConnected = true;
+    };
+    
+    
+    oSocket.onclose = function (event) {
+        if(oSocket.bConnected)
+        {
+            if(event.code !== 1000)
+            {
+                wb.resetrun("Server Closed Unexpectedly");
+            }
+        }
+        else
+        {
+            wb.resetrun("Server Unavailable");
+        }
     };
     
     oSocket.onmessage = function(event) {
         var msg = JSON.parse(event.data);
+        //console.log("msg =", msg);
         switch(msg.type) {
             case "recieved":
                 messagebox.innerHTML = "Code recieved on RPi";
                 break;
             case "running":
                 messagebox.innerHTML = "Code running on RPi "+ msg.pid;
-                document.querySelector('.run-scripts').style.display = 'none';
-                document.querySelector('.stop-scripts').style.display = 'inline-block';
+                var runbutton= document.querySelector('.run-remote');
+                wb.hide(runbutton);
+                wb.show(document.querySelector('.stop-remote'));
                 
-                Event.once('.stop-scripts', 'click', null, function(){
+                Event.once('.stop-remote', 'click', null, function(){
                       oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
                 });
 
                 break;
             case "completed":
                 wb.resetrun("Code Completed Successfully");
-                oSocket.close();
+                oSocket.close(1000, "Code Completed");
                 break;
             case "exit":
-                wb.resetrun("Code Exited");
-                oSocket.close();
+                wb.resetrun("Code Stopped");
+                oSocket.close(1000, "Code Stopped");
                 break;
             case "error":
                 wb.resetrun("Code Failed " + msg.data.toString());
-                oSocket.close();
+                oSocket.close(1000, "Code Failed");
                 break;
             case "sterr":
-                messagebox.innerHTML = "Error Recieved " + msg.data;
+                messagebox.innerHTML = "Error Recieved " + stringFromData(msg.data);
                 break;    
             case "stdout":
-                messagebox.innerHTML = "Data Recieved ";// + msg.data;
-                console.log("msg.data =", msg.data.toString());
+                messagebox.innerHTML = "Data Recieved " + stringFromData(msg.data);
                 break;    
         }
-  
     };
 };
 
@@ -201,7 +242,8 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ");
+    }).join(" ")+"\n process.on('SIGINT', function(){process.exit(0);});";
+    //"process.on('exit', function(){console.log(\"Ending\");});";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);

@@ -223,22 +223,22 @@
         Event.trigger(document.body, 'wb-loaded');
     }
 
-    function loadScriptsFromFile(file){
-        fileName = file.name;
-        if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-            console.error("File not a JSON file");
-            return;
-        }
-        var reader = new FileReader();
-        reader.readAsText( file );
-        reader.onload = function (evt){
-            wb.clearScripts(null, true);
-            var saved = JSON.parse(evt.target.result);
-            wb.loaded = true;
-            loadScriptsFromObject(saved);
-            wb.scriptModified = true;
-        };
-    }
+	function loadScriptsFromFile(file){
+		var fileName = file.name;
+		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+			console.error("File not a JSON file");
+			return;
+		}
+		var reader = new FileReader();
+		reader.readAsText( file );
+		reader.onload = function (evt){
+			wb.clearScripts(null, true);
+			var saved = JSON.parse(evt.target.result);
+			wb.loaded = true;
+			loadScriptsFromObject(saved);
+			wb.scriptModified = true;
+		};
+	}
 
     function getFiles(evt){
         evt.stopPropagation();

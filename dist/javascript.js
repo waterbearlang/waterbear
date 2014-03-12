@@ -2990,26 +2990,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function registerScratchSpace() {
-        var workspace = document.querySelector('.workspace');
-        var mainWorkspace = document.querySelector('scripts_workspace');
-        var id = "23423443";
-        var sBlock = wb.Block({
-                group: 'scripts_scratchspace',
-                id: id,
-                scriptId: id,
-                scopeId: id,
-                blocktype: 'context',
-                sockets: [
-                ],
-                script: '[[1]]',
-                isTemplateBlock: false,
-                help: 'Place script blocks here for quick access'
-            });
-    
-        workspace.insertBefore(sBlock, mainWorkspace);
-    }
-    
     function cancelDrag(event) {
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
@@ -3029,14 +3009,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var x = event.clientX;
         var y = event.clientY;
     
-        console.log("Mouse x " + x);
-        console.log("Mouse y" + y);
-    
         for (var i = 0; i < children.length; i++){
-            console.log(children[i]);
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
-                console.log(r);
                 if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
                     return children[i];
                 }
@@ -3045,37 +3020,45 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return false;
     }
     
+    function menuToScratchpad(event) {
+	cloned = wb.cloneBlock(event.target);
+	scratchpad.appendChild(cloned);
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchPad() {
-	var PADDING = 5;
+    function arrangeScratchpad(event) {
+	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
 	
 	var children = scratchpad.childNodes;
+	var maxHeight = 0;
 	
 	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
+		if (rBounding.height > maxHeight) {
+		    maxHeight = rBounding.height;
+		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width - 25) {
+		    //We are going into a new row.
 		    x = xOrigin;
-		    y += rBounding.height + PADDING;
+		    y += maxHeight + PADDING;
+		    maxHeight = 0;
 		}
 	    }
 	}
@@ -3091,6 +3074,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'dblclick', null, arrangeScratchpad);
+    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -4089,7 +4074,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	};
 
 	function loadScriptsFromFile(file){
-		fileName = file.name;
+		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
 			return;
@@ -5946,6 +5931,24 @@ wb.menu({
                 {
                     "name": "clear stage to color",
                     "type": "color",
+                    "block": "13236aef-cccd-42b3-a041-e26528174323"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "44d98663-d4fd-4fc8-8b65-0cde22deced6",
+            "script": "local.ctx.save();local.ctx.canvas.width = global.stage_width;local.ctx.canvas.height =  global.stage_height;var w = local.ctx.canvas.width;var h = local.ctx.canvas.height;var size = {{1}};local.ctx.beginPath();if (size <= 0){size = 0.1;};for (var x=0;x<=w;x+=size){local.ctx.moveTo(x,0);local.ctx.lineTo(x,h);};for (var y=0;y<=h;y+=size){local.ctx.moveTo(0,y);local.ctx.lineTo(w,y);};local.ctx.strokeStyle ={{2}};local.ctx.stroke();",
+            "help": "set a grid background",
+            "sockets": [
+                {
+                    "name": "set grid with interval",
+                    "type": "number",
+                    "block": ""
+                },
+                {
+                    "name": "with color",
+                    "type": "point",
                     "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
             ]

@@ -8,4 +8,4 @@ wb.choiceLists.pifaceonoff = [0, 1];
 
 
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
-wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");pfio.write_output(0);pfio.deinit(); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+wb.requiredjs.after.piface =  "\nprocess.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";

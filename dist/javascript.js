@@ -3993,23 +3993,27 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         history.pushState(null, '', path);
 	};
 
-	function loadScriptsFromFilesystem(event){
+    function compareScript(event){
+        loadScriptsFromFilesystem(event, true);
+    }
+    
+	function loadScriptsFromFilesystem(event, compare){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
 		input.addEventListener('change', function(evt){
 			var file = input.files[0];
-			loadScriptsFromFile(file);
+			loadScriptsFromFile(file, compare);
 		});
 		input.click();
 	};
 
-	function loadScriptsFromObject(fileObject){
+	function loadScriptsFromObject(fileObject, compare){
 	    // console.info('file format version: %s', fileObject.waterbearVersion);
 	    // console.info('restoring to workspace %s', fileObject.workspace);
 	    if (!fileObject) return wb.createWorkspace();
 	    var blocks = fileObject.blocks.map(wb.Block);
-	    if (!blocks.length){
+	    if (!blocks.length && !compare){
 	    	return wb.createWorkspace();
 	    }
 	    if (blocks.length > 1){
@@ -4017,7 +4021,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	    	console.error(blocks);
 	    }
 	    blocks.forEach(function(block){
-	    	wb.wireUpWorkspace(block);
+	    	wb.wireUpWorkspace(block, compare);
 	    	Event.trigger(block, 'wb-add');
 	    });
 	    wb.loaded = true;
@@ -4076,8 +4080,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 		wb.loaded = true;
 		Event.trigger(document.body, 'wb-loaded');
 	};
-
-	function loadScriptsFromFile(file){
+	function loadScriptsFromFile(file, compare){
 		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
@@ -4086,11 +4089,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-			wb.clearScripts(null, true);
-			var saved = JSON.parse(evt.target.result);
-			wb.loaded = true;
-			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+            var saved = JSON.parse(evt.target.result);
+            if (compare){
+                loadScriptsFromObject(saved, true);
+            }else{
+                wb.clearScripts(null, true);
+                wb.loaded = true;
+                loadScriptsFromObject(saved);
+                wb.scriptModified = true;
+            }
 		};
 	}
 
@@ -4113,6 +4120,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
 	wb.loadCurrentScripts = loadCurrentScripts;
 	wb.getFiles = getFiles;
+    wb.compareScript = compareScript;
 
 })(wb);
 
@@ -4815,16 +4823,25 @@ wb.menu = menu;
 		wb.wireUpWorkspace(workspace);
 	}
 	
-	function wireUpWorkspace(workspace){
-		workspace.addEventListener('drop', wb.getFiles, false);
-		workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
-		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
-	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
-	    });
-		document.querySelector('.workspace').appendChild(workspace);
-		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
-		// wb.initializeDragHandlers();
-		Event.trigger(document.body, 'wb-workspace-initialized');
+	function wireUpWorkspace(workspace, compare){
+        if (compare){
+            wb.findAll(document, '.scripts_workspace_compare').forEach(function(ws){
+                ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+            });
+            var element = document.querySelector('.workspace_compare');
+            element.appendChild(workspace);
+            element.className = element.className.replace("hidden","");
+        }else{
+            workspace.addEventListener('drop', wb.getFiles, false);
+            workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
+            wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+                ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+            });
+            document.querySelector('.workspace').appendChild(workspace);
+            workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
+            // wb.initializeDragHandlers();
+            Event.trigger(document.body, 'wb-workspace-initialized');
+        }
 	};
 
 
@@ -4969,6 +4986,7 @@ wb.menu = menu;
 	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
 	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
 	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+    Event.on('.compare_script', 'click', null, wb.compareScript);
 	Event.on('.workspace', 'click', '.disclosure', disclosure);
 	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 	Event.on('.workspace', 'keypress', 'input', wb.resize);

@@ -34,7 +34,7 @@ input{
 	user-select: text;
 }
 
-.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace, .remote{
+.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace, .scripts_workspace_compare, .remote{
 	margin: 5px;
 	border: 2px outset #333;
 	padding: 10px;	
@@ -229,7 +229,7 @@ body{
 	flex: 0 0 300px;
 }
 
-.workspace{
+.workspace, .workspace_compare{
 	-webkit-flex: 3 0 0;
 	flex: 3 0 0;
 	display: -webkit-flex;
@@ -253,7 +253,7 @@ body{
 	color: rgba(0,0,0,0.4);
 }
 
-.scripts_workspace{
+.scripts_workspace, .scripts_workspace_compare{
 	-webkit-flex: 3 0 0;
 	flex: 3 0 0;
 	overflow: auto;
@@ -295,7 +295,7 @@ body{
 	overflow: auto;
 }
 
-.blocks-menu, .workspace, .results, .files{
+.blocks_menu, .workspace, .workspace_compare, .results, .files{
 	overflow: auto;
 }
 
@@ -342,7 +342,7 @@ ul.menu .show-ide{
 		position: relative;
 		overflow: hidden;
 	}
-	#block_menu, .workspace, .results, .files{
+	#block_menu, .workspace, .workspace_compare, .results, .files{
 		display: block;
 		position: absolute;
 		width: 100%;
@@ -351,9 +351,9 @@ ul.menu .show-ide{
 		left: 100%;
 		transition-property: left;
 	}
-	.workspace{
+	.workspace, .workspace_compare{
 		left: 0;
-	}
+	}    
 	.stage{
 		display: block;
 		width: 100%;
@@ -398,7 +398,8 @@ ul.menu .show-ide{
 	cursor: auto;
 }
 
-.scripts_workspace > .block, .submenu > .block{
+.scripts_workspace > .block, .submenu > .block,
+.scripts_workspace_compare> .block, .submenu > .block{
   margin-bottom: 15px;
 }
 
@@ -423,7 +424,8 @@ ul.menu .show-ide{
   text-align: right;
 }
 
-.scripts_workspace > .label >  .socket{
+.scripts_workspace > .label >  .socket,
+.scripts_workspace_compare > .label >  .socket{
   text-align: left;
 }
 
@@ -689,36 +691,44 @@ ul.menu .show-ide{
     margin: 0;
 }
 
-.scripts_workspace > .block{
+.scripts_workspace > .block,
+.scripts_workspace_compare > .block,{
     display: block;
 }
 
-.block.scripts_workspace{
+.block.scripts_workspace,
+.block.scripts_workspace_compare{
     width: 100%;
     height: calc(100% - 36px); /* 36px refers to height of tabbar class */
     margin: 0px;
     padding: 0px;
 }
-.block.scripts_workspace{
+.block.scripts_workspace,
+.block.scripts_workspace_compare{
     width: 100%;
     max-width: 100%;
     border: 0;
 }
-.block.scripts_workspace:before{
+.block.scripts_workspace:before,
+.block.scripts_workspace_compare:before{
     content: none;
 }
-.block.scripts_workspace > .contained{
+.block.scripts_workspace > .contained,
+.block.scripts_workspace_compare > .contained{
     border: 0;
 }
-.block.scripts_workspace > .contained:before{
+.block.scripts_workspace > .contained:before,
+.block.scripts_workspace_compare > .contained:before{
     content: none;
 }
-.block.scripts_workspace > .label > .block-menu {
+.block.scripts_workspace > .label > .block-menu,
+.block.scripts_workspace_compare > .label > .block-menu {
     border: 1px solid black;
     border-radius: 5px;
 }
 
-.block.scripts_workspace:after{
+.block.scripts_workspace:after,
+.block.scripts_workspace_compare:after{
   content: none;
 }
 

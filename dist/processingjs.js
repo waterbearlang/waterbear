@@ -12854,9 +12854,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Scoll workspace as needed
+        // Auto-scroll deemed unnecessary given advent of scratchspace, so
+	// the if(workspace) block has been commented out
         // WB-Specific
-        if (workspace){
+        /*if (workspace){
             // FIXME: is this why scroll-wheel doesn't work?
             // FIXME: is this why scrolling down works poorly?
             var container = workspace.parentElement;
@@ -12873,7 +12874,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
                 container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
             }
-        }
+        }*/
         currentPosition = nextPosition;
         return false;
     }

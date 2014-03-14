@@ -1,5 +1,6 @@
 {
-	"name": "Random",
+	"sectionkey": "random",
+    "name": "Random",
 	"help": "Various forms of randomness for your code",
 	"blocks": [
 		{

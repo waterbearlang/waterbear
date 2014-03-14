@@ -340,19 +340,57 @@ function is_touch_device() {
 
 initContextMenus();
 
+var defaultLangData  = {};
+var localizationData = {};
+
+var l10nHalfDone = false;
+wb.l10nHalfDone = l10nHalfDone;
+
+/* will be set true by either code in l10n.js or initLanguageFiles() */
+initLanguageFiles();
+
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
-    var title = blockspec.name.replace(/\W/g, '');
-    var specs = blockspec.blocks;
-    var help = blockspec.help !== undefined ? blockspec.help : '';
-    return edit_menu(title, specs, help);
+    var id_blocks = {};
+    var blocks = blockspec.blocks;
+
+    // put blocks in data structure with block.id as key 
+    for (var key in blocks) {
+        var block = blocks[key];
+        id_blocks[block.id] = block;
+    }
+
+    // store blocks temporarily in defaultLangData
+    blockspec.blocks = id_blocks;
+    defaultLangData[blockspec.sectionkey] = blockspec;
+
 };
 
-function edit_menu(title, specs, help, show){
+function populateMenu() {
+	for (var key in defaultLangData) {
+
+        //default data
+        var blockspec = defaultLangData[key];
+
+        //read in from localized file
+        var l10nData = localizationData[blockspec.sectionkey];
+ 
+        //overwrite attributes in blockspec
+        wb.overwriteAttributes(blockspec, l10nData);
+
+		var title = blockspec.name;
+        var sectionKey = blockspec.sectionkey.replace(/\W/g, '');
+        var specs = blockspec.blocks;
+        var help = blockspec.help !== undefined ? blockspec.help : '';
+        edit_menu(title, sectionKey, specs, help);
+	}
+}
+
+function edit_menu(title, sectionKey, specs, help, show){
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = document.querySelector('.' + group + '+ .submenu');
+    var submenu = document.querySelector('.' + sectionKey + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
+        var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
         var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
@@ -360,10 +398,68 @@ function edit_menu(title, specs, help, show){
         blockmenu.appendChild(submenu);
         submenu.appendChild(description);
     }
-    specs.forEach(function(spec, idx){
-        spec.group = group;
+    for (var key in specs) {
+        var spec = specs[key];
+        spec.group = sectionKey;
         spec.isTemplateBlock = true;
         submenu.appendChild(wb.Block(spec));
+    }
+}
+
+function initLanguageFiles(){
+    // pulled from workspace.js, one file below in the dist/javascript.js
+    var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+
+    //gets language locale code. en, es, de, etc.
+    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
+
+    // get list of paths of localized language files for language
+    var listFiles;
+
+    if ( (typeof(l10nFiles) != "undefined") && (typeof(l10nFiles[language]) != "undefined") )
+        listFiles = l10nFiles[language][locale];
+
+    // if no localized files exist 
+    if (!listFiles) {
+        if (l10nHalfDone) {
+            populateMenu();
+        } else {
+            l10nHalfDone = true;
+        }
+
+        return;
+    }
+
+    // open all relevent localized files for language 
+    listFiles.forEach(function(name, idx){
+        ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
+            var lang = JSON.parse(json);
+
+            var id_blocks = {};
+            var blocks = lang.blocks;
+
+            // put blocks into proper structure. resembles blockRegistry 
+            for (var key in blocks) {
+                var block = blocks[key];
+                id_blocks[block.id] = block;
+            }
+
+            lang.blocks = id_blocks;
+            localizationData[lang.sectionkey] = lang;
+
+            // if this is the last file that needs to be retrieved (this step is done)
+            if ( idx === (listFiles.length - 1 )) {
+                if (wb.l10nHalfDone) {
+                    populateMenu();
+                } else {
+                    wb.l10nHalfDone = true;
+                }
+            }
+
+        }, function(xhr, status){
+            console.error('Error in ajax.get:', status);
+        });
+
     });
 }
 
@@ -437,6 +533,7 @@ if (document.body.clientWidth > 360){
 }
 
 wb.menu = menu;
+wb.populateMenu = populateMenu;
+wb.l10nHalfDone = l10nHalfDone;
 
 })(wb);
-

@@ -1,4 +1,5 @@
 {
+    "sectionkey": "paths",
     "name": "Paths",
     "help": "Path blocks are for construction more complex shapes for drawing, masking, and other uses.",
     "blocks": [

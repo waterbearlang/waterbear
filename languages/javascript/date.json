@@ -1,4 +1,5 @@
 {
+    "sectionkey": "date",
     "name": "Date",
     "help": "Date blocks are used to work with dates and times",
     "blocks": [

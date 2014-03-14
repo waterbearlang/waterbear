@@ -47,9 +47,7 @@ var libs = {
 };
 
 var localizations = {
-    javascript: {
-        es: ['array', 'boolean']
-    }
+
 };
 
 

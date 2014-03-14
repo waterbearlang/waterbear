@@ -12048,7 +12048,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 
 /* list of files used for localization of blocks */
-var l10nFiles = {"javascript":{"es":["array","boolean"]}};
+var l10nFiles = {};
 
 
 /*begin ajax.js*/
@@ -14802,7 +14802,6 @@ function menu(blockspec){
 };
 
 function populateMenu() {
-    console.log("populating");
 	for (var key in defaultLangData) {
 
         //default data
@@ -14850,7 +14849,10 @@ function initLanguageFiles(){
     var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
 
     // get list of paths of localized language files for language
-    var listFiles = l10nFiles[language][locale];
+    var listFiles;
+
+    if ( (typeof(l10nFiles) != "undefined") && (typeof(l10nFiles[language]) != "undefined") )
+        listFiles = l10nFiles[language][locale];
 
     // if no localized files exist 
     if (!listFiles) {

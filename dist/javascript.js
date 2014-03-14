@@ -2652,9 +2652,10 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Scoll workspace as needed
+        // Auto-scroll deemed unnecessary given advent of scratchspace, so
+	// the if(workspace) block has been commented out
         // WB-Specific
-        if (workspace){
+        /*if (workspace){
             // FIXME: is this why scroll-wheel doesn't work?
             // FIXME: is this why scrolling down works poorly?
             var container = workspace.parentElement;
@@ -2671,7 +2672,7 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
                 var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
                 container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
             }
-        }
+        }*/
         currentPosition = nextPosition;
         return false;
     }
@@ -4581,11 +4582,13 @@ function menu(blockspec){
     var id_blocks = {};
     var blocks = blockspec.blocks;
 
+    // put blocks in data structure with block.id as key 
     for (var key in blocks) {
         var block = blocks[key];
         id_blocks[block.id] = block;
     }
 
+    // store blocks temporarily in defaultLangData
     blockspec.blocks = id_blocks;
     defaultLangData[blockspec.sectionkey] = blockspec;
 
@@ -4633,29 +4636,27 @@ function edit_menu(title, sectionKey, specs, help, show){
 }
 
 function initLanguageFiles(){
-    var ajaxDone = false;
-
     // pulled from workspace.js, one file below in the dist/javascript.js
     var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
-    //gets en, es, de, etc.
-    // var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
-    var locale = "es";
+    //gets language locale code. en, es, de, etc.
+    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
 
+    // get list of paths of localized language files for language
     var listFiles = l10nFiles[language][locale];
 
+    // if no localized files exist 
     if (!listFiles) {
         if (l10nHalfDone) {
             populateMenu();
-            // console.log("AJAX populating");
         } else {
             l10nHalfDone = true;
-            // console.log("AJAX done");
         }
 
         return;
     }
 
+    // open all relevent localized files for language 
     listFiles.forEach(function(name, idx){
         ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
             var lang = JSON.parse(json);
@@ -4663,6 +4664,7 @@ function initLanguageFiles(){
             var id_blocks = {};
             var blocks = lang.blocks;
 
+            // put blocks into proper structure. resembles blockRegistry 
             for (var key in blocks) {
                 var block = blocks[key];
                 id_blocks[block.id] = block;
@@ -4671,12 +4673,11 @@ function initLanguageFiles(){
             lang.blocks = id_blocks;
             localizationData[lang.sectionkey] = lang;
 
+            // if this is the last file that needs to be retrieved (this step is done)
             if ( idx === (listFiles.length - 1 )) {
                 if (wb.l10nHalfDone) {
-                    // console.log("AJAX populating");
                     populateMenu();
                 } else {
-                    // console.log("AJAX done");
                     wb.l10nHalfDone = true;
                 }
             }
@@ -5648,6 +5649,10 @@ wb.choiceLists.rettypes.push('motion');
 /*begin languages/javascript/geolocation.js*/
 
 /*end languages/javascript/geolocation.js*/
+
+/*begin languages/javascript/date.js*/
+
+/*end languages/javascript/date.js*/
 
 /*begin languages/javascript/size.js*/
 
@@ -11122,6 +11127,123 @@ wb.menu({
     ]
 });
 /*end languages/javascript/geolocation.json*/
+
+/*begin languages/javascript/date.json*/
+wb.menu({
+    "name": "Date",
+    "help": "Date blocks are used to work with dates and times",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "31007d66-3b78-43d8-a295-89bc81cb62d9",
+            "script": "local.date## = new Date();",
+            "help": "create a date block",
+            "sockets": [
+                {
+                    "name": "date##"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "type": "date",
+                    "script": "local.date##",
+                    "help": "current location",
+                    "sockets": [
+                        {
+                            "name": "date##"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "795bacf1-3abd-4e04-b181-baab9bcf6721",
+            "type": "number",
+            "script": "{{1}}.getFullYear()",
+            "help": "get the year (four digits)",
+            "sockets": [
+                {
+                    "name": "get the year",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1a14fa64-bf53-4584-95fe-9d6bf0cc823a",
+            "type": "number",
+            "script": "({{1}}.getMonth() + 1)",
+            "help": "get the month (from 1-12)",
+            "sockets": [
+                {
+                    "name": "get the month",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c2aa55be-42a0-4831-b554-b35680f81dfd",
+            "type": "number",
+            "script": "{{1}}.getDate()",
+            "help": "get the day of the month (from 1-31)",
+            "sockets": [
+                {
+                    "name": "get the date",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f5958007-0839-4491-a176-e2599169cb16",
+            "type": "number",
+            "script": "{{1}}.getHours()",
+            "help": "get the hour (from 0-23)",
+            "sockets": [
+                {
+                    "name": "get the hour",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "00128be4-a08d-44cc-99a1-47eaaff6ecf4",
+            "type": "number",
+            "script": "{{1}}.getMinutes()",
+            "help": "get the minutes (from 0-59)",
+            "sockets": [
+                {
+                    "name": "get the minutes",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f26108f4-3427-4489-abd3-af9e26315f2f",
+            "type": "number",
+            "script": "{{1}}.getSeconds()",
+            "help": "get the seconds (from 0-59)",
+            "sockets": [
+                {
+                    "name": "get the seconds",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        }
+    ]
+});
+/*end languages/javascript/date.json*/
 
 /*begin languages/javascript/size.json*/
 wb.menu({

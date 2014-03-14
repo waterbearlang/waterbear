@@ -354,11 +354,13 @@ function menu(blockspec){
     var id_blocks = {};
     var blocks = blockspec.blocks;
 
+    // put blocks in data structure with block.id as key 
     for (var key in blocks) {
         var block = blocks[key];
         id_blocks[block.id] = block;
     }
 
+    // store blocks temporarily in defaultLangData
     blockspec.blocks = id_blocks;
     defaultLangData[blockspec.sectionkey] = blockspec;
 
@@ -406,29 +408,27 @@ function edit_menu(title, sectionKey, specs, help, show){
 }
 
 function initLanguageFiles(){
-    var ajaxDone = false;
-
     // pulled from workspace.js, one file below in the dist/javascript.js
     var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
 
-    //gets en, es, de, etc.
-    // var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
-    var locale = "es";
+    //gets language locale code. en, es, de, etc.
+    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
 
+    // get list of paths of localized language files for language
     var listFiles = l10nFiles[language][locale];
 
+    // if no localized files exist 
     if (!listFiles) {
         if (l10nHalfDone) {
             populateMenu();
-            // console.log("AJAX populating");
         } else {
             l10nHalfDone = true;
-            // console.log("AJAX done");
         }
 
         return;
     }
 
+    // open all relevent localized files for language 
     listFiles.forEach(function(name, idx){
         ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
             var lang = JSON.parse(json);
@@ -436,6 +436,7 @@ function initLanguageFiles(){
             var id_blocks = {};
             var blocks = lang.blocks;
 
+            // put blocks into proper structure. resembles blockRegistry 
             for (var key in blocks) {
                 var block = blocks[key];
                 id_blocks[block.id] = block;
@@ -444,12 +445,11 @@ function initLanguageFiles(){
             lang.blocks = id_blocks;
             localizationData[lang.sectionkey] = lang;
 
+            // if this is the last file that needs to be retrieved (this step is done)
             if ( idx === (listFiles.length - 1 )) {
                 if (wb.l10nHalfDone) {
-                    // console.log("AJAX populating");
                     populateMenu();
                 } else {
-                    // console.log("AJAX done");
                     wb.l10nHalfDone = true;
                 }
             }

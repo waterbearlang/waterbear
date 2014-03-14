@@ -2557,6 +2557,15 @@ a .icon-flip-vertical:before {
 
 /*end languages/node/piface.css*/
 
+/*begin languages/node/pibrella_simple.css*/
+.pibrella, .pibrella .holder{
+    border-color: hsl(210, 79%, 65%);
+    background-color: hsl(210, 89%, 62%);
+}
+
+
+/*end languages/node/pibrella_simple.css*/
+
 /*begin languages/node/firmata.css*/
 .firmata, .firmata .holder{
     background-color: #55FFAA;

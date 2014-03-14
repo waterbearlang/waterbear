@@ -2995,26 +2995,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function registerScratchSpace() {
-        var workspace = document.querySelector('.workspace');
-        var mainWorkspace = document.querySelector('scripts_workspace');
-        var id = "23423443";
-        var sBlock = wb.Block({
-                group: 'scripts_scratchspace',
-                id: id,
-                scriptId: id,
-                scopeId: id,
-                blocktype: 'context',
-                sockets: [
-                ],
-                script: '[[1]]',
-                isTemplateBlock: false,
-                help: 'Place script blocks here for quick access'
-            });
-    
-        workspace.insertBefore(sBlock, mainWorkspace);
-    }
-    
     function cancelDrag(event) {
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
@@ -3045,15 +3025,18 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         return false;
     }
     
+    function menuToScratchpad(event) {
+	cloned = wb.cloneBlock(event.target);
+	scratchpad.appendChild(cloned);
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchPad() {
-	console.log("ARRANGING SCRATCH PAD");
+    function arrangeScratchpad(event) {
 	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
 	var xOrigin = 5;
 	var yOrigin = 5;
@@ -3074,8 +3057,6 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		console.log("X " + x);
-		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
 		if (x >= width - 25) {
@@ -3098,7 +3079,8 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
-    Event.on('.content', 'dblclick', null, arrangeScratchPad);
+    Event.on('.content', 'dblclick', null, arrangeScratchpad);
+    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);
@@ -3887,217 +3869,217 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 // are loaded (in template/template.html)
 (function(wb){
 'use strict';
-	function saveCurrentScripts(){
-		if (!wb.scriptModified){
-			// console.log('nothing to save');
-			// nothing to save
-			return;
-		}
-		document.querySelector('#block_menu').scrollIntoView();
-		localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
-	};
+    function saveCurrentScripts(){
+        if (!wb.scriptModified){
+            // console.log('nothing to save');
+            // nothing to save
+            return;
+        }
+        document.querySelector('#block_menu').scrollIntoView();
+        localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
+    }
 
-	// Save script to gist;
-	function saveCurrentScriptsToGist(event){
-	    event.preventDefault();
-		// console.log("Saving to Gist");
-		var title = prompt("Save to an anonymous Gist titled: ");
-		if ( !title ) return;
-		ajax.post("https://api.github.com/gists", function(data){
-	        //var raw_url = JSON.parse(data).files["script.json"].raw_url;
-	        var gistID = JSON.parse(data).url.split("/").pop();
-	        prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
+    // Save script to gist;
+    function saveCurrentScriptsToGist(event){
+        event.preventDefault();
+        // console.log("Saving to Gist");
+        var title = prompt("Save to an anonymous Gist titled: ");
+        if ( !title ) return;
+        ajax.post("https://api.github.com/gists", function(data){
+            //var raw_url = JSON.parse(data).files["script.json"].raw_url;
+            var gistID = JSON.parse(data).url.split("/").pop();
+            prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
-	        //save gist id to local storage
-	        var localGists = localStorage['__' + wb.language + '_recent_gists'];
-	        var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-	        gistArray.push(gistID);
-	        localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
+            //save gist id to local storage
+            var localGists = localStorage['__' + wb.language + '_recent_gists'];
+            var gistArray = localGists === undefined ? [] : JSON.parse(localGists);
+            gistArray.push(gistID);
+            localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
 
-	    }, JSON.stringify({
-	    	"description": title,
-	    	"public": true,
-	    	"files": {
-	    		"script.json": {
-	    			"content": scriptsToString(title, '', title)
-	    		},
-	    	}
-	    }), function(statusCode, x){
+        }, JSON.stringify({
+            "description": title,
+            "public": true,
+            "files": {
+                "script.json": {
+                    "content": scriptsToString(title, '', title)
+                },
+            }
+        }), function(statusCode, x){
             alert("Can't save to Gist:\n" + statusCode + " (" + x.statusText + ") ");
         });
-	};
-	//populate the gist submenu with recent gists
-	function loadRecentGists() {
-		var localGists = localStorage['__' + wb.language + '_recent_gists'];
-		var gistArray = localGists == undefined ? [] : JSON.parse(localGists);
-		var gistContainer = document.querySelector("#recent_gists");
-		gistContainer.innerHTML = '';
+    }
+    //populate the gist submenu with recent gists
+    function loadRecentGists() {
+        var localGists = localStorage['__' + wb.language + '_recent_gists'];
+        var gistArray = localGists === undefined ? [] : JSON.parse(localGists);
+        var gistContainer = document.querySelector("#recent_gists");
+        gistContainer.innerHTML = '';
 
-		for (var i = 0; i < gistArray.length; i++) {
-			//add a new button to the gist sub-menu
-			var gist = gistArray[i];
-			var node = document.createElement("li");
-			var button = document.createElement('button');
-			var buttonText = document.createTextNode("#" + gist);
+        for (var i = 0; i < gistArray.length; i++) {
+            //add a new button to the gist sub-menu
+            var gist = gistArray[i];
+            var node = document.createElement("li");
+            var button = document.createElement('button');
+            var buttonText = document.createTextNode("#" + gist);
 
-			button.appendChild(buttonText);
-			button.classList.add('load-gist');
-			button.dataset.href = wb.language + ".html?gist=" + gist;
-			button.dataset.gist = gist;
+            button.appendChild(buttonText);
+            button.classList.add('load-gist');
+            button.dataset.href = wb.language + ".html?gist=" + gist;
+            button.dataset.gist = gist;
 
-			node.appendChild(button);
-			gistContainer.appendChild(node);
+            node.appendChild(button);
+            gistContainer.appendChild(node);
 
-			button.addEventListener('click', function(){
-				wb.loadScriptsFromGistId(this.dataset.gist);
-			});
-		}
-	};
+            button.addEventListener('click', function(){
+                wb.loadScriptsFromGistId(this.dataset.gist);
+            });
+        }
+    }
 
-	//Potential FIXME: I feel that title should be the filename, but uName || name
-	//determines what is shown in the workspace.
-	function scriptsToString(title, description, name){
-		if (!title){ title = ''; }
-		if (!description){ description = ''; }
-		if (!name){ name = 'Workspace';}
-		var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-		var json = {
-			title: title,
-			description: description,
-			date: Date.now(),
-			waterbearVersion: '2.0',
-			blocks: blocks.map(wb.blockDesc)
-		};
+    //Potential FIXME: I feel that title should be the filename, but uName || name
+    //determines what is shown in the workspace.
+    function scriptsToString(title, description, name){
+        if (!title){ title = ''; }
+        if (!description){ description = ''; }
+        if (!name){ name = 'Workspace';}
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        var json = {
+            title: title,
+            description: description,
+            date: Date.now(),
+            waterbearVersion: '2.0',
+            blocks: blocks.map(wb.blockDesc)
+        };
 
-		if(json.blocks[0].sockets[0].name){
-			json.blocks[0].sockets[0].name = name;
-		}else if(json.blocks[0].sockets[0].uName){
-			json.blocks[0].sockets[0].uName = name;
-		}
+        if(json.blocks[0].sockets[0].name){
+            json.blocks[0].sockets[0].name = name;
+        }else if(json.blocks[0].sockets[0].uName){
+            json.blocks[0].sockets[0].uName = name;
+        }
 
-		return JSON.stringify(json, null, '    ');
-	}
+        return JSON.stringify(json, null, '    ');
+    }
 
 
-	function createDownloadUrl(evt){
-	    evt.preventDefault();
-	    var name = prompt("Save file as: ");
-	    if( !name ) return;
-		var URL = window.webkitURL || window.URL;
-		var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
-		var reader = new FileReader();
-		var a = document.createElement('a');
-		reader.onloadend = function(){
-			a.href = reader.result;
-			a.download = name + '.json';
-			a.target = '_blank';
-			document.body.appendChild(a);
-			a.click();
-		};
-		reader.readAsDataURL(file);
-	};
+    function createDownloadUrl(evt){
+        evt.preventDefault();
+        var name = prompt("Save file as: ");
+        if( !name ) return;
+        var URL = window.webkitURL || window.URL;
+        var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
+        var reader = new FileReader();
+        var a = document.createElement('a');
+        reader.onloadend = function(){
+            a.href = reader.result;
+            a.download = name + '.json';
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+        };
+        reader.readAsDataURL(file);
+    }
 
-	function loadScriptsFromGistId(id){
-		//we may get an event passed to this function so make sure we have a valid id or ask for one
-		var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
-		// console.log("Loading gist " + id);
-		if( !gistID ) return;
-		ajax.get("https://api.github.com/gists/"+gistID, function(data){
-			loadScriptsFromGist({data:JSON.parse(data)});
-	    }, function(statusCode, x){
+    function loadScriptsFromGistId(id){
+        //we may get an event passed to this function so make sure we have a valid id or ask for one
+        var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+        // console.log("Loading gist " + id);
+        if( !gistID ) return;
+        ajax.get("https://api.github.com/gists/"+gistID, function(data){
+            loadScriptsFromGist({data:JSON.parse(data)});
+        }, function(statusCode, x){
             alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
-		});
+        });
         var path = location.href.split('?')[0];
         path += "?gist=" + gistID;
         history.pushState(null, '', path);
-	};
+    }
 
-	function loadScriptsFromFilesystem(event){
-		var input = document.createElement('input');
-		input.setAttribute('type', 'file');
-		input.setAttribute('accept', 'application/json');
-		input.addEventListener('change', function(evt){
-			var file = input.files[0];
-			loadScriptsFromFile(file);
-		});
-		input.click();
-	};
+    function loadScriptsFromFilesystem(event){
+        var input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'application/json');
+        input.addEventListener('change', function(evt){
+            var file = input.files[0];
+            loadScriptsFromFile(file);
+        });
+        input.click();
+    }
 
-	function loadScriptsFromObject(fileObject){
-	    // console.info('file format version: %s', fileObject.waterbearVersion);
-	    // console.info('restoring to workspace %s', fileObject.workspace);
-	    if (!fileObject) return wb.createWorkspace();
-	    var blocks = fileObject.blocks.map(wb.Block);
-	    if (!blocks.length){
-	    	return wb.createWorkspace();
-	    }
-	    if (blocks.length > 1){
-	    	console.error('not really expecting multiple blocks here right now');
-	    	console.error(blocks);
-	    }
-	    blocks.forEach(function(block){
-	    	wb.wireUpWorkspace(block);
-	    	Event.trigger(block, 'wb-add');
-	    });
-	    wb.loaded = true;
-	    Event.trigger(document.body, 'wb-script-loaded');
-	}
+    function loadScriptsFromObject(fileObject){
+        // console.info('file format version: %s', fileObject.waterbearVersion);
+        // console.info('restoring to workspace %s', fileObject.workspace);
+        if (!fileObject) return wb.createWorkspace();
+        var blocks = fileObject.blocks.map(wb.Block);
+        if (!blocks.length){
+            return wb.createWorkspace();
+        }
+        if (blocks.length > 1){
+            console.error('not really expecting multiple blocks here right now');
+            console.error(blocks);
+        }
+        blocks.forEach(function(block){
+            wb.wireUpWorkspace(block);
+            Event.trigger(block, 'wb-add');
+        });
+        wb.loaded = true;
+        Event.trigger(document.body, 'wb-script-loaded');
+    }
 
-	function loadScriptsFromGist(gist){
-		var keys = Object.keys(gist.data.files);
-		var file;
-		keys.forEach(function(key){
-			if (/.*\.json/.test(key)){
-				// it's a json file
-				file = gist.data.files[key].content;
-			}
-		});
-		if (!file){
-			console.error('no json file found in gist: %o', gist);
-			return;
-		}
-		loadScriptsFromObject(JSON.parse(file));
-	}
+    function loadScriptsFromGist(gist){
+        var keys = Object.keys(gist.data.files);
+        var file;
+        keys.forEach(function(key){
+            if (/.*\.json/.test(key)){
+                // it's a json file
+                file = gist.data.files[key].content;
+            }
+        });
+        if (!file){
+            console.error('no json file found in gist: %o', gist);
+            return;
+        }
+        loadScriptsFromObject(JSON.parse(file));
+    }
 
-	function loadScriptsFromExample(name){
-		ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
-			loadScriptsFromObject(JSON.parse(exampleJson));
-		}, function(statusCode, xhr){
-			console.error(statusCode + xhr);
-		});
-	}
+    function loadScriptsFromExample(name){
+        ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
+            loadScriptsFromObject(JSON.parse(exampleJson));
+        }, function(statusCode, xhr){
+            console.error(statusCode + xhr);
+        });
+    }
 
-	function loadCurrentScripts(queryParsed){
-		// console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
-		if (wb.loaded) return;
-		wb.scriptLoaded = false;
-		if (queryParsed.gist){
-			//console.log("Loading gist %s", queryParsed.gist);
-			ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
-				loadScriptsFromGist({data:JSON.parse(data)});
-	        }, function(statusCode, x){
+    function loadCurrentScripts(queryParsed){
+        // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
+        if (wb.loaded) return;
+        wb.scriptLoaded = false;
+        if (queryParsed.gist){
+            //console.log("Loading gist %s", queryParsed.gist);
+            ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
+                loadScriptsFromGist({data:JSON.parse(data)});
+            }, function(statusCode, x){
               alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
-			});
-		}else if (queryParsed.example){
-			//console.log('loading example %s', queryParsed.example);
-			loadScriptsFromExample(queryParsed.example);
-		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			//console.log('loading current script from local storage');
-			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
-			if (fileObject){
-				loadScriptsFromObject(fileObject);
-			}
-		}else{
-			//console.log('no script to load, starting a new script');	
-			wb.scriptLoaded = true;
-			wb.createWorkspace('Workspace');
-		}
-		wb.loaded = true;
-		Event.trigger(document.body, 'wb-loaded');
-	};
+            });
+        }else if (queryParsed.example){
+            //console.log('loading example %s', queryParsed.example);
+            loadScriptsFromExample(queryParsed.example);
+        }else if (localStorage['__' + wb.language + '_current_scripts']){
+            //console.log('loading current script from local storage');
+            var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
+            if (fileObject){
+                loadScriptsFromObject(fileObject);
+            }
+        }else{
+            //console.log('no script to load, starting a new script');  
+            wb.scriptLoaded = true;
+            wb.createWorkspace('Workspace');
+        }
+        wb.loaded = true;
+        Event.trigger(document.body, 'wb-loaded');
+    }
 
 	function loadScriptsFromFile(file){
-		fileName = file.name;
+		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
 			return;
@@ -4113,25 +4095,25 @@ var l10nFiles = {"javascript":{"es":["array","boolean"]}};
 		};
 	}
 
-	function getFiles(evt){
-		evt.stopPropagation();
-		evt.preventDefault();
-		var files = evt.dataTransfer.files;
-		if ( files.length > 0 ){
-	        // we only support dropping one file for now
-	        var file = files[0];
-	        loadScriptsFromFile(file);
-	    }
-	}
+    function getFiles(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
+        var files = evt.dataTransfer.files;
+        if ( files.length > 0 ){
+            // we only support dropping one file for now
+            var file = files[0];
+            loadScriptsFromFile(file);
+        }
+    }
 
-	wb.saveCurrentScripts = saveCurrentScripts;
-	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
-	wb.loadRecentGists = loadRecentGists;
-	wb.createDownloadUrl = createDownloadUrl;
-	wb.loadScriptsFromGistId = loadScriptsFromGistId;
-	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
-	wb.loadCurrentScripts = loadCurrentScripts;
-	wb.getFiles = getFiles;
+    wb.saveCurrentScripts = saveCurrentScripts;
+    wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
+    wb.loadRecentGists = loadRecentGists;
+    wb.createDownloadUrl = createDownloadUrl;
+    wb.loadScriptsFromGistId = loadScriptsFromGistId;
+    wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
+    wb.loadCurrentScripts = loadCurrentScripts;
+    wb.getFiles = getFiles;
 
 })(wb);
 
@@ -5337,7 +5319,6 @@ var stageMenu = document.querySelector('[data-target=stage]').parentElement;
 stageMenu.parentElement.removeChild(stageMenu);
 
 var menu = document.querySelector('.menu');
-console.log("menu =", menu);
 
 var newLi = document.createElement("li");
 var newBtn = document.createElement("button");
@@ -5418,11 +5399,18 @@ wb.resetrun = function(message){
     //Event.remove('.stop-remote', 'click');
 
 };
+
+function stringFromData(dat){
+    var text = dat.map(function(chc){return String.fromCharCode(chc);}).join("");
+    return text;
+}
     
 wb.runScript = function(script){
 
     var aHost = window.location.host.split(":");
     var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
+    
+    oSocket.bConnected = false;
     
     var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = "Connecting to Raspberry Pi";
@@ -5430,31 +5418,40 @@ wb.runScript = function(script){
     oSocket.onerror = function(event) {
         messagebox.innerHTML = "Error Communicating with RPi";
         window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
-        oSocket.close();
     };
     
     oSocket.onopen = function (event) {
         messagebox.innerHTML = "Sending Code to RPi";
         oSocket.send(JSON.stringify({"command":"run","code":script})); 
+        oSocket.bConnected = true;
     };
     
     
     oSocket.onclose = function (event) {
-        wb.resetrun("Communication Ended");
+        if(oSocket.bConnected)
+        {
+            if(event.code !== 1000)
+            {
+                wb.resetrun("Server Closed Unexpectedly");
+            }
+        }
+        else
+        {
+            wb.resetrun("Server Unavailable");
+        }
     };
     
     oSocket.onmessage = function(event) {
         var msg = JSON.parse(event.data);
+        //console.log("msg =", msg);
         switch(msg.type) {
             case "recieved":
                 messagebox.innerHTML = "Code recieved on RPi";
                 break;
             case "running":
                 messagebox.innerHTML = "Code running on RPi "+ msg.pid;
-                var runbutton= document.querySelector('.run-remote')
-                console.log("runbutton =", runbutton);
+                var runbutton= document.querySelector('.run-remote');
                 wb.hide(runbutton);
-                //document.querySelector('.stop-remote').style.display = 'inline-block';
                 wb.show(document.querySelector('.stop-remote'));
                 
                 Event.once('.stop-remote', 'click', null, function(){
@@ -5464,25 +5461,23 @@ wb.runScript = function(script){
                 break;
             case "completed":
                 wb.resetrun("Code Completed Successfully");
-                oSocket.close();
+                oSocket.close(1000, "Code Completed");
                 break;
             case "exit":
-                wb.resetrun("Code Exited");
-                oSocket.close();
+                wb.resetrun("Code Stopped");
+                oSocket.close(1000, "Code Stopped");
                 break;
             case "error":
                 wb.resetrun("Code Failed " + msg.data.toString());
-                oSocket.close();
+                oSocket.close(1000, "Code Failed");
                 break;
             case "sterr":
-                messagebox.innerHTML = "Error Recieved " + msg.data;
+                messagebox.innerHTML = "Error Recieved " + stringFromData(msg.data);
                 break;    
             case "stdout":
-                messagebox.innerHTML = "Data Recieved ";// + msg.data;
-                console.log("msg.data =", msg.data.toString());
+                messagebox.innerHTML = "Data Recieved " + stringFromData(msg.data);
                 break;    
         }
-  
     };
 };
 
@@ -5556,7 +5551,8 @@ wb.prettyScript = function(elements){
             return req;
         }
         return "";
-    }).join(" ");
+    }).join(" ")+"\n process.on('SIGINT', function(){process.exit(0);});";
+    //"process.on('exit', function(){console.log(\"Ending\");});";
     
     var script = elements.map(function(elem){
         return wb.codeFromBlock(elem);
@@ -5628,9 +5624,85 @@ wb.choiceLists.pifaceonoff = [0, 1];
 
 
 wb.requiredjs.before.piface = "var pfio = require('piface-node');\npfio.init();\n";
-wb.requiredjs.after.piface =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\"); process.exit();});process.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
+wb.requiredjs.after.piface =  "\nprocess.on('exit',function(){console.log(\"exit\");pfio.write_output(0);pfio.deinit();});";
 
 /*end languages/node/piface.js*/
+
+/*begin languages/node/pibrella_simple.js*/
+
+//PiBrella 
+/*
+gpio export 27 out
+gpio export 17 out
+gpio export 4 out
+gpio export 22 out
+gpio export 23 out
+gpio export 24 out
+gpio export 25 out
+gpio export 18 out
+
+gpio export 11 in
+gpio export 9 in
+gpio export 7 in
+gpio export 8 in
+gpio export 10 in
+
+gpio -g mode 11 down
+gpio -g mode 9 down
+gpio -g mode 7 down
+gpio -g mode 8 down
+gpio -g mode 10 down
+
+*/
+
+
+wb.choiceLists.pibrellaout = {27:"Red LED", 17:"Amber LED", 4:"Green LED", 22:"Output E", 23:"Output F", 24:"Output G", 25:"Output H", 18: "Buzzer"}
+wb.choiceLists.pibrellain = {11:"Red Button", 9:"Input A", 7:"Input B", 8:"Input C", 10:"Input D"}
+
+wb.choiceLists.pibrellaedge = {'both': 'Change', 'rising':'Turn On', 'falling':'Turn Off'}
+
+
+//PB_PIN_BUZZER = 18
+
+
+wb.requiredjs.before.pibrella = "var Gpio = require('onoff').Gpio;\n";
+wb.requiredjs.after.pibrella =  "";
+
+
+/*Run the following commands to export GPIO #17 and #18:
+
+gpio export 17 out
+gpio export 18 in
+
+Step 2 - Run the application
+
+Now the application can be executed without superuser privileges. Note that unlike the initial led/button example, the applications exit function does not attempt to unexport the GPIOs when it terminates.
+
+var Gpio = require('onoff').Gpio,
+    led = new Gpio(17, 'out'),
+    button = new Gpio(18, 'in', 'both');
+
+button.watch(function(err, value) {
+    if (err) exit();
+    led.writeSync(value);
+});
+
+function exit() {
+    process.exit();
+}
+
+process.on('SIGINT', exit);
+
+Step 3 - Unxport GPIOs with gpio
+
+After the application has terminated, run the following commands to unexport GPIO #17 and #18:
+
+gpio unexport 17
+gpio unexport 18
+
+*/
+
+/*end languages/node/pibrella_simple.js*/
 
 /*begin languages/node/firmata.js*/
 //arduino firmata  https://npmjs.org/search?q=firmata
@@ -5654,9 +5726,9 @@ wb.requiredjs.after.firmata =  "";
 /*begin languages/node/mc_game.js*/
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nvar v= require('vec3');";
+wb.requiredjs.before.minecraftgame = "var Minecraft = require('minecraft-pi-vec3');\nvar v= require('vec3');";
 
-wb.requiredjs.after.minecraftgame =  "\nprocess.on('SIGINT',function(){console.log(\"Caught SIGINT\");client.end(); process.exit();});process.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+wb.requiredjs.after.minecraftgame =  "\nprocess.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 
 
 // TODO : fix blocktypes to number or text not both
@@ -6065,6 +6137,113 @@ wb.menu({
     ]
 });
 /*end languages/node/piface.json*/
+
+/*begin languages/node/pibrella_simple.json*/
+wb.menu({
+    "name": "PiBrella",
+    "help": "Physical Input and Output for the Raspberry Pi using a PiBrella board.",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "cecd70c5-e733-4f36-83f3-aec34a70f75b",
+            "script": "output## = new Gpio({{1}}, 'out');",
+            "help": "Create a named pin set to output",
+            "sockets": [
+                {
+                    "name": "Create output## using",
+                    "type": "number",
+                    "options": "pibrellaout",
+                    "value": null
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "step",
+                    "sockets": [
+                        {
+                            "name": "output##"
+                        },
+                        {
+                            "name": "=",
+                            "type": "boolean",
+                            "value": null
+                        }
+                    ],
+                    "script": "output##.writeSync(({{1}})?1:0);"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "f2c60382-47b4-40d7-8117-c790a866c104",
+            "script": "input## = new Gpio({{1}}, 'in');",
+            "help": "Create a named pin set to input",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "input##"
+                        }
+                    ],
+                    "script": "(input##.readSync() === 1)",
+                    "help": "Is the digital input pin ON",
+                    "type": "boolean"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "Create input## using Input Pin",
+                    "type": "number",
+                    "options": "pibrellain",
+                    "value": 11
+                }
+            ]
+        },
+        {
+            "blocktype": "context",
+            "id": "e57b641a-3de8-4ecd-90bc-77a1277b8066",
+            "script": "watcher## = new Gpio({{1}}, 'in', {{2}}, {\"debounceTimeout\":{{3}}}); watcher##.watch(function(err, watcherval){[[1]]})",
+            "help": "Create a named pin set to input",
+            "sockets": [
+                {
+                    "name": "Watch for",
+                    "type": "number",
+                    "options": "pibrellain",
+                    "value": 11
+                },
+                {
+                    "name": "to",
+                    "type": "string",
+                    "options": "pibrellaedge",
+                    "value": "both"
+                },
+                {
+                    "name": "debounce",
+                    "type": "number",
+                    "value": 100,
+                    "suffix": "ms"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "value"
+                        }
+                    ],
+                    "script": "(watcherval === 1)",
+                    "help": "value from input",
+                    "type": "boolean"
+                }
+            ]
+        }
+        
+        
+    ]
+});
+/*end languages/node/pibrella_simple.json*/
 
 /*begin languages/node/firmata.json*/
 wb.menu({

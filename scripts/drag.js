@@ -252,9 +252,10 @@
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Scoll workspace as needed
+        // Auto-scroll deemed unnecessary given advent of scratchspace, so
+	// the if(workspace) block has been commented out
         // WB-Specific
-        if (workspace){
+        /*if (workspace){
             // FIXME: is this why scroll-wheel doesn't work?
             // FIXME: is this why scrolling down works poorly?
             var container = workspace.parentElement;
@@ -271,7 +272,7 @@
                 var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
                 container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
             }
-        }
+        }*/
         currentPosition = nextPosition;
         return false;
     }
@@ -595,26 +596,6 @@
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function registerScratchSpace() {
-        var workspace = document.querySelector('.workspace');
-        var mainWorkspace = document.querySelector('scripts_workspace');
-        var id = "23423443";
-        var sBlock = wb.Block({
-                group: 'scripts_scratchspace',
-                id: id,
-                scriptId: id,
-                scopeId: id,
-                blocktype: 'context',
-                sockets: [
-                ],
-                script: '[[1]]',
-                isTemplateBlock: false,
-                help: 'Place script blocks here for quick access'
-            });
-    
-        workspace.insertBefore(sBlock, mainWorkspace);
-    }
-    
     function cancelDrag(event) {
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
@@ -645,15 +626,18 @@
         return false;
     }
     
+    function menuToScratchpad(event) {
+	cloned = wb.cloneBlock(event.target);
+	scratchpad.appendChild(cloned);
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchPad() {
-	console.log("ARRANGING SCRATCH PAD");
+    function arrangeScratchpad(event) {
 	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	console.log(scratchPadRect);
 	var width = scratchPadRect.width;
 	var xOrigin = 5;
 	var yOrigin = 5;
@@ -674,8 +658,6 @@
 		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		console.log("X " + x);
-		console.log("Y " + y);
 		x += rBounding.width + PADDING;
 		
 		if (x >= width - 25) {
@@ -698,7 +680,8 @@
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
-    Event.on('.content', 'dblclick', null, arrangeScratchPad);
+    Event.on('.content', 'dblclick', null, arrangeScratchpad);
+    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

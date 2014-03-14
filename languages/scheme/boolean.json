@@ -4,9 +4,9 @@
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "770756e8-3a10-4993-b02e-3d1333c98958",
+            "id": "785ae0ef-8f4c-4ef8-8a38-b465353b4695",
             "type": "boolean",
-            "script": "({{1}} && {{2}})",
+            "script": "(&& {{1}} {{2}})",
             "help": "both operands are true",
             "sockets": [
                 {
@@ -21,9 +21,9 @@
         },
         {
             "blocktype": "expression",
-            "id": "a56c0d03-5c5c-4459-9aaf-cbbea6eb3abf",
+            "id": "aa8b642a-b3ae-49b6-9ab8-7ea74afdc133",
             "type": "boolean",
-            "script": "({{1}} || {{2}})",
+            "script": "(|| {{1}} {{2}})",
             "help": "either or both operands are true",
             "sockets": [
                 {
@@ -38,7 +38,7 @@
         },
         {
             "blocktype": "expression",
-            "id": "cb9ddee8-5ee1-423b-9559-6d2cbb379b80",
+            "id": "d4ab8689-5a27-40d1-9ec5-f15c1cf7eb00",
             "type": "boolean",
             "script": "({{1}} ? !{{2}} : {{2}})",
             "help": "either, but not both, operands are true",
@@ -55,7 +55,7 @@
         },
         {
             "blocktype": "expression",
-            "id": "138a6840-37cc-4e2d-b44a-af32e673ba56",
+            "id": "35155155-37aa-487e-93dc-0eacc42b7e42",
             "type": "boolean",
             "script": "(! {{1}})",
             "help": "operand is false",
@@ -68,7 +68,7 @@
         },
         {
             "blocktype": "expression",
-            "id": "de9f5ebd-2408-4c72-9705-786b1eec2b14",
+            "id": "e91a811e-5d4c-4394-badf-d346a84ea0a5",
             "type": "boolean",
             "script": "!({{1}}%2)",
             "help": "true when the parameter is even",
@@ -83,7 +83,7 @@
         },
         {
             "blocktype": "expression",
-            "id": "0ac50ac9-2af6-4073-83cf-4f79b4bde163",
+            "id": "38c05cc3-e1e1-4ac7-94ac-68ab7b73b519",
             "type": "boolean",
             "script": "!!({{1}}%2)",
             "help": "true when the parameter is odd",
@@ -96,6 +96,5 @@
                 }
             ]
         }
-
     ]
 }

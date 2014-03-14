@@ -74,15 +74,6 @@ function createSprite(shape, color){
     }
 };
 
-window.createRectSprite = createRectSprite; // deprecated
-window.createTextSprite = createTextSprite;
-window.createImageSprite = createImageSprite;
-window.createPolygonSprite = createPolygonSprite;
-window.createCircleSprite = createCircleSprite;
-window.createSprite = createSprite;
-
-window.Sprite = Sprite;
-
 Sprite.prototype.isPolygon = function(){
     return this.type === 'polygon';
 };
@@ -354,4 +345,14 @@ Sprite.prototype.edgeWrap = function(stage_width, stage_height){
         this.setPos(null, bounds.up);
     }
 }
+
+window.createRectSprite = createRectSprite; // deprecated
+window.createTextSprite = createTextSprite;
+window.createImageSprite = createImageSprite;
+window.createPolygonSprite = createPolygonSprite;
+window.createCircleSprite = createCircleSprite;
+window.createSprite = createSprite;
+window.isSpriteClicked = isSpriteClicked;
+window.Sprite = Sprite;
+
 })(window);

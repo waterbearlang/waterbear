@@ -17,7 +17,8 @@
 	cursor: auto;
 }
 
-.scripts_workspace > .block, .submenu > .block{
+.scripts_workspace > .block, .submenu > .block,
+.scripts_workspace_compare> .block, .submenu > .block{
   margin-bottom: 15px;
 }
 
@@ -42,7 +43,8 @@
   text-align: right;
 }
 
-.scripts_workspace > .label >  .socket{
+.scripts_workspace > .label >  .socket,
+.scripts_workspace_compare > .label >  .socket{
   text-align: left;
 }
 
@@ -308,36 +310,44 @@
     margin: 0;
 }
 
-.scripts_workspace > .block{
+.scripts_workspace > .block,
+.scripts_workspace_compare > .block,{
     display: block;
 }
 
-.block.scripts_workspace{
+.block.scripts_workspace,
+.block.scripts_workspace_compare{
     width: 100%;
     height: calc(100% - 36px); /* 36px refers to height of tabbar class */
     margin: 0px;
     padding: 0px;
 }
-.block.scripts_workspace{
+.block.scripts_workspace,
+.block.scripts_workspace_compare{
     width: 100%;
     max-width: 100%;
     border: 0;
 }
-.block.scripts_workspace:before{
+.block.scripts_workspace:before,
+.block.scripts_workspace_compare:before{
     content: none;
 }
-.block.scripts_workspace > .contained{
+.block.scripts_workspace > .contained,
+.block.scripts_workspace_compare > .contained{
     border: 0;
 }
-.block.scripts_workspace > .contained:before{
+.block.scripts_workspace > .contained:before,
+.block.scripts_workspace_compare > .contained:before{
     content: none;
 }
-.block.scripts_workspace > .label > .block-menu {
+.block.scripts_workspace > .label > .block-menu,
+.block.scripts_workspace_compare > .label > .block-menu {
     border: 1px solid black;
     border-radius: 5px;
 }
 
-.block.scripts_workspace:after{
+.block.scripts_workspace:after,
+.block.scripts_workspace_compare:after{
   content: none;
 }
 

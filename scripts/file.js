@@ -139,23 +139,27 @@
         history.pushState(null, '', path);
 	};
 
-	function loadScriptsFromFilesystem(event){
+    function compareScript(event){
+        loadScriptsFromFilesystem(event, true);
+    }
+    
+	function loadScriptsFromFilesystem(event, compare){
 		var input = document.createElement('input');
 		input.setAttribute('type', 'file');
 		input.setAttribute('accept', 'application/json');
 		input.addEventListener('change', function(evt){
 			var file = input.files[0];
-			loadScriptsFromFile(file);
+			loadScriptsFromFile(file, compare);
 		});
 		input.click();
 	};
 
-	function loadScriptsFromObject(fileObject){
+	function loadScriptsFromObject(fileObject, compare){
 	    // console.info('file format version: %s', fileObject.waterbearVersion);
 	    // console.info('restoring to workspace %s', fileObject.workspace);
 	    if (!fileObject) return wb.createWorkspace();
 	    var blocks = fileObject.blocks.map(wb.Block);
-	    if (!blocks.length){
+	    if (!blocks.length && !compare){
 	    	return wb.createWorkspace();
 	    }
 	    if (blocks.length > 1){
@@ -163,7 +167,7 @@
 	    	console.error(blocks);
 	    }
 	    blocks.forEach(function(block){
-	    	wb.wireUpWorkspace(block);
+	    	wb.wireUpWorkspace(block, compare);
 	    	Event.trigger(block, 'wb-add');
 	    });
 	    wb.loaded = true;
@@ -222,8 +226,7 @@
 		wb.loaded = true;
 		Event.trigger(document.body, 'wb-loaded');
 	};
-
-	function loadScriptsFromFile(file){
+	function loadScriptsFromFile(file, compare){
 		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
 			console.error("File not a JSON file");
@@ -232,11 +235,15 @@
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-			wb.clearScripts(null, true);
-			var saved = JSON.parse(evt.target.result);
-			wb.loaded = true;
-			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+            var saved = JSON.parse(evt.target.result);
+            if (compare){
+                loadScriptsFromObject(saved, true);
+            }else{
+                wb.clearScripts(null, true);
+                wb.loaded = true;
+                loadScriptsFromObject(saved);
+                wb.scriptModified = true;
+            }
 		};
 	}
 
@@ -259,5 +266,6 @@
 	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
 	wb.loadCurrentScripts = loadCurrentScripts;
 	wb.getFiles = getFiles;
+    wb.compareScript = compareScript;
 
 })(wb);

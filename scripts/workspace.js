@@ -143,16 +143,25 @@
 		wb.wireUpWorkspace(workspace);
 	}
 	
-	function wireUpWorkspace(workspace){
-		workspace.addEventListener('drop', wb.getFiles, false);
-		workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
-		wb.findAll(document, '.scripts_workspace').forEach(function(ws){
-	        ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
-	    });
-		document.querySelector('.workspace').appendChild(workspace);
-		workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
-		// wb.initializeDragHandlers();
-		Event.trigger(document.body, 'wb-workspace-initialized');
+	function wireUpWorkspace(workspace, compare){
+        if (compare){
+            wb.findAll(document, '.scripts_workspace_compare').forEach(function(ws){
+                ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+            });
+            var element = document.querySelector('.workspace_compare');
+            element.appendChild(workspace);
+            element.className = element.className.replace("hidden","");
+        }else{
+            workspace.addEventListener('drop', wb.getFiles, false);
+            workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
+            wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+                ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
+            });
+            document.querySelector('.workspace').appendChild(workspace);
+            workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
+            // wb.initializeDragHandlers();
+            Event.trigger(document.body, 'wb-workspace-initialized');
+        }
 	};
 
 
@@ -297,6 +306,7 @@
 	Event.on('.download_scripts', 'click', null, wb.createDownloadUrl);
 	Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
 	Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
+    Event.on('.compare_script', 'click', null, wb.compareScript);
 	Event.on('.workspace', 'click', '.disclosure', disclosure);
 	Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
 	Event.on('.workspace', 'keypress', 'input', wb.resize);

@@ -29,7 +29,7 @@ body{
 	flex: 0 0 300px;
 }
 
-.workspace{
+.workspace, .workspace_compare{
 	-webkit-flex: 3 0 0;
 	flex: 3 0 0;
 	display: -webkit-flex;
@@ -53,7 +53,7 @@ body{
 	color: rgba(0,0,0,0.4);
 }
 
-.scripts_workspace{
+.scripts_workspace, .scripts_workspace_compare{
 	-webkit-flex: 3 0 0;
 	flex: 3 0 0;
 	overflow: auto;
@@ -95,7 +95,7 @@ body{
 	overflow: auto;
 }
 
-.blocks-menu, .workspace, .results, .files{
+.blocks_menu, .workspace, .workspace_compare, .results, .files{
 	overflow: auto;
 }
 
@@ -142,7 +142,7 @@ ul.menu .show-ide{
 		position: relative;
 		overflow: hidden;
 	}
-	#block_menu, .workspace, .results, .files{
+	#block_menu, .workspace, .workspace_compare, .results, .files{
 		display: block;
 		position: absolute;
 		width: 100%;
@@ -151,9 +151,9 @@ ul.menu .show-ide{
 		left: 100%;
 		transition-property: left;
 	}
-	.workspace{
+	.workspace, .workspace_compare{
 		left: 0;
-	}
+	}    
 	.stage{
 		display: block;
 		width: 100%;

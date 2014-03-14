@@ -362,6 +362,40 @@
   display: none;
 }
 
+.diff_changed:before, .diff_deleted:before {
+  content: "-";
+  font-size: 2em;
+  color: red;
+}
+.diff_added:before {
+  content: "+";
+  font-size: 2em;
+  color: green;  
+}
+.diff_changed:after ,.diff_deleted:after ,.diff_added:after {
+  display: block;
+  height: calc(100% + 10px);
+  width: calc(100% + 10px);
+  position: absolute;
+  top: -5px;
+  left: -25px;
+  border: none;
+  z-index: 100;
+  border-radius: 20px;
+}
+
+.diff_changed:after {
+  background: rgba(30,250,250,.3);
+}
+
+.diff_deleted:after {
+  background: rgba(250,30,30,.3);
+}
+
+.diff_added:after {
+  background: rgba(30,250,30,.3);
+}
+
 #block_menu .accordion-header.hidden,
 #block_menu.settings .accordion-body,
 #block_menu .accordion-header.hidden + .accordion-body {

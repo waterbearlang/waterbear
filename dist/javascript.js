@@ -1840,7 +1840,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*end events.min.js*/
 
 /*begin ajax.js*/
-(function (global) {
+(function (runtime) {
     'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
@@ -1933,7 +1933,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         };
         ajax.post(url, f, ajax.serialize(frm))
     };
-    global.ajax = ajax;
+    runtime.ajax = ajax;
 })(this);
 
 /*end ajax.js*/
@@ -1943,7 +1943,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // is initialized in the HTML before any javascript files are
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
-(function(global){
+(function(runtime){
 'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
@@ -1987,7 +1987,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 	wb.urlToQueryParams = urlToQueryParams;
 	wb.queryParamsToUrl = queryParamsToUrl;
-	global.wb = wb;
+	runtime.wb = wb;
 })(this);
 
 /*end queryparams.js*/
@@ -1995,7 +1995,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*begin util.js*/
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
-(function(global){
+(function(runtime){
     'use strict';
     //
     //
@@ -2238,7 +2238,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 
-(function(global){
+(function(runtime){
     "use strict";
 
     function isDomObject(e){
@@ -2319,7 +2319,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     };
 
     // Are touch events supported?
-    var isTouch = ('ontouchstart' in global);
+    var isTouch = ('ontouchstart' in runtime);
     function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
@@ -2381,7 +2381,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
 
-    global.Event = {
+    runtime.Event = {
         on: on,
         off: off,
         once: once,
@@ -2396,7 +2396,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 
-(function(global){
+(function(runtime){
 'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
@@ -3090,7 +3090,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // This returns a Version 4 (random) UUID
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
-(function(global){
+(function(runtime){
   'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
@@ -3122,8 +3122,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     return hex(8) + '-' + hex(4) + '-4' + hex(3) + '-' + variant() + hex(3) + '-' + hex(12);
   }
 
-  global.uuid = uuid;
-  global.isUuid = isUuid;
+  runtime.uuid = uuid;
+  runtime.isUuid = isUuid;
 
 })(this);
 
@@ -5221,16 +5221,16 @@ wb.menu = menu;
             '(function(){', 
                 // 'try{',
                     'local.canvas = document.createElement("canvas");',
-                    'local.canvas.setAttribute("width", global.stage_width);',
-                    'local.canvas.setAttribute("height", global.stage_height);',
-                    'global.stage.appendChild(local.canvas);',
+                    'local.canvas.setAttribute("width", runtime.stage_width);',
+                    'local.canvas.setAttribute("height", runtime.stage_height);',
+                    'runtime.stage.appendChild(local.canvas);',
                     'local.canvas.focus()',
                     'local.ctx = local.canvas.getContext("2d");',
                     'local.ctx.textAlign = "center";',
                     'var main = function(){',
                         script,
                     '}',
-                    'global.preloadAssets(' + assetUrls() + ', main);',
+                    'runtime.preloadAssets(' + assetUrls() + ', main);',
                 // '}catch(e){',
                     // 'alert(e);',
                 // '}',
@@ -5628,7 +5628,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
-            "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+            "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
             "help": "this trigger will run the attached blocks every time this key is pressed",
             "sockets": [
                 {
@@ -5820,7 +5820,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
+            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
             "help": "send this message to any listeners",
             "sockets": [
                 {
@@ -5834,7 +5834,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
-            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
+            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
             "help": "send this message with an object argument to any listeners",
             "sockets": [
                 {
@@ -5851,7 +5851,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+            "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
             "help": "add a listener for the given message, run these blocks when it is received",
             "sockets": [
                 {
@@ -5865,7 +5865,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
-            "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+            "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
             "locals": [
                 {
                     "blocktype": "expression",
@@ -5973,7 +5973,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
-            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
+            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();",
             "help": "clear the stage to a solid color",
             "sockets": [
                 {
@@ -5986,7 +5986,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "9d6b3a43-8319-482e-b0f8-2ce0fe7c2f3a",
-            "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
+            "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,runtime.stage_width,runtime.stage_height);",
             "help": "clear the stage to a background image",
             "sockets": [
                 {
@@ -6366,7 +6366,7 @@ wb.menu({
             "blocktype": "step",
             "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
             "help": "bounce in the x and/or y direction if the stage is exceeded",
-            "script": "{{1}}.stageBounce(global.stage_width, global.stage_height);",
+            "script": "{{1}}.stageBounce(runtime.stage_width, runtime.stage_height);",
             "sockets": [
                 {
                     "name": "bounce",
@@ -6378,7 +6378,7 @@ wb.menu({
             "blocktype": "step",
             "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
             "help": "if the sprite moves to the edge of the screen, stop it at the edge",
-            "script": "{{1}}.edgeStop(global.stage_width, global.stage_height);",
+            "script": "{{1}}.edgeStop(runtime.stage_width, runtime.stage_height);",
             "sockets": [
                 {
                     "name": "stop sprite ",
@@ -6391,7 +6391,7 @@ wb.menu({
             "blocktype": "step",
             "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
             "help": "if the sprite moves to the edge of the screen, slide it along the edge",
-            "script": "{{1}}.edgeSlide(global.stage_width, global.stage_height);",
+            "script": "{{1}}.edgeSlide(runtime.stage_width, runtime.stage_height);",
             "sockets": [
                 {
                     "name": "slide sprite ",
@@ -6404,7 +6404,7 @@ wb.menu({
             "blocktype": "step",
             "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
             "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
-            "script": "{{1}}.edgeWrap(global.stage_width, global.stage_height);",
+            "script": "{{1}}.edgeWrap(runtime.stage_width, runtime.stage_height);",
             "sockets": [
                 {
                     "name": "wrap sprite ",
@@ -6832,7 +6832,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "59f338b4-0f2f-489a-b4bd-b458fcb48e37",
-            "script": "global.preloadAudio('##', {{1}});",
+            "script": "runtime.preloadAudio('##', {{1}});",
             "sockets": [
                 {
                     "name": "load audio## from url",
@@ -6847,7 +6847,7 @@ wb.menu({
                             "name": "audio ##"
                         }
                     ],
-                    "script": "global.audio[\"##\"]",
+                    "script": "runtime.audio[\"##\"]",
                     "type": "sound"
                 }
             ],
@@ -8067,7 +8067,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
-            "script": "global.preloadImage('##', {{1}});",
+            "script": "runtime.preloadImage('##', {{1}});",
             "sockets": [
                 {
                     "name": "create ImageData image## from url",
@@ -8082,7 +8082,7 @@ wb.menu({
                             "name": "image ##"
                         }
                     ],
-                    "script": "global.images[\"##\"]",
+                    "script": "runtime.images[\"##\"]",
                     "type": "image"
                 }
             ]
@@ -9845,7 +9845,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "06ddcfee-76b7-4be4-856d-44cda3fb109b",
-            "script": "global.keys",
+            "script": "runtime.keys",
             "help": "for debugging",
             "type": "object",
             "sockets": [
@@ -10087,7 +10087,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
             "type": "point",
-            "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+            "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
             "help": "returns a point at a random location on the stage",
             "sockets": [
                 {
@@ -10339,7 +10339,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
             "type": "number",
-            "script": "global.mouse_x",
+            "script": "runtime.mouse_x",
             "help": "The current horizontal mouse position",
             "sockets": [
                 {
@@ -10351,7 +10351,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
             "type": "number",
-            "script": "global.mouse_y",
+            "script": "runtime.mouse_y",
             "help": "the current vertical mouse position",
             "sockets": [
                 {
@@ -10363,7 +10363,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "ce1026a0-9acf-4d8f-a7c0-0759115af1ca",
             "type": "boolean",
-            "script": "global.mouse_down",
+            "script": "runtime.mouse_down",
             "help": "true if the mouse is down, false otherwise",
             "sockets": [
                 {
@@ -10375,7 +10375,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "4321cef6-6365-4885-9a3c-1fd0db2b4eab",
             "type": "boolean",
-            "script": "global.isKeyDown({{1}})",
+            "script": "runtime.isKeyDown({{1}})",
             "help": "is the given key down when this block is run?",
             "sockets": [
                 {
@@ -10391,7 +10391,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "048218dd-0b8d-4bc9-b310-480e93232665",
             "type": "number",
-            "script": "global.stage_width",
+            "script": "runtime.stage_width",
             "help": "width of the stage where scripts are run. This may change if the browser window changes",
             "sockets": [
                 {
@@ -10403,7 +10403,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
             "type": "number",
-            "script": "global.stage_height",
+            "script": "runtime.stage_height",
             "help": "height of the stage where scripts are run. This may change if the browser window changes.",
             "sockets": [
                 {
@@ -10415,7 +10415,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "f85d3bfd-b58c-458f-b4a9-68538302aa12",
             "type": "number",
-            "script": "global.stage_center_x",
+            "script": "runtime.stage_center_x",
             "help": "horizontal center of the stage",
             "sockets": [
                 {
@@ -10427,7 +10427,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "083bee4f-ee36-4a35-98df-587ed586d623",
             "type": "number",
-            "script": "global.stage_center_y",
+            "script": "runtime.stage_center_y",
             "help": "vertical center of the stage",
             "sockets": [
                 {
@@ -10439,7 +10439,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "76184edb-ac2c-4809-899d-7b105776ba12",
             "type": "number",
-            "script": "randint(0,global.stage_width)",
+            "script": "randint(0,runtime.stage_width)",
             "help": "return a number between 0 and the stage width",
             "sockets": [
                 {
@@ -10451,7 +10451,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "8e749092-327d-4921-a50e-c87acefe7102",
             "type": "number",
-            "script": "randint(0, global.stage_height)",
+            "script": "randint(0, runtime.stage_height)",
             "help": "return a number between 0 and the stage height",
             "sockets": [
                 {
@@ -10462,8 +10462,8 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "6b924f28-9bba-4257-a80b-2f2a591128a5",
-            "script": "global.timer.reset();",
-            "help": "set the global timer back to zero",
+            "script": "runtime.timer.reset();",
+            "help": "set the runtime timer back to zero",
             "sockets": [
                 {
                     "name": "reset timer"
@@ -10474,7 +10474,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "f04b0e0a-b591-4eaf-954d-dea412cbfd61",
             "type": "number",
-            "script": "global.timer.value()",
+            "script": "runtime.timer.value()",
             "help": "seconds since the script began running",
             "sockets": [
                 {
@@ -10496,7 +10496,7 @@ wb.menu({
     		"blocktype": "expression",
     		"id": "f1a792df-9508-4ad5-90f8-aa9cd60d46bc",
     		"type": "string",
-    		"script": "global.accelerometer.direction",
+    		"script": "runtime.accelerometer.direction",
     		"help": "which way is the device moving?",
     		"sockets": [
     			{
@@ -10507,7 +10507,7 @@ wb.menu({
     	{
     		"blocktype": "eventhandler",
     		"id": "74f8f7c0-f2f9-4ea4-9888-49110785b26d",
-    		"script": "global.accelerometer.whenTurned({{1}}, function(){[[1]]});",
+    		"script": "runtime.accelerometer.whenTurned({{1}}, function(){[[1]]});",
     		"help": "handler for accelerometer events",
     		"sockets": [
     			{
@@ -10904,7 +10904,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "0da815af-6010-48b6-838d-f7dd0999b07d",
-            "script": "global.location.watchPosition(function(){[[1]]});",
+            "script": "runtime.location.watchPosition(function(){[[1]]});",
             "help": "called every time current location is updated",
             "sockets": [
                 {
@@ -10915,7 +10915,7 @@ wb.menu({
                 {
                     "blocktype": "expression",
                     "type": "location",
-                    "script": "global.location.currentLocation",
+                    "script": "runtime.location.currentLocation",
                     "help": "current location",
                     "sockets": [
                         {
@@ -10928,7 +10928,7 @@ wb.menu({
         {
             "blocktype": "eventhandler",
             "id": "a7b25224-a030-4cf5-8f30-026a379d958b",
-            "script": "global.location.whenWithinXOf({{1}},{{2}},function(){[[1]]});",
+            "script": "runtime.location.whenWithinXOf({{1}},{{2}},function(){[[1]]});",
             "help": "script to call when the distance from a position is less than specified distance",
             "sockets": [
                 {
@@ -10945,7 +10945,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "e3bcf430-979b-4fff-a856-d10071c63708",
-            "script": "global.location.distance({{1}},{{2}})",
+            "script": "runtime.location.distance({{1}},{{2}})",
             "type": "number",
             "help": "return distance in kilometers between two locations",
             "sockets": [

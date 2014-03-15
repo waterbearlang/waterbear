@@ -120,9 +120,9 @@ function Global(){
             g.stage_height = g.stage.clientHeight;
             g.stage_center_x = g.stage_width / 2;
             g.stage_center_y = g.stage_height / 2;
-            local.canvas.setAttribute("width", global.stage_width);
-            local.canvas.setAttribute("height", global.stage_width);
-            console.log('updated stage size: %s, %s', global.stage_width, global.stage_height);
+            local.canvas.setAttribute("width", runtime.stage_width);
+            local.canvas.setAttribute("height", runtime.stage_width);
+            console.log('updated stage size: %s, %s', runtime.stage_width, runtime.stage_height);
         }
     })
 };
@@ -363,28 +363,11 @@ if(typeof(console) == "undefined") {
     // console.log provided by Firefox + Firebug
 }
 
-var global = new Global();
+var runtime = new Global();
 var local = new Local();
-
-// stub function for testing with mocha...because mocha has a global variable named global too.
-function getGlobal() {
-    if(!window.global){
-        return global;
-    }
-
-    for (var prop in global) {
-        if( global.hasOwnProperty( prop ) ) {
-      window.global[prop] = global.prop;
-    } 
-  }
-
-  return window.global;
-};
-
-
 window.Global = Global;
 window.Local = Local;
-window.global = getGlobal();
+window.runtime = runtime;
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;

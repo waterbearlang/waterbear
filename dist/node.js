@@ -1840,7 +1840,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*end events.min.js*/
 
 /*begin ajax.js*/
-(function (global) {
+(function (runtime) {
     'use strict';
     function $(e) {
         if (typeof e == 'string') e = document.getElementById(e);
@@ -1933,7 +1933,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         };
         ajax.post(url, f, ajax.serialize(frm))
     };
-    global.ajax = ajax;
+    runtime.ajax = ajax;
 })(this);
 
 /*end ajax.js*/
@@ -1943,7 +1943,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // is initialized in the HTML before any javascript files are
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
-(function(global){
+(function(runtime){
 'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
@@ -1987,7 +1987,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 	wb.urlToQueryParams = urlToQueryParams;
 	wb.queryParamsToUrl = queryParamsToUrl;
-	global.wb = wb;
+	runtime.wb = wb;
 })(this);
 
 /*end queryparams.js*/
@@ -1995,7 +1995,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 /*begin util.js*/
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
-(function(global){
+(function(runtime){
     'use strict';
     //
     //
@@ -2238,7 +2238,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 
-(function(global){
+(function(runtime){
     "use strict";
 
     function isDomObject(e){
@@ -2319,7 +2319,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     };
 
     // Are touch events supported?
-    var isTouch = ('ontouchstart' in global);
+    var isTouch = ('ontouchstart' in runtime);
     function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
@@ -2381,7 +2381,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
 
-    global.Event = {
+    runtime.Event = {
         on: on,
         off: off,
         once: once,
@@ -2396,7 +2396,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 
-(function(global){
+(function(runtime){
 'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
@@ -3090,7 +3090,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 // This returns a Version 4 (random) UUID
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
-(function(global){
+(function(runtime){
   'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
@@ -3122,8 +3122,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     return hex(8) + '-' + hex(4) + '-4' + hex(3) + '-' + variant() + hex(3) + '-' + hex(12);
   }
 
-  global.uuid = uuid;
-  global.isUuid = isUuid;
+  runtime.uuid = uuid;
+  runtime.isUuid = isUuid;
 
 })(this);
 
@@ -7800,7 +7800,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "efe8c097-a91f-42f7-a92f-50ad32a969db",
-            "script": "global.keys",
+            "script": "runtime.keys",
             "help": "for debugging",
             "type": "object",
             "sockets": [

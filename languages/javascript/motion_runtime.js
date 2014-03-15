@@ -1,4 +1,4 @@
-(function(global){
+(function(runtime){
 'use strict';
 var accelerometer = {
     direction: ""
@@ -54,6 +54,6 @@ function processData(event) {
     }
 };
 
-global.accelerometer = accelerometer;
+runtime.accelerometer = accelerometer;
 
-})(global);
+})(runtime);

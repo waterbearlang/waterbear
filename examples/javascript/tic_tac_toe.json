@@ -205,7 +205,7 @@
             }
           ],
           "seqNum": "98",
-          "script": "global.preloadImage('##', {{1}});",
+          "script": "runtime.preloadImage('##', {{1}});",
           "locals": [
             {
               "blocktype": "asset",
@@ -214,7 +214,7 @@
                   "name": "imgBoard"
                 }
               ],
-              "script": "global.images[\"##\"]",
+              "script": "runtime.images[\"##\"]",
               "type": "image",
               "isTemplateBlock": true,
               "isLocal": true,
@@ -243,7 +243,7 @@
             }
           ],
           "seqNum": "145",
-          "script": "global.preloadImage('##', {{1}});",
+          "script": "runtime.preloadImage('##', {{1}});",
           "locals": [
             {
               "blocktype": "asset",
@@ -252,7 +252,7 @@
                   "name": "imgO"
                 }
               ],
-              "script": "global.images[\"##\"]",
+              "script": "runtime.images[\"##\"]",
               "type": "image",
               "isTemplateBlock": true,
               "isLocal": true,
@@ -281,7 +281,7 @@
             }
           ],
           "seqNum": "146",
-          "script": "global.preloadImage('##', {{1}});",
+          "script": "runtime.preloadImage('##', {{1}});",
           "locals": [
             {
               "blocktype": "asset",
@@ -290,7 +290,7 @@
                   "name": "imgX"
                 }
               ],
-              "script": "global.images[\"##\"]",
+              "script": "runtime.images[\"##\"]",
               "type": "image",
               "isTemplateBlock": true,
               "isLocal": true,
@@ -339,7 +339,7 @@
             }
           ],
           "seqNum": "14",
-          "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
           "locals": [
             {
               "blocktype": "expression",
@@ -698,7 +698,7 @@
                     }
                   ],
                   "seqNum": "91",
-                  "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                  "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                 }
               ]
             }
@@ -740,7 +740,7 @@
             }
           ],
           "seqNum": "17",
-          "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
           "contained": [
             {
               "blocktype": "step",
@@ -767,7 +767,7 @@
                       }
                     ],
                     "seqNum": "98",
-                    "script": "global.images[\"##\"]",
+                    "script": "runtime.images[\"##\"]",
                     "localSource": "1bad09db-6413-460e-90ba-10e6bb77b7a2",
                     "type": "image"
                   }
@@ -968,7 +968,7 @@
                               }
                             ],
                             "seqNum": "145",
-                            "script": "global.images[\"##\"]",
+                            "script": "runtime.images[\"##\"]",
                             "localSource": "ecbcd488-03d2-4ddf-afda-b477d77befde",
                             "type": "image"
                           }
@@ -1247,7 +1247,7 @@
                               }
                             ],
                             "seqNum": "146",
-                            "script": "global.images[\"##\"]",
+                            "script": "runtime.images[\"##\"]",
                             "localSource": "1921b509-0ce3-49de-b4d0-a20f0f419684",
                             "type": "image"
                           }
@@ -1464,7 +1464,7 @@
             }
           ],
           "seqNum": "103",
-          "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+          "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
         },
         {
           "blocktype": "step",
@@ -1503,7 +1503,7 @@
             }
           ],
           "seqNum": "20",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1526,7 +1526,7 @@
                 }
               ],
               "seqNum": "29",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1550,7 +1550,7 @@
             }
           ],
           "seqNum": "21",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1573,7 +1573,7 @@
                 }
               ],
               "seqNum": "30",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1597,7 +1597,7 @@
             }
           ],
           "seqNum": "22",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1620,7 +1620,7 @@
                 }
               ],
               "seqNum": "32",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1644,7 +1644,7 @@
             }
           ],
           "seqNum": "23",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1667,7 +1667,7 @@
                 }
               ],
               "seqNum": "33",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1691,7 +1691,7 @@
             }
           ],
           "seqNum": "24",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1714,7 +1714,7 @@
                 }
               ],
               "seqNum": "34",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1738,7 +1738,7 @@
             }
           ],
           "seqNum": "25",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1761,7 +1761,7 @@
                 }
               ],
               "seqNum": "35",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1785,7 +1785,7 @@
             }
           ],
           "seqNum": "26",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1808,7 +1808,7 @@
                 }
               ],
               "seqNum": "36",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1832,7 +1832,7 @@
             }
           ],
           "seqNum": "27",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1855,7 +1855,7 @@
                 }
               ],
               "seqNum": "37",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         },
@@ -1879,7 +1879,7 @@
             }
           ],
           "seqNum": "28",
-          "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
           "contained": [
             {
               "blocktype": "step",
@@ -1902,7 +1902,7 @@
                 }
               ],
               "seqNum": "38",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
             }
           ]
         }

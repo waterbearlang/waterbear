@@ -900,14 +900,14 @@ function Global(){
     this.subscribeKeyboardEvents();
     var g = this;
     this.timer.registerListener(function(){
-        if (g.stage_width !== g.stage.clientWidth  || g.stage_height !== g.stage.clientHeight){
+        if (g.stage_width !== g.stage.clientWidth || g.stage_height !== g.stage.clientHeight){
             g.stage_width = g.stage.clientWidth;
             g.stage_height = g.stage.clientHeight;
             g.stage_center_x = g.stage_width / 2;
             g.stage_center_y = g.stage_height / 2;
-            local.canvas.setAttribute("width", global.stage_width);
-            local.canvas.setAttribute("height", global.stage_width);
-            console.log('updated stage size: %s, %s', global.stage_width, global.stage_height);
+            local.canvas.setAttribute("width", runtime.stage_width);
+            local.canvas.setAttribute("height", runtime.stage_width);
+            console.log('updated stage size: %s, %s', runtime.stage_width, runtime.stage_height);
         }
     })
 };
@@ -1148,28 +1148,11 @@ if(typeof(console) == "undefined") {
     // console.log provided by Firefox + Firebug
 }
 
-var global = new Global();
+var runtime = new Global();
 var local = new Local();
-
-// stub function for testing with mocha...because mocha has a global variable named global too.
-function getGlobal() {
-    if(!window.global){
-        return global;
-    }
-
-    for (var prop in global) {
-        if( global.hasOwnProperty( prop ) ) {
-      window.global[prop] = global.prop;
-    } 
-  }
-
-  return window.global;
-};
-
-
 window.Global = Global;
 window.Local = Local;
-window.global = getGlobal();
+window.runtime = runtime;
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;
@@ -1442,8 +1425,8 @@ Sprite.prototype.draw = function(ctx){
 };
 
 function isSpriteClicked(sprite){
-    if(global.mouse_down){
-        var pos = {x: global.mouse_x, y: global.mouse_y};
+    if(runtime.mouse_down){
+        var pos = {x: runtime.mouse_x, y: runtime.mouse_y};
         var color = null;
         var size = {w: 1, h: 1};
         var detRect = createRectSprite(size, pos, color);
@@ -2114,7 +2097,7 @@ window.levenshtein = levenshtein;
 /*end languages/javascript/sensing_runtime.js*/
 
 /*begin languages/javascript/motion_runtime.js*/
-(function(global){
+(function(runtime){
 'use strict';
 var accelerometer = {
     direction: ""
@@ -2170,9 +2153,9 @@ function processData(event) {
     }
 };
 
-global.accelerometer = accelerometer;
+runtime.accelerometer = accelerometer;
 
-})(global);
+})(runtime);
 /*end languages/javascript/motion_runtime.js*/
 
 /*begin languages/javascript/shape_runtime.js*/
@@ -2180,7 +2163,7 @@ global.accelerometer = accelerometer;
 /*end languages/javascript/shape_runtime.js*/
 
 /*begin languages/javascript/geolocation_runtime.js*/
-(function(global){
+(function(runtime){
 'use strict';
 var location = {};
 
@@ -2243,9 +2226,9 @@ location.currentLocation = {
   longitude: 0
 };
 
-global.location = location;
+runtime.location = location;
 
-})(global);
+})(runtime);
 /*end languages/javascript/geolocation_runtime.js*/
 
 /*begin languages/javascript/size_runtime.js*/

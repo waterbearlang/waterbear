@@ -870,10 +870,25 @@ Local.prototype.delete = function(type, name){
     return value;
 };
 
+function getStage() {
+    var stage = document.querySelector('.stage')
+    if(stage) {
+        return stage;
+    }
+    // create stub for testing
+    stage = {};
+    stage.clientWidth = 1200;
+    stage.clientHeight = 1000;
+    stage.addEventListener = function(type, listener, useCapture) {/*Do nothing*/};
+stage.setAttribute = function(attributename, attributevalue) {/*Do nothing*/};
+
+    return stage;
+}
+
 function Global(){
     this.timer = new Timer();
     this.keys = {};
-    this.stage = document.querySelector('.stage');
+    this.stage = getStage();
     this.mouse_x = -1;
     this.mouse_y = -1;
     this.stage_width = this.stage.clientWidth;
@@ -885,7 +900,7 @@ function Global(){
     this.subscribeKeyboardEvents();
     var g = this;
     this.timer.registerListener(function(){
-        if (g.stage_width !== g.stage.clientWidth || g.stage_height !== g.stage.clientHeight){
+        if (g.stage_width !== g.stage.clientWidth  || g.stage_height !== g.stage.clientHeight){
             g.stage_width = g.stage.clientWidth;
             g.stage_height = g.stage.clientHeight;
             g.stage_center_x = g.stage_width / 2;
@@ -1135,16 +1150,32 @@ if(typeof(console) == "undefined") {
 
 var global = new Global();
 var local = new Local();
+
+// stub function for testing with mocha...because mocha has a global variable named global too.
+function getGlobal() {
+    if(!window.global){
+        return global;
+    }
+
+    for (var prop in global) {
+        if( global.hasOwnProperty( prop ) ) {
+      window.global[prop] = global.prop;
+    } 
+  }
+
+  return window.global;
+};
+
+
 window.Global = Global;
 window.Local = Local;
-window.global = global;
+window.global = getGlobal();
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;
 window.rad2deg = rad2deg;
 window.deg2rad = deg2rad;
 window.range = range;
-window.randint = randint;
 window.angle = angle;
 console.log('runtime ready');
 })(window);
@@ -1203,7 +1234,10 @@ function preloadAssets(assetUrls, callback){
  	});
 }
 
-
+if(!window.Global) { 
+	console.log("If this was in a production environment something is wrong. window.Global is undefined");
+	window.Global = function() { return this; };
+}
 var images = Global.prototype.images = {};
 var audio = Global.prototype.audio = {};
 var video = Global.prototype.video = {};
@@ -1920,7 +1954,8 @@ window.gamma = gamma;
 /*end languages/javascript/math_runtime.js*/
 
 /*begin languages/javascript/random_runtime.js*/
-
+(function(window){
+  'use strict';
 function randint(start, stop){
     // return an integer between start and stop, inclusive
     if (stop === undefined){
@@ -2008,6 +2043,14 @@ function removeChoice(list){
   return list.splice(Math.floor(Math.random() * list.length), 1);
 }
 
+window.randint = randint;
+window.fade = fade;
+window.lerp = lerp;
+window.grad = grad;
+window.scale = scale;
+window.noise = noise;
+
+})(window);
 
 /*end languages/javascript/random_runtime.js*/
 

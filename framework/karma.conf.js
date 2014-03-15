@@ -7,6 +7,9 @@ module.exports = function(config) {
     // base path, that will be used to resolve files and exclude
     basePath: '',
 
+    preprocessors: {
+        'fixtures/**/*.html': ['html2js']
+    },
 
     // frameworks to use
     frameworks: ['mocha', 'chai', 'sinon'],
@@ -14,6 +17,24 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+
+        { pattern: 'fixtures/**/*.html', included: true },
+      'waterbear.js',
+      '../languages/javascript/asset_runtime.js',
+      '../languages/javascript/canvas_runtime.js',
+      //'../languages/javascript/geolocation_runtime.js',
+      '../languages/javascript/image_runtime.js',
+      '../languages/javascript/motion_runtime.js',
+      '../languages/javascript/social_runtime.js',
+      '../languages/javascript/javascript_runtime.js',
+      '../languages/javascript/control_runtime.js',
+      '../languages/javascript/datablock_runtime.js',
+      '../languages/javascript/math_runtime.js',
+      '../languages/javascript/random_runtime.js',
+      '../languages/javascript/sprite_runtime.js',
+      '../languages/javascript/string_runtime.js',
+      '../languages/javascript/vector_runtime.js',
+      '../languages/javascript/voice_runtime.js',
       'specs/*.js'
     ],
 

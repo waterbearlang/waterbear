@@ -85,10 +85,25 @@ Local.prototype.delete = function(type, name){
     return value;
 };
 
+function getStage() {
+    var stage = document.querySelector('.stage')
+    if(stage) {
+        return stage;
+    }
+    // create stub for testing
+    stage = {};
+    stage.clientWidth = 1200;
+    stage.clientHeight = 1000;
+    stage.addEventListener = function(type, listener, useCapture) {/*Do nothing*/};
+stage.setAttribute = function(attributename, attributevalue) {/*Do nothing*/};
+
+    return stage;
+}
+
 function Global(){
     this.timer = new Timer();
     this.keys = {};
-    this.stage = document.querySelector('.stage');
+    this.stage = getStage();
     this.mouse_x = -1;
     this.mouse_y = -1;
     this.stage_width = this.stage.clientWidth;
@@ -350,16 +365,32 @@ if(typeof(console) == "undefined") {
 
 var global = new Global();
 var local = new Local();
+
+// stub function for testing with mocha...because mocha has a global variable named global too.
+function getGlobal() {
+    if(!window.global){
+        return global;
+    }
+
+    for (var prop in global) {
+        if( global.hasOwnProperty( prop ) ) {
+      window.global[prop] = global.prop;
+    } 
+  }
+
+  return window.global;
+};
+
+
 window.Global = Global;
 window.Local = Local;
-window.global = global;
+window.global = getGlobal();
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;
 window.rad2deg = rad2deg;
 window.deg2rad = deg2rad;
 window.range = range;
-window.randint = randint;
 window.angle = angle;
 console.log('runtime ready');
 })(window);

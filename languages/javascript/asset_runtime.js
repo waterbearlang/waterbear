@@ -49,7 +49,10 @@ function preloadAssets(assetUrls, callback){
  	});
 }
 
-
+if(!window.Global) { 
+	console.log("If this was in a production environment something is wrong. window.Global is undefined");
+	window.Global = function() { return this; };
+}
 var images = Global.prototype.images = {};
 var audio = Global.prototype.audio = {};
 var video = Global.prototype.video = {};

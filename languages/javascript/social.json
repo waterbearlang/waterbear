@@ -1,4 +1,5 @@
 {
+    "sectionkey": "twitter",
     "name": "Twitter",
     "help": "Social blocks are intended for working with social networking sites",
     "blocks": [

@@ -1,4 +1,5 @@
 {
+    "sectionkey": "canvas",
     "name": "Canvas",
     "help": "Canvas blocks are blocks that are about drawing on the canvas but don't fit elsewhere. Also look at the Sprites, Shapes, and Path menus.",
     "blocks": [

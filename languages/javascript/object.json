@@ -1,4 +1,5 @@
 {
+    "sectionkey": "objects",
     "name": "Objects",
     "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
     "blocks": [

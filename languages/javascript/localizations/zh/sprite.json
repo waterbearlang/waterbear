@@ -1,4 +1,5 @@
 {
+    "sectionkey": "sprites",
     "name": "Sprites",
     "help": "Sprites are graphics that can be repositioned, rotated, and have a vector of motion. They can also check for collision with other Sprites.",
     "blocks": [

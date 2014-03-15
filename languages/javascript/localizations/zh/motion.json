@@ -1,4 +1,5 @@
 {
+    "sectionkey": "motion",
     "name": "Motion",
     "help": "Motion blocks are for detecting the motion of devices equipped with accelerometers",
     "blocks": [

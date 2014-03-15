@@ -47,6 +47,9 @@ var libs = {
 };
 
 var localizations = {
+    javascript: {
+        'zh': ['control']
+    }
 
 };
 

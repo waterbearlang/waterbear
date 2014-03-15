@@ -1,4 +1,5 @@
 {
+    "sectionkey": "sizes",
     "name": "Sizes",
     "help": "Size blocks represent a width and height. They are often used as components of Rects.",
     "blocks": [

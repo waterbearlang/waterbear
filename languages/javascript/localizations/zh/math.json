@@ -1,4 +1,5 @@
 {
+    "sectionkey": "math",
     "name": "Math",
     "help": "Math blocks are for manipulating numbers",
     "blocks": [

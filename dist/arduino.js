@@ -18,7 +18,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 
 /* list of files used for localization of blocks */
-var l10nFiles = {};
+var l10nFiles = {"javascript":{"zh":["control"]}};
 
 
 /*begin ajax.js*/

@@ -187,6 +187,10 @@ input{
 
 
 .hidden, .block.hidden{
+	display: none;
+}
+
+.menu button.hidden{
 	display: none !important;
 }
 

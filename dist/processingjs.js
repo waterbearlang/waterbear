@@ -12048,7 +12048,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 
 
 /* list of files used for localization of blocks */
-var l10nFiles = {"javascript":{"zh":["control"]}};
+var l10nFiles = {"javascript":{"zh":["control","array"]}};
 
 
 /*begin ajax.js*/

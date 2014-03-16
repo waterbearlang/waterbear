@@ -45,7 +45,7 @@
             ],
             "sockets": [
                 {
-                    "name": "new array with array##",
+                    "name": "new array## with array",
                     "type": "array"
                 }
             ]

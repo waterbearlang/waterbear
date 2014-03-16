@@ -1,248 +1,191 @@
 {
     "sectionkey": "arrays",
-    "name": "Arrays",
-    "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
+    "name": "陣列",
+    "help": "陣列是一連串有順序的變數，支持的運算包含可以增加、刪除、排序、尋找...。",
     "blocks": [
         {
-            "blocktype": "step",
             "id": "e6a297e9-1255-4701-91d8-80548489ee9a",
             "script": "local.array## = [];",
-            "help": "Create an empty array",
+            "help": "建立一個新的空白的陣列",
             "locals": [
                 {
-                    "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "array##"
+                            "name": "陣列##"
                         }
-                    ],
-                    "script": "local.array##",
-                    "type": "array"
+                    ]
                 }
             ],
             "sockets": [
                 {
-                    "name": "new array##"
+                    "name": "宣告陣列 陣列##"
                 }
             ]
         },
         {
-            "blocktype": "step",
             "id": "83d67170-4ba7-45ac-95ae-bb2f314c3ae0",
-            "script": "local.array## = {{1}}.slice();",
-            "help": "create a new array with the contents of another array",
+            "help": "建立一個新的陣列，但是內容與另外一個陣列相同。",
             "locals": [
                 {
-                    "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "array##"
+                            "name": "陣列##"
                         }
-                    ],
-                    "script": "local.array##",
-                    "type": "array"
+                    ]
                 }
             ],
             "sockets": [
                 {
-                    "name": "new array with array##",
-                    "type": "array"
+                    "name": "宣告陣列 陣列## 並複製陣列",
+                    "suffix": "的內容"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "3e56f9c1-29b9-4d0c-99bd-05ccabfa29c2",
-            "script": "{{1}}[{{2}}]",
-            "type": "any",
-            "help": "get an item from an index in the array",
+            "help": "找到陣列裡面第n+1個值。（例，0代表第一項）",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array"
+                    "name": "陣列",
+                    "suffix": "的"
                 },
                 {
-                    "name": "item",
-                    "type": "number",
-                    "value": 0
+                    "name": "第",
+                    "suffix": "+1項"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "5b1cc330-b9b1-4062-b8d4-e5032c7a5776",
-            "script": "{{1}}.join({{2}})",
-            "type": "string",
-            "help": "join items of an array into a string, each item separated by given string",
+
+            "help": "將陣列裡面的項目轉換成字符串，並且用指定的字符串隔開",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array"
+                    "name": "將陣列"
                 },
                 {
-                    "name": "join with",
-                    "type": "string",
-                    "value": ", "
+                    "name": "用",
+                    "suffix": "分隔"
                 }
             ]
         },
         {
-            "blocktype": "step",
             "id": "3fab2b88-430a-401e-88b2-2703d614780a",
-            "script": "{{1}}.push({{2}});",
-            "help": "add any object to the end of an array",
+            "help": "把值放到陣列裡的最後一項",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array"
+                    "name": "在陣列",
+                    "suffix": "的最後"
                 },
                 {
-                    "name": "append",
-                    "type": "any"
+                    "name": "加入"
                 }
             ]
         },
         {
-            "blocktype": "step",
             "id": "77edf0e9-e5df-4294-81ef-bfa363cda3ee",
-            "script": "{{1}}.unshift({{2}});",
-            "help": "add any object to the beginning of an array",
+            "help": "把值放到陣列裡的第一項",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array"
+                    "name": "在陣列",
+                    "suffix": "的最前方"
                 },
                 {
-                    "name": "prepend",
-                    "type": "any"
+                    "name": "加入"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "bf3ed213-4435-4152-bb2c-573ce1721036",
-            "script": "{{1}}.length",
-            "type": "number",
-            "help": "get the length of an array",
+            "help": "陣列的長度",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "length"
+                    "name": "陣列",
+                    "suffix": "的長度"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "f4870f0f-1dbb-4bc7-b8e3-3a00af613689",
-            "script": "{{1}}.splice({{2}}, 1)[0]",
-            "type": "any",
-            "help": "remove item at index from an array",
+            "help": "從陣列裡面移除第n+1項。（例，0代表第一項）",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array"
+                    "name": "將陣列",
+                    "suffix": "的"
                 },
                 {
-                    "name": "remove item",
-                    "type": "number",
-                    "value": 0
+                    "name": "第",
+                    "suffix": "+1項移除"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "e137e1a3-fe66-4d15-ae2a-596050acb6a7",
-            "script": "{{1}}.pop()",
-            "type": "any",
-            "help": "remove and return the last item from an array",
+            "help": "回傳陣列裡最後一項的值，並將之移除",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "pop"
+                    "name": "移出陣列",
+                    "suffix": "的最後一項"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "00685267-c279-4fc1-bdbd-a07742a76b1e",
-            "script": "{{1}}.shift()",
-            "type": "any",
-            "help": "remove and return the first item from an array",
+            "help": "回傳陣列裡第一項的值，並將之移除",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "shift"
+                    "name": "移出陣列",
+                    "suffix": "的第一項"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "b4f115d3-fc52-4d75-a363-5119de21e97c",
-            "script": "{{1}}.slice().reverse()",
-            "type": "array",
-            "help": "reverse a copy of array",
+            "help": "回傳指定的陣列反序的複本",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "reversed"
+                    "name": "陣列",
+                    "suffix": "的反序"
                 }
             ]
         },
         {
-            "blocktype": "expression",
             "id": "0931d219-707c-41dd-92e6-b1a7c2a0f6b3",
-            "script": "{{1}}.concat({{2}});",
-            "type": "array",
-            "help": "a new array formed by joining the arrays",
+            "help": "將兩個陣列連接起來並形成新的陣列",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array"
+                    "name": "陣列"
                 },
                 {
-                    "name": "concat",
-                    "type": "array"
+                    "name": "串聯陣列"
                 }
             ]
         },
         {
-            "blocktype": "context",
             "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
-            "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
             "locals": [
                 {
-                    "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "index"
+                            "name": "索引值"
                         }
                     ],
-                    "script": "local.index",
-                    "help": "index of current item in array",
-                    "type": "number"
+                    "help": "目前項目在陣列中的索引值。（第n項的索引值是n-1。比如說第一項的索引值是0）"
                 },
                 {
-                    "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "item"
+                            "name": "項目"
                         }
                     ],
-                    "script": "local.item",
-                    "help": "the current item in the iteration",
-                    "type": "any"
+                    "help": "目前循環到的項目"
                 }
             ],
-            "help": "run the blocks with each item of a named array",
+            "help": "對陣列中的每個項目運行方框中的腳本",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "for each"
+                    "name": "對陣列",
+                    "suffix": "中的每個項目"
                 }
             ]
         }

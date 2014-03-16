@@ -2534,3 +2534,12 @@ a .icon-flip-vertical:before {
 }
 
 /*end fontawesome.css*/
+
+/*begin languages/scheme/boolean.css*/
+.boolean, .boolean .holder{
+    background-color: #FF4444;
+    border-color: red;
+}
+
+
+/*end languages/scheme/boolean.css*/

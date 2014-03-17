@@ -16,8 +16,8 @@
                 },
                 {
                     "name": "width units",
-                    "type": "choice",
-                    "value": "px",
+                    "type": "string",
+                    "value": "choice",
                     "options": "relativeUnit"
                 },
                 {
@@ -27,8 +27,8 @@
                 },
                 {
                     "name": "height units",
-                    "type": "choice",
-                    "value": "px",
+                    "type": "string",
+                    "value": "choice",
                     "options": "relativeUnit"
                 }
             ]
@@ -45,14 +45,14 @@
                 },
                 {
                     "name": "width units",
-                    "type": "choice",
-                    "value": "px",
+                    "type": "string",
+                    "value": "choice",
                     "options": "relativeUnit"
                 },
                 {
                     "name": "height units",
-                    "type": "choice",
-                    "value": "px",
+                    "type": "string",
+                    "value": "choice",
                     "options": "relativeUnit"
                 }
             ]
@@ -70,7 +70,7 @@
                 },
                 {
                     "name": "width units",
-                    "type": "choice",
+                    "type": "string",
                     "value": "px",
                     "options": "relativeUnit"
                 }
@@ -89,7 +89,7 @@
                 },
                 {
                     "name": "height units",
-                    "type": "choice",
+                    "type": "string",
                     "value": "px",
                     "options": "relativeUnit"
                 }

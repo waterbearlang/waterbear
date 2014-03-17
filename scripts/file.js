@@ -183,15 +183,22 @@
             console.error('no json file found in gist: %o', gist);
             return;
         }
-        loadScriptsFromObject(JSON.parse(file));
+        loadScriptsFromJson(file);
     }
 
     function loadScriptsFromExample(name){
         ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
-            loadScriptsFromObject(JSON.parse(exampleJson));
+            loadScriptsFromJson(exampleJson);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });
+    }
+
+    function loadScriptsFromJson(jsonblob){
+        // wb.clearScripts(null, true);
+        wb.loaded = true;
+        loadScriptsFromObject(JSON.parse(jsonblob));
+        wb.scriptModified = true;
     }
 
     function loadCurrentScripts(queryParsed){
@@ -226,17 +233,13 @@
 	function loadScriptsFromFile(file){
 		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-			console.error("File not a JSON file");
+			console.error("File is not a JSON file");
 			return;
 		}
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-			wb.clearScripts(null, true);
-			var saved = JSON.parse(evt.target.result);
-			wb.loaded = true;
-			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+            loadScriptsFromJson(evt.target.result);
 		};
 	}
 

@@ -146,7 +146,6 @@
               "type": "size",
               "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
               "uName": "rectangle leftPaddle",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "sizes",
@@ -333,7 +332,6 @@
               "type": "size",
               "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
               "uName": "rectangle rightPaddle",
-              "uValue": "",
               "uBlock": {
                 "blocktype": "expression",
                 "group": "sizes",
@@ -354,7 +352,7 @@
                     "value": "choice",
                     "options": "relativeUnit",
                     "uValue": "px"
-                  }, 
+                  },
                   {
                     "name": "height",
                     "type": "number",
@@ -367,7 +365,7 @@
                     "value": "choice",
                     "options": "relativeUnit",
                     "uValue": "%"
-                  },
+                  }
                 ],
                 "seqNum": "27",
                 "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
@@ -577,14 +575,28 @@
                     "uValue": "20"
                   },
                   {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "20"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
                   }
                 ],
                 "seqNum": "31",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },

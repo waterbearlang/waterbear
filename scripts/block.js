@@ -40,9 +40,11 @@
     }
 
     function resetSeqNum(){
+        console.log('resetSeqNum (and also block registry)');
         nextSeqNum = 0;
-        blockRegistry = {};
-        wb.blockRegistry = blockRegistry;
+        // the lines below were breaking loading from files, and probably any load after the menus were built
+        // blockRegistry = {};
+        // wb.blockRegistry = blockRegistry;
     }
 
     function registerBlock(blockdesc){

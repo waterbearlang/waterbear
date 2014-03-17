@@ -267,7 +267,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -501,7 +501,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu'));
+	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
 }
 
 function showScript(evt){
@@ -513,9 +513,24 @@ function showResult(evt){
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 
+/* Search filter */
+
+function highlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #FFA500";
+}
+
+function unhighlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #CCC";
+}
+
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+Event.on('#search_text', 'focus', null, highlightSearch);
+Event.on('#search_text', 'blur', null, unhighlightSearch);
 
 if (document.body.clientWidth < 361){
 	// console.log('mobile view');

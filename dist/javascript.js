@@ -11601,7 +11601,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
-            "script": "{w: {{1}}, h: {{2}} }",
+            "script": "{w: convertSidelengthUnits({{1}}, {{2}}, true), h: convertSidelengthUnits({{3}}, {{4}}, false)}",
             "type": "size",
             "sockets": [
                 {
@@ -11610,9 +11610,23 @@ wb.menu({
                     "value": 32
                 },
                 {
+                    "name": "",
+                    "type": "choice",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
+                },
+                {
                     "name": "height",
                     "type": "number",
                     "value": 32
+                },
+                {
+                    "name": "",
+                    "type": "choice",
+                    "value": "choice",
+                    "options": "unit",
+                    "uValue": "px"
                 }
             ]
         },

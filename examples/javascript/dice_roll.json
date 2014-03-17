@@ -145,14 +145,28 @@
                                         "uValue": "64"
                                     },
                                     {
+                                        "name": "width units",
+                                        "type": "string",
+                                        "value": "choice",
+                                        "options": "relativeUnit",
+                                        "uValue": "px"
+                                    },
+                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "64"
+                                    },
+                                    {
+                                        "name": "height units",
+                                        "type": "string",
+                                        "value": "choice",
+                                        "options": "relativeUnit",
+                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "18",
-                                "script": "{w: {{1}}, h: {{2}} }"
+                                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}"
                             }
                         },
                         {
@@ -312,14 +326,28 @@
                                         "uValue": "64"
                                     },
                                     {
+                                        "name": "width units",
+                                        "type": "string",
+                                        "value": "choice",
+                                        "options": "relativeUnit",
+                                        "uValue": "px"
+                                    },
+                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "64"
+                                    },
+                                    {
+                                        "name": "height units",
+                                        "type": "string",
+                                        "value": "choice",
+                                        "options": "relativeUnit",
+                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "281",
-                                "script": "{w: {{1}}, h: {{2}} }"
+                                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}"
                             }
                         },
                         {

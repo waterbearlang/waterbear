@@ -28,7 +28,7 @@ function changeSocket(event) {
 	// console.log("Changed a socket!");
 	var oldValue = event.target.getAttribute('data-oldvalue');
 	var newValue = event.target.value;
-	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	if(oldValue === undefined) oldValue = event.target.defaultValue;
 	// console.log("New value:", newValue);
 	// console.log("Old value:", oldValue);
 	event.target.setAttribute('data-oldvalue', newValue);
@@ -41,7 +41,7 @@ function changeSocket(event) {
 			event.target.value = newValue;
 			event.target.setAttribute('data-oldvalue', newValue);
 		}
-	}
+	};
 	wb.history.add(action);
 }
 
@@ -97,7 +97,7 @@ function collapseCommand(key, opt){
 function copyCommand(evt) {
 	// console.log("Copying a block in ui.js!");
 	// console.log(this);
-	action = {
+	var action = {
 		copied: this,
 		oldPasteboard: pasteboard,
 		undo: function() {
@@ -106,14 +106,14 @@ function copyCommand(evt) {
 		redo: function() {
 			pasteboard = this.copied;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function deleteCommand(evt) {
 	// console.log("Deleting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -131,14 +131,14 @@ function deleteCommand(evt) {
 			Event.trigger(this.removed, 'wb-remove');
 			this.removed.remove();
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function cutCommand(evt) {
 	// console.log("Cutting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -159,14 +159,14 @@ function cutCommand(evt) {
 			this.removed.remove();
 			pasteboard = this.removed;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function pasteCommand(evt) {
 	// console.log(pasteboard);
-	action = {
+	var action = {
 		pasted: wb.cloneBlock(pasteboard),
 		into: cmenuTarget.parentNode,
 		before: cmenuTarget.nextSibling,
@@ -184,7 +184,7 @@ function pasteCommand(evt) {
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
@@ -222,10 +222,11 @@ function buildContextMenu(options) {
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
+	var item;
 	menu.classList.add('cmenu');
 	for(var key in options) {
 		if(options.hasOwnProperty(key) && options[key]) {
-			var item = document.createElement('li');
+			item = document.createElement('li');
 			if(cmenuitem_enabled(options[key])) {
 				Event.on(item, "click", null, cmenuCallback(options[key].callback));
 			} else {
@@ -238,7 +239,7 @@ function buildContextMenu(options) {
 			menu.appendChild(item);
 		}
 	}
-	var item = document.createElement('li');
+	item = document.createElement('li');
 	item.onclick = function(evt) {};
 	item.innerHTML = 'Disable this menu';
 	item.classList.add('topSep');
@@ -331,7 +332,7 @@ var block_cmenu = {
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
         delete: {name: 'Delete', callback: deleteCommand},
-}
+};
 
 // Test drawn from modernizr
 function is_touch_device() {
@@ -364,7 +365,7 @@ function menu(blockspec){
     blockspec.blocks = id_blocks;
     defaultLangData[blockspec.sectionkey] = blockspec;
 
-};
+}
 
 function populateMenu() {
 	for (var key in defaultLangData) {
@@ -391,7 +392,7 @@ function edit_menu(title, sectionKey, specs, help, show){
     var submenu = document.querySelector('.' + sectionKey + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
-        var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);

@@ -353,13 +353,29 @@ body{
 }
 
 .nav{
-	-webkit-flex: 0 0 34px;
-	flex: 0 0 34px;
+	-webkit-flex: 0 0 37px;
+	flex: 0 0 37px;
 }
 
-#block_menu{
+#block_menu_wrapper {
 	-webkit-flex: 0 0 300px;
 	flex: 0 0 300px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+#search {
+	height: 24px;
+	-webkit-flex: 0 0 24px;
+	flex: 0 0 24px;
+}
+
+#block_menu, #search_results {
+	height: calc(100% - 24px);
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 .workspace{
@@ -428,7 +444,7 @@ body{
 	overflow: auto;
 }
 
-.blocks-menu, .workspace, .results, .files{
+#block_menu, #search_results, .workspace, .results, .files{
 	overflow: auto;
 }
 
@@ -475,7 +491,7 @@ ul.menu .show-ide{
 		position: relative;
 		overflow: hidden;
 	}
-	#block_menu, .workspace, .results, .files{
+	#block_menu_wrapper, .workspace, .results, .files{
 		display: block;
 		position: absolute;
 		width: 100%;
@@ -885,6 +901,72 @@ ul.menu .show-ide{
 #block_menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;
+}
+
+/* Search filter */
+
+#search form {
+  width: 100%;
+  border: 1px solid #CCC;
+  display: inline-block;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+	-webkit-flex-direction: row;
+  flex-direction: row;
+}
+
+#search form > * {
+  border: 0;
+  outline: 0;
+  height: 24px;
+  background-color: transparent;
+}
+
+#search form datalist {
+  display: none;
+}
+
+#search form label {
+  width: 20px;
+  -webkit-flex: 0 0 20px;
+  flex: 0 0 20px;
+  text-align: center;
+  color: #CCC;
+}
+
+#search form label i {
+  margin: auto;
+  vertical-align: middle;
+}
+
+#search_text {
+  width: calc(100% - 40px);
+  -webkit-flex: 0 0 auto;
+  flex: 1 1 auto;
+}
+
+#search_clear {
+  width: 20px;
+  -webkit-flex: 0 0 20px;
+  flex: 0 0 20px;
+  font-family: 'FontAwesome';
+  color: #CCC;
+}
+
+.search_result {
+  border-left-style: solid;
+  border-left-width: 4px;
+  padding: 12px;
+}
+
+.search_result .keyword {
+  display: block;
+  color: #999;
+  font-size: 0.8em;
+}
+
+.search_result .keyword .match {
+  color: darkgreen;
 }
 
 /*end blocks.css*/

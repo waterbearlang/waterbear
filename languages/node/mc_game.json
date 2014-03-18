@@ -1,4 +1,5 @@
 {
+	"sectionkey": "minecraft",
     "name": "Minecraft Game",
     "help": "Blocks which connect to and manipulate Minecraft Pi Edition",
     "blocks": [

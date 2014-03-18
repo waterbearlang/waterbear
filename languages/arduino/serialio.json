@@ -1,4 +1,5 @@
 {
+	"sectionkey": "serialio",
     "name": "Serial I/O",
     "blocks": [
         {

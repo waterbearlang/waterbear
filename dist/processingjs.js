@@ -12859,27 +12859,6 @@ var l10nFiles = {};
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Auto-scroll deemed unnecessary given advent of scratchspace, so
-	// the if(workspace) block has been commented out
-        // WB-Specific
-        /*if (workspace){
-            // FIXME: is this why scroll-wheel doesn't work?
-            // FIXME: is this why scrolling down works poorly?
-            var container = workspace.parentElement;
-            var offset = wb.rect(container);
-            if (currPos.top < offset.top){
-                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
-            }else if (currPos.bottom > offset.bottom){
-                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
-                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
-            }
-            if (currPos.left < offset.left){
-                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
-            }else if(currPos.right > offset.right){
-                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
-            }
-        }*/
         currentPosition = nextPosition;
         return false;
     }

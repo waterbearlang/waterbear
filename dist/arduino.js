@@ -3684,6 +3684,7 @@ wb.setDefaultScript(defaultscript);
 
 /*begin languages/arduino/boolean.json*/
 wb.menu({
+	"sectionkey": "boolean",
     "name": "Boolean",
     "blocks": [
         {
@@ -3745,6 +3746,7 @@ wb.menu({
 
 /*begin languages/arduino/control.json*/
 wb.menu({
+	"sectionkey": "controls",
     "name": "Controls",
     "blocks": [
         {
@@ -3871,6 +3873,7 @@ wb.menu({
 
 /*begin languages/arduino/digitalio.json*/
 wb.menu({
+	"sectionkey": "digitalio",
     "name": "Digital I/O",
     "blocks": [
         {
@@ -4048,6 +4051,7 @@ wb.menu({
 
 /*begin languages/arduino/math.json*/
 wb.menu({
+	"sectionkey": "math",
     "name": "Math",
     "blocks": [
         {
@@ -4411,6 +4415,7 @@ wb.menu({
 
 /*begin languages/arduino/serialio.json*/
 wb.menu({
+	"sectionkey": "serialio",
     "name": "Serial I/O",
     "blocks": [
         {
@@ -4486,6 +4491,7 @@ wb.menu({
 
 /*begin languages/arduino/timing.json*/
 wb.menu({
+	"sectionkey": "timing",
     "name": "Timing",
     "blocks": [
         {
@@ -4535,6 +4541,7 @@ wb.menu({
 
 /*begin languages/arduino/variables.json*/
 wb.menu({
+	"sectionkey": "variables",
     "name": "Variables",
     "blocks": [
         {

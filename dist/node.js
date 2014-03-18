@@ -5928,6 +5928,7 @@ wb.choiceLists.cameramode = ['normal','thirdPerson','fixed'];
 
 /*begin languages/node/control.json*/
 wb.menu({
+	"sectionkey": "control",
     "name": "Control",
     "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
@@ -6143,6 +6144,7 @@ wb.menu({
 
 /*begin languages/node/piface.json*/
 wb.menu({
+	"sectionkey": "piface",
     "name": "PiFace",
     "help": "Physical Input and Output for the Raspberry Pi using a PiFace board.",
     "blocks": [
@@ -6270,6 +6272,7 @@ wb.menu({
 
 /*begin languages/node/pibrella_simple.json*/
 wb.menu({
+	"sectionkey": "pibrella",
     "name": "PiBrella",
     "help": "Physical Input and Output for the Raspberry Pi using a PiBrella board.",
     "blocks": [
@@ -6377,6 +6380,7 @@ wb.menu({
 
 /*begin languages/node/firmata.json*/
 wb.menu({
+	"sectionkey": "firmata",
     "name": "Firmata",
     "help": "Physical Input and Output for the Raspberry Pi using an Arduino loaded with Firmata.",
     "blocks": [
@@ -6545,6 +6549,7 @@ wb.menu({
 
 /*begin languages/node/mc_game.json*/
 wb.menu({
+	"sectionkey": "minecraft",
     "name": "Minecraft Game",
     "help": "Blocks which connect to and manipulate Minecraft Pi Edition",
     "blocks": [
@@ -6611,6 +6616,7 @@ wb.menu({
 
 /*begin languages/node/mc_player.json*/
 wb.menu({
+	"sectionkey": "mcplayer",
     "name": "Player",
     "help": "Find and move Steve the Minecraft player",
     "blocks": [
@@ -6721,6 +6727,7 @@ wb.menu({
 
 /*begin languages/node/mc_position.json*/
 wb.menu({
+	"sectionkey": "mcposition",
     "name": "Position",
     "help": "Find and change Minecraft Positions",
     "blocks": [
@@ -7054,6 +7061,7 @@ wb.menu({
 
 /*begin languages/node/mc_blocks.json*/
 wb.menu({
+	"sectionkey": "mcblocks",
     "name": "Blocks",
     "help": "Find and set Minecraft Blocks",
     "blocks": [
@@ -7173,6 +7181,7 @@ wb.menu({
 
 /*begin languages/node/mc_camera.json*/
 wb.menu({
+	"sectionkey": "mccamera",
     "name": "Camera",
     "help": "Manipulating the Minecraft Camera",
     "blocks": [
@@ -7212,6 +7221,7 @@ wb.menu({
 
 /*begin languages/node/array.json*/
 wb.menu({
+	"sectionkey": "arrays",
     "name": "Arrays",
     "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
@@ -7471,6 +7481,7 @@ wb.menu({
 
 /*begin languages/node/boolean.json*/
 wb.menu({
+	"sectionkey": "boolean",
     "name": "Boolean",
     "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
@@ -7551,6 +7562,7 @@ wb.menu({
 
 /*begin languages/node/math.json*/
 wb.menu({
+	"sectionkey": "math",
     "name": "Math",
     "help": "Math blocks are for manipulating numbers",
     "blocks": [
@@ -8033,6 +8045,7 @@ wb.menu({
 
 /*begin languages/node/string.json*/
 wb.menu({
+	"sectionkey": "strings",
     "name": "Strings",
     "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [

@@ -15783,6 +15783,7 @@ wb.choiceLists.mode = ['RGB', 'HSB'];
 
 /*begin languages/processingjs/structure.json*/
 wb.menu({
+	"sectionkey": "structure",
     "name": "Structure",
     "blocks": [
         {
@@ -15855,6 +15856,7 @@ wb.menu({
 
 /*begin languages/processingjs/environment.json*/
 wb.menu({
+	"sectionkey": "environment",
     "name": "Environment",
     "blocks": [
         {
@@ -15927,6 +15929,7 @@ wb.menu({
 
 /*begin languages/processingjs/controls.json*/
 wb.menu({
+	"sectionkey": "control",
     "name": "Control",
     "blocks": [
         {
@@ -16229,6 +16232,7 @@ wb.menu({
 
 /*begin languages/processingjs/shapes.json*/
 wb.menu({
+	"sectionkey": "shape",
     "name": "Shape",
     "blocks": [
         {
@@ -16527,6 +16531,7 @@ wb.menu({
 
 /*begin languages/processingjs/input.json*/
 wb.menu({
+	"sectionkey": "input",
     "name": "Input",
     "blocks": [
         {
@@ -16755,6 +16760,7 @@ wb.menu({
 
 /*begin languages/processingjs/colors.json*/
 wb.menu({
+	"sectionkey": "colors",
     "name": "Colors",
     "blocks": [
         {
@@ -16857,6 +16863,7 @@ wb.menu({
 
 /*begin languages/processingjs/math.json*/
 wb.menu({
+	"sectionkey": "math",
     "name": "Math",
     "blocks": [
         {
@@ -17250,6 +17257,7 @@ wb.menu({
 
 /*begin languages/processingjs/transform.json*/
 wb.menu({
+	"sectionkey": "transform",
     "name": "Transform",
     "blocks": [
         {

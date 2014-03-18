@@ -247,14 +247,28 @@
                                                         "uValue": "10"
                                                     },
                                                     {
+                                                        "name": "width units",
+                                                        "type": "string",
+                                                        "value": "choice",
+                                                        "options": "relativeUnit",
+                                                        "uValue": "px"
+                                                    },
+                                                    {
                                                         "name": "height",
                                                         "type": "number",
                                                         "value": "32",
                                                         "uValue": "10"
+                                                    },
+                                                    {
+                                                        "name": "height units",
+                                                        "type": "string",
+                                                        "value": "choice",
+                                                        "options": "relativeUnit",
+                                                        "uValue": "px"
                                                     }
                                                 ],
                                                 "seqNum": "569",
-                                                "script": "{w: {{1}}, h: {{2}} }"
+                                                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}"
                                             }
                                         },
                                         {

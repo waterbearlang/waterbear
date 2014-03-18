@@ -13385,9 +13385,11 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
     }
 
     function resetSeqNum(){
+        console.log('resetSeqNum (and also block registry)');
         nextSeqNum = 0;
-        blockRegistry = {};
-        wb.blockRegistry = blockRegistry;
+        // the lines below were breaking loading from files, and probably any load after the menus were built
+        // blockRegistry = {};
+        // wb.blockRegistry = blockRegistry;
     }
 
     function registerBlock(blockdesc){
@@ -13464,6 +13466,7 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
+                'data-keywords': JSON.stringify(obj.keywords),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
@@ -14038,9 +14041,135 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
         }
     }
 
+    /** Search filter */
+
+    var oldQuery = '';
+
+    function searchBlock(event) {
+        // Clear input if the clear button is pressed
+        var searchTextNode = document.getElementById('search_text');
+
+        if (event.target.id == 'search_clear') {
+            searchTextNode.value = '';
+        }
+
+        // Proceed if the query is changed
+        var query = searchTextNode.value.trim().toLowerCase();
+
+        if (oldQuery == query) {
+            return;
+        } else {
+            oldQuery = query;
+        }
+
+        var searchResultsNode = document.getElementById('search_results');
+        var blockMenuNode = document.getElementById('block_menu');
+
+        // For non-empty query, show all blocks; otherwise, hide all blocks
+        if (query) {
+            wb.show(searchResultsNode);
+            wb.hide(blockMenuNode);
+
+            while (searchResultsNode.firstChild) {
+                searchResultsNode.removeChild(searchResultsNode.firstChild);
+            }
+        } else {
+            wb.hide(searchResultsNode);
+            wb.show(blockMenuNode);
+            return;
+        }
+
+        // Clear suggestions
+        var suggestions = [];
+        var suggestionsNode = document.getElementById('search_suggestions');
+        while (suggestionsNode.firstChild) {
+            suggestionsNode.removeChild(suggestionsNode.firstChild);
+        }
+
+        var groups = document.querySelectorAll('.block-menu');
+     
+        for (var i = 0; i < groups.length; i++) {
+            var blocks = groups[i].getElementsByClassName('block');
+
+            for (var j = 0; j < blocks.length; j++) {
+                // Construct an array of keywords
+                var keywords = [];
+
+                var group = blocks[j].getAttribute('data-group');
+                if (group) {
+                    keywords.push(group);
+                }
+
+                var keywordsAttr = blocks[j].getAttribute('data-keywords');
+                if (keywordsAttr) {
+                    keywords = keywords.concat(JSON.parse(keywordsAttr));
+                }
+
+                // Find a match
+                var matchingKeywords = [];
+
+                for (var k = 0; k < keywords.length; k++) {
+                    if (keywords[k].indexOf(query) == 0) {
+                        matchingKeywords.push(keywords[k]);
+
+                        if (suggestions.indexOf(keywords[k]) == -1) {
+                            suggestions.push(keywords[k]);
+
+                            var suggestionNode = document.createElement('option');
+                            suggestionNode.value = keywords[k];
+                            suggestionsNode.appendChild(suggestionNode);
+                        }
+                    }
+                }
+
+                // Show/hide blocks
+                if (matchingKeywords.length > 0) {
+                    var resultNode = document.createElement('div');
+                    resultNode.classList.add('search_result');
+                    resultNode.classList.add(group);
+                    resultNode.style.backgroundColor = 'transparent';
+
+                    // Block
+                    resultNode.appendChild(blocks[j].cloneNode(true));
+
+                    // Fix result height
+                    var clearNode = document.createElement('div');
+                    clearNode.style.clear = 'both';
+                    resultNode.appendChild(clearNode);
+
+                    // Keyword name
+                    var keywordNode = document.createElement('span');
+                    keywordNode.classList.add('keyword');
+                    var keywordNodeContent = '<span class="keyword">';
+                    keywordNodeContent += '<span class="match">';
+                    keywordNodeContent += matchingKeywords[0].substr(0, query.length);
+                    keywordNodeContent += '</span>';
+                    keywordNodeContent += matchingKeywords[0].substr(query.length);
+
+                    for (var k = 1; k < matchingKeywords.length; k++) {
+                        keywordNodeContent += ', <span class="match">';
+                        keywordNodeContent += matchingKeywords[k].substr(0, query.length);
+                        keywordNodeContent += '</span>';
+                        keywordNodeContent += matchingKeywords[k].substr(query.length);
+                    }
+
+                    keywordNodeContent += '</span>';
+                    keywordNode.innerHTML = keywordNodeContent;
+                    resultNode.appendChild(keywordNode);
+
+                    searchResultsNode.appendChild(resultNode);
+                }
+            }
+        }
+    }
+
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    Event.on('#search_text', 'keyup', null, searchBlock);
+    Event.on('#search_text', 'input', null, searchBlock);
+    Event.on('#search_clear', 'click', null, searchBlock);
 
     wb.blockRegistry = blockRegistry;
 
@@ -14246,15 +14375,22 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
             console.error('no json file found in gist: %o', gist);
             return;
         }
-        loadScriptsFromObject(JSON.parse(file));
+        loadScriptsFromJson(file);
     }
 
     function loadScriptsFromExample(name){
         ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
-            loadScriptsFromObject(JSON.parse(exampleJson));
+            loadScriptsFromJson(exampleJson);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });
+    }
+
+    function loadScriptsFromJson(jsonblob){
+        // wb.clearScripts(null, true);
+        wb.loaded = true;
+        loadScriptsFromObject(JSON.parse(jsonblob));
+        wb.scriptModified = true;
     }
 
     function loadCurrentScripts(queryParsed){
@@ -14289,17 +14425,13 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
 	function loadScriptsFromFile(file){
 		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-			console.error("File not a JSON file");
+			console.error("File is not a JSON file");
 			return;
 		}
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-			wb.clearScripts(null, true);
-			var saved = JSON.parse(evt.target.result);
-			wb.loaded = true;
-			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+            loadScriptsFromJson(evt.target.result);
 		};
 	}
 
@@ -14463,7 +14595,7 @@ function changeSocket(event) {
 	// console.log("Changed a socket!");
 	var oldValue = event.target.getAttribute('data-oldvalue');
 	var newValue = event.target.value;
-	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	if(oldValue === undefined) oldValue = event.target.defaultValue;
 	// console.log("New value:", newValue);
 	// console.log("Old value:", oldValue);
 	event.target.setAttribute('data-oldvalue', newValue);
@@ -14476,7 +14608,7 @@ function changeSocket(event) {
 			event.target.value = newValue;
 			event.target.setAttribute('data-oldvalue', newValue);
 		}
-	}
+	};
 	wb.history.add(action);
 }
 
@@ -14532,7 +14664,7 @@ function collapseCommand(key, opt){
 function copyCommand(evt) {
 	// console.log("Copying a block in ui.js!");
 	// console.log(this);
-	action = {
+	var action = {
 		copied: this,
 		oldPasteboard: pasteboard,
 		undo: function() {
@@ -14541,14 +14673,14 @@ function copyCommand(evt) {
 		redo: function() {
 			pasteboard = this.copied;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function deleteCommand(evt) {
 	// console.log("Deleting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -14566,14 +14698,14 @@ function deleteCommand(evt) {
 			Event.trigger(this.removed, 'wb-remove');
 			this.removed.remove();
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function cutCommand(evt) {
 	// console.log("Cutting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -14594,14 +14726,14 @@ function cutCommand(evt) {
 			this.removed.remove();
 			pasteboard = this.removed;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function pasteCommand(evt) {
 	// console.log(pasteboard);
-	action = {
+	var action = {
 		pasted: wb.cloneBlock(pasteboard),
 		into: cmenuTarget.parentNode,
 		before: cmenuTarget.nextSibling,
@@ -14619,7 +14751,7 @@ function pasteCommand(evt) {
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
@@ -14657,10 +14789,11 @@ function buildContextMenu(options) {
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
+	var item;
 	menu.classList.add('cmenu');
 	for(var key in options) {
 		if(options.hasOwnProperty(key) && options[key]) {
-			var item = document.createElement('li');
+			item = document.createElement('li');
 			if(cmenuitem_enabled(options[key])) {
 				Event.on(item, "click", null, cmenuCallback(options[key].callback));
 			} else {
@@ -14673,7 +14806,7 @@ function buildContextMenu(options) {
 			menu.appendChild(item);
 		}
 	}
-	var item = document.createElement('li');
+	item = document.createElement('li');
 	item.onclick = function(evt) {};
 	item.innerHTML = 'Disable this menu';
 	item.classList.add('topSep');
@@ -14702,7 +14835,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -14766,7 +14899,7 @@ var block_cmenu = {
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
         delete: {name: 'Delete', callback: deleteCommand},
-}
+};
 
 // Test drawn from modernizr
 function is_touch_device() {
@@ -14799,7 +14932,7 @@ function menu(blockspec){
     blockspec.blocks = id_blocks;
     defaultLangData[blockspec.sectionkey] = blockspec;
 
-};
+}
 
 function populateMenu() {
 	for (var key in defaultLangData) {
@@ -14826,7 +14959,7 @@ function edit_menu(title, sectionKey, specs, help, show){
     var submenu = document.querySelector('.' + sectionKey + '+ .submenu');
     if (!submenu){
         var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
-        var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
@@ -14936,7 +15069,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu'));
+	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
 }
 
 function showScript(evt){
@@ -14948,9 +15081,24 @@ function showResult(evt){
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 
+/* Search filter */
+
+function highlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #FFA500";
+}
+
+function unhighlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #CCC";
+}
+
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+Event.on('#search_text', 'focus', null, highlightSearch);
+Event.on('#search_text', 'blur', null, unhighlightSearch);
 
 if (document.body.clientWidth < 361){
 	// console.log('mobile view');

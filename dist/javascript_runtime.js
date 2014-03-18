@@ -2183,20 +2183,16 @@ global.location = location;
  * Convert size parameter to pixel value 
  * 
  * @param {?number=} x is the size parameter
- * @param {?unit=} unit is px or %
+ * @param {?relativeUnit=} unit is px or %
  * @param {?boolean=} isWidth is true for width, false for height
  * @return {number} pixel value for size
  *
  * Notes: -em and pt irrelevant for these purposes, need way to disable these
  *         options in the dropdown
  */
-function convertSidelengthUnits(x, unit, isWidth) {
-  switch(unit) {
+function convert(x, relativeUnit, isWidth) {
+  switch(relativeUnit) {
     case "px":
-      return x;
-    case "em":
-      return x;
-    case "pt":
       return x;
     case "%":
       if(isWidth){
@@ -2205,7 +2201,7 @@ function convertSidelengthUnits(x, unit, isWidth) {
       else {
         return (global.stage_height*x)/100;
       }
-    default: //i.e. if no units are specified. May be same as "px", need to confirm
+    default: //need this b/c examples currently have size blocks w/o option list
       return x; 
   }
 }

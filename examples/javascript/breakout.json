@@ -954,14 +954,28 @@
                             "uValue": "98"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "32"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "7",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -1547,14 +1561,28 @@
                     "uValue": "128"
                   },
                   {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "32"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
                   }
                 ],
                 "seqNum": "4",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },
@@ -1736,14 +1764,28 @@
                     "uValue": "16"
                   },
                   {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
                     "uValue": "16"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
                   }
                 ],
                 "seqNum": "7",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },
@@ -1885,14 +1927,28 @@
                     "uValue": "200"
                   },
                   {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
+                  },
+                  {
                     "name": "height",
                     "type": "number",
                     "value": "32",
-                    "uValue": "33"
+                    "uValue": "32"
+                  },
+                  {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit",
+                    "uValue": "px"
                   }
                 ],
                 "seqNum": "11",
-                "script": "{w: {{1}}, h: {{2}} }",
+                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                 "type": "size"
               }
             },

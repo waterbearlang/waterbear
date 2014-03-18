@@ -2,7 +2,7 @@
 // are loaded (in template/template.html)
 
 (function(global){
-
+'use strict';
     // After trying to find a decent drag-and-drop library which could handle
     // snapping tabs to slots *and* dropping expressions in sockets *and*
     // work on both touch devices and with mouse/trackpad *and* could prevent dragging
@@ -57,6 +57,7 @@
     var timer;
     var dragTarget;
     var dropTarget;
+    var dropRects;
     var dragging;
     var currentPosition;
     var scope;
@@ -68,6 +69,9 @@
     var selectedSocket; // <- WB
     var dragAction = {};
     var templateDrag, localDrag; // <- WB
+    var startPosition;
+    var pointerDown;
+    var cloned;
     
     var _dropCursor; // <- WB
     
@@ -248,26 +252,6 @@
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Scoll workspace as needed
-        // WB-Specific
-        if (workspace){
-            // FIXME: is this why scroll-wheel doesn't work?
-            // FIXME: is this why scrolling down works poorly?
-            var container = workspace.parentElement;
-            var offset = wb.rect(container);
-            if (currPos.top < offset.top){
-                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
-            }else if (currPos.bottom > offset.bottom){
-                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
-                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
-            }
-            if (currPos.left < offset.left){
-                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
-            }else if(currPos.right > offset.right){
-                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
-            }
-        }
         currentPosition = nextPosition;
         return false;
     }
@@ -591,26 +575,6 @@
         return '.socket[data-type=' + name + '] > .holder';
     }
     
-    function registerScratchSpace() {
-        var workspace = document.querySelector('.workspace');
-        var mainWorkspace = document.querySelector('scripts_workspace');
-        var id = "23423443";
-        var sBlock = wb.Block({
-                group: 'scripts_scratchspace',
-                id: id,
-                scriptId: id,
-                scopeId: id,
-                blocktype: 'context',
-                sockets: [
-                ],
-                script: '[[1]]',
-                isTemplateBlock: false,
-                help: 'Place script blocks here for quick access'
-            });
-    
-        workspace.insertBefore(sBlock, mainWorkspace);
-    }
-    
     function cancelDrag(event) {
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
@@ -630,14 +594,9 @@
         var x = event.clientX;
         var y = event.clientY;
     
-        console.log("Mouse x " + x);
-        console.log("Mouse y" + y);
-    
         for (var i = 0; i < children.length; i++){
-            console.log(children[i]);
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
-                console.log(r);
                 if (r.bottom > y && r.top < y && r.left < x && r.right > x) {
                     return children[i];
                 }
@@ -646,37 +605,45 @@
         return false;
     }
     
+    function menuToScratchpad(event) {
+	cloned = wb.cloneBlock(event.target);
+	scratchpad.appendChild(cloned);
+    }
+    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchPad() {
-	var PADDING = 5;
+    function arrangeScratchpad(event) {
+	var PADDING = 8;
 	
 	var scratchPadRect = scratchpad.getBoundingClientRect();
-	
 	var width = scratchPadRect.width;
-	var xOrigin = scratchPadRect.x;
-	var yOrigin = scratchPadRect.y;
+	var xOrigin = 5;
+	var yOrigin = 5;
 	
 	var x = xOrigin;
 	var y = yOrigin;
 	
 	var children = scratchpad.childNodes;
+	var maxHeight = 0;
 	
 	for (var i = 0; i < children.length; i++) {
 	    if (children[i].nodeType != 3) {
 		var r = children[i];
 		
 		var rBounding = r.getBoundingClientRect();
-		
+		if (rBounding.height > maxHeight) {
+		    maxHeight = rBounding.height;
+		}
 		r.style.top = y + "px";
 		r.style.left = x + "px";
-		
 		x += rBounding.width + PADDING;
 		
-		if (xOrigin >= width) {
+		if (x >= width - 25) {
+		    //We are going into a new row.
 		    x = xOrigin;
-		    y += rBounding.height + PADDING;
+		    y += maxHeight + PADDING;
+		    maxHeight = 0;
 		}
 	    }
 	}
@@ -692,6 +659,8 @@
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+    Event.on('.content', 'dblclick', null, arrangeScratchpad);
+    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

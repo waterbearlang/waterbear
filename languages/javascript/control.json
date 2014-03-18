@@ -1,4 +1,5 @@
 {
+    "sectionkey": "controls",
     "name": "Controls",
     "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [

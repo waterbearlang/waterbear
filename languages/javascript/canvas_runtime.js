@@ -1,4 +1,6 @@
-Shape = {};
+(function(window){
+    'use strict';
+var Shape = {};
 
 window.Shape = Shape;
 
@@ -72,3 +74,4 @@ Shape.strokeShape = function(shape, color, width) {
     local.ctx.restore();
 
 };
+})(window);

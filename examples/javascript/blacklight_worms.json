@@ -130,13 +130,13 @@
                               "name": "pick random",
                               "type": "number",
                               "value": "1",
-                              "uValue": "10"
+                              "uValue": "11"
                             },
                             {
                               "name": "to",
                               "type": "number",
                               "value": "10",
-                              "uValue": "30"
+                              "uValue": "29"
                             }
                           ],
                           "seqNum": "223",
@@ -144,6 +144,13 @@
                           "type": "number"
                         }
                       },
+                      {
+                        "name": "width units",
+                        "type": "string",
+                        "value": "choice",
+                        "options": "relativeUnit",
+                        "uValue": "px"
+                      },                
                       {
                         "name": "height",
                         "type": "number",
@@ -173,10 +180,17 @@
                           "script": "randint({{1}}, {{2}})",
                           "type": "number"
                         }
+                      },
+                      {
+                        "name": "height units",
+                        "type": "string",
+                        "value": "choice",
+                        "options": "relativeUnit",
+                        "uValue": "px"
                       }
                     ],
                     "seqNum": "211",
-                    "script": "{w: {{1}}, h: {{2}} }",
+                    "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                     "type": "size"
                   }
                 },

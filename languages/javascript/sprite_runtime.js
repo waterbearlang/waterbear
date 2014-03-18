@@ -1,6 +1,8 @@
 // Sprite Routines
 
 // This uses and embeds code from https://github.com/jriecken/sat-js
+(function(window){
+    'use strict';
 
 function Sprite(type, color){
     this.color = color;
@@ -72,6 +74,8 @@ function createSprite(shape, color){
     }
 };
 
+window.createRectSprite = createRectSprite; // deprecated
+window.createSprite = createSprite;
 window.Sprite = Sprite;
 
 Sprite.prototype.isPolygon = function(){
@@ -345,3 +349,4 @@ Sprite.prototype.edgeWrap = function(stage_width, stage_height){
         this.setPos(null, bounds.up);
     }
 }
+})(window);

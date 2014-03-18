@@ -1,7 +1,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 // UI Chrome Section
 
 
@@ -28,7 +28,7 @@ function changeSocket(event) {
 	// console.log("Changed a socket!");
 	var oldValue = event.target.getAttribute('data-oldvalue');
 	var newValue = event.target.value;
-	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	if(oldValue === undefined) oldValue = event.target.defaultValue;
 	// console.log("New value:", newValue);
 	// console.log("Old value:", oldValue);
 	event.target.setAttribute('data-oldvalue', newValue);
@@ -41,7 +41,7 @@ function changeSocket(event) {
 			event.target.value = newValue;
 			event.target.setAttribute('data-oldvalue', newValue);
 		}
-	}
+	};
 	wb.history.add(action);
 }
 
@@ -97,7 +97,7 @@ function collapseCommand(key, opt){
 function copyCommand(evt) {
 	// console.log("Copying a block in ui.js!");
 	// console.log(this);
-	action = {
+	var action = {
 		copied: this,
 		oldPasteboard: pasteboard,
 		undo: function() {
@@ -106,14 +106,14 @@ function copyCommand(evt) {
 		redo: function() {
 			pasteboard = this.copied;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function deleteCommand(evt) {
 	// console.log("Deleting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -131,14 +131,14 @@ function deleteCommand(evt) {
 			Event.trigger(this.removed, 'wb-remove');
 			this.removed.remove();
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function cutCommand(evt) {
 	// console.log("Cutting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -159,14 +159,14 @@ function cutCommand(evt) {
 			this.removed.remove();
 			pasteboard = this.removed;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function pasteCommand(evt) {
 	// console.log(pasteboard);
-	action = {
+	var action = {
 		pasted: wb.cloneBlock(pasteboard),
 		into: cmenuTarget.parentNode,
 		before: cmenuTarget.nextSibling,
@@ -184,7 +184,7 @@ function pasteCommand(evt) {
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
@@ -222,10 +222,11 @@ function buildContextMenu(options) {
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
+	var item;
 	menu.classList.add('cmenu');
 	for(var key in options) {
 		if(options.hasOwnProperty(key) && options[key]) {
-			var item = document.createElement('li');
+			item = document.createElement('li');
 			if(cmenuitem_enabled(options[key])) {
 				Event.on(item, "click", null, cmenuCallback(options[key].callback));
 			} else {
@@ -238,7 +239,7 @@ function buildContextMenu(options) {
 			menu.appendChild(item);
 		}
 	}
-	var item = document.createElement('li');
+	item = document.createElement('li');
 	item.onclick = function(evt) {};
 	item.innerHTML = 'Disable this menu';
 	item.classList.add('topSep');
@@ -267,7 +268,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -331,7 +332,7 @@ var block_cmenu = {
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
         delete: {name: 'Delete', callback: deleteCommand},
-}
+};
 
 // Test drawn from modernizr
 function is_touch_device() {
@@ -340,31 +341,126 @@ function is_touch_device() {
 
 initContextMenus();
 
+var defaultLangData  = {};
+var localizationData = {};
+
+var l10nHalfDone = false;
+wb.l10nHalfDone = l10nHalfDone;
+
+/* will be set true by either code in l10n.js or initLanguageFiles() */
+initLanguageFiles();
+
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
-    var title = blockspec.name.replace(/\W/g, '');
-    var specs = blockspec.blocks;
-    var help = blockspec.help !== undefined ? blockspec.help : '';
-    return edit_menu(title, specs, help);
-};
+    var id_blocks = {};
+    var blocks = blockspec.blocks;
 
-function edit_menu(title, specs, help, show){
-	menu_built = true;
+    // put blocks in data structure with block.id as key 
+    for (var key in blocks) {
+        var block = blocks[key];
+        id_blocks[block.id] = block;
+    }
+
+    // store blocks temporarily in defaultLangData
+    blockspec.blocks = id_blocks;
+    defaultLangData[blockspec.sectionkey] = blockspec;
+
+}
+
+function populateMenu() {
+	for (var key in defaultLangData) {
+
+        //default data
+        var blockspec = defaultLangData[key];
+
+        //read in from localized file
+        var l10nData = localizationData[blockspec.sectionkey];
+ 
+        //overwrite attributes in blockspec
+        wb.overwriteAttributes(blockspec, l10nData);
+
+		var title = blockspec.name;
+        var sectionKey = blockspec.sectionkey.replace(/\W/g, '');
+        var specs = blockspec.blocks;
+        var help = blockspec.help !== undefined ? blockspec.help : '';
+        edit_menu(title, sectionKey, specs, help);
+	}
+}
+
+function edit_menu(title, sectionKey, specs, help, show){
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = document.querySelector('.' + group + '+ .submenu');
+    var submenu = document.querySelector('.' + sectionKey + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
-        var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
+        submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
         submenu.appendChild(description);
     }
-    specs.forEach(function(spec, idx){
-        spec.group = group;
+    for (var key in specs) {
+        var spec = specs[key];
+        spec.group = sectionKey;
         spec.isTemplateBlock = true;
         submenu.appendChild(wb.Block(spec));
+    }
+}
+
+function initLanguageFiles(){
+    // pulled from workspace.js, one file below in the dist/javascript.js
+    var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+
+    //gets language locale code. en, es, de, etc.
+    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
+
+    // get list of paths of localized language files for language
+    var listFiles;
+
+    if ( (typeof(l10nFiles) != "undefined") && (typeof(l10nFiles[language]) != "undefined") )
+        listFiles = l10nFiles[language][locale];
+
+    // if no localized files exist 
+    if (!listFiles) {
+        if (l10nHalfDone) {
+            populateMenu();
+        } else {
+            l10nHalfDone = true;
+        }
+
+        return;
+    }
+
+    // open all relevent localized files for language 
+    listFiles.forEach(function(name, idx){
+        ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
+            var lang = JSON.parse(json);
+
+            var id_blocks = {};
+            var blocks = lang.blocks;
+
+            // put blocks into proper structure. resembles blockRegistry 
+            for (var key in blocks) {
+                var block = blocks[key];
+                id_blocks[block.id] = block;
+            }
+
+            lang.blocks = id_blocks;
+            localizationData[lang.sectionkey] = lang;
+
+            // if this is the last file that needs to be retrieved (this step is done)
+            if ( idx === (listFiles.length - 1 )) {
+                if (wb.l10nHalfDone) {
+                    populateMenu();
+                } else {
+                    wb.l10nHalfDone = true;
+                }
+            }
+
+        }, function(xhr, status){
+            console.error('Error in ajax.get:', status);
+        });
+
     });
 }
 
@@ -406,7 +502,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu'));
+	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
 }
 
 function showScript(evt){
@@ -418,9 +514,24 @@ function showResult(evt){
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 
+/* Search filter */
+
+function highlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #FFA500";
+}
+
+function unhighlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #CCC";
+}
+
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+Event.on('#search_text', 'focus', null, highlightSearch);
+Event.on('#search_text', 'blur', null, unhighlightSearch);
 
 if (document.body.clientWidth < 361){
 	// console.log('mobile view');
@@ -438,6 +549,7 @@ if (document.body.clientWidth > 360){
 }
 
 wb.menu = menu;
+wb.populateMenu = populateMenu;
+wb.l10nHalfDone = l10nHalfDone;
 
 })(wb);
-

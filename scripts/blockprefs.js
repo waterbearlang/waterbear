@@ -10,7 +10,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
-
+'use strict';
 	//save the state of the settings link
 	var closed = true;
 	var language = wb.language;
@@ -99,7 +99,7 @@
 		var hiddenBlocks = storedData == undefined ? [] : JSON.parse(storedData);
 		window.hbl = hiddenBlocks;
 		// console.log("Loading block preferences", hiddenBlocks);
-		for (key in hiddenBlocks) {
+		Object.keys(hiddenBlocks).forEach(function(key){
 			if(!hiddenBlocks[key]){
 				var h3 = document.getElementById(key);
 				if(h3 != null){
@@ -108,8 +108,8 @@
 					h3.classList.add('hidden');
 				}
 			}
-		}
-	};
+		});
+	}
 
 	//after initliazation, create the settings and checkboxes
 	function load(){

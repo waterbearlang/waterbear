@@ -4,6 +4,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 (function(wb){
+	'use strict';
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){

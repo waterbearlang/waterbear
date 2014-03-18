@@ -5,9 +5,11 @@
  *
  */
 
-
+(function(wb){
 // expose these globally so the Block/Label methods can find them
+'use strict';
 wb.choiceLists.unit = ['px', 'em', '%', 'pt'];
+wb.choiceLists.relativeUnit = ['px', '%'];
 wb.choiceLists.align = ['start', 'end', 'left', 'right', 'center'];
 wb.choiceLists.baseline = ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'];
 wb.choiceLists.linecap = ['round', 'butt', 'square'];
@@ -19,4 +21,4 @@ wb.choiceLists.repetition = ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
 wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
 
-
+})(wb);

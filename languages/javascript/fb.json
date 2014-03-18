@@ -1,4 +1,5 @@
 {
+    "sectionkey": "facebook",
     "name": "Facebook",
     "help": "Blocks for interacting with Facebook",
     "blocks": [

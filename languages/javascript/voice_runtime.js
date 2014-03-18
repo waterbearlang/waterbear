@@ -1,4 +1,6 @@
 // Music Routines
+(function(window){
+	'use strict';
 function Voice(){
     this.on = false;
     this.osc;       // The oscillator which will generate tones
@@ -32,6 +34,10 @@ Voice.prototype.startOsc = function() {
 
 // Turn off the oscillator
 Voice.prototype.stopOsc = function() {
+	//during use strict you can't call stop more than once
+	// Failed to execute 'stop' on 'OscillatorNode': cannot call stop more than once. 
+	// so add conditional
+	if(this.on)
     this.osc.stop(0);
     this.osc.disconnect();
     this.on = false;
@@ -129,3 +135,5 @@ Voice.notes = [
 	'C8'
 ];
 Voice.refNote = Voice.notes.indexOf('A4');
+window.Voice = Voice;
+})(window);

@@ -4,7 +4,8 @@
  *    Support for playing music/sounds using Waterbear
  *
  */
-
+(function(wb){
+	'use strict';
 // Based on an 88-key piano
 wb.choiceLists.notes = [
 	// Octave 0
@@ -39,4 +40,6 @@ wb.choiceLists.durations = [
 ];
 wb.choiceLists.types.push('voice');
 wb.choiceLists.rettypes.push('voice');
+
+})(wb);
 

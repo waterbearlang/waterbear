@@ -1,4 +1,5 @@
 {
+    "sectionkey": "music",
     "name": "Music",
     "help": "Music blocks are for creating and manipulating sound programmatically, generating the sounds rather than playing back a recorded audio file (see the Sound menu for that).",
     "blocks": [

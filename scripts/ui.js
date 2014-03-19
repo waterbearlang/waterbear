@@ -268,7 +268,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -502,7 +502,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
+	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
 }
 
 function showScript(evt){

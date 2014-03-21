@@ -1,4 +1,5 @@
 {
+	"sectionkey": "digitalio",
     "name": "Digital I/O",
     "blocks": [
         {

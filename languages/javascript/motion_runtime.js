@@ -54,6 +54,10 @@ function processData(event) {
     }
 };
 
+if(runtime === undefined) {
+    console.log("Runtime is undefined; If this was called in a production environment look in to this!");
+    runtime = {};
+}
 runtime.accelerometer = accelerometer;
 
-})(runtime);
+})(window.runtime);

@@ -20,13 +20,29 @@ body{
 }
 
 .nav{
-	-webkit-flex: 0 0 34px;
-	flex: 0 0 34px;
+	-webkit-flex: 0 0 37px;
+	flex: 0 0 37px;
 }
 
-#block_menu{
+.block_menu_wrapper {
 	-webkit-flex: 0 0 300px;
 	flex: 0 0 300px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+
+#search {
+	height: 24px;
+	-webkit-flex: 0 0 24px;
+	flex: 0 0 24px;
+}
+
+#block_menu, #search_results {
+	height: calc(100% - 24px);
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 .workspace{
@@ -95,11 +111,11 @@ body{
 	overflow: auto;
 }
 
-.blocks-menu, .workspace, .results, .files{
+#block_menu, #search_results, .workspace, .results, .files{
 	overflow: auto;
 }
 
-body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+body.result .block_menu_wrapper, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
 	display: none;
 }
 body.result .stage, body.result stage.hidden{
@@ -142,7 +158,7 @@ ul.menu .show-ide{
 		position: relative;
 		overflow: hidden;
 	}
-	#block_menu, .workspace, .results, .files{
+	.block_menu_wrapper, .workspace, .results, .files{
 		display: block;
 		position: absolute;
 		width: 100%;

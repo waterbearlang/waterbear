@@ -1,4 +1,5 @@
 {
+    "sectionkey": "sound",
     "name": "Sound",
     "help": "Sound blocks can load and play sound files (wav, mp3, ogg) if those files are supported by your browser.",
     "blocks": [

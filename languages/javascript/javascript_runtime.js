@@ -61,11 +61,11 @@ Local.prototype.set = function(type, name, value){
 
 Local.prototype.get = function(type, name){
     if (this[type] === undefined){
-        console.error('Cannot remove %s from unknown type %s', name, type);
+        console.error('Cannot get %s from unknown type %s', name, type);
         return undefined;
     }
     if (this[type][name] === undefined){
-        console.error('No %s named %s to remove', type, name);
+        console.error('No %s named %s to get', type, name);
         return undefined;
     }
     return this[type][name];

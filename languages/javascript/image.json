@@ -1,4 +1,5 @@
 {
+    "sectionkey": "images",
     "name": "Images",
     "help": "Image blocks are for loading image files to use in other blocks and for manipulating images. See Sprite and Canvas menus.",
     "blocks": [

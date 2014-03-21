@@ -1,0 +1,100 @@
+{
+    "name": "Boolean",
+    "help": "Booleans are true or false and expressions which evaluate to true or false",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "785ae0ef-8f4c-4ef8-8a38-b465353b4695",
+            "type": "boolean",
+            "script": "(&& {{1}} {{2}})",
+            "help": "both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean"
+                },
+                {
+                    "name": "and",
+                    "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "aa8b642a-b3ae-49b6-9ab8-7ea74afdc133",
+            "type": "boolean",
+            "script": "(|| {{1}} {{2}})",
+            "help": "either or both operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean"
+                },
+                {
+                    "name": "or",
+                    "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d4ab8689-5a27-40d1-9ec5-f15c1cf7eb00",
+            "type": "boolean",
+            "script": "({{1}} ? !{{2}} : {{2}})",
+            "help": "either, but not both, operands are true",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "boolean"
+                },
+                {
+                    "name": "xor",
+                    "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "35155155-37aa-487e-93dc-0eacc42b7e42",
+            "type": "boolean",
+            "script": "(! {{1}})",
+            "help": "operand is false",
+            "sockets": [
+                {
+                    "name": "not",
+                    "type": "boolean"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "e91a811e-5d4c-4394-badf-d346a84ea0a5",
+            "type": "boolean",
+            "script": "!({{1}}%2)",
+            "help": "true when the parameter is even",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": 2,
+                    "suffix": "is even"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "38c05cc3-e1e1-4ac7-94ac-68ab7b73b519",
+            "type": "boolean",
+            "script": "!!({{1}}%2)",
+            "help": "true when the parameter is odd",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "number",
+                    "value": 1,
+                    "suffix": "is odd"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+/*Defines a block representing a variable binding*/

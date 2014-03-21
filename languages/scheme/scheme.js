@@ -4,6 +4,12 @@
  * Support for writing Scheme in Waterbear
  */
 
+/*Implement wb.wrap(script)
+*wb.runCurrentScripts(false)
+*wb.clearStage()
+*wb.choiceLists
+*scheme_runtime.js
+*/
 (function(wb,Event){
     'use strict';
     var bscheme = new BiwaScheme.Interpreter(function(e, state) {
@@ -28,14 +34,24 @@
         view.innerHTML = '<pre class="language-scheme">' + script + '</pre>';
     };
 
-    wb.runCurrentScripts = function(){ /* do nothing */ };
+    wb.wrap = function(script){
+        return "";
+    }
+    
+    function runCurrentScripts(force){
         
-    wb.clearStage = function(){ /* do nothing */ };
-
-
+    }
+    wb.runCurrentScripts = runCurrentScripts;
+ 
+    function clearStage(event){
+        wb.iframeReady = false;
+        document.body.classList.remove('running');
+        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
+    }
+    wb.clearStage = clearStage;
     // NOTE: Taken directly from the JS file needs modification
     // expose these globally so the Block/Label methods can find them
-    wb.choiceLists = {
+     wb.choiceLists = {
         boolean: ['true', 'false'],
         keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
             .split('').concat(['up', 'down', 'left', 'right',
@@ -46,4 +62,5 @@
         types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
         rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
     }})(wb, Event);
+
 

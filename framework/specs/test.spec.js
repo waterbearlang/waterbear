@@ -162,15 +162,26 @@ describe("Javascript_runtime test suite", function() {
 			function sum(n) {
 				return (n*(n-1))/2;
 			}
+			function inclusiveSum(n1, n2) {
+				var numOfInts = Math.abs(n2 - n1)+1;
+				var avg = (n1 + n2)/2;
+				return numOfInts*avg;
+			}
+
+			function sumOfMultiples(n,mul) {
+            
+				return (n*(mul*(mul-1)))/2;
+			}
 
 			var s = 0;
-			var ran = range(0, 50, 1);
+			var ran = range(3, 300, 3);
 
 			for(var i = 0; i < ran.length; i++ ) {
 				s+=ran[i];
 			}
-
-			console.log("summation func %s, for loop %s", sum(50),s);
+			console.log(ran);
+			//assert();
+			console.log("summation func %s, for loop %s", sumOfMultiples(3,100),s);
 		
 		});
 

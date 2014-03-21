@@ -7320,6 +7320,58 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "acf4e2d3-24b2-41c7-8452-bce733400248",
+            "script": "sum({{1}})",
+            "type": "number",
+            "help": "calculate the sum of a number array",
+            "sockets": [
+                {
+                    "name": "sum of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f8be8360-aa41-4079-a7cb-12ff7a91b52d",
+            "script": "mean({{1}})",
+            "type": "number",
+            "help": "calculate the mean of a number array",
+            "sockets": [
+                {
+                    "name": "mean of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "e7424a86-3773-4759-828e-4dc33423a4da",
+            "script": "stdev({{1}})",
+            "type": "number",
+            "help": "calculate the standard deviation of a number array",
+            "sockets": [
+                {
+                    "name": "stdev of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
+            "script": "variance({{1}})",
+            "type": "number",
+            "help": "calculate the variance of a number array",
+            "sockets": [
+                {
+                    "name": "variance of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
@@ -7357,8 +7409,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/array.json*/
 
 /*begin languages/javascript/boolean.json*/

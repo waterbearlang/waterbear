@@ -212,6 +212,19 @@
         {
             "blocktype": "expression",
             "id": "acf4e2d3-24b2-41c7-8452-bce733400248",
+            "script": "sum({{1}})",
+            "type": "number",
+            "help": "calculate the sum of a number array",
+            "sockets": [
+                {
+                    "name": "sum of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f8be8360-aa41-4079-a7cb-12ff7a91b52d",
             "script": "mean({{1}})",
             "type": "number",
             "help": "calculate the mean of a number array",
@@ -231,6 +244,19 @@
             "sockets": [
                 {
                     "name": "stdev of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
+            "script": "variance({{1}})",
+            "type": "number",
+            "help": "calculate the variance of a number array",
+            "sockets": [
+                {
+                    "name": "variance of array",
                     "type": "array"
                 }
             ]

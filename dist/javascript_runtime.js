@@ -2172,10 +2172,6 @@ global.location = location;
 })(global);
 /*end languages/javascript/geolocation_runtime.js*/
 
-/*begin languages/javascript/date_runtime.js*/
-
-/*end languages/javascript/date_runtime.js*/
-
 /*begin languages/javascript/size_runtime.js*/
 
 /*end languages/javascript/size_runtime.js*/

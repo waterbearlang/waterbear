@@ -47,7 +47,7 @@ var libs = {
     node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
     processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min'],
-    scheme: ['beautify', 'highlight', 'highlight-javascript','events.min']
+    scheme: ['beautify', 'highlight', 'highlight-javascript','events.min', 'biwascheme-min']
 };
 
 

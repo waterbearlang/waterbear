@@ -13226,15 +13226,9 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         return false;
     }
     
-<<<<<<< HEAD
     function menuToScratchpad(event) {
 	cloned = wb.cloneBlock(event.target);
 	scratchpad.appendChild(cloned);
-=======
-    function moveToScratchPad(event){
-	cloneBlock = wb.cloneBlock(event.target);
-	//Add child to scratchpad
->>>>>>> origin/SchemeWrapper
     }
     
     
@@ -13286,13 +13280,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
     Event.on('.content', 'mousedown', '.scratchpad', initDrag);
-<<<<<<< HEAD
     Event.on('.content', 'dblclick', null, arrangeScratchpad);
     Event.on('.content', 'dblclick', '.block', menuToScratchpad)
-=======
-    Event.on('.content', 'dblclick', null, arrangeScratchPad);
-    Event.on('.content', 'dblclick', '.block', moveToScratchPad);
->>>>>>> origin/SchemeWrapper
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

@@ -1,4 +1,5 @@
 {
+    "sectionkey": "math",
     "name": "Math",
     "help": "Math blocks are for manipulating numbers",
     "blocks": [
@@ -19,6 +20,9 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "exponent"
             ]
         },
         {
@@ -38,6 +42,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "addition",
+                "plus",
+                "sum"
             ]
         },
         {
@@ -57,6 +66,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "subtraction",
+                "minus",
+                "difference"
             ]
         },
         {
@@ -76,6 +90,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "multiplication",
+                "times",
+                "product"
             ]
         },
         {
@@ -95,6 +114,11 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "division",
+                "divide",
+                "quotient"
             ]
         },
         {
@@ -114,6 +138,10 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "equal"
             ]
         },
         {
@@ -133,6 +161,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "not equal"
             ]
         },
         {
@@ -152,6 +184,10 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "less than"
             ]
         },
         {
@@ -171,6 +207,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "less than or equal to"
             ]
         },
         {
@@ -190,6 +230,10 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "greater than"
             ]
         },
         {
@@ -209,6 +253,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "greater than or equal to"
             ]
         },
         {
@@ -228,6 +276,10 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "modulus",
+                "modulo"
             ]
         },
         {
@@ -242,6 +294,9 @@
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "rounding"
             ]
         },
         {
@@ -256,6 +311,9 @@
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "absolute value"
             ]
         },
         {
@@ -270,6 +328,10 @@
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "floor",
+                "rounding"
             ]
         },
         {
@@ -284,6 +346,10 @@
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "ceiling",
+                "rounding"
             ]
         },
         {
@@ -303,6 +369,9 @@
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "gcd"
             ]
         },
         {
@@ -322,6 +391,9 @@
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "lcm"
             ]
         },
         {
@@ -341,6 +413,9 @@
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "maximum"
             ]
         },
         {
@@ -360,6 +435,9 @@
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "minimum"
             ]
         },
         {
@@ -374,6 +452,9 @@
                     "type": "number",
                     "value": "5"
                 }
+            ],
+            "keywords": [
+                "factorial"
             ]
         },
         {
@@ -389,6 +470,10 @@
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "cosine"
             ]
         },
         {
@@ -404,6 +489,10 @@
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "sine"
             ]
         },
         {
@@ -419,6 +508,10 @@
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "tangent"
             ]
         },
         {
@@ -433,6 +526,11 @@
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arccosine",
+                "cosine"
             ]
         },
         {
@@ -447,6 +545,11 @@
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arcsine",
+                "sine"
             ]
         },
         {
@@ -461,6 +564,11 @@
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arctangent",
+                "tangent"
             ]
         },
         {
@@ -478,6 +586,12 @@
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "cosh",
+                "cosine"
             ]
         },
         {
@@ -495,6 +609,12 @@
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "sinh",
+                "sine"
             ]
         },
         {
@@ -512,6 +632,12 @@
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "tanh",
+                "tangent"
             ]
         },
         {
@@ -526,6 +652,13 @@
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "acosh",
+                "arccosine",
+                "cosine"
             ]
         },
         {
@@ -540,6 +673,13 @@
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "asinh",
+                "arcsine",
+                "sine"
             ]
         },
         {
@@ -554,6 +694,13 @@
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "atanh",
+                "arctangent",
+                "tangent"
             ]
         },
         {
@@ -573,6 +720,10 @@
                     "type": "number",
                     "value": 2
                 }
+            ],
+            "keywords": [
+                "power",
+                "exponent"
             ]
         },
         {
@@ -587,6 +738,10 @@
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "square root"
             ]
         },
         {
@@ -606,6 +761,10 @@
                     "type": "number",
                     "value": "1"
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "logarithm"
             ]
         },
         {
@@ -618,6 +777,10 @@
                 {
                     "name": "e"
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "logarithm"
             ]
         },
         {
@@ -630,6 +793,11 @@
                 {
                     "name": "pi"
                 }
+            ],
+            "keywords": [
+                "pi",
+                "circle",
+                "circumference"
             ]
         },
         {
@@ -642,6 +810,11 @@
                 {
                     "name": "tau"
                 }
+            ],
+            "keywords": [
+                "pi",
+                "circle",
+                "circumference"
             ]
         },
         {
@@ -661,6 +834,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "and"
             ]
         },
         {
@@ -680,6 +857,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "or"
             ]
         },
         {
@@ -699,6 +880,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "xor"
             ]
         },
         {
@@ -718,6 +903,10 @@
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "nand"
             ]
         },
         {
@@ -740,6 +929,10 @@
                 {
                     "name": "bits"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "shift"
             ]
         },
         {
@@ -762,6 +955,10 @@
                 {
                     "name": "bits"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "shift"
             ]
         }
     ]

@@ -690,6 +690,13 @@
                               }
                             },
                             {
+                              "name": "width units",
+                              "type": "string",
+                              "value": "choice",
+                              "options": "relativeUnit",
+                              "uValue": "px"
+                            },
+                            {
                               "name": "height",
                               "type": "number",
                               "value": "32",
@@ -711,10 +718,17 @@
                                 "localSource": "d797e94f-7ddc-40fe-a9bf-bfeb63cc13a0",
                                 "type": "any"
                               }
+                            },
+                            {
+                              "name": "height units",
+                              "type": "string",
+                              "value": "choice",
+                              "options": "relativeUnit",
+                              "uValue": "px"
                             }
                           ],
                           "seqNum": "3",
-                          "script": "{w: {{1}}, h: {{2}} }",
+                          "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                           "type": "size"
                         }
                       }
@@ -1065,6 +1079,13 @@
                                   }
                                 },
                                 {
+                                  "name": "width units",
+                                  "type": "string",
+                                  "value": "choice",
+                                  "options": "relativeUnit",
+                                  "uValue": "px"
+                                },
+                                {
                                   "name": "height",
                                   "type": "number",
                                   "value": "32",
@@ -1086,10 +1107,17 @@
                                     "localSource": "8fda637e-4383-454d-b1af-81056d6c860a",
                                     "type": "any"
                                   }
+                                },
+                                {
+                                  "name": "height units",
+                                  "type": "string",
+                                  "value": "choice",
+                                  "options": "relativeUnit",
+                                  "uValue": "px"
                                 }
                               ],
                               "seqNum": "3",
-                              "script": "{w: {{1}}, h: {{2}} }",
+                              "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                               "type": "size"
                             }
                           }
@@ -1339,14 +1367,28 @@
                             "uValue": "100"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "100"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "102",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -1670,14 +1712,28 @@
                             "uValue": "100"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "100"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "102",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -2001,14 +2057,28 @@
                             "uValue": "100"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "100"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "102",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -2357,14 +2427,28 @@
                             "uValue": "100"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "100"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "102",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -2713,14 +2797,28 @@
                             "uValue": "70"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "140"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "132",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -3008,14 +3106,28 @@
                             "uValue": "140"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "70"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "162",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -3303,14 +3415,28 @@
                             "uValue": "70"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "140"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "166",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -3623,14 +3749,28 @@
                             "uValue": "140"
                           },
                           {
+                            "name": "width units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
+                          },
+                          {
                             "name": "height",
                             "type": "number",
                             "value": "32",
                             "uValue": "70"
+                          },
+                          {
+                            "name": "height units",
+                            "type": "string",
+                            "value": "choice",
+                            "options": "relativeUnit",
+                            "uValue": "px"
                           }
                         ],
                         "seqNum": "170",
-                        "script": "{w: {{1}}, h: {{2}} }",
+                        "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                         "type": "size"
                       }
                     },
@@ -4607,6 +4747,13 @@
                                   }
                                 },
                                 {
+                                  "name": "width units",
+                                  "type": "string",
+                                  "value": "choice",
+                                  "options": "relativeUnit",
+                                  "uValue": "px"
+                                },
+                                {
                                   "name": "height",
                                   "type": "number",
                                   "value": "32",
@@ -4653,10 +4800,17 @@
                                     "script": "({{1}} - {{2}})",
                                     "type": "number"
                                   }
+                                },
+                                {
+                                  "name": "height units",
+                                  "type": "string",
+                                  "value": "choice",
+                                  "options": "relativeUnit",
+                                  "uValue": "px"
                                 }
                               ],
                               "seqNum": "3",
-                              "script": "{w: {{1}}, h: {{2}} }",
+                              "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                               "type": "size"
                             }
                           }
@@ -4724,14 +4878,28 @@
                         "uValue": "200"
                       },
                       {
+                        "name": "width units",
+                        "type": "string",
+                        "value": "choice",
+                        "options": "relativeUnit",
+                        "uValue": "px"
+                      },
+                      {
                         "name": "height",
                         "type": "number",
                         "value": "32",
                         "uValue": "200"
+                      },
+                      {
+                        "name": "height units",
+                        "type": "string",
+                        "value": "choice",
+                        "options": "relativeUnit",
+                        "uValue": "px"
                       }
                     ],
                     "seqNum": "180",
-                    "script": "{w: {{1}}, h: {{2}} }",
+                    "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
                     "type": "size"
                   }
                 },

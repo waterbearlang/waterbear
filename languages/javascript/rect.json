@@ -1,4 +1,5 @@
 {
+    "sectionkey": "rects",
     "name": "Rects",
     "help": "Rect blocks represent and manipulate rectangles represented by x,y coordinates for the top left corner of the rectangle, plus a size (width,height).",
     "blocks": [

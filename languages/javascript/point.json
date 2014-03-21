@@ -1,4 +1,5 @@
 {
+    "sectionkey": "points",
     "name": "Points",
     "help": "Point blocks represent and manipulate x,y coordinates.",
     "blocks": [

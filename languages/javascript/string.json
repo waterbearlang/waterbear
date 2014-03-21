@@ -1,4 +1,5 @@
 {
+    "sectionkey": "strings",
     "name": "Strings",
     "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [

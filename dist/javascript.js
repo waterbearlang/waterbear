@@ -1839,6 +1839,11 @@ hljs.LANGUAGES.javascript = {
 var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=document.readyState==="complete";if(!a){function b(){a=!0}window.addEventListener?window.addEventListener("load",b,!1):window.attachEvent&&window.attachEvent("onload",b)}return function(){return a}}(),e={mouseenter:{attachesTo:"mouseover",eventTest:function(a){return!withinElement(a,a.originalTarget(),"fromElement")}},mouseleave:{attachesTo:"mouseout",eventTest:function(a){return!withinElement(a,a.originalTarget(),"toElement")}},hashchange:{bind:function(a,b){f.addEventListener(b)},unbind:function(a,b){f.removeEventListener(b)},invoke:function(a){f.dispatchEvent()}},keystroke:{attachesTo:"keydown",eventTest:function(a){return g.runTest(a,a.getNamespace().split(".")[0])}}},f=new function(){var b=this,c=25,d=[],e=function(){var a=(location+"").match(/^[^#]*(#.+)$/);return a?a[1]:""},f=function(a){a[0]!=="#"&&(a="#"+a),location.hash=a},g=function(){var a=!1;return function(b){typeof b=="boolean"&&(a=b);return a}}(),h=function(b,c){return a.buildEventObject("hashchange",{},merge({oldURL:b,newURL:location+""},c||{}))},i=function(a){var b;for(var c=0,e=d.length;c<e;c++)b=d[c].call(window,a);a.returnValue!=null&&(b=a.returnValue);return b},j=function(){var a=e(),d=location+"",f=!1,h=null;return{start:function(){f||(f=!0,h=window.setInterval(function(){var c=e();c!==a&&(a=c,g()||b.dispatchEvent(d),d=location+"")},c))},stop:function(){f&&(f=!1,window.clearInterval(h))}}}(),k=function(a){var a=a||window.event,b=a._isEmulated||!1;!g()&&!b&&(g(!0),j.stop());return i(a)};b.init=function(){attachListener(window,"hashchange",k),g()||j.start()},b.addEventListener=function(a){d.push(a)},b.removeEventListener=function(a){var b=[];for(var c=0,e=d.length;c<e;c++)d[c]!==a&&b.push(d[c]);d=b},b.dispatchEvent=function(a){return i(h(location+"",a))}},g=function(){var a={type:"keydown",propagate:!1,disable_in_input:!0,target:document,keycode:!1},b={"`":"~",1:"!",2:"@",3:"#",4:"$",5:"%",6:"^",7:"&",8:"*",9:"(",0:")","-":"_","=":"+",";":":","'":'"',",":"<",".":">","/":"?","\\":"|"},c={esc:27,escape:27,tab:9,space:32,"return":13,enter:13,backspace:8,scrolllock:145,scroll_lock:145,scroll:145,capslock:20,caps_lock:20,caps:20,numlock:144,num_lock:144,num:144,pause:19,"break":19,insert:45,home:36,"delete":46,end:35,pageup:33,page_up:33,pu:33,pagedown:34,page_down:34,pd:34,left:37,up:38,right:39,down:40,f1:112,f2:113,f3:114,f4:115,f5:116,f6:117,f7:118,f8:119,f9:120,f10:121,f11:122,f12:123},d=function(){return{shift:{wanted:!1,pressed:!1},ctrl:{wanted:!1,pressed:!1},alt:{wanted:!1,pressed:!1},meta:{wanted:!1,pressed:!1}}},e=function(a,e,f){var g,h,i,j,k,l;if(f.disable_in_input){i=a.currentTarget;if(i&&i.tagName&&(i.tagName.toLowerCase()==="input"||i.tagName.toLowerCase()==="textarea")&&i!==f.target)return}a.keyCode?k=a.keyCode:a.which&&(k=a.which),j=String.fromCharCode(k).toLowerCase(),k===188&&(j=","),k===190&&(j="."),g=e.split("+"),h=0,l=d(),a.ctrlKey&&(l.ctrl.pressed=!0),a.shiftKey&&(l.shift.pressed=!0),a.altKey&&(l.alt.pressed=!0),a.metaKey&&(l.meta.pressed=!0);for(var m=0;m<g.length;m++){var n=g[m];n==="ctrl"||n==="control"?(h++,l.ctrl.wanted=!0):n==="shift"?(h++,l.shift.wanted=!0):n==="alt"?(h++,l.alt.wanted=!0):n==="meta"?(h++,l.meta.wanted=!0):n.length>1?c[n]===k&&h++:f.keycode?f.keycode===k&&h++:j===n?h++:b[j]&&a.shiftKey&&(j=b[j],j===n&&h++)}return h===g.length&&l.ctrl.pressed===l.ctrl.wanted&&l.shift.pressed===l.shift.wanted&&l.alt.pressed===l.alt.wanted&&l.meta.pressed===l.meta.wanted};return{runTest:function(b,c,d){var d=d||{};for(var f in a)a.hasOwnProperty(f)&&d[f]===undefined&&(d[f]=a[f]);return e(b,c.toLowerCase(),d)},defaults:a}}(),h=function(){var a=function(a){if(typeof this=="undefined"||typeof a=="undefined"||typeof this[a]=="undefined")return!1;return this[a]!==this.constructor.prototype[a]};return function(b){try{b.prototype.hasOwnProperty=a;if(typeof b.hasOwnProperty!="function")throw 0}catch(c){b.hasOwnProperty=a}}}();EventController=function(a,b){var c=this,d=!1,a=a,b=b,e=null;typeof a.hasOwnProperty!="function"&&h(a),c.target=c.srcElement=b;for(var f in a)a.hasOwnProperty(f)&&typeof a[f]!="function"&&(c[f]=a[f]);c.getNamespace=function(){return e},c._setNamespace=function(a){e=a},c.mousePosition=function(){var b=0,c=0;if(a.pageX||a.pageY)b=a.pageX,c=a.pageY;else if(a.clientX||a.clientY)b=a.clientX+document.body.scrollLeft+document.documentElement.scrollLeft,c=a.clientY+document.body.scrollTop+document.documentElement.scrollTop;return{x:b,y:c}},c.eventObject=function(){return a},c.originalTarget=function(){return b},c.stopPropagation=function(){typeof a.stopPropagation=="function"&&a.stopPropagation(),a.cancelBubble=!0},c.cancelDefault=function(){d||(d=!0,typeof a.preventDefault=="function"&&a.preventDefault(),a.returnValue=!1)},c.isDefaultCanceled=function(){return d}},EventFunction=function(a,b){var c=this,b=b;a=a||undefined;if(typeof a!="function")return undefined;c.call=function(b,c){return a.call(b,c)}},EventWrapper=function(a,b){var c=this,a=a||null,b=b||null,d={},f=!1,g=!1,h=function(a){var b=d;for(var c=0,e=a.length;c<e;c++){var f=a[c];typeof b[f]!="object"&&(b[f]={}),b=b[f]}typeof b["."]!="object"&&(b["."]=[]);return b};c.registerFunction=function(a,b){var d=h(b);d["."].push(new EventFunction(a,c))},c.removeNamespace=function(a){if(a&&a.length){var b=a.pop(),c=h(a);c[b]={}}else d={}},c.run=function(c,f){var f=f||new EventController(c,a),g=[],h=b in e&&e[b].eventTest?e[b].eventTest:function(){return!0},i=function(b){var c=null;for(var d in b)if(b.hasOwnProperty(d)){f._setNamespace(g.join("."));if(d==="."){if(h(f))for(var e=0,j=b[d].length;e<j;e++)c=b[d][e].call(a,f),c===!1&&f.cancelDefault()}else g.push(d),c=i(b[d]),g.pop()}return c},j=i(d);return f.isDefaultCanceled()?!1:j};if(b in e){var i=e[b],j=!!i.bind&&!!i.unbind,k=function(a){return c.run(a||window.event)};c.bindEvent=function(){g||(g=!0,j?i.bind(a,k):attachListener(a,i.attachesTo,k))},c.unbindEvent=function(){g&&(g=!1,j?i.unbind(a,k):detachListener(a,i.attachesTo,k))}}else{var k=function(a){return c.run(a||window.event)};c.bindEvent=function(){g||(g=!0,attachListener(a,b,k))},c.unbindEvent=function(){g&&(g=!1,detachListener(a,b,k))}}c.bindEvent()},EventHandler=function(a){var c=this,a=a||null,d={};b.push(c),c.getTarget=function(){return a},c.registerEvent=function(b,c){if(typeof b!="string"||typeof c!="function")return!1;var e=b.split("."),f;b=e.shift(),f=e,startsWithOn.test(b)&&(b=b.substring(2)),d[b]===undefined&&(d[b]=new EventWrapper(a,b)),d[b].registerFunction(c,f)},c.removeEvent=function(a){var a=a||!1,b;if(typeof a!="string")return!1;if(a==="*"){for(var c in d)d.hasOwnProperty(c)&&d[c].removeNamespace(!1);return!0}b=a.split("."),a=b.shift(),d[a].removeNamespace(b)}},startsWithOn=/^on/,startsWithDOM=/^DOM/,attachListener=function(a,b,c){if(a.addEventListener)startsWithOn.test(b)&&(b=b.substring(2)),a.addEventListener(b,c,!1);else if(a.attachEvent)!startsWithDOM.test(b)&&!startsWithOn.test(b)&&(b="on"+b),a.attachEvent(b,c);else throw new YourBrowserFailsError("Could not attach event listener")},detachListener=function(a,b,c){if(a.removeEventListener)startsWithOn.test(b)&&(b=b.substring(2)),a.removeEventListener(b,c,!1);else if(a.detachEvent)!startsWithDOM.test(b)&&!startsWithOn.test(b)&&(b="on"+b),a.detachEvent(b,c);else throw new YourBrowserFailsError("Could not detach event listener")},invokeListener=function(b,c,d){var e;if(b.dispatchEvent)startsWithOn.test(c)&&(c=c.substring(2)),e=a.buildEventObject(b,c,d),b.dispatchEvent(e);else if(b.fireEvent)!startsWithDOM.test(c)&&!startsWithOn.test(c)&&(c="on"+c),e=a.buildEventObject(b,c,d),b.fireEvent(c,e);else throw new YourBrowserFailsError("Could not invoke event listener")},getEventTarget=function(a,b){var c=!1;a.target?c=a.target:a.srcElement&&(c=a.srcElement),!c&&a.srcElement===null&&(c=b||window),c.nodeType==3&&(c=c.parentNode);return c},withinElement=function(a,b,c){var d=a.relatedTarget,e;d==null&&(d=a[c]||null);try{while(d&&d!==b)d=d.parentNode;e=d===b}catch(f){e=!1}return e},getHandlerByTarget=function(a){for(var c=0;c<b.length;c++)if(b[c].getTarget()===a)return b[c];return!1},getEventHandler=function(a){var b=getHandlerByTarget(a);return b?b:new EventHandler(a)},merge=function(){var a=Array.prototype.slice.call(arguments,0),b={};for(var c=0,d=a.length;c<d;c++)for(var e in a[c])a[c].hasOwnProperty(e)&&(b[e]=a[c][e]);return b},contains=function(a,b){for(var c=0,d=b.length;c<d;c++)if(b[c]===a)return!0;return!1},a.version=function(){return c},a.ready=function(){var a=[],b=!1;return function(c){d()?c():(a.push(c),b||Events.bind(window,"load",function(){for(var b=0,c=a.length;b<c;b++)a[b]()}))}}(),a.log=function(){var a=null,b=function(){a==null&&(typeof window.console!="undefined"?typeof window.console.log.apply=="function"?a=function(){window.console.log.apply(window.console,arguments)}:a=function(){window.console.log(arguments)}:typeof console!="undefined"?a=function(){console.log.apply(console,arguments)}:a=function(){});return a};return function(){var a=Array.prototype.slice.call(arguments,0);typeof a[0]=="string"&&(a[0]="["+Date()+"] - "+a[0]),b().apply(this,a)}}(),a.bind=function(a,b,c){var d=getEventHandler(a);return d.registerEvent(b,c)},a.unbind=function(a,b){var c=getEventHandler(a);return c.removeEvent(b)},a.specialEvents={exists:function(a){return e[a]!=null},add:function(a,b){e[a]==null&&(e[a]=b)},edit:function(a,b){if(e[a]!=null)for(var c in b)b.hasOwnProperty(c)&&(e[a][c]=b[c])},del:function(a){e[a]!=null&&(e[a]=null)}},a.invoke=function(a,b,c){return invokeListener(a,b,c)},a.buildEventObject=function(){var a={HTMLEvents:["abort","blur","change","error","focus","load","reset","resize","scroll","select","submit","unload","hashchange"],UIEvents:["DOMActivate","DOMFocusIn","DOMFocusOut"],KeyEvents:["keydown","keypress","keyup"],MouseEvents:["click","mousedown","mousemove","mouseout","mouseover","mouseup"],MutationEvents:["DOMAttrModified","DOMNodeInserted","DOMNodeRemoved","DOMCharacterDataModified","DOMNodeInsertedIntoDocument","DOMNodeRemovedFromDocument","DOMSubtreeModified"]},b=function(b){var c="Events";for(var d in a)if(a.hasOwnProperty(d)&&contains(b,a[d])){d==="KeyEvents"&&!window.KeyEvent&&(d="UIEvents");if(document.implementation.hasFeature(d,"2.0")||window[d.substring(0,d.length-1)])d="Events";c=d;break}return c},c={useDefaults:!1,bubbles:!0,cancelable:!1},d={winObj:window,detail:1},e={winObj:window,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,keyCode:0,charCode:0},f={winObj:window,ctrlKey:!1,altKey:!1,shiftKey:!1,metaKey:!1,button:0,relatedTarget:null},g={relatedNode:null,prevValue:null,newValue:null,attrName:null,attrChange:null};return document.createEvent?function(a,h,i){var j=b(event),k=document.createEvent(j),l=h,h=h||{};if(typeof l!="object"||h.useDefaults)j="Events";switch(j){case"Events":case"HTMLEvents":h=merge(c,h),k.initEvent(a,h.bubbles,h.cancelable);break;case"UIEvents":h=merge(c,d,h),k.initUIEvent(a,h.bubbles,h.cancelable,h.winObj,h.detail);break;case"KeyEvents":h=merge(c,e,h),k.initKeyEvent(a,h.bubbles,h.cancelable,h.winObj,h.ctrlKey,h.altKey,h.shiftKey,h.metaKey,h.keyCode,h.charCode);break;case"MouseEvents":h=merge(c,f,h),k.initMouseEvent(a,h.bubbles,h.cancelable,h.winObj,h.screenX,h.screenY,h.clientX,h.clientY,h.ctrlKey,h.altKey,h.shiftKey,h.metaKey,h.button,h.relatedTarget);break;case"MutationEvents":h=merge(c,g,h),k.initMutationEvent(a,h.bubbles,h.cancelable,h.relatedNode,h.prevValue,h.newValue,h.attrName,h.attrChange)}for(var m in i)i.hasOwnProperty(m)&&(k[m]=i[m]);return k}:document.createEventObject?function(a,b,d){var e=document.createEventObject(),b=merge(c,b||{},d);for(var f in b)b.hasOwnProperty(f)&&(e[f]=b[f]);return e}:function(a,b,d){return merge({type:a,timeStamp:(new Date).getTime(),target:target,srcElement:target,currentTarget:target,defaultPrevented:!1},c,b||{},d||{},{bubbles:!1})}}(),f.init()};typeof window.YourBrowserFailsError=="undefined"&&(window.YourBrowserFailsError=function(a){if(!this instanceof YourBrowserFailsError)return new YourBrowserFailsError(a);var b=function(){var a;try{(0)()}catch(b){a=b}return a}();this.name="YourBrowserFailsError",this.message=a,this.stack=b.stack||b.stacktrace||"Could not get a stack. MORE FAILS!!"});
 /*end events.min.js*/
 
+
+/* list of files used for localization of blocks */
+var l10nFiles = {};
+
+
 /*begin ajax.js*/
 (function (global) {
     'use strict';
@@ -2647,26 +2652,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Scoll workspace as needed
-        // WB-Specific
-        if (workspace){
-            // FIXME: is this why scroll-wheel doesn't work?
-            // FIXME: is this why scrolling down works poorly?
-            var container = workspace.parentElement;
-            var offset = wb.rect(container);
-            if (currPos.top < offset.top){
-                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
-            }else if (currPos.bottom > offset.bottom){
-                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
-                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
-            }
-            if (currPos.left < offset.left){
-                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
-            }else if(currPos.right > offset.right){
-                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
-            }
-        }
         currentPosition = nextPosition;
         return false;
     }
@@ -3172,9 +3157,11 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     }
 
     function resetSeqNum(){
+        console.log('resetSeqNum (and also block registry)');
         nextSeqNum = 0;
-        blockRegistry = {};
-        wb.blockRegistry = blockRegistry;
+        // the lines below were breaking loading from files, and probably any load after the menus were built
+        // blockRegistry = {};
+        // wb.blockRegistry = blockRegistry;
     }
 
     function registerBlock(blockdesc){
@@ -3251,6 +3238,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
+                'data-keywords': JSON.stringify(obj.keywords),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
@@ -3825,9 +3813,135 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
     }
 
+    /** Search filter */
+
+    var oldQuery = '';
+
+    function searchBlock(event) {
+        // Clear input if the clear button is pressed
+        var searchTextNode = document.getElementById('search_text');
+
+        if (event.target.id == 'search_clear') {
+            searchTextNode.value = '';
+        }
+
+        // Proceed if the query is changed
+        var query = searchTextNode.value.trim().toLowerCase();
+
+        if (oldQuery == query) {
+            return;
+        } else {
+            oldQuery = query;
+        }
+
+        var searchResultsNode = document.getElementById('search_results');
+        var blockMenuNode = document.getElementById('block_menu');
+
+        // For non-empty query, show all blocks; otherwise, hide all blocks
+        if (query) {
+            wb.show(searchResultsNode);
+            wb.hide(blockMenuNode);
+
+            while (searchResultsNode.firstChild) {
+                searchResultsNode.removeChild(searchResultsNode.firstChild);
+            }
+        } else {
+            wb.hide(searchResultsNode);
+            wb.show(blockMenuNode);
+            return;
+        }
+
+        // Clear suggestions
+        var suggestions = [];
+        var suggestionsNode = document.getElementById('search_suggestions');
+        while (suggestionsNode.firstChild) {
+            suggestionsNode.removeChild(suggestionsNode.firstChild);
+        }
+
+        var groups = document.querySelectorAll('.block-menu');
+     
+        for (var i = 0; i < groups.length; i++) {
+            var blocks = groups[i].getElementsByClassName('block');
+
+            for (var j = 0; j < blocks.length; j++) {
+                // Construct an array of keywords
+                var keywords = [];
+
+                var group = blocks[j].getAttribute('data-group');
+                if (group) {
+                    keywords.push(group);
+                }
+
+                var keywordsAttr = blocks[j].getAttribute('data-keywords');
+                if (keywordsAttr) {
+                    keywords = keywords.concat(JSON.parse(keywordsAttr));
+                }
+
+                // Find a match
+                var matchingKeywords = [];
+
+                for (var k = 0; k < keywords.length; k++) {
+                    if (keywords[k].indexOf(query) == 0) {
+                        matchingKeywords.push(keywords[k]);
+
+                        if (suggestions.indexOf(keywords[k]) == -1) {
+                            suggestions.push(keywords[k]);
+
+                            var suggestionNode = document.createElement('option');
+                            suggestionNode.value = keywords[k];
+                            suggestionsNode.appendChild(suggestionNode);
+                        }
+                    }
+                }
+
+                // Show/hide blocks
+                if (matchingKeywords.length > 0) {
+                    var resultNode = document.createElement('div');
+                    resultNode.classList.add('search_result');
+                    resultNode.classList.add(group);
+                    resultNode.style.backgroundColor = 'transparent';
+
+                    // Block
+                    resultNode.appendChild(blocks[j].cloneNode(true));
+
+                    // Fix result height
+                    var clearNode = document.createElement('div');
+                    clearNode.style.clear = 'both';
+                    resultNode.appendChild(clearNode);
+
+                    // Keyword name
+                    var keywordNode = document.createElement('span');
+                    keywordNode.classList.add('keyword');
+                    var keywordNodeContent = '<span class="keyword">';
+                    keywordNodeContent += '<span class="match">';
+                    keywordNodeContent += matchingKeywords[0].substr(0, query.length);
+                    keywordNodeContent += '</span>';
+                    keywordNodeContent += matchingKeywords[0].substr(query.length);
+
+                    for (var k = 1; k < matchingKeywords.length; k++) {
+                        keywordNodeContent += ', <span class="match">';
+                        keywordNodeContent += matchingKeywords[k].substr(0, query.length);
+                        keywordNodeContent += '</span>';
+                        keywordNodeContent += matchingKeywords[k].substr(query.length);
+                    }
+
+                    keywordNodeContent += '</span>';
+                    keywordNode.innerHTML = keywordNodeContent;
+                    resultNode.appendChild(keywordNode);
+
+                    searchResultsNode.appendChild(resultNode);
+                }
+            }
+        }
+    }
+
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    Event.on('#search_text', 'keyup', null, searchBlock);
+    Event.on('#search_text', 'input', null, searchBlock);
+    Event.on('#search_clear', 'click', null, searchBlock);
 
     wb.blockRegistry = blockRegistry;
 
@@ -4033,15 +4147,22 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             console.error('no json file found in gist: %o', gist);
             return;
         }
-        loadScriptsFromObject(JSON.parse(file));
+        loadScriptsFromJson(file);
     }
 
     function loadScriptsFromExample(name){
         ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
-            loadScriptsFromObject(JSON.parse(exampleJson));
+            loadScriptsFromJson(exampleJson);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });
+    }
+
+    function loadScriptsFromJson(jsonblob){
+        // wb.clearScripts(null, true);
+        wb.loaded = true;
+        loadScriptsFromObject(JSON.parse(jsonblob));
+        wb.scriptModified = true;
     }
 
     function loadCurrentScripts(queryParsed){
@@ -4076,17 +4197,13 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
 	function loadScriptsFromFile(file){
 		var fileName = file.name;
 		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-			console.error("File not a JSON file");
+			console.error("File is not a JSON file");
 			return;
 		}
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-			wb.clearScripts(null, true);
-			var saved = JSON.parse(evt.target.result);
-			wb.loaded = true;
-			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+            loadScriptsFromJson(evt.target.result);
 		};
 	}
 
@@ -4250,7 +4367,7 @@ function changeSocket(event) {
 	// console.log("Changed a socket!");
 	var oldValue = event.target.getAttribute('data-oldvalue');
 	var newValue = event.target.value;
-	if(oldValue == undefined) oldValue = event.target.defaultValue;
+	if(oldValue === undefined) oldValue = event.target.defaultValue;
 	// console.log("New value:", newValue);
 	// console.log("Old value:", oldValue);
 	event.target.setAttribute('data-oldvalue', newValue);
@@ -4263,7 +4380,7 @@ function changeSocket(event) {
 			event.target.value = newValue;
 			event.target.setAttribute('data-oldvalue', newValue);
 		}
-	}
+	};
 	wb.history.add(action);
 }
 
@@ -4319,7 +4436,7 @@ function collapseCommand(key, opt){
 function copyCommand(evt) {
 	// console.log("Copying a block in ui.js!");
 	// console.log(this);
-	action = {
+	var action = {
 		copied: this,
 		oldPasteboard: pasteboard,
 		undo: function() {
@@ -4328,14 +4445,14 @@ function copyCommand(evt) {
 		redo: function() {
 			pasteboard = this.copied;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function deleteCommand(evt) {
 	// console.log("Deleting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -4353,14 +4470,14 @@ function deleteCommand(evt) {
 			Event.trigger(this.removed, 'wb-remove');
 			this.removed.remove();
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function cutCommand(evt) {
 	// console.log("Cutting a block!");
-	action = {
+	var action = {
 		removed: this,
 		// Storing parent and next sibling in case removing the node from the DOM clears them
 		parent: this.parentNode,
@@ -4381,14 +4498,14 @@ function cutCommand(evt) {
 			this.removed.remove();
 			pasteboard = this.removed;
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
 
 function pasteCommand(evt) {
 	// console.log(pasteboard);
-	action = {
+	var action = {
 		pasted: wb.cloneBlock(pasteboard),
 		into: cmenuTarget.parentNode,
 		before: cmenuTarget.nextSibling,
@@ -4406,7 +4523,7 @@ function pasteCommand(evt) {
 			}
 			Event.trigger(this.pasted, 'wb-add');
 		},
-	}
+	};
 	wb.history.add(action);
 	action.redo();
 }
@@ -4444,10 +4561,11 @@ function buildContextMenu(options) {
 	var contextDiv = document.getElementById('context_menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
+	var item;
 	menu.classList.add('cmenu');
 	for(var key in options) {
 		if(options.hasOwnProperty(key) && options[key]) {
-			var item = document.createElement('li');
+			item = document.createElement('li');
 			if(cmenuitem_enabled(options[key])) {
 				Event.on(item, "click", null, cmenuCallback(options[key].callback));
 			} else {
@@ -4460,7 +4578,7 @@ function buildContextMenu(options) {
 			menu.appendChild(item);
 		}
 	}
-	var item = document.createElement('li');
+	item = document.createElement('li');
 	item.onclick = function(evt) {};
 	item.innerHTML = 'Disable this menu';
 	item.classList.add('topSep');
@@ -4489,7 +4607,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block-menu *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -4553,7 +4671,7 @@ var block_cmenu = {
 	paste: {name: 'Paste', callback: pasteCommand, enabled: canPaste},
 	//cancel: {name: 'Cancel', callback: dummyCallback},
         delete: {name: 'Delete', callback: deleteCommand},
-}
+};
 
 // Test drawn from modernizr
 function is_touch_device() {
@@ -4562,30 +4680,126 @@ function is_touch_device() {
 
 initContextMenus();
 
+var defaultLangData  = {};
+var localizationData = {};
+
+var l10nHalfDone = false;
+wb.l10nHalfDone = l10nHalfDone;
+
+/* will be set true by either code in l10n.js or initLanguageFiles() */
+initLanguageFiles();
+
 // Build the Blocks menu, this is a public method
 function menu(blockspec){
-    var title = blockspec.name.replace(/\W/g, '');
-    var specs = blockspec.blocks;
-    var help = blockspec.help !== undefined ? blockspec.help : '';
-    return edit_menu(title, specs, help);
-};
+    var id_blocks = {};
+    var blocks = blockspec.blocks;
 
-function edit_menu(title, specs, help, show){
+    // put blocks in data structure with block.id as key 
+    for (var key in blocks) {
+        var block = blocks[key];
+        id_blocks[block.id] = block;
+    }
+
+    // store blocks temporarily in defaultLangData
+    blockspec.blocks = id_blocks;
+    defaultLangData[blockspec.sectionkey] = blockspec;
+
+}
+
+function populateMenu() {
+	for (var key in defaultLangData) {
+
+        //default data
+        var blockspec = defaultLangData[key];
+
+        //read in from localized file
+        var l10nData = localizationData[blockspec.sectionkey];
+ 
+        //overwrite attributes in blockspec
+        wb.overwriteAttributes(blockspec, l10nData);
+
+		var title = blockspec.name;
+        var sectionKey = blockspec.sectionkey.replace(/\W/g, '');
+        var specs = blockspec.blocks;
+        var help = blockspec.help !== undefined ? blockspec.help : '';
+        edit_menu(title, sectionKey, specs, help);
+	}
+}
+
+function edit_menu(title, sectionKey, specs, help, show){
     var group = title.toLowerCase().split(/\s+/).join('');
-    var submenu = document.querySelector('.' + group + '+ .submenu');
+    var submenu = document.querySelector('.' + sectionKey + '+ .submenu');
     if (!submenu){
-        var header = wb.elem('h3', {'class': group + ' accordion-header', 'id': 'group_'+group}, title);
-        var submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
+        var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
+        submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
         var blockmenu = document.querySelector('#block_menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
         submenu.appendChild(description);
     }
-    specs.forEach(function(spec, idx){
-        spec.group = group;
+    for (var key in specs) {
+        var spec = specs[key];
+        spec.group = sectionKey;
         spec.isTemplateBlock = true;
         submenu.appendChild(wb.Block(spec));
+    }
+}
+
+function initLanguageFiles(){
+    // pulled from workspace.js, one file below in the dist/javascript.js
+    var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+
+    //gets language locale code. en, es, de, etc.
+    var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);
+
+    // get list of paths of localized language files for language
+    var listFiles;
+
+    if ( (typeof(l10nFiles) != "undefined") && (typeof(l10nFiles[language]) != "undefined") )
+        listFiles = l10nFiles[language][locale];
+
+    // if no localized files exist 
+    if (!listFiles) {
+        if (l10nHalfDone) {
+            populateMenu();
+        } else {
+            l10nHalfDone = true;
+        }
+
+        return;
+    }
+
+    // open all relevent localized files for language 
+    listFiles.forEach(function(name, idx){
+        ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
+            var lang = JSON.parse(json);
+
+            var id_blocks = {};
+            var blocks = lang.blocks;
+
+            // put blocks into proper structure. resembles blockRegistry 
+            for (var key in blocks) {
+                var block = blocks[key];
+                id_blocks[block.id] = block;
+            }
+
+            lang.blocks = id_blocks;
+            localizationData[lang.sectionkey] = lang;
+
+            // if this is the last file that needs to be retrieved (this step is done)
+            if ( idx === (listFiles.length - 1 )) {
+                if (wb.l10nHalfDone) {
+                    populateMenu();
+                } else {
+                    wb.l10nHalfDone = true;
+                }
+            }
+
+        }, function(xhr, status){
+            console.error('Error in ajax.get:', status);
+        });
+
     });
 }
 
@@ -4627,7 +4841,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu'));
+	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
 }
 
 function showScript(evt){
@@ -4639,9 +4853,24 @@ function showResult(evt){
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 
+/* Search filter */
+
+function highlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #FFA500";
+}
+
+function unhighlightSearch(event) {
+	var form = document.querySelector('#search > form');
+	form.style.border = "1px solid #CCC";
+}
+
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('#block_menu', 'click', '.accordion-header', accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+
+Event.on('#search_text', 'focus', null, highlightSearch);
+Event.on('#search_text', 'blur', null, unhighlightSearch);
 
 if (document.body.clientWidth < 361){
 	// console.log('mobile view');
@@ -4659,9 +4888,10 @@ if (document.body.clientWidth > 360){
 }
 
 wb.menu = menu;
+wb.populateMenu = populateMenu;
+wb.l10nHalfDone = l10nHalfDone;
 
 })(wb);
-
 
 /*end ui.js*/
 
@@ -5460,6 +5690,7 @@ wb.choiceLists.rettypes.push('sound');
 // expose these globally so the Block/Label methods can find them
 'use strict';
 wb.choiceLists.unit = ['px', 'em', '%', 'pt'];
+wb.choiceLists.relativeUnit = ['px', '%'];
 wb.choiceLists.align = ['start', 'end', 'left', 'right', 'center'];
 wb.choiceLists.baseline = ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'];
 wb.choiceLists.linecap = ['round', 'butt', 'square'];
@@ -5549,6 +5780,10 @@ wb.choiceLists.rettypes.push('motion');
 
 /*end languages/javascript/geolocation.js*/
 
+/*begin languages/javascript/date.js*/
+
+/*end languages/javascript/date.js*/
+
 /*begin languages/javascript/size.js*/
 
 /*end languages/javascript/size.js*/
@@ -5563,6 +5798,7 @@ wb.choiceLists.rettypes.push('motion');
 
 /*begin languages/javascript/control.json*/
 wb.menu({
+    "sectionkey": "controls",
     "name": "Controls",
     "help": "Contains control flow, variables, setters, and messaging blocks.",
     "blocks": [
@@ -5914,11 +6150,13 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/control.json*/
 
 /*begin languages/javascript/sprite.json*/
 wb.menu({
+    "sectionkey": "sprites",
     "name": "Sprites",
     "help": "Sprites are graphics that can be repositioned, rotated, and have a vector of motion. They can also check for collision with other Sprites.",
     "blocks": [
@@ -6556,6 +6794,7 @@ wb.menu({
 
 /*begin languages/javascript/voice.json*/
 wb.menu({
+    "sectionkey": "music",
     "name": "Music",
     "help": "Music blocks are for creating and manipulating sound programmatically, generating the sounds rather than playing back a recorded audio file (see the Sound menu for that).",
     "blocks": [
@@ -6796,6 +7035,7 @@ wb.menu({
 
 /*begin languages/javascript/sound.json*/
 wb.menu({
+    "sectionkey": "sound",
     "name": "Sound",
     "help": "Sound blocks can load and play sound files (wav, mp3, ogg) if those files are supported by your browser.",
     "blocks": [
@@ -6869,6 +7109,7 @@ wb.menu({
 
 /*begin languages/javascript/array.json*/
 wb.menu({
+    "sectionkey": "arrays",
     "name": "Arrays",
     "help": "Arrays are lists of items. Items can be added and removed, located, sorted and more.",
     "blocks": [
@@ -7122,6 +7363,7 @@ wb.menu({
 
 /*begin languages/javascript/boolean.json*/
 wb.menu({
+    "sectionkey": "boolean",
     "name": "Boolean",
     "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
@@ -7227,6 +7469,7 @@ wb.menu({
 
 /*begin languages/javascript/canvas.json*/
 wb.menu({
+    "sectionkey": "canvas",
     "name": "Canvas",
     "help": "Canvas blocks are blocks that are about drawing on the canvas but don't fit elsewhere. Also look at the Sprites, Shapes, and Path menus.",
     "blocks": [
@@ -7504,6 +7747,7 @@ wb.menu({
 
 /*begin languages/javascript/color.json*/
 wb.menu({
+    "sectionkey": "color",
     "name": "Color",
     "help": "Color blocks are for creating, converting, and manipulating colors",
     "blocks": [
@@ -7807,6 +8051,7 @@ wb.menu({
 
 /*begin languages/javascript/image.json*/
 wb.menu({
+    "sectionkey": "images",
     "name": "Images",
     "help": "Image blocks are for loading image files to use in other blocks and for manipulating images. See Sprite and Canvas menus.",
     "blocks": [
@@ -8103,6 +8348,7 @@ wb.menu({
 
 /*begin languages/javascript/math.json*/
 wb.menu({
+    "sectionkey": "math",
     "name": "Math",
     "help": "Math blocks are for manipulating numbers",
     "blocks": [
@@ -8123,6 +8369,9 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "exponent"
             ]
         },
         {
@@ -8142,6 +8391,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "addition",
+                "plus",
+                "sum"
             ]
         },
         {
@@ -8161,6 +8415,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "subtraction",
+                "minus",
+                "difference"
             ]
         },
         {
@@ -8180,6 +8439,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "multiplication",
+                "times",
+                "product"
             ]
         },
         {
@@ -8199,6 +8463,11 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "division",
+                "divide",
+                "quotient"
             ]
         },
         {
@@ -8218,6 +8487,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "equal"
             ]
         },
         {
@@ -8237,6 +8510,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "not equal"
             ]
         },
         {
@@ -8256,6 +8533,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "less than"
             ]
         },
         {
@@ -8275,6 +8556,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "less than or equal to"
             ]
         },
         {
@@ -8294,6 +8579,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "greater than"
             ]
         },
         {
@@ -8313,6 +8602,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "comparison",
+                "greater than or equal to"
             ]
         },
         {
@@ -8332,6 +8625,10 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "modulus",
+                "modulo"
             ]
         },
         {
@@ -8346,6 +8643,9 @@ wb.menu({
                     "type": "number",
                     "value": 0
                 }
+            ],
+            "keywords": [
+                "rounding"
             ]
         },
         {
@@ -8360,6 +8660,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "absolute value"
             ]
         },
         {
@@ -8374,6 +8677,10 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "floor",
+                "rounding"
             ]
         },
         {
@@ -8388,6 +8695,10 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "ceiling",
+                "rounding"
             ]
         },
         {
@@ -8407,6 +8718,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "gcd"
             ]
         },
         {
@@ -8426,6 +8740,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "lcm"
             ]
         },
         {
@@ -8445,6 +8762,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "maximum"
             ]
         },
         {
@@ -8464,6 +8784,9 @@ wb.menu({
                     "type": "number",
                     "value": "2"
                 }
+            ],
+            "keywords": [
+                "minimum"
             ]
         },
         {
@@ -8478,6 +8801,9 @@ wb.menu({
                     "type": "number",
                     "value": "5"
                 }
+            ],
+            "keywords": [
+                "factorial"
             ]
         },
         {
@@ -8493,6 +8819,10 @@ wb.menu({
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "cosine"
             ]
         },
         {
@@ -8508,6 +8838,10 @@ wb.menu({
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "sine"
             ]
         },
         {
@@ -8523,6 +8857,10 @@ wb.menu({
                     "value": 10,
                     "suffix": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "tangent"
             ]
         },
         {
@@ -8537,6 +8875,11 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arccosine",
+                "cosine"
             ]
         },
         {
@@ -8551,6 +8894,11 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arcsine",
+                "sine"
             ]
         },
         {
@@ -8565,6 +8913,11 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "arctangent",
+                "tangent"
             ]
         },
         {
@@ -8582,6 +8935,12 @@ wb.menu({
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "cosh",
+                "cosine"
             ]
         },
         {
@@ -8599,6 +8958,12 @@ wb.menu({
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "sinh",
+                "sine"
             ]
         },
         {
@@ -8616,6 +8981,12 @@ wb.menu({
                 {
                     "name": "degrees"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "tanh",
+                "tangent"
             ]
         },
         {
@@ -8630,6 +9001,13 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "acosh",
+                "arccosine",
+                "cosine"
             ]
         },
         {
@@ -8644,6 +9022,13 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "asinh",
+                "arcsine",
+                "sine"
             ]
         },
         {
@@ -8658,6 +9043,13 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "keywords": [
+                "trigonometric",
+                "hyperbolic",
+                "atanh",
+                "arctangent",
+                "tangent"
             ]
         },
         {
@@ -8677,6 +9069,10 @@ wb.menu({
                     "type": "number",
                     "value": 2
                 }
+            ],
+            "keywords": [
+                "power",
+                "exponent"
             ]
         },
         {
@@ -8691,6 +9087,10 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "square root"
             ]
         },
         {
@@ -8710,6 +9110,10 @@ wb.menu({
                     "type": "number",
                     "value": "1"
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "logarithm"
             ]
         },
         {
@@ -8722,6 +9126,10 @@ wb.menu({
                 {
                     "name": "e"
                 }
+            ],
+            "keywords": [
+                "exponent",
+                "logarithm"
             ]
         },
         {
@@ -8734,6 +9142,11 @@ wb.menu({
                 {
                     "name": "pi"
                 }
+            ],
+            "keywords": [
+                "pi",
+                "circle",
+                "circumference"
             ]
         },
         {
@@ -8746,6 +9159,11 @@ wb.menu({
                 {
                     "name": "tau"
                 }
+            ],
+            "keywords": [
+                "pi",
+                "circle",
+                "circumference"
             ]
         },
         {
@@ -8765,6 +9183,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "and"
             ]
         },
         {
@@ -8784,6 +9206,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "or"
             ]
         },
         {
@@ -8803,6 +9229,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "xor"
             ]
         },
         {
@@ -8822,6 +9252,10 @@ wb.menu({
                     "type": "number",
                     "value": "0"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "nand"
             ]
         },
         {
@@ -8844,6 +9278,10 @@ wb.menu({
                 {
                     "name": "bits"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "shift"
             ]
         },
         {
@@ -8866,6 +9304,10 @@ wb.menu({
                 {
                     "name": "bits"
                 }
+            ],
+            "keywords": [
+                "bitwise",
+                "shift"
             ]
         }
     ]
@@ -8875,7 +9317,8 @@ wb.menu({
 
 /*begin languages/javascript/random.json*/
 wb.menu({
-	"name": "Random",
+	"sectionkey": "random",
+    "name": "Random",
 	"help": "Various forms of randomness for your code",
 	"blocks": [
 		{
@@ -8998,6 +9441,7 @@ wb.menu({
 
 /*begin languages/javascript/vector.json*/
 wb.menu({
+    "sectionkey": "vectors",
     "name": "Vectors",
     "help": "Vector blocks have a direction and a magnitude, which can represent speed of movement for a Sprite. Vectors can be added to or subtracted from other Vectors, among other things.",
     "blocks": [
@@ -9150,6 +9594,7 @@ wb.menu({
 
 /*begin languages/javascript/object.json*/
 wb.menu({
+    "sectionkey": "objects",
     "name": "Objects",
     "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
     "blocks": [
@@ -9277,6 +9722,7 @@ wb.menu({
 
 /*begin languages/javascript/string.json*/
 wb.menu({
+    "sectionkey": "strings",
     "name": "Strings",
     "help": "String blocks represent or manipulate bits of text (strings of characters)",
     "blocks": [
@@ -9831,6 +10277,7 @@ wb.menu({
 
 /*begin languages/javascript/path.json*/
 wb.menu({
+    "sectionkey": "paths",
     "name": "Paths",
     "help": "Path blocks are for construction more complex shapes for drawing, masking, and other uses.",
     "blocks": [
@@ -10018,6 +10465,7 @@ wb.menu({
 
 /*begin languages/javascript/point.json*/
 wb.menu({
+    "sectionkey": "points",
     "name": "Points",
     "help": "Point blocks represent and manipulate x,y coordinates.",
     "blocks": [
@@ -10114,6 +10562,7 @@ wb.menu({
 
 /*begin languages/javascript/rect.json*/
 wb.menu({
+    "sectionkey": "rects",
     "name": "Rects",
     "help": "Rect blocks represent and manipulate rectangles represented by x,y coordinates for the top left corner of the rectangle, plus a size (width,height).",
     "blocks": [
@@ -10276,6 +10725,7 @@ wb.menu({
 
 /*begin languages/javascript/sensing.json*/
 wb.menu({
+    "sectionkey": "sensing",
     "name": "Sensing",
     "help": "Sensing blocks are for getting information from the environment, like user responses, mouse clicks, keyboard presses, and the size of the drawing area.",
     "blocks": [
@@ -10459,6 +10909,7 @@ wb.menu({
 
 /*begin languages/javascript/motion.json*/
 wb.menu({
+    "sectionkey": "motion",
     "name": "Motion",
     "help": "Motion blocks are for detecting the motion of devices equipped with accelerometers",
     "blocks": [
@@ -10495,6 +10946,7 @@ wb.menu({
 
 /*begin languages/javascript/shape.json*/
 wb.menu({
+    "sectionkey": "shapes",
     "name": "Shapes",
     "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
     "blocks": [
@@ -10868,6 +11320,7 @@ wb.menu({
 
 /*begin languages/javascript/geolocation.json*/
 wb.menu({
+    "sectionkey": "geolocation",
     "name": "Geolocation",
     "help": "Geolocation blocks are for getting your position on Earth",
     "blocks": [
@@ -11001,15 +11454,134 @@ wb.menu({
 });
 /*end languages/javascript/geolocation.json*/
 
+/*begin languages/javascript/date.json*/
+wb.menu({
+    "sectionkey": "date",
+    "name": "Date",
+    "help": "Date blocks are used to work with dates and times",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "31007d66-3b78-43d8-a295-89bc81cb62d9",
+            "script": "local.date## = new Date();",
+            "help": "create a date block",
+            "sockets": [
+                {
+                    "name": "date##"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "type": "date",
+                    "script": "local.date##",
+                    "help": "current location",
+                    "sockets": [
+                        {
+                            "name": "date##"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "795bacf1-3abd-4e04-b181-baab9bcf6721",
+            "type": "number",
+            "script": "{{1}}.getFullYear()",
+            "help": "get the year (four digits)",
+            "sockets": [
+                {
+                    "name": "get the year",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "1a14fa64-bf53-4584-95fe-9d6bf0cc823a",
+            "type": "number",
+            "script": "({{1}}.getMonth() + 1)",
+            "help": "get the month (from 1-12)",
+            "sockets": [
+                {
+                    "name": "get the month",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "c2aa55be-42a0-4831-b554-b35680f81dfd",
+            "type": "number",
+            "script": "{{1}}.getDate()",
+            "help": "get the day of the month (from 1-31)",
+            "sockets": [
+                {
+                    "name": "get the date",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f5958007-0839-4491-a176-e2599169cb16",
+            "type": "number",
+            "script": "{{1}}.getHours()",
+            "help": "get the hour (from 0-23)",
+            "sockets": [
+                {
+                    "name": "get the hour",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "00128be4-a08d-44cc-99a1-47eaaff6ecf4",
+            "type": "number",
+            "script": "{{1}}.getMinutes()",
+            "help": "get the minutes (from 0-59)",
+            "sockets": [
+                {
+                    "name": "get the minutes",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f26108f4-3427-4489-abd3-af9e26315f2f",
+            "type": "number",
+            "script": "{{1}}.getSeconds()",
+            "help": "get the seconds (from 0-59)",
+            "sockets": [
+                {
+                    "name": "get the seconds",
+                    "type": "date",
+					"block": ""
+                }
+            ]
+        }
+    ]
+});
+/*end languages/javascript/date.json*/
+
 /*begin languages/javascript/size.json*/
 wb.menu({
+    "sectionkey": "sizes",
     "name": "Sizes",
     "help": "Size blocks represent a width and height. They are often used as components of Rects.",
     "blocks": [
         {
             "blocktype": "expression",
             "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
-            "script": "{w: {{1}}, h: {{2}} }",
+            "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
             "type": "size",
             "sockets": [
                 {
@@ -11018,47 +11590,83 @@ wb.menu({
                     "value": 32
                 },
                 {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit"
+                },
+                {
                     "name": "height",
                     "type": "number",
                     "value": 32
+                },
+                {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit"
                 }
             ]
         },
         {
             "blocktype": "expression",
             "id": "404cb2f4-abe5-4c3b-a9da-9b44050e012d",
-            "script": "{w: {{1}}[0], h: {{1}}[1]",
+            "script": "{w: convert({{1}}[0], {2}, true), h: convert({{1}}[1], {3}, false)",
             "type": "size",
             "sockets": [
                 {
                     "name": "size from array",
                     "type": "array"
+                },
+                {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit"
+                },
+                {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "choice",
+                    "options": "relativeUnit"
                 }
             ]
         },
         {
             "blocktype": "expression",
             "id": "33f2a3b7-5d87-4481-ad1c-f2970915db51",
-            "script": "{{1}}.w",
+            "script": "convert({{1}}.w, {2}, true)",
             "type": "number",
             "sockets": [
                 {
                     "name": "size",
                     "type": "size",
                     "suffix": "width"
+                },
+                {
+                    "name": "width units",
+                    "type": "string",
+                    "value": "px",
+                    "options": "relativeUnit"
                 }
             ]
         },
         {
             "blocktype": "expression",
             "id": "2d449e0e-cb18-473f-a574-614320b7ba22",
-            "script": "{{1}}.h",
+            "script": "convert({{1}}.h, {2}, false)",
             "type": "number",
             "sockets": [
                 {
                     "name": "size",
                     "type": "size",
                     "suffix": "height"
+                },
+                {
+                    "name": "height units",
+                    "type": "string",
+                    "value": "px",
+                    "options": "relativeUnit"
                 }
             ]
         },
@@ -11082,6 +11690,7 @@ wb.menu({
 
 /*begin languages/javascript/text.json*/
 wb.menu({
+    "sectionkey": "text",
     "name": "Text",
     "help": "Text blocks represent and manipulate the way text is drawn to the screen, things like alignment, font, and size.",
     "blocks": [
@@ -11255,6 +11864,7 @@ wb.menu({
 
 /*begin languages/javascript/matrix.json*/
 wb.menu({
+    "sectionkey": "matrix",
     "name": "Matrix",
     "help": "Matrix blocks can be used to store more complex tranformations on the canvas",
     "blocks": [
@@ -11285,3 +11895,63 @@ wb.menu({
     ]
 });
 /*end languages/javascript/matrix.json*/
+
+/*begin l10n.js*/
+(function(wb){
+
+/* old Obj will be overwritten by newObj */
+function overwriteAttributes(oldObj, newObj) {
+ 
+    if (!newObj || ! oldObj)
+        return;
+
+    var oldObjQueue = [];
+    var newObjQueue = [];
+    oldObjQueue.push(oldObj);
+    newObjQueue.push(newObj);
+
+    while (oldObjQueue.length && newObjQueue.length) {
+
+        // pop object to investigate. 
+        var currOldObj = oldObjQueue.pop();
+        var currNewObj = newObjQueue.pop();
+
+        // Objects: get strings values of keys in current object     
+        // Arrays:  get the integer values of all indexes into array 
+        //          (this is obviously 0...n)     
+        // 
+        // This isn't the cleanest approach, but it keeps me from creating
+        // a more complex structure with typeof array or typeof object
+        var keys = Object.keys(currNewObj);
+
+        // iterate through all keys 
+        for (var idx in keys) {
+            var key = keys[idx];
+
+            if (typeof currNewObj[key] === "object" && currNewObj[key] !== null) {
+
+                // if it's an object, queue it to dive into it later
+                newObjQueue.push(currNewObj[key]);
+                oldObjQueue.push(currOldObj[key]);
+
+            } else {
+
+                // if anything but object, overwrite value from new object in old object 
+                currOldObj[key] = currNewObj[key];
+            }
+        }
+    }
+}
+
+wb.overwriteAttributes = overwriteAttributes;
+
+})(wb);
+
+if (wb.l10nHalfDone) {
+    // console.log("l10n populating");
+    wb.populateMenu();
+} else {
+    // console.log("l10n done");
+    wb.l10nHalfDone = true;
+}
+/*end l10n.js*/

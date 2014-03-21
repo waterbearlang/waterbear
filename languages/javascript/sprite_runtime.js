@@ -74,10 +74,6 @@ function createSprite(shape, color){
     }
 };
 
-window.createRectSprite = createRectSprite; // deprecated
-window.createSprite = createSprite;
-window.Sprite = Sprite;
-
 Sprite.prototype.isPolygon = function(){
     return this.type === 'polygon';
 };
@@ -105,11 +101,11 @@ Sprite.prototype.setPos = function(x, y){
 Sprite.prototype.draw = function(ctx){
     //rotation
     if(this.image != null){
-    	ctx.save();
-    	ctx.translate(this.getPos().x,this.getPos().y);
-    	ctx.rotate( this.facingDegrees *Math.PI/180);
-    	ctx.drawImage(this.image, 0, 0,this.size.w,this.size.h);
-    	ctx.restore();
+        ctx.save();
+        ctx.translate(this.getPos().x,this.getPos().y);
+        ctx.rotate( this.facingDegrees *Math.PI/180);
+        ctx.drawImage(this.image, 0, 0,this.size.w,this.size.h);
+        ctx.restore();
     }else{
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -126,23 +122,23 @@ Sprite.prototype.draw = function(ctx){
         ctx.fill();
     }
     if(this.text != null){
-    	ctx.fillStyle = this.color;
-    	ctx.fill();
-    	ctx.textAlign="center";
-    	var height = this.size.h * 0.6;
-    	ctx.font = String(height) +"px Arial";
-    	ctx.fillStyle = this.tColor;
-    	ctx.save();
-    	ctx.translate(this.getPos().x ,this.getPos().y );
-    	ctx.rotate( this.facingDegrees *Math.PI/180);
-    	ctx.fillText(this.text,this.size.w *0.5,this.size.h *0.6, this.size.w *0.8);
-    	ctx.restore();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.textAlign="center";
+        var height = this.size.h * 0.6;
+        ctx.font = String(height) +"px Arial";
+        ctx.fillStyle = this.tColor;
+        ctx.save();
+        ctx.translate(this.getPos().x ,this.getPos().y );
+        ctx.rotate( this.facingDegrees *Math.PI/180);
+        ctx.fillText(this.text,this.size.w *0.5,this.size.h *0.6, this.size.w *0.8);
+        ctx.restore();
     }
 };
 
 function isSpriteClicked(sprite){
-    if(global.mouse_down){
-        var pos = {x: global.mouse_x, y: global.mouse_y};
+    if(runtime.mouse_down){
+        var pos = {x: runtime.mouse_x, y: runtime.mouse_y};
         var color = null;
         var size = {w: 1, h: 1};
         var detRect = createRectSprite(size, pos, color);
@@ -349,4 +345,14 @@ Sprite.prototype.edgeWrap = function(stage_width, stage_height){
         this.setPos(null, bounds.up);
     }
 }
+
+window.createRectSprite = createRectSprite; // deprecated
+window.createTextSprite = createTextSprite;
+window.createImageSprite = createImageSprite;
+window.createPolygonSprite = createPolygonSprite;
+window.createCircleSprite = createCircleSprite;
+window.createSprite = createSprite;
+window.isSpriteClicked = isSpriteClicked;
+window.Sprite = Sprite;
+
 })(window);

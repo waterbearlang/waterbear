@@ -8,47 +8,20 @@ var cleanCSS = require('clean-css');
 var UglifyJS = require('uglify-js');
 var yargs = require('yargs');
 
-var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
-
-var plugins = {
-    arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    node: ['node','control', 'piface', "pibrella_simple",'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation','date','size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
-    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform']
-};
-
-var pluginlibs = {
-    arduino: [],
-    javascript: ['SAT'],
-    node: [],
-    demo: [],
-    processingjs: ['processing-1.4.1']
-}
-
-var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome']
-
-var styles = {
-    arduino: [],
-    javascript: ['highlight-github'],
-    node: ['highlight-github'],
-    demo: ['highlight-github'],
-    processingjs: ['highlight-github']
-}
-
+var htmlTemplate = fs.readFileSync('template/ide.html', 'utf8');
+var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
 var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
-
-var libs = {
-    arduino: ['events.min'],
-    javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
-};
 
 var localizations = {
 
 };
 
+var languages = fs.readdirSync('languages');
+
+var config = {}; 
+languages.forEach(function(lang){
+    config[lang] = JSON.parse(fs.readFileSync('languages/' + lang + '/config.json'));
+});
 
 function clear(){
     if (fs.existsSync('dist')){
@@ -148,37 +121,81 @@ function build(){
             pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }
+    });
+   buildHtmlFiles();
+}
 
+function examples(lang){
+    var _examples = "";
+    var tplExamplePath = 'languages/' + lang + '/templates/examples.html';
+    if (fs.existsSync(tplExamplePath)) {
+        _examples = fs.readFileSync(tplExamplePath);
+    }
+    else {
+        console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
+    }
+    return _examples;
+}
+
+function stage(lang){
+    var tplStagePath = 'languages/' + lang + '/templates/stage.html';
+    // initialize default for fallback
+    var _stage = fs.readFileSync('languages/javascript/templates/stage.html');
+    if (fs.existsSync(tplStagePath)) {
+        _stage = fs.readFileSync(tplStagePath);
+    }
+    else {
+        console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
+    }
+    return _stage;
+}
+
+function cssInclude(path){
+    return '<link rel="stylesheet" href="' + path + '.css" >';
+}
+
+function cssIncludes(lang){
+    var includes = universalStyles.concat(config[lang].styles).map(function(stylename){
+        return cssInclude('../../stylesheets/' + stylename);
+    });
+    includes.push(cssInclude(lang));
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(cssInclude('blocks/' + plugin));
+    });
+    return includes.join('\n');
+}
+
+function jsInclude(path){
+    return '<script src="' + path + '.js"></script>';
+}
+
+function jsIncludes(lang){
+    var includes = config[lang].libs.map(function(scriptName){
+        return jsInclude('../../scripts/' + scriptName);
+    });
+    scripts.forEach(function(scriptName){
+        includes.push(jsInclude('../../lib/' + scriptName));
+    });
+    includes.push(jsInclude(lang));
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(jsInclude('blocks/' + plugin));
+    });
+    return includes.join('\n');
+}
+
+function buildHtmlFiles(){
+    languages.forEach(function(lang){
         // Build HTML file
-        var tplExamplePath = 'template/' + lang + '.examples';
-        var examples = "";
-        if (fs.existsSync(tplExamplePath)) {
-            examples = fs.readFileSync(tplExamplePath);
-        }
-        else {
-            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
-        }
 
-        var tplStagePath = 'template/' + lang + '.stage';
-        var stage = fs.readFileSync('template/' + "javascript" + '.stage');
-        if (fs.existsSync(tplStagePath)) {
-            stage = fs.readFileSync(tplStagePath);
-        }
-        else {
-            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
-        }
-        var html = htmlTemplate.replace(/<\?examples\?>/g, examples)
-                               .replace(/<\?stage\?>/g, stage)
+        var html = htmlTemplate.replace(/<\?examples\?>/g, examples(lang))
+                               .replace(/<\?stage\?>/g, stage(lang))
+                               .replace(/<\?cssincludes\?>/g, cssIncludes(lang))
+                               .replace(/<\?jsincludes\?>/g, jsIncludes(lang))
                                .replace(/<\?language\?>/g, lang);
-        fs.writeFileSync(lang + '.html', html, 'utf8')
+        fs.writeFileSync('languages/' + lang + '/index.html', html, 'utf8')
         console.log(" == "+lang+" complete == ");
     });
-
-    if (!errors) {
-        console.log("Success: The build completed successfully."); //@todo this is a bit misleading
-    } else {
-        console.error("FAILURE: The build completed with errors. Check the messages above.");
-    }
 };
 
-build();
+// build();
+buildHtmlFiles();

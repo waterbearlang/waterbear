@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-console.log("Starting")
-
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
 var validateJson = require('./validate').validateJson;
-// var cleanCSS = require('clean-css');
-// var UglifyJS = require('uglify-js');
+var cleanCSS = require('clean-css');
+var UglifyJS = require('uglify-js');
+var yargs = require('yargs');
 
 var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 

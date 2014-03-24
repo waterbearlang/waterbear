@@ -110,7 +110,7 @@
         evt.preventDefault();
         var name = prompt("Save file as: ");
         if( !name ) return;
-        var URL = window.webkitURL || window.URL;
+        // var URL = window.webkitURL || window.URL;
         var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
         var reader = new FileReader();
         var a = document.createElement('a');

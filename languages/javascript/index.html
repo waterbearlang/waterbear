@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="../../stylesheets/fonts/fontawesome.css" >
 <link rel="stylesheet" href="../../stylesheets/highlight-github.css" >
 <link rel="stylesheet" href="javascript.css" >
-<link rel="stylesheet" href="blocks/javascript.css" >
 <link rel="stylesheet" href="blocks/asset.css" >
 <link rel="stylesheet" href="blocks/control.css" >
 <link rel="stylesheet" href="blocks/sprite.css" >
@@ -52,7 +51,7 @@
 </head>
 <body class="autorun">
 	<div class="titlebar">
-		<img src="images/logo.png" />
+		<img src="../../images/logo.png" />
 		<h1 class="title">javascript playground</h1>
 	</div>
 	<nav class="mobilenav">
@@ -187,7 +186,7 @@
 		<button class="icon-check autorun-script-on">Autorun</button>
 		<button class="icon-unchecked autorun-script-off">Autorun</button>
 	</div>
-	<iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
+	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
 	<div class="scripts_text_view"></div>
 </div>
 <script>
@@ -205,50 +204,75 @@
 
 	</div>
 	<svg class="sekrit-svg"><text class="resize-tester"></text></svg>
-	<script src="../../scripts/beautify.js"></script>
-<script src="../../scripts/highlight.js"></script>
-<script src="../../scripts/highlight-javascript.js"></script>
-<script src="../../scripts/events.min.js"></script>
-<script src="../../lib/ajax.js"></script>
-<script src="../../lib/queryparams.js"></script>
-<script src="../../lib/util.js"></script>
-<script src="../../lib/event.js"></script>
-<script src="../../lib/drag.js"></script>
-<script src="../../lib/uuid.js"></script>
-<script src="../../lib/block.js"></script>
-<script src="../../lib/file.js"></script>
-<script src="../../lib/undo.js"></script>
-<script src="../../lib/ui.js"></script>
-<script src="../../lib/workspace.js"></script>
-<script src="../../lib/blockprefs.js"></script>
-<script src="../../lib/menu.js"></script>
-<script src="javascript.js"></script>
-<script src="blocks/javascript.js"></script>
-<script src="blocks/asset.js"></script>
-<script src="blocks/control.js"></script>
-<script src="blocks/sprite.js"></script>
-<script src="blocks/voice.js"></script>
-<script src="blocks/sound.js"></script>
-<script src="blocks/array.js"></script>
-<script src="blocks/boolean.js"></script>
-<script src="blocks/canvas.js"></script>
-<script src="blocks/color.js"></script>
-<script src="blocks/image.js"></script>
-<script src="blocks/math.js"></script>
-<script src="blocks/random.js"></script>
-<script src="blocks/vector.js"></script>
-<script src="blocks/object.js"></script>
-<script src="blocks/string.js"></script>
-<script src="blocks/path.js"></script>
-<script src="blocks/point.js"></script>
-<script src="blocks/rect.js"></script>
-<script src="blocks/sensing.js"></script>
-<script src="blocks/motion.js"></script>
-<script src="blocks/shape.js"></script>
-<script src="blocks/geolocation.js"></script>
-<script src="blocks/date.js"></script>
-<script src="blocks/size.js"></script>
-<script src="blocks/text.js"></script>
-<script src="blocks/matrix.js"></script>
+	<script src="../../lib/beautify.js"></script>
+<script src="../../lib/highlight.js"></script>
+<script src="../../lib/highlight-javascript.js"></script>
+<script src="../../lib/events.min.js"></script>
+<script src="../../scripts/queryparams.js"></script>
+<script src="../../scripts/util.js"></script>
+<script src="../../scripts/event.js"></script>
+<script src="../../scripts/drag.js"></script>
+<script src="../../scripts/uuid.js"></script>
+<script src="../../scripts/block.js"></script>
+<script src="../../scripts/file.js"></script>
+<script src="../../scripts/undo.js"></script>
+<script src="../../scripts/ui.js"></script>
+<script src="../../scripts/blockprefs.js"></script>
+<script src="../../scripts/menu.js"></script>
+<script src="ide.js"></script>
+<script src="blocks/asset_ide.js"></script>
+<script src="blocks/control_ide.js"></script>
+<script src="blocks/sprite_ide.js"></script>
+<script src="blocks/voice_ide.js"></script>
+<script src="blocks/sound_ide.js"></script>
+<script src="blocks/array_ide.js"></script>
+<script src="blocks/boolean_ide.js"></script>
+<script src="blocks/canvas_ide.js"></script>
+<script src="blocks/color_ide.js"></script>
+<script src="blocks/image_ide.js"></script>
+<script src="blocks/math_ide.js"></script>
+<script src="blocks/random_ide.js"></script>
+<script src="blocks/vector_ide.js"></script>
+<script src="blocks/object_ide.js"></script>
+<script src="blocks/string_ide.js"></script>
+<script src="blocks/path_ide.js"></script>
+<script src="blocks/point_ide.js"></script>
+<script src="blocks/rect_ide.js"></script>
+<script src="blocks/sensing_ide.js"></script>
+<script src="blocks/motion_ide.js"></script>
+<script src="blocks/shape_ide.js"></script>
+<script src="blocks/geolocation_ide.js"></script>
+<script src="blocks/date_ide.js"></script>
+<script src="blocks/size_ide.js"></script>
+<script src="blocks/text_ide.js"></script>
+<script src="blocks/matrix_ide.js"></script>
+<script src="blocks/asset_blockmenu.js"></script>
+<script src="blocks/control_blockmenu.js"></script>
+<script src="blocks/sprite_blockmenu.js"></script>
+<script src="blocks/voice_blockmenu.js"></script>
+<script src="blocks/sound_blockmenu.js"></script>
+<script src="blocks/array_blockmenu.js"></script>
+<script src="blocks/boolean_blockmenu.js"></script>
+<script src="blocks/canvas_blockmenu.js"></script>
+<script src="blocks/color_blockmenu.js"></script>
+<script src="blocks/image_blockmenu.js"></script>
+<script src="blocks/math_blockmenu.js"></script>
+<script src="blocks/random_blockmenu.js"></script>
+<script src="blocks/vector_blockmenu.js"></script>
+<script src="blocks/object_blockmenu.js"></script>
+<script src="blocks/string_blockmenu.js"></script>
+<script src="blocks/path_blockmenu.js"></script>
+<script src="blocks/point_blockmenu.js"></script>
+<script src="blocks/rect_blockmenu.js"></script>
+<script src="blocks/sensing_blockmenu.js"></script>
+<script src="blocks/motion_blockmenu.js"></script>
+<script src="blocks/shape_blockmenu.js"></script>
+<script src="blocks/geolocation_blockmenu.js"></script>
+<script src="blocks/date_blockmenu.js"></script>
+<script src="blocks/size_blockmenu.js"></script>
+<script src="blocks/text_blockmenu.js"></script>
+<script src="blocks/matrix_blockmenu.js"></script>
+<script src="../../scripts/l10n.js"></script>
+<script src="../../scripts/workspace.js"></script>
 </body>
 </html>

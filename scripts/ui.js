@@ -409,7 +409,7 @@ function edit_menu(title, sectionKey, specs, help, show){
 
 function initLanguageFiles(){
     // pulled from workspace.js, one file below in the dist/javascript.js
-    var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+    var language = location.pathname.split('/')[2];
 
     //gets language locale code. en, es, de, etc.
     var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);

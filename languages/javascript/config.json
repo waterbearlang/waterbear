@@ -1,6 +1,6 @@
 {
 	"runsInBrowser": true,
-	"plugins": ["javascript", "asset", "control", "sprite", "voice", "sound", "array", "boolean", "canvas", "color",  "image", "math", "random", "vector", "object", "string", "path", "point", "rect", "sensing", "motion", "shape", "geolocation","date","size", "text", "matrix"],
+	"plugins": ["asset", "control", "sprite", "voice", "sound", "array", "boolean", "canvas", "color",  "image", "math", "random", "vector", "object", "string", "path", "point", "rect", "sensing", "motion", "shape", "geolocation","date","size", "text", "matrix"],
 	"plugin_libs": ["SAT"],
 	"styles": ["highlight-github"],
 	"libs": ["beautify", "highlight", "highlight-javascript","events.min"]

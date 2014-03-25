@@ -3,7 +3,7 @@
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
-var validateJson = require('./validate').validateJson;
+// var validateJson = require('./validate').validateJson;
 var cleanCSS = require('clean-css');
 var UglifyJS = require('uglify-js');
 var yargs = require('yargs');
@@ -11,7 +11,8 @@ var yargs = require('yargs');
 var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
 var styles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
-var scripts = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
+var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu'];
+var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {
 
@@ -159,10 +160,10 @@ function cssInclude(path){
 function cssIncludes(lang){
     var includes = [];
     styles.forEach(function(styleName){
-        includes.push(cssInclude('../../stylesheets/' + stylename));
+        includes.push(cssInclude('../../stylesheets/' + styleName));
     });
-    config[lang].styles.forEach(function(stylename){
-        includes.push(cssInclude('../../stylesheets/' + stylename));
+    config[lang].styles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
     });
     includes.push(cssInclude(lang));
     config[lang].plugins.forEach(function(plugin){
@@ -178,20 +179,26 @@ function jsInclude(path){
 function jsIdeIncludes(lang){
     var includes = [];
     config[lang].libs.forEach(function(scriptName){
-        includes.push(jsInclude('../../scripts/' + scriptName));
-    });
-    scripts.forEach(function(scriptName){
         includes.push(jsInclude('../../lib/' + scriptName));
+    });
+    scripts_pre.forEach(function(scriptName){
+        includes.push(jsInclude('../../scripts/' + scriptName));
     });
     includes.push(jsInclude('ide'));
     config[lang].plugins.forEach(function(plugin){
         includes.push(jsInclude('blocks/' + plugin + '_ide'));
     });
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(jsInclude('blocks/' + plugin + '_blockmenu'));
+    });
+    scripts_post.forEach(function(scriptName){
+        includes.push(jsInclude('../../scripts/' + scriptName));
+    });
     return includes.join('\n');
 }
 
 function jsRuntimeIncludes(lang){
-    var includes = [];
+    var includes = [jsInclude('runtime')];
     config[lang].plugins.forEach(function(plugin){
         includes.push(jsInclude('blocks/' + plugin + '_runtime'));
     });

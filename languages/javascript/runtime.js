@@ -359,7 +359,6 @@ window.twinapex = twinapex;
 window.rad2deg = rad2deg;
 window.deg2rad = deg2rad;
 window.range = range;
-window.randint = randint;
 window.angle = angle;
 console.log('runtime ready');
 })(window);

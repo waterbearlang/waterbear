@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>iFrame Canvas</title>
+    <style>
+    html,body,.stage{ height: 100%; border:0; margin:0;}
+    </style>
+</head>
+
+<body>
+    <div class="stage"></div>
+    <script src="runtime.js"></script>
+<script src="blocks/processingjs_runtime.js"></script>
+<script src="blocks/structure_runtime.js"></script>
+<script src="blocks/environment_runtime.js"></script>
+<script src="blocks/controls_runtime.js"></script>
+<script src="blocks/shapes_runtime.js"></script>
+<script src="blocks/input_runtime.js"></script>
+<script src="blocks/colors_runtime.js"></script>
+<script src="blocks/math_runtime.js"></script>
+<script src="blocks/transform_runtime.js"></script>
+    <script>
+
+    window.addEventListener('message', receiveMessage, false);
+
+    function receiveMessage(evt){
+		try{
+			var message = JSON.parse(evt.data);
+		}catch(e){
+			console.log('problem parsing %s', evt.data);
+			return;
+		}
+		switch(message.command){
+			case 'reset': return location.reload();
+			case 'loadScript': return new Function(script)();
+			default: return console.log('unknown command: %o', message);
+		}
+	}
+    window.parent.postMessage('ready', '*');
+
+    </script>
+</body>
+</html>

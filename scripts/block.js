@@ -382,7 +382,9 @@
         // Retrieve the things we don't need to duplicate in every instance block description
         var tB = blockRegistry[obj.scriptId];
         if (!tB){
-            console.error('Error: could not get template block for  for %o', obj);
+            if (!obj.localSource){
+                console.error('Error: could not get template block for  for %o', obj);
+            }
             return obj;
         }
         obj.blocktype = tB.blocktype;

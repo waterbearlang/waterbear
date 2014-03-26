@@ -249,6 +249,30 @@
             ]
         },
         {
+            "blocktype": "step",
+            "id": "58e775de-23aa-4572-88b8-ce85891db42b",
+            "script": "local.array## = createArrayFromCSV({{1}});",
+            "help": "create number array from CSV",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
+                    "script": "local.array##",
+                    "type": "array"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "new array## from CSV",
+                    "type": "file"
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
             "script": "variance({{1}})",

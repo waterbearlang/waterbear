@@ -13840,7 +13840,28 @@ var l10nFiles = {};
             return choice;
         
         }
-        
+        //KNOWN ISSUE: width manually set to 120, need to programmatically get
+        //(size of "Browse" button) + (size of file input field)
+        if (type === 'file') {
+            var value = obj.uValue || obj.value || '';
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value});
+            var x=0;
+            //input.setAttribute('accept', 'application/json');
+            input.addEventListener('change', function(evt){
+                var file = input.files[0];
+                var reader = new FileReader();
+		reader.onload = function (evt){
+                    alert(evt.target.result);
+                    alert(file.name + " " + file.type + " " + file.size);
+		};
+                alert(input.value);
+                alert(reader.readAsText( file ));
+            });
+            //alert(x);
+            wb.resize(input);
+            input.style.width= "120px";
+            return input;
+        }
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -14318,7 +14339,7 @@ var l10nFiles = {};
             var file = input.files[0];
             loadScriptsFromFile(file);
         });
-        input.click();
+        //input.click();
     }
 
     function loadScriptsFromObject(fileObject){

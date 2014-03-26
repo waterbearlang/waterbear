@@ -3633,7 +3633,28 @@ var l10nFiles = {};
             return choice;
         
         }
-        
+        //KNOWN ISSUE: width manually set to 120, need to programmatically get
+        //(size of "Browse" button) + (size of file input field)
+        if (type === 'file') {
+            var value = obj.uValue || obj.value || '';
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value});
+            var x=0;
+            //input.setAttribute('accept', 'application/json');
+            input.addEventListener('change', function(evt){
+                var file = input.files[0];
+                var reader = new FileReader();
+		reader.onload = function (evt){
+                    alert(evt.target.result);
+                    alert(file.name + " " + file.type + " " + file.size);
+		};
+                alert(input.value);
+                alert(reader.readAsText( file ));
+            });
+            //alert(x);
+            wb.resize(input);
+            input.style.width= "120px";
+            return input;
+        }
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -4111,7 +4132,7 @@ var l10nFiles = {};
             var file = input.files[0];
             loadScriptsFromFile(file);
         });
-        input.click();
+        //input.click();
     }
 
     function loadScriptsFromObject(fileObject){
@@ -5699,8 +5720,8 @@ wb.choiceLists.easing = ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic
 wb.choiceLists.fontweight = ['normal', 'bold', 'inherit'];
 wb.choiceLists.globalCompositeOperators = ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'];
 wb.choiceLists.repetition = ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
-wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
-wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'file']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'file']);
 
 })(wb);
 
@@ -7355,6 +7376,30 @@ wb.menu({
                 {
                     "name": "stdev of array",
                     "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "58e775de-23aa-4572-88b8-ce85891db42b",
+            "script": "local.array## = createArrayFromCSV({{1}});",
+            "help": "create number array from CSV",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
+                    "script": "local.array##",
+                    "type": "array"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "new array## from CSV",
+                    "type": "file"
                 }
             ]
         },

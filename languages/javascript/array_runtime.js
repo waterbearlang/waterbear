@@ -56,3 +56,14 @@ function normalize(arr){
         arr[i] /= total;    
     }    
 }
+
+function createArrayFromCSV(file) {
+    //console.log("hi");
+    alert(fale.name);
+    /*if (file.name.indexOf('.csv', fileName.length - 4) === -1) {
+        console.error("File is not a CSV file");
+	return;
+    }
+    alert()*/
+    return [1,2,3];
+}

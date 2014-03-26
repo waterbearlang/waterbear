@@ -516,27 +516,36 @@
             return choice;
         
         }
+                
         //KNOWN ISSUE: width manually set to 120, need to programmatically get
         //(size of "Browse" button) + (size of file input field)
         if (type === 'file') {
             var value = obj.uValue || obj.value || '';
-            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value});
-            var x=0;
-            //input.setAttribute('accept', 'application/json');
+            //not sure if 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
             input.addEventListener('change', function(evt){
                 var file = input.files[0];
+                //csv check will need to be removed if this is to be extended to
+                //other types of files
+                if (file.name.indexOf('.csv', file.name.length - 4) === -1) {
+			console.error("File is not a CSV file");
+			return;
+		}
                 var reader = new FileReader();
-                reader.readAsText( file );
+                
 		reader.onload = function (evt){
-                    alert(evt.target.result);
-                    alert(file.name + " " + file.type + " " + file.size);
+                    //Why doesn't this work???
+                    input.setAttribute('value', evt.target.result);
+                    //alert(file.name + " " + file.type + " " + file.size);
+                    
+                    //How does input.value not change after setting the attribute??
+                    //input.setAttribute('value', "asd");
+                    alert(input.value);
 		};
-                alert(input.value);
-                alert();
+                reader.readAsDataURL( file );
             });
-            //alert(x);
-            wb.resize(input);
-            input.style.width= "120px";
+            wb.resize(input); //not sure if this is necessary
+            input.style.width= "120px"; //known issue stated above
             return input;
         }
         if (type === 'int' || type === 'float'){

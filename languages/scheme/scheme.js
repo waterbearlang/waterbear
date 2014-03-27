@@ -24,7 +24,7 @@
     wb.clearStage = clearStage;
     
      wb.choiceLists = {
-        boolean: ["#t", "#f"],
+        boolean: ["true", "false"],
         keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
             .split('').concat(['up', 'down', 'left', 'right',
             'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',

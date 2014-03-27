@@ -517,7 +517,7 @@
         
         }
                 
-        //KNOWN ISSUE: width manually set to 120, need to programmatically get
+        //Known issue: width manually set to 160, need to programmatically get
         //(size of "Browse" button) + (size of file input field)
         if (type === 'file') {
             var value = obj.uValue || obj.value || '';
@@ -525,8 +525,8 @@
             var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
             input.addEventListener('change', function(evt){
                 var file = input.files[0];
-                //csv check will need to be removed if this is to be extended to
-                //other types of files
+                //csv check below will need to be removed if this is to be
+                //extended to other types of files
                 if (file.name.indexOf('.csv', file.name.length - 4) === -1) {
 			console.error("File is not a CSV file");
 			return;
@@ -534,15 +534,14 @@
                 var reader = new FileReader();
                 
 		reader.onload = function (evt){
-                    //Why doesn't this work???
+                    //Why doesn't this work? It doesn't actually set the value
+                    //of "input" to evt.target.result, i.e. the file contents
                     input.setAttribute('value', evt.target.result);
-                    //alert(file.name + " " + file.type + " " + file.size);
                     
-                    //How does input.value not change after setting the attribute??
-                    //input.setAttribute('value', "asd");
+                    //Evidence that input.value didn't change:
                     alert(input.value);
 		};
-                reader.readAsDataURL( file );
+                reader.readAsText( file );
             });
             wb.resize(input); //not sure if this is necessary
             input.style.width= "160px"; //known issue stated above

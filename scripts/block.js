@@ -545,7 +545,7 @@
                 reader.readAsDataURL( file );
             });
             wb.resize(input); //not sure if this is necessary
-            input.style.width= "120px"; //known issue stated above
+            input.style.width= "160px"; //known issue stated above
             return input;
         }
         if (type === 'int' || type === 'float'){

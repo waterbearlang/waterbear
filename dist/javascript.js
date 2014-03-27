@@ -3652,9 +3652,8 @@ var l10nFiles = {};
                 
 		reader.onload = function (evt){
                     //Why doesn't this work???
-                    alert(evt.target.result);
                     input.setAttribute('value', evt.target.result);
-                    alert(file.name + " " + file.type + " " + file.size);
+                    //alert(file.name + " " + file.type + " " + file.size);
                     
                     //How does input.value not change after setting the attribute??
                     //input.setAttribute('value', "asd");
@@ -3663,7 +3662,7 @@ var l10nFiles = {};
                 reader.readAsDataURL( file );
             });
             wb.resize(input); //not sure if this is necessary
-            input.style.width= "120px";
+            input.style.width= "160px"; //known issue stated above
             return input;
         }
         if (type === 'int' || type === 'float'){
@@ -7482,7 +7481,8 @@ wb.menu({
             ]
         }
     ]
-});
+}
+);
 /*end languages/javascript/array.json*/
 
 /*begin languages/javascript/boolean.json*/

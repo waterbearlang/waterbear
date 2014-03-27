@@ -7293,6 +7293,23 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "step",
+            "id": "f4870f0f-1dbb-4bc7-b8e3-3a00af613619",
+            "script": "{{1}}.splice({{2}}, 1)[0]",
+            "help": "remove item at index from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array"
+                },
+                {
+                    "name": "remove item",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "e137e1a3-fe66-4d15-ae2a-596050acb6a7",
             "script": "{{1}}.pop()",

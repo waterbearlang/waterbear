@@ -46,4 +46,4 @@
         //hljs.highlightBlock(view.firstChild);
     }; 
  
-})(wb, Event)
+})(wb, Event);

@@ -5524,14 +5524,14 @@ wb.l10nHalfDone = l10nHalfDone;
 
 /*begin languages/scheme/boolean.json*/
 wb.menu({
+    "sectionkey": "boolean",
     "name": "Boolean",
     "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
-            "blocktype": "expression",
-            "id": "785ae0ef-8f4c-4ef8-8a38-b465353b4695",
-            "type": "boolean",
-            "script": "(&& {{1}} {{2}})",
+            "blocktype": "step",
+            "id": "eec0910c-be04-407f-9536-f246a65222b5",
+            "script": "(and {{1}} {{2}})",
             "help": "both operands are true",
             "sockets": [
                 {
@@ -5546,9 +5546,9 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "aa8b642a-b3ae-49b6-9ab8-7ea74afdc133",
+            "id": "43e8d463-0048-473c-8f15-a504455a4849",
             "type": "boolean",
-            "script": "(|| {{1}} {{2}})",
+            "script": "(or {{1}} {{2}})",
             "help": "either or both operands are true",
             "sockets": [
                 {
@@ -5563,9 +5563,9 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "d4ab8689-5a27-40d1-9ec5-f15c1cf7eb00",
+            "id": "37756b6e-7ed3-4aff-9e07-c3bb75cb8b9e",
             "type": "boolean",
-            "script": "({{1}} ? !{{2}} : {{2}})",
+            "script": "(and (or {{1}} {{2}}) (not (and {{1}} {{2}})))",
             "help": "either, but not both, operands are true",
             "sockets": [
                 {
@@ -5580,44 +5580,14 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "35155155-37aa-487e-93dc-0eacc42b7e42",
+            "id": "39ea95e2-2874-4b3c-a2ef-c7ae30e03e34",
             "type": "boolean",
-            "script": "(! {{1}})",
+            "script": "(not {{1}})",
             "help": "operand is false",
             "sockets": [
                 {
                     "name": "not",
                     "type": "boolean"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "e91a811e-5d4c-4394-badf-d346a84ea0a5",
-            "type": "boolean",
-            "script": "!({{1}}%2)",
-            "help": "true when the parameter is even",
-            "sockets": [
-                {
-                    "name": "",
-                    "type": "number",
-                    "value": 2,
-                    "suffix": "is even"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "38c05cc3-e1e1-4ac7-94ac-68ab7b73b519",
-            "type": "boolean",
-            "script": "!!({{1}}%2)",
-            "help": "true when the parameter is odd",
-            "sockets": [
-                {
-                    "name": "",
-                    "type": "number",
-                    "value": 1,
-                    "suffix": "is odd"
                 }
             ]
         }

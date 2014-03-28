@@ -5482,7 +5482,8 @@ wb.l10nHalfDone = l10nHalfDone;
     }
     
     function runCurrentScripts(force){
-        
+        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
  
@@ -5496,7 +5497,7 @@ wb.l10nHalfDone = l10nHalfDone;
     // NOTE: Taken directly from the JS file needs modification
     // expose these globally so the Block/Label methods can find them
      wb.choiceLists = {
-        boolean: ['true', 'false'],
+        boolean: ['#t', '#f'],
         keys: 'abcdefghijklmnopqrstuvwxyz0123456789*+-./'
             .split('').concat(['up', 'down', 'left', 'right',
             'backspace', 'tab', 'return', 'shift', 'ctrl', 'alt',

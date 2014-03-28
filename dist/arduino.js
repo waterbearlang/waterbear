@@ -1880,6 +1880,7 @@ var l10nFiles = {};
     }
 
     function codeFromBlock(block){
+        console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 

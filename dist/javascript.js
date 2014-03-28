@@ -1,3 +1,4 @@
+
 /*begin beautify.js*/
 /*jslint onevar: false, plusplus: false */
 /*
@@ -2651,27 +2652,6 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Auto-scroll deemed unnecessary given advent of scratchspace, so
-	// the if(workspace) block has been commented out
-        // WB-Specific
-        /*if (workspace){
-            // FIXME: is this why scroll-wheel doesn't work?
-            // FIXME: is this why scrolling down works poorly?
-            var container = workspace.parentElement;
-            var offset = wb.rect(container);
-            if (currPos.top < offset.top){
-                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
-            }else if (currPos.bottom > offset.bottom){
-                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
-                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
-            }
-            if (currPos.left < offset.left){
-                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
-            }else if(currPos.right > offset.right){
-                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
-            }
-        }*/
         currentPosition = nextPosition;
         return false;
     }
@@ -4627,7 +4607,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -4861,7 +4841,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
+	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
 }
 
 function showScript(evt){
@@ -5710,6 +5690,7 @@ wb.choiceLists.rettypes.push('sound');
 // expose these globally so the Block/Label methods can find them
 'use strict';
 wb.choiceLists.unit = ['px', 'em', '%', 'pt'];
+wb.choiceLists.relativeUnit = ['px', '%'];
 wb.choiceLists.align = ['start', 'end', 'left', 'right', 'center'];
 wb.choiceLists.baseline = ['alphabetic', 'top', 'hanging', 'middle', 'ideographic', 'bottom'];
 wb.choiceLists.linecap = ['round', 'butt', 'square'];
@@ -7266,6 +7247,23 @@ wb.menu({
             "id": "f4870f0f-1dbb-4bc7-b8e3-3a00af613689",
             "script": "{{1}}.splice({{2}}, 1)[0]",
             "type": "any",
+            "help": "remove item at index from an array",
+            "sockets": [
+                {
+                    "name": "array",
+                    "type": "array"
+                },
+                {
+                    "name": "remove item",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "f4870f0f-1dbb-4bc7-b8e3-3a00af613619",
+            "script": "{{1}}.splice({{2}}, 1)[0]",
             "help": "remove item at index from an array",
             "sockets": [
                 {

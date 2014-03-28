@@ -1318,10 +1318,6 @@ function createSprite(shape, color){
     }
 };
 
-window.createRectSprite = createRectSprite; // deprecated
-window.createSprite = createSprite;
-window.Sprite = Sprite;
-
 Sprite.prototype.isPolygon = function(){
     return this.type === 'polygon';
 };
@@ -1349,11 +1345,11 @@ Sprite.prototype.setPos = function(x, y){
 Sprite.prototype.draw = function(ctx){
     //rotation
     if(this.image != null){
-    	ctx.save();
-    	ctx.translate(this.getPos().x,this.getPos().y);
-    	ctx.rotate( this.facingDegrees *Math.PI/180);
-    	ctx.drawImage(this.image, 0, 0,this.size.w,this.size.h);
-    	ctx.restore();
+        ctx.save();
+        ctx.translate(this.getPos().x,this.getPos().y);
+        ctx.rotate( this.facingDegrees *Math.PI/180);
+        ctx.drawImage(this.image, 0, 0,this.size.w,this.size.h);
+        ctx.restore();
     }else{
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -1370,17 +1366,17 @@ Sprite.prototype.draw = function(ctx){
         ctx.fill();
     }
     if(this.text != null){
-    	ctx.fillStyle = this.color;
-    	ctx.fill();
-    	ctx.textAlign="center";
-    	var height = this.size.h * 0.6;
-    	ctx.font = String(height) +"px Arial";
-    	ctx.fillStyle = this.tColor;
-    	ctx.save();
-    	ctx.translate(this.getPos().x ,this.getPos().y );
-    	ctx.rotate( this.facingDegrees *Math.PI/180);
-    	ctx.fillText(this.text,this.size.w *0.5,this.size.h *0.6, this.size.w *0.8);
-    	ctx.restore();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.textAlign="center";
+        var height = this.size.h * 0.6;
+        ctx.font = String(height) +"px Arial";
+        ctx.fillStyle = this.tColor;
+        ctx.save();
+        ctx.translate(this.getPos().x ,this.getPos().y );
+        ctx.rotate( this.facingDegrees *Math.PI/180);
+        ctx.fillText(this.text,this.size.w *0.5,this.size.h *0.6, this.size.w *0.8);
+        ctx.restore();
     }
 };
 
@@ -1593,6 +1589,16 @@ Sprite.prototype.edgeWrap = function(stage_width, stage_height){
         this.setPos(null, bounds.up);
     }
 }
+
+window.createRectSprite = createRectSprite; // deprecated
+window.createTextSprite = createTextSprite;
+window.createImageSprite = createImageSprite;
+window.createPolygonSprite = createPolygonSprite;
+window.createCircleSprite = createCircleSprite;
+window.createSprite = createSprite;
+window.isSpriteClicked = isSpriteClicked;
+window.Sprite = Sprite;
+
 })(window);
 
 /*end languages/javascript/sprite_runtime.js*/
@@ -2183,20 +2189,16 @@ global.location = location;
  * Convert size parameter to pixel value 
  * 
  * @param {?number=} x is the size parameter
- * @param {?unit=} unit is px or %
+ * @param {?relativeUnit=} unit is px or %
  * @param {?boolean=} isWidth is true for width, false for height
  * @return {number} pixel value for size
  *
  * Notes: -em and pt irrelevant for these purposes, need way to disable these
  *         options in the dropdown
  */
-function convertSidelengthUnits(x, unit, isWidth) {
-  switch(unit) {
+function convert(x, relativeUnit, isWidth) {
+  switch(relativeUnit) {
     case "px":
-      return x;
-    case "em":
-      return x;
-    case "pt":
       return x;
     case "%":
       if(isWidth){
@@ -2205,7 +2207,7 @@ function convertSidelengthUnits(x, unit, isWidth) {
       else {
         return (global.stage_height*x)/100;
       }
-    default: //i.e. if no units are specified. May be same as "px", need to confirm
+    default: //need this b/c examples currently have size blocks w/o option list
       return x; 
   }
 }

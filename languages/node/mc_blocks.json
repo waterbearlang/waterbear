@@ -1,4 +1,5 @@
 {
+	"sectionkey": "mcblocks",
     "name": "Blocks",
     "help": "Find and set Minecraft Blocks",
     "blocks": [

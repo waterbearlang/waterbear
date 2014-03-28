@@ -24,7 +24,7 @@ body{
 	flex: 0 0 37px;
 }
 
-#block_menu_wrapper {
+.block_menu_wrapper {
 	-webkit-flex: 0 0 300px;
 	flex: 0 0 300px;
 	display: -webkit-flex;
@@ -115,7 +115,7 @@ body{
 	overflow: auto;
 }
 
-body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+body.result .block_menu_wrapper, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
 	display: none;
 }
 body.result .stage, body.result stage.hidden{
@@ -158,7 +158,7 @@ ul.menu .show-ide{
 		position: relative;
 		overflow: hidden;
 	}
-	#block_menu_wrapper, .workspace, .results, .files{
+	.block_menu_wrapper, .workspace, .results, .files{
 		display: block;
 		position: absolute;
 		width: 100%;

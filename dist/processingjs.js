@@ -12859,27 +12859,6 @@ var l10nFiles = {"javascript":{"zh":["control","array"]}};
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Auto-scroll deemed unnecessary given advent of scratchspace, so
-	// the if(workspace) block has been commented out
-        // WB-Specific
-        /*if (workspace){
-            // FIXME: is this why scroll-wheel doesn't work?
-            // FIXME: is this why scrolling down works poorly?
-            var container = workspace.parentElement;
-            var offset = wb.rect(container);
-            if (currPos.top < offset.top){
-                container.scrollTop -= Math.min(container.scrollTop, offset.top - currPos.top);
-            }else if (currPos.bottom > offset.bottom){
-                var maxVerticalScroll = container.scrollHeight - offset.height - container.scrollTop;
-                container.scrollTop += Math.min(maxVerticalScroll, currPos.bottom - offset.bottom);
-            }
-            if (currPos.left < offset.left){
-                container.scrollLeft -= Math.min(container.scrollLeft, offset.left - currPos.left);
-            }else if(currPos.right > offset.right){
-                var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
-                container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
-            }
-        }*/
         currentPosition = nextPosition;
         return false;
     }
@@ -14835,7 +14814,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block_menu_wrapper *')) return;
 	else if(false);
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
@@ -15069,7 +15048,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('#block_menu_wrapper'));
+	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
 }
 
 function showScript(evt){
@@ -15804,6 +15783,7 @@ wb.choiceLists.mode = ['RGB', 'HSB'];
 
 /*begin languages/processingjs/structure.json*/
 wb.menu({
+	"sectionkey": "structure",
     "name": "Structure",
     "blocks": [
         {
@@ -15876,6 +15856,7 @@ wb.menu({
 
 /*begin languages/processingjs/environment.json*/
 wb.menu({
+	"sectionkey": "environment",
     "name": "Environment",
     "blocks": [
         {
@@ -15948,6 +15929,7 @@ wb.menu({
 
 /*begin languages/processingjs/controls.json*/
 wb.menu({
+	"sectionkey": "control",
     "name": "Control",
     "blocks": [
         {
@@ -16250,6 +16232,7 @@ wb.menu({
 
 /*begin languages/processingjs/shapes.json*/
 wb.menu({
+	"sectionkey": "shape",
     "name": "Shape",
     "blocks": [
         {
@@ -16548,6 +16531,7 @@ wb.menu({
 
 /*begin languages/processingjs/input.json*/
 wb.menu({
+	"sectionkey": "input",
     "name": "Input",
     "blocks": [
         {
@@ -16776,6 +16760,7 @@ wb.menu({
 
 /*begin languages/processingjs/colors.json*/
 wb.menu({
+	"sectionkey": "colors",
     "name": "Colors",
     "blocks": [
         {
@@ -16878,6 +16863,7 @@ wb.menu({
 
 /*begin languages/processingjs/math.json*/
 wb.menu({
+	"sectionkey": "math",
     "name": "Math",
     "blocks": [
         {
@@ -17271,6 +17257,7 @@ wb.menu({
 
 /*begin languages/processingjs/transform.json*/
 wb.menu({
+	"sectionkey": "transform",
     "name": "Transform",
     "blocks": [
         {

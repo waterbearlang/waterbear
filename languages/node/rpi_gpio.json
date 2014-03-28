@@ -1,4 +1,5 @@
 {
+	"sectionkey": "rpigpio",
     "name": "RPi_GPIO",
     "help": "Physical Input and Output for the Raspberry Pi using RPi_GPIO.",
     "id": "63b8ffcc-9b51-4a5e-b687-634945bfb9b8",

@@ -1,4 +1,5 @@
 {
+	"sectionkey": "mcplayer",
     "name": "Player",
     "help": "Find and move Steve the Minecraft player",
     "blocks": [

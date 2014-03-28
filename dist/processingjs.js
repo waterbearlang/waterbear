@@ -13446,6 +13446,7 @@ var l10nFiles = {};
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'data-keywords': JSON.stringify(obj.keywords),
+                'data-tags': JSON.stringify(obj.tags),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))

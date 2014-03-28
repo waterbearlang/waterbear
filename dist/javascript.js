@@ -3239,6 +3239,7 @@ var l10nFiles = {};
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'data-keywords': JSON.stringify(obj.keywords),
+                'data-tags': JSON.stringify(obj.tags),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
@@ -6237,6 +6238,9 @@ wb.menu({
                     "type": "color",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10610,6 +10614,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10627,6 +10634,9 @@ wb.menu({
                     "name": "with size",
                     "type": "size"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10640,6 +10650,9 @@ wb.menu({
                     "name": "rect from array",
                     "type": "array"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10654,6 +10667,9 @@ wb.menu({
                     "type": "rect",
                     "suffix": "position"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10668,6 +10684,9 @@ wb.menu({
                     "type": "rect",
                     "suffix": "size"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10978,6 +10997,9 @@ wb.menu({
                     "name": "clear rect",
                     "type": "rect"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -10996,6 +11018,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11019,6 +11044,9 @@ wb.menu({
                     "type": "color",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11037,6 +11065,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11058,6 +11089,9 @@ wb.menu({
                     "name": "and color",
                     "type": "color"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11076,6 +11110,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11089,6 +11126,9 @@ wb.menu({
                     "name": "fill rect",
                     "type": "rect"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11105,6 +11145,9 @@ wb.menu({
                     "name": "with color",
                     "type": "color"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11128,6 +11171,9 @@ wb.menu({
                     "type": "color",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11144,6 +11190,9 @@ wb.menu({
                     "name": "with color",
                     "type": "color"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11157,6 +11206,9 @@ wb.menu({
                     "name": "stroke rect",
                     "type": "rect"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11186,6 +11238,9 @@ wb.menu({
                     "type": "number",
                     "value": 10
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -11223,6 +11278,9 @@ wb.menu({
                     "type": "color",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {

@@ -13,7 +13,7 @@
         var run = function(){
             wb.script = script;
             bscheme.evaluate(script, function(result) {
-                if (result !== undefined && result !== BewaScheme.undef) {
+                if (result !== undefined && result !== BiwaScheme.undef) {
                     console.log(BiwaScheme.to_write(result));
                 }
             });
@@ -33,6 +33,19 @@
     }
     
     function runCurrentScripts(force){
+        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
+        if (!(wb.autorun || force)){
+            // false alarm, we were notified of a script change, but user hasn't asked us to restart script
+            return;
+        }
+        document.body.classList.add('running');
+        if (!wb.scriptLoaded){
+            console.log('not ready to run script yet, waiting');
+            Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
+            return;
+        }else{
+            console.log('ready to run script, let us proceed to the running of said script');
+        }
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
@@ -60,14 +73,8 @@
     };
     
      wb.prettyScript = function(elements){
-        return js_beautify(elements.map(function(elem){
+        return elements.map(function(elem){
             return wb.codeFromBlock(elem);
-        }).join(''));
+        }).join('');
     };
-    
-    wb.writeScript = function(elements, view){
-        view.innerHTML = '<pre class="language-javascript">' + wb.prettyScript(elements) + '</pre>';
-        //hljs.highlightBlock(view.firstChild);
-    }; 
- 
 })(wb, Event);

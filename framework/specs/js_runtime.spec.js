@@ -159,7 +159,7 @@ describe("Javascript_runtime test suite", function() {
 		});
 
 		it("Test Range function", function(){
-			function sum(n) {
+			function summation(n) {
 				return (n*(n-1))/2;
 			}
 			function inclusiveSum(n1, n2) {
@@ -173,16 +173,46 @@ describe("Javascript_runtime test suite", function() {
 				return (n*(mul*(mul-1)))/2;
 			}
 
-			var s = 0;
-			var ran = range(3, 300, 3);
+			// test one step at a time
+			var start = 0;
+			var end = 50;
+			var step =1;
+
+			var sum = 0;
+			var ran = range(start, end, step);
 
 			for(var i = 0; i < ran.length; i++ ) {
-				s+=ran[i];
+				sum+=ran[i];
 			}
-			console.log(ran);
-			//assert();
-			console.log("summation func %s, for loop %s", sumOfMultiples(3,100),s);
-		
+
+			assert.equal(sum, summation(end));
+			// check steps
+			end = 300;
+			step = 3;
+
+			ran = range(start, end, step);
+			sum = 0;
+			for(var i = 0; i < ran.length; i++ ) {
+				sum+=ran[i];
+			}
+
+
+			assert.equal(sum, sumOfMultiples(3, 100));
+
+			// inclusive sum
+			start = 132;
+			end = 531;
+			step = 1;
+
+			ran = range(start, end+1, step);
+			sum = 0;
+			for(var i = 0; i < ran.length; i++ ) {
+				sum+=ran[i];
+			}
+
+			
+			assert.equal(sum, inclusiveSum(start, end));
+	
 		});
 
 	});

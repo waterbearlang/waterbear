@@ -57,6 +57,10 @@ function normalize(arr){
     }    
 }
 
+//Create number array from user-inputted CSV file
+//potential issue: use of "Number()" to convert string to number may be too
+//lenient, because Number() auto-converts variables of type "Date" to a number,
+//and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");

@@ -268,7 +268,7 @@
         {
             "blocktype": "step",
             "id": "58e775de-23aa-4572-88b8-ce85891db42b",
-            "script": "local.array## = createArrayFromCSV({{1}});",
+            "script": "local.array##= createArrayFromCSV(\"{{1}}\");",
             "help": "create number array from CSV",
             "locals": [
                 {

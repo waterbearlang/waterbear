@@ -536,10 +536,12 @@
 		reader.onload = function (evt){
                     //Why doesn't this work? It doesn't actually set the value
                     //of "input" to evt.target.result, i.e. the file contents
-                    input.setAttribute('value', evt.target.result);
+                    //input.setAttribute('value', evt.target.result);
                     
                     //Evidence that input.value didn't change:
-                    alert(input.value);
+                    //alert(input.value);
+                    console.log('ummm'+'__' + wb.language + '_' + file.name);
+                    localStorage['__' + file.name]= evt.target.result;
 		};
                 reader.readAsText( file );
             });

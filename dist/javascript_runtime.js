@@ -1755,13 +1755,13 @@ window.Voice = Voice;
 //Calculate sum of number array
 function sum(arr){
     if(arr.length==0) {
-        console.log("Array is empty!");
+        console.error("Array is empty!");
         return NaN;
     }
     var total= 0;
     for(var i = 0; i < arr.length; i++){
         if(typeof arr[i] != "number") {
-            console.log("Non-numerical value in array!");
+            console.error("Non-numerical value in array!");
             return NaN;
         }
         total += arr[i];    
@@ -1811,14 +1811,25 @@ function normalize(arr){
 }
 
 function createArrayFromCSV(file) {
-    //console.log("hi");
-    alert(fale.name);
-    /*if (file.name.indexOf('.csv', fileName.length - 4) === -1) {
+    if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");
 	return;
     }
-    alert()*/
-    return [1,2,3];
+    console.log("Filename: %s", file);
+    var arr= localStorage['__' + file].split(',');
+    console.log(arr);
+    for(var i = 0; i < arr.length; i++){
+        try{
+            arr[i]= Number(arr[i]);
+        }
+        catch(err){
+            console.error("Error description: " + err.message);
+            console.error("Non-numerical value in CSV!");
+            return;
+        }
+    }
+    console.log(arr);
+    return arr;
 }
 /*end languages/javascript/array_runtime.js*/
 

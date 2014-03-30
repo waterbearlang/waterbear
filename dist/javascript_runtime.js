@@ -1810,23 +1810,23 @@ function normalize(arr){
     }    
 }
 
+//Create number array from user-inputted CSV file
+//potential issue: use of "Number()" to convert string to number may be too
+//lenient, because Number() auto-converts variables of type "Date" to a number,
+//and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");
 	return;
     }
-    console.log("Filename: %s", file);
     var arr= localStorage['__' + file].split(',');
-    console.log(arr);
     for(var i = 0; i < arr.length; i++){
         arr[i]= Number(arr[i]);
-        //console.log(arr[i]);
         if(isNaN(arr[i])) {
             console.error("Non-numerical value in CSV!");
             return;
         }
     }
-    console.log(arr);
     return arr;
 }
 /*end languages/javascript/array_runtime.js*/

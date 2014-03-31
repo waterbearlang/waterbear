@@ -6,7 +6,7 @@
         {
             "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
-            "type": "number",
+            "type": "nur",
             "script": "(+ {{1}} {{2}})",
             "help": "sum of the two operands",
             "sockets": [

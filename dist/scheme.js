@@ -5554,9 +5554,8 @@ wb.menu({
             ]
         },
         {
-            "blocktype": "expression",
+            "blocktype": "step",
             "id": "43e8d463-0048-473c-8f15-a504455a4849",
-            "type": "boolean",
             "script": "(or {{1}} {{2}})",
             "help": "either or both operands are true",
             "sockets": [

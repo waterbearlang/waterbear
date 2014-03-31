@@ -58,7 +58,7 @@
     }
     wb.clearStage = clearStage;
 
-    // NOTE: Taken directly from the JS file needs modification
+    //TODO: add extra block types: In Scheme, everything is a value, and these need to be able to exist on their own
     // expose these globally so the Block/Label methods can find them
      wb.choiceLists = {
         boolean: ['#t', '#f'],

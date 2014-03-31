@@ -5,31 +5,9 @@
     "blocks": [
         {
             "blocktype": "expression",
-            "id": "CC2FD987-1EFC-483C-BDA3-71C839E4BAC4",
-            "type": "number",
-            "script": "({{1}}E{{2}})",
-            "help": "scientific notation",
-            "sockets": [
-                {
-                    "name": "",
-                    "type": "number",
-                    "value": "0"
-                },
-                {
-                    "name": "× 10 ^",
-                    "type": "number",
-                    "value": "0"
-                }
-            ],
-            "keywords": [
-                "exponent"
-            ]
-        },
-        {
-            "blocktype": "expression",
             "id": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
             "type": "number",
-            "script": "(- {{1}} {{2}})",
+            "script": "(+ {{1}} {{2}})",
             "help": "sum of the two operands",
             "sockets": [
                 {
@@ -77,7 +55,7 @@
             "blocktype": "expression",
             "id": "bd3879e6-e440-49cb-b10b-52d744846341",
             "type": "number",
-            "script": "({{1}} * {{2}})",
+            "script": "(* {{1}} {{2}})",
             "help": "product of the two operands",
             "sockets": [
                 {
@@ -101,7 +79,7 @@
             "blocktype": "expression",
             "id": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
             "type": "number",
-            "script": "({{1}} / {{2}})",
+            "script": "(/ {{1}} {{2}})",
             "help": "quotient of the two operands",
             "sockets": [
                 {
@@ -125,7 +103,7 @@
             "blocktype": "expression",
             "id": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
             "type": "boolean",
-            "script": "({{1}} === {{2}})",
+            "script": "(equals? {{1}} {{2}})",
             "help": "two operands are equal",
             "sockets": [
                 {
@@ -148,7 +126,7 @@
             "blocktype": "expression",
             "id": "11f59515-8061-4c96-a358-4944ad58cd18",
             "type": "boolean",
-            "script": "({{1}} !== {{2}})",
+            "script": "(not (equals? {{1}} {{2}}))",
             "help": "two operands are not equal",
             "sockets": [
                 {
@@ -171,7 +149,7 @@
             "blocktype": "expression",
             "id": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
             "type": "boolean",
-            "script": "({{1}} < {{2}})",
+            "script": "(< {{1}} {{2}})",
             "help": "first operand is less than second operand",
             "sockets": [
                 {
@@ -194,7 +172,7 @@
             "blocktype": "expression",
             "id": "A6725EBC-C1A2-4BB4-8A34-396F2CC5D833",
             "type": "boolean",
-            "script": "({{1}} <= {{2}})",
+            "script": "(<= {{1}} {{2}})",
             "help": "first operand is less than or equal to second operand",
             "sockets": [
                 {
@@ -217,7 +195,7 @@
             "blocktype": "expression",
             "id": "5a1f5f68-d74b-4154-b376-6a0200f585ed",
             "type": "boolean",
-            "script": "({{1}} > {{2}})",
+            "script": "(> {{1}} {{2}})",
             "help": "first operand is greater than second operand",
             "sockets": [
                 {
@@ -240,7 +218,7 @@
             "blocktype": "expression",
             "id": "75B859E7-9244-45DE-BA08-C3D09F67069F",
             "type": "boolean",
-            "script": "({{1}} >= {{2}})",
+            "script": "(>= {{1}} {{2}})",
             "help": "first operand is greater than or equal to second operand",
             "sockets": [
                 {
@@ -263,7 +241,7 @@
             "blocktype": "expression",
             "id": "a2647515-2f14-4d0f-84b1-a6e288823630",
             "type": "number",
-            "script": "({{1}} % {{2}})",
+            "script": "(% {{1}} {{2}})",
             "help": "modulus of a number is the remainder after whole number division",
             "sockets": [
                 {
@@ -280,23 +258,6 @@
             "keywords": [
                 "modulus",
                 "modulo"
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "4f7803c0-24b1-4a0c-a461-d46acfe9ab25",
-            "type": "number",
-            "script": "Math.round({{1}})",
-            "help": "rounds to the nearest whole number",
-            "sockets": [
-                {
-                    "name": "round",
-                    "type": "number",
-                    "value": 0
-                }
-            ],
-            "keywords": [
-                "rounding"
             ]
         },
         {

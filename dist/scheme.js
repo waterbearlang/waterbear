@@ -5536,7 +5536,8 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "uValue":"#t"
                 },
                 {
                     "name": "and",

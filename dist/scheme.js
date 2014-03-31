@@ -5984,15 +5984,15 @@ wb.menu({
             "blocktype": "expression",
             "type": "array",
             "id": "be0fb2db-fd62-4817-9b11-bee7ce44acd7",
-            "script": "(cons {{1}} {{2}}",
+            "script": "(cons {{1}} {{2}})",
             "help": "prepend argument 1 to argument 2",
             "sockets": [
                 {
-                    "name": "prepend",
+                    "name": "",
                     "type": "any"
                 },
                 {
-                    "name": "to",
+                    "name": "prepended to",
                     "type": "array",
                     "value": "( )"
                 }
@@ -6006,26 +6006,34 @@ wb.menu({
             "help": "the head element of a list",
             "sockets": [
                 {
-                    "name": "array",
+                    "name": "head of",
                     "type": "array"
-                },
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "type": "any",
+            "id": "fd90f624-c14f-41fe-8459-628da33f2226",
+            "script": "(cdr {{1}})",
+            "help": "the head element of a list",
+            "sockets": [
                 {
-                    "name": "append",
-                    "type": "any"
+                    "name": "tail of",
+                    "type": "array"
                 }
             ]
         },
         {
             "blocktype": "expression",
             "id": "840b188f-c890-47d3-8c9b-777efa1f372b",
-            "script": "{{1}}.length",
+            "script": "(length {{1}})",
             "type": "number",
             "help": "get the length of an array",
             "sockets": [
                 {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "length"
+                    "name": "length of",
+                    "type": "array"
                 }
             ]
         },
@@ -6037,45 +6045,8 @@ wb.menu({
             "help": "Returns true if and only if the argument is a list",
             "sockets": [
                 {
-                    "name": "is a list?",
+                    "name": "list?",
                     "type": "any"
-                }
-            ]
-        },
-        {
-            "blocktype": "context",
-            "id": "baf0fa5d-8f57-4134-9765-602a17b020c8",
-            "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
-            "locals": [
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "index"
-                        }
-                    ],
-                    "script": "local.index",
-                    "help": "index of current item in array",
-                    "type": "number"
-                },
-                {
-                    "blocktype": "expression",
-                    "sockets": [
-                        {
-                            "name": "item"
-                        }
-                    ],
-                    "script": "local.item",
-                    "help": "the current item in the iteration",
-                    "type": "any"
-                }
-            ],
-            "help": "run the blocks with each item of a named array",
-            "sockets": [
-                {
-                    "name": "array",
-                    "type": "array",
-                    "suffix": "for each"
                 }
             ]
         }

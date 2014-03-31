@@ -11,8 +11,7 @@
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean",
-                    "uValue":"#t"
+                    "type": "boolean"
                 },
                 {
                     "name": "and",

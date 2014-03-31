@@ -10,14 +10,6 @@
     wb.wrap = function(script){
         return [
             '(function(){', 
-                // 'try{',
-                    'local.canvas = document.createElement("canvas");',
-                    'local.canvas.setAttribute("width", global.stage_width);',
-                    'local.canvas.setAttribute("height", global.stage_height);',
-                    'global.stage.appendChild(local.canvas);',
-                    'local.canvas.focus()',
-                    'local.ctx = local.canvas.getContext("2d");',
-                    'local.ctx.textAlign = "center";',
                     'var main = function(){',
                         script,
                     '}',
@@ -27,7 +19,7 @@
                 // '}',
             '})()'
         ].join('\n');
-    }
+    };
 
     function assetUrls(){
         return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
@@ -46,7 +38,7 @@
         document.body.classList.add('running');
         if (!wb.scriptLoaded){
             console.log('not ready to run script yet, waiting');
-            Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
+            // Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
             return;
         }else{
             console.log('ready to run script, let us proceed to the running of said script');
@@ -75,10 +67,7 @@
         // console.log('script: %s', script);
         var run = function(){
             wb.script = script;
-            var path = location.pathname.slice(0,location.pathname.lastIndexOf('/'));
-            var runtimeUrl = location.protocol + '//' + location.host + path + '/dist/javascript_runtime.js';
-            // console.log('trying to load library %s', runtimeUrl);
-            document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
+            document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadScript', script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
         if (wb.iframeReady){
@@ -86,7 +75,7 @@
         }else{
             wb.iframewaiting = run;
         }
-    }
+    };
 
     function clearStage(event){
         wb.iframeReady = false;

@@ -178,7 +178,7 @@ function jsInclude(path){
 
 function jsIdeIncludes(lang){
     var includes = [];
-    config[lang].libs.forEach(function(scriptName){
+    config[lang].ideLibs.forEach(function(scriptName){
         includes.push(jsInclude('../../lib/' + scriptName));
     });
     scripts_pre.forEach(function(scriptName){
@@ -201,6 +201,9 @@ function jsRuntimeIncludes(lang){
     var includes = [jsInclude('runtime')];
     config[lang].plugins.forEach(function(plugin){
         includes.push(jsInclude('blocks/' + plugin + '_runtime'));
+    });
+    config[lang].runtimeLibs.forEach(function(libName){
+        includes.push(jsInclude('../../lib/' + libName));
     });
     return includes.join('\n');
 }

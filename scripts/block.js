@@ -362,7 +362,7 @@
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name');
         
-        if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
+        if (desc.name && desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
         var holder = wb.findChild(socket, '.holder');

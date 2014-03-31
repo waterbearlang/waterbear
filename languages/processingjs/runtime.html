@@ -20,6 +20,7 @@
 <script src="blocks/colors_runtime.js"></script>
 <script src="blocks/math_runtime.js"></script>
 <script src="blocks/transform_runtime.js"></script>
+<script src="../../lib/processing-1.4.1.js"></script>
     <script>
 
     window.addEventListener('message', receiveMessage, false);
@@ -32,8 +33,12 @@
 			return;
 		}
 		switch(message.command){
-			case 'reset': return location.reload();
-			case 'loadScript': return new Function(script)();
+			case 'reset': 
+				console.log('reset script');
+				return location.reload();
+			case 'loadScript': 
+				console.log('load script');
+				return new Function(message.script)();
 			default: return console.log('unknown command: %o', message);
 		}
 	}

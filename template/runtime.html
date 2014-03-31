@@ -23,12 +23,16 @@
 			return;
 		}
 		switch(message.command){
-			case 'reset': return location.reload();
-			case 'loadScript': return new Function(script)();
+			case 'reset': 
+				console.log('reset script');
+				return location.reload();
+			case 'loadScript': 
+				console.log('load script');
+				return new Function(message.script)();
 			default: return console.log('unknown command: %o', message);
 		}
 	}
-    window.parent.postMessage('ready', '*');
+    window.parent.postMessage('ide-ready', '*');
 
     </script>
 </body>

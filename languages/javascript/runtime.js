@@ -348,8 +348,19 @@ if(typeof(console) == "undefined") {
     // console.log provided by Firefox + Firebug
 }
 
+function initialize(local, global){
+    local.canvas = document.createElement("canvas");
+    local.canvas.setAttribute("width", global.stage_width);
+    local.canvas.setAttribute("height", global.stage_height);
+    global.stage.appendChild(local.canvas);
+    local.canvas.focus()
+    local.ctx = local.canvas.getContext("2d");
+    local.ctx.textAlign = "center";
+}
+
 var global = new Global();
 var local = new Local();
+initialize(local, global);
 window.Global = Global;
 window.Local = Local;
 window.global = global;

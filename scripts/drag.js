@@ -128,7 +128,7 @@
         var target = null;
         if (eT.classList.contains('scratchpad')) {
             var clickedBlock = getClickedBlock(scratchpad, event);
-            if (clickedBlock != false) {
+            if (clickedBlock !== false) {
                 console.log("The event has block");
                 target = clickedBlock;
             } else {
@@ -376,24 +376,22 @@
     */
     
     function undoDrag() {
-        if(this.toParent != null) {
+        if(this.toParent !== null) {
             // Remove the inserted block
             // WB-Specific
             Event.trigger(this.target, 'wb-remove');
             this.target.remove();
         }
-        if(this.fromParent != null) {
-            // Put back the removed block
-            this.target.removeAttribute('style');
-            // WB-Specific
-            if(wb.matches(this.target,'.step')) {
-                this.fromParent.insertBefore(this.target, this.fromBefore);
-            } else {
-                this.fromParent.appendChild(this.target);
-            }
-            // WB-Specific
-            Event.trigger(this.target, 'wb-add');
+        // Put back the removed block
+        this.target.removeAttribute('style');
+        // WB-Specific
+        if(wb.matches(this.target,'.step')) {
+            this.fromParent.insertBefore(this.target, this.fromBefore);
+        } else {
+            this.fromParent.appendChild(this.target);
         }
+        // WB-Specific
+        Event.trigger(this.target, 'wb-add');
     }
     
     function redoDrag() {
@@ -606,7 +604,7 @@
     }
     
     function menuToScratchpad(event) {
-	cloned = wb.cloneBlock(event.target);
+	cloned = wb.cloneBlock(event.wbTarget);
 	scratchpad.appendChild(cloned);
     }
     

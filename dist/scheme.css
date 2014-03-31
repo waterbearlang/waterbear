@@ -2626,8 +2626,8 @@ a .icon-flip-vertical:before {
 
 /*end languages/scheme/boolean.css*/
 
-/*begin languages/scheme/math.css*/
-.math, .math .holder{
+/*begin languages/scheme/integer.css*/
+.integer, .integer .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
 }
@@ -2637,4 +2637,12 @@ a .icon-flip-vertical:before {
 }
 
 
-/*end languages/scheme/math.css*/
+/*end languages/scheme/integer.css*/
+
+/*begin languages/scheme/list.css*/
+.lists, .lists .holder{
+    border-color: hsl(195, 65%, 79%);
+    background-color: hsl(195, 62%, 89%);
+}
+
+/*end languages/scheme/list.css*/

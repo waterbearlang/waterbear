@@ -24,6 +24,13 @@
     <script>
 
     window.addEventListener('message', receiveMessage, false);
+    var scriptRunning = false;
+    if (localStorage._storedScript){
+    	var script = localStorage._storedScript;
+    	delete localStorage._storedScript;
+    	scriptRunning = true;
+    	new Function(script)();
+    }
 
     function receiveMessage(evt){
 		try{
@@ -37,12 +44,17 @@
 				console.log('reset script');
 				return location.reload();
 			case 'loadScript': 
+			    if (scriptRunning){
+			    	localStorage._storedScript = message.script;
+			    	location.reload();
+			    }
 				console.log('load script');
+				scriptRunning = true;
 				return new Function(message.script)();
 			default: return console.log('unknown command: %o', message);
 		}
 	}
-    window.parent.postMessage('ready', '*');
+    window.parent.postMessage('ide-ready', '*');
 
     </script>
 </body>

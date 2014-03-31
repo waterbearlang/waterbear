@@ -192,7 +192,7 @@
 <script>
 	var iframe = document.querySelector('.stageframe');
 	function receiveMessage(event){
-		wb.iframeReady = event.data === 'ready' ? true : false;
+		wb.iframeReady = event.data === 'ide-ready' ? true : false;
 	}
 	window.addEventListener('message', receiveMessage, false);
 	// Work around Chrome bug with iframes in flexbox

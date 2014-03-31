@@ -175,8 +175,7 @@
     function handleScriptLoad(event){
         wb.scriptModified = false;
         wb.scriptLoaded = true;
-        if (wb.view === 'result'){
-            // console.log('run script because we are awesome');
+        if (wb.view === 'result' || wb.autorun){
             if (wb.windowLoaded){
                 // console.log('run scripts directly');
                 wb.runCurrentScripts();

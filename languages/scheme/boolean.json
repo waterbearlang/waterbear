@@ -4,7 +4,8 @@
     "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "expression",
+            "type" : "boolean",
             "id": "eec0910c-be04-407f-9536-f246a65222b5",
             "script": "(and {{1}} {{2}})",
             "help": "both operands are true",

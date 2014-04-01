@@ -5537,34 +5537,36 @@ wb.menu({
     "help": "Booleans are true or false and expressions which evaluate to true or false",
     "blocks": [
         {
-            "blocktype": "step",
+            "blocktype": "expression",
+            "type" : "boolean",
             "id": "eec0910c-be04-407f-9536-f246a65222b5",
             "script": "(and {{1}} {{2}})",
             "help": "both operands are true",
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "any"
                 },
                 {
                     "name": "and",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         },
         {
-            "blocktype": "step",
+            "blocktype": "expression",
+            "type":"boolean",
             "id": "43e8d463-0048-473c-8f15-a504455a4849",
             "script": "(or {{1}} {{2}})",
             "help": "either or both operands are true",
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "any"
                 },
                 {
                     "name": "or",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         },
@@ -5577,11 +5579,11 @@ wb.menu({
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "any"
                 },
                 {
                     "name": "xor",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         },
@@ -5594,7 +5596,7 @@ wb.menu({
             "sockets": [
                 {
                     "name": "not",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         }

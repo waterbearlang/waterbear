@@ -11,27 +11,28 @@
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "any"
                 },
                 {
                     "name": "and",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         },
         {
-            "blocktype": "step",
+            "blocktype": "expression",
+            "type":"boolean",
             "id": "43e8d463-0048-473c-8f15-a504455a4849",
             "script": "(or {{1}} {{2}})",
             "help": "either or both operands are true",
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "any"
                 },
                 {
                     "name": "or",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         },
@@ -44,11 +45,11 @@
             "sockets": [
                 {
                     "name": "",
-                    "type": "boolean"
+                    "type": "any"
                 },
                 {
                     "name": "xor",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         },
@@ -61,7 +62,7 @@
             "sockets": [
                 {
                     "name": "not",
-                    "type": "boolean"
+                    "type": "any"
                 }
             ]
         }

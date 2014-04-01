@@ -1,4 +1,4 @@
-.integer, .integer .holder{
+.number, .number .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
 }

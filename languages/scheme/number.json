@@ -1,7 +1,7 @@
 {
-    "sectionkey": "integer",
-    "name": "Integer",
-    "help": "Integer blocks are for manipulating numbers",
+    "sectionkey": "number",
+    "name": "Number",
+    "help": "Number blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "expression",

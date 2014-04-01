@@ -5602,11 +5602,11 @@ wb.menu({
 });
 /*end languages/scheme/boolean.json*/
 
-/*begin languages/scheme/integer.json*/
+/*begin languages/scheme/number.json*/
 wb.menu({
-    "sectionkey": "integer",
-    "name": "Integer",
-    "help": "Integer blocks are for manipulating numbers",
+    "sectionkey": "number",
+    "name": "Number",
+    "help": "Number blocks are for manipulating numbers",
     "blocks": [
         {
             "blocktype": "expression",
@@ -5972,7 +5972,7 @@ wb.menu({
         }
     ]
 });
-/*end languages/scheme/integer.json*/
+/*end languages/scheme/number.json*/
 
 /*begin languages/scheme/list.json*/
 wb.menu({
@@ -6014,7 +6014,7 @@ wb.menu({
         {
             "blocktype": "expression",
             "type": "any",
-            "id": "fd90f624-c14f-41fe-8459-628da33f2226",
+            "id": "85e9a7f8-a0ea-43ca-807d-83544372bae3",
             "script": "(cdr {{1}})",
             "help": "the head element of a list",
             "sockets": [

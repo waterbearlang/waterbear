@@ -2646,3 +2646,11 @@ a .icon-flip-vertical:before {
 }
 
 /*end languages/scheme/list.css*/
+
+/*begin languages/scheme/tree.css*/
+.trees, .trees .holder{
+    border-color: hsl(156, 90%, 66%);
+    background-color: hsl(156, 85%, 70%);
+}
+
+/*end languages/scheme/tree.css*/

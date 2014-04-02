@@ -94,3 +94,16 @@
 		(fold_right f (cdr lst) (f (car lst) acc))
 	)
 )
+
+(define (binarySearch tree item)
+	(if (> (car (cdr tree)) item)
+			(binarySearch (car tree) item)
+		(if (< (car (cdr tree)) item)
+			(binarySearch (car (cdr (cdr tree))) item)
+			item
+		)
+
+
+	)
+
+)

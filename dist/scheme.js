@@ -5971,6 +5971,22 @@ wb.menu({
             "keywords": [
                 "minimum"
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "dc2be559-bbf5-423e-a396-e331c14eb535",
+            "type": "number",
+            "script": "(min {{1}} {{2}})",
+            "help": "the smaller of the two arguments",
+            "sockets": [
+                {
+                    "name": "number",
+                    "type": "number"
+                }
+            ],
+            "keywords": [
+                "minimum"
+            ]
         }
     ]
 });

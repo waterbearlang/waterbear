@@ -66,18 +66,10 @@ function createArrayFromCSV(file) {
         console.error("File is not a CSV file");
 	return;
     }
-    var arr= localStorage['__' + file];//.split(',');
-    /*for(var i = 0; i < arr.length; i++){
-        arr[i]= Number(arr[i]);
-        if(isNaN(arr[i])) {
-            console.error("Non-numerical value in CSV!");
-            return;
-        }
-    }*/
+    var arr= localStorage['__' + file];
     var parsed= CSV.parse(arr);
     if(parsed.length==1) {
         parsed= parsed[0];
     }
     return parsed;
-    //return arr;
 }

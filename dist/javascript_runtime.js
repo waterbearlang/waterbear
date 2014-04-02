@@ -866,6 +866,7 @@ Author Greg Kindel (twitter @gkindel), 2013
         var result = CSV.result = [];
         CSV.offset = 0;
         CSV.str = str;
+        alert(CSV.str);
         CSV.record_begin();
 
         CSV.debug("parse()", str);
@@ -2130,10 +2131,12 @@ function createArrayFromCSV(file) {
 	return;
     }
     var arr= localStorage['__' + file];
+    console.log("ARRAY: " + arr);
     var parsed= CSV.parse(arr);
     if(parsed.length==1) {
         parsed= parsed[0];
     }
+    console.log(parsed);
     return parsed;
 }
 /*end languages/javascript/array_runtime.js*/

@@ -36,7 +36,20 @@ function gamma(n) {
 		return Math.sqrt(2*Math.PI) * Math.pow(t,n+0.5) * Math.exp(-t) * x;
 	}
 }
+
+function summation(n) {
+	return (n*(n-1))/2;
+}
+
+function sumOfFirstNMultiples(mul, n) {
+	return mul*summation(n);
+}
+
+function inclusiveSummation() {
+	;
+}
 window.gcd = gcd;
 window.lcm = lcm;
 window.gamma = gamma;
+window.summation = summation;
 })(window);

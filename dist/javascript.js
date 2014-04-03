@@ -9326,10 +9326,79 @@ wb.menu({
                 "bitwise",
                 "shift"
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "be2c0634-28d8-4f64-97e0-48ed66877ba6",
+            "type": "number",
+            "script": "",
+            "help": "sum all of the numbers from 1 to N",
+            "sockets": [
+                {
+                    "name": "Summation",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Summation",
+                "1 to N"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5d547a3d-886a-40f9-86fa-b3d68d3db228",
+            "type": "number",
+            "script": "",
+            "help": "sum all of the numbers from N to M",
+            "sockets": [
+                {
+                    "name": "Inclusive Summation"
+                },
+                {
+                    "name": "from ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Inclusive Summation",
+                "N to M"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "",
+            "type": "number",
+            "script": "",
+            "help": "sum of the first N multiples of M",
+            "sockets": [
+                {
+                    "name": "Multiple Summation"
+                },
+                {
+                    "name": "from ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Multiple Summation",
+                "multiple"
+            ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/math.json*/
 
 /*begin languages/javascript/random.json*/

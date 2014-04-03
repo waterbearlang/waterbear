@@ -9331,7 +9331,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "be2c0634-28d8-4f64-97e0-48ed66877ba6",
             "type": "number",
-            "script": "",
+            "script": "summation({{1}});",
             "help": "sum all of the numbers from 1 to N",
             "sockets": [
                 {
@@ -9349,7 +9349,7 @@ wb.menu({
             "blocktype": "expression",
             "id": "5d547a3d-886a-40f9-86fa-b3d68d3db228",
             "type": "number",
-            "script": "",
+            "script": "inclusiveSummation({{1}}, {{2}});",
             "help": "sum all of the numbers from N to M",
             "sockets": [
                 {
@@ -9373,21 +9373,21 @@ wb.menu({
         },
         {
             "blocktype": "expression",
-            "id": "",
+            "id": "3348490a-2b56-453e-9dfb-bfecd4cac71f",
             "type": "number",
-            "script": "",
+            "script": "sumOfFirstNMultiples({{2}}, {{1}});",
             "help": "sum of the first N multiples of M",
             "sockets": [
                 {
                     "name": "Multiple Summation"
                 },
                 {
-                    "name": "from ",
+                    "name": "First ",
                     "type": "number",
                     "value": "0"
                 },
                 {
-                    "name": "to",
+                    "name": "multiples of",
                     "type": "number",
                     "value": "0"
                 }

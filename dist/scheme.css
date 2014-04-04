@@ -2654,3 +2654,12 @@ a .icon-flip-vertical:before {
 }
 
 /*end languages/scheme/tree.css*/
+
+/*begin languages/scheme/control.css*/
+.control, .control .holder{
+    background-color: #FF4444;
+    border-color: red;
+}
+
+
+/*end languages/scheme/control.css*/

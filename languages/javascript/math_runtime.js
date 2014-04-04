@@ -28,11 +28,11 @@ function gamma(n) {
 		return Math.PI / (Math.sin(Math.PI*n) * gamma(1-n));
 	} else {
 		n -= 1;
-		x = p[0];
-		for(i = 1; i < g+2; i++) {
+		var x = p[0];
+		for(var i = 1; i < g+2; i++) {
 			x += p[i]/(n+i);
 		}
-		t = n + g + 0.5;
+		var t = n + g + 0.5;
 		return Math.sqrt(2*Math.PI) * Math.pow(t,n+0.5) * Math.exp(-t) * x;
 	}
 }

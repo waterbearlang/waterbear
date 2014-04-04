@@ -185,7 +185,7 @@ describe("Javascript_runtime test suite", function() {
 				sum+=ran[i];
 			}
 
-			assert.equal(sum, summation(end));
+			assert.equal(sum, summation(end), "Testing Range function with step of 1");
 			// check steps
 			end = 300;
 			step = 3;
@@ -197,7 +197,7 @@ describe("Javascript_runtime test suite", function() {
 			}
 
 
-			assert.equal(sum, sumOfMultiples(3, 100));
+			assert.equal(sum, sumOfMultiples(3, 100), "Testing Range function with step of 3");
 
 			// inclusive sum
 			start = 132;
@@ -208,10 +208,8 @@ describe("Javascript_runtime test suite", function() {
 			sum = 0;
 			for(var i = 0; i < ran.length; i++ ) {
 				sum+=ran[i];
-			}
-
-			
-			assert.equal(sum, inclusiveSum(start, end));
+			}			
+			assert.equal(sum, inclusiveSum(start, end), "Testing Range function of step 1 with nonzero start value");
 	
 		});
 

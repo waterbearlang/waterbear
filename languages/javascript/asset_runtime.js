@@ -56,8 +56,12 @@ if(!window.Global) {
 	
 	window.Global = new makeObj();
 	window.Global.prototype = {};
-	window.preloadAssets = preloadAssets; 
+	window.preloadAssets = preloadAssets;
+	window.preloadImage = preloadImage;
+	window.preloadAudio = preloadAudio;
+	window.preloadVideo = preloadVideo;
 }
+
 var images = Global.prototype.images = {};
 var audio = Global.prototype.audio = {};
 var video = Global.prototype.video = {};

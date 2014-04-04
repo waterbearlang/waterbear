@@ -1,7 +1,7 @@
 {
     "sectionkey": "sound",
-    "name": "Sound",
-    "help": "Sound blocks can load and play sound files (wav, mp3, ogg) if those files are supported by your browser.",
+    "name": "聲音",
+    "help": "若瀏覽器支援，能夠播放 wav, mp3, ogg 聲音檔案。",
     "blocks": [
         {
             "blocktype": "step",
@@ -9,7 +9,7 @@
             "script": "global.preloadAudio('##', {{1}});",
             "sockets": [
                 {
-                    "name": "load audio## from url",
+                    "name": "從網頁讀取聲音資料##",
                     "type": "string"
                 }
             ],
@@ -18,14 +18,14 @@
                     "blocktype": "asset",
                     "sockets": [
                         {
-                            "name": "audio ##"
+                            "name": "聲音 ##"
                         }
                     ],
                     "script": "global.audio[\"##\"]",
                     "type": "sound"
                 }
             ],
-            "help": "Load a sound for playback"
+            "help": "讀取聲音資料"
         },
         {
         	"blocktype": "step",
@@ -33,11 +33,11 @@
         	"script": "{{1}}.currentTime=0;{{1}}.play();",
         	"sockets": [
         		{
-        			"name": "play sound",
+        			"name": "播放聲音",
         			"type": "sound"
         		}
         	],
-        	"help": "play a sound"
+        	"help": "播放聲音"
         },
         {
         	"blocktype": "step",
@@ -45,7 +45,7 @@
         	"script": "{{1}}.pause();",
         	"sockets": [
         		{
-        			"name": "pause sound",
+        			"name": "暫停聲音",
         			"type": "sound"
         		}
         	]
@@ -56,11 +56,11 @@
         	"script": "{{1}}.loop={{2}};",
         	"sockets": [
         		{
-        			"name": "set sound",
+        			"name": "將聲音",
         			"type": "sound"
         		},
         		{
-        			"name": "looping to",
+        			"name": "循環設置為",
         			"type": "boolean"
         		}
 

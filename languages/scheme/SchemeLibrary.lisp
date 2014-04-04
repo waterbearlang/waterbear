@@ -96,14 +96,15 @@
 )
 
 (define (binarySearch tree item)
-	(if (> (car (cdr tree)) item)
+	(if (equal? (cdr tree) ()) 
+		(equal? item  (car tree))
+		(if (> (cadr tree))
 			(binarySearch (car tree) item)
-		(if (< (car (cdr tree)) item)
-			(binarySearch (car (cdr (cdr tree))) item)
-			item
+			(if (< cadr tree)
+				(binarySearch (caddr tree) item)
+				#t
+			)
 		)
 
-
+		)
 	)
-
-)

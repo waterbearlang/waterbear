@@ -2055,6 +2055,11 @@ var l10nFiles = {};
                     keywords = keywords.concat(JSON.parse(keywordsAttr));
                 }
 
+                var tagsAttr = blocks[j].getAttribute('data-tags');
+                if (tagsAttr) {
+                    keywords = keywords.concat(JSON.parse(tagsAttr));
+                }
+
                 // Find a match
                 var matchingKeywords = [];
 

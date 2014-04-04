@@ -95,6 +95,27 @@
 	)
 )
 
+(define (treeInsert tree item)
+	(if (equal? (cdr tree) ())
+
+	)
+)
+
+(define (treeDelete tree item)
+
+)
+
+(define (lstTreeHelper lst tree)
+	(if (equals? lst ())
+		tree
+		(lstTreeHelper (cdr lst) (treeInsert tree (car lst)))
+	)
+)
+
+(define (listToTree lst)
+
+)
+
 (define (binarySearch tree item)
 	(if (equal? (cdr tree) ()) 
 		(equal? item  (car tree))

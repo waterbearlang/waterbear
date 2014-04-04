@@ -7,18 +7,22 @@
 (function(wb, Event){
  'use strict';
     var bscheme = new BiwaScheme.Interpreter(function(e, state) {
-        console.error(e.message);
+        document.querySelector('.stageframe').contentWindow.document.write(e.message);
     });
     wb.runScript = function(script){
         var run = function(){
             wb.script = script;
-            bscheme.evaluate(script, function(result) {
-                if (result !== undefined && result !== BiwaScheme.undef) {
-                    console.log(BiwaScheme.to_write(result));
-                    document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
-                    document.querySelector('.stageframe').contentWindow.document.write('==> ' + result);
-                }
-            });
+            var scriptArray = script.split(";;end");
+            
+            for(var i = 0; i < scriptArray.length; i++) {
+                console.log('THIS IS IMPORTANT:' + scriptArray[i]);
+                bscheme.evaluate(scriptArray[i], function(result) {
+                    if (result !== undefined && result !== BiwaScheme.undef) {
+                        console.log(BiwaScheme.to_write(result));
+                        document.querySelector('.stageframe').contentWindow.document.write('==> ' + result + '<br>');
+                    }
+                });
+            }
         }
         run();
     }
@@ -30,7 +34,7 @@
         view.innerHTML = '<pre class="language-scheme">' + script + '</pre>';
     };
 
-    wb.wrap = function(script){
+    wb.wrap = function(script){ //doesn't do anything
         return "";
     }
     
@@ -55,8 +59,7 @@
  
     function clearStage(event){
         wb.iframeReady = false;
-        document.body.classList.remove('running');
-        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
+        document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
     }
     wb.clearStage = clearStage;
 

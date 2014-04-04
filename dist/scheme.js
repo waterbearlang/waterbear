@@ -5456,18 +5456,22 @@ wb.l10nHalfDone = l10nHalfDone;
 (function(wb, Event){
  'use strict';
     var bscheme = new BiwaScheme.Interpreter(function(e, state) {
-        console.error(e.message);
+        document.querySelector('.stageframe').contentWindow.document.write(e.message);
     });
     wb.runScript = function(script){
         var run = function(){
             wb.script = script;
-            bscheme.evaluate(script, function(result) {
-                if (result !== undefined && result !== BiwaScheme.undef) {
-                    console.log(BiwaScheme.to_write(result));
-                    document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
-                    document.querySelector('.stageframe').contentWindow.document.write('==> ' + result);
-                }
-            });
+            var scriptArray = script.split(";;end");
+            
+            for(var i = 0; i < scriptArray.length; i++) {
+                console.log('THIS IS IMPORTANT:' + scriptArray[i]);
+                bscheme.evaluate(scriptArray[i], function(result) {
+                    if (result !== undefined && result !== BiwaScheme.undef) {
+                        console.log(BiwaScheme.to_write(result));
+                        document.querySelector('.stageframe').contentWindow.document.write('==> ' + result + '<br>');
+                    }
+                });
+            }
         }
         run();
     }
@@ -5479,7 +5483,7 @@ wb.l10nHalfDone = l10nHalfDone;
         view.innerHTML = '<pre class="language-scheme">' + script + '</pre>';
     };
 
-    wb.wrap = function(script){
+    wb.wrap = function(script){ //doesn't do anything
         return "";
     }
     
@@ -5504,8 +5508,7 @@ wb.l10nHalfDone = l10nHalfDone;
  
     function clearStage(event){
         wb.iframeReady = false;
-        document.body.classList.remove('running');
-        document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
+        document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
     }
     wb.clearStage = clearStage;
 
@@ -6170,6 +6173,46 @@ wb.menu({
     ]
 });
 /*end languages/scheme/tree.json*/
+
+/*begin languages/scheme/control.json*/
+wb.menu({
+    "sectionkey": "control",
+    "name": "Control",
+    "help": "Basic Control blocks for testing",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "eec0910c-be04-407f-9536-f246a65222b7",
+            "script": "{{1}} ;;end\n",
+            "help": "Overall control block",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "any"
+                }
+            ]
+        },
+         {
+            "blocktype": "expression",
+            "type" : "any",
+            "id": "eec0910c-be04-407f-9536-f246a65222c9",
+            "script": "{{1}} {{2}}",
+            "help": "expands a input to 2",
+            "sockets": [
+                {
+                    "name": "",
+                    "type": "any"
+                },
+                {
+                    "name": " ",
+                    "type": "any"
+                }
+            ]
+        }
+    ]
+}
+);
+/*end languages/scheme/control.json*/
 
 /*begin l10n.js*/
 (function(wb){

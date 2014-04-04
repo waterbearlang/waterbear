@@ -6,7 +6,7 @@
         {
             "blocktype": "step",
             "id": "eec0910c-be04-407f-9536-f246a65222b7",
-            "script": "{{1}} \n",
+            "script": "{{1}} ;;end\n",
             "help": "Overall control block",
             "sockets": [
                 {

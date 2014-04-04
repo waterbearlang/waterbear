@@ -6111,6 +6111,20 @@ wb.menu({
                     "type": "any"
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7bc79894-a495-4464-ae5d-2d47b66cbfc6",
+            "script": "(listToTree {{1}})",
+            "type": "tree",
+            "help": "Create a binary tree of only one element",
+            "sockets": [
+                {
+                    "name": "list",
+                    "type": "list",
+                    "suffix": "of tree"
+                }
+            ]
         }
     ]
 });

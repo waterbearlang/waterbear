@@ -113,7 +113,7 @@
 )
 
 (define (listToTree lst)
-
+	(fold_left treeInsert (list car lst) (cdr lst))
 )
 
 (define (binarySearch tree item)

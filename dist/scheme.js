@@ -5464,6 +5464,8 @@ wb.l10nHalfDone = l10nHalfDone;
             bscheme.evaluate(script, function(result) {
                 if (result !== undefined && result !== BiwaScheme.undef) {
                     console.log(BiwaScheme.to_write(result));
+                    document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
+                    document.querySelector('.stageframe').contentWindow.document.write('==> ' + result);
                 }
             });
         }
@@ -6139,7 +6141,7 @@ wb.menu({
         {
             "blocktype": "step",
             "id": "eec0910c-be04-407f-9536-f246a65222b7",
-            "script": "{{1}}",
+            "script": "{{1}} \n",
             "help": "Overall control block",
             "sockets": [
                 {

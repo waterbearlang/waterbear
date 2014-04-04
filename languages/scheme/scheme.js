@@ -15,6 +15,8 @@
             bscheme.evaluate(script, function(result) {
                 if (result !== undefined && result !== BiwaScheme.undef) {
                     console.log(BiwaScheme.to_write(result));
+                    document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
+                    document.querySelector('.stageframe').contentWindow.document.write('==> ' + result);
                 }
             });
         }

@@ -31,22 +31,6 @@
                     "type": "any"
                 }
             ]
-        },
-            "blocktype": "step",
-            "type" : "any",
-            "id": "eec0910c-be04-407f-9536-f246a65222d9",
-            "script": "(define{{1}} {{2}}",
-            "help": "expands a input to 2",
-            "sockets": [
-                {
-                    "name": "",
-                    "type": "any"
-                },
-                {
-                    "name": " ",
-                    "type": "any"
-                }
-            ]
-
+        }
     ]
 }

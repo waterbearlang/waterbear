@@ -57,15 +57,23 @@ function normalize(arr){
     }    
 }
 
+function stringEscape(s) {
+    return s ? s.replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/\t/g,'\\t').replace(/\v/g,'\\v').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/[\x00-\x1F\x80-\x9F]/g,hex) : s;
+    function hex(c) { var v = '0'+c.charCodeAt(0).toString(16); return '\\x'+v.substr(v.length-2); }
+}
+
 //Create number array from user-inputted CSV file
 //potential issue: use of "Number()" to convert string to number may be too
 //lenient, because Number() auto-converts variables of type "Date" to a number,
 //and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
+    file= stringEscape(file);//want to replace backslashes so that they arent seen as escapes
+    alert(file);
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");
 	return;
     }
+    console.log("Trying to open: " + "__" + file);
     var arr= localStorage['__' + file];
     console.log("ARRAY: " + arr);
     var parsed= CSV.parse(arr);

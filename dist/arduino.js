@@ -1828,6 +1828,7 @@ var l10nFiles = {};
                 var reader = new FileReader();
                 
 		reader.onload = function (evt){
+                    console.log("File saved: " + "__" + file.name);
                     localStorage['__' + file.name]= evt.target.result;
 		};
                 reader.readAsText( file );

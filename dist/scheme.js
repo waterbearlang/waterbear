@@ -3642,7 +3642,33 @@ var l10nFiles = {};
             return choice;
         
         }
-        
+                
+        //Known issue: width manually set to 160, need to programmatically get
+        //(size of "Browse" button) + (size of file input field)
+        if (type === 'file') {
+            var value = obj.uValue || obj.value || '';
+            //not sure if 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            input.addEventListener('change', function(evt){
+                var file = input.files[0];
+                //csv check below will need to be removed if this is to be
+                //extended to other types of files
+                if (file.name.indexOf('.csv', file.name.length - 4) === -1) {
+			console.error("File is not a CSV file");
+			return;
+		}
+                var reader = new FileReader();
+                
+		reader.onload = function (evt){
+                    console.log("File saved: " + "__" + file.name);
+                    localStorage['__' + file.name]= evt.target.result;
+		};
+                reader.readAsText( file );
+            });
+            wb.resize(input); //not sure if this is necessary
+            input.style.width= "160px"; //known issue stated above
+            return input;
+        }
         if (type === 'int' || type === 'float'){
             type = 'number';
         }

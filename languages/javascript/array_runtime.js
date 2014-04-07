@@ -57,11 +57,23 @@ function normalize(arr){
     }    
 }
 
+//Possible issue: does this cover all possible control sequence issues?
+//Do all browsers handle all control sequences the same way?
 function stringEscape(s) {
-    return s ? s.replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/\t/g,'\\t').replace(/\v/g,'\\v').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/[\x00-\x1F\x80-\x9F]/g,hex) : s;
-    function hex(c) { var v = '0'+c.charCodeAt(0).toString(16); return '\\x'+v.substr(v.length-2); }
+    //not optimal design decision, but "escapse" contains length-3 arrays where:
+    //1st entry is the escape character
+    //2nd entry is the regex to be used in the replace function
+    //3rd entry is the the replacement string
+    escapes= [["\b", /\b/g, " b"], ["\t", /\t/g, " t"], ["\n", /\n/g, " n"],
+              ["\v", /\v/g, " v"], ["\f", /\f/g, " f"], ["\r",/\r/g, " r"]];
+    for (var i=0;i<escapes.length;i++) {
+        if(s.indexOf(escapes[i][0]) != -1) {
+            console.log("HERE WITH " + escapes[i][2]);
+            s= s.replace(escapes[i][1],escapes[i][2]);
+        }
+    }
+    return s;
 }
-
 //Create number array from user-inputted CSV file
 //potential issue: use of "Number()" to convert string to number may be too
 //lenient, because Number() auto-converts variables of type "Date" to a number,

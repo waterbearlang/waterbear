@@ -16,12 +16,12 @@ var plugins = {
     node: ['node','control', 'piface', "pibrella_simple",'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
     javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation','date','size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
     processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
-    scheme: ['scheme', 'boolean', 'number', 'list', 'tree', 'control']
+    scheme: ['scheme', 'boolean', 'math']
 };
 
 var pluginlibs = {
     arduino: [],
-    javascript: ['SAT','CSV'],
+    javascript: ['SAT'],
     node: [],
     demo: [],
     processingjs: ['processing-1.4.1'],

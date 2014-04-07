@@ -2516,8 +2516,6 @@ var l10nFiles = {};
         // DONE: Don't start drag on a text input or select using :input jquery selector
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        // console.log(eT);
-        //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
@@ -3729,6 +3727,7 @@ var l10nFiles = {};
     }
 
     function codeFromBlock(block){
+        console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -9428,10 +9427,79 @@ wb.menu({
                 "bitwise",
                 "shift"
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "be2c0634-28d8-4f64-97e0-48ed66877ba6",
+            "type": "number",
+            "script": "summation({{1}});",
+            "help": "sum all of the numbers from 1 to N",
+            "sockets": [
+                {
+                    "name": "Summation",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Summation",
+                "1 to N"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5d547a3d-886a-40f9-86fa-b3d68d3db228",
+            "type": "number",
+            "script": "inclusiveSummation({{1}}, {{2}});",
+            "help": "sum all of the numbers from N to M",
+            "sockets": [
+                {
+                    "name": "Inclusive Summation"
+                },
+                {
+                    "name": "from ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Inclusive Summation",
+                "N to M"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "3348490a-2b56-453e-9dfb-bfecd4cac71f",
+            "type": "number",
+            "script": "sumOfFirstNMultiples({{2}}, {{1}});",
+            "help": "sum of the first N multiples of M",
+            "sockets": [
+                {
+                    "name": "Multiple Summation"
+                },
+                {
+                    "name": "First ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "multiples of",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Multiple Summation",
+                "multiple"
+            ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/math.json*/
 
 /*begin languages/javascript/random.json*/

@@ -12723,8 +12723,6 @@ var l10nFiles = {};
         // DONE: Don't start drag on a text input or select using :input jquery selector
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        // console.log(eT);
-        //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
@@ -13936,6 +13934,7 @@ var l10nFiles = {};
     }
 
     function codeFromBlock(block){
+        console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 

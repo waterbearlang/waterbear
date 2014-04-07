@@ -68,11 +68,17 @@ function stringEscape(s) {
               ["\v", /\v/g, " v"], ["\f", /\f/g, " f"], ["\r",/\r/g, " r"]];
     for (var i=0;i<escapes.length;i++) {
         if(s.indexOf(escapes[i][0]) != -1) {
-            console.log("HERE WITH " + escapes[i][2]);
             s= s.replace(escapes[i][1],escapes[i][2]);
         }
     }
-    return s;
+    filepathParts= s.split(' ');
+    filename= filepathParts[filepathParts.length-1]
+    //the below replace is needed b/c "\" followed by something like "c" (i.e.
+    //something that doesn't make an escape sequence) just gets reduced to "c"
+    //(i.e. the "\" disappears), so the "fakepath" part of the filepath gets
+    //prepended to the actual filename
+    filename= filename.replace("fakepath",""); 
+    return filename;
 }
 //Create number array from user-inputted CSV file
 //potential issue: use of "Number()" to convert string to number may be too
@@ -80,18 +86,14 @@ function stringEscape(s) {
 //and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
     file= stringEscape(file);//want to replace backslashes so that they arent seen as escapes
-    alert(file);
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");
 	return;
     }
-    console.log("Trying to open: " + "__" + file);
     var arr= localStorage['__' + file];
-    console.log("ARRAY: " + arr);
     var parsed= CSV.parse(arr);
     if(parsed.length==1) {
         parsed= parsed[0];
     }
-    console.log(parsed);
     return parsed;
 }

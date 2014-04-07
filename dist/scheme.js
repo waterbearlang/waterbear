@@ -3651,16 +3651,9 @@ var l10nFiles = {};
             var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
             input.addEventListener('change', function(evt){
                 var file = input.files[0];
-                //csv check below will need to be removed if this is to be
-                //extended to other types of files
-                if (file.name.indexOf('.csv', file.name.length - 4) === -1) {
-			console.error("File is not a CSV file");
-			return;
-		}
                 var reader = new FileReader();
                 
 		reader.onload = function (evt){
-                    console.log("File saved: " + "__" + file.name);
                     localStorage['__' + file.name]= evt.target.result;
 		};
                 reader.readAsText( file );

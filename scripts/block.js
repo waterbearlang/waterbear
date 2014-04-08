@@ -518,7 +518,7 @@
         }
                 
         //Known issue: width manually set to 160, need to programmatically get
-        //(size of "Browse" button) + (size of file input field)
+        //(size of "Browse" button) + (size of file input field). 
         if (type === 'file') {
             var value = obj.uValue || obj.value || '';
             //not sure if 'data-oldvalue' is needed in the below line
@@ -526,7 +526,6 @@
             input.addEventListener('change', function(evt){
                 var file = input.files[0];
                 var reader = new FileReader();
-                
 		reader.onload = function (evt){
                     localStorage['__' + file.name]= evt.target.result;
 		};

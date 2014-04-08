@@ -2158,6 +2158,9 @@ function createArrayFromCSV(file) {
     if(parsed.length==1) {
         parsed= parsed[0];
     }
+    //for(var i=0; i<parsed.length; i++) {
+        //alert(parsed[i]);
+    //}
     return parsed;
 }
 /*end languages/javascript/array_runtime.js*/

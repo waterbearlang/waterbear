@@ -263,17 +263,24 @@ function closeContextMenu(evt) {
 }
 
 function handleContextMenu(evt) {
+	var block = wb.closest(evt.wbTarget, '.block');
+	var cm_cont = document.getElementById('cm_container');
 	// console.log('handling context menu');
 	stackTrace();
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block_menu_wrapper *')) return;
-	else if(false);
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
+	
+	else if(wb.overlap(evt.wbTarget, cm_cont)){
+		setContextMenuTarget(evt.wbTarget);
+		buildContextMenu(cm_cmenu);
+	}
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
 		buildContextMenu(block_cmenu);
-	} else return;
+		}
+	else return;
 	showContextMenu(evt.clientX, evt.clientY);
 	evt.preventDefault();
 }
@@ -333,6 +340,60 @@ var block_cmenu = {
 	//cancel: {name: 'Cancel', callback: dummyCallback},
         delete: {name: 'Delete', callback: deleteCommand},
 };
+
+// context menu for code map
+var cm_cmenu = {
+	thrity: {name: '30%', callback: thirtyPercent},
+	fifty: {name: '50%', callback: fiftyPercent},
+	seventy: {name: '70%', callback: seventyPercent},
+    hundred: {name: '100%', callback: hundredPercent},
+};
+
+//call back function for code map
+function thirtyPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(0.3, 0.3)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
+
+//call back function for code map
+function fiftyPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(0.5, 0.5)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
+//call back function for code map
+function seventyPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(0.7, 0.7)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
+//call back function for code map
+function hundredPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(1, 1)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
 
 // Test drawn from modernizr
 function is_touch_device() {

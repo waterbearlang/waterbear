@@ -1888,7 +1888,6 @@ function gamma(n) {
 }
 
 function summation(n) {
-	// get rid of off by one error;
 	return (n*(n+1))/2;
 }
 

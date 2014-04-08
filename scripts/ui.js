@@ -271,10 +271,13 @@ function handleContextMenu(evt) {
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
 	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
-	
+	else if(false);
 	else if(wb.overlap(evt.wbTarget, cm_cont)){
 		setContextMenuTarget(evt.wbTarget);
-		buildContextMenu(cm_cmenu);
+		if(cmenuTarget == null)return;
+		if( wb.matches(cmenuTarget, '.cloned') || wb.matches(cmenuTarget, '.holder')){
+			buildContextMenu(cm_cmenu);
+		}else return;
 	}
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);

@@ -72,6 +72,7 @@
     var startPosition;
     var pointerDown;
     var cloned;
+    var cm_cont= document.querySelector('#cm_container');
     
     var _dropCursor; // <- WB
     
@@ -118,6 +119,9 @@
         var eT = event.wbTarget; // <- WB
         //Check whether the original target was an input ....
         // WB-specific
+        if(eT.classList.contains('cloned')){
+        	return undefined;
+	}
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
@@ -306,7 +310,13 @@
             Event.trigger(dragTarget, 'wb-add');
             return;
         }
-        
+        else if(wb.overlap(dragTarget, cm_cont)){
+        	if (cloned){
+        		dragTarget.parentElement.removeChild(dragTarget);
+            	}else{
+                	revertDrop();
+            	}
+	}
         else if (dropTarget){
             //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
@@ -604,8 +614,10 @@
     }
     
     function menuToScratchpad(event) {
-	cloned = wb.cloneBlock(event.target);
-	scratchpad.appendChild(cloned);
+	if(!wb.matches(event.target, '.cloned')){
+		cloned = wb.cloneBlock(event.target);
+		scratchpad.appendChild(cloned);
+	}
     }
     
     

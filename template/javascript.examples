@@ -18,3 +18,5 @@
 <li><button class="load-example" data-example="sieve_of_eratosthenes">Sieve of Eratosthenes</button></li>
 <li><button class="load-example" data-example="dice_roll">Dice Roll</button></li>
 <li><button class="load-example" data-example="confetti">Confetti!</li>
+<li><button class="load-example" data-example="sandbox">Sandbox</button></li>
+<li><button class="load-example" data-example="flappy_block">Flappy Block</button></li>

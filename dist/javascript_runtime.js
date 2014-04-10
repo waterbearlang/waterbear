@@ -2143,6 +2143,7 @@ function stringEscape(s) {
     filename= filename.replace("fakepath",""); 
     return filename;
 }
+
 //Create number array from user-inputted CSV file
 //potential issue: use of "Number()" to convert string to number may be too
 //lenient, because Number() auto-converts variables of type "Date" to a number,
@@ -2158,9 +2159,6 @@ function createArrayFromCSV(file) {
     if(parsed.length==1) {
         parsed= parsed[0];
     }
-    //for(var i=0; i<parsed.length; i++) {
-        //alert(parsed[i]);
-    //}
     return parsed;
 }
 /*end languages/javascript/array_runtime.js*/

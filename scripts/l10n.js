@@ -1,5 +1,43 @@
 (function(wb){
 
+String.toLocaleString({
+    "en": {
+        "javascript playground":"javascript playground",
+        "New": "New",
+        "%open_gist_button": "Open Gist",
+        "%open_file_button": "Open File",
+        "%save_gist_button": "Save Gist",
+        "%save_file_button": "Save File",
+    },
+    "es": {
+        "javascript playground":"playa de javascript",
+        "New": "Nuevo",
+        "%open_gist_button": "Abra Gist",
+        "%open_file_button": "Abra Archivo",
+        "%save_gist_button": "Guarde Gist",
+        "%save_file_button": "Guarde Archivo",
+    }
+});
+
+var localize = function (string, fallback) {
+    var localized = string.toLocaleString();
+    if (localized !== string) {
+        return localized;
+    } else {
+        return fallback;
+    }
+};
+
+var elements = document.getElementsByClassName('l10n'); 
+for (var i=0; i<elements.length; i++) {
+    // localize(key, default)
+    var element = elements[i];
+    element.textContent = localize(element.textContent, element.textContent);
+}
+// document.documentElement.dir = localize("%locale.dir", document.documentElement.dir);
+
+document.documentElement.lang = String.locale || document.documentElement.lang;
+
 /* old Obj will be overwritten by newObj */
 function overwriteAttributes(oldObj, newObj) {
  

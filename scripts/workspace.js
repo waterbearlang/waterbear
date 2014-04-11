@@ -8,6 +8,7 @@
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
+			wb.clearCodeMap();
 			var workspace = document.querySelector('.scripts_workspace')
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);

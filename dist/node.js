@@ -2516,8 +2516,6 @@ var l10nFiles = {};
         // DONE: Don't start drag on a text input or select using :input jquery selector
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        // console.log(eT);
-        //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
@@ -3633,7 +3631,25 @@ var l10nFiles = {};
             return choice;
         
         }
-        
+                
+        //Known issue: width manually set to 160, need to programmatically get
+        //(size of "Browse" button) + (size of file input field). 
+        if (type === 'file') {
+            var value = obj.uValue || obj.value || '';
+            //not sure if 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            input.addEventListener('change', function(evt){
+                var file = input.files[0];
+                var reader = new FileReader();
+		reader.onload = function (evt){
+                    localStorage['__' + file.name]= evt.target.result;
+		};
+                reader.readAsText( file );
+            });
+            wb.resize(input); //not sure if this is necessary
+            input.style.width= "160px"; //known issue stated above
+            return input;
+        }
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -3703,6 +3719,7 @@ var l10nFiles = {};
     }
 
     function codeFromBlock(block){
+        console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 

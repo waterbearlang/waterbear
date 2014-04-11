@@ -2516,8 +2516,6 @@ var l10nFiles = {};
         // DONE: Don't start drag on a text input or select using :input jquery selector
         pointerDown = true;
         var eT = event.wbTarget; // <- WB
-        // console.log(eT);
-        //For some reason this is the scratchpad
         //Check whether the original target was an input ....
         // WB-specific
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
@@ -3633,7 +3631,25 @@ var l10nFiles = {};
             return choice;
         
         }
-        
+                
+        //Known issue: width manually set to 160, need to programmatically get
+        //(size of "Browse" button) + (size of file input field). 
+        if (type === 'file') {
+            var value = obj.uValue || obj.value || '';
+            //not sure if 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            input.addEventListener('change', function(evt){
+                var file = input.files[0];
+                var reader = new FileReader();
+		reader.onload = function (evt){
+                    localStorage['__' + file.name]= evt.target.result;
+		};
+                reader.readAsText( file );
+            });
+            wb.resize(input); //not sure if this is necessary
+            input.style.width= "160px"; //known issue stated above
+            return input;
+        }
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -3703,6 +3719,7 @@ var l10nFiles = {};
     }
 
     function codeFromBlock(block){
+        console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -5699,8 +5716,8 @@ wb.choiceLists.easing = ['>', '<', '<>', 'backIn', 'backOut', 'bounce', 'elastic
 wb.choiceLists.fontweight = ['normal', 'bold', 'inherit'];
 wb.choiceLists.globalCompositeOperators = ['source-over', 'source-atop', 'source-in', 'source-out', 'destination-atop', 'destination-in', 'destination-out', 'destination-over', 'lighter', 'copy', 'xor'];
 wb.choiceLists.repetition = ['repeat', 'repeat-x', 'repeat-y', 'no-repeat'];
-wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
-wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata']);
+wb.choiceLists.types = wb.choiceLists.types.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'file']);
+wb.choiceLists.rettypes = wb.choiceLists.rettypes.concat(['color', 'image', 'shape', 'point', 'size', 'rect', 'gradient', 'pattern', 'imagedata', 'file']);
 
 })(wb);
 
@@ -7332,6 +7349,82 @@ wb.menu({
                 },
                 {
                     "name": "concat",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "acf4e2d3-24b2-41c7-8452-bce733400248",
+            "script": "sum({{1}})",
+            "type": "number",
+            "help": "calculate the sum of a number array",
+            "sockets": [
+                {
+                    "name": "sum of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "f8be8360-aa41-4079-a7cb-12ff7a91b52d",
+            "script": "mean({{1}})",
+            "type": "number",
+            "help": "calculate the mean of a number array",
+            "sockets": [
+                {
+                    "name": "mean of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "e7424a86-3773-4759-828e-4dc33423a4da",
+            "script": "stdev({{1}})",
+            "type": "number",
+            "help": "calculate the standard deviation of a number array",
+            "sockets": [
+                {
+                    "name": "stdev of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "58e775de-23aa-4572-88b8-ce85891db42b",
+            "script": "local.array##= createArrayFromCSV(\"{{1}}\");",
+            "help": "create number array from CSV",
+            "locals": [
+                {
+                    "blocktype": "expression",
+                    "sockets": [
+                        {
+                            "name": "array##"
+                        }
+                    ],
+                    "script": "local.array##",
+                    "type": "array"
+                }
+            ],
+            "sockets": [
+                {
+                    "name": "new array## from CSV",
+                    "type": "file"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
+            "script": "variance({{1}})",
+            "type": "number",
+            "help": "calculate the variance of a number array",
+            "sockets": [
+                {
+                    "name": "variance of array",
                     "type": "array"
                 }
             ]
@@ -9326,10 +9419,79 @@ wb.menu({
                 "bitwise",
                 "shift"
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "be2c0634-28d8-4f64-97e0-48ed66877ba6",
+            "type": "number",
+            "script": "summation({{1}});",
+            "help": "sum all of the numbers from 1 to N",
+            "sockets": [
+                {
+                    "name": "Summation",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Summation",
+                "1 to N"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5d547a3d-886a-40f9-86fa-b3d68d3db228",
+            "type": "number",
+            "script": "inclusiveSummation({{1}}, {{2}});",
+            "help": "sum all of the numbers from N to M",
+            "sockets": [
+                {
+                    "name": "Inclusive Summation"
+                },
+                {
+                    "name": "from ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Inclusive Summation",
+                "N to M"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "3348490a-2b56-453e-9dfb-bfecd4cac71f",
+            "type": "number",
+            "script": "sumOfFirstNMultiples({{2}}, {{1}});",
+            "help": "sum of the first N multiples of M",
+            "sockets": [
+                {
+                    "name": "Multiple Summation"
+                },
+                {
+                    "name": "First ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "multiples of",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Multiple Summation",
+                "multiple"
+            ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/math.json*/
 
 /*begin languages/javascript/random.json*/

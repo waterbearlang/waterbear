@@ -21,8 +21,13 @@
     var elem = wb.elem;
 
     var nextSeqNum = 0;
-    var blockRegistry = {}; /* populated in function "registerBlock", which is
+    var blockRegistry = {};/* populated in function "registerBlock", which is
                                called by the Block() function below*/
+    // variables for code map
+    var codeMap_view = document.querySelector('.code_map');
+	var cloneForCM = false;
+	var recently_removed = null;
+                            
 
     function newSeqNum(){
         nextSeqNum++;
@@ -174,8 +179,17 @@
             removeExpression(event);
         }else{
             removeStep(event);
-        }
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'removed'});
+        }	
+		var dup_block = document.getElementById(event.wbTarget.id + "-d");
+		if(dup_block){
+			if (wb.matches(event.wbTarget, '.expression')){
+            removeExpressionCodeMap(dup_block);
+			}else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
+            removeStepCodeMap(dup_block);
+			}
+			recently_removed = dup_block;
+			dup_block.parentNode.removeChild(dup_block);
+		}
     }
 
     function addBlock(event){
@@ -185,8 +199,65 @@
         }else{
             addStep(event);
         }
+		if((recently_removed !== null) && (event.wbTarget.id + '-d' == recently_removed.id)){
+			addBlocksCodeMap(event, true);
+		}else{
+			addBlocksCodeMap(event, false);
+		}
         Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
+    
+    function addBlocksCodeMap(event, isRestored){
+		cloneForCM = true;
+		var target = event.wbTarget;
+		var parent = null;
+		var next_sibling = null;
+		var dup_target; 
+		if(isRestored){
+			dup_target = recently_removed;
+		}else{
+			dup_target = cloneBlock(target);
+			dup_target.className = dup_target.className + " cloned";
+		}
+		dup_target.id = target.id + "-d";
+		var siblings = target.parentNode.childNodes;
+		var targetIndex = wb.indexOf(event.wbTarget);
+		var dup_next_sibling = null;
+		var dup_sibling_id;
+		while(targetIndex < siblings.length -1){
+			dup_sibling_id = siblings[targetIndex+1].id
+			if(dup_sibling_id == ''){
+				targetIndex += 1;
+			}else{
+				dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
+				break;
+			}
+		}
+		if(wb.matches(target.parentNode, ".workspace")){
+			//recursively add it to the code_map
+		}
+		else if(wb.matches(target.parentNode.parentNode, ".scripts_workspace")){
+			parent = codeMap_view;
+			parent.insertBefore(dup_target, dup_next_sibling);
+			
+		}else{
+			if(wb.matches(target, '.expression')){
+				var parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
+				parent = document.getElementById(parent_id).querySelector('.holder');
+				parent.appendChild(dup_target);
+				addExpressionCodeMap(dup_target);
+			}else{
+				console.log("target.id");
+				console.log(target.id);
+				console.log(target.parentNode.className);
+				var parent_id = target.parentNode.parentNode.id + "-d";
+				parent = document.getElementById(parent_id).querySelector('.contained');
+				parent.insertBefore(dup_target,dup_next_sibling);
+				addStepCodeMap(dup_target);
+			}
+		}
+		cloneForCM = false;
+	}
 
     function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
@@ -208,11 +279,42 @@
             }
         }
     }
+    
+    function removeStepCodeMap(block){
+        // About to remove a block from a block container, but it still exists and can be re-added
+        // Remove instances of locals
+
+        // console.log('remove block: %o', block);
+        if (block.classList.contains('step') && !block.classList.contains('context')){
+            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+            if (block.dataset.locals && block.dataset.locals.length){
+                // remove locals
+                var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
+                locals.forEach(function(local){
+                    if (!local.isTemplateBlock){
+                        Event.trigger(local, 'wb-remove');
+                    }
+                    local.parentElement.removeChild(local);
+                });
+                delete block.dataset.localsAdded;
+            }
+        }
+    }
 
     function removeExpression(event){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
         var block = event.wbTarget;
+        //  ('remove expression %o', block);
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.removeAttribute('style');
+        });
+    }
+    
+    function removeExpressionCodeMap(block){
+        // Remove an expression from an expression holder, say for dragging
+        // Revert socket to default
+		console.log("came here");
         //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.removeAttribute('style');
@@ -250,6 +352,35 @@
             block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
+    
+    function addStepCodeMap(block){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
+            var parent = wb.closest(block, '.context');
+            var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = [];
+             JSON.parse(block.dataset.locals).forEach(
+                function(spec){
+                    spec.isTemplateBlock = true;
+                    spec.isLocal = true;
+                    spec.group = block.dataset.group;
+                    // if (!spec.seqNum){
+                        spec.seqNum = block.dataset.seqNum;
+                    // }
+                    // add scopeid to local blocks
+                    spec.scopeId = parent.id;
+                    if(!spec.id){
+                        spec.id = spec.scriptId = uuid();
+                    }
+                    // add localSource so we can trace a local back to its origin
+                    spec.localSource = block.id;
+                    block.dataset.localsAdded = true;
+                    locals.appendChild(Block(spec));
+                    parsedLocals.push(spec);
+                }
+            ); 
+            block.dataset.locals = JSON.stringify(parsedLocals);
+        }
+	}
 
     function addExpression(event){
         // add an expression to an expression holder
@@ -262,6 +393,12 @@
         if (event.stopPropagation){
             event.stopPropagation();
         }
+    }
+    
+    function addExpressionCodeMap(block){
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.style.display = 'none';
+        });
     }
 
     var Socket = function(desc, blockdesc){
@@ -448,7 +585,7 @@
         // new sequence numbers. But, if the block being clones is an instance of a local then we
         // don't want to get a new sequence number.
         // /////////////////
-        if (!block.dataset.localSource){
+         if (!block.dataset.localSource && !cloneForCM){
             delete blockdesc.seqNum;
         }
         if (blockdesc.isTemplateBlock){
@@ -516,7 +653,25 @@
             return choice;
         
         }
-        
+                
+        //Known issue: width manually set to 160, need to programmatically get
+        //(size of "Browse" button) + (size of file input field). 
+        if (type === 'file') {
+            var value = obj.uValue || obj.value || '';
+            //not sure if 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            input.addEventListener('change', function(evt){
+                var file = input.files[0];
+                var reader = new FileReader();
+		reader.onload = function (evt){
+                    localStorage['__' + file.name]= evt.target.result;
+		};
+                reader.readAsText( file );
+            });
+            wb.resize(input); //not sure if this is necessary
+            input.style.width= "160px"; //known issue stated above
+            return input;
+        }
         if (type === 'int' || type === 'float'){
             type = 'number';
         }
@@ -586,6 +741,7 @@
     }
 
     function codeFromBlock(block){
+        console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 

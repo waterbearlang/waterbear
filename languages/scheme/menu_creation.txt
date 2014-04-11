@@ -1,0 +1,6 @@
+For each block menu:
+
+<menu_name>.js
+<menu_name>_runtime.js
+<menu_name>.css -This styles the blocks in menu
+<menu_name>.json

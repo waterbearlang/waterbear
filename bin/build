@@ -21,7 +21,7 @@ var plugins = {
 
 var pluginlibs = {
     arduino: [],
-    javascript: ['SAT'],
+    javascript: ['SAT','CSV'],
     node: [],
     demo: [],
     processingjs: ['processing-1.4.1'],

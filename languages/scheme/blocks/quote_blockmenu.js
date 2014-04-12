@@ -1,1 +1,5 @@
-/*Creates a block representing the quote construct in Scheme*/
+(function(wb){
+    'use strict';
+    wb.menu({
+    });
+})(wb);

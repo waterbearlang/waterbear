@@ -2472,6 +2472,7 @@ var l10nFiles = {};
     var startPosition;
     var pointerDown;
     var cloned;
+    var cm_cont= document.querySelector('#cm_container');
     
     var _dropCursor; // <- WB
     
@@ -2518,6 +2519,9 @@ var l10nFiles = {};
         var eT = event.wbTarget; // <- WB
         //Check whether the original target was an input ....
         // WB-specific
+        if(eT.classList.contains('cloned')){
+        	return undefined;
+	}
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
@@ -2706,7 +2710,13 @@ var l10nFiles = {};
             Event.trigger(dragTarget, 'wb-add');
             return;
         }
-        
+        else if(wb.overlap(dragTarget, cm_cont)){
+        	if (cloned){
+        		dragTarget.parentElement.removeChild(dragTarget);
+            	}else{
+                	revertDrop();
+            	}
+	}
         else if (dropTarget){
             //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
@@ -3004,8 +3014,10 @@ var l10nFiles = {};
     }
     
     function menuToScratchpad(event) {
-	cloned = wb.cloneBlock(event.target);
-	scratchpad.appendChild(cloned);
+	if(!wb.matches(event.target, '.cloned')){
+		cloned = wb.cloneBlock(event.target);
+		scratchpad.appendChild(cloned);
+	}
     }
     
     
@@ -3136,8 +3148,13 @@ var l10nFiles = {};
     var elem = wb.elem;
 
     var nextSeqNum = 0;
-    var blockRegistry = {}; /* populated in function "registerBlock", which is
+    var blockRegistry = {};/* populated in function "registerBlock", which is
                                called by the Block() function below*/
+    // variables for code map
+    var codeMap_view = document.querySelector('.code_map');
+	var cloneForCM = false;
+	var recently_removed = null;
+                            
 
     function newSeqNum(){
         nextSeqNum++;
@@ -3289,8 +3306,17 @@ var l10nFiles = {};
             removeExpression(event);
         }else{
             removeStep(event);
-        }
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'removed'});
+        }	
+		var dup_block = document.getElementById(event.wbTarget.id + "-d");
+		if(dup_block){
+			if (wb.matches(event.wbTarget, '.expression')){
+            removeExpressionCodeMap(dup_block);
+			}else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
+            removeStepCodeMap(dup_block);
+			}
+			recently_removed = dup_block;
+			dup_block.parentNode.removeChild(dup_block);
+		}
     }
 
     function addBlock(event){
@@ -3300,8 +3326,65 @@ var l10nFiles = {};
         }else{
             addStep(event);
         }
+		if((recently_removed !== null) && (event.wbTarget.id + '-d' == recently_removed.id)){
+			addBlocksCodeMap(event, true);
+		}else{
+			addBlocksCodeMap(event, false);
+		}
         Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
+    
+    function addBlocksCodeMap(event, isRestored){
+		cloneForCM = true;
+		var target = event.wbTarget;
+		var parent = null;
+		var next_sibling = null;
+		var dup_target; 
+		if(isRestored){
+			dup_target = recently_removed;
+		}else{
+			dup_target = cloneBlock(target);
+			dup_target.className = dup_target.className + " cloned";
+		}
+		dup_target.id = target.id + "-d";
+		var siblings = target.parentNode.childNodes;
+		var targetIndex = wb.indexOf(event.wbTarget);
+		var dup_next_sibling = null;
+		var dup_sibling_id;
+		while(targetIndex < siblings.length -1){
+			dup_sibling_id = siblings[targetIndex+1].id
+			if(dup_sibling_id == ''){
+				targetIndex += 1;
+			}else{
+				dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
+				break;
+			}
+		}
+		if(wb.matches(target.parentNode, ".workspace")){
+			//recursively add it to the code_map
+		}
+		else if(wb.matches(target.parentNode.parentNode, ".scripts_workspace")){
+			parent = codeMap_view;
+			parent.insertBefore(dup_target, dup_next_sibling);
+			
+		}else{
+			if(wb.matches(target, '.expression')){
+				var parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
+				parent = document.getElementById(parent_id).querySelector('.holder');
+				parent.appendChild(dup_target);
+				addExpressionCodeMap(dup_target);
+			}else{
+				console.log("target.id");
+				console.log(target.id);
+				console.log(target.parentNode.className);
+				var parent_id = target.parentNode.parentNode.id + "-d";
+				parent = document.getElementById(parent_id).querySelector('.contained');
+				parent.insertBefore(dup_target,dup_next_sibling);
+				addStepCodeMap(dup_target);
+			}
+		}
+		cloneForCM = false;
+	}
 
     function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
@@ -3323,11 +3406,42 @@ var l10nFiles = {};
             }
         }
     }
+    
+    function removeStepCodeMap(block){
+        // About to remove a block from a block container, but it still exists and can be re-added
+        // Remove instances of locals
+
+        // console.log('remove block: %o', block);
+        if (block.classList.contains('step') && !block.classList.contains('context')){
+            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+            if (block.dataset.locals && block.dataset.locals.length){
+                // remove locals
+                var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
+                locals.forEach(function(local){
+                    if (!local.isTemplateBlock){
+                        Event.trigger(local, 'wb-remove');
+                    }
+                    local.parentElement.removeChild(local);
+                });
+                delete block.dataset.localsAdded;
+            }
+        }
+    }
 
     function removeExpression(event){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
         var block = event.wbTarget;
+        //  ('remove expression %o', block);
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.removeAttribute('style');
+        });
+    }
+    
+    function removeExpressionCodeMap(block){
+        // Remove an expression from an expression holder, say for dragging
+        // Revert socket to default
+		console.log("came here");
         //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.removeAttribute('style');
@@ -3365,6 +3479,35 @@ var l10nFiles = {};
             block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
+    
+    function addStepCodeMap(block){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
+            var parent = wb.closest(block, '.context');
+            var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = [];
+             JSON.parse(block.dataset.locals).forEach(
+                function(spec){
+                    spec.isTemplateBlock = true;
+                    spec.isLocal = true;
+                    spec.group = block.dataset.group;
+                    // if (!spec.seqNum){
+                        spec.seqNum = block.dataset.seqNum;
+                    // }
+                    // add scopeid to local blocks
+                    spec.scopeId = parent.id;
+                    if(!spec.id){
+                        spec.id = spec.scriptId = uuid();
+                    }
+                    // add localSource so we can trace a local back to its origin
+                    spec.localSource = block.id;
+                    block.dataset.localsAdded = true;
+                    locals.appendChild(Block(spec));
+                    parsedLocals.push(spec);
+                }
+            ); 
+            block.dataset.locals = JSON.stringify(parsedLocals);
+        }
+	}
 
     function addExpression(event){
         // add an expression to an expression holder
@@ -3377,6 +3520,12 @@ var l10nFiles = {};
         if (event.stopPropagation){
             event.stopPropagation();
         }
+    }
+    
+    function addExpressionCodeMap(block){
+        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
+            elem.style.display = 'none';
+        });
     }
 
     var Socket = function(desc, blockdesc){
@@ -3563,7 +3712,7 @@ var l10nFiles = {};
         // new sequence numbers. But, if the block being clones is an instance of a local then we
         // don't want to get a new sequence number.
         // /////////////////
-        if (!block.dataset.localSource){
+         if (!block.dataset.localSource && !cloneForCM){
             delete blockdesc.seqNum;
         }
         if (blockdesc.isTemplateBlock){
@@ -4601,17 +4750,27 @@ function closeContextMenu(evt) {
 }
 
 function handleContextMenu(evt) {
+	var block = wb.closest(evt.wbTarget, '.block');
+	var cm_cont = document.getElementById('cm_container');
 	// console.log('handling context menu');
 	stackTrace();
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '.block_menu_wrapper *')) return;
+	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
 	else if(false);
+	else if(wb.overlap(evt.wbTarget, cm_cont)){
+		setContextMenuTarget(evt.wbTarget);
+		if(cmenuTarget == null)return;
+		if( wb.matches(cmenuTarget, '.cloned') || wb.matches(cmenuTarget, '.holder')){
+			buildContextMenu(cm_cmenu);
+		}else return;
+	}
 	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
 		setContextMenuTarget(evt.wbTarget);
 		buildContextMenu(block_cmenu);
-	} else return;
+		}
+	else return;
 	showContextMenu(evt.clientX, evt.clientY);
 	evt.preventDefault();
 }
@@ -4671,6 +4830,60 @@ var block_cmenu = {
 	//cancel: {name: 'Cancel', callback: dummyCallback},
         delete: {name: 'Delete', callback: deleteCommand},
 };
+
+// context menu for code map
+var cm_cmenu = {
+	thrity: {name: '30%', callback: thirtyPercent},
+	fifty: {name: '50%', callback: fiftyPercent},
+	seventy: {name: '70%', callback: seventyPercent},
+    hundred: {name: '100%', callback: hundredPercent},
+};
+
+//call back function for code map
+function thirtyPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(0.3, 0.3)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
+
+//call back function for code map
+function fiftyPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(0.5, 0.5)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
+//call back function for code map
+function seventyPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(0.7, 0.7)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
+//call back function for code map
+function hundredPercent(evt) {
+	var element = document.querySelector('.code_map');
+	var transfromString = ("scale(1, 1)");
+    // now attach that variable to each prefixed style
+    element.style.webkitTransform = transfromString;
+    element.style.MozTransform = transfromString;
+    element.style.msTransform = transfromString;
+    element.style.OTransform = transfromString;
+    element.style.transform = transfromString;
+}
 
 // Test drawn from modernizr
 function is_touch_device() {
@@ -4905,6 +5118,7 @@ wb.l10nHalfDone = l10nHalfDone;
 
 	function clearScripts(event, force){
 		if (force || confirm('Throw out the current script?')){
+			wb.clearCodeMap();
 			var workspace = document.querySelector('.scripts_workspace')
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
@@ -5434,6 +5648,35 @@ wb.l10nHalfDone = l10nHalfDone;
 
 })(wb, Event);
 /*end menu.js*/
+
+/*begin code_map.js*/
+(function(wb){
+	'use strict';
+	var canvas = document.getElementById('cm_canvas');
+	var code_map = document.querySelector('.code_map');
+	var container = document.getElementById('cm_container');
+	var workspace = document.querySelector('.workspace');       
+	
+	function clearScripts(){
+		while (code_map.lastChild) {
+		code_map.removeChild(code_map.lastChild);
+		}
+	}
+
+	function handleScrollChange(event){
+	}
+	
+
+	function handleClickEvent(event){ 
+	}
+
+	code_map.addEventListener('mousedown', handleClickEvent, false);
+	wb.clearCodeMap = clearScripts;
+	wb.handleScrollChange = handleScrollChange;
+	
+})(wb);
+
+/*end code_map.js*/
 
 /*begin languages/node/node.js*/
 /*

@@ -824,9 +824,10 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         var currPos = wb.rect(dragTarget); // <- WB
         // WB-Specific
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
-        // Scoll workspace as needed
+        // Auto-scroll deemed unnecessary given advent of scratchspace, so
+	// the if(workspace) block has been commented out
         // WB-Specific
-        if (workspace){
+        /*if (workspace){
             // FIXME: is this why scroll-wheel doesn't work?
             // FIXME: is this why scrolling down works poorly?
             var container = workspace.parentElement;
@@ -843,7 +844,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 var maxHorizontalScroll = container.scrollWidth - offset.width - container.scrollLeft;
                 container.scrollLeft += Math.min(maxHorizontalScroll, currPos.right - offset.right);
             }
-        }
+        }*/
         currentPosition = nextPosition;
         return false;
     }
@@ -2170,59 +2171,28 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         history.pushState(null, '', path);
     }
 
-<<<<<<< HEAD
+
     function compareScript(event){
         loadScriptsFromFilesystem(event, true);
     }
     
-	function loadScriptsFromFilesystem(event, compare){
-		var input = document.createElement('input');
-		input.setAttribute('type', 'file');
-		input.setAttribute('accept', 'application/json');
-		input.addEventListener('change', function(evt){
-			var file = input.files[0];
-			loadScriptsFromFile(file, compare);
-		});
-		input.click();
-	};
-
-	function loadScriptsFromObject(fileObject, compare){
-	    // console.info('file format version: %s', fileObject.waterbearVersion);
-	    // console.info('restoring to workspace %s', fileObject.workspace);
-	    if (!fileObject) return wb.createWorkspace();
-	    var blocks = fileObject.blocks.map(wb.Block);
-	    if (!blocks.length && !compare){
-	    	return wb.createWorkspace();
-	    }
-	    if (blocks.length > 1){
-	    	console.error('not really expecting multiple blocks here right now');
-	    	console.error(blocks);
-	    }
-	    blocks.forEach(function(block){
-	    	wb.wireUpWorkspace(block, compare);
-	    	Event.trigger(block, 'wb-add');
-	    });
-	    wb.loaded = true;
-	    Event.trigger(document.body, 'wb-script-loaded');
-	}
-=======
-    function loadScriptsFromFilesystem(event){
+    function loadScriptsFromFilesystem(event, compare){
         var input = document.createElement('input');
         input.setAttribute('type', 'file');
         input.setAttribute('accept', 'application/json');
         input.addEventListener('change', function(evt){
             var file = input.files[0];
-            loadScriptsFromFile(file);
+            loadScriptsFromFile(file, compare);
         });
         input.click();
     }
 
-    function loadScriptsFromObject(fileObject){
+    function loadScriptsFromObject(fileObject, compare){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
         if (!fileObject) return wb.createWorkspace();
         var blocks = fileObject.blocks.map(wb.Block);
-        if (!blocks.length){
+        if (!blocks.length && !compare){
             return wb.createWorkspace();
         }
         if (blocks.length > 1){
@@ -2230,13 +2200,12 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
             console.error(blocks);
         }
         blocks.forEach(function(block){
-            wb.wireUpWorkspace(block);
+            wb.wireUpWorkspace(block, compare);
             Event.trigger(block, 'wb-add');
         });
         wb.loaded = true;
         Event.trigger(document.body, 'wb-script-loaded');
     }
->>>>>>> master
 
     function loadScriptsFromGist(gist){
         var keys = Object.keys(gist.data.files);
@@ -2272,27 +2241,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 loadScriptsFromGist({data:JSON.parse(data)});
             }, function(statusCode, x){
               alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
-<<<<<<< HEAD
-			});
-		}else if (queryParsed.example){
-			//console.log('loading example %s', queryParsed.example);
-			loadScriptsFromExample(queryParsed.example);
-		}else if (localStorage['__' + wb.language + '_current_scripts']){
-			//console.log('loading current script from local storage');
-			var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
-			if (fileObject){
-				loadScriptsFromObject(fileObject);
-			}
-		}else{
-			//console.log('no script to load, starting a new script');	
-			wb.scriptLoaded = true;
-			wb.createWorkspace('Workspace');
-		}
-		wb.loaded = true;
-		Event.trigger(document.body, 'wb-loaded');
-	};
-	function loadScriptsFromFile(file, compare){
-=======
             });
         }else if (queryParsed.example){
             //console.log('loading example %s', queryParsed.example);
@@ -2312,16 +2260,15 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         Event.trigger(document.body, 'wb-loaded');
     }
 
-	function loadScriptsFromFile(file){
->>>>>>> master
-		var fileName = file.name;
-		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-			console.error("File not a JSON file");
-			return;
-		}
-		var reader = new FileReader();
-		reader.readAsText( file );
-		reader.onload = function (evt){
+    function loadScriptsFromFile(file, compare){
+        var fileName = file.name;
+        if (fileName.indexOf('.json', fileName.length - 5) === -1) {
+            console.error("File not a JSON file");
+            return;
+        }
+        var reader = new FileReader();
+        reader.readAsText( file );
+        reader.onload = function (evt){
             var saved = JSON.parse(evt.target.result);
             if (compare){
                 loadScriptsFromObject(saved, true);
@@ -2331,8 +2278,8 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
                 loadScriptsFromObject(saved);
                 wb.scriptModified = true;
             }
-		};
-	}
+        };
+    }
 
     function getFiles(evt){
         evt.stopPropagation();
@@ -2345,17 +2292,6 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
         }
     }
 
-<<<<<<< HEAD
-	wb.saveCurrentScripts = saveCurrentScripts;
-	wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
-	wb.loadRecentGists = loadRecentGists;
-	wb.createDownloadUrl = createDownloadUrl;
-	wb.loadScriptsFromGistId = loadScriptsFromGistId;
-	wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
-	wb.loadCurrentScripts = loadCurrentScripts;
-	wb.getFiles = getFiles;
-    wb.compareScript = compareScript;
-=======
     wb.saveCurrentScripts = saveCurrentScripts;
     wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
     wb.loadRecentGists = loadRecentGists;
@@ -2364,7 +2300,7 @@ var Events=new function(){var a=this,b=[],c="0.2.3-beta",d=function(){var a=docu
     wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
     wb.loadCurrentScripts = loadCurrentScripts;
     wb.getFiles = getFiles;
->>>>>>> master
+    wb.compareScript = compareScript;
 
 })(wb);
 

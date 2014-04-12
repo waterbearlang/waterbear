@@ -138,11 +138,6 @@
         path += "?gist=" + gistID;
         history.pushState(null, '', path);
     }
-
-
-    function compareScript(event){
-        loadScriptsFromFilesystem(event, true);
-    }
     
     function loadScriptsFromFilesystem(event, compare){
         var input = document.createElement('input');
@@ -268,6 +263,5 @@
     wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
     wb.loadCurrentScripts = loadCurrentScripts;
     wb.getFiles = getFiles;
-    wb.compareScript = compareScript;
-
+    
 })(wb);

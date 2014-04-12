@@ -299,9 +299,15 @@ body{
 	overflow: auto;
 }
 
-body.result .blocks-menu, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+body.result .blocks-menu, body.result .workspace, 
+body.result .scripts_text_view, body.result ul.menu .run-scripts, 
+body.result .workspace_compare, body.editor .workspace_compare,
+body.compare .blocks-menu, body.compare .results,
+body.compare .scripts_text_view, body.compare ul.menu .run-scripts
+{
 	display: none;
 }
+
 body.result .stage, body.result stage.hidden{
 	display: block;
 }

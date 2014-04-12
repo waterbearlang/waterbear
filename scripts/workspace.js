@@ -6,9 +6,16 @@
 (function(wb){
     'use strict';
 
+<<<<<<< HEAD
     function clearScripts(event, force){
         if (force || confirm('Throw out the current script?')){
             var workspace = document.querySelector('.scripts_workspace');
+=======
+	function clearScripts(event, force){
+		if (force || confirm('Throw out the current script?')){
+			wb.clearCodeMap();
+			var workspace = document.querySelector('.scripts_workspace')
+>>>>>>> origin/master
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);

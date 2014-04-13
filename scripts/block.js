@@ -208,8 +208,12 @@
     }
     
     function addBlocksCodeMap(event, isRestored){
+        var target = event.wbTarget;
+        if (wb.matches(target.parentNode, '.scratchpad')){
+            // don't mirror scratchpad in code map
+            return;
+        }
 		cloneForCM = true;
-		var target = event.wbTarget;
 		var parent = null;
 		var next_sibling = null;
 		var dup_target, parent_id; 

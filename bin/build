@@ -11,7 +11,7 @@ var yargs = require('yargs');
 var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
 var styles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
-var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu'];
+var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
 var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {

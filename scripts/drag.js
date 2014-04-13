@@ -120,8 +120,8 @@
         //Check whether the original target was an input ....
         // WB-specific
         if(eT.classList.contains('cloned')){
-        	return undefined;
-	}
+            return undefined;
+    }
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(eT, '#block_menu *')) {
             console.log('not a drag handle');
             return undefined;
@@ -311,12 +311,12 @@
             return;
         }
         else if(wb.overlap(dragTarget, cm_cont)){
-        	if (cloned){
-        		dragTarget.parentElement.removeChild(dragTarget);
-            	}else{
-                	revertDrop();
-            	}
-	}
+            if (cloned){
+                dragTarget.parentElement.removeChild(dragTarget);
+                }else{
+                    revertDrop();
+                }
+    }
         else if (dropTarget){
             //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
@@ -403,7 +403,7 @@
     }
     
     function redoDrag() {
-        if(this.toParent != null) {
+        if(this.toParent !== null) {
             // WB-Specific
             if(wb.matches(this.target,'.step')) {
                 this.toParent.insertBefore(this.target, this.toBefore);
@@ -412,7 +412,7 @@
             }
             Event.trigger(this.target, 'wb-add');
         }
-        if(this.fromParent != null) {
+        if(this.fromParent !== null) {
             // WB-Specific
             Event.trigger(this.target, 'wb-remove');
             this.target.remove();
@@ -567,12 +567,13 @@
                 }else{
                     return wb.findAll(workspace, selector).filter(hasChildBlock);
                 }
+                break;
             case 'eventhandler':
                 return [workspace];
             default:
                 throw new Error('Unrecognized blocktype: ' + blocktype);
         }
-    };
+    }
 
     function dataSelector(name){
         if (name[0] === '.'){
@@ -612,56 +613,50 @@
     }
     
     function menuToScratchpad(event) {
-<<<<<<< HEAD
-	cloned = wb.cloneBlock(event.wbTarget);
-	scratchpad.appendChild(cloned);
-=======
-	if(!wb.matches(event.target, '.cloned')){
-		cloned = wb.cloneBlock(event.target);
-		scratchpad.appendChild(cloned);
-	}
->>>>>>> origin/master
-    }
-    
+        if(!wb.matches(event.target, '.cloned')){
+            cloned = wb.cloneBlock(event.target);
+            scratchpad.appendChild(cloned);
+        }
+    }    
     
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchpad(event) {
-	var PADDING = 8;
-	
-	var scratchPadRect = scratchpad.getBoundingClientRect();
-	var width = scratchPadRect.width;
-	var xOrigin = 5;
-	var yOrigin = 5;
-	
-	var x = xOrigin;
-	var y = yOrigin;
-	
-	var children = scratchpad.childNodes;
-	var maxHeight = 0;
-	
-	for (var i = 0; i < children.length; i++) {
-	    if (children[i].nodeType != 3) {
-		var r = children[i];
-		
-		var rBounding = r.getBoundingClientRect();
-		if (rBounding.height > maxHeight) {
-		    maxHeight = rBounding.height;
-		}
-		r.style.top = y + "px";
-		r.style.left = x + "px";
-		x += rBounding.width + PADDING;
-		
-		if (x >= width - 25) {
-		    //We are going into a new row.
-		    x = xOrigin;
-		    y += maxHeight + PADDING;
-		    maxHeight = 0;
-		}
-	    }
-	}
-	
-	
+    var PADDING = 8;
+    
+    var scratchPadRect = scratchpad.getBoundingClientRect();
+    var width = scratchPadRect.width;
+    var xOrigin = 5;
+    var yOrigin = 5;
+    
+    var x = xOrigin;
+    var y = yOrigin;
+    
+    var children = scratchpad.childNodes;
+    var maxHeight = 0;
+    
+    for (var i = 0; i < children.length; i++) {
+        if (children[i].nodeType != 3) {
+        var r = children[i];
+        
+        var rBounding = r.getBoundingClientRect();
+        if (rBounding.height > maxHeight) {
+            maxHeight = rBounding.height;
+        }
+        r.style.top = y + "px";
+        r.style.left = x + "px";
+        x += rBounding.width + PADDING;
+        
+        if (x >= width - 25) {
+            //We are going into a new row.
+            x = xOrigin;
+            y += maxHeight + PADDING;
+            maxHeight = 0;
+        }
+        }
+    }
+    
+    
     }
 
     // Initialize event handlers
@@ -671,9 +666,9 @@
         Event.on('.content', 'touchmove', null, drag);
         Event.on('.content', 'touchend', null, endDrag);
         // TODO: A way to cancel touch drag?
-    Event.on('.content', 'mousedown', '.scratchpad', initDrag);
-    Event.on('.content', 'dblclick', null, arrangeScratchpad);
-    Event.on('.content', 'dblclick', '.block', menuToScratchpad)
+        Event.on('.content', 'mousedown', '.scratchpad', initDrag);
+        Event.on('.content', 'dblclick', null, arrangeScratchpad);
+        Event.on('.content', 'dblclick', '.block', menuToScratchpad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
         Event.on(document.body, 'mouseup', null, endDrag);

@@ -614,7 +614,7 @@
     
     function menuToScratchpad(event) {
         if(!wb.matches(event.target, '.cloned')){
-            cloned = wb.cloneBlock(event.target);
+            var cloned = wb.cloneBlock(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
         }
     }    

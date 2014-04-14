@@ -2131,7 +2131,9 @@ function dist(a,b){
     return Math.sqrt(sum(diffs));
 }
 
-function kNN(k,trainSet,testPoint) {
+//returns an array of the form:
+//[[neighbor_1_label, similarity score], ... , [neighbor_k_label, similarity score]]
+function getNearestNeighbors(k, trainSet, testPoint) {
     if(trainSet.length==0) {
         console.error("Training set is empty!");
         return NaN;
@@ -2164,7 +2166,13 @@ function kNN(k,trainSet,testPoint) {
                 }
             }
         }
-    }
+    }    
+    return kClosest
+}
+
+//no weighting, just majority vote
+function kNN(k,trainSet,testPoint) {
+    kClosest= getNearestNeighbors(k, trainSet, testPoint);
     //majority vote, can be made more efficient
     kClosest.sort();
     mode= kClosest[0][0]; //guaranteed to exist (so no array bounds issue)
@@ -2188,6 +2196,33 @@ function kNN(k,trainSet,testPoint) {
     return mode;
 }
 
+//uses 1/similarity_score for weight
+function weightedKNN(k,trainSet,testPoint) {
+    kClosest= getNearestNeighbors(k, trainSet, testPoint);
+    //majority vote, can be made more efficient
+    kClosest.sort();
+    mode= kClosest[0][0]; //guaranteed to exist (so no array bounds issue)
+    modeFreq= 0;
+    currMode= kClosest[0][0];
+    currModeFreq= 0;
+    for(var n=0; n<kClosest.length; n++) {
+        if(kClosest[n][0] == currMode) {
+            console.log(kClosest[n][1]);
+            currModeFreq += 1/kClosest[n][1];
+            if(currModeFreq > modeFreq) {
+                modeFreq= currModeFreq;
+                mode= currMode;
+            }
+        }
+        else{
+            currMode= kClosest[n][0];
+            currModeFreq= kClosest[n][1];
+        }
+    }
+    alert("Your test point can be labeled as: " + mode);
+    alert(modeFreq);
+    return mode;
+}
 
 
 //Possible issue: does this cover all possible control sequence issues?

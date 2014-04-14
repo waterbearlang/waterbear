@@ -7673,6 +7673,27 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "dc315e45-66cd-4c06-af40-ec9275b63a4c",
+            "script": "kNN({{2}},{{3}},{{1}})",
+            "type": "number",
+            "help": "Run k-Nearest Neighbors algorithm",
+            "sockets": [
+                {
+                    "name": "classify test point",
+                    "type": "array"
+                },
+                {
+                    "name": "using kNN algorithm with k value",
+                    "type": "number"
+                },
+                {
+                    "name": "and training set",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
@@ -7710,8 +7731,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/array.json*/
 
 /*begin languages/javascript/boolean.json*/

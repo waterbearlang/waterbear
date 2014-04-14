@@ -57,6 +57,76 @@ function normalize(arr){
     }    
 }
 
+//ignores last entry b/c that's assumed to be the label
+function dist(a,b){
+    //appending to "diffs" array via grow-as-you-go method:
+    //http://jsperf.com/array-pre-allocate-vs-array-push
+    var diffs= [];
+    for(var i = 0; i < a.length-1; i++){
+        diffs[i]= Math.pow(a[i]-b[i],2);    
+    }
+    return Math.sqrt(sum(diffs));
+}
+
+function kNN(k,trainSet,testPoint) {
+    if(trainSet.length==0) {
+        console.error("Training set is empty!");
+        return NaN;
+    }
+    var kClosest= [];
+    var distBound= Number.MIN_VALUE;
+    var furthestIndex= 0
+    for(var i=0; i<trainSet.length; i++) {
+        label= trainSet[i][trainSet[i].length-1];
+        d= dist(trainSet[i],testPoint);
+        //if there aren't k neighbors yet, add one
+        if(kClosest.length < k) {
+            kClosest[kClosest.length]= [label,d];
+            if(distBound < d) {
+                distBound= d;
+                furthestIndex= kClosest.length-1;
+            }
+        }
+        //else only add if it is closer than the current furthest neighbor N,
+        //and replace N with it
+        else {
+            if(d < distBound) {
+                kClosest[furthestIndex]= [label,d];
+                distBound= d;
+                for(var j=0; j<kClosest.length; j++) {
+                    if(kClosest[j][1] >= distBound) {
+                        distBound= kClosest[j][1];
+                        furthestIndex= j;
+                    }
+                }
+            }
+        }
+    }
+    //majority vote, can be made more efficient
+    kClosest.sort();
+    mode= kClosest[0][0]; //guaranteed to exist (so no array bounds issue)
+    modeFreq= 0;
+    currMode= kClosest[0][0];
+    currModeFreq= 0;
+    for(var n=0; n<kClosest.length; n++) {
+        if(kClosest[n][0] == currMode) {
+            currModeFreq++;
+            if(currModeFreq > modeFreq) {
+                modeFreq= currModeFreq;
+                mode= currMode;
+            }
+        }
+        else{
+            currMode= kClosest[n][0];
+            currModeFreq= 1;
+        }
+    }
+    alert("Your test point can be labeled as: " + mode);
+    return mode;
+}
+
+
+
 //Possible issue: does this cover all possible control sequence issues?
 //Do all browsers handle all control sequences the same way?
 function stringEscape(s) {

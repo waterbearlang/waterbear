@@ -190,6 +190,11 @@ function stringEscape(s) {
 //lenient, because Number() auto-converts variables of type "Date" to a number,
 //and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
+    alert(file);
+    if (file=="null") {
+        console.error("File not entered");
+        return;
+    }
     file= stringEscape(file);//want to replace backslashes so that they arent seen as escapes
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");

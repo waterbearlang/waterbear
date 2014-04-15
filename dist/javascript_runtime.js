@@ -2192,7 +2192,7 @@ function kNN(k,trainSet,testPoint) {
             currModeFreq= 1;
         }
     }
-    alert("Your test point can be labeled as: " + mode);
+    //alert("Your test point can be labeled as: " + mode);
     return mode;
 }
 
@@ -2208,7 +2208,7 @@ function weightedKNN(k,trainSet,testPoint) {
     for(var n=0; n<kClosest.length; n++) {
         if(kClosest[n][0] == currMode) {
             console.log(kClosest[n][1]);
-            currModeFreq += 1/kClosest[n][1];
+            currModeFreq += 1/kClosest[n][1]; //when kClosest[n][1], currModeFreq= infinity
             if(currModeFreq > modeFreq) {
                 modeFreq= currModeFreq;
                 mode= currMode;
@@ -2219,8 +2219,7 @@ function weightedKNN(k,trainSet,testPoint) {
             currModeFreq= kClosest[n][1];
         }
     }
-    alert("Your test point can be labeled as: " + mode);
-    alert(modeFreq);
+    //alert("Your test point can be labeled as: " + mode);
     return mode;
 }
 
@@ -2254,6 +2253,11 @@ function stringEscape(s) {
 //lenient, because Number() auto-converts variables of type "Date" to a number,
 //and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
+    alert(file);
+    if (file=="null") {
+        console.error("File not entered");
+        return;
+    }
     file= stringEscape(file);//want to replace backslashes so that they arent seen as escapes
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");

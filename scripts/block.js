@@ -659,14 +659,20 @@
         if (type === 'file') {
             var value = obj.uValue || obj.value || '';
             //not sure if 'data-oldvalue' is needed in the below line
-            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            var input = elem('input', {type: "file", value: (confirm ? value : null), 'data-oldvalue': value}); 
             input.addEventListener('change', function(evt){
-                var file = input.files[0];
-                var reader = new FileReader();
-		reader.onload = function (evt){
-                    localStorage['__' + file.name]= evt.target.result;
-		};
-                reader.readAsText( file );
+                if(confirm("Hi")) {
+                    alert("CONFIRMED");
+                    var file = input.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function (evt){
+                        localStorage['__' + file.name]= evt.target.result;
+                    };
+                    reader.readAsText( file );
+                }
+                else {
+                    alert("NOT CONFIRMED");
+                }
             });
             wb.resize(input); //not sure if this is necessary
             input.style.width= "160px"; //known issue stated above

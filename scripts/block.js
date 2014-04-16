@@ -657,12 +657,12 @@
         //Known issue: width manually set to 160, need to programmatically get
         //(size of "Browse" button) + (size of file input field). 
         if (type === 'file') {
-            var value = obj.uValue || obj.value || '';
-            //not sure if 'data-oldvalue' is needed in the below line
-            var input = elem('input', {type: "file", value: (confirm ? value : null), 'data-oldvalue': value}); 
+            //var value = obj.uValue || obj.value || '';
+            //not sure if 'value' or 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
             input.addEventListener('change', function(evt){
-                if(confirm("Hi")) {
-                    alert("CONFIRMED");
+                if(confirm("Your potentially sensitive data will be uploaded \
+                           to the server. Continue?")) {
                     var file = input.files[0];
                     var reader = new FileReader();
                     reader.onload = function (evt){
@@ -671,7 +671,7 @@
                     reader.readAsText( file );
                 }
                 else {
-                    alert("NOT CONFIRMED");
+                    input.value= "";
                 }
             });
             wb.resize(input); //not sure if this is necessary

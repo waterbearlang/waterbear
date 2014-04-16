@@ -168,11 +168,14 @@ function stringEscape(s) {
     //1st entry is the escape character
     //2nd entry is the regex to be used in the replace function
     //3rd entry is the the replacement string
-    escapes= [["\b", /\b/g, " b"], ["\t", /\t/g, " t"], ["\n", /\n/g, " n"],
-              ["\v", /\v/g, " v"], ["\f", /\f/g, " f"], ["\r",/\r/g, " r"]];
-    for (var i=0;i<escapes.length;i++) {
-        if(s.indexOf(escapes[i][0]) != -1) {
-            s= s.replace(escapes[i][1],escapes[i][2]);
+    escapes= [["\b", " b"], ["\t", " t"], ["\n", " n"],
+              ["\v", " v"], ["\f", " f"], ["\r", " r"]];
+    for (var i = 0; i < escapes.length; i++) {
+        ind = s.indexOf(escapes[i][0]);
+        while (ind != -1) {
+            s = s.replace(escapes[i][0], escapes[i][1]);
+            //console.log("Replacement process"+escapes[i][1]+": " + s);
+            ind = s.substr(ind + 1).indexOf(escapes[i][0]);
         }
     }
     filepathParts= s.split(' ');
@@ -181,7 +184,7 @@ function stringEscape(s) {
     //something that doesn't make an escape sequence) just gets reduced to "c"
     //(i.e. the "\" disappears), so the "fakepath" part of the filepath gets
     //prepended to the actual filename
-    filename= filename.replace("fakepath",""); 
+    filename= filename.replace("fakepath","");
     return filename;
 }
 
@@ -190,12 +193,11 @@ function stringEscape(s) {
 //lenient, because Number() auto-converts variables of type "Date" to a number,
 //and there may be similar auto-conversions too. TBD if this is desired behavior
 function createArrayFromCSV(file) {
-    alert(file);
-    if (file=="null") {
+    file= stringEscape(file);//want to replace backslashes so that they arent seen as escapes
+    if(localStorage.getItem('__' + file) === null) {
         console.error("File not entered");
         return;
     }
-    file= stringEscape(file);//want to replace backslashes so that they arent seen as escapes
     if (file.indexOf('.csv', file.length - 4) === -1) {
         console.error("File is not a CSV file");
 	return;

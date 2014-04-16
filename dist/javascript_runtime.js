@@ -863,7 +863,6 @@ Author Greg Kindel (twitter @gkindel), 2013
 * @see http://www.ietf.org/rfc/rfc4180.txt
 */
     CSV.parse = function (str) {
-        alert("CSV.parse str is " + str);
         var result = CSV.result = [];
         CSV.offset = 0;
         CSV.str = str;

@@ -13,15 +13,15 @@ var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
 
 var plugins = {
     arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    javascript: ['javascript', 'asset', 'datablock', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation', 'size', /*'social',*/ /*'fb',*/ 'text', 'matrix'],
     node: ['node','control', 'piface', "pibrella_simple",'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
+    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation','date','size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
     processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform'],
-    scheme: ['scheme', 'boolean', 'number', 'list', 'tree', 'control']
+    scheme: ['scheme', 'boolean', 'math']
 };
 
 var pluginlibs = {
     arduino: [],
-    javascript: ['SAT','CSV'],
+    javascript: ['SAT'],
     node: [],
     demo: [],
     processingjs: ['processing-1.4.1'],
@@ -150,7 +150,7 @@ function build(){
 
         // Build runtime support
         if (lang === 'javascript' || lang === 'processingjs'){
-            pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); });
+            pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
         }
 

@@ -2643,101 +2643,17 @@ a .icon-flip-vertical:before {
 
 /*end fontawesome.css*/
 
-/*begin languages/node/node.css*/
-
-/*end languages/node/node.css*/
-
-/*begin languages/node/control.css*/
-.control, .control .holder{
-    border-color: hsl(44, 81%, 49%);
-    background-color: hsl(44, 81%, 85%);
-}
-
-
-/*end languages/node/control.css*/
-
-/*begin languages/node/piface.css*/
-.piface, .piface .holder{
-    border-color: hsl(195, 79%, 65%);
-    background-color: hsl(195, 89%, 62%);
-}
-
-
-/*end languages/node/piface.css*/
-
-/*begin languages/node/firmata.css*/
-.firmata, .firmata .holder{
-    background-color: #55FFAA;
-    border-color: green;
-}
-
-
-/*end languages/node/firmata.css*/
-
-/*begin languages/node/mc_game.css*/
-.minecraftgame, .minecraftgame .holder{
-    border-color: hsl(156, 90%, 66%);
-    background-color: hsl(156, 85%, 70%);
-}
-
-
-/*end languages/node/mc_game.css*/
-
-/*begin languages/node/mc_player.css*/
-.player, .player .holder{
-    border-color: hsl(264,62%,79%);
-    background-color: hsl(264,62%,89%);
-}
-
-
-/*end languages/node/mc_player.css*/
-
-/*begin languages/node/mc_position.css*/
-.position, .position .holder{
-    border-color: hsl(115, 65%, 79%);
-    background-color: hsl(115, 62%, 89%);
-}
-
-
-/*end languages/node/mc_position.css*/
-
-/*begin languages/node/mc_blocks.css*/
-.blocks, .blocks .holder{
-    border-color: hsl(195, 65%, 79%);
-    background-color: hsl(195, 62%, 89%);
-}
-
-
-/*end languages/node/mc_blocks.css*/
-
-/*begin languages/node/mc_camera.css*/
-.camera, .camera .holder{
-    border-color: hsl(164,65%,83%);
-    background-color: hsl(164, 65%, 93%);
-}
-
-
-/*end languages/node/mc_camera.css*/
-
-/*begin languages/node/array.css*/
-.arrays, .arrays .holder{
-    border-color: hsl(195, 65%, 79%);
-    background-color: hsl(195, 62%, 89%);
-}
-
-/*end languages/node/array.css*/
-
-/*begin languages/node/boolean.css*/
+/*begin languages/scheme/boolean.css*/
 .boolean, .boolean .holder{
-    background-color: #FFAAAA;
+    background-color: #FF4444;
     border-color: red;
 }
 
 
-/*end languages/node/boolean.css*/
+/*end languages/scheme/boolean.css*/
 
-/*begin languages/node/math.css*/
-.math, .math .holder{
+/*begin languages/scheme/number.css*/
+.number, .number .holder{
     border-color: hsl(264,62%,79%);
     background-color: hsl(264,62%,89%);
 }
@@ -2747,12 +2663,29 @@ a .icon-flip-vertical:before {
 }
 
 
-/*end languages/node/math.css*/
+/*end languages/scheme/number.css*/
 
-/*begin languages/node/string.css*/
-.strings, .strings .holder{
-    border-color: hsl(240, 65%, 83%);
-    background-color: hsl(240, 65%, 93%);
+/*begin languages/scheme/list.css*/
+.lists, .lists .holder{
+    border-color: hsl(195, 65%, 79%);
+    background-color: hsl(195, 62%, 89%);
 }
 
-/*end languages/node/string.css*/
+/*end languages/scheme/list.css*/
+
+/*begin languages/scheme/tree.css*/
+.trees, .trees .holder{
+    border-color: hsl(156, 90%, 66%);
+    background-color: hsl(156, 85%, 70%);
+}
+
+/*end languages/scheme/tree.css*/
+
+/*begin languages/scheme/control.css*/
+.control, .control .holder{
+    background-color: #FFCC00;
+    border-color: red;
+}
+
+
+/*end languages/scheme/control.css*/

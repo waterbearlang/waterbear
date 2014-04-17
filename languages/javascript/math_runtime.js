@@ -36,7 +36,25 @@ function gamma(n) {
 		return Math.sqrt(2*Math.PI) * Math.pow(t,n+0.5) * Math.exp(-t) * x;
 	}
 }
+
+function summation(n) {
+	return (n*(n+1))/2;
+}
+
+function sumOfFirstNMultiples(mul, n) {
+	return mul*summation(n);
+}
+
+function inclusiveSummation(from, to) {
+	if(from >= to) return -1;
+	var numOfInts = Math.abs(to - from)+1;
+	var avg = (from + to)/2;
+	return numOfInts*avg;
+}
 window.gcd = gcd;
 window.lcm = lcm;
 window.gamma = gamma;
+window.summation = summation;
+window.sumOfFirstNMultiples = sumOfFirstNMultiples;
+window.inclusiveSummation = inclusiveSummation;
 })(window);

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Waterbear node playground</title>
-	<link href="dist/node.css" rel="stylesheet" />
+	<title>Waterbear scheme playground</title>
+	<link href="dist/scheme.css" rel="stylesheet" />
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -21,7 +21,7 @@
 <body class="autorun">
 	<div class="titlebar">
 		<img src="images/logo.png" />
-		<h1 class="title">node playground</h1>
+		<h1 class="title">scheme playground</h1>
 	</div>
 	<nav class="mobilenav">
 		<button class="show-files">Files</button>
@@ -55,7 +55,7 @@
 			<li>
 				<button class="show-examples">Examples&#x25BE;</button>
 				<ul class="sub-menu">
-					
+					<Fibonacci>
 				</ul>
 			</li>
 			<li>
@@ -128,11 +128,28 @@
 			<div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
 		<div class="results">
-    <div class="remote">
-        <div class="messagebox"></div>
-    </div>
+	<div class="stage">
+	<div class="buttonmenu">
+		<button class="icon-play run-script">Run</button>
+		<button class="icon-stop stop-script">Stop</button>
+		<button class="icon-check autorun-script-on">Autorun</button>
+		<button class="icon-unchecked autorun-script-off">Autorun</button>
+	</div>
+	<iframe class="stageframe" seamless="seamless" src="iframerunner.html"></iframe></div>
 	<div class="scripts_text_view"></div>
 </div>
+<script>
+	var iframe = document.querySelector('.stageframe');
+	function receiveMessage(event){
+		wb.iframeReady = event.data === 'ready' ? true : false;
+	}
+	window.addEventListener('message', receiveMessage, false);
+	// Work around Chrome bug with iframes in flexbox
+	iframe.style.height = iframe.parentElement.clientHeight + 'px';
+	window.addEventListener('resize', function(evt){
+		iframe.style.height = iframe.parentElement.clientHeight + 'px';			
+	}, false);
+</script>
 
 		<div id="cm_container">
 		<div class="code_map">
@@ -141,6 +158,6 @@
 		</div>
 	</div>
 	<svg class="sekrit-svg"><text class="resize-tester"></text></svg>
-	<script src="dist/node.js"></script>
+	<script src="dist/scheme.js"></script>
 </body>
 </html>

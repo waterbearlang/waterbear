@@ -208,11 +208,15 @@
     }
     
     function addBlocksCodeMap(event, isRestored){
+        var target = event.wbTarget;
+        if (wb.matches(target.parentNode, '.scratchpad')){
+            // don't mirror scratchpad in code map
+            return;
+        }
 		cloneForCM = true;
-		var target = event.wbTarget;
 		var parent = null;
 		var next_sibling = null;
-		var dup_target; 
+		var dup_target, parent_id; 
 		if(isRestored){
 			dup_target = recently_removed;
 		}else{
@@ -225,8 +229,8 @@
 		var dup_next_sibling = null;
 		var dup_sibling_id;
 		while(targetIndex < siblings.length -1){
-			dup_sibling_id = siblings[targetIndex+1].id
-			if(dup_sibling_id == ''){
+			dup_sibling_id = siblings[targetIndex+1].id;
+			if(dup_sibling_id === ''){
 				targetIndex += 1;
 			}else{
 				dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
@@ -242,7 +246,7 @@
 			
 		}else{
 			if(wb.matches(target, '.expression')){
-				var parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
+				parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
 				parent = document.getElementById(parent_id).querySelector('.holder');
 				parent.appendChild(dup_target);
 				addExpressionCodeMap(dup_target);
@@ -250,7 +254,7 @@
 				console.log("target.id");
 				console.log(target.id);
 				console.log(target.parentNode.className);
-				var parent_id = target.parentNode.parentNode.id + "-d";
+				parent_id = target.parentNode.parentNode.id + "-d";
 				parent = document.getElementById(parent_id).querySelector('.contained');
 				parent.insertBefore(dup_target,dup_next_sibling);
 				addStepCodeMap(dup_target);
@@ -412,6 +416,7 @@
         // A socket may also have a uValue, if it has been set by the user, over-rides value
         // A socket may also have a uName if it has been set by the user, over-rides name
         // A socket may also have a uBlock descriptor, if it has been set by the user, this over-rides the block
+        var holder;
         var socket = elem('div',
             {
                 'class': 'socket',
@@ -433,7 +438,7 @@
         socket.firstElementChild.innerHTML = socket.firstElementChild.innerHTML.replace(/##/, ' <span class="seq-num">' + (blockdesc.seqNum || '##') + '</span>');
         if (desc.type){
             socket.dataset.type = desc.type;
-            var holder = elem('div', {'class': 'holder'}, [Default(desc)]);
+            holder = elem('div', {'class': 'holder'}, [Default(desc)]);
             socket.appendChild(holder);
         }
         if (desc.block){
@@ -499,7 +504,7 @@
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name');
         
-        if (desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
+        if (desc.name && desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
         var holder = wb.findChild(socket, '.holder');
@@ -519,7 +524,9 @@
         // Retrieve the things we don't need to duplicate in every instance block description
         var tB = blockRegistry[obj.scriptId];
         if (!tB){
-            console.error('Error: could not get template block for  for %o', obj);
+            if (!obj.localSource){
+                console.error('Error: could not get template block for  for %o', obj);
+            }
             return obj;
         }
         obj.blocktype = tB.blocktype;
@@ -606,7 +613,7 @@
     var Default = function(obj){
         // return an input for input types (number, string, color, date)
         // return a block for block types
-        var value;
+        var value, input;
         var type = obj.type;
         
         if(type === 'boolean')
@@ -653,13 +660,12 @@
             return choice;
         
         }
-                
         //Known issue: width manually set to 160, need to programmatically get
         //(size of "Browse" button) + (size of file input field). 
         if (type === 'file') {
-            var value = obj.uValue || obj.value || '';
+            value = obj.uValue || obj.value || '';
             //not sure if 'data-oldvalue' is needed in the below line
-            var input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
             input.addEventListener('change', function(evt){
                 var file = input.files[0];
                 var reader = new FileReader();
@@ -704,7 +710,7 @@
             default:
                 value = obj.uValue || obj.value || '';
         }
-        var input = elem('input', {type: type, value: value, 'data-oldvalue': value});
+        input = elem('input', {type: type, value: value, 'data-oldvalue': value});
 
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || type === 'regex' ||
@@ -741,7 +747,7 @@
     }
 
     function codeFromBlock(block){
-        console.log(getScript(block.dataset.scriptId));
+        // console.log(getScript(block.dataset.scriptId));
         var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -757,7 +763,7 @@
             .filter(function(holder){ return holder; }) // remove undefineds
             .map(socketValue); // get value
         if (wb.matches(block, '.context')){
-            var childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock).join('');
+            childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock).join('');
         }
         // Now intertwingle the values with the template and return the result
         function replace_values(match, offset, s){
@@ -920,7 +926,7 @@
                 var matchingKeywords = [];
 
                 for (var k = 0; k < keywords.length; k++) {
-                    if (keywords[k].indexOf(query) == 0) {
+                    if (keywords[k].indexOf(query) === 0) {
                         matchingKeywords.push(keywords[k]);
 
                         if (suggestions.indexOf(keywords[k]) == -1) {
@@ -957,11 +963,11 @@
                     keywordNodeContent += '</span>';
                     keywordNodeContent += matchingKeywords[0].substr(query.length);
 
-                    for (var k = 1; k < matchingKeywords.length; k++) {
+                    for (var l = 1; l < matchingKeywords.length; l++) {
                         keywordNodeContent += ', <span class="match">';
-                        keywordNodeContent += matchingKeywords[k].substr(0, query.length);
+                        keywordNodeContent += matchingKeywords[l].substr(0, query.length);
                         keywordNodeContent += '</span>';
-                        keywordNodeContent += matchingKeywords[k].substr(query.length);
+                        keywordNodeContent += matchingKeywords[l].substr(query.length);
                     }
 
                     keywordNodeContent += '</span>';

@@ -110,7 +110,7 @@
         evt.preventDefault();
         var name = prompt("Save file as: ");
         if( !name ) return;
-        var URL = window.webkitURL || window.URL;
+        // var URL = window.webkitURL || window.URL;
         var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
         var reader = new FileReader();
         var a = document.createElement('a');
@@ -187,7 +187,7 @@
     }
 
     function loadScriptsFromExample(name){
-        ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
+        ajax.get('examples/' + name + '.json?b=' + Math.random(), function(exampleJson){
             loadScriptsFromJson(exampleJson);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);

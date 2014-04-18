@@ -1,0 +1,7 @@
+{
+	"runsInBrowser": true,
+	"plugins": ["processingjs", "structure", "environment", "controls", "shapes", "input", "colors", "math", "transform"],
+	"runtimeLibs": ["processing-1.4.1"],
+	"styles": ["highlight-github"],
+	"ideLibs": ["beautify", "highlight", "highlight-javascript", "processing-1.4.1","events.min"]
+}

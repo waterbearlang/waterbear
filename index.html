@@ -1,88 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="landing/images/favicon.ico">
+
     <title>Waterbear: Welcome</title>
-    <link href="stylesheets/fonts/stylesheet.css" rel="stylesheet" />
-    <link href="stylesheets/waterbear.css" rel="stylesheet" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="viewport" content="height=device-height, initial-scale=1.0" />
-    <!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
-    <!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
-    <script src="lib/prefixfree.min.js"></script>
-    <!--script src="/lib/modernizr-1.6.min.js"></script-->
+
+    <!-- Bootstrap core CSS -->
+
+    <link href="landing/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="stylesheets/javascript.css" rel="stylesheet">-->
+    <!-- Custom styles for this template -->
+    <link href="landing/stylesheets/cover.css" rel="stylesheet">
+    <link href="landing/stylesheets/style.css" rel="stylesheet">
+    <!--- Perfections -->
+
+
+
   </head>
-  <body>
-    <div class="content">
-        <h1>The Waterbear Welcomes You!</h1>
-        <div class="main">
-            <section id="intro">
-                <img class="mascot" src="images/waterbear_steampunk.png" alt="Waterbear mascot" />
-                <p>Waterbear is a toolkit for creating drag-and-drop programming languages, with some example languages you can play around with and learn from. The goal is to make it easy to wrap other existing languages with Waterbear blocks to create draggable, snappable syntaxes for them.</p>
-                <p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming. Waterbear is good for kids, artists, and anyone who would like to make their computer do something new without having to become a "programmer" (although it could lead to that).</p>
-	<iframe width="100%" height="300px" src="javascript.html?view=result&example=blacklight_worms&embedded=true"></iframe>
 
-                <p><a href="http://scratch.mit.edu"><img class="scratchmascot" alt="Scratch mascot" src="images/scratchcat.png" /></a>Waterbear's blocks are heavily inspired by MIT's <a href="http://scratch.mit.edu/">Scratch</a> language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad.</p>
-				<iframe width="100%" height="300px" src="javascript.html?view=blocks&example=pong&embedded=true"></iframe>
+  <body class="body1">
 
-                <p><a href='https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function' title='JavaScript Function constructor'><img class="promotejs" src='http://static.jsconf.us/promotejsh.gif' alt='JavaScript Function constructor'/></a>Waterbear's system of draggable, snappable blocks are built using clean HTML5, CSS3, and Javascript. The Javascript playground for Waterbear allows you to create Waterbear scripts, see the Javascript it will generate, and run it right in the browser.</p>
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <!--<div class="masthead clearfix" >-->
+            <div class="inner">
+              <h3 class="masthead-brand">Waterbear</h3>
+              <ul class="nav masthead-nav">
+                <li class="active"><a href="#section2">Home</a></li>
+              </ul>
+            </div>
+          <!--</div>-->
+
+          <div class="inner cover">
+            <!--<h1 class="cover-heading">The Waterbear Welcomes You!</h1>-->
+            <img alt="Waterbear mascot" class="waterbear" src="landing/images/waterbear_steampunk_alpha.png" alt="Waterbear mascot">
+            <p class="lead">Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="site-wrapper" id="section2">
+            <div class="row">
+              <div class="col-md-6">
+                <h3>Inspiration</h3>
+                <blockquote class="blockquote-reverse">
+                  <img src="landing/images/alan_perlis.jpg">
+                  <p class="lead" id="first-col">“It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self-critical?”</p>
+                  <footer><cite id="citation" title="Alan Perlis">Alan Perlis, first recipient of the Turing Award</cite></footer>
+                </blockquote>
+
+
+              </div>
+              <div class="col-md-6">
+                <h3>For Whom</h3>
+                <img src="landing/images/waterblocks.png" class="img-waterblock">
+                <p id="second-col" class="lead">Waterbear is also toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming. It's good for kids, artists, and anyone who would like to make their computer do something new without having to become a "programmer" (although it could lead to that).</p>
+              </div>
+            </div>
+
+            <div class="row">
+              <h2>Play with Waterbear</h2>
+              <div class="col-md-6">
+                <h3>Javascript Playground</h3>
+                <a href="languages/javascript/" target="_tab"><img class="img-responsive" src="landing/images/Javascript.png"></a>
+              </div>
+              <div class="col-md-6">
+                <h3>ProcessingJS Playground</h3>
+                <a href="languages/processingjs/" target="_tab" ><img class="img-responsive" src="landing/images/Processing_js.png"></a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <h3>Scheme Playground</h3>
+                <a href="languages/scheme/" target="_tab"><img class="img-responsive" src="landing/images/Javascript.png"></a>
+              </div>
+                <div class="col-md-6">
+                <h3>Node JS Playground</h3>
+                <a href="languages/node/" target="_tab"><img class="img-responsive" src="landing/images/node.png" ></a>
+                <p>Especially useful for programming on Raspberry Pi and hacking the free Minecraft Pi Edition as well as playing with buttons and gadgets at home, please follow the <a href="https://github.com/EduMake/RPi-WaterbearNodeJS" target="_tab"><b>installation instructions</b></a></p>
+            </div>
+          </div>
+
+            <div class="site-wrapper" id="section3">
+            <h1 class="text-center">Other</h1>
+            <!--<iframe width="100%" height="300px" src="javascript.html?view=result&example=blacklight_worms"></iframe>-->
+
+
+            <div class="row">
+              <div class="col-md-4">
+                <a href="http://scratch.mit.edu"><img alt="Scratch mascot" src="landing/images/scratchcat.png"></a>
+                <p>Waterbear's blocks are heavily inspired by MIT's <a href="http://scratch.mit.edu/">Scratch</a> language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual syntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad.</p>
+
+              </div>
+              <div class="col-md-4">
 
                 <p>Waterbear is beta software and under active development as we work to improve the interface, organize the blocks, and build curriculum around it.</p>
-            </section>
-            <section id="why_waterbears">
-                <h3>Why Waterbears?</h3>
-                <p><a href="http://en.wikipedia.org/wiki/Waterbear"><img class="tardigrade" src="images/tardigrade.jpg" alt="Waterbear photo" /></a>[mostly via <a href="http://en.wikipedia.org/wiki/Waterbear">Wikipedia</a>]Waterbears, also known as tardigrades, or moss piglets, are probably the most resilient creatures on Earth, able to survive extremes of heat and cold, pressure (high pressure and the vacuum of space), dehydration, radiation, environmental toxins. Since we want to be able to create code that is robust, they are an appropriate mascot. Also, they are cute.
-            </section>
-            <section id="acknowledgements">
-                <h3>Credits</h3>
-                <ul>
-                    <li>Dethe Elza founded the project and named it (blame him!)</li>
-                    <li>Dethe's kids, for helping test so many programming environments and great critics (and for the Waterbear mascot image above)</li>
-                    <li>Martyn Eggleton, for the Arduino blocks, good brainstorming, and using Waterbear to teach programming</li>
-                    <li>Blake Bourque, for Java blocks, troubleshooting, documentation and code contributions</li>
-                    <li>Christopher de Beer, for suggestions and bug fixes</li>
-                    <li>Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real</li>
-                    <li>Everyone who worked on <a href="http://scratch.mit.edu/">Scratch</a>, the primary source of inspiration for this project</li>
-                </ul>
-            </section>
-        </div>
-        <div class="extras">
-            <blockquote>
-                <p>&ldquo;It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self-critical?&rdquo;<p>
-                <p class="attribution">&mdash;Alan Perlis</p>
-            </blockquote>
-            <img src="images/waterblocks.png" />
-            <navigation>
-                <h2>Play with Waterbear</h2>
-                <p><a href="javascript.html">Javascript Playground</a></p>
-                <p><a href="processingjs.html">ProcessingJS Playground</a></p>
-                <p><a href="node.html">Raspberry Pi Playground</a> to hack live Minecraft at home please follow the <a href="https://github.com/EduMake/RPi-WaterbearNodeJS">installation instructions</a></p>
-                <hr />
-                <h2>Waterbear Community</h2>
-                <iframe src="http://ghbtns.com/github-btn.html?user=waterbearlang&repo=waterbear&type=fork&count=true&size=large"
-  allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="31px"></iframe>
-                <p>Follow <a href="https://twitter.com/waterbearlang">@Waterbearlang</a> on Twitter</p>
-                <p>Discuss Waterbear on the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a></p>
-                <p>Fork <a href="http://github.com/waterbearlang/waterbear/">Waterbear on Github</a></p>
-                <p>File an <a href="http://github.com/waterbearlang/waterbear/issues">issue or feature request</a></p>
-                <p>Featured pages from the <a href="https://github.com/waterbearlang/waterbear/wiki/_pages">Wiki</a>:
-                    <ul>
+              </div>
+              <div class="col-md-4">
+                <a href='https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function' title='JavaScript Function constructor'><img src="landing/images/promotejsh.gif"></a>
+                <p>Waterbear's system of draggable, snappable blocks are built using clean HTML5, CSS3, and Javascript. The Javascript playground for Waterbear allows you to create Waterbear scripts, see the Javascript it will generate, and run it right in the browser.</p>
+              </div>
+            </div>
+
+            <hr>
+            <div class="row">
+              <div class="col-md-4">
+                <h1 class="text-center">Community</h1>
+                  <p>1. Discuss Waterbear on the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a></p>
+                  <p>2. File an <a href="http://github.com/waterbearlang/waterbear/issues">issue or feature request</a></p>
+                  <p>3. Featured pages from the <a href="https://github.com/waterbearlang/waterbear/wiki/_pages">Wiki:</a></p>
+                  <ul class="list-unstyled">
                         <li><a href="https://github.com/waterbearlang/waterbear/wiki/Glossary">Waterbear glossary</a></li>
                         <li><a href="https://github.com/waterbearlang/waterbear/wiki/How-to-Contribute">How to Contribute</a></li>
                         <li><a href="https://github.com/waterbearlang/waterbear/wiki/Why-Blocks%3F">Why Blocks?</a></li>
                     </ul>
-                </p>
-            </navigation>
-            <aside>
-                    <h3>Friends of Waterbear</h3>
-                    <p>Forks and other projects based on Waterbear</p>
-                    <ul>
-                        <li><a href="http://easyj.team2648.com/">Team2648</a> has blocks for the WPI robotics API</li>
-                        <li><a href="http://scriptastic.greenbush.us/">ScripTastic</a> has blocks for Opensim</li>
-                    </ul>
-            </aside>
-        </div>
-    </div>
+              </div>
+              <div class="col-md-4">
+                <h1 class="text-center">Why Waterbear?</h1>
+                <p><a href="http://en.wikipedia.org/wiki/Waterbear"><img src="landing/images/tardigrade.jpg" alt="Waterbear photo" /></a>
+                  <p>
+
+                  [mostly via <a href="http://en.wikipedia.org/wiki/Waterbear"> Wikipedia</a>]Waterbears, also known as tardigrades, or moss piglets, are probably the most resilient creatures on Earth, able to survive extremes of heat and cold, pressure (high pressure and the vacuum of space), dehydration, radiation, environmental toxins. Since we want to be able to create code that is robust, they are an appropriate mascot. Also, they are cute.</p>
+              </div>
+              <div class="col-md-4">
+                <h1 class="text-center">Credits</h1>
+                 <ul class="list-unstyled">
+                    <li>• Dethe Elza founded the project and named it.</li>
+                    <li>• Dethe's kids, for helping test so many programming environments and great critics (and for the Waterbear mascot image above)</li>
+                    <li>• Martyn Eggleton, for the Arduino blocks, good brainstorming, and using Waterbear to teach programming</li>
+                    <li>• Blake Bourque, for Java blocks, troubleshooting, documentation and code contributions</li>
+                    <li>• Christopher de Beer, for suggestions and bug fixes</li>
+                    <li>• Steve Dekorte, Alex Payne, Bob Nystrom, Wolf Rentzsch, Victoria Wang, and Brian Leroux for the encouragement to make this real</li>
+                    <li>• Everyone who worked on <a href="http://scratch.mit.edu/">Scratch</a>, the primary source of inspiration for this project</li>
+                </ul>
+              </div>
+            </div>
+            <div class="inner">
+              <p>
+                <iframe src="http://ghbtns.com/github-btn.html?user=waterbearlang&repo=waterbear&type=fork&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="150px" height="31px"></iframe>
+
+                <a href="https://twitter.com/Waterbearlang" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @Waterbearlang</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p> </div>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!--<script src="javascripts/javascript.js"></script>-->
+    <script src="landing/javascripts/bootstrap.min.js"></script>
   </body>
 </html>

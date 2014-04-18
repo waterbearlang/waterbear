@@ -363,9 +363,6 @@ if(typeof(console) == "undefined") {
     // console.log provided by Firefox + Firebug
 }
 
-<<<<<<< HEAD:languages/javascript/javascript_runtime.js
-var runtime = new Global();
-=======
 function initialize(local, global){
     local.canvas = document.createElement("canvas");
     local.canvas.setAttribute("width", global.stage_width);
@@ -377,12 +374,11 @@ function initialize(local, global){
 }
 
 var global = new Global();
->>>>>>> 269_build_improvements:languages/javascript/runtime.js
 var local = new Local();
 initialize(local, global);
 window.Global = Global;
 window.Local = Local;
-window.runtime = runtime;
+window.runtime = global;
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;

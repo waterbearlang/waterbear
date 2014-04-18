@@ -10,17 +10,6 @@
     wb.wrap = function(script){
         return [
             '(function(){', 
-<<<<<<< HEAD:languages/javascript/javascript.js
-                // 'try{',
-                    'local.canvas = document.createElement("canvas");',
-                    'local.canvas.setAttribute("width", runtime.stage_width);',
-                    'local.canvas.setAttribute("height", runtime.stage_height);',
-                    'runtime.stage.appendChild(local.canvas);',
-                    'local.canvas.focus()',
-                    'local.ctx = local.canvas.getContext("2d");',
-                    'local.ctx.textAlign = "center";',
-=======
->>>>>>> 269_build_improvements:languages/javascript/ide.js
                     'var main = function(){',
                         script,
                     '}',

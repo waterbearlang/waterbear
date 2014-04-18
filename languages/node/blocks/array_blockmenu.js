@@ -120,10 +120,8 @@
                         {
                             "name": "array",
                             "type": "array",
-                            "value": null
-                        },
-                        {
-                            "name": "length"
+                            "value": null,
+                            "suffix": "length"
                         }
                     ]
                 },
@@ -156,10 +154,8 @@
                         {
                             "name": "array",
                             "type": "array",
-                            "value": null
-                        },
-                        {
-                            "name": "pop"
+                            "value": null,
+                            "suffix": "pop"
                         }
                     ]
                 },
@@ -173,10 +169,8 @@
                         {
                             "name": "array",
                             "type": "array",
-                            "value": null
-                        },
-                        {
-                            "name": "shift"
+                            "value": null,
+                            "suffix": "shift"
                         }
                     ]
                 },
@@ -190,10 +184,8 @@
                         {
                             "name": "array",
                             "type": "array",
-                            "value": null
-                        },
-                        {
-                            "name": "reversed"
+                            "value": null,
+                            "suffix": "reversed"
                         }
                     ]
                 },
@@ -249,10 +241,8 @@
                         {
                             "name": "array",
                             "type": "array",
-                            "value": null
-                        },
-                        {
-                            "name": "for each"
+                            "value": null,
+                            "suffix": "for each"
                         }
                     ]
                 }

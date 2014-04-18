@@ -3,7 +3,7 @@
     wb.menu(
         {
             "sectionkey": "mcposition",
-            "name": "Position",
+            "name": "Minecraft Position",
             "help": "Find and change Minecraft Positions",
             "blocks": [
                 {
@@ -190,10 +190,8 @@
                         {
                             "name": "position",
                             "type": "position",
-                            "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7"
-                        },
-                        {
-                            "name": "as text"
+                            "block": "8bb6aab6-273d-4671-8caa-9c15b5c486a7",
+                            "suffix": "as text"
                         }
                     ],
                     "script": "{{1}}.toString()",
@@ -249,10 +247,8 @@
                         {
                             "name": "by",
                             "type": "number",
-                            "value": "1"
-                        },
-                        {
-                            "name": "block(s)"
+                            "value": "1",
+                            "suffix": "block(s)"
                         }
                     ],
                     "script": "client.directions.forEach(function(dir, idx){var position##=client.directioncalcs[dir]({{1}},{{2}});[[1]]});",

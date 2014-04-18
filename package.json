@@ -7,10 +7,12 @@
     "doc": "docs",
     "test": "test"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "uglify-js": "~2.3.6",
     "clean-css": "~1.0.10",
+    "yargs": "~0.0.8"  
+    },
+  "devDependencies": {
     "karma-script-launcher": "~0.1.0",
     "karma-chrome-launcher": "~0.1.2",
     "karma-html2js-preprocessor": "~0.1.0",

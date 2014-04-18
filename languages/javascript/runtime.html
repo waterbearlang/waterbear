@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>iFrame Canvas</title>
+    <style>
+    html,body,.stage{ height: 100%; border:0; margin:0;}
+    </style>
+</head>
+
+<body>
+    <div class="stage"></div>
+    <script src="runtime.js"></script>
+<script src="blocks/asset_runtime.js"></script>
+<script src="blocks/control_runtime.js"></script>
+<script src="blocks/sprite_runtime.js"></script>
+<script src="blocks/voice_runtime.js"></script>
+<script src="blocks/sound_runtime.js"></script>
+<script src="blocks/array_runtime.js"></script>
+<script src="blocks/boolean_runtime.js"></script>
+<script src="blocks/canvas_runtime.js"></script>
+<script src="blocks/color_runtime.js"></script>
+<script src="blocks/image_runtime.js"></script>
+<script src="blocks/math_runtime.js"></script>
+<script src="blocks/random_runtime.js"></script>
+<script src="blocks/vector_runtime.js"></script>
+<script src="blocks/object_runtime.js"></script>
+<script src="blocks/string_runtime.js"></script>
+<script src="blocks/path_runtime.js"></script>
+<script src="blocks/point_runtime.js"></script>
+<script src="blocks/rect_runtime.js"></script>
+<script src="blocks/sensing_runtime.js"></script>
+<script src="blocks/motion_runtime.js"></script>
+<script src="blocks/shape_runtime.js"></script>
+<script src="blocks/geolocation_runtime.js"></script>
+<script src="blocks/date_runtime.js"></script>
+<script src="blocks/size_runtime.js"></script>
+<script src="blocks/text_runtime.js"></script>
+<script src="blocks/matrix_runtime.js"></script>
+<script src="../../lib/SAT.js"></script>
+    <script>
+
+    window.addEventListener('message', receiveMessage, false);
+    var scriptRunning = false;
+    if (localStorage._storedScript){
+    	var script = localStorage._storedScript;
+    	delete localStorage._storedScript;
+    	scriptRunning = true;
+    	new Function(script)();
+    }
+
+    function receiveMessage(evt){
+		try{
+			var message = JSON.parse(evt.data);
+		}catch(e){
+			console.log('problem parsing %s', evt.data);
+			return;
+		}
+		switch(message.command){
+			case 'reset': 
+				console.log('reset script');
+				return location.reload();
+			case 'loadScript': 
+			    if (scriptRunning){
+			    	localStorage._storedScript = message.script;
+			    	location.reload();
+			    }
+				console.log('load script');
+				scriptRunning = true;
+				return new Function(message.script)();
+			default: return console.log('unknown command: %o', message);
+		}
+	}
+    window.parent.postMessage('ide-ready', '*');
+
+    </script>
+</body>
+</html>

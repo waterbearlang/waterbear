@@ -306,6 +306,7 @@
     Event.on('.workspace', 'click', '.disclosure', disclosure);
     Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
     Event.on('.workspace', 'keypress', 'input', wb.resize);
+    Event.on('.workspace', 'change', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input, select', function(event){
         Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
     });

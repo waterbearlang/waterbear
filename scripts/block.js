@@ -269,7 +269,12 @@
         var block = event.wbTarget;
         // console.log('remove block: %o', block);
         if (block.classList.contains('step') && !block.classList.contains('context')){
-            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+            try{
+                var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+            }catch(e){
+                /* We are likely in the scratch space, which has no context */
+                return;
+            }
             if (block.dataset.locals && block.dataset.locals.length){
                 // remove locals
                 var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
@@ -330,7 +335,13 @@
         var block = event.wbTarget;
         // console.log('add block %o', block);
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
-            var parent = wb.closest(block, '.context');
+            var parent;
+            try{
+                parent = wb.closest(block, '.context');
+            }catch(e){
+                // This *should* mean we're putting a block into the Scratchpad, so ignore locals
+                return;
+            }
             var locals = wb.findChild(parent, '.locals');
             var parsedLocals = [];
             JSON.parse(block.dataset.locals).forEach(

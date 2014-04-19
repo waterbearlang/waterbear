@@ -748,7 +748,7 @@
 
     function codeFromBlock(block){
         // console.log(getScript(block.dataset.scriptId));
-        var scriptTemplate = getScript(block.dataset.scriptId).replace(/##/g, '_' + block.dataset.seqNum);
+        var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
@@ -756,6 +756,12 @@
                 elem.style.backgroundColor = 'red';
             });
         }
+        // support optional multiline templates
+        if (Array.isArray(scriptTemplate)){
+            scriptTemplate = scriptTemplate.join('\n');
+        }
+        // fixup sequence numbers in template
+        scriptTemplate = scriptTemplate.replace(/##/g, '_' + block.dataset.seqNum);
         var childValues = [];
         var label = wb.findChild(block, '.label');
         var expressionValues = wb.findChildren(label, '.socket')

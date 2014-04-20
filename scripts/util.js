@@ -123,6 +123,10 @@
     }
 
     function findChildren(elem, selector){
+        if (!elem){
+            console.log('no children of null with selector %s', selector);
+            return [];
+        }
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });

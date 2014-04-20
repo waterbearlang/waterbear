@@ -16,6 +16,7 @@
 
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
+
 (function(wb){
 'use strict';
     var elem = wb.elem;
@@ -25,8 +26,7 @@
                                called by the Block() function below*/
     // variables for code map
     var codeMap_view = document.querySelector('.code_map');
-	var cloneForCM = false;
-	var recently_removed = null;
+    var recently_removed = null;
                             
 
     function newSeqNum(){
@@ -37,8 +37,7 @@
     function registerSeqNum(seqNum){
         // When reifying saved blocks, call this for each block to make sure we start new blocks
         // that do not overlap with old ones.
-        if (!seqNum)
-        {
+        if (!seqNum){
             return;
         }
         nextSeqNum = Math.max(parseInt(seqNum, 10), nextSeqNum);
@@ -86,13 +85,13 @@
         return socketValue(wb.findChild(socket, '.holder'));
     }
 
-    function createSockets(obj){
+    function createSockets(obj, cloneForCM){
         return obj.sockets.map(function(socket_descriptor){
-            return Socket(socket_descriptor, obj);
+            return Socket(socket_descriptor, obj, cloneForCM);
         });
     }
 
-    var Block = function(obj){
+    var Block = function(obj, cloneForCM){
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -116,6 +115,9 @@
                     }else if (obj.blocktype === 'asset'){
                         names.push('expression');
                     }
+                    if (cloneForCM){
+                        names.push('cloned');
+                    }
                     return names.join(' ');
                 },
                 'data-blocktype': obj.blocktype,
@@ -129,7 +131,7 @@
                 'data-keywords': JSON.stringify(obj.keywords),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
-            elem('div', {'class': 'label'}, createSockets(obj))
+            elem('div', {'class': 'label'}, createSockets(obj, cloneForCM))
         );
         if (obj.seqNum){
             block.dataset.seqNum = obj.seqNum;
@@ -155,7 +157,7 @@
             block.appendChild(contained);
             if (obj.contained){
                 obj.contained.map(function(childdesc){
-                    var child = Block(childdesc);
+                    var child = Block(childdesc, cloneForCM);
                     contained.appendChild(child);
                     addStep({wbTarget: child}); // simulate event
                 });
@@ -179,17 +181,17 @@
             removeExpression(event);
         }else{
             removeStep(event);
-        }	
-		var dup_block = document.getElementById(event.wbTarget.id + "-d");
-		if(dup_block){
-			if (wb.matches(event.wbTarget, '.expression')){
+        }   
+        var dup_block = document.getElementById(event.wbTarget.id + "-d");
+        if(dup_block){
+            if (wb.matches(event.wbTarget, '.expression')){
             removeExpressionCodeMap(dup_block);
-			}else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
+            }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
             removeStepCodeMap(dup_block);
-			}
-			recently_removed = dup_block;
-			dup_block.parentNode.removeChild(dup_block);
-		}
+            }
+            recently_removed = dup_block;
+            dup_block.parentNode.removeChild(dup_block);
+        }
     }
 
     function addBlock(event){
@@ -199,11 +201,11 @@
         }else{
             addStep(event);
         }
-		if((recently_removed !== null) && (event.wbTarget.id + '-d' == recently_removed.id)){
-			addBlocksCodeMap(event, true);
-		}else{
-			addBlocksCodeMap(event, false);
-		}
+        if((recently_removed !== null) && (event.wbTarget.id + '-d' == recently_removed.id)){
+            addBlocksCodeMap(event, true);
+        }else{
+            addBlocksCodeMap(event, false);
+        }
         Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
     
@@ -213,64 +215,64 @@
             // don't mirror scratchpad in code map
             return;
         }
-		cloneForCM = true;
-		var parent = null;
-		var next_sibling = null;
-		var dup_target, parent_id; 
-		if(isRestored){
-			dup_target = recently_removed;
-		}else{
-			dup_target = cloneBlock(target);
-			dup_target.className = dup_target.className + " cloned";
-		}
-		dup_target.id = target.id + "-d";
-		var siblings = target.parentNode.childNodes;
-		var targetIndex = wb.indexOf(event.wbTarget);
-		var dup_next_sibling = null;
-		var dup_sibling_id;
-		while(targetIndex < siblings.length -1){
-			dup_sibling_id = siblings[targetIndex+1].id;
-			if(dup_sibling_id === ''){
-				targetIndex += 1;
-			}else{
-				dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
-				break;
-			}
-		}
-		if(wb.matches(target.parentNode, ".workspace")){
-			//recursively add it to the code_map
-		}
-		else if(wb.matches(target.parentNode.parentNode, ".scripts_workspace")){
-			parent = codeMap_view;
-			parent.insertBefore(dup_target, dup_next_sibling);
-			
-		}else{
-			if(wb.matches(target, '.expression')){
-				parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
-				parent = document.getElementById(parent_id).querySelector('.holder');
-				parent.appendChild(dup_target);
-				addExpressionCodeMap(dup_target);
-			}else{
-				console.log("target.id");
-				console.log(target.id);
-				console.log(target.parentNode.className);
-				parent_id = target.parentNode.parentNode.id + "-d";
-				parent = document.getElementById(parent_id).querySelector('.contained');
-				parent.insertBefore(dup_target,dup_next_sibling);
-				addStepCodeMap(dup_target);
-			}
-		}
-		cloneForCM = false;
-	}
+        var cloneForCM = true;
+        var parent = null;
+        var next_sibling = target.nextElementSibling;
+        var dup_target, parent_id; 
+        if(isRestored){
+            dup_target = recently_removed;
+        }else{
+            dup_target = cloneBlock(target, cloneForCM);
+        }
+
+        dup_target.id = target.id + "-d";
+        // var siblings = target.parentNode.childNodes;
+        // var targetIndex = wb.indexOf(event.wbTarget);
+        var dup_next_sibling = null;
+        // var dup_sibling_id;
+        if (next_sibling){
+            dup_next_sibling = document.getElementById(next_sibling.id + '-d');
+        }
+        // while(targetIndex < siblings.length -1){
+        //  dup_sibling_id = siblings[targetIndex+1].id;
+        //  if(dup_sibling_id === ''){
+        //      targetIndex += 1;
+        //  }else{
+        //      dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
+        //      break;
+        //  }
+        // }
+        // console.log('target: %s, parent: %s, grandparent: %s', target.className, target.parentNode.className, target.parentNode.parentNode.className);
+        if(wb.matches(target, ".scripts_workspace")){
+            //recursively add it to the code_map
+            parent = codeMap_view;
+            parent.insertBefore(dup_target, dup_next_sibling);
+        }else if(wb.matches(target, '.expression')){
+            parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
+            parent = document.getElementById(parent_id).querySelector('.holder');
+            parent.appendChild(dup_target);
+            addExpressionCodeMap(dup_target);
+        }else{
+            console.log("target.id");
+            console.log(target.id);
+            console.log(target.parentNode.className);
+            parent_id = target.parentNode.parentNode.id + "-d";
+            parent = document.getElementById(parent_id).querySelector('.contained');
+            parent.insertBefore(dup_target,dup_next_sibling);
+            addStepCodeMap(dup_target);
+        }
+        cloneForCM = false;
+    }
 
     function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
         var block = event.wbTarget;
+        var parent;
         // console.log('remove block: %o', block);
         if (block.classList.contains('step') && !block.classList.contains('context')){
             try{
-                var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
+                parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
             }catch(e){
                 /* We are likely in the scratch space, which has no context */
                 return;
@@ -323,7 +325,7 @@
     function removeExpressionCodeMap(block){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
-		console.log("came here");
+        console.log("came here");
         //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.removeAttribute('style');
@@ -395,7 +397,7 @@
             ); 
             block.dataset.locals = JSON.stringify(parsedLocals);
         }
-	}
+    }
 
     function addExpression(event){
         // add an expression to an expression holder
@@ -416,7 +418,7 @@
         });
     }
 
-    var Socket = function(desc, blockdesc){
+    var Socket = function(desc, blockdesc, cloneForCM){
         // desc is a socket descriptor object, block is the owner block descriptor
         // Sockets are described by text, type, and (default) value
         // type and value are optional, but if you have one you must have the other
@@ -462,11 +464,11 @@
             if (desc.uBlock){
                 // console.log('trying to instantiate %o', desc.uBlock);
                 delete desc.uValue;
-                newBlock = Block(desc.uBlock);
+                newBlock = Block(desc.uBlock, cloneForCM);
                 //console.log('created instance: %o', newBlock);
             } else if (desc.block && ! desc.uValue){
                 //console.log('desc.block');
-                newBlock = cloneBlock(document.getElementById(desc.block));
+                newBlock = cloneBlock(document.getElementById(desc.block), cloneForCM);
             }else if (desc.block && desc.uValue){
                 // for debugging only
                 // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
@@ -591,7 +593,7 @@
         return desc;
     }
 
-    function cloneBlock(block){
+    function cloneBlock(block, cloneForCM){
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
         delete blockdesc.id;
@@ -600,8 +602,10 @@
         // I think it was from back when menu template blocks had sequence numbers
         // UPDATE:
         // No, it was because we want cloned blocks (and the locals they create) to get 
-        // new sequence numbers. But, if the block being clones is an instance of a local then we
+        // new sequence numbers. But, if the block being cloned is an instance of a local then we
         // don't want to get a new sequence number.
+        //
+        // And all of that is before we started cloning for the code map.
         // /////////////////
          if (!block.dataset.localSource && !cloneForCM){
             delete blockdesc.seqNum;
@@ -610,8 +614,8 @@
             blockdesc.scriptId = block.id;            
         }
         delete blockdesc.isTemplateBlock;
-        delete blockdesc.isLocal;        
-        return Block(blockdesc);
+        delete blockdesc.isLocal;
+        return Block(blockdesc, cloneForCM);
     }
 
     function deleteBlock(event){
@@ -680,9 +684,9 @@
             input.addEventListener('change', function(evt){
                 var file = input.files[0];
                 var reader = new FileReader();
-		reader.onload = function (evt){
+        reader.onload = function (evt){
                     localStorage['__' + file.name]= evt.target.result;
-		};
+        };
                 reader.readAsText( file );
             });
             wb.resize(input); //not sure if this is necessary

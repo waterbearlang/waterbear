@@ -75,6 +75,7 @@
             node.appendChild(button);
             gistContainer.appendChild(node);
 
+            // move this to a live event handler at the bottom of the file:
             button.addEventListener('click', function(){
                 wb.loadScriptsFromGistId(this.dataset.gist);
             });

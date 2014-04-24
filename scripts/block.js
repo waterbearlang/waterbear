@@ -92,6 +92,9 @@
     }
 
     var Block = function(obj, cloneForCM){
+        if (cloneForCM){
+            obj.id = obj.id + '-d';
+        }
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -159,6 +162,7 @@
                 obj.contained.map(function(childdesc){
                     var child = Block(childdesc, cloneForCM);
                     contained.appendChild(child);
+                    // Event.trigger(child, 'wb-add');
                     addStep({wbTarget: child}); // simulate event
                 });
             }
@@ -177,20 +181,31 @@
 
     function removeBlock(event){
         event.stopPropagation();
-        if (wb.matches(event.wbTarget, '.expression')){
+        var block = event.wbTarget;
+        console.log('removeBlock %o', block.className);
+        if (wb.matches(block, '.expression')){
             removeExpression(event);
         }else{
             removeStep(event);
-        }   
-        var dup_block = document.getElementById(event.wbTarget.id + "-d");
+        }
+        if (!block.dataset.isLocal){
+            removeBlockCodeMap(block);
+        }
+        Event.trigger(document.body, 'wb-modified', {block: block, type: 'removed'});
+    }
+
+    function removeBlockCodeMap(block){
+        var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){
             if (wb.matches(event.wbTarget, '.expression')){
-            removeExpressionCodeMap(dup_block);
+                removeExpressionCodeMap(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
-            removeStepCodeMap(dup_block);
+                removeStepCodeMap(dup_block);
             }
             recently_removed = dup_block;
             dup_block.parentNode.removeChild(dup_block);
+        }else{
+            console.log('why is there no block for %s', block.id + '-d');
         }
     }
 
@@ -337,7 +352,7 @@
 
     function addWorkspace(event){
         // Add a workspace, which has no block parent
-        var block = event.wbTarget;
+        // var block = event.wbTarget;
     }
 
     function addStep(event){
@@ -370,7 +385,7 @@
         }
     }
 
-    function addLocals(block, parent){
+    function addLocals(block, parent, cloneForCM){
         var parsedLocals = [];
         var locals = wb.findChild(parent, '.locals');
         JSON.parse(block.dataset.locals).forEach(
@@ -469,6 +484,7 @@
             if (newBlock){
                 //console.log('appending new block');
                 holder.appendChild(newBlock);
+                // Event.trigger(newBlock, 'wb-add');
                 addExpression({'wbTarget': newBlock});
             }
         }
@@ -589,7 +605,9 @@
     function cloneBlock(block, cloneForCM){
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
-        delete blockdesc.id;
+        if (!cloneForCM){
+            delete blockdesc.id;
+        }
         ////////////////////
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers

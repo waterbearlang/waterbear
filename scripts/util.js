@@ -123,6 +123,10 @@
     }
 
     function findChildren(elem, selector){
+        if (!elem){
+            console.log('no children of null with selector %s', selector);
+            return [];
+        }
         return wb.makeArray(elem.children).filter(function(item){
             return wb.matches(item, selector);
         });
@@ -210,6 +214,12 @@
     }else if(document.body.oMatchesSelector){
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
+
+    window.requestAnimationFrame = window.requestAnimationFrame ||
+                                   window.mozRequestAnimationFrame || 
+                                   window.msRequestAnimationFrame || 
+                                   window.webkitRequestAnimationFrame || 
+                                   function(fn){ setTimeout(fn, 20); };
 
     wb.makeArray = makeArray;
     wb.reposition = reposition;

@@ -70,14 +70,25 @@ body{
 }
 
 .code_map{
-	overflow: visual;
+	overflow: visible;
 	z-index: 10;
-	transform-origin:0 0;
+}
+
+.code_map .block.scripts_workspace {
 	-ms-transform-origin:0 0;
 	-webkit-transform-origin:0 0;
 	-moz-transform-origin: 0 0;
-	-o-transform-origin: 0 0; 
+	-o-transform-origin: 0 0;
+	transform-origin:0 0;
+	-ms-transform: scale(0.4, 0.4);
+	-webkit-transform: scale(0.4, 0.4);
+	-moz-transform: scale(0.4, 0.4);
+	-o-transform: scale(0.4, 0.4);
+	transform: scale(0.4, 0.4);
+	width: 250%;
+	max-width: 250%; /* bring width back to !00% after scaling */
 }
+
 
 #cm_container{
 	-webkit-flex: 1 0 0;

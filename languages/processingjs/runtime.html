@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>iFrame Canvas</title>
+    <style>
+    html,body,.stage{ height: 100%; border:0; margin:0;}
+    </style>
+</head>
+
+<body>
+    <div class="stage"></div>
+    <script src="runtime.js"></script>
+<script src="blocks/processingjs_runtime.js"></script>
+<script src="blocks/structure_runtime.js"></script>
+<script src="blocks/environment_runtime.js"></script>
+<script src="blocks/controls_runtime.js"></script>
+<script src="blocks/shapes_runtime.js"></script>
+<script src="blocks/input_runtime.js"></script>
+<script src="blocks/colors_runtime.js"></script>
+<script src="blocks/math_runtime.js"></script>
+<script src="blocks/transform_runtime.js"></script>
+<script src="../../lib/processing-1.4.1.js"></script>
+    <script>
+
+    window.addEventListener('message', receiveMessage, false);
+    var scriptRunning = false;
+    if (localStorage._storedScript){
+    	var script = localStorage._storedScript;
+    	delete localStorage._storedScript;
+    	scriptRunning = true;
+    	new Function(script)();
+    }
+
+    function receiveMessage(evt){
+		try{
+			var message = JSON.parse(evt.data);
+		}catch(e){
+			console.log('problem parsing %s', evt.data);
+			return;
+		}
+		switch(message.command){
+			case 'reset': 
+				console.log('reset script');
+				return location.reload();
+			case 'loadScript': 
+			    if (scriptRunning){
+			    	localStorage._storedScript = message.script;
+			    	location.reload();
+			    }
+				console.log('load script');
+				scriptRunning = true;
+				return new Function(message.script)();
+			default: return console.log('unknown command: %o', message);
+		}
+	}
+    window.parent.postMessage('ide-ready', '*');
+
+    </script>
+</body>
+</html>

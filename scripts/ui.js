@@ -15,11 +15,24 @@ function accordion(event){
     event.wbTarget.nextSibling.classList.add('open');
 }
 
+var textScriptNeedsUpdate = false;
 
-function updateScriptsView(){
+function runUpdateForScriptsView(){
+	if (!textScriptNeedsUpdate){
+		return;
+	}
     var blocks = wb.findAll(document.body, '.scripts_workspace');
     var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
+    textScriptNeedsUpdate = false;
+}
+
+function updateScriptsView(){
+	// debounce
+	if (textScriptNeedsUpdate) return;
+	textScriptNeedsUpdate = true;
+	// async
+	requestAnimationFrame(runUpdateForScriptsView);
 }
 wb.updateScriptsView = updateScriptsView; 
 
@@ -473,7 +486,7 @@ function edit_menu(title, sectionKey, specs, help, show){
 
 function initLanguageFiles(){
     // pulled from workspace.js, one file below in the dist/javascript.js
-    var language = location.pathname.match(/\/([^/.]*)\.html/)[1];
+    var language = location.pathname.split('/')[2];
 
     //gets language locale code. en, es, de, etc.
     var locale = (navigator.userLanguage || navigator.language || "en-US").substring(0,2);

@@ -70,27 +70,24 @@ body{
 }
 
 .code_map{
-	overflow: visible;
+	position: relative;
+	overflow: visual;
 	z-index: 10;
-}
-
-.code_map .block.scripts_workspace {
+	transform: scale(0.3, 0.3);
+	-ms-transform:scale(0.3, 0.3);
+	-webkit-transform:scale(0.3, 0.3);
+	-moz-transform: scale(0.3, 0.3);
+	-o-transform: scale(0.3, 0.3);
+	
+	transform-origin:0 0;
 	-ms-transform-origin:0 0;
 	-webkit-transform-origin:0 0;
 	-moz-transform-origin: 0 0;
-	-o-transform-origin: 0 0;
-	transform-origin:0 0;
-	-ms-transform: scale(0.4, 0.4);
-	-webkit-transform: scale(0.4, 0.4);
-	-moz-transform: scale(0.4, 0.4);
-	-o-transform: scale(0.4, 0.4);
-	transform: scale(0.4, 0.4);
-	width: 250%;
-	max-width: 250%; /* bring width back to !00% after scaling */
+	-o-transform-origin: 0 0; 
 }
 
-
 #cm_container{
+	position: relative;
 	-webkit-flex: 1 0 0;
 	flex: 1 0 0;
 	z-index: 9;
@@ -101,7 +98,7 @@ body{
 #cm_canvas{
 	width: 100%;
 	height:100%;
-    	position:absolute;
+    position:absolute;
 	pointer-events: none;
 	z-index: 15;
 }

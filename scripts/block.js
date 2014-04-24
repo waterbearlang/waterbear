@@ -197,7 +197,7 @@
     function removeBlockCodeMap(block){
         var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){
-            if (wb.matches(event.wbTarget, '.expression')){
+            if (wb.matches(block, '.expression')){
                 removeExpressionCodeMap(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
                 removeStepCodeMap(dup_block);
@@ -220,15 +220,26 @@
             addStep(event);
         }
         if((recently_removed !== null) && (event.wbTarget.id + '-d' == recently_removed.id)){
-            addBlocksCodeMap(event, true);
+            addBlocksCodeMap(event.wbTarget, true);
         }else{
-            addBlocksCodeMap(event, false);
+            addBlocksCodeMap(event.wbTarget, false);
         }
         Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'added'});
     }
-    
-    function addBlocksCodeMap(event, isRestored){
-        var target = event.wbTarget;
+	
+	function loadExampleCodeMap(blocks){
+		var blocks = blocks.querySelector('.contained').childNodes;
+		var block_length = blocks.length;
+		var block; 
+		for(var i = 0; i < block_length; i ++){
+			block = blocks[i];
+			if(block.className !== 'drop-cursor'){
+				addBlocksCodeMap(block, false);
+			} 
+		}
+	}
+	
+    function addBlocksCodeMap(target, isRestored){
         if (wb.matches(target.parentNode, '.scratchpad')){
             // don't mirror scratchpad in code map
             return;
@@ -236,6 +247,9 @@
         var cloneForCM = true;
         var parent = null;
         var next_sibling = target.nextElementSibling;
+		if(next_sibling != null && next_sibling.className == "drop-cursor"){
+			next_sibling = next_sibling.nextElementSibling;
+		}
         var dup_target, parent_id; 
         if(isRestored){
             dup_target = recently_removed;
@@ -262,10 +276,16 @@
         // }
         // console.log('target: %s, parent: %s, grandparent: %s', target.className, target.parentNode.className, target.parentNode.parentNode.className);
         if(wb.matches(target, ".scripts_workspace")){
-            //recursively add it to the code_map
-            parent = codeMap_view;
-            parent.insertBefore(dup_target, dup_next_sibling);
-        }else if(wb.matches(target, '.expression')){
+            loadExampleCodeMap(target);
+        }else if(wb.matches(target.parentNode.parentNode, ".scripts_workspace")){
+			parent = codeMap_view;
+			parent.insertBefore(dup_target, dup_next_sibling);
+			if(wb.matches(dup_target, '.context')){
+				addStepCodeMap(dup_target, parent);
+			}
+			setDupIDRecursively(target, dup_target);
+		}
+		else if(wb.matches(target, '.expression')){
             parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
             parent = document.getElementById(parent_id).querySelector('.holder');
             parent.appendChild(dup_target);
@@ -278,10 +298,23 @@
             parent = document.getElementById(parent_id).querySelector('.contained');
             parent.insertBefore(dup_target,dup_next_sibling);
             addStepCodeMap(dup_target);
+			setDupIDRecursively(target, dup_target);
         }
         cloneForCM = false;
     }
-
+	function setDupIDRecursively(target, dup_target){
+		console.log("setDupIDRecursively");
+		console.log(target.id);
+		var blocks = target.querySelectorAll('.block');
+		if(blocks){
+			var dup_blocks = dup_target.querySelectorAll('.block');
+			console.log(blocks.length);
+			for(var i =0; i < blocks.length; i ++){
+				dup_blocks[i].id = blocks[i].id + '-d';
+				setDupIDRecursively(blocks[i],dup_blocks[i])	
+			}
+		}
+	}
     function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
@@ -410,7 +443,39 @@
         );
         return parsedLocals;
     }
-    
+    function addStepCodeMap(block, parent){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
+		
+            var parent = wb.closest(block, '.context');
+			console.log("parent.id");
+			console.log(parent.id);
+			
+            var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = [];
+             JSON.parse(block.dataset.locals).forEach(
+                function(spec){
+                    spec.isTemplateBlock = true;
+                    spec.isLocal = true;
+                    spec.group = block.dataset.group;
+                    // if (!spec.seqNum){
+                        spec.seqNum = block.dataset.seqNum;
+                    // }
+                    // add scopeid to local blocks
+                    spec.scopeId = parent.id;
+                    if(!spec.id){
+                        spec.id = spec.scriptId = uuid();
+                    }
+                    // add localSource so we can trace a local back to its origin
+                    spec.localSource = block.id;
+                    block.dataset.localsAdded = true;
+                    locals.appendChild(Block(spec));
+                    parsedLocals.push(spec);
+                }
+            ); 
+            block.dataset.locals = JSON.stringify(parsedLocals);
+        }
+    }
+	
     function addStepCodeMap(block){
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
             var parent = wb.closest(block, '.context');

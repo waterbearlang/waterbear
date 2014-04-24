@@ -164,7 +164,6 @@
         }
         blocks.forEach(function(block){
             wb.wireUpWorkspace(block);
-            Event.trigger(block, 'wb-add');
         });
         wb.loaded = true;
         Event.trigger(document.body, 'wb-script-loaded');

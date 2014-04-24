@@ -195,9 +195,12 @@
     }
 
     function addBlock(event){
+        console.log('add block: %o', event.wbTarget.className);
         event.stopPropagation();
         if (wb.matches(event.wbTarget, '.expression')){
             addExpression(event);
+        }else if(wb.matches(event.wbTarget, '.scripts_workspace')){
+            addWorkspace(event);
         }else{
             addStep(event);
         }
@@ -253,10 +256,10 @@
             parent.appendChild(dup_target);
             addExpressionCodeMap(dup_target);
         }else{
-            console.log("target.id");
-            console.log(target.id);
+            console.log('target.id: %s', target.id);
             console.log(target.parentNode.className);
-            parent_id = target.parentNode.parentNode.id + "-d";
+            parent_id = wb.closest(target.parentNode, '.block').id + "-d";
+            console.log('parent_id: %s', parent_id);
             parent = document.getElementById(parent_id).querySelector('.contained');
             parent.insertBefore(dup_target,dup_next_sibling);
             addStepCodeMap(dup_target);
@@ -332,6 +335,11 @@
         });
     }
 
+    function addWorkspace(event){
+        // Add a workspace, which has no block parent
+        var block = event.wbTarget;
+    }
+
     function addStep(event){
         // Add a block to a block container
         var block = event.wbTarget;
@@ -344,57 +352,7 @@
                 // This *should* mean we're putting a block into the Scratchpad, so ignore locals
                 return;
             }
-            var locals = wb.findChild(parent, '.locals');
-            var parsedLocals = [];
-            JSON.parse(block.dataset.locals).forEach(
-                function(spec){
-                    spec.isTemplateBlock = true;
-                    spec.isLocal = true;
-                    spec.group = block.dataset.group;
-                    // if (!spec.seqNum){
-                        spec.seqNum = block.dataset.seqNum;
-                    // }
-                    // add scopeid to local blocks
-                    spec.scopeId = parent.id;
-                    if(!spec.id){
-                        spec.id = spec.scriptId = uuid();
-                    }
-                    // add localSource so we can trace a local back to its origin
-                    spec.localSource = block.id;
-                    block.dataset.localsAdded = true;
-                    locals.appendChild(Block(spec));
-                    parsedLocals.push(spec);
-                }
-            );
-            block.dataset.locals = JSON.stringify(parsedLocals);
-        }
-    }
-    
-    function addStepCodeMap(block){
-        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
-            var parent = wb.closest(block, '.context');
-            var locals = wb.findChild(parent, '.locals');
-            var parsedLocals = [];
-             JSON.parse(block.dataset.locals).forEach(
-                function(spec){
-                    spec.isTemplateBlock = true;
-                    spec.isLocal = true;
-                    spec.group = block.dataset.group;
-                    // if (!spec.seqNum){
-                        spec.seqNum = block.dataset.seqNum;
-                    // }
-                    // add scopeid to local blocks
-                    spec.scopeId = parent.id;
-                    if(!spec.id){
-                        spec.id = spec.scriptId = uuid();
-                    }
-                    // add localSource so we can trace a local back to its origin
-                    spec.localSource = block.id;
-                    block.dataset.localsAdded = true;
-                    locals.appendChild(Block(spec));
-                    parsedLocals.push(spec);
-                }
-            ); 
+            var parsedLocals = addLocals(block, parent);
             block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
@@ -409,6 +367,41 @@
         });
         if (event.stopPropagation){
             event.stopPropagation();
+        }
+    }
+
+    function addLocals(block, parent){
+        var parsedLocals = [];
+        var locals = wb.findChild(parent, '.locals');
+        JSON.parse(block.dataset.locals).forEach(
+            function(spec){
+                spec.isTemplateBlock = true;
+                spec.isLocal = true;
+                spec.group = block.dataset.group;
+                // if (!spec.seqNum){
+                    spec.seqNum = block.dataset.seqNum;
+                // }
+                // add scopeid to local blocks
+                spec.scopeId = parent.id;
+                if(!spec.id){
+                    spec.id = spec.scriptId = uuid();
+                }
+                // add localSource so we can trace a local back to its origin
+                spec.localSource = block.id;
+                block.dataset.localsAdded = true;
+                locals.appendChild(Block(spec));
+                parsedLocals.push(spec);
+            }
+        );
+        return parsedLocals;
+    }
+    
+    function addStepCodeMap(block){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
+            var parent = wb.closest(block, '.context');
+            var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = addLocals(block, parent);
+            block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
     
@@ -763,6 +756,9 @@
 
     function codeFromBlock(block){
         // console.log(getScript(block.dataset.scriptId));
+        if (block.classList.contains('cloned')){
+            return ''
+        }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -1003,6 +999,7 @@
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on('.workspace', 'wb-add', null, addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
     Event.on('#search_text', 'keyup', null, searchBlock);

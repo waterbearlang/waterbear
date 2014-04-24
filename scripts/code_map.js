@@ -14,7 +14,7 @@
 		var workspace = document.querySelector('.scripts_workspace'); 
 		var blocked = workspace.querySelector('.contained');
 		var ctOffTop = blocked.offsetTop;
-		var ratio = canvas.height/ container.clientHeight;
+		var ratio = canvas.height/ container.clientHeight ;
 		var scrt = workspace.scrollTop;
 		top = scrt;
 		var work_space_vh = workspace.clientHeight; 
@@ -42,7 +42,7 @@
 	
 
 	function handleClickEvent(event){ 
-		var y = event.pageY - content.offsetTop;
+		var y = event.pageY - content.offsetTop + container.scrollTop;
 		var workspace = document.querySelector('.scripts_workspace'); 
 		workspace.scrollTop = y / wb.cm_percent;
 	}

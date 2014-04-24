@@ -153,6 +153,7 @@
         document.querySelector('.workspace').appendChild(workspace);
         workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
         // wb.initializeDragHandlers();
+        Event.trigger(workspace, 'wb-add');
         Event.trigger(document.body, 'wb-workspace-initialized');
     }
 

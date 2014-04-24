@@ -15,11 +15,24 @@ function accordion(event){
     event.wbTarget.nextSibling.classList.add('open');
 }
 
+var textScriptNeedsUpdate = false;
 
-function updateScriptsView(){
+function runUpdateForScriptsView(){
+	if (!textScriptNeedsUpdate){
+		return;
+	}
     var blocks = wb.findAll(document.body, '.scripts_workspace');
     var view = wb.find(document.body, '.scripts_text_view');
     wb.writeScript(blocks, view);
+    textScriptNeedsUpdate = false;
+}
+
+function updateScriptsView(){
+	// debounce
+	if (textScriptNeedsUpdate) return;
+	textScriptNeedsUpdate = true;
+	// async
+	requestAnimationFrame(runUpdateForScriptsView);
 }
 wb.updateScriptsView = updateScriptsView; 
 

@@ -2118,6 +2118,16 @@ var l10nFiles = {};
         }
     }
 
+    function toggleTag(evt){
+      if (evt.detail.name.substring(0, 4) == 'tag-') {
+        var blocks = wb.findAll(document.body, '.block[data-tags*="' + evt.detail.name.substring(4) + '"]');
+        var i;
+        for (i = 0; i < blocks.length; i++) {
+          evt.detail.state ? wb.show(blocks[i]) : wb.hide(blocks[i]);
+        }
+      }
+    }
+
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
@@ -2125,6 +2135,8 @@ var l10nFiles = {};
     Event.on('#search_text', 'keyup', null, searchBlock);
     Event.on('#search_text', 'input', null, searchBlock);
     Event.on('#search_clear', 'click', null, searchBlock);
+
+    Event.on(document.body, 'wb-toggle', null, toggleTag);
 
     wb.blockRegistry = blockRegistry;
 

@@ -357,6 +357,8 @@ var block_cmenu = {
         delete: {name: 'Delete', callback: deleteCommand},
 };
 
+wb.cm_percent = 0.3;
+
 // context menu for code map
 var cm_cmenu = {
 	thrity: {name: '30%', callback: thirtyPercent},
@@ -367,6 +369,8 @@ var cm_cmenu = {
 
 //call back function for code map
 function thirtyPercent(evt) {
+	wb.cm_percent  = 0.3;
+	wb.drawRectForViewPort();
 	var element = document.querySelector('.code_map');
 	var transfromString = ("scale(0.3, 0.3)");
     // now attach that variable to each prefixed style
@@ -379,6 +383,8 @@ function thirtyPercent(evt) {
 
 //call back function for code map
 function fiftyPercent(evt) {
+	wb.cm_percent  = 0.5;
+	wb.drawRectForViewPort();
 	var element = document.querySelector('.code_map');
 	var transfromString = ("scale(0.5, 0.5)");
     // now attach that variable to each prefixed style
@@ -390,6 +396,8 @@ function fiftyPercent(evt) {
 }
 //call back function for code map
 function seventyPercent(evt) {
+	wb.cm_percent  = 0.7;
+	wb.drawRectForViewPort();
 	var element = document.querySelector('.code_map');
 	var transfromString = ("scale(0.7, 0.7)");
     // now attach that variable to each prefixed style
@@ -401,6 +409,8 @@ function seventyPercent(evt) {
 }
 //call back function for code map
 function hundredPercent(evt) {
+	wb.cm_percent  = 1;
+	wb.drawRectForViewPort();
 	var element = document.querySelector('.code_map');
 	var transfromString = ("scale(1, 1)");
     // now attach that variable to each prefixed style

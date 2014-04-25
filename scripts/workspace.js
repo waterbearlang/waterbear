@@ -30,6 +30,7 @@
         path += "?example=" + event.target.dataset.example;
         if (wb.scriptModified){
             if (confirm('Throw out the current script?')){
+				wb.clearCodeMap();
                 wb.scriptModified = false;
                 wb.loaded = false;
                 history.pushState(null, '', path);
@@ -155,6 +156,8 @@
         // wb.initializeDragHandlers();
         Event.trigger(workspace, 'wb-add');
         Event.trigger(document.body, 'wb-workspace-initialized');
+		wb.drawRectForViewPort();
+		workspace.addEventListener('scroll', wb.handleScrollChange, false);
     }
 
 
@@ -253,6 +256,12 @@
                 break;
             case 'tutorial':
             case 'scratchpad':
+			case 'code_map':
+				if(!wb.toggleState.code_map){
+					wb.hide(wb.find(document.body, '#cm_container'));
+				}else{
+					wb.show(wb.find(document.body, '#cm_container'));
+				}
             case 'scripts_workspace':
                 if (! (wb.toggleState.tutorial || wb.toggleState.scratchpad || wb.toggleState.scripts_workspace)){
                     wb.hide(wb.find(document.body, '.workspace'));

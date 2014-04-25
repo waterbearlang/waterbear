@@ -236,6 +236,9 @@
         var cloneForCM = true;
         var parent = null;
         var next_sibling = target.nextElementSibling;
+        if(next_sibling !== null && next_sibling.className === "drop-cursor"){
+            next_sibling = next_sibling.nextElementSibling;
+        }
         var dup_target, parent_id; 
         if(isRestored){
             dup_target = recently_removed;

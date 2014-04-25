@@ -195,7 +195,7 @@
                 {
                     "blocktype": "expression",
                     "id": "efe8c097-a91f-42f7-a92f-50ad32a969db",
-                    "script": "global.keys",
+                    "script": "runtime.keys",
                     "help": "for debugging",
                     "type": "object",
                     "sockets": [

@@ -7,10 +7,6 @@ module.exports = function(config) {
     // base path, that will be used to resolve files and exclude
     basePath: '',
 
-    preprocessors: {
-        'fixtures/**/*.html': ['html2js']
-    },
-
     // frameworks to use
     frameworks: ['mocha', 'chai', 'sinon'],
 
@@ -20,21 +16,23 @@ module.exports = function(config) {
 
         { pattern: 'fixtures/**/*.html', included: true },
       'waterbear.js',
-      '../languages/javascript/asset_runtime.js',
-      '../languages/javascript/canvas_runtime.js',
+      
+      '../languages/javascript/blocks/asset_runtime.js',
+      '../languages/javascript/blocks/canvas_runtime.js',
       //'../languages/javascript/geolocation_runtime.js',
-      '../languages/javascript/image_runtime.js',
-      '../languages/javascript/motion_runtime.js',
-      '../languages/javascript/social_runtime.js',
-      '../languages/javascript/javascript_runtime.js',
-      '../languages/javascript/control_runtime.js',
-      '../languages/javascript/datablock_runtime.js',
-      '../languages/javascript/math_runtime.js',
-      '../languages/javascript/random_runtime.js',
-      '../languages/javascript/sprite_runtime.js',
-      '../languages/javascript/string_runtime.js',
-      '../languages/javascript/vector_runtime.js',
-      '../languages/javascript/voice_runtime.js',
+      '../languages/javascript/blocks/image_runtime.js',
+      '../languages/javascript/blocks/motion_runtime.js',
+      '../languages/javascript/blocks/social_runtime.js',
+      '../languages/javascript/blocks/control_runtime.js',
+      //'../languages/javascript/blocks/datablocks_runtime.js',
+      '../languages/javascript/blocks/size_runtime.js',
+      '../languages/javascript/runtime.js',
+      '../languages/javascript/blocks/math_runtime.js',
+      '../languages/javascript/blocks/random_runtime.js',
+      '../languages/javascript/blocks/sprite_runtime.js',
+      '../languages/javascript/blocks/string_runtime.js',
+      '../languages/javascript/blocks/vector_runtime.js',
+      '../languages/javascript/blocks/voice_runtime.js',
       'specs/*.js'
     ],
 

@@ -331,7 +331,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "13",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -368,7 +368,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "15",
-                                                        "script": "global.stage_height"
+                                                        "script": "runtime.stage_height"
                                                     }
                                                 },
                                                 {
@@ -504,7 +504,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "13",
-                                                                    "script": "global.stage_width"
+                                                                    "script": "runtime.stage_width"
                                                                 }
                                                             },
                                                             {
@@ -561,7 +561,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "15",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -708,7 +708,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "13",
-                                                                    "script": "global.stage_width"
+                                                                    "script": "runtime.stage_width"
                                                                 }
                                                             },
                                                             {
@@ -765,7 +765,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "15",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -894,7 +894,7 @@
                                                 }
                                             ],
                                             "seqNum": "32",
-                                            "script": "global.stage_width"
+                                            "script": "runtime.stage_width"
                                         }
                                     },
                                     {
@@ -929,7 +929,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "107",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -989,7 +989,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "126",
-                                                        "script": "global.stage_height"
+                                                        "script": "runtime.stage_height"
                                                     }
                                                 }
                                             ],
@@ -1101,7 +1101,7 @@
                                                 }
                                             ],
                                             "seqNum": "33",
-                                            "script": "global.stage_width"
+                                            "script": "runtime.stage_width"
                                         }
                                     },
                                     {
@@ -1136,7 +1136,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "108",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -1297,7 +1297,7 @@
                                                 }
                                             ],
                                             "seqNum": "33",
-                                            "script": "global.stage_width"
+                                            "script": "runtime.stage_width"
                                         }
                                     },
                                     {
@@ -1332,7 +1332,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "108",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -1502,7 +1502,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "87",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -1537,7 +1537,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "87",
-                                                                                "script": "global.stage_width"
+                                                                                "script": "runtime.stage_width"
                                                                             }
                                                                         },
                                                                         {
@@ -1599,7 +1599,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "145",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -1659,7 +1659,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "149",
-                                                        "script": "global.stage_height"
+                                                        "script": "runtime.stage_height"
                                                     }
                                                 }
                                             ],
@@ -1780,7 +1780,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "88",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -1815,7 +1815,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "87",
-                                                                                "script": "global.stage_width"
+                                                                                "script": "runtime.stage_width"
                                                                             }
                                                                         },
                                                                         {
@@ -1877,7 +1877,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "146",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -2047,7 +2047,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "88",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -2082,7 +2082,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "87",
-                                                                                "script": "global.stage_width"
+                                                                                "script": "runtime.stage_width"
                                                                             }
                                                                         },
                                                                         {
@@ -2144,7 +2144,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "108",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -2314,7 +2314,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "89",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -2349,7 +2349,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "87",
-                                                                                "script": "global.stage_width"
+                                                                                "script": "runtime.stage_width"
                                                                             }
                                                                         },
                                                                         {
@@ -2411,7 +2411,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "147",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -2471,7 +2471,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "150",
-                                                        "script": "global.stage_height"
+                                                        "script": "runtime.stage_height"
                                                     }
                                                 }
                                             ],
@@ -2592,7 +2592,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "90",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -2627,7 +2627,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "87",
-                                                                                "script": "global.stage_width"
+                                                                                "script": "runtime.stage_width"
                                                                             }
                                                                         },
                                                                         {
@@ -2689,7 +2689,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "148",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -2859,7 +2859,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "89",
-                                                        "script": "global.stage_width"
+                                                        "script": "runtime.stage_width"
                                                     }
                                                 },
                                                 {
@@ -2894,7 +2894,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "87",
-                                                                                "script": "global.stage_width"
+                                                                                "script": "runtime.stage_width"
                                                                             }
                                                                         },
                                                                         {
@@ -2956,7 +2956,7 @@
                                                                         }
                                                                     ],
                                                                     "seqNum": "108",
-                                                                    "script": "global.stage_height"
+                                                                    "script": "runtime.stage_height"
                                                                 }
                                                             },
                                                             {
@@ -4035,7 +4035,7 @@
                                 }
                             ],
                             "seqNum": "41",
-                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
                         },
                         {
                             "id": "d5a30140-1817-4008-9afc-340b1be72692",
@@ -4464,7 +4464,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -4499,7 +4499,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "107",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -4559,7 +4559,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "126",
-                                                                        "script": "global.stage_height"
+                                                                        "script": "runtime.stage_height"
                                                                     }
                                                                 }
                                                             ],
@@ -4620,7 +4620,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "33",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -4655,7 +4655,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -4765,7 +4765,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -4800,7 +4800,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -5027,7 +5027,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -5062,7 +5062,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "107",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -5122,7 +5122,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "126",
-                                                                        "script": "global.stage_height"
+                                                                        "script": "runtime.stage_height"
                                                                     }
                                                                 }
                                                             ],
@@ -5184,7 +5184,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "33",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -5219,7 +5219,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -5329,7 +5329,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -5364,7 +5364,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -5589,7 +5589,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -5624,7 +5624,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "107",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -5684,7 +5684,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "126",
-                                                                        "script": "global.stage_height"
+                                                                        "script": "runtime.stage_height"
                                                                     }
                                                                 }
                                                             ],
@@ -5745,7 +5745,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "33",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -5780,7 +5780,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -5890,7 +5890,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -5925,7 +5925,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -6863,7 +6863,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "208",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -6900,7 +6900,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "207",
-                                                            "script": "global.stage_height"
+                                                            "script": "runtime.stage_height"
                                                         }
                                                     },
                                                     {
@@ -7495,7 +7495,7 @@
                                                         }
                                                     ],
                                                     "seqNum": "234",
-                                                    "script": "global.mouse_down"
+                                                    "script": "runtime.mouse_down"
                                                 }
                                             },
                                             {
@@ -7734,7 +7734,7 @@
                                                                     }
                                                                 ],
                                                                 "seqNum": "238",
-                                                                "script": "global.mouse_down"
+                                                                "script": "runtime.mouse_down"
                                                             }
                                                         }
                                                     ],
@@ -8177,7 +8177,7 @@
                                 }
                             ],
                             "seqNum": "41",
-                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
                         },
                         {
                             "id": "d5a30140-1817-4008-9afc-340b1be72692",
@@ -8606,7 +8606,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -8641,7 +8641,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "107",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -8701,7 +8701,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "126",
-                                                                        "script": "global.stage_height"
+                                                                        "script": "runtime.stage_height"
                                                                     }
                                                                 }
                                                             ],
@@ -8762,7 +8762,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "33",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -8797,7 +8797,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -8907,7 +8907,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -8942,7 +8942,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -9169,7 +9169,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -9204,7 +9204,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "107",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -9264,7 +9264,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "126",
-                                                                        "script": "global.stage_height"
+                                                                        "script": "runtime.stage_height"
                                                                     }
                                                                 }
                                                             ],
@@ -9326,7 +9326,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "33",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -9361,7 +9361,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -9471,7 +9471,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -9506,7 +9506,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -9731,7 +9731,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -9766,7 +9766,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "107",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -9826,7 +9826,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "126",
-                                                                        "script": "global.stage_height"
+                                                                        "script": "runtime.stage_height"
                                                                     }
                                                                 }
                                                             ],
@@ -9887,7 +9887,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "33",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -9922,7 +9922,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -10032,7 +10032,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "32",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -10067,7 +10067,7 @@
                                                                                         }
                                                                                     ],
                                                                                     "seqNum": "108",
-                                                                                    "script": "global.stage_height"
+                                                                                    "script": "runtime.stage_height"
                                                                                 }
                                                                             },
                                                                             {
@@ -11005,7 +11005,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "208",
-                                                            "script": "global.stage_width"
+                                                            "script": "runtime.stage_width"
                                                         }
                                                     },
                                                     {
@@ -11042,7 +11042,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "207",
-                                                            "script": "global.stage_height"
+                                                            "script": "runtime.stage_height"
                                                         }
                                                     },
                                                     {
@@ -11637,7 +11637,7 @@
                                                         }
                                                     ],
                                                     "seqNum": "234",
-                                                    "script": "global.mouse_down"
+                                                    "script": "runtime.mouse_down"
                                                 }
                                             },
                                             {
@@ -11876,7 +11876,7 @@
                                                                     }
                                                                 ],
                                                                 "seqNum": "238",
-                                                                "script": "global.mouse_down"
+                                                                "script": "runtime.mouse_down"
                                                             }
                                                         }
                                                     ],

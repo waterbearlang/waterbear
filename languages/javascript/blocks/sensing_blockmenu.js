@@ -36,7 +36,7 @@
                     "blocktype": "expression",
                     "id": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
                     "type": "number",
-                    "script": "global.mouse_x",
+                    "script": "runtime.mouse_x",
                     "help": "The current horizontal mouse position",
                     "sockets": [
                         {
@@ -48,7 +48,7 @@
                     "blocktype": "expression",
                     "id": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
                     "type": "number",
-                    "script": "global.mouse_y",
+                    "script": "runtime.mouse_y",
                     "help": "the current vertical mouse position",
                     "sockets": [
                         {
@@ -60,7 +60,7 @@
                     "blocktype": "expression",
                     "id": "ce1026a0-9acf-4d8f-a7c0-0759115af1ca",
                     "type": "boolean",
-                    "script": "global.mouse_down",
+                    "script": "runtime.mouse_down",
                     "help": "true if the mouse is down, false otherwise",
                     "sockets": [
                         {
@@ -72,7 +72,7 @@
                     "blocktype": "expression",
                     "id": "4321cef6-6365-4885-9a3c-1fd0db2b4eab",
                     "type": "boolean",
-                    "script": "global.isKeyDown({{1}})",
+                    "script": "runtime.isKeyDown({{1}})",
                     "help": "is the given key down when this block is run?",
                     "sockets": [
                         {
@@ -88,7 +88,7 @@
                     "blocktype": "expression",
                     "id": "048218dd-0b8d-4bc9-b310-480e93232665",
                     "type": "number",
-                    "script": "global.stage_width",
+                    "script": "runtime.stage_width",
                     "help": "width of the stage where scripts are run. This may change if the browser window changes",
                     "sockets": [
                         {
@@ -100,7 +100,7 @@
                     "blocktype": "expression",
                     "id": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
                     "type": "number",
-                    "script": "global.stage_height",
+                    "script": "runtime.stage_height",
                     "help": "height of the stage where scripts are run. This may change if the browser window changes.",
                     "sockets": [
                         {
@@ -112,7 +112,7 @@
                     "blocktype": "expression",
                     "id": "f85d3bfd-b58c-458f-b4a9-68538302aa12",
                     "type": "number",
-                    "script": "global.stage_center_x",
+                    "script": "runtime.stage_center_x",
                     "help": "horizontal center of the stage",
                     "sockets": [
                         {
@@ -124,7 +124,7 @@
                     "blocktype": "expression",
                     "id": "083bee4f-ee36-4a35-98df-587ed586d623",
                     "type": "number",
-                    "script": "global.stage_center_y",
+                    "script": "runtime.stage_center_y",
                     "help": "vertical center of the stage",
                     "sockets": [
                         {
@@ -136,7 +136,7 @@
                     "blocktype": "expression",
                     "id": "76184edb-ac2c-4809-899d-7b105776ba12",
                     "type": "number",
-                    "script": "randint(0,global.stage_width)",
+                    "script": "randint(0,runtime.stage_width)",
                     "help": "return a number between 0 and the stage width",
                     "sockets": [
                         {
@@ -148,7 +148,7 @@
                     "blocktype": "expression",
                     "id": "8e749092-327d-4921-a50e-c87acefe7102",
                     "type": "number",
-                    "script": "randint(0, global.stage_height)",
+                    "script": "randint(0, runtime.stage_height)",
                     "help": "return a number between 0 and the stage height",
                     "sockets": [
                         {
@@ -159,7 +159,7 @@
                 {
                     "blocktype": "step",
                     "id": "6b924f28-9bba-4257-a80b-2f2a591128a5",
-                    "script": "global.timer.reset();",
+                    "script": "runtime.timer.reset();",
                     "help": "set the global timer back to zero",
                     "sockets": [
                         {
@@ -171,7 +171,7 @@
                     "blocktype": "expression",
                     "id": "f04b0e0a-b591-4eaf-954d-dea412cbfd61",
                     "type": "number",
-                    "script": "global.timer.value()",
+                    "script": "runtime.timer.value()",
                     "help": "seconds since the script began running",
                     "sockets": [
                         {

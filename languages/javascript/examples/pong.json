@@ -171,50 +171,6 @@
                     "name": "height",
                     "type": "number",
                     "value": "32",
-<<<<<<< HEAD
-                    "uValue": "100",
-                    "uBlock": {
-                      "blocktype": "expression",
-                      "group": "math",
-                      "id": "08dd605b-0d19-4d61-9f5c-d35de6d20c89",
-                      "help": "quotient of the two operands",
-                      "scopeId": "0",
-                      "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
-                      "sockets": [
-                        {
-                          "name": "",
-                          "type": "number",
-                          "value": "0",
-                          "uValue": "0",
-                          "uBlock": {
-                            "blocktype": "expression",
-                            "group": "sensing",
-                            "id": "2c1abbb9-4d44-4071-8048-fe7da63a123d",
-                            "help": "height of the stage where scripts are run. This may change if the browser window changes.",
-                            "scopeId": "0",
-                            "scriptId": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
-                            "sockets": [
-                              {
-                                "name": "stage height"
-                              }
-                            ],
-                            "seqNum": "9",
-                            "script": "runtime.stage_height",
-                            "type": "number"
-                          }
-                        },
-                        {
-                          "name": "/",
-                          "type": "number",
-                          "value": "0",
-                          "uValue": "10"
-                        }
-                      ],
-                      "seqNum": "7",
-                      "script": "({{1}} / {{2}})",
-                      "type": "number"
-                    }
-=======
                     "uValue": "10"
                   },
                   {
@@ -223,7 +179,6 @@
                     "value": "choice",
                     "options": "relativeUnit",
                     "uValue": "%"
->>>>>>> master
                   }
                 ],
                 "seqNum": "18",
@@ -402,50 +357,6 @@
                     "name": "height",
                     "type": "number",
                     "value": "32",
-<<<<<<< HEAD
-                    "uValue": "100",
-                    "uBlock": {
-                      "blocktype": "expression",
-                      "group": "math",
-                      "id": "d62a960f-4b1e-48e8-85cb-7d30c37e8733",
-                      "help": "quotient of the two operands",
-                      "scopeId": "0",
-                      "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
-                      "sockets": [
-                        {
-                          "name": "",
-                          "type": "number",
-                          "value": "0",
-                          "uValue": "0",
-                          "uBlock": {
-                            "blocktype": "expression",
-                            "group": "sensing",
-                            "id": "d3b45313-8052-4e8b-a099-0bb353555238",
-                            "help": "height of the stage where scripts are run. This may change if the browser window changes.",
-                            "scopeId": "0",
-                            "scriptId": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
-                            "sockets": [
-                              {
-                                "name": "stage height"
-                              }
-                            ],
-                            "seqNum": "10",
-                            "script": "runtime.stage_height",
-                            "type": "number"
-                          }
-                        },
-                        {
-                          "name": "/",
-                          "type": "number",
-                          "value": "0",
-                          "uValue": "10"
-                        }
-                      ],
-                      "seqNum": "8",
-                      "script": "({{1}} / {{2}})",
-                      "type": "number"
-                    }
-=======
                     "uValue": "10"
                   },
                   {
@@ -454,7 +365,6 @@
                     "value": "choice",
                     "options": "relativeUnit",
                     "uValue": "%"
->>>>>>> master
                   }
                 ],
                 "seqNum": "27",

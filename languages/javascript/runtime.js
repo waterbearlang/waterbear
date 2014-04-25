@@ -95,7 +95,8 @@ function getStage() {
     stage.clientWidth = 1200;
     stage.clientHeight = 1000;
     stage.addEventListener = function(type, listener, useCapture) {/*Do nothing*/};
-stage.setAttribute = function(attributename, attributevalue) {/*Do nothing*/};
+    stage.setAttribute = function(attributename, attributevalue) {/*Do nothing*/};
+    stage.appendChild = function(child) {/*Do nothing*/};
 
     return stage;
 }
@@ -363,22 +364,22 @@ if(typeof(console) == "undefined") {
     // console.log provided by Firefox + Firebug
 }
 
-function initialize(local, global){
+function initialize(local, runtime){
     local.canvas = document.createElement("canvas");
-    local.canvas.setAttribute("width", global.stage_width);
-    local.canvas.setAttribute("height", global.stage_height);
-    global.stage.appendChild(local.canvas);
+    local.canvas.setAttribute("width", runtime.stage_width);
+    local.canvas.setAttribute("height", runtime.stage_height);
+    runtime.stage.appendChild(local.canvas);
     local.canvas.focus()
     local.ctx = local.canvas.getContext("2d");
     local.ctx.textAlign = "center";
 }
 
-var global = new Global();
+var runtime = new Global();
 var local = new Local();
-initialize(local, global);
+initialize(local, runtime);
 window.Global = Global;
 window.Local = Local;
-window.runtime = global;
+window.runtime = runtime;
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;

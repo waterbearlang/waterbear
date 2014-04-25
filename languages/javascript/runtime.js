@@ -61,11 +61,11 @@ Local.prototype.set = function(type, name, value){
 
 Local.prototype.get = function(type, name){
     if (this[type] === undefined){
-        console.error('Cannot remove %s from unknown type %s', name, type);
+        console.error('Cannot get %s from unknown type %s', name, type);
         return undefined;
     }
     if (this[type][name] === undefined){
-        console.error('No %s named %s to remove', type, name);
+        console.error('No %s named %s to get', type, name);
         return undefined;
     }
     return this[type][name];
@@ -85,10 +85,26 @@ Local.prototype.delete = function(type, name){
     return value;
 };
 
+function getStage() {
+    var stage = document.querySelector('.stage')
+    if(stage) {
+        return stage;
+    }
+    // create stub for testing
+    stage = {};
+    stage.clientWidth = 1200;
+    stage.clientHeight = 1000;
+    stage.addEventListener = function(type, listener, useCapture) {/*Do nothing*/};
+    stage.setAttribute = function(attributename, attributevalue) {/*Do nothing*/};
+    stage.appendChild = function(child) {/*Do nothing*/};
+
+    return stage;
+}
+
 function Global(){
     this.timer = new Timer();
     this.keys = {};
-    this.stage = document.querySelector('.stage');
+    this.stage = getStage();
     this.mouse_x = -1;
     this.mouse_y = -1;
     this.stage_width = this.stage.clientWidth;
@@ -105,9 +121,9 @@ function Global(){
             g.stage_height = g.stage.clientHeight;
             g.stage_center_x = g.stage_width / 2;
             g.stage_center_y = g.stage_height / 2;
-            local.canvas.setAttribute("width", global.stage_width);
-            local.canvas.setAttribute("height", global.stage_width);
-            console.log('updated stage size: %s, %s', global.stage_width, global.stage_height);
+            local.canvas.setAttribute("width", runtime.stage_width);
+            local.canvas.setAttribute("height", runtime.stage_width);
+            console.log('updated stage size: %s, %s', runtime.stage_width, runtime.stage_height);
         }
     })
 };
@@ -348,22 +364,22 @@ if(typeof(console) == "undefined") {
     // console.log provided by Firefox + Firebug
 }
 
-function initialize(local, global){
+function initialize(local, runtime){
     local.canvas = document.createElement("canvas");
-    local.canvas.setAttribute("width", global.stage_width);
-    local.canvas.setAttribute("height", global.stage_height);
-    global.stage.appendChild(local.canvas);
+    local.canvas.setAttribute("width", runtime.stage_width);
+    local.canvas.setAttribute("height", runtime.stage_height);
+    runtime.stage.appendChild(local.canvas);
     local.canvas.focus()
     local.ctx = local.canvas.getContext("2d");
     local.ctx.textAlign = "center";
 }
 
-var global = new Global();
+var runtime = new Global();
 var local = new Local();
-initialize(local, global);
+initialize(local, runtime);
 window.Global = Global;
 window.Local = Local;
-window.global = global;
+window.runtime = runtime;
 window.local = local;
 window.Timer = Timer;
 window.twinapex = twinapex;

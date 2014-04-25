@@ -1,4 +1,4 @@
-(function(global){
+(function(runtime){
 'use strict';
 var location = {};
 
@@ -61,6 +61,6 @@ location.currentLocation = {
   longitude: 0
 };
 
-global.location = location;
+runtime.location = location;
 
-})(global);
+})(runtime);

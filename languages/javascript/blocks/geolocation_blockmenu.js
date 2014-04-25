@@ -9,7 +9,7 @@
                 {
                     "blocktype": "eventhandler",
                     "id": "0da815af-6010-48b6-838d-f7dd0999b07d",
-                    "script": "global.location.watchPosition(function(){[[1]]});",
+                    "script": "runtime.location.watchPosition(function(){[[1]]});",
                     "help": "called every time current location is updated",
                     "sockets": [
                         {
@@ -20,7 +20,7 @@
                         {
                             "blocktype": "expression",
                             "type": "location",
-                            "script": "global.location.currentLocation",
+                            "script": "runtime.location.currentLocation",
                             "help": "current location",
                             "sockets": [
                                 {
@@ -33,7 +33,7 @@
                 {
                     "blocktype": "eventhandler",
                     "id": "a7b25224-a030-4cf5-8f30-026a379d958b",
-                    "script": "global.location.whenWithinXOf({{1}},{{2}},function(){[[1]]});",
+                    "script": "runtime.location.whenWithinXOf({{1}},{{2}},function(){[[1]]});",
                     "help": "script to call when the distance from a position is less than specified distance",
                     "sockets": [
                         {
@@ -50,7 +50,7 @@
                 {
                     "blocktype": "expression",
                     "id": "e3bcf430-979b-4fff-a856-d10071c63708",
-                    "script": "global.location.distance({{1}},{{2}})",
+                    "script": "runtime.location.distance({{1}},{{2}})",
                     "type": "number",
                     "help": "return distance in kilometers between two locations",
                     "sockets": [

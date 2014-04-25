@@ -72,7 +72,7 @@
             }
           ],
           "seqNum": "10",
-          "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+          "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
         },
         {
           "blocktype": "step",
@@ -129,7 +129,7 @@
             }
           ],
           "seqNum": "63",
-          "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
           "contained": [
             {
               "blocktype": "step",
@@ -844,7 +844,7 @@
             }
           ],
           "seqNum": "64",
-          "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+          "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
         },
         {
           "blocktype": "step",
@@ -1452,7 +1452,7 @@
             }
           ],
           "seqNum": "65",
-          "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+          "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
         },
         {
           "blocktype": "step",
@@ -2232,7 +2232,7 @@
                           }
                         ],
                         "seqNum": "6",
-                        "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+                        "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
                         "type": "point"
                       }
                     }

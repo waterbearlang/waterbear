@@ -1,4 +1,6 @@
 // Size Routines
+(function(window){
+'use strict';
 
 /**
  * Convert size parameter to pixel value 
@@ -17,12 +19,14 @@ function convert(x, relativeUnit, isWidth) {
       return x;
     case "%":
       if(isWidth){
-        return (global.stage_width*x)/100;
+        return (runtime.stage_width*x)/100;
       }
       else {
-        return (global.stage_height*x)/100;
+        return (runtime.stage_height*x)/100;
       }
     default: //need this b/c examples currently have size blocks w/o option list
       return x; 
   }
 }
+window.convert = convert;
+})(window);

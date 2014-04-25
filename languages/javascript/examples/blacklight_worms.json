@@ -211,7 +211,7 @@
                       }
                     ],
                     "seqNum": "212",
-                    "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+                    "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
                     "type": "point"
                   }
                 },
@@ -538,7 +538,7 @@
                 }
               ],
               "seqNum": "224",
-              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
             },
             {
               "blocktype": "context",
@@ -714,7 +714,7 @@
                     }
                   ],
                   "seqNum": "218",
-                  "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});"
+                  "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>runtime.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>runtime.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});"
                 }
               ]
             }

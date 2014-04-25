@@ -9,7 +9,7 @@
                 {
                     "blocktype": "step",
                     "id": "59f338b4-0f2f-489a-b4bd-b458fcb48e37",
-                    "script": "global.preloadAudio('##', {{1}});",
+                    "script": "runtime.preloadAudio('##', {{1}});",
                     "sockets": [
                         {
                             "name": "load audio## from url",
@@ -24,7 +24,7 @@
                                     "name": "audio ##"
                                 }
                             ],
-                            "script": "global.audio[\"##\"]",
+                            "script": "runtime.audio[\"##\"]",
                             "type": "sound"
                         }
                     ],

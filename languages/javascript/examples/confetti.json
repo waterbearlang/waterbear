@@ -301,7 +301,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "573",
-                                                                        "script": "global.mouse_x"
+                                                                        "script": "runtime.mouse_x"
                                                                     }
                                                                 },
                                                                 {
@@ -355,7 +355,7 @@
                                                                             }
                                                                         ],
                                                                         "seqNum": "574",
-                                                                        "script": "global.mouse_y"
+                                                                        "script": "runtime.mouse_y"
                                                                     }
                                                                 },
                                                                 {
@@ -524,7 +524,7 @@
                                 }
                             ],
                             "seqNum": "9",
-                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
                         },
                         {
                             "id": "d10016a9-e1f8-4546-beda-b79af3da7785",
@@ -695,7 +695,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "596",
-                                                            "script": "global.stage_height"
+                                                            "script": "runtime.stage_height"
                                                         }
                                                     },
                                                     {

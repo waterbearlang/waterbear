@@ -236,7 +236,7 @@
                               }
                             ],
                             "seqNum": "10",
-                            "script": "global.stage_height",
+                            "script": "runtime.stage_height",
                             "type": "number"
                           }
                         },
@@ -416,7 +416,7 @@
                               }
                             ],
                             "seqNum": "4",
-                            "script": "global.stage_width",
+                            "script": "runtime.stage_width",
                             "type": "number"
                           }
                         },
@@ -463,7 +463,7 @@
                               }
                             ],
                             "seqNum": "11",
-                            "script": "global.stage_height",
+                            "script": "runtime.stage_height",
                             "type": "number"
                           }
                         },
@@ -631,7 +631,7 @@
                         }
                       ],
                       "seqNum": "6",
-                      "script": "global.stage_center_x",
+                      "script": "runtime.stage_center_x",
                       "type": "number"
                     }
                   },
@@ -653,7 +653,7 @@
                         }
                       ],
                       "seqNum": "7",
-                      "script": "global.stage_center_y",
+                      "script": "runtime.stage_center_y",
                       "type": "number"
                     }
                   }
@@ -1069,7 +1069,7 @@
                     }
                   ],
                   "seqNum": "23",
-                  "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+                  "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
                 },
                 {
                   "blocktype": "step",
@@ -1132,7 +1132,7 @@
                                 }
                               ],
                               "seqNum": "6",
-                              "script": "global.stage_center_x",
+                              "script": "runtime.stage_center_x",
                               "type": "number"
                             }
                           },
@@ -1219,7 +1219,7 @@
                                 }
                               ],
                               "seqNum": "14",
-                              "script": "global.stage_center_x",
+                              "script": "runtime.stage_center_x",
                               "type": "number"
                             }
                           },
@@ -1701,7 +1701,7 @@
                                           }
                                         ],
                                         "seqNum": "1",
-                                        "script": "global.stage_width",
+                                        "script": "runtime.stage_width",
                                         "type": "number"
                                       }
                                     },
@@ -1748,7 +1748,7 @@
                                           }
                                         ],
                                         "seqNum": "22",
-                                        "script": "global.stage_height",
+                                        "script": "runtime.stage_height",
                                         "type": "number"
                                       }
                                     },
@@ -2063,7 +2063,7 @@
                                       }
                                     ],
                                     "seqNum": "40",
-                                    "script": "global.stage_width",
+                                    "script": "runtime.stage_width",
                                     "type": "number"
                                   }
                                 },
@@ -2163,7 +2163,7 @@
                                           }
                                         ],
                                         "seqNum": "37",
-                                        "script": "global.stage_width",
+                                        "script": "runtime.stage_width",
                                         "type": "number"
                                       }
                                     },
@@ -2210,7 +2210,7 @@
                                           }
                                         ],
                                         "seqNum": "38",
-                                        "script": "global.stage_height",
+                                        "script": "runtime.stage_height",
                                         "type": "number"
                                       }
                                     },
@@ -2580,7 +2580,7 @@
                               }
                             ],
                             "seqNum": "11",
-                            "script": "global.stage_center_x",
+                            "script": "runtime.stage_center_x",
                             "type": "number"
                           }
                         },
@@ -2602,7 +2602,7 @@
                               }
                             ],
                             "seqNum": "12",
-                            "script": "global.stage_center_y",
+                            "script": "runtime.stage_center_y",
                             "type": "number"
                           }
                         }
@@ -2684,7 +2684,7 @@
                     }
                   ],
                   "seqNum": "48",
-                  "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>global.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>global.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});"
+                  "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>runtime.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>runtime.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});"
                 }
               ]
             },
@@ -2720,7 +2720,7 @@
                       }
                     ],
                     "seqNum": "3",
-                    "script": "global.isKeyDown({{1}})",
+                    "script": "runtime.isKeyDown({{1}})",
                     "type": "boolean"
                   }
                 }
@@ -2812,7 +2812,7 @@
                                 }
                               ],
                               "seqNum": "16",
-                              "script": "global.stage_height",
+                              "script": "runtime.stage_height",
                               "type": "number"
                             }
                           }
@@ -2907,7 +2907,7 @@
                       }
                     ],
                     "seqNum": "7",
-                    "script": "global.isKeyDown({{1}})",
+                    "script": "runtime.isKeyDown({{1}})",
                     "type": "boolean"
                   }
                 }
@@ -3078,7 +3078,7 @@
                       }
                     ],
                     "seqNum": "8",
-                    "script": "global.isKeyDown({{1}})",
+                    "script": "runtime.isKeyDown({{1}})",
                     "type": "boolean"
                   }
                 }
@@ -3249,7 +3249,7 @@
                       }
                     ],
                     "seqNum": "9",
-                    "script": "global.isKeyDown({{1}})",
+                    "script": "runtime.isKeyDown({{1}})",
                     "type": "boolean"
                   }
                 }
@@ -3341,7 +3341,7 @@
                                 }
                               ],
                               "seqNum": "23",
-                              "script": "global.stage_height",
+                              "script": "runtime.stage_height",
                               "type": "number"
                             }
                           }

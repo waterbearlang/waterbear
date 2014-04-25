@@ -128,6 +128,9 @@ function concat(src, dest, files, ext, suffix, before, after){
 //    buildHtmlFiles();
 // }
 
+// FIXME: examples, stage, and controls are basically the same function, 
+// make them actually the same function
+
 function examples(lang){
     var _examples = "";
     var tplExamplePath = 'languages/' + lang + '/templates/examples.html';
@@ -153,6 +156,18 @@ function stage(lang){
     return _stage;
 }
 
+function controls(lang){
+    var tplStagePath = 'languages/' + lang + '/templates/controls.html';
+    // initialize default for fallback
+    var _controls = fs.readFileSync('languages/javascript/templates/controls.html');
+    if (fs.existsSync(tplStagePath)) {
+        _controls = fs.readFileSync(tplStagePath);
+    }
+    else {
+        console.warn("Controls template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
+    }
+    return _controls;
+}
 function cssInclude(path){
     return '<link rel="stylesheet" href="' + path + '.css" >';
 }
@@ -217,6 +232,7 @@ function buildIdeHtmlFiles(){
     languages.forEach(function(lang){
         // Build HTML file
         var html = ideTemplate.replace(/<\?examples\?>/g, examples(lang))
+                               .replace(/<\?controls\?>/g, controls(lang))
                                .replace(/<\?stage\?>/g, stage(lang))
                                .replace(/<\?cssincludes\?>/g, cssIncludes(lang))
                                .replace(/<\?jsincludes\?>/g, jsIdeIncludes(lang))

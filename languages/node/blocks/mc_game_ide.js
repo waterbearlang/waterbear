@@ -1,8 +1,8 @@
    
 
-wb.requiredjs.before.minecraftgame = "var Minecraft = require('minecraft-pi-vec3');\nvar v= require('vec3');";
+wb.requiredjs.before.mcgame = "var Minecraft = require('minecraft-pi-vec3');\nvar v= require('vec3');";
 
-wb.requiredjs.after.minecraftgame =  "\nprocess.on('exit',function(){console.log(\"Caught exit\");client.end();});";
+wb.requiredjs.after.mcgame =  "\nprocess.on('exit',function(){console.log(\"Caught exit\");client.end();});";
 
 
 // TODO : fix blocktypes to number or text not both

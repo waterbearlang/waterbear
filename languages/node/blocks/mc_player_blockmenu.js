@@ -3,7 +3,7 @@
     wb.menu(
         {
             "sectionkey": "mcplayer",
-            "name": "Player",
+            "name": "Minecraft Player",
             "help": "Find and move Steve the Minecraft player",
             "blocks": [
                 {

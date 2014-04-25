@@ -3,7 +3,7 @@
     wb.menu(
         {
             "sectionkey": "mccamera",
-            "name": "Camera",
+            "name": "Minecraft Camera",
             "help": "Manipulating the Minecraft Camera",
             "blocks": [
               

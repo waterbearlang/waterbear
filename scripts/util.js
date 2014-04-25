@@ -215,6 +215,12 @@
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
 
+    window.requestAnimationFrame = window.requestAnimationFrame ||
+                                   window.mozRequestAnimationFrame || 
+                                   window.msRequestAnimationFrame || 
+                                   window.webkitRequestAnimationFrame || 
+                                   function(fn){ setTimeout(fn, 20); };
+
     wb.makeArray = makeArray;
     wb.reposition = reposition;
     wb.hide = hide;

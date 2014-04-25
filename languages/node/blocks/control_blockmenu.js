@@ -77,10 +77,8 @@
                         {
                             "name": "Repeat",
                             "type": "number",
-                            "value": "2"
-                        },
-                        {
-                            "name": "times a second"
+                            "value": "2",
+                            "suffix": "times a second"
                         }
                     ]
                 },
@@ -108,10 +106,8 @@
                         {
                             "name": "Repeat every",
                             "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "seconds"
+                            "value": "10",
+                            "suffix": "seconds"
                         }
                     ]
                 },
@@ -167,10 +163,8 @@
                         {
                             "name": "Wait",
                             "type": "number",
-                            "value": "1"
-                        },
-                        {
-                            "name": "secs"
+                            "value": "1",
+                            "suffix": "secs"
                         }
                     ]
                 },

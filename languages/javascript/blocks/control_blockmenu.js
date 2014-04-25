@@ -9,7 +9,11 @@
                 {
                     "blocktype": "eventhandler",
                     "id": "1cf8132a-4996-47db-b482-4e336200e3ca",
-                    "script": "function _start(){[[1]]}_start();",
+                    "script": [
+                        "(function(){",
+                        "    [[1]]",
+                        "})();"
+                    ],
                     "help": "this trigger will run its scripts once when the program starts",
                     "sockets": [
                         {

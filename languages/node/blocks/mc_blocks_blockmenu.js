@@ -3,7 +3,7 @@
     wb.menu(
         {
             "sectionkey": "mcblocks",
-            "name": "Blocks",
+            "name": "Minecraft Blocks",
             "help": "Find and set Minecraft Blocks",
             "blocks": [
                 {

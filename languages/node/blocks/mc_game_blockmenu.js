@@ -2,7 +2,7 @@
 'use strict';
     wb.menu(
         {
-            "sectionkey": "minecraft",
+            "sectionkey": "mcgame",
             "name": "Minecraft Game",
             "help": "Blocks which connect to and manipulate Minecraft Pi Edition",
             "blocks": [
@@ -18,24 +18,32 @@
                     "script": "var client = new Minecraft('localhost', 4711, function() {[[1]]});",
                     "help": "All Minecraft things in here"
                 },
-                
-                
                 {
                     "blocktype": "step",
                     "id": "9161dad6-2d90-4d70-b447-5cc61130350c",
                     "sockets": [
                         {
                             "name": "Say",
-                            "type": "any",
-                            "value": "hi"
-                        },
-                        {
-                            "name": "in chat"
+                            "type": "string",
+                            "value": "hi",
+                            "suffix": "in chat"
                         }
-                        
+                    ],
+                    "script": "client.chat({{1}});",
+                    "help": "Send a message as chat"
+                },
+                {
+                    "blocktype": "step",
+                    "id": "aded8d3e-9815-41f2-8988-dec3cca30c72",
+                    "sockets": [
+                        {
+                            "name": "Send data to chat",
+                            "type": "any",
+                            "value": "0"
+                        }
                     ],
                     "script": "client.chat({{1}}.toString());",
-                    "help": "Send a message as chat"
+                    "help": "Send data to chat (will try to convert it to text first)"
                 },
                 
                 {

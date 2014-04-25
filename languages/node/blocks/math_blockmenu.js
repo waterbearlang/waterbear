@@ -310,10 +310,8 @@
                         {
                             "name": "cosine of",
                             "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "degrees"
+                            "value": "10",
+                            "suffix": "degrees"
                         }
                     ]
                 },
@@ -327,10 +325,8 @@
                         {
                             "name": "sine of",
                             "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "degrees"
+                            "value": "10",
+                            "suffix": "degrees"
                         }
                     ]
                 },
@@ -344,10 +340,8 @@
                         {
                             "name": "tangent of",
                             "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "degrees"
+                            "value": "10",
+                            "suffix": "degrees"
                         }
                     ]
                 },

@@ -73,10 +73,8 @@
                         {
                             "name": "string",
                             "type": "string",
-                            "value": null
-                        },
-                        {
-                            "name": "length"
+                            "value": null,
+                            "suffix": "length"
                         }
                     ]
                 },

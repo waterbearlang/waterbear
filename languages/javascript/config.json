@@ -2,7 +2,7 @@
 	"runsInBrowser": true,
 	"plugins": ["asset", "control", "sprite", "voice", "sound", "array", "boolean", "canvas", "color",  "image", "math", "random", "vector", "object", "string", "path", "point", "rect", "sensing", "motion", "shape", "geolocation","date","size", "text", "matrix"],
 	"ideLibs": ["ajax", "beautify", "highlight", "highlight-javascript","events.min"],
-	"runtimeLibs": ["SAT"],
+	"runtimeLibs": ["SAT", "CSV"],
 	"ideStyles": ["highlight-github"],
 	"runtimeStyles": []
 }

@@ -137,43 +137,26 @@ function concat(src, dest, files, ext, suffix, before, after){
 // FIXME: examples, stage, and controls are basically the same function, 
 // make them actually the same function
 
-function examples(lang){
-    var _examples = "";
-    var tplExamplePath = 'languages/' + lang + '/templates/examples.html';
-    if (fs.existsSync(tplExamplePath)) {
-        _examples = fs.readFileSync(tplExamplePath);
+function template(name){
+    function getTemplate(lang){
+        var _template = "";
+        var tplPath = 'languages/' + lang + '/templates/' + name + '.html';
+        if (fs.existsSync(tplPath)) {
+            _template = fs.readFileSync(tplPath);
+        }
+        else {
+            _template = fs.readFileSync('languages/javascript/templates/' + name + '.html');
+            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
+        }
+        return _template;
     }
-    else {
-        console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
-    }
-    return _examples;
+    return getTemplate;
 }
 
-function stage(lang){
-    var tplStagePath = 'languages/' + lang + '/templates/stage.html';
-    // initialize default for fallback
-    var _stage = fs.readFileSync('languages/javascript/templates/stage.html');
-    if (fs.existsSync(tplStagePath)) {
-        _stage = fs.readFileSync(tplStagePath);
-    }
-    else {
-        console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
-    }
-    return _stage;
-}
+var examples = template('examples');
+var stage = template('stage');
+var controls = template('controls');
 
-function controls(lang){
-    var tplStagePath = 'languages/' + lang + '/templates/controls.html';
-    // initialize default for fallback
-    var _controls = fs.readFileSync('languages/javascript/templates/controls.html');
-    if (fs.existsSync(tplStagePath)) {
-        _controls = fs.readFileSync(tplStagePath);
-    }
-    else {
-        console.warn("Controls template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
-    }
-    return _controls;
-}
 function cssInclude(path){
     return '<link rel="stylesheet" href="' + path + '.css" >';
 }

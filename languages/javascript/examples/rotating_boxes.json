@@ -212,7 +212,7 @@
             }
           ],
           "seqNum": "35",
-          "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
           "locals": [
             {
               "blocktype": "expression",
@@ -354,7 +354,7 @@
                             }
                           ],
                           "seqNum": "70",
-                          "script": "global.stage_center_x",
+                          "script": "runtime.stage_center_x",
                           "type": "number"
                         }
                       },
@@ -475,7 +475,7 @@
                             }
                           ],
                           "seqNum": "71",
-                          "script": "global.stage_center_y",
+                          "script": "runtime.stage_center_y",
                           "type": "number"
                         }
                       },
@@ -1283,7 +1283,7 @@
                     }
                   ],
                   "seqNum": "42",
-                  "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+                  "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
                 }
               ]
             }
@@ -1358,7 +1358,7 @@
                 }
               ],
               "seqNum": "39",
-              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
             },
             {
               "blocktype": "context",

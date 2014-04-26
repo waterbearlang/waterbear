@@ -153,7 +153,10 @@
         document.querySelector('.workspace').appendChild(workspace);
         workspace.querySelector('.contained').appendChild(wb.elem('div', {'class': 'drop-cursor'}));
         // wb.initializeDragHandlers();
+        Event.trigger(workspace, 'wb-add');
         Event.trigger(document.body, 'wb-workspace-initialized');
+        wb.drawRectForViewPort();
+        workspace.addEventListener('scroll', wb.handleScrollChange, false);
     }
 
 
@@ -257,6 +260,16 @@
                     wb.hide(wb.find(document.body, '.workspace'));
                 }else{
                     wb.show(wb.find(document.body, '.workspace'));
+                }
+                break;
+            case 'code_map':
+                // We should only be hiding panels like this when they contain multiple
+                // sub-panes. Move this to CSS or (better) make the whole code map an overlay
+                // on the scripts_workspace
+                if(!wb.toggleState.code_map){
+                    wb.hide(wb.find(document.body, '#cm_container'));
+                }else{
+                    wb.show(wb.find(document.body, '#cm_container'));
                 }
                 break;
             default:

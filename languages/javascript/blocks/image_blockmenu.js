@@ -233,7 +233,7 @@
                 {
                     "blocktype": "step",
                     "id": "7fa79655-4c85-45b3-be9e-a19aa038feae",
-                    "script": "global.preloadImage('##', {{1}});",
+                    "script": "runtime.preloadImage('##', {{1}});",
                     "sockets": [
                         {
                             "name": "create ImageData image## from url",
@@ -248,7 +248,7 @@
                                     "name": "image ##"
                                 }
                             ],
-                            "script": "global.images[\"##\"]",
+                            "script": "runtime.images[\"##\"]",
                             "type": "image"
                         }
                     ]

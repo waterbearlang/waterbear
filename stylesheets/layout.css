@@ -1,6 +1,6 @@
 body{
-	display: -webkit-flex;
-	display: flex;
+    display: -webkit-flex;
+    display: flex;
    -webkit-flex-direction: column; /* works with row or column */
    flex-direction: column;
 }
@@ -15,216 +15,212 @@ body{
 }
 
 .titlebar{
-	-webkit-flex: 0 0 34px;
-	flex: 0 0 34px;
+    -webkit-flex: 0 0 34px;
+    flex: 0 0 34px;
 }
 
 .nav{
-	-webkit-flex: 0 0 37px;
-	flex: 0 0 37px;
+    -webkit-flex: 0 0 37px;
+    flex: 0 0 37px;
 }
 
 .block_menu_wrapper {
-	-webkit-flex: 0 0 300px;
-	flex: 0 0 300px;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	flex-direction: column;
+    -webkit-flex: 0 0 300px;
+    flex: 0 0 300px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 
 #search {
-	height: 24px;
-	-webkit-flex: 0 0 24px;
-	flex: 0 0 24px;
+    height: 24px;
+    -webkit-flex: 0 0 24px;
+    flex: 0 0 24px;
 }
 
 #block_menu, #search_results {
-	height: calc(100% - 24px);
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
+    height: calc(100% - 24px);
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .workspace{
-	-webkit-flex: 3 0 0;
-	flex: 3 0 0;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	flex-direction: column;
+    -webkit-flex: 3 0 0;
+    flex: 3 0 0;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 
 .tutorial{
-	-webkit-flex: 1 1 0;
-	flex: 1 1 0;
-	background-color: #7fdbff;
+    -webkit-flex: 1 1 0;
+    flex: 1 1 0;
+    background-color: #7fdbff;
 }
 
 .scratchpad{
-	overflow: scroll;
-	position:relative;
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
-	background-color: #FFF;
-	color: rgba(0,0,0,0.4);
+    overflow: scroll;
+    position:relative;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    background-color: #FFF;
+    color: rgba(0,0,0,0.4);
 }
 
 .code_map{
-	overflow: visible;
-	z-index: 10;
+    position: relative;
+    overflow: visible;
+    z-index: 10;
 }
 
 .code_map .block.scripts_workspace {
-	-ms-transform-origin:0 0;
-	-webkit-transform-origin:0 0;
-	-moz-transform-origin: 0 0;
-	-o-transform-origin: 0 0;
-	transform-origin:0 0;
-	-ms-transform: scale(0.4, 0.4);
-	-webkit-transform: scale(0.4, 0.4);
-	-moz-transform: scale(0.4, 0.4);
-	-o-transform: scale(0.4, 0.4);
-	transform: scale(0.4, 0.4);
-	width: 250%;
-	max-width: 250%; /* bring width back to !00% after scaling */
+    -ms-transform-origin:0 0;
+    -webkit-transform-origin:0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    transform-origin:0 0;
+    -ms-transform: scale(0.3, 0.3);
+    -webkit-transform: scale(0.3, 0.3);
+    -moz-transform: scale(0.3, 0.3);
+    -o-transform: scale(0.3, 0.3);
+    transform: scale(0.3, 0.3);
+    width: 333%;
+    max-width: 333%; /* bring width back to 100% after scaling */
 }
 
 
 #cm_container{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
-	z-index: 9;
-	overflow: auto;
+    position: relative;
+    -webkit-flex: 1 0 0;
+    flex: 1 0 0;
+    z-index: 9;
+    overflow: auto;
 }
 
 
 #cm_canvas{
-	width: 100%;
-	height:100%;
-    	position:absolute;
-	pointer-events: none;
-	z-index: 15;
+    width: 100%;
+    height:100%;
+    position:absolute;
+    pointer-events: none;
+    z-index: 15;
 }
 
 .scripts_workspace{
-	-webkit-flex: 3 0 0;
-	flex: 3 0 0;
-	overflow: auto;
+    -webkit-flex: 3 0 0;
+    flex: 3 0 0;
+    overflow: auto;
 }
 
 .results{
-	-webkit-flex: 0 0 400px;
-	flex: 1 1 400px;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	flex-direction: column;
+    -webkit-flex: 0 0 400px;
+    flex: 1 1 400px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 
 .results.hidden{
-	display: none;
+    display: none;
 }
 
 .stage{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
-	position: relative;
-}
-
-.buttonmenu{
-	position: absolute;
-	left: 0;
-	top: 0;
+    -webkit-flex: 1 0 0;
+    flex: 1 0 0;
+    position: relative;
 }
 
 .stageframe{
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .scripts_text_view{
-	-webkit-flex: 1 0 0;
-	flex: 1 0 0;
-	overflow: auto;
+    -webkit-flex: 1 0 0;
+    flex: 1 0 0;
+    overflow: auto;
 }
 
 #block_menu, #search_results, .workspace, .results, .files{
-	overflow: auto;
+    overflow: auto;
 }
 
 body.result .block_menu_wrapper, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
-	display: none;
+    display: none;
 }
 body.result .stage, body.result stage.hidden{
-	display: block;
+    display: block;
 }
 body.result ul.menu .show-ide{
-	display: inline-block;
+    display: inline-block;
 }
 ul.menu .show-ide{
-	display: none;
+    display: none;
 }
 
 
 @media all and (max-width:360px) {
-	.nav, h1.title, .scripts_text_view{
-		display: none;
-	}
-	.mobilenav{
-		-webkit-flex: 0 0 30px;
-		flex: 0 0 30px;
-		display: -webkit-flex;
-		display: flex;
-		-webkit-flex-direction: row;
-		flex-direction: row;
-		order: 4;
-	}
-	.mobilenav button{
-		-webkit-flex: 1 0 auto;
-		flex: 1 0 auto;
-		background-color: #FFF;
-		color: #111111;
-	}
-	.mobilenav button.current-button{
-		background-color: #111111;
-		color: #FFF;
-		pointer-events: none;
-	}
-	.content{
-		display: block;
-		position: relative;
-		overflow: hidden;
-	}
-	.block_menu_wrapper, .workspace, .results, .files{
-		display: block;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 100%;
-		transition-property: left;
-	}
-	.workspace{
-		left: 0;
-	}
-	.stage{
-		display: block;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-	}
-	.files button{
-		width: 100%;
-		height: 30px;
-		font-size: 24px;
-		line-height: 30px;
-		text-align: center;
-	}
+    .nav, h1.title, .scripts_text_view{
+        display: none;
+    }
+    .mobilenav{
+        -webkit-flex: 0 0 30px;
+        flex: 0 0 30px;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        order: 4;
+    }
+    .mobilenav button{
+        -webkit-flex: 1 0 auto;
+        flex: 1 0 auto;
+        background-color: #FFF;
+        color: #111111;
+    }
+    .mobilenav button.current-button{
+        background-color: #111111;
+        color: #FFF;
+        pointer-events: none;
+    }
+    .content{
+        display: block;
+        position: relative;
+        overflow: hidden;
+    }
+    .block_menu_wrapper, .workspace, .results, .files{
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 100%;
+        transition-property: left;
+    }
+    .workspace{
+        left: 0;
+    }
+    .stage{
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+    .files button{
+        width: 100%;
+        height: 30px;
+        font-size: 24px;
+        line-height: 30px;
+        text-align: center;
+    }
 }
 
 @media all and (min-width:361px) {
-	.mobilenav, .files{
-		display: none;
-	}
+    .mobilenav, .files{
+        display: none;
+    }
 }
 

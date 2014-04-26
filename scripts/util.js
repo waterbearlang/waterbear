@@ -1,6 +1,6 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
-(function(global){
+(function(runtime){
     'use strict';
     //
     //
@@ -214,6 +214,12 @@
     }else if(document.body.oMatchesSelector){
         wb.matches = function matches(elem, selector){ return wb.elem(elem).oMatchesSelector(selector); };
     }
+
+    window.requestAnimationFrame = window.requestAnimationFrame ||
+                                   window.mozRequestAnimationFrame || 
+                                   window.msRequestAnimationFrame || 
+                                   window.webkitRequestAnimationFrame || 
+                                   function(fn){ setTimeout(fn, 20); };
 
     wb.makeArray = makeArray;
     wb.reposition = reposition;

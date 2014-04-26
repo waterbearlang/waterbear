@@ -19,7 +19,7 @@ function getAssetType(url){
 		case 'mp3':
 			return new Audio();
 		default:
-			console.error('No format recognized for %s type', ext);
+			console.error('No format recognized for %s type', url);
 			return null;
 	}
 }
@@ -49,6 +49,18 @@ function preloadAssets(assetUrls, callback){
  	});
 }
 
+function makeObj() { this.notReal = true;};
+
+if(!window.Global) { 
+	console.log("If this was in a production environment something is wrong. window.Global is undefined");
+	
+	window.Global = new makeObj();
+	window.Global.prototype = {};
+	window.preloadAssets = preloadAssets;
+	window.preloadImage = preloadImage;
+	window.preloadAudio = preloadAudio;
+	window.preloadVideo = preloadVideo;
+}
 
 var images = Global.prototype.images = {};
 var audio = Global.prototype.audio = {};

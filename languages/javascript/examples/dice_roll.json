@@ -199,7 +199,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "23",
-                                                        "script": "global.stage_center_x"
+                                                        "script": "runtime.stage_center_x"
                                                     }
                                                 },
                                                 {
@@ -233,7 +233,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "24",
-                                                        "script": "global.stage_center_y"
+                                                        "script": "runtime.stage_center_y"
                                                     }
                                                 },
                                                 {
@@ -380,7 +380,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "287",
-                                                        "script": "global.stage_center_x"
+                                                        "script": "runtime.stage_center_x"
                                                     }
                                                 },
                                                 {
@@ -414,7 +414,7 @@
                                                             }
                                                         ],
                                                         "seqNum": "24",
-                                                        "script": "global.stage_center_y"
+                                                        "script": "runtime.stage_center_y"
                                                     }
                                                 },
                                                 {
@@ -610,7 +610,7 @@
                                 }
                             ],
                             "seqNum": "31",
-                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
                         },
                         {
                             "id": "8dd4a76d-2dc1-4b1f-9136-acaf38e4104d",
@@ -687,7 +687,7 @@
                                             }
                                         ],
                                         "seqNum": "36",
-                                        "script": "global.stage_center_x"
+                                        "script": "runtime.stage_center_x"
                                     }
                                 },
                                 {
@@ -711,7 +711,7 @@
                                                         }
                                                     ],
                                                     "seqNum": "37",
-                                                    "script": "global.stage_height"
+                                                    "script": "runtime.stage_height"
                                                 }
                                             },
                                             {
@@ -786,7 +786,7 @@
                                         }
                                     ],
                                     "seqNum": "246",
-                                    "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                                    "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                                 },
                                 {
                                     "id": "7084d942-538f-46cd-b79e-4c473f13d2f7",
@@ -802,7 +802,7 @@
                                         }
                                     ],
                                     "seqNum": "292",
-                                    "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                                    "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                                 }
                             ]
                         },
@@ -820,7 +820,7 @@
                                 }
                             ],
                             "seqNum": "38",
-                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                         },
                         {
                             "id": "efd008bb-6d54-4621-9246-ae3cbcf08583",
@@ -1122,7 +1122,7 @@
                         }
                     ],
                     "seqNum": "4",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
                     "contained": [
                         {
                             "id": "f7cb6f01-fad6-4202-84c8-f06c2152ea75",
@@ -1147,7 +1147,7 @@
                                             }
                                         ],
                                         "seqNum": "40",
-                                        "script": "global.isKeyDown({{1}})"
+                                        "script": "runtime.isKeyDown({{1}})"
                                     }
                                 }
                             ],
@@ -1203,7 +1203,7 @@
                         }
                     ],
                     "seqNum": "248",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
                     "contained": [
                         {
                             "id": "91118f87-2934-4c3c-87f5-de189ef27b1e",
@@ -1280,7 +1280,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "266",
-                                                            "script": "global.stage_center_x"
+                                                            "script": "runtime.stage_center_x"
                                                         }
                                                     },
                                                     {
@@ -1314,7 +1314,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "267",
-                                                            "script": "global.stage_center_y"
+                                                            "script": "runtime.stage_center_y"
                                                         }
                                                     },
                                                     {
@@ -1408,7 +1408,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "266",
-                                                            "script": "global.stage_center_x"
+                                                            "script": "runtime.stage_center_x"
                                                         }
                                                     },
                                                     {
@@ -1442,7 +1442,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "267",
-                                                            "script": "global.stage_center_y"
+                                                            "script": "runtime.stage_center_y"
                                                         }
                                                     },
                                                     {
@@ -1536,7 +1536,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "266",
-                                                            "script": "global.stage_center_x"
+                                                            "script": "runtime.stage_center_x"
                                                         }
                                                     },
                                                     {
@@ -1570,7 +1570,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "267",
-                                                            "script": "global.stage_center_y"
+                                                            "script": "runtime.stage_center_y"
                                                         }
                                                     },
                                                     {
@@ -1605,7 +1605,7 @@
                         }
                     ],
                     "seqNum": "293",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
                     "contained": [
                         {
                             "id": "91118f87-2934-4c3c-87f5-de189ef27b1e",
@@ -1682,7 +1682,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "266",
-                                                            "script": "global.stage_center_x"
+                                                            "script": "runtime.stage_center_x"
                                                         }
                                                     },
                                                     {
@@ -1716,7 +1716,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "267",
-                                                            "script": "global.stage_center_y"
+                                                            "script": "runtime.stage_center_y"
                                                         }
                                                     },
                                                     {
@@ -1810,7 +1810,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "266",
-                                                            "script": "global.stage_center_x"
+                                                            "script": "runtime.stage_center_x"
                                                         }
                                                     },
                                                     {
@@ -1844,7 +1844,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "267",
-                                                            "script": "global.stage_center_y"
+                                                            "script": "runtime.stage_center_y"
                                                         }
                                                     },
                                                     {
@@ -1938,7 +1938,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "266",
-                                                            "script": "global.stage_center_x"
+                                                            "script": "runtime.stage_center_x"
                                                         }
                                                     },
                                                     {
@@ -1972,7 +1972,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "267",
-                                                            "script": "global.stage_center_y"
+                                                            "script": "runtime.stage_center_y"
                                                         }
                                                     },
                                                     {

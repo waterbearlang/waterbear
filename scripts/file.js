@@ -75,6 +75,7 @@
             node.appendChild(button);
             gistContainer.appendChild(node);
 
+            // move this to a live event handler at the bottom of the file:
             button.addEventListener('click', function(){
                 wb.loadScriptsFromGistId(this.dataset.gist);
             });
@@ -164,7 +165,6 @@
         }
         blocks.forEach(function(block){
             wb.wireUpWorkspace(block);
-            Event.trigger(block, 'wb-add');
         });
         wb.loaded = true;
         Event.trigger(document.body, 'wb-script-loaded');

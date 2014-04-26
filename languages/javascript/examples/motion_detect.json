@@ -38,7 +38,7 @@
             }
           ],
           "seqNum": "21",
-          "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
           "contained": [
             {
               "blocktype": "step",
@@ -93,7 +93,7 @@
                 }
               ],
               "seqNum": "18",
-              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
             },
             {
               "blocktype": "step",
@@ -139,7 +139,7 @@
                       }
                     ],
                     "seqNum": "16",
-                    "script": "global.accelerometer.direction",
+                    "script": "runtime.accelerometer.direction",
                     "type": "string"
                   }
                 },
@@ -161,7 +161,7 @@
                       }
                     ],
                     "seqNum": "27",
-                    "script": "global.stage_center_x",
+                    "script": "runtime.stage_center_x",
                     "type": "number"
                   }
                 },
@@ -183,7 +183,7 @@
                       }
                     ],
                     "seqNum": "28",
-                    "script": "global.stage_center_y",
+                    "script": "runtime.stage_center_y",
                     "type": "number"
                   }
                 }
@@ -209,7 +209,7 @@
             }
           ],
           "seqNum": "2",
-          "script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+          "script": "(function() { var id = setInterval( function(){ if(runtime.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); runtime.accelerometer._tasks.push( id ); })();",
           "contained": [
             {
               "blocktype": "step",
@@ -230,7 +230,7 @@
                 }
               ],
               "seqNum": "22",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
             }
           ]
         },
@@ -250,7 +250,7 @@
             }
           ],
           "seqNum": "3",
-          "script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+          "script": "(function() { var id = setInterval( function(){ if(runtime.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); runtime.accelerometer._tasks.push( id ); })();",
           "contained": [
             {
               "blocktype": "step",
@@ -271,7 +271,7 @@
                 }
               ],
               "seqNum": "22",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
             }
           ]
         },
@@ -291,7 +291,7 @@
             }
           ],
           "seqNum": "5",
-          "script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+          "script": "(function() { var id = setInterval( function(){ if(runtime.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); runtime.accelerometer._tasks.push( id ); })();",
           "contained": [
             {
               "blocktype": "step",
@@ -312,7 +312,7 @@
                 }
               ],
               "seqNum": "22",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
             }
           ]
         },
@@ -332,7 +332,7 @@
             }
           ],
           "seqNum": "4",
-          "script": "(function() { var id = setInterval( function(){ if(global.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); global.accelerometer._tasks.push( id ); })();",
+          "script": "(function() { var id = setInterval( function(){ if(runtime.accelerometer.direction.indexOf( {{1}} ) != -1 ){ [[1]] } }, 1000); runtime.accelerometer._tasks.push( id ); })();",
           "contained": [
             {
               "blocktype": "step",
@@ -353,7 +353,7 @@
                 }
               ],
               "seqNum": "22",
-              "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
             }
           ]
         }

@@ -5,7 +5,7 @@
 // support routines
 //
 // The idea here is that rather than try to maintain a separate "model" to capture
-// the block state, which mirros the DOM and has to be kept in sync with it,
+// the block state, which mirrors the DOM and has to be kept in sync with it,
 // just keep that state in the DOM itself using attributes (and data- attributes)
 //
 // Block(obj) -> Block element
@@ -92,6 +92,9 @@
     }
 
     var Block = function(obj, cloneForCM){
+        if (cloneForCM){
+            obj.id = obj.id + '-d';
+        }
         registerBlock(obj);
         // if (!obj.isTemplateBlock){
         //     console.log('block seq num: %s', obj.seqNum);
@@ -159,6 +162,7 @@
                 obj.contained.map(function(childdesc){
                     var child = Block(childdesc, cloneForCM);
                     contained.appendChild(child);
+                    // Event.trigger(child, 'wb-add');
                     addStep({wbTarget: child}); // simulate event
                 });
             }
@@ -177,27 +181,41 @@
 
     function removeBlock(event){
         event.stopPropagation();
-        if (wb.matches(event.wbTarget, '.expression')){
+        var block = event.wbTarget;
+        console.log('removeBlock %o', block.className);
+        if (wb.matches(block, '.expression')){
             removeExpression(event);
         }else{
             removeStep(event);
-        }   
-        var dup_block = document.getElementById(event.wbTarget.id + "-d");
+        }
+        if (!block.dataset.isLocal){
+            removeBlockCodeMap(block);
+        }
+        Event.trigger(document.body, 'wb-modified', {block: block, type: 'removed'});
+    }
+
+    function removeBlockCodeMap(block){
+        var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){
             if (wb.matches(event.wbTarget, '.expression')){
-            removeExpressionCodeMap(dup_block);
+                removeExpressionCodeMap(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
-            removeStepCodeMap(dup_block);
+                removeStepCodeMap(dup_block);
             }
             recently_removed = dup_block;
             dup_block.parentNode.removeChild(dup_block);
+        }else{
+            console.log('why is there no block for %s', block.id + '-d');
         }
     }
 
     function addBlock(event){
+        console.log('add block: %o', event.wbTarget.className);
         event.stopPropagation();
         if (wb.matches(event.wbTarget, '.expression')){
             addExpression(event);
+        }else if(wb.matches(event.wbTarget, '.scripts_workspace')){
+            addWorkspace(event);
         }else{
             addStep(event);
         }
@@ -218,6 +236,9 @@
         var cloneForCM = true;
         var parent = null;
         var next_sibling = target.nextElementSibling;
+        if(next_sibling !== null && next_sibling.className === "drop-cursor"){
+            next_sibling = next_sibling.nextElementSibling;
+        }
         var dup_target, parent_id; 
         if(isRestored){
             dup_target = recently_removed;
@@ -253,10 +274,10 @@
             parent.appendChild(dup_target);
             addExpressionCodeMap(dup_target);
         }else{
-            console.log("target.id");
-            console.log(target.id);
+            console.log('target.id: %s', target.id);
             console.log(target.parentNode.className);
-            parent_id = target.parentNode.parentNode.id + "-d";
+            parent_id = wb.closest(target.parentNode, '.block').id + "-d";
+            console.log('parent_id: %s', parent_id);
             parent = document.getElementById(parent_id).querySelector('.contained');
             parent.insertBefore(dup_target,dup_next_sibling);
             addStepCodeMap(dup_target);
@@ -332,6 +353,11 @@
         });
     }
 
+    function addWorkspace(event){
+        // Add a workspace, which has no block parent
+        // var block = event.wbTarget;
+    }
+
     function addStep(event){
         // Add a block to a block container
         var block = event.wbTarget;
@@ -344,57 +370,7 @@
                 // This *should* mean we're putting a block into the Scratchpad, so ignore locals
                 return;
             }
-            var locals = wb.findChild(parent, '.locals');
-            var parsedLocals = [];
-            JSON.parse(block.dataset.locals).forEach(
-                function(spec){
-                    spec.isTemplateBlock = true;
-                    spec.isLocal = true;
-                    spec.group = block.dataset.group;
-                    // if (!spec.seqNum){
-                        spec.seqNum = block.dataset.seqNum;
-                    // }
-                    // add scopeid to local blocks
-                    spec.scopeId = parent.id;
-                    if(!spec.id){
-                        spec.id = spec.scriptId = uuid();
-                    }
-                    // add localSource so we can trace a local back to its origin
-                    spec.localSource = block.id;
-                    block.dataset.localsAdded = true;
-                    locals.appendChild(Block(spec));
-                    parsedLocals.push(spec);
-                }
-            );
-            block.dataset.locals = JSON.stringify(parsedLocals);
-        }
-    }
-    
-    function addStepCodeMap(block){
-        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
-            var parent = wb.closest(block, '.context');
-            var locals = wb.findChild(parent, '.locals');
-            var parsedLocals = [];
-             JSON.parse(block.dataset.locals).forEach(
-                function(spec){
-                    spec.isTemplateBlock = true;
-                    spec.isLocal = true;
-                    spec.group = block.dataset.group;
-                    // if (!spec.seqNum){
-                        spec.seqNum = block.dataset.seqNum;
-                    // }
-                    // add scopeid to local blocks
-                    spec.scopeId = parent.id;
-                    if(!spec.id){
-                        spec.id = spec.scriptId = uuid();
-                    }
-                    // add localSource so we can trace a local back to its origin
-                    spec.localSource = block.id;
-                    block.dataset.localsAdded = true;
-                    locals.appendChild(Block(spec));
-                    parsedLocals.push(spec);
-                }
-            ); 
+            var parsedLocals = addLocals(block, parent);
             block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
@@ -409,6 +385,41 @@
         });
         if (event.stopPropagation){
             event.stopPropagation();
+        }
+    }
+
+    function addLocals(block, parent, cloneForCM){
+        var parsedLocals = [];
+        var locals = wb.findChild(parent, '.locals');
+        JSON.parse(block.dataset.locals).forEach(
+            function(spec){
+                spec.isTemplateBlock = true;
+                spec.isLocal = true;
+                spec.group = block.dataset.group;
+                // if (!spec.seqNum){
+                    spec.seqNum = block.dataset.seqNum;
+                // }
+                // add scopeid to local blocks
+                spec.scopeId = parent.id;
+                if(!spec.id){
+                    spec.id = spec.scriptId = uuid();
+                }
+                // add localSource so we can trace a local back to its origin
+                spec.localSource = block.id;
+                block.dataset.localsAdded = true;
+                locals.appendChild(Block(spec));
+                parsedLocals.push(spec);
+            }
+        );
+        return parsedLocals;
+    }
+    
+    function addStepCodeMap(block){
+        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
+            var parent = wb.closest(block, '.context');
+            var locals = wb.findChild(parent, '.locals');
+            var parsedLocals = addLocals(block, parent);
+            block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
     
@@ -476,6 +487,7 @@
             if (newBlock){
                 //console.log('appending new block');
                 holder.appendChild(newBlock);
+                // Event.trigger(newBlock, 'wb-add');
                 addExpression({'wbTarget': newBlock});
             }
         }
@@ -596,7 +608,9 @@
     function cloneBlock(block, cloneForCM){
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
-        delete blockdesc.id;
+        if (!cloneForCM){
+            delete blockdesc.id;
+        }
         ////////////////////
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers
@@ -769,6 +783,9 @@
 
     function codeFromBlock(block){
         // console.log(getScript(block.dataset.scriptId));
+        if (block.classList.contains('cloned')){
+            return ''
+        }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
@@ -1009,6 +1026,7 @@
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on('.workspace', 'wb-add', null, addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
     Event.on('#search_text', 'keyup', null, searchBlock);

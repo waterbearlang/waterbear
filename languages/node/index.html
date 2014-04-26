@@ -98,6 +98,9 @@
 					<li>
 						<button class="toggle" data-target="scripts_text_view">Text Script</button>
 					</li>
+					<li>
+						<button class="toggle" data-target="code_map">Code Map</button>
+					</li>
 					<li class='separator'>
 						<button class="run-scripts">Run Full Size</button>
 						<button class="show-ide">Show IDE</button>
@@ -116,6 +119,11 @@
 			<li class="escape">
 				<button class="escape-embed">Open in Waterbear</button>
 			</li>
+			<li><button class="icon-play run-script">Run</button></li>
+<li><button class="icon-stop stop-script">Stop</button></li>
+<li><button class="icon-check autorun-script-on">Autorun</button></li>
+<li><button class="icon-unchecked autorun-script-off">Autorun</button></li>
+
 		</ul>
 	</nav>
 	<div id="context_menu"></div>
@@ -154,9 +162,8 @@
 </div>
 
 		<div id="cm_container">
-		<div class="code_map">
 		<canvas id="cm_canvas"></canvas>
-		</div>
+		<div class="code_map"></div>
 		</div>
 	</div>
 	<svg class="sekrit-svg"><text class="resize-tester"></text></svg>

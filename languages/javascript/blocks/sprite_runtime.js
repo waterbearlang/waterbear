@@ -137,8 +137,8 @@ Sprite.prototype.draw = function(ctx){
 };
 
 function isSpriteClicked(sprite){
-    if(global.mouse_down){
-        var pos = {x: global.mouse_x, y: global.mouse_y};
+    if(runtime.mouse_down){
+        var pos = {x: runtime.mouse_x, y: runtime.mouse_y};
         var color = null;
         var size = {w: 1, h: 1};
         var detRect = createRectSprite(size, pos, color);

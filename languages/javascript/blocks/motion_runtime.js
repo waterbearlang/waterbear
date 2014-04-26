@@ -1,4 +1,4 @@
-(function(global){
+(function(runtime){
 'use strict';
 var accelerometer = {
     direction: ""
@@ -54,6 +54,10 @@ function processData(event) {
     }
 };
 
-global.accelerometer = accelerometer;
+if(runtime === undefined) {
+    console.log("Runtime is undefined; If this was called in a production environment look in to this!");
+    runtime = {};
+}
+runtime.accelerometer = accelerometer;
 
-})(global);
+})(window.runtime);

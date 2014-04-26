@@ -42,7 +42,7 @@
                     "blocktype": "expression",
                     "id": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
                     "type": "point",
-                    "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+                    "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
                     "help": "returns a point at a random location on the stage",
                     "sockets": [
                         {

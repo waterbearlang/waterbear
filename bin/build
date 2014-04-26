@@ -16,7 +16,8 @@ try{
 }
 var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
-var styles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
+var ideStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
+var runtimeStyles = [];
 var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
 var scripts_post = ['l10n', 'workspace'];
 
@@ -163,17 +164,28 @@ function cssInclude(path){
     return '<link rel="stylesheet" href="' + path + '.css" >';
 }
 
-function cssIncludes(lang){
+function cssIdeIncludes(lang){
     var includes = [];
-    styles.forEach(function(styleName){
+    ideStyles.forEach(function(styleName){
         includes.push(cssInclude('../../stylesheets/' + styleName));
     });
-    config[lang].styles.forEach(function(styleName){
+    config[lang].ideStyles.forEach(function(styleName){
         includes.push(cssInclude('../../stylesheets/' + styleName));
     });
     includes.push(cssInclude(lang));
     config[lang].plugins.forEach(function(plugin){
         includes.push(cssInclude('blocks/' + plugin));
+    });
+    return includes.join('\n');
+}
+
+function cssRuntimeIncludes(lang){
+    var includes = [];
+    runtimeStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
+    });
+    config[lang].runtimeStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
     });
     return includes.join('\n');
 }
@@ -225,7 +237,7 @@ function buildIdeHtmlFiles(){
         var html = ideTemplate.replace(/<\?examples\?>/g, examples(lang))
                                .replace(/<\?controls\?>/g, controls(lang))
                                .replace(/<\?stage\?>/g, stage(lang))
-                               .replace(/<\?cssincludes\?>/g, cssIncludes(lang))
+                               .replace(/<\?cssincludes\?>/g, cssIdeIncludes(lang))
                                .replace(/<\?jsincludes\?>/g, jsIdeIncludes(lang))
                                .replace(/<\?language\?>/g, lang);
         fs.writeFileSync('languages/' + lang + '/index.html', html, 'utf8')
@@ -235,7 +247,8 @@ function buildIdeHtmlFiles(){
 function buildRuntimeHtmlFiles(){
     languages.forEach(function(lang){
         if (config[lang].runsInBrowser){
-            var html = runtimeTemplate.replace(/<\?jsincludes\?>/g, jsRuntimeIncludes(lang));
+            var html = runtimeTemplate.replace(/<\?jsincludes\?>/g, jsRuntimeIncludes(lang))
+                                      .replace(/<\?cssincludes\?/g,cssRuntimeIncludes(lang));
             fs.writeFileSync('languages/' + lang + '/runtime.html', html, 'utf8');
         }
     });

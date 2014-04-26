@@ -24,7 +24,9 @@ var localizations = {
 
 };
 
-var languages = fs.readdirSync('languages');
+var languages = fs.readdirSync('languages').filter(function(lang){
+        return fs.statSync('languages/' + lang).isDirectory();
+    });
 
 var config = {}; 
 languages.forEach(function(lang){

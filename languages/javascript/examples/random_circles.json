@@ -1,0 +1,123 @@
+{
+  "title": "random circles",
+  "description": "draw a bunch of circles, simplest demo evar, this is the Waterbear 'hello world'",
+  "date": 1370837392711,
+  "waterbearVersion": "2.0",
+  "blocks": [
+    {
+      "blocktype": "context",
+      "group": "scripts_workspace",
+      "id": "6a2656b1-0138-445a-89c2-ba3d762203f8",
+      "help": "Drag your script blocks here",
+      "seqNum": "200",
+      "scopeId": "6a2656b1-0138-445a-89c2-ba3d762203f8",
+      "scriptId": "6a2656b1-0138-445a-89c2-ba3d762203f8",
+      "sockets": [
+        {
+          "name": "Workspace"
+        }
+      ],
+      "script": "[[1]]",
+      "contained": [
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "5f624121-ef8d-4cef-97ae-cd9c98ecdbf0",
+          "help": "this trigger will run the attached blocks periodically",
+          "seqNum": "201",
+          "scopeId": "0",
+          "scriptId": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+          "sockets": [
+            {
+              "name": "repeat",
+              "type": "number",
+              "value": "30",
+              "uValue": "30"
+            },
+            {
+              "name": "times a second"
+            }
+          ],
+          "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "count##"
+                }
+              ],
+              "script": "local.count##",
+              "type": "number"
+            }
+          ],
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "shapes",
+              "id": "3caecc22-85b0-4f6c-bccf-1c9c7c8afb09",
+              "help": "",
+              "seqNum": "202",
+              "scopeId": "0",
+              "scriptId": "e399d950-4d91-49aa-ac42-bfc58299633c",
+              "sockets": [
+                {
+                  "name": "fill circle at point",
+                  "type": "point",
+                  "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "points",
+                    "id": "679eaf7b-dda0-46f2-aad6-556991adcb89",
+                    "help": "returns a point at a random location on the stage",
+                    "seqNum": "198",
+                    "scopeId": "0",
+                    "scriptId": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+                    "sockets": [
+                      {
+                        "name": "random point"
+                      }
+                    ],
+                    "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
+                    "type": "point"
+                  }
+                },
+                {
+                  "name": "with radius",
+                  "type": "number",
+                  "value": "30",
+                  "uValue": "30"
+                },
+                {
+                  "name": "and color",
+                  "type": "color",
+                  "value": "#000000",
+                  "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                  "uValue": "#000000",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "color",
+                    "id": "b17125a2-51be-41f9-819c-1899aeedc82b",
+                    "help": "returns a random color",
+                    "seqNum": "199",
+                    "scopeId": "0",
+                    "scriptId": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                    "sockets": [
+                      {
+                        "name": "random color"
+                      }
+                    ],
+                    "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\"",
+                    "type": "color"
+                  }
+                }
+              ],
+              "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

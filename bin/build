@@ -1,55 +1,38 @@
 #!/usr/bin/env node
 
-console.log("Starting")
+(function(){
 
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
-var validateJson = require('./validate').validateJson;
-// var cleanCSS = require('clean-css');
-// var UglifyJS = require('uglify-js');
 
-var htmlTemplate = fs.readFileSync('template/template.html', 'utf8');
-
-var plugins = {
-    arduino: ['arduino', 'boolean', 'control', 'digitalio', 'math', 'serialio', 'timing', 'variables'],
-    node: ['node','control', 'piface', "pibrella_simple",'firmata', 'mc_game',  'mc_player', 'mc_position', 'mc_blocks',  'mc_camera', 'array', 'boolean', 'math', 'string'], /* 'mc_player', 'mc_position', 'mc_blocks',  'mc_camera',*/
-    javascript: ['javascript', 'asset', 'control', 'sprite', 'voice', 'sound', 'array', 'boolean', 'canvas', 'color',  'image', 'math', 'random', 'vector', 'object', 'string', 'path', 'point', 'rect', 'sensing', 'motion', 'shape', 'geolocation','date','size', /*'social',*/ /*'fb'*/, 'text', 'matrix'],
-    processingjs: ['processingjs', 'structure', 'environment', 'controls', 'shapes', 'input', 'colors', 'math', 'transform']
-};
-
-var pluginlibs = {
-    arduino: [],
-    javascript: ['SAT'],
-    node: [],
-    demo: [],
-    processingjs: ['processing-1.4.1']
+// var validateJson = require('./validate').validateJson;
+try{
+    var cleanCSS = require('clean-css');
+    var UglifyJS = require('uglify-js');
+    var yargs = require('yargs');
+}catch(e){
+    console.warn('Unable to import libraries, try running "npm install" first');
 }
-
-var universalStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome']
-
-var styles = {
-    arduino: [],
-    javascript: ['highlight-github'],
-    node: ['highlight-github'],
-    demo: ['highlight-github'],
-    processingjs: ['highlight-github']
-}
-
-var scripts = ['ajax', 'queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'workspace', 'blockprefs', 'menu'];
-
-var libs = {
-    arduino: ['events.min'],
-    javascript: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    node: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    demo: ['beautify', 'highlight', 'highlight-javascript','events.min'],
-    processingjs: ['beautify', 'highlight', 'highlight-javascript', 'processing-1.4.1','events.min']
-};
+var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
+var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
+var ideStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
+var runtimeStyles = [];
+var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
+var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {
 
 };
 
+var languages = fs.readdirSync('languages').filter(function(lang){
+        return fs.statSync('languages/' + lang).isDirectory();
+    });
+
+var config = {}; 
+languages.forEach(function(lang){
+    config[lang] = JSON.parse(fs.readFileSync('languages/' + lang + '/config.json'));
+});
 
 function clear(){
     if (fs.existsSync('dist')){
@@ -103,83 +86,176 @@ function concat(src, dest, files, ext, suffix, before, after){
     });
 }
 
-function build(){
-    clear();
-    var errors = false;
-    Object.keys(plugins).forEach(function(lang){
-        console.log(" == "+lang+" == ");
-        var files = plugins[lang];
-        var src = path.join('languages', lang);
-        var dest = path.join('dist', lang);
-        if (typeof libs[lang] != "undefined") {
-            libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
-        }
-        if (typeof styles[lang] == "undefined") {
-            console.error("No styles are included. Please check the styles array.");
-            console.error(" == "+lang+" FAILED == ");
-            errors = true;
-            return -1;
-        }
-        styles[lang].concat(universalStyles)
-            .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
-            .forEach(function(stylename){cat(stylename, dest + '.css'); });
+// function build(){
+//     clear();
+//     var errors = false;
+//     var stylefiles = {};
+//     Object.keys(plugins).forEach(function(lang){
+//         console.log(" == "+lang+" == ");
+//         var files = plugins[lang];
+//         var src = path.join('languages', lang);
+//         var dest = path.join('dist', lang);
+//         if (typeof libs[lang] != "undefined") {
+//             libs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '.js'); });
+//         }
+//         if (typeof styles[lang] == "undefined") {
+//             console.error("No styles are included. Please check the styles array.");
+//             console.error(" == "+lang+" FAILED == ");
+//             errors = true;
+//             return -1;
+//         }
+//         styles[lang].concat(styles)
+//             .map(function(stylename){ return 'stylesheets/' + stylename + '.css';})
+//             .forEach(function(stylename){cat(stylename, dest + '.css'); });
 
-        // Add localization file string
-        fileStr = "\n\n/* list of files used for localization of blocks */\nvar l10nFiles = " + JSON.stringify(localizations) + ";\n\n";
-        append(fileStr, dest + '.js');
+//         // Add localization file string
+//         fileStr = "\n\n/* list of files used for localization of blocks */\nvar l10nFiles = " + JSON.stringify(localizations) + ";\n\n";
+//         append(fileStr, dest + '.js');
 
-        scripts.forEach(function(scriptname){
-            cat('scripts/' + scriptname + '.js', dest + '.js'); 
-        });
+//         scripts.forEach(function(scriptname){
+//             cat('scripts/' + scriptname + '.js', dest + '.js'); 
+//         });
 
-        // Build CSS
-        concat(src, dest + '.css', files, '.css');
+//         // Build CSS
+//         concat(src, dest + '.css', files, '.css');
 
-        // Build Waterbear support
-        concat(src, dest + '.js', files, '.js');
+//         // Build Waterbear support
+//         concat(src, dest + '.js', files, '.js');
 
-        // Build Waterbear blocks
-        concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
+//         // Build Waterbear blocks
+//         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
 
-        // Attach l10n file to end of javascript dist
-        cat('scripts/' + 'l10n' + '.js', dest + '.js'); 
+//         // Attach l10n file to end of javascript dist
+//         cat('scripts/' + 'l10n' + '.js', dest + '.js'); 
 
-        // Build runtime support
-        if (lang === 'javascript' || lang === 'processingjs'){
-            pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
-            concat(src, dest + '_runtime.js', files, '.js', '_runtime');
-        }
+//         // Build runtime support
+//         if (lang === 'javascript' || lang === 'processingjs'){
+//             pluginlibs[lang].forEach(function(libname){cat('lib/' + libname + '.js', dest + '_runtime.js'); })
+//             concat(src, dest + '_runtime.js', files, '.js', '_runtime');
+//         }
+//     });
+//    buildHtmlFiles();
+// }
 
-        // Build HTML file
-        var tplExamplePath = 'template/' + lang + '.examples';
-        var examples = "";
-        if (fs.existsSync(tplExamplePath)) {
-            examples = fs.readFileSync(tplExamplePath);
+// FIXME: examples, stage, and controls are basically the same function, 
+// make them actually the same function
+
+function template(name){
+    function getTemplate(lang){
+        var _template = "";
+        var tplPath = 'languages/' + lang + '/templates/' + name + '.html';
+        if (fs.existsSync(tplPath)) {
+            _template = fs.readFileSync(tplPath);
         }
         else {
+            _template = fs.readFileSync('languages/javascript/templates/' + name + '.html');
             console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
         }
-
-        var tplStagePath = 'template/' + lang + '.stage';
-        var stage = fs.readFileSync('template/' + "javascript" + '.stage');
-        if (fs.existsSync(tplStagePath)) {
-            stage = fs.readFileSync(tplStagePath);
-        }
-        else {
-            console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
-        }
-        var html = htmlTemplate.replace(/<\?examples\?>/g, examples)
-                               .replace(/<\?stage\?>/g, stage)
-                               .replace(/<\?language\?>/g, lang);
-        fs.writeFileSync(lang + '.html', html, 'utf8')
-        console.log(" == "+lang+" complete == ");
-    });
-
-    if (!errors) {
-        console.log("Success: The build completed successfully."); //@todo this is a bit misleading
-    } else {
-        console.error("FAILURE: The build completed with errors. Check the messages above.");
+        return _template;
     }
+    return getTemplate;
+}
+
+var examples = template('examples');
+var stage = template('stage');
+var controls = template('controls');
+
+function cssInclude(path){
+    return '<link rel="stylesheet" href="' + path + '.css" >';
+}
+
+function cssIdeIncludes(lang){
+    var includes = [];
+    ideStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
+    });
+    config[lang].ideStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
+    });
+    includes.push(cssInclude(lang));
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(cssInclude('blocks/' + plugin));
+    });
+    return includes.join('\n');
+}
+
+function cssRuntimeIncludes(lang){
+    var includes = [];
+    runtimeStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
+    });
+    config[lang].runtimeStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
+    });
+    return includes.join('\n');
+}
+
+function jsInclude(path){
+    return '<script src="' + path + '.js"></script>';
+}
+
+function jsIdeIncludes(lang){
+    var includes = [];
+    config[lang].ideLibs.forEach(function(scriptName){
+        includes.push(jsInclude('../../lib/' + scriptName));
+    });
+    scripts_pre.forEach(function(scriptName){
+        includes.push(jsInclude('../../scripts/' + scriptName));
+    });
+    includes.push(jsInclude('ide'));
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(jsInclude('blocks/' + plugin + '_ide'));
+    });
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(jsInclude('blocks/' + plugin + '_blockmenu'));
+    });
+    scripts_post.forEach(function(scriptName){
+        includes.push(jsInclude('../../scripts/' + scriptName));
+    });
+    return includes.join('\n');
+}
+
+function jsRuntimeIncludes(lang){
+    var includes = [jsInclude('runtime')];
+    config[lang].plugins.forEach(function(plugin){
+        includes.push(jsInclude('blocks/' + plugin + '_runtime'));
+    });
+    config[lang].runtimeLibs.forEach(function(libName){
+        includes.push(jsInclude('../../lib/' + libName));
+    });
+    return includes.join('\n');
+}
+
+function buildHtmlFiles(){
+    buildIdeHtmlFiles();
+    buildRuntimeHtmlFiles();
+}
+
+function buildIdeHtmlFiles(){
+    languages.forEach(function(lang){
+        // Build HTML file
+        var html = ideTemplate.replace(/<\?examples\?>/g, examples(lang))
+                               .replace(/<\?controls\?>/g, controls(lang))
+                               .replace(/<\?stage\?>/g, stage(lang))
+                               .replace(/<\?cssincludes\?>/g, cssIdeIncludes(lang))
+                               .replace(/<\?jsincludes\?>/g, jsIdeIncludes(lang))
+                               .replace(/<\?language\?>/g, lang);
+        fs.writeFileSync('languages/' + lang + '/index.html', html, 'utf8')
+    });
 };
 
-build();
+function buildRuntimeHtmlFiles(){
+    languages.forEach(function(lang){
+        if (config[lang].runsInBrowser){
+            var html = runtimeTemplate.replace(/<\?jsincludes\?>/g, jsRuntimeIncludes(lang))
+                                      .replace(/<\?cssincludes\?/g,cssRuntimeIncludes(lang));
+            fs.writeFileSync('languages/' + lang + '/runtime.html', html, 'utf8');
+        }
+    });
+}
+
+// build();
+buildHtmlFiles();
+
+
+})();

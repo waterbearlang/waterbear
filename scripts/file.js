@@ -75,6 +75,7 @@
             node.appendChild(button);
             gistContainer.appendChild(node);
 
+            // move this to a live event handler at the bottom of the file:
             button.addEventListener('click', function(){
                 wb.loadScriptsFromGistId(this.dataset.gist);
             });
@@ -110,7 +111,7 @@
         evt.preventDefault();
         var name = prompt("Save file as: ");
         if( !name ) return;
-        var URL = window.webkitURL || window.URL;
+        // var URL = window.webkitURL || window.URL;
         var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
         var reader = new FileReader();
         var a = document.createElement('a');
@@ -164,7 +165,6 @@
         }
         blocks.forEach(function(block){
             wb.wireUpWorkspace(block);
-            Event.trigger(block, 'wb-add');
         });
         wb.loaded = true;
         Event.trigger(document.body, 'wb-script-loaded');
@@ -187,7 +187,7 @@
     }
 
     function loadScriptsFromExample(name){
-        ajax.get('examples/' + wb.language + '/' + name + '.json?b=' + Math.random(), function(exampleJson){
+        ajax.get('examples/' + name + '.json?b=' + Math.random(), function(exampleJson){
             loadScriptsFromJson(exampleJson);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);

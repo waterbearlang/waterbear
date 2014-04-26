@@ -1,0 +1,8 @@
+{
+	"runsInBrowser": false,
+	"plugins": ["arduino", "boolean", "control", "digitalio", "math", "serialio", "timing", "variables"],
+	"ideLibs": ["ajax", "events.min"],
+	"runtimeLibs": [],
+	"ideStyles": [],
+	"runtimeStyles": []
+}

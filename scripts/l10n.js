@@ -49,9 +49,9 @@ wb.overwriteAttributes = overwriteAttributes;
 })(wb);
 
 if (wb.l10nHalfDone) {
-    // console.log("l10n populating");
+    console.log("l10n populating");
     wb.populateMenu();
 } else {
-    // console.log("l10n done");
+    console.log("l10n done");
     wb.l10nHalfDone = true;
 }

@@ -1,0 +1,1912 @@
+{
+  "title": "Tic Tac Toe",
+  "description": "",
+  "date": 1390728086656,
+  "waterbearVersion": "2.0",
+  "blocks": [
+    {
+      "blocktype": "context",
+      "group": "scripts_workspace",
+      "id": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+      "help": "Drag your script blocks here",
+      "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+      "scriptId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+      "sockets": [
+        {
+          "name": "Workspace"
+        }
+      ],
+      "seqNum": "1",
+      "script": "[[1]]",
+      "contained": [
+        {
+          "blocktype": "step",
+          "group": "strings",
+          "id": "e3556289-609a-492a-9893-e01e8e79fe92",
+          "help": "this is a comment and will not be run by the program",
+          "scopeId": "0",
+          "scriptId": "48bb8639-0092-4384-b5a0-3a772699dea9",
+          "sockets": [
+            {
+              "name": "comment",
+              "type": "any",
+              "uValue": "Initialize variables"
+            }
+          ],
+          "seqNum": "8",
+          "script": "/* {{1}}; */"
+        },
+        {
+          "blocktype": "step",
+          "group": "arrays",
+          "id": "d02dce69-0d96-4a7f-8acf-88169ef13e01",
+          "help": "Create an empty array",
+          "scopeId": "0",
+          "scriptId": "e6a297e9-1255-4701-91d8-80548489ee9a",
+          "sockets": [
+            {
+              "name": "new array##",
+              "uName": "new board"
+            }
+          ],
+          "seqNum": "2",
+          "script": "local.array## = [];",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "board"
+                }
+              ],
+              "script": "local.array##",
+              "type": "array",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "arrays",
+              "seqNum": "2",
+              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+              "scriptId": "28711550-21cd-4553-b1e6-1c565c7d3a06",
+              "id": "28711550-21cd-4553-b1e6-1c565c7d3a06",
+              "localSource": "d02dce69-0d96-4a7f-8acf-88169ef13e01"
+            }
+          ]
+        },
+        {
+          "blocktype": "context",
+          "group": "controls",
+          "id": "9100f95d-7f39-4bdd-9b70-f1395c09dbaf",
+          "help": "repeat the contained blocks so many times",
+          "scopeId": "0",
+          "scriptId": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+          "sockets": [
+            {
+              "name": "repeat",
+              "type": "number",
+              "value": "10",
+              "uValue": "9"
+            }
+          ],
+          "seqNum": "73",
+          "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "count"
+                }
+              ],
+              "script": "local.count##",
+              "type": "number",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "controls",
+              "seqNum": "73",
+              "scopeId": "9100f95d-7f39-4bdd-9b70-f1395c09dbaf",
+              "scriptId": "7cd003db-8190-4086-831a-08602f0d2e92",
+              "id": "7cd003db-8190-4086-831a-08602f0d2e92",
+              "localSource": "9100f95d-7f39-4bdd-9b70-f1395c09dbaf"
+            }
+          ],
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "arrays",
+              "id": "80d2b53a-61cb-43e3-afcf-d2b5e18255e9",
+              "help": "add any object to the end of an array",
+              "scopeId": "0",
+              "scriptId": "3fab2b88-430a-401e-88b2-2703d614780a",
+              "sockets": [
+                {
+                  "name": "array",
+                  "type": "array",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "arrays",
+                    "id": "79d9acba-6cc9-4871-b6af-c31a837793b6",
+                    "help": "",
+                    "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                    "scriptId": "28711550-21cd-4553-b1e6-1c565c7d3a06",
+                    "sockets": [
+                      {
+                        "name": "board"
+                      }
+                    ],
+                    "seqNum": "2",
+                    "script": "local.array##",
+                    "localSource": "d02dce69-0d96-4a7f-8acf-88169ef13e01",
+                    "type": "array"
+                  }
+                },
+                {
+                  "name": "append",
+                  "type": "any",
+                  "uValue": "-1"
+                }
+              ],
+              "seqNum": "74",
+              "script": "{{1}}.push({{2}});"
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "controls",
+          "id": "178e7897-e621-42b0-9704-5617ee3499af",
+          "help": "create a reference to re-use the any",
+          "scopeId": "0",
+          "scriptId": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+          "sockets": [
+            {
+              "name": "variable variable##",
+              "type": "any",
+              "uName": "variable turn",
+              "uValue": "0"
+            }
+          ],
+          "seqNum": "10",
+          "script": "local.variable## = {{1}};",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "script": "local.variable##",
+              "type": "any",
+              "sockets": [
+                {
+                  "name": "turn"
+                }
+              ],
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "controls",
+              "seqNum": "10",
+              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+              "scriptId": "e6c2b71a-a9b4-4386-8b80-1e566acd21a8",
+              "id": "e6c2b71a-a9b4-4386-8b80-1e566acd21a8",
+              "localSource": "178e7897-e621-42b0-9704-5617ee3499af"
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "images",
+          "id": "1bad09db-6413-460e-90ba-10e6bb77b7a2",
+          "help": "",
+          "scopeId": "0",
+          "scriptId": "7fa79655-4c85-45b3-be9e-a19aa038feae",
+          "sockets": [
+            {
+              "name": "create ImageData image## from url",
+              "type": "string",
+              "uName": "create ImageData imgBoard from url",
+              "uValue": "http://mouserunner.com/MozllaTicTacToe/TicTackBack_400x400.png"
+            }
+          ],
+          "seqNum": "98",
+          "script": "runtime.preloadImage('##', {{1}});",
+          "locals": [
+            {
+              "blocktype": "asset",
+              "sockets": [
+                {
+                  "name": "imgBoard"
+                }
+              ],
+              "script": "runtime.images[\"##\"]",
+              "type": "image",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "images",
+              "seqNum": "98",
+              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+              "scriptId": "6aef3499-1eb7-49e6-bbbb-32c1f2950665",
+              "id": "6aef3499-1eb7-49e6-bbbb-32c1f2950665",
+              "localSource": "1bad09db-6413-460e-90ba-10e6bb77b7a2"
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "images",
+          "id": "ecbcd488-03d2-4ddf-afda-b477d77befde",
+          "help": "",
+          "scopeId": "0",
+          "scriptId": "7fa79655-4c85-45b3-be9e-a19aa038feae",
+          "sockets": [
+            {
+              "name": "create ImageData image## from url",
+              "type": "string",
+              "uName": "create ImageData imgO from url",
+              "uValue": "http://www.i2clipart.com/cliparts/a/d/a/e/clipart-cyrillic-letter-o-adae.png"
+            }
+          ],
+          "seqNum": "145",
+          "script": "runtime.preloadImage('##', {{1}});",
+          "locals": [
+            {
+              "blocktype": "asset",
+              "sockets": [
+                {
+                  "name": "imgO"
+                }
+              ],
+              "script": "runtime.images[\"##\"]",
+              "type": "image",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "images",
+              "seqNum": "145",
+              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+              "scriptId": "370e1b9f-ae16-4402-bb77-ebffaab6b4d2",
+              "id": "370e1b9f-ae16-4402-bb77-ebffaab6b4d2",
+              "localSource": "ecbcd488-03d2-4ddf-afda-b477d77befde"
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "images",
+          "id": "1921b509-0ce3-49de-b4d0-a20f0f419684",
+          "help": "",
+          "scopeId": "0",
+          "scriptId": "7fa79655-4c85-45b3-be9e-a19aa038feae",
+          "sockets": [
+            {
+              "name": "create ImageData image## from url",
+              "type": "string",
+              "uName": "create ImageData imgX from url",
+              "uValue": "https://cdn3.iconfinder.com/data/icons/iconano-text-editor/512/005-X-128.png"
+            }
+          ],
+          "seqNum": "146",
+          "script": "runtime.preloadImage('##', {{1}});",
+          "locals": [
+            {
+              "blocktype": "asset",
+              "sockets": [
+                {
+                  "name": "imgX"
+                }
+              ],
+              "script": "runtime.images[\"##\"]",
+              "type": "image",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "images",
+              "seqNum": "146",
+              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+              "scriptId": "d27b6706-799e-4f5a-937d-fae43c50b7e6",
+              "id": "d27b6706-799e-4f5a-937d-fae43c50b7e6",
+              "localSource": "1921b509-0ce3-49de-b4d0-a20f0f419684"
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "strings",
+          "id": "4db6366c-9bec-4e95-ba5d-38f3855d3f69",
+          "help": "this is a comment and will not be run by the program",
+          "scopeId": "0",
+          "scriptId": "48bb8639-0092-4384-b5a0-3a772699dea9",
+          "sockets": [
+            {
+              "name": "comment",
+              "type": "any",
+              "uValue": "Update board"
+            }
+          ],
+          "seqNum": "13",
+          "script": "/* {{1}}; */"
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60",
+          "help": "add a listener for the given message which receives data, run these blocks when it is received",
+          "scopeId": "0",
+          "scriptId": "a0496339-c405-4d1c-8185-9bc211bf5a56",
+          "sockets": [
+            {
+              "name": "when I receive",
+              "type": "string",
+              "value": "ping",
+              "uValue": "update"
+            },
+            {
+              "name": "message with data"
+            }
+          ],
+          "seqNum": "14",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "position"
+                }
+              ],
+              "script": "local.data##",
+              "type": "any",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "controls",
+              "seqNum": "14",
+              "scopeId": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60",
+              "scriptId": "3c77c5cb-f602-4d9f-a705-739407e2d333",
+              "id": "3c77c5cb-f602-4d9f-a705-739407e2d333",
+              "localSource": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60"
+            }
+          ],
+          "contained": [
+            {
+              "blocktype": "context",
+              "group": "controls",
+              "id": "d3692ae8-dd81-4eba-9568-d26cc536542c",
+              "help": "run the following blocks only if the condition is true",
+              "scopeId": "0",
+              "scriptId": "20ba3e08-74c0-428e-b612-53545de63ce0",
+              "sockets": [
+                {
+                  "name": "if",
+                  "type": "boolean",
+                  "uValue": "true",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "math",
+                    "id": "9dce4981-0bdb-49e0-bf84-381836b09674",
+                    "help": "two operands are equal",
+                    "scopeId": "0",
+                    "scriptId": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+                    "sockets": [
+                      {
+                        "name": "",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "arrays",
+                          "id": "dff2ff53-5ac5-4029-8559-efc33156cace",
+                          "help": "get an item from an index in the array",
+                          "scopeId": "0",
+                          "scriptId": "3e56f9c1-29b9-4d0c-99bd-05ccabfa29c2",
+                          "sockets": [
+                            {
+                              "name": "array",
+                              "type": "array",
+                              "uValue": "",
+                              "uBlock": {
+                                "blocktype": "expression",
+                                "group": "arrays",
+                                "id": "1bed5390-048e-4bb8-b03b-52506c17cd65",
+                                "help": "",
+                                "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                                "scriptId": "28711550-21cd-4553-b1e6-1c565c7d3a06",
+                                "sockets": [
+                                  {
+                                    "name": "board"
+                                  }
+                                ],
+                                "seqNum": "2",
+                                "script": "local.array##",
+                                "localSource": "d02dce69-0d96-4a7f-8acf-88169ef13e01",
+                                "type": "array"
+                              }
+                            },
+                            {
+                              "name": "item",
+                              "type": "number",
+                              "value": "0",
+                              "uValue": "0",
+                              "uBlock": {
+                                "blocktype": "expression",
+                                "group": "controls",
+                                "id": "437e6432-8a99-49a0-bfb4-4a16d55fe5d2",
+                                "help": "",
+                                "scopeId": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60",
+                                "scriptId": "3c77c5cb-f602-4d9f-a705-739407e2d333",
+                                "sockets": [
+                                  {
+                                    "name": "position"
+                                  }
+                                ],
+                                "seqNum": "14",
+                                "script": "local.data##",
+                                "localSource": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60",
+                                "type": "any"
+                              }
+                            }
+                          ],
+                          "seqNum": "43",
+                          "script": "{{1}}[{{2}}]",
+                          "type": "any"
+                        }
+                      },
+                      {
+                        "name": "=",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "-1"
+                      }
+                    ],
+                    "seqNum": "42",
+                    "script": "({{1}} === {{2}})",
+                    "type": "boolean"
+                  }
+                }
+              ],
+              "seqNum": "41",
+              "script": "if({{1}}){[[1]]}",
+              "contained": [
+                {
+                  "blocktype": "step",
+                  "group": "controls",
+                  "id": "911c1c0f-cecc-4e65-938c-6ec6feb4ed39",
+                  "help": "first argument must be a variable",
+                  "scopeId": "0",
+                  "scriptId": "b4036693-8645-4852-a4de-9e96565f9aec",
+                  "sockets": [
+                    {
+                      "name": "set variable",
+                      "type": "any",
+                      "uValue": "",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "arrays",
+                        "id": "e869d1bf-b334-42d0-ae70-fdc4cc85e6a5",
+                        "help": "get an item from an index in the array",
+                        "scopeId": "0",
+                        "scriptId": "3e56f9c1-29b9-4d0c-99bd-05ccabfa29c2",
+                        "sockets": [
+                          {
+                            "name": "array",
+                            "type": "array",
+                            "uValue": "",
+                            "uBlock": {
+                              "blocktype": "expression",
+                              "group": "arrays",
+                              "id": "0c78b9ca-90fc-4226-9cc7-8c3c3ff16cf9",
+                              "help": "",
+                              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                              "scriptId": "28711550-21cd-4553-b1e6-1c565c7d3a06",
+                              "sockets": [
+                                {
+                                  "name": "board"
+                                }
+                              ],
+                              "seqNum": "2",
+                              "script": "local.array##",
+                              "localSource": "d02dce69-0d96-4a7f-8acf-88169ef13e01",
+                              "type": "array"
+                            }
+                          },
+                          {
+                            "name": "item",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "0",
+                            "uBlock": {
+                              "blocktype": "expression",
+                              "group": "controls",
+                              "id": "5ccd522b-ae94-4ca5-87ff-a0f99885bf74",
+                              "help": "",
+                              "scopeId": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60",
+                              "scriptId": "3c77c5cb-f602-4d9f-a705-739407e2d333",
+                              "sockets": [
+                                {
+                                  "name": "position"
+                                }
+                              ],
+                              "seqNum": "14",
+                              "script": "local.data##",
+                              "localSource": "af9ceb41-990c-4d64-8f48-ac18a2cb1c60",
+                              "type": "any"
+                            }
+                          }
+                        ],
+                        "seqNum": "45",
+                        "script": "{{1}}[{{2}}]",
+                        "type": "any"
+                      }
+                    },
+                    {
+                      "name": "to",
+                      "type": "any",
+                      "uValue": "1",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "controls",
+                        "id": "b33720fd-e814-4204-bb90-f825abd0270b",
+                        "help": "",
+                        "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                        "scriptId": "e6c2b71a-a9b4-4386-8b80-1e566acd21a8",
+                        "sockets": [
+                          {
+                            "name": "turn"
+                          }
+                        ],
+                        "seqNum": "10",
+                        "script": "local.variable##",
+                        "localSource": "178e7897-e621-42b0-9704-5617ee3499af",
+                        "type": "any"
+                      }
+                    }
+                  ],
+                  "seqNum": "44",
+                  "script": "{{1}} = {{2}};"
+                },
+                {
+                  "blocktype": "step",
+                  "group": "controls",
+                  "id": "109d5663-4fbd-4cee-8244-e8f5d6179054",
+                  "help": "first argument must be a variable",
+                  "scopeId": "0",
+                  "scriptId": "9AED48C9-A90B-49FB-9C1A-FD632F0388F5",
+                  "sockets": [
+                    {
+                      "name": "increment variable",
+                      "type": "any",
+                      "uValue": "",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "controls",
+                        "id": "defb66c0-f0b7-4e60-839c-5d3173f16103",
+                        "help": "",
+                        "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                        "scriptId": "e6c2b71a-a9b4-4386-8b80-1e566acd21a8",
+                        "sockets": [
+                          {
+                            "name": "turn"
+                          }
+                        ],
+                        "seqNum": "10",
+                        "script": "local.variable##",
+                        "localSource": "178e7897-e621-42b0-9704-5617ee3499af",
+                        "type": "any"
+                      }
+                    },
+                    {
+                      "name": "by",
+                      "type": "any",
+                      "value": "1",
+                      "uValue": "1"
+                    }
+                  ],
+                  "seqNum": "88",
+                  "script": "{{1}} += {{2}};"
+                },
+                {
+                  "blocktype": "step",
+                  "group": "controls",
+                  "id": "874bef6e-e144-400c-93ee-7b6010cc1692",
+                  "help": "first argument must be a variable",
+                  "scopeId": "0",
+                  "scriptId": "b4036693-8645-4852-a4de-9e96565f9aec",
+                  "sockets": [
+                    {
+                      "name": "set variable",
+                      "type": "any",
+                      "uValue": "",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "controls",
+                        "id": "e24b3ea5-3096-40ee-96b5-6b648d358ed3",
+                        "help": "",
+                        "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                        "scriptId": "e6c2b71a-a9b4-4386-8b80-1e566acd21a8",
+                        "sockets": [
+                          {
+                            "name": "turn"
+                          }
+                        ],
+                        "seqNum": "10",
+                        "script": "local.variable##",
+                        "localSource": "178e7897-e621-42b0-9704-5617ee3499af",
+                        "type": "any"
+                      }
+                    },
+                    {
+                      "name": "to",
+                      "type": "any",
+                      "uValue": "",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "math",
+                        "id": "7a50b826-4166-41c2-b20f-28d20ac911ea",
+                        "help": "modulus of a number is the remainder after whole number division",
+                        "scopeId": "0",
+                        "scriptId": "a2647515-2f14-4d0f-84b1-a6e288823630",
+                        "sockets": [
+                          {
+                            "name": "",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "0",
+                            "uBlock": {
+                              "blocktype": "expression",
+                              "group": "controls",
+                              "id": "2f99bf40-6e33-4239-81c2-b272ddf58c7e",
+                              "help": "",
+                              "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                              "scriptId": "e6c2b71a-a9b4-4386-8b80-1e566acd21a8",
+                              "sockets": [
+                                {
+                                  "name": "turn"
+                                }
+                              ],
+                              "seqNum": "10",
+                              "script": "local.variable##",
+                              "localSource": "178e7897-e621-42b0-9704-5617ee3499af",
+                              "type": "any"
+                            }
+                          },
+                          {
+                            "name": "mod",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "2"
+                          }
+                        ],
+                        "seqNum": "89",
+                        "script": "({{1}} % {{2}})",
+                        "type": "number"
+                      }
+                    }
+                  ],
+                  "seqNum": "84",
+                  "script": "{{1}} = {{2}};"
+                },
+                {
+                  "blocktype": "step",
+                  "group": "controls",
+                  "id": "96406a42-ff3f-427b-b638-394cf9e90d47",
+                  "help": "send this message to any listeners",
+                  "scopeId": "0",
+                  "scriptId": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
+                  "sockets": [
+                    {
+                      "name": "broadcast",
+                      "type": "string",
+                      "value": "ack",
+                      "uValue": "render"
+                    },
+                    {
+                      "name": "message"
+                    }
+                  ],
+                  "seqNum": "91",
+                  "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "strings",
+          "id": "92b41410-8a34-4533-a318-5a8877cc1b60",
+          "help": "this is a comment and will not be run by the program",
+          "scopeId": "0",
+          "scriptId": "48bb8639-0092-4384-b5a0-3a772699dea9",
+          "sockets": [
+            {
+              "name": "comment",
+              "type": "any",
+              "uValue": "Render"
+            }
+          ],
+          "seqNum": "18",
+          "script": "/* {{1}}; */"
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "a9c1dcc8-2018-43b4-b076-8068f6f51efb",
+          "help": "add a listener for the given message, run these blocks when it is received",
+          "scopeId": "0",
+          "scriptId": "3931a20c-f510-45e4-83d2-4005983d5cae",
+          "sockets": [
+            {
+              "name": "when I receive",
+              "type": "string",
+              "value": "ack",
+              "uValue": "render"
+            },
+            {
+              "name": "message"
+            }
+          ],
+          "seqNum": "17",
+          "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "images",
+              "id": "79209510-ad22-43c7-b6d4-281bacfd6ecc",
+              "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
+              "scopeId": "0",
+              "scriptId": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
+              "sockets": [
+                {
+                  "name": "draw image",
+                  "type": "image",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "asset",
+                    "group": "images",
+                    "id": "8c89df14-c6ee-4dd9-9993-5bd67a3a79d1",
+                    "help": "",
+                    "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                    "scriptId": "6aef3499-1eb7-49e6-bbbb-32c1f2950665",
+                    "sockets": [
+                      {
+                        "name": "imgBoard"
+                      }
+                    ],
+                    "seqNum": "98",
+                    "script": "runtime.images[\"##\"]",
+                    "localSource": "1bad09db-6413-460e-90ba-10e6bb77b7a2",
+                    "type": "image"
+                  }
+                },
+                {
+                  "name": "at point",
+                  "type": "point",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "points",
+                    "id": "41ab32d9-64c8-4091-90fd-9e0d467dd0fa",
+                    "help": "create a new point",
+                    "scopeId": "0",
+                    "scriptId": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+                    "sockets": [
+                      {
+                        "name": "point at x",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0"
+                      },
+                      {
+                        "name": "y",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0"
+                      }
+                    ],
+                    "seqNum": "101",
+                    "script": "{x: {{1}}, y: {{2}} }",
+                    "type": "point"
+                  }
+                }
+              ],
+              "seqNum": "100",
+              "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);"
+            },
+            {
+              "blocktype": "context",
+              "group": "arrays",
+              "id": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+              "help": "run the blocks with each item of a named array",
+              "scopeId": "0",
+              "scriptId": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
+              "sockets": [
+                {
+                  "name": "array",
+                  "type": "array",
+                  "uValue": "",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "arrays",
+                    "id": "962d9458-2013-44ea-8cfe-c9372fac242a",
+                    "help": "",
+                    "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                    "scriptId": "28711550-21cd-4553-b1e6-1c565c7d3a06",
+                    "sockets": [
+                      {
+                        "name": "board"
+                      }
+                    ],
+                    "seqNum": "2",
+                    "script": "local.array##",
+                    "localSource": "d02dce69-0d96-4a7f-8acf-88169ef13e01",
+                    "type": "array"
+                  }
+                },
+                {
+                  "name": "for each"
+                }
+              ],
+              "seqNum": "112",
+              "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
+              "locals": [
+                {
+                  "blocktype": "expression",
+                  "sockets": [
+                    {
+                      "name": "index"
+                    }
+                  ],
+                  "script": "local.index",
+                  "help": "index of current item in array",
+                  "type": "number",
+                  "isTemplateBlock": true,
+                  "isLocal": true,
+                  "group": "arrays",
+                  "seqNum": "112",
+                  "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                  "scriptId": "95ed7766-05d2-417f-8061-508cae98bd2a",
+                  "id": "95ed7766-05d2-417f-8061-508cae98bd2a",
+                  "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958"
+                },
+                {
+                  "blocktype": "expression",
+                  "sockets": [
+                    {
+                      "name": "item"
+                    }
+                  ],
+                  "script": "local.item",
+                  "help": "the current item in the iteration",
+                  "type": "any",
+                  "isTemplateBlock": true,
+                  "isLocal": true,
+                  "group": "arrays",
+                  "seqNum": "112",
+                  "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                  "scriptId": "0f213527-fd8e-472a-a12d-55dc819fbcfa",
+                  "id": "0f213527-fd8e-472a-a12d-55dc819fbcfa",
+                  "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958"
+                }
+              ],
+              "contained": [
+                {
+                  "blocktype": "context",
+                  "group": "controls",
+                  "id": "cc4cfdb1-69ac-4d24-8ba7-df67d838df67",
+                  "help": "run the following blocks only if the condition is true",
+                  "scopeId": "0",
+                  "scriptId": "20ba3e08-74c0-428e-b612-53545de63ce0",
+                  "sockets": [
+                    {
+                      "name": "if",
+                      "type": "boolean",
+                      "uValue": "true",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "math",
+                        "id": "4ae8674d-df6c-4d41-aba0-d71ef7c23999",
+                        "help": "two operands are equal",
+                        "scopeId": "0",
+                        "scriptId": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+                        "sockets": [
+                          {
+                            "name": "",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "0",
+                            "uBlock": {
+                              "blocktype": "expression",
+                              "group": "arrays",
+                              "id": "97e574f6-1fad-4759-b21c-58a54ce9d1c0",
+                              "help": "the current item in the iteration",
+                              "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                              "scriptId": "0f213527-fd8e-472a-a12d-55dc819fbcfa",
+                              "sockets": [
+                                {
+                                  "name": "item"
+                                }
+                              ],
+                              "seqNum": "112",
+                              "script": "local.item",
+                              "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                              "type": "any"
+                            }
+                          },
+                          {
+                            "name": "=",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "0"
+                          }
+                        ],
+                        "seqNum": "119",
+                        "script": "({{1}} === {{2}})",
+                        "type": "boolean"
+                      }
+                    }
+                  ],
+                  "seqNum": "118",
+                  "script": "if({{1}}){[[1]]}",
+                  "contained": [
+                    {
+                      "blocktype": "step",
+                      "group": "images",
+                      "id": "06cb2a56-6457-473b-a9fe-6361443dcf18",
+                      "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
+                      "scopeId": "0",
+                      "scriptId": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
+                      "sockets": [
+                        {
+                          "name": "draw image",
+                          "type": "image",
+                          "uValue": "",
+                          "uBlock": {
+                            "blocktype": "asset",
+                            "group": "images",
+                            "id": "e4d22224-d8bd-4731-9177-eb73373e78df",
+                            "help": "",
+                            "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                            "scriptId": "370e1b9f-ae16-4402-bb77-ebffaab6b4d2",
+                            "sockets": [
+                              {
+                                "name": "image ##",
+                                "uName": "imgO"
+                              }
+                            ],
+                            "seqNum": "145",
+                            "script": "runtime.images[\"##\"]",
+                            "localSource": "ecbcd488-03d2-4ddf-afda-b477d77befde",
+                            "type": "image"
+                          }
+                        },
+                        {
+                          "name": "at point",
+                          "type": "point",
+                          "uValue": "",
+                          "uBlock": {
+                            "blocktype": "expression",
+                            "group": "points",
+                            "id": "a586402a-b77c-48fc-81e8-f8494c2254f9",
+                            "help": "create a new point",
+                            "scopeId": "0",
+                            "scriptId": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+                            "sockets": [
+                              {
+                                "name": "point at x",
+                                "type": "number",
+                                "value": "0",
+                                "uValue": "0",
+                                "uBlock": {
+                                  "blocktype": "expression",
+                                  "group": "math",
+                                  "id": "095b5b4f-9c9d-4c6d-88c6-e8274b2b2633",
+                                  "help": "product of the two operands",
+                                  "scopeId": "0",
+                                  "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                  "sockets": [
+                                    {
+                                      "name": "",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "0",
+                                      "uBlock": {
+                                        "blocktype": "expression",
+                                        "group": "math",
+                                        "id": "a8bd876e-d02b-4d85-906e-a0aab8daacfb",
+                                        "help": "modulus of a number is the remainder after whole number division",
+                                        "scopeId": "0",
+                                        "scriptId": "a2647515-2f14-4d0f-84b1-a6e288823630",
+                                        "sockets": [
+                                          {
+                                            "name": "",
+                                            "type": "number",
+                                            "value": "0",
+                                            "uValue": "0",
+                                            "uBlock": {
+                                              "blocktype": "expression",
+                                              "group": "arrays",
+                                              "id": "4d6d6252-d1d3-4e26-a5a6-78c87ad7dc12",
+                                              "help": "index of current item in array",
+                                              "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                              "scriptId": "95ed7766-05d2-417f-8061-508cae98bd2a",
+                                              "sockets": [
+                                                {
+                                                  "name": "index"
+                                                }
+                                              ],
+                                              "seqNum": "112",
+                                              "script": "local.index",
+                                              "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                              "type": "number"
+                                            }
+                                          },
+                                          {
+                                            "name": "mod",
+                                            "type": "number",
+                                            "value": "0",
+                                            "uValue": "3"
+                                          }
+                                        ],
+                                        "seqNum": "160",
+                                        "script": "({{1}} % {{2}})",
+                                        "type": "number"
+                                      }
+                                    },
+                                    {
+                                      "name": "*",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "135"
+                                    }
+                                  ],
+                                  "seqNum": "155",
+                                  "script": "({{1}} * {{2}})",
+                                  "type": "number"
+                                }
+                              },
+                              {
+                                "name": "y",
+                                "type": "number",
+                                "value": "0",
+                                "uValue": "0",
+                                "uBlock": {
+                                  "blocktype": "expression",
+                                  "group": "math",
+                                  "id": "26cc19c5-4404-4af5-b8a6-ae1fbb695041",
+                                  "help": "product of the two operands",
+                                  "scopeId": "0",
+                                  "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                  "sockets": [
+                                    {
+                                      "name": "",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "0",
+                                      "uBlock": {
+                                        "blocktype": "expression",
+                                        "group": "math",
+                                        "id": "b45a47c3-20c5-44b4-bd50-40aba6776818",
+                                        "help": "rounds down to nearest whole number",
+                                        "scopeId": "0",
+                                        "scriptId": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+                                        "sockets": [
+                                          {
+                                            "name": "floor of",
+                                            "type": "number",
+                                            "value": "10",
+                                            "uValue": "10",
+                                            "uBlock": {
+                                              "blocktype": "expression",
+                                              "group": "math",
+                                              "id": "062e26d2-0f17-4427-bd32-de86188072b2",
+                                              "help": "quotient of the two operands",
+                                              "scopeId": "0",
+                                              "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+                                              "sockets": [
+                                                {
+                                                  "name": "",
+                                                  "type": "number",
+                                                  "value": "0",
+                                                  "uValue": "0",
+                                                  "uBlock": {
+                                                    "blocktype": "expression",
+                                                    "group": "arrays",
+                                                    "id": "a72dbb62-7dc0-4a07-9787-868acfc45fd0",
+                                                    "help": "index of current item in array",
+                                                    "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                                    "scriptId": "95ed7766-05d2-417f-8061-508cae98bd2a",
+                                                    "sockets": [
+                                                      {
+                                                        "name": "index"
+                                                      }
+                                                    ],
+                                                    "seqNum": "112",
+                                                    "script": "local.index",
+                                                    "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                                    "type": "number"
+                                                  }
+                                                },
+                                                {
+                                                  "name": "/",
+                                                  "type": "number",
+                                                  "value": "0",
+                                                  "uValue": "3"
+                                                }
+                                              ],
+                                              "seqNum": "164",
+                                              "script": "({{1}} / {{2}})",
+                                              "type": "number"
+                                            }
+                                          }
+                                        ],
+                                        "seqNum": "162",
+                                        "script": "Math.floor({{1}})",
+                                        "type": "number"
+                                      }
+                                    },
+                                    {
+                                      "name": "*",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "135"
+                                    }
+                                  ],
+                                  "seqNum": "156",
+                                  "script": "({{1}} * {{2}})",
+                                  "type": "number"
+                                }
+                              }
+                            ],
+                            "seqNum": "152",
+                            "script": "{x: {{1}}, y: {{2}} }",
+                            "type": "point"
+                          }
+                        }
+                      ],
+                      "seqNum": "150",
+                      "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);"
+                    }
+                  ]
+                },
+                {
+                  "blocktype": "context",
+                  "group": "controls",
+                  "id": "5d90aee3-369a-45a1-a0f8-5dada4ac37ad",
+                  "help": "run the following blocks only if the condition is true",
+                  "scopeId": "0",
+                  "scriptId": "20ba3e08-74c0-428e-b612-53545de63ce0",
+                  "sockets": [
+                    {
+                      "name": "if",
+                      "type": "boolean",
+                      "uValue": "true",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "math",
+                        "id": "5ecd3e4f-90ca-4e59-a960-5231c057eb88",
+                        "help": "two operands are equal",
+                        "scopeId": "0",
+                        "scriptId": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+                        "sockets": [
+                          {
+                            "name": "",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "0",
+                            "uBlock": {
+                              "blocktype": "expression",
+                              "group": "arrays",
+                              "id": "ca2c768c-ca0d-4244-bd99-41f834caabc7",
+                              "help": "the current item in the iteration",
+                              "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                              "scriptId": "0f213527-fd8e-472a-a12d-55dc819fbcfa",
+                              "sockets": [
+                                {
+                                  "name": "item"
+                                }
+                              ],
+                              "seqNum": "112",
+                              "script": "local.item",
+                              "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                              "type": "any"
+                            }
+                          },
+                          {
+                            "name": "=",
+                            "type": "number",
+                            "value": "0",
+                            "uValue": "1"
+                          }
+                        ],
+                        "seqNum": "121",
+                        "script": "({{1}} === {{2}})",
+                        "type": "boolean"
+                      }
+                    }
+                  ],
+                  "seqNum": "120",
+                  "script": "if({{1}}){[[1]]}",
+                  "contained": [
+                    {
+                      "blocktype": "step",
+                      "group": "images",
+                      "id": "a15d2b68-cea0-4715-96c8-41c8de653a60",
+                      "help": "draw the HTML &lt;img&gt; into the canvas without resizing",
+                      "scopeId": "0",
+                      "scriptId": "1a6150d8-b3d5-46e3-83e5-a4fe3b00f7db",
+                      "sockets": [
+                        {
+                          "name": "draw image",
+                          "type": "image",
+                          "uValue": "",
+                          "uBlock": {
+                            "blocktype": "asset",
+                            "group": "images",
+                            "id": "809a5a92-206a-44d9-97f8-94f83f0b0f9f",
+                            "help": "",
+                            "scopeId": "74971199-3ed0-4e74-a9a6-af24a21c57d7",
+                            "scriptId": "d27b6706-799e-4f5a-937d-fae43c50b7e6",
+                            "sockets": [
+                              {
+                                "name": "image ##",
+                                "uName": "imgX"
+                              }
+                            ],
+                            "seqNum": "146",
+                            "script": "runtime.images[\"##\"]",
+                            "localSource": "1921b509-0ce3-49de-b4d0-a20f0f419684",
+                            "type": "image"
+                          }
+                        },
+                        {
+                          "name": "at point",
+                          "type": "point",
+                          "uValue": "",
+                          "uBlock": {
+                            "blocktype": "expression",
+                            "group": "points",
+                            "id": "50aabd22-53b7-43bd-be8c-00a2473e2d4b",
+                            "help": "create a new point",
+                            "scopeId": "0",
+                            "scriptId": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+                            "sockets": [
+                              {
+                                "name": "point at x",
+                                "type": "number",
+                                "value": "0",
+                                "uValue": "0",
+                                "uBlock": {
+                                  "blocktype": "expression",
+                                  "group": "math",
+                                  "id": "fe910f47-f85e-47e2-9231-680d3c7e022a",
+                                  "help": "product of the two operands",
+                                  "scopeId": "0",
+                                  "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                  "sockets": [
+                                    {
+                                      "name": "",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "0",
+                                      "uBlock": {
+                                        "blocktype": "expression",
+                                        "group": "math",
+                                        "id": "8216d94e-adb4-49da-b9ef-5636324372bf",
+                                        "help": "modulus of a number is the remainder after whole number division",
+                                        "scopeId": "0",
+                                        "scriptId": "a2647515-2f14-4d0f-84b1-a6e288823630",
+                                        "sockets": [
+                                          {
+                                            "name": "",
+                                            "type": "number",
+                                            "value": "0",
+                                            "uValue": "0",
+                                            "uBlock": {
+                                              "blocktype": "expression",
+                                              "group": "arrays",
+                                              "id": "6602bdbe-05b2-4657-9b7f-b993435edc02",
+                                              "help": "index of current item in array",
+                                              "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                              "scriptId": "95ed7766-05d2-417f-8061-508cae98bd2a",
+                                              "sockets": [
+                                                {
+                                                  "name": "index"
+                                                }
+                                              ],
+                                              "seqNum": "112",
+                                              "script": "local.index",
+                                              "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                              "type": "number"
+                                            }
+                                          },
+                                          {
+                                            "name": "mod",
+                                            "type": "number",
+                                            "value": "0",
+                                            "uValue": "3"
+                                          }
+                                        ],
+                                        "seqNum": "161",
+                                        "script": "({{1}} % {{2}})",
+                                        "type": "number"
+                                      }
+                                    },
+                                    {
+                                      "name": "*",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "135"
+                                    }
+                                  ],
+                                  "seqNum": "154",
+                                  "script": "({{1}} * {{2}})",
+                                  "type": "number"
+                                }
+                              },
+                              {
+                                "name": "y",
+                                "type": "number",
+                                "value": "0",
+                                "uValue": "0",
+                                "uBlock": {
+                                  "blocktype": "expression",
+                                  "group": "math",
+                                  "id": "846c8575-708d-4d96-81ac-cc68d73965b1",
+                                  "help": "product of the two operands",
+                                  "scopeId": "0",
+                                  "scriptId": "bd3879e6-e440-49cb-b10b-52d744846341",
+                                  "sockets": [
+                                    {
+                                      "name": "",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "0",
+                                      "uBlock": {
+                                        "blocktype": "expression",
+                                        "group": "math",
+                                        "id": "88bc2ced-28cc-4de0-9ccf-d17f5ad3f2d6",
+                                        "help": "rounds down to nearest whole number",
+                                        "scopeId": "0",
+                                        "scriptId": "46bcac2d-eb76-417c-81af-cb894a54a86c",
+                                        "sockets": [
+                                          {
+                                            "name": "floor of",
+                                            "type": "number",
+                                            "value": "10",
+                                            "uValue": "10",
+                                            "uBlock": {
+                                              "blocktype": "expression",
+                                              "group": "math",
+                                              "id": "f72fd630-55fa-4b4a-baff-55cd7e9748ec",
+                                              "help": "quotient of the two operands",
+                                              "scopeId": "0",
+                                              "scriptId": "7f51bf70-a48d-4fda-ab61-442a0766abc4",
+                                              "sockets": [
+                                                {
+                                                  "name": "",
+                                                  "type": "number",
+                                                  "value": "0",
+                                                  "uValue": "0",
+                                                  "uBlock": {
+                                                    "blocktype": "expression",
+                                                    "group": "arrays",
+                                                    "id": "acb485af-6037-4b52-aa36-0d21d7691455",
+                                                    "help": "index of current item in array",
+                                                    "scopeId": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                                    "scriptId": "95ed7766-05d2-417f-8061-508cae98bd2a",
+                                                    "sockets": [
+                                                      {
+                                                        "name": "index"
+                                                      }
+                                                    ],
+                                                    "seqNum": "112",
+                                                    "script": "local.index",
+                                                    "localSource": "44eb9724-ab8c-4bde-bb05-0b83b8267958",
+                                                    "type": "number"
+                                                  }
+                                                },
+                                                {
+                                                  "name": "/",
+                                                  "type": "number",
+                                                  "value": "0",
+                                                  "uValue": "3"
+                                                }
+                                              ],
+                                              "seqNum": "166",
+                                              "script": "({{1}} / {{2}})",
+                                              "type": "number"
+                                            }
+                                          }
+                                        ],
+                                        "seqNum": "163",
+                                        "script": "Math.floor({{1}})",
+                                        "type": "number"
+                                      }
+                                    },
+                                    {
+                                      "name": "*",
+                                      "type": "number",
+                                      "value": "0",
+                                      "uValue": "135"
+                                    }
+                                  ],
+                                  "seqNum": "157",
+                                  "script": "({{1}} * {{2}})",
+                                  "type": "number"
+                                }
+                              }
+                            ],
+                            "seqNum": "153",
+                            "script": "{x: {{1}}, y: {{2}} }",
+                            "type": "point"
+                          }
+                        }
+                      ],
+                      "seqNum": "151",
+                      "script": "var img = {{1}}, point={{2}}; local.ctx.drawImage(img,point.x,point.y);"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "blocktype": "step",
+          "group": "controls",
+          "id": "9f43f923-3a26-4321-acea-8baa075103d9",
+          "help": "send this message to any listeners",
+          "scopeId": "0",
+          "scriptId": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
+          "sockets": [
+            {
+              "name": "broadcast",
+              "type": "string",
+              "value": "ack",
+              "uValue": "render"
+            },
+            {
+              "name": "message"
+            }
+          ],
+          "seqNum": "103",
+          "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+        },
+        {
+          "blocktype": "step",
+          "group": "strings",
+          "id": "18782721-12ba-4e65-98b5-58c7871ee886",
+          "help": "this is a comment and will not be run by the program",
+          "scopeId": "0",
+          "scriptId": "48bb8639-0092-4384-b5a0-3a772699dea9",
+          "sockets": [
+            {
+              "name": "comment",
+              "type": "any",
+              "uValue": "Handle keyboard input"
+            }
+          ],
+          "seqNum": "19",
+          "script": "/* {{1}}; */"
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "0e33c912-f76f-445e-ba24-f8660c85961b",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "q"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "20",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "4dc4e4b2-d5eb-4d5d-a779-7a692d1ffdea",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "0"
+                }
+              ],
+              "seqNum": "29",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "203becc8-5550-4c9b-8b1f-51a6ce984ced",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "w"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "21",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "a6e62a08-4530-4588-b38c-551835cac211",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "1"
+                }
+              ],
+              "seqNum": "30",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "add36c82-74b6-47be-9587-8e6110c03fc6",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "e"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "22",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "6def5d04-eb8d-49f4-a763-fcc413f9c832",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "2"
+                }
+              ],
+              "seqNum": "32",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "f8e81f87-dae8-4bfd-9974-499d9911e2e0",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "a"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "23",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "e7cad6ef-5755-4f18-a74c-65a27c777477",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "3"
+                }
+              ],
+              "seqNum": "33",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "d5011280-bf1c-4953-bb6c-abd5ab5c393b",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "s"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "24",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "0b4ae8c1-6c2f-412d-8b06-c7f23516ebde",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "4"
+                }
+              ],
+              "seqNum": "34",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "783586ed-8eaa-4de2-ae53-ed2fc4d4e174",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "d"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "25",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "2d3f149d-48fd-4b06-a141-c95aff2b1e16",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "5"
+                }
+              ],
+              "seqNum": "35",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "6d546888-21bc-44ee-be27-e3fac886ee7b",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "z"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "26",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "eeab0cf6-2b1f-432c-9552-dba3c111c874",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "6"
+                }
+              ],
+              "seqNum": "36",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "7f6f8b9d-f367-4722-a3b1-78c796adc140",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "x"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "27",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "b3a6bfb6-b639-4b7c-b674-c74acce2443c",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "7"
+                }
+              ],
+              "seqNum": "37",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "80bcd0a0-9c29-41ed-9b43-17d910145316",
+          "help": "this trigger will run the attached blocks every time this key is pressed",
+          "scopeId": "0",
+          "scriptId": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
+          "sockets": [
+            {
+              "name": "when",
+              "type": "string",
+              "value": "choice",
+              "options": "keys",
+              "uValue": "c"
+            },
+            {
+              "name": "key pressed"
+            }
+          ],
+          "seqNum": "28",
+          "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "controls",
+              "id": "4f704fb1-dba4-43d2-bfb9-e49ef2de519c",
+              "help": "send this message with an object argument to any listeners",
+              "scopeId": "0",
+              "scriptId": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
+              "sockets": [
+                {
+                  "name": "broadcast",
+                  "type": "string",
+                  "value": "ping",
+                  "uValue": "update"
+                },
+                {
+                  "name": "message with data",
+                  "type": "any",
+                  "uValue": "8"
+                }
+              ],
+              "seqNum": "38",
+              "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

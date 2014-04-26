@@ -1,0 +1,832 @@
+{
+    "title": "",
+    "description": "",
+    "date": 1394317350585,
+    "waterbearVersion": "2.0",
+    "blocks": [
+        {
+            "id": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+            "scopeId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+            "scriptId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+            "sockets": [
+                {
+                    "name": "confetti2"
+                }
+            ],
+            "blocktype": "context",
+            "group": "scripts_workspace",
+            "seqNum": "1",
+            "script": "[[1]]",
+            "contained": [
+                {
+                    "id": "d3cfa8dc-a9b5-4ce4-a0d9-27366019845c",
+                    "scopeId": "0",
+                    "scriptId": "e6a297e9-1255-4701-91d8-80548489ee9a",
+                    "sockets": [
+                        {
+                            "name": "new array##"
+                        }
+                    ],
+                    "seqNum": "575",
+                    "script": "local.array## = [];",
+                    "locals": [
+                        {
+                            "blocktype": "expression",
+                            "sockets": [
+                                {
+                                    "name": "array##"
+                                }
+                            ],
+                            "script": "local.array##",
+                            "type": "array",
+                            "isTemplateBlock": true,
+                            "isLocal": true,
+                            "group": "arrays",
+                            "seqNum": "575",
+                            "scopeId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+                            "scriptId": "a00e02ae-baf8-4118-9265-00ef9bd4d472",
+                            "id": "a00e02ae-baf8-4118-9265-00ef9bd4d472",
+                            "localSource": "d3cfa8dc-a9b5-4ce4-a0d9-27366019845c"
+                        }
+                    ]
+                },
+                {
+                    "id": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                    "scopeId": "0",
+                    "scriptId": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+                    "sockets": [
+                        {
+                            "name": "each frame"
+                        }
+                    ],
+                    "seqNum": "2",
+                    "script": "(function(){local.count##=0;requestAnimationFrame(function eachFrame(){local.count##++;[[1]];requestAnimationFrame(eachFrame);})})();",
+                    "locals": [
+                        {
+                            "blocktype": "expression",
+                            "sockets": [
+                                {
+                                    "name": "count##"
+                                }
+                            ],
+                            "script": "local.count##",
+                            "type": "number",
+                            "isTemplateBlock": true,
+                            "isLocal": true,
+                            "group": "controls",
+                            "seqNum": "2",
+                            "scopeId": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                            "scriptId": "62b55474-bce0-4459-97b2-b19f6fb79a73",
+                            "id": "62b55474-bce0-4459-97b2-b19f6fb79a73",
+                            "localSource": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c"
+                        }
+                    ],
+                    "contained": [
+                        {
+                            "id": "48a5da3b-3078-403c-ad27-a861a5d3b279",
+                            "scopeId": "0",
+                            "scriptId": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+                            "sockets": [
+                                {
+                                    "name": "variable variable##",
+                                    "type": "any",
+                                    "uBlock": {
+                                        "id": "eafa6bd0-82a0-46c9-9721-844b70650957",
+                                        "scopeId": "0",
+                                        "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                        "sockets": [
+                                            {
+                                                "name": "pick random integer from",
+                                                "type": "number",
+                                                "value": "1",
+                                                "uValue": "10"
+                                            },
+                                            {
+                                                "name": "to",
+                                                "type": "number",
+                                                "value": "10",
+                                                "uValue": "20"
+                                            }
+                                        ],
+                                        "seqNum": "562",
+                                        "script": "randint({{1}}, {{2}})"
+                                    }
+                                }
+                            ],
+                            "seqNum": "564",
+                            "script": "local.variable## = {{1}};",
+                            "locals": [
+                                {
+                                    "blocktype": "expression",
+                                    "script": "local.variable##",
+                                    "type": "any",
+                                    "sockets": [
+                                        {
+                                            "name": "variable##"
+                                        }
+                                    ],
+                                    "isTemplateBlock": true,
+                                    "isLocal": true,
+                                    "group": "controls",
+                                    "seqNum": "564",
+                                    "scopeId": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                                    "scriptId": "2644b8ff-e43b-47a9-8bfe-71908eca045a",
+                                    "id": "2644b8ff-e43b-47a9-8bfe-71908eca045a",
+                                    "localSource": "48a5da3b-3078-403c-ad27-a861a5d3b279"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "1fcad91e-27fa-4bf6-b7be-f1feae109af4",
+                            "scopeId": "0",
+                            "scriptId": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
+                            "sockets": [
+                                {
+                                    "name": "variable variable##",
+                                    "type": "any",
+                                    "uValue": "0"
+                                }
+                            ],
+                            "seqNum": "563",
+                            "script": "local.variable## = {{1}};",
+                            "locals": [
+                                {
+                                    "blocktype": "expression",
+                                    "script": "local.variable##",
+                                    "type": "any",
+                                    "sockets": [
+                                        {
+                                            "name": "variable##"
+                                        }
+                                    ],
+                                    "isTemplateBlock": true,
+                                    "isLocal": true,
+                                    "group": "controls",
+                                    "seqNum": "563",
+                                    "scopeId": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                                    "scriptId": "518428b3-b79f-4b4d-87be-ec65a0bbfb91",
+                                    "id": "518428b3-b79f-4b4d-87be-ec65a0bbfb91",
+                                    "localSource": "1fcad91e-27fa-4bf6-b7be-f1feae109af4"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "cb5cfdac-ca04-44b3-9ac8-a55cf338aac9",
+                            "scopeId": "0",
+                            "scriptId": "5a09e58a-4f45-4fa8-af98-84de735d0fc8",
+                            "sockets": [
+                                {
+                                    "name": "repeat until",
+                                    "type": "boolean",
+                                    "uBlock": {
+                                        "id": "a5204e06-9927-44d5-ba60-ca34d3de5af5",
+                                        "scopeId": "0",
+                                        "scriptId": "e3a5ea20-3ca9-42cf-ac02-77ff06836a7e",
+                                        "sockets": [
+                                            {
+                                                "name": "",
+                                                "type": "number",
+                                                "uBlock": {
+                                                    "id": "e7506005-dd34-4f42-9ca9-31fb5e849c78",
+                                                    "scopeId": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                                                    "scriptId": "518428b3-b79f-4b4d-87be-ec65a0bbfb91",
+                                                    "sockets": [
+                                                        {
+                                                            "name": "variable##"
+                                                        }
+                                                    ],
+                                                    "seqNum": "563",
+                                                    "script": "local.variable##",
+                                                    "localSource": "1fcad91e-27fa-4bf6-b7be-f1feae109af4"
+                                                }
+                                            },
+                                            {
+                                                "name": "=",
+                                                "type": "number",
+                                                "uBlock": {
+                                                    "id": "3163501b-4613-4036-8127-10bf78c43d6c",
+                                                    "scopeId": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                                                    "scriptId": "2644b8ff-e43b-47a9-8bfe-71908eca045a",
+                                                    "sockets": [
+                                                        {
+                                                            "name": "variable##"
+                                                        }
+                                                    ],
+                                                    "seqNum": "564",
+                                                    "script": "local.variable##",
+                                                    "localSource": "48a5da3b-3078-403c-ad27-a861a5d3b279"
+                                                }
+                                            }
+                                        ],
+                                        "seqNum": "567",
+                                        "script": "({{1}} === {{2}})"
+                                    }
+                                }
+                            ],
+                            "seqNum": "565",
+                            "script": "while(!({{1}})){[[1]]}",
+                            "contained": [
+                                {
+                                    "id": "404e3cbe-fdb6-4849-88ce-61daf2597a72",
+                                    "scopeId": "0",
+                                    "scriptId": "eb889480-c381-4cfa-a6ee-7c6928c08817",
+                                    "sockets": [
+                                        {
+                                            "name": "rectangle sprite##",
+                                            "type": "size",
+                                            "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
+                                            "uBlock": {
+                                                "id": "c647fc3e-667a-4c66-a578-efaaeb43d2e0",
+                                                "scopeId": "0",
+                                                "scriptId": "d8e71067-afc2-46be-8bb5-3527b36474d7",
+                                                "sockets": [
+                                                    {
+                                                        "name": "size with width",
+                                                        "type": "number",
+                                                        "value": "32",
+                                                        "uValue": "10"
+                                                    },
+                                                    {
+                                                        "name": "width units",
+                                                        "type": "string",
+                                                        "value": "choice",
+                                                        "options": "relativeUnit",
+                                                        "uValue": "px"
+                                                    },
+                                                    {
+                                                        "name": "height",
+                                                        "type": "number",
+                                                        "value": "32",
+                                                        "uValue": "10"
+                                                    },
+                                                    {
+                                                        "name": "height units",
+                                                        "type": "string",
+                                                        "value": "choice",
+                                                        "options": "relativeUnit",
+                                                        "uValue": "px"
+                                                    }
+                                                ],
+                                                "seqNum": "569",
+                                                "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}"
+                                            }
+                                        },
+                                        {
+                                            "name": "big at",
+                                            "type": "point",
+                                            "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+                                            "uBlock": {
+                                                "id": "7dfec53a-059e-4304-a130-ae9393b66de9",
+                                                "scopeId": "0",
+                                                "scriptId": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+                                                "sockets": [
+                                                    {
+                                                        "name": "point at x",
+                                                        "type": "number",
+                                                        "uBlock": {
+                                                            "id": "e830ab0d-a0b4-491e-af1d-52af03254e69",
+                                                            "scopeId": "0",
+                                                            "scriptId": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
+                                                            "sockets": [
+                                                                {
+                                                                    "name": "",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "0e064b06-7ee3-4b3b-8ef1-91249ffdddeb",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "2504cc6a-0053-4acc-8594-a00fa8a078cb",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "mouse x"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "573",
+                                                                        "script": "runtime.mouse_x"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "+",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "2c33a337-58e7-4dd7-8083-5da8c53d420b",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "pick random integer from",
+                                                                                "type": "number",
+                                                                                "value": "1",
+                                                                                "uValue": "-20"
+                                                                            },
+                                                                            {
+                                                                                "name": "to",
+                                                                                "type": "number",
+                                                                                "value": "10",
+                                                                                "uValue": "20"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "581",
+                                                                        "script": "randint({{1}}, {{2}})"
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "seqNum": "579",
+                                                            "script": "({{1}} + {{2}})"
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "y",
+                                                        "type": "number",
+                                                        "uBlock": {
+                                                            "id": "9cbc33b8-09f0-46b2-921b-1d56d4f6e7ac",
+                                                            "scopeId": "0",
+                                                            "scriptId": "406d4e12-7dbd-4f94-9b0e-e2a66d960b3c",
+                                                            "sockets": [
+                                                                {
+                                                                    "name": "",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "5911149e-b5be-4ac3-a46f-9cd98fce5d57",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "80600e66-f99e-4270-8c32-a2bb8d1dafe0",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "mouse y"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "574",
+                                                                        "script": "runtime.mouse_y"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "name": "+",
+                                                                    "type": "number",
+                                                                    "uBlock": {
+                                                                        "id": "cc35c77a-468f-4ceb-995e-d46afeb9b4e3",
+                                                                        "scopeId": "0",
+                                                                        "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "pick random integer from",
+                                                                                "type": "number",
+                                                                                "value": "1",
+                                                                                "uValue": "-20"
+                                                                            },
+                                                                            {
+                                                                                "name": "to",
+                                                                                "type": "number",
+                                                                                "value": "10",
+                                                                                "uValue": "20"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "582",
+                                                                        "script": "randint({{1}}, {{2}})"
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "seqNum": "580",
+                                                            "script": "({{1}} + {{2}})"
+                                                        }
+                                                    }
+                                                ],
+                                                "seqNum": "572",
+                                                "script": "{x: {{1}}, y: {{2}} }"
+                                            }
+                                        },
+                                        {
+                                            "name": "with color",
+                                            "type": "color",
+                                            "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                                            "uBlock": {
+                                                "id": "149b46c6-5a81-4566-9148-0e8491836741",
+                                                "scopeId": "0",
+                                                "scriptId": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                                                "sockets": [
+                                                    {
+                                                        "name": "random color"
+                                                    }
+                                                ],
+                                                "seqNum": "571",
+                                                "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\""
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "568",
+                                    "script": "local.sprite## = createRectSprite({{1}}, {{2}}, {{3}});",
+                                    "locals": [
+                                        {
+                                            "blocktype": "expression",
+                                            "sockets": [
+                                                {
+                                                    "name": "sprite##"
+                                                }
+                                            ],
+                                            "script": "local.sprite##",
+                                            "type": "sprite",
+                                            "isTemplateBlock": true,
+                                            "isLocal": true,
+                                            "group": "sprites",
+                                            "seqNum": "568",
+                                            "scopeId": "cb5cfdac-ca04-44b3-9ac8-a55cf338aac9",
+                                            "scriptId": "a5643a4d-6b65-43a6-98f1-a3cbd9d46ae6",
+                                            "id": "a5643a4d-6b65-43a6-98f1-a3cbd9d46ae6",
+                                            "localSource": "404e3cbe-fdb6-4849-88ce-61daf2597a72"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "b59a4ac8-2ed7-42d3-a799-19fe07a6d1c0",
+                                    "scopeId": "0",
+                                    "scriptId": "3fab2b88-430a-401e-88b2-2703d614780a",
+                                    "sockets": [
+                                        {
+                                            "name": "array",
+                                            "type": "array",
+                                            "uBlock": {
+                                                "id": "6c9d2c38-d01b-44bc-9bd6-e4d234648703",
+                                                "scopeId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+                                                "scriptId": "a00e02ae-baf8-4118-9265-00ef9bd4d472",
+                                                "sockets": [
+                                                    {
+                                                        "name": "array##"
+                                                    }
+                                                ],
+                                                "seqNum": "575",
+                                                "script": "local.array##",
+                                                "localSource": "d3cfa8dc-a9b5-4ce4-a0d9-27366019845c"
+                                            }
+                                        },
+                                        {
+                                            "name": "append",
+                                            "type": "any",
+                                            "uBlock": {
+                                                "id": "de294b68-70db-49a1-8245-39aa51fba665",
+                                                "scopeId": "cb5cfdac-ca04-44b3-9ac8-a55cf338aac9",
+                                                "scriptId": "a5643a4d-6b65-43a6-98f1-a3cbd9d46ae6",
+                                                "sockets": [
+                                                    {
+                                                        "name": "sprite##"
+                                                    }
+                                                ],
+                                                "seqNum": "568",
+                                                "script": "local.sprite##",
+                                                "localSource": "404e3cbe-fdb6-4849-88ce-61daf2597a72"
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "576",
+                                    "script": "{{1}}.push({{2}});"
+                                },
+                                {
+                                    "id": "cbdd7c2c-3e84-4b51-ab90-60509bf5b55d",
+                                    "scopeId": "0",
+                                    "scriptId": "9AED48C9-A90B-49FB-9C1A-FD632F0388F5",
+                                    "sockets": [
+                                        {
+                                            "name": "increment variable",
+                                            "type": "any",
+                                            "uBlock": {
+                                                "id": "94aaf098-eab6-4381-9057-c95f542cd1d0",
+                                                "scopeId": "dcf040b0-97eb-4abe-b8ff-3b7c6fcec98c",
+                                                "scriptId": "518428b3-b79f-4b4d-87be-ec65a0bbfb91",
+                                                "sockets": [
+                                                    {
+                                                        "name": "variable##"
+                                                    }
+                                                ],
+                                                "seqNum": "563",
+                                                "script": "local.variable##",
+                                                "localSource": "1fcad91e-27fa-4bf6-b7be-f1feae109af4"
+                                            }
+                                        },
+                                        {
+                                            "name": "by",
+                                            "type": "any",
+                                            "value": "1",
+                                            "uValue": "1"
+                                        }
+                                    ],
+                                    "seqNum": "566",
+                                    "script": "{{1}} += {{2}};"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "fdbd6757-2606-413c-a2bc-1fb7988b8d42",
+                            "scopeId": "0",
+                            "scriptId": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
+                            "sockets": [
+                                {
+                                    "name": "clear stage to color",
+                                    "type": "color",
+                                    "block": "13236aef-cccd-42b3-a041-e26528174323",
+                                    "uValue": "#000000"
+                                }
+                            ],
+                            "seqNum": "9",
+                            "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
+                        },
+                        {
+                            "id": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                            "scopeId": "0",
+                            "scriptId": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
+                            "sockets": [
+                                {
+                                    "name": "array",
+                                    "type": "array",
+                                    "suffix": "for each",
+                                    "uBlock": {
+                                        "id": "c0419f31-ef7d-4800-b19c-c8337f53457d",
+                                        "scopeId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+                                        "scriptId": "a00e02ae-baf8-4118-9265-00ef9bd4d472",
+                                        "sockets": [
+                                            {
+                                                "name": "array##"
+                                            }
+                                        ],
+                                        "seqNum": "575",
+                                        "script": "local.array##",
+                                        "localSource": "d3cfa8dc-a9b5-4ce4-a0d9-27366019845c"
+                                    }
+                                }
+                            ],
+                            "seqNum": "577",
+                            "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
+                            "locals": [
+                                {
+                                    "blocktype": "expression",
+                                    "sockets": [
+                                        {
+                                            "name": "index"
+                                        }
+                                    ],
+                                    "script": "local.index",
+                                    "help": "index of current item in array",
+                                    "type": "number",
+                                    "isTemplateBlock": true,
+                                    "isLocal": true,
+                                    "group": "arrays",
+                                    "seqNum": "577",
+                                    "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                    "scriptId": "fa4174ca-79fa-4127-a79f-482d2fcf6ca4",
+                                    "id": "fa4174ca-79fa-4127-a79f-482d2fcf6ca4",
+                                    "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                },
+                                {
+                                    "blocktype": "expression",
+                                    "sockets": [
+                                        {
+                                            "name": "item"
+                                        }
+                                    ],
+                                    "script": "local.item",
+                                    "help": "the current item in the iteration",
+                                    "type": "any",
+                                    "isTemplateBlock": true,
+                                    "isLocal": true,
+                                    "group": "arrays",
+                                    "seqNum": "577",
+                                    "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                    "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                    "id": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                    "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                }
+                            ],
+                            "contained": [
+                                {
+                                    "id": "a187405b-89e0-43f4-a553-34f52dccda32",
+                                    "scopeId": "0",
+                                    "scriptId": "d1521a30-c7bd-4f42-b21d-6330a2a73631",
+                                    "sockets": [
+                                        {
+                                            "name": "move",
+                                            "type": "sprite",
+                                            "uBlock": {
+                                                "id": "c60ccacc-5c01-4569-bdb2-2e9f8b9180f6",
+                                                "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                                "sockets": [
+                                                    {
+                                                        "name": "item"
+                                                    }
+                                                ],
+                                                "seqNum": "577",
+                                                "script": "local.item",
+                                                "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                            }
+                                        },
+                                        {
+                                            "name": "by x",
+                                            "type": "number",
+                                            "uBlock": {
+                                                "id": "7cca2df7-5423-442c-8532-b6629dd01b5d",
+                                                "scopeId": "0",
+                                                "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                "sockets": [
+                                                    {
+                                                        "name": "pick random integer from",
+                                                        "type": "number",
+                                                        "value": "1",
+                                                        "uValue": "-1"
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "number",
+                                                        "value": "10",
+                                                        "uValue": "1"
+                                                    }
+                                                ],
+                                                "seqNum": "588",
+                                                "script": "randint({{1}}, {{2}})"
+                                            }
+                                        },
+                                        {
+                                            "name": "y",
+                                            "type": "number",
+                                            "uBlock": {
+                                                "id": "d94c1175-07f9-414f-94a4-308e5d990a1d",
+                                                "scopeId": "0",
+                                                "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                                                "sockets": [
+                                                    {
+                                                        "name": "pick random integer from",
+                                                        "type": "number",
+                                                        "value": "1",
+                                                        "uValue": "1"
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "number",
+                                                        "value": "10",
+                                                        "uValue": "4"
+                                                    }
+                                                ],
+                                                "seqNum": "585",
+                                                "script": "randint({{1}}, {{2}})"
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "584",
+                                    "script": "{{1}}.moveRelative({{2}},{{3}});"
+                                },
+                                {
+                                    "id": "5b70069f-a988-4430-a99d-4eb51f3f57bc",
+                                    "scopeId": "0",
+                                    "scriptId": "20ba3e08-74c0-428e-b612-53545de63ce0",
+                                    "sockets": [
+                                        {
+                                            "name": "if",
+                                            "type": "boolean",
+                                            "uBlock": {
+                                                "id": "9717a8ff-e12e-4b8c-b4df-bc42e547cfbc",
+                                                "scopeId": "0",
+                                                "scriptId": "d753757b-a7d4-4d84-99f1-cb9b8c7e62da",
+                                                "sockets": [
+                                                    {
+                                                        "name": "",
+                                                        "type": "number",
+                                                        "uBlock": {
+                                                            "id": "c3fa50d5-6880-4817-bb65-876b747a8ee8",
+                                                            "scopeId": "0",
+                                                            "scriptId": "6f9031c6-579b-4e24-b5d1-f648aab6e0aa",
+                                                            "sockets": [
+                                                                {
+                                                                    "name": "stage height"
+                                                                }
+                                                            ],
+                                                            "seqNum": "596",
+                                                            "script": "runtime.stage_height"
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "<",
+                                                        "type": "number",
+                                                        "uBlock": {
+                                                            "id": "a17082fb-cc96-4c83-ab43-b776b25f6c96",
+                                                            "scopeId": "0",
+                                                            "scriptId": "8c73e3fd-7c53-4c92-be1d-286db5357cbb",
+                                                            "sockets": [
+                                                                {
+                                                                    "name": "sprite",
+                                                                    "type": "sprite",
+                                                                    "suffix": "bottom",
+                                                                    "uBlock": {
+                                                                        "id": "f2f063e7-5821-41fb-816e-6d54cc7c2b95",
+                                                                        "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                                        "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                                                        "sockets": [
+                                                                            {
+                                                                                "name": "item"
+                                                                            }
+                                                                        ],
+                                                                        "seqNum": "577",
+                                                                        "script": "local.item",
+                                                                        "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "seqNum": "595",
+                                                            "script": "({{1}}.y + {{1}}.h)"
+                                                        }
+                                                    }
+                                                ],
+                                                "seqNum": "591",
+                                                "script": "({{1}} < {{2}})"
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "589",
+                                    "script": "if({{1}}){[[1]]}",
+                                    "contained": [
+                                        {
+                                            "id": "3778b6eb-3440-4d4f-964c-16c2fe952be3",
+                                            "scopeId": "0",
+                                            "scriptId": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
+                                            "sockets": [
+                                                {
+                                                    "name": "draw sprite",
+                                                    "type": "sprite",
+                                                    "uBlock": {
+                                                        "id": "3b43a40e-2eb4-4dc8-94f3-8ac4609e8ee8",
+                                                        "scopeId": "0",
+                                                        "scriptId": "f4870f0f-1dbb-4bc7-b8e3-3a00af613689",
+                                                        "sockets": [
+                                                            {
+                                                                "name": "array",
+                                                                "type": "array",
+                                                                "uBlock": {
+                                                                    "id": "a160d696-8413-45a3-b4ea-4fac38856b07",
+                                                                    "scopeId": "452fa4bf-077e-4e6a-9083-cc64688a5a0c",
+                                                                    "scriptId": "a00e02ae-baf8-4118-9265-00ef9bd4d472",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "array##"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "575",
+                                                                    "script": "local.array##",
+                                                                    "localSource": "d3cfa8dc-a9b5-4ce4-a0d9-27366019845c"
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "remove item",
+                                                                "type": "number",
+                                                                "uBlock": {
+                                                                    "id": "16fe7152-1b23-4da5-a676-5bdb32be140b",
+                                                                    "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                                    "scriptId": "fa4174ca-79fa-4127-a79f-482d2fcf6ca4",
+                                                                    "sockets": [
+                                                                        {
+                                                                            "name": "index"
+                                                                        }
+                                                                    ],
+                                                                    "seqNum": "577",
+                                                                    "script": "local.index",
+                                                                    "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "seqNum": "598",
+                                                        "script": "{{1}}.splice({{2}}, 1)[0]"
+                                                    }
+                                                }
+                                            ],
+                                            "seqNum": "578",
+                                            "script": "{{1}}.draw(local.ctx);"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "3c2c272b-1138-4a17-8195-be14ecd88354",
+                                    "scopeId": "0",
+                                    "scriptId": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
+                                    "sockets": [
+                                        {
+                                            "name": "draw sprite",
+                                            "type": "sprite",
+                                            "uBlock": {
+                                                "id": "140181f5-04bf-4bbd-89b5-6dbb62ff30f3",
+                                                "scopeId": "d10016a9-e1f8-4546-beda-b79af3da7785",
+                                                "scriptId": "8d46f88a-306d-416c-bb5c-81ef2e7cbd1a",
+                                                "sockets": [
+                                                    {
+                                                        "name": "item"
+                                                    }
+                                                ],
+                                                "seqNum": "577",
+                                                "script": "local.item",
+                                                "localSource": "d10016a9-e1f8-4546-beda-b79af3da7785"
+                                            }
+                                        }
+                                    ],
+                                    "seqNum": "599",
+                                    "script": "{{1}}.draw(local.ctx);"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

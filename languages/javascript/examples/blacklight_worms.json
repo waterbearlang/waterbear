@@ -1,0 +1,726 @@
+{
+  "title": "Blacklight Worms",
+  "description": "",
+  "date": 1379856182640,
+  "waterbearVersion": "2.0",
+  "blocks": [
+    {
+      "blocktype": "context",
+      "group": "scripts_workspace",
+      "id": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
+      "help": "Drag your script blocks here",
+      "scopeId": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
+      "scriptId": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
+      "sockets": [
+        {
+          "uName": "Workspace"
+        }
+      ],
+      "seqNum": "203",
+      "script": "[[1]]",
+      "contained": [
+        {
+          "blocktype": "step",
+          "group": "arrays",
+          "id": "f555b535-7607-4c61-a628-ef5a9dfb73d5",
+          "help": "Create an empty array",
+          "scopeId": "0",
+          "scriptId": "e6a297e9-1255-4701-91d8-80548489ee9a",
+          "sockets": [
+            {
+              "name": "new array##",
+              "uName": "new array 205"
+            }
+          ],
+          "seqNum": "205",
+          "script": "local.array## = [];",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "array##"
+                }
+              ],
+              "script": "local.array##",
+              "type": "array",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "arrays",
+              "seqNum": "205",
+              "scopeId": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
+              "scriptId": "edc7f21c-1af1-4d1b-96ea-b3d9a16babb4",
+              "id": "edc7f21c-1af1-4d1b-96ea-b3d9a16babb4",
+              "localSource": "f555b535-7607-4c61-a628-ef5a9dfb73d5"
+            }
+          ]
+        },
+        {
+          "blocktype": "context",
+          "group": "controls",
+          "id": "2e932a5d-ea0a-4796-a1d0-965d530799e5",
+          "help": "repeat the contained blocks so many times",
+          "scopeId": "0",
+          "scriptId": "aa146082-9a9c-4ae7-a409-a89e84dc113a",
+          "sockets": [
+            {
+              "name": "repeat",
+              "type": "number",
+              "value": "10",
+              "uValue": "30"
+            }
+          ],
+          "seqNum": "208",
+          "script": "range({{1}}).forEach(function(idx, item){local.count## = idx;[[1]]});",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "count##"
+                }
+              ],
+              "script": "local.count##",
+              "type": "number",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "controls",
+              "seqNum": "208",
+              "scopeId": "2e932a5d-ea0a-4796-a1d0-965d530799e5",
+              "scriptId": "82df3eec-8ba8-42d5-b35f-ea9b6fcffb3d",
+              "id": "82df3eec-8ba8-42d5-b35f-ea9b6fcffb3d",
+              "localSource": "2e932a5d-ea0a-4796-a1d0-965d530799e5"
+            }
+          ],
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "sprites",
+              "id": "5862c395-77d5-4535-865a-da2422ceee26",
+              "help": "create a simple rectangle sprite",
+              "scopeId": "0",
+              "scriptId": "eb889480-c381-4cfa-a6ee-7c6928c08817",
+              "sockets": [
+                {
+                  "name": "rectangle sprite##",
+                  "type": "size",
+                  "block": "d8e71067-afc2-46be-8bb5-3527b36474d7",
+                  "uName": "rectangle sprite 210",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "sizes",
+                    "id": "6d1590f8-1885-4996-9e0e-ddf3c65dd91a",
+                    "help": "",
+                    "scopeId": "0",
+                    "scriptId": "d8e71067-afc2-46be-8bb5-3527b36474d7",
+                    "sockets": [
+                      {
+                        "name": "size with width",
+                        "type": "number",
+                        "value": "32",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "math",
+                          "id": "4ffa5912-4057-45e7-ad67-ddfbc410dbb0",
+                          "help": "random number between two numbers (inclusive)",
+                          "scopeId": "0",
+                          "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                          "sockets": [
+                            {
+                              "name": "pick random",
+                              "type": "number",
+                              "value": "1",
+                              "uValue": "11"
+                            },
+                            {
+                              "name": "to",
+                              "type": "number",
+                              "value": "10",
+                              "uValue": "29"
+                            }
+                          ],
+                          "seqNum": "223",
+                          "script": "randint({{1}}, {{2}})",
+                          "type": "number"
+                        }
+                      },
+                      {
+                        "name": "width units",
+                        "type": "string",
+                        "value": "choice",
+                        "options": "relativeUnit",
+                        "uValue": "px"
+                      },                
+                      {
+                        "name": "height",
+                        "type": "number",
+                        "value": "32",
+                        "uBlock": {
+                          "blocktype": "expression",
+                          "group": "math",
+                          "id": "e5a954c8-91c6-4457-9244-05601c80010a",
+                          "help": "random number between two numbers (inclusive)",
+                          "scopeId": "0",
+                          "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                          "sockets": [
+                            {
+                              "name": "pick random",
+                              "type": "number",
+                              "value": "1",
+                              "uValue": "10"
+                            },
+                            {
+                              "name": "to",
+                              "type": "number",
+                              "value": "10",
+                              "uValue": "30"
+                            }
+                          ],
+                          "seqNum": "222",
+                          "script": "randint({{1}}, {{2}})",
+                          "type": "number"
+                        }
+                      },
+                      {
+                        "name": "height units",
+                        "type": "string",
+                        "value": "choice",
+                        "options": "relativeUnit",
+                        "uValue": "px"
+                      }
+                    ],
+                    "seqNum": "211",
+                    "script": "{w: convert({{1}}, {{2}}, true), h: convert({{3}}, {{4}}, false)}",
+                    "type": "size"
+                  }
+                },
+                {
+                  "name": "big at",
+                  "type": "point",
+                  "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "points",
+                    "id": "eb11156c-fd97-466e-aa6b-6c6dca95f76a",
+                    "help": "returns a point at a random location on the stage",
+                    "scopeId": "0",
+                    "scriptId": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+                    "sockets": [
+                      {
+                        "name": "random point"
+                      }
+                    ],
+                    "seqNum": "212",
+                    "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
+                    "type": "point"
+                  }
+                },
+                {
+                  "name": "with color",
+                  "type": "color",
+                  "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "color",
+                    "id": "d0f2a6e0-bcd7-4364-9c33-3e188e921e25",
+                    "help": "returns a random color",
+                    "scopeId": "0",
+                    "scriptId": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
+                    "sockets": [
+                      {
+                        "name": "random color"
+                      }
+                    ],
+                    "seqNum": "213",
+                    "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\"",
+                    "type": "color"
+                  }
+                }
+              ],
+              "seqNum": "210",
+              "script": "local.sprite## = new RectSprite({{1}}, {{2}}, {{3}});",
+              "locals": [
+                {
+                  "blocktype": "expression",
+                  "sockets": [
+                    {
+                      "name": "sprite##"
+                    }
+                  ],
+                  "script": "local.sprite##",
+                  "type": "sprite",
+                  "isTemplateBlock": true,
+                  "isLocal": true,
+                  "group": "sprites",
+                  "seqNum": "210",
+                  "scopeId": "2e932a5d-ea0a-4796-a1d0-965d530799e5",
+                  "scriptId": "1fbced24-d96d-4fe2-993d-fdfe687c6606",
+                  "id": "1fbced24-d96d-4fe2-993d-fdfe687c6606",
+                  "localSource": "5862c395-77d5-4535-865a-da2422ceee26"
+                }
+              ]
+            },
+            {
+              "blocktype": "step",
+              "group": "sprites",
+              "id": "69367964-d364-4441-996e-dd72269fc0e8",
+              "help": "set the direction (angle in degrees) of a sprite",
+              "scopeId": "0",
+              "scriptId": "7ecb947f-28ac-4418-bc44-cd797be697c9",
+              "sockets": [
+                {
+                  "name": "set sprite",
+                  "type": "sprite",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "sprites",
+                    "id": "d6e5d8ad-bd8a-49da-b816-e625b89f81e3",
+                    "help": "",
+                    "scopeId": "2e932a5d-ea0a-4796-a1d0-965d530799e5",
+                    "scriptId": "1fbced24-d96d-4fe2-993d-fdfe687c6606",
+                    "sockets": [
+                      {
+                        "name": "sprite##",
+                        "uName": "sprite 210"
+                      }
+                    ],
+                    "seqNum": "210",
+                    "script": "local.sprite##",
+                    "localSource": "5862c395-77d5-4535-865a-da2422ceee26",
+                    "type": "sprite"
+                  }
+                },
+                {
+                  "name": "direction",
+                  "type": "number",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "math",
+                    "id": "3bfb3af9-bc4d-4a44-a747-90196157f36b",
+                    "help": "random number between two numbers (inclusive)",
+                    "scopeId": "0",
+                    "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                    "sockets": [
+                      {
+                        "name": "pick random",
+                        "type": "number",
+                        "value": "1",
+                        "uValue": "1"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "value": "10",
+                        "uValue": "360"
+                      }
+                    ],
+                    "seqNum": "221",
+                    "script": "randint({{1}}, {{2}})",
+                    "type": "number"
+                  }
+                }
+              ],
+              "seqNum": "1",
+              "script": "{{1}}.setDirection({{2}});"
+            },
+            {
+              "blocktype": "step",
+              "group": "sprites",
+              "id": "b81f0022-3c66-406c-abd4-3c0196f92650",
+              "help": "set the speed of a sprite",
+              "scopeId": "0",
+              "scriptId": "4d7d6b10-222b-11e3-8224-0800200c9a66",
+              "sockets": [
+                {
+                  "name": "set sprite",
+                  "type": "sprite",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "sprites",
+                    "id": "f6acaccf-1675-4998-afd7-829d87da1cb5",
+                    "help": "",
+                    "scopeId": "2e932a5d-ea0a-4796-a1d0-965d530799e5",
+                    "scriptId": "1fbced24-d96d-4fe2-993d-fdfe687c6606",
+                    "sockets": [
+                      {
+                        "name": "sprite##",
+                        "uName": "sprite 210"
+                      }
+                    ],
+                    "seqNum": "210",
+                    "script": "local.sprite##",
+                    "localSource": "5862c395-77d5-4535-865a-da2422ceee26",
+                    "type": "sprite"
+                  }
+                },
+                {
+                  "name": "speed",
+                  "type": "number",
+                  "value": "3",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "math",
+                    "id": "8f1d85eb-e893-4f36-8f12-86202dc8d4c4",
+                    "help": "random number between two numbers (inclusive)",
+                    "scopeId": "0",
+                    "scriptId": "a35fb291-e2fa-42bb-a5a6-2124bb33157d",
+                    "sockets": [
+                      {
+                        "name": "pick random",
+                        "type": "number",
+                        "value": "1",
+                        "uValue": "2"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "value": "10",
+                        "uValue": "5"
+                      }
+                    ],
+                    "seqNum": "220",
+                    "script": "randint({{1}}, {{2}})",
+                    "type": "number"
+                  }
+                }
+              ],
+              "seqNum": "2",
+              "script": "{{1}}.setSpeed({{2}});"
+            },
+            {
+              "blocktype": "step",
+              "group": "arrays",
+              "id": "0276e590-e640-42d1-af2b-2c8cc2132298",
+              "help": "add any object to an array",
+              "scopeId": "0",
+              "scriptId": "3fab2b88-430a-401e-88b2-2703d614780a",
+              "sockets": [
+                {
+                  "name": "array",
+                  "type": "array",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "arrays",
+                    "id": "b7644b71-242f-498b-8739-06bc71aae97c",
+                    "help": "",
+                    "scopeId": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
+                    "scriptId": "edc7f21c-1af1-4d1b-96ea-b3d9a16babb4",
+                    "sockets": [
+                      {
+                        "name": "array##",
+                        "uName": "array 205"
+                      }
+                    ],
+                    "seqNum": "205",
+                    "script": "local.array##",
+                    "localSource": "f555b535-7607-4c61-a628-ef5a9dfb73d5",
+                    "type": "array"
+                  }
+                },
+                {
+                  "name": "append",
+                  "type": "any",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "sprites",
+                    "id": "6807f121-5ad7-4017-9b8f-db2aba092aa9",
+                    "help": "",
+                    "scopeId": "2e932a5d-ea0a-4796-a1d0-965d530799e5",
+                    "scriptId": "1fbced24-d96d-4fe2-993d-fdfe687c6606",
+                    "sockets": [
+                      {
+                        "name": "sprite##",
+                        "uName": "sprite 210"
+                      }
+                    ],
+                    "seqNum": "210",
+                    "script": "local.sprite##",
+                    "localSource": "5862c395-77d5-4535-865a-da2422ceee26",
+                    "type": "sprite"
+                  }
+                }
+              ],
+              "seqNum": "219",
+              "script": "{{1}}.push({{2}});"
+            }
+          ]
+        },
+        {
+          "blocktype": "eventhandler",
+          "group": "controls",
+          "id": "69012040-f8ed-4821-900c-cb4d946fc719",
+          "help": "this trigger will run the attached blocks periodically",
+          "scopeId": "0",
+          "scriptId": "cfea9087-3d7c-46ad-aa41-579bba2f4709",
+          "sockets": [
+            {
+              "name": "repeat",
+              "type": "number",
+              "value": "30",
+              "uValue": "30"
+            },
+            {
+              "name": "times a second"
+            }
+          ],
+          "seqNum": "209",
+          "script": "local.count##=0;(function(){setInterval(function(){local.count##++;[[1]]},1000/{{1}})})();",
+          "locals": [
+            {
+              "blocktype": "expression",
+              "sockets": [
+                {
+                  "name": "count##"
+                }
+              ],
+              "script": "local.count##",
+              "type": "number",
+              "isTemplateBlock": true,
+              "isLocal": true,
+              "group": "controls",
+              "seqNum": "209",
+              "scopeId": "69012040-f8ed-4821-900c-cb4d946fc719",
+              "scriptId": "de576f2d-1332-4446-af98-adeba4c26d8f",
+              "id": "de576f2d-1332-4446-af98-adeba4c26d8f",
+              "localSource": "69012040-f8ed-4821-900c-cb4d946fc719"
+            }
+          ],
+          "contained": [
+            {
+              "blocktype": "step",
+              "group": "sprites",
+              "id": "20854056-ae5d-4d68-9336-bfc9e76ed4ce",
+              "help": "clear the stage to a solid color",
+              "scopeId": "0",
+              "scriptId": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
+              "sockets": [
+                {
+                  "name": "clear stage to color",
+                  "type": "color",
+                  "block": "13236aef-cccd-42b3-a041-e26528174323",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "color",
+                    "id": "15d7d493-db6f-44c2-9d6c-43ece4795630",
+                    "help": "returns a semi-opaque color",
+                    "scopeId": "0",
+                    "scriptId": "13236aef-cccd-42b3-a041-e26528174323",
+                    "sockets": [
+                      {
+                        "name": "color with red",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0"
+                      },
+                      {
+                        "name": "green",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0"
+                      },
+                      {
+                        "name": "blue",
+                        "type": "number",
+                        "value": "0",
+                        "uValue": "0"
+                      },
+                      {
+                        "name": "alpha",
+                        "type": "number",
+                        "value": "0.1",
+                        "uValue": "0.1"
+                      }
+                    ],
+                    "seqNum": "225",
+                    "script": "\"rgba({{1}},{{2}},{{3}},{{4}})\"",
+                    "type": "color"
+                  }
+                }
+              ],
+              "seqNum": "224",
+              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
+            },
+            {
+              "blocktype": "context",
+              "group": "arrays",
+              "id": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+              "help": "run the blocks with each item of a named array",
+              "scopeId": "0",
+              "scriptId": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
+              "sockets": [
+                {
+                  "name": "array",
+                  "type": "array",
+                  "uBlock": {
+                    "blocktype": "expression",
+                    "group": "arrays",
+                    "id": "472a4973-7318-4e26-ae79-58b60361d029",
+                    "help": "",
+                    "scopeId": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
+                    "scriptId": "edc7f21c-1af1-4d1b-96ea-b3d9a16babb4",
+                    "sockets": [
+                      {
+                        "name": "array##",
+                        "uName": "array 205"
+                      }
+                    ],
+                    "seqNum": "205",
+                    "script": "local.array##",
+                    "localSource": "f555b535-7607-4c61-a628-ef5a9dfb73d5",
+                    "type": "array"
+                  }
+                },
+                {
+                  "name": "for each"
+                }
+              ],
+              "seqNum": "215",
+              "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
+              "locals": [
+                {
+                  "blocktype": "expression",
+                  "sockets": [
+                    {
+                      "name": "index"
+                    }
+                  ],
+                  "script": "local.index",
+                  "help": "index of current item in array",
+                  "type": "number",
+                  "isTemplateBlock": true,
+                  "isLocal": true,
+                  "group": "arrays",
+                  "seqNum": "215",
+                  "scopeId": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                  "scriptId": "a222e39c-5db5-45a6-8a2f-7fb2988ad7be",
+                  "id": "a222e39c-5db5-45a6-8a2f-7fb2988ad7be",
+                  "localSource": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4"
+                },
+                {
+                  "blocktype": "expression",
+                  "sockets": [
+                    {
+                      "name": "item"
+                    }
+                  ],
+                  "script": "local.item",
+                  "help": "the current item in the iteration",
+                  "type": "any",
+                  "isTemplateBlock": true,
+                  "isLocal": true,
+                  "group": "arrays",
+                  "seqNum": "215",
+                  "scopeId": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                  "scriptId": "f8496ced-7599-450c-b70f-a6b459f90343",
+                  "id": "f8496ced-7599-450c-b70f-a6b459f90343",
+                  "localSource": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4"
+                }
+              ],
+              "contained": [
+                {
+                  "blocktype": "step",
+                  "group": "sprites",
+                  "id": "17e54af6-cd65-458a-a887-9988de30315a",
+                  "help": "draw the sprite at its current location",
+                  "scopeId": "0",
+                  "scriptId": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
+                  "sockets": [
+                    {
+                      "name": "draw sprite",
+                      "type": "sprite",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "arrays",
+                        "id": "369adc89-56cc-434b-b349-1312021b5e83",
+                        "help": "the current item in the iteration",
+                        "scopeId": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                        "scriptId": "f8496ced-7599-450c-b70f-a6b459f90343",
+                        "sockets": [
+                          {
+                            "name": "item"
+                          }
+                        ],
+                        "seqNum": "215",
+                        "script": "local.item",
+                        "localSource": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                        "type": "any"
+                      }
+                    }
+                  ],
+                  "seqNum": "216",
+                  "script": "{{1}}.draw(local.ctx);"
+                },
+                {
+                  "blocktype": "step",
+                  "group": "sprites",
+                  "id": "e5c41eed-d10b-4b06-a988-e1859b2e8b61",
+                  "help": "move a sprite by its own speed and direction",
+                  "scopeId": "0",
+                  "scriptId": "372de8c1-5f72-49cb-a2bd-faf66c36e318",
+                  "sockets": [
+                    {
+                      "name": "move",
+                      "type": "sprite",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "arrays",
+                        "id": "495bb0b4-423c-4027-96d7-0259f4cc10a8",
+                        "help": "the current item in the iteration",
+                        "scopeId": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                        "scriptId": "f8496ced-7599-450c-b70f-a6b459f90343",
+                        "sockets": [
+                          {
+                            "name": "item"
+                          }
+                        ],
+                        "seqNum": "215",
+                        "script": "local.item",
+                        "localSource": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                        "type": "any"
+                      }
+                    }
+                  ],
+                  "seqNum": "217",
+                  "script": "(function(sprite){sprite.x+=sprite.dx;sprite.y+=sprite.dy;})({{1}});"
+                },
+                {
+                  "blocktype": "step",
+                  "group": "sprites",
+                  "id": "63cc0356-98b8-4f2c-ba39-b347629f8836",
+                  "help": "bounce in the x and/or y direction if the stage is exceeded",
+                  "scopeId": "0",
+                  "scriptId": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
+                  "sockets": [
+                    {
+                      "name": "bounce",
+                      "type": "sprite",
+                      "uBlock": {
+                        "blocktype": "expression",
+                        "group": "arrays",
+                        "id": "122d5b19-1b53-48e6-9de5-eb29d7920f8c",
+                        "help": "the current item in the iteration",
+                        "scopeId": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                        "scriptId": "f8496ced-7599-450c-b70f-a6b459f90343",
+                        "sockets": [
+                          {
+                            "name": "item"
+                          }
+                        ],
+                        "seqNum": "215",
+                        "script": "local.item",
+                        "localSource": "383ee7ff-7b06-42ef-b80c-2f66a58dc2f4",
+                        "type": "any"
+                      }
+                    }
+                  ],
+                  "seqNum": "218",
+                  "script": "(function(sprite){if(sprite.x<0){sprite.dx=Math.abs(sprite.dx);}else if((sprite.x+sprite.w)>runtime.stage_width){sprite.dx=Math.abs(sprite.dx)*-1;};if(sprite.y<0){sprite.dy=Math.abs(sprite.dy);}else if((sprite.y+sprite.h)>runtime.stage_height){sprite.dy=Math.abs(sprite.dy)*-1;}})({{1}});"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

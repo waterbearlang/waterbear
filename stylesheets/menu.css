@@ -117,42 +117,34 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
 /* Button Menu in stage */
 
 
-.buttonmenu button{
-	padding-left: 10px;
-	visibility: hidden;
-}
-
-.buttonmenu:hover button{
-	visibility: visible;
-}
-
 .run-script{
-}
-
-.running .buttonmenu .run-script{
-	display: none;
-}
-
-.buttonmenu .stop-script{
-	display: none;
-}
-
-.running .buttonmenu .stop-script{
 	display: inline;
 }
 
-.buttonmenu .autorun-script-on{
-}
-
-.no-autorun .buttonmenu .autorun-script-on{
+.running .menu .run-script{
 	display: none;
 }
 
-.buttonmenu .autorun-script-off{
+.menu .stop-script{
 	display: none;
 }
 
-.no-autorun .buttonmenu .autorun-script-off{
+.running .menu .stop-script{
+	display: inline;
+}
+
+.menu .autorun-script-on{
+}
+
+.no-autorun .menu .autorun-script-on{
+	display: none;
+}
+
+.menu .autorun-script-off{
+	display: none;
+}
+
+.no-autorun .menu .autorun-script-off{
 	display: inline;
 }
 

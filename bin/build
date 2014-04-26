@@ -1,13 +1,18 @@
 #!/usr/bin/env node
 
+(function(){
+
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
 // var validateJson = require('./validate').validateJson;
-var cleanCSS = require('clean-css');
-var UglifyJS = require('uglify-js');
-var yargs = require('yargs');
-
+try{
+    var cleanCSS = require('clean-css');
+    var UglifyJS = require('uglify-js');
+    var yargs = require('yargs');
+}catch(e){
+    console.warn('Unable to import libraries, try running "npm install" first');
+}
 var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
 var styles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
@@ -252,3 +257,6 @@ function buildRuntimeHtmlFiles(){
 
 // build();
 buildHtmlFiles();
+
+
+})();

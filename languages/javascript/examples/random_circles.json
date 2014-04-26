@@ -79,7 +79,7 @@
                         "name": "random point"
                       }
                     ],
-                    "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+                    "script": "{x: randint(0, runtime.stage_width), y: randint(0, runtime.stage_height)}",
                     "type": "point"
                   }
                 },

@@ -9,7 +9,7 @@
                 {
                     "blocktype": "step",
                     "id": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
-                    "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
+                    "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();",
                     "help": "clear the stage to a solid color",
                     "sockets": [
                         {
@@ -22,7 +22,7 @@
                 {
                     "blocktype": "step",
                     "id": "44d98663-d4fd-4fc8-8b65-0cde22deced6",
-                    "script": "local.ctx.save();local.ctx.canvas.width = global.stage_width;local.ctx.canvas.height =  global.stage_height;var w = local.ctx.canvas.width;var h = local.ctx.canvas.height;var size = {{1}};local.ctx.beginPath();if (size <= 0){size = 0.1;};for (var x=0;x<=w;x+=size){local.ctx.moveTo(x,0);local.ctx.lineTo(x,h);};for (var y=0;y<=h;y+=size){local.ctx.moveTo(0,y);local.ctx.lineTo(w,y);};local.ctx.strokeStyle ={{2}};local.ctx.stroke();",
+                    "script": "local.ctx.save();local.ctx.canvas.width = runtime.stage_width;local.ctx.canvas.height =  runtime.stage_height;var w = local.ctx.canvas.width;var h = local.ctx.canvas.height;var size = {{1}};local.ctx.beginPath();if (size <= 0){size = 0.1;};for (var x=0;x<=w;x+=size){local.ctx.moveTo(x,0);local.ctx.lineTo(x,h);};for (var y=0;y<=h;y+=size){local.ctx.moveTo(0,y);local.ctx.lineTo(w,y);};local.ctx.strokeStyle ={{2}};local.ctx.stroke();",
                     "help": "set a grid background",
                     "sockets": [
                         {
@@ -40,7 +40,7 @@
                 {
                     "blocktype": "step",
                     "id": "9d6b3a43-8319-482e-b0f8-2ce0fe7c2f3a",
-                    "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
+                    "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,runtime.stage_width,runtime.stage_height);",
                     "help": "clear the stage to a background image",
                     "sockets": [
                         {
@@ -420,7 +420,7 @@
                     "blocktype": "step",
                     "id": "a110b9d4-34bc-4d3f-a7b1-dbc7885eb977",
                     "help": "bounce in the x and/or y direction if the stage is exceeded",
-                    "script": "{{1}}.stageBounce(global.stage_width, global.stage_height);",
+                    "script": "{{1}}.stageBounce(runtime.stage_width, runtime.stage_height);",
                     "sockets": [
                         {
                             "name": "bounce",
@@ -432,7 +432,7 @@
                     "blocktype": "step",
                     "id": "039a62e2-fbde-4fd0-9fa6-1e5383434698",
                     "help": "if the sprite moves to the edge of the screen, stop it at the edge",
-                    "script": "{{1}}.edgeStop(global.stage_width, global.stage_height);",
+                    "script": "{{1}}.edgeStop(runtime.stage_width, runtime.stage_height);",
                     "sockets": [
                         {
                             "name": "stop sprite ",
@@ -445,7 +445,7 @@
                     "blocktype": "step",
                     "id": "a4caaf13-514a-499a-a406-f88bfc9ddccd",
                     "help": "if the sprite moves to the edge of the screen, slide it along the edge",
-                    "script": "{{1}}.edgeSlide(global.stage_width, global.stage_height);",
+                    "script": "{{1}}.edgeSlide(runtime.stage_width, runtime.stage_height);",
                     "sockets": [
                         {
                             "name": "slide sprite ",
@@ -458,7 +458,7 @@
                     "blocktype": "step",
                     "id": "45f73aca-bf93-4249-9da4-1c089d6c8537",
                     "help": "if the sprite moves to the edge of the screen, wrap it around to the other side",
-                    "script": "{{1}}.edgeWrap(global.stage_width, global.stage_height);",
+                    "script": "{{1}}.edgeWrap(runtime.stage_width, runtime.stage_height);",
                     "sockets": [
                         {
                             "name": "wrap sprite ",

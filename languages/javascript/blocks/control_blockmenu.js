@@ -24,7 +24,7 @@
                 {
                     "blocktype": "eventhandler",
                     "id": "f4a604cd-f0b5-4133-9f91-4e1abe48fb6a",
-                    "script": "document.addEventListener('keydown', function(event){ if (global.keyForEvent(event) === {{1}}){[[1]];}});",
+                    "script": "document.addEventListener('keydown', function(event){ if (runtime.keyForEvent(event) === {{1}}){[[1]];}});",
                     "help": "this trigger will run the attached blocks every time this key is pressed",
                     "sockets": [
                         {
@@ -216,7 +216,7 @@
                 {
                     "blocktype": "step",
                     "id": "b7079d91-f76d-41cc-a6aa-43fc2749429c",
-                    "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
+                    "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));",
                     "help": "send this message to any listeners",
                     "sockets": [
                         {
@@ -230,7 +230,7 @@
                 {
                     "blocktype": "step",
                     "id": "d175bd7d-c7fd-4465-8b1f-c82687f35577",
-                    "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
+                    "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));",
                     "help": "send this message with an object argument to any listeners",
                     "sockets": [
                         {
@@ -247,7 +247,7 @@
                 {
                     "blocktype": "eventhandler",
                     "id": "3931a20c-f510-45e4-83d2-4005983d5cae",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
                     "help": "add a listener for the given message, run these blocks when it is received",
                     "sockets": [
                         {
@@ -261,7 +261,7 @@
                 {
                     "blocktype": "eventhandler",
                     "id": "a0496339-c405-4d1c-8185-9bc211bf5a56",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
                     "locals": [
                         {
                             "blocktype": "expression",

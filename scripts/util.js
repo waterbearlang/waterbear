@@ -1,6 +1,6 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
-(function(global){
+(function(runtime){
     'use strict';
     //
     //

@@ -370,7 +370,7 @@
                 }
               ],
               "seqNum": "17",
-              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+              "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
             },
             {
               "blocktype": "step",
@@ -1047,7 +1047,7 @@
                                 }
                               ],
                               "seqNum": "46",
-                              "script": "global.stage_center_x",
+                              "script": "runtime.stage_center_x",
                               "type": "number"
                             }
                           }
@@ -1207,7 +1207,7 @@
                                 }
                               ],
                               "seqNum": "48",
-                              "script": "global.stage_center_y",
+                              "script": "runtime.stage_center_y",
                               "type": "number"
                             }
                           }

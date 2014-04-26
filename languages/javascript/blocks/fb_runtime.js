@@ -1,4 +1,4 @@
-(function(){
+(function(d){
 // initialize empty object for fb data
 'use strict';
 var fb = {}

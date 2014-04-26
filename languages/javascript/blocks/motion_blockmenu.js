@@ -10,7 +10,7 @@
                 	"blocktype": "expression",
                 	"id": "f1a792df-9508-4ad5-90f8-aa9cd60d46bc",
                 	"type": "string",
-                	"script": "global.accelerometer.direction",
+                	"script": "runtime.accelerometer.direction",
                 	"help": "which way is the device moving?",
                 	"sockets": [
                 		{
@@ -21,7 +21,7 @@
                 {
                 	"blocktype": "eventhandler",
                 	"id": "74f8f7c0-f2f9-4ea4-9888-49110785b26d",
-                	"script": "global.accelerometer.whenTurned({{1}}, function(){[[1]]});",
+                	"script": "runtime.accelerometer.whenTurned({{1}}, function(){[[1]]});",
                 	"help": "handler for accelerometer events",
                 	"sockets": [
                 		{

@@ -985,7 +985,7 @@
                       }
                     ],
                     "seqNum": "314",
-                    "script": "global.stage_center_x",
+                    "script": "runtime.stage_center_x",
                     "type": "number"
                   }
                 },
@@ -1007,7 +1007,7 @@
                       }
                     ],
                     "seqNum": "315",
-                    "script": "global.stage_center_y",
+                    "script": "runtime.stage_center_y",
                     "type": "number"
                   }
                 }
@@ -1107,7 +1107,7 @@
                             }
                           ],
                           "seqNum": "330",
-                          "script": "global.stage_center_x",
+                          "script": "runtime.stage_center_x",
                           "type": "number"
                         }
                       },
@@ -1141,7 +1141,7 @@
                       }
                     ],
                     "seqNum": "324",
-                    "script": "global.stage_center_y",
+                    "script": "runtime.stage_center_y",
                     "type": "number"
                   }
                 }

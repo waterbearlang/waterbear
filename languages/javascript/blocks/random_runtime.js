@@ -1,4 +1,5 @@
-
+(function(window){
+  'use strict';
 function randint(start, stop){
     // return an integer between start and stop, inclusive
     if (stop === undefined){
@@ -86,3 +87,11 @@ function removeChoice(list){
   return list.splice(Math.floor(Math.random() * list.length), 1);
 }
 
+window.randint = randint;
+window.fade = fade;
+window.lerp = lerp;
+window.grad = grad;
+window.scale = scale;
+window.noise = noise;
+
+})(window);

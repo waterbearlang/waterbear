@@ -25,6 +25,10 @@
         }
     };
 
+    if(!window.Local) {
+        console.log("This should not be called in production. If this is called then window.Local is undefined.");
+        window.Local = function() { return this};
+    }
     Local.prototype.getTweet = function(name, callback){
         var jsonTwitterFeed = "https://twitter.com/statuses/user_timeline/" + name + ".json";
         var args = 'count=1';

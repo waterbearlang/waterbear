@@ -3510,7 +3510,7 @@
                                 }
                             ],
                             "seqNum": "474",
-                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                         }
                     ]
                 },
@@ -4057,7 +4057,7 @@
                                                 }
                                             ],
                                             "seqNum": "230",
-                                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+                                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
                                         }
                                     ]
                                 },
@@ -4823,7 +4823,7 @@
                                                                                                 }
                                                                                             ],
                                                                                             "seqNum": "78",
-                                                                                            "script": "global.mouse_y",
+                                                                                            "script": "runtime.mouse_y",
                                                                                             "type": "number"
                                                                                         }
                                                                                     },
@@ -4970,7 +4970,7 @@
                                                                                                 }
                                                                                             ],
                                                                                             "seqNum": "75",
-                                                                                            "script": "global.mouse_x",
+                                                                                            "script": "runtime.mouse_x",
                                                                                             "type": "number"
                                                                                         }
                                                                                     },
@@ -5871,7 +5871,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "92",
-                                                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+                                                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
                                                         }
                                                     ]
                                                 },
@@ -6003,7 +6003,7 @@
                                                                 }
                                                             ],
                                                             "seqNum": "92",
-                                                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+                                                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
                                                         }
                                                     ]
                                                 }
@@ -6048,7 +6048,7 @@
                         }
                     ],
                     "seqNum": "473",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
                     "contained": [
                         {
                             "blocktype": "context",
@@ -6164,7 +6164,7 @@
                                         }
                                     ],
                                     "seqNum": "222",
-                                    "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();"
+                                    "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,runtime.stage_width, runtime.stage_height);local.ctx.restore();"
                                 },
                                 {
                                     "blocktype": "step",
@@ -14058,7 +14058,7 @@
                                                                                     }
                                                                                 ],
                                                                                 "seqNum": "500",
-                                                                                "script": "global.timer.value()",
+                                                                                "script": "runtime.timer.value()",
                                                                                 "type": "number"
                                                                             }
                                                                         },
@@ -16335,7 +16335,7 @@
                         }
                     ],
                     "seqNum": "25",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
                     "locals": [
                         {
                             "blocktype": "expression",
@@ -17205,7 +17205,7 @@
                         }
                     ],
                     "seqNum": "3",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
                     "locals": [
                         {
                             "blocktype": "expression",
@@ -20678,7 +20678,7 @@
                                 }
                             ],
                             "seqNum": "477",
-                            "script": "global.timer.reset();"
+                            "script": "runtime.timer.reset();"
                         },
                         {
                             "blocktype": "step",
@@ -20735,7 +20735,7 @@
                                 }
                             ],
                             "seqNum": "92",
-                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
                         }
                     ]
                 },
@@ -20773,7 +20773,7 @@
                         }
                     ],
                     "seqNum": "95",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
                     "locals": [
                         {
                             "blocktype": "expression",
@@ -22018,7 +22018,7 @@
                                                 }
                                             ],
                                             "seqNum": "113",
-                                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
+                                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}, {detail: {{2}}}));"
                                         }
                                     ]
                                 }
@@ -23288,7 +23288,7 @@
                                         }
                                     ],
                                     "seqNum": "527",
-                                    "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                                    "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                                 }
                             ]
                         }
@@ -23328,7 +23328,7 @@
                         }
                     ],
                     "seqNum": "118",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(event){local.data##=event.detail;[[1]]});",
                     "locals": [
                         {
                             "blocktype": "expression",
@@ -25253,7 +25253,7 @@
                                 }
                             ],
                             "seqNum": "527",
-                            "script": "global.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
+                            "script": "runtime.stage.dispatchEvent(new CustomEvent(\"wb_\" + {{1}}));"
                         }
                     ]
                 },
@@ -25291,7 +25291,7 @@
                         }
                     ],
                     "seqNum": "528",
-                    "script": "global.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
+                    "script": "runtime.stage.addEventListener(\"wb_\" + {{1}}, function(){[[1]]});",
                     "closed": true,
                     "contained": [
                         {

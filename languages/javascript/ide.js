@@ -13,7 +13,7 @@
                     'var main = function(){',
                         script,
                     '}',
-                    'global.preloadAssets(' + assetUrls() + ', main);',
+                    'runtime.preloadAssets(' + assetUrls() + ', main);',
                 // '}catch(e){',
                     // 'alert(e);',
                 // '}',

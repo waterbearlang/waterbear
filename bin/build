@@ -1,17 +1,23 @@
 #!/usr/bin/env node
 
+(function(){
+
 // I tried building a concatenation step in Grunt, but it ended up being more complex than just writing it myself
 var fs = require('fs');
 var path = require('path');
 
 // var validateJson = require('./validate').validateJson;
-var cleanCSS = require('clean-css');
-var UglifyJS = require('uglify-js');
-var yargs = require('yargs');
-
+try{
+    var cleanCSS = require('clean-css');
+    var UglifyJS = require('uglify-js');
+    var yargs = require('yargs');
+}catch(e){
+    console.warn('Unable to import libraries, try running "npm install" first');
+}
 var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
-var styles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
+var ideStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
+var runtimeStyles = [];
 var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
 var scripts_post = ['l10n', 'workspace'];
 
@@ -19,7 +25,9 @@ var localizations = {
 
 };
 
-var languages = fs.readdirSync('languages');
+var languages = fs.readdirSync('languages').filter(function(lang){
+        return fs.statSync('languages/' + lang).isDirectory();
+    });
 
 var config = {}; 
 languages.forEach(function(lang){
@@ -132,58 +140,52 @@ function concat(src, dest, files, ext, suffix, before, after){
 // FIXME: examples, stage, and controls are basically the same function, 
 // make them actually the same function
 
-function examples(lang){
-    var _examples = "";
-    var tplExamplePath = 'languages/' + lang + '/templates/examples.html';
-    if (fs.existsSync(tplExamplePath)) {
-        _examples = fs.readFileSync(tplExamplePath);
+function template(name){
+    function getTemplate(lang){
+        var _template = "";
+        var tplPath = 'languages/' + lang + '/templates/' + name + '.html';
+        if (fs.existsSync(tplPath)) {
+            _template = fs.readFileSync(tplPath);
+        }
+        else {
+            _template = fs.readFileSync('languages/javascript/templates/' + name + '.html');
+            console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
+        }
+        return _template;
     }
-    else {
-        console.warn("Example template file for %s located at %s is missing. Defaulting to ''.", lang, tplExamplePath);
-    }
-    return _examples;
+    return getTemplate;
 }
 
-function stage(lang){
-    var tplStagePath = 'languages/' + lang + '/templates/stage.html';
-    // initialize default for fallback
-    var _stage = fs.readFileSync('languages/javascript/templates/stage.html');
-    if (fs.existsSync(tplStagePath)) {
-        _stage = fs.readFileSync(tplStagePath);
-    }
-    else {
-        console.warn("Stage template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
-    }
-    return _stage;
-}
+var examples = template('examples');
+var stage = template('stage');
+var controls = template('controls');
 
-function controls(lang){
-    var tplStagePath = 'languages/' + lang + '/templates/controls.html';
-    // initialize default for fallback
-    var _controls = fs.readFileSync('languages/javascript/templates/controls.html');
-    if (fs.existsSync(tplStagePath)) {
-        _controls = fs.readFileSync(tplStagePath);
-    }
-    else {
-        console.warn("Controls template file for %s located at %s is missing. Defaulting to javascript's template.", lang, tplStagePath);
-    }
-    return _controls;
-}
 function cssInclude(path){
     return '<link rel="stylesheet" href="' + path + '.css" >';
 }
 
-function cssIncludes(lang){
+function cssIdeIncludes(lang){
     var includes = [];
-    styles.forEach(function(styleName){
+    ideStyles.forEach(function(styleName){
         includes.push(cssInclude('../../stylesheets/' + styleName));
     });
-    config[lang].styles.forEach(function(styleName){
+    config[lang].ideStyles.forEach(function(styleName){
         includes.push(cssInclude('../../stylesheets/' + styleName));
     });
     includes.push(cssInclude(lang));
     config[lang].plugins.forEach(function(plugin){
         includes.push(cssInclude('blocks/' + plugin));
+    });
+    return includes.join('\n');
+}
+
+function cssRuntimeIncludes(lang){
+    var includes = [];
+    runtimeStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
+    });
+    config[lang].runtimeStyles.forEach(function(styleName){
+        includes.push(cssInclude('../../stylesheets/' + styleName));
     });
     return includes.join('\n');
 }
@@ -235,7 +237,7 @@ function buildIdeHtmlFiles(){
         var html = ideTemplate.replace(/<\?examples\?>/g, examples(lang))
                                .replace(/<\?controls\?>/g, controls(lang))
                                .replace(/<\?stage\?>/g, stage(lang))
-                               .replace(/<\?cssincludes\?>/g, cssIncludes(lang))
+                               .replace(/<\?cssincludes\?>/g, cssIdeIncludes(lang))
                                .replace(/<\?jsincludes\?>/g, jsIdeIncludes(lang))
                                .replace(/<\?language\?>/g, lang);
         fs.writeFileSync('languages/' + lang + '/index.html', html, 'utf8')
@@ -245,7 +247,8 @@ function buildIdeHtmlFiles(){
 function buildRuntimeHtmlFiles(){
     languages.forEach(function(lang){
         if (config[lang].runsInBrowser){
-            var html = runtimeTemplate.replace(/<\?jsincludes\?>/g, jsRuntimeIncludes(lang));
+            var html = runtimeTemplate.replace(/<\?jsincludes\?>/g, jsRuntimeIncludes(lang))
+                                      .replace(/<\?cssincludes\?/g,cssRuntimeIncludes(lang));
             fs.writeFileSync('languages/' + lang + '/runtime.html', html, 'utf8');
         }
     });
@@ -253,3 +256,6 @@ function buildRuntimeHtmlFiles(){
 
 // build();
 buildHtmlFiles();
+
+
+})();

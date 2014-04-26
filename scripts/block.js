@@ -5,7 +5,7 @@
 // support routines
 //
 // The idea here is that rather than try to maintain a separate "model" to capture
-// the block state, which mirros the DOM and has to be kept in sync with it,
+// the block state, which mirrors the DOM and has to be kept in sync with it,
 // just keep that state in the DOM itself using attributes (and data- attributes)
 //
 // Block(obj) -> Block element

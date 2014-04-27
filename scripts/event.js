@@ -6,7 +6,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 
-(function(global){
+(function(runtime){
     "use strict";
 
     function isDomObject(e){
@@ -87,7 +87,7 @@
     };
 
     // Are touch events supported?
-    var isTouch = ('ontouchstart' in global);
+    var isTouch = ('ontouchstart' in runtime);
     function isMouseEvent(event){
         switch(event.type){
             case 'mousedown':
@@ -149,7 +149,7 @@
     }
 
 
-    global.Event = {
+    runtime.Event = {
         on: on,
         off: off,
         once: once,

@@ -1,0 +1,8 @@
+{
+	"runsInBrowser": false,
+	"plugins": ["node","control", "piface", "pibrella_simple","firmata", "mc_game",  "mc_player", "mc_position", "mc_blocks",  "mc_camera", "array", "boolean", "math", "string"],
+	"runtimeLibs": [],
+	"ideLibs": ["beautify", "highlight", "highlight-javascript","events.min"],
+	"ideStyles": ["highlight-github"],
+	"runtimeStyles": []
+}

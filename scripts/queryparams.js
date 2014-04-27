@@ -2,7 +2,7 @@
 // is initialized in the HTML before any javascript files are
 // loaded (in template/template.html).
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
-(function(global){
+(function(runtime){
 'use strict';
 	// Source: http://stackoverflow.com/a/13984429
 	function urlToQueryParams(url){
@@ -46,5 +46,5 @@
 
 	wb.urlToQueryParams = urlToQueryParams;
 	wb.queryParamsToUrl = queryParamsToUrl;
-	global.wb = wb;
+	runtime.wb = wb;
 })(this);

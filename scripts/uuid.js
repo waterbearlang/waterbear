@@ -1,7 +1,7 @@
 // This returns a Version 4 (random) UUID
 // See: https://en.wikipedia.org/wiki/Universally_unique_identifier for more info
 
-(function(global){
+(function(runtime){
   'use strict';
   function hex(length){
     if (length > 8) return hex(8) + hex(length-8); // routine is good for up to 8 digits
@@ -33,7 +33,7 @@
     return hex(8) + '-' + hex(4) + '-4' + hex(3) + '-' + variant() + hex(3) + '-' + hex(12);
   }
 
-  global.uuid = uuid;
-  global.isUuid = isUuid;
+  runtime.uuid = uuid;
+  runtime.isUuid = isUuid;
 
 })(this);

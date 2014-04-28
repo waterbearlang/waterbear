@@ -255,19 +255,6 @@
             ]
         },
         {
-            "blocktype": "step",
-            "id": "f8be8360-aa41-4079-a7cb-12ff7a91b52d",
-            "script": "normalize({{1}})",
-            "type": "array",
-            "help": "normalize the entries of a number array",
-            "sockets": [
-                {
-                    "name": "normalize array",
-                    "type": "array"
-                }
-            ]
-        },
-        {
             "blocktype": "expression",
             "id": "e7424a86-3773-4759-828e-4dc33423a4da",
             "script": "stdev({{1}})",
@@ -289,6 +276,19 @@
             "sockets": [
                 {
                     "name": "variance of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "71e323de-c561-4aac-91dd-4d5eae671b5b",
+            "script": "normalize({{1}})",
+            "type": "array",
+            "help": "normalize the entries of a number array",
+            "sockets": [
+                {
+                    "name": "normalize array",
                     "type": "array"
                 }
             ]

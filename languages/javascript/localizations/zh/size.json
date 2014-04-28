@@ -1,7 +1,7 @@
 {
     "sectionkey": "sizes",
-    "name": "Sizes",
-    "help": "Size blocks represent a width and height. They are often used as components of Rects.",
+    "name": "尺寸",
+    "help": "尺寸是用來表示闊度和高度。經常用在矩形內。",
     "blocks": [
         {
             "blocktype": "expression",
@@ -10,12 +10,12 @@
             "type": "size",
             "sockets": [
                 {
-                    "name": "size with width",
+                    "name": "尺寸 闊度",
                     "type": "number",
                     "value": 32
                 },
                 {
-                    "name": "height",
+                    "name": "高度",
                     "type": "number",
                     "value": 32
                 }
@@ -28,7 +28,7 @@
             "type": "size",
             "sockets": [
                 {
-                    "name": "size from array",
+                    "name": "以尺寸表示的矩陣",
                     "type": "array"
                 }
             ]
@@ -40,9 +40,9 @@
             "type": "number",
             "sockets": [
                 {
-                    "name": "size",
+                    "name": "尺寸",
                     "type": "size",
-                    "suffix": "width"
+                    "suffix": "的闊度"
                 }
             ]
         },
@@ -53,9 +53,9 @@
             "type": "number",
             "sockets": [
                 {
-                    "name": "size",
+                    "name": "尺寸",
                     "type": "size",
-                    "suffix": "height"
+                    "suffix": "的高度"
                 }
             ]
         },
@@ -66,9 +66,8 @@
             "type": "array",
             "sockets": [
                 {
-                    "name": "size",
-                    "type": "size",
-                    "suffix": "as array"
+                    "name": "以矩陣表示的尺寸",
+                    "type": "size"
                 }
             ]
         }

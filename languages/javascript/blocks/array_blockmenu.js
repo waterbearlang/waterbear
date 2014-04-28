@@ -255,6 +255,19 @@
             ]
         },
         {
+            "blocktype": "step",
+            "id": "f8be8360-aa41-4079-a7cb-12ff7a91b52d",
+            "script": "normalize({{1}})",
+            "type": "array",
+            "help": "normalize the entries of a number array",
+            "sockets": [
+                {
+                    "name": "normalize array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "expression",
             "id": "e7424a86-3773-4759-828e-4dc33423a4da",
             "script": "stdev({{1}})",
@@ -263,6 +276,19 @@
             "sockets": [
                 {
                     "name": "stdev of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
+            "script": "variance({{1}})",
+            "type": "number",
+            "help": "calculate the variance of a number array",
+            "sockets": [
+                {
+                    "name": "variance of array",
                     "type": "array"
                 }
             ]
@@ -288,19 +314,6 @@
                 {
                     "name": "new array## from CSV",
                     "type": "file"
-                }
-            ]
-        },
-        {
-            "blocktype": "expression",
-            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
-            "script": "variance({{1}})",
-            "type": "number",
-            "help": "calculate the variance of a number array",
-            "sockets": [
-                {
-                    "name": "variance of array",
-                    "type": "array"
                 }
             ]
         },

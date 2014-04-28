@@ -133,7 +133,7 @@ function kNN(k,trainSet,testPoint) {
     return mode;
 }
 
-//uses 1/similarity_score for weight
+//uses 1/similarity_score for weight, value of infinity if sim_score=0
 function weightedKNN(k,trainSet,testPoint) {
     kClosest= getNearestNeighbors(k, trainSet, testPoint);
     //majority vote, can be made more efficient

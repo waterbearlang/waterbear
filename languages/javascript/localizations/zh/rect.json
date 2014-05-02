@@ -1,7 +1,7 @@
 {
     "sectionkey": "rects",
-    "name": "Rects",
-    "help": "Rect blocks represent and manipulate rectangles represented by x,y coordinates for the top left corner of the rectangle, plus a size (width,height).",
+    "name": "矩形",
+    "help": "矩形方塊是用來表示和操作以位置和尺寸代表的矩形。矩形的位置是以左上角的xy坐標代表。",
     "blocks": [
         {
             "deprecated": true,
@@ -11,7 +11,7 @@
             "type": "rect",
             "sockets": [
                 {
-                    "name": "rect at x",
+                    "name": "矩形在x",
                     "type": "number",
                     "value": 0
                 },
@@ -21,12 +21,12 @@
                     "value": 0
                 },
                 {
-                    "name": "with width",
+                    "name": "和闊度",
                     "type": "number",
                     "value": 10
                 },
                 {
-                    "name": "height",
+                    "name": "高度",
                     "type": "number",
                     "value": 10
                 }
@@ -40,11 +40,11 @@
             "type": "rect",
             "sockets": [
                 {
-                    "name": "rect at point",
+                    "name": "矩形在座標",
                     "type": "point"
                 },
                 {
-                    "name": "with size",
+                    "name": "和尺寸",
                     "type": "size"
                 }
             ]
@@ -57,7 +57,7 @@
             "type": "rect",
             "sockets": [
                 {
-                    "name": "rect from array",
+                    "name": "從矩陣轉為矩形",
                     "type": "array"
                 }
             ]
@@ -70,9 +70,9 @@
             "type": "point",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "矩形",
                     "type": "rect",
-                    "suffix": "position"
+                    "suffix": "位置"
                 }
             ]
         },
@@ -84,9 +84,9 @@
             "type": "size",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "矩形",
                     "type": "rect",
-                    "suffix": "size"
+                    "suffix": "尺寸"
                 }
             ]
         },
@@ -97,9 +97,9 @@
             "type": "array",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "轉矩形",
                     "type": "rect",
-                    "suffix": "as array"
+                    "suffix": "為矩陣"
                 }
             ]
         },
@@ -110,7 +110,7 @@
             "type": "number",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "矩形",
                     "type": "rect",
                     "suffix": "x"
                 }
@@ -123,7 +123,7 @@
             "type": "number",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "矩形",
                     "type": "rect",
                     "suffix": "y"
                 }
@@ -136,9 +136,9 @@
             "type": "number",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "矩形",
                     "type": "rect",
-                    "suffix": "width"
+                    "suffix": "闊度"
                 }
             ]
         },
@@ -149,9 +149,9 @@
             "type": "number",
             "sockets": [
                 {
-                    "name": "rect",
+                    "name": "矩形",
                     "type": "rect",
-                    "suffix": "height"
+                    "suffix": "高度"
                 }
             ]
         }

@@ -1,7 +1,7 @@
 {
     "sectionkey": "objects",
-    "name": "Objects",
-    "help": "Objects are key/value containers. Keys must be strings, but values can be any type.",
+    "name": "物件",
+    "help": "物件是一個名值對。屬性名稱必須是字串，屬性值可以是任何一個類形。",
     "blocks": [
         {
             "blocktype": "step",
@@ -12,17 +12,17 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "object##"
+                            "name": "物件##"
                         }
                     ],
                     "script": "local.object##",
                     "type": "object"
                 }
             ],
-            "help": "create a new, empty object",
+            "help": "建立一個新物件。",
             "sockets": [
                 {
-                    "name": "new object##"
+                    "name": "新物件##"
                 }
             ]
         },
@@ -30,18 +30,18 @@
             "blocktype": "step",
             "id": "ee86bcd0-10e3-499f-9a81-6738374c0c1f",
             "script": "{{1}}[{{2}}] = {{3}};",
-            "help": "set the key/value of an object",
+            "help": "設置物件的屬性名稱和屬性值",
             "sockets": [
                 {
-                    "name": "object",
+                    "name": "物件",
                     "type": "any"
                 },
                 {
-                    "name": "key",
+                    "name": "屬性名稱",
                     "type": "string"
                 },
                 {
-                    "name": "= value",
+                    "name": "= 屬性值",
                     "type": "any"
                 }
             ]
@@ -51,15 +51,16 @@
             "id": "7ca6df56-7c25-4c8c-98ef-8dfef90eff36",
             "script": "{{1}}[{{2}}]",
             "type": "any",
-            "help": "return the value of the key in an object",
+            "help": "傳回物件屬性的值",
             "sockets": [
                 {
-                    "name": "object",
+                    "name": "物件",
                     "type": "any"
                 },
                 {
-                    "name": "value at key",
-                    "type": "string"
+                    "name": "屬性",
+                    "type": "string",
+                    "suffix": "的值"
                 }
             ]
         },
@@ -67,18 +68,18 @@
             "blocktype": "step",
             "id": "cd07f8d6-d2cb-475b-b1fb-1ee8392e0b14",
             "script": "{{1}}[{{2}}].apply({{1}},{{3}});",
-            "help": "call instance method",
+            "help": "調用函數",
             "sockets": [
                 {
-                    "name": "object",
+                    "name": "物件",
                     "type": "any"
                 },
                 {
-                    "name": "method name",
+                    "name": "函數",
                     "type": "string"
                 },
                 {
-                    "name": "arguments",
+                    "name": "參數",
                     "type": "array"
                 }
             ]
@@ -92,31 +93,31 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "key"
+                            "name": "屬性名稱"
                         }
                     ],
                     "script": "local.key",
-                    "help": "key of current item in object",
+                    "help": "現在的屬性名稱",
                     "type": "string"
                 },
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "item"
+                            "name": "屬性值"
                         }
                     ],
                     "script": "local.item",
-                    "help": "the current item in the iteration",
+                    "help": "現在的屬性值",
                     "type": "any"
                 }
             ],
-            "help": "run the blocks with each item of a object",
+            "help": "執行物件中的每個屬性",
             "sockets": [
                 {
-                    "name": "for each item in",
+                    "name": "循環每個屬性",
                     "type": "any",
-                    "suffix": "do"
+                    "suffix": "執行"
                 }
             ]
         }

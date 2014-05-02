@@ -96,6 +96,10 @@
         ajax.post(url, f, ajax.serialize(frm))
     };
 
+    var  whitelist = [
+    	'www.google.com',
+    	'www.wikipedia.com'
+    ];
 	function DataBlock(url) {
 		this.url = 'http://www.corsproxy.com/' + url;
 		this.data = '';
@@ -111,6 +115,10 @@
 			alert("Please give a url");
 			return;
 		} 
+		else if(!whitelist.indexof(url)) {
+			alert(this.url + " is not supported");
+			return;
+		}
 		console.log(JSON.stringify(this.url));
 		this.data = ajax.gets(this.url); 
 		console.log(JSON.stringify(this.data));

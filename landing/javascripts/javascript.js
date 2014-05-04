@@ -3011,11 +3011,8 @@ global.ajax = ajax;
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
-<<<<<<< HEAD:dist/javascript.js
                 'data-keywords': JSON.stringify(obj.keywords),
                 'data-tags': JSON.stringify(obj.tags),
-=======
->>>>>>> e6b5e7ab01205c91da504f628b6fa30ce9bfc679:landing/javascripts/javascript.js
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
@@ -3514,7 +3511,6 @@ global.ajax = ajax;
         }
     }
 
-<<<<<<< HEAD:dist/javascript.js
     /** Search filter */
 
     var oldQuery = '';
@@ -3663,8 +3659,6 @@ global.ajax = ajax;
     Event.on(document.body, 'wb-toggle', null, toggleTag);
 
     wb.blockRegistry = blockRegistry;
-=======
->>>>>>> e6b5e7ab01205c91da504f628b6fa30ce9bfc679:landing/javascripts/javascript.js
 
     // Export methods
     wb.Block = Block;

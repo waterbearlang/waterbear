@@ -103,8 +103,8 @@ function getNearestNeighbors(k, trainSet, testPoint) {
                 }
             }
         }
-    }    
-    return kClosest
+    }
+    return kClosest;
 }
 
 //no weighting, just majority vote
@@ -144,7 +144,7 @@ function weightedKNN(k,trainSet,testPoint) {
     currModeFreq= 0;
     for(var n=0; n<kClosest.length; n++) {
         if(kClosest[n][0] == currMode) {
-            console.log(kClosest[n][1]);
+            //console.log(kClosest[n][1]);
             currModeFreq += 1/kClosest[n][1]; //when kClosest[n][1], currModeFreq= infinity
             if(currModeFreq > modeFreq) {
                 modeFreq= currModeFreq;

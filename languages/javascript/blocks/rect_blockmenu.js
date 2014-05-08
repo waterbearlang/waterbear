@@ -33,6 +33,9 @@
                             "type": "number",
                             "value": 10
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -50,6 +53,9 @@
                             "name": "with size",
                             "type": "size"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -63,6 +69,9 @@
                             "name": "rect from array",
                             "type": "array"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -77,6 +86,9 @@
                             "type": "rect",
                             "suffix": "position"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -91,6 +103,9 @@
                             "type": "rect",
                             "suffix": "size"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {

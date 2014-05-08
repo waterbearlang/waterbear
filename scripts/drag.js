@@ -671,7 +671,7 @@
         Event.on('.content', 'dblclick', '.block', menuToScratchpad);
         Event.on('.content', 'mousedown', '.block', initDrag);
         Event.on('.content', 'mousemove', null, drag);
-        Event.on(document.body, 'mouseup', null, endDrag);
+        Event.on(window, 'mouseup', null, endDrag);
         Event.on(document.body, 'keyup', null, cancelDrag);
     };
 })(this);

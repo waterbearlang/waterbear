@@ -268,6 +268,32 @@
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
+            "script": "variance({{1}})",
+            "type": "number",
+            "help": "calculate the variance of a number array",
+            "sockets": [
+                {
+                    "name": "variance of array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "step",
+            "id": "71e323de-c561-4aac-91dd-4d5eae671b5b",
+            "script": "normalize({{1}})",
+            "type": "array",
+            "help": "normalize the entries of a number array",
+            "sockets": [
+                {
+                    "name": "normalize array",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "step",
             "id": "58e775de-23aa-4572-88b8-ce85891db42b",
             "script": "local.array##= createArrayFromCSV(\"{{1}}\");",
@@ -293,13 +319,42 @@
         },
         {
             "blocktype": "expression",
-            "id": "d037e6dd-099b-4e0f-aa54-cbf2b92067b8",
-            "script": "variance({{1}})",
+            "id": "dc315e45-66cd-4c06-af40-ec9275b63a4c",
+            "script": "kNN({{2}},{{3}},{{1}})",
             "type": "number",
-            "help": "calculate the variance of a number array",
+            "help": "Run k-Nearest Neighbors algorithm",
             "sockets": [
                 {
-                    "name": "variance of array",
+                    "name": "classify test point",
+                    "type": "array"
+                },
+                {
+                    "name": "using kNN algorithm with k value",
+                    "type": "number"
+                },
+                {
+                    "name": "and training set",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "68d14a01-3e8e-4fd8-9a37-08257b70d429",
+            "script": "weightedKNN({{2}},{{3}},{{1}})",
+            "type": "number",
+            "help": "Run weighted k-Nearest Neighbors algorithm",
+            "sockets": [
+                {
+                    "name": "classify test point",
+                    "type": "array"
+                },
+                {
+                    "name": "using weighted kNN algorithm with k value",
+                    "type": "number"
+                },
+                {
+                    "name": "and training set",
                     "type": "array"
                 }
             ]
@@ -343,6 +398,5 @@
         }
         ]
     }
-    
     );
 })(wb);

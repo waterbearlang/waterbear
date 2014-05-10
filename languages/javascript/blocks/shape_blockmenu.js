@@ -17,6 +17,9 @@
                             "name": "clear rect",
                             "type": "rect"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -35,6 +38,9 @@
                             "type": "number",
                             "value": 10
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -58,6 +64,9 @@
                             "type": "color",
                             "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -76,6 +85,9 @@
                             "type": "number",
                             "value": 10
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -97,6 +109,9 @@
                             "name": "and color",
                             "type": "color"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -115,6 +130,9 @@
                             "type": "number",
                             "value": 10
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -128,6 +146,9 @@
                             "name": "fill rect",
                             "type": "rect"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -144,6 +165,9 @@
                             "name": "with color",
                             "type": "color"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -167,6 +191,9 @@
                             "type": "color",
                             "value": null
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -183,6 +210,9 @@
                             "name": "with color",
                             "type": "color"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -196,6 +226,9 @@
                             "name": "stroke rect",
                             "type": "rect"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -225,6 +258,9 @@
                             "type": "number",
                             "value": 10
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {
@@ -262,6 +298,9 @@
                             "type": "color",
                             "value": null
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {

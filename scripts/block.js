@@ -132,6 +132,7 @@
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'data-keywords': JSON.stringify(obj.keywords),
+                'data-tags': JSON.stringify(obj.tags),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj, cloneForCM))
@@ -692,16 +693,22 @@
         //Known issue: width manually set to 160, need to programmatically get
         //(size of "Browse" button) + (size of file input field). 
         if (type === 'file') {
-            value = obj.uValue || obj.value || '';
-            //not sure if 'data-oldvalue' is needed in the below line
-            input = elem('input', {type: "file", value: value, 'data-oldvalue': value}); 
+            //var value = obj.uValue || obj.value || '';
+            //not sure if 'value' or 'data-oldvalue' is needed in the below line
+            var input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
             input.addEventListener('change', function(evt){
-                var file = input.files[0];
-                var reader = new FileReader();
-        reader.onload = function (evt){
-                    localStorage['__' + file.name]= evt.target.result;
-        };
-                reader.readAsText( file );
+                if(confirm("Your potentially sensitive data will be uploaded \
+                           to the server. Continue?")) {
+                    var file = input.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function (evt){
+                        localStorage['__' + file.name]= evt.target.result;
+                    };
+                    reader.readAsText( file );
+                }
+                else {
+                    input.value= "";
+                }
             });
             wb.resize(input); //not sure if this is necessary
             input.style.width= "160px"; //known issue stated above
@@ -960,6 +967,11 @@
                     keywords = keywords.concat(JSON.parse(keywordsAttr));
                 }
 
+                var tagsAttr = blocks[j].getAttribute('data-tags');
+                if (tagsAttr) {
+                    keywords = keywords.concat(JSON.parse(tagsAttr));
+                }
+
                 // Find a match
                 var matchingKeywords = [];
 
@@ -1018,6 +1030,42 @@
         }
     }
 
+    function toggleTag(evt){
+        if (evt.detail.name.substring(0, 4) == 'tag-') {
+            var groups = document.querySelectorAll('.submenu');
+         
+            for (var i = 0; i < groups.length; i++) {
+                var blocks = groups[i].getElementsByClassName('block');
+                var blocksHidden = 0;
+
+                for (var j = 0; j < blocks.length; j++) {
+                    var tagsAttr = blocks[j].getAttribute('data-tags');
+                    var tags = [];
+
+                    if (tagsAttr) {
+                        tags = JSON.parse(tagsAttr);
+                        if (tags.indexOf(evt.detail.name.substring(4)) > -1) {
+                            if (evt.detail.state) {
+                                wb.show(blocks[j]);
+                            } else {
+                                wb.hide(blocks[j]);
+                                blocksHidden++;
+                            }
+                        }
+                    }
+                }
+
+                if (blocksHidden == blocks.length) {
+                    wb.hide(groups[i].previousSibling);
+                    wb.hide(groups[i]);
+                } else {
+                    wb.show(groups[i].previousSibling);
+                    wb.show(groups[i]);
+                }
+            }
+        }
+    }
+
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on('.workspace', 'wb-add', null, addBlock);
@@ -1026,6 +1074,8 @@
     Event.on('#search_text', 'keyup', null, searchBlock);
     Event.on('#search_text', 'input', null, searchBlock);
     Event.on('#search_clear', 'click', null, searchBlock);
+
+    Event.on(document.body, 'wb-toggle', null, toggleTag);
 
     wb.blockRegistry = blockRegistry;
 

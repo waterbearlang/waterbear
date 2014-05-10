@@ -83,6 +83,9 @@
                             "type": "color",
                             "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                         }
+                    ],
+                    "tags": [
+                        "deprecated"
                     ]
                 },
                 {

@@ -3036,6 +3036,8 @@ global.ajax = ajax;
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
                 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
+                'data-keywords': JSON.stringify(obj.keywords),
+                'data-tags': JSON.stringify(obj.tags),
                 'title': obj.help || getHelp(obj.scriptId || obj.id)
             },
             elem('div', {'class': 'label'}, createSockets(obj))
@@ -3534,6 +3536,154 @@ global.ajax = ajax;
         }
     }
 
+    /** Search filter */
+
+    var oldQuery = '';
+
+    function searchBlock(event) {
+        // Clear input if the clear button is pressed
+        var searchTextNode = document.getElementById('search_text');
+
+        if (event.target.id == 'search_clear') {
+            searchTextNode.value = '';
+        }
+
+        // Proceed if the query is changed
+        var query = searchTextNode.value.trim().toLowerCase();
+
+        if (oldQuery == query) {
+            return;
+        } else {
+            oldQuery = query;
+        }
+
+        var searchResultsNode = document.getElementById('search_results');
+        var blockMenuNode = document.getElementById('block_menu');
+
+        // For non-empty query, show all blocks; otherwise, hide all blocks
+        if (query) {
+            wb.show(searchResultsNode);
+            wb.hide(blockMenuNode);
+
+            while (searchResultsNode.firstChild) {
+                searchResultsNode.removeChild(searchResultsNode.firstChild);
+            }
+        } else {
+            wb.hide(searchResultsNode);
+            wb.show(blockMenuNode);
+            return;
+        }
+
+        // Clear suggestions
+        var suggestions = [];
+        var suggestionsNode = document.getElementById('search_suggestions');
+        while (suggestionsNode.firstChild) {
+            suggestionsNode.removeChild(suggestionsNode.firstChild);
+        }
+
+        var groups = document.querySelectorAll('.block-menu');
+     
+        for (var i = 0; i < groups.length; i++) {
+            var blocks = groups[i].getElementsByClassName('block');
+
+            for (var j = 0; j < blocks.length; j++) {
+                // Construct an array of keywords
+                var keywords = [];
+
+                var group = blocks[j].getAttribute('data-group');
+                if (group) {
+                    keywords.push(group);
+                }
+
+                var keywordsAttr = blocks[j].getAttribute('data-keywords');
+                if (keywordsAttr) {
+                    keywords = keywords.concat(JSON.parse(keywordsAttr));
+                }
+
+                var tagsAttr = blocks[j].getAttribute('data-tags');
+                if (tagsAttr) {
+                    keywords = keywords.concat(JSON.parse(tagsAttr));
+                }
+
+                // Find a match
+                var matchingKeywords = [];
+
+                for (var k = 0; k < keywords.length; k++) {
+                    if (keywords[k].indexOf(query) == 0) {
+                        matchingKeywords.push(keywords[k]);
+
+                        if (suggestions.indexOf(keywords[k]) == -1) {
+                            suggestions.push(keywords[k]);
+
+                            var suggestionNode = document.createElement('option');
+                            suggestionNode.value = keywords[k];
+                            suggestionsNode.appendChild(suggestionNode);
+                        }
+                    }
+                }
+
+                // Show/hide blocks
+                if (matchingKeywords.length > 0) {
+                    var resultNode = document.createElement('div');
+                    resultNode.classList.add('search_result');
+                    resultNode.classList.add(group);
+                    resultNode.style.backgroundColor = 'transparent';
+
+                    // Block
+                    resultNode.appendChild(blocks[j].cloneNode(true));
+
+                    // Fix result height
+                    var clearNode = document.createElement('div');
+                    clearNode.style.clear = 'both';
+                    resultNode.appendChild(clearNode);
+
+                    // Keyword name
+                    var keywordNode = document.createElement('span');
+                    keywordNode.classList.add('keyword');
+                    var keywordNodeContent = '<span class="keyword">';
+                    keywordNodeContent += '<span class="match">';
+                    keywordNodeContent += matchingKeywords[0].substr(0, query.length);
+                    keywordNodeContent += '</span>';
+                    keywordNodeContent += matchingKeywords[0].substr(query.length);
+
+                    for (var k = 1; k < matchingKeywords.length; k++) {
+                        keywordNodeContent += ', <span class="match">';
+                        keywordNodeContent += matchingKeywords[k].substr(0, query.length);
+                        keywordNodeContent += '</span>';
+                        keywordNodeContent += matchingKeywords[k].substr(query.length);
+                    }
+
+                    keywordNodeContent += '</span>';
+                    keywordNode.innerHTML = keywordNodeContent;
+                    resultNode.appendChild(keywordNode);
+
+                    searchResultsNode.appendChild(resultNode);
+                }
+            }
+        }
+    }
+
+    function toggleTag(evt){
+      if (evt.detail.name.substring(0, 4) == 'tag-') {
+        var blocks = wb.findAll(document.body, '.block[data-tags*="' + evt.detail.name.substring(4) + '"]');
+        var i;
+        for (i = 0; i < blocks.length; i++) {
+          evt.detail.state ? wb.show(blocks[i]) : wb.hide(blocks[i]);
+        }
+      }
+    }
+
+    Event.on(document.body, 'wb-remove', '.block', removeBlock);
+    Event.on(document.body, 'wb-add', '.block', addBlock);
+    Event.on(document.body, 'wb-delete', '.block', deleteBlock);
+
+    Event.on('#search_text', 'keyup', null, searchBlock);
+    Event.on('#search_text', 'input', null, searchBlock);
+    Event.on('#search_clear', 'click', null, searchBlock);
+
+    Event.on(document.body, 'wb-toggle', null, toggleTag);
+
+    wb.blockRegistry = blockRegistry;
 
     // Export methods
     wb.Block = Block;
@@ -5317,6 +5467,9 @@ wb.menu({
                     "type": "color",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -6368,6 +6521,48 @@ wb.menu({
             ]
         },
         {
+            "blocktype": "expression",
+            "id": "dc315e45-66cd-4c06-af40-ec9275b63a4c",
+            "script": "kNN({{2}},{{3}},{{1}})",
+            "type": "number",
+            "help": "Run k-Nearest Neighbors algorithm",
+            "sockets": [
+                {
+                    "name": "classify test point",
+                    "type": "array"
+                },
+                {
+                    "name": "using kNN algorithm with k value",
+                    "type": "number"
+                },
+                {
+                    "name": "and training set",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "68d14a01-3e8e-4fd8-9a37-08257b70d429",
+            "script": "weightedKNN({{2}},{{3}},{{1}})",
+            "type": "number",
+            "help": "Run weighted k-Nearest Neighbors algorithm",
+            "sockets": [
+                {
+                    "name": "classify test point",
+                    "type": "array"
+                },
+                {
+                    "name": "using weighted kNN algorithm with k value",
+                    "type": "number"
+                },
+                {
+                    "name": "and training set",
+                    "type": "array"
+                }
+            ]
+        },
+        {
             "blocktype": "context",
             "id": "9f6f4e21-7abf-4e6f-b9bf-4ce8a1086a21",
             "script": "{{1}}.forEach(function(item, idx){local.index = idx; local.item = item; [[1]] });",
@@ -6408,8 +6603,7 @@ wb.menu({
             ]
         }
     ]
-}
-);
+});
 /*end languages/javascript/array.json*/
 
 /*begin languages/javascript/boolean.json*/
@@ -8548,6 +8742,9 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8566,6 +8763,9 @@ wb.menu({
                     "type": "size",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8579,6 +8779,9 @@ wb.menu({
                     "type": "array",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8595,6 +8798,9 @@ wb.menu({
                 {
                     "name": "position"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8611,6 +8817,9 @@ wb.menu({
                 {
                     "name": "size"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8934,6 +9143,9 @@ wb.menu({
                     "type": "rect",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8952,6 +9164,9 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8974,6 +9189,9 @@ wb.menu({
                     "type": "color",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -8992,6 +9210,9 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -9001,7 +9222,91 @@ wb.menu({
             "sockets": [
                 {
                     "name": "stroke circle at point",
+<<<<<<< HEAD:dist/javascript.js
+                    "type": "point"
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": 10
+                },
+                {
+                    "name": "and color",
+                    "type": "color"
+                }
+            ],
+            "tags": [
+                "deprecated"
+            ]
+        },
+        {
+            "deprecated": true,
+            "blocktype": "step",
+            "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();",
+            "help": "circle...",
+            "id": "094fa424-8b6f-4759-a9bc-f4dbf289f697",
+            "sockets": [
+                {
+                    "name": "stroke and fill circle at point",
+                    "type": "point"
+                },
+                {
+                    "name": "with radius",
+                    "type": "number",
+                    "value": 10
+                }
+            ],
+            "tags": [
+                "deprecated"
+            ]
+        },
+        {
+            "deprecated": true,
+            "blocktype": "step",
+            "script": "var rect## = {{1}};local.ctx.fillRect(rect##.x,rect##.y,rect##.w,rect##.h);",
+            "help": "fill...",
+            "id": "bf909ec4-5387-4baf-ba43-f17df493f9bd",
+            "sockets": [
+                {
+                    "name": "fill rect",
+                    "type": "rect"
+                }
+            ],
+            "tags": [
+                "deprecated"
+            ]
+        },
+        {
+            "deprecated": true,
+            "blocktype": "step",
+            "id": "7a342b2b-f169-4071-8771-34394cc07393",
+            "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.fillStyle = color##; local.ctx.fillRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "fill rect",
+                    "type": "rect"
+                },
+                {
+                    "name": "with color",
+                    "type": "color"
+                }
+            ],
+            "tags": [
+                "deprecated"
+            ]
+        },
+        {
+            "deprecated": true,
+            "blocktype": "step",
+            "id": "cbc60543-0a14-4f5c-af14-a2b55148b4e0",
+            "script": "var rect## = {{1}};var borderRadius## = {{2}};var color## = {{3}};local.ctx.save();local.ctx.strokeStyle=color##;local.ctx.fillStyle=color##;local.ctx.lineJoin='round';local.ctx.lineWidth=borderRadius##;local.ctx.strokeRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.fillRect(rect##.x+(borderRadius##/2), rect##.y+(borderRadius##/2), rect##.w-borderRadius##, rect##.h-borderRadius##);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "fill round rect",
+                    "type": "rect",
+=======
                     "type": "point",
+>>>>>>> e6b5e7ab01205c91da504f628b6fa30ce9bfc679:landing/javascripts/javascript.js
                     "value": null
                 },
                 {
@@ -9014,9 +9319,51 @@ wb.menu({
                     "type": "color",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
+<<<<<<< HEAD:dist/javascript.js
+            "deprecated": true,
+            "blocktype": "step",
+            "id": "9cf3a017-ab20-4987-875a-5d8436377bd0",
+            "script": "var rect## = {{1}};var color## = {{2}};local.ctx.save();local.ctx.strokeStyle = color##; local.ctx.strokeRect(rect##.x, rect##.y, rect##.w, rect##.h);local.ctx.restore();",
+            "sockets": [
+                {
+                    "name": "stroke rect",
+                    "type": "rect"
+                },
+                {
+                    "name": "with color",
+                    "type": "color"
+                }
+            ],
+            "tags": [
+                "deprecated"
+            ]
+        },
+        {
+            "deprecated": true,
+            "blocktype": "step",
+            "id": "b28a6aeb-bbad-4828-8ff1-2f846e556e1a",
+            "script": "var rect## = {{1}};local.ctx.strokeRect(rect##.x,rect##.y,rect##.w,rect##.h);",
+            "help": "stroke...",
+            "sockets": [
+                {
+                    "name": "stroke rect",
+                    "type": "rect"
+                }
+            ],
+            "tags": [
+                "deprecated"
+            ]
+        },
+        {
+            "deprecated": true,
+=======
+>>>>>>> e6b5e7ab01205c91da504f628b6fa30ce9bfc679:landing/javascripts/javascript.js
             "blocktype": "step",
             "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.stroke();",
             "help": "circle...",
@@ -9032,6 +9379,9 @@ wb.menu({
                     "type": "number",
                     "value": "10"
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {
@@ -9062,6 +9412,9 @@ wb.menu({
                     "type": "color",
                     "value": null
                 }
+            ],
+            "tags": [
+                "deprecated"
             ]
         },
         {

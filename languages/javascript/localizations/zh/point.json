@@ -27,10 +27,10 @@
             "id": "efe5e679-8336-4e5a-ade0-4bd930826096",
             "type": "point",
             "script": "{x: {{1}}[0], y: {{1}}[1]}",
-            "help": "將矩陣轉變成座標",
+            "help": "將陣列轉變成座標",
             "sockets": [
                 {
-                    "name": "將矩陣",
+                    "name": "將陣列",
                     "type": "array",
                     "suffix": "轉變成座標"
                 }
@@ -81,12 +81,12 @@
             "id": "743cba63-11d4-4a84-a3b6-a98480bdd731",
             "script": "[{{1}}.x, {{1}}.y]",
             "type": "array",
-            "help": "將座標轉變成矩陣",
+            "help": "將座標轉變成陣列",
             "sockets": [
                 {
                     "name": "將座標",
                     "type": "point",
-                    "suffix": "轉變成矩陣"
+                    "suffix": "轉變成陣列"
                 }
             ]
         }

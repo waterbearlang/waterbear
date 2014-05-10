@@ -57,7 +57,7 @@
             "type": "rect",
             "sockets": [
                 {
-                    "name": "從矩陣轉為矩形",
+                    "name": "從陣列轉為矩形",
                     "type": "array"
                 }
             ]
@@ -99,7 +99,7 @@
                 {
                     "name": "轉矩形",
                     "type": "rect",
-                    "suffix": "為矩陣"
+                    "suffix": "為陣列"
                 }
             ]
         },

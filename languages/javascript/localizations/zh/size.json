@@ -28,7 +28,7 @@
             "type": "size",
             "sockets": [
                 {
-                    "name": "以尺寸表示的矩陣",
+                    "name": "以尺寸表示的陣列",
                     "type": "array"
                 }
             ]
@@ -66,7 +66,7 @@
             "type": "array",
             "sockets": [
                 {
-                    "name": "以矩陣表示的尺寸",
+                    "name": "以陣列表示的尺寸",
                     "type": "size"
                 }
             ]

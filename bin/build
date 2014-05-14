@@ -248,7 +248,7 @@ function buildRuntimeHtmlFiles(){
     languages.forEach(function(lang){
         if (config[lang].runsInBrowser){
             var html = runtimeTemplate.replace(/<\?jsincludes\?>/g, jsRuntimeIncludes(lang))
-                                      .replace(/<\?cssincludes\?/g,cssRuntimeIncludes(lang));
+                                      .replace(/<\?cssincludes\?>/g,cssRuntimeIncludes(lang));
             fs.writeFileSync('languages/' + lang + '/runtime.html', html, 'utf8');
         }
     });

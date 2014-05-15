@@ -75,6 +75,8 @@
     var cm_cont= document.querySelector('#cm_container');
     
     var _dropCursor; // <- WB
+
+    var selectedBlocks;
     
     // WB-specific
     function dropCursor(){
@@ -107,6 +109,7 @@
         _dropCursor = null;
         startParent = null;
         startSibling = null;
+        selectedBlocks = [];
     }
     reset();
     
@@ -152,6 +155,18 @@
                 //console.log('target parent: %o', target.parentElement);
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
+            } else {
+                // TODO: Restrict selecting blocks that are contigious
+                //       on the same level
+                if (event.ctrlKey) {
+                    selectedBlocks.push(target);
+                } else {
+                    for (var i = 0; i < selectedBlocks.length; i++) {
+                        selectedBlocks[i].classList.remove("selected");
+                    }
+                    selectedBlocks = [target];
+                }
+                target.classList.add("selected");
             }
             dragAction.target = target;
             // WB-Specific

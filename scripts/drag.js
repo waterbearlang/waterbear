@@ -58,11 +58,11 @@
     var dropTarget;
     var dropRects;
     var isDragging;
-    var currentPosition;
     var scope;
     var potentialDropTargets;
     var startPosition;
     var pointerDown;
+    var blockMenu;
     
     
     function reset(){
@@ -73,7 +73,6 @@
         dropRects = [];
         dropTarget = null;
         startPosition = null;
-        currentPosition = null;
         timer = null;
         isDragging = false;
         pointerDown = false;
@@ -100,8 +99,6 @@
         if (!pointerDown) {return undefined;}
         isDragging = true;
         // console.log('startDrag(%o)', event);
-        // start timer for drag events
-        timer = setTimeout(hitTest, dragTimeout);
         Event.forward(event.target, 'drag-start', event);
         return false;
     }
@@ -120,10 +117,9 @@
         pointerDown = false;
         // console.log('endDrag(%o) dragging: %s', event, dragging);
         if (!isDragging) {return undefined;}
-        clearTimeout(timer);
-        timer = null;
         Event.forward(event.target, 'drag-end', event);
         event.preventDefault();
+        reset();
         return false;
     }
 
@@ -131,8 +127,6 @@
         // Cancel if escape key pressed
         // console.log('cancel drag of %o', dragTarget);
         if(event.keyCode == 27) {
-            clearTimeout(timer);
-            timer = null;
             Event.forward(event.target, 'drag-cancel', event);
             reset();
             return false;

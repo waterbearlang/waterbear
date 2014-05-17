@@ -37,8 +37,8 @@
         {
             return;
         }
-        if (input.wbTarget){
-            input = input.wbTarget;
+        if (input.target){
+            input = input.target;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();

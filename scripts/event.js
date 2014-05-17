@@ -16,12 +16,19 @@
         return false;
     }
 
+    // Refactor this into an constructor with prototype methods
     function cloneEvent(evt){
         var newEvent = {};
         for (var key in evt){
             newEvent[key] = evt[key];
         }
         newEvent.original = evt;
+        newEvent.stopPropagation = function(){
+            evt.stopPropagation();
+        };
+        newEvent.preventDefault = function(){
+            evt.preventDefault();
+        };
         return newEvent;
     }
 
@@ -41,7 +48,7 @@
         var listener = function listener(originalEvent){
             var event;
             if (originalEvent.detail && originalEvent.detail.forwarded){
-                event = blend(originalEvent.forwarded);
+                event = blend(originalEvent.detail.forwarded);
                 event.type = originalEvent.type;
             }else{
                 event = blend(originalEvent); // normalize between touch and mouse events
@@ -90,8 +97,11 @@
         elem.dispatchEvent(evt);
     }
 
-    function forward(elem, eventname, originalEvent){
-        trigger(elem, eventName, {forwarded: originalElement});
+    function forward(elem, eventName, evt){
+        if (evt.original){
+            evt = evt.original;
+        }
+        trigger(elem, eventName, {forwarded: evt});
     }
 
     // Are touch events supported?
@@ -158,6 +168,8 @@
         off: off,
         once: once,
         trigger: trigger,
+        forward: forward,
+        cloneEvent: cloneEvent,
         isTouch: isTouch
     };
 })(this);

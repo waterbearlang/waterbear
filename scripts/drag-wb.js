@@ -11,6 +11,9 @@
     var templateDrag, localDrag; // <- WB
     var _dropCursor; // <- WB
     var dragTarget;
+    var currentPosition;
+    var dragTimeout = 20;
+    var timer;
 
     // Specific to the code map
     var cloned;
@@ -34,6 +37,11 @@
         selectedSocket = null; // <- WB
         _dropCursor = null; // <- WB
         dragTarget = null;
+        currentPosition = null;
+        if (timer){
+            clearTimeout(timer);
+            timer = null;
+        }
     }
 
     function initDrag(event){
@@ -88,7 +96,11 @@
     }
 
     function startDrag(event){
+        console.log('wb start drag');
         dragTarget.classList.add("dragIndication");
+        // start timer for drag events
+        timer = setTimeout(hitTest, dragTimeout);
+
         currentPosition = {left: event.pageX, top: event.pageY};
         // target = clone target if in menu
         // FIXME: Set different listeners on menu blocks than on the script area
@@ -146,12 +158,15 @@
     }
 
     function endDrag(event){
+        clearTimeout(timer);
+        timer = null;
         handleDrop(event,event.altKey || event.ctrlKey);
-        drag.reset();
     }
 
     function cancelDrag(event) {
         // Cancel if escape key pressed
+        clearTimeout(timer);
+        timer = null;
         resetDragStyles();
         revertDrop();
     }
@@ -481,10 +496,10 @@
         // Set high-level handlers
         Event.on(document, 'drag-reset', null, reset);
         Event.on('.content', 'drag-init', '.block', initDrag);
-        Event.on('.contetnt', 'drag-start', '.block', startDrag);
+        Event.on('.content', 'drag-start', '.block', startDrag);
         Event.on('.content', 'dragging', null, dragging);
         Event.on('.content', 'drag-end', null, endDrag);
-        Event.on(document, 'drag-cancel', null, dragCancel);
+        Event.on(document, 'drag-cancel', null, cancelDrag);
 
         drag.reset(); // initialization kick
     };

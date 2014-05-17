@@ -168,7 +168,7 @@
     }
 
     function disclosure(event){
-        var block = wb.closest(event.wbTarget, '.block');
+        var block = wb.closest(event.target, '.block');
         if (block.dataset.closed){
             delete block.dataset.closed;
         }else{
@@ -321,7 +321,7 @@
     Event.on('.workspace', 'keypress', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input, select', function(event){
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+        Event.trigger(document.body, 'wb-modified', {block: event.target, type: 'valueChanged'});
     });
     Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
     Event.on(document.body, 'wb-modified', null, handleScriptModify);

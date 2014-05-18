@@ -15,7 +15,7 @@
                         {
                             "name": "clear stage to color",
                             "type": "color",
-                            "block": "13236aef-cccd-42b3-a041-e26528174323"
+                            "block": "#111111"
                         }
                     ]
                 },

@@ -60,15 +60,14 @@
 
     function initDrag(event){
         var target = event.target;
-        //Check whether the original target was an input ....
         if(target.classList.contains('cloned')){ // support code-map
+            // Could also make the main drags more specific so they don't include .codemap *
             return;
         }
+        // don't start dragging from these elements
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(target, '#block_menu *')) {
-            console.log('not a drag handle');
             return;
         }
-        
         target = wb.closest(target, '.block');
         // This throws an error when block is in scratchpad
         if (target){

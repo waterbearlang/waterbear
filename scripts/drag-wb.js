@@ -3,23 +3,32 @@
     // After factoring it out to here it should be easier to see where things might go
     // into other files like block.js, workspace.js, etc.
 
-    var workspace; // <- WB. The Workspace block is created with the function
+    var workspace; // The Workspace block is created with the function
        // createWorkspace() in the workspace.js file.
-    var blockMenu = document.querySelector('#block_menu'); // <- WB
-    var scratchpad= document.querySelector('.scratchpad'); // <- WB
-    var selectedSocket; // <- WB
-    var templateDrag, localDrag; // <- WB
-    var _dropCursor; // <- WB
+       // We grab workspace in reset() because it can change, while the blocks below
+       // do not change and we can fetch them once.
+    var blockMenu = document.querySelector('#block_menu');
+    var scratchpad = document.querySelector('.scratchpad');
+
+    var selectedSocket;
+    var templateDrag, localDrag;
+    var _dropCursor;
     var dragTarget;
     var currentPosition;
     var dragTimeout = 20;
     var timer;
+    var startParent;
+    var startSibling;
+    var dropTarget;
+    var dropRects;
+    var scope;
+    var potentialDropTargets;
+    var startPosition;
 
     // Specific to the code map
     var cloned;
     var cm_cont= document.querySelector('#cm_container');
 
-    // WB-specific
     function dropCursor(){
         if (!_dropCursor){
             _dropCursor = document.querySelector('.drop-cursor');
@@ -28,14 +37,19 @@
     }
 
     function reset(){
-        cloned = false; // <- WB
-        scope = null; // <- WB
-        templateDrag = false; // <- WB
-        localDrag = false; // <- WB
-        var scratchpad= document.querySelector('.scratchpad'); // <- WB
-        workspace = null; // <- WB
-        selectedSocket = null; // <- WB
-        _dropCursor = null; // <- WB
+        startParent = null;
+        startSibling = null;
+        dropTarget = null;
+        dropRects = [];
+        potentialDropTargets = [];
+        startPosition = null;
+        cloned = false;
+        scope = null;
+        templateDrag = false;
+        localDrag = false;
+        workspace = null;
+        selectedSocket = null;
+        _dropCursor = null;
         dragTarget = null;
         currentPosition = null;
         if (timer){
@@ -55,35 +69,30 @@
             return;
         }
         
-        target = wb.closest(target, '.block'); // <- WB
+        target = wb.closest(target, '.block');
         // This throws an error when block is in scratchpad
         if (target){
-            // WB-Specific
             if (wb.matches(target, '.scripts_workspace')){
                 // don't start drag on workspace block
                 return;
             }
             dragTarget = target;
-            // WB-Specific
             if (target.parentElement.classList.contains('block-menu')){
                 //console.log('target parent: %o', target.parentElement);
                 target.dataset.isTemplateBlock = 'true';
                 templateDrag = true;
             }
-            // WB-Specific
             if (target.parentElement.classList.contains('locals')){
                 //console.log('target parent: %o', target.parentElement);
                 target.dataset.isLocal = 'true';
                 localDrag = true;
             }
             //dragTarget.classList.add("dragIndication");
-            startPosition = wb.rect(target); // <- WB
-            // WB-Specific
+            startPosition = wb.rect(target);
             if (! wb.matches(target.parentElement, '.scripts_workspace')){
                 startParent = target.parentElement;
             }
             startSibling = target.nextElementSibling;
-            // WB-Specific
             if(startSibling && !wb.matches(startSibling, '.block')) {
                 // Sometimes the "next sibling" ends up being the cursor
                 startSibling = startSibling.nextElementSibling;
@@ -96,7 +105,6 @@
     }
 
     function startDrag(event){
-        console.log('wb start drag');
         dragTarget.classList.add("dragIndication");
         // start timer for drag events
         timer = setTimeout(hitTest, dragTimeout);
@@ -128,18 +136,13 @@
         // set last offset
         dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
         dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
-        // WB-Specific
         document.body.appendChild(dragTarget);
-        // WB-Specific
         if (cloned){
             // call this here so it can bubble to document.body
             Event.trigger(dragTarget, 'wb-clone');
         }
-        // WB-Specific
         wb.reposition(dragTarget, startPosition);
-        // WB-Specific ???
         potentialDropTargets = getPotentialDropTargets(dragTarget);
-        // WB-Specific
         dropRects = potentialDropTargets.map(function(elem, idx){
             elem.classList.add('dropTarget');
             return wb.rect(elem);
@@ -148,11 +151,10 @@
     }
 
     function dragging(event){
-        var nextPosition = {left: event.pageX, top: event.pageY}; // <- WB
+        var nextPosition = {left: event.pageX, top: event.pageY};
         var dX = nextPosition.left - currentPosition.left;
         var dY = nextPosition.top - currentPosition.top;
-        var currPos = wb.rect(dragTarget); // <- WB
-        // WB-Specific
+        var currPos = wb.rect(dragTarget);
         wb.reposition(dragTarget, {left: currPos.left + dX, top: currPos.top + dY});
         currentPosition = nextPosition;
     }
@@ -181,8 +183,7 @@
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        resetDragStyles(); // <- WB
-        // WB-Specific
+        resetDragStyles();
         if (wb.overlap(dragTarget, blockMenu)){
             // delete block if dragged back to menu
             Event.trigger(dragTarget, 'wb-delete');
@@ -501,7 +502,7 @@
         Event.on('.content', 'drag-end', null, endDrag);
         Event.on(document, 'drag-cancel', null, cancelDrag);
 
-        drag.reset(); // initialization kick
+        reset(); // initialization kick
     };
 
 

@@ -17,9 +17,18 @@
 	cursor: auto;
 }
 
+.scripts_workspace{
+  pointer-events: none;
+}
+
+.scripts_workspace .block{
+  pointer-events: auto;
+}
+
 .scripts_workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }
+
 
 .submenu .seq-num{
   display: none;

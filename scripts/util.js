@@ -37,8 +37,8 @@
         {
             return;
         }
-        if (input.wbTarget){
-            input = input.wbTarget;
+        if (input.target){
+            input = input.target;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
@@ -81,16 +81,12 @@
     }
 
     function closest(elem, selector){
-        if (elem.jquery){
-            elem = elem[0];
-        }
         while(elem){
             if (wb.matches(elem, selector)){
                 return elem;
             }
             if (!elem.parentElement){
-                throw new Error('Element has no parent, is it in the tree? %o', elem);
-                //return null;
+                return null;
             }
             elem = elem.parentElement;
         }

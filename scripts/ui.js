@@ -11,8 +11,8 @@ function accordion(event){
     if (open){
         open.classList.remove('open');
     }
-    if (open && open === event.wbTarget.nextSibling) return;
-    event.wbTarget.nextSibling.classList.add('open');
+    if (open && open === event.target.nextSibling) return;
+    event.target.nextSibling.classList.add('open');
 }
 
 var textScriptNeedsUpdate = false;
@@ -270,30 +270,31 @@ function stackTrace() {
 
 function closeContextMenu(evt) {
 	var contextDiv = document.getElementById('context_menu');
-	if(!wb.matches(evt.wbTarget, '#context_menu *')) {
+	if(!wb.matches(evt.target, '#context_menu *')) {
 		contextDiv.style.display = 'none';
 	}
 }
 
 function handleContextMenu(evt) {
-	var block = wb.closest(evt.wbTarget, '.block');
+	var block = wb.closest(evt.target, '.block');
+	if (!block){ return; }
 	var cm_cont = document.getElementById('cm_container');
 	// console.log('handling context menu');
 	stackTrace();
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
-	// console.log(evt.wbTarget);
-	if(cmenuDisabled || wb.matches(evt.wbTarget, '#block_menu_wrapper *')) return;
+	// console.log(evt.target);
+	if(cmenuDisabled || wb.matches(evt.target, '#block_menu_wrapper *')) return;
 	else if(false);
-	else if(wb.overlap(evt.wbTarget, cm_cont)){
-		setContextMenuTarget(evt.wbTarget);
-		if(cmenuTarget == null)return;
+	else if(wb.overlap(evt.target, cm_cont)){
+		setContextMenuTarget(evt.target);
+		if(cmenuTarget == null){ return };
 		if( wb.matches(cmenuTarget, '.cloned') || wb.matches(cmenuTarget, '.holder')){
 			buildContextMenu(cm_cmenu);
 		}else return;
 	}
-	else if(wb.matches(evt.wbTarget, '.block:not(.scripts_workspace) *')) {
-		setContextMenuTarget(evt.wbTarget);
+	else if(wb.matches(evt.target, '.block:not(.scripts_workspace) *')) {
+		setContextMenuTarget(evt.target);
 		buildContextMenu(block_cmenu);
 		}
 	else return;

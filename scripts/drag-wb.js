@@ -196,11 +196,9 @@
             dropTarget.classList.remove('dropActive');
             if (wb.matches(dragTarget, '.step')){
                 // Drag a step to snap to a step
-                // dropTarget.parent().append(dragTarget);
                 if(copyBlock && !templateDrag) {
                     // FIXME: This results in two blocks if you copy-drag back to the starting socket
                     revertDrop();
-                    // console.log('clone dragTarget block to dragTarget');
                     dragTarget = wb.cloneBlock(dragTarget);
                 }
                 dropTarget.insertBefore(dragTarget, dropCursor());

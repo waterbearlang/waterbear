@@ -4,9 +4,8 @@
     var isDragging = false;
     var pointerDown = false;
     
-    
     function reset(){
-        // Some of this should be dragEnd, some is initialization
+        // called when we end a drag for any reason
         dragTarget = null;
         isDragging = false;
         pointerDown = false;
@@ -24,18 +23,16 @@
 
     function startDrag(event){
         // called on mousemove or touchmove if not already dragging
-        if (!dragTarget) {return undefined;}
-        if (!pointerDown) {return undefined;}
+        if (!dragTarget) { return undefined; }
+        if (!pointerDown) { return undefined; }
         isDragging = true;
-        // console.log('startDrag(%o)', event);
         Event.forward(event.target, 'drag-start', event);
         return false;
     }
 
     function dragging(event){
-        if (!dragTarget) {return undefined;}
+        if (!dragTarget) { return undefined; }
         if (!isDragging) {startDrag(event);}
-        // console.log('drag(%o)', event);
         event.preventDefault();
         // update the variables, distance, button pressed
         Event.forward(event.target, 'dragging', event);
@@ -44,8 +41,7 @@
 
     function endDrag(event){
         pointerDown = false;
-        // console.log('endDrag(%o) dragging: %s', event, dragging);
-        if (!isDragging) {return undefined;}
+        if (!isDragging) { return undefined; }
         Event.forward(event.target, 'drag-end', event);
         event.preventDefault();
         reset();
@@ -54,7 +50,6 @@
 
     function cancelDrag(event) {
         // Cancel if escape key pressed
-        // console.log('cancel drag of %o', dragTarget);
         if(event.keyCode == 27) {
             Event.forward(event.target, 'drag-cancel', event);
             reset();

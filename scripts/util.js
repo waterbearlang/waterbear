@@ -81,16 +81,12 @@
     }
 
     function closest(elem, selector){
-        if (elem.jquery){
-            elem = elem[0];
-        }
         while(elem){
             if (wb.matches(elem, selector)){
                 return elem;
             }
             if (!elem.parentElement){
-                throw new Error('Element has no parent, is it in the tree? %o', elem);
-                //return null;
+                return null;
             }
             elem = elem.parentElement;
         }

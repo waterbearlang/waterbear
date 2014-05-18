@@ -196,7 +196,7 @@
             var blockStyle = dragTarget.getBoundingClientRect();
             var oldX = blockStyle.left;
             var oldY = blockStyle.top;
-
+            dragTarget.removeAttribute('style');
             dragTarget.style.position = "absolute";
             dragTarget.style.left = (oldX - newOriginX) + "px";
             dragTarget.style.top = (oldY - newOriginY) + "px";

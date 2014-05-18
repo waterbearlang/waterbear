@@ -277,6 +277,7 @@ function closeContextMenu(evt) {
 
 function handleContextMenu(evt) {
 	var block = wb.closest(evt.target, '.block');
+	if (!block){ return; }
 	var cm_cont = document.getElementById('cm_container');
 	// console.log('handling context menu');
 	stackTrace();
@@ -287,7 +288,7 @@ function handleContextMenu(evt) {
 	else if(false);
 	else if(wb.overlap(evt.target, cm_cont)){
 		setContextMenuTarget(evt.target);
-		if(cmenuTarget == null)return;
+		if(cmenuTarget == null){ return };
 		if( wb.matches(cmenuTarget, '.cloned') || wb.matches(cmenuTarget, '.holder')){
 			buildContextMenu(cm_cmenu);
 		}else return;

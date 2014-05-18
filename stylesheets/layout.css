@@ -75,6 +75,10 @@ body{
     z-index: 10;
 }
 
+.code_map *{
+    pointer-events: none;
+}
+
 .code_map .block.scripts_workspace {
     -ms-transform-origin:0 0;
     -webkit-transform-origin:0 0;

@@ -59,48 +59,31 @@
     }
 
     function initDrag(event){
-        var target = event.target;
-        if(target.classList.contains('cloned')){ // support code-map
-            // Could also make the main drags more specific so they don't include .codemap *
+        var target = wb.closest(event.target, '.block');
+        if (!target){ return; }
+        // don't start dragging from these elements, unless block is in block menu
+        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained') && !wb.matches(target, '#block_menu *')) {
             return;
         }
-        // don't start dragging from these elements
-        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained')  && !wb.matches(target, '#block_menu *')) {
-            return;
+        dragTarget = target;
+        if (target.parentElement.classList.contains('block-menu')){            //console.log('target parent: %o', target.parentElement);
+            target.dataset.isTemplateBlock = 'true';
+            templateDrag = true;
         }
-        target = wb.closest(target, '.block');
-        // This throws an error when block is in scratchpad
-        if (target){
-            if (wb.matches(target, '.scripts_workspace')){
-                // don't start drag on workspace block
-                return;
-            }
-            dragTarget = target;
-            if (target.parentElement.classList.contains('block-menu')){
-                //console.log('target parent: %o', target.parentElement);
-                target.dataset.isTemplateBlock = 'true';
-                templateDrag = true;
-            }
-            if (target.parentElement.classList.contains('locals')){
-                //console.log('target parent: %o', target.parentElement);
-                target.dataset.isLocal = 'true';
-                localDrag = true;
-            }
-            //dragTarget.classList.add("dragIndication");
-            startPosition = wb.rect(target);
-            if (! wb.matches(target.parentElement, '.scripts_workspace')){
-                startParent = target.parentElement;
-            }
-            startSibling = target.nextElementSibling;
-            if(startSibling && !wb.matches(startSibling, '.block')) {
-                // Sometimes the "next sibling" ends up being the cursor
-                startSibling = startSibling.nextElementSibling;
-            }
-        }else{
-            console.warn('not a valid drag target');
-            dragTarget = null;
+        if (target.parentElement.classList.contains('locals')){
+            target.dataset.isLocal = 'true';
+            localDrag = true;
         }
-
+        //dragTarget.classList.add("dragIndication");
+        startPosition = wb.rect(target);
+        if (! wb.matches(target.parentElement, '.scripts_workspace')){
+            startParent = target.parentElement;
+        }
+        startSibling = target.nextElementSibling;
+        if(startSibling && !wb.matches(startSibling, '.block')) {
+            // Sometimes the "next sibling" ends up being the cursor
+            startSibling = startSibling.nextElementSibling;
+        }
     }
 
     function startDrag(event){
@@ -125,8 +108,6 @@
             cloned = true;
         }else{
             // TODO: handle detach better (generalize restoring sockets, put in language file)
-            // FIXME: Need to handle this somewhere
-            // FIXME: Better name?
             // FIXME: Always clone, remove on drop when needed
             Event.trigger(dragTarget, 'wb-remove');
         }
@@ -175,7 +156,6 @@
     // HELPERS
     
     function handleDrop(event,copyBlock){
-        // console.log('handleDrop(%o)', copyBlock);
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
@@ -201,20 +181,16 @@
             dragTarget.style.left = (oldX - newOriginX) + "px";
             dragTarget.style.top = (oldY - newOriginY) + "px";
             scratchpad.appendChild(dragTarget);
-
-            //when dragging from workspace to scratchpad, this keeps workspace from
-            //moving around when block in scratchpad is moved.
-            //dragTarget.parentElement.removeChild(dragTarget); 
             Event.trigger(dragTarget, 'wb-add');
             return;
         }
         else if(wb.overlap(dragTarget, cm_cont)){
             if (cloned){
                 dragTarget.parentElement.removeChild(dragTarget);
-                }else{
-                    revertDrop();
-                }
-    }
+            }else{
+                revertDrop();
+            }
+        }
         else if (dropTarget){
             //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');

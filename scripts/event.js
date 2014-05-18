@@ -20,6 +20,12 @@
     function cloneEvent(evt){
         var newEvent = {};
         for (var key in evt){
+            if (key === 'returnValue'){
+                continue;
+            }
+            if (typeof evt[key] === 'function'){
+                continue;
+            }
             newEvent[key] = evt[key];
         }
         newEvent.original = evt;

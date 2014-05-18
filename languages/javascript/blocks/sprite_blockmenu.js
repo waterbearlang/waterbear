@@ -15,7 +15,7 @@
                         {
                             "name": "clear stage to color",
                             "type": "color",
-                            "block": "#111111"
+                            "value": "#111111"
                         }
                     ]
                 },

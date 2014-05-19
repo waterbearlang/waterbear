@@ -77,6 +77,12 @@
         }
     }
 
+    // Get socket templates from block definition
+    function getSocketDefinitions(block){
+        return blockRegistry[block.id].sockets;
+    }
+
+    // Get sockeet elements from live block
     function getSockets(block){
         return wb.findChildren(wb.findChild(block, '.label'), '.socket');
     }
@@ -129,7 +135,7 @@
                 'data-scope-id': obj.scopeId || 0,
                 'data-script-id': obj.scriptId || obj.id,
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
-                'data-sockets': JSON.stringify(obj.sockets),
+                // 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'data-keywords': JSON.stringify(obj.keywords),
                 'data-tags': JSON.stringify(obj.tags),
@@ -288,19 +294,14 @@
 
     function removeStep(event){
         // About to remove a block from a block container, but it still exists and can be re-added
+        removeLocals(event.target);
+    }
+
+    function removeLocals(block){
         // Remove instances of locals
-        var block = event.target;
-        var parent;
-        // console.log('remove block: %o', block);
         if (block.classList.contains('step') && !block.classList.contains('context')){
-            try{
-                parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
-            }catch(e){
-                /* We are likely in the scratch space, which has no context */
-                return;
-            }
-            if (block.dataset.locals && block.dataset.locals.length){
-                // remove locals
+            var parent = wb.closest(block, '.context');
+            if (parent){
                 var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
                 locals.forEach(function(local){
                     if (!local.isTemplateBlock){
@@ -311,27 +312,12 @@
                 delete block.dataset.localsAdded;
             }
         }
+        return block;
     }
     
     function removeStepCodeMap(block){
         // About to remove a block from a block container, but it still exists and can be re-added
-        // Remove instances of locals
-
-        // console.log('remove block: %o', block);
-        if (block.classList.contains('step') && !block.classList.contains('context')){
-            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
-            if (block.dataset.locals && block.dataset.locals.length){
-                // remove locals
-                var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
-                locals.forEach(function(local){
-                    if (!local.isTemplateBlock){
-                        Event.trigger(local, 'wb-remove');
-                    }
-                    local.parentElement.removeChild(local);
-                });
-                delete block.dataset.localsAdded;
-            }
-        }
+        removeLocals(block);
     }
 
     function removeExpression(event){
@@ -364,11 +350,9 @@
         var block = event.target;
         // console.log('add block %o', block);
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
-            var parent;
-            try{
-                parent = wb.closest(block, '.context');
-            }catch(e){
-                // This *should* mean we're putting a block into the Scratchpad, so ignore locals
+            var parent = wb.closest(block, '.context');
+            if (!parent){
+                // We're putting a block into the Scratchpad, ignore locals
                 return;
             }
             var parsedLocals = addLocals(block, parent);
@@ -858,7 +842,7 @@
 
             //Change name of parent
             var parent = document.getElementById(source.dataset.localSource);
-            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            var nameTemplate = getSocketDefinitions(parent)[0].name;
             nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
             //Change locals name of parent

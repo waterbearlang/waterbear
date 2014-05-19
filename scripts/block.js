@@ -185,9 +185,9 @@
         var block = event.target;
         console.log('removeBlock %o', block.className);
         if (wb.matches(block, '.expression')){
-            removeExpression(event);
+            removeExpression(block);
         }else{
-            removeStep(event);
+            removeStep(block);
         }
         if (!block.dataset.isLocal){
             removeBlockCodeMap(block);
@@ -199,7 +199,7 @@
         var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){
             if (wb.matches(event.target, '.expression')){
-                removeExpressionCodeMap(dup_block);
+                removeExpression(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
                 removeStepCodeMap(dup_block);
             }
@@ -211,7 +211,6 @@
     }
 
     function addBlock(event){
-        console.log('add block: %o', event.target.className);
         event.stopPropagation();
         if (wb.matches(event.target, '.expression')){
             addExpression(event);
@@ -255,16 +254,6 @@
         if (next_sibling){
             dup_next_sibling = document.getElementById(next_sibling.id + '-d');
         }
-        // while(targetIndex < siblings.length -1){
-        //  dup_sibling_id = siblings[targetIndex+1].id;
-        //  if(dup_sibling_id === ''){
-        //      targetIndex += 1;
-        //  }else{
-        //      dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
-        //      break;
-        //  }
-        // }
-        // console.log('target: %s, parent: %s, grandparent: %s', target.className, target.parentNode.className, target.parentNode.parentNode.className);
         if(wb.matches(target, ".scripts_workspace")){
             //recursively add it to the code_map
             parent = codeMap_view;
@@ -286,10 +275,9 @@
         cloneForCM = false;
     }
 
-    function removeStep(event){
+    function removeStep(block){
         // About to remove a block from a block container, but it still exists and can be re-added
         // Remove instances of locals
-        var block = event.target;
         var parent;
         // console.log('remove block: %o', block);
         if (block.classList.contains('step') && !block.classList.contains('context')){
@@ -334,26 +322,15 @@
         }
     }
 
-    function removeExpression(event){
+    function removeExpression(block){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
-        var block = event.target;
         //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.removeAttribute('style');
         });
     }
     
-    function removeExpressionCodeMap(block){
-        // Remove an expression from an expression holder, say for dragging
-        // Revert socket to default
-        console.log("came here");
-        //  ('remove expression %o', block);
-        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
-            elem.removeAttribute('style');
-        });
-    }
-
     function addWorkspace(event){
         // Add a workspace, which has no block parent
         // var block = event.target;

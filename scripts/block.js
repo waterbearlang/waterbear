@@ -102,9 +102,6 @@
             obj.id = obj.id + '-d';
         }
         registerBlock(obj);
-        // if (!obj.isTemplateBlock){
-        //     console.log('block seq num: %s', obj.seqNum);
-        // }
         if (!obj.isTemplateBlock){
             updateFromTemplateBlock(obj);
         }
@@ -148,9 +145,6 @@
         }
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
-        }
-        if (obj.script){
-            block.dataset.script = obj.script;
         }
         if (obj.isLocal){
             block.dataset.isLocal = obj.isLocal;
@@ -565,15 +559,6 @@
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
-        if (block.dataset.script){
-            desc.script = block.dataset.script;
-        }
-        if (block.dataset.isTemplateBlock){
-            desc.isTemplateBlock = true;
-        }
-        if (block.dataset.isLocal){
-            desc.isLocal = true;
-        }
         if (block.dataset.localSource){
             desc.localSource = block.dataset.localSource;
         }
@@ -581,6 +566,7 @@
             desc.locals = JSON.parse(block.dataset.locals);
         }
         if (block.dataset.closed){
+            // maintain open/closed widgets, might be better in a parallele IDE local state?
             desc.closed = true;
         }
         var contained = wb.findChild(block, '.contained');
@@ -767,17 +753,21 @@
     }
 
     function codeFromBlock(block){
-        // console.log(getScript(block.dataset.scriptId));
         if (block.classList.contains('cloned')){
-            return ''
+            return '';
         }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
-            wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
-                elem.style.backgroundColor = 'red';
-            });
+            if (block.classList.contains('scripts_workspace')){
+                scriptTemplate = '[[1]]';
+            }else{
+                wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
+                    elem.style.backgroundColor = 'red';
+                });
+                return;
+            }
         }
         // support optional multiline templates
         if (Array.isArray(scriptTemplate)){

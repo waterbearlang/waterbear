@@ -18,7 +18,7 @@ var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
 var ideStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
 var runtimeStyles = [];
-var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'drag-wb', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
+var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'drag-wb', 'uuid', 'block', 'search', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
 var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {

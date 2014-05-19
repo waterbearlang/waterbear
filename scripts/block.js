@@ -185,9 +185,9 @@
         var block = event.target;
         console.log('removeBlock %o', block.className);
         if (wb.matches(block, '.expression')){
-            removeExpression(event);
+            removeExpression(block);
         }else{
-            removeStep(event);
+            removeStep(block);
         }
         if (!block.dataset.isLocal){
             removeBlockCodeMap(block);
@@ -199,7 +199,7 @@
         var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){
             if (wb.matches(event.target, '.expression')){
-                removeExpressionCodeMap(dup_block);
+                removeExpression(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
                 removeStepCodeMap(dup_block);
             }
@@ -211,7 +211,6 @@
     }
 
     function addBlock(event){
-        console.log('add block: %o', event.target.className);
         event.stopPropagation();
         if (wb.matches(event.target, '.expression')){
             addExpression(event);
@@ -255,16 +254,6 @@
         if (next_sibling){
             dup_next_sibling = document.getElementById(next_sibling.id + '-d');
         }
-        // while(targetIndex < siblings.length -1){
-        //  dup_sibling_id = siblings[targetIndex+1].id;
-        //  if(dup_sibling_id === ''){
-        //      targetIndex += 1;
-        //  }else{
-        //      dup_next_sibling = document.getElementById(siblings[targetIndex+1].id + "-d");
-        //      break;
-        //  }
-        // }
-        // console.log('target: %s, parent: %s, grandparent: %s', target.className, target.parentNode.className, target.parentNode.parentNode.className);
         if(wb.matches(target, ".scripts_workspace")){
             //recursively add it to the code_map
             parent = codeMap_view;
@@ -286,7 +275,7 @@
         cloneForCM = false;
     }
 
-    function removeStep(event){
+    function removeStep(block){
         // About to remove a block from a block container, but it still exists and can be re-added
         removeLocals(event.target);
     }
@@ -314,26 +303,15 @@
         removeLocals(block);
     }
 
-    function removeExpression(event){
+    function removeExpression(block){
         // Remove an expression from an expression holder, say for dragging
         // Revert socket to default
-        var block = event.target;
         //  ('remove expression %o', block);
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.removeAttribute('style');
         });
     }
     
-    function removeExpressionCodeMap(block){
-        // Remove an expression from an expression holder, say for dragging
-        // Revert socket to default
-        console.log("came here");
-        //  ('remove expression %o', block);
-        wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
-            elem.removeAttribute('style');
-        });
-    }
-
     function addWorkspace(event){
         // Add a workspace, which has no block parent
         // var block = event.target;
@@ -877,179 +855,12 @@
         }
     }
 
-    /** Search filter */
-
-    var oldQuery = '';
-
-    function searchBlock(event) {
-        // Clear input if the clear button is pressed
-        var searchTextNode = document.getElementById('search_text');
-
-        if (event.target.id == 'search_clear') {
-            searchTextNode.value = '';
-        }
-
-        // Proceed if the query is changed
-        var query = searchTextNode.value.trim().toLowerCase();
-
-        if (oldQuery == query) {
-            return;
-        } else {
-            oldQuery = query;
-        }
-
-        var searchResultsNode = document.getElementById('search_results');
-        var blockMenuNode = document.getElementById('block_menu');
-
-        // For non-empty query, show all blocks; otherwise, hide all blocks
-        if (query) {
-            wb.show(searchResultsNode);
-            wb.hide(blockMenuNode);
-
-            while (searchResultsNode.firstChild) {
-                searchResultsNode.removeChild(searchResultsNode.firstChild);
-            }
-        } else {
-            wb.hide(searchResultsNode);
-            wb.show(blockMenuNode);
-            return;
-        }
-
-        // Clear suggestions
-        var suggestions = [];
-        var suggestionsNode = document.getElementById('search_suggestions');
-        while (suggestionsNode.firstChild) {
-            suggestionsNode.removeChild(suggestionsNode.firstChild);
-        }
-
-        var groups = document.querySelectorAll('.block-menu');
-     
-        for (var i = 0; i < groups.length; i++) {
-            var blocks = groups[i].getElementsByClassName('block');
-
-            for (var j = 0; j < blocks.length; j++) {
-                // Construct an array of keywords
-                var keywords = [];
-
-                var group = blocks[j].getAttribute('data-group');
-                if (group) {
-                    keywords.push(group);
-                }
-
-                var keywordsAttr = blocks[j].getAttribute('data-keywords');
-                if (keywordsAttr) {
-                    keywords = keywords.concat(JSON.parse(keywordsAttr));
-                }
-
-                var tagsAttr = blocks[j].getAttribute('data-tags');
-                if (tagsAttr) {
-                    keywords = keywords.concat(JSON.parse(tagsAttr));
-                }
-
-                // Find a match
-                var matchingKeywords = [];
-
-                for (var k = 0; k < keywords.length; k++) {
-                    if (keywords[k].indexOf(query) === 0) {
-                        matchingKeywords.push(keywords[k]);
-
-                        if (suggestions.indexOf(keywords[k]) == -1) {
-                            suggestions.push(keywords[k]);
-
-                            var suggestionNode = document.createElement('option');
-                            suggestionNode.value = keywords[k];
-                            suggestionsNode.appendChild(suggestionNode);
-                        }
-                    }
-                }
-
-                // Show/hide blocks
-                if (matchingKeywords.length > 0) {
-                    var resultNode = document.createElement('div');
-                    resultNode.classList.add('search_result');
-                    resultNode.classList.add(group);
-                    resultNode.style.backgroundColor = 'transparent';
-
-                    // Block
-                    resultNode.appendChild(blocks[j].cloneNode(true));
-
-                    // Fix result height
-                    var clearNode = document.createElement('div');
-                    clearNode.style.clear = 'both';
-                    resultNode.appendChild(clearNode);
-
-                    // Keyword name
-                    var keywordNode = document.createElement('span');
-                    keywordNode.classList.add('keyword');
-                    var keywordNodeContent = '<span class="keyword">';
-                    keywordNodeContent += '<span class="match">';
-                    keywordNodeContent += matchingKeywords[0].substr(0, query.length);
-                    keywordNodeContent += '</span>';
-                    keywordNodeContent += matchingKeywords[0].substr(query.length);
-
-                    for (var l = 1; l < matchingKeywords.length; l++) {
-                        keywordNodeContent += ', <span class="match">';
-                        keywordNodeContent += matchingKeywords[l].substr(0, query.length);
-                        keywordNodeContent += '</span>';
-                        keywordNodeContent += matchingKeywords[l].substr(query.length);
-                    }
-
-                    keywordNodeContent += '</span>';
-                    keywordNode.innerHTML = keywordNodeContent;
-                    resultNode.appendChild(keywordNode);
-
-                    searchResultsNode.appendChild(resultNode);
-                }
-            }
-        }
-    }
-
-    function toggleTag(evt){
-        if (evt.detail.name.substring(0, 4) == 'tag-') {
-            var groups = document.querySelectorAll('.submenu');
-         
-            for (var i = 0; i < groups.length; i++) {
-                var blocks = groups[i].getElementsByClassName('block');
-                var blocksHidden = 0;
-
-                for (var j = 0; j < blocks.length; j++) {
-                    var tagsAttr = blocks[j].getAttribute('data-tags');
-                    var tags = [];
-
-                    if (tagsAttr) {
-                        tags = JSON.parse(tagsAttr);
-                        if (tags.indexOf(evt.detail.name.substring(4)) > -1) {
-                            if (evt.detail.state) {
-                                wb.show(blocks[j]);
-                            } else {
-                                wb.hide(blocks[j]);
-                                blocksHidden++;
-                            }
-                        }
-                    }
-                }
-
-                if (blocksHidden == blocks.length) {
-                    wb.hide(groups[i].previousSibling);
-                    wb.hide(groups[i]);
-                } else {
-                    wb.show(groups[i].previousSibling);
-                    wb.show(groups[i]);
-                }
-            }
-        }
-    }
 
     Event.on(document.body, 'wb-remove', '.block', removeBlock);
     Event.on(document.body, 'wb-add', '.block', addBlock);
     Event.on('.workspace', 'wb-add', null, addBlock);
     Event.on(document.body, 'wb-delete', '.block', deleteBlock);
 
-    Event.on('#search_text', 'keyup', null, searchBlock);
-    Event.on('#search_text', 'input', null, searchBlock);
-    Event.on('#search_clear', 'click', null, searchBlock);
-
-    Event.on(document.body, 'wb-toggle', null, toggleTag);
 
     wb.blockRegistry = blockRegistry;
 

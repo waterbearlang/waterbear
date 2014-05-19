@@ -77,6 +77,12 @@
         }
     }
 
+    // Get socket templates from block definition
+    function getSocketDefinitions(block){
+        return blockRegistry[block.id].sockets;
+    }
+
+    // Get sockeet elements from live block
     function getSockets(block){
         return wb.findChildren(wb.findChild(block, '.label'), '.socket');
     }
@@ -96,9 +102,6 @@
             obj.id = obj.id + '-d';
         }
         registerBlock(obj);
-        // if (!obj.isTemplateBlock){
-        //     console.log('block seq num: %s', obj.seqNum);
-        // }
         if (!obj.isTemplateBlock){
             updateFromTemplateBlock(obj);
         }
@@ -129,7 +132,7 @@
                 'data-scope-id': obj.scopeId || 0,
                 'data-script-id': obj.scriptId || obj.id,
                 'data-local-source': obj.localSource || null, // help trace locals back to their origin
-                'data-sockets': JSON.stringify(obj.sockets),
+                // 'data-sockets': JSON.stringify(obj.sockets),
                 'data-locals': JSON.stringify(obj.locals),
                 'data-keywords': JSON.stringify(obj.keywords),
                 'data-tags': JSON.stringify(obj.tags),
@@ -142,9 +145,6 @@
         }
         if (obj.type){
             block.dataset.type = obj.type; // capture type of expression blocks
-        }
-        if (obj.script){
-            block.dataset.script = obj.script;
         }
         if (obj.isLocal){
             block.dataset.isLocal = obj.isLocal;
@@ -277,18 +277,14 @@
 
     function removeStep(block){
         // About to remove a block from a block container, but it still exists and can be re-added
+        removeLocals(event.target);
+    }
+
+    function removeLocals(block){
         // Remove instances of locals
-        var parent;
-        // console.log('remove block: %o', block);
         if (block.classList.contains('step') && !block.classList.contains('context')){
-            try{
-                parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
-            }catch(e){
-                /* We are likely in the scratch space, which has no context */
-                return;
-            }
-            if (block.dataset.locals && block.dataset.locals.length){
-                // remove locals
+            var parent = wb.closest(block, '.context');
+            if (parent){
                 var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
                 locals.forEach(function(local){
                     if (!local.isTemplateBlock){
@@ -299,27 +295,12 @@
                 delete block.dataset.localsAdded;
             }
         }
+        return block;
     }
     
     function removeStepCodeMap(block){
         // About to remove a block from a block container, but it still exists and can be re-added
-        // Remove instances of locals
-
-        // console.log('remove block: %o', block);
-        if (block.classList.contains('step') && !block.classList.contains('context')){
-            var parent = wb.closest(block, '.context'); // valid since we haven't actually removed the block from the DOM yet
-            if (block.dataset.locals && block.dataset.locals.length){
-                // remove locals
-                var locals = wb.findAll(parent, '[data-local-source="' + block.id + '"]');
-                locals.forEach(function(local){
-                    if (!local.isTemplateBlock){
-                        Event.trigger(local, 'wb-remove');
-                    }
-                    local.parentElement.removeChild(local);
-                });
-                delete block.dataset.localsAdded;
-            }
-        }
+        removeLocals(block);
     }
 
     function removeExpression(block){
@@ -341,11 +322,9 @@
         var block = event.target;
         // console.log('add block %o', block);
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
-            var parent;
-            try{
-                parent = wb.closest(block, '.context');
-            }catch(e){
-                // This *should* mean we're putting a block into the Scratchpad, so ignore locals
+            var parent = wb.closest(block, '.context');
+            if (!parent){
+                // We're putting a block into the Scratchpad, ignore locals
                 return;
             }
             var parsedLocals = addLocals(block, parent);
@@ -558,15 +537,6 @@
         if (block.dataset.seqNum){
             desc.seqNum  = block.dataset.seqNum;
         }
-        if (block.dataset.script){
-            desc.script = block.dataset.script;
-        }
-        if (block.dataset.isTemplateBlock){
-            desc.isTemplateBlock = true;
-        }
-        if (block.dataset.isLocal){
-            desc.isLocal = true;
-        }
         if (block.dataset.localSource){
             desc.localSource = block.dataset.localSource;
         }
@@ -574,6 +544,7 @@
             desc.locals = JSON.parse(block.dataset.locals);
         }
         if (block.dataset.closed){
+            // maintain open/closed widgets, might be better in a parallele IDE local state?
             desc.closed = true;
         }
         var contained = wb.findChild(block, '.contained');
@@ -760,17 +731,21 @@
     }
 
     function codeFromBlock(block){
-        // console.log(getScript(block.dataset.scriptId));
         if (block.classList.contains('cloned')){
-            return ''
+            return '';
         }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from 
             // a block being removed from the language rather than hidden
-            wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
-                elem.style.backgroundColor = 'red';
-            });
+            if (block.classList.contains('scripts_workspace')){
+                scriptTemplate = '[[1]]';
+            }else{
+                wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){
+                    elem.style.backgroundColor = 'red';
+                });
+                return;
+            }
         }
         // support optional multiline templates
         if (Array.isArray(scriptTemplate)){
@@ -835,7 +810,7 @@
 
             //Change name of parent
             var parent = document.getElementById(source.dataset.localSource);
-            var nameTemplate = JSON.parse(parent.dataset.sockets)[0].name;
+            var nameTemplate = getSocketDefinitions(parent)[0].name;
             nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
             //Change locals name of parent

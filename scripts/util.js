@@ -16,6 +16,17 @@
         return Array.prototype.slice.call(arrayLike);
     }
 
+    function extend(dest, source){
+        for (var key in source){
+            dest[key] = source[key];
+        }
+        return dest;
+    }
+
+    function cloneObject(obj){
+        return extend({}, obj);
+    }
+
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
@@ -218,6 +229,8 @@
                                    function(fn){ setTimeout(fn, 20); };
 
     wb.makeArray = makeArray;
+    wb.extend = extend;
+    wb.cloneObject = cloneObject;
     wb.reposition = reposition;
     wb.hide = hide;
     wb.show = show;

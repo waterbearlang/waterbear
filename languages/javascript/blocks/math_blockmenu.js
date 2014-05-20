@@ -970,7 +970,7 @@
             "blocktype": "expression",
             "id": "be2c0634-28d8-4f64-97e0-48ed66877ba6",
             "type": "number",
-            "script": "summation({{1}});",
+            "script": "runtime.math.summation({{1}});",
             "help": "sum all of the numbers from 1 to N",
             "sockets": [
                 {
@@ -988,7 +988,7 @@
             "blocktype": "expression",
             "id": "5d547a3d-886a-40f9-86fa-b3d68d3db228",
             "type": "number",
-            "script": "inclusiveSummation({{1}}, {{2}});",
+            "script": "runtie.math.inclusiveSummation({{1}}, {{2}});",
             "help": "sum all of the numbers from N to M",
             "sockets": [
                 {
@@ -1010,7 +1010,7 @@
             "blocktype": "expression",
             "id": "3348490a-2b56-453e-9dfb-bfecd4cac71f",
             "type": "number",
-            "script": "sumOfFirstNMultiples({{2}}, {{1}});",
+            "script": "runtime.math.sumOfFirstNMultiples({{2}}, {{1}});",
             "help": "sum of the first N multiples of M",
             "sockets": [
                 {

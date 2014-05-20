@@ -425,7 +425,9 @@
         if (desc.block){
             socket.dataset.block = desc.block;
         }
-        socket.dataset.seqNum = blockdesc.seqNum;
+        if (blockdesc.seqNum !== undefined){
+            socket.dataset.seqNum = blockdesc.seqNum;
+        }
         if (!blockdesc.isTemplateBlock){
             //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
@@ -750,6 +752,8 @@
         // support optional multiline templates
         if (Array.isArray(scriptTemplate)){
             scriptTemplate = scriptTemplate.join('\n');
+        }else if (typeof scriptTemplate === 'function'){
+            return scriptTemplate.call(block, gatherArgs(block), gatherContained(block));
         }
         // fixup sequence numbers in template
         scriptTemplate = scriptTemplate.replace(/##/g, '_' + block.dataset.seqNum);

@@ -44,9 +44,8 @@
                     ]
                 },
                 {
-                    "deprecated": true,
                     "blocktype": "step",
-                    "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
+                    "script": "runtime.shape.fillCircleAtPointWithRadiusAndColor({{1}},{{2}},{{3}});",
                     "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
                     "sockets": [
                         {

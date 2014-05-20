@@ -1,4 +1,4 @@
-(function(window){
+(function(runtime){
 	'use strict';
 function gcd(a,b) {
 	var c;
@@ -17,10 +17,10 @@ function lcm(a,b) {
 // Adapted from an example found on Wikipedia:
 // http://en.wikipedia.org/w/index.php?title=Lanczos_approximation&oldid=552993029#Simple_implementation
 
-var g = 7
+var g = 7;
 var p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
      771.32342877765313, -176.61502916214059, 12.507343278686905,
-     -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7]
+     -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
  
 function gamma(n) {
 	// Reflection formula
@@ -51,10 +51,19 @@ function inclusiveSummation(from, to) {
 	var avg = (from + to)/2;
 	return numOfInts*avg;
 }
-window.gcd = gcd;
-window.lcm = lcm;
-window.gamma = gamma;
-window.summation = summation;
-window.sumOfFirstNMultiples = sumOfFirstNMultiples;
-window.inclusiveSummation = inclusiveSummation;
-})(window);
+
+function limit(value, min, max){
+	return Math.min(max, Math.max(min, value));
+}
+
+runtime.math = {
+	limit: limit,
+	gcd: gcd,
+	lcm: lcm,
+	gamma: gamma,
+	summation: summation,
+	sumOfFirstNMultiples: sumOfFirstNMultiples,
+	inclusiveSummation: inclusiveSummation
+};
+
+})(runtime);

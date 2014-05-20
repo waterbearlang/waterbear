@@ -235,42 +235,7 @@
                 },
                 {
                     "blocktype": "step",
-                    "script": [
-                        "(function(){",
-                            "var point## = {{1}};",
-                            "var radius=## = {{2}};",
-                            "local.ctx.save()",
-                            "local.ctx.beginPath();",
-                            "local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);",
-                            "local.ctx.closePath();",
-                            "local.ctx.fill();",
-                            "local.ctx.restore()",
-                        "})()"
-                    ],
-                    "help": "fill a circle with the specified color",
-                    "id": "6a2656b1-0138-445a-89c2-ba3d762203f8",
-                    "sockets": [
-                        {
-                            "name": "fill circle at point",
-                            "type": "point",
-                            "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
-                        },
-                        {
-                            "name": "with radius",
-                            "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "and color",
-                            "type": "color",
-                            "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
-                        }
-                    ],
-                    "tags": ["circle", "fill", "shape"]
-                },
-                {
-                    "blocktype": "step",
-                    "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
+                    "script": "Shape.fillShape({{1}}, {{2}});",
                     "help": "fill...",
                     "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
                     "sockets": [

@@ -233,6 +233,23 @@
                 },
                 {
                     "blocktype": "expression",
+                    "id": "c8a2aa22-df8e-40e4-b33e-fcbd489689da",
+                    "script": function(args){
+                        // expect one argument, a number between 0 and 255
+                        return 'runtime.color.greyValueAsHex(' + args[0] + ')';
+                    },
+                    "type": "color",
+                    "help": "returns a grey with a level between 0 and 255",
+                    "sockets": [
+                        {
+                            "name": "grey with level",
+                            "type": "number",
+                            "value": 100
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
                     "id": "271c8b4c-b045-4ff9-8ad5-9608ea204b09",
                     "script": "\"rgb(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \")\"",
                     "type": "color",

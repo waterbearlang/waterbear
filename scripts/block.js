@@ -425,7 +425,9 @@
         if (desc.block){
             socket.dataset.block = desc.block;
         }
-        socket.dataset.seqNum = blockdesc.seqNum;
+        if (blockdesc.seqNum !== undefined){
+            socket.dataset.seqNum = blockdesc.seqNum;
+        }
         if (!blockdesc.isTemplateBlock){
             //console.log('socket seq num: %s', blockdesc.seqNum);
             var newBlock = null;
@@ -750,30 +752,43 @@
         // support optional multiline templates
         if (Array.isArray(scriptTemplate)){
             scriptTemplate = scriptTemplate.join('\n');
+        }else if (typeof scriptTemplate === 'function'){
+            return scriptTemplate.call(block, gatherArgs(block), gatherContained(block));
         }
         // fixup sequence numbers in template
         scriptTemplate = scriptTemplate.replace(/##/g, '_' + block.dataset.seqNum);
-        var childValues = [];
-        var label = wb.findChild(block, '.label');
-        var expressionValues = wb.findChildren(label, '.socket')
-            .map(function(socket){ return wb.findChild(socket, '.holder'); }) // get holders, if any
-            .filter(function(holder){ return holder; }) // remove undefineds
-            .map(socketValue); // get value
-        if (wb.matches(block, '.context')){
-            childValues = wb.findChildren(wb.findChild(block, '.contained'), '.block').map(codeFromBlock).join('');
-        }
+        var childValues = gatherContained(block);
+        var expressionValues = gatherArgs(block);
         // Now intertwingle the values with the template and return the result
         function replace_values(match, offset, s){
             var idx = parseInt(match.slice(2, -2), 10) - 1;
             if (match[0] === '{'){
                 return expressionValues[idx] || 'null';
             }else{
-                return childValues || '/* do nothing */';
+                return childValues[idx] || '/* do nothing */';
             }
         }
         var _code = scriptTemplate.replace(/\{\{\d\}\}/g, replace_values);
         var _code2 = _code.replace(/\[\[\d\]\]/g, replace_values);
         return _code2;
+    }
+
+    function gatherContained(block){
+        if (wb.matches(block, '.context')){
+            return wb.findChildren(block, '.contained').map(function(container){
+                return wb.findChildren(container, '.block').map(codeFromBlock).join('');
+            });
+        }else{
+            return [];
+        }
+    }
+
+    function gatherArgs(block){
+        var label = wb.findChild(block, '.label');
+        return wb.findChildren(label, '.socket')
+            .map(function(socket){ return wb.findChild(socket, '.holder'); }) // get holders, if any
+            .filter(function(holder){ return holder; }) // remove undefineds
+            .map(socketValue); // get value
     }
 
     function changeName(event){

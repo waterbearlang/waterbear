@@ -359,7 +359,7 @@
                     "blocktype": "expression",
                     "id": "24A7ACF3-13A7-4150-8740-CB9F2B963789",
                     "type": "number",
-                    "script": "gcd({{1}},{{2}})",
+                    "script": "math.runtime.gcd({{1}},{{2}})",
                     "help": "greatest common divisor - the largest number that is a factor of both arguments",
                     "sockets": [
                         {
@@ -381,7 +381,7 @@
                     "blocktype": "expression",
                     "id": "E764FF62-BB0D-477E-85A2-8C0EA050904E",
                     "type": "number",
-                    "script": "lcm({{1}},{{2}})",
+                    "script": "runtime.math.lcm({{1}},{{2}})",
                     "help": "least common multiple - the smallest number divisible by both arguments",
                     "sockets": [
                         {
@@ -965,7 +965,72 @@
                     ]
                 }
             ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "be2c0634-28d8-4f64-97e0-48ed66877ba6",
+            "type": "number",
+            "script": "summation({{1}});",
+            "help": "sum all of the numbers from 1 to N",
+            "sockets": [
+                {
+                    "name": "Summation",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Summation",
+                "1 to N"
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "5d547a3d-886a-40f9-86fa-b3d68d3db228",
+            "type": "number",
+            "script": "inclusiveSummation({{1}}, {{2}});",
+            "help": "sum all of the numbers from N to M",
+            "sockets": [
+                {
+                    "name": "Inclusive Summation"
+                },
+                {
+                    "name": "from ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "to",
+                    "type": "number",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "3348490a-2b56-453e-9dfb-bfecd4cac71f",
+            "type": "number",
+            "script": "sumOfFirstNMultiples({{2}}, {{1}});",
+            "help": "sum of the first N multiples of M",
+            "sockets": [
+                {
+                    "name": "Multiple Summation"
+                },
+                {
+                    "name": "First ",
+                    "type": "number",
+                    "value": "0"
+                },
+                {
+                    "name": "multiples of",
+                    "type": "number",
+                    "value": "0"
+                }
+            ],
+            "keywords": [
+                "Multiple Summation",
+                "multiple"
+            ]
         }
-        
     );
 })(wb);

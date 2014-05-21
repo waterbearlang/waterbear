@@ -40,12 +40,12 @@
     
     function runCurrentScripts(force){
         // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
-        if (!(wb.autorun || force)){
+        if (!(wb.state.autorun || force)){
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
         document.body.classList.add('running');
-        if (!wb.scriptLoaded){
+        if (!wb.state.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
             return;
@@ -58,7 +58,7 @@
     wb.runCurrentScripts = runCurrentScripts;
  
     function clearStage(event){
-        wb.iframeReady = false;
+        wb.state.iframeReady = false;
         document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
     }
     wb.clearStage = clearStage;

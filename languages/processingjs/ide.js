@@ -29,7 +29,7 @@
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
-        if (!(wb.autorun || force)){
+        if (!(wb.state.autorun || force)){
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }

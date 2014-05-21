@@ -3688,7 +3688,7 @@ global.ajax = ajax;
 (function(wb){
 
 	wb.saveCurrentScripts = function saveCurrentScripts(){
-		if (!wb.scriptModified){
+		if (!wb.state.scriptModified){
 			// console.log('nothing to save');
 			// nothing to save
 			return;
@@ -3887,7 +3887,7 @@ global.ajax = ajax;
 			var saved = JSON.parse(evt.target.result);
 			wb.loaded = true;
 			loadScriptsFromObject(saved);
-			wb.scriptModified = true;
+			wb.state.scriptModified = true;
 		};
 	}
 
@@ -4401,7 +4401,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 		if (force || confirm('Throw out the current script?')){
 			var workspace = document.querySelector('.workspace > .scripts_workspace')
 			workspace.parentElement.removeChild(workspace);
-			wb.scriptModified = false;
+			wb.state.scriptModified = false;
 			wb.loaded = false;
 			createWorkspace('Workspace');
 			document.querySelector('.workspace > .scripts_text_view').innerHTML = '';
@@ -4420,15 +4420,15 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	Event.on('.content', 'click', '.load-example', function(evt){
 		var path = location.href.split('?')[0];
 		path += "?example=" + evt.target.dataset.example;
-		if (wb.scriptModified){
+		if (wb.state.scriptModified){
 			if (confirm('Throw out the current script?')){
-				wb.scriptModified = false;
+				wb.state.scriptModified = false;
 				wb.loaded = false;
 				history.pushState(null, '', path);
 				Event.trigger(document.body, 'wb-state-change');
 			}
 		}else{
-			wb.scriptModified = false;
+			wb.state.scriptModified = false;
 			wb.loaded = false;
 			history.pushState(null, '', path);
 			Event.trigger(document.body, 'wb-state-change');
@@ -4563,8 +4563,8 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 	// 	console.log('menu loaded');
 	// });
 	Event.on(document.body, 'wb-script-loaded', null, function(evt){
-		wb.scriptModified = false;
-		wb.scriptLoaded = true;
+		wb.state.scriptModified = false;
+		wb.state.scriptLoaded = true;
 		if (wb.view === 'result'){
 			// console.log('run script because we are awesome');
 			if (wb.windowLoaded){
@@ -4586,9 +4586,9 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 	Event.on(document.body, 'wb-modified', null, function(evt){
 		// still need modified events for changing input values
-		if (!wb.scriptLoaded) return;
-		if (!wb.scriptModified){
-			wb.scriptModified = true;
+		if (!wb.state.scriptLoaded) return;
+		if (!wb.state.scriptModified){
+			wb.state.scriptModified = true;
 			wb.historySwitchState(wb.view, true);
 		}
 	});
@@ -4771,7 +4771,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
-        if (!wb.scriptLoaded){
+        if (!wb.state.scriptLoaded){
             console.log('not ready to run script yet, waiting');
             Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
             return;
@@ -4787,7 +4787,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
         wb.historySwitchState('result');
     });
 
-    if (!wb.iframeReady){
+    if (!wb.state.iframeReady){
         document.querySelector('.stageframe').addEventListener('load', function(event){
             console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
             if (wb.iframewaiting){
@@ -4807,7 +4807,7 @@ Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadlibrary', library: runtimeUrl, script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
-        if (wb.iframeReady){
+        if (wb.state.iframeReady){
             run();
         }else{
             wb.iframewaiting = run;

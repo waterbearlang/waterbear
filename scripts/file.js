@@ -15,7 +15,7 @@
 (function(wb){
 'use strict';
     function saveCurrentScripts(){
-        if (!wb.scriptModified){
+        if (!wb.state.scriptModified){
             // console.log('nothing to save');
             // nothing to save
             return;
@@ -198,13 +198,13 @@
         // wb.clearScripts(null, true);
         wb.loaded = true;
         loadScriptsFromObject(JSON.parse(jsonblob));
-        wb.scriptModified = true;
+        wb.state.scriptModified = true;
     }
 
     function loadCurrentScripts(queryParsed){
         // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
         if (wb.loaded) return;
-        wb.scriptLoaded = false;
+        wb.state.scriptLoaded = false;
         if (queryParsed.gist){
             //console.log("Loading gist %s", queryParsed.gist);
             ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
@@ -223,7 +223,7 @@
             }
         }else{
             //console.log('no script to load, starting a new script');  
-            wb.scriptLoaded = true;
+            wb.state.scriptLoaded = true;
             wb.createWorkspace('Workspace');
         }
         wb.loaded = true;

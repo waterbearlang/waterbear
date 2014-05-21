@@ -30,18 +30,16 @@
     }
 
     function runCurrentScripts(force){
-        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
-        if (!(wb.autorun || force)){
+        if (!(wb.state.autorun || force)){
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
         document.body.classList.add('running');
-        if (!wb.scriptLoaded){
-            console.log('not ready to run script yet, waiting');
-            // Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
-            return;
-        }else{
+        if (wb.state.scriptLoaded && wb.state.iframeReady){
             console.log('ready to run script, let us proceed to the running of said script');
+        }else{
+            console.log('not ready to run script yet, waiting');
+            return;
         }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
         // update size of frame
@@ -53,7 +51,7 @@
     wb.runCurrentScripts = runCurrentScripts;
 
 
-    if (!wb.iframeReady){
+    if (!wb.state.iframeReady){
         document.querySelector('.stageframe').addEventListener('load', function(event){
             console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
             if (wb.iframewaiting){
@@ -70,7 +68,7 @@
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadScript', script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
-        if (wb.iframeReady){
+        if (wb.state.iframeReady){
             run();
         }else{
             wb.iframewaiting = run;
@@ -78,7 +76,7 @@
     };
 
     function clearStage(event){
-        wb.iframeReady = false;
+        wb.state.iframeReady = false;
         document.body.classList.remove('running');
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }

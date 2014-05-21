@@ -52,6 +52,7 @@
         if (wb.queryParams.view === 'result'){
             document.body.classList.add('result');
             document.body.classList.remove('editor');
+            wb.state.scriptModified = true;
             for(var i = 0; i < viewButtons.length; i++) {
                 viewButtons[i].classList.add('disabled');
             }
@@ -59,6 +60,7 @@
         }else{
             document.body.classList.remove('result');
             document.body.classList.add('editor');
+            wb.state.scriptModified = true;
             for(var j = 0; j < viewButtons.length; j++) {
                 viewButtons[j].classList.remove('disabled');
             }
@@ -89,6 +91,8 @@
         }
         if (wb.state.stage || wb.view === 'result'){
             // console.log('run current scripts');
+            console.log('where is that rabbit?')
+            wb.state.scriptModified = false;
             wb.runCurrentScripts();
         }else{
             wb.clearStage();
@@ -177,9 +181,9 @@
     }
 
     function handleScriptLoad(event){
-        wb.state.scriptModified = false;
         wb.state.scriptLoaded = true;
         if (wb.view === 'result' || wb.autorun){
+            wb.scriptModified = true; // force running
             if (wb.windowLoaded){
                 // console.log('run scripts directly');
                 wb.runCurrentScripts();
@@ -190,8 +194,9 @@
                     wb.runCurrentScripts();
                  }, false);
             }
-        // }else{
+        }else{
         //  console.log('do not run script for some odd reason: %s', wb.view);
+            wb.state.scriptModified = false;
         }
         // clear undo/redo stack
         console.log('script loaded');
@@ -221,7 +226,9 @@
                 if (evt.detail.state){
                     wb.show(results);
                 }else{
-                    wb.clearStage();
+                    if (!wb.view === 'results'){
+                        wb.clearStage();
+                    }
                     if (!wb.state.scripts_text_view){
                         wb.hide(results);
                     }

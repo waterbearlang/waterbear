@@ -13,7 +13,7 @@
 	};
 
     // these are transient state we store here for convenience, but don't persist
-	var volotile = ['scriptModified', 'iframeReady', 'scriptLoaded'];
+	var volotile = ['scriptModified', 'iframeReady', 'scriptLoaded', 'isRunning'];
 
 	function loadState(){
 		console.log('load persistent state');

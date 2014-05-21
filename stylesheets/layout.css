@@ -152,7 +152,11 @@ body{
     overflow: auto;
 }
 
-body.result .block_menu_wrapper, body.result .workspace, body.result .scripts_text_view, body.result ul.menu .run-scripts{
+body.result .block_menu_wrapper, 
+body.result .workspace, 
+body.result .scripts_text_view, 
+body.result #cm_container, 
+body.result ul.menu .run-scripts{
     display: none;
 }
 body.result .stage, body.result stage.hidden{

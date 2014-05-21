@@ -30,10 +30,18 @@
     }
 
     function runCurrentScripts(force){
-        if (!(wb.state.autorun || force)){
+        if (!(wb.state.autorun || force || wb.view === 'result')){
+            console.log('false alarm');
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
+        if (wb.state.isRunning && !wb.state.scriptModified){
+            // we're good, but thanks for asking
+            // mark scriptModified on resize events?
+            console.log('thanks for asking');
+            return;
+        }
+
         document.body.classList.add('running');
         if (wb.state.scriptLoaded && wb.state.iframeReady){
             console.log('ready to run script, let us proceed to the running of said script');
@@ -46,6 +54,8 @@
         var iframe = document.querySelector('.stageframe');
         iframe.style.width =  iframe.parentElement.clientWidth + 'px';
         iframe.style.height = iframe.parentElement.clientHeight + 'px';
+        wb.state.isRunning = true;
+        wb.state.scriptModified = false;
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;

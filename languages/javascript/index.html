@@ -42,15 +42,8 @@
 	<meta name="viewport" content="width=device-width">
 	<!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
 	<!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
-	<script>
-		var wb = {
-			scriptModified: true,
-			iframeReady: false,
-			autorun: true
-		};
-	</script>
 </head>
-<body class="autorun">
+<body>
 	<div class="titlebar">
 		<img src="../../images/logo.png" />
 		<h1 class="title">javascript playground</h1>
@@ -164,8 +157,7 @@
 			</li>
 			<li><button class="icon-play run-script">Run</button></li>
 <li><button class="icon-stop stop-script">Stop</button></li>
-<li><button class="icon-check autorun-script-on">Autorun</button></li>
-<li><button class="icon-unchecked autorun-script-off">Autorun</button></li>
+<li><button class="toggle" data-target="autorun">Autorun</button></li>
 
 		</ul>
 	</nav>
@@ -197,17 +189,21 @@
 			<div class="tutorial hidden">Tutorial goes here</div>
 			<div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
 		</div>
-		<div class="results">
+		<script>
+	function receiveMessage(event){
+		wb.state.iframeReady = event.data === 'ide-ready' ? true : false;
+		console.log('iframeReady: %s', wb.state.iframeReady);
+		wb.runCurrentScripts();
+	}
+	window.addEventListener('message', receiveMessage, false);
+</script>
+<div class="results">
 	<div class="stage">
 	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
 	<div class="scripts_text_view"></div>
 </div>
 <script>
 	var iframe = document.querySelector('.stageframe');
-	function receiveMessage(event){
-		wb.iframeReady = event.data === 'ide-ready' ? true : false;
-	}
-	window.addEventListener('message', receiveMessage, false);
 	// Work around Chrome bug with iframes in flexbox
 	iframe.style.height = iframe.parentElement.clientHeight + 'px';
 	window.addEventListener('resize', function(evt){
@@ -226,9 +222,11 @@
 <script src="../../lib/highlight.js"></script>
 <script src="../../lib/highlight-javascript.js"></script>
 <script src="../../lib/events.min.js"></script>
+<script src="../../scripts/wb.js"></script>
 <script src="../../scripts/queryparams.js"></script>
 <script src="../../scripts/util.js"></script>
 <script src="../../scripts/event.js"></script>
+<script src="../../scripts/persistence.js"></script>
 <script src="../../scripts/drag.js"></script>
 <script src="../../scripts/drag-wb.js"></script>
 <script src="../../scripts/uuid.js"></script>

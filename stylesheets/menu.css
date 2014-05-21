@@ -133,18 +133,3 @@ ul.menu li ul.sub-menu li:hover ul.sub-menu {
 	display: inline;
 }
 
-.menu .autorun-script-on{
-}
-
-.no-autorun .menu .autorun-script-on{
-	display: none;
-}
-
-.menu .autorun-script-off{
-	display: none;
-}
-
-.no-autorun .menu .autorun-script-off{
-	display: inline;
-}
-

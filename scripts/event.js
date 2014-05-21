@@ -89,10 +89,8 @@
     }
 
     function trigger(elemOrSelector, eventname, data){
-        var elem;
-        if (elemOrSelector.nodeName){
-            elem = elemOrSelector;
-        }else{
+        var elem = elemOrSelector;
+        if (typeof elemOrSelector === 'string'){
             elem = document.querySelector(elem);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});

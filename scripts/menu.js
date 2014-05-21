@@ -2,20 +2,14 @@
    even if the user leaves the site or restarts their browser. SessionStorage
    is volatile and will be deleted if they restart the browser.*/
 
-// global variable wb is initialized in the HTML before any javascript files
-// are loaded (in template/template.html)
+// global variable wb is initialized in the wb.js before any other javascript files
 (function(wb, Event){
-
-	var toggleState = {};
-	if (localStorage.toggleState){
-		toggleState = JSON.parse(localStorage.toggleState);
-	}
 
 	function handleToggle(evt){
 		var button = evt.target;
 		var name = button.dataset.target;
 		var isOn = !getState(name);
-		toggleState[name] = isOn;
+		setState(name, isOn);
 		if (isOn){
 			button.classList.remove('icon-unchecked');
 			button.classList.add('icon-check');
@@ -24,16 +18,19 @@
 			button.classList.remove('icon-check');
 		}
 		Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
-		localStorage.toggleState = JSON.stringify(toggleState);
 	}
 
 	Event.on(document.body, 'click', '.toggle:not(.disabled)', handleToggle);
 
 	function getState(name){
-		if (toggleState[name] === undefined){
-			toggleState[name] = true;
+		if (wb.state[name] === undefined){
+			wb.state[name] = true; // default to on
 		}
-		return toggleState[name];
+		return wb.state[name];
+	}
+
+	function setState(name, value){
+		wb.state[name] = value;
 	}
 
 	// initialize toggle states
@@ -52,7 +49,5 @@
 	}
 
 	Event.once(document.body, 'wb-workspace-initialized', null, initializeToggleStates);
-
-	wb.toggleState = toggleState; // treat as read-only
 
 })(wb, Event);

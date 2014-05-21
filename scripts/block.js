@@ -183,7 +183,6 @@
     function removeBlock(event){
         event.stopPropagation();
         var block = event.target;
-        console.log('removeBlock %o', block.className);
         if (wb.matches(block, '.expression')){
             removeExpression(block);
         }else{
@@ -197,7 +196,7 @@
 
     function removeBlockCodeMap(block){
         var dup_block = document.getElementById(block.id + "-d");
-        if(dup_block){
+        if(dup_block){ // if not, we're removing from the scratch space
             if (wb.matches(event.target, '.expression')){
                 removeExpression(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
@@ -205,8 +204,6 @@
             }
             recently_removed = dup_block;
             dup_block.parentNode.removeChild(dup_block);
-        }else{
-            console.log('why is there no block for %s', block.id + '-d');
         }
     }
 
@@ -264,10 +261,10 @@
             parent.appendChild(dup_target);
             addExpressionCodeMap(dup_target);
         }else{
-            console.log('target.id: %s', target.id);
-            console.log(target.parentNode.className);
+            // console.log('target.id: %s', target.id);
+            // console.log(target.parentNode.className);
             parent_id = wb.closest(target.parentNode, '.block').id + "-d";
-            console.log('parent_id: %s', parent_id);
+            // console.log('parent_id: %s', parent_id);
             parent = document.getElementById(parent_id).querySelector('.contained');
             parent.insertBefore(dup_target,dup_next_sibling);
             addStepCodeMap(dup_target);

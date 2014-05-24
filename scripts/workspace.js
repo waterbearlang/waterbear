@@ -91,7 +91,6 @@
         }
         if (wb.state.stage || wb.view === 'result'){
             // console.log('run current scripts');
-            console.log('where is that rabbit?')
             wb.state.scriptModified = false;
             wb.runCurrentScripts();
         }else{
@@ -226,7 +225,7 @@
                 if (evt.detail.state){
                     wb.show(results);
                 }else{
-                    if (!wb.view === 'results'){
+                    if (wb.view !== 'results'){
                         wb.clearStage();
                     }
                     if (!wb.state.scripts_text_view){

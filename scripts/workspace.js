@@ -13,8 +13,8 @@
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);
-            wb.scriptModified = false;
-            wb.scriptLoaded = false;
+            wb.state.scriptModified = false;
+            wb.state.scriptLoaded = false;
             wb.loaded = false;
             wb.clearStage();
             createWorkspace('Workspace');
@@ -28,15 +28,15 @@
     function loadExample(event){
         var path = location.href.split('?')[0];
         path += "?example=" + event.target.dataset.example;
-        if (wb.scriptModified){
+        if (wb.state.scriptModified){
             if (confirm('Throw out the current script?')){
-                wb.scriptModified = false;
+                wb.state.scriptModified = false;
                 wb.loaded = false;
                 history.pushState(null, '', path);
                 Event.trigger(document.body, 'wb-state-change');
             }
         }else{
-            wb.scriptModified = false;
+            wb.state.scriptModified = false;
             wb.loaded = false;
             history.pushState(null, '', path);
             Event.trigger(document.body, 'wb-state-change');
@@ -84,10 +84,10 @@
            //   // console.log('we do not care about current scripts, so there');
            //  }
         // }
-        if (wb.toggleState.scripts_text_view){
+        if (wb.state.scripts_text_view){
             wb.updateScriptsView();
         }
-        if (wb.toggleState.stage || wb.view === 'result'){
+        if (wb.state.stage || wb.view === 'result'){
             // console.log('run current scripts');
             wb.runCurrentScripts();
         }else{
@@ -168,7 +168,7 @@
     }
 
     function disclosure(event){
-        var block = wb.closest(event.wbTarget, '.block');
+        var block = wb.closest(event.target, '.block');
         if (block.dataset.closed){
             delete block.dataset.closed;
         }else{
@@ -177,8 +177,8 @@
     }
 
     function handleScriptLoad(event){
-        wb.scriptModified = false;
-        wb.scriptLoaded = true;
+        wb.state.scriptModified = false;
+        wb.state.scriptLoaded = true;
         if (wb.view === 'result' || wb.autorun){
             if (wb.windowLoaded){
                 // console.log('run scripts directly');
@@ -199,30 +199,14 @@
 
     function handleScriptModify(event){
         // still need modified events for changing input values
-        if (!wb.scriptLoaded) return;
-        if (!wb.scriptModified){
-            wb.scriptModified = true;
+        if (!wb.state.scriptLoaded) return;
+        if (!wb.state.scriptModified){
+            wb.state.scriptModified = true;
             wb.historySwitchState(wb.view, true);
         }
     }
 
-    // function runFullSize(){
-    //  ['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-    //      wb.hide(wb.find(document.body, sel));
-    //  });
-    //  wb.show(wb.find(document.body, '.stage'));
-    // }
-
-    // function runWithLayout(){
-    //  ['#block_menu', '.workspace'].forEach(function(sel){
-    //      wb.show(wb.find(document.body, sel));
-    //  });
-    //  ['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-    //      toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-    //  });
-    // }
-
-    function toggleComponent(evt){
+    function togglePanel(evt){
         var component = wb.find(document.body, '.' + evt.detail.name);
         if (!component) return;
         if (evt.detail.state){
@@ -238,7 +222,7 @@
                     wb.show(results);
                 }else{
                     wb.clearStage();
-                    if (!wb.toggleState.scripts_text_view){
+                    if (!wb.state.scripts_text_view){
                         wb.hide(results);
                     }
                 }
@@ -248,7 +232,7 @@
                     wb.show(results);
                     wb.updateScriptsView();
                 }else{
-                    if (!wb.toggleState.stage){
+                    if (!wb.state.stage){
                         wb.hide(results);
                     }
                 }
@@ -256,7 +240,7 @@
             case 'tutorial':
             case 'scratchpad':
             case 'scripts_workspace':
-                if (! (wb.toggleState.tutorial || wb.toggleState.scratchpad || wb.toggleState.scripts_workspace)){
+                if (! (wb.state.tutorial || wb.state.scratchpad || wb.state.scripts_workspace)){
                     wb.hide(wb.find(document.body, '.workspace'));
                 }else{
                     wb.show(wb.find(document.body, '.workspace'));
@@ -266,7 +250,7 @@
                 // We should only be hiding panels like this when they contain multiple
                 // sub-panes. Move this to CSS or (better) make the whole code map an overlay
                 // on the scripts_workspace
-                if(!wb.toggleState.code_map){
+                if(!wb.state.code_map){
                     wb.hide(wb.find(document.body, '#cm_container'));
                 }else{
                     wb.show(wb.find(document.body, '#cm_container'));
@@ -276,7 +260,7 @@
                 // do nothing
                 break;
         }
-        if (wb.toggleState.stage){
+        if (wb.state.stage){
             // restart script on any toggle
             // so it runs at the new size
             wb.runCurrentScripts();
@@ -284,7 +268,7 @@
 
     }
 
-    Event.on(document.body, 'wb-toggle', null, toggleComponent);
+    Event.on(document.body, 'wb-toggle', null, togglePanel);
 
 
     window.addEventListener('load', function(evt){
@@ -321,7 +305,7 @@
     Event.on('.workspace', 'keypress', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input, select', function(event){
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+        Event.trigger(document.body, 'wb-modified', {block: event.target, type: 'valueChanged'});
     });
     Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
     Event.on(document.body, 'wb-modified', null, handleScriptModify);
@@ -348,16 +332,16 @@
         document.body.classList.remove('running');
         wb.clearStage();
     });
-    Event.on('.autorun-script-on', 'click', null, function(){
-        // turn it off
-        document.body.classList.add('no-autorun');
-        wb.autorun = false;
-        wb.clearStage();
-    });
-    Event.on('.autorun-script-off', 'click', null, function(){
-        document.body.classList.remove('no-autorun');
-        wb.autorun = true;
-        wb.runCurrentScripts(true);
+    Event.on(document.body, 'wb-toggle', null, function(evt){
+        if (evt.detail.name === 'autorun'){
+            console.log('Caught wb-toggle autorun: %s', evt.detail.state);
+            wb.autorun = evt.detail.state;
+            if (evt.detail.state){
+                wb.runCurrentScripts();
+            }else{
+                wb.clearStage();
+            }
+        }
     });
 
     wb.language = location.pathname.split('/')[2];

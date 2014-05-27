@@ -18,7 +18,7 @@ var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
 var ideStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/fontawesome'];
 var runtimeStyles = [];
-var scripts_pre = ['queryparams', 'util', 'event', 'drag', 'uuid', 'block', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
+var scripts_pre = ['wb', 'queryparams', 'util', 'event', 'persistence', 'drag', 'drag-wb', 'uuid', 'block', 'search', 'file', 'undo', 'ui', 'blockprefs', 'menu', 'code_map'];
 var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {
@@ -160,21 +160,25 @@ var examples = template('examples');
 var stage = template('stage');
 var controls = template('controls');
 
-function cssInclude(path){
-    return '<link rel="stylesheet" href="' + path + '.css" >';
+function cssInclude(filepath, urlpath, styleName){
+    if (fs.existsSync(filepath + styleName + '.css')){
+        return '<link rel="stylesheet" href="' + urlpath + styleName + '.css" >';
+    }
+    console.log('skipping %s%s.css', filepath, styleName);
+    return '';
 }
 
 function cssIdeIncludes(lang){
     var includes = [];
     ideStyles.forEach(function(styleName){
-        includes.push(cssInclude('../../stylesheets/' + styleName));
+        includes.push(cssInclude('stylesheets/', '../../stylesheets/', styleName));
     });
     config[lang].ideStyles.forEach(function(styleName){
-        includes.push(cssInclude('../../stylesheets/' + styleName));
+        includes.push(cssInclude('stylesheets/', '../../stylesheets/', styleName));
     });
-    includes.push(cssInclude(lang));
+    includes.push(cssInclude('languages/' + lang + '/', '', lang));
     config[lang].plugins.forEach(function(plugin){
-        includes.push(cssInclude('blocks/' + plugin));
+        includes.push(cssInclude('languages/' + lang + '/blocks/', 'blocks/', plugin));
     });
     return includes.join('\n');
 }
@@ -182,46 +186,50 @@ function cssIdeIncludes(lang){
 function cssRuntimeIncludes(lang){
     var includes = [];
     runtimeStyles.forEach(function(styleName){
-        includes.push(cssInclude('../../stylesheets/' + styleName));
+        includes.push(cssInclude('stylesheets/', '../../stylesheets/', styleName));
     });
     config[lang].runtimeStyles.forEach(function(styleName){
-        includes.push(cssInclude('../../stylesheets/' + styleName));
+        includes.push(cssInclude('stylesheets/', '../../stylesheets/', styleName));
     });
     return includes.join('\n');
 }
 
-function jsInclude(path){
-    return '<script src="' + path + '.js"></script>';
+function jsInclude(filepath, urlpath, scriptName){
+    if (fs.existsSync(filepath + scriptName + '.js')){
+        return '<script src="' + urlpath + scriptName + '.js"></script>';
+    }
+    console.log('skipping %s%s.js',filepath,scriptName);
+    return '';
 }
 
 function jsIdeIncludes(lang){
     var includes = [];
     config[lang].ideLibs.forEach(function(scriptName){
-        includes.push(jsInclude('../../lib/' + scriptName));
+        includes.push(jsInclude('lib/', '../../lib/', scriptName));
     });
     scripts_pre.forEach(function(scriptName){
-        includes.push(jsInclude('../../scripts/' + scriptName));
+        includes.push(jsInclude('scripts/', '../../scripts/', scriptName));
     });
-    includes.push(jsInclude('ide'));
+    includes.push(jsInclude('languages/' + lang + '/', '', 'ide'));
     config[lang].plugins.forEach(function(plugin){
-        includes.push(jsInclude('blocks/' + plugin + '_ide'));
+        includes.push(jsInclude('languages/' + lang + '/blocks/', 'blocks/', plugin + '_ide'));
     });
     config[lang].plugins.forEach(function(plugin){
-        includes.push(jsInclude('blocks/' + plugin + '_blockmenu'));
+        includes.push(jsInclude('languages/' + lang + '/blocks/', 'blocks/',  plugin + '_blockmenu'));
     });
     scripts_post.forEach(function(scriptName){
-        includes.push(jsInclude('../../scripts/' + scriptName));
+        includes.push(jsInclude('scripts/', '../../scripts/', scriptName));
     });
     return includes.join('\n');
 }
 
 function jsRuntimeIncludes(lang){
-    var includes = [jsInclude('runtime')];
+    var includes = [jsInclude('languages/' + lang + '/', '', 'runtime')];
     config[lang].plugins.forEach(function(plugin){
-        includes.push(jsInclude('blocks/' + plugin + '_runtime'));
+        includes.push(jsInclude('languages/' + lang + '/blocks/', 'blocks/',  plugin + '_runtime'));
     });
     config[lang].runtimeLibs.forEach(function(libName){
-        includes.push(jsInclude('../../lib/' + libName));
+        includes.push(jsInclude('lib/', '../../lib/',  libName));
     });
     return includes.join('\n');
 }

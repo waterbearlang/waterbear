@@ -7,6 +7,193 @@
             "help": "Color blocks are for creating, converting, and manipulating colors",
             "blocks": [
                 {
+                    "blocktype": "expression",
+                    "id": "a57f2c99-c76b-499d-bd49-8bb2f1a15bd7",
+                    "script": "#111111",
+                    "help": "simple black color",
+                    "sockets": [
+                        {
+                            "name": "black"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "4ba83dbf-9317-4db6-ab40-cd5d67cc154c",
+                    "script": "#FFFFFF",
+                    "help": "simple white color",
+                    "sockets": [
+                        {
+                            "name": "white"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "a096d508-0ad6-4b91-a780-d814da70c892",
+                    "script": "#001f3f",
+                    "help": "simple navy color",
+                    "sockets": [
+                        {
+                            "name": "navy"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "49e94816-79c8-4184-9b1e-3d67d0cf462c",
+                    "script": "#0074d9",
+                    "help": "simple blue color",
+                    "sockets": [
+                        {
+                            "name": "blue"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "2371917e-02b5-4309-8f50-adc37138cabe",
+                    "script": "#7fdbff",
+                    "help": "simple aqua color",
+                    "sockets": [
+                        {
+                            "name": "aqua"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "33f4911a-848e-4fee-98b4-1518eaa8c8c3",
+                    "script": "#39cccc",
+                    "help": "simple teal color",
+                    "sockets": [
+                        {
+                            "name": "teal"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "1594cdab-0816-47f2-a8b8-ebb2ede1773b",
+                    "script": "#3d9970",
+                    "help": "simple olive color",
+                    "sockets": [
+                        {
+                            "name": "olive"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "59684297-d8e8-4d2a-9a79-a3067d1346ec",
+                    "script": "#2ecc40",
+                    "help": "simple green color",
+                    "sockets": [
+                        {
+                            "name": "green"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "9370a21d-3201-4f1a-97c5-779bc2b97070",
+                    "script": "#01ff70",
+                    "help": "simple lime color",
+                    "sockets": [
+                        {
+                            "name": "lime"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "b22d1d30-e49d-4994-aca8-f8018e518975",
+                    "script": "#ffdc00",
+                    "help": "simple yellow color",
+                    "sockets": [
+                        {
+                            "name": "yellow"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "be273619-4467-4b71-ab98-7698dedfad2f",
+                    "script": "#ff851b",
+                    "help": "simple orange color",
+                    "sockets": [
+                        {
+                            "name": "orange"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "88e2874a-2dd7-4e47-bc1a-769696f6dddc7",
+                    "script": "#ff4136",
+                    "help": "simple red color",
+                    "sockets": [
+                        {
+                            "name": "red"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "9586be34-f287-410b-8bfa-867e392d62d3",
+                    "script": "#f012be",
+                    "help": "simple fuchsia color",
+                    "sockets": [
+                        {
+                            "name": "fuchsia"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "62df6765-092a-4d70-bd62-2e67f72c4712",
+                    "script": "#b10dc9",
+                    "help": "simple purple color",
+                    "sockets": [
+                        {
+                            "name": "purple"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "3e791123-ef1f-4d2c-8081-9d65dc39ed12",
+                    "script": "#85144b",
+                    "help": "simple maroon color",
+                    "sockets": [
+                        {
+                            "name": "maroon"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "04041f33-7eda-4b8c-a5af-90ec3a444168",
+                    "script": "#aaaaaa",
+                    "help": "simple grey color",
+                    "sockets": [
+                        {
+                            "name": "grey"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "a1acf4e2-7281-4fa0-a669-0cbfca863dbc",
+                    "script": "#dddddd",
+                    "help": "simple silver color",
+                    "sockets": [
+                        {
+                            "name": "silver"
+                        }
+                    ]
+                },
+                {
                     "blocktype": "step",
                     "id": "01e39af1-679d-4b4d-b30e-a093a2687063",
                     "script": "local.ctx.shadowColor = {{1}};",
@@ -41,6 +228,23 @@
                             "name": "fill color",
                             "type": "color",
                             "value": "#000"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "c8a2aa22-df8e-40e4-b33e-fcbd489689da",
+                    "script": function(args){
+                        // expect one argument, a number between 0 and 255
+                        return 'runtime.color.greyValueAsHex(' + args[0] + ')';
+                    },
+                    "type": "color",
+                    "help": "returns a grey with a level between 0 and 255",
+                    "sockets": [
+                        {
+                            "name": "grey with level",
+                            "type": "number",
+                            "value": 100
                         }
                     ]
                 },

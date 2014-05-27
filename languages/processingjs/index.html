@@ -9,30 +9,23 @@
 <link rel="stylesheet" href="../../stylesheets/menu.css" >
 <link rel="stylesheet" href="../../stylesheets/fonts/fontawesome.css" >
 <link rel="stylesheet" href="../../stylesheets/highlight-github.css" >
-<link rel="stylesheet" href="processingjs.css" >
-<link rel="stylesheet" href="blocks/processingjs.css" >
+
+
 <link rel="stylesheet" href="blocks/structure.css" >
-<link rel="stylesheet" href="blocks/environment.css" >
-<link rel="stylesheet" href="blocks/controls.css" >
-<link rel="stylesheet" href="blocks/shapes.css" >
-<link rel="stylesheet" href="blocks/input.css" >
-<link rel="stylesheet" href="blocks/colors.css" >
-<link rel="stylesheet" href="blocks/math.css" >
-<link rel="stylesheet" href="blocks/transform.css" >
+
+
+
+
+
+
+
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<meta name="viewport" content="width=device-width">
 	<!--link rel="apple-touch-icon-precomposed" href="icon.png"--><!-- 57x57 icon -->
 	<!--link rel="apple-touch-startup-image" href="default.png"--><!-- 320x460 image -->
-	<script>
-		var wb = {
-			scriptModified: true,
-			iframeReady: false,
-			autorun: true
-		};
-	</script>
 </head>
-<body class="autorun">
+<body>
 	<div class="titlebar">
 		<img src="../../images/logo.png" />
 		<h1 class="title">processingjs playground</h1>
@@ -172,7 +165,7 @@
 <script>
 	var iframe = document.querySelector('.stageframe');
 	function receiveMessage(event){
-		wb.iframeReady = event.data === 'ready' ? true : false;
+		wb.state.iframeReady = event.data === 'ready' ? true : false;
 	}
 	window.addEventListener('message', receiveMessage, false);
 	// Work around Chrome bug with iframes in flexbox
@@ -193,12 +186,16 @@
 <script src="../../lib/highlight-javascript.js"></script>
 <script src="../../lib/processing-1.4.1.js"></script>
 <script src="../../lib/events.min.js"></script>
+<script src="../../scripts/wb.js"></script>
 <script src="../../scripts/queryparams.js"></script>
 <script src="../../scripts/util.js"></script>
 <script src="../../scripts/event.js"></script>
+<script src="../../scripts/persistence.js"></script>
 <script src="../../scripts/drag.js"></script>
+<script src="../../scripts/drag-wb.js"></script>
 <script src="../../scripts/uuid.js"></script>
 <script src="../../scripts/block.js"></script>
+<script src="../../scripts/search.js"></script>
 <script src="../../scripts/file.js"></script>
 <script src="../../scripts/undo.js"></script>
 <script src="../../scripts/ui.js"></script>
@@ -206,16 +203,16 @@
 <script src="../../scripts/menu.js"></script>
 <script src="../../scripts/code_map.js"></script>
 <script src="ide.js"></script>
-<script src="blocks/processingjs_ide.js"></script>
-<script src="blocks/structure_ide.js"></script>
-<script src="blocks/environment_ide.js"></script>
-<script src="blocks/controls_ide.js"></script>
-<script src="blocks/shapes_ide.js"></script>
-<script src="blocks/input_ide.js"></script>
+
+
+
+
+
+
 <script src="blocks/colors_ide.js"></script>
 <script src="blocks/math_ide.js"></script>
-<script src="blocks/transform_ide.js"></script>
-<script src="blocks/processingjs_blockmenu.js"></script>
+
+
 <script src="blocks/structure_blockmenu.js"></script>
 <script src="blocks/environment_blockmenu.js"></script>
 <script src="blocks/controls_blockmenu.js"></script>

@@ -29,7 +29,7 @@
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
-        if (!(wb.autorun || force)){
+        if (!(wb.state.autorun || force)){
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
@@ -118,8 +118,8 @@
     };
 
     Event.on('.socket input', 'click', null, function(event){
-        event.wbTarget.focus();
-        event.wbTarget.select();
+        event.target.focus();
+        event.target.select();
     });
 
 })(wb, Event);

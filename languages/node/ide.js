@@ -284,8 +284,8 @@ wb.choiceLists = {
 
 
 Event.on('.socket input', 'click', null, function(event){
-    event.wbTarget.focus();
-    event.wbTarget.select();
+    event.target.focus();
+    event.target.select();
 });
 
 

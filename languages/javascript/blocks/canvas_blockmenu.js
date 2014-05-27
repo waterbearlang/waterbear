@@ -217,7 +217,7 @@
                 {
                     "blocktype": "step",
                     "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
-                    "help": "circle...",
+                    "help": "stroke a circle with the current color",
                     "id": "b4e05d48-32e4-4e0b-832c-b2433ffda2e2",
                     "sockets": [
                         {
@@ -230,11 +230,12 @@
                             "type": "number",
                             "value": "10"
                         }
-                    ]
+                    ],
+                    "tags": ["shape", "circle", "stroke"]
                 },
                 {
                     "blocktype": "step",
-                    "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
+                    "script": "Shape.fillShape({{1}}, {{2}});",
                     "help": "fill...",
                     "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
                     "sockets": [

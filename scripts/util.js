@@ -16,6 +16,17 @@
         return Array.prototype.slice.call(arrayLike);
     }
 
+    function extend(dest, source){
+        for (var key in source){
+            dest[key] = source[key];
+        }
+        return dest;
+    }
+
+    function cloneObject(obj){
+        return extend({}, obj);
+    }
+
     function reposition(elem, position){
         // put an absolutely positioned element in the right place
         // May need to take into account offsets of container
@@ -37,8 +48,8 @@
         {
             return;
         }
-        if (input.wbTarget){
-            input = input.wbTarget;
+        if (input.target){
+            input = input.target;
         }
         svgText.textContent = input.value || '';
         var textbox = svgText.getBBox();
@@ -81,16 +92,12 @@
     }
 
     function closest(elem, selector){
-        if (elem.jquery){
-            elem = elem[0];
-        }
         while(elem){
             if (wb.matches(elem, selector)){
                 return elem;
             }
             if (!elem.parentElement){
-                throw new Error('Element has no parent, is it in the tree? %o', elem);
-                //return null;
+                return null;
             }
             elem = elem.parentElement;
         }
@@ -222,6 +229,8 @@
                                    function(fn){ setTimeout(fn, 20); };
 
     wb.makeArray = makeArray;
+    wb.extend = extend;
+    wb.cloneObject = cloneObject;
     wb.reposition = reposition;
     wb.hide = hide;
     wb.show = show;

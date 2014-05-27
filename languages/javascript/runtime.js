@@ -123,7 +123,6 @@ function Global(){
             g.stage_center_y = g.stage_height / 2;
             local.canvas.setAttribute("width", runtime.stage_width);
             local.canvas.setAttribute("height", runtime.stage_width);
-            console.log('updated stage size: %s, %s', runtime.stage_width, runtime.stage_height);
         }
     })
 };

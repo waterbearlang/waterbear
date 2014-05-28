@@ -598,7 +598,7 @@ function showScript(evt){
 }
 
 function showResult(evt){
-	handleShowButton(evt.target, document.querySelector('.results'));
+	handleShowButton(evt.target, document.querySelector('.result'));
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 

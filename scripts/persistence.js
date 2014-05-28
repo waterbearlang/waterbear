@@ -9,6 +9,7 @@
 		scriptLoaded: false,
         iframeReady: false,
         tutorial: false,
+        isRunning: false,
         'tag-deprecated': false
 	};
 

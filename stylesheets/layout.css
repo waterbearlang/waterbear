@@ -118,7 +118,7 @@ body{
     overflow: auto;
 }
 
-.results{
+.result{
     -webkit-flex: 0 0 400px;
     flex: 1 1 400px;
     display: -webkit-flex;
@@ -127,7 +127,7 @@ body{
     flex-direction: column;
 }
 
-.results.hidden{
+.result.hidden{
     display: none;
 }
 
@@ -148,7 +148,7 @@ body{
     overflow: auto;
 }
 
-#block_menu, #search_results, .workspace, .results, .files{
+#block_menu, #search_results, .workspace, .result, .files{
     overflow: auto;
 }
 
@@ -156,7 +156,7 @@ body.result .block_menu_wrapper,
 body.result .workspace, 
 body.result .scripts_text_view, 
 body.result #cm_container, 
-body.result ul.menu .run-scripts{
+body.result ul.menu .run-full-size{
     display: none;
 }
 body.result .stage, body.result stage.hidden{
@@ -199,7 +199,7 @@ ul.menu .show-ide{
         position: relative;
         overflow: hidden;
     }
-    .block_menu_wrapper, .workspace, .results, .files{
+    .block_menu_wrapper, .workspace, .result, .files{
         display: block;
         position: absolute;
         width: 100%;

@@ -45,10 +45,10 @@
 
     function handleStateChange(event){
         // hide loading spinner if needed
-        console.log('handleStateChange');
+        wb.queryParams = wb.urlToQueryParams(location.href);
+        console.log('handleStateChange %s', wb.queryParams.view);
         hideLoader();
         var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
-        wb.queryParams = wb.urlToQueryParams(location.href);
         if (wb.queryParams.view === 'result'){
             document.body.classList.add('result');
             document.body.classList.remove('editor');
@@ -92,8 +92,9 @@
         if (wb.state.stage || wb.view === 'result'){
             // console.log('run current scripts');
             wb.state.scriptModified = false;
-            wb.runCurrentScripts();
+            wb.runCurrentScripts(true);
         }else{
+            console.log('fall through to clearStage');
             wb.clearStage();
         }
     }
@@ -218,28 +219,29 @@
         }else{
             wb.hide(component);
         }
-        var results = wb.find(document.body, '.results');
+        var result = wb.find(document.body, '.result');
         // Special cases
         switch(evt.detail.name){
             case 'stage':
                 if (evt.detail.state){
-                    wb.show(results);
+                    wb.show(result);
                 }else{
-                    if (wb.view !== 'results'){
+                    if (wb.view !== 'result'){
+                        console.log('hide stage, so clear it too');
                         wb.clearStage();
                     }
                     if (!wb.state.scripts_text_view){
-                        wb.hide(results);
+                        wb.hide(result);
                     }
                 }
                 break;
             case 'scripts_text_view':
                 if (evt.detail.state){
-                    wb.show(results);
+                    wb.show(result);
                     wb.updateScriptsView();
                 }else{
                     if (!wb.state.stage){
-                        wb.hide(results);
+                        wb.hide(result);
                     }
                 }
                 break;
@@ -315,7 +317,7 @@
     });
     Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
     Event.on(document.body, 'wb-modified', null, handleScriptModify);
-    Event.on('.run-scripts', 'click', null, function(){
+    Event.on('.run-full-size', 'click', null, function(){
         wb.historySwitchState('result');
     });
     Event.on('.show-ide', 'click', null, function(){

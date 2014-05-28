@@ -30,16 +30,17 @@
     }
 
     function runCurrentScripts(force){
-        if (!(wb.state.autorun || force || wb.view === 'result')){
+        if (!((wb.state.autorun && wb.state.scriptModified) || force || wb.view === 'result')){
             console.log('false alarm');
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
-        if (wb.state.isRunning && !wb.state.scriptModified){
+        if ((wb.state.isRunning)){
             // we're good, but thanks for asking
             // mark scriptModified on resize events?
             console.log('thanks for asking');
-            return;
+            // Problem: we're getting script cleared events on startup. Why?
+            // return;
         }
 
         document.body.classList.add('running');
@@ -88,6 +89,7 @@
     function clearStage(event){
         wb.state.iframeReady = false;
         document.body.classList.remove('running');
+        wb.state.isRunning = false;
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     wb.clearStage = clearStage;

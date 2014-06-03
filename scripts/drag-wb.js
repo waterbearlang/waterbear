@@ -25,6 +25,8 @@
     var potentialDropTargets;
     var startPosition;
 
+    var selectedBlocks;
+
     // Specific to the code map
     var cloned;
     var cm_cont= document.querySelector('#cm_container');
@@ -56,10 +58,12 @@
             clearTimeout(timer);
             timer = null;
         }
+        selectedBlocks = [];
     }
 
     function initDrag(event){
         var target = wb.closest(event.target, '.block');
+
         if (!target){ return; }
         // don't start dragging from these elements, unless block is in block menu
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained') && !wb.matches(target, '#block_menu *')) {
@@ -69,6 +73,40 @@
         if (target.parentElement.classList.contains('block-menu')){            //console.log('target parent: %o', target.parentElement);
             target.dataset.isTemplateBlock = 'true';
             templateDrag = true;
+        } else {
+            // Select blocks that are contigious on the same level
+            if (selectedBlocks.length == 0) {
+                target.classList.add("selected");
+                selectedBlocks.push(target);
+            } else {
+                var nodeList = Array.prototype.slice.call(selectedBlocks[0].parentNode.children);
+                var firstIndex = nodeList.indexOf(selectedBlocks[0]);
+                var targetIndex = nodeList.indexOf(target);
+
+                if (event.shiftKey && targetIndex > -1) {
+                    // Select all blocks that are on the same level if shift is pressed
+                    while (selectedBlocks.length > 1) {
+                        selectedBlocks.pop().classList.remove("selected");
+                    }
+
+                    var step = firstIndex < targetIndex ? 1 : -1;
+
+                    for (var i = firstIndex; i != targetIndex; i += step) {
+                        nodeList[i].classList.add("selected");
+                        selectedBlocks.push(nodeList[i]);
+                    }
+                } else {
+                    // Only select target if shift is not pressed
+                    if (Math.abs(targetIndex - firstIndex) >= nodeList.length) {
+                        while (selectedBlocks.length > 0) {
+                            selectedBlocks.pop().classList.remove("selected");
+                        }
+                    }
+                }
+
+                target.classList.add("selected");
+                selectedBlocks.push(target);
+            }
         }
         if (target.parentElement.classList.contains('locals')){
             target.dataset.isLocal = 'true';
@@ -154,7 +192,7 @@
     }
 
     // HELPERS
-    
+
     function handleDrop(event,copyBlock){
         // TODO:
            // is it over the menu
@@ -450,7 +488,6 @@
             }
         }
     }
-
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){

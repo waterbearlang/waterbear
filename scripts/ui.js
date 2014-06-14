@@ -1,5 +1,24 @@
-// global variable wb is initialized in the HTML before any javascript files
-// are loaded (in template/template.html)
+// Still in this file
+//
+// * var textScriptNeedsUpdate
+// * runUpdateForScriptView()
+// * updateScriptsView()
+// * changeSocket(event)
+// * is_touch_device()
+// * var defaultLangData
+// * var localizationData
+// * var l10nHalfDone
+// menu(blockspec)
+// populateMenu()
+// edit_menu(title, sectionKey, specs, help, show)
+// initLanguageFiles()
+// handleShowButton(button, newView)
+// showFiles(evt)
+// showBlocks(evt)
+// showScript(evt)
+// showResult(evt)
+
+
 (function(wb){
 'use strict';
 // UI Chrome Section
@@ -225,7 +244,7 @@ function showResult(evt){
 
 
 Event.on(document.body, 'change', 'input', changeSocket);
-Event.on('#block_menu', 'click', '.accordion-header', accordion);
+Event.on('#block_menu', 'click', '.accordion-header', wb.accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 

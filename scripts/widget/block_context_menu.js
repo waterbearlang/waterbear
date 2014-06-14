@@ -303,10 +303,10 @@ wb.cm_percent = 0.3;
 
 // context menu for code map
 var cm_cmenu = {
-	thrity: {name: '30%', callback: thirtyPercent},
-	fifty: {name: '50%', callback: fiftyPercent},
-	seventy: {name: '70%', callback: seventyPercent},
-    hundred: {name: '100%', callback: hundredPercent},
+	thirty: {name: '30%', callback: wb.thirtyPercent},
+	fifty: {name: '50%', callback: wb.fiftyPercent},
+	seventy: {name: '70%', callback: wb.seventyPercent},
+    hundred: {name: '100%', callback: wb.hundredPercent},
 };
 
 function initContextMenus() {

@@ -3,6 +3,24 @@
 
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
+
+// Currently in this file
+//
+// clearScripts(event, force)
+// loadExample(event)
+// handleStateChange(event)
+// hideLoader()
+// historySwitchStates(state, clearFiles)
+// createWorkspace(name)
+// wireUpWorkspace(workspace)
+// handleDragOver(event)
+// disclosure(event)
+// handleScriptLoad(event)
+// handleScriptModify(event)
+// togglePanel(evt)
+// initHistory()
+// A bunch of controller logic
+
 (function(wb){
     'use strict';
 

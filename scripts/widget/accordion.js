@@ -13,4 +13,6 @@ function accordion(event){
     event.target.nextSibling.classList.add('open');
 }
 
+wb.accordion = accordion;
+
 })(wb);

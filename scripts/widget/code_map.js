@@ -54,5 +54,9 @@ function hundredPercent(evt) {
     element.style.transform = transfromString;
 }
 
+wb.thirtyPercent = thirtyPercent;
+wb.fiftyPercent = fiftyPercent;
+wb.seventyPercent = seventyPercent;
+wb.hundredPercent = hundredPercent;
 
 })(wb);

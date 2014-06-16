@@ -247,10 +247,9 @@
                     }
                 }
                 break;
-            case 'tutorial':
             case 'scratchpad':
             case 'scripts_workspace':
-                if (! (wb.getState('tutorial') || wb.getState('scratchpad') || wb.getState('scripts_workspace'))){
+                if (! (wb.getState('scratchpad') || wb.getState('scripts_workspace'))){
                     wb.hide(wb.find(document.body, '.workspace'));
                 }else{
                     wb.show(wb.find(document.body, '.workspace'));

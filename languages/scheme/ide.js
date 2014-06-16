@@ -25,7 +25,7 @@
             }
         }
         run();
-    }
+    };
 
     wb.writeScript = function(elements, view){
         var script = elements.map(function(elem){
@@ -36,7 +36,7 @@
 
     wb.wrap = function(script){ //doesn't do anything
         return "";
-    }
+    };;
     
     function runCurrentScripts(force){
         // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
@@ -47,7 +47,9 @@
         document.body.classList.add('running');
         if (!wb.state.scriptLoaded){
             console.log('not ready to run script yet, waiting');
-            Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
+            Event.once(document.body, 'wb-script-loaded', null, function(event){
+                Event.trigger(document.body, 'wb-initialize', {component: 'script'});
+            });
             return;
         }else{
             console.log('ready to run script, let us proceed to the running of said script');
@@ -58,7 +60,7 @@
     wb.runCurrentScripts = runCurrentScripts;
  
     function clearStage(event){
-        wb.state.iframeReady = false;
+        wb.state.stageReady = false;
         document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
     }
     wb.clearStage = clearStage;

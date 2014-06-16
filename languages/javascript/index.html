@@ -166,9 +166,9 @@
             <li class="escape">
                 <button class="escape-embed">Open in Waterbear</button>
             </li>
-            <li><button class="icon-play run-script">Run</button></li>
-<li><button class="icon-stop stop-script">Stop</button></li>
-<li><button class="toggle" data-target="autorun">Autorun</button></li>
+            <li><button class="icon-play run-script stage-control">Run</button></li>
+<li><button class="icon-stop stop-script stage-control">Stop</button></li>
+<li><button class="toggle stag-control" data-target="autorun">Autorun</button></li>
 
         </ul>
     </nav>
@@ -201,11 +201,11 @@
             <div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
         </div>
         <script>
-	function receiveMessage(event){
-		wb.state.iframeReady = event.data === 'ide-ready' ? true : false;
-		console.log('iframeReady: %s', wb.state.iframeReady);
-		wb.runCurrentScripts();
-	}
+    function receiveMessage(event){
+        if (event.data === 'ide-ready'){
+            Event.trigger(document.body, 'wb-initialize', {component: 'stage'});
+        }
+    }
 	window.addEventListener('message', receiveMessage, false);
 </script>
 <div class="result">

@@ -169,8 +169,8 @@
         </div>
         <script>
 	function receiveMessage(event){
-		wb.state.iframeReady = event.data === 'ide-ready' ? true : false;
-		console.log('iframeReady: %s', wb.state.iframeReady);
+		wb.state.stageReady = event.data === 'ide-ready' ? true : false;
+		console.log('stageReady: %s', wb.state.stageReady);
 		wb.runCurrentScripts();
 	}
 	window.addEventListener('message', receiveMessage, false);

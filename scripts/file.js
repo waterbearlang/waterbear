@@ -15,7 +15,7 @@
 (function(wb){
 'use strict';
     function saveCurrentScripts(){
-        if (!wb.state.scriptModified){
+        if (!wb.getState('scriptModified')){
             // console.log('nothing to save');
             // nothing to save
             return;
@@ -154,7 +154,10 @@
     function loadScriptsFromObject(fileObject){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
-        if (!fileObject) return wb.createWorkspace();
+        if (!fileObject){
+            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
+            return wb.createWorkspace();
+        }
         var blocks = fileObject.blocks.map(wb.Block);
         if (!blocks.length){
             return wb.createWorkspace();
@@ -167,7 +170,8 @@
             wb.wireUpWorkspace(block);
         });
         wb.loaded = true;
-        Event.trigger(document.body, 'wb-script-loaded');
+        console.log('initialize: script');
+        Event.trigger(document.body, 'wb-initialize', {component: 'script'});
     }
 
     function loadScriptsFromGist(gist){
@@ -198,36 +202,34 @@
         // wb.clearScripts(null, true);
         wb.loaded = true;
         loadScriptsFromObject(JSON.parse(jsonblob));
-        wb.state.scriptModified = true;
+        wb.setState('scriptModified', true);
     }
 
     function loadCurrentScripts(queryParsed){
         // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
         if (wb.loaded) return;
-        wb.state.scriptLoaded = false;
+        wb.setState('scriptReady', false);
         if (queryParsed.gist){
-            //console.log("Loading gist %s", queryParsed.gist);
+            console.log("Loading gist %s", queryParsed.gist);
             ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
                 loadScriptsFromGist({data:JSON.parse(data)});
             }, function(statusCode, x){
               alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
             });
         }else if (queryParsed.example){
-            //console.log('loading example %s', queryParsed.example);
+            console.log('loading example %s', queryParsed.example);
             loadScriptsFromExample(queryParsed.example);
         }else if (localStorage['__' + wb.language + '_current_scripts']){
-            //console.log('loading current script from local storage');
+            console.log('loading current script from local storage');
             var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
             if (fileObject){
                 loadScriptsFromObject(fileObject);
             }
         }else{
             //console.log('no script to load, starting a new script');  
-            wb.state.scriptLoaded = true;
             wb.createWorkspace('Workspace');
         }
         wb.loaded = true;
-        Event.trigger(document.body, 'wb-loaded');
     }
 
 	function loadScriptsFromFile(file){

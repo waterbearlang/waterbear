@@ -30,21 +30,22 @@
     }
 
     function runCurrentScripts(force){
-        if (!((wb.state.autorun && wb.state.scriptModified) || force || wb.view === 'result')){
-            console.log('false alarm');
+        force = force === true; // ignore stray values like event objects
+        if (!((wb.getState('autorun') && wb.getState('scriptModified')) || wb.getState('fullSize') || force)){
+            console.log('false alarm: autorun: %s, scriptModified: %s, view: %s, force: %s, isRunning: %s', wb.getState('autorun'), wb.getState('scriptModified'), wb.getState('fullSize'), force, wb.getState('isRunning'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
-        if ((wb.state.isRunning)){
+        if ((wb.getState('isRunning') && !force)){
             // we're good, but thanks for asking
             // mark scriptModified on resize events?
-            console.log('thanks for asking');
+            console.log('thanks for asking: isRunning: %s, force: %s', wb.getState('isRunning'), force);
             // Problem: we're getting script cleared events on startup. Why?
             // return;
         }
 
         document.body.classList.add('running');
-        if (wb.state.scriptLoaded && wb.state.iframeReady){
+        if (wb.getState('scriptReady') && wb.getState('stageReady')){
             console.log('ready to run script, let us proceed to the running of said script');
         }else{
             console.log('not ready to run script yet, waiting');
@@ -55,14 +56,14 @@
         var iframe = document.querySelector('.stageframe');
         iframe.style.width =  iframe.parentElement.clientWidth + 'px';
         iframe.style.height = iframe.parentElement.clientHeight + 'px';
-        wb.state.isRunning = true;
-        wb.state.scriptModified = false;
+        wb.setState('isRunning', true);
+        wb.setState('scriptModified', false);
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
 
 
-    if (!wb.state.iframeReady){
+    if (!wb.getState('stageReady')){
         document.querySelector('.stageframe').addEventListener('load', function(event){
             console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
             if (wb.iframewaiting){
@@ -79,7 +80,7 @@
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadScript', script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
-        if (wb.state.iframeReady){
+        if (wb.getState('stageReady')){
             run();
         }else{
             wb.iframewaiting = run;
@@ -87,9 +88,9 @@
     };
 
     function clearStage(event){
-        wb.state.iframeReady = false;
+        wb.setState('stageReady', false);
         document.body.classList.remove('running');
-        wb.state.isRunning = false;
+        wb.setState('isRunning', false);
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     wb.clearStage = clearStage;

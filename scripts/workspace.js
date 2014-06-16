@@ -31,8 +31,8 @@
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);
-            wb.state.scriptModified = false;
-            wb.state.scriptLoaded = false;
+            wb.setState('scriptModified', false);
+            wb.setState('scriptLoaded', false);
             wb.loaded = false;
             wb.clearStage();
             createWorkspace('Workspace');
@@ -46,71 +46,52 @@
     function loadExample(event){
         var path = location.href.split('?')[0];
         path += "?example=" + event.target.dataset.example;
-        if (wb.state.scriptModified){
+        if (wb.getState('scriptModified')){
             if (confirm('Throw out the current script?')){
-                wb.state.scriptModified = false;
+                wb.setState('scriptModified', false);
                 wb.loaded = false;
                 history.pushState(null, '', path);
                 Event.trigger(document.body, 'wb-state-change');
             }
         }else{
-            wb.state.scriptModified = false;
+            wb.setState('scriptModified', false);
             wb.loaded = false;
             history.pushState(null, '', path);
             Event.trigger(document.body, 'wb-state-change');
         }
     }
 
-    function handleStateChange(event){
+    function handleStateChange(){
         // hide loading spinner if needed
+        console.log('handleStateChange()');
         wb.queryParams = wb.urlToQueryParams(location.href);
         console.log('handleStateChange %s', wb.queryParams.view);
-        hideLoader();
-        var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
         if (wb.queryParams.view === 'result'){
+            wb.setState('fullSize', true);
             document.body.classList.add('result');
             document.body.classList.remove('editor');
-            wb.state.scriptModified = true;
-            for(var i = 0; i < viewButtons.length; i++) {
-                viewButtons[i].classList.add('disabled');
-            }
+            wb.enableMenuToggleControls(false);
             wb.view = 'result';
         }else{
             document.body.classList.remove('result');
             document.body.classList.add('editor');
-            wb.state.scriptModified = true;
-            for(var j = 0; j < viewButtons.length; j++) {
-                viewButtons[j].classList.remove('disabled');
-            }
+            wb.setState('fullSize', false);
+            wb.enableMenuToggleControls(true);
             wb.view = 'editor';
         }
-        if (wb.queryParams.embedded === 'true'){
+        // Are we embedded in an iframe? If so, show appropriate menu
+        if (window.parent !== window){
             document.body.classList.add('embedded');
         }else{
             document.body.classList.remove('embedded');
         }
-        // handle loading example, gist, currentScript, etc. if needed
-        wb.loadCurrentScripts(wb.queryParams);
-        // If we go to the result and can run the result inline, do it
-        // if (wb.view === 'result' && wb.runCurrentScripts){
-        //  // This bothers me greatly: runs with the console.log, but not without it
-        //  console.log('running current scripts');
-        //  runFullSize();
-        // }else{
-        //  if (wb.view === 'result'){
-           //   // console.log('we want to run current scripts, but cannot');
-           //  }else{
-           //   runWithLayout();
-           //   // console.log('we do not care about current scripts, so there');
-           //  }
-        // }
-        if (wb.state.scripts_text_view){
+        if (wb.getState('scripts_text_view')){
             wb.updateScriptsView();
         }
-        if (wb.state.stage || wb.view === 'result'){
+        if (wb.getState('stage') || wb.getState('fullSize')){
             // console.log('run current scripts');
-            wb.state.scriptModified = false;
-            wb.runCurrentScripts(true);
+            wb.setState('scriptModified', false);
+            wb.runCurrentScripts();
         }else{
             console.log('fall through to clearStage');
             wb.clearStage();
@@ -181,6 +162,28 @@
         workspace.addEventListener('scroll', wb.handleScrollChange, false);
     }
 
+    function enableMenuToggleControls(flag){
+        var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
+        for(var i = 0; i < viewButtons.length; i++) {
+            if (flag){
+                viewButtons[i].classList.remove('disabled');
+            }else{
+                viewButtons[i].classList.add('disabled');
+            }
+        }
+    }
+
+    function enableStageControls(flag){
+        var viewButtons = document.querySelectorAll('.stage-control');
+        for(var i = 0; i < viewButtons.length; i++) {
+            if (flag){
+                viewButtons[i].classList.remove('disabled');
+            }else{
+                viewButtons[i].classList.add('disabled');
+            }
+        }
+    }
+
 
     function handleDragover(evt){
         // Stop Firefox from grabbing the file prematurely
@@ -198,33 +201,11 @@
         }
     }
 
-    function handleScriptLoad(event){
-        wb.state.scriptLoaded = true;
-        if (wb.view === 'result' || wb.autorun){
-            wb.scriptModified = true; // force running
-            if (wb.windowLoaded){
-                // console.log('run scripts directly');
-                wb.runCurrentScripts();
-            }else{
-                // console.log('run scripts when the iframe is ready');
-                window.addEventListener('load', function(){
-                //  // console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
-                    wb.runCurrentScripts();
-                 }, false);
-            }
-        }else{
-        //  console.log('do not run script for some odd reason: %s', wb.view);
-            wb.state.scriptModified = false;
-        }
-        // clear undo/redo stack
-        console.log('script loaded');
-    }
-
     function handleScriptModify(event){
         // still need modified events for changing input values
-        if (!wb.state.scriptLoaded) return;
-        if (!wb.state.scriptModified){
-            wb.state.scriptModified = true;
+        if (!wb.getState('scriptLoaded')) return;
+        if (!wb.getState('scriptModified')){
+            wb.setState('scriptModified', true);
             wb.historySwitchState(wb.view, true);
         }
     }
@@ -239,6 +220,7 @@
         }
         var result = wb.find(document.body, '.result');
         // Special cases
+        console.log('togglePanel %s: %s', evt.detail.name, evt.detail.state);
         switch(evt.detail.name){
             case 'stage':
                 if (evt.detail.state){
@@ -247,9 +229,11 @@
                     if (wb.view !== 'result'){
                         console.log('hide stage, so clear it too');
                         wb.clearStage();
+                        wb.enableStageControls(false);
                     }
-                    if (!wb.state.scripts_text_view){
+                    if (!wb.getState('scripts_text_view')){
                         wb.hide(result);
+                        wb.enableStageControls(true);
                     }
                 }
                 break;
@@ -258,7 +242,7 @@
                     wb.show(result);
                     wb.updateScriptsView();
                 }else{
-                    if (!wb.state.stage){
+                    if (!wb.getState('stage')){
                         wb.hide(result);
                     }
                 }
@@ -266,7 +250,7 @@
             case 'tutorial':
             case 'scratchpad':
             case 'scripts_workspace':
-                if (! (wb.state.tutorial || wb.state.scratchpad || wb.state.scripts_workspace)){
+                if (! (wb.getState('tutorial') || wb.getState('scratchpad') || wb.getState('scripts_workspace'))){
                     wb.hide(wb.find(document.body, '.workspace'));
                 }else{
                     wb.show(wb.find(document.body, '.workspace'));
@@ -276,7 +260,7 @@
                 // We should only be hiding panels like this when they contain multiple
                 // sub-panes. Move this to CSS or (better) make the whole code map an overlay
                 // on the scripts_workspace
-                if(!wb.state.code_map){
+                if(!wb.getState('code_map')){
                     wb.hide(wb.find(document.body, '#cm_container'));
                 }else{
                     wb.show(wb.find(document.body, '#cm_container'));
@@ -286,7 +270,7 @@
                 // do nothing
                 break;
         }
-        if (wb.state.stage){
+        if (wb.getState('stage')){
             // restart script on any toggle
             // so it runs at the new size
             wb.runCurrentScripts();
@@ -294,12 +278,20 @@
 
     }
 
+    function shouldAutorun(){
+        if (wb.getState('fullSize')) return true;
+        if (wb.getState('autorun')) return true;
+        return false;
+    }
+
     Event.on(document.body, 'wb-toggle', null, togglePanel);
 
 
     window.addEventListener('load', function(evt){
-        console.log('load event');
-        Event.trigger(document.body, 'wb-state-change');
+        console.log('ide loaded');
+        handleStateChange();
+        Event.trigger(document.body, 'wb-initialize', {component: 'ide'});
+        // Event.trigger(document.body, 'wb-state-change');
     });
 
     // Kick off some initialization work
@@ -333,7 +325,6 @@
     Event.on('.workspace', 'change', 'input, select', function(event){
         Event.trigger(document.body, 'wb-modified', {block: event.target, type: 'valueChanged'});
     });
-    Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
     Event.on(document.body, 'wb-modified', null, handleScriptModify);
     Event.on('.run-full-size', 'click', null, function(){
         wb.historySwitchState('result');
@@ -352,6 +343,7 @@
     // autorun buttons
     Event.on('.run-script', 'click', null, function(){
         document.body.classList.add('running');
+        console.log('running because the play button was pressed');
         wb.runCurrentScripts(true);
     });
     Event.on('.stop-script', 'click', null, function(){
@@ -363,6 +355,7 @@
             console.log('Caught wb-toggle autorun: %s', evt.detail.state);
             wb.autorun = evt.detail.state;
             if (evt.detail.state){
+                console.log('run when autorun is checked');
                 wb.runCurrentScripts();
             }else{
                 wb.clearStage();
@@ -370,10 +363,36 @@
         }
     });
 
+    Event.once(document.body, 'wb-ready', null, function(evt){
+        hideLoader();
+        if (wb.shouldAutorun()){
+            wb.runCurrentScripts();
+        }
+        wb.setState('ready', true);
+    });
+
+    Event.on(document.body, 'wb-initialize', null, function(evt){
+        switch(event.detail.component){
+            case 'ide': wb.setState('ideReady', true); break;
+            case 'stage': wb.setState('stageReady', true); break;
+            case 'script': wb.setState('scriptReady', true); break;
+        }
+        if (wb.getState('ideReady') && wb.getState('stageReady') && !wb.getState('scriptReady')){
+            wb.loadCurrentScripts(wb.urlToQueryParams(location.href));
+        }
+        if (wb.getState('ideReady') && wb.getState('stageReady') && wb.getState('scriptReady')){
+            console.log('everything is ready');
+            Event.trigger(document.body, 'wb-ready');
+        }
+    });
+
     wb.language = location.pathname.split('/')[2];
+    wb.shouldAutorun = shouldAutorun;
     wb.loaded = false;
     wb.clearScripts = clearScripts;
     wb.historySwitchState = historySwitchState;
     wb.createWorkspace = createWorkspace;
     wb.wireUpWorkspace = wireUpWorkspace;
+    wb.enableStageControls = enableStageControls;
+    wb.enableMenuToggleControls = enableMenuToggleControls;
 })(wb);

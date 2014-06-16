@@ -66,7 +66,7 @@
         }
     }
 
-    Event.on('.run-scripts', 'click', null, function(){
+    Event.on('.run-full-size', 'click', null, function(){
         wb.historySwitchState('result');
     });
 

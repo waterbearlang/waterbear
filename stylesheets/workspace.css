@@ -52,7 +52,7 @@ input{
 
 
 .hidden, .block.hidden{
-	display: none !important;
+	display: none;
 }
 
 

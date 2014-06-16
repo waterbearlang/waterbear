@@ -11,7 +11,7 @@
 
 /*
 
-$('.run-scripts').click(function(){
+$('.run-full-size').click(function(){
      var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
      var code = blocks.prettyScript();
      var query = $.param({'code':code});
@@ -55,7 +55,7 @@ function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );        
 }
-Event.on('.run-scripts', 'click', null, runCurrentScripts);
+Event.on('.run-full-size', 'click', null, runCurrentScripts);
 
 
 wb.ajax = {

@@ -2,6 +2,17 @@
 
     /** Search filter */
 
+    function highlightSearch(event) {
+        var form = document.querySelector('#search > form');
+        form.style.border = "1px solid #FFA500";
+    }
+
+    function unhighlightSearch(event) {
+        var form = document.querySelector('#search > form');
+        form.style.border = "1px solid #CCC";
+    }
+
+
     var oldQuery = '';
 
     function searchBlock(event) {
@@ -166,6 +177,9 @@
     Event.on('#search_text', 'keyup', null, searchBlock);
     Event.on('#search_text', 'input', null, searchBlock);
     Event.on('#search_clear', 'click', null, searchBlock);
+    Event.on('#search_text', 'focus', null, highlightSearch);
+    Event.on('#search_text', 'blur', null, unhighlightSearch);
+
 
     Event.on(document.body, 'wb-toggle', null, toggleTag);
 

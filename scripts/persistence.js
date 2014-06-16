@@ -6,7 +6,6 @@
     var defaults = {
         autorun: false,
         scriptModified: true,
-        tutorial: false,
         isRunning: false,
         fullSize: false,
         ready: false,

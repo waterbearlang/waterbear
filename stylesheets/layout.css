@@ -54,12 +54,6 @@ body{
     flex-direction: column;
 }
 
-.tutorial{
-    -webkit-flex: 1 1 0;
-    flex: 1 1 0;
-    background-color: #7fdbff;
-}
-
 .scratchpad{
     overflow: scroll;
     position:relative;

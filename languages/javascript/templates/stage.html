@@ -1,12 +1,12 @@
 <script>
-	function receiveMessage(event){
-		wb.state.iframeReady = event.data === 'ide-ready' ? true : false;
-		console.log('iframeReady: %s', wb.state.iframeReady);
-		wb.runCurrentScripts();
-	}
+    function receiveMessage(event){
+        if (event.data === 'ide-ready'){
+            Event.trigger(document.body, 'wb-initialize', {component: 'stage'});
+        }
+    }
 	window.addEventListener('message', receiveMessage, false);
 </script>
-<div class="results">
+<div class="result">
 	<div class="stage">
 	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
 	<div class="scripts_text_view"></div>

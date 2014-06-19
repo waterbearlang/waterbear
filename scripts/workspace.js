@@ -371,7 +371,7 @@
     });
 
     Event.on(document.body, 'wb-initialize', null, function(evt){
-        switch(event.detail.component){
+        switch(evt.detail.component){
             case 'ide': wb.setState('ideReady', true); break;
             case 'stage': wb.setState('stageReady', true); break;
             case 'script': wb.setState('scriptReady', true); break;

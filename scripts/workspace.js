@@ -272,7 +272,7 @@
         if (wb.getState('stage')){
             // restart script on any toggle
             // so it runs at the new size
-            wb.runCurrentScripts();
+            // wb.runCurrentScripts();
         }
 
     }

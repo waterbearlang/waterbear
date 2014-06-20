@@ -31,7 +31,7 @@
 
     function runCurrentScripts(force){
         force = force === true; // ignore stray values like event objects
-        if (!((wb.getState('autorun') && wb.getState('scriptModified')) || wb.getState('fullSize') || force)){
+        if (!(wb.getState('autorun') || wb.getState('fullSize') || force)){
             console.log('false alarm: autorun: %s, scriptModified: %s, view: %s, force: %s, isRunning: %s', wb.getState('autorun'), wb.getState('scriptModified'), wb.getState('fullSize'), force, wb.getState('isRunning'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
@@ -43,6 +43,14 @@
             // Problem: we're getting script cleared events on startup. Why?
             // return;
         }
+        var blocks = wb.findAll(document.body, '.scripts_workspace');
+
+        // for (var i=0; i < blocks.length; i++){
+        //     if (!wb.blockValidate(blocks[i])){
+        //         console.warn('Not running script because of invalid block(s)');
+        //         return;
+        //     }
+        // }
 
         document.body.classList.add('running');
         if (wb.getState('scriptReady') && wb.getState('stageReady')){
@@ -51,7 +59,6 @@
             console.log('not ready to run script yet, waiting');
             return;
         }
-        var blocks = wb.findAll(document.body, '.scripts_workspace');
         // update size of frame
         var iframe = document.querySelector('.stageframe');
         iframe.style.width =  iframe.parentElement.clientWidth + 'px';

@@ -32,7 +32,11 @@
 
     function dragging(event){
         if (!dragTarget) { return undefined; }
-        if (!isDragging) {startDrag(event);}
+        if (!isDragging) {
+          if (startDrag(event) === undefined) {
+            return undefined;
+          }
+        }
         event.preventDefault();
         // update the variables, distance, button pressed
         Event.forward(event.target, 'dragging', event);

@@ -447,3 +447,7 @@
 .search_result .keyword .match {
   color: darkgreen;
 }
+
+.invalid{
+    outline: 2px dashed red;
+}

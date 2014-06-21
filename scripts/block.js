@@ -92,7 +92,7 @@
         if (holder){
             return socketValue(holder);
         }else{
-            return '';
+            return null;
         }
     }
 
@@ -673,10 +673,9 @@
         if (type === 'file'){
             //var value = obj.uValue || obj.value || '';
             //not sure if 'value' or 'data-oldvalue' is needed in the below line
-            var input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
+            input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
             input.addEventListener('change', function(evt){
-                if(confirm("Your potentially sensitive data will be uploaded \
-                           to the server. Continue?")) {
+                if(confirm("Your potentially sensitive data will be uploaded to the server. Continue?")) {
                     var file = input.files[0];
                     var reader = new FileReader();
                     reader.onload = function (evt){
@@ -761,7 +760,7 @@
     function socketValidate(socket){
         // Going to assume for now that empty strings are not wanted
         if (getSocketValue(socket) === ''){
-            console.warn('Empty socket: %s', socket);
+            console.warn('Empty socket: %o', socket);
             socket.classList.add('invalid');
             return false;
         }else{
@@ -772,7 +771,7 @@
 
     function codeFromBlock(block){
         if (block.classList.contains('cloned')){
-            return '';
+            return null;
         }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
@@ -824,10 +823,15 @@
     }
 
     function gatherContained(block){
-        return containedForBlock(block).map(function(container){
-            container.map(codeFromBlock).join('');
-        });
+        if (wb.matches(block, '.context')){
+            return wb.findChildren(block, '.contained').map(function(container){
+                return wb.findChildren(container, '.block').map(codeFromBlock).join('');
+            });
+        }else{
+            return [];
+        }
     }
+
 
     function socketsForBlock(block){
         var label = wb.findChild(block, '.label');

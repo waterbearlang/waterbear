@@ -61,16 +61,23 @@
         }
     }
 
+    function resizeStage(){
+        var iframe = document.querySelector('.stageframe');
+        if (!iframe) return; // not all languages have one!
+        iframe.style.width = iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
+    }
+
     function handleStateChange(){
         // hide loading spinner if needed
-        console.log('handleStateChange()');
         wb.queryParams = wb.urlToQueryParams(location.href);
-        console.log('handleStateChange %s', wb.queryParams.view);
+        console.log('handleStateChange %o', wb.queryParams);
         if (wb.queryParams.view === 'result'){
             wb.setState('fullSize', true);
             document.body.classList.add('result');
             document.body.classList.remove('editor');
             wb.enableMenuToggleControls(false);
+            wb.resizeStage();
             wb.view = 'result';
         }else{
             document.body.classList.remove('result');
@@ -90,7 +97,7 @@
         }
         if (wb.getState('stage') || wb.getState('fullSize')){
             // console.log('run current scripts');
-            wb.setState('scriptModified', false);
+            // wb.setState('scriptModified', false);
             wb.runCurrentScripts();
         }else{
             console.log('fall through to clearStage');
@@ -202,6 +209,7 @@
     }
 
     function handleScriptModify(event){
+        console.log('Script modified %o', event);
         // still need modified events for changing input values
         if (!wb.getState('scriptLoaded')) return;
         if (!wb.getState('scriptModified')){
@@ -352,7 +360,7 @@
     Event.on(document.body, 'wb-toggle', null, function(evt){
         if (evt.detail.name === 'autorun'){
             console.log('Caught wb-toggle autorun: %s', evt.detail.state);
-            wb.autorun = evt.detail.state;
+            wb.setState('autorun', evt.detail.state);
             if (evt.detail.state){
                 console.log('run when autorun is checked');
                 wb.runCurrentScripts();
@@ -381,10 +389,14 @@
         }
         if (wb.getState('ideReady') && wb.getState('stageReady') && wb.getState('scriptReady')){
             console.log('everything is ready');
+            wb.resizeStage();
             Event.trigger(document.body, 'wb-ready');
         }
     });
 
+    Event.on(window, 'resize', null, resizeStage);
+
+    wb.resizeStage = resizeStage;
     wb.language = location.pathname.split('/')[2];
     wb.shouldAutorun = shouldAutorun;
     wb.loaded = false;

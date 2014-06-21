@@ -202,7 +202,7 @@
         // wb.clearScripts(null, true);
         wb.loaded = true;
         loadScriptsFromObject(JSON.parse(jsonblob));
-        wb.setState('scriptModified', true);
+        wb.setState('scriptModified', false);
     }
 
     function loadCurrentScripts(queryParsed){

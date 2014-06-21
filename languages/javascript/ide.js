@@ -7,6 +7,10 @@
 (function(wb,Event){
     // Add some utilities
     'use strict';
+
+
+    /* Wrap a script for execution in an iframe */
+    // Maybe this should all be moved to runtime?
     wb.wrap = function(script){
         return [
             '(function(){', 
@@ -21,6 +25,7 @@
         ].join('\n');
     };
 
+    // Where is this used? What is it for?
     function assetUrls(){
         return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
             // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
@@ -29,28 +34,32 @@
         }).join(',') + ']';
     }
 
+    // Try to run the current script.
+    // Bail if there is no view to run it in (either preview pane or running full size)
+    // Bail if it is already running and hasn't changed
+    // Bail if 
     function runCurrentScripts(force){
         force = force === true; // ignore stray values like event objects
-        if (!(wb.getState('autorun') || wb.getState('fullSize') || force)){
+        if (! wb.getState('preview') ||  wb.getState('fullSize') ){
             console.log('false alarm: autorun: %s, scriptModified: %s, view: %s, force: %s, isRunning: %s', wb.getState('autorun'), wb.getState('scriptModified'), wb.getState('fullSize'), force, wb.getState('isRunning'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
-        if ((wb.getState('isRunning') && !force)){
-            // we're good, but thanks for asking
-            // mark scriptModified on resize events?
-            console.log('thanks for asking: isRunning: %s, force: %s', wb.getState('isRunning'), force);
-            // Problem: we're getting script cleared events on startup. Why?
-            // return;
-        }
+        // if ((wb.getState('isRunning') && !force)){
+        //     // we're good, but thanks for asking
+        //     // mark scriptModified on resize events?
+        //     console.log('thanks for asking: isRunning: %s, force: %s', wb.getState('isRunning'), force);
+        //     // Problem: we're getting script cleared events on startup. Why?
+        //     // return;
+        // }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
 
-        // for (var i=0; i < blocks.length; i++){
-        //     if (!wb.blockValidate(blocks[i])){
-        //         console.warn('Not running script because of invalid block(s)');
-        //         return;
-        //     }
-        // }
+        for (var i=0; i < blocks.length; i++){
+            if (!wb.blockValidate(blocks[i])){
+                console.warn('Not running script because of invalid block(s)');
+                return;
+            }
+        }
 
         document.body.classList.add('running');
         if (wb.getState('scriptReady') && wb.getState('stageReady')){
@@ -60,9 +69,6 @@
             return;
         }
         // update size of frame
-        var iframe = document.querySelector('.stageframe');
-        iframe.style.width =  iframe.parentElement.clientWidth + 'px';
-        iframe.style.height = iframe.parentElement.clientHeight + 'px';
         wb.setState('isRunning', true);
         wb.setState('scriptModified', false);
         wb.runScript( wb.prettyScript(blocks) );
@@ -83,13 +89,16 @@
     wb.runScript = function(script){
         // console.log('script: %s', script);
         var run = function(){
+            wb.setState('scriptLoaded', false);
             wb.script = script;
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadScript', script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
         if (wb.getState('stageReady')){
+            console.log('sending run to the iframe');
             run();
         }else{
+            console.log('waiting for the stage to be ready before we run');
             wb.iframewaiting = run;
         }
     };

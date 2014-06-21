@@ -88,7 +88,12 @@
     }
 
     function getSocketValue (socket){
-        return socketValue(wb.findChild(socket, '.holder'));
+        var holder = wb.findChild(socket, '.holder');
+        if (holder){
+            return socketValue(holder);
+        }else{
+            return null;
+        }
     }
 
     function createSockets(obj, cloneForCM){
@@ -553,6 +558,36 @@
         return desc;
     }
 
+    function blockValidate(block){
+        var valid = true;
+        block.classList.remove('invalid');
+        // Are the block's sockets valid?
+        var sockets = socketsForBlock(block);
+        for (var i = 0; i < sockets.length; i++){
+            if (!socketValidate(sockets[i])){
+                valid = false;
+            }
+        }
+        // If a container, does it contain anything?
+        // If it contains anything, are those blocks valid?
+        if (wb.matches(block, '.context')){
+            var containers = containedForBlock(block);
+            containers.forEach(function(children){
+                if (!children.length){
+                    valid = false;
+                    console.warn('Empty context block: %s', block);
+                    block.classList.add('invalid');
+                }
+                for (var j = 0; j < children.length; j++){
+                    if (!blockValidate(children[j])){
+                        valid = false;
+                    }
+                }
+            });
+        }
+        return valid;
+    }
+
     function cloneBlock(block, cloneForCM){
         // Clone a template (or other) block
         var blockdesc = blockDesc(block);
@@ -593,20 +628,17 @@
         var value, input;
         var type = obj.type;
         
-        if(type === 'boolean')
-        {
+        if(type === 'boolean'){
             obj.options = 'boolean';
         }
         
-        if(typeof obj.options !== 'undefined')
-        {
+        if(typeof obj.options !== 'undefined'){
             // DONE : #24
             // DONE : #227
             var choice = elem('select');
             var list = wb.choiceLists[obj.options];
             
-            if(Array.isArray(list))
-            {
+            if(Array.isArray(list)){
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
                     var value = obj.uValue || obj.value;
@@ -618,8 +650,7 @@
                     choice.appendChild(option);
                 });
             }
-            else
-            {
+            else{
                 var values = Object.keys(list);
                 
                 values.forEach(function(val){
@@ -639,25 +670,22 @@
         }
         //Known issue: width manually set to 160, need to programmatically get
         //(size of "Browse" button) + (size of file input field). 
-        if (type === 'file') {
+        if (type === 'file'){
             //var value = obj.uValue || obj.value || '';
             //not sure if 'value' or 'data-oldvalue' is needed in the below line
-            var input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
+            input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
             input.addEventListener('change', function(evt){
-                if(confirm("Your potentially sensitive data will be uploaded \
-                           to the server. Continue?")) {
+                if(confirm("Your potentially sensitive data will be uploaded to the server. Continue?")) {
                     var file = input.files[0];
                     var reader = new FileReader();
                     reader.onload = function (evt){
                         localStorage['__' + file.name]= evt.target.result;
                     };
                     reader.readAsText( file );
-                }
-                else {
+                }else{
                     input.value= "";
                 }
             });
-            wb.resize(input); //not sure if this is necessary
             input.style.width= "160px"; //known issue stated above
             return input;
         }
@@ -729,9 +757,21 @@
         }
     }
 
+    function socketValidate(socket){
+        // Going to assume for now that empty strings are not wanted
+        if (getSocketValue(socket) === ''){
+            console.warn('Empty socket: %o', socket);
+            socket.classList.add('invalid');
+            return false;
+        }else{
+            socket.classList.remove('invalid');
+            return true;
+        }
+    }
+
     function codeFromBlock(block){
         if (block.classList.contains('cloned')){
-            return '';
+            return null;
         }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
@@ -770,6 +810,18 @@
         return _code2;
     }
 
+    function containedForBlock(block){
+        // returns an array with one item for each .contained block
+        // Each item is an array of blocks held by that container
+        if (wb.matches(block, '.context')){
+            return wb.findChildren(block, '.contained').map(function(container){
+                return wb.findChildren(container, '.block');
+            });
+        }else{
+            return [];
+        }
+    }
+
     function gatherContained(block){
         if (wb.matches(block, '.context')){
             return wb.findChildren(block, '.contained').map(function(container){
@@ -780,9 +832,14 @@
         }
     }
 
-    function gatherArgs(block){
+
+    function socketsForBlock(block){
         var label = wb.findChild(block, '.label');
-        return wb.findChildren(label, '.socket')
+        return wb.findChildren(label, '.socket');
+    }
+
+    function gatherArgs(block){
+        return socketsForBlock(block)
             .map(function(socket){ return wb.findChild(socket, '.holder'); }) // get holders, if any
             .filter(function(holder){ return holder; }) // remove undefineds
             .map(socketValue); // get value
@@ -877,8 +934,11 @@
     wb.blockRegistry = blockRegistry;
 
     // Export methods
+    wb.socketsForBlock = socketsForBlock;
+    wb.containedForBlock = containedForBlock;
     wb.Block = Block;
     wb.blockDesc = blockDesc;
+    wb.blockValidate = blockValidate;
     wb.socketDesc = socketDesc;
     wb.registerSeqNum = registerSeqNum;
     wb.resetSeqNum = resetSeqNum;

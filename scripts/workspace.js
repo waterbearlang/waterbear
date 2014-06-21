@@ -32,7 +32,7 @@
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);
             wb.setState('scriptModified', false);
-            wb.setState('scriptLoaded', false);
+            wb.setState('scriptReady', false);
             wb.loaded = false;
             wb.clearStage();
             createWorkspace('Workspace');
@@ -42,35 +42,46 @@
             delete localStorage['__' + wb.language + '_current_scripts'];
         }
     }
+
+    function reallyLoadExample(exampleName, path){
+        wb.setState('scriptModified', true);
+        wb.setState('scriptLoaded', false);
+        wb.setState('scriptReady', false);
+        history.pushState(null, '', path);
+        wb.loadScriptsFromExample(exampleName);
+        Event.trigger(document.body, 'wb-state-change');
+    }
     
     function loadExample(event){
         var path = location.href.split('?')[0];
-        path += "?example=" + event.target.dataset.example;
+        var exampleName = event.target.dataset.example;
+        path += "?example=" + exampleName;
         if (wb.getState('scriptModified')){
             if (confirm('Throw out the current script?')){
-                wb.setState('scriptModified', false);
-                wb.loaded = false;
-                history.pushState(null, '', path);
-                Event.trigger(document.body, 'wb-state-change');
+                reallyLoadExample(exampleName, path);
             }
         }else{
-            wb.setState('scriptModified', false);
-            wb.loaded = false;
-            history.pushState(null, '', path);
-            Event.trigger(document.body, 'wb-state-change');
+            reallyLoadExample(exampleName, path);
         }
+    }
+
+    function resizeStage(){
+        var iframe = document.querySelector('.stageframe');
+        if (!iframe) return; // not all languages have one!
+        iframe.style.width = iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
     }
 
     function handleStateChange(){
         // hide loading spinner if needed
-        console.log('handleStateChange()');
         wb.queryParams = wb.urlToQueryParams(location.href);
-        console.log('handleStateChange %s', wb.queryParams.view);
+        console.log('handleStateChange %o', wb.queryParams);
         if (wb.queryParams.view === 'result'){
             wb.setState('fullSize', true);
             document.body.classList.add('result');
             document.body.classList.remove('editor');
             wb.enableMenuToggleControls(false);
+            wb.resizeStage();
             wb.view = 'result';
         }else{
             document.body.classList.remove('result');
@@ -90,7 +101,7 @@
         }
         if (wb.getState('stage') || wb.getState('fullSize')){
             // console.log('run current scripts');
-            wb.setState('scriptModified', false);
+            // wb.setState('scriptModified', false);
             wb.runCurrentScripts();
         }else{
             console.log('fall through to clearStage');
@@ -202,8 +213,9 @@
     }
 
     function handleScriptModify(event){
+        console.log('Script modified %o', event);
         // still need modified events for changing input values
-        if (!wb.getState('scriptLoaded')) return;
+        if (!wb.getState('scriptReady')) return;
         if (!wb.getState('scriptModified')){
             wb.setState('scriptModified', true);
             wb.historySwitchState(wb.view, true);
@@ -220,7 +232,7 @@
         }
         var result = wb.find(document.body, '.result');
         // Special cases
-        console.log('togglePanel %s: %s', evt.detail.name, evt.detail.state);
+        // console.log('togglePanel %s: %s', evt.detail.name, evt.detail.state);
         switch(evt.detail.name){
             case 'stage':
                 if (evt.detail.state){
@@ -272,7 +284,7 @@
         if (wb.getState('stage')){
             // restart script on any toggle
             // so it runs at the new size
-            wb.runCurrentScripts();
+            // wb.runCurrentScripts();
         }
 
     }
@@ -351,10 +363,10 @@
     });
     Event.on(document.body, 'wb-toggle', null, function(evt){
         if (evt.detail.name === 'autorun'){
-            console.log('Caught wb-toggle autorun: %s', evt.detail.state);
-            wb.autorun = evt.detail.state;
+            // console.log('Caught wb-toggle autorun: %s', evt.detail.state);
+            wb.setState('autorun', evt.detail.state);
             if (evt.detail.state){
-                console.log('run when autorun is checked');
+                // console.log('run when autorun is checked');
                 wb.runCurrentScripts();
             }else{
                 wb.clearStage();
@@ -362,7 +374,7 @@
         }
     });
 
-    Event.once(document.body, 'wb-ready', null, function(evt){
+    Event.on(document.body, 'wb-ready', null, function(evt){
         hideLoader();
         if (wb.shouldAutorun()){
             wb.runCurrentScripts();
@@ -381,10 +393,14 @@
         }
         if (wb.getState('ideReady') && wb.getState('stageReady') && wb.getState('scriptReady')){
             console.log('everything is ready');
+            wb.resizeStage();
             Event.trigger(document.body, 'wb-ready');
         }
     });
 
+    Event.on(window, 'resize', null, resizeStage);
+
+    wb.resizeStage = resizeStage;
     wb.language = location.pathname.split('/')[2];
     wb.shouldAutorun = shouldAutorun;
     wb.loaded = false;

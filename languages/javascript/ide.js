@@ -41,7 +41,7 @@
     function runCurrentScripts(force){
         force = force === true; // ignore stray values like event objects
         if (! wb.getState('preview') ||  wb.getState('fullSize') ){
-            console.log('false alarm: autorun: %s, scriptModified: %s, view: %s, force: %s, isRunning: %s', wb.getState('autorun'), wb.getState('scriptModified'), wb.getState('fullSize'), force, wb.getState('isRunning'));
+            // console.log('false alarm: autorun: %s, scriptModified: %s, view: %s, force: %s, isRunning: %s', wb.getState('autorun'), wb.getState('scriptModified'), wb.getState('fullSize'), force, wb.getState('isRunning'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
@@ -63,9 +63,9 @@
 
         document.body.classList.add('running');
         if (wb.getState('scriptReady') && wb.getState('stageReady')){
-            console.log('ready to run script, let us proceed to the running of said script');
+            // console.log('ready to run script, let us proceed to the running of said script');
         }else{
-            console.log('not ready to run script yet, waiting');
+            // console.log('not ready to run script yet, waiting');
             return;
         }
         // update size of frame
@@ -78,7 +78,7 @@
 
     if (!wb.getState('stageReady')){
         document.querySelector('.stageframe').addEventListener('load', function(event){
-            console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
+            // console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
             if (wb.iframewaiting){
                 wb.iframewaiting();
             }
@@ -89,16 +89,16 @@
     wb.runScript = function(script){
         // console.log('script: %s', script);
         var run = function(){
-            wb.setState('scriptLoaded', false);
+            wb.setState('scriptReady', false);
             wb.script = script;
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadScript', script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
         if (wb.getState('stageReady')){
-            console.log('sending run to the iframe');
+            // console.log('sending run to the iframe');
             run();
         }else{
-            console.log('waiting for the stage to be ready before we run');
+            // console.log('waiting for the stage to be ready before we run');
             wb.iframewaiting = run;
         }
     };

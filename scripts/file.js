@@ -261,6 +261,7 @@
     wb.loadRecentGists = loadRecentGists;
     wb.createDownloadUrl = createDownloadUrl;
     wb.loadScriptsFromGistId = loadScriptsFromGistId;
+    wb.loadScriptsFromExample = loadScriptsFromExample;
     wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
     wb.loadCurrentScripts = loadCurrentScripts;
     wb.getFiles = getFiles;

@@ -1,12 +1,9 @@
 <html>
 <head>
 	<title>Waterbear: Welcome</title>
-	<link href='//fonts.googleapis.com/css?family=Titillium+Web:400,700,600,300' rel='stylesheet' type='text/css'>
-	<link href='//fonts.googleapis.com/css?family=Merriweather:700italic,300italic' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-	<link href='stylesheets/fonts/font-awesome.css' rel='stylesheet' type='text/css'>
+	<link href='stylesheets/fonts/stylesheet.css' rel='stylesheet'>
+	<link href='stylesheets/fonts/font-awesome/css/font-awesome.min.css' rel='stylesheet'>
 	<script src="lib/prefixfree.min.js"></script>
-
 	<meta charset="utf-8">
     <meta name="description" content="Waterbear is a toolkit for creating drag-and-drop programming languages.">
 	<style>
@@ -48,15 +45,14 @@
 		}
 		.s2 .s2-2.steampunk{
 			flex:1000;
-			-moz-transform: scaleX(-1);
-	        -o-transform: scaleX(-1);
-	        -webkit-transform: scaleX(-1);
-	        transform: scaleX(-1);
-	        filter: FlipH;
-	        -ms-filter: "FlipH";
 	        min-width:200px;
 	        max-width:300px;
 		}
+
+        .steampunk img{
+            width: 100%;
+        }
+
 		.s2 .s2-1{
 			flex:1 0 0;
 			max-width: 400px;
@@ -84,18 +80,19 @@
 			margin:0px;
 		}
 		.s2 .s2-3 p{color:#999}
-		.s2 .s2-3 button{
+		.button{
 			background:transparent;
 			outline:none;
 			border:2px solid #222;
+            text-decoration: none;
 			font-size: 20px;
 			font-family: "Titillium Web", sans-serif;
-			padding:5px 20px;
+			padding: 8px 20px;
 			transition:color .3s ease, border-color .3s ease;
 			cursor:pointer;
 			position: relative;
 		}
-		.s2 .s2-3 button:before{
+		.button:before{
 			content: "";
 			position: absolute;
 			width: 0; 
@@ -107,7 +104,7 @@
 			border-left: 0px solid #000;
 			transition:border .3s ease;
 		}
-		.s2 .s2-3 button:after{
+		.button:after{
 			content: "";
 			position: absolute;
 			width: 0; 
@@ -120,15 +117,15 @@
 			border-left: 0px solid #999;
 			transition:border .3s ease;
 		}
-		.s2 .s2-3 button:hover::before{
+		.button:hover::before{
 			border-left-width:22.5px;
 			border-left-color:#09f;
 		}
-		.s2 .s2-3 button:hover::after{
+		.button:hover::after{
 			border-left-width:20.5px;
 			border-left-color:#f9f9f9;
 		}
-		.s2 .s2-3 button:hover{
+		.button:hover{
 			color:#09f;
 			border-color:#09f;
 			border-right:none;
@@ -182,14 +179,37 @@
 			color:#666;
 			padding:0px 20px;
 		}
-		.s3 > div > div .circle{
+		.circle{
 			width:150px;
 			height:150px;
 			background-color:#fff;
 			border-radius: 50%;
 			margin:auto;
 			border:1px solid #aaa;
+            background-repeat: no-repeat;
 		}
+        /* Individual circles */
+        .community{
+            background-image: url(images/mascot-community.png);
+            background-size: 150px;
+            background-position: 0 30px;
+        }
+        .scratch{
+            background-image: url(images/mascot-dancing.png);
+            background-size: 150px;
+            background-position: 0 30px;
+        }
+        .tardigrade{
+            background-image: url(images/mascot-space.png);
+            background-size: 200px;
+            background-color: #000;
+            background-position: -25px 0;
+        }
+        .github{
+            background-image: url(images/mascot-github.png);
+            background-size: 100px;
+            background-position: 20px 10px;
+        }
 		.s3 > div > div h2{
 			font-family: "Titillium Web", sans-serif;
 			color:#09f;
@@ -281,51 +301,53 @@
 	</style>
 </head>
 <body>
-	<header class="s1">waterbear</header>
+	<header class="s1"><img class="logo" src="images/waterbear_icon_logo.svg" />&nbsp;waterbear</header>
 	<section class="s2">
 		<div>
 			<div class="s2-1"></div>
-			<img class="s2-2 steampunk" src="images/steampunk.png" width="200px"></img>
+			<div class="s2-2 steampunk">
+                <img src="images/steampunk.png" />
+            </div>
 			<div class="s2-3">
 				<div>
 					<h2>The</h2>
 					<h1>WATERBEAR</h1>
 					<h2>welcomes you!</h2>
 					<p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming.</p>
-					<button>Try it out</button>
+					<a class="button" href="languages/javascript/">Try it out</a>
 				</div>
 			</div>
-			<div class="s2-4">
+			<!--div class="s2-4">
 				<ul>
 					<li onclick="s2_4li_click(this)" class="checked"></li>
 					<li onclick="s2_4li_click(this)"></li>
 					<li onclick="s2_4li_click(this)"></li>
 					<li onclick="s2_4li_click(this)"></li>
 				</ul>
-			</div>
+			</div-->
 		</div>
 	</section>
 	<section class="s3">
 		<div>
 			<div class="s3-1">
-				<div class="circle">[Need Image]</div>
+				<div class="circle community"></div>
 				<h2>Community</h2>
 				<p>[Need information to be here]</p>
 			</div>
 			<div class="s3-2">
-				<div class="circle">[Need Image]</div>
+				<div class="circle scratch"></div>
 				<h2>Same Step</h2>
-				<p>Our blocks are heavily inspired by MIT's Scratch language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual suntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad</p>
+				<p>Our blocks are heavily inspired by MIT's <a href="http://scratch.mit.edu">Scratch</a> language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual suntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad</p>
 			</div>
 			<div class="s3-3">
-				<div class="circle">[Need Image]</div>
+				<div class="circle tardigrade"></div>
 				<h2>The Reason Why</h2>
-				<p>Waterbears, also known as tardigrades, or moss piglets, are probably the most resilient creatures on Earth, able to survive extremes of heat and cold, pressure (high pressure and the vacuum of space), dehydration, radiation, environmental toxins. Since we want to be able to create code that is robust, they are an appropriate mascot. Also, they are cute.<br><i>[mostly via Wikipedia]</i></p>
+				<p>Waterbears, also known as tardigrades, or moss piglets, are probably the most resilient creatures on Earth, able to survive extremes of heat and cold, pressure (high pressure and the vacuum of space), dehydration, radiation, environmental toxins. Since we want to be able to create code that is robust, they are an appropriate mascot. Also, they are cute.<br><i>[mostly via <a href="https://en.wikipedia.org/wiki/Tardigrade">Wikipedia</a>]</i></p>
 			</div>
 			<div class="s3-4">
-				<div class="circle">[Need Image]</div>
+				<div class="circle github"></div>
 				<h2>Fork us</h2>
-				<p>Our Waterbear is beta software and under active development as we work to improve the interface, organize the blocks, and build curriculum around it. Fork us on Github and help us to make Waterbear even better!</p>
+				<p>Our Waterbear is beta software and under active development as we work to improve the interface, organize the blocks, and build curriculum around it. <a href="https://github.com/waterbearlang/waterbear">Fork us on Github</a> and help us to make Waterbear even better!</p>
 			</div>
 		</div>
 	</section>
@@ -337,29 +359,29 @@
 		<div class="s5-1">
 			<h2>Wiki</h2>
 			Our featured pages from the Wiki.<br><br>
-			<a href="#">Waterbear glossary</a><br><br>
-			<a href="#">How to Contribute</a><br><br>
-			<a href="#">Why Blocks?</a>
+            <a href="https://github.com/waterbearlang/waterbear/wiki/Hello-Waterbear">Introduction: Hello Waterbear</a><br><br>
+			<a href="https://github.com/waterbearlang/waterbear/wiki/Contributors-and-Acknowledgements">Contributors</a><br><br>
+			<a href="https://github.com/waterbearlang/waterbear/wiki/How-to-Contribute">How to Contribute</a>
 		</div>
 		<div class="s5-2">
 			<h2>Friends</h2>
-			Forks and other projects based on Waterbear.<br><br>
-			<a href="#">Team2648</a><br>
-			<label>has blocks for the WPI robotics API</label><br><br>
-			<a href="#">ScripTastic</a><br>
-			<label>has blocks for Opensim</label>
+			Other projects based on Waterbear.<br><br>
+			<a href="#">ProcessingJS</a><br>
+			<label>write Processing with blocks</label><br><br>
+			<a href="#">NodeJS</a><br>
+			<label>use blocks for server-side development</label>
 		</div>
 		<div class="s5-3">
 			<h2>Help us</h2>
 			Waterbear is better with your help.<br><br>
-			<a href="#">Discuss Waterbear on the mailing list</a><br><br>
-			<a href="#">File an issue or feature request</a>
+			<a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">Discuss Waterbear on the mailing list</a><br><br>
+			<a href="https://github.com/waterbearlang/waterbear/issues">File an issue or feature request</a>
 		</div>
 		<div class="s5-4">
 			<h2>Keep in touch</h2>
-			<a class="btn fa fa-github" href="#">Fork us</a>
-			<a class="btn fa fa-twitter" href="#">Follow us</a>
-			<a class="btn fa fa-envelope" href="#">Mail us</a>
+			<a class="btn fa fa-github" href="https://github.com/waterbearlang/waterbear/">Fork us</a>
+			<a class="btn fa fa-twitter" href="https://twitter.com/waterbearlang">Follow us</a>
+			<a class="btn fa fa-envelope" href="mailto:discuss@lists.waterbearlang.com.">Mail us</a>
 		</div>
 	</section>
 

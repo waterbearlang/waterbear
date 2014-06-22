@@ -374,15 +374,18 @@
         }
     });
 
-    Event.on(document.body, 'wb-ready', null, function(evt){
+    function onReady(evt){
         hideLoader();
         if (wb.shouldAutorun()){
             wb.runCurrentScripts();
         }
         wb.setState('ready', true);
-    });
+    }
+
+    Event.once(document.body, 'wb-ready', null, onReady);
 
     Event.on(document.body, 'wb-initialize', null, function(evt){
+        console.log('wb-initialize %s', evt.detail.component);
         switch(evt.detail.component){
             case 'ide': wb.setState('ideReady', true); break;
             case 'stage': wb.setState('stageReady', true); break;
@@ -400,6 +403,7 @@
 
     Event.on(window, 'resize', null, resizeStage);
 
+    wb.onReady = onReady;
     wb.resizeStage = resizeStage;
     wb.language = location.pathname.split('/')[2];
     wb.shouldAutorun = shouldAutorun;

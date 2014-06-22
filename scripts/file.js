@@ -154,6 +154,8 @@
     function loadScriptsFromObject(fileObject){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
+        wb.setState('scriptReady', false);
+        Event.once(document.body, 'wb-ready', null, wb.onReady);
         if (!fileObject){
             Event.trigger(document.body, 'wb-initialize', {component: 'script'});
             return wb.createWorkspace();
@@ -209,6 +211,7 @@
         // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
         if (wb.loaded) return;
         wb.setState('scriptReady', false);
+        Event.once(document.body, 'wb-ready', null, wb.onReady);
         if (queryParsed.gist){
             console.log("Loading gist %s", queryParsed.gist);
             ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){

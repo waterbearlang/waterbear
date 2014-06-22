@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <title>Waterbear javascript playground</title>
+    <link href='stylesheets/fonts/stylesheet.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../stylesheets/workspace.css" >
 <link rel="stylesheet" href="../../stylesheets/layout.css" >
 <link rel="stylesheet" href="../../stylesheets/blocks.css" >
 <link rel="stylesheet" href="../../stylesheets/menu.css" >
-<link rel="stylesheet" href="../../stylesheets/fonts/fontawesome.css" >
+<link rel="stylesheet" href="../../stylesheets/fonts/font-awesome/css/font-awesome.min.css" >
 <link rel="stylesheet" href="../../stylesheets/highlight-github.css" >
 <link rel="stylesheet" href="javascript.css" >
 <link rel="stylesheet" href="blocks/asset.css" >
@@ -56,8 +57,10 @@
 </head>
 <body>
     <div class="titlebar">
-        <img src="../../images/logo.png" />
-        <h1 class="title">javascript playground</h1>
+        <a href="../..">
+            <img src="../../images/waterbear_icon_logo.svg" />
+        </a>
+        <h1 class="title">Waterbear javascript playground</h1>
     </div>
     <nav class="mobilenav">
         <button class="show-files">Files</button>
@@ -200,6 +203,9 @@
     function receiveMessage(event){
         if (event.data === 'ide-ready'){
             Event.trigger(document.body, 'wb-initialize', {component: 'stage'});
+        }else if (event.data === 'ide-paused'){
+            wb.setState('stageReady', false);
+            // Event.once(document.body, 'wb-ready', null, wb.onReady);
         }
     }
 	window.addEventListener('message', receiveMessage, false);
@@ -209,6 +215,7 @@
 	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
 	<div class="scripts_text_view"></div>
 </div>
+
         <div id="cm_container">
         <canvas id="cm_canvas"></canvas>
         <div class="code_map"></div>

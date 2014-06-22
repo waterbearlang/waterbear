@@ -10,11 +10,11 @@
 		var isOn = !wb.getState(name);
 		wb.setState(name, isOn);
 		if (isOn){
-			button.classList.remove('icon-unchecked');
-			button.classList.add('icon-check');
+			button.classList.remove('fa-square-o');
+			button.classList.add('fa-check-square-o');
 		}else{
-			button.classList.add('icon-unchecked');
-			button.classList.remove('icon-check');
+			button.classList.add('fa-square-o');
+			button.classList.remove('fa-check-square-o');
 		}
 		Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
 	}
@@ -27,10 +27,11 @@
 		wb.findAll(document.body, '.toggle').forEach(function(button){
 			var name = button.dataset.target;
 			var isOn = wb.getState(name);
+            button.classList.add('fa');
 			if (isOn){
-				button.classList.add('icon-check');
+				button.classList.add('fa-check-square-o');
 			}else{
-				button.classList.add('icon-unchecked');
+				button.classList.add('fa-square-o');
 			}
 			Event.trigger(document.body, 'wb-toggle', {name: name, state: isOn});
 		});

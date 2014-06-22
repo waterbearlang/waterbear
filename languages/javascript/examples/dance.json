@@ -633,44 +633,6 @@
                 {
                   "blocktype": "step",
                   "group": "controls",
-                  "id": "f363ebf4-e0c6-4698-8b80-796acc5836c9",
-                  "help": "create a reference to re-use the any",
-                  "scopeId": "0",
-                  "scriptId": "079b2b89-41c2-4d00-8e21-bcb86574bf80",
-                  "sockets": [
-                    {
-                      "name": "variable variable##",
-                      "type": "any",
-                      "uName": "variable variable  51",
-                      "uValue": ""
-                    }
-                  ],
-                  "seqNum": "51",
-                  "script": "local.variable## = {{1}};",
-                  "locals": [
-                    {
-                      "blocktype": "expression",
-                      "script": "local.variable##",
-                      "type": "any",
-                      "sockets": [
-                        {
-                          "name": "variable##"
-                        }
-                      ],
-                      "isTemplateBlock": true,
-                      "isLocal": true,
-                      "group": "controls",
-                      "seqNum": "51",
-                      "scopeId": "47c4d00e-7cfc-4efd-93a2-fbc8aa5f58e0",
-                      "scriptId": "5ba247ed-8781-482e-a78d-5051593bf144",
-                      "id": "5ba247ed-8781-482e-a78d-5051593bf144",
-                      "localSource": "f363ebf4-e0c6-4698-8b80-796acc5836c9"
-                    }
-                  ]
-                },
-                {
-                  "blocktype": "step",
-                  "group": "controls",
                   "id": "5c846251-25c4-4364-8f40-03d23b2d77b4",
                   "help": "create a reference to re-use the any",
                   "scopeId": "0",

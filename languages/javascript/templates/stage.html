@@ -2,6 +2,9 @@
     function receiveMessage(event){
         if (event.data === 'ide-ready'){
             Event.trigger(document.body, 'wb-initialize', {component: 'stage'});
+        }else if (event.data === 'ide-paused'){
+            wb.setState('stageReady', false);
+            // Event.once(document.body, 'wb-ready', null, wb.onReady);
         }
     }
 	window.addEventListener('message', receiveMessage, false);

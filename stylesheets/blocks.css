@@ -296,6 +296,8 @@
 /*This class is added to the block that is moving*/
 .dragIndication{
     opacity: 0.75;
+    position: absolute;
+    pointer-events: none;
 }
 
 /* This class is added to all potential drop targets */

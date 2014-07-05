@@ -25,6 +25,9 @@
     var potentialDropTargets;
     var startPosition;
 
+    var selectedBlocks;
+    var selectedInAscOrder;
+
     // Specific to the code map
     var cloned;
     var cm_cont= document.querySelector('#cm_container');
@@ -56,27 +59,44 @@
             clearTimeout(timer);
             timer = null;
         }
+
+        if (selectedBlocks !== undefined) {
+            deselectAllBlocks();
+        } else {
+            selectedBlocks = [];
+        }
+
+        selectedInAscOrder = false;
     }
 
-    function initDrag(event){
+    function initDrag(event) {
         var target = wb.closest(event.target, '.block');
-        if (!target){ return; }
-        // don't start dragging from these elements, unless block is in block menu
-        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained') && !wb.matches(target, '#block_menu *')) {
+
+        // No block was clicked
+        if (!target) { return; }
+
+        // Don't start dragging from these elements, unless block is in block menu
+        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained, .scripts_workspace') && !wb.matches(target, '#block_menu *')) {
             return;
         }
-        dragTarget = target;
-        if (target.parentElement.classList.contains('block-menu')){            //console.log('target parent: %o', target.parentElement);
+
+        // Set different behavior for template blocks
+        if (wb.matches(target.parentElement, '.block-menu')) {
+            // Drag from block menu or local variables
             target.dataset.isTemplateBlock = 'true';
             templateDrag = true;
+
+             // Drag from local variables
+             if (target.parentElement.classList.contains('locals')) {
+                 target.dataset.isLocal = 'true';
+                 localDrag = true;
+            }
         }
-        if (target.parentElement.classList.contains('locals')){
-            target.dataset.isLocal = 'true';
-            localDrag = true;
-        }
-        //dragTarget.classList.add("dragIndication");
-        startPosition = wb.rect(target);
-        if (! wb.matches(target.parentElement, '.scripts_workspace')){
+
+        // Select block
+        selectBlock(target, event.shiftKey);
+
+        if (!wb.matches(target.parentElement, '.scripts_workspace')) {
             startParent = target.parentElement;
         }
         startSibling = target.nextElementSibling;
@@ -86,51 +106,48 @@
         }
     }
 
-    function startDrag(event){
+    function startDrag(event) {
+        // FIXME: Set different listeners on menu blocks than on the script area
+        if (localDrag) {
+            scope = wb.closest(selectedBlocks[0].parentElement, '.context');
+        } else {
+            scope = null;
+        }
+
+        // Create a div for the selected blocks
+        dragTarget = wb.elem('div');
+        for (var i = 0; i < selectedBlocks.length; i++) {
+            var index = selectedInAscOrder ? i : selectedBlocks.length - 1 - i;
+            var clonedBlock = wb.cloneBlock(selectedBlocks[index]);
+            Event.trigger(selectedBlocks[index], 'wb-clone');
+            dragTarget.appendChild(clonedBlock);
+        }
+
+        // Position the block at the correct location
+        if (selectedInAscOrder) {
+            startPosition = wb.rect(selectedBlocks[0]);
+        } else {
+            startPosition = wb.rect(selectedBlocks[selectedBlocks.length - 1]);
+        }
+
         dragTarget.classList.add("dragIndication");
-        // start timer for drag events
+        document.body.appendChild(dragTarget);
+        wb.reposition(dragTarget, startPosition);
+
+        // Save the current position for dragging event
+        currentPosition = {left: event.pageX, top: event.pageY};
+
+        // Start timer for drag events
         timer = setTimeout(hitTest, dragTimeout);
 
-        currentPosition = {left: event.pageX, top: event.pageY};
-        // target = clone target if in menu
-        // FIXME: Set different listeners on menu blocks than on the script area
-        if (dragTarget.dataset.isTemplateBlock){
-            dragTarget.classList.remove('dragIndication');
-            var parent = dragTarget.parentElement;
-            // console.log('set drag target to clone of old drag target');
-            dragTarget = wb.cloneBlock(dragTarget); // clones dataset and children, yay
-            dragTarget.classList.add('dragIndication');
-            if (localDrag){
-                scope = wb.closest(parent, '.context');
-            }else{
-                scope = null;
-            }
-            cloned = true;
-        }else{
-            // TODO: handle detach better (generalize restoring sockets, put in language file)
-            // FIXME: Always clone, remove on drop when needed
-            Event.trigger(dragTarget, 'wb-remove');
-        }
-
-        // get position and append target to .content, adjust offsets
-        // set last offset
-        dragTarget.style.position = 'absolute'; // FIXME, this should be in CSS
-        dragTarget.style.pointerEvents = 'none'; // FIXME, this should be in CSS
-        document.body.appendChild(dragTarget);
-        if (cloned){
-            // call this here so it can bubble to document.body
-            Event.trigger(dragTarget, 'wb-clone');
-        }
-        wb.reposition(dragTarget, startPosition);
-        potentialDropTargets = getPotentialDropTargets(dragTarget);
-        dropRects = potentialDropTargets.map(function(elem, idx){
+        potentialDropTargets = getPotentialDropTargets(dragTarget.firstChild);
+        dropRects = potentialDropTargets.map(function(elem, idx) {
             elem.classList.add('dropTarget');
             return wb.rect(elem);
         });
-
     }
 
-    function dragging(event){
+    function dragging(event) {
         var nextPosition = {left: event.pageX, top: event.pageY};
         var dX = nextPosition.left - currentPosition.left;
         var dY = nextPosition.top - currentPosition.top;
@@ -139,10 +156,10 @@
         currentPosition = nextPosition;
     }
 
-    function endDrag(event){
+    function endDrag(event) {
         clearTimeout(timer);
         timer = null;
-        handleDrop(event,event.altKey || event.ctrlKey);
+        handleDrop(event, event.altKey || event.ctrlKey);
     }
 
     function cancelDrag(event) {
@@ -150,84 +167,160 @@
         clearTimeout(timer);
         timer = null;
         resetDragStyles();
-        revertDrop();
+        dragTarget.parentElement.removeChild(dragTarget);
     }
 
     // HELPERS
-    
-    function handleDrop(event,copyBlock){
+
+    function selectBlock(target, multiselect) {
+        // Handle single selection
+        if (!multiselect) {
+            // Select the block if it is not selected
+            // Ignore the selection if it is already selected
+            if (selectedBlocks.indexOf(target) == -1) {
+                deselectAllBlocks();
+                target.classList.add("selected");
+                selectedBlocks.push(target);
+            }
+
+            return;
+        }
+
+        // Disable multiselect for blocks outside of the workspace
+        if (wb.closest(target, '.scripts_workspace') === null) { return; }
+
+        // Disable multiselect for blocks in the block menu
+        if (wb.matches(target.parentElement, '.block-menu')) { return; }
+
+        // Handle multiple selection
+        var nodes = wb.makeArray(selectedBlocks[0].parentNode.children);
+        var firstIndex = nodes.indexOf(selectedBlocks[0]);
+        var targetIndex = nodes.indexOf(target);
+
+        // Only select blocks if target block is on the same level
+        if (targetIndex > -1) {
+            // FIXME: Inefficient algorithm
+            deselectAllBlocks();
+
+            var step;
+
+            if (firstIndex < targetIndex) {
+                selectedInAscOrder = true;
+                step = 1;
+            } else {
+                selectedInAscOrder = false;
+                step = -1;
+            }
+
+            for (var i = firstIndex; i != targetIndex; i += step) {
+                nodes[i].classList.add("selected");
+                selectedBlocks.push(nodes[i]);
+            }
+
+            target.classList.add("selected");
+            selectedBlocks.push(target);
+        }
+    }
+
+    function deselectAllBlocks() {
+        while (selectedBlocks.length > 0) {
+            selectedBlocks.pop().classList.remove("selected");
+        }
+    }
+
+    function deleteAllSelectedBlocks() {
+        for (var i = 0; i < selectedBlocks.length; i++) {
+            selectedBlocks[i].classList.remove('selected');
+            Event.trigger(selectedBlocks[i], 'wb-remove');
+            Event.trigger(selectedBlocks[i], 'wb-delete');
+            selectedBlocks[i].parentElement.removeChild(selectedBlocks[i]);
+        }
+
+        selectedBlocks.length = 0;
+    }
+
+    function handleDrop(event, copyBlock) {
         // TODO:
            // is it over the menu
            // 1. Drop if there is a target
            // 2. Remove, if not over a canvas
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
-        resetDragStyles();
-        if (wb.overlap(dragTarget, blockMenu)){
-            // delete block if dragged back to menu
-            Event.trigger(dragTarget, 'wb-delete');
-            dragTarget.parentElement.removeChild(dragTarget);
+        var childNodes = dragTarget.childNodes;
+
+        if (wb.overlap(dragTarget, blockMenu)) {
+            // Delete block if dragged back to menu
+            if (!templateDrag) {
+                deleteAllSelectedBlocks();
+            }
+
             // Add history action if the source block was in the workspace
         } else if (wb.overlap(dragTarget, scratchpad)) {
             var scratchPadStyle = scratchpad.getBoundingClientRect();
             var newOriginX = scratchPadStyle.left;
             var newOriginY = scratchPadStyle.top;
 
-            var blockStyle = dragTarget.getBoundingClientRect();
-            var oldX = blockStyle.left;
-            var oldY = blockStyle.top;
-            dragTarget.removeAttribute('style');
-            dragTarget.style.position = "absolute";
-            dragTarget.style.left = (oldX - newOriginX) + "px";
-            dragTarget.style.top = (oldY - newOriginY) + "px";
-            scratchpad.appendChild(dragTarget);
-            Event.trigger(dragTarget, 'wb-add');
-            return;
-        }
-        else if(wb.overlap(dragTarget, cm_cont)){
-            if (cloned){
-                dragTarget.parentElement.removeChild(dragTarget);
-            }else{
-                revertDrop();
+            var height = 0;
+
+            while (childNodes.length > 0) {
+                var blockStyle = childNodes[0].getBoundingClientRect();
+                var oldX = blockStyle.left;
+                var oldY = blockStyle.top;
+
+                childNodes[0].removeAttribute('style');
+                childNodes[0].style.position = "absolute";
+                childNodes[0].style.left = (oldX - newOriginX) + "px";
+                childNodes[0].style.top = (oldY - newOriginY + height) + "px";
+
+                height += blockStyle.bottom - blockStyle.top;
+
+                scratchpad.appendChild(childNodes[0]);
             }
-        }
-        else if (dropTarget){
+
+            if (!templateDrag) {
+                deleteAllSelectedBlocks();
+            }
+        } else if (wb.overlap(dragTarget, cm_cont)) {
+            // Ignore dragging blocks to code map
+        } else if (dropTarget) {
             //moving around when dragged block is moved in scratchpad
             dropTarget.classList.remove('dropActive');
-            if (wb.matches(dragTarget, '.step')){
+
+            // NOTE: dragTarget.childNodes[0] will be undefined after it is
+            // moved to dropTarget. So we need to create a reference to it
+            // if we want to use it later.
+            var firstChild = childNodes[0];
+
+            if (wb.matches(firstChild, '.step')) {
                 // Drag a step to snap to a step
-                if(copyBlock && !templateDrag) {
-                    // FIXME: This results in two blocks if you copy-drag back to the starting socket
-                    revertDrop();
-                    dragTarget = wb.cloneBlock(dragTarget);
+                while (childNodes.length > 0) {
+                    firstChild = childNodes[0];
+                    dropTarget.insertBefore(firstChild, dropCursor());
+                    firstChild.removeAttribute('style');
+                    Event.trigger(firstChild, 'wb-add');
                 }
-                dropTarget.insertBefore(dragTarget, dropCursor());
-                dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'wb-add');
-            }else{
+
+            } else {
                 // Insert a value block into a socket
-                if(copyBlock && !templateDrag) {
-                    revertDrop();
-                    // console.log('clone dragTarget value to dragTarget');
-                    dragTarget = wb.cloneBlock(dragTarget);
-                }
-                dropTarget.appendChild(dragTarget);
-                dragTarget.removeAttribute('style');
-                Event.trigger(dragTarget, 'wb-add');
+                dropTarget.appendChild(firstChild);
+                firstChild.removeAttribute('style');
+                Event.trigger(firstChild, 'wb-add');
             }
-        }else{
-            if (cloned){
-                // remove cloned block (from menu)
-                dragTarget.parentElement.removeChild(dragTarget);
-            }else{
-                revertDrop();
+
+            if (!copyBlock && !templateDrag) {
+                // FIXME: This results in two blocks if you copy-drag back to the starting socket
+                // TODO: Check if this is fixed
+                deleteAllSelectedBlocks();
             }
         }
+
+        resetDragStyles();
+        dragTarget.parentElement.removeChild(dragTarget);
     }    
 
     function resetDragStyles() {
         if (dragTarget){
-            dragTarget.classList.remove('dragActive');
+            dragTarget.classList.remove('dragActive'); // TODO: Is this deprecated?
             dragTarget.classList.remove('dragIndication');
         }
         potentialDropTargets.forEach(function(elem){
@@ -274,7 +367,7 @@
     }
 
     function positionDropCursor(){
-        var dragRect = wb.rect(wb.findChild(dragTarget, '.label'));
+        var dragRect = wb.rect(wb.findChild(dragTarget.firstChild, '.label'));
         var cy = dragRect.top + dragRect.height / 2; // vertical centre of drag element
         // get only the .contains which cx is contained by
         var overlapping = potentialDropTargets.filter(function(item){
@@ -326,7 +419,7 @@
         // test all of the left borders first, then the top, right, bottom
         // goal is to eliminate negatives as fast as possible
         if (!dragTarget) {return;}
-        if (wb.matches(dragTarget, '.expression')){
+        if (wb.matches(dragTarget.firstChild, '.expression')) {
             positionExpressionDropCursor();
         }else{
             positionDropCursor();
@@ -450,7 +543,6 @@
             }
         }
     }
-
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){

@@ -29,7 +29,7 @@
 
     wb.writeScript = function(elements, view){
         var script = elements.map(function(elem){
-            return wb.codeFromBlock(elem);
+            return wb.block.code(elem);
         }).join('');
         view.innerHTML = '<pre class="language-scheme">' + script + '</pre>';
     };
@@ -81,7 +81,7 @@
     
      wb.prettyScript = function(elements){
         return elements.map(function(elem){
-            return wb.codeFromBlock(elem);
+            return wb.block.code(elem);
         }).join('');
     };
 })(wb, Event);

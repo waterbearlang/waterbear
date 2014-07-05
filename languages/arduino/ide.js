@@ -32,7 +32,7 @@ wb.loadDefaultScript = function(script){
 
 wb.writeScript = function(blocks, view){
     var code = blocks.map(function(elem){
-        return wb.codeFromBlock(elem);
+        return wb.block.code(elem);
     }).join('\n');
     view.innerHTML = '<pre class="language-arduino">' + code + '</pre>';
 };
@@ -44,7 +44,7 @@ wb.clearStage = function(){ /* do nothing */ };
 wb.wrap = function(blocks){
         // update size of frame
         return blocks.map(function(elem){
-          return wb.codeFromBlock(elem);
+          return wb.block.code(elem);
         }).join('\n\n');
 };
 

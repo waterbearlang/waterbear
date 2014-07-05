@@ -38,7 +38,7 @@
             createWorkspace('Workspace');
             document.querySelector('.scripts_text_view').innerHTML = '';
             wb.history.clear();
-            wb.resetSeqNum();
+            wb.block.resetSeqNum();
             delete localStorage['__' + wb.language + '_current_scripts'];
         }
     }
@@ -140,7 +140,7 @@
     function createWorkspace(name){
         console.log('createWorkspace');
         var id = uuid();
-        var workspace = wb.Block({
+        var workspace = wb.block.create({
             group: 'scripts_workspace',
             id: id,
             scriptId: id,
@@ -330,7 +330,7 @@
     Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
     Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
     Event.on('.workspace', 'click', '.disclosure', disclosure);
-    Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+    Event.on('.workspace', 'dblclick', '.locals .name', wb.socket.changeName);
     Event.on('.workspace', 'keypress', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input, select', function(event){

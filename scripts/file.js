@@ -94,7 +94,7 @@
             description: description,
             date: Date.now(),
             waterbearVersion: '2.0',
-            blocks: blocks.map(wb.blockDesc)
+            blocks: blocks.map(wb.block.description)
         };
 
         if(json.blocks[0].sockets[0].name){
@@ -160,7 +160,7 @@
             Event.trigger(document.body, 'wb-initialize', {component: 'script'});
             return wb.createWorkspace();
         }
-        var blocks = fileObject.blocks.map(wb.Block);
+        var blocks = fileObject.blocks.map(wb.block.create);
         if (!blocks.length){
             return wb.createWorkspace();
         }

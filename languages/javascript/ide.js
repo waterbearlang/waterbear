@@ -30,7 +30,7 @@
         return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
             // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
             var source = document.getElementById(asset.dataset.localSource);
-            return wb.getSocketValue(wb.getSockets(source)[0]);
+            return wb.getSocketValue(wb.block.sockets(source)[0]);
         }).join(',') + ']';
     }
 
@@ -55,7 +55,7 @@
         var blocks = wb.findAll(document.body, '.scripts_workspace');
 
         for (var i=0; i < blocks.length; i++){
-            if (!wb.blockValidate(blocks[i])){
+            if (!wb.block.validate(blocks[i])){
                 console.warn('Not running script because of invalid block(s)');
                 return;
             }
@@ -117,7 +117,7 @@
 
     wb.prettyScript = function(elements){
         return js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
+            return wb.block.code(elem);
         }).join(''));
     };
 

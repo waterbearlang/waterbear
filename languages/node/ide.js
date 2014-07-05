@@ -246,7 +246,7 @@ wb.prettyScript = function(elements){
     //"process.on('exit', function(){console.log(\"Ending\");});";
     
     var script = elements.map(function(elem){
-        return wb.codeFromBlock(elem);
+        return wb.block.code(elem);
     }).join('');
     
     var pretty = js_beautify(before+script+after);

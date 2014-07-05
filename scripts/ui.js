@@ -137,7 +137,7 @@ function edit_menu(title, sectionKey, specs, help, show){
         var spec = specs[key];
         spec.group = sectionKey;
         spec.isTemplateBlock = true;
-        submenu.appendChild(wb.Block(spec));
+        submenu.appendChild(wb.block.create(spec));
     }
 }
 

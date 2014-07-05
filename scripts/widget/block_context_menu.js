@@ -121,7 +121,7 @@ function cutCommand(evt) {
 function pasteCommand(evt) {
 	// console.log(pasteboard);
 	var action = {
-		pasted: wb.cloneBlock(pasteboard),
+		pasted: wb.block.clone(pasteboard),
 		into: cmenuTarget.parentNode,
 		before: cmenuTarget.nextSibling,
 		undo: function() {

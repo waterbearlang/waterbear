@@ -118,7 +118,7 @@
         dragTarget = wb.elem('div');
         for (var i = 0; i < selectedBlocks.length; i++) {
             var index = selectedInAscOrder ? i : selectedBlocks.length - 1 - i;
-            var clonedBlock = wb.cloneBlock(selectedBlocks[index]);
+            var clonedBlock = wb.block.clone(selectedBlocks[index]);
             Event.trigger(selectedBlocks[index], 'wb-clone');
             dragTarget.appendChild(clonedBlock);
         }
@@ -501,7 +501,7 @@
     
     function menuToScratchpad(event) {
         if(!wb.matches(event.target, '.cloned')){
-            var cloned = wb.cloneBlock(wb.closest(event.target, '.block'));
+            var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
         }
     }    

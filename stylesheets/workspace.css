@@ -147,7 +147,8 @@ h1.title {
 .drop-cursor {
 	height: 2px;
 	background-color: red;
-	width: 75%
+	width: 75%;
+	float: left;
 }
 
 /* Context menu */

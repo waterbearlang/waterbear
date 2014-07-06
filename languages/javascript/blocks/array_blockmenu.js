@@ -67,7 +67,8 @@
             {
                 "name": "item",
                 "type": "number",
-                "value": 0
+                "value": 0,
+                "min": 0
             }
             ]
         },
@@ -149,7 +150,8 @@
             {
                 "name": "remove item",
                 "type": "number",
-                "value": 0
+                "value": 0,
+                "min": 0
             }
             ]
         },
@@ -165,7 +167,8 @@
                 {
                     "name": "remove item",
                     "type": "number",
-                    "value": 0
+                    "value": 0,
+                    "min": 0
                 }
             ]
         },

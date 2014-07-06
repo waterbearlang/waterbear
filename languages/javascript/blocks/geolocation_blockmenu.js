@@ -39,7 +39,8 @@
                         {
                             "name": "when within",
                             "type": "number",
-                            "value": 1
+                            "value": 1,
+                            "min": 0
                         },
                         {
                             "name": "km of",

@@ -28,7 +28,7 @@
                             "name": "vector##",
                             "type": "number",
                             "value": 0,
-                            "suffix": "x,"
+                            "suffix": "x"
                         },
                         {
                             "name": "",

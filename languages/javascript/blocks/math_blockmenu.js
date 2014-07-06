@@ -16,12 +16,12 @@
                         {
                             "name": "",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "× 10 ^",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -157,12 +157,12 @@
                         {
                             "name": "",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "≠",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -203,12 +203,11 @@
                         {
                             "name": "",
                             "type": "number",
-                            "value": "0"
-                        },
+                            "value": 0                        },
                         {
                             "name": "≤",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -249,12 +248,12 @@
                         {
                             "name": "",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "≥",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -830,12 +829,12 @@
                         {
                             "name": "bitwise",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "and",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -853,12 +852,12 @@
                         {
                             "name": "bitwise",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "or",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -876,12 +875,12 @@
                         {
                             "name": "bitwise",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "xor",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -899,12 +898,12 @@
                         {
                             "name": "bitwise",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "nand",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         }
                     ],
                     "keywords": [
@@ -922,12 +921,12 @@
                         {
                             "name": "bit shift",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "left by",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "bits"
@@ -948,12 +947,12 @@
                         {
                             "name": "bit shift",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "right by",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "bits"
@@ -976,7 +975,7 @@
                 {
                     "name": "Summation",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ],
             "keywords": [
@@ -997,12 +996,12 @@
                 {
                     "name": "from ",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "to",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ]
         },
@@ -1019,12 +1018,12 @@
                 {
                     "name": "First ",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "name": "multiples of",
                     "type": "number",
-                    "value": "0"
+                    "value": 0
                 }
             ],
             "keywords": [

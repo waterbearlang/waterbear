@@ -48,7 +48,9 @@
                         {
                             "name": "global alpha",
                             "type": "number",
-                            "value": 1.0
+                            "value": 1.0,
+                            "min": 0.0,
+                            "max": 1.0
                         }
                     ]
                 },
@@ -126,6 +128,7 @@
                             "name": "line width",
                             "type": "number",
                             "value": 1
+                            "min": 0
                         }
                     ]
                 },
@@ -166,7 +169,8 @@
                         {
                             "name": "mitre limit",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0.0
                         }
                     ]
                 },
@@ -197,7 +201,8 @@
                         {
                             "name": "shadow blur",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -228,7 +233,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": "10"
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": ["shape", "circle", "stroke"]
@@ -270,7 +276,8 @@
                         {
                             "name": "and width",
                             "type": "number",
-                            "value": 1
+                            "value": 1,
+                            "min": 0
                         }
                     ]
                 }

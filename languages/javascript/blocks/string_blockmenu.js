@@ -57,7 +57,8 @@
                         {
                             "name": "",
                             "type": "number",
-                            "value": "2"
+                            "value": 2,
+                            "min": 0
                         },
                         {
                             "name": "times"
@@ -78,7 +79,8 @@
                         {
                             "name": "character at",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -97,7 +99,8 @@
                         {
                             "name": "character at",
                             "type": "number",
-                            "value": "0"
+                            "value": 0,
+                            "min": 0
                         },
                         {
                             "name": "from the end"
@@ -119,12 +122,14 @@
                         {
                             "name": "substring at",
                             "type": "number",
-                            "value": "0"
+                            "value": 0,
+                            "min": 0
                         },
                         {
                             "name": "of length",
                             "type": "number",
-                            "value": "0"
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -143,12 +148,14 @@
                         {
                             "name": "substring from",
                             "type": "number",
-                            "value": "0"
+                            "value": 0,
+                            "min": 0
                         },
                         {
                             "name": "to",
                             "type": "number",
-                            "value": "0"
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },

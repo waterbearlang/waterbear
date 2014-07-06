@@ -36,7 +36,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -56,7 +57,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 30
+                            "value": 30,
+                            "min": 0
                         },
                         {
                             "name": "and color",
@@ -82,7 +84,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -102,7 +105,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "and color",
@@ -127,7 +131,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -183,7 +188,8 @@
                         {
                             "name": "with border-radius",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         },
                         {
                             "name": "and color",
@@ -250,12 +256,14 @@
                         {
                             "name": "width",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "height",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -311,17 +319,18 @@
                         {
                             "name": "circle at x",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "y",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": "10"
+                            "value": 10,
+                            "min": 0
                         }
                     ]
                 },
@@ -333,8 +342,7 @@
                     "sockets": [
                         {
                             "name": "polygon with points ",
-                            "type": "array",
-                            "value": null
+                            "type": "array"
                         }
                     ]
                 },
@@ -347,27 +355,30 @@
                         {
                             "name": "rect at x",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "y",
                             "type": "number",
-                            "value": "0"
+                            "value": 0
                         },
                         {
                             "name": "with width",
                             "type": "number",
-                            "value": "10"
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "height",
                             "type": "number",
-                            "value": "10"
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "border-radius",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -379,18 +390,17 @@
                     "sockets": [
                         {
                             "name": "rect at point",
-                            "type": "point",
-                            "value": null
+                            "type": "point"
                         },
                         {
                             "name": "with size",
-                            "type": "size",
-                            "value": null
+                            "type": "size"
                         },
                         {
                             "name": "border-radius",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -402,8 +412,7 @@
                     "sockets": [
                         {
                             "name": "rect from array",
-                            "type": "array",
-                            "value": null
+                            "type": "array"
                         }
                     ]
                 }

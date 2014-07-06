@@ -95,6 +95,7 @@
                             "name": "with radius",
                             "type": "number",
                             "value": 1.0
+                            "min": 0.0
                         }
                     ]
                 },
@@ -110,20 +111,24 @@
                         },
                         {
                             "name": "radius",
-                            "type": "number"
+                            "type": "number",
+                            "value": "1",
+                            "min": 0
                         },
                         {
                             "name": "start angle",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "suffix": "degrees"
                         },
                         {
-                            "name": "deg, end angle",
+                            "name": "end angle",
                             "type": "number",
                             "value": 45
-                        },
+                            "suffix" "degrees"
+                        }
                         {
-                            "name": "deg",
+                            "name": "anticlockwise",
                             "type": "boolean",
                             "value": true
                         }
@@ -155,6 +160,7 @@
                             "name": "with radius",
                             "type": "number",
                             "value": 10
+                            "min": 0
                         }
                     ]
                 },

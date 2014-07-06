@@ -106,7 +106,8 @@
                         {
                             "name": "repeat",
                             "type": "number",
-                            "value": "30"
+                            "value": 30,
+                            "min": 0
                         },
                         {
                             "name": "times a second until",
@@ -181,7 +182,8 @@
                         {
                             "name": "schedule in",
                             "type": "number",
-                            "value": "1"
+                            "value": 1,
+                            "min": 0
                         },
                         {
                             "name": "secs"
@@ -209,7 +211,8 @@
                         {
                             "name": "repeat",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ]
                 },

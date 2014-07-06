@@ -26,12 +26,14 @@
                         {
                             "name": "with width",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "height",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [

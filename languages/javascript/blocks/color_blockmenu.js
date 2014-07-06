@@ -245,6 +245,8 @@
                             "name": "grey with level",
                             "type": "number",
                             "value": 100
+                            "min": 0,
+                            "max": 255
                         }
                     ]
                 },
@@ -259,16 +261,22 @@
                             "name": "color with red",
                             "type": "number",
                             "value": 0
+                            "min": 0,
+                            "max": 255
                         },
                         {
                             "name": "green",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 255
                         },
                         {
                             "name": "blue",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 255
                         }
                     ]
                 },
@@ -282,22 +290,30 @@
                         {
                             "name": "color with red",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 255
                         },
                         {
                             "name": "green",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 255
                         },
                         {
                             "name": "blue",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 255
                         },
                         {
                             "name": "alpha",
                             "type": "number",
-                            "value": 0.1
+                            "value": 0.1,
+                            "min": 0.0,
+                            "max": 1.0
                         }
                     ]
                 },
@@ -311,17 +327,26 @@
                         {
                             "name": "color with hue",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 360,
+                            "suffix": "°"
                         },
                         {
                             "name": "saturation",
                             "type": "number",
                             "value": 0
+                            "min": 0,
+                            "max": 100,
+                            "suffix": "%"
                         },
                         {
                             "name": "brightness",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0,
+                            "max": 100,
+                            "suffix": "%"
                         }
                     ]
                 },
@@ -410,7 +435,8 @@
                         {
                             "name": "radius1",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         },
                         {
                             "name": "to point2",
@@ -419,7 +445,8 @@
                         {
                             "name": "radius2",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -464,7 +491,9 @@
                         {
                             "name": "at offset",
                             "type": "number",
-                            "value": 0.5
+                            "value": 0.5,
+                            "min": 0.0,
+                            "max": 1.0
                         },
                         {
                             "name": "with color",

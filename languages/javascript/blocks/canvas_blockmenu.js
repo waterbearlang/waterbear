@@ -127,7 +127,7 @@
                         {
                             "name": "line width",
                             "type": "number",
-                            "value": 1
+                            "value": 1,
                             "min": 0
                         }
                     ]

@@ -389,23 +389,17 @@
     function confirmNumberValue(evt){
         var input = evt.target;
         if (input.validity.valid){
-            console.log('just right');
             input.dataset.value = input.value;
         }else{
             if (input.validity.rangeUnderflow){
-                console.log('under');
                 input.value = input.getAttribute('min');
                 input.dataset.value = input.value;
             }else if (input.validity.rangeOverflow){
-                console.log('over');
                 input.value = input.getAttribute('max');
                 input.dataset.value = input.value;
-            }else if (input.value === ''){
-                console.log('blank');
-                // Do nothing, we allow fields to be temporarily blank
             }else{
-                console.log('mystery value: %s', input.dataset.value);
-                input.value = input.dataset.value;
+                // We allow blanks, unfortunately, we can't detect blank vs. say 'abc'
+                input.value = '';
             }
         }
     }

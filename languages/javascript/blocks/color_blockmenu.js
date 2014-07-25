@@ -244,7 +244,7 @@
                         {
                             "name": "grey with level",
                             "type": "number",
-                            "value": 100
+                            "value": 100,
                             "min": 0,
                             "max": 255
                         }
@@ -260,7 +260,7 @@
                         {
                             "name": "color with red",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
                             "min": 0,
                             "max": 255
                         },
@@ -335,7 +335,7 @@
                         {
                             "name": "saturation",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
                             "min": 0,
                             "max": 100,
                             "suffix": "%"

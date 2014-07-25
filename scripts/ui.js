@@ -47,20 +47,20 @@ wb.updateScriptsView = updateScriptsView;
 
 function changeSocket(event) {
 	// console.log("Changed a socket!");
-	var oldValue = event.target.getAttribute('data-oldvalue');
+	var oldValue = event.target.dataset.value; 
 	var newValue = event.target.value;
 	if(oldValue === undefined) oldValue = event.target.defaultValue;
 	// console.log("New value:", newValue);
 	// console.log("Old value:", oldValue);
-	event.target.setAttribute('data-oldvalue', newValue);
+	event.target.dataset.value = newValue;
 	var action = {
 		undo: function() {
 			event.target.value = oldValue;
-			event.target.setAttribute('data-oldvalue', oldValue);
+			event.target.dataset.value = oldValue;
 		},
 		redo: function() {
 			event.target.value = newValue;
-			event.target.setAttribute('data-oldvalue', newValue);
+			event.target.dataset.value = newValue;
 		}
 	};
 	wb.history.add(action);

@@ -16,7 +16,7 @@
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
 
-(function(wb){
+(function(wb, Event){
 'use strict';
     var elem = wb.elem;
 
@@ -586,5 +586,5 @@
         sockets: getSockets
     };
 
-})(wb);
+})(wb, Event);
 

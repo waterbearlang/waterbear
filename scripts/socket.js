@@ -1,8 +1,9 @@
-(function(wb){
+(function(wb, Event){
 'use strict';
     var elem = wb.elem;
 
     function createSocket(desc, blockdesc, cloneForCM){
+        // console.log('createSocket(%o)', desc);
         // desc is a socket descriptor object, block is the owner block descriptor
         // Sockets are described by text, type, and (default) value
         // type and value are optional, but if you have one you must have the other
@@ -28,6 +29,12 @@
         }
         if (desc.options){
             socket.dataset.options = desc.options;
+        }
+        if (desc.min !== undefined){
+            socket.dataset.min = desc.min;
+        }
+        if (desc.max !== undefined){
+            socket.dataset.max = desc.max;
         }
         // if (!blockdesc.isTemplateBlock){
         //      console.log('socket seq num: %s', blockdesc.seqNum);
@@ -57,7 +64,7 @@
                 newBlock = cloneBlock(document.getElementById(desc.block), cloneForCM);
             }else if (desc.block && desc.uValue){
                 // for debugging only
-                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
+                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);
             }
             if (newBlock){
                 //console.log('appending new block');
@@ -96,14 +103,20 @@
         if (socket.dataset.suffix){
             desc.suffix = socket.dataset.suffix;
         }
+        if (socket.dataset.min !== undefined){
+            desc.min = socket.dataset.min;
+        }
+        if (socket.dataset.max !== undefined){
+            desc.max = socket.dataset.max;
+        }
         // User-specified settings
-        if (isTemplate) 
+        if (isTemplate)
         {
             return desc;
         }
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name');
-        
+
         if (desc.name && desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
@@ -178,53 +191,52 @@
         // return a block for block types
         var value, input;
         var type = obj.type;
-        
+
         if(type === 'boolean'){
             obj.options = 'boolean';
         }
-        
+
         if(typeof obj.options !== 'undefined'){
             // DONE : #24
             // DONE : #227
             var choice = elem('select');
             var list = wb.choiceLists[obj.options];
-            
+
             if(Array.isArray(list)){
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
                     var value = obj.uValue || obj.value;
-                    
+
                     if (value !== undefined && value !== null && value == opt){
                         option.setAttribute('selected', 'selected');
                     }
-                    
+
                     choice.appendChild(option);
                 });
             }
             else{
                 var values = Object.keys(list);
-                
+
                 values.forEach(function(val){
                     var option = elem('option', {"value":val}, list[val]);
                     var value = obj.uValue || obj.value;
-                    
+
                     if (value !== undefined && value !== null && value == val){
                         option.setAttribute('selected', 'selected');
                     }
-                    
+
                     choice.appendChild(option);
                 });
             }
-            
+
             return choice;
-        
+
         }
         //Known issue: width manually set to 160, need to programmatically get
-        //(size of "Browse" button) + (size of file input field). 
+        //(size of "Browse" button) + (size of file input field).
         if (type === 'file'){
             //var value = obj.uValue || obj.value || '';
-            //not sure if 'value' or 'data-oldvalue' is needed in the below line
-            input = elem('input', {type: "file"});//, value: value, 'data-oldvalue': value});
+            input = elem('input', {type: "file"});//, value: value});
             input.addEventListener('change', function(evt){
                 if(confirm("Your potentially sensitive data will be uploaded to the server. Continue?")) {
                     var file = input.files[0];
@@ -272,8 +284,16 @@
             default:
                 value = obj.uValue || obj.value || '';
         }
-        input = elem('input', {type: type, value: value, 'data-oldvalue': value});
-
+        input = elem('input', {type: type, value: value, 'data-value': value});
+        if (type === 'number'){
+            if (obj.min !== undefined){
+                input.setAttribute('min', obj.min);
+            }
+            if (obj.max !== undefined){
+                input.setAttribute('max', obj.max);
+            }
+            input.setAttribute('required', 'required');
+        }
         //Only enable editing for the appropriate types
         if (!(type === "string" || type === "any" || type === 'regex' ||
               type === "url"    || type === "phone" ||
@@ -366,8 +386,27 @@
         }
     }
 
+    function confirmNumberValue(evt){
+        var input = evt.target;
+        if (input.validity.valid){
+            input.dataset.value = input.value;
+        }else{
+            if (input.validity.rangeUnderflow){
+                input.value = input.getAttribute('min');
+                input.dataset.value = input.value;
+            }else if (input.validity.rangeOverflow){
+                input.value = input.getAttribute('max');
+                input.dataset.value = input.value;
+            }else{
+                // We allow blanks, unfortunately, we can't detect blank vs. say 'abc'
+                input.value = '';
+            }
+        }
+    }
+
+    Event.on(document.body, 'input', 'input[type=number]', confirmNumberValue);
+
     wb.socket = {
-        create: createSocket,
         value: getSocketValue,
         holderValue: getHolderValue,
         validate: socketValidate,
@@ -377,4 +416,4 @@
     };
 
 
-})(wb);
+})(wb, Event);

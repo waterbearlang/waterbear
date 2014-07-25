@@ -94,7 +94,7 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 1.0
+                            "value": 1.0,
                             "min": 0.0
                         }
                     ]
@@ -124,9 +124,9 @@
                         {
                             "name": "end angle",
                             "type": "number",
-                            "value": 45
-                            "suffix" "degrees"
-                        }
+                            "value": 45,
+                            "suffix": "degrees"
+                        },
                         {
                             "name": "anticlockwise",
                             "type": "boolean",
@@ -159,7 +159,7 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
                             "min": 0
                         }
                     ]

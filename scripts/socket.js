@@ -3,7 +3,7 @@
     var elem = wb.elem;
 
     function createSocket(desc, blockdesc, cloneForCM){
-        console.log('createSocket(%o)', desc);
+        // console.log('createSocket(%o)', desc);
         // desc is a socket descriptor object, block is the owner block descriptor
         // Sockets are described by text, type, and (default) value
         // type and value are optional, but if you have one you must have the other
@@ -64,7 +64,7 @@
                 newBlock = cloneBlock(document.getElementById(desc.block), cloneForCM);
             }else if (desc.block && desc.uValue){
                 // for debugging only
-                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);                
+                // console.log('block: %s, uValue: %s', desc.block, desc.uValue);
             }
             if (newBlock){
                 //console.log('appending new block');
@@ -110,13 +110,13 @@
             desc.max = socket.dataset.max;
         }
         // User-specified settings
-        if (isTemplate) 
+        if (isTemplate)
         {
             return desc;
         }
         var uName = wb.findChild(socket, '.name').textContent;
         var uEle = wb.findChild(socket, '.name');
-        
+
         if (desc.name && desc.name.replace(/##/, ' ' + socket.dataset.seqNum) !== uName){
             desc.uName = uName;
         }
@@ -191,49 +191,49 @@
         // return a block for block types
         var value, input;
         var type = obj.type;
-        
+
         if(type === 'boolean'){
             obj.options = 'boolean';
         }
-        
+
         if(typeof obj.options !== 'undefined'){
             // DONE : #24
             // DONE : #227
             var choice = elem('select');
             var list = wb.choiceLists[obj.options];
-            
+
             if(Array.isArray(list)){
                 wb.choiceLists[obj.options].forEach(function(opt){
                     var option = elem('option', {}, opt);
                     var value = obj.uValue || obj.value;
-                    
+
                     if (value !== undefined && value !== null && value == opt){
                         option.setAttribute('selected', 'selected');
                     }
-                    
+
                     choice.appendChild(option);
                 });
             }
             else{
                 var values = Object.keys(list);
-                
+
                 values.forEach(function(val){
                     var option = elem('option', {"value":val}, list[val]);
                     var value = obj.uValue || obj.value;
-                    
+
                     if (value !== undefined && value !== null && value == val){
                         option.setAttribute('selected', 'selected');
                     }
-                    
+
                     choice.appendChild(option);
                 });
             }
-            
+
             return choice;
-        
+
         }
         //Known issue: width manually set to 160, need to programmatically get
-        //(size of "Browse" button) + (size of file input field). 
+        //(size of "Browse" button) + (size of file input field).
         if (type === 'file'){
             //var value = obj.uValue || obj.value || '';
             input = elem('input', {type: "file"});//, value: value});
@@ -389,15 +389,22 @@
     function confirmNumberValue(evt){
         var input = evt.target;
         if (input.validity.valid){
+            console.log('just right');
             input.dataset.value = input.value;
         }else{
             if (input.validity.rangeUnderflow){
+                console.log('under');
                 input.value = input.getAttribute('min');
                 input.dataset.value = input.value;
             }else if (input.validity.rangeOverflow){
+                console.log('over');
                 input.value = input.getAttribute('max');
                 input.dataset.value = input.value;
+            }else if (input.value === ''){
+                console.log('blank');
+                // Do nothing, we allow fields to be temporarily blank
             }else{
+                console.log('mystery value: %s', input.dataset.value);
                 input.value = input.dataset.value;
             }
         }

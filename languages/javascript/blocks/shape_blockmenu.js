@@ -283,8 +283,7 @@
                         },
                         {
                             "name": "with color",
-                            "type": "color",
-                            "value": null
+                            "type": "color"
                         }
                     ]
                 },
@@ -297,13 +296,11 @@
                     "sockets": [
                         {
                             "name": "stroke polygon ",
-                            "type": "array",
-                            "value": null
+                            "type": "array"
                         },
                         {
                             "name": "with color",
-                            "type": "color",
-                            "value": null
+                            "type": "color"
                         }
                     ],
                     "tags": [
@@ -418,6 +415,6 @@
                 }
             ]
         }
-        
+
     );
 })(wb);

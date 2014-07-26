@@ -35,15 +35,15 @@ runtime.shape = {
         local.ctx.fillStyle = color;
         switch (shape.type) {
             case "circle":
-                Shape.drawCircle(shape);
+                runtime.shape.drawCircle(shape);
                 break;
 
             case "poly":
-                Shape.drawPolygon(shape);
+                runtime.shape.drawPolygon(shape);
                 break;
 
             case "rect":
-                Shape.drawRect(shape);
+                runtime.shape.drawRect(shape);
                 break;
         }
         local.ctx.fill();
@@ -57,15 +57,15 @@ runtime.shape = {
 
         switch (shape.type) {
             case "circle":
-                Shape.drawCircle(shape);
+            runtime.shape.drawCircle(shape);
                 break;
 
             case "poly":
-                Shape.drawPolygon(shape);
+                runtime.shape.drawPolygon(shape);
                 break;
 
             case "rect":
-                Shape.drawRect(shape);
+                runtime.shape.drawRect(shape);
                 break;
         }
         local.ctx.stroke();

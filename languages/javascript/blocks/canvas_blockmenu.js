@@ -238,51 +238,9 @@
                         }
                     ],
                     "tags": ["shape", "circle", "stroke"]
-                },
-                {
-                    "blocktype": "step",
-                    "script": "Shape.fillShape({{1}}, {{2}});",
-                    "help": "fill...",
-                    "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
-                    "sockets": [
-                        {
-                            "name": "fill shape",
-                            "type": "shape",
-                            "value": null
-                        },
-                        {
-                            "name": "with color",
-                            "type": "color",
-                            "value": null
-                        }
-                    ]
-                },
-                {
-                    "blocktype": "step",
-                    "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; Shape.strokeShape(shape##, color##, width##);",
-                    "help": "stroke...",
-                    "id": "90b70122-340f-46a7-9753-9c39022c00ac",
-                    "sockets": [
-                        {
-                            "name": "stroke shape",
-                            "type": "shape",
-                            "value": null
-                        },
-                        {
-                            "name": "with color",
-                            "type": "color",
-                            "value": null
-                        },
-                        {
-                            "name": "and width",
-                            "type": "number",
-                            "value": 1,
-                            "min": 0
-                        }
-                    ]
                 }
             ]
         }
-        
+
     );
 })(wb);

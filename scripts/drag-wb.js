@@ -316,7 +316,7 @@
 
         resetDragStyles();
         dragTarget.parentElement.removeChild(dragTarget);
-    }    
+    }
 
     function resetDragStyles() {
         if (dragTarget){
@@ -327,7 +327,7 @@
             elem.classList.remove('dropTarget');
         });
     }
-    
+
     function revertDrop() {
         // Put blocks back where we got them from
         if (startParent){
@@ -481,13 +481,13 @@
         }
         return '.socket[data-type=' + name + '] > .holder';
     }
-    
+
     function getClickedBlock(element, event) {
         var children = element.childNodes;
         //console.log(children);
         var x = event.clientX;
         var y = event.clientY;
-    
+
         for (var i = 0; i < children.length; i++){
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
@@ -498,34 +498,38 @@
         }
         return false;
     }
-    
+
     function menuToScratchpad(event) {
+        console.log('menuToScratchpad');
         if(!wb.matches(event.target, '.cloned')){
+            console.log('cloning and sending');
             var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
+        }else{
+            console.log('where are the clones? send in the clones!');
         }
-    }    
-    
+    }
+
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchpad(event) {
         var PADDING = 8;
-        
+
         var scratchPadRect = scratchpad.getBoundingClientRect();
         var width = scratchPadRect.width;
         var xOrigin = 5;
         var yOrigin = 5;
-        
+
         var x = xOrigin;
         var y = yOrigin;
-        
+
         var children = scratchpad.childNodes;
         var maxHeight = 0;
-        
+
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeType != 3) {
                 var r = children[i];
-                
+
                 var rBounding = r.getBoundingClientRect();
                 if (rBounding.height > maxHeight) {
                     maxHeight = rBounding.height;
@@ -533,7 +537,7 @@
                 r.style.top = y + "px";
                 r.style.left = x + "px";
                 x += rBounding.width + PADDING;
-                
+
                 if (x >= width - 25) {
                     //We are going into a new row.
                     x = xOrigin;

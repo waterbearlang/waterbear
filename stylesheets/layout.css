@@ -146,10 +146,10 @@ body{
     overflow: auto;
 }
 
-body.result .block_menu_wrapper, 
-body.result .workspace, 
-body.result .scripts_text_view, 
-body.result #cm_container, 
+body.result .block_menu_wrapper,
+body.result .workspace,
+body.result .scripts_text_view,
+body.result #cm_container,
 body.result ul.menu .run-full-size{
     display: none;
 }
@@ -217,6 +217,11 @@ ul.menu .show-ide{
         font-size: 24px;
         line-height: 30px;
         text-align: center;
+    }
+
+    /* Never show code map in mobile view */
+    #cm_container {
+        display: none;
     }
 }
 

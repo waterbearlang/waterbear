@@ -341,7 +341,7 @@
 
             //Change name of parent
             var parent = document.getElementById(source.dataset.localSource);
-            var nameTemplate = getSocketDefinitions(parent)[0].name;
+            var nameTemplate = wb.block.getSocketDefinitions(parent)[0].name;
             nameTemplate = nameTemplate.replace(/[^' ']*##/g, newName);
 
             //Change locals name of parent

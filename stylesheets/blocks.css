@@ -25,6 +25,10 @@
   pointer-events: auto;
 }
 
+.blocks-menu .block * {
+    pointer-events: none;
+}
+
 .scripts_workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }

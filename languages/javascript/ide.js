@@ -13,7 +13,7 @@
     // Maybe this should all be moved to runtime?
     wb.wrap = function(script){
         return [
-            '(function(){', 
+            '(function(){',
                     'var main = function(){',
                         script,
                     '}',
@@ -37,7 +37,7 @@
     // Try to run the current script.
     // Bail if there is no view to run it in (either preview pane or running full size)
     // Bail if it is already running and hasn't changed
-    // Bail if 
+    // Bail if
     function runCurrentScripts(force){
         force = force === true; // ignore stray values like event objects
         if (! (wb.getState('preview') ||  wb.getState('fullSize')) ){

@@ -30,6 +30,7 @@
             evt.stopPropagation();
         };
         newEvent.preventDefault = function(){
+            console.log('evt %s preventDefault', evt.type);
             evt.preventDefault();
         };
         return newEvent;
@@ -41,7 +42,7 @@
                 return on(e, eventname, selector, handler);
             });
         }
-        if (!isDomObject(elem)){ 
+        if (!isDomObject(elem)){
             console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element, document, or window');
         }
@@ -50,6 +51,7 @@
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener = function listener(originalEvent){
             var event;
+            // console.log('event %s', originalEvent.type);
             if (originalEvent.detail && originalEvent.detail.forwarded){
                 event = blend(originalEvent.detail.forwarded);
                 event.type = originalEvent.type;

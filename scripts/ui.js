@@ -42,12 +42,12 @@ function updateScriptsView(){
 	// async
 	requestAnimationFrame(runUpdateForScriptsView);
 }
-wb.updateScriptsView = updateScriptsView; 
+wb.updateScriptsView = updateScriptsView;
 
 
 function changeSocket(event) {
 	// console.log("Changed a socket!");
-	var oldValue = event.target.dataset.value; 
+	var oldValue = event.target.dataset.value;
 	var newValue = event.target.value;
 	if(oldValue === undefined) oldValue = event.target.defaultValue;
 	// console.log("New value:", newValue);
@@ -89,7 +89,7 @@ function menu(blockspec){
     var id_blocks = {};
     var blocks = blockspec.blocks;
 
-    // put blocks in data structure with block.id as key 
+    // put blocks in data structure with block.id as key
     for (var key in blocks) {
         var block = blocks[key];
         id_blocks[block.id] = block;
@@ -109,7 +109,7 @@ function populateMenu() {
 
         //read in from localized file
         var l10nData = localizationData[blockspec.sectionkey];
- 
+
         //overwrite attributes in blockspec
         wb.overwriteAttributes(blockspec, l10nData);
 
@@ -154,7 +154,7 @@ function initLanguageFiles(){
     if ( (typeof(l10nFiles) != "undefined") && (typeof(l10nFiles[language]) != "undefined") )
         listFiles = l10nFiles[language][locale];
 
-    // if no localized files exist 
+    // if no localized files exist
     if (!listFiles) {
         if (l10nHalfDone) {
             populateMenu();
@@ -165,7 +165,7 @@ function initLanguageFiles(){
         return;
     }
 
-    // open all relevent localized files for language 
+    // open all relevent localized files for language
     listFiles.forEach(function(name, idx){
         ajax.get('languages/' + language + '/' + 'localizations' + '/' + locale + '/' + name +'.json', function(json){
             var lang = JSON.parse(json);
@@ -173,7 +173,7 @@ function initLanguageFiles(){
             var id_blocks = {};
             var blocks = lang.blocks;
 
-            // put blocks into proper structure. resembles blockRegistry 
+            // put blocks into proper structure. resembles blockRegistry
             for (var key in blocks) {
                 var block = blocks[key];
                 id_blocks[block.id] = block;
@@ -203,7 +203,7 @@ function initLanguageFiles(){
 
 function handleShowButton(button, newView){
 	// stop result
-	wb.clearStage();
+	// wb.clearStage();
 	// enable previous button, disable current button
 	var currentButton = document.querySelector('.current-button');
 	if (currentButton){

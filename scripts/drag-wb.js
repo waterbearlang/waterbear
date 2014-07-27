@@ -557,7 +557,7 @@
         Event.on('.content', 'touchend', null, drag.end);
         // TODO: A way to cancel touch drag?
         Event.on('.content', 'dblclick', '.scratchpad', arrangeScratchpad);
-        Event.on('.content', 'dblclick', '.blockmenu .block', menuToScratchpad);
+        Event.on('.content', 'dblclick', '.blocks-menu .block', menuToScratchpad);
         Event.on('.content', 'mousedown', '.block', drag.init);
         Event.on('.content', 'mousemove', null, drag.dragging);
         Event.on(window, 'mouseup', null, drag.end);

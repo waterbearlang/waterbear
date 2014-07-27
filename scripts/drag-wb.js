@@ -25,7 +25,7 @@
     var potentialDropTargets;
     var startPosition;
 
-    var selectedBlocks;
+    var selectedBlocks = [];
     var selectedInAscOrder;
 
     // Specific to the code map
@@ -60,11 +60,7 @@
             timer = null;
         }
 
-        if (selectedBlocks !== undefined) {
-            deselectAllBlocks();
-        } else {
-            selectedBlocks = [];
-        }
+        deselectAllBlocks();
 
         selectedInAscOrder = false;
     }
@@ -77,6 +73,11 @@
 
         // Don't start dragging from these elements, unless block is in block menu
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained, .scripts_workspace') && !wb.matches(target, '#block_menu *')) {
+            return;
+        }
+        // Select block
+        selectBlock(target, event.shiftKey);
+        if (!selectedBlocks.length){
             return;
         }
 
@@ -93,8 +94,6 @@
             }
         }
 
-        // Select block
-        selectBlock(target, event.shiftKey);
 
         if (!wb.matches(target.parentElement, '.scripts_workspace')) {
             startParent = target.parentElement;
@@ -107,6 +106,10 @@
     }
 
     function startDrag(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
+
         // FIXME: Set different listeners on menu blocks than on the script area
         if (localDrag) {
             scope = wb.closest(selectedBlocks[0].parentElement, '.context');
@@ -148,6 +151,9 @@
     }
 
     function dragging(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
         var nextPosition = {left: event.pageX, top: event.pageY};
         var dX = nextPosition.left - currentPosition.left;
         var dY = nextPosition.top - currentPosition.top;
@@ -157,12 +163,18 @@
     }
 
     function endDrag(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
         clearTimeout(timer);
         timer = null;
         handleDrop(event, event.altKey || event.ctrlKey);
     }
 
     function cancelDrag(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
         // Cancel if escape key pressed
         clearTimeout(timer);
         timer = null;

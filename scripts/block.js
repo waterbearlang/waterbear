@@ -186,7 +186,7 @@
     function removeBlockCodeMap(block){
         var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){ // if not, we're removing from the scratch space
-            if (wb.matches(event.target, '.expression')){
+            if (wb.matches(block, '.expression')){
                 removeExpression(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
                 removeStepCodeMap(dup_block);

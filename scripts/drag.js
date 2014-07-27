@@ -3,7 +3,7 @@
     var dragTarget = null;
     var isDragging = false;
     var pointerDown = false;
-    
+
     function reset(){
         // called when we end a drag for any reason
         dragTarget = null;
@@ -11,10 +11,10 @@
         pointerDown = false;
         Event.trigger(document, 'drag-reset');
     }
-    
+
     function initDrag(event){
         // Called on mousedown or touchstart, we haven't started dragging yet
-        // Don't start drag on a text input or select 
+        // Don't start drag on a text input or select
         pointerDown = true;
         dragTarget = event.target;
         Event.forward(event.target, 'drag-init', event);

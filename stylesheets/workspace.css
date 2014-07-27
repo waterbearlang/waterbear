@@ -35,7 +35,11 @@ input{
 .scripts_text_view, .scratchpad, .scripts_workspace, .remote{
 	margin: 5px;
 	border: 2px outset #333;
-	padding: 10px;	
+	padding: 10px;
+}
+
+.scripts_workspace > .label{
+    display: none;
 }
 
 .stage{

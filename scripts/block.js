@@ -26,7 +26,7 @@
     // variables for code map
     var codeMap_view = document.querySelector('.code_map');
     var recently_removed = null;
-                            
+
 
     function newSeqNum(){
         nextSeqNum++;
@@ -186,7 +186,7 @@
     function removeBlockCodeMap(block){
         var dup_block = document.getElementById(block.id + "-d");
         if(dup_block){ // if not, we're removing from the scratch space
-            if (wb.matches(event.target, '.expression')){
+            if (wb.matches(block, '.expression')){
                 removeExpression(dup_block);
             }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
                 removeStepCodeMap(dup_block);
@@ -212,7 +212,7 @@
         }
         Event.trigger(document.body, 'wb-modified', {block: event.target, type: 'added'});
     }
-    
+
     function addBlocksCodeMap(event, isRestored){
         var target = event.target;
         if (wb.matches(target.parentNode, '.scratchpad')){
@@ -225,7 +225,7 @@
         if(next_sibling !== null && next_sibling.className === "drop-cursor"){
             next_sibling = next_sibling.nextElementSibling;
         }
-        var dup_target, parent_id; 
+        var dup_target, parent_id;
         if(isRestored){
             dup_target = recently_removed;
         }else{
@@ -263,7 +263,7 @@
 
     function removeStep(block){
         // About to remove a block from a block container, but it still exists and can be re-added
-        removeLocals(event.target);
+        removeLocals(block);
     }
 
     function removeLocals(block){
@@ -283,7 +283,7 @@
         }
         return block;
     }
-    
+
     function removeStepCodeMap(block){
         // About to remove a block from a block container, but it still exists and can be re-added
         removeLocals(block);
@@ -297,7 +297,7 @@
             elem.removeAttribute('style');
         });
     }
-    
+
     function addWorkspace(event){
         // Add a workspace, which has no block parent
         // var block = event.target;
@@ -356,7 +356,7 @@
         );
         return parsedLocals;
     }
-    
+
     function addStepCodeMap(block){
         if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
             var parent = wb.closest(block, '.context');
@@ -365,7 +365,7 @@
             block.dataset.locals = JSON.stringify(parsedLocals);
         }
     }
-    
+
     function addExpressionCodeMap(block){
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){
             elem.style.display = 'none';
@@ -402,7 +402,7 @@
             desc.blocktype = block.dataset.blocktype;
             desc.group = block.dataset.group;
             desc.help = block.dataset.help;
-            desc.type = block.dataset.type;            
+            desc.type = block.dataset.type;
         }
 
         if (block.dataset.seqNum){
@@ -465,7 +465,7 @@
         // Why were we deleting seqNum here?
         // I think it was from back when menu template blocks had sequence numbers
         // UPDATE:
-        // No, it was because we want cloned blocks (and the locals they create) to get 
+        // No, it was because we want cloned blocks (and the locals they create) to get
         // new sequence numbers. But, if the block being cloned is an instance of a local then we
         // don't want to get a new sequence number.
         //
@@ -475,7 +475,7 @@
             delete blockdesc.seqNum;
         }
         if (blockdesc.isTemplateBlock){
-            blockdesc.scriptId = block.id;            
+            blockdesc.scriptId = block.id;
         }
         delete blockdesc.isTemplateBlock;
         delete blockdesc.isLocal;
@@ -497,7 +497,7 @@
         }
         var scriptTemplate = getScript(block.dataset.scriptId);
         if (!scriptTemplate){
-            // If there is no scriptTemplate, things have gone horribly wrong, probably from 
+            // If there is no scriptTemplate, things have gone horribly wrong, probably from
             // a block being removed from the language rather than hidden
             if (block.classList.contains('scripts_workspace')){
                 scriptTemplate = '[[1]]';
@@ -583,7 +583,8 @@
         resetSeqNum: resetSeqNum,
         clone: cloneBlock,
         code: codeFromBlock,
-        sockets: getSockets
+        sockets: getSockets,
+        getSocketDefinitions: getSocketDefinitions
     };
 
 })(wb, Event);

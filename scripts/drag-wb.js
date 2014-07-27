@@ -512,9 +512,13 @@
     }
 
     function menuToScratchpad(event) {
+        // console.log('menuToScratchpad');
         if(!wb.matches(event.target, '.cloned')){
+            console.log('cloning and sending');
             var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
+        }else{
+            console.log('where are the clones? send in the clones!');
         }
     }
 
@@ -564,8 +568,9 @@
         Event.on('.content', 'touchmove', null, drag.dragging);
         Event.on('.content', 'touchend', null, drag.end);
         // TODO: A way to cancel touch drag?
+        // REFACTOR: Move Scratchpad code to own file
         Event.on('.content', 'dblclick', '.scratchpad', arrangeScratchpad);
-        Event.on('.content', 'dblclick', '.blockmenu .block', menuToScratchpad);
+        Event.on('.content', 'click', '.blocks-menu .block', menuToScratchpad);
         Event.on('.content', 'mousedown', '.block', drag.init);
         Event.on('.content', 'mousemove', null, drag.dragging);
         Event.on(window, 'mouseup', null, drag.end);

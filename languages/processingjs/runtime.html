@@ -52,10 +52,10 @@
             return;
         }
         switch(message.command){
-            case 'reset': 
+            case 'reset':
                 console.log('reset script');
                 return location.reload();
-            case 'loadScript': 
+            case 'loadScript':
                 if (scriptRunning){
                     localStorage._storedScript = message.script;
                     location.reload();

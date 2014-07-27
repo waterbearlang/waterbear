@@ -25,7 +25,7 @@
     var potentialDropTargets;
     var startPosition;
 
-    var selectedBlocks;
+    var selectedBlocks = [];
     var selectedInAscOrder;
 
     // Specific to the code map
@@ -60,11 +60,7 @@
             timer = null;
         }
 
-        if (selectedBlocks !== undefined) {
-            deselectAllBlocks();
-        } else {
-            selectedBlocks = [];
-        }
+        deselectAllBlocks();
 
         selectedInAscOrder = false;
     }
@@ -77,6 +73,11 @@
 
         // Don't start dragging from these elements, unless block is in block menu
         if (wb.matches(event.target, 'input, select, option, .disclosure, .contained, .scripts_workspace') && !wb.matches(target, '#block_menu *')) {
+            return;
+        }
+        // Select block
+        selectBlock(target, event.shiftKey);
+        if (!selectedBlocks.length){
             return;
         }
 
@@ -93,8 +94,6 @@
             }
         }
 
-        // Select block
-        selectBlock(target, event.shiftKey);
 
         if (!wb.matches(target.parentElement, '.scripts_workspace')) {
             startParent = target.parentElement;
@@ -107,6 +106,10 @@
     }
 
     function startDrag(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
+
         // FIXME: Set different listeners on menu blocks than on the script area
         if (localDrag) {
             scope = wb.closest(selectedBlocks[0].parentElement, '.context');
@@ -148,6 +151,9 @@
     }
 
     function dragging(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
         var nextPosition = {left: event.pageX, top: event.pageY};
         var dX = nextPosition.left - currentPosition.left;
         var dY = nextPosition.top - currentPosition.top;
@@ -157,12 +163,18 @@
     }
 
     function endDrag(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
         clearTimeout(timer);
         timer = null;
         handleDrop(event, event.altKey || event.ctrlKey);
     }
 
     function cancelDrag(event) {
+        if (!selectedBlocks.length){
+            return;
+        }
         // Cancel if escape key pressed
         clearTimeout(timer);
         timer = null;
@@ -316,7 +328,7 @@
 
         resetDragStyles();
         dragTarget.parentElement.removeChild(dragTarget);
-    }    
+    }
 
     function resetDragStyles() {
         if (dragTarget){
@@ -327,7 +339,7 @@
             elem.classList.remove('dropTarget');
         });
     }
-    
+
     function revertDrop() {
         // Put blocks back where we got them from
         if (startParent){
@@ -481,13 +493,13 @@
         }
         return '.socket[data-type=' + name + '] > .holder';
     }
-    
+
     function getClickedBlock(element, event) {
         var children = element.childNodes;
         //console.log(children);
         var x = event.clientX;
         var y = event.clientY;
-    
+
         for (var i = 0; i < children.length; i++){
             if (children[i].nodeType != 3) {
                 var r = children[i].getBoundingClientRect();
@@ -498,34 +510,34 @@
         }
         return false;
     }
-    
+
     function menuToScratchpad(event) {
         if(!wb.matches(event.target, '.cloned')){
             var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
         }
-    }    
-    
+    }
+
     //This function arranges the blocks into a grid. Future functions could
     //sort the blocks by type, frequency of use, or other such metrics
     function arrangeScratchpad(event) {
         var PADDING = 8;
-        
+
         var scratchPadRect = scratchpad.getBoundingClientRect();
         var width = scratchPadRect.width;
         var xOrigin = 5;
         var yOrigin = 5;
-        
+
         var x = xOrigin;
         var y = yOrigin;
-        
+
         var children = scratchpad.childNodes;
         var maxHeight = 0;
-        
+
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeType != 3) {
                 var r = children[i];
-                
+
                 var rBounding = r.getBoundingClientRect();
                 if (rBounding.height > maxHeight) {
                     maxHeight = rBounding.height;
@@ -533,7 +545,7 @@
                 r.style.top = y + "px";
                 r.style.left = x + "px";
                 x += rBounding.width + PADDING;
-                
+
                 if (x >= width - 25) {
                     //We are going into a new row.
                     x = xOrigin;

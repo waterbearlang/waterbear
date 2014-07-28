@@ -30,7 +30,6 @@
             evt.stopPropagation();
         };
         newEvent.preventDefault = function(){
-            console.log('evt %s preventDefault', evt.type);
             evt.preventDefault();
         };
         return newEvent;

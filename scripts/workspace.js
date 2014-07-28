@@ -27,7 +27,7 @@
     function clearScripts(event, force){
         if (force || confirm('Throw out the current script?')){
             wb.clearCodeMap();
-            var workspace = document.querySelector('.scripts_workspace');
+            var workspace = document.querySelector('.scripts-workspace');
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);
@@ -36,7 +36,7 @@
             wb.loaded = false;
             wb.clearStage();
             createWorkspace('Workspace');
-            document.querySelector('.scripts_text_view').innerHTML = '';
+            document.querySelector('.scripts-text-view').innerHTML = '';
             wb.history.clear();
             wb.block.resetSeqNum();
             delete localStorage['__' + wb.language + '_current_scripts'];
@@ -51,7 +51,7 @@
         wb.loadScriptsFromExample(exampleName);
         Event.trigger(document.body, 'wb-state-change');
     }
-    
+
     function loadExample(event){
         var path = location.href.split('?')[0];
         var exampleName = event.target.dataset.example;
@@ -96,7 +96,7 @@
         }else{
             document.body.classList.remove('embedded');
         }
-        if (wb.getState('scripts_text_view')){
+        if (wb.getState('scripts-text-view')){
             wb.updateScriptsView();
         }
         if (wb.getState('stage') || wb.getState('fullSize')){
@@ -110,10 +110,10 @@
     }
 
     function hideLoader(){
-        var loader = document.querySelector('#block_menu_load');
+        var loader = document.querySelector('.block-menu-load');
         if (loader){
             loader.parentElement.removeChild(loader);
-        }       
+        }
     }
 
     function historySwitchState(state, clearFiles){
@@ -141,7 +141,7 @@
         console.log('createWorkspace');
         var id = uuid();
         var workspace = wb.block.create({
-            group: 'scripts_workspace',
+            group: 'scripts-workspace',
             id: id,
             scriptId: id,
             scopeId: id,
@@ -157,11 +157,11 @@
         });
         wb.wireUpWorkspace(workspace);
     }
-    
+
     function wireUpWorkspace(workspace){
         workspace.addEventListener('drop', wb.getFiles, false);
         workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
-        wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+        wb.findAll(document, '.scripts-workspace').forEach(function(ws){
             ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
         });
         document.querySelector('.workspace').appendChild(workspace);
@@ -243,13 +243,13 @@
                         wb.clearStage();
                         wb.enableStageControls(false);
                     }
-                    if (!wb.getState('scripts_text_view')){
+                    if (!wb.getState('scripts-text-view')){
                         wb.hide(result);
                         wb.enableStageControls(true);
                     }
                 }
                 break;
-            case 'scripts_text_view':
+            case 'scripts-text-view':
                 if (evt.detail.state){
                     wb.show(result);
                     wb.updateScriptsView();
@@ -260,21 +260,21 @@
                 }
                 break;
             case 'scratchpad':
-            case 'scripts_workspace':
-                if (! (wb.getState('scratchpad') || wb.getState('scripts_workspace'))){
+            case 'scripts-workspace':
+                if (! (wb.getState('scratchpad') || wb.getState('scripts-workspace'))){
                     wb.hide(wb.find(document.body, '.workspace'));
                 }else{
                     wb.show(wb.find(document.body, '.workspace'));
                 }
                 break;
-            case 'code_map':
+            case 'code-map':
                 // We should only be hiding panels like this when they contain multiple
                 // sub-panes. Move this to CSS or (better) make the whole code map an overlay
-                // on the scripts_workspace
-                if(!wb.getState('code_map')){
-                    wb.hide(wb.find(document.body, '#cm_container'));
+                // on the scripts-workspace
+                if(!wb.getState('code-map')){
+                    wb.hide(wb.find(document.body, '.cm-container'));
                 }else{
-                    wb.show(wb.find(document.body, '#cm_container'));
+                    wb.show(wb.find(document.body, '.cm-container'));
                 }
                 break;
             default:

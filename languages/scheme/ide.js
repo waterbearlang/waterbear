@@ -13,7 +13,7 @@
         var run = function(){
             wb.script = script;
             var scriptArray = script.split(";;end");
-            
+
             for(var i = 0; i < scriptArray.length; i++) {
                 console.log('THIS IS IMPORTANT:' + scriptArray[i]);
                 bscheme.evaluate(scriptArray[i], function(result) {
@@ -37,7 +37,7 @@
     wb.wrap = function(script){ //doesn't do anything
         return "";
     };;
-    
+
     function runCurrentScripts(force){
         // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
         if (!(wb.state.autorun || force)){
@@ -54,14 +54,14 @@
         }else{
             console.log('ready to run script, let us proceed to the running of said script');
         }
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        var blocks = wb.findAll(document.body, '.workspace .scripts-workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
- 
+
     function clearStage(event){
         wb.state.stageReady = false;
-        document.querySelector('.stageframe').contentWindow.document.body.innerHTML = ''; 
+        document.querySelector('.stageframe').contentWindow.document.body.innerHTML = '';
     }
     wb.clearStage = clearStage;
 
@@ -78,7 +78,7 @@
         types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
         rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
     };
-    
+
      wb.prettyScript = function(elements){
         return elements.map(function(elem){
             return wb.block.code(elem);

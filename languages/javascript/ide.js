@@ -52,7 +52,7 @@
         //     // Problem: we're getting script cleared events on startup. Why?
         //     // return;
         // }
-        var blocks = wb.findAll(document.body, '.scripts_workspace');
+        var blocks = wb.findAll(document.body, '.scripts-workspace');
 
         for (var i=0; i < blocks.length; i++){
             if (!wb.block.validate(blocks[i])){

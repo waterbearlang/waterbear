@@ -3,12 +3,12 @@
     /** Search filter */
 
     function highlightSearch(event) {
-        var form = document.querySelector('#search > form');
+        var form = document.querySelector('.search > form');
         form.style.border = "1px solid #FFA500";
     }
 
     function unhighlightSearch(event) {
-        var form = document.querySelector('#search > form');
+        var form = document.querySelector('.search > form');
         form.style.border = "1px solid #CCC";
     }
 
@@ -32,8 +32,8 @@
             oldQuery = query;
         }
 
-        var searchResultsNode = document.getElementById('search_results');
-        var blockMenuNode = document.getElementById('block_menu');
+        var searchResultsNode = document.querySelector('.search-result');
+        var blockMenuNode = document.querySelector('.block-menu');
 
         // For non-empty query, show all blocks; otherwise, hide all blocks
         if (query) {
@@ -57,7 +57,7 @@
         }
 
         var groups = document.querySelectorAll('.block-menu');
-     
+
         for (var i = 0; i < groups.length; i++) {
             var blocks = groups[i].getElementsByClassName('block');
 
@@ -100,7 +100,7 @@
                 // Show/hide blocks
                 if (matchingKeywords.length > 0) {
                     var resultNode = document.createElement('div');
-                    resultNode.classList.add('search_result');
+                    resultNode.classList.add('search-result');
                     resultNode.classList.add(group);
                     resultNode.style.backgroundColor = 'transparent';
 
@@ -141,7 +141,7 @@
     function toggleTag(evt){
         if (evt.detail.name.substring(0, 4) == 'tag-') {
             var groups = document.querySelectorAll('.submenu');
-         
+
             for (var i = 0; i < groups.length; i++) {
                 var blocks = groups[i].getElementsByClassName('block');
                 var blocksHidden = 0;

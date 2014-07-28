@@ -29,8 +29,8 @@ function runUpdateForScriptsView(){
 	if (!textScriptNeedsUpdate){
 		return;
 	}
-    var blocks = wb.findAll(document.body, '.scripts_workspace');
-    var view = wb.find(document.body, '.scripts_text_view');
+    var blocks = wb.findAll(document.body, '.scripts-workspace');
+    var view = wb.find(document.body, '.scripts-text-view');
     wb.writeScript(blocks, view);
     textScriptNeedsUpdate = false;
 }
@@ -128,7 +128,7 @@ function edit_menu(title, sectionKey, specs, help, show){
         var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
         submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
-        var blockmenu = document.querySelector('#block_menu');
+        var blockmenu = document.querySelector('.block-menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
         submenu.appendChild(description);
@@ -230,7 +230,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
+	handleShowButton(evt.target, document.querySelector('.block-menu-wrapper'));
 }
 
 function showScript(evt){
@@ -244,7 +244,7 @@ function showResult(evt){
 
 
 Event.on(document.body, 'change', 'input', changeSocket);
-Event.on('#block_menu', 'click', '.accordion-header', wb.accordion);
+Event.on('.block-menu', 'click', '.accordion-header', wb.accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 

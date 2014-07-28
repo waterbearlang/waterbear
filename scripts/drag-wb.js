@@ -7,7 +7,7 @@
        // createWorkspace() in the workspace.js file.
        // We grab workspace in reset() because it can change, while the blocks below
        // do not change and we can fetch them once.
-    var blockMenu = document.querySelector('#block_menu');
+    var blockMenu = document.querySelector('.block-menu');
     var scratchpad = document.querySelector('.scratchpad');
 
     var selectedSocket;
@@ -30,7 +30,7 @@
 
     // Specific to the code map
     var cloned;
-    var cm_cont= document.querySelector('#cm_container');
+    var cm_cont= document.querySelector('.cm-container');
 
     function dropCursor(){
         if (!_dropCursor){
@@ -72,7 +72,7 @@
         if (!target) { return; }
 
         // Don't start dragging from these elements, unless block is in block menu
-        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained, .scripts_workspace') && !wb.matches(target, '#block_menu *')) {
+        if (wb.matches(event.target, 'input, select, option, .disclosure, .contained, .scripts-workspace') && !wb.matches(target, '.block-menu *')) {
             return;
         }
         // Select block
@@ -95,7 +95,7 @@
         }
 
 
-        if (!wb.matches(target.parentElement, '.scripts_workspace')) {
+        if (!wb.matches(target.parentElement, '.scripts-workspace')) {
             startParent = target.parentElement;
         }
         startSibling = target.nextElementSibling;
@@ -199,7 +199,7 @@
         }
 
         // Disable multiselect for blocks outside of the workspace
-        if (wb.closest(target, '.scripts_workspace') === null) { return; }
+        if (wb.closest(target, '.scripts-workspace') === null) { return; }
 
         // Disable multiselect for blocks in the block menu
         if (wb.matches(target.parentElement, '.block-menu')) { return; }
@@ -456,7 +456,7 @@
 
     function getPotentialDropTargets(view){
         if (!workspace){
-            workspace = document.querySelector('.scripts_workspace').querySelector('.contained');
+            workspace = document.querySelector('.scripts-workspace').querySelector('.contained');
         }
         var blocktype = view.dataset.blocktype;
         switch(blocktype){

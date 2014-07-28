@@ -6,7 +6,7 @@
   "blocks": [
     {
       "blocktype": "context",
-      "group": "scripts_workspace",
+      "group": "scripts-workspace",
       "id": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",
       "help": "Drag your script blocks here",
       "scopeId": "c7540554-a5d3-4dbf-bc62-f948b68b0d65",

@@ -20,7 +20,7 @@
             // nothing to save
             return;
         }
-        document.querySelector('#block_menu').scrollIntoView();
+        document.querySelector('.block-menu').scrollIntoView();
         localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
     }
 
@@ -88,7 +88,7 @@
         if (!title){ title = ''; }
         if (!description){ description = ''; }
         if (!name){ name = 'Workspace';}
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        var blocks = wb.findAll(document.body, '.workspace .scripts-workspace');
         var json = {
             title: title,
             description: description,
@@ -229,7 +229,7 @@
                 loadScriptsFromObject(fileObject);
             }
         }else{
-            //console.log('no script to load, starting a new script');  
+            //console.log('no script to load, starting a new script');
             wb.createWorkspace('Workspace');
         }
         wb.loaded = true;

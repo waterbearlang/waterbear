@@ -58,11 +58,11 @@ blocks/datablock.css
 ../../scripts/undo.js
 ../../scripts/widget/accordion.js
 ../../scripts/widget/block_context_menu.js
-../../scripts/widget/code_map.js
+../../scripts/widget/codemap.js
 ../../scripts/ui.js
 ../../scripts/blockprefs.js
 ../../scripts/menu.js
-../../scripts/code_map.js
+../../scripts/codemap.js
 ide.js
 blocks/asset_ide.js
 blocks/control_ide.js

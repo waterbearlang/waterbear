@@ -24,7 +24,7 @@
     var blockRegistry = {};/* populated in function "registerBlock", which is
                                called by the Block() function below*/
     // variables for code map
-    var codeMap_view = document.querySelector('.code_map');
+    var codeMap_view = document.querySelector('.code-map');
     var recently_removed = null;
 
 
@@ -156,7 +156,7 @@
                     addStep({target: child}); // simulate event
                 });
             }
-            if (! wb.matches(block, '.scripts_workspace')){
+            if (! wb.matches(block, '.scripts-workspace')){
                 var label = wb.findChild(block, '.label');
                 label.insertBefore(elem('div', {'class': 'disclosure'}), label.firstElementChild);
             }
@@ -188,7 +188,7 @@
         if(dup_block){ // if not, we're removing from the scratch space
             if (wb.matches(block, '.expression')){
                 removeExpression(dup_block);
-            }else if(!(wb.matches(dup_block.parentNode, ".code_map"))){
+            }else if(!(wb.matches(dup_block.parentNode, ".code-map"))){
                 removeStepCodeMap(dup_block);
             }
             recently_removed = dup_block;
@@ -200,7 +200,7 @@
         event.stopPropagation();
         if (wb.matches(event.target, '.expression')){
             addExpression(event);
-        }else if(wb.matches(event.target, '.scripts_workspace')){
+        }else if(wb.matches(event.target, '.scripts-workspace')){
             addWorkspace(event);
         }else{
             addStep(event);
@@ -240,8 +240,8 @@
         if (next_sibling){
             dup_next_sibling = document.getElementById(next_sibling.id + '-d');
         }
-        if(wb.matches(target, ".scripts_workspace")){
-            //recursively add it to the code_map
+        if(wb.matches(target, ".scripts-workspace")){
+            //recursively add it to the code-map
             parent = codeMap_view;
             parent.insertBefore(dup_target, dup_next_sibling);
         }else if(wb.matches(target, '.expression')){
@@ -398,7 +398,7 @@
             sockets: sockets.map(wb.socket.description)
         };
 
-        if (block.dataset.group === 'scripts_workspace'){
+        if (block.dataset.group === 'scripts-workspace'){
             desc.blocktype = block.dataset.blocktype;
             desc.group = block.dataset.group;
             desc.help = block.dataset.help;
@@ -499,7 +499,7 @@
         if (!scriptTemplate){
             // If there is no scriptTemplate, things have gone horribly wrong, probably from
             // a block being removed from the language rather than hidden
-            if (block.classList.contains('scripts_workspace')){
+            if (block.classList.contains('scripts-workspace')){
                 scriptTemplate = '[[1]]';
             }else{
                 wb.findAll('.block[data-script-id="' + block.dataset.scriptId + '"]').forEach(function(elem){

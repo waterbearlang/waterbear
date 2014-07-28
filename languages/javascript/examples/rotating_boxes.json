@@ -6,7 +6,7 @@
   "blocks": [
     {
       "blocktype": "context",
-      "group": "scripts_workspace",
+      "group": "scripts-workspace",
       "id": "a4be1aba-cbb5-4b30-8f8d-f7e1a063c6cc",
       "help": "Drag your script blocks here",
       "scopeId": "a4be1aba-cbb5-4b30-8f8d-f7e1a063c6cc",
@@ -980,7 +980,7 @@
                             "value": "choice",
                             "options": "relativeUnit",
                             "uValue": "px"
-                          }, 
+                          },
                           {
                             "name": "height",
                             "type": "number",

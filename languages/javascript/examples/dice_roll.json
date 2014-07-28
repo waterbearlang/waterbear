@@ -14,7 +14,7 @@
                 }
             ],
             "blocktype": "context",
-            "group": "scripts_workspace",
+            "group": "scripts-workspace",
             "seqNum": "2",
             "script": "[[1]]",
             "contained": [

@@ -225,7 +225,7 @@ function handleContextMenu(evt) {
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.target);
-	if(cmenuDisabled || wb.matches(evt.target, '.block-menu-wrapper *')) return;
+	if(cmenuDisabled || wb.matches(evt.target, '.blocklist *')) return;
 	else if(false);
 	else if(wb.overlap(evt.target, cm_cont)){
 		setContextMenuTarget(evt.target);

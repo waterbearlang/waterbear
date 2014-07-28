@@ -230,7 +230,7 @@ function showFiles(evt){
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('.block-menu-wrapper'));
+	handleShowButton(evt.target, document.querySelector('.blocklist'));
 }
 
 function showScript(evt){

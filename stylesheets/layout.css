@@ -70,7 +70,7 @@ body, html{
 }
 
 .workspace{
-    width: calc(50% - 211px); /* (300px block menu + 122px codemap) / 2 */
+    width: calc(50% - 150px); /* 300px block menu / 2 */
     height: 100%;
     position: absolute;
     left: 300px;
@@ -96,10 +96,10 @@ body, html{
 }
 
 .result{
-    width: calc(50% - 211px);/* (300px block menu + 122px codemap) / 2 */
+    width: calc(50% - 150px);/* 300px block menu / 2 */
     height: 100%;
     position: absolute;
-    right: 122px;
+    right: 0;
     top: 0;
 }
 
@@ -124,10 +124,10 @@ body, html{
 
 .cm-container{
     width: 122px;
-    height: 100%;
+    height: calc(100% - 150px);
     position: absolute;
     right: 0;
-    top: 0;
+    bottom: 0;
     overflow: auto;
 }
 
@@ -143,6 +143,34 @@ body, html{
             preview
             scripts-text-view
 */
+
+.no-codemap .cm-container{ display: none; }
+.no-blocklist .blocklist{ display: none; }
+.no-workspace .workspace{ display: none; }
+.no-stage .stage{ display: none; }
+.no-textview .scripts-text-view{ display: none; }
+
+.no-blocklist .workspace{ width: 50%; }
+.no-blocklist .result{ width: 50%; }
+.no-stage.no-textview .workspace{ width: calc(100% - 300px); }
+.no-stage.no-textview.no-blocklist .workspace{ width: 100%; }
+.no-workspace .result{ width: calc(100% - 300px); }
+.no-workspace.no-blocklist .result{ width: 100%; }
+.no-stage .scripts-text-view{ height: 100%; }
+.no-textview .stage{ height: 100%; }
+
+body.fullsize .blocklist,
+body.fullsize .workspace,
+body.fullsize .scripts-text-view{
+    display: none;
+}
+body.fullsize .result{
+    width: 100%;
+}
+body.fullsize .preview{
+    height: 100%;
+}
+
 
 .code-map{
     position: relative;

@@ -76,7 +76,7 @@
             <li>
                 <button class="show-examples">Examples&#x25BE;</button>
                 <ul class="sub-menu">
-
+                    
                 </ul>
             </li>
             <li>
@@ -86,19 +86,16 @@
                         <button class="toggle" data-target="blocklist">Blocks Menu</button>
                     </li>
                     <li>
-                        <button class="toggle" data-target="scripts-workspace">Scripts Workspace</button>
-                    </li>
-                    <li>
-                        <button class="toggle" data-target="scratchpad">Scratchpad</button>
+                        <button class="toggle" data-target="workspace">Scripts Workspace</button>
                     </li>
                     <li>
                         <button class="toggle" data-target="stage">Preview</button>
                     </li>
                     <li>
-                        <button class="toggle" data-target="scripts-text-view">Text Script</button>
+                        <button class="toggle" data-target="textview">Text Script</button>
                     </li>
                     <li>
-                        <button class="toggle" data-target="code-map">Code Map</button>
+                        <button class="toggle" data-target="codemap">Code Map</button>
                     </li>
                     <li class='separator'>
                         <button class="run-full-size">Run Full Size</button>
@@ -156,16 +153,17 @@
             <div class="block-menu blocks-menu"></div>
         </div>
         <div class="workspace">
-            <div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
+            <div class="scratchpad">Scratch space, drag blocks here to re-use</div>
             <div class="hint">Hints go here</div>
+            <div class="cm-container">
+                <canvas class="cm-canvas"></canvas>
+                <div class="code-map"></div>
+            </div>
         </div>
         <div class="result">
 	<div class="scripts-text-view"></div>
 </div>
 
-        <div class="cm-container">
-        <canvas class="cm-canvas"></canvas>
-        <div class="code-map"></div>
         </div>
     </div>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>

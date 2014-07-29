@@ -76,16 +76,14 @@
         // hide loading spinner if needed
         wb.queryParams = wb.urlToQueryParams(location.href);
         console.log('handleStateChange %o', wb.queryParams);
-        if (wb.queryParams.view === 'result'){
+        if (wb.queryParams.view === 'fullsize'){
             wb.setState('fullSize', true);
-            document.body.classList.add('result');
-            document.body.classList.remove('editor');
+            document.body.classList.add('fullsize');
             wb.enableMenuToggleControls(false);
             wb.resizeStage();
             wb.view = 'result';
         }else{
-            document.body.classList.remove('result');
-            document.body.classList.add('editor');
+            document.body.classList.remove('fullsize');
             wb.setState('fullSize', false);
             wb.enableMenuToggleControls(true);
             wb.view = 'editor';
@@ -223,70 +221,12 @@
     }
 
     function togglePanel(evt){
-        var component = wb.find(document.body, '.' + evt.detail.name);
-        if (!component) return;
+        var component = evt.detail.name;
         if (evt.detail.state){
-            wb.show(component);
+            document.body.classList.remove('no-' + component);
         }else{
-            wb.hide(component);
+            document.body.classList.add('no-' + component);
         }
-        var result = wb.find(document.body, '.result');
-        // Special cases
-        // console.log('togglePanel %s: %s', evt.detail.name, evt.detail.state);
-        switch(evt.detail.name){
-            case 'stage':
-                if (evt.detail.state){
-                    wb.show(result);
-                }else{
-                    if (wb.view !== 'result'){
-                        console.log('hide stage, so clear it too');
-                        wb.clearStage();
-                        wb.enableStageControls(false);
-                    }
-                    if (!wb.getState('scripts-text-view')){
-                        wb.hide(result);
-                        wb.enableStageControls(true);
-                    }
-                }
-                break;
-            case 'scripts-text-view':
-                if (evt.detail.state){
-                    wb.show(result);
-                    wb.updateScriptsView();
-                }else{
-                    if (!wb.getState('stage')){
-                        wb.hide(result);
-                    }
-                }
-                break;
-            case 'scratchpad':
-            case 'scripts-workspace':
-                if (! (wb.getState('scratchpad') || wb.getState('scripts-workspace'))){
-                    wb.hide(wb.find(document.body, '.workspace'));
-                }else{
-                    wb.show(wb.find(document.body, '.workspace'));
-                }
-                break;
-            case 'code-map':
-                // We should only be hiding panels like this when they contain multiple
-                // sub-panes. Move this to CSS or (better) make the whole code map an overlay
-                // on the scripts-workspace
-                if(!wb.getState('code-map')){
-                    wb.hide(wb.find(document.body, '.cm-container'));
-                }else{
-                    wb.show(wb.find(document.body, '.cm-container'));
-                }
-                break;
-            default:
-                // do nothing
-                break;
-        }
-        if (wb.getState('stage')){
-            // restart script on any toggle
-            // so it runs at the new size
-            // wb.runCurrentScripts();
-        }
-
     }
 
     function shouldAutorun(){

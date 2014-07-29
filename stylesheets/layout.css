@@ -150,10 +150,10 @@ body, html{
 .no-stage .stage{ display: none; }
 .no-textview .scripts-text-view{ display: none; }
 
-.no-blocklist .workspace{ width: 50%; }
+.no-blocklist .workspace{ width: 50%; left: 0; }
 .no-blocklist .result{ width: 50%; }
 .no-stage.no-textview .workspace{ width: calc(100% - 300px); }
-.no-stage.no-textview.no-blocklist .workspace{ width: 100%; }
+.no-stage.no-textview.no-blocklist .workspace{ width: 100%; left: 0; }
 .no-workspace .result{ width: calc(100% - 300px); }
 .no-workspace.no-blocklist .result{ width: 100%; }
 .no-stage .scripts-text-view{ height: 100%; }
@@ -229,6 +229,10 @@ ul.menu .show-ide{
     display: none;
 }
 
+.stageframe{
+    width: 100%;
+    height: 100%;
+}
 
 @media all and (max-width:360px) {
     .nav, h1.title, .scripts-text-view{

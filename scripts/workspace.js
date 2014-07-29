@@ -65,12 +65,12 @@
         }
     }
 
-    function resizeStage(){
-        var iframe = document.querySelector('.stageframe');
-        if (!iframe) return; // not all languages have one!
-        iframe.style.width = iframe.parentElement.clientWidth + 'px';
-        iframe.style.height = iframe.parentElement.clientHeight + 'px';
-    }
+    // function resizeStage(){
+    //     var iframe = document.querySelector('.stageframe');
+    //     if (!iframe) return; // not all languages have one!
+    //     iframe.style.width = iframe.parentElement.clientWidth + 'px';
+    //     iframe.style.height = iframe.parentElement.clientHeight + 'px';
+    // }
 
     function handleStateChange(){
         // hide loading spinner if needed
@@ -336,15 +336,15 @@
         }
         if (wb.getState('ideReady') && wb.getState('stageReady') && wb.getState('scriptReady')){
             console.log('everything is ready');
-            wb.resizeStage();
+            // wb.resizeStage();
             Event.trigger(document.body, 'wb-ready');
         }
     });
 
-    Event.on(window, 'resize', null, resizeStage);
+    // Event.on(window, 'resize', null, resizeStage);
 
     wb.onReady = onReady;
-    wb.resizeStage = resizeStage;
+    // wb.resizeStage = resizeStage;
     wb.language = location.pathname.split('/')[2];
     wb.shouldAutorun = shouldAutorun;
     wb.loaded = false;

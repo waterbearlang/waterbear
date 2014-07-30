@@ -270,7 +270,6 @@
         } else if (wb.overlap(dragTarget, scratchpad)) {
             while (childNodes.length > 0) {
                 scratchpad.appendChild(childNodes[0]);
-                childNodes[0].scrollIntoView();
             }
 
             if (!templateDrag) {
@@ -501,7 +500,6 @@
             console.log('cloning and sending');
             var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
-            cloned.scrollIntoView();
         }else{
             console.log('where are the clones? send in the clones!');
         }

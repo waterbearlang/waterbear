@@ -29,7 +29,7 @@
 
     function runCurrentScripts(){
         // console.log('runCurrentScripts');
-        if (!(wb.autorun || force)){
+        if (!(wb.state.autorun || force)){
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
@@ -66,7 +66,7 @@
         }
     }
 
-    Event.on('.run-scripts', 'click', null, function(){
+    Event.on('.run-full-size', 'click', null, function(){
         wb.historySwitchState('result');
     });
 
@@ -82,7 +82,7 @@
 
     wb.prettyScript = function(elements){
         return js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
+            return wb.block.code(elem);
         }).join(''));
     };
 
@@ -118,8 +118,8 @@
     };
 
     Event.on('.socket input', 'click', null, function(event){
-        event.wbTarget.focus();
-        event.wbTarget.select();
+        event.target.focus();
+        event.target.select();
     });
 
 })(wb, Event);

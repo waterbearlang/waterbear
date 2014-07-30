@@ -96,6 +96,10 @@ Events.bind(document, 'keystroke.Ctrl+Y', redoLastAction);
 Events.bind(document, 'keystroke.meta+Z', undoLastAction);
 Events.bind(document, 'keystroke.meta+Y', redoLastAction);
 //end short cut 
-Event.on(document.body, 'wb-script-loaded', null, clearUndoStack);
+Event.on(document.body, 'wb-initialize', null, function(evt){
+    if (evt.detail.component === 'script'){
+        clearUndoStack();
+    }
+});
 
 })(wb);

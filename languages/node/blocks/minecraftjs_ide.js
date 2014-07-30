@@ -11,7 +11,7 @@
 
 /*
 
-$('.run-scripts').click(function(){
+$('.run-full-size').click(function(){
      var blocks = $('.workspace:visible .scripts_workspace > .wrapper');
      var code = blocks.prettyScript();
      var query = $.param({'code':code});
@@ -55,7 +55,7 @@ function runCurrentScripts(event){
         var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
         wb.runScript( wb.prettyScript(blocks) );        
 }
-Event.on('.run-scripts', 'click', null, runCurrentScripts);
+Event.on('.run-full-size', 'click', null, runCurrentScripts);
 
 
 wb.ajax = {
@@ -128,7 +128,7 @@ Event.on('.edit-script', 'click', null, clearStage);
 
 wb.prettyScript = function(elements){
     var script = js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
+            return wb.block.code(elem);
         }).join(''));
     script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
     return script;
@@ -163,7 +163,7 @@ wb.choiceLists = {
 
 
 Event.on('.socket input', 'click', null, function(event){
-    event.wbTarget.focus();
-    event.wbTarget.select();
+    event.target.focus();
+    event.target.select();
 });
 

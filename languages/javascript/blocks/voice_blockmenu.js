@@ -43,6 +43,8 @@
                             "name": "tone",
                             "type": "number",
                             "value": 440,
+                            "min": 20,
+                            "max": 20000,
                             "suffix": "Hz"
                         }
                     ]
@@ -78,7 +80,8 @@
                         {
                             "name": "volume",
                             "type": "number",
-                            "value": 1
+                            "value": 1,
+                            "min": 0
                         }
                     ]
                 },
@@ -96,6 +99,7 @@
                             "name": "tempo quarter note =",
                             "type": "number",
                             "value": 120,
+                            "min": 0,
                             "suffix": "beats per minute"
                         }
                     ]
@@ -154,6 +158,7 @@
                             "name": "for ",
                             "type": "number",
                             "value": 2,
+                            "min": 0,
                             "suffix": "seconds"
                         }
                     ]
@@ -183,7 +188,8 @@
                         {
                             "name": "dotted",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -206,7 +212,8 @@
                         {
                             "name": "dotted",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },

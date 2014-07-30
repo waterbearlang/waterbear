@@ -17,9 +17,15 @@
 	cursor: auto;
 }
 
+
+.blocks-menu .block * {
+    pointer-events: none;
+}
+
 .scripts_workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }
+
 
 .submenu .seq-num{
   display: none;
@@ -287,6 +293,8 @@
 /*This class is added to the block that is moving*/
 .dragIndication{
     opacity: 0.75;
+    position: absolute;
+    pointer-events: none;
 }
 
 /* This class is added to all potential drop targets */
@@ -437,4 +445,8 @@
 
 .search_result .keyword .match {
   color: darkgreen;
+}
+
+.invalid{
+    outline: 2px dashed red;
 }

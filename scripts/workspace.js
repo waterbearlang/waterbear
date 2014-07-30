@@ -3,6 +3,24 @@
 
 // global variable wb is initialized in the HTML before any javascript files
 // are loaded (in template/template.html)
+
+// Currently in this file
+//
+// clearScripts(event, force)
+// loadExample(event)
+// handleStateChange(event)
+// hideLoader()
+// historySwitchStates(state, clearFiles)
+// createWorkspace(name)
+// wireUpWorkspace(workspace)
+// handleDragOver(event)
+// disclosure(event)
+// handleScriptLoad(event)
+// handleScriptModify(event)
+// togglePanel(evt)
+// initHistory()
+// A bunch of controller logic
+
 (function(wb){
     'use strict';
 
@@ -13,84 +31,80 @@
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);
-            wb.scriptModified = false;
-            wb.scriptLoaded = false;
+            wb.setState('scriptModified', false);
+            wb.setState('scriptReady', false);
             wb.loaded = false;
             wb.clearStage();
             createWorkspace('Workspace');
             document.querySelector('.scripts_text_view').innerHTML = '';
             wb.history.clear();
-            wb.resetSeqNum();
+            wb.block.resetSeqNum();
             delete localStorage['__' + wb.language + '_current_scripts'];
         }
+    }
+
+    function reallyLoadExample(exampleName, path){
+        wb.setState('scriptModified', true);
+        wb.setState('scriptLoaded', false);
+        wb.setState('scriptReady', false);
+        history.pushState(null, '', path);
+        wb.loadScriptsFromExample(exampleName);
+        Event.trigger(document.body, 'wb-state-change');
     }
     
     function loadExample(event){
         var path = location.href.split('?')[0];
-        path += "?example=" + event.target.dataset.example;
-        if (wb.scriptModified){
+        var exampleName = event.target.dataset.example;
+        path += "?example=" + exampleName;
+        if (wb.getState('scriptModified')){
             if (confirm('Throw out the current script?')){
-                wb.scriptModified = false;
-                wb.loaded = false;
-                history.pushState(null, '', path);
-                Event.trigger(document.body, 'wb-state-change');
+                reallyLoadExample(exampleName, path);
             }
         }else{
-            wb.scriptModified = false;
-            wb.loaded = false;
-            history.pushState(null, '', path);
-            Event.trigger(document.body, 'wb-state-change');
+            reallyLoadExample(exampleName, path);
         }
     }
 
-    function handleStateChange(event){
+    function resizeStage(){
+        var iframe = document.querySelector('.stageframe');
+        if (!iframe) return; // not all languages have one!
+        iframe.style.width = iframe.parentElement.clientWidth + 'px';
+        iframe.style.height = iframe.parentElement.clientHeight + 'px';
+    }
+
+    function handleStateChange(){
         // hide loading spinner if needed
-        console.log('handleStateChange');
-        hideLoader();
-        var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
         wb.queryParams = wb.urlToQueryParams(location.href);
+        console.log('handleStateChange %o', wb.queryParams);
         if (wb.queryParams.view === 'result'){
+            wb.setState('fullSize', true);
             document.body.classList.add('result');
             document.body.classList.remove('editor');
-            for(var i = 0; i < viewButtons.length; i++) {
-                viewButtons[i].classList.add('disabled');
-            }
+            wb.enableMenuToggleControls(false);
+            wb.resizeStage();
             wb.view = 'result';
         }else{
             document.body.classList.remove('result');
             document.body.classList.add('editor');
-            for(var j = 0; j < viewButtons.length; j++) {
-                viewButtons[j].classList.remove('disabled');
-            }
+            wb.setState('fullSize', false);
+            wb.enableMenuToggleControls(true);
             wb.view = 'editor';
         }
-        if (wb.queryParams.embedded === 'true'){
+        // Are we embedded in an iframe? If so, show appropriate menu
+        if (window.parent !== window){
             document.body.classList.add('embedded');
         }else{
             document.body.classList.remove('embedded');
         }
-        // handle loading example, gist, currentScript, etc. if needed
-        wb.loadCurrentScripts(wb.queryParams);
-        // If we go to the result and can run the result inline, do it
-        // if (wb.view === 'result' && wb.runCurrentScripts){
-        //  // This bothers me greatly: runs with the console.log, but not without it
-        //  console.log('running current scripts');
-        //  runFullSize();
-        // }else{
-        //  if (wb.view === 'result'){
-           //   // console.log('we want to run current scripts, but cannot');
-           //  }else{
-           //   runWithLayout();
-           //   // console.log('we do not care about current scripts, so there');
-           //  }
-        // }
-        if (wb.toggleState.scripts_text_view){
+        if (wb.getState('scripts_text_view')){
             wb.updateScriptsView();
         }
-        if (wb.toggleState.stage || wb.view === 'result'){
+        if (wb.getState('stage') || wb.getState('fullSize')){
             // console.log('run current scripts');
+            // wb.setState('scriptModified', false);
             wb.runCurrentScripts();
         }else{
+            console.log('fall through to clearStage');
             wb.clearStage();
         }
     }
@@ -126,7 +140,7 @@
     function createWorkspace(name){
         console.log('createWorkspace');
         var id = uuid();
-        var workspace = wb.Block({
+        var workspace = wb.block.create({
             group: 'scripts_workspace',
             id: id,
             scriptId: id,
@@ -159,6 +173,28 @@
         workspace.addEventListener('scroll', wb.handleScrollChange, false);
     }
 
+    function enableMenuToggleControls(flag){
+        var viewButtons = document.querySelectorAll('.views + .sub-menu .toggle');
+        for(var i = 0; i < viewButtons.length; i++) {
+            if (flag){
+                viewButtons[i].classList.remove('disabled');
+            }else{
+                viewButtons[i].classList.add('disabled');
+            }
+        }
+    }
+
+    function enableStageControls(flag){
+        var viewButtons = document.querySelectorAll('.stage-control');
+        for(var i = 0; i < viewButtons.length; i++) {
+            if (flag){
+                viewButtons[i].classList.remove('disabled');
+            }else{
+                viewButtons[i].classList.add('disabled');
+            }
+        }
+    }
+
 
     function handleDragover(evt){
         // Stop Firefox from grabbing the file prematurely
@@ -168,7 +204,7 @@
     }
 
     function disclosure(event){
-        var block = wb.closest(event.wbTarget, '.block');
+        var block = wb.closest(event.target, '.block');
         if (block.dataset.closed){
             delete block.dataset.closed;
         }else{
@@ -176,53 +212,17 @@
         }
     }
 
-    function handleScriptLoad(event){
-        wb.scriptModified = false;
-        wb.scriptLoaded = true;
-        if (wb.view === 'result' || wb.autorun){
-            if (wb.windowLoaded){
-                // console.log('run scripts directly');
-                wb.runCurrentScripts();
-            }else{
-                // console.log('run scripts when the iframe is ready');
-                window.addEventListener('load', function(){
-                //  // console.log('in window load, starting script: %s', !!wb.runCurrentScripts);
-                    wb.runCurrentScripts();
-                 }, false);
-            }
-        // }else{
-        //  console.log('do not run script for some odd reason: %s', wb.view);
-        }
-        // clear undo/redo stack
-        console.log('script loaded');
-    }
-
     function handleScriptModify(event){
+        console.log('Script modified %o', event);
         // still need modified events for changing input values
-        if (!wb.scriptLoaded) return;
-        if (!wb.scriptModified){
-            wb.scriptModified = true;
+        if (!wb.getState('scriptReady')) return;
+        if (!wb.getState('scriptModified')){
+            wb.setState('scriptModified', true);
             wb.historySwitchState(wb.view, true);
         }
     }
 
-    // function runFullSize(){
-    //  ['#block_menu', '.workspace', '.scripts_text_view'].forEach(function(sel){
-    //      wb.hide(wb.find(document.body, sel));
-    //  });
-    //  wb.show(wb.find(document.body, '.stage'));
-    // }
-
-    // function runWithLayout(){
-    //  ['#block_menu', '.workspace'].forEach(function(sel){
-    //      wb.show(wb.find(document.body, sel));
-    //  });
-    //  ['stage', 'scripts_text_view', 'tutorial', 'scratchpad', 'scripts_workspace'].forEach(function(name){
-    //      toggleComponent({detail: {name: name, state: wb.toggleState[name]}});
-    //  });
-    // }
-
-    function toggleComponent(evt){
+    function togglePanel(evt){
         var component = wb.find(document.body, '.' + evt.detail.name);
         if (!component) return;
         if (evt.detail.state){
@@ -230,33 +230,38 @@
         }else{
             wb.hide(component);
         }
-        var results = wb.find(document.body, '.results');
+        var result = wb.find(document.body, '.result');
         // Special cases
+        // console.log('togglePanel %s: %s', evt.detail.name, evt.detail.state);
         switch(evt.detail.name){
             case 'stage':
                 if (evt.detail.state){
-                    wb.show(results);
+                    wb.show(result);
                 }else{
-                    wb.clearStage();
-                    if (!wb.toggleState.scripts_text_view){
-                        wb.hide(results);
+                    if (wb.view !== 'result'){
+                        console.log('hide stage, so clear it too');
+                        wb.clearStage();
+                        wb.enableStageControls(false);
+                    }
+                    if (!wb.getState('scripts_text_view')){
+                        wb.hide(result);
+                        wb.enableStageControls(true);
                     }
                 }
                 break;
             case 'scripts_text_view':
                 if (evt.detail.state){
-                    wb.show(results);
+                    wb.show(result);
                     wb.updateScriptsView();
                 }else{
-                    if (!wb.toggleState.stage){
-                        wb.hide(results);
+                    if (!wb.getState('stage')){
+                        wb.hide(result);
                     }
                 }
                 break;
-            case 'tutorial':
             case 'scratchpad':
             case 'scripts_workspace':
-                if (! (wb.toggleState.tutorial || wb.toggleState.scratchpad || wb.toggleState.scripts_workspace)){
+                if (! (wb.getState('scratchpad') || wb.getState('scripts_workspace'))){
                     wb.hide(wb.find(document.body, '.workspace'));
                 }else{
                     wb.show(wb.find(document.body, '.workspace'));
@@ -266,7 +271,7 @@
                 // We should only be hiding panels like this when they contain multiple
                 // sub-panes. Move this to CSS or (better) make the whole code map an overlay
                 // on the scripts_workspace
-                if(!wb.toggleState.code_map){
+                if(!wb.getState('code_map')){
                     wb.hide(wb.find(document.body, '#cm_container'));
                 }else{
                     wb.show(wb.find(document.body, '#cm_container'));
@@ -276,20 +281,28 @@
                 // do nothing
                 break;
         }
-        if (wb.toggleState.stage){
+        if (wb.getState('stage')){
             // restart script on any toggle
             // so it runs at the new size
-            wb.runCurrentScripts();
+            // wb.runCurrentScripts();
         }
 
     }
 
-    Event.on(document.body, 'wb-toggle', null, toggleComponent);
+    function shouldAutorun(){
+        if (wb.getState('fullSize')) return true;
+        if (wb.getState('autorun')) return true;
+        return false;
+    }
+
+    Event.on(document.body, 'wb-toggle', null, togglePanel);
 
 
     window.addEventListener('load', function(evt){
-        console.log('load event');
-        Event.trigger(document.body, 'wb-state-change');
+        console.log('ide loaded');
+        handleStateChange();
+        Event.trigger(document.body, 'wb-initialize', {component: 'ide'});
+        // Event.trigger(document.body, 'wb-state-change');
     });
 
     // Kick off some initialization work
@@ -317,15 +330,14 @@
     Event.on('.load_from_gist', 'click', null, wb.loadScriptsFromGistId);
     Event.on('.restore_scripts', 'click', null, wb.loadScriptsFromFilesystem);
     Event.on('.workspace', 'click', '.disclosure', disclosure);
-    Event.on('.workspace', 'dblclick', '.locals .name', wb.changeName);
+    Event.on('.workspace', 'dblclick', '.locals .name', wb.socket.changeName);
     Event.on('.workspace', 'keypress', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input', wb.resize);
     Event.on('.workspace', 'change', 'input, select', function(event){
-        Event.trigger(document.body, 'wb-modified', {block: event.wbTarget, type: 'valueChanged'});
+        Event.trigger(document.body, 'wb-modified', {block: event.target, type: 'valueChanged'});
     });
-    Event.on(document.body, 'wb-script-loaded', null, handleScriptLoad);
     Event.on(document.body, 'wb-modified', null, handleScriptModify);
-    Event.on('.run-scripts', 'click', null, function(){
+    Event.on('.run-full-size', 'click', null, function(){
         wb.historySwitchState('result');
     });
     Event.on('.show-ide', 'click', null, function(){
@@ -342,28 +354,64 @@
     // autorun buttons
     Event.on('.run-script', 'click', null, function(){
         document.body.classList.add('running');
+        console.log('running because the play button was pressed');
         wb.runCurrentScripts(true);
     });
     Event.on('.stop-script', 'click', null, function(){
         document.body.classList.remove('running');
         wb.clearStage();
     });
-    Event.on('.autorun-script-on', 'click', null, function(){
-        // turn it off
-        document.body.classList.add('no-autorun');
-        wb.autorun = false;
-        wb.clearStage();
-    });
-    Event.on('.autorun-script-off', 'click', null, function(){
-        document.body.classList.remove('no-autorun');
-        wb.autorun = true;
-        wb.runCurrentScripts(true);
+    Event.on(document.body, 'wb-toggle', null, function(evt){
+        if (evt.detail.name === 'autorun'){
+            // console.log('Caught wb-toggle autorun: %s', evt.detail.state);
+            wb.setState('autorun', evt.detail.state);
+            if (evt.detail.state){
+                // console.log('run when autorun is checked');
+                wb.runCurrentScripts();
+            }else{
+                wb.clearStage();
+            }
+        }
     });
 
+    function onReady(evt){
+        hideLoader();
+        if (wb.shouldAutorun()){
+            wb.runCurrentScripts();
+        }
+        wb.setState('ready', true);
+    }
+
+    Event.once(document.body, 'wb-ready', null, onReady);
+
+    Event.on(document.body, 'wb-initialize', null, function(evt){
+        console.log('wb-initialize %s', evt.detail.component);
+        switch(evt.detail.component){
+            case 'ide': wb.setState('ideReady', true); break;
+            case 'stage': wb.setState('stageReady', true); break;
+            case 'script': wb.setState('scriptReady', true); break;
+        }
+        if (wb.getState('ideReady') && wb.getState('stageReady') && !wb.getState('scriptReady')){
+            wb.loadCurrentScripts(wb.urlToQueryParams(location.href));
+        }
+        if (wb.getState('ideReady') && wb.getState('stageReady') && wb.getState('scriptReady')){
+            console.log('everything is ready');
+            wb.resizeStage();
+            Event.trigger(document.body, 'wb-ready');
+        }
+    });
+
+    Event.on(window, 'resize', null, resizeStage);
+
+    wb.onReady = onReady;
+    wb.resizeStage = resizeStage;
     wb.language = location.pathname.split('/')[2];
+    wb.shouldAutorun = shouldAutorun;
     wb.loaded = false;
     wb.clearScripts = clearScripts;
     wb.historySwitchState = historySwitchState;
     wb.createWorkspace = createWorkspace;
     wb.wireUpWorkspace = wireUpWorkspace;
+    wb.enableStageControls = enableStageControls;
+    wb.enableMenuToggleControls = enableMenuToggleControls;
 })(wb);

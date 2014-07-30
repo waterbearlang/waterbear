@@ -15,7 +15,8 @@
                         {
                             "name": "font",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 6
                         },
                         {
                             "name": "",

@@ -1,0 +1,18 @@
+{
+  "version": "0.8",
+  "name": "Waterbear",
+  "description": "Web-based visual programming tool",
+  "launch_path": "/languages/javascript/index.html",
+  "icons": {
+    "32": "/images/icon_32.png",
+    "60": "/images/icon_60.png",
+    "90": "/images/icon_90.png",
+    "128": "/images/icon_128.png",
+    "256": "/images/icon_256.png"
+  },
+  "developer": {
+    "name": "Dethe Elza",
+    "url": "http://livingcode.org/"
+  },
+  "default_locale": "en"
+}

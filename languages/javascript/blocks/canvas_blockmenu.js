@@ -48,7 +48,9 @@
                         {
                             "name": "global alpha",
                             "type": "number",
-                            "value": 1.0
+                            "value": 1.0,
+                            "min": 0.0,
+                            "max": 1.0
                         }
                     ]
                 },
@@ -125,7 +127,8 @@
                         {
                             "name": "line width",
                             "type": "number",
-                            "value": 1
+                            "value": 1,
+                            "min": 0
                         }
                     ]
                 },
@@ -166,7 +169,8 @@
                         {
                             "name": "mitre limit",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0.0
                         }
                     ]
                 },
@@ -197,7 +201,8 @@
                         {
                             "name": "shadow blur",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         }
                     ]
                 },
@@ -217,7 +222,7 @@
                 {
                     "blocktype": "step",
                     "script": "var point## = {{1}}; var radius## = {{2}};local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.stroke();",
-                    "help": "circle...",
+                    "help": "stroke a circle with the current color",
                     "id": "b4e05d48-32e4-4e0b-832c-b2433ffda2e2",
                     "sockets": [
                         {
@@ -228,53 +233,14 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": "10"
+                            "value": 10,
+                            "min": 0
                         }
-                    ]
-                },
-                {
-                    "blocktype": "step",
-                    "script": "var shape## = {{1}}; var color## = {{2}}; Shape.fillShape(shape##, color##);",
-                    "help": "fill...",
-                    "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
-                    "sockets": [
-                        {
-                            "name": "fill shape",
-                            "type": "shape",
-                            "value": null
-                        },
-                        {
-                            "name": "with color",
-                            "type": "color",
-                            "value": null
-                        }
-                    ]
-                },
-                {
-                    "blocktype": "step",
-                    "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; Shape.strokeShape(shape##, color##, width##);",
-                    "help": "stroke...",
-                    "id": "90b70122-340f-46a7-9753-9c39022c00ac",
-                    "sockets": [
-                        {
-                            "name": "stroke shape",
-                            "type": "shape",
-                            "value": null
-                        },
-                        {
-                            "name": "with color",
-                            "type": "color",
-                            "value": null
-                        },
-                        {
-                            "name": "and width",
-                            "type": "number",
-                            "value": 1
-                        }
-                    ]
+                    ],
+                    "tags": ["shape", "circle", "stroke"]
                 }
             ]
         }
-        
+
     );
 })(wb);

@@ -7,9 +7,13 @@
 (function(wb,Event){
     // Add some utilities
     'use strict';
+
+
+    /* Wrap a script for execution in an iframe */
+    // Maybe this should all be moved to runtime?
     wb.wrap = function(script){
         return [
-            '(function(){', 
+            '(function(){',
                     'var main = function(){',
                         script,
                     '}',
@@ -21,41 +25,60 @@
         ].join('\n');
     };
 
+    // Where is this used? What is it for?
     function assetUrls(){
         return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
             // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
             var source = document.getElementById(asset.dataset.localSource);
-            return wb.getSocketValue(wb.getSockets(source)[0]);
+            return wb.getSocketValue(wb.block.sockets(source)[0]);
         }).join(',') + ']';
     }
 
+    // Try to run the current script.
+    // Bail if there is no view to run it in (either preview pane or running full size)
+    // Bail if it is already running and hasn't changed
+    // Bail if
     function runCurrentScripts(force){
-        // console.log('runCurrentScripts: %s', runCurrentScripts.caller.name);
-        if (!(wb.autorun || force)){
+        force = force === true; // ignore stray values like event objects
+        if (! (wb.getState('preview') ||  wb.getState('fullSize')) ){
+            console.log('false alarm: preview: %s, fullSize: %s', wb.getState('preview'), wb.getState('fullSize'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
-        document.body.classList.add('running');
-        if (!wb.scriptLoaded){
-            console.log('not ready to run script yet, waiting');
-            // Event.on(document.body, 'wb-script-loaded', null, wb.runCurrentScripts);
-            return;
-        }else{
-            console.log('ready to run script, let us proceed to the running of said script');
-        }
+        // if ((wb.getState('isRunning') && !force)){
+        //     // we're good, but thanks for asking
+        //     // mark scriptModified on resize events?
+        //     console.log('thanks for asking: isRunning: %s, force: %s', wb.getState('isRunning'), force);
+        //     // Problem: we're getting script cleared events on startup. Why?
+        //     // return;
+        // }
         var blocks = wb.findAll(document.body, '.scripts_workspace');
+
+        for (var i=0; i < blocks.length; i++){
+            if (!wb.block.validate(blocks[i])){
+                console.warn('Not running script because of invalid block(s)');
+                return;
+            }
+        }
+
+        document.body.classList.add('running');
+        if (wb.getState('scriptReady') && wb.getState('stageReady')){
+            console.log('ready to run script, let us proceed to the running of said script');
+        }else{
+            console.log('not ready to run script yet, waiting: scriptReady: %s, stageReady: %s', wb.getState('scriptReady'), wb.getState('stageReady'));
+            return;
+        }
         // update size of frame
-        var iframe = document.querySelector('.stageframe');
-        iframe.style.width =  iframe.parentElement.clientWidth + 'px';
-        iframe.style.height = iframe.parentElement.clientHeight + 'px';
+        wb.setState('isRunning', true);
+        wb.setState('scriptModified', false);
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;
 
 
-    if (!wb.iframeReady){
+    if (!wb.getState('stageReady')){
         document.querySelector('.stageframe').addEventListener('load', function(event){
-            console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
+            // console.log('iframe ready, waiting: %s', !!wb.iframewaiting);
             if (wb.iframewaiting){
                 wb.iframewaiting();
             }
@@ -70,16 +93,20 @@
             document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'loadScript', script: wb.wrap(script)}), '*');
             document.querySelector('.stageframe').focus();
         };
-        if (wb.iframeReady){
+        if (wb.getState('stageReady')){
+            // console.log('sending run to the iframe');
+            wb.setState('stageReady', false);
             run();
         }else{
+            // console.log('waiting for the stage to be ready before we run');
             wb.iframewaiting = run;
         }
     };
 
     function clearStage(event){
-        wb.iframeReady = false;
+        wb.setState('stageReady', false);
         document.body.classList.remove('running');
+        wb.setState('isRunning', false);
         document.querySelector('.stageframe').contentWindow.postMessage(JSON.stringify({command: 'reset'}), '*');
     }
     wb.clearStage = clearStage;
@@ -90,7 +117,7 @@
 
     wb.prettyScript = function(elements){
         return js_beautify(elements.map(function(elem){
-            return wb.codeFromBlock(elem);
+            return wb.block.code(elem);
         }).join(''));
     };
 
@@ -128,8 +155,8 @@
 
 
     Event.on('.socket input', 'click', null, function(event){
-        event.wbTarget.focus();
-        event.wbTarget.select();
+        event.target.focus();
+        event.target.select();
     });
 
 })(wb, Event);

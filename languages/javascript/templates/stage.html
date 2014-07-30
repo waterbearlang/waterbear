@@ -1,17 +1,16 @@
-<div class="results">
+<script>
+    function receiveMessage(event){
+        if (event.data === 'ide-ready'){
+            Event.trigger(document.body, 'wb-initialize', {component: 'stage'});
+        }else if (event.data === 'ide-paused'){
+            wb.setState('stageReady', false);
+            // Event.once(document.body, 'wb-ready', null, wb.onReady);
+        }
+    }
+	window.addEventListener('message', receiveMessage, false);
+</script>
+<div class="result">
 	<div class="stage">
 	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
 	<div class="scripts_text_view"></div>
 </div>
-<script>
-	var iframe = document.querySelector('.stageframe');
-	function receiveMessage(event){
-		wb.iframeReady = event.data === 'ide-ready' ? true : false;
-	}
-	window.addEventListener('message', receiveMessage, false);
-	// Work around Chrome bug with iframes in flexbox
-	iframe.style.height = iframe.parentElement.clientHeight + 'px';
-	window.addEventListener('resize', function(evt){
-		iframe.style.height = iframe.parentElement.clientHeight + 'px';			
-	}, false);
-</script>

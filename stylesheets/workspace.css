@@ -32,7 +32,7 @@ input{
 	user-select: text;
 }
 
-.scripts_text_view, .tutorial, .scratchpad, .scripts_workspace, .remote{
+.scripts_text_view, .scratchpad, .scripts_workspace, .remote{
 	margin: 5px;
 	border: 2px outset #333;
 	padding: 10px;	
@@ -52,7 +52,7 @@ input{
 
 
 .hidden, .block.hidden{
-	display: none !important;
+	display: none;
 }
 
 
@@ -74,6 +74,7 @@ input{
 	outline: 0;
 	line-height: 1.3;
 }
+
 
 .accordion-header{
 	display: block;
@@ -146,7 +147,8 @@ h1.title {
 .drop-cursor {
 	height: 2px;
 	background-color: red;
-	width: 75%
+	width: 75%;
+	float: left;
 }
 
 /* Context menu */

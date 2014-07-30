@@ -15,7 +15,8 @@
                         {
                             "name": "size with width",
                             "type": "number",
-                            "value": 32
+                            "value": 32,
+                            "min": 0
                         },
                         {
                             "name": "width units",
@@ -26,7 +27,8 @@
                         {
                             "name": "height",
                             "type": "number",
-                            "value": 32
+                            "value": 32,
+                            "min": 0
                         },
                         {
                             "name": "height units",

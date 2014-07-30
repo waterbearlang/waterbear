@@ -15,7 +15,7 @@
                         {
                             "name": "clear stage to color",
                             "type": "color",
-                            "block": "13236aef-cccd-42b3-a041-e26528174323"
+                            "value": "#111111"
                         }
                     ]
                 },
@@ -223,10 +223,8 @@
                         {
                             "name": "by",
                             "type": "number",
-                            "value": 0
-                        },
-                        {
-                            "name": "degrees"
+                            "value": 0,
+                            "suffix": "degrees"
                         }
                     ]
                 },
@@ -261,10 +259,8 @@
                         {
                             "name": "by",
                             "type": "number",
-                            "value": 0
-                        },
-                        {
-                            "name": "degrees"
+                            "value": 0,
+                            "suffix": "degrees"
                         }
                     ]
                 },
@@ -281,10 +277,8 @@
                         {
                             "name": "to",
                             "type": "number",
-                            "value": 0
-                        },
-                        {
-                            "name": "degrees"
+                            "value": 0,
+                            "suffix": "degrees"
                         }
                     ]
                 },

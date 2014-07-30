@@ -7,6 +7,156 @@
             "help": "Shape blocks are for creating shapes that can then be drawn or used to create sprites",
             "blocks": [
                 {
+                    "blocktype": "step",
+                    "script": "runtime.shape.fillShape({{1}}, {{2}});",
+                    "help": "fill...",
+                    "id": "0baa9d2b-659d-40a7-bbd3-cc72712a546b",
+                    "sockets": [
+                        {
+                            "name": "fill shape",
+                            "type": "shape",
+                            "value": null
+                        },
+                        {
+                            "name": "with color",
+                            "type": "color",
+                            "value": null
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "step",
+                    "script": "var shape## = {{1}}; var color## = {{2}}; var width## = {{3}}; runtime.shape.strokeShape(shape##, color##, width##);",
+                    "help": "stroke...",
+                    "id": "90b70122-340f-46a7-9753-9c39022c00ac",
+                    "sockets": [
+                        {
+                            "name": "stroke shape",
+                            "type": "shape",
+                            "value": null
+                        },
+                        {
+                            "name": "with color",
+                            "type": "color",
+                            "value": null
+                        },
+                        {
+                            "name": "and width",
+                            "type": "number",
+                            "value": 1,
+                            "min": 0
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "8219fa9f-caeb-42cf-a3e5-9cd5066b707c",
+                    "script": "{type: 'circle', x: {{1}}, y: {{2}}, r: {{3}}}",
+                    "type": "shape",
+                    "sockets": [
+                        {
+                            "name": "circle at x",
+                            "type": "number",
+                            "value": 0
+                        },
+                        {
+                            "name": "y",
+                            "type": "number",
+                            "value": 0
+                        },
+                        {
+                            "name": "with radius",
+                            "type": "number",
+                            "value": 10,
+                            "min": 0
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "957e8a12-b933-4489-ba55-8d9a08d511a5",
+                    "script": "{type: 'poly', points: {{1}}}",
+                    "type": "shape",
+                    "sockets": [
+                        {
+                            "name": "polygon with points ",
+                            "type": "array"
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "7c7e116b-3035-43d7-9230-4d1b6cc4a7dd",
+                    "script": "{type: 'rect', x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}}, r:{{5}}}",
+                    "type": "shape",
+                    "sockets": [
+                        {
+                            "name": "rect at x",
+                            "type": "number",
+                            "value": 0
+                        },
+                        {
+                            "name": "y",
+                            "type": "number",
+                            "value": 0
+                        },
+                        {
+                            "name": "with width",
+                            "type": "number",
+                            "value": 10,
+                            "min": 0
+                        },
+                        {
+                            "name": "height",
+                            "type": "number",
+                            "value": 10,
+                            "min": 0
+                        },
+                        {
+                            "name": "border-radius",
+                            "type": "number",
+                            "value": 0,
+                            "min": 0
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "a51afa9e-f6be-444c-a591-1ca0d0ab697f",
+                    "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}}",
+                    "type": "shape",
+                    "sockets": [
+                        {
+                            "name": "rect at point",
+                            "type": "point"
+                        },
+                        {
+                            "name": "with size",
+                            "type": "size"
+                        },
+                        {
+                            "name": "border-radius",
+                            "type": "number",
+                            "value": 0,
+                            "min": 0
+                        }
+                    ]
+                },
+                {
+                    "blocktype": "expression",
+                    "id": "b2b9d08f-5d21-4742-a1fd-3f118c254c17",
+                    "script": "{type: 'rect', x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] }, r:{{1}}[4];",
+                    "type": "shape",
+                    "sockets": [
+                        {
+                            "name": "rect from array",
+                            "type": "array"
+                        }
+                    ]
+                },
+                // DEPRECATED BLOCKS ONLY BELOW THIS LINE
+
+                {
                     "deprecated": true,
                     "blocktype": "step",
                     "script": "local.ctx.clearRect({{1}}.x,{{1}}.y,{{1}}.w,{{1}}.h);",
@@ -36,7 +186,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -44,9 +195,8 @@
                     ]
                 },
                 {
-                    "deprecated": true,
                     "blocktype": "step",
-                    "script": "var point## = {{1}}; var radius## = {{2}}; var color## = {{3}};local.ctx.save();local.ctx.fillStyle = color##;local.ctx.beginPath();local.ctx.arc(point##.x,point##.y,radius##,0,Math.PI*2,true);local.ctx.closePath();local.ctx.fill();local.ctx.restore();",
+                    "script": "runtime.shape.fillCircleAtPointWithRadiusAndColor({{1}},{{2}},{{3}});",
                     "id": "e399d950-4d91-49aa-ac42-bfc58299633c",
                     "sockets": [
                         {
@@ -57,7 +207,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 30
+                            "value": 30,
+                            "min": 0
                         },
                         {
                             "name": "and color",
@@ -83,7 +234,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -103,7 +255,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "and color",
@@ -128,7 +281,8 @@
                         {
                             "name": "with radius",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
@@ -184,7 +338,8 @@
                         {
                             "name": "with border-radius",
                             "type": "number",
-                            "value": 0
+                            "value": 0,
+                            "min": 0
                         },
                         {
                             "name": "and color",
@@ -251,34 +406,18 @@
                         {
                             "name": "width",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         },
                         {
                             "name": "height",
                             "type": "number",
-                            "value": 10
+                            "value": 10,
+                            "min": 0
                         }
                     ],
                     "tags": [
                         "deprecated"
-                    ]
-                },
-                {
-                    "blocktype": "step",
-                    "id": "e93b909e-19f8-4f80-8308-ae896bd63189",
-                    "script": "var points## = {{1}}; var color## = {{2}}; local.ctx.save();local.ctx.beginPath(); local.ctx.moveTo(points##[0].x, points##[0].y); for (var i = 1; i < points##.length; i ++ ) {   local.ctx.lineTo(points##[i].x, points##[i].y); } local.ctx.closePath(); local.ctx.fillStyle = color##; local.ctx.fill();local.ctx.restore();",
-                    "help": "fill the polygon defined by array of points",
-                    "sockets": [
-                        {
-                            "name": "fill polygon ",
-                            "type": "array",
-                            "value": null
-                        },
-                        {
-                            "name": "with color",
-                            "type": "color",
-                            "value": null
-                        }
                     ]
                 },
                 {
@@ -290,126 +429,19 @@
                     "sockets": [
                         {
                             "name": "stroke polygon ",
-                            "type": "array",
-                            "value": null
+                            "type": "array"
                         },
                         {
                             "name": "with color",
-                            "type": "color",
-                            "value": null
+                            "type": "color"
                         }
                     ],
                     "tags": [
                         "deprecated"
                     ]
-                },
-                {
-                    "blocktype": "expression",
-                    "id": "8219fa9f-caeb-42cf-a3e5-9cd5066b707c",
-                    "script": "{type: 'circle', x: {{1}}, y: {{2}}, r: {{3}}}",
-                    "type": "shape",
-                    "sockets": [
-                        {
-                            "name": "circle at x",
-                            "type": "number",
-                            "value": "0"
-                        },
-                        {
-                            "name": "y",
-                            "type": "number",
-                            "value": "0"
-                        },
-                        {
-                            "name": "with radius",
-                            "type": "number",
-                            "value": "10"
-                        }
-                    ]
-                },
-                {
-                    "blocktype": "expression",
-                    "id": "957e8a12-b933-4489-ba55-8d9a08d511a5",
-                    "script": "{type: 'poly', points: {{1}}}",
-                    "type": "shape",
-                    "sockets": [
-                        {
-                            "name": "polygon with points ",
-                            "type": "array",
-                            "value": null
-                        }
-                    ]
-                },
-                {
-                    "blocktype": "expression",
-                    "id": "7c7e116b-3035-43d7-9230-4d1b6cc4a7dd",
-                    "script": "{type: 'rect', x: {{1}}, y: {{2}}, w: {{3}}, h: {{4}}, r:{{5}}}",
-                    "type": "shape",
-                    "sockets": [
-                        {
-                            "name": "rect at x",
-                            "type": "number",
-                            "value": "0"
-                        },
-                        {
-                            "name": "y",
-                            "type": "number",
-                            "value": "0"
-                        },
-                        {
-                            "name": "with width",
-                            "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "height",
-                            "type": "number",
-                            "value": "10"
-                        },
-                        {
-                            "name": "border-radius",
-                            "type": "number",
-                            "value": 0
-                        }
-                    ]
-                },
-                {
-                    "blocktype": "expression",
-                    "id": "a51afa9e-f6be-444c-a591-1ca0d0ab697f",
-                    "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}}",
-                    "type": "shape",
-                    "sockets": [
-                        {
-                            "name": "rect at point",
-                            "type": "point",
-                            "value": null
-                        },
-                        {
-                            "name": "with size",
-                            "type": "size",
-                            "value": null
-                        },
-                        {
-                            "name": "border-radius",
-                            "type": "number",
-                            "value": 0
-                        }
-                    ]
-                },
-                {
-                    "blocktype": "expression",
-                    "id": "b2b9d08f-5d21-4742-a1fd-3f118c254c17",
-                    "script": "{type: 'rect', x: {{1}}[0], y: {{1}}[1], w: {{1}}[2], h: {{1}}[3] }, r:{{1}}[4];",
-                    "type": "shape",
-                    "sockets": [
-                        {
-                            "name": "rect from array",
-                            "type": "array",
-                            "value": null
-                        }
-                    ]
                 }
             ]
         }
-        
+
     );
 })(wb);

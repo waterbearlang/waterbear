@@ -26,7 +26,7 @@
 
     function clearScripts(event, force){
         if (force || confirm('Throw out the current script?')){
-            wb.clearCodeMap();
+            // wb.clearCodeMap();
             var workspace = document.querySelector('.scripts-workspace');
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
@@ -163,7 +163,7 @@
         // wb.initializeDragHandlers();
         Event.trigger(workspace, 'wb-add');
         Event.trigger(document.body, 'wb-workspace-initialized');
-        wb.drawRectForViewPort();
+        // wb.drawRectForViewPort();
         workspace.addEventListener('scroll', wb.handleScrollChange, false);
     }
 

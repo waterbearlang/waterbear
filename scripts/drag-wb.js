@@ -275,7 +275,7 @@
             if (!templateDrag) {
                 deleteAllSelectedBlocks();
             }
-        } else if (wb.overlap(dragTarget, cm_cont)) {
+        // } else if (wb.overlap(dragTarget, cm_cont)) {
             // Ignore dragging blocks to code map
         } else if (dropTarget) {
             //moving around when dragged block is moved in scratchpad

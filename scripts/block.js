@@ -24,8 +24,8 @@
     var blockRegistry = {};/* populated in function "registerBlock", which is
                                called by the Block() function below*/
     // variables for code map
-    var codeMap_view = document.querySelector('.code-map');
-    var recently_removed = null;
+    // var codeMap_view = document.querySelector('.code-map');
+    // var recently_removed = null;
 
 
     function newSeqNum(){
@@ -177,24 +177,24 @@
         }else{
             removeStep(block);
         }
-        if (!block.dataset.isLocal){
-            removeBlockCodeMap(block);
-        }
+        // if (!block.dataset.isLocal){
+        //     removeBlockCodeMap(block);
+        // }
         Event.trigger(document.body, 'wb-modified', {block: block, type: 'removed'});
     }
 
-    function removeBlockCodeMap(block){
-        var dup_block = document.getElementById(block.id + "-d");
-        if(dup_block){ // if not, we're removing from the scratch space
-            if (wb.matches(block, '.expression')){
-                removeExpression(dup_block);
-            }else if(!(wb.matches(dup_block.parentNode, ".code-map"))){
-                removeStepCodeMap(dup_block);
-            }
-            recently_removed = dup_block;
-            dup_block.parentNode.removeChild(dup_block);
-        }
-    }
+    // function removeBlockCodeMap(block){
+    //     var dup_block = document.getElementById(block.id + "-d");
+    //     if(dup_block){ // if not, we're removing from the scratch space
+    //         if (wb.matches(block, '.expression')){
+    //             removeExpression(dup_block);
+    //         }else if(!(wb.matches(dup_block.parentNode, ".code-map"))){
+    //             removeStepCodeMap(dup_block);
+    //         }
+    //         recently_removed = dup_block;
+    //         dup_block.parentNode.removeChild(dup_block);
+    //     }
+    // }
 
     function addBlock(event){
         event.stopPropagation();
@@ -205,61 +205,61 @@
         }else{
             addStep(event);
         }
-        if((recently_removed !== null) && (event.target.id + '-d' == recently_removed.id)){
-            addBlocksCodeMap(event, true);
-        }else{
-            addBlocksCodeMap(event, false);
-        }
+        // if((recently_removed !== null) && (event.target.id + '-d' == recently_removed.id)){
+        //     addBlocksCodeMap(event, true);
+        // }else{
+        //     addBlocksCodeMap(event, false);
+        // }
         Event.trigger(document.body, 'wb-modified', {block: event.target, type: 'added'});
     }
 
-    function addBlocksCodeMap(event, isRestored){
-        var target = event.target;
-        if (wb.matches(target.parentNode, '.scratchpad')){
-            // don't mirror scratchpad in code map
-            return;
-        }
-        var cloneForCM = true;
-        var parent = null;
-        var next_sibling = target.nextElementSibling;
-        if(next_sibling !== null && next_sibling.className === "drop-cursor"){
-            next_sibling = next_sibling.nextElementSibling;
-        }
-        var dup_target, parent_id;
-        if(isRestored){
-            dup_target = recently_removed;
-        }else{
-            dup_target = cloneBlock(target, cloneForCM);
-        }
+    // function addBlocksCodeMap(event, isRestored){
+    //     var target = event.target;
+    //     if (wb.matches(target.parentNode, '.scratchpad')){
+    //         // don't mirror scratchpad in code map
+    //         return;
+    //     }
+    //     var cloneForCM = true;
+    //     var parent = null;
+    //     var next_sibling = target.nextElementSibling;
+    //     if(next_sibling !== null && next_sibling.className === "drop-cursor"){
+    //         next_sibling = next_sibling.nextElementSibling;
+    //     }
+    //     var dup_target, parent_id;
+    //     if(isRestored){
+    //         dup_target = recently_removed;
+    //     }else{
+    //         dup_target = cloneBlock(target, cloneForCM);
+    //     }
 
-        dup_target.id = target.id + "-d";
-        // var siblings = target.parentNode.childNodes;
-        // var targetIndex = wb.indexOf(event.target);
-        var dup_next_sibling = null;
-        // var dup_sibling_id;
-        if (next_sibling){
-            dup_next_sibling = document.getElementById(next_sibling.id + '-d');
-        }
-        if(wb.matches(target, ".scripts-workspace")){
-            //recursively add it to the code-map
-            parent = codeMap_view;
-            parent.insertBefore(dup_target, dup_next_sibling);
-        }else if(wb.matches(target, '.expression')){
-            parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
-            parent = document.getElementById(parent_id).querySelector('.holder');
-            parent.appendChild(dup_target);
-            addExpressionCodeMap(dup_target);
-        }else{
-            // console.log('target.id: %s', target.id);
-            // console.log(target.parentNode.className);
-            parent_id = wb.closest(target.parentNode, '.block').id + "-d";
-            // console.log('parent_id: %s', parent_id);
-            parent = document.getElementById(parent_id).querySelector('.contained');
-            parent.insertBefore(dup_target,dup_next_sibling);
-            addStepCodeMap(dup_target);
-        }
-        cloneForCM = false;
-    }
+    //     dup_target.id = target.id + "-d";
+    //     // var siblings = target.parentNode.childNodes;
+    //     // var targetIndex = wb.indexOf(event.target);
+    //     var dup_next_sibling = null;
+    //     // var dup_sibling_id;
+    //     if (next_sibling){
+    //         dup_next_sibling = document.getElementById(next_sibling.id + '-d');
+    //     }
+    //     if(wb.matches(target, ".scripts-workspace")){
+    //         //recursively add it to the code-map
+    //         parent = codeMap_view;
+    //         parent.insertBefore(dup_target, dup_next_sibling);
+    //     }else if(wb.matches(target, '.expression')){
+    //         parent_id = target.parentNode.parentNode.parentNode.parentNode.id + "-d";
+    //         parent = document.getElementById(parent_id).querySelector('.holder');
+    //         parent.appendChild(dup_target);
+    //         addExpressionCodeMap(dup_target);
+    //     }else{
+    //         // console.log('target.id: %s', target.id);
+    //         // console.log(target.parentNode.className);
+    //         parent_id = wb.closest(target.parentNode, '.block').id + "-d";
+    //         // console.log('parent_id: %s', parent_id);
+    //         parent = document.getElementById(parent_id).querySelector('.contained');
+    //         parent.insertBefore(dup_target,dup_next_sibling);
+    //         addStepCodeMap(dup_target);
+    //     }
+    //     cloneForCM = false;
+    // }
 
     function removeStep(block){
         // About to remove a block from a block container, but it still exists and can be re-added
@@ -284,10 +284,10 @@
         return block;
     }
 
-    function removeStepCodeMap(block){
-        // About to remove a block from a block container, but it still exists and can be re-added
-        removeLocals(block);
-    }
+    // function removeStepCodeMap(block){
+    //     // About to remove a block from a block container, but it still exists and can be re-added
+    //     removeLocals(block);
+    // }
 
     function removeExpression(block){
         // Remove an expression from an expression holder, say for dragging
@@ -357,14 +357,14 @@
         return parsedLocals;
     }
 
-    function addStepCodeMap(block){
-        if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
-            var parent = wb.closest(block, '.context');
-            var locals = wb.findChild(parent, '.locals');
-            var parsedLocals = addLocals(block, parent);
-            block.dataset.locals = JSON.stringify(parsedLocals);
-        }
-    }
+    // function addStepCodeMap(block){
+    //     if (block.dataset.locals && block.dataset.locals.length && !block.dataset.localsAdded){
+    //         var parent = wb.closest(block, '.context');
+    //         var locals = wb.findChild(parent, '.locals');
+    //         var parsedLocals = addLocals(block, parent);
+    //         block.dataset.locals = JSON.stringify(parsedLocals);
+    //     }
+    // }
 
     function addExpressionCodeMap(block){
         wb.findChildren(block.parentElement, 'input, select').forEach(function(elem){

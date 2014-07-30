@@ -40,8 +40,8 @@
     // Bail if
     function runCurrentScripts(force){
         force = force === true; // ignore stray values like event objects
-        if (! (wb.getState('preview') ||  wb.getState('fullSize')) ){
-            console.log('false alarm: preview: %s, fullSize: %s', wb.getState('preview'), wb.getState('fullSize'));
+        if (! (wb.getState('preview') ||  wb.getState('fullsize')) ){
+            console.log('false alarm: preview: %s, fullsize: %s', wb.getState('preview'), wb.getState('fullsize'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }

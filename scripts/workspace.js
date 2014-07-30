@@ -75,29 +75,25 @@
     function handleStateChange(){
         // hide loading spinner if needed
         wb.queryParams = wb.urlToQueryParams(location.href);
-        console.log('handleStateChange %o', wb.queryParams);
+        // console.log('handleStateChange %o', wb.queryParams);
         if (wb.queryParams.view === 'fullsize'){
-            wb.setState('fullSize', true);
+            wb.setState('fullsize', true);
             document.body.classList.add('fullsize');
             wb.enableMenuToggleControls(false);
-            wb.resizeStage();
+            // wb.resizeStage();
+            // REFACTOR: get rid of wb.view
             wb.view = 'result';
         }else{
             document.body.classList.remove('fullsize');
-            wb.setState('fullSize', false);
+            wb.setState('fullsize', false);
             wb.enableMenuToggleControls(true);
             wb.view = 'editor';
         }
         // Are we embedded in an iframe? If so, show appropriate menu
-        if (window.parent !== window){
-            document.body.classList.add('embedded');
-        }else{
-            document.body.classList.remove('embedded');
-        }
         if (wb.getState('scripts-text-view')){
             wb.updateScriptsView();
         }
-        if (wb.getState('stage') || wb.getState('fullSize')){
+        if (wb.getState('stage') || wb.getState('fullsize')){
             // console.log('run current scripts');
             // wb.setState('scriptModified', false);
             wb.runCurrentScripts();
@@ -117,7 +113,7 @@
     function historySwitchState(state, clearFiles){
         console.log('historySwitchState(%o, %s)', state, !!clearFiles);
         var params = wb.urlToQueryParams(location.href);
-        if (state !== 'result'){
+        if (state !== 'fullsize'){
             delete params.view;
         }else{
             params.view = state;
@@ -224,13 +220,18 @@
         var component = evt.detail.name;
         if (evt.detail.state){
             document.body.classList.remove('no-' + component);
+            wb.setState(component, true);
+            if (component === 'stage'){
+                wb.runCurrentScripts();
+            }
         }else{
             document.body.classList.add('no-' + component);
+            wb.setState(component, false);
         }
     }
 
     function shouldAutorun(){
-        if (wb.getState('fullSize')) return true;
+        if (wb.getState('fullsize')) return true;
         if (wb.getState('autorun')) return true;
         return false;
     }
@@ -278,7 +279,7 @@
     });
     Event.on(document.body, 'wb-modified', null, handleScriptModify);
     Event.on('.run-full-size', 'click', null, function(){
-        wb.historySwitchState('result');
+        wb.historySwitchState('fullsize');
     });
     Event.on('.show-ide', 'click', null, function(){
         wb.historySwitchState('ide');
@@ -316,6 +317,12 @@
 
     function onReady(evt){
         hideLoader();
+        if (window.parent !== window){
+            document.body.classList.add('embedded');
+        }else{
+            document.body.classList.remove('embedded');
+        }
+
         if (wb.shouldAutorun()){
             wb.runCurrentScripts();
         }

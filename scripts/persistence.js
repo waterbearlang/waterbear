@@ -7,7 +7,7 @@
         autorun: false,
         scriptModified: true,
         isRunning: false,
-        fullSize: false,
+        fullsize: false,
         ready: false,
         ideReady: false,
         stageReady: false,
@@ -16,7 +16,7 @@
     };
 
     // these are transient state we store here for convenience, but don't persist
-    var volotile = ['scriptModified', 'stageReady', 'ideReady', 'scriptReady', 'isRunning', 'fullSize'];
+    var volotile = ['scriptModified', 'stageReady', 'ideReady', 'scriptReady', 'isRunning', 'fullsize'];
 
     function getState(name){
         if (wb.state[name] === undefined){

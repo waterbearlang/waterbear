@@ -167,7 +167,7 @@ body.fullsize .scripts-text-view{
 body.fullsize .result{
     width: 100%;
 }
-body.fullsize .preview{
+body.fullsize .stage{
     height: 100%;
 }
 
@@ -212,22 +212,9 @@ body.fullsize .preview{
     overflow: auto;
 }
 
-body.result .blocklist,
-body.result .workspace,
-body.result .scripts-text-view,
-body.result .cm-container,
-body.result ul.menu .run-full-size{
-    display: none;
-}
-body.result .stage, body.result stage.hidden{
-    display: block;
-}
-body.result ul.menu .show-ide{
-    display: inline-block;
-}
-ul.menu .show-ide{
-    display: none;
-}
+body.fullsize .run-full-size{ display: none; }
+body.fullsize ul.menu .show-ide{ display: inline-block; }
+ul.menu .show-ide{ display: none; }
 
 .stageframe{
     width: 100%;

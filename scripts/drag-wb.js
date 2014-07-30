@@ -268,25 +268,9 @@
 
             // Add history action if the source block was in the workspace
         } else if (wb.overlap(dragTarget, scratchpad)) {
-            var scratchPadStyle = scratchpad.getBoundingClientRect();
-            var newOriginX = scratchPadStyle.left;
-            var newOriginY = scratchPadStyle.top;
-
-            var height = 0;
-
             while (childNodes.length > 0) {
-                var blockStyle = childNodes[0].getBoundingClientRect();
-                var oldX = blockStyle.left;
-                var oldY = blockStyle.top;
-
-                childNodes[0].removeAttribute('style');
-                childNodes[0].style.position = "absolute";
-                childNodes[0].style.left = (oldX - newOriginX) + "px";
-                childNodes[0].style.top = (oldY - newOriginY + height) + "px";
-
-                height += blockStyle.bottom - blockStyle.top;
-
                 scratchpad.appendChild(childNodes[0]);
+                childNodes[0].scrollIntoView();
             }
 
             if (!templateDrag) {
@@ -517,48 +501,49 @@
             console.log('cloning and sending');
             var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
+            cloned.scrollIntoView();
         }else{
             console.log('where are the clones? send in the clones!');
         }
     }
 
-    //This function arranges the blocks into a grid. Future functions could
-    //sort the blocks by type, frequency of use, or other such metrics
-    function arrangeScratchpad(event) {
-        var PADDING = 8;
+    // //This function arranges the blocks into a grid. Future functions could
+    // //sort the blocks by type, frequency of use, or other such metrics
+    // function arrangeScratchpad(event) {
+    //     var PADDING = 8;
 
-        var scratchPadRect = scratchpad.getBoundingClientRect();
-        var width = scratchPadRect.width;
-        var xOrigin = 5;
-        var yOrigin = 5;
+    //     var scratchPadRect = scratchpad.getBoundingClientRect();
+    //     var width = scratchPadRect.width;
+    //     var xOrigin = 5;
+    //     var yOrigin = 5;
 
-        var x = xOrigin;
-        var y = yOrigin;
+    //     var x = xOrigin;
+    //     var y = yOrigin;
 
-        var children = scratchpad.childNodes;
-        var maxHeight = 0;
+    //     var children = scratchpad.childNodes;
+    //     var maxHeight = 0;
 
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].nodeType != 3) {
-                var r = children[i];
+    //     for (var i = 0; i < children.length; i++) {
+    //         if (children[i].nodeType != 3) {
+    //             var r = children[i];
 
-                var rBounding = r.getBoundingClientRect();
-                if (rBounding.height > maxHeight) {
-                    maxHeight = rBounding.height;
-                }
-                r.style.top = y + "px";
-                r.style.left = x + "px";
-                x += rBounding.width + PADDING;
+    //             var rBounding = r.getBoundingClientRect();
+    //             if (rBounding.height > maxHeight) {
+    //                 maxHeight = rBounding.height;
+    //             }
+    //             r.style.top = y + "px";
+    //             r.style.left = x + "px";
+    //             x += rBounding.width + PADDING;
 
-                if (x >= width - 25) {
-                    //We are going into a new row.
-                    x = xOrigin;
-                    y += maxHeight + PADDING;
-                    maxHeight = 0;
-                }
-            }
-        }
-    }
+    //             if (x >= width - 25) {
+    //                 //We are going into a new row.
+    //                 x = xOrigin;
+    //                 y += maxHeight + PADDING;
+    //                 maxHeight = 0;
+    //             }
+    //         }
+    //     }
+    // }
 
     // Initialize event handlers
     wb.initializeDragHandlers = function(){
@@ -569,7 +554,7 @@
         Event.on('.content', 'touchend', null, drag.end);
         // TODO: A way to cancel touch drag?
         // REFACTOR: Move Scratchpad code to own file
-        Event.on('.content', 'dblclick', '.scratchpad', arrangeScratchpad);
+        // Event.on('.content', 'dblclick', '.scratchpad', arrangeScratchpad);
         Event.on('.content', 'click', '.blocks-menu .block', menuToScratchpad);
         Event.on('.content', 'mousedown', '.block', drag.init);
         Event.on('.content', 'mousemove', null, drag.dragging);

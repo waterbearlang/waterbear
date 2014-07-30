@@ -17,9 +17,19 @@
 	cursor: auto;
 }
 
+.scratchhint{
+    position:absolute;
+    left: 0;
+    top: 0;
+}
 
 .blocks-menu .block *, .scratchpad .block * {
     pointer-events: none;
+}
+
+.scratchpad .block{
+    float: none;
+    clear: none;
 }
 
 .scripts-workspace > .block, .submenu > .block{
@@ -404,7 +414,7 @@
 }
 
 #search_text {
-  width: calc(100% - 40px);
+  width: calc(100% - 45px);
 }
 
 #search_clear {

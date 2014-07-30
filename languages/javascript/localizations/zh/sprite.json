@@ -1,7 +1,7 @@
 {
     "sectionkey": "sprites",
-    "name": "Sprites",
-    "help": "Sprites are graphics that can be repositioned, rotated, and have a vector of motion. They can also check for collision with other Sprites.",
+    "name": "精靈",
+    "help": "精靈指可移動和旋轉的影像。精靈亦可用於碰撞檢測。",
     "blocks": [
         {
             "blocktype": "step",
@@ -63,7 +63,7 @@
                     "type": "sprite"
                 }
             ],
-            "help": "create a simple rectangle sprite",
+            "help": "建立一個簡單的矩形精靈",
             "sockets": [
                 {
                     "name": "rectangle sprite##",
@@ -98,7 +98,7 @@
                     "type": "sprite"
                 }
             ],
-            "help": "create a simple image sprite",
+            "help": "建立一個簡單的圖像精靈",
             "sockets": [
                 {
                     "name": "image sprite##",
@@ -133,7 +133,7 @@
                     "type": "sprite"
                 }
             ],
-            "help": "create a simple text sprite",
+            "help": "建立一個簡單的文字精靈",
             "sockets": [
                 {
                     "name": "text sprite##",
@@ -178,7 +178,7 @@
                     "type": "sprite"
                 }
             ],
-            "help": "create a simple rectangle sprite",
+            "help": "建立一個簡單的圖像精靈",
             "sockets": [
                 {
                     "name": "shape sprite##",

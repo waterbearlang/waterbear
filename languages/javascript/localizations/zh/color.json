@@ -1,16 +1,16 @@
 {
     "sectionkey": "color",
-    "name": "Color",
-    "help": "Color blocks are for creating, converting, and manipulating colors",
+    "name": "色彩",
+    "help": "色彩方塊用於建立，轉換，和操作色彩。",
     "blocks": [
         {
             "blocktype": "step",
             "id": "01e39af1-679d-4b4d-b30e-a093a2687063",
             "script": "local.ctx.shadowColor = {{1}};",
-            "help": "set the shadow color",
+            "help": "設置陰影色彩",
             "sockets": [
                 {
-                    "name": "shadow color",
+                    "name": "陰影色彩",
                     "type": "color"
                 }
             ]
@@ -19,10 +19,10 @@
             "blocktype": "step",
             "id": "9286b647-2c6f-4fbe-ae92-3d0062bc438f",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "stroke color...",
+            "help": "設置線條色彩",
             "sockets": [
                 {
-                    "name": "stroke color",
+                    "name": "線條色彩",
                     "type": "color",
                     "value": "#000"
                 }
@@ -32,10 +32,10 @@
             "blocktype": "step",
             "id": "6fe550a9-c630-4876-950c-f727de27b7ae",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "fill color...",
+            "help": "填滿色彩",
             "sockets": [
                 {
-                    "name": "fill color",
+                    "name": "填滿色彩",
                     "type": "color",
                     "value": "#000"
                 }
@@ -46,20 +46,20 @@
             "id": "271c8b4c-b045-4ff9-8ad5-9608ea204b09",
             "script": "\"rgb(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \")\"",
             "type": "color",
-            "help": "returns a color",
+            "help": "紅綠藍 (RGB) 色彩",
             "sockets": [
                 {
-                    "name": "color with red",
+                    "name": "RGB色彩 紅",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "green",
+                    "name": "綠",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "blue",
+                    "name": "藍",
                     "type": "number",
                     "value": 0
                 }
@@ -70,25 +70,25 @@
             "id": "13236aef-cccd-42b3-a041-e26528174323",
             "script": "\"rgba(\" + {{1}} + \",\" + {{2}} + \",\" + {{3}} + \",\" + {{4}} + \")\"",
             "type": "color",
-            "help": "returns a semi-opaque color",
+            "help": "傳圖一個半透明的色彩",
             "sockets": [
                 {
-                    "name": "color with red",
+                    "name": "RGB色彩 紅",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "green",
+                    "name": "綠",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "blue",
+                    "name": "藍",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "alpha",
+                    "name": "透明度",
                     "type": "number",
                     "value": 0.1
                 }
@@ -99,20 +99,20 @@
             "id": "e9496816-4f7b-47d3-8c70-163df835230c",
             "type": "color",
             "script": "\"hsb({{1}}, {{2}}, {{3}})\"",
-            "help": "returns a color",
+            "help": "傳回一個色彩",
             "sockets": [
                 {
-                    "name": "color with hue",
+                    "name": "色彩 色相",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "saturation",
+                    "name": "飽和度",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "brightness",
+                    "name": "亮度",
                     "type": "number",
                     "value": 0
                 }
@@ -123,10 +123,10 @@
             "id": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f",
             "type": "color",
             "script": "\"rgb(\" + randint(0,255) + \",\" + randint(0,255) + \",\" + randint(0,255) + \")\"",
-            "help": "returns a random color",
+            "help": "傳回一個隨機色彩",
             "sockets": [
                 {
-                    "name": "random color"
+                    "name": "隨機色彩"
                 }
             ]
         },
@@ -134,10 +134,10 @@
             "blocktype": "step",
             "id": "c2d8442b-c9eb-45bb-8ca6-69f2e6d4c7c7",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "replaces stroke color or stroke pattern with gradient",
+            "help": "用漸變色取代線條色彩或圖樣",
             "sockets": [
                 {
-                    "name": "stroke gradient",
+                    "name": "線條漸變色",
                     "type": "gradient"
                 }
             ]
@@ -146,10 +146,10 @@
             "blocktype": "step",
             "id": "b80bc4ea-7f07-4dd5-b2f9-d8f09e0aca55",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "replaces fill color or fill pattern with gradient",
+            "help": "用漸變色取代填滿色彩或填滿圖樣",
             "sockets": [
                 {
-                    "name": "fill gradient",
+                    "name": "填滿漸變色",
                     "type": "gradient"
                 }
             ]
@@ -158,10 +158,10 @@
             "blocktype": "step",
             "id": "7fd65106-276d-43f3-b433-5ce6b750d511",
             "script": "local.ctx.strokeStyle = {{1}};",
-            "help": "replaces stroke color or stroke gradient with pattern",
+            "help": "用線條圖樣取代線條色彩或漸變色",
             "sockets": [
                 {
-                    "name": "stroke pattern",
+                    "name": "線條圖樣",
                     "type": "pattern"
                 }
             ]
@@ -170,7 +170,7 @@
             "blocktype": "step",
             "id": "9f54e5b1-f539-4005-bd8e-5b759e776bba",
             "script": "local.ctx.fillStyle = {{1}};",
-            "help": "replaces fill color or fill gradient with pattern",
+            "help": "用填滿圖樣取代填滿色彩或漸變色",
             "sockets": [
                 {
                     "name": "fill pattern",
@@ -270,13 +270,13 @@
             "blocktype": "step",
             "id": "3a6b43b7-3392-4f0d-b2b7-c5e1dc0cf501",
             "script": "local.pattern## = local.ctx.createPattern({{1}}, {{2}});",
-            "help": "create a pattern with the given html image",
+            "help": "以HTML圖像建立一個圖樣",
             "locals": [
                 {
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "pattern##"
+                            "name": "圖樣##"
                         }
                     ],
                     "script": "local.pattern##",
@@ -285,11 +285,12 @@
             ],
             "sockets": [
                 {
-                    "name": "create pattern## from image",
-                    "type": "image"
+                    "name": "從圖像",
+                    "type": "image",
+                    "suffix": "建立圖樣##"
                 },
                 {
-                    "name": "repeats",
+                    "name": "重複",
                     "type": "string",
                     "options": "repetition",
                     "value": "repeat"

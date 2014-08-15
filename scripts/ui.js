@@ -219,25 +219,29 @@ function handleShowButton(button, newView){
 	newView.style.transitionDuration = '0.5s';
 	newView.style.left = '0';
 	Event.once(document.body, 'transitionend', null, function(){
-		// console.log('transitionend: %o', oldView);
+		console.log('transitionend: %o', oldView);
 		oldView.style.transitionDuration = '0s';
 		oldView.style.left = '100%';
 	});
 }
 
 function showFiles(evt){
+    console.log('showFiles');
 	handleShowButton(evt.target, document.querySelector('.files'));
 }
 
 function showBlocks(evt){
+    console.log('showBlocks');
 	handleShowButton(evt.target, document.querySelector('.blocklist'));
 }
 
 function showScript(evt){
+    console.log('showScript');
 	handleShowButton(evt.target, document.querySelector('.workspace'));
 }
 
 function showResult(evt){
+    console.log('showResult');
 	handleShowButton(evt.target, document.querySelector('.result'));
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
@@ -248,7 +252,7 @@ Event.on('.block-menu', 'click', '.accordion-header', wb.accordion);
 // Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 
-if (document.body.clientWidth < 361){
+// if (document.body.clientWidth < 361){
 	// console.log('mobile view');
 	Event.on('.show-files', 'click', null, showFiles);
 	Event.on('.show-blocks', 'click', null, showBlocks);
@@ -256,7 +260,8 @@ if (document.body.clientWidth < 361){
 	Event.on('.show-result', 'click', null, showResult);
 	document.querySelector('.show-script').classList.add('current-button');
 	document.querySelector('.workspace').classList.add('current-view');
-}
+    console.log('Body is %s wide', document.body.clientWidth);
+// }
 if (document.body.clientWidth > 360){
 	// console.log('desktop view');
 	Event.on(document.body, 'change', 'input', updateScriptsView);

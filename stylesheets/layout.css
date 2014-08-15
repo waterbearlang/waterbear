@@ -242,9 +242,12 @@ ul.menu .show-ide{ display: none; }
         background-color: #FFF;
         color: #111111;
     }
+    .mobilenav button:active{
+        background-color: #F00;
+    }
     .mobilenav button.current-button{
         background-color: #111111;
-        color: #FFF;
+        color: #00F;
         pointer-events: none;
     }
     .content{

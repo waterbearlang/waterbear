@@ -18,7 +18,7 @@ var ideTemplate = fs.readFileSync('template/ide.html', 'utf8');
 var runtimeTemplate = fs.readFileSync('template/runtime.html', 'utf8');
 var ideStyles = ['workspace', 'layout', 'blocks', 'menu', 'fonts/font-awesome/css/font-awesome.min'];
 var runtimeStyles = [];
-var scripts_pre = ['wb', 'queryparams', 'util', 'event', 'persistence', 'drag', 'drag-wb', 'uuid', 'block', 'socket', 'search', 'file', 'undo', 'widget/accordion', 'widget/block_context_menu', 'widget/code_map', 'ui', 'blockprefs', 'menu', 'code_map'];
+var scripts_pre = ['wb', 'queryparams', 'util', 'event', 'persistence', 'drag', 'drag-wb', 'uuid', 'block', 'socket', 'search', 'file', 'undo', 'widget/accordion', 'widget/block_context_menu', /*'widget/codemap',*/ 'ui', 'menu'/*, 'codemap' */];
 var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {
@@ -29,7 +29,7 @@ var languages = fs.readdirSync('languages').filter(function(lang){
         return fs.statSync('languages/' + lang).isDirectory();
     });
 
-var config = {}; 
+var config = {};
 languages.forEach(function(lang){
     config[lang] = JSON.parse(fs.readFileSync('languages/' + lang + '/config.json'));
 });
@@ -113,7 +113,7 @@ function concat(src, dest, files, ext, suffix, before, after){
 //         append(fileStr, dest + '.js');
 
 //         scripts.forEach(function(scriptname){
-//             cat('scripts/' + scriptname + '.js', dest + '.js'); 
+//             cat('scripts/' + scriptname + '.js', dest + '.js');
 //         });
 
 //         // Build CSS
@@ -126,7 +126,7 @@ function concat(src, dest, files, ext, suffix, before, after){
 //         concat(src, dest + '.js', files, '.json', null, 'wb.menu(', ');');
 
 //         // Attach l10n file to end of javascript dist
-//         cat('scripts/' + 'l10n' + '.js', dest + '.js'); 
+//         cat('scripts/' + 'l10n' + '.js', dest + '.js');
 
 //         // Build runtime support
 //         if (lang === 'javascript' || lang === 'processingjs'){
@@ -137,7 +137,7 @@ function concat(src, dest, files, ext, suffix, before, after){
 //    buildHtmlFiles();
 // }
 
-// FIXME: examples, stage, and controls are basically the same function, 
+// FIXME: examples, stage, and controls are basically the same function,
 // make them actually the same function
 
 function template(name){

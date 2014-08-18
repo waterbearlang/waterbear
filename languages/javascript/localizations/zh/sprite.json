@@ -1,16 +1,16 @@
 {
     "sectionkey": "sprites",
     "name": "精靈",
-    "help": "精靈指可移動和旋轉的影像。精靈亦可用於碰撞檢測。",
+    "help": "精靈指可移動和旋轉的影像，並可用於碰撞檢測。",
     "blocks": [
         {
             "blocktype": "step",
             "id": "a5ec5438-a3e5-4949-a3d6-296f959670b1",
             "script": "local.ctx.save();local.ctx.fillStyle = {{1}};local.ctx.fillRect(0,0,global.stage_width, global.stage_height);local.ctx.restore();",
-            "help": "clear the stage to a solid color",
+            "help": "清除背景緩衝為純色",
             "sockets": [
                 {
-                    "name": "clear stage to color",
+                    "name": "清除背景為顏色",
                     "type": "color",
                     "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
@@ -20,15 +20,15 @@
             "blocktype": "step",
             "id": "44d98663-d4fd-4fc8-8b65-0cde22deced6",
             "script": "local.ctx.save();local.ctx.canvas.width = global.stage_width;local.ctx.canvas.height =  global.stage_height;var w = local.ctx.canvas.width;var h = local.ctx.canvas.height;var size = {{1}};local.ctx.beginPath();if (size <= 0){size = 0.1;};for (var x=0;x<=w;x+=size){local.ctx.moveTo(x,0);local.ctx.lineTo(x,h);};for (var y=0;y<=h;y+=size){local.ctx.moveTo(0,y);local.ctx.lineTo(w,y);};local.ctx.strokeStyle ={{2}};local.ctx.stroke();",
-            "help": "set a grid background",
+            "help": "設置方格背景",
             "sockets": [
                 {
-                    "name": "set grid with interval",
+                    "name": "設置方格間隔",
                     "type": "number",
                     "block": ""
                 },
                 {
-                    "name": "with color",
+                    "name": "與色彩",
                     "type": "point",
                     "block": "13236aef-cccd-42b3-a041-e26528174323"
                 }
@@ -38,10 +38,10 @@
             "blocktype": "step",
             "id": "9d6b3a43-8319-482e-b0f8-2ce0fe7c2f3a",
             "script": "local.ctx.drawImage(img, 0,0,img.width,img.height,0,0,global.stage_width,global.stage_height);",
-            "help": "clear the stage to a background image",
+            "help": "清除背景緩衝為圖像",
             "sockets": [
                 {
-                    "name": "clear stage to image",
+                    "name": "清除背景為圖像",
                     "type": "image"
                 }
             ]
@@ -56,7 +56,7 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "sprite##"
+                            "name": "精靈##"
                         }
                     ],
                     "script": "local.sprite##",
@@ -66,17 +66,17 @@
             "help": "建立一個簡單的矩形精靈",
             "sockets": [
                 {
-                    "name": "rectangle sprite##",
+                    "name": "矩形精靈 大小##",
                     "type": "size",
                     "block": "d8e71067-afc2-46be-8bb5-3527b36474d7"
                 },
                 {
-                    "name": "big at",
+                    "name": "在位置",
                     "type": "point",
                     "block": "29803c49-5bd5-4473-bff7-b3cf66ab9711"
                 },
                 {
-                    "name": "with color",
+                    "name": "與色彩",
                     "type": "color",
                     "block": "da9a266b-8ec0-4b97-bd79-b18dc7d4596f"
                 }
@@ -91,7 +91,7 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "sprite##"
+                            "name": "精靈##"
                         }
                     ],
                     "script": "local.sprite##",
@@ -101,17 +101,17 @@
             "help": "建立一個簡單的圖像精靈",
             "sockets": [
                 {
-                    "name": "image sprite##",
+                    "name": "圖像精靈 大小##",
                     "type": "size",
                     "block": ""
                 },
                 {
-                    "name": "big at",
+                    "name": "在位置",
                     "type": "point",
                     "block": ""
                 },
                 {
-                    "name": "with image",
+                    "name": "與色彩",
                     "type": "image",
                     "block": ""
                 }
@@ -126,7 +126,7 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "sprite##"
+                            "name": "精靈##"
                         }
                     ],
                     "script": "local.sprite##",
@@ -136,27 +136,27 @@
             "help": "建立一個簡單的文字精靈",
             "sockets": [
                 {
-                    "name": "text sprite##",
+                    "name": "文字精靈 大小##",
                     "type": "size",
                     "block": ""
                 },
                 {
-                    "name": "big at",
+                    "name": "在位置",
                     "type": "point",
                     "block": ""
                 },
                 {
-                    "name": "with block color",
+                    "name": "與方塊色彩",
                     "type": "color",
                     "block": ""
                 },
 				{
-                    "name": "with text",
+                    "name": "與文字",
                     "type": "string",
                     "block": ""
                 },
 				{
-                    "name": "with text color",
+                    "name": "與文字色彩",
                     "type": "color",
                     "block": ""
                 }
@@ -171,7 +171,7 @@
                     "blocktype": "expression",
                     "sockets": [
                         {
-                            "name": "sprite##"
+                            "name": "精靈##"
                         }
                     ],
                     "script": "local.sprite##",
@@ -181,12 +181,12 @@
             "help": "建立一個簡單的圖像精靈",
             "sockets": [
                 {
-                    "name": "shape sprite##",
+                    "name": "形狀精靈##",
                     "type": "shape",
                     "block": null
                 },
                 {
-                    "name": "with color",
+                    "name": "與色彩",
                     "type": "color",
                     "block": null
                 }
@@ -196,10 +196,10 @@
             "blocktype": "step",
             "id": "db5f8b4e-93f2-4f88-934b-5eb4bac40e0d",
             "script": "{{1}}.draw(local.ctx);",
-            "help": "draw the sprite at its current location",
+            "help": "在現在位置繪畫精靈",
             "sockets": [
                 {
-                    "name": "draw sprite",
+                    "name": "繪畫精靈",
                     "type": "sprite"
                 }
             ]
@@ -208,19 +208,19 @@
             "blocktype": "step",
             "id": "468e4180-2221-11e3-8224-0800200c9a66",
             "script": "{{1}}.setFacingDirectionBy({{2}});",
-            "help": "Rotate the sprites facing direction absolutely",
+            "help": "旋轉精靈到一個絕對的度數",
             "sockets": [
                 {
-                    "name": "Turn sprite",
+                    "name": "旋轉精靈",
                     "type": "sprite"
                 },
                 {
-                    "name": "by",
+                    "name": "到絕對",
                     "type": "number",
                     "value": 0
                 },
                 {
-                    "name": "degrees"
+                    "name": "度"
                 }
             ]
         },
@@ -228,17 +228,17 @@
             "blocktype": "step",
             "id": "69998440-22f4-11e3-8224-0800200c9a66",
             "script": "{{1}}.setFacingDirection({{2}});",
-            "help": "Rotate the sprites facing direction",
+            "help": "旋轉精靈到一個相對的度數",
             "sockets": [
                 {
-                    "name": "Turn sprite",
+                    "name": "旋轉精靈",
                     "type": "sprite"
                 },
                 {
-                    "name": "to",
+                    "name": "到",
                     "type": "number",
                     "value": 0,
-                    "suffix": "degrees"
+                    "suffix": "度"
                 }
             ]
         },

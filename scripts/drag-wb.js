@@ -61,7 +61,6 @@
         }
 
         deselectAllBlocks();
-
         selectedInAscOrder = false;
     }
 
@@ -86,11 +85,13 @@
             // Drag from block menu or local variables
             target.dataset.isTemplateBlock = 'true';
             templateDrag = true;
+            console.log('template drag');
 
              // Drag from local variables
              if (target.parentElement.classList.contains('locals')) {
                  target.dataset.isLocal = 'true';
                  localDrag = true;
+                 console.log('local drag');
             }
         }
 
@@ -123,6 +124,7 @@
             var index = selectedInAscOrder ? i : selectedBlocks.length - 1 - i;
             var clonedBlock = wb.block.clone(selectedBlocks[index]);
             Event.trigger(selectedBlocks[index], 'wb-clone');
+            console.log('everybody must get cloned');
             dragTarget.appendChild(clonedBlock);
         }
 
@@ -190,6 +192,7 @@
             // Select the block if it is not selected
             // Ignore the selection if it is already selected
             if (selectedBlocks.indexOf(target) == -1) {
+                console.log('selecting a single block');
                 deselectAllBlocks();
                 target.classList.add("selected");
                 selectedBlocks.push(target);
@@ -224,6 +227,7 @@
                 step = -1;
             }
 
+            console.log('selecting %s blocks', targetIndex - firstIndex);
             for (var i = firstIndex; i != targetIndex; i += step) {
                 nodes[i].classList.add("selected");
                 selectedBlocks.push(nodes[i]);
@@ -235,12 +239,14 @@
     }
 
     function deselectAllBlocks() {
+        console.log('deselect %s selected blocks', selectedBlocks.length);
         while (selectedBlocks.length > 0) {
             selectedBlocks.pop().classList.remove("selected");
         }
     }
 
     function deleteAllSelectedBlocks() {
+        console.log('delete %s selected blocks', selectedBlocks.length);
         for (var i = 0; i < selectedBlocks.length; i++) {
             selectedBlocks[i].classList.remove('selected');
             Event.trigger(selectedBlocks[i], 'wb-remove');
@@ -259,6 +265,7 @@
            // 3. Remove, if dragging a clone
            // 4. Move back to start position if not a clone (maybe not?)
         var childNodes = dragTarget.childNodes;
+        console.log('still template drag? %s', templateDrag);
 
         if (wb.overlap(dragTarget, blockMenu)) {
             // Delete block if dragged back to menu
@@ -311,6 +318,7 @@
 
         resetDragStyles();
         dragTarget.parentElement.removeChild(dragTarget);
+        reset();
     }
 
     function resetDragStyles() {
@@ -500,6 +508,7 @@
             console.log('cloning and sending');
             var cloned = wb.block.clone(wb.closest(event.target, '.block'));
             scratchpad.appendChild(cloned);
+            reset();
         }else{
             console.log('where are the clones? send in the clones!');
         }

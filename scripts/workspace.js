@@ -207,7 +207,7 @@
     }
 
     function handleScriptModify(event){
-        console.log('Script modified %o', event);
+        console.log('Script modified: node %s %s', event.detail.block, event.detail.type);
         // still need modified events for changing input values
         if (!wb.getState('scriptReady')) return;
         if (!wb.getState('scriptModified')){

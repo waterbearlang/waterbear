@@ -249,19 +249,15 @@ function showResult(evt){
 
 Event.on(document.body, 'change', 'input', changeSocket);
 Event.on('.block-menu', 'click', '.accordion-header', wb.accordion);
-// Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
 
 
-// if (document.body.clientWidth < 361){
-	// console.log('mobile view');
-	Event.on('.show-files', 'click', null, showFiles);
-	Event.on('.show-blocks', 'click', null, showBlocks);
-	Event.on('.show-script', 'click', null, showScript);
-	Event.on('.show-result', 'click', null, showResult);
-	document.querySelector('.show-script').classList.add('current-button');
-	document.querySelector('.workspace').classList.add('current-view');
-    console.log('Body is %s wide', document.body.clientWidth);
-// }
+Event.on('.show-files', 'click', null, showFiles);
+Event.on('.show-blocks', 'click', null, showBlocks);
+Event.on('.show-script', 'click', null, showScript);
+Event.on('.show-result', 'click', null, showResult);
+document.querySelector('.show-script').classList.add('current-button');
+document.querySelector('.workspace').classList.add('current-view');
+
 if (document.body.clientWidth > 360){
 	// console.log('desktop view');
 	Event.on(document.body, 'change', 'input', updateScriptsView);

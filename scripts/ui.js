@@ -226,22 +226,25 @@ function handleShowButton(button, newView){
 }
 
 function showFiles(evt){
-    console.log('showFiles');
+    console.log('show files');
 	handleShowButton(evt.target, document.querySelector('.files'));
 }
 
 function showBlocks(evt){
-    console.log('showBlocks');
+    console.log('show blocks');
 	handleShowButton(evt.target, document.querySelector('.blocklist'));
+    // handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
 }
 
 function showScript(evt){
-    console.log('showScript');
-	handleShowButton(evt.target, document.querySelector('.workspace'));
+    console.log('show blocks');
+	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
+    // handleShowButton(evt.target, document.querySelector('.workspace'));
 }
 
+
 function showResult(evt){
-    console.log('showResult');
+    console.log('show result');
 	handleShowButton(evt.target, document.querySelector('.result'));
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }

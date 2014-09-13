@@ -12,6 +12,7 @@
         ideReady: false,
         stageReady: false,
         scriptReady: false,
+        mobile: false,
         'tag-deprecated': false
     };
 
@@ -40,6 +41,9 @@
             Object.keys(savedState).forEach(function(key){
                 wb.state[key] = savedState[key];
             });
+        }
+        if (window.innerWidth < 360){
+            wb.state['mobile'] = true;
         }
         Event.trigger(document, 'wb-state-loaded', wb.state);
     }

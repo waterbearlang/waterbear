@@ -341,7 +341,7 @@
         if (wb.getState('ideReady') && wb.getState('stageReady') && !wb.getState('scriptReady')){
             wb.loadCurrentScripts(wb.urlToQueryParams(location.href));
         }
-        if (wb.getState('ideReady') && wb.getState('stageReady') && (wb.getState('scriptReady') || wb.getState('mobile')){
+        if (wb.getState('ideReady') && wb.getState('stageReady') && (wb.getState('scriptReady') || wb.getState('mobile'))){
             console.log('everything is ready');
             // wb.resizeStage();
             Event.trigger(document.body, 'wb-ready');

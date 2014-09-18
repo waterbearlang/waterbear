@@ -61,13 +61,13 @@
             }
         }
 
-        document.body.classList.add('running');
         if (wb.getState('scriptReady') && wb.getState('stageReady')){
             console.log('ready to run script, let us proceed to the running of said script');
         }else{
             console.log('not ready to run script yet, waiting: scriptReady: %s, stageReady: %s', wb.getState('scriptReady'), wb.getState('stageReady'));
             return;
         }
+        document.body.classList.add('running');
         // update size of frame
         wb.setState('isRunning', true);
         wb.setState('scriptModified', false);

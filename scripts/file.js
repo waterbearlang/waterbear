@@ -164,6 +164,7 @@
         }
         var blocks = fileObject.blocks.map(wb.block.create);
         if (!blocks.length){
+            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
             return wb.createWorkspace();
         }
         if (blocks.length > 1){

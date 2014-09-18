@@ -338,10 +338,10 @@
             case 'stage': wb.setState('stageReady', true); break;
             case 'script': wb.setState('scriptReady', true); break;
         }
-        if (wb.getState('ideReady') && wb.getState('stageReady') && !wb.getState('scriptReady')){
+        if (wb.getState('ideReady') && (wb.getState('stageReady') || wb.getState('mobile')) && !wb.getState('scriptReady')){
             wb.loadCurrentScripts(wb.urlToQueryParams(location.href));
         }
-        if (wb.getState('ideReady') && wb.getState('stageReady') && (wb.getState('scriptReady') || wb.getState('mobile'))){
+        if (wb.getState('ideReady') && wb.getState('scriptReady') && (wb.getState('stageReady') || wb.getState('mobile'))){
             console.log('everything is ready');
             // wb.resizeStage();
             Event.trigger(document.body, 'wb-ready');

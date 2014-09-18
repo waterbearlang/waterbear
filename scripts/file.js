@@ -212,7 +212,7 @@
     }
 
     function loadCurrentScripts(queryParsed){
-        // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
+        console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
         if (wb.loaded) return;
         wb.setState('scriptReady', false);
         Event.once(document.body, 'wb-ready', null, wb.onReady);

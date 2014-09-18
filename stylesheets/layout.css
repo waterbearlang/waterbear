@@ -1,79 +1,197 @@
-body{
-    display: -webkit-flex;
-    display: flex;
-   -webkit-flex-direction: column; /* works with row or column */
-   flex-direction: column;
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-.content{
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row; /* works with row or column */
-   flex-direction: row;
-   -webkit-flex: 1 0 0;
-   flex: 1 0 0;
+body, html{
+    height: 100%;
 }
+
+/*
+
+Desktop / Tablet
+
++--------------------------------------------------------------------------+
+|             titlebar                                                     |
++--------------------------------------------------------------------------+
+|             menubar                                                      |
++--------------------------------------------------------------------------+
+|--------------------------------------------------------------------------|
+||            content                                                     ||
+|| +------+------+ +-------------------------+ +--------------------------++
+|| | blocklist   | | workspace               | | result                    |
+|| |             | | +---------------------+ | | +--------------------+ +-++
+|| | ++--------+ | | | scratchpad          | | | | stage              | |c||
+|| | | search  | | | |                     | | | |                    | |o||
+|| | +---------+ | | +---------------------+ | | |                    | |d||
+|| | +---------+ | | +---------------------+ | | |                    | |e||
+|| | | block   | | | | hint                | | | |                    | |m||
+|| | |  -menu  | | | +---------------------+ | | |                    | |a||
+|| | |         | | | +---------------------+ | | +--------------------+ |p||
+|| | |         | | | | scripts-workspace   | | | +--------------------+ | ||
+|| | |         | | | |                     | | | | scripts-text-view  | | ||
+|| | |         | | | |                     | | | |                    | | ||
+|| | |         | | | |                     | | | |                    | | ||
+|| | |         | | | |                     | | | |                    | | ||
+|| | +---------+ | | +---------------------+ | | +--------------------+ +--|
+|| +-------------+ +-------------------------+ +---------------------------|
+|--------------------------------------------------------------------------|
++--------------------------------------------------------------------------+
+
+Mobile
+
+
+
+*/
 
 .titlebar{
-    -webkit-flex: 0 0 34px;
-    flex: 0 0 34px;
+    height: 34px;
 }
 
 .nav{
-    -webkit-flex: 0 0 37px;
-    flex: 0 0 37px;
+    height: 41px;
 }
 
-.block_menu_wrapper {
-    -webkit-flex: 0 0 300px;
-    flex: 0 0 300px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+.content{
+    height: calc(100% - 75px); /* 34 px titlebar, 41px menubar */
+    position: relative;
 }
 
-#search {
+.blocklist{
+    width: 300px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.search {
     height: 24px;
-    -webkit-flex: 0 0 24px;
-    flex: 0 0 24px;
 }
 
-#block_menu, #search_results {
+.block-menu, .search-result {
     height: calc(100% - 24px);
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
 }
 
 .workspace{
-    -webkit-flex: 3 0 0;
-    flex: 3 0 0;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+    width: calc(50% - 150px); /* 300px block menu / 2 */
+    height: 100%;
+    position: absolute;
+    left: 300px;
+    top: 0;
 }
 
 .scratchpad{
-    overflow: scroll;
+    height: 20%;
     position:relative;
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
+    overflow: scroll;
     background-color: #FFF;
     color: rgba(0,0,0,0.4);
 }
 
-.code_map{
+.hint{
+    height: 24px;
+}
+
+.scripts-workspace{
+    height: calc(70% - 24px);
+    position: relative;
+    overflow: auto;
+}
+
+.result{
+    width: calc(50% - 150px);/* 300px block menu / 2 */
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.result.hidden{
+    display: none;
+}
+
+.stage{
+    height: 50%;
+    position: relative;
+}
+
+.stageframe{
+    width: 100%;
+    height: 100%;
+}
+
+.scripts-text-view{
+    height: 50%;
+    overflow: auto;
+}
+
+.cm-container{
+    width: 122px;
+    height: calc(100% - 150px);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+/* ADJUST LAYOUT WHEN PANELS ARE HIDDEN */
+/* Yes, there is a combinatorial explosion here. So be it. */
+/* Panels:
+    content
+        blocklist
+        workspace
+            scratchpad
+            scripts-workspace
+        result
+            preview
+            scripts-text-view
+*/
+
+.no-codemap .cm-container{ display: none; }
+.no-blocklist .blocklist{ display: none; }
+.no-workspace .workspace{ display: none; }
+.no-stage .stage{ display: none; }
+.no-textview .scripts-text-view{ display: none; }
+
+.no-blocklist .workspace{ width: 50%; left: 0; }
+.no-blocklist .result{ width: 50%; }
+.no-stage.no-textview .workspace{ width: calc(100% - 300px); }
+.no-stage.no-textview.no-blocklist .workspace{ width: 100%; left: 0; }
+.no-workspace .result{ width: calc(100% - 300px); }
+.no-workspace.no-blocklist .result{ width: 100%; }
+.no-stage .scripts-text-view{ height: 100%; }
+.no-textview .stage{ height: 100%; }
+
+body.fullsize .blocklist,
+body.fullsize .workspace,
+body.fullsize .scripts-text-view{
+    display: none;
+}
+body.fullsize .result{
+    width: 100%;
+}
+body.fullsize .stage{
+    height: 100%;
+}
+
+
+.code-map{
     position: relative;
     overflow: visible;
     z-index: 10;
 }
 
-.code_map *{
+.code-map *{
     pointer-events: none;
 }
 
-.code_map .block.scripts_workspace {
+
+.code-map .block.scripts-workspace {
     -ms-transform-origin:0 0;
     -webkit-transform-origin:0 0;
     -moz-transform-origin: 0 0;
@@ -89,111 +207,63 @@ body{
 }
 
 
-#cm_container{
-    position: relative;
-    -webkit-flex: 1 0 0;
-    flex: 1 0 0;
-    z-index: 9;
-    overflow: auto;
-}
-
-
-#cm_canvas{
+.cm-canvas{
     width: 100%;
-    height:100%;
-    position:absolute;
-    pointer-events: none;
+    height: 100%;
+    position: absolute;
+    pointer-events: auto;
     z-index: 15;
 }
 
-.scripts_workspace{
-    -webkit-flex: 3 0 0;
-    flex: 3 0 0;
+
+.block-menu, .search-result, .workspace, .result, .files{
     overflow: auto;
 }
 
-.result{
-    -webkit-flex: 0 0 400px;
-    flex: 1 1 400px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-}
-
-.result.hidden{
-    display: none;
-}
-
-.stage{
-    -webkit-flex: 1 0 0;
-    flex: 1 0 0;
-    position: relative;
-}
+body.fullsize .run-full-size{ display: none; }
+body.fullsize ul.menu .show-ide{ display: inline-block; }
+ul.menu .show-ide{ display: none; }
 
 .stageframe{
     width: 100%;
     height: 100%;
 }
 
-.scripts_text_view{
-    -webkit-flex: 1 0 0;
-    flex: 1 0 0;
-    overflow: auto;
-}
-
-#block_menu, #search_results, .workspace, .result, .files{
-    overflow: auto;
-}
-
-body.result .block_menu_wrapper,
-body.result .workspace,
-body.result .scripts_text_view,
-body.result #cm_container,
-body.result ul.menu .run-full-size{
-    display: none;
-}
-body.result .stage, body.result stage.hidden{
-    display: block;
-}
-body.result ul.menu .show-ide{
-    display: inline-block;
-}
-ul.menu .show-ide{
-    display: none;
-}
-
-
 @media all and (max-width:360px) {
-    .nav, h1.title, .scripts_text_view{
+    .nav, h1.title, .scripts-text-view{
         display: none;
     }
     .mobilenav{
-        -webkit-flex: 0 0 30px;
-        flex: 0 0 30px;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-        order: 4;
+        height: 30px;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
     .mobilenav button{
-        -webkit-flex: 1 0 auto;
-        flex: 1 0 auto;
+        display: block;
+        float: left;
+        width: 25%;
+        height: 100%;
+        border: 2px outset #666;
+        border-radius: 4px;
         background-color: #FFF;
         color: #111111;
     }
+    .mobilenav button:active{
+        background-color: #F00;
+    }
     .mobilenav button.current-button{
         background-color: #111111;
-        color: #FFF;
+        color: #00F;
         pointer-events: none;
     }
     .content{
-        display: block;
+        height: calc(100% - 64px); /* 30px buttons + 34px titlebar */
         position: relative;
         overflow: hidden;
     }
-    .block_menu_wrapper, .workspace, .result, .files{
+    .blocklist, .workspace, .result, .files{
         display: block;
         position: absolute;
         width: 100%;
@@ -211,16 +281,25 @@ ul.menu .show-ide{
         height: 100%;
         overflow: auto;
     }
+
+    .files{
+        background-color: #000;
+    }
+
     .files button{
         width: 100%;
-        height: 30px;
+        height: calc(20% - 4px);
+        color: #EEE;
+        margin-bottom: 5px;
         font-size: 24px;
-        line-height: 30px;
+        line-height: 20%;
         text-align: center;
+        border: 2px outset #666;
+        border-radius: 8px;
     }
 
     /* Never show code map in mobile view */
-    #cm_container {
+    .cm-container {
         display: none;
     }
 }

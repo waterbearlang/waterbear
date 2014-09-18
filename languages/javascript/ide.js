@@ -40,8 +40,8 @@
     // Bail if
     function runCurrentScripts(force){
         force = force === true; // ignore stray values like event objects
-        if (! (wb.getState('preview') ||  wb.getState('fullSize')) ){
-            console.log('false alarm: preview: %s, fullSize: %s', wb.getState('preview'), wb.getState('fullSize'));
+        if (! (wb.getState('preview') ||  wb.getState('fullsize')) ){
+            console.log('false alarm: preview: %s, fullsize: %s', wb.getState('preview'), wb.getState('fullsize'));
             // false alarm, we were notified of a script change, but user hasn't asked us to restart script
             return;
         }
@@ -52,7 +52,7 @@
         //     // Problem: we're getting script cleared events on startup. Why?
         //     // return;
         // }
-        var blocks = wb.findAll(document.body, '.scripts_workspace');
+        var blocks = wb.findAll(document.body, '.scripts-workspace');
 
         for (var i=0; i < blocks.length; i++){
             if (!wb.block.validate(blocks[i])){
@@ -61,13 +61,13 @@
             }
         }
 
-        document.body.classList.add('running');
         if (wb.getState('scriptReady') && wb.getState('stageReady')){
             console.log('ready to run script, let us proceed to the running of said script');
         }else{
             console.log('not ready to run script yet, waiting: scriptReady: %s, stageReady: %s', wb.getState('scriptReady'), wb.getState('stageReady'));
             return;
         }
+        document.body.classList.add('running');
         // update size of frame
         wb.setState('isRunning', true);
         wb.setState('scriptModified', false);

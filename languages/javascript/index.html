@@ -127,23 +127,20 @@
                 <button class="views">View&#x25BE;</button>
                 <ul class="sub-menu">
                     <li>
-                        <button class="toggle" data-target="block_menu_wrapper">Blocks Menu</button>
+                        <button class="toggle" data-target="blocklist">Blocks Menu</button>
                     </li>
                     <li>
-                        <button class="toggle" data-target="scripts_workspace">Scripts Workspace</button>
-                    </li>
-                    <li>
-                        <button class="toggle" data-target="scratchpad">Scratchpad</button>
+                        <button class="toggle" data-target="workspace">Scripts Workspace</button>
                     </li>
                     <li>
                         <button class="toggle" data-target="stage">Preview</button>
                     </li>
                     <li>
-                        <button class="toggle" data-target="scripts_text_view">Text Script</button>
+                        <button class="toggle" data-target="textview">Text Script</button>
                     </li>
-                    <li>
-                        <button class="toggle" data-target="code_map">Code Map</button>
-                    </li>
+                    <!--li>
+                        <button class="toggle" data-target="codemap">Code Map</button>
+                    </li-->
                     <li class='separator'>
                         <button class="run-full-size">Run Full Size</button>
                         <button class="show-ide">Show IDE</button>
@@ -174,8 +171,8 @@
 
         </ul>
     </nav>
-    <div id="context_menu"></div>
-    <div id="block_menu_load">
+    <div class="context-menu"></div>
+    <div class="block-menu-load">
         Loading...
     </div>
     <div class="content">
@@ -186,8 +183,8 @@
             <button class="save_scripts">Save Gist</button>
             <button class="download_scripts">Save File</button>
         </div>
-        <div class="block_menu_wrapper">
-            <div id="search">
+        <div class="blocklist">
+            <div class="search">
                 <form>
                     <label for="search_text"><i class="fa fa-search"></i></label>
                     <input id="search_text" type="search" placeholder="search" list="search_suggestions" />
@@ -195,11 +192,16 @@
                     <datalist id="search_suggestions"></datalist>
                 </form>
             </div>
-            <div id="search_results" class="hidden"></div>
-            <div id="block_menu" class="blocks-menu"></div>
+            <div class="search-result hidden"></div>
+            <div class="block-menu blocks-menu"></div>
         </div>
         <div class="workspace">
-            <div class="scratchpad hidden">Scratch space, drag blocks here to re-use</div>
+            <div class="scratchpad"><span class="scratchhint">Scratch space, drag blocks here to re-use</span></div>
+            <div class="hint">Hints go here</div>
+            <!--div class="cm-container">
+                <canvas class="cm-canvas"></canvas>
+                <div class="code-map"></div>
+            </div-->
         </div>
         <script>
     function receiveMessage(event){
@@ -215,12 +217,9 @@
 <div class="result">
 	<div class="stage">
 	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
-	<div class="scripts_text_view"></div>
+	<div class="scripts-text-view"></div>
 </div>
 
-        <div id="cm_container">
-        <canvas id="cm_canvas"></canvas>
-        <div class="code_map"></div>
         </div>
     </div>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>

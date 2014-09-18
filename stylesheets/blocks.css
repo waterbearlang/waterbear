@@ -17,12 +17,22 @@
 	cursor: auto;
 }
 
+.scratchhint{
+    position:absolute;
+    left: 0;
+    top: 0;
+}
 
-.blocks-menu .block * {
+.blocks-menu .block *, .scratchpad .block * {
     pointer-events: none;
 }
 
-.scripts_workspace > .block, .submenu > .block{
+.scratchpad .block{
+    float: none;
+    clear: none;
+}
+
+.scripts-workspace > .block, .submenu > .block{
   margin-bottom: 15px;
 }
 
@@ -48,7 +58,7 @@
   text-align: right;
 }
 
-.scripts_workspace > .label >  .socket{
+.scripts-workspace > .label >  .socket{
   text-align: left;
 }
 
@@ -79,7 +89,7 @@
     margin: 5px;
 }
 
-.block-menu .locals, [data-closed] .locals{
+.block-menu .locals, [data-closed] .locals, .scratchpad .locals{
   display: none;
 }
 
@@ -187,10 +197,6 @@
   margin-right: auto;
   width: 16px;
   height: 5px;
-  -webkit-border-top-right-radius: 4px;
-  -webkit-border-top-left-radius: 4px;
-  -moz-border-radius-topright: 4px;
-  -moz-border-radius-topleft: 4px;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
   border-width: 2px 2px 0 2px;
@@ -232,10 +238,6 @@
   margin-bottom: 0;
   padding-bottom: 10px;
   overflow: visible;
-  -webkit-border-top-left-radius: 10px;
-  -webkit-border-bottom-left-radius: 10px;
-  -moz-border-radius-topleft: 10px;
-  -moz-border-radius-bottomleft: 10px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border-width: 2px 0 2px 2px;
@@ -256,7 +258,7 @@
   visibility: hidden;
 }
 
-.block-menu .contained, [data-closed] .contained{
+.block-menu .contained, [data-closed] .contained, .scratchpad .contained{
   display: none;
 }
 
@@ -316,36 +318,36 @@
     margin: 0;
 }
 
-.scripts_workspace > .block{
+.scripts-workspace > .block{
     display: block;
 }
 
-.block.scripts_workspace{
+.block.scripts-workspace{
     width: 100%;
     height: calc(100% - 36px); /* 36px refers to height of tabbar class */
     margin: 0px;
     padding: 0px;
 }
-.block.scripts_workspace{
+.block.scripts-workspace{
     width: 100%;
     max-width: 100%;
     border: 0;
 }
-.block.scripts_workspace:before{
+.block.scripts-workspace:before{
     content: none;
 }
-.block.scripts_workspace > .contained{
+.block.scripts-workspace > .contained{
     border: 0;
 }
-.block.scripts_workspace > .contained:before{
+.block.scripts-workspace > .contained:before{
     content: none;
 }
-.block.scripts_workspace > .label > .block-menu {
+.block.scripts-workspace > .label > .block-menu {
     border: 1px solid black;
     border-radius: 5px;
 }
 
-.block.scripts_workspace:after{
+.block.scripts-workspace:after{
   content: none;
 }
 
@@ -353,7 +355,7 @@
   width: 1em;
   height: 1em;
   margin-right: 1em;
-  margin-left -1em;
+  margin-left: -1em;
   display: inline-block;
   cursor: pointer;
 }
@@ -366,84 +368,74 @@
   content: "▶"
 }
 
-.block-menu .disclosure{
+.block-menu .disclosure, .scratchpad .disclosure{
   display: none;
 }
 
-#block_menu .accordion-header.hidden,
-#block_menu.settings .accordion-body,
-#block_menu .accordion-header.hidden + .accordion-body {
+.block-menu .accordion-header.hidden,
+.block-menu.settings .accordion-body,
+.block-menu .accordion-header.hidden + .accordion-body {
 	display: none;
 }
 
-#block_menu.settings .accordion-header.hidden {
+.block-menu.settings .accordion-header.hidden {
 	display:block;
 	opacity:0.5;
 }
 
 /* Search filter */
 
-#search form {
+.search form {
   width: 100%;
   border: 1px solid #CCC;
   display: inline-block;
-  display: -webkit-inline-flex;
-  display: inline-flex;
-	-webkit-flex-direction: row;
-  flex-direction: row;
 }
 
-#search form > * {
+.search form > * {
   border: 0;
   outline: 0;
   height: 24px;
   background-color: transparent;
 }
 
-#search form datalist {
+.search form datalist {
   display: none;
 }
 
-#search form label {
+.search form label {
   width: 20px;
-  -webkit-flex: 0 0 20px;
-  flex: 0 0 20px;
   text-align: center;
   color: #CCC;
 }
 
-#search form label i {
+.search form label i {
   margin: auto;
   vertical-align: middle;
 }
 
 #search_text {
-  width: calc(100% - 40px);
-  -webkit-flex: 0 0 auto;
-  flex: 1 1 auto;
+  width: calc(100% - 45px);
 }
 
 #search_clear {
   width: 20px;
-  -webkit-flex: 0 0 20px;
-  flex: 0 0 20px;
   font-family: 'FontAwesome';
   color: #CCC;
 }
 
-.search_result {
+.search-result {
   border-left-style: solid;
   border-left-width: 4px;
   padding: 12px;
 }
 
-.search_result .keyword {
+.search-result .keyword {
   display: block;
   color: #999;
   font-size: 0.8em;
 }
 
-.search_result .keyword .match {
+.search-result .keyword .match {
   color: darkgreen;
 }
 

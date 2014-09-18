@@ -7,16 +7,17 @@
         autorun: false,
         scriptModified: true,
         isRunning: false,
-        fullSize: false,
+        fullsize: false,
         ready: false,
         ideReady: false,
         stageReady: false,
         scriptReady: false,
+        mobile: false,
         'tag-deprecated': false
     };
 
     // these are transient state we store here for convenience, but don't persist
-    var volotile = ['scriptModified', 'stageReady', 'ideReady', 'scriptReady', 'isRunning', 'fullSize'];
+    var volotile = ['scriptModified', 'stageReady', 'ideReady', 'scriptReady', 'mobile', 'isRunning', 'fullsize'];
 
     function getState(name){
         if (wb.state[name] === undefined){
@@ -40,6 +41,9 @@
             Object.keys(savedState).forEach(function(key){
                 wb.state[key] = savedState[key];
             });
+        }
+        if (window.innerWidth < 360){
+            wb.state['mobile'] = true;
         }
         Event.trigger(document, 'wb-state-loaded', wb.state);
     }

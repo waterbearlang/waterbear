@@ -4,7 +4,7 @@
 function thirtyPercent(evt) {
 	wb.cm_percent  = 0.3;
 	wb.drawRectForViewPort();
-	var element = document.querySelector('.code_map');
+	var element = document.querySelector('.code-map');
 	var transfromString = ("scale(0.3, 0.3)");
     // now attach that variable to each prefixed style
     element.style.webkitTransform = transfromString;
@@ -18,7 +18,7 @@ function thirtyPercent(evt) {
 function fiftyPercent(evt) {
 	wb.cm_percent  = 0.5;
 	wb.drawRectForViewPort();
-	var element = document.querySelector('.code_map');
+	var element = document.querySelector('.code-map');
 	var transfromString = ("scale(0.5, 0.5)");
     // now attach that variable to each prefixed style
     element.style.webkitTransform = transfromString;
@@ -31,7 +31,7 @@ function fiftyPercent(evt) {
 function seventyPercent(evt) {
 	wb.cm_percent  = 0.7;
 	wb.drawRectForViewPort();
-	var element = document.querySelector('.code_map');
+	var element = document.querySelector('.code-map');
 	var transfromString = ("scale(0.7, 0.7)");
     // now attach that variable to each prefixed style
     element.style.webkitTransform = transfromString;
@@ -44,7 +44,7 @@ function seventyPercent(evt) {
 function hundredPercent(evt) {
 	wb.cm_percent  = 1;
 	wb.drawRectForViewPort();
-	var element = document.querySelector('.code_map');
+	var element = document.querySelector('.code-map');
 	var transfromString = ("scale(1, 1)");
     // now attach that variable to each prefixed style
     element.style.webkitTransform = transfromString;

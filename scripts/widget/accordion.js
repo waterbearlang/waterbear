@@ -5,7 +5,7 @@
 
 function accordion(event){
     event.preventDefault();
-    var open = document.querySelector('#block_menu .open');
+    var open = document.querySelector('.block-menu .open');
     if (open){
         open.classList.remove('open');
     }

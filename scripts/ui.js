@@ -29,8 +29,8 @@ function runUpdateForScriptsView(){
 	if (!textScriptNeedsUpdate){
 		return;
 	}
-    var blocks = wb.findAll(document.body, '.scripts_workspace');
-    var view = wb.find(document.body, '.scripts_text_view');
+    var blocks = wb.findAll(document.body, '.scripts-workspace');
+    var view = wb.find(document.body, '.scripts-text-view');
     wb.writeScript(blocks, view);
     textScriptNeedsUpdate = false;
 }
@@ -128,7 +128,7 @@ function edit_menu(title, sectionKey, specs, help, show){
         var header = wb.elem('h3', {'class': sectionKey + ' accordion-header', 'id': 'group_'+sectionKey}, title);
         submenu = wb.elem('div', {'class': 'submenu block-menu accordion-body'});
         var description = wb.elem('p', {'class': 'accordion-description'}, help);
-        var blockmenu = document.querySelector('#block_menu');
+        var blockmenu = document.querySelector('.block-menu');
         blockmenu.appendChild(header);
         blockmenu.appendChild(submenu);
         submenu.appendChild(description);
@@ -219,44 +219,48 @@ function handleShowButton(button, newView){
 	newView.style.transitionDuration = '0.5s';
 	newView.style.left = '0';
 	Event.once(document.body, 'transitionend', null, function(){
-		// console.log('transitionend: %o', oldView);
+		console.log('transitionend: %o', oldView);
 		oldView.style.transitionDuration = '0s';
 		oldView.style.left = '100%';
 	});
 }
 
 function showFiles(evt){
+    console.log('show files');
 	handleShowButton(evt.target, document.querySelector('.files'));
 }
 
 function showBlocks(evt){
-	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
+    console.log('show blocks');
+	handleShowButton(evt.target, document.querySelector('.blocklist'));
+    // handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
 }
 
 function showScript(evt){
+    console.log('show scripts');
 	handleShowButton(evt.target, document.querySelector('.workspace'));
+    // handleShowButton(evt.target, document.querySelector('.workspace'));
 }
 
+
 function showResult(evt){
+    console.log('show result');
 	handleShowButton(evt.target, document.querySelector('.result'));
 	Event.once(document.body, 'transitionend', null, wb.runCurrentScripts);
 }
 
 
 Event.on(document.body, 'change', 'input', changeSocket);
-Event.on('#block_menu', 'click', '.accordion-header', wb.accordion);
-// Event.on('.tabbar', 'click', '.chrome_tab', tabSelect);
+Event.on('.block-menu', 'click', '.accordion-header', wb.accordion);
 
 
-if (document.body.clientWidth < 361){
-	// console.log('mobile view');
-	Event.on('.show-files', 'click', null, showFiles);
-	Event.on('.show-blocks', 'click', null, showBlocks);
-	Event.on('.show-script', 'click', null, showScript);
-	Event.on('.show-result', 'click', null, showResult);
-	document.querySelector('.show-script').classList.add('current-button');
-	document.querySelector('.workspace').classList.add('current-view');
-}
+Event.on('.show-files', 'click', null, showFiles);
+Event.on('.show-blocks', 'click', null, showBlocks);
+Event.on('.show-script', 'click', null, showScript);
+Event.on('.show-result', 'click', null, showResult);
+document.querySelector('.show-script').classList.add('current-button');
+document.querySelector('.workspace').classList.add('current-view');
+
 if (document.body.clientWidth > 360){
 	// console.log('desktop view');
 	Event.on(document.body, 'change', 'input', updateScriptsView);

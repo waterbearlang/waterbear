@@ -173,7 +173,7 @@ function cmenuitem_enabled(menuitem) {
 function buildContextMenu(options) {
 	// console.log('building context menu');
 	// console.log(options);
-	var contextDiv = document.getElementById('context_menu');
+	var contextDiv = document.querySelector('.context-menu');
 	contextDiv.innerHTML = '';
 	var menu = document.createElement('ul');
 	var item;
@@ -210,8 +210,8 @@ function stackTrace() {
 }
 
 function closeContextMenu(evt) {
-	var contextDiv = document.getElementById('context_menu');
-	if(!wb.matches(evt.target, '#context_menu *')) {
+	var contextDiv = document.querySelector('.context-menu');
+	if(!wb.matches(evt.target, '.context-menu *')) {
 		contextDiv.style.display = 'none';
 	}
 }
@@ -219,22 +219,22 @@ function closeContextMenu(evt) {
 function handleContextMenu(evt) {
 	var block = wb.closest(evt.target, '.block');
 	if (!block){ return; }
-	var cm_cont = document.getElementById('cm_container');
+	var cm_cont = document.querySelector('.cm-container');
 	// console.log('handling context menu');
 	stackTrace();
 	//if(!showContext) return;
 	// console.log(evt.clientX, evt.clientY);
 	// console.log(evt.target);
-	if(cmenuDisabled || wb.matches(evt.target, '#block_menu_wrapper *')) return;
+	if(cmenuDisabled || wb.matches(evt.target, '.blocklist *')) return;
 	else if(false);
 	else if(wb.overlap(evt.target, cm_cont)){
 		setContextMenuTarget(evt.target);
-		if(cmenuTarget == null){ return };
+		if(cmenuTarget === null){ return; }
 		if( wb.matches(cmenuTarget, '.cloned') || wb.matches(cmenuTarget, '.holder')){
 			buildContextMenu(cm_cmenu);
 		}else return;
 	}
-	else if(wb.matches(evt.target, '.block:not(.scripts_workspace) *')) {
+	else if(wb.matches(evt.target, '.block:not(.scripts-workspace) *')) {
 		setContextMenuTarget(evt.target);
 		buildContextMenu(block_cmenu);
 		}
@@ -258,7 +258,7 @@ function setContextMenuTarget(target) {
 
 function showContextMenu(atX, atY) {
 	// console.log('showing context menu');
-	var contextDiv = document.getElementById('context_menu');
+	var contextDiv = document.querySelector('.context-menu');
 	contextDiv.style.display = 'block';
 	contextDiv.style.left = atX + 'px';
 	contextDiv.style.top = atY + 'px';
@@ -268,7 +268,7 @@ function cmenuCallback(fcn) {
 	return function(evt) {
 		// console.log(cmenuTarget);
 		fcn.call(cmenuTarget,evt);
-		var contextDiv = document.getElementById('context_menu');
+		var contextDiv = document.querySelector('.context-menu');
 		contextDiv.style.display = 'none';
 		evt.preventDefault();
 	};
@@ -278,7 +278,7 @@ function disableContextMenu(evt) {
 	cmenuDisabled = true;
 	var enableBtn = document.querySelector('.cmenuEnable');
 	enableBtn.style.display = '';
-	var contextDiv = document.getElementById('context_menu');
+	var contextDiv = document.querySelector('.context-menu');
 	contextDiv.style.display = 'none';
 }
 

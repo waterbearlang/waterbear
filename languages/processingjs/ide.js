@@ -34,8 +34,8 @@
             return;
         }
         document.body.classList.add('running');
-                
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+
+        var blocks = wb.findAll(document.body, '.workspace .scripts-workspace');
         wb.runScript( wb.prettyScript(blocks) );
     }
     wb.runCurrentScripts = runCurrentScripts;

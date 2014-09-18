@@ -26,8 +26,8 @@
 
     function clearScripts(event, force){
         if (force || confirm('Throw out the current script?')){
-            wb.clearCodeMap();
-            var workspace = document.querySelector('.scripts_workspace');
+            // wb.clearCodeMap();
+            var workspace = document.querySelector('.scripts-workspace');
             var path = location.href.split('?')[0];
             history.pushState(null, '', path);
             workspace.parentElement.removeChild(workspace);
@@ -36,7 +36,7 @@
             wb.loaded = false;
             wb.clearStage();
             createWorkspace('Workspace');
-            document.querySelector('.scripts_text_view').innerHTML = '';
+            document.querySelector('.scripts-text-view').innerHTML = '';
             wb.history.clear();
             wb.block.resetSeqNum();
             delete localStorage['__' + wb.language + '_current_scripts'];
@@ -51,7 +51,7 @@
         wb.loadScriptsFromExample(exampleName);
         Event.trigger(document.body, 'wb-state-change');
     }
-    
+
     function loadExample(event){
         var path = location.href.split('?')[0];
         var exampleName = event.target.dataset.example;
@@ -65,41 +65,35 @@
         }
     }
 
-    function resizeStage(){
-        var iframe = document.querySelector('.stageframe');
-        if (!iframe) return; // not all languages have one!
-        iframe.style.width = iframe.parentElement.clientWidth + 'px';
-        iframe.style.height = iframe.parentElement.clientHeight + 'px';
-    }
+    // function resizeStage(){
+    //     var iframe = document.querySelector('.stageframe');
+    //     if (!iframe) return; // not all languages have one!
+    //     iframe.style.width = iframe.parentElement.clientWidth + 'px';
+    //     iframe.style.height = iframe.parentElement.clientHeight + 'px';
+    // }
 
     function handleStateChange(){
         // hide loading spinner if needed
         wb.queryParams = wb.urlToQueryParams(location.href);
-        console.log('handleStateChange %o', wb.queryParams);
-        if (wb.queryParams.view === 'result'){
-            wb.setState('fullSize', true);
-            document.body.classList.add('result');
-            document.body.classList.remove('editor');
+        // console.log('handleStateChange %o', wb.queryParams);
+        if (wb.queryParams.view === 'fullsize'){
+            wb.setState('fullsize', true);
+            document.body.classList.add('fullsize');
             wb.enableMenuToggleControls(false);
-            wb.resizeStage();
+            // wb.resizeStage();
+            // REFACTOR: get rid of wb.view
             wb.view = 'result';
         }else{
-            document.body.classList.remove('result');
-            document.body.classList.add('editor');
-            wb.setState('fullSize', false);
+            document.body.classList.remove('fullsize');
+            wb.setState('fullsize', false);
             wb.enableMenuToggleControls(true);
             wb.view = 'editor';
         }
         // Are we embedded in an iframe? If so, show appropriate menu
-        if (window.parent !== window){
-            document.body.classList.add('embedded');
-        }else{
-            document.body.classList.remove('embedded');
-        }
-        if (wb.getState('scripts_text_view')){
+        if (wb.getState('scripts-text-view')){
             wb.updateScriptsView();
         }
-        if (wb.getState('stage') || wb.getState('fullSize')){
+        if (wb.getState('stage') || wb.getState('fullsize')){
             // console.log('run current scripts');
             // wb.setState('scriptModified', false);
             wb.runCurrentScripts();
@@ -110,16 +104,16 @@
     }
 
     function hideLoader(){
-        var loader = document.querySelector('#block_menu_load');
+        var loader = document.querySelector('.block-menu-load');
         if (loader){
             loader.parentElement.removeChild(loader);
-        }       
+        }
     }
 
     function historySwitchState(state, clearFiles){
         console.log('historySwitchState(%o, %s)', state, !!clearFiles);
         var params = wb.urlToQueryParams(location.href);
-        if (state !== 'result'){
+        if (state !== 'fullsize'){
             delete params.view;
         }else{
             params.view = state;
@@ -141,7 +135,7 @@
         console.log('createWorkspace');
         var id = uuid();
         var workspace = wb.block.create({
-            group: 'scripts_workspace',
+            group: 'scripts-workspace',
             id: id,
             scriptId: id,
             scopeId: id,
@@ -157,11 +151,11 @@
         });
         wb.wireUpWorkspace(workspace);
     }
-    
+
     function wireUpWorkspace(workspace){
         workspace.addEventListener('drop', wb.getFiles, false);
         workspace.addEventListener('dragover', function(event){event.preventDefault();}, false);
-        wb.findAll(document, '.scripts_workspace').forEach(function(ws){
+        wb.findAll(document, '.scripts-workspace').forEach(function(ws){
             ws.parentElement.removeChild(ws); // remove any pre-existing workspaces
         });
         document.querySelector('.workspace').appendChild(workspace);
@@ -169,7 +163,7 @@
         // wb.initializeDragHandlers();
         Event.trigger(workspace, 'wb-add');
         Event.trigger(document.body, 'wb-workspace-initialized');
-        wb.drawRectForViewPort();
+        // wb.drawRectForViewPort();
         workspace.addEventListener('scroll', wb.handleScrollChange, false);
     }
 
@@ -213,7 +207,7 @@
     }
 
     function handleScriptModify(event){
-        console.log('Script modified %o', event);
+        console.log('Script modified: node %s %s', event.detail.block, event.detail.type);
         // still need modified events for changing input values
         if (!wb.getState('scriptReady')) return;
         if (!wb.getState('scriptModified')){
@@ -223,74 +217,21 @@
     }
 
     function togglePanel(evt){
-        var component = wb.find(document.body, '.' + evt.detail.name);
-        if (!component) return;
+        var component = evt.detail.name;
         if (evt.detail.state){
-            wb.show(component);
+            document.body.classList.remove('no-' + component);
+            wb.setState(component, true);
+            if (component === 'stage'){
+                wb.runCurrentScripts();
+            }
         }else{
-            wb.hide(component);
+            document.body.classList.add('no-' + component);
+            wb.setState(component, false);
         }
-        var result = wb.find(document.body, '.result');
-        // Special cases
-        // console.log('togglePanel %s: %s', evt.detail.name, evt.detail.state);
-        switch(evt.detail.name){
-            case 'stage':
-                if (evt.detail.state){
-                    wb.show(result);
-                }else{
-                    if (wb.view !== 'result'){
-                        console.log('hide stage, so clear it too');
-                        wb.clearStage();
-                        wb.enableStageControls(false);
-                    }
-                    if (!wb.getState('scripts_text_view')){
-                        wb.hide(result);
-                        wb.enableStageControls(true);
-                    }
-                }
-                break;
-            case 'scripts_text_view':
-                if (evt.detail.state){
-                    wb.show(result);
-                    wb.updateScriptsView();
-                }else{
-                    if (!wb.getState('stage')){
-                        wb.hide(result);
-                    }
-                }
-                break;
-            case 'scratchpad':
-            case 'scripts_workspace':
-                if (! (wb.getState('scratchpad') || wb.getState('scripts_workspace'))){
-                    wb.hide(wb.find(document.body, '.workspace'));
-                }else{
-                    wb.show(wb.find(document.body, '.workspace'));
-                }
-                break;
-            case 'code_map':
-                // We should only be hiding panels like this when they contain multiple
-                // sub-panes. Move this to CSS or (better) make the whole code map an overlay
-                // on the scripts_workspace
-                if(!wb.getState('code_map')){
-                    wb.hide(wb.find(document.body, '#cm_container'));
-                }else{
-                    wb.show(wb.find(document.body, '#cm_container'));
-                }
-                break;
-            default:
-                // do nothing
-                break;
-        }
-        if (wb.getState('stage')){
-            // restart script on any toggle
-            // so it runs at the new size
-            // wb.runCurrentScripts();
-        }
-
     }
 
     function shouldAutorun(){
-        if (wb.getState('fullSize')) return true;
+        if (wb.getState('fullsize')) return true;
         if (wb.getState('autorun')) return true;
         return false;
     }
@@ -338,7 +279,7 @@
     });
     Event.on(document.body, 'wb-modified', null, handleScriptModify);
     Event.on('.run-full-size', 'click', null, function(){
-        wb.historySwitchState('result');
+        wb.historySwitchState('fullsize');
     });
     Event.on('.show-ide', 'click', null, function(){
         wb.historySwitchState('ide');
@@ -376,6 +317,12 @@
 
     function onReady(evt){
         hideLoader();
+        if (window.parent !== window){
+            document.body.classList.add('embedded');
+        }else{
+            document.body.classList.remove('embedded');
+        }
+
         if (wb.shouldAutorun()){
             wb.runCurrentScripts();
         }
@@ -391,20 +338,20 @@
             case 'stage': wb.setState('stageReady', true); break;
             case 'script': wb.setState('scriptReady', true); break;
         }
-        if (wb.getState('ideReady') && wb.getState('stageReady') && !wb.getState('scriptReady')){
+        if (wb.getState('ideReady') && (wb.getState('stageReady') || wb.getState('mobile')) && !wb.getState('scriptReady')){
             wb.loadCurrentScripts(wb.urlToQueryParams(location.href));
         }
-        if (wb.getState('ideReady') && wb.getState('stageReady') && wb.getState('scriptReady')){
+        if (wb.getState('ideReady') && wb.getState('scriptReady') && (wb.getState('stageReady') || wb.getState('mobile'))){
             console.log('everything is ready');
-            wb.resizeStage();
+            // wb.resizeStage();
             Event.trigger(document.body, 'wb-ready');
         }
     });
 
-    Event.on(window, 'resize', null, resizeStage);
+    // Event.on(window, 'resize', null, resizeStage);
 
     wb.onReady = onReady;
-    wb.resizeStage = resizeStage;
+    // wb.resizeStage = resizeStage;
     wb.language = location.pathname.split('/')[2];
     wb.shouldAutorun = shouldAutorun;
     wb.loaded = false;

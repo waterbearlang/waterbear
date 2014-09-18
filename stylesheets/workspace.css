@@ -23,7 +23,7 @@ input{
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.scripts_text_view {
+.scripts-text-view {
 	-webkit-touch-callout: text;
 	-webkit-user-select: text;
 	-khtml-user-select: text;
@@ -32,10 +32,14 @@ input{
 	user-select: text;
 }
 
-.scripts_text_view, .scratchpad, .scripts_workspace, .remote{
+.scripts-text-view, .scratchpad, .scripts-workspace, .remote{
 	margin: 5px;
 	border: 2px outset #333;
-	padding: 10px;	
+	padding: 10px;
+}
+
+.scripts-workspace > .label{
+    display: none;
 }
 
 .stage{
@@ -58,7 +62,7 @@ input{
 
 /* ACCORDION */
 
-#block_menu{
+.block-menu{
 	/*position: relative;*/
 	cursor: pointer;
 	margin-top: 1px;
@@ -153,7 +157,7 @@ h1.title {
 
 /* Context menu */
 
-#context_menu {
+.context-menu {
 	position: absolute;
 	z-index: 99;
 }

@@ -9,13 +9,13 @@
 <div class="result">
 	<div class="stage">
 	<iframe class="stageframe" seamless="seamless" src="runtime.html"></iframe></div>
-	<div class="scripts_text_view"></div>
+	<div class="scripts-text-view"></div>
 </div>
 <script>
 	var iframe = document.querySelector('.stageframe');
 	// Work around Chrome bug with iframes in flexbox
 	iframe.style.height = iframe.parentElement.clientHeight + 'px';
 	window.addEventListener('resize', function(evt){
-		iframe.style.height = iframe.parentElement.clientHeight + 'px';			
+		iframe.style.height = iframe.parentElement.clientHeight + 'px';
 	}, false);
 </script>

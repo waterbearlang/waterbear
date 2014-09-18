@@ -46,8 +46,8 @@ wb.requiredjs={"before":{}, "after":{}};
 
 
 function runCurrentScripts(event){
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
-        wb.runScript( wb.prettyScript(blocks) );        
+        var blocks = wb.findAll(document.body, '.workspace .scripts-workspace');
+        wb.runScript( wb.prettyScript(blocks) );
 }
 Event.on('.run-remote', 'click', null, runCurrentScripts);
 
@@ -77,7 +77,7 @@ wb.ajax = {
     };
 
 
-    
+
 wb.resetrun = function(message){
     var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = message;
@@ -86,7 +86,7 @@ wb.resetrun = function(message){
     //document.querySelector('.stop-remote').style.display = 'none';
     wb.hide(document.querySelector('.stop-remote'));
     wb.show(document.querySelector('.run-remote'));
-    
+
     //Event.remove('.stop-remote', 'click');
 
 };
@@ -95,29 +95,29 @@ function stringFromData(dat){
     var text = dat.map(function(chc){return String.fromCharCode(chc);}).join("");
     return text;
 }
-    
+
 wb.runScript = function(script){
 
     var aHost = window.location.host.split(":");
     var oSocket = new WebSocket("ws://"+aHost[0]+":8080/");
-    
+
     oSocket.bConnected = false;
-    
+
     var messagebox = document.querySelector('.messagebox');
     messagebox.innerHTML = "Connecting to Raspberry Pi";
-    
+
     oSocket.onerror = function(event) {
         messagebox.innerHTML = "Error Communicating with RPi";
         window.setTimeout(function(){messagebox.innerHTML = "";}, 5000);
     };
-    
+
     oSocket.onopen = function (event) {
         messagebox.innerHTML = "Sending Code to RPi";
-        oSocket.send(JSON.stringify({"command":"run","code":script})); 
+        oSocket.send(JSON.stringify({"command":"run","code":script}));
         oSocket.bConnected = true;
     };
-    
-    
+
+
     oSocket.onclose = function (event) {
         if(oSocket.bConnected)
         {
@@ -131,7 +131,7 @@ wb.runScript = function(script){
             wb.resetrun("Server Unavailable");
         }
     };
-    
+
     oSocket.onmessage = function(event) {
         var msg = JSON.parse(event.data);
         //console.log("msg =", msg);
@@ -144,7 +144,7 @@ wb.runScript = function(script){
                 var runbutton= document.querySelector('.run-remote');
                 wb.hide(runbutton);
                 wb.show(document.querySelector('.stop-remote'));
-                
+
                 Event.once('.stop-remote', 'click', null, function(){
                       oSocket.send(JSON.stringify({"command":"kill","pid":msg.pid}));
                 });
@@ -164,10 +164,10 @@ wb.runScript = function(script){
                 break;
             case "sterr":
                 messagebox.innerHTML = "Error Recieved " + stringFromData(msg.data);
-                break;    
+                break;
             case "stdout":
                 messagebox.innerHTML = "Data Recieved " + stringFromData(msg.data);
-                break;    
+                break;
         }
     };
 };
@@ -179,7 +179,7 @@ Event.on('.clear-stage', 'click', null, clearStage);
 Event.on('.edit-script', 'click', null, clearStage);
 
 
-    
+
     wb.groupsFromBlock = function(block){
         var group = block.dataset.group;
         var values = [];
@@ -190,7 +190,7 @@ Event.on('.edit-script', 'click', null, clearStage);
         }
 
         if (wb.matches(block, '.context')){
-            var children = wb.findChildren(wb.findChild(block, '.contained'), '.block');            
+            var children = wb.findChildren(wb.findChild(block, '.contained'), '.block');
             childValues = children.map(wb.groupsFromBlock);
             childValues.forEach(function(ar){
                 values = values.concat(ar);
@@ -198,34 +198,34 @@ Event.on('.edit-script', 'click', null, clearStage);
         }
         return values;
     };
-    
+
     wb.getGroupsFromElements = function(elements)
     {
         var blockgroups = elements.map(function(elem){
                 return wb.groupsFromBlock(elem);
             });
-      
+
         var groups = [];
         blockgroups.forEach(function(ar){
-                    groups = groups.concat(ar);             
+                    groups = groups.concat(ar);
             });
-        
+
         var uniquegroups = [];
         var usedgroups = {};
         groups.forEach(function(group){
             if(typeof usedgroups[group] === "undefined")
             {
                 usedgroups[group] = group;
-                uniquegroups.push(group);             
+                uniquegroups.push(group);
             }
         });
         return uniquegroups;
-    
+
     };
 
 wb.prettyScript = function(elements){
-    
-    var groups = wb.getGroupsFromElements(elements);    
+
+    var groups = wb.getGroupsFromElements(elements);
     var before = groups.map(function(group){
         var req = wb.requiredjs.before[group];
         if(typeof req !== "undefined")
@@ -234,7 +234,7 @@ wb.prettyScript = function(elements){
         }
         return "";
     }).join(" ")+ "\n// Your code starts here\n";
-    
+
     var after = "\n//Your code ends here\n"+groups.map(function(group){
         var req = wb.requiredjs.after[group];
         if(typeof req !== "undefined")
@@ -244,13 +244,13 @@ wb.prettyScript = function(elements){
         return "";
     }).join(" ")+"\n process.on('SIGINT', function(){process.exit(0);});";
     //"process.on('exit', function(){console.log(\"Ending\");});";
-    
+
     var script = elements.map(function(elem){
         return wb.block.code(elem);
     }).join('');
-    
+
     var pretty = js_beautify(before+script+after);
-    
+
     //script = "var Minecraft = require('./minecraft-pi/lib/minecraft.js');\nrequire('./waterbear/dist/minecraftjs_runtime.js');\nvar client = new Minecraft('localhost', 4711, function() {\nvar zeros={x:0, y:0, z:0};\n"+script+"\n});";
     return pretty;
 };
@@ -289,7 +289,7 @@ Event.on('.socket input', 'click', null, function(event){
 });
 
 
-/* TODO : 
+/* TODO :
 https://npmjs.org/package/omxcontrol
 https://npmjs.org/package/omxdirector
 https://npmjs.org/package/piglow

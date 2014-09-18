@@ -20,7 +20,7 @@
             // nothing to save
             return;
         }
-        document.querySelector('#block_menu').scrollIntoView();
+        document.querySelector('.block-menu').scrollIntoView();
         localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
     }
 
@@ -88,7 +88,7 @@
         if (!title){ title = ''; }
         if (!description){ description = ''; }
         if (!name){ name = 'Workspace';}
-        var blocks = wb.findAll(document.body, '.workspace .scripts_workspace');
+        var blocks = wb.findAll(document.body, '.workspace .scripts-workspace');
         var json = {
             title: title,
             description: description,
@@ -96,11 +96,12 @@
             waterbearVersion: '2.0',
             blocks: blocks.map(wb.block.description)
         };
-
-        if(json.blocks[0].sockets[0].name){
-            json.blocks[0].sockets[0].name = name;
-        }else if(json.blocks[0].sockets[0].uName){
-            json.blocks[0].sockets[0].uName = name;
+        if (json.blocks.length){
+            if(json.blocks[0].sockets[0].name){
+                json.blocks[0].sockets[0].name = name;
+            }else if(json.blocks[0].sockets[0].uName){
+                json.blocks[0].sockets[0].uName = name;
+            }
         }
 
         return JSON.stringify(json, null, '    ');
@@ -154,6 +155,7 @@
     function loadScriptsFromObject(fileObject){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
+        console.log('start loadScriptsFromObject');
         wb.setState('scriptReady', false);
         Event.once(document.body, 'wb-ready', null, wb.onReady);
         if (!fileObject){
@@ -162,6 +164,7 @@
         }
         var blocks = fileObject.blocks.map(wb.block.create);
         if (!blocks.length){
+            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
             return wb.createWorkspace();
         }
         if (blocks.length > 1){
@@ -174,6 +177,7 @@
         wb.loaded = true;
         console.log('initialize: script');
         Event.trigger(document.body, 'wb-initialize', {component: 'script'});
+        console.log('end loadScriptsFromObject');
     }
 
     function loadScriptsFromGist(gist){
@@ -208,7 +212,7 @@
     }
 
     function loadCurrentScripts(queryParsed){
-        // console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
+        console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
         if (wb.loaded) return;
         wb.setState('scriptReady', false);
         Event.once(document.body, 'wb-ready', null, wb.onReady);
@@ -229,7 +233,8 @@
                 loadScriptsFromObject(fileObject);
             }
         }else{
-            //console.log('no script to load, starting a new script');  
+            console.log('no script to load, starting a new script');
+            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
             wb.createWorkspace('Workspace');
         }
         wb.loaded = true;

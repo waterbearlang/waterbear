@@ -154,6 +154,7 @@
     function loadScriptsFromObject(fileObject){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
+        console.log('start loadScriptsFromObject');
         wb.setState('scriptReady', false);
         Event.once(document.body, 'wb-ready', null, wb.onReady);
         if (!fileObject){
@@ -174,6 +175,7 @@
         wb.loaded = true;
         console.log('initialize: script');
         Event.trigger(document.body, 'wb-initialize', {component: 'script'});
+        console.log('end loadScriptsFromObject');
     }
 
     function loadScriptsFromGist(gist){

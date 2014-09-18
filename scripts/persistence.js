@@ -17,7 +17,7 @@
     };
 
     // these are transient state we store here for convenience, but don't persist
-    var volotile = ['scriptModified', 'stageReady', 'ideReady', 'scriptReady', 'isRunning', 'fullsize'];
+    var volotile = ['scriptModified', 'stageReady', 'ideReady', 'scriptReady', 'mobile', 'isRunning', 'fullsize'];
 
     function getState(name){
         if (wb.state[name] === undefined){

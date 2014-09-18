@@ -237,8 +237,8 @@ function showBlocks(evt){
 }
 
 function showScript(evt){
-    console.log('show blocks');
-	handleShowButton(evt.target, document.querySelector('.block_menu_wrapper'));
+    console.log('show scripts');
+	handleShowButton(evt.target, document.querySelector('.workspace'));
     // handleShowButton(evt.target, document.querySelector('.workspace'));
 }
 

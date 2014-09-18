@@ -96,11 +96,12 @@
             waterbearVersion: '2.0',
             blocks: blocks.map(wb.block.description)
         };
-
-        if(json.blocks[0].sockets[0].name){
-            json.blocks[0].sockets[0].name = name;
-        }else if(json.blocks[0].sockets[0].uName){
-            json.blocks[0].sockets[0].uName = name;
+        if (json.blocks.length){
+            if(json.blocks[0].sockets[0].name){
+                json.blocks[0].sockets[0].name = name;
+            }else if(json.blocks[0].sockets[0].uName){
+                json.blocks[0].sockets[0].uName = name;
+            }
         }
 
         return JSON.stringify(json, null, '    ');

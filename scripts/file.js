@@ -233,7 +233,8 @@
                 loadScriptsFromObject(fileObject);
             }
         }else{
-            //console.log('no script to load, starting a new script');
+            console.log('no script to load, starting a new script');
+            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
             wb.createWorkspace('Workspace');
         }
         wb.loaded = true;

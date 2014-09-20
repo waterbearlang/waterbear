@@ -1,12 +1,12 @@
 {
     "sectionkey": "canvas",
-    "name": "Canvas",
-    "help": "Canvas blocks are blocks that are about drawing on the canvas but don't fit elsewhere. Also look at the Sprites, Shapes, and Path menus.",
+    "name": "畫布",
+    "help": "畫布方塊用於畫圖或組合圖像。另見Sprites, Shapes, and Path menus.",
     "blocks": [
         {
             "blocktype": "context",
             "script": "local.ctx.save();[[1]];local.ctx.restore();",
-            "help": "save the current state, run the contained steps, then restore the saved state",
+            "help": "儲存現在的狀態、執行以下的步驟、和恢復已儲存的狀態",
             "id": "9e514499-05a6-4b76-ad4b-1ea888181a8b",
             "sockets": [
                 {

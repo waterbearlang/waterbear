@@ -289,7 +289,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -319,7 +321,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -516,7 +520,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -546,7 +552,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -1293,7 +1301,9 @@
                                                     "script": "local.variable##",
                                                     "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                     "type": "any"
-                                                }
+                                                },
+                                                "quantity": "length",
+                                                "unit": "px"
                                             },
                                             {
                                                 "name": "width units",
@@ -1323,7 +1333,9 @@
                                                     "script": "local.variable##",
                                                     "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                     "type": "any"
-                                                }
+                                                },
+                                                "quantity": "length",
+                                                "unit": "px"
                                             },
                                             {
                                                 "name": "height units",
@@ -2583,7 +2595,9 @@
                                                             "script": "local.variable##",
                                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                             "type": "any"
-                                                        }
+                                                        },
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     },
                                                     {
                                                         "name": "width units",
@@ -2613,7 +2627,9 @@
                                                             "script": "local.variable##",
                                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                             "type": "any"
-                                                        }
+                                                        },
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     },
                                                     {
                                                         "name": "height units",

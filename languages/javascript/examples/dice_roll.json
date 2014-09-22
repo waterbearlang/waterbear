@@ -142,7 +142,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "64"
+                                        "uValue": "64",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -155,7 +157,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "64"
+                                        "uValue": "64",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -323,7 +327,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "64"
+                                        "uValue": "64",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -336,7 +342,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "64"
+                                        "uValue": "64",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",

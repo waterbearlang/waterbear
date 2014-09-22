@@ -656,7 +656,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           },
                           {
                             "name": "width units",
@@ -686,7 +688,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           },
                           {
                             "name": "height units",
@@ -972,7 +976,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           },
                           {
                             "name": "width units",
@@ -1002,7 +1008,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           },
                           {
                             "name": "height units",

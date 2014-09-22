@@ -142,7 +142,9 @@
                           "seqNum": "223",
                           "script": "randint({{1}}, {{2}})",
                           "type": "number"
-                        }
+                        },
+                        "quantity": "length",
+                        "unit": "px"
                       },
                       {
                         "name": "width units",
@@ -179,7 +181,9 @@
                           "seqNum": "222",
                           "script": "randint({{1}}, {{2}})",
                           "type": "number"
-                        }
+                        },
+                        "quantity": "length",
+                        "unit": "px"
                       },
                       {
                         "name": "height units",

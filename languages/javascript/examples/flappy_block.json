@@ -272,7 +272,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "32"
+                                        "uValue": "32",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -285,7 +287,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "32"
+                                        "uValue": "32",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -436,7 +440,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "20"
+                                        "uValue": "20",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -449,7 +455,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "20"
+                                        "uValue": "20",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -640,7 +648,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "25"
+                                        "uValue": "25",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -653,7 +663,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "10"
+                                        "uValue": "10",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -844,7 +856,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "200"
+                                        "uValue": "200",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -857,7 +871,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "100"
+                                        "uValue": "100",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -1051,7 +1067,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "200"
+                                        "uValue": "200",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -1064,7 +1082,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "100"
+                                        "uValue": "100",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -1247,7 +1267,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "2"
+                                        "uValue": "2",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -1260,7 +1282,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "300"
+                                        "uValue": "300",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -1443,7 +1467,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "200"
+                                        "uValue": "200",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -1456,7 +1482,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "100"
+                                        "uValue": "100",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -1721,7 +1749,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "200"
+                                        "uValue": "200",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -1734,7 +1764,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "100"
+                                        "uValue": "100",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -1988,7 +2020,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "2"
+                                        "uValue": "2",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -2001,7 +2035,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "300"
+                                        "uValue": "300",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -2255,7 +2291,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "200"
+                                        "uValue": "200",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -2268,7 +2306,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "100"
+                                        "uValue": "100",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -2533,7 +2573,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "200"
+                                        "uValue": "200",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -2546,7 +2588,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "100"
+                                        "uValue": "100",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",
@@ -2800,7 +2844,9 @@
                                         "name": "size with width",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "2"
+                                        "uValue": "2",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "width units",
@@ -2813,7 +2859,9 @@
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
-                                        "uValue": "300"
+                                        "uValue": "300",
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height units",

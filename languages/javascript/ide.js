@@ -30,7 +30,7 @@
         return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
             // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
             var source = document.getElementById(asset.dataset.localSource);
-            return wb.getSocketValue(wb.block.sockets(source)[0]);
+            return wb.socket.value(wb.block.sockets(source)[0]);
         }).join(',') + ']';
     }
 

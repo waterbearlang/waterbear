@@ -16,7 +16,9 @@
                             "name": "size with width",
                             "type": "number",
                             "value": 32,
-                            "min": 0
+                            "min": 0,
+                            "quantity": "length",
+                            "unit": "%"
                         },
                         {
                             "name": "width units",
@@ -28,7 +30,9 @@
                             "name": "height",
                             "type": "number",
                             "value": 32,
-                            "min": 0
+                            "min": 0,
+                            "quantity": "length",
+                            "unit": "%"
                         },
                         {
                             "name": "height units",
@@ -46,7 +50,9 @@
                     "sockets": [
                         {
                             "name": "size from array",
-                            "type": "array"
+                            "type": "array",
+                            "quantity": "length",
+                            "unit": "%"
                         },
                         {
                             "name": "width units",
@@ -71,7 +77,9 @@
                         {
                             "name": "size",
                             "type": "size",
-                            "suffix": "width"
+                            "suffix": "width",
+                            "quantity": "length",
+                            "unit": "%"
                         },
                         {
                             "name": "width units",
@@ -90,7 +98,9 @@
                         {
                             "name": "size",
                             "type": "size",
-                            "suffix": "height"
+                            "suffix": "height",
+                            "quantity": "length",
+                            "unit": "%"
                         },
                         {
                             "name": "height units",

@@ -244,7 +244,9 @@
                                                         "name": "size with width",
                                                         "type": "number",
                                                         "value": "32",
-                                                        "uValue": "10"
+                                                        "uValue": "10",
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     },
                                                     {
                                                         "name": "width units",
@@ -257,7 +259,9 @@
                                                         "name": "height",
                                                         "type": "number",
                                                         "value": "32",
-                                                        "uValue": "10"
+                                                        "uValue": "10",
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     },
                                                     {
                                                         "name": "height units",

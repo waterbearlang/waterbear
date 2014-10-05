@@ -177,6 +177,9 @@
         </div>
     </div>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
+    <script>
+    var globals = Object.keys(window);
+    </script>
     <script src="../../lib/beautify.js"></script>
 <script src="../../lib/highlight.js"></script>
 <script src="../../lib/highlight-javascript.js"></script>
@@ -229,5 +232,14 @@
 <script src="blocks/string_blockmenu.js"></script>
 <script src="../../scripts/l10n.js"></script>
 <script src="../../scripts/workspace.js"></script>
+    <script>
+    var newglobals = Object.keys(window).filter(function(value, idx, array){
+        return globals.indexOf(value) === -1;
+    });
+    console.log('Loading script addded %s new globals', newglobals.length);
+    newglobals.forEach(function(item){
+        console.log('\t%s', item);
+    });
+    </script>
 </body>
 </html>

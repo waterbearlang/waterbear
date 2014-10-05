@@ -941,7 +941,7 @@
                   "name": "",
                   "type": "string",
                   "value": "px",
-                  "options": "unit",
+                  "options": "fontsize",
                   "uValue": "px"
                 },
                 {
@@ -1033,7 +1033,7 @@
                   "name": "",
                   "type": "string",
                   "value": "choice",
-                  "options": "unit",
+                  "options": "fontsize",
                   "uValue": "px"
                 },
                 {

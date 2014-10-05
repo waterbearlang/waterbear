@@ -277,26 +277,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "32",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "462",
@@ -445,26 +431,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "20",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "463",
@@ -653,26 +625,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "10",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "464",
@@ -861,26 +819,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "100",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "%"
                                     }
                                 ],
                                 "seqNum": "465",
@@ -1072,26 +1016,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "100",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "%"
                                     }
                                 ],
                                 "seqNum": "466",
@@ -1272,26 +1202,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "300",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "467",
@@ -1472,26 +1388,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "100",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "%"
                                     }
                                 ],
                                 "seqNum": "468",
@@ -1754,26 +1656,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "100",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "%"
                                     }
                                 ],
                                 "seqNum": "469",
@@ -2025,26 +1913,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "300",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "470",
@@ -2296,26 +2170,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "100",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "%"
                                     }
                                 ],
                                 "seqNum": "471",
@@ -2578,26 +2438,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "100",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "%"
                                     }
                                 ],
                                 "seqNum": "472",
@@ -2849,26 +2695,12 @@
                                         "unit": "px"
                                     },
                                     {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
-                                    },
-                                    {
                                         "name": "height",
                                         "type": "number",
                                         "value": "32",
                                         "uValue": "300",
                                         "quantity": "length",
                                         "unit": "px"
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
                                     }
                                 ],
                                 "seqNum": "473",
@@ -3458,7 +3290,7 @@
                                     "name": "",
                                     "type": "string",
                                     "value": "px",
-                                    "options": "unit",
+                                    "options": "fontsize",
                                     "uValue": "px"
                                 },
                                 {

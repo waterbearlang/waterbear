@@ -21,7 +21,7 @@
                         {
                             "name": "",
                             "type": "string",
-                            "options": "unit",
+                            "options": "fontsize",
                             "value": "px"
                         },
                         {
@@ -172,6 +172,6 @@
                 }
             ]
         }
-        
+
     );
 })(wb);

@@ -123,7 +123,7 @@
                 {
                     "blocktype": "expression",
                     "id": "a51afa9e-f6be-444c-a591-1ca0d0ab697f",
-                    "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}}",
+                    "script": "{type: 'rect', x: {{1}}.x, y: {{1}}.y, w: {{2}}.w, h: {{2}}.h, r: {{3}} }",
                     "type": "shape",
                     "sockets": [
                         {

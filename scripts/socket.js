@@ -36,6 +36,10 @@
         if (desc.max !== undefined){
             socket.dataset.max = desc.max;
         }
+        if (desc.quantity){
+            socket.dataset.quantity = desc.quantity;
+            socket.dataset.unit = desc.unit;
+        }
         // if (!blockdesc.isTemplateBlock){
         //      console.log('socket seq num: %s', blockdesc.seqNum);
         // }
@@ -73,6 +77,9 @@
                 wb.block.addExpression({'target': newBlock});
             }
         }
+        if (desc.quantity){
+            socket.appendChild(createSelect(wb.unitLists[desc.quantity], desc.unit, 'unit'));
+        }
         if (desc.suffix){
             socket.dataset.suffix = desc.suffix;
             socket.appendChild(elem('span', {'class': 'suffix'}, desc.suffix));
@@ -109,6 +116,10 @@
         if (socket.dataset.max !== undefined){
             desc.max = socket.dataset.max;
         }
+        if (socket.dataset.quantity !== undefined){
+            desc.quantity = socket.dataset.quantity;
+            desc.unit = socket.dataset.unit;
+        }
         // User-specified settings
         if (isTemplate)
         {
@@ -133,6 +144,7 @@
         return desc;
     }
 
+
     function getHolderValue(holder){
         if (!holder) return null;
         if (holder.children.length > 1){
@@ -153,9 +165,21 @@
                 value = value.replace(/\//g, '\\/');
                 value = '/' + value + '/';
             }
+            if (holder.parentElement.dataset.unit){
+                return new ValueUnit(value, holder.parentElement.dataset.unit);
+            }
             return value;
         }
     }
+
+    function ValueUnit(value,unit){
+        this.value = Number(value);
+        this.unit = unit;
+    }
+    ValueUnit.prototype.toString = function(){
+        return '{value: ' + this.value + ', unit: "' + this.unit + '"}';
+    }
+
 
     function getSocketValue (socket){
         var holder = wb.findChild(socket, '.holder');
@@ -165,6 +189,7 @@
             return null;
         }
     }
+
 
     function socketValidate(socket){
         // Going to assume for now that empty strings are not wanted
@@ -186,6 +211,35 @@
         });
     }
 
+
+    function createSelect(options, value, classname){
+        var choice = elem('select');
+        if(Array.isArray(options)){
+            options.forEach(function(opt){
+                var option = elem('option', {}, opt);
+                if (value !== undefined && value !== null && value === opt){
+                    option.setAttribute('selected', 'selected');
+                }
+                choice.appendChild(option);
+            });
+        }
+        else{
+            var values = Object.keys(options);
+            values.forEach(function(val){
+                var option = elem('option', {"value":val}, list[val]);
+                if (value !== undefined && value !== null && value === val){
+                    option.setAttribute('selected', 'selected');
+                }
+                choice.appendChild(option);
+            });
+        }
+        if (classname){
+            choice.className = classname;
+        }
+        return choice;
+    }
+
+
     function defaultInput(obj){
         // return an input for input types (number, string, color, date)
         // return a block for block types
@@ -199,38 +253,7 @@
         if(typeof obj.options !== 'undefined'){
             // DONE : #24
             // DONE : #227
-            var choice = elem('select');
-            var list = wb.choiceLists[obj.options];
-
-            if(Array.isArray(list)){
-                wb.choiceLists[obj.options].forEach(function(opt){
-                    var option = elem('option', {}, opt);
-                    var value = obj.uValue || obj.value;
-
-                    if (value !== undefined && value !== null && value == opt){
-                        option.setAttribute('selected', 'selected');
-                    }
-
-                    choice.appendChild(option);
-                });
-            }
-            else{
-                var values = Object.keys(list);
-
-                values.forEach(function(val){
-                    var option = elem('option', {"value":val}, list[val]);
-                    var value = obj.uValue || obj.value;
-
-                    if (value !== undefined && value !== null && value == val){
-                        option.setAttribute('selected', 'selected');
-                    }
-
-                    choice.appendChild(option);
-                });
-            }
-
-            return choice;
-
+            return createSelect(wb.choiceLists[obj.options], obj.uValue || obj.value, 'choice');
         }
         //Known issue: width manually set to 160, need to programmatically get
         //(size of "Browse" button) + (size of file input field).

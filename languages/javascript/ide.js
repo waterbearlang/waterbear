@@ -30,7 +30,7 @@
         return '[' + wb.findAll(document.body, '.workspace .block-menu .asset').map(function(asset){
             // tricky and a bit hacky, since asset URLs aren't defined on asset blocks
             var source = document.getElementById(asset.dataset.localSource);
-            return wb.getSocketValue(wb.block.sockets(source)[0]);
+            return wb.socket.value(wb.block.sockets(source)[0]);
         }).join(',') + ']';
     }
 
@@ -138,7 +138,12 @@
             'end', 'home', 'insert', 'del', 'numlock', 'scroll', 'meta']),
         blocktypes: ['step', 'expression', 'context', 'eventhandler', 'asset'],
         types: ['string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
-        rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any']
+        rettypes: ['none', 'string', 'number', 'boolean', 'array', 'object', 'function', 'any'],
+        fontsize: ['px', 'pt', 'em', '%']
+    };
+
+    wb.unitLists = {
+        length: ['px', '% height', '% width']
     };
 
     // Hints for building blocks
@@ -157,6 +162,10 @@
     Event.on('.socket input', 'click', null, function(event){
         event.target.focus();
         event.target.select();
+    });
+
+    Event.on(document, 'change', 'select.unit', function(event){
+        wb.closest(event.target, '.socket').dataset.unit = event.target.value;
     });
 
 })(wb, Event);

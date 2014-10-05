@@ -656,14 +656,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
-                          },
-                          {
-                            "name": "width units",
-                            "type": "string",
-                            "value": "choice",
-                            "options": "relativeUnit",
-                            "uValue": "px"
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           },
                           {
                             "name": "height",
@@ -686,14 +681,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
-                          },
-                          {
-                            "name": "height units",
-                            "type": "string",
-                            "value": "choice",
-                            "options": "relativeUnit",
-                            "uValue": "px"
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           }
                         ],
                         "seqNum": "44",
@@ -972,14 +962,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
-                          },
-                          {
-                            "name": "width units",
-                            "type": "string",
-                            "value": "choice",
-                            "options": "relativeUnit",
-                            "uValue": "px"
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           },
                           {
                             "name": "height",
@@ -1002,14 +987,9 @@
                               "script": "local.variable##",
                               "localSource": "9f4981de-ed40-4238-9936-9dda116c4e1b",
                               "type": "any"
-                            }
-                          },
-                          {
-                            "name": "height units",
-                            "type": "string",
-                            "value": "choice",
-                            "options": "relativeUnit",
-                            "uValue": "px"
+                            },
+                            "quantity": "length",
+                            "unit": "px"
                           }
                         ],
                         "seqNum": "44",

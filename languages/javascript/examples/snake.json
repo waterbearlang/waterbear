@@ -289,14 +289,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
-                                    },
-                                    {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height",
@@ -319,14 +314,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     }
                                 ],
                                 "seqNum": "9",
@@ -516,14 +506,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
-                                    },
-                                    {
-                                        "name": "width units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     },
                                     {
                                         "name": "height",
@@ -546,14 +531,9 @@
                                             "script": "local.variable##",
                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                             "type": "any"
-                                        }
-                                    },
-                                    {
-                                        "name": "height units",
-                                        "type": "string",
-                                        "value": "choice",
-                                        "options": "relativeUnit",
-                                        "uValue": "px"
+                                        },
+                                        "quantity": "length",
+                                        "unit": "px"
                                     }
                                 ],
                                 "seqNum": "75",
@@ -1293,14 +1273,9 @@
                                                     "script": "local.variable##",
                                                     "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                     "type": "any"
-                                                }
-                                            },
-                                            {
-                                                "name": "width units",
-                                                "type": "string",
-                                                "value": "choice",
-                                                "options": "relativeUnit",
-                                                "uValue": "px"
+                                                },
+                                                "quantity": "length",
+                                                "unit": "px"
                                             },
                                             {
                                                 "name": "height",
@@ -1323,14 +1298,9 @@
                                                     "script": "local.variable##",
                                                     "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                     "type": "any"
-                                                }
-                                            },
-                                            {
-                                                "name": "height units",
-                                                "type": "string",
-                                                "value": "choice",
-                                                "options": "relativeUnit",
-                                                "uValue": "px"
+                                                },
+                                                "quantity": "length",
+                                                "unit": "px"
                                             }
                                         ],
                                         "seqNum": "503",
@@ -2583,14 +2553,9 @@
                                                             "script": "local.variable##",
                                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                             "type": "any"
-                                                        }
-                                                    },
-                                                    {
-                                                        "name": "width units",
-                                                        "type": "string",
-                                                        "value": "choice",
-                                                        "options": "relativeUnit",
-                                                        "uValue": "px"
+                                                        },
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     },
                                                     {
                                                         "name": "height",
@@ -2613,14 +2578,9 @@
                                                             "script": "local.variable##",
                                                             "localSource": "69fbbe03-16ef-49a3-a5d3-65be2f49f54d",
                                                             "type": "any"
-                                                        }
-                                                    },
-                                                    {
-                                                        "name": "height units",
-                                                        "type": "string",
-                                                        "value": "choice",
-                                                        "options": "relativeUnit",
-                                                        "uValue": "px"
+                                                        },
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     }
                                                 ],
                                                 "seqNum": "503",
@@ -3684,7 +3644,7 @@
                                             "name": "",
                                             "type": "string",
                                             "value": "choice",
-                                            "options": "unit",
+                                            "options": "fontsize",
                                             "uValue": "px"
                                         },
                                         {

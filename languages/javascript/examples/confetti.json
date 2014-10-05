@@ -244,27 +244,17 @@
                                                         "name": "size with width",
                                                         "type": "number",
                                                         "value": "32",
-                                                        "uValue": "10"
-                                                    },
-                                                    {
-                                                        "name": "width units",
-                                                        "type": "string",
-                                                        "value": "choice",
-                                                        "options": "relativeUnit",
-                                                        "uValue": "px"
+                                                        "uValue": "10",
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     },
                                                     {
                                                         "name": "height",
                                                         "type": "number",
                                                         "value": "32",
-                                                        "uValue": "10"
-                                                    },
-                                                    {
-                                                        "name": "height units",
-                                                        "type": "string",
-                                                        "value": "choice",
-                                                        "options": "relativeUnit",
-                                                        "uValue": "px"
+                                                        "uValue": "10",
+                                                        "quantity": "length",
+                                                        "unit": "px"
                                                     }
                                                 ],
                                                 "seqNum": "569",

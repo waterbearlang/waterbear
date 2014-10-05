@@ -3,29 +3,22 @@
 'use strict';
 
 /**
- * Convert size parameter to pixel value 
- * 
- * @param {?number=} x is the size parameter
- * @param {?relativeUnit=} unit is px or %
- * @param {?boolean=} isWidth is true for width, false for height
+ * Convert size parameter to pixel value
+ *
+ * @param {?size=} size is the size parameter
  * @return {number} pixel value for size
  *
- * Notes: -em and pt irrelevant for these purposes, need way to disable these
- *         options in the dropdown
  */
-function convert(x, relativeUnit, isWidth) {
-  switch(relativeUnit) {
+function convert(size) {
+  switch(size.unit) {
     case "px":
-      return x;
-    case "%":
-      if(isWidth){
-        return (runtime.stage_width*x)/100;
-      }
-      else {
-        return (runtime.stage_height*x)/100;
-      }
+        return size.value;
+    case "% width":
+        return (runtime.stage_width * size.value)/100;
+    case "% height":
+        return (runtime.stage_height * size.value)/100;
     default: //need this b/c examples currently have size blocks w/o option list
-      return x; 
+      return size.value;
   }
 }
 window.convert = convert;

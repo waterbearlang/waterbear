@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Waterbear with Custom Elements</title>
+	<link rel="stylesheet" href="css/reset.css" />
+	<link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+    <header>
+    	<h1>Waterbear with Custom Elements</h1>
+    </header>
+    <sidebar>
+        <wb-search></wb-search>
+        <wb-accordion>
+            <wb-step script="start.hello">
+                <wb-value type="text" value="World">Say hello</wb-value>
+            </wb-step>
+            <wb-context script="start.loop">
+                <wb-value type="any">Loop over</wb-value>
+            </wb-context>
+            <wb-expression script="start.add">
+                <wb-value type="number" value="1"></wb-value><wb-value type="number" value="1">+</wb-value>
+            </wb-expression>
+        </wb-accordion>
+    </sidebar>
+    <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
+	<script src="js/dom.js"></script>
+    <script src="js/block.js"></script>
+	<script src="js/app.js"></script>
+</body>
+</html>

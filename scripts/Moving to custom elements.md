@@ -1,4 +1,6 @@
-Moving to custom elements
+# Moving to custom elements
+
+## 2014-11-20
 
 Each type of block would be a custom element:
 
@@ -8,6 +10,12 @@ Each type of block would be a custom element:
 * expression
 * asset
 * async?
+* top-level (singletons, all put their variables in file global context)
+ - setup
+ - draw
+ - assets
+ - exports
+ - exit
 
 No need for a separate event-handler block, just use context.
 
@@ -33,3 +41,10 @@ Magic left over:
 
 There is already a lot of special casing depending on type of block. Anything shared can go into a common prototype.
 
+## 2014-11-22
+
+OK, now that I've ripped Waterbear apart, what are the steps to putting it back together?
+
+* [ ] Custom elements for blocks
+* [ ] User hammer.js for drag-and-drop
+* [ ] Move all code out of blocks, runtime, put in namespaced, accessible functions

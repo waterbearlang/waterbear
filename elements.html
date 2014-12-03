@@ -4,6 +4,8 @@
 	<meta charset="utf-8" />
 	<title>Waterbear with Custom Elements</title>
 	<link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/widgets.css" />
+    <link ref="stylesheet" href="css/block.css" />
 	<link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
@@ -20,12 +22,26 @@
                 <wb-value type="any">Loop over</wb-value>
             </wb-context>
             <wb-expression script="start.add">
-                <wb-value type="number" value="1"></wb-value><wb-value type="number" value="1">+</wb-value>
+                <wb-value type="number" value="1" min="-2" max="5"></wb-value><wb-value type="number" value="1">+</wb-value>
             </wb-expression>
         </wb-accordion>
     </sidebar>
+    <wb-hbox class="green" split="true">
+      <wb-vbox class="yellow" split="true">
+        <div class="orange"></div>
+        <wb-splitter></wb-splitter>
+        <div class="purple"></div>
+      </wb-vbox>
+      <wb-splitter></wb-splitter>
+      <wb-vbox class="blue" split="true">
+        <div class="brown"></div>
+        <wb-splitter></wb-splitter>
+        <div class="pink"></div>
+      </wb-vbox>
+    </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
 	<script src="js/dom.js"></script>
+    <script src="js/widgets.js"></script>
     <script src="js/block.js"></script>
 	<script src="js/app.js"></script>
 </body>

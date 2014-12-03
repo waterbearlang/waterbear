@@ -1,0 +1,55 @@
+/* Custom Elements for Waterbear blocks */
+
+wb-step, wb-context, wb-expression{
+    display: inline-block;
+    background-color: #00F;
+    border-radius: 5px;
+    border-color: #30C;
+    border-width: 2px;
+    border-style: solid;
+    float: left;
+    clear: left;
+}
+
+wb-content{
+    display: block;
+    background-color: #FFF;
+}
+
+wb-expression{
+    text-align: right;
+}
+
+wb-value{
+    display: inline-block;
+    background-color: #FFF;
+    border-radius: 2px;
+    border-color: yellow;
+    border-width: 1px;
+    border-style: solid;
+    float: right;
+    clear: right;
+}
+
+wb-value > * {
+    height: 100%;
+    vertical-align: middle;
+    margin: 0px 5px;
+}
+
+
+input{
+    width: 20px;
+}
+
+/* Used for input resizing */
+.sekrit-svg{
+    position: absolute;
+    left: -1000px; /* cannot get size if display: none */
+    top: 0; /* because it was screwing up layout even hidden */
+    width: 400px;
+    height: 100px;
+}
+
+
+

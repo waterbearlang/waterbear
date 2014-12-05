@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
 	<title>Waterbear with Custom Elements</title>
 	<link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/widgets.css" />
-    <link ref="stylesheet" href="css/block.css" />
+    <link rel="stylesheet" href="css/widget.css" />
+    <link rel="stylesheet" href="css/block.css" />
 	<link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
@@ -26,22 +27,24 @@
             </wb-expression>
         </wb-accordion>
     </sidebar>
-    <wb-hbox class="green" split="true">
-      <wb-vbox class="yellow" split="true">
-        <div class="orange"></div>
+    <wb-hbox class="workspace">
+      <wb-vbox>
+        <div></div>
         <wb-splitter></wb-splitter>
-        <div class="purple"></div>
+        <div></div>
       </wb-vbox>
       <wb-splitter></wb-splitter>
-      <wb-vbox class="blue" split="true">
-        <div class="brown"></div>
+      <wb-vbox>
+        <div></div>
         <wb-splitter></wb-splitter>
-        <div class="pink"></div>
+        <div></div>
       </wb-vbox>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
+    <script src="lib/zepto.min.js"></script>
+    <script src="lib/zepto.dragdrop.min.js"></script>
 	<script src="js/dom.js"></script>
-    <script src="js/widgets.js"></script>
+    <script src="js/widget.js"></script>
     <script src="js/block.js"></script>
 	<script src="js/app.js"></script>
 </body>

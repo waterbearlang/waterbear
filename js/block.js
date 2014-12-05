@@ -25,13 +25,11 @@
             return;
         }
         var textStyle = window.getComputedStyle(input);
-        console.log('font: %s %s %s', textStyle.fontFamily, textStyle.fontSize, textStyle.fontWeight);
         svgText.style.fontFamily = textStyle.fontFamily;
         svgText.style.fontSize = textStyle.fontSize;
         svgText.style.fontWeight = textStyle.fontWeight;
         svgText.textContent = input.value || '';
         var textwidth = svgText.getComputedTextLength();
-        console.log('textwidth = %s', textwidth);
         input.style.width = Math.max((textwidth + 15), 30) + 'px';
     }
 
@@ -72,7 +70,7 @@ window.WBContext = document.registerElement('wb-context', {prototype: ContextPro
 
 var ExpressionProto = Object.create(BlockProto);
 ExpressionProto.createdCallback = function expressionCreated(){
-    console.log('Expression created');
+    // console.log('Expression created');
     var children = [].slice.apply(this.children);
     children.forEach(function(child){
         console.log('Expression child of mine: %s', child);
@@ -89,7 +87,7 @@ window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
 var ValueProto = Object.create(HTMLElement.prototype);
 ValueProto.createdCallback = function valueCreated(){
     // Add holder, input or select, or block
-    console.log('Value created');
+    // console.log('Value created');
     var type = this.getAttribute('type');
     var value = this.getAttribute('value');
     var input;
@@ -120,12 +118,10 @@ ValueProto.createdCallback = function valueCreated(){
             throw new Error('Type ' + type + ' is not supported for value types');
     }
     var min = this.getAttribute('min');
-    console.warn('min: %s', min);
     if (min !== null){
         input.setAttribute('min', min);
     }
     var max = this.getAttribute('max');
-    console.warn('max: %s', max);
     if (max !== null){
         input.setAttribute('max', max);
     }

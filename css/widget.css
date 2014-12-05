@@ -6,16 +6,7 @@ wb-search, wb-accordion{
 
 
 /* test widgets */
-.blue{ background-color: blue; }
-.brown { background-color: brown; }
-.green { background-color: green; }
-.purple { background-color: purple; }
-.orange { background-color: orange; }
-.pink { background-color: pink; }
-.red { background-color: red; }
-.yellow { background-color: yellow; }
-
-.green{
+.workspace{
     width: calc(100% - 300px);
     height: calc(100% - 16px);
     position: absolute;
@@ -35,7 +26,7 @@ wb-hbox > *{
 }
 
 wb-hbox[split=true] > *{
-    width: calc(50% - 10px);
+    width: calc(50% - 4px);
 }
 
 wb-vbox > *{
@@ -44,24 +35,28 @@ wb-vbox > *{
 }
 
 wb-vbox[split=true] > *{
-    height: calc(50% - 10px);
+    height: calc(50% - 4px);
 }
 
 wb-splitter{
     display: block;
+    z-index: 100;
 }
 
 wb-hbox[split=true] > wb-splitter{
-    width: 20px;
+    width: 8px;
     height: 100%;
-    background-color: gray;
-    background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
-    background-size: 5px 5px;
+    background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
+    background-image-size: 8px 8px;
+    cursor: ew-resize;
 }
 
 wb-vbox[split=true] > wb-splitter{
     width: 100%;
-    height: 20px;
-    background-color: gray;
-    background-image: linear-gradient(0deg, transparent 50%, rgba(255,255,255,.5) 50%);
-    background-size: 5px 5px;}
+    height: 8px;
+    background-image: linear-gradient(0deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
+    background-image-size: 8px 8px;
+    cursor: ns-resize;
+}
+
+

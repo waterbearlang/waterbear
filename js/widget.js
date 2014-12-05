@@ -2,7 +2,7 @@
 
 (function(){
 'use strict';
-    var elem = dom.html;
+    // var elem = dom.html;
 
 // Layout elements
 
@@ -32,14 +32,23 @@ window.WBHBox = document.registerElement('wb-hbox', {prototype: HBoxProto});
 var VBoxProto = Object.create(HTMLElement.prototype);
 window.WBVBox = document.registerElement('wb-vbox', {prototype: VBoxProto});
 
+/******************************
+*
+* SPLITTER
+*
+*******************************/
+
 var SplitterProto = Object.create(HTMLElement.prototype);
 SplitterProto.attachedCallback = function splitterAttached(){
+    console.log('splitting up');
     this.parentElement.setAttribute('split', 'true');
 };
 SplitterProto.detachedCallback = function splitterDetached(){
+    console.log('unsplitting my parent: %s', this.parentElement);
     this.parentElement.removeAttribute('split');
 };
-window.WBSplitter = document.registerElement('wb-splitter');
+window.WBSplitter = document.registerElement('wb-splitter', {prototype: SplitterProto});
+
 
 document.addEventListener('childAdded', function(event){
     if (dom.matches(event.target, 'wb-hbox, wb-vbox')){
@@ -52,6 +61,27 @@ document.addEventListener('childRemoved', function(event){
     }
 }, false);
 
+var splitDragging = {
+    direction: 'horizontal',
+    parentBox: [0,0,0,0],
+    startX: 0,
+    startY: 0
+};
+
+$(document.body).draggable({selector: 'wb-splitter'}).on('draggable:start', 'wb-splitter', function(evt){
+    console.log('start drag: %o', evt);
+    var splitterBox = evt.target.getBoundingBox();
+    splitDragging = {
+        direction: $(evt.target).is('wb-hbox > wb-splitter') ? 'horizontal' : 'vertical',
+        parentBox: evt.target.parentElement.getBoundingBox(),
+        startX: splitterBox.x,
+        startY: splitterBox.y
+    };
+}).on('draggable:drag', 'wb-splitter', function(evt){
+    console.log('dragging: %o', evt);
+}).on('draggable:stop', 'wb-splitter', function(evt){
+});
+
 // Observe child changes
 
 var observer = new MutationObserver(function(mutations){
@@ -63,18 +93,19 @@ var observer = new MutationObserver(function(mutations){
             parent.dispatchEvent(new CustomEvent('removeChild', {
                 bubbles: true,
                 detail: node
-            });
+            }));
         });
         [].slice.apply(mutation.addedNodes).forEach(function(node){
-            parent.dispatchEvent(new CustomElement('addChild', {
+            parent.dispatchEvent(new CustomEvent('addChild', {
                 bubbles: true,
                 detail: node
-            });
+            }));
         });
     });
-})();
+});
 
 var config = { childList: true, subtree: true };
 
 observer.observe(document.body, config);
 
+})();

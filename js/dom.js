@@ -199,7 +199,8 @@
         prevSibling: prevSibling,
         nextSibling: nextSibling,
         toggleClass: toggleClass,
-        indexOf: indexOf
+        indexOf: indexOf,
     };
+
 
 })(this);

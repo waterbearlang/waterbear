@@ -61,27 +61,6 @@ document.addEventListener('childRemoved', function(event){
     }
 }, false);
 
-var splitDragging = {
-    direction: 'horizontal',
-    parentBox: [0,0,0,0],
-    startX: 0,
-    startY: 0
-};
-
-$(document.body).draggable({selector: 'wb-splitter'}).on('draggable:start', 'wb-splitter', function(evt){
-    console.log('start drag: %o', evt);
-    var splitterBox = evt.target.getBoundingBox();
-    splitDragging = {
-        direction: $(evt.target).is('wb-hbox > wb-splitter') ? 'horizontal' : 'vertical',
-        parentBox: evt.target.parentElement.getBoundingBox(),
-        startX: splitterBox.x,
-        startY: splitterBox.y
-    };
-}).on('draggable:drag', 'wb-splitter', function(evt){
-    console.log('dragging: %o', evt);
-}).on('draggable:stop', 'wb-splitter', function(evt){
-});
-
 // Observe child changes
 
 var observer = new MutationObserver(function(mutations){

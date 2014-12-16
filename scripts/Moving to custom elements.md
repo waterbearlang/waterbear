@@ -46,20 +46,31 @@ There is already a lot of special casing depending on type of block. Anything sh
 OK, now that I've ripped Waterbear apart, what are the steps to putting it back together?
 
 * [x] Custom elements for blocks
-* [ ] User hammer.js for drag-and-drop
+* [-] User hammer.js for drag-and-drop (NOPE)
 * [ ] Move all code out of blocks, runtime, put in namespaced, accessible functions
 
 ## 2014-11-29
 
 I have basic blocks showing up. Things I still need:
 
-* [ ] Contains, block nesting
+* [x] Contains, block nesting
 * [ ] Block type values, expression nesting
 * [ ] Embed locals a) on attachedCallback, b) when something is added to the expression value
 * [ ] Handle "any" values
+* [ ] Handle event namespaces to separate UI and runtime events
 * [ ] Build choice lists
 * [ ] All drag and drop
 * [ ] All layout and widgets (move to a separate file)
-* [ ] Shaping the blocks? Or leave rectangular-ish like we do for 500 lines Block Code?
+* [-] Shaping the blocks? Or leave rectangular-ish like we do for 500 lines Block Code? (LEAVE)
 * [ ] Validation: enforce types in inputs
 * [x] Resize inputs when value changes
+* [ ] Tap, Double-tap, and other gestures
+
+## 2014-12-15
+
+Maybe a better route than having the loop block watch for child changes and add the right locals depending on the child would be to have children that are iterable have iterableLocals get inserted. Other specific types of locals could be added too?
+
+Keeping the original locals as children, with unambiguous names, can give a handle to find all clones with when removing the originating block.
+
+* [ ] Maintain unique name within scope at all times
+* [ ] Rename instances when name changes

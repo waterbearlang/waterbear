@@ -17,32 +17,72 @@
 
 // Utility
 
-    // FIXME: insert this into the document rather than including in markup
-    var svgText = document.querySelector('.resize-tester');
-    function resize(input){
-        if (!input){
-            console.err('No input');
-            return;
-        }
-        var textStyle = window.getComputedStyle(input);
-        svgText.style.fontFamily = textStyle.fontFamily;
-        svgText.style.fontSize = textStyle.fontSize;
-        svgText.style.fontWeight = textStyle.fontWeight;
-        svgText.textContent = input.value || '';
-        var textwidth = svgText.getComputedTextLength();
-        input.style.width = Math.max((textwidth + 15), 30) + 'px';
+// FIXME: insert this into the document rather than including in markup
+var svgText = document.querySelector('.resize-tester');
+function resize(input){
+    if (!input){
+        console.err('No input');
+        return;
     }
+    var textStyle = window.getComputedStyle(input);
+    svgText.style.fontFamily = textStyle.fontFamily;
+    svgText.style.fontSize = textStyle.fontSize;
+    svgText.style.fontWeight = textStyle.fontWeight;
+    svgText.textContent = input.value || '';
+    var textwidth = svgText.getComputedTextLength();
+    input.style.width = Math.max((textwidth + 15), 30) + 'px';
+}
+
+// If the markup doesn't contain this element, add it
+// This is like how tables will insert <thead> elements
+// if they are left out
+function setDefault(element, tagname, top){
+    var test = dom.child(element, tagname);
+    if (!test){
+        test = elem(tagname);
+        if (top){
+            element.insertBefore(test, element.firstChild);
+        }else{
+            element.appendChild(test);
+        }
+    }
+    return test;
+}
+
+// Make sure these elements are always inserted into a header element
+// and that the header element exists
+function insertIntoHeader(){
+    if (dom.matches(this.parentElement, 'header')) return;
+    var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
+    var head = setDefault(block, 'header');
+    head.appendChild(this, true);
+};
 
 
-// Blocks
+// BlockProto
+// Not actually instantiated, but used as a superclass for other blocks
 
 var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
-    console.log('%s created', this.tagName.toLowerCase());
+    setDefault(this, 'header', true);
+    console.log('%s created with %s children', this.tagName.toLowerCase(), this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
     // Add locals
+    // Make sure they have unique names in scope
+    // Handle special cases:
+    // 1) Added to socket of iteration, add iterationLocals
+    //    Are there other expression blocks that add locals?
+    // 2) Added to contains of setup block, add globally (to file)
+    // 3) Otherwise, when added to contains add to locals view of closest context
+    if (dom.matches(this.parentElement, 'wb-contains')) return;
+    var parent = dom.parent(this, 'wb-context');
+    if (parent){
+        setDefault(parent, 'wb-contains').appendChild(this);
+    }else{
+        console.warn('free-floating block: %o, OK for now', this);
+    }
     console.log('%s attached', this.tagName.toLowerCase());
 };
 BlockProto.detachedCallback = function blockDetached(){
@@ -58,12 +98,22 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
 };
 
+// Step Proto
+// Instantiated as new WBStep or as <wb-step>
+
 var StepProto = Object.create(BlockProto);
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
+
+// Context Proto
+// Instantiated as new WBContext or as <wb-context>
 
 var ContextProto = Object.create(BlockProto);
 ContextProto.createdCallback = function contextCreated(){
     // Add disclosure, contained, local
+    BlockProto.createdCallback.call(this);
+    setDefault(this, 'wb-disclosure');
+    setDefault(this, 'wb-local');
+    setDefault(this, 'wb-contains');
     console.log('Context created');
 };
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
@@ -79,6 +129,7 @@ ExpressionProto.createdCallback = function expressionCreated(){
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
 var DisclosureProto = Object.create(HTMLElement.prototype);
+DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
 var LocalProto = Object.create(HTMLElement.prototype);
@@ -127,6 +178,7 @@ ValueProto.createdCallback = function valueCreated(){
     }
     resize(input);
 };
+ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 // Handle resizing inputs when their content changes

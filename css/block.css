@@ -2,13 +2,14 @@
 
 wb-step, wb-context, wb-expression{
     display: inline-block;
-    background-color: #00F;
+    background-color: #EDE378;
     border-radius: 5px;
-    border-color: #30C;
+    border-color: #CEBD3E;
     border-width: 2px;
     border-style: solid;
     float: left;
     clear: left;
+    position: relative;
 }
 
 wb-content{
@@ -21,20 +22,55 @@ wb-expression{
 }
 
 wb-value{
-    display: inline-block;
-    background-color: #FFF;
-    border-radius: 2px;
-    border-color: yellow;
-    border-width: 1px;
-    border-style: solid;
-    float: right;
-    clear: right;
+    display: block;
+    text-align: right;
+    margin-left: 20px;
 }
 
 wb-value > * {
     height: 100%;
     vertical-align: middle;
     margin: 0px 5px;
+}
+
+wb-contains {
+    display: block;
+    background-color: rgba(255, 255, 255, 1.0);
+    position: relative;
+    padding-top: 1px;
+    margin-left: 10px;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-width: 2px 0 2px 2px;
+    border-style: solid;
+    border-color: inherit;
+    border-right: 0;
+    right: -3px;
+}
+
+wb-contains:last-child:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+wb-disclosure:after{
+    content: "▼";
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    top: 5px;
+    left: 0px;
+}
+
+wb-context[closed] > header > wb-disclosure{
+    content: "▶";
 }
 
 

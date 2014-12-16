@@ -101,15 +101,16 @@
     }
 
    function closest(elem, selector){
-        while(elem){
-            if (matches(elem, selector)){
-                return elem;
+        var e = elem;
+        while(e){
+            if (matches(e, selector)){
+                return e;
             }
-            if (!elem.parentElement){
-                throw new Error('Element has no parent, is it in the tree? %o', elem);
+            if (!e.parentElement){
+                throw new Error('Element has no parent, is it in the tree? ' + e);
                 //return null;
             }
-            elem = elem.parentElement;
+            e = e.parentElement;
         }
         return null;
     }
@@ -128,6 +129,31 @@
             elem = document.body;
         }
         return [].slice.call(elem.querySelectorAll(selector));
+    }
+
+    function child(elem, selector){
+        for (var i = 0; i < elem.children.length; i++){
+            if (matches(elem.children[i], selector)){
+                return elem.children[i];
+            }
+        }
+        return null;
+    }
+
+    function children(elem, selector){
+        return [].slice.call(elem.children).filter(function(child){
+            return matches(child, selector);
+        });
+    }
+
+    // like closest, but won't match itself
+    function parent(elem, selector){
+        // OK to return null
+        try{
+            return closest(elem.parentElement, selector);
+        }catch(e){
+            return null;
+        }
     }
 
     // Remove namespace for matches
@@ -193,7 +219,10 @@
         matches: matches,
         find: find,
         findAll: findAll,
+        child: child,
+        children: children,
         closest: closest,
+        parent: parent,
         addClass: addClass,
         removeClass: removeClass,
         prevSibling: prevSibling,

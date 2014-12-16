@@ -22,6 +22,18 @@
             <wb-context script="start.loop">
                 <wb-value type="any">Loop over</wb-value>
             </wb-context>
+            <wb-context script="start.donothing">
+                <wb-value type="number" value="5">Cinco</wb-value>
+                <wb-step script="maybe.yes">
+                    <wb-value type="text" value="Gibson">Guitar</wb-value>
+                </wb-step>
+                <wb-step script="maybe.perhaps">
+                    <wb-value type="text" value="Apple">Fruit</wb-value>
+                </wb-step>
+                <wb-context script="maybe.no">
+                    <wb-value type="text" value="Hootenanny">Dance</wb-value>
+                </wb-context>
+            </wb-context>
             <wb-expression script="start.add">
                 <wb-value type="number" value="1" min="-2" max="5"></wb-value><wb-value type="number" value="1">+</wb-value>
             </wb-expression>
@@ -41,9 +53,8 @@
       </wb-vbox>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
-    <script src="lib/zepto.min.js"></script>
-    <script src="lib/zepto.dragdrop.min.js"></script>
 	<script src="js/dom.js"></script>
+    <script src="js/event.js"></script>
     <script src="js/widget.js"></script>
     <script src="js/block.js"></script>
 	<script src="js/app.js"></script>

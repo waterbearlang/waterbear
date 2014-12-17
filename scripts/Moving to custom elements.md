@@ -57,7 +57,7 @@ I have basic blocks showing up. Things I still need:
 * [ ] Block type values, expression nesting
 * [ ] Embed locals a) on attachedCallback, b) when something is added to the expression value
 * [ ] Handle "any" values
-* [ ] Handle event namespaces to separate UI and runtime events
+* [x] Handle event namespaces to separate UI and runtime events (needs testing)
 * [ ] Build choice lists
 * [ ] All drag and drop
 * [ ] All layout and widgets (move to a separate file)

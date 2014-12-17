@@ -16,6 +16,26 @@
         return false;
     }
 
+    // Move these to utils.js
+
+    function deleteItem(list, item){
+        var idx = list.indexOf(item);
+        if (idx > -1){
+            list.splice(idx, 1);
+        }
+        return item;
+    }
+
+    function setDefault(obj, key, defaultValue){
+        if (obj[key] === undefined){
+            obj[key] = defaultValue;
+        }
+        return obj[key];
+    }
+
+    // Maintain references to events so we can mass-remove them later
+    var allEvents = {};
+
     // Refactor this into an constructor with prototype methods
     function cloneEvent(evt){
         var newEvent = {};
@@ -36,6 +56,14 @@
     }
 
     function on(elem, eventname, selector, handler, onceOnly){
+        var ns_name = eventname.split(':');
+        var namespace = 'global';
+        if (ns_name.length === 1){
+            namespace = ns_name[0];
+            eventname = ns_name[1];
+        }else{
+            console.warn('Setting event handler in global namespace: %o : %s', elem, eventname);
+        }
         if (typeof elem === 'string'){
             return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
@@ -78,11 +106,31 @@
             }
         };
         elem.addEventListener(eventname, listener, false);
+        setDefault(allEvents, namespace, []).push([elem, eventname, listener]);
         return listener;
     }
 
     function off(elem, eventname, handler){
-        elem.removeEventListener(eventname, handler);
+        var ns_name = eventname.split(':');
+        var namespace = 'global';
+        if (ns_name.length === 1){
+            namespace = ns_name[0];
+            eventname = ns_name[1];
+        }
+        if (handler){
+            elem.removeEventListener(eventname, handler);
+        }else{
+            allEvents[namespace].slice().forEach(function(elem_name_hand, idx){
+                // Pass in null element to remove listeners from all elements
+                var el = elem || elem_name_hand[0];
+                var en = eventname === '*' ? elem_name_hand[1] : eventname;
+                var hd = elem_name_hand[2];
+                if (el === elem_name_hand[0] && eventname === elem_name_hand[1])){
+                    elem.removeEventListener(elem_name_hand[1], elem_name_hand[2]);
+                    allEvents[namespace].splice(idx, 1); // remove elem_name_hand from allEvents
+                }
+            });
+        }
     }
 
     function once(elem, eventname, selector, handler){
@@ -165,7 +213,7 @@
     }
 
 
-    runtime.Event = {
+    runtime.event = {
         on: on,
         off: off,
         once: once,

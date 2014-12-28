@@ -1,12 +1,76 @@
 sidebar{
     width: 300px;
-    height: calc(100% - 20px);
+    height: calc(100% - 68px);
+    overflow-y: auto;
     position: absolute;
     left: 0;
-    top: 20px;
+    top: 68px;
 }
 
 body > header{
-    float: left;
-    clear: both;
+    height: 34px;
+    background: #111111;
+    color: #FFFFFF;
 }
+
+body > header img{
+    border: 0;
+    padding-top: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+body > header > h1{
+    margin: 0;
+    display: inline;
+    padding: 7px;
+    font-size: 20px;
+    color: #fff;
+    vertical-align: top;
+    line-height: 34px;
+}
+
+.menu{
+    background-color: #666666;
+    color: #FFFFFF;
+    height: 34px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.menu button{
+    background-color: #666666;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 2px #111111 outset;
+    margin: 3px;
+    font-size: 18px;
+}
+
+/* Accordion Colors and Icons */
+wb-accordion.controls > header:after{ background-color: hsl(0, 93%, 56%); }
+wb-accordion.sprites > header:after{ background-color: hsl(156, 93%, 56%); }
+wb-accordion.music > header:after{ background-color: hsl(312, 93%, 56%); }
+wb-accordion.sound > header:after{ background-color: hsl(108, 93%, 56%); }
+wb-accordion.arrays > header:after{ background-color: hsl(264, 93%, 56%); }
+wb-accordion.boolean > header:after{ background-color: hsl(60, 93%, 56%); }
+wb-accordion.canvas > header:after{ background-color: hsl(216, 93%, 56%); }
+wb-accordion.colors > header:after{ background-color: hsl(12, 93%, 56%); }
+wb-accordion.images > header:after{ background-color: hsl(168, 93%, 56%); }
+wb-accordion.math > header:after{ background-color: hsl(324, 93%, 56%); }
+wb-accordion.random > header:after{ background-color: hsl(120, 93%, 56%); }
+wb-accordion.vectors > header:after{ background-color: hsl(276, 93%, 56%); }
+wb-accordion.objects > header:after{ background-color: hsl(72, 93%, 56%); }
+wb-accordion.strings > header:after{ background-color: hsl(228, 93%, 56%); }
+wb-accordion.paths > header:after{ background-color: hsl(24, 93%, 56%); }
+wb-accordion.points > header:after{ background-color: hsl(180, 93%, 56%); }
+wb-accordion.rects > header:after{ background-color: hsl(336, 93%, 56%); }
+wb-accordion.sensing > header:after{ background-color: hsl(132, 93%, 56%); }
+wb-accordion.motion > header:after{ background-color: hsl(288, 93%, 56%); }
+wb-accordion.shapes > header:after{ background-color: hsl(84, 93%, 56%); }
+wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
+wb-accordion.date > header:after{ background-color: hsl(36, 93%, 56%); }
+wb-accordion.sizes > header:after{ background-color: hsl(192, 93%, 56%); }
+wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
+wb-accordion.matrix > header:after{ background-color: hsl(144, 93%, 56%); }
+wb-accordion.datablock > header:after{ background-color: hsl(300, 93%, 56%); }

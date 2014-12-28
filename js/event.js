@@ -2,9 +2,7 @@
 // Adds support for event delegation on top of normal DOM events (like jQuery "live" events)
 // Minimal support for non-DOM (custom) events
 // Normalized between mouse and touch events
-// Waterbear specific: events have wb-target which is always a block element
-// global variable wb is initialized in the HTML before any javascript files
-// are loaded (in template/template.html)
+// Supports namespaced events, removing event listeners by namespace
 
 (function(runtime){
     "use strict";
@@ -58,14 +56,14 @@
     function on(elem, eventname, selector, handler, onceOnly){
         var ns_name = eventname.split(':');
         var namespace = 'global';
-        if (ns_name.length === 1){
+        if (ns_name.length === 2){
             namespace = ns_name[0];
             eventname = ns_name[1];
         }else{
             console.warn('Setting event handler in global namespace: %o : %s', elem, eventname);
         }
         if (typeof elem === 'string'){
-            return wb.makeArray(document.querySelectorAll(elem)).map(function(e){
+            return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
         }
@@ -73,7 +71,10 @@
             console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element, document, or window');
         }
-        if (typeof eventname !== 'string'){ console.error('second argument must be eventname'); }
+        if (typeof eventname !== 'string'){
+            console.error('second argument must be eventname: %s', eventname);
+            throw new Error('second argument must be eventname: ' + eventname);
+        }
         if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
         if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
         var listener = function listener(originalEvent){
@@ -93,12 +94,12 @@
                 Event.off(elem, eventname, listener);
             }
             if (selector){
-                if (wb.matches(event.target, selector)){
+                if (dom.matches(event.target, selector)){
                     handler(event);
-                }else if (wb.matches(event.target, selector + ' *')){
+                }else if (dom.matches(event.target, selector + ' *')){
                     // Fix for missing events that are contained in child elements
                     // Bubble up to the nearest matching parent
-                    event.target = wb.closest(event.target, selector);
+                    event.target = dom.closest(event.target, selector);
                     handler(event);
                 }
             }else{
@@ -125,7 +126,7 @@
                 var el = elem || elem_name_hand[0];
                 var en = eventname === '*' ? elem_name_hand[1] : eventname;
                 var hd = elem_name_hand[2];
-                if (el === elem_name_hand[0] && eventname === elem_name_hand[1])){
+                if (el === elem_name_hand[0] && eventname === elem_name_hand[1]){
                     elem.removeEventListener(elem_name_hand[1], elem_name_hand[2]);
                     allEvents[namespace].splice(idx, 1); // remove elem_name_hand from allEvents
                 }
@@ -220,6 +221,7 @@
         trigger: trigger,
         forward: forward,
         cloneEvent: cloneEvent,
-        isTouch: isTouch
+        isTouch: isTouch,
+        allEvents: allEvents // for testing
     };
 })(this);

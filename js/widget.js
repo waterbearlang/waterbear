@@ -2,15 +2,56 @@
 
 (function(){
 'use strict';
-    // var elem = dom.html;
 
 // Layout elements
+
+/*************************
+ *
+ *  SEARCH
+ *
+ *************************/
 
 var SearchProto = Object.create(HTMLElement.prototype);
 window.WBSearch = document.registerElement('wb-search', {prototype: SearchProto});
 
+/*************************
+ *
+ *  ACCORDION
+ *
+ *************************/
+
 var AccordionProto = Object.create(HTMLElement.prototype);
+
+AccordionProto.open = function(){
+    // If there are other accordions in this group open, close them
+    var existing = this.parentElement.querySelector('wb-accordion[open=true]');
+    if (existing){
+        existing.close();
+    }
+    this.setAttribute('open', 'true');
+}
+
+AccordionProto.close = function(){
+    this.removeAttribute('open');
+}
+
+AccordionProto.toggle = function(){
+    if (this.getAttribute('open') === 'true'){
+        this.close();
+    }else{
+        this.open();
+    }
+}
+
 window.WBAccordion = document.registerElement('wb-accordion', {prototype: AccordionProto});
+
+function accordionClick(event){
+    event.preventDefault();
+    dom.closest(event.target, 'wb-accordion').toggle();
+}
+
+event.on(document.body, 'click', 'wb-accordion > header', accordionClick);
+event.on(document.body, 'tap', 'wb-accordion > header', accordionClick);
 
 /* For HBox, VBox, and Splitter:
 

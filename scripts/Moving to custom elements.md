@@ -74,3 +74,4 @@ Keeping the original locals as children, with unambiguous names, can give a hand
 
 * [ ] Maintain unique name within scope at all times
 * [ ] Rename instances when name changes
+* [ ] How do I define the supported gestures?

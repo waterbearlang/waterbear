@@ -8,11 +8,13 @@ wb-search, wb-accordion{
 /* test widgets */
 .workspace{
     width: calc(100% - 300px);
-    height: calc(100% - 16px);
+    height: calc(100% - 68px);
     position: absolute;
     bottom: 0;
     right: 0;
 }
+
+/* HBOX, VBOX layout widgets */
 
 wb-hbox, wb-vbox{
     display: inline-block;
@@ -57,6 +59,64 @@ wb-vbox[split=true] > wb-splitter{
     background-image: linear-gradient(0deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
     background-image-size: 8px 8px;
     cursor: ns-resize;
+}
+
+/* ACCORDION */
+
+wb-accordion{
+    overflow: hidden;
+    padding-left: 6px;
+}
+
+wb-accordion[open=true]{
+    padding-bottom: 6px;
+}
+
+wb-accordion > :not(header){
+    display: none;
+}
+
+wb-accordion[open=true] > :not(header){
+    display: inline-block;
+}
+
+wb-accordion > header {
+    display: block;
+    position: relative;
+    margin-left: -6px;
+    padding-left: 45px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 16px;
+    color: #777;
+    border: 1px solid #CCC;
+    background: linear-gradient(to bottom, #999 0%, transparent 35%); /* W3C */
+}
+
+wb-accordion[open=true] > header{
+    margin-bottom: 6px;
+}
+
+.cat-icon{
+    width: 30px;
+    height: 30px;
+    display: inline;
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    fill: #666;
+    z-index: -1;
+}
+
+wb-accordion > header:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 100%;
+    background-color: #CCC; /* over-ride colours in app.css */
+    z-index: -1;
 }
 
 

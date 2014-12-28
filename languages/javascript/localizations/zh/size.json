@@ -1,0 +1,75 @@
+{
+    "sectionkey": "sizes",
+    "name": "尺寸",
+    "help": "尺寸是用來表示闊度和高度。經常用在矩形內。",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "d8e71067-afc2-46be-8bb5-3527b36474d7",
+            "script": "{w: {{1}}, h: {{2}} }",
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "尺寸 闊度",
+                    "type": "number",
+                    "value": 32
+                },
+                {
+                    "name": "高度",
+                    "type": "number",
+                    "value": 32
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "404cb2f4-abe5-4c3b-a9da-9b44050e012d",
+            "script": "{w: {{1}}[0], h: {{1}}[1]",
+            "type": "size",
+            "sockets": [
+                {
+                    "name": "以尺寸表示的陣列",
+                    "type": "array"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "33f2a3b7-5d87-4481-ad1c-f2970915db51",
+            "script": "{{1}}.w",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "尺寸",
+                    "type": "size",
+                    "suffix": "的闊度"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "2d449e0e-cb18-473f-a574-614320b7ba22",
+            "script": "{{1}}.h",
+            "type": "number",
+            "sockets": [
+                {
+                    "name": "尺寸",
+                    "type": "size",
+                    "suffix": "的高度"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "7ca31ad7-946a-4587-a5c8-d6b8879dc4e2",
+            "script": "[{{1}}.w, {{1}}.h]",
+            "type": "array",
+            "sockets": [
+                {
+                    "name": "以陣列表示的尺寸",
+                    "type": "size"
+                }
+            ]
+        }
+    ]
+}

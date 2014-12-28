@@ -22,6 +22,9 @@ var scripts_pre = ['wb', 'queryparams', 'util', 'event', 'persistence', 'drag', 
 var scripts_post = ['l10n', 'workspace'];
 
 var localizations = {
+    javascript: {
+        'zh': ['control', 'array']
+    }
 
 };
 

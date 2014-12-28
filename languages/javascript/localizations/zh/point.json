@@ -1,0 +1,94 @@
+{
+    "sectionkey": "points",
+    "name": "座標",
+    "help": "座標(x,y)是指平面上的點的位置。",
+    "blocks": [
+        {
+            "blocktype": "expression",
+            "id": "71eb3271-6dc0-4a82-81cc-4c50d8acb9e7",
+            "script": "{x: {{1}}, y: {{2}} }",
+            "type": "point",
+            "help": "建立一個新座標",
+            "sockets": [
+                {
+                    "name": "座標 x",
+                    "type": "number",
+                    "value": 0
+                },
+                {
+                    "name": "y",
+                    "type": "number",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "efe5e679-8336-4e5a-ade0-4bd930826096",
+            "type": "point",
+            "script": "{x: {{1}}[0], y: {{1}}[1]}",
+            "help": "將陣列轉變成座標",
+            "sockets": [
+                {
+                    "name": "將陣列",
+                    "type": "array",
+                    "suffix": "轉變成座標"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "29803c49-5bd5-4473-bff7-b3cf66ab9711",
+            "type": "point",
+            "script": "{x: randint(0, global.stage_width), y: randint(0, global.stage_height)}",
+            "help": "傳回一個隨機座標",
+            "sockets": [
+                {
+                    "name": "隨機座標"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "36f0eb56-9370-402d-83ef-99201a62c732",
+            "script": "{{1}}.x",
+            "type": "number",
+            "help": "座標的X位置",
+            "sockets": [
+                {
+                    "name": "座標",
+                    "type": "point",
+                    "suffix": "的X位置"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "90b42cf3-185d-4556-b7e8-d9682c187425",
+            "script": "{{1}}.y",
+            "type": "number",
+            "help": "座標的Y位置",
+            "sockets": [
+                {
+                    "name": "座標",
+                    "type": "point",
+                    "suffix": "的Y位置"
+                }
+            ]
+        },
+        {
+            "blocktype": "expression",
+            "id": "743cba63-11d4-4a84-a3b6-a98480bdd731",
+            "script": "[{{1}}.x, {{1}}.y]",
+            "type": "array",
+            "help": "將座標轉變成陣列",
+            "sockets": [
+                {
+                    "name": "將座標",
+                    "type": "point",
+                    "suffix": "轉變成陣列"
+                }
+            ]
+        }
+    ]
+}

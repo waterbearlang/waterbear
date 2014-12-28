@@ -1,0 +1,70 @@
+{
+    "sectionkey": "sound",
+    "name": "聲音",
+    "help": "若瀏覽器支援，能夠播放 wav, mp3, ogg 聲音檔案。",
+    "blocks": [
+        {
+            "blocktype": "step",
+            "id": "59f338b4-0f2f-489a-b4bd-b458fcb48e37",
+            "script": "global.preloadAudio('##', {{1}});",
+            "sockets": [
+                {
+                    "name": "從網頁讀取聲音資料##",
+                    "type": "string"
+                }
+            ],
+            "locals": [
+                {
+                    "blocktype": "asset",
+                    "sockets": [
+                        {
+                            "name": "聲音 ##"
+                        }
+                    ],
+                    "script": "global.audio[\"##\"]",
+                    "type": "sound"
+                }
+            ],
+            "help": "讀取聲音資料"
+        },
+        {
+        	"blocktype": "step",
+        	"id": "4deb2817-6dfc-44e9-a885-7f4b350cc81f",
+        	"script": "{{1}}.currentTime=0;{{1}}.play();",
+        	"sockets": [
+        		{
+        			"name": "播放聲音",
+        			"type": "sound"
+        		}
+        	],
+        	"help": "播放聲音"
+        },
+        {
+        	"blocktype": "step",
+        	"id": "eb715a54-c1f2-4677-819a-9427537bad72",
+        	"script": "{{1}}.pause();",
+        	"sockets": [
+        		{
+        			"name": "暫停聲音",
+        			"type": "sound"
+        		}
+        	]
+        },
+        {
+        	"blocktype": "step",
+        	"id": "79f14360-3a3b-48de-83ae-240977cf343b",
+        	"script": "{{1}}.loop={{2}};",
+        	"sockets": [
+        		{
+        			"name": "將聲音",
+        			"type": "sound"
+        		},
+        		{
+        			"name": "循環設置為",
+        			"type": "boolean"
+        		}
+
+        	]
+        }
+    ]
+}

@@ -72,6 +72,6 @@ Maybe a better route than having the loop block watch for child changes and add 
 
 Keeping the original locals as children, with unambiguous names, can give a handle to find all clones with when removing the originating block.
 
-* [ ] Maintain unique name within scope at all times
-* [ ] Rename instances when name changes
+* [ ] Maintain unique name for variables (locals) within scope at all times
+* [ ] Rename instances of locals when name changes
 * [ ] How do I define the supported gestures?

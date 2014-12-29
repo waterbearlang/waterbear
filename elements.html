@@ -21,200 +21,203 @@
         <button class="open-tags">Tags…</button>
         <button class="do-undo">Undo</button>
         <button class="do-redo">Redo</button>
-        <button class="do-run">Run</button>
     </div>
-    <sidebar>
-        <wb-search></wb-search>
-        <wb-accordion class="controls">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#controls" /></svg>
-                Controls
-            </header>
-            <wb-step script="start.hello">
-                <wb-value type="text" value="World">Say hello</wb-value>
-            </wb-step>
-            <wb-context script="start.loop">
-                <wb-value type="any">Loop over</wb-value>
-            </wb-context>
-            <wb-context script="start.donothing">
-                <wb-value type="number" value="5">Cinco</wb-value>
-                <wb-step script="maybe.yes">
-                    <wb-value type="text" value="Gibson">Guitar</wb-value>
+    <wb-hbox>
+        <sidebar>
+            <wb-search></wb-search>
+            <wb-accordion class="controls">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#controls" /></svg>
+                    Controls
+                </header>
+                <wb-step script="start.hello">
+                    <wb-value type="text" value="World">Say hello</wb-value>
                 </wb-step>
-                <wb-step script="maybe.perhaps">
-                    <wb-value type="text" value="Apple">Fruit</wb-value>
-                </wb-step>
-                <wb-context script="maybe.no">
-                    <wb-value type="text" value="Hootenanny">Dance</wb-value>
+                <wb-context script="start.loop">
+                    <wb-value type="any">Loop over</wb-value>
                 </wb-context>
-            </wb-context>
-            <wb-expression script="start.add">
-                <wb-value type="number" value="1" min="-2" max="5"></wb-value><wb-value type="number" value="1">+</wb-value>
-            </wb-expression>
-        </wb-accordion>
-        <wb-accordion class="sprites">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sprites" /></svg>
-                Sprites
-            </header>
-        </wb-accordion>
-        <wb-accordion class="music">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#music" /></svg>
-                Music
-            </header>
-        </wb-accordion>
-        <wb-accordion class="sound">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sound" /></svg>
-                Sound
-            </header>
-        </wb-accordion>
-        <wb-accordion class="arrays">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#arrays" /></svg>
-                Arrays
-            </header>
-        </wb-accordion>
-        <wb-accordion class="boolean">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#boolean" /></svg>
-                Boolean
-            </header>
-        </wb-accordion>
-        <wb-accordion class="canvas">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#canvas" /></svg>
-                Canvas
-            </header>
-        </wb-accordion>
-        <wb-accordion class="colors">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#colors" /></svg>
-                Colors
-            </header>
-        </wb-accordion>
-        <wb-accordion class="images">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#images" /></svg>
-                Images
-            </header>
-        </wb-accordion>
-        <wb-accordion class="math">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#math" /></svg>
-                Math
-            </header>
-        </wb-accordion>
-        <wb-accordion class="random">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#random" /></svg>
-                Random
-            </header>
-        </wb-accordion>
-        <wb-accordion class="vectors">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#vectors" /></svg>
-                Vectors
-            </header>
-        </wb-accordion>
-        <wb-accordion class="objects">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#objects" /></svg>
-                Objects
-            </header>
-        </wb-accordion>
-        <wb-accordion class="strings">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#strings" /></svg>
-                Strings
-            </header>
-        </wb-accordion>
-        <wb-accordion class="paths">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#paths" /></svg>
-                Paths
-            </header>
-        </wb-accordion>
-        <wb-accordion class="points">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#points" /></svg>
-                Points
-            </header>
-        </wb-accordion>
-        <wb-accordion class="rects">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#rects" /></svg>
-                Rects
-            </header>
-        </wb-accordion>
-        <wb-accordion class="sensing">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sensing" /></svg>
-                Sensing
-            </header>
-        </wb-accordion>
-        <wb-accordion class="motion">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#motion" /></svg>
-                Motion
-            </header>
-        </wb-accordion>
-        <wb-accordion class="shapes">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#shapes" /></svg>
-                Shapes
-            </header>
-        </wb-accordion>
-        <wb-accordion class="geolocation">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#geolocation" /></svg>
-                Geolocation
-            </header>
-        </wb-accordion>
-        <wb-accordion class="date">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#date" /></svg>
-                Date
-            </header>
-        </wb-accordion>
-        <wb-accordion class="sizes">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sizes" /></svg>
-                Sizes
-            </header>
-        </wb-accordion>
-        <wb-accordion class="text">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#text" /></svg>
-                Text
-            </header>
-        </wb-accordion>
-         <wb-accordion class="matrix">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#matrix" /></svg>
-                Matrix
-            </header>
-        </wb-accordion>
-        <wb-accordion class="datablock">
-            <header>
-                <svg class="cat-icon"><use xlink:href="images/category-icons.svg#datablock" /></svg>
-                Datablock
-            </header>
-        </wb-accordion>
-   </sidebar>
-    <wb-hbox class="workspace">
-      <wb-vbox>
-        <div></div>
+                <wb-context script="start.donothing">
+                    <wb-value type="number" value="5">Cinco</wb-value>
+                    <wb-step script="maybe.yes">
+                        <wb-value type="text" value="Gibson">Guitar</wb-value>
+                    </wb-step>
+                    <wb-step script="maybe.perhaps">
+                        <wb-value type="text" value="Apple">Fruit</wb-value>
+                    </wb-step>
+                    <wb-context script="maybe.no">
+                        <wb-value type="text" value="Hootenanny">Dance</wb-value>
+                    </wb-context>
+                </wb-context>
+                <wb-expression script="start.add">
+                    <wb-value type="number" value="1" min="-2" max="5"></wb-value><wb-value type="number" value="1">+</wb-value>
+                </wb-expression>
+            </wb-accordion>
+            <wb-accordion class="sprites">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sprites" /></svg>
+                    Sprites
+                </header>
+            </wb-accordion>
+            <wb-accordion class="music">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#music" /></svg>
+                    Music
+                </header>
+            </wb-accordion>
+            <wb-accordion class="sound">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sound" /></svg>
+                    Sound
+                </header>
+            </wb-accordion>
+            <wb-accordion class="arrays">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#arrays" /></svg>
+                    Arrays
+                </header>
+            </wb-accordion>
+            <wb-accordion class="boolean">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#boolean" /></svg>
+                    Boolean
+                </header>
+            </wb-accordion>
+            <wb-accordion class="canvas">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#canvas" /></svg>
+                    Canvas
+                </header>
+            </wb-accordion>
+            <wb-accordion class="colors">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#colors" /></svg>
+                    Colors
+                </header>
+            </wb-accordion>
+            <wb-accordion class="images">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#images" /></svg>
+                    Images
+                </header>
+            </wb-accordion>
+            <wb-accordion class="math">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#math" /></svg>
+                    Math
+                </header>
+            </wb-accordion>
+            <wb-accordion class="random">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#random" /></svg>
+                    Random
+                </header>
+            </wb-accordion>
+            <wb-accordion class="vectors">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#vectors" /></svg>
+                    Vectors
+                </header>
+            </wb-accordion>
+            <wb-accordion class="objects">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#objects" /></svg>
+                    Objects
+                </header>
+            </wb-accordion>
+            <wb-accordion class="strings">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#strings" /></svg>
+                    Strings
+                </header>
+            </wb-accordion>
+            <wb-accordion class="paths">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#paths" /></svg>
+                    Paths
+                </header>
+            </wb-accordion>
+            <wb-accordion class="points">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#points" /></svg>
+                    Points
+                </header>
+            </wb-accordion>
+            <wb-accordion class="rects">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#rects" /></svg>
+                    Rects
+                </header>
+            </wb-accordion>
+            <wb-accordion class="sensing">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sensing" /></svg>
+                    Sensing
+                </header>
+            </wb-accordion>
+            <wb-accordion class="motion">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#motion" /></svg>
+                    Motion
+                </header>
+            </wb-accordion>
+            <wb-accordion class="shapes">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#shapes" /></svg>
+                    Shapes
+                </header>
+            </wb-accordion>
+            <wb-accordion class="geolocation">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#geolocation" /></svg>
+                    Geolocation
+                </header>
+            </wb-accordion>
+            <wb-accordion class="date">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#date" /></svg>
+                    Date
+                </header>
+            </wb-accordion>
+            <wb-accordion class="sizes">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#sizes" /></svg>
+                    Sizes
+                </header>
+            </wb-accordion>
+            <wb-accordion class="text">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#text" /></svg>
+                    Text
+                </header>
+            </wb-accordion>
+             <wb-accordion class="matrix">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#matrix" /></svg>
+                    Matrix
+                </header>
+            </wb-accordion>
+            <wb-accordion class="datablock">
+                <header>
+                    <svg class="cat-icon"><use xlink:href="images/category-icons.svg#datablock" /></svg>
+                    Datablock
+                </header>
+            </wb-accordion>
+        </sidebar>
         <wb-splitter></wb-splitter>
-        <div></div>
-      </wb-vbox>
-      <wb-splitter></wb-splitter>
-      <wb-vbox>
-        <div></div>
+        <wb-workspace>
+            <header>Workspace Title</header>
+            <output class="feedback">Message to the user go here</output>
+            <wb-locals>Put workspace globals here</wb-locals>
+            <wb-contains>Script area</wb-contains>
+        </wb-workspace>
         <wb-splitter></wb-splitter>
-        <div></div>
-      </wb-vbox>
+        <wb-playground>
+            <div class="menu">
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
+            </div>
+            <wb-canvas></wb-canvas>
+        </wb-playground>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
 	<script src="js/dom.js"></script>

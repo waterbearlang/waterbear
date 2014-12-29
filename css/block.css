@@ -33,7 +33,7 @@ wb-value > * {
     margin: 0px 5px;
 }
 
-wb-contains {
+wb-context > wb-contains {
     display: block;
     background-color: rgba(255, 255, 255, 1.0);
     position: relative;
@@ -52,15 +52,15 @@ wb-contains {
     right: -3px;
 }
 
-wb-contains:last-child:after {
-    content: ".";
+wb-context > wb-contains:last-child:after {
+    content: "";
     display: block;
     height: 0;
     clear: both;
     visibility: hidden;
 }
 
-wb-disclosure:after{
+wb-context > wb-disclosure:after{
     content: "▼";
     width: 1em;
     height: 1em;

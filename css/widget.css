@@ -5,60 +5,94 @@ wb-search, wb-accordion{
 }
 
 
-/* test widgets */
-.workspace{
-    width: calc(100% - 300px);
-    height: calc(100% - 68px);
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-
 /* HBOX, VBOX layout widgets */
 
 wb-hbox, wb-vbox{
-    display: inline-block;
+    display: flex;
+    flex: 1 1;
     position: relative;
+}
+wb-hbox{
+    flex-direction: row;
+    height: 100%;
+}
+wb-vbox{
+    flex-direction: column;
 }
 
 wb-hbox > *{
-    width: 50%;
-    height: 100%;
-    float: left;
-}
-
-wb-hbox[split=true] > *{
-    width: calc(50% - 4px);
+    flex: 1 1 auto;
 }
 
 wb-vbox > *{
     width: 100%;
-    height: 50%;
+    flex: 1 1 auto;
 }
 
-wb-vbox[split=true] > *{
-    height: calc(50% - 4px);
-}
 
 wb-splitter{
     display: block;
     z-index: 100;
+    flex: 0 0 8px;
 }
 
-wb-hbox[split=true] > wb-splitter{
-    width: 8px;
-    height: 100%;
+wb-hbox > wb-splitter{
     background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
     background-image-size: 8px 8px;
     cursor: ew-resize;
 }
 
-wb-vbox[split=true] > wb-splitter{
-    width: 100%;
-    height: 8px;
+wb-vbox > wb-splitter{
     background-image: linear-gradient(0deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
     background-image-size: 8px 8px;
     cursor: ns-resize;
+}
+
+/* Workspace */
+
+wb-workspace{
+    display: flex;
+    flex-direction: column;
+    flex: 2 1;
+}
+
+wb-workspace > header{
+    flex: 0 0 34px;
+}
+
+wb-workspace > output{
+    flex: 0 0 34px;
+}
+
+wb-workspace > wb-locals{
+    flex: 1 1;
+}
+
+wb-workspace > wb-contains{
+    flex: 3 1;
+    overflow-y: auto;
+}
+
+/* Playground */
+
+wb-playground{
+    display: flex;
+    flex-direction: column;
+    flex: 3 1;
+}
+
+wb-playground > header{
+    flex: 0 0 34px;
+}
+
+wb-playground > wb-canvas{
+    flex: 1 1;
+}
+
+/* Search */
+
+wb-search{
+    height: 34px;
 }
 
 /* ACCORDION */

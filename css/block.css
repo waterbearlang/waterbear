@@ -12,9 +12,10 @@ wb-step, wb-context, wb-expression{
     position: relative;
 }
 
-wb-content{
-    display: block;
-    background-color: #FFF;
+wb-step.dragging, wb-context.dragging, wb-expression.dragging{
+    opacity: 0.5;
+    position: absolute;
+    pointer-events: none;
 }
 
 wb-expression{

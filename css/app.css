@@ -56,6 +56,18 @@ body > header > h1{
     font-size: 18px;
 }
 
+/* Show trash for sidebar while dragging */
+
+sidebar.trash > *{
+    display: none;
+}
+
+sidebar.trash:after{
+    content: '';
+    background-image: url("images/recycle.svg");
+}
+
+
 /* Accordion Colors and Icons */
 wb-accordion.controls > header:after{ background-color: hsl(0, 93%, 56%); }
 wb-accordion.sprites > header:after{ background-color: hsl(156, 93%, 56%); }

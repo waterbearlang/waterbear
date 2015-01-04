@@ -5,7 +5,7 @@
 // A wb- or wb-expression can only contain wb-arguments, wb-locals, and/or text
 // A wb-context, wb-toplevel, or wb-workspace must also contain wb-contents, wb-locals
 // Some elements can be implied, like in HTML: when you don't include a wb-head it goes in anyway?
-// So you could make a context with multiple wb-contents, but by default there would be one even
+// So you could make a context with multiple wb-contains, but by default there would be one even
 // if you don't put it there explicitly.
 //
 // Or should we avoid that kind of magic? I think if it is documented it might be OK and help keep
@@ -66,7 +66,7 @@ var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
     setDefault(this, 'header', true);
-    console.log('%s created with %s children', this.tagName.toLowerCase(), this.children.length);
+    // console.log('%s created with %s children', this.tagName.toLowerCase(), this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
     // Add locals
@@ -81,13 +81,13 @@ BlockProto.attachedCallback = function blockAttached(){
     if (parent){
         setDefault(parent, 'wb-contains').appendChild(this);
     }else{
-        console.warn('free-floating block: %o, OK for now', this);
+        // console.warn('free-floating block: %o, OK for now', this);
     }
-    console.log('%s attached', this.tagName.toLowerCase());
+    // console.log('%s attached', this.tagName.toLowerCase());
 };
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
-    console.log('%s detached', this.tagName.toLowerCase());
+    // console.log('%s detached', this.tagName.toLowerCase());
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -95,7 +95,7 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    title or help (do nothing)
     //    script (do nothing)
     //    type (do nothing
-    console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
+    // console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
 };
 
 // Step Proto
@@ -114,7 +114,7 @@ ContextProto.createdCallback = function contextCreated(){
     setDefault(this, 'wb-disclosure');
     setDefault(this, 'wb-local');
     setDefault(this, 'wb-contains');
-    console.log('Context created');
+    // console.log('Context created');
 };
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
@@ -123,7 +123,7 @@ ExpressionProto.createdCallback = function expressionCreated(){
     // console.log('Expression created');
     var children = [].slice.apply(this.children);
     children.forEach(function(child){
-        console.log('Expression child of mine: %s', child);
+        // console.log('Expression child of mine: %s', child);
     });
 };
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
@@ -192,6 +192,62 @@ document.addEventListener('input', function(event){
 var ContainedProto = Object.create(HTMLElement.prototype);
 window.WBContained = document.registerElement('wb-contained', {prototype: ContainedProto});
 
+var dragTarget = null;
+var origTarget = null;
+
+event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
+    origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
+    // Maybe move to object notation later
+    //    return target.startDrag(evt);
+
+    // Show trash can, should be in app.js, not block.js
+    document.querySelector('sidebar').classList.add('trashcan');
+
+    dragTarget = origTarget.cloneNode(true);
+    document.body.appendChild(dragTarget);
+    var dragStart = dom.matches(origTarget, '.wb-contains *') ? 'script' : 'menu';
+    if (dragStart === 'script'){
+        origTarget.style.display = 'none';
+    }
+    dragTarget.classList.add('dragging');
+    dragTarget.style.left = (evt.pageX - 15) + 'px';
+    dragTarget.style.top = (evt.pageY - 15) + 'px';
+});
+
+event.on(document.body, 'dragging', null, function(evt){
+    if (!dragTarget){ return; }
+    // console.log('block dragging ' + dragTarget.tagName.toLowerCase() + ' (' + evt.pageX + ', ' + evt.pageY + ') %o', evt);
+    dragTarget.style.left = (evt.pageX - 15) + 'px';
+    dragTarget.style.top = (evt.pageY - 15) + 'px';
+    var potentialDropTarget = document.elementFromPoint(evt.x, evt.y);
+    app.warn('over ' + potentialDropTarget.tagName.toLowerCase());
+});
+
+event.on(document.body, 'drag-end', null, function(evt){
+    if (!dragTarget){ return; }
+    // console.log('block drag-end ' + dragTarget.tagName.toLowerCase());
+    dragTarget.classList.remove('dragging');
+    dragTarget.style.top = 0;
+    dragTarget.style.left = 0;
+    // if there is no valid drop target
+    dragTarget.parentElement.removeChild(dragTarget);
+    // re-show original
+    origTarget.style.display = 'inline-block';
+    dragTarget = null;
+    origTarget = null;
+});
+
+event.on(document.body, 'drag-cancel', null, function(evt){
+    if (!dragTarget){ return null; }
+    // console.log('block drag-cancel ' + dragTarget.tagName.toLowerCase());
+    dragTarget.classList.remove('dragging');
+    dragTarget.style.top = 0;
+    dragTarget.style.left = 0;
+    // if there is no valid drop target
+    dragTarget.parentElement.removeChild(dragTarget);
+    // re-show original
+    origTarget.style.display = 'inline-block';
+});
 
 })();
 

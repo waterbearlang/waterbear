@@ -60,7 +60,7 @@
             namespace = ns_name[0];
             eventname = ns_name[1];
         }else{
-            console.warn('Setting event handler in global namespace: %o : %s', elem, eventname);
+            // console.warn('Setting event handler in global namespace: %o : %s', elem, eventname);
         }
         if (typeof elem === 'string'){
             return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
@@ -75,35 +75,36 @@
             console.error('second argument must be eventname: %s', eventname);
             throw new Error('second argument must be eventname: ' + eventname);
         }
-        if (selector && typeof selector !== 'string'){ console.log('third argument must be selector or null'); }
-        if (typeof handler !== 'function'){ console.log('fourth argument must be handler'); }
+        if (selector && typeof selector !== 'string'){ console.error('third argument must be selector or null'); }
+        if (typeof handler !== 'function'){ console.error('fourth argument must be handler'); }
         var listener = function listener(originalEvent){
-            var event;
+            var evt;
             // console.log('event %s', originalEvent.type);
             if (originalEvent.detail && originalEvent.detail.forwarded){
-                event = blend(originalEvent.detail.forwarded);
-                event.type = originalEvent.type;
+                // console.log('unwrapping forwarded event %s: %o', originalEvent.type, originalEvent.detail.forwarded);
+                evt = blend(originalEvent.detail.forwarded);
+                evt.type = originalEvent.type;
             }else{
-                event = blend(originalEvent); // normalize between touch and mouse events
+                evt = blend(originalEvent); // normalize between touch and mouse events
             }
-            if (event.invalid){
-                // console.log('event is not valid');
+            if (evt.invalid){
+                // console.log('event is not valid: %o', evt);
                 return;
             }
             if (onceOnly){
-                Event.off(elem, eventname, listener);
+                event.off(elem, eventname, listener);
             }
             if (selector){
-                if (dom.matches(event.target, selector)){
-                    handler(event);
-                }else if (dom.matches(event.target, selector + ' *')){
-                    // Fix for missing events that are contained in child elements
-                    // Bubble up to the nearest matching parent
-                    event.target = dom.closest(event.target, selector);
-                    handler(event);
+                if (dom.matches(evt.target, selector)){
+                    handler(evt);
+                // }else if (dom.matches(evt.target, selector + ' *')){
+                //     // Fix for missing events that are contained in child elements
+                //     // Bubble up to the nearest matching parent
+                //     evt.target = dom.closest(evt.target, selector);
+                //     handler(evt);
                 }
             }else{
-                handler(event);
+                handler(evt);
             }
         };
         elem.addEventListener(eventname, listener, false);
@@ -141,10 +142,10 @@
     function trigger(elemOrSelector, eventname, data){
         var elem = elemOrSelector;
         if (typeof elemOrSelector === 'string'){
-            elem = document.querySelector(elem);
+            elem = document.querySelector(elemOrSelector);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
-        //console.log('dispatching %s for %o', eventname, elem);
+        // console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     }
 
@@ -157,8 +158,8 @@
 
     // Are touch events supported?
     var isTouch = ('ontouchstart' in runtime);
-    function isMouseEvent(event){
-        switch(event.type){
+    function isMouseEvent(evt){
+        switch(evt.type){
             case 'mousedown':
             case 'mousemove':
             case 'mouseup':
@@ -169,8 +170,8 @@
         }
     }
 
-    function isTouchEvent(event){
-        switch(event.type){
+    function isTouchEvent(evt){
+        switch(evt.type){
             case 'touchstart':
             case 'touchmove':
             case 'touchend':
@@ -187,30 +188,232 @@
 
     // Treat mouse events and single-finger touch events similarly
     function blend(originalEvent){
-        var event = cloneEvent(originalEvent);
-        if (isPointerEvent(event)){
-            if (isTouchEvent(event)){
+        var evt = cloneEvent(originalEvent);
+        if (isPointerEvent(evt)){
+            if (isTouchEvent(evt)){
                 var touch = null;
-                if (event.touches.length === 1){
-                    touch = event.touches[0];
-                }else if (event.changedTouches.length === 1){
-                    touch = event.changedTouches[0];
+                if (evt.touches.length === 1){
+                    touch = evt.touches[0];
+                }else if (evt.changedTouches.length === 1){
+                    touch = evt.changedTouches[0];
                 }else{
-                    event.invalid = true;
-                    return event;
+                    evt.invalid = true;
+                    evt.invalidReason = 'Multiple touches present';
+                    return evt;
                 }
-                event.target = touch.target;
-                event.pageX = touch.pageX;
-                event.pageY = touch.pageY;
+                evt.target = touch.target;
+                evt.pageX = touch.pageX;
+                evt.pageY = touch.pageY;
             }else{
                 // is this necessary or desirable?
-                if (event.which !== 1){ // left mouse button
-                    event.invalid = true;
-                    return event;
+                if (evt.which !== 1){ // left mouse button
+                    evt.invalid = true;
+                    evt.invalidReason = 'Not the left mouse button';
+                    return evt;
                 }
             }
         }
-        return event;
+        return evt;
+    }
+
+    // /****************************
+    //  *
+    //  *  Synthesize pointing events
+    //  *
+    //  *  Simple normalization of mouse and touch events, no biggie
+    //  *
+    //  *  NOT W3C "Pointer Events" because they are dumb (will elaborate at length over a beer)
+    //  *
+    //  *  File under "things we shouldn't have to do"
+    //  *
+    //  *  Modified from pointer.js: https://raw.githubusercontent.com/mozilla/pointer.js/master/pointer.js
+    //  *
+    //  *****************************/
+
+    // // Pointer events have the following custom properties:
+    // // * origEvent: the event that triggered the pointer event.
+    // // * touch: boolean- is maskedEvent a touch event?
+    // // * mouse: boolean- is maskedEvent a mouse event?
+    // // * x: page-normalized x coordinate of the event.
+    // // * y: page-normalized y coordinate of the event.
+
+    // var body = document.body;
+
+    // var isScrolling = false;
+    // var timeout = false;
+    // var sDistX = 0;
+    // var sDistY = 0;
+    // window.addEventListener('scroll', function() {
+    //     if (!isScrolling) {
+    //         sDistX = window.pageXOffset;
+    //         sDistY = window.pageYOffset;
+    //     }
+    //     isScrolling = true;
+    //     clearTimeout(timeout);
+    //     timeout = setTimeout(function() {
+    //         isScrolling = false;
+    //         sDistX = 0;
+    //         sDistY = 0;
+    //     }, 100);
+    // });
+
+    // body.addEventListener('mousedown', pointerDown);
+    // body.addEventListener('touchstart', pointerDown);
+    // body.addEventListener('mouseup', pointerUp);
+    // body.addEventListener('touchend', pointerUp);
+    // body.addEventListener('mousemove', pointerMove);
+    // body.addEventListener('touchmove', pointerMove);
+    // body.addEventListener('mouseout', pointerLeave);
+    // body.addEventListener('touchleave', pointerLeave);
+
+    // // 'pointerdown' event, triggered by mousedown/touchstart.
+    // function pointerDown(e) {
+    //     var evt = makePointerEvent('down', e);
+    //     // don't maybeClick if more than one touch is active.
+    //     var singleFinger = evt.mouse || (evt.touch && e.touches.length === 1);
+    //     if (!isScrolling && singleFinger) {
+    //         e.target.maybeClick = true;
+    //         e.target.maybeClickX = evt.x;
+    //         e.target.maybeClickY = evt.y;
+    //     }
+    // }
+
+    // // 'pointerdown' event, triggered by mouseout/touchleave.
+    // function pointerLeave(e) {
+    //     e.target.maybeClick = false;
+    //     makePointerEvent('leave', e);
+    // }
+
+    // // 'pointermove' event, triggered by mousemove/touchmove.
+    // function pointerMove(e) {
+    //     var evt = makePointerEvent('move', e);
+    // }
+
+    // // 'pointerup' event, triggered by mouseup/touchend.
+    // function pointerUp(e) {
+    //     var evt = makePointerEvent('up', e);
+    //     // Does our target have maybeClick set by pointerdown?
+    //     if (e.target.maybeClick) {
+    //         // Have we moved too much?
+    //         if (Math.abs(e.target.maybeClickX - evt.x) < 5 &&
+    //             Math.abs(e.target.maybeClickY - evt.y) < 5) {
+    //             // Have we scrolled too much?
+    //             if (!isScrolling ||
+    //                 (Math.abs(sDistX - window.pageXOffset) < 5 &&
+    //                  Math.abs(sDistY - window.pageYOffset) < 5)) {
+    //                 makePointerEvent('click', e);
+    //             }
+    //         }
+    //     }
+    //     e.target.maybeClick = false;
+    // }
+
+    // function makePointerEvent(type, e) {
+    //     var tgt = e.target;
+    //     var evt = document.createEvent('CustomEvent');
+    //     evt.initCustomEvent('pointing' + type, true, true, {});
+    //     evt.touch = e.type.indexOf('touch') === 0;
+    //     evt.mouse = e.type.indexOf('mouse') === 0;
+    //     if (evt.touch) {
+    //         evt.x = e.changedTouches[0].pageX;
+    //         evt.y = e.changedTouches[0].pageY;
+    //     }
+    //     if (evt.mouse) {
+    //         evt.x = e.clientX + window.pageXOffset;
+    //         evt.y = e.clientY + window.pageYOffset;
+    //     }
+    //     evt.origEvent = e;
+    //     tgt.dispatchEvent(evt);
+    //     return evt;
+    // }
+
+
+    /****************************
+     *
+     *  Synthesize dragging events
+     *
+     *  Simple dragging within the window and DOM, not to/from desktop or wild crazy stuff like that
+     *
+     *  NOT W3C "HTML5 Drag and Drop" which is badly broken and not supported at all on mobile
+     *
+     *  File under "Things we shouldn't have to do"
+     *
+     *****************************/
+    var dragTarget = null;
+    var isDragging = false;
+    var pointerDown = false;
+    var startPos = {x: 0, y: 0};
+    var DELTA = 5; // movement required to trigger drag vs. tap
+
+    function reset(){
+        // called when we end a drag for any reason
+        dragTarget = null;
+        isDragging = false;
+        pointerDown = false;
+        trigger(document, 'drag-reset');
+    }
+
+    function initDrag(evt){
+        // Called on mousedown or touchstart, we haven't started dragging yet
+        // Don't start drag on a text input or select
+        if (dom.closest(evt.target, 'input, select')){
+            return undefined;
+        }
+        // console.log('init drag: ' +  evt.target.tagName.toLowerCase());
+        pointerDown = true;
+        dragTarget = evt.target;
+        startPos = {x: evt.pageX, y: evt.pageY};
+        forward(dragTarget, 'drag-init', evt);
+    }
+
+    function startDrag(evt){
+        // called on mousemove or touchmove if not already dragging
+        if (!dragTarget) { return undefined; }
+        if (!pointerDown) { return undefined; }
+        // console.info('start drag: ' + dragTarget.tagName.toLowerCase());
+        isDragging = true;
+        forward(dragTarget, 'drag-start', evt);
+        return false;
+    }
+
+    function dragging(evt){
+        if (!dragTarget) { return undefined; }
+        if (!isDragging) {
+            // Test if we've moved more than a delta?
+            // Otherwise this could block legitimate click/tap events
+            // var distanceMoved = Math.sqrt(Math.pow(evt.pageX - startPos.x, 2) + Math.pow(evt.pageY - startPos.y));
+            // if (distanceMoved < DELTA){
+                // console.info('Have not moved enough yet');
+            //     return undefined;
+            // }
+            if (startDrag(evt) === undefined) {
+                return undefined;
+            }
+        }
+        // console.log('dragging: ' + dragTarget.tagName.toLowerCase() + ' (' + evt.pageX + ', ' + evt.pageY + ')');
+        evt.preventDefault();
+        forward(dragTarget, 'dragging', evt);
+        return false;
+    }
+
+    function endDrag(evt){
+        pointerDown = false;
+        if (!isDragging) { return undefined; }
+        // console.log('end drag: ' + dragTarget.tagName.toLowerCase());
+        forward(dragTarget, 'drag-end', evt);
+        // FIXME: Don't prevent default unless we've dragged more than delta
+        evt.preventDefault();
+        reset();
+        return false;
+    }
+
+    function cancelDrag(evt) {
+        // Cancel if escape key pressed
+        if(evt.keyCode == 27 && isDragging) {
+            forward(dragTarget, 'drag-cancel', evt);
+            reset();
+            return false;
+        }
     }
 
 
@@ -224,4 +427,15 @@
         isTouch: isTouch,
         allEvents: allEvents // for testing
     };
+
+
+    on(document.body, 'touchstart', null, initDrag);
+    on(document.body, 'touchmove', null, dragging);
+    on(document.body, 'touchend', null, endDrag);
+    on(document.body, 'mousedown', null, initDrag);
+    on(document.body, 'mousemove', null, dragging);
+    on(window, 'mouseup', null, endDrag);
+    on(window, 'keyup', null, cancelDrag);
+
+
 })(this);

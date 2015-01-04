@@ -107,8 +107,8 @@
                 return e;
             }
             if (!e.parentElement){
-                throw new Error('Element has no parent, is it in the tree? ' + e);
-                //return null;
+                // throw new Error('Element has no parent, is it in the tree? ' + e);
+                return null;
             }
             e = e.parentElement;
         }

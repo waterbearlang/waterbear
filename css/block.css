@@ -34,14 +34,19 @@ wb-value > * {
     margin: 0px 5px;
 }
 
+wb-locals{
+    background-color: #CCC;
+    border: 2px inset #999;
+}
+
 wb-context > wb-contains {
     display: block;
     background-color: rgba(255, 255, 255, 1.0);
     position: relative;
-    padding-top: 1px;
+    padding-top: 10px;
     margin-left: 10px;
     margin-bottom: 0;
-    padding-bottom: 10px;
+    padding-bottom: 1px;
     overflow-x: hidden;
     overflow-y: hidden;
     border-top-left-radius: 10px;
@@ -75,8 +80,13 @@ wb-context[closed] > header > wb-disclosure{
 }
 
 
-input{
+wb-value > input{
     width: 20px;
+    display: none;
+}
+
+wb-value > input:last-child{
+    display: inline-block;
 }
 
 /* Used for input resizing */

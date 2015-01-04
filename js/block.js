@@ -58,9 +58,13 @@ function insertIntoHeader(){
     head.appendChild(this, true);
 };
 
-
-// BlockProto
-// Not actually instantiated, but used as a superclass for other blocks
+/*****************
+*
+*  BlockProto
+*
+*  Not actually instantiated, but used as a superclass for other blocks
+*
+******************/
 
 var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
@@ -98,14 +102,35 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
 };
 
-// Step Proto
-// Instantiated as new WBStep or as <wb-step>
+/*****************
+*
+*  wb-step
+*
+*  Instantiated as new WBStep or as <wb-step>
+*
+*  Attributes: class, id, script (mandatory)
+*
+*  Children: wb-value
+*
+******************/
 
 var StepProto = Object.create(BlockProto);
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
+
+/*****************
+*
+*  wb-context
+*
+*  Instantiated as new WBContext or as <wb-context>
+*
+*  Attributes: class, id, script (mandatory)
+*
+*  Children: wb-value, wb-disclosure, wb-locals, wb-contains
+*
+******************/
 
 var ContextProto = Object.create(BlockProto);
 ContextProto.createdCallback = function contextCreated(){
@@ -118,9 +143,22 @@ ContextProto.createdCallback = function contextCreated(){
 };
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
-var ExpressionProto = Object.create(BlockProto);
+/*****************
+*
+*  wb-expression
+*
+*  Instantiated as new WBExpression or as <wb-expression>
+*
+*  Attributes: class, id, script (mandatory), type (mandatory)
+*
+*  Children: wb-value
+*
+******************/
+
+var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
     // console.log('Expression created');
+    setDefault(this, 'header', true);
     var children = [].slice.apply(this.children);
     children.forEach(function(child){
         // console.log('Expression child of mine: %s', child);
@@ -128,17 +166,60 @@ ExpressionProto.createdCallback = function expressionCreated(){
 };
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
+/*****************
+*
+*  wb-disclosure
+*
+*  Instantiated as new WBDisclosure or as <wb-disclosure>
+*
+*  Attributes: closed (true/false)
+*
+******************/
+
 var DisclosureProto = Object.create(HTMLElement.prototype);
 DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
+/*****************
+*
+*  wb-locals
+*
+*  Instantiated as new WBLocals or as <wb-locals>
+*
+*  Attributes: class, id
+*
+*  Children: wb-step, wb-context, wb-expression
+*
+*  Locals are a menu of blocks which are local to a wb-context
+*
+*  FIXME: Still need to decide on how to represent locals in a block definintion vs. locals
+*  in a context runtime
+*
+******************/
+
+
 var LocalProto = Object.create(HTMLElement.prototype);
 window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
+
+/*****************
+*
+*  wb-value
+*
+*  Instantiated as new WBValue or as <wb-value>
+*
+*  Attributes: class, id, type (mandatory, can be comma-separated list), value, min, max
+*
+*  Children: text, input, select, wb-expression
+*
+******************/
+
 
 var ValueProto = Object.create(HTMLElement.prototype);
 ValueProto.createdCallback = function valueCreated(){
     // Add holder, input or select, or block
     // console.log('Value created');
+    // See if we're already initialized (if cloned, for instance)
+    if (dom.child(this, 'input, select, wb-expression')){ return; }
     var type = this.getAttribute('type');
     var value = this.getAttribute('value');
     var input;
@@ -181,19 +262,15 @@ ValueProto.createdCallback = function valueCreated(){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-// Handle resizing inputs when their content changes
-document.addEventListener('input', function(event){
-    var target = event.target;
-    if (! dom.matches(target, 'wb-value > input')) return;
-    resize(target);
-}, false);
-
 
 var ContainedProto = Object.create(HTMLElement.prototype);
 window.WBContained = document.registerElement('wb-contained', {prototype: ContainedProto});
 
 var dragTarget = null;
 var origTarget = null;
+var dragStart = '';
+var dropTarget = null;
+var BLOCK_MENU = document.querySelector('sidebar');
 
 event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
@@ -201,11 +278,13 @@ event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     //    return target.startDrag(evt);
 
     // Show trash can, should be in app.js, not block.js
-    document.querySelector('sidebar').classList.add('trashcan');
+    BLOCK_MENU.classList.add('trashcan');
+
+    // FIXME: Highlight droppable places (or grey out non-droppable)
 
     dragTarget = origTarget.cloneNode(true);
     document.body.appendChild(dragTarget);
-    var dragStart = dom.matches(origTarget, '.wb-contains *') ? 'script' : 'menu';
+    dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
     if (dragStart === 'script'){
         origTarget.style.display = 'none';
     }
@@ -220,34 +299,121 @@ event.on(document.body, 'dragging', null, function(evt){
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
     var potentialDropTarget = document.elementFromPoint(evt.x, evt.y);
-    app.warn('over ' + potentialDropTarget.tagName.toLowerCase());
+    if (potentialDropTarget.matches('sidebar, sidebar *')){
+        dropTarget = BLOCK_MENU;
+        app.warn('drop here to delete block(s)');
+        return;
+    }
+    if (dragTarget.matches('wb-expression')){
+        // FIXME
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value');
+        if (dropTarget){
+            console.log('expression drop target: %o', dropTarget);
+            if (dom.child(dropTarget, 'wb-expression')){
+                app.warn('cannot drop an expression on another expression');
+                dropTarget = null;
+                return;
+            }
+            if (dom.child(dropTarget, 'select')){
+                app.warn('cannot currently drop an expression on a drop-down');
+                dropTarget = null;
+                return;
+            }
+            var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
+            var dragType = dragTarget.getAttribute('type');
+            if (dropTypes[0] === 'any' || dropTypes.indexOf(dragType) > -1){
+                app.warn('drop here to add block to script');
+            }else{
+                app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');
+                dropTarget = null;
+            }
+        }else{
+            app.warn('expressions blocks can only be dropped on values');
+        }
+        return;
+    }else{
+        dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
+        // FIXME: Don't drop onto locals
+        if (dropTarget){
+            if (dropTarget.matches('wb-contains')){
+                app.warn('drop to add to top of the block container');
+            }else{
+                app.warn('drop to add after this block');
+            }
+            return;
+        }
+    }
+    app.warn('Not a target, drop to cancel drag');
 });
 
 event.on(document.body, 'drag-end', null, function(evt){
-    if (!dragTarget){ return; }
-    // console.log('block drag-end ' + dragTarget.tagName.toLowerCase());
-    dragTarget.classList.remove('dragging');
-    dragTarget.style.top = 0;
-    dragTarget.style.left = 0;
-    // if there is no valid drop target
-    dragTarget.parentElement.removeChild(dragTarget);
-    // re-show original
-    origTarget.style.display = 'inline-block';
-    dragTarget = null;
-    origTarget = null;
+    if (!dropTarget){
+        // fall through to resetDragging()
+    }else if (dropTarget === BLOCK_MENU){
+        // Drop on script menu to delete block, always delete clone
+        dragTarget.parentElement.removeChild(dragTarget);
+        if (dragStart === 'script'){
+            // only delete original if it is in the script, not menu
+            // FIXME: Don't delete originals in locals
+            origTarget.parentElement.removeChild(origTarget);
+            origTarget = null;
+        }
+    }else if(dragTarget.matches('wb-expression')){
+        console.log('dropping a %o into an %o', dragTarget, dropTarget);
+        dropTarget.appendChild(dragTarget);
+    }else if(dragTarget.matches('wb-context, wb-step')){
+        if (dropTarget.matches('wb-contains')){
+            // dropping directly into a contains section
+            dropTarget.insertBefore(dragTarget, dropTarget.firstElementChild);
+        }else{
+            // dropping on a block in the contains, insert after that block
+            dropTarget.parentElement.insertBefore(dragTarget, dropTarget.nextElementSibling);
+        }
+        if (dragStart === 'script'){
+            // only delete original if it is in the script, not menu
+            // FIXME: Don't delete originals in locals
+            // FIXME: Duplicated code, refactor
+            origTarget.parentElement.removeChild(origTarget);
+            origTarget = null;
+        }
+    }else{
+        dragTarget.parentElement.removeChild(dragTarget);
+    }
+
+    resetDragging();
 });
 
 event.on(document.body, 'drag-cancel', null, function(evt){
-    if (!dragTarget){ return null; }
-    // console.log('block drag-cancel ' + dragTarget.tagName.toLowerCase());
-    dragTarget.classList.remove('dragging');
-    dragTarget.style.top = 0;
-    dragTarget.style.left = 0;
-    // if there is no valid drop target
     dragTarget.parentElement.removeChild(dragTarget);
-    // re-show original
-    origTarget.style.display = 'inline-block';
+    resetDragging();
 });
+
+// Handle resizing inputs when their content changes
+document.addEventListener('input', function(event){
+    var target = event.target;
+    if (! dom.matches(target, 'wb-value > input')) return;
+    resize(target);
+}, false);
+
+
+
+function resetDragging(){
+    if (dragTarget){
+        dragTarget.classList.remove('dragging');
+        dragTarget.removeAttribute('style');
+    }
+    if (origTarget){
+        delete origTarget.style.display;
+    }
+    dragTarget = null;
+    origTarget = null;
+    dragStart = '';
+    dropTarget = null;
+    app.info('');
+    // Hide trash can, should be in app.js, not block.js
+    BLOCK_MENU.classList.remove('trashcan');
+}
+
 
 })();
 

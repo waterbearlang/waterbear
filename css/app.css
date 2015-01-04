@@ -14,6 +14,7 @@ body{
 sidebar{
     flex: 0 0 200px;
     overflow-y: auto;
+    position: relative;
 }
 
 body > header{
@@ -58,13 +59,39 @@ body > header > h1{
 
 /* Show trash for sidebar while dragging */
 
-sidebar.trash > *{
+sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{
     display: none;
 }
 
-sidebar.trash:after{
+sidebar.trashcan:after{
     content: '';
-    background-image: url("images/recycle.svg");
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    background-image: url("../images/recycle.svg");
+    background-size: contain;
+    background-position: 50%;
+}
+
+/* Format Workspace */
+
+wb-workspace > wb-contains{
+    border: 2px inset #CCC;
+    position: relative;
+}
+
+wb-workspace > wb-contains:empty::before{
+    display: block;
+    content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+
 }
 
 

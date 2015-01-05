@@ -48,7 +48,7 @@
         return elem; // for chaining
     }
 
-    function appendChildren(elem, children){
+    function appendChildren(e, children){
         // Children can be a single child or an array
         // Each child can be a string or a node
         if (children){
@@ -64,7 +64,7 @@
                 }
             });
         }
-        return elem;
+        return e;
     }
 
     function elemToObject(elem){
@@ -210,6 +210,34 @@
         return allChildren.indexOf(child);
     }
 
+    function createSelect(options, value, classname){
+        var choice = html('select');
+        if(Array.isArray(options)){
+            options.forEach(function(opt){
+                var option = html('option', {}, opt);
+                if (value !== undefined && value !== null && value === opt){
+                    option.setAttribute('selected', 'selected');
+                }
+                choice.appendChild(option);
+            });
+        }
+        else{
+            var values = Object.keys(options);
+            values.forEach(function(val){
+                var option = html('option', {"value":val}, list[val]);
+                if (value !== undefined && value !== null && value === val){
+                    option.setAttribute('selected', 'selected');
+                }
+                choice.appendChild(option);
+            });
+        }
+        if (classname){
+            choice.className = classname;
+        }
+        return choice;
+    }
+
+
     global.dom = {
         html: html,
         svg: svg,
@@ -229,6 +257,7 @@
         nextSibling: nextSibling,
         toggleClass: toggleClass,
         indexOf: indexOf,
+        createSelect: createSelect
     };
 
 

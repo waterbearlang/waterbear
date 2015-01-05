@@ -30,27 +30,55 @@
                     <svg class="cat-icon"><use xlink:href="images/category-icons.svg#controls" /></svg>
                     Controls
                 </header>
-                <wb-step script="start.hello">
-                    <wb-value type="text" value="World">Say hello</wb-value>
+                <wb-context script="control.whenProgramRuns">
+                    <wb-value>when program runs</wb-value>
+                </wb-context>
+                <wb-context script="control.whenKeyPressed">
+                    <wb-value type="list" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
+                    <wb-value>key pressed<wb-value>
+                </wb-context>
+                <wb-context script="control.onEvent">
+                    <wb-value type="list" value="mousecancel" options="mousecancel,mousedown,mouseenter,mouseleave,mouseout,mousemove,mouseover,mouseup,click,dblclick,contextmenu">on event</wb-value>
+                </wb-context>
+                <wb-context script="control.eachFrame">
+                    <wb-value>each frame</wb-value>
+                </wb-context>
+                <wb-step script="control.createVariableXWithY">
+                    <wb-value type="text" value="var ##">create variable</wb-value>
+                    <wb-value type="any">with</wb-value>
                 </wb-step>
-                <wb-context script="start.loop">
-                    <wb-value type="any">Loop over</wb-value>
+                <wb-step script="control.setVariableXToY">
+                    <wb-value type="any">set variable</wb-value>
+                    <wb-value type="any">to</wb-value>
+                </wb-step>
+                <wb-step script="control.incrementXByY">
+                    <wb-value type="number">increment variable</wb-value>
+                    <wb-value type="number" value="1">by</wb-value>
+                </wb-step>
+                <wb-context script="control.loopOverX">
+                    <wb-value type="any">loop over</wb-value>
+                    <wb-locals>
+                        <wb-expression type="any" script="local.index">
+                            <wb-value>index ##</wb-value>
+                        </wb-expression>
+                        <wb-expression type="any" script="local.value">
+                            <wb-value>value ##</wb-value>
+                        </wb-expression>
+                    </wb-locals>
                 </wb-context>
-                <wb-context script="start.donothing">
-                    <wb-value type="number" value="5">Cinco</wb-value>
-                    <wb-step script="maybe.yes">
-                        <wb-value type="text" value="Gibson">Guitar</wb-value>
-                    </wb-step>
-                    <wb-step script="maybe.perhaps">
-                        <wb-value type="text" value="Apple">Fruit</wb-value>
-                    </wb-step>
-                    <wb-context script="maybe.no">
-                        <wb-value type="text" value="Hootenanny">Dance</wb-value>
-                    </wb-context>
+                <wb-context script="control.broadcastXWithY">
+                    <wb-value type="text">broadcast</wb-value>
+                    <wb-value type="any" optional="true">message with data</wb-value>
                 </wb-context>
-                <wb-expression script="start.add" type="number">
-                    <wb-value type="number" value="1" min="-2" max="5"></wb-value><wb-value type="number" value="1">+</wb-value>
-                </wb-expression>
+                <wb-context script="control.receiveXWithY">
+                    <wb-value type="text">when I receive</wb-value>
+                    <wb-value>message with data</wb-value>
+                    <wb-locals>
+                        <wb-expression type="any" script="local.data">
+                            <wb-value>data ##</wb-value>
+                        </wb-expression>
+                    </wb-locals>
+                </wb-context>
             </wb-accordion>
             <wb-accordion class="sprites">
                 <header>

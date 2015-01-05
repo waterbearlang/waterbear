@@ -12,6 +12,11 @@ wb-step, wb-context, wb-expression{
     position: relative;
 }
 
+wb-value > wb-expression{
+    float: none;
+    clear: none;
+}
+
 wb-step.dragging, wb-context.dragging, wb-expression.dragging{
     opacity: 0.5;
     position: absolute;

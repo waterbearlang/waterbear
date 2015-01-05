@@ -224,40 +224,41 @@ ValueProto.createdCallback = function valueCreated(){
     var value = this.getAttribute('value');
     var input;
     switch(type){
+        // FIXME: Support multiple types on a value (comma-separated)
         case 'number':
         case 'text':
         case 'color':
             input = elem('input', {type: type, value: value});
+            if (this.hasAttribute('min')){
+                input.setAttribute('min', this.getAttribute('min'));
+            }
+            if (this.hasAttribute('max')){
+                input.setAttribute('max', this.getAttribute('max'));
+            }
             this.appendChild(input);
             break;
-        case 'choice':
-            var listName = this.getAttribute('choiceList');
-            console.log('FIXME: Choice value');
-            var list = wb.choiceLists[listName];
-            this.appendChild(wb.createSelect(list, value));
+        case 'list':
+            var list = this.getAttribute('options').split(',');
+            this.appendChild(dom.createSelect(list, value));
             break;
-        case 'block':
-            input = elem('input', {type: 'block'});
-            input.readOnly = true;
-            console.log('FIXME: Block value');
+        case 'boolean':
+            this.appendChild(dom.createSelect(['true','false'], value));
             break;
         case 'any':
             input = elem('input', {type: 'any'});
             this.appendChild(input);
-            console.log('FIXME: Any value');
             break;
         default:
-            throw new Error('Type ' + type + ' is not supported for value types');
+            if (type){
+                // block types, only drop blocks of proper type, no direct input
+                input = elem('input', {type: type});
+                input.readOnly = true;
+            }
+            break;
     }
-    var min = this.getAttribute('min');
-    if (min !== null){
-        input.setAttribute('min', min);
+    if (input){
+        resize(input);
     }
-    var max = this.getAttribute('max');
-    if (max !== null){
-        input.setAttribute('max', max);
-    }
-    resize(input);
 };
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
@@ -308,7 +309,6 @@ event.on(document.body, 'dragging', null, function(evt){
         // FIXME
         dropTarget = dom.closest(potentialDropTarget, 'wb-value');
         if (dropTarget){
-            console.log('expression drop target: %o', dropTarget);
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');
                 dropTarget = null;
@@ -359,7 +359,6 @@ event.on(document.body, 'drag-end', null, function(evt){
             origTarget = null;
         }
     }else if(dragTarget.matches('wb-expression')){
-        console.log('dropping a %o into an %o', dragTarget, dropTarget);
         dropTarget.appendChild(dragTarget);
     }else if(dragTarget.matches('wb-context, wb-step')){
         if (dropTarget.matches('wb-contains')){

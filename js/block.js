@@ -157,12 +157,20 @@ window.WBContext = document.registerElement('wb-context', {prototype: ContextPro
 
 var typeMapping = {
     number: 'math',
-    text: 'strings',
-    color: 'colors',
+    text: 'text',
+    color: 'color',
     'boolean': 'boolean',
-    'array': 'arrays',
-    'object': 'objects',
-    'any': 'controls'
+    'array': 'array',
+    'object': 'object',
+    'any': 'control',
+    sprite: 'sprite',
+    sound: 'sound',
+    image: 'image',
+    shape: 'shape',
+    vector: 'vector',
+    path: 'path',
+    point: 'point',
+    rect: 'rect'
 };
 
 var ExpressionProto = Object.create(HTMLElement.prototype);

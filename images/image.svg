@@ -1,0 +1,9 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30">
+        <g id='image'>
+            <path d="M0,0v20h20V0H0z M18.182,1.818v7.738l-2.273-2.582l-5.887,6.059l-2.9-2.966l-5.303,4.733V1.818H18.182z"/>
+            <g>
+                <circle cx="8.446" cy="5.235" r="2.859"/>
+            </g>
+        </g>
+</svg>

@@ -12,6 +12,11 @@ wb-step, wb-context, wb-expression{
     position: relative;
 }
 
+wb-expression{
+    border-radius: 0;
+    text-align: right;
+}
+
 wb-value > wb-expression{
     float: none;
     clear: none;
@@ -23,8 +28,8 @@ wb-step.dragging, wb-context.dragging, wb-expression.dragging{
     pointer-events: none;
 }
 
-wb-expression{
-    text-align: right;
+wb-expression > header{
+    margin-left: 15px;
 }
 
 wb-value{
@@ -94,6 +99,22 @@ wb-value > input:last-child{
     display: inline-block;
 }
 
+wb-expression:before{
+    content: '';
+    width: 15px;
+    height: 15px;
+    display: block;
+    float: left;
+    margin-left: 5px;
+    margin-top: 5px;
+    background-size: contain;
+    /* Over-ride background-image for each type of expression */
+}
+
+wb-expression[type=number]:before{ background-image: url(../images/math.svg); }
+
+
+
 /* Used for input resizing */
 .sekrit-svg{
     position: absolute;
@@ -103,5 +124,8 @@ wb-value > input:last-child{
     height: 100px;
 }
 
+.wb-icons{
+    display: none;
+}
 
 

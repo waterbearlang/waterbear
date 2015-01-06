@@ -83,7 +83,7 @@ wb-workspace > wb-contains{
     position: relative;
 }
 
-wb-workspace > wb-contains:empty::before{
+wb-contains:empty::before{
     display: block;
     content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */
     width: 100%;
@@ -96,29 +96,26 @@ wb-workspace > wb-contains:empty::before{
 
 
 /* Accordion Colors and Icons */
-wb-accordion.controls > header:after{ background-color: hsl(0, 93%, 56%); }
-wb-accordion.sprites > header:after{ background-color: hsl(156, 93%, 56%); }
+wb-accordion.control > header:after{ background-color: hsl(0, 93%, 56%); }
+wb-accordion.sprite > header:after{ background-color: hsl(156, 93%, 56%); }
 wb-accordion.music > header:after{ background-color: hsl(312, 93%, 56%); }
 wb-accordion.sound > header:after{ background-color: hsl(108, 93%, 56%); }
-wb-accordion.arrays > header:after{ background-color: hsl(264, 93%, 56%); }
+wb-accordion.array > header:after{ background-color: hsl(264, 93%, 56%); }
 wb-accordion.boolean > header:after{ background-color: hsl(60, 93%, 56%); }
 wb-accordion.canvas > header:after{ background-color: hsl(216, 93%, 56%); }
-wb-accordion.colors > header:after{ background-color: hsl(12, 93%, 56%); }
-wb-accordion.images > header:after{ background-color: hsl(168, 93%, 56%); }
+wb-accordion.color > header:after{ background-color: hsl(12, 93%, 56%); }
+wb-accordion.image > header:after{ background-color: hsl(168, 93%, 56%); }
 wb-accordion.math > header:after{ background-color: hsl(324, 93%, 56%); }
 wb-accordion.random > header:after{ background-color: hsl(120, 93%, 56%); }
-wb-accordion.vectors > header:after{ background-color: hsl(276, 93%, 56%); }
-wb-accordion.objects > header:after{ background-color: hsl(72, 93%, 56%); }
-wb-accordion.strings > header:after{ background-color: hsl(228, 93%, 56%); }
-wb-accordion.paths > header:after{ background-color: hsl(24, 93%, 56%); }
-wb-accordion.points > header:after{ background-color: hsl(180, 93%, 56%); }
-wb-accordion.rects > header:after{ background-color: hsl(336, 93%, 56%); }
-wb-accordion.sensing > header:after{ background-color: hsl(132, 93%, 56%); }
+wb-accordion.vector > header:after{ background-color: hsl(276, 93%, 56%); }
+wb-accordion.object > header:after{ background-color: hsl(72, 93%, 56%); }
+wb-accordion.string > header:after{ background-color: hsl(228, 93%, 56%); }
+wb-accordion.path > header:after{ background-color: hsl(24, 93%, 56%); }
+wb-accordion.point > header:after{ background-color: hsl(180, 93%, 56%); }
+wb-accordion.rect > header:after{ background-color: hsl(336, 93%, 56%); }
+wb-accordion.sense > header:after{ background-color: hsl(132, 93%, 56%); }
 wb-accordion.motion > header:after{ background-color: hsl(288, 93%, 56%); }
-wb-accordion.shapes > header:after{ background-color: hsl(84, 93%, 56%); }
+wb-accordion.shape > header:after{ background-color: hsl(84, 93%, 56%); }
 wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
-wb-accordion.date > header:after{ background-color: hsl(36, 93%, 56%); }
-wb-accordion.sizes > header:after{ background-color: hsl(192, 93%, 56%); }
+wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
 wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
-wb-accordion.matrix > header:after{ background-color: hsl(144, 93%, 56%); }
-wb-accordion.datablock > header:after{ background-color: hsl(300, 93%, 56%); }

@@ -4,7 +4,7 @@
 //
 // A wb- or wb-expression can only contain wb-arguments, wb-locals, and/or text
 // A wb-context, wb-toplevel, or wb-workspace must also contain wb-contents, wb-locals
-// Some elements can be implied, like in HTML: when you don't include a wb-head it goes in anyway?
+// Some elements can be implied, like in HTML: when you don't include a header it goes in anyway?
 // So you could make a context with multiple wb-contains, but by default there would be one even
 // if you don't put it there explicitly.
 //
@@ -36,7 +36,7 @@ function resize(input){
 // If the markup doesn't contain this element, add it
 // This is like how tables will insert <thead> elements
 // if they are left out
-function setDefault(element, tagname, top){
+function setDefaultByTag(element, tagname, top){
     var test = dom.child(element, tagname);
     if (!test){
         test = elem(tagname);
@@ -54,7 +54,7 @@ function setDefault(element, tagname, top){
 function insertIntoHeader(){
     if (dom.matches(this.parentElement, 'header')) return;
     var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
-    var head = setDefault(block, 'header');
+    var head = setDefaultByTag(block, 'header');
     head.appendChild(this, true);
 };
 
@@ -69,7 +69,7 @@ function insertIntoHeader(){
 var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
-    setDefault(this, 'header', true);
+    setDefaultByTag(this, 'header', true);
     // console.log('%s created with %s children', this.tagName.toLowerCase(), this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
@@ -83,7 +83,7 @@ BlockProto.attachedCallback = function blockAttached(){
     if (dom.matches(this.parentElement, 'wb-contains')) return;
     var parent = dom.parent(this, 'wb-context');
     if (parent){
-        setDefault(parent, 'wb-contains').appendChild(this);
+        setDefaultByTag(parent, 'wb-contains').appendChild(this);
     }else{
         // console.warn('free-floating block: %o, OK for now', this);
     }
@@ -136,9 +136,9 @@ var ContextProto = Object.create(BlockProto);
 ContextProto.createdCallback = function contextCreated(){
     // Add disclosure, contained, local
     BlockProto.createdCallback.call(this);
-    setDefault(this, 'wb-disclosure');
-    setDefault(this, 'wb-local');
-    setDefault(this, 'wb-contains');
+    setDefaultByTag(this, 'wb-disclosure');
+    setDefaultByTag(this, 'wb-local');
+    setDefaultByTag(this, 'wb-contains');
     // console.log('Context created');
 };
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
@@ -155,14 +155,24 @@ window.WBContext = document.registerElement('wb-context', {prototype: ContextPro
 *
 ******************/
 
+var typeMapping = {
+    number: 'math',
+    text: 'strings',
+    color: 'colors',
+    'boolean': 'boolean',
+    'array': 'arrays',
+    'object': 'objects',
+    'any': 'controls'
+};
+
 var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
     // console.log('Expression created');
-    setDefault(this, 'header', true);
-    var children = [].slice.apply(this.children);
-    children.forEach(function(child){
+    var header = setDefaultByTag(this, 'header', true);
+    // var children = [].slice.apply(this.children);
+    // children.forEach(function(child){
         // console.log('Expression child of mine: %s', child);
-    });
+    // });
 };
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
@@ -220,15 +230,15 @@ ValueProto.createdCallback = function valueCreated(){
     // console.log('Value created');
     // See if we're already initialized (if cloned, for instance)
     if (dom.child(this, 'input, select, wb-expression')){ return; }
-    var type = this.getAttribute('type');
+    var types = (this.getAttribute('type') || '').split(',');
     var value = this.getAttribute('value');
     var input;
-    switch(type){
+    switch(types[0]){
         // FIXME: Support multiple types on a value (comma-separated)
         case 'number':
         case 'text':
         case 'color':
-            input = elem('input', {type: type, value: value});
+            input = elem('input', {type: types[0], value: value});
             if (this.hasAttribute('min')){
                 input.setAttribute('min', this.getAttribute('min'));
             }
@@ -249,9 +259,9 @@ ValueProto.createdCallback = function valueCreated(){
             this.appendChild(input);
             break;
         default:
-            if (type){
+            if (types.length){
                 // block types, only drop blocks of proper type, no direct input
-                input = elem('input', {type: type});
+                input = elem('input', {type: types[0]});
                 input.readOnly = true;
             }
             break;

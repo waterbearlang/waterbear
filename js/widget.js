@@ -81,12 +81,10 @@ window.WBVBox = document.registerElement('wb-vbox', {prototype: VBoxProto});
 
 var SplitterProto = Object.create(HTMLElement.prototype);
 SplitterProto.attachedCallback = function splitterAttached(){
-    console.log('splitting up');
-    this.parentElement.setAttribute('split', 'true');
+    // console.log('splitting up');
 };
 SplitterProto.detachedCallback = function splitterDetached(){
-    console.log('unsplitting my parent: %s', this.parentElement);
-    this.parentElement.removeAttribute('split');
+    // console.log('unsplitting my parent: %s', this.parentElement);
 };
 window.WBSplitter = document.registerElement('wb-splitter', {prototype: SplitterProto});
 

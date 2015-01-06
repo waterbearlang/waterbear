@@ -4,6 +4,7 @@
     'use strict';
 
     var SVG_NS = 'http://www.w3.org/2000/svg';
+    var XLINK_NS = 'http://www.w3.org/1999/xlink';
 
     function html(name, attributes, children){
         return element(document.createElement(name), attributes, children);
@@ -27,6 +28,10 @@
 
     function svg(name, attrs, children){
         return element(document.createElementNS(SVG_NS, name), attrs, children);
+    }
+
+    function setXlinkAttr(elem, name, value){
+        elem.setAttributeNS(XLINK_NS, name, value);
     }
 
     function setAttributes(elem, attributes){
@@ -257,7 +262,10 @@
         nextSibling: nextSibling,
         toggleClass: toggleClass,
         indexOf: indexOf,
-        createSelect: createSelect
+        createSelect: createSelect,
+        setXlinkAttr: setXlinkAttr,
+        SVG_NS: SVG_NS,
+        XLINK_NS: XLINK_NS
     };
 
 

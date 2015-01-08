@@ -111,21 +111,21 @@ wb-expression:before{
     /* Over-ride background-image for each type of expression */
 }
 
-wb-expression[type=number]:before{ background-image: url(../images/math.svg); }
-wb-expression[type=color]:before{ background-image: url(../images/color.svg); }
-wb-expression[type=text]:before{ background-image: url(../images/text.svg); }
-wb-expression[type=boolean]:before{ background-image: url(../images/boolean.svg); }
-wb-expression[type=sprite]:before{ background-image: url(../images/sprite.svg); }
-wb-expression[type=any]:before{ background-image: url(../images/control.svg); }
-wb-expression[type=sound]:before{ background-image: url(../images/sound.svg); }
-wb-expression[type=array]:before{ background-image: url(../images/array.svg); }
-wb-expression[type=image]:before{ background-image: url(../images/image.svg); }
-wb-expression[type=shape]:before{ background-image: url(../images/shape.svg); }
-wb-expression[type=vector]:before{ background-image: url(../images/vector.svg); }
-wb-expression[type=object]:before{ background-image: url(../images/object.svg); }
-wb-expression[type=path]:before{ background-image: url(../images/path.svg); }
-wb-expression[type=point]:before{ background-image: url(../images/point.svg); }
-wb-expression[type=rect]:before{ background-image: url(../images/rect.svg); }
+wb-expression[type=number]:before{ background-image: url(../images/icon/math.svg); }
+wb-expression[type=color]:before{ background-image: url(../images/icon/color.svg); }
+wb-expression[type=text]:before{ background-image: url(../images/icon/text.svg); }
+wb-expression[type=boolean]:before{ background-image: url(../images/icon/boolean.svg); }
+wb-expression[type=sprite]:before{ background-image: url(../images/icon/sprite.svg); }
+wb-expression[type=any]:before{ background-image: url(../images/icon/control.svg); }
+wb-expression[type=sound]:before{ background-image: url(../images/icon/sound.svg); }
+wb-expression[type=array]:before{ background-image: url(../images/icon/array.svg); }
+wb-expression[type=image]:before{ background-image: url(../images/icon/image.svg); }
+wb-expression[type=shape]:before{ background-image: url(../images/icon/shape.svg); }
+wb-expression[type=vector]:before{ background-image: url(../images/icon/vector.svg); }
+wb-expression[type=object]:before{ background-image: url(../images/icon/object.svg); }
+wb-expression[type=path]:before{ background-image: url(../images/icon/path.svg); }
+wb-expression[type=point]:before{ background-image: url(../images/icon/point.svg); }
+wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg); }
 
 /* Used for input resizing */
 .sekrit-svg{

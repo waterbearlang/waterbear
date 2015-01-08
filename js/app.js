@@ -23,6 +23,14 @@ function info(text){
     message('#333', text);
 }
 
+event.on(document.body, 'click', '.do-run', function(){
+    dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
+        if (block.run){
+            block.run();
+        }
+    });
+});
+
 window.app = {
     message: message,
     error: error,

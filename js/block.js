@@ -101,6 +101,21 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    type (do nothing
     // console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
 };
+BlockProto.gatherValues = function(){
+    if (!this.values){
+        this.values = dom.children(dom.child(this, 'header'), 'wb-value');
+    }
+    return this.values.map(function(value){
+        return value.getValue();
+    });
+};
+BlockProto.run = function(){
+    if (!this.fn){
+        var fnName = this.getAttribute('script').split('.');
+        this.fn = runtime[fnName[0]][fnName[1]];
+    }
+    return this.fn.apply(this, this.gatherValues());
+};
 
 /*****************
 *
@@ -182,7 +197,33 @@ ExpressionProto.createdCallback = function expressionCreated(){
         // console.log('Expression child of mine: %s', child);
     // });
 };
+ExpressionProto.attachedCallback = function expressionAttached(){
+    console.log('Expression added to parent: %o', this.parentElement);
+};
+ExpressionProto.gatherValues = BlockProto.gatherValues;
+ExpressionProto.run = BlockProto.run;
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
+
+/*****************
+*
+*  wb-unit
+*
+*  Instantiated as new WBUnit or as <wb-unit>
+*
+*  Attributes: type: list or name (default: name)
+*
+*  Units are meant to be used with wb-values to give more context than simply "number"
+*
+******************/
+
+var UnitProto = Object.create(HTMLElement.prototype);
+// UnitProto.attachedCallback = function unitAttached(){
+//     if (this.nextElementSibling){
+//         this.parentElement.appendChild(this); // move to end of value, after the input
+//     }
+// };
+window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
+
 
 /*****************
 *
@@ -267,9 +308,10 @@ ValueProto.createdCallback = function valueCreated(){
             this.appendChild(input);
             break;
         default:
-            if (types.length){
+            if (types.length && types[0] !== ''){
                 // block types, only drop blocks of proper type, no direct input
                 input = elem('input', {type: types[0]});
+                this.appendChild(input);
                 input.readOnly = true;
             }
             break;
@@ -278,9 +320,32 @@ ValueProto.createdCallback = function valueCreated(){
         resize(input);
     }
 };
+ValueProto.getValue = function(){
+    var block = dom.child(this, 'wb-expression');
+    if (block){
+        console.log('found expression, returning %o', block.run());
+        return block.run();
+    }
+    var input = dom.child(this, 'input, select');
+    if (!this.type){
+        this.type = this.getAttribute('type');
+    }
+    if (input){
+        if (convert[this.type]){
+            return convert[this.type](input.value);
+        }else{
+            return input.value;
+        }
+    }
+    return null;
+};
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
+var convert = {
+    boolean: function(text){ return text === 'true'; },
+    number: function(text){ return new Number(text); }
+};
 
 var ContainedProto = Object.create(HTMLElement.prototype);
 window.WBContained = document.registerElement('wb-contained', {prototype: ContainedProto});

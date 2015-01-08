@@ -1,0 +1,35 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30">
+        <g id='sprite'>
+            <path d="M16.036,10.164l3.75-1.065L19.37,7.858l-3.406,0.465l-2.197-2.618l-0.001,0.003c-0.077-0.086-0.178-0.15-0.312-0.184
+                c0,0-2.825-0.886-3.786-0.595L5.804,6.203L3.905,9.607l1.173,0.584l1.833-2.292l1.122-0.337l0.159,0.014
+                c-0.304,0.839-0.584,1.759-0.787,2.591l-0.003-0.003l-1.294,3.643l-3.755,0.657l0.625,1.416l4.078-0.126c0,0,2.258-2.43,2.45-2.446
+                l3.073,3.03l1.742,3.03l1.342-0.863l-1.342-2.75l-2.821-4.27c0.467-0.708,0.988-1.557,1.431-2.392L12.929,9.1L16.036,10.164z"/>
+            <path d="M14.056,3.61c-0.198,0.891-1.081,1.452-1.972,1.254l0,0c-0.891-0.198-1.452-1.081-1.254-1.972l0.215-0.968
+                c0.198-0.891,1.081-1.452,1.972-1.254l0,0c0.891,0.198,1.452,1.081,1.254,1.972L14.056,3.61z"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="9.79" y1="0.639" x2="11.81" y2="0.639"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="8.37" y1="2.72" x2="9.868" y2="2.72"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="7.246" y1="4.801" x2="8.666" y2="4.801"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.005" y1="6.882" x2="4.62" y2="6.882"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="1.844" y1="8.964" x2="3.263" y2="8.964"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="6.75" y1="8.964" x2="6.75" y2="8.964"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="4.668" y1="11.045" x2="6.04" y2="11.045"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.929" y1="13.126" x2="5.313" y2="13.126"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="0.214" y1="15.207" x2="1.679" y2="15.207"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="9.119" y1="15.207" x2="10.429" y2="15.207"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="10.518" y1="17.288" x2="12.122" y2="17.288"/>
+
+                <line fill="none" stroke="#000000" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="11.777" y1="19.369" x2="13.196" y2="19.369"/>
+        </g>
+</svg>

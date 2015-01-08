@@ -71,7 +71,7 @@ sidebar.trashcan:after{
     left: 0;
     top: 0;
     background-repeat: no-repeat;
-    background-image: url("../images/recycle.svg");
+    background-image: url("../images/icon/recycle.svg");
     background-size: contain;
     background-position: 50%;
 }

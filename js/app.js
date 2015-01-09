@@ -23,13 +23,31 @@ function info(text){
     message('#333', text);
 }
 
-event.on(document.body, 'click', '.do-run', function(){
+// Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
+
+event.on(document.body, 'click', '.do-run', preload);
+
+function preload(){
+    var assets = dom.findAll('wb-workspace > wb-contains wb-expression[isAsset=true]').map(function(asset){
+        return asset.gatherValues()[0];
+    });
+    if (assets.length){
+        console.log('preloading %o', assets);
+        sounds.load(assets);
+        sounds.whenLoaded = run;
+    }else{
+        console.log('nothing to preload');
+        run();
+    }
+}
+
+function run(){
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
             block.run();
         }
     });
-});
+}
 
 window.app = {
     message: message,

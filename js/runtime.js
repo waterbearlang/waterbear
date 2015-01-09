@@ -19,7 +19,7 @@
                 return sounds(url);
             },
             get: function(url){
-                return sounds(url); // already cached by sounds library
+                return sounds[url]; // already cached by sounds library
             },
             play: function(sound){
                 sound.play();

@@ -97,7 +97,7 @@
                     <img class="cat-icon" src="images/icon/sound.svg" />
                     Sound
                 </header>
-                <wb-expression type="sound" isAsset="true" init="sound.initialize" script="sound.get">
+                <wb-expression type="sound" isAsset="true" script="sound.get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
                 </wb-expression>
                 <wb-step script="sound.play">
@@ -169,6 +169,21 @@
                     <img class="cat-icon" src="images/icon/boolean.svg" />
                     Boolean
                 </header>
+                <wb-expression type="boolean" script="boolean.and">
+                    <wb-value type="boolean" value="true"></wb-value>
+                    <wb-value type="boolean" value="true">and</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="boolean.or">
+                    <wb-value type="boolean" value="true"></wb-value>
+                    <wb-value type="boolean" value="true">or</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="boolean.xor">
+                    <wb-value type="boolean" value="true"></wb-value>
+                    <wb-value type="boolean" value="true">xor</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="boolean.not">
+                    <wb-value type="boolean" value="true">not</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="canvas">
                 <header>
@@ -181,6 +196,43 @@
                     <img class="cat-icon" src="images/icon/color.svg" />
                     Colors
                 </header>
+                <wb-expression type="color" script="color.namedColor">
+                    <wb-value type="list" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuschia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
+                </wb-expression>
+                <wb-expression type="color" script="color.rgb">
+                    <wb-value type="number" min="0" max="255" value="0">red</wb-value>
+                    <wb-value type="number" min="0" max="255" value="0">green</wb-value>
+                    <wb-value type="number" min="0" max="255" value="0">blue</wb-value>
+                </wb-expression>
+                <wb-expression type="color" script="color.rgba">
+                    <wb-value type="number" min="0" max="255" value="0">red</wb-value>
+                    <wb-value type="number" min="0" max="255" value="0">green</wb-value>
+                    <wb-value type="number" min="0" max="255" value="0">blue</wb-value>
+                    <wb-value type="number" min="0" max="100" value="0">alpha</wb-value>
+                </wb-expression>
+                <wb-expression type="color" script="color.grey">
+                    <wb-value type="number" min="0" max="255" value="105">grey</wb-value>
+                </wb-expression>
+                <wb-expression type="color" script="color.hsl">
+                    <wb-value type="number" min="0" max="360" value="0">hue</wb-value>
+                    <wb-value type="number" min="0" max="100" value="0">saturation</wb-value>
+                    <wb-value type="number" min="0" max="100" value="0">lightness</wb-value>
+                </wb-expression>
+                <wb-expression type="color" script="color.hsla">
+                    <wb-value type="number" min="0" max="360" value="0">hue</wb-value>
+                    <wb-value type="number" min="0" max="100" value="0">saturation</wb-value>
+                    <wb-value type="number" min="0" max="100" value="0">lightness</wb-value>
+                    <wb-value type="number" min="0" max="100" value="0">alpha</wb-value>
+                </wb-expression>
+                <wb-step script="color.fill">
+                    <wb-value type="color" value="#0000FF">fill style</wb-value>
+                </wb-step>
+                <wb-step script="color.stroke">
+                    <wb-value type="color" value="00FF00">stroke style</wb-value>
+                </wb-step>
+                <wb-step script="color.shadow">
+                    <wb-value type="color" value="#FF0000">shadow color</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="image">
                 <header>
@@ -294,7 +346,7 @@
                 <button class="do-run">Run</button>
                 <button class="do-stop">Stop</button>
             </div>
-            <wb-canvas></wb-canvas>
+            <canvas></canvas>
         </wb-playground>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>

@@ -287,7 +287,7 @@ ValueProto.createdCallback = function valueCreated(){
         case 'number':
         case 'text':
         case 'color':
-            input = elem('input', {type: types[0], value: value});
+            input = elem('input', {type: types[0]});
             if (this.hasAttribute('min')){
                 input.setAttribute('min', this.getAttribute('min'));
             }
@@ -295,17 +295,23 @@ ValueProto.createdCallback = function valueCreated(){
                 input.setAttribute('max', this.getAttribute('max'));
             }
             this.appendChild(input);
+            input.value = value;
             break;
         case 'list':
             var list = this.getAttribute('options').split(',');
-            this.appendChild(dom.createSelect(list, value));
+            input = dom.createSelect(list, value);
+            this.appendChild(input);
             break;
         case 'boolean':
-            this.appendChild(dom.createSelect(['true','false'], value));
+            input = dom.createSelect(['true', 'false'], value);
+            this.appendChild(input);
             break;
         case 'any':
             input = elem('input', {type: 'any'});
             this.appendChild(input);
+            if (input !== ''){
+                input.value = value;
+            }
             break;
         default:
             if (types.length && types[0] !== ''){

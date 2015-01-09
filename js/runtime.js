@@ -3,6 +3,14 @@
 
     // resources
 
+    var canvas, ctx;
+    window.addEventListener('load', function(){
+        canvas = dom.find('wb-playground > canvas');
+        ctx = canvas.getContext('2d');
+    }, false);
+
+    // utilities
+
     global.runtime = {
         control: {
         },
@@ -67,8 +75,52 @@
         array: {
         },
         'boolean': {
+            and: function(a,b){
+                return a && b;
+            },
+            or: function(a,b){
+                return a || b;
+            },
+            xor: function(a,b){
+                return !a !== !b;
+            },
+            not: function(a){
+                return !a;
+            }
         },
         color: {
+            namedColor: function(name){
+                // FIXME: We may need to return hex or other color value
+                return name;
+            },
+            rgb: function(r,g,b){
+                return 'rgb(' + r + ',' + g + ',' + b + ')';
+            },
+            rgba: function(r,g,b,a){
+                return 'rgba(' + r + ',' + g + ',' + b + ',' + a/100 + ')';
+            },
+            grey: function(g){
+                return 'rgb(' + g + ',' + g + ',' + g + ')';
+            },
+            hsl: function(h,s,l){
+                return 'hsl(' + h + ',' + s + '%,' + l + '%)';
+            },
+            hsla: function(h,s,l,a){
+                return 'hsl(' + h + ',' + s + '%,' + l + '%,' + a/100 + ')';
+            },
+            random: function(){
+                return "#"+(~~(Math.random()*(1<<30))).toString(16).toUpperCase().slice(0,6);
+            },
+            fill: function(color){
+                ctx.fillStyle = color;
+            },
+            stroke: function(color){
+                ctx.strokeStyle = color;
+            },
+            shadow: function(color){
+                ctx.shadowColor = color;
+            }
+
         },
         image: {
         },

@@ -85,7 +85,7 @@ wb-playground > header{
     flex: 0 0 34px;
 }
 
-wb-playground > wb-canvas{
+wb-playground > canvas{
     flex: 1 1;
 }
 

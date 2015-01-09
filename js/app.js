@@ -32,11 +32,9 @@ function preload(){
         return asset.gatherValues()[0];
     });
     if (assets.length){
-        console.log('preloading %o', assets);
         sounds.load(assets);
         sounds.whenLoaded = run;
     }else{
-        console.log('nothing to preload');
         run();
     }
 }

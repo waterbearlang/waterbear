@@ -9,7 +9,6 @@
         ctx = canvas.getContext('2d');
     }, false);
 
-    // utilities
 
     global.runtime = {
         control: {
@@ -120,13 +119,45 @@
             shadow: function(color){
                 ctx.shadowColor = color;
             }
-
         },
         image: {
         },
         math: {
+            add: util.add
+            subtract: util.subtract,
+            multiply: util.multiply,
+            divide: util.divide,
+            equal: function(a,b){ return a === b; },
+            notEqual: function(a,b){ return a !== b; },
+            lt: function(a,b){ return a < b; },
+            lte: function(a,b){ return a <= b; },
+            gt: function(a,b){ return a > b; },
+            gte: function(a,b){ return a >= b; },
+            mod: function(a,b){ return a % b; },
+            round: Math.round,
+            abs: Math.abs,
+            floor: Math.floor,
+            ceil: Math.ceil,
+            max: Math.max,
+            min: Math.min,
+            cos: function(a){ return Math.cos(util.deg2rad(a)); },
+            sin: function(a){ return Math.sin(util.deg2rad(a)); },
+            tan: function(a){ return Math.tan(util.deg2rad(a)); },
+            asin: function(a){ return Math.asin(util.deg2rad(a)); },
+            acos: function(a){ return Math.acos(util.deg2rad(a)); },
+            atan: function(a){ return Math.atan(util.deg2rad(a)); },
+            pow: function(a,b){ return Math.pow(a, b); },
+            sqrt: function(a,b){ return Math.sqrt(a); },
+            pi: function(){ return Math.PI; },
+            e: function(){ return Math.E; },
+            tau: function(){ return Math.PI * 2; }
+
         },
         random: {
+            randFloat: Math.random,
+            randInt: util.randInt,
+            noise: util.noise,
+            choice: util.choice
         },
         vector: {
         },

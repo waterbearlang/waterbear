@@ -239,19 +239,115 @@
                     <img class="cat-icon" src="images/icon/image.svg" />
                     Images
                 </header>
+                <wb-expression type="image" script="image.get">
+                    <wb-value type="text" value="/images/mascot/mascot-steampunk.jpg">image from url</wb-value>
+                </wb-expression>
+                <wb-step script="image.drawAtPoint">
+                    <wb-value type="image">draw</wb-value>
+                    <wb-value type="point">at</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="math">
                 <header>
                     <img class="cat-icon" src="images/icon/math.svg" />
                     Math
                 </header>
-                <wb-expression script="math.raiseXtoThePowerOfY" type="number">
-                    <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">× 10 ^</wb-number>
+                <wb-expression script="math.add" type="number">
+                    <wb-value type="number,vector,array" value="0"></wb-value>
+                    <wb-value type="number,vector,array" value="0">+</wb-value>
                 </wb-expression>
-                <wb-expression script="math.addXToY" type="number">
+                <wb-expression script="math.subtract" type="number">
+                    <wb-value type="number,vector,array" value="0"></wb-value>
+                    <wb-value type="number,vector,array" value="0">−</wb-value>
+                </wb-expression>
+                <wb-expression script="math.multiply" type="number">
+                    <wb-value type="number,vector,array" value="0"></wb-value>
+                    <wb-value type="number,vector">×</wb-value>
+                </wb-expression>
+                <wb-expression script="math.divide" type="number">
+                    <wb-value type="number,vector,array" value="0"></wb-value>
+                    <wb-value type="number">÷</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.equal">
+                    <wb-value type="any" value="0"></wb-value>
+                    <wb-value type="any" value="0">=</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.notEqual">
+                    <wb-value type="any" value="0"></wb-value>
+                    <wb-value type="any" value="0">≠</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.lt">
                     <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">+</wb-value>
+                    <wb-value type="number" value="0">&lt;</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.lte">
+                    <wb-value type="number" value="0"></wb-value>
+                    <wb-value type="number" value="0">≤</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.gt">
+                    <wb-value type="number" value="0"></wb-value>
+                    <wb-value type="number" value="0">&gt;</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.gte">
+                    <wb-value type="number" value="0"></wb-value>
+                    <wb-value type="number" value="0">≥</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.mod">
+                    <wb-value type="number" value="0"></wb-value>
+                    <wb-value type="number" value="0">modulus</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.round">
+                    <wb-value type="number" value="0">round</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.abs">
+                    <wb-value type="number" value="0">absolute value</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.floor">
+                    <wb-value type="number" value="0">floor</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.abs">
+                    <wb-value type="number" value="0">ceiling</wb-value>
+                </wb-expression>
+                <wb-expression type="boolean" script="math.lt">
+                    <wb-value type="number" value="0"></wb-value>
+                    <wb-value type="number" value="0">&lt;</wb-value>
+                </wb-expression>
+                <wb-expression script="math.pow" type="number">
+                    <wb-value type="number" value="0"></wb-value>
+                    <wb-value type="number" value="0">to the power of</wb-number>
+                </wb-expression>
+                <wb-expression type="number" script="math.max">
+                    <wb-value type="number" value="0">max</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.min">
+                    <wb-value type="number" value="0">min</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.sin">
+                    <wb-value type="number" value="0">sine</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.cos">
+                    <wb-value type="number" value="0">cosine</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.tan">
+                    <wb-value type="number" value="0">tangent</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.asin">
+                    <wb-value type="number" value="0">arcsine</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.acos">
+                    <wb-value type="number" value="0">arcosine</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.atan">
+                    <wb-value type="number" value="0">arctangent</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.pi">
+                    <wb-value>pi</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.e">
+                    <wb-value>e</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.tau">
+                    <wb-value>tau</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="random">
@@ -259,12 +355,58 @@
                     <img class="cat-icon" src="images/icon/random.svg" />
                     Random
                 </header>
+                <wb-expression type="number" script="random.randFloat">
+                    <wb-value>random float</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="random.randInt">
+                    <wb-value type="number" value="1">random int from</wb-value>
+                    <wb-value type="number" value="10">to</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="random.noise">
+                    <wb-value type="number" value="0.001">noise from x</wb-value>
+                    <wb-value type="number" value="0.002">y</wb-value>
+                    <wb-value type="number" value="0.003">z</wb-value>
+                </wb-expression>
+                <wb-expression type="any" script="random.choice">
+                    <wb-value type="array">random item from</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="vector">
                 <header>
                     <img class="cat-icon" src="images/icon/vector.svg" />
                     Vectors
                 </header>
+                <wb-expression type="vector" script="vector.create">
+                    <wb-value type="number" value="0">vector at x</wb-value>
+                    <wb-value type="number" value="0">y</wb-value>
+                </wb-expression>
+                <wb-expression type="vector" script="vector.createPolar">
+                    <wb-value type="number" value="0">vector at angle</wb-value>
+                    <wb-value type="number" value="0">magnitude</wb-value>
+                </wb-expression>
+                <wb-expression type="vector" script="vector.rotateTo">
+                    <wb-value type="vector">rotate</wb-value>
+                    <wb-value type="number" value="0">to</wb-value>
+                </wb-expression>
+                <wb-expression type="vector" script="vector.rotate">
+                    <wb-value type="vector">rotate</wb-value>
+                    <wb-value type="number" value="0">by</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="vector.degrees">
+                    <wb-value type="vector">degrees</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="vector.magnitude">
+                    <wb-value type="vector">magnitude</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="vector.x">
+                    <wb-value type="vector">x</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="vector.y">
+                    <wb-value type="vector">y</wb-value>
+                </wb-expression>
+                <wb-expression type="vector" script="vector.normalize">
+                    <wb-value type="vector">normalize</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="object">
                 <header>
@@ -352,6 +494,7 @@
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.min.js"></script>
+    <script src="hs/util.js"></script>
     <script src="js/runtime.js"></script>
 	<script src="js/dom.js"></script>
     <script src="js/event.js"></script>

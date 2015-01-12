@@ -12,6 +12,31 @@
 
     global.runtime = {
         control: {
+            whenProgramRuns: function(args, containers){
+            },
+            whenKeyPressed: function(args, containers){
+            },
+            onEvent: function(args, containers){
+            },
+            eachFrame: function(args, containers){
+            },
+            setVariable: function(name, value){
+            },
+            incrementVariable: function(variable, value){
+            },
+            loopOver: function(args, containers){
+            },
+            broadcast: function(args, containers){
+            },
+            receive: function(args, containers){
+            },
+            'if': function(args, containers){
+            },
+            ifElse: function(args, containers){
+            }
+            ternary: function(cond, iftrue, else){
+                return cond ? iftrue : else;
+            }
         },
         sprite: {
         },

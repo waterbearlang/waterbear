@@ -15,6 +15,16 @@
         return item;
     }
 
+    function extend(target, source){
+        if (source === null || typeof obj !== 'object') return source;
+        for (var attr in source) {
+            if (source.hasOwnProperty(attr)){
+                target[attr] = source[attr];
+            }
+        }
+        return target;
+    }
+
     // add defaultValue if key does't exist in an object yet and return it
     // otherwise return current valud of key
     function setDefault(obj, key, defaultValue){
@@ -267,6 +277,7 @@
 
     // exports
     window.util = {
+        extend: extend,
         deleteItem: deleteItem,
         setDefault: setDefault,
         type: type,

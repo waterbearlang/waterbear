@@ -47,11 +47,11 @@
                     <wb-value type="text">set variable</wb-value>
                     <wb-value type="any">to</wb-value>
                 </wb-step>
-                <wb-step script="control.incrementXByY">
+                <wb-step script="control.incrementVariable">
                     <wb-value type="number">increment variable</wb-value>
                     <wb-value type="number" value="1">by</wb-value>
                 </wb-step>
-                <wb-context script="control.loopOverX">
+                <wb-context script="control.loopOver">
                     <wb-value type="any">loop over</wb-value>
                     <wb-locals>
                         <wb-expression type="any" script="local.index">
@@ -62,11 +62,11 @@
                         </wb-expression>
                     </wb-locals>
                 </wb-context>
-                <wb-context script="control.broadcastXWithY">
+                <wb-context script="control.broadcast">
                     <wb-value type="text">broadcast</wb-value>
                     <wb-value type="any" optional="true">message with data</wb-value>
                 </wb-context>
-                <wb-context script="control.receiveXWithY">
+                <wb-context script="control.receive">
                     <wb-value type="text">when I receive</wb-value>
                     <wb-value>message with data</wb-value>
                     <wb-locals>
@@ -88,6 +88,11 @@
                     </header>
                     <wb-contains></wb-contains>
                 </wb-context>
+                <wb-expression type="any" script="control.ternary">
+                    <wb-value type="boolean" value="true">if</wb-value>
+                    <wb-value type="any">then</wb-value>
+                    <wb-value type="any">else</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="sprite">
                 <header>
@@ -234,6 +239,19 @@
                 </wb-step>
                 <wb-expression type="number" script="array.length">
                     <wb-value type="array,string">length</wb-value>
+                </wb-expression>
+                <wb-step script="array.removeItem">
+                    <wb-value type="array"></wb-value>
+                    <wb-value type="number" min="0" value="0">remove item at</wb-value>
+                </wb-step>
+                <wb-expression type="any" script="array.pop">
+                    <wb-value type="array">take last value</wb-value>
+                </wb-expression>
+                <wb-expression type="any" script="array.shift">
+                    <wb-value type="array">take first value</wb-value>
+                </wb-expression>
+                <wb-expression type="array" script="array.reverse">
+                    <wb-value type="array">reverse</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="boolean">

@@ -72,6 +72,39 @@
             }
         },
         array: {
+            create: function(){
+                return [].slice.call(arguments);
+            },
+            copy: function(a){
+                return a.slice();
+            },
+            itemAt: function(a,i){
+                return a[i];
+            },
+            join: function(a,s){
+                return a.join(s);
+            },
+            append: function(a,item){
+                a.push(item);
+            },
+            prepend: function(a,item){
+                a.unshift(item);
+            },
+            length: function(a){
+                return a.length;
+            },
+            removeItem: function(a,i){
+                a.splice(i,1);
+            },
+            pop: function(a){
+                return a.pop();
+            },
+            shift: function(a){
+                return a.shift();
+            },
+            reverse: function(a){
+                return a.reverse();
+            }
         },
         'boolean': {
             and: function(a,b){

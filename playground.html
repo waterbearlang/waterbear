@@ -216,8 +216,25 @@
                 <wb-expression type="array" script="array.copy">
                     <wb-value type="array">copy array</wb-value>
                 </wb-expression>
-                <wb-expression type="array">item from</wb-expression>
-                <wb-expression type="number">at index</wb-expression>
+                <wb-expression type="any" script="array.itemAt">
+                    <wb-value type="array">item from</wb-value>
+                    <wb-value type="number" value="0" min="0">at index</wb-value>
+                </wb-expression>
+                <wb-expression type="string" script="array.join">
+                    <wb-value type="array">join</wb-value>
+                    <wb-value type="string">with</wb-value>
+                </wb-expression>
+                <wb-step script="array.append">
+                    <wb-value type="array"></wb-value>
+                    <wb-value type="any">append</wb-value>
+                </wb-step>
+                <wb-step script="array.prepend">
+                    <wb-value type="array"></wb-value>
+                    <wb-value type="any">prepend</wb-value>
+                </wb-step>
+                <wb-expression type="number" script="array.length">
+                    <wb-value type="array,string">length</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="boolean">
                 <header>

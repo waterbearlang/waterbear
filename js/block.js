@@ -14,6 +14,7 @@
 (function(){
 'use strict';
     var elem = dom.html;
+    var workspace = dom.find(document.body, 'wb-workspace');
 
 // Utility
 
@@ -115,7 +116,11 @@ BlockProto.run = function(){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
-    return this.fn.apply(this, this.gatherValues());
+    if (this.gatherContains){
+        return this.fn.call(this, this.gatherValues(), this.gatherContains());
+    }else{
+        return this.fn.apply(this, this.gatherValues());
+    }
 };
 
 /*****************
@@ -152,11 +157,18 @@ var ContextProto = Object.create(BlockProto);
 ContextProto.createdCallback = function contextCreated(){
     // Add disclosure, contained, local
     BlockProto.createdCallback.call(this);
-    setDefaultByTag(this, 'wb-disclosure');
+    var header = dom.child(this, 'header');
+    setDefaultByTag(header, 'wb-disclosure');
     setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
     // console.log('Context created');
 };
+ContextProto.gatherContains = function(){
+    // returns an array of arrays of blocks (steps and contexts)
+    return dom.children(this, 'wb-contains').map(function(container){
+        return [].slice.call(container.children);
+    });
+}
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
 /*****************
@@ -262,6 +274,19 @@ var DisclosureProto = Object.create(HTMLElement.prototype);
 DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
+function toggleClosed(evt){
+    console.log('toggle');
+    var block = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
+    console.log('%s closed = %s', block.tagName.toLowerCase(), block.getAttribute('closed'));
+    if (block.hasAttribute('closed')){
+        block.removeAttribute('closed');
+    }else{
+        block.setAttribute('closed', true);
+    }
+}
+
+event.on(workspace, 'click', 'wb-disclosure', toggleClosed);
+
 /*****************
 *
 *  wb-local
@@ -286,7 +311,6 @@ window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
 ******************/
 
 function addItem(evt){
-    console.log('adding a new row');
     var self = evt.target;
     var template = dom.closest(self, 'wb-row');
     // we want to clone the row and it's children, but not their contents
@@ -411,8 +435,11 @@ var convert = {
     number: function(text){ return new Number(text); }
 };
 
-var ContainedProto = Object.create(HTMLElement.prototype);
-window.WBContained = document.registerElement('wb-contained', {prototype: ContainedProto});
+var ContainsProto = Object.create(HTMLElement.prototype);
+window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
+
+
+/* DRAGGING */
 
 var dragTarget = null;
 var origTarget = null;
@@ -454,7 +481,7 @@ event.on(document.body, 'dragging', null, function(evt){
     }
     if (dragTarget.matches('wb-expression')){
         // FIXME
-        dropTarget = dom.closest(potentialDropTarget, 'wb-value');
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');
@@ -468,7 +495,7 @@ event.on(document.body, 'dragging', null, function(evt){
             }
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
-            if (dropTypes[0] === 'any' || dropTypes.indexOf(dragType) > -1){
+            if (dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
                 app.warn('drop here to add block to script');
             }else{
                 app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');
@@ -495,6 +522,7 @@ event.on(document.body, 'dragging', null, function(evt){
 
 event.on(document.body, 'drag-end', null, function(evt){
     if (!dropTarget){
+        dragTarget.parentElement.removeChild(dragTarget);
         // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone

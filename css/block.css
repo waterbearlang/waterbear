@@ -22,6 +22,10 @@ wb-value > wb-expression{
     clear: none;
 }
 
+wb-value select{
+    min-width: 5em;
+}
+
 wb-step.dragging, wb-context.dragging, wb-expression.dragging{
     opacity: 0.5;
     position: absolute;
@@ -94,7 +98,11 @@ wb-context > wb-contains:last-child:after {
     visibility: hidden;
 }
 
-wb-context > wb-disclosure:after{
+wb-disclosure{
+    position: relative;
+}
+
+wb-context > header > wb-disclosure:after{
     content: "▼";
     width: 1em;
     height: 1em;
@@ -103,8 +111,12 @@ wb-context > wb-disclosure:after{
     left: 0px;
 }
 
-wb-context[closed] > header > wb-disclosure{
+wb-context[closed] > header > wb-disclosure:after{
     content: "▶";
+}
+
+wb-context[closed] > wb-contains{
+    display: none;
 }
 
 .hide{

@@ -83,6 +83,9 @@
     function deg2rad(deg){
         return deg * DEGREE;
     }
+    function rad2deg(rad){
+        return rad / DEGREE;
+    }
 
     // replace JavaScript % operator because of sign conversion
     function mod(a,b){
@@ -100,7 +103,7 @@
         this.x = x;
         this.y = y;
     }
-    Vector.fromPolar(degrees, mag){
+    Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
@@ -111,6 +114,9 @@
 
     Vector.prototype.radians = function(){
         return atan2(this.y, this.x);
+    }
+    Vector.prototype.degrees = function(){
+        return rad2deg(this.radians());
     }
 
     // Make magnitude equal to 1

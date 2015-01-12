@@ -38,8 +38,19 @@ wb-value{
     margin-left: 20px;
 }
 
+wb-row{
+    display: block;
+    text-align: right;
+    margin-left: 20px;
+    white-space: no-wrap;
+}
+
+wb-row > wb-value{
+    display: inline-block;
+    margin-left: 0;
+}
+
 wb-value > * {
-    /*height: 100%;*/
     vertical-align: middle;
     margin: 0px 5px;
 }
@@ -49,13 +60,11 @@ wb-value > input[type=color]{
 }
 
 wb-unit{
-    /* hide these until I can figure out how to display them properly */
-    display: none;
+    display: inline-block;
 }
 
-wb-locals{
-    background-color: #CCC;
-    border: 2px inset #999;
+wb-local{
+    display: inline-block;
 }
 
 wb-context > wb-contains {
@@ -98,14 +107,8 @@ wb-context[closed] > header > wb-disclosure{
     content: "▶";
 }
 
-
-wb-value > input{
-    width: 20px;
+.hide{
     display: none;
-}
-
-wb-value > input:last-child{
-    display: inline-block;
 }
 
 wb-expression:before{

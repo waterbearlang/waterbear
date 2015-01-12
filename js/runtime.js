@@ -123,7 +123,7 @@
         image: {
         },
         math: {
-            add: util.add
+            add: util.add,
             subtract: util.subtract,
             multiply: util.multiply,
             divide: util.divide,
@@ -160,6 +160,15 @@
             choice: util.choice
         },
         vector: {
+            create: function(x,y){ return new Vector(x,y); },
+            createPolar: function(r,m){ return Vector.fromPolar(r,m); },
+            rotate: function(v,a){ return v.rotate(a); },
+            rotateTo: function(v,a){ return v.rotateTo(a); },
+            magnitude: function(v){ return v.magnitude(); },
+            degrees: function(v){ return v.degrees(); },
+            x: function(v){ return v.x; },
+            y: function(v){ return v.y; },
+            normalize: function(v){ return v.normalize(); }
         },
         object: {
         },

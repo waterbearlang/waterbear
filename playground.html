@@ -43,12 +43,8 @@
                 <wb-context script="control.eachFrame">
                     <wb-value>each frame</wb-value>
                 </wb-context>
-                <wb-step script="control.createVariableXWithY">
-                    <wb-value type="text" value="var ##">create variable</wb-value>
-                    <wb-value type="any">with</wb-value>
-                </wb-step>
-                <wb-step script="control.setVariableXToY">
-                    <wb-value type="any">set variable</wb-value>
+                <wb-step script="control.setVariable">
+                    <wb-value type="text">set variable</wb-value>
                     <wb-value type="any">to</wb-value>
                 </wb-step>
                 <wb-step script="control.incrementXByY">
@@ -116,7 +112,10 @@
                 </wb-step>
                 <wb-step script="sound.playFrom">
                     <wb-value type="sound">play</wb-value>
-                    <wb-value type="number" min="0" value="2">from</wb-value><wb-unit>seconds</wb-unit>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="2">from</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    <wb-row>
                 </wb-step>
                 <wb-step script="sound.pan">
                     <wb-value type="sound">balance</wb-value>
@@ -124,17 +123,32 @@
                 </wb-step>
                 <wb-step script="sound.echo_DelayFeedbackFilter">
                     <wb-value type="sound">set echo</wb-value>
-                    <wb-value type="number" min="0" value="0.2">delay</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="number" min="0" value="0.3">feedback</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="filter" min="0" value="1000">filter</wb-value><wb-unit>Hz</wb-unit>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0.2">delay</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0.3">feedback</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="filter" min="0" value="1000">filter</wb-value>
+                        <wb-unit>Hz</wb-unit>
+                    </wb-row>
                 </wb-step>
                 <wb-step script="sound.stopEcho">
                     <wb-value type="sound">echo off</wb-value>
                 </wb-step>
                 <wb-step script="sound.reverb_DurationDecayReverse">
                     <wb-value type="sound">set reverb</wb-value>
-                    <wb-value type="number" min="0" value="2">duration</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="number" min="0" value="2">decay</wb-value><wb-unit>seconds</wb-unit>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="2">duration</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="2">decay</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
                     <wb-value type="boolean" value="false">reverse</wb-value>
                 </wb-step>
                 <wb-step script="sound.stopReverb">
@@ -142,20 +156,41 @@
                 </wb-step>
                 <wb-expression type="sound" script="sound.effect">
                     <wb-value>sound effect</wb-value>
-                    <wb-value type="number" min="0" value="1046.5">frequency</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="number" min="0" value="0">attack</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="number" min="0" value="0.3">decay</wb-value><wb-unit>seconds</wb-unit>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="1046.5">frequency</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0">attack</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0.3">decay</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
                     <wb-value type="list" options="triangle,square,sawtooth" value="triangle">waveform</wb-value>
                     <wb-value type="number" min="0" max="10" value="1">volume</wb-value>
                     <wb-value type="number" min="-1" max="1" value="0">balance</wb-value>
-                    <wb-value type="number" min="0" value="0">wait before playing</wb-value><wb-unit>seconds</wb-unit>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0">wait before playing</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
                     <wb-value type="number" min="0" value="1200">pitch bend</wb-value>
                     <wb-value type="boolean" value="false">reverse bend</wb-value>
                     <wb-value type="number" min="0" value="0">random pitch range</wb-value>
                     <wb-value type="number" min="0" value="25">dissonance</wb-value>
-                    <wb-value type="number" min="0" value="0.2">echo delay</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="number" min="0" value="0.2">echo feedback</wb-value><wb-unit>seconds</wb-unit>
-                    <wb-value type="number" min="0" value="2000">echo filter</wb-value><wb-unit>Hz</wb-unit>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0.2">echo delay</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="0.2">echo feedback</wb-value>
+                        <wb-unit>seconds</wb-unit>
+                    </wb-row>
+                    <wb-row>
+                        <wb-value type="number" min="0" value="2000">echo filter</wb-value>
+                        <wb-unit>Hz</wb-unit>
+                    </wb-row>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="array">
@@ -163,6 +198,19 @@
                     <img class="cat-icon" src="images/icon/array.svg" />
                     Arrays
                 </header>
+                <wb-expression type="array" script="array.create">
+                    <wb-value>create array</wb-value>
+                    <wb-row>
+                        <wb-value type="any"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+                <wb-expression type="array" script="array.copy">
+                    <wb-value type="array">copy array</wb-value>
+                </wb-expression>
+                <wb-expression type="array">item from</wb-expression>
+                <wb-expression type="number">at index</wb-expression>
             </wb-accordion>
             <wb-accordion class="boolean">
                 <header>
@@ -494,7 +542,7 @@
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.min.js"></script>
-    <script src="hs/util.js"></script>
+    <script src="js/util.js"></script>
     <script src="js/runtime.js"></script>
 	<script src="js/dom.js"></script>
     <script src="js/event.js"></script>

@@ -52,7 +52,8 @@ function setDefaultByTag(element, tagname, top){
 // Make sure these elements are always inserted into a header element
 // and that the header element exists
 function insertIntoHeader(){
-    if (dom.matches(this.parentElement, 'header')) return;
+    var parent = this.parentElement.tagName.toLowerCase();
+    if (parent === 'header' || parent === 'wb-row' ) return;
     var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
     var head = setDefaultByTag(block, 'header');
     head.appendChild(this, true);
@@ -103,7 +104,7 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
 };
 BlockProto.gatherValues = function(){
     if (!this.values){
-        this.values = dom.children(dom.child(this, 'header'), 'wb-value');
+        this.values = dom.children(dom.child(this, 'header'), 'wb-value, wb-row');
     }
     return this.values.map(function(value){
         return value.getValue();
@@ -192,13 +193,12 @@ var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
     // console.log('Expression created');
     var header = setDefaultByTag(this, 'header', true);
-    // var children = [].slice.apply(this.children);
-    // children.forEach(function(child){
-        // console.log('Expression child of mine: %s', child);
-    // });
+    if (this.getAttribute('context') === 'true'){
+        setDefaultByTag(this, 'wb-disclosure');
+    }
 };
 ExpressionProto.attachedCallback = function expressionAttached(){
-    console.log('Expression added to parent: %o', this.parentElement);
+    // console.log('Expression added to parent: %o', this.parentElement);
 };
 ExpressionProto.gatherValues = BlockProto.gatherValues;
 ExpressionProto.run = BlockProto.run;
@@ -224,6 +224,29 @@ var UnitProto = Object.create(HTMLElement.prototype);
 // };
 window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 
+/*****************
+*
+*  wb-row
+*
+*  Instantiated as new WBRow or as <wb-row>
+*
+*  Rows can be used wherever a <wb-value> could go. They are used to group
+*  values, units, and locals on a single line when they belong together.
+*
+******************/
+var RowProto = Object.create(HTMLElement.prototype);
+RowProto.getValue = function(){
+    var values = dom.children(this, 'wb-value');
+    if (values.length == 1){
+        return values[0].getValue();
+    }else if (values.length > 1){
+        return values.map(function(value){ return value.getValue(); });
+    }
+    return null;
+}
+RowProto.attachedCallback = insertIntoHeader;
+window.WBRow = document.registerElement('wb-row', {prototype: RowProto});
+
 
 /*****************
 *
@@ -241,24 +264,59 @@ window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: Disc
 
 /*****************
 *
-*  wb-locals
+*  wb-local
 *
-*  Instantiated as new WBLocals or as <wb-locals>
+*  Instantiated as new WBLocals or as <wb-local>
 *
-*  Attributes: class, id
+*  Children: wb-expression
 *
-*  Children: wb-step, wb-context, wb-expression
-*
-*  Locals are a menu of blocks which are local to a wb-context
-*
-*  FIXME: Still need to decide on how to represent locals in a block definintion vs. locals
-*  in a context runtime
+*  Local holds a single expression block, acting as a tiny blockmenu of one, inline to another block
 *
 ******************/
 
-
 var LocalProto = Object.create(HTMLElement.prototype);
 window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
+
+/*****************
+*
+*  .add-item button
+*
+*  Just a button with a class, adds a new row to an expression context
+*
+******************/
+
+function addItem(evt){
+    console.log('adding a new row');
+    var self = evt.target;
+    var template = dom.closest(self, 'wb-row');
+    // we want to clone the row and it's children, but not their contents
+    var newItem = template.cloneNode(true);
+    template.parentElement.insertBefore(newItem, template.nextElementSibling);
+}
+
+event.on(document.body, 'click', 'wb-contains .add-item', addItem);
+
+/*****************
+*
+*  .remove-item button
+*
+*  Just a button with a class, removes a row from an expression context
+*
+******************/
+
+function removeItem(evt){
+    console.log('removing a row');
+    var self = evt.target;
+    var row = dom.closest(self, 'wb-row');
+    // we want to remove the row, but not if it is the last one
+    if (row.previousElementSibling || row.nextElementSibling){
+        row.parentElement.removeChild(row);
+    }
+}
+
+event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
+
+
 
 /*****************
 *

@@ -33,9 +33,9 @@
             'if': function(args, containers){
             },
             ifElse: function(args, containers){
-            }
-            ternary: function(cond, iftrue, else){
-                return cond ? iftrue : else;
+            },
+            ternary: function(cond, iftrue, otherwise){
+                return cond ? iftrue : otherwise;
             }
         },
         sprite: {

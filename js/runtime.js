@@ -9,33 +9,97 @@
         ctx = canvas.getContext('2d');
     }, false);
 
+    var perFrameHandlers = [];
+
+    function startEventLoop(){
+        var perFrameHandlers = [];
+        Event.frame = 0;
+        Event.sinceLastTick = 0;
+        var lastTime = new Date().valueOf();
+
+        requestAnimationFrame(function(){
+            // where to put these? Event already has some global state.
+            var currTime = new Date().valueOf();
+            Event.sinceLastTick = currTime - lastTime;
+            Event.frame++;
+            lastTime = currTime;
+            perFrameHandlers.forEach(function(handler){
+                handler();
+            });
+        });
+    }
+
     // for all of these functions, `this` is the scope object
     global.runtime = {
         control: {
             whenProgramRuns: function(args, containers){
+                var self = this;
                 containers[0].forEach(function(block){
-                    block.run(this);
+                    block.run(self);
                 });
             },
             whenKeyPressed: function(args, containers){
-            },
-            onEvent: function(args, containers){
+                var self = this;
+                Event.onKeyDown(args[0], function(){
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                });
             },
             eachFrame: function(args, containers){
+                var self = this;
+                perFrameHandlers.push(function(){
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                });
             },
             setVariable: function(name, value){
+                //FIXME: Make sure this is named properly
+                this[name] = value;
             },
             incrementVariable: function(variable, value){
+                this[name] += value;
             },
             loopOver: function(args, containers){
+                // FIXME: this has to work over arrays, strings, objects, and numbers
             },
-            broadcast: function(args, containers){
+            broadcast: function(eventName, data){
+                // Handle with and without data
+                Event.trigger(document.body, eventName, data);
             },
             receive: function(args, containers){
+                // Handle with and without data
+                // Has a local for the data
+                var self = this;
+                Event.on(document.body, args[0], null, function(evt){
+                    // FIXME: how do I get the local from here?
+                    // As an arg would be easiest
+                    self[args[1]] = evt.detail;
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                });
             },
             'if': function(args, containers){
+                if (args[0]){
+                    var self = this;
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                }
             },
             ifElse: function(args, containers){
+                var self = this;
+                if (args[0]){
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                }else{
+                    containers[1].forEach(function(block){
+                        block.run(self);
+                    });
+                }
             },
             ternary: function(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;

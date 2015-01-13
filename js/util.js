@@ -25,6 +25,14 @@
         return target;
     }
 
+    // Remove namespaces and/or polyfill requestAnimationFrame
+    window.requestAnimationFrame = window.requestAnimationFrame ||
+                                   window.mozRequestAnimationFrame ||
+                                   window.msRequestAnimationFrame ||
+                                   window.webkitRequestAnimationFrame ||
+                                   function(fn){ setTimeout(fn, 20); };
+
+
     // add defaultValue if key does't exist in an object yet and return it
     // otherwise return current valud of key
     function setDefault(obj, key, defaultValue){

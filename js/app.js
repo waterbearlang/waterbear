@@ -25,7 +25,7 @@ function info(text){
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-event.on(document.body, 'click', '.do-run', preload);
+Event.on(document.body, 'click', '.do-run', preload);
 
 function preload(){
     var assets = dom.findAll('wb-workspace > wb-contains wb-expression[isAsset=true]').map(function(asset){

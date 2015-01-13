@@ -4,7 +4,7 @@
 // Normalized between mouse and touch events
 // Supports namespaced events, removing event listeners by namespace
 
-(function(runtime){
+(function(){
     "use strict";
 
     function isDomObject(e){
@@ -77,7 +77,7 @@
                 return;
             }
             if (onceOnly){
-                event.off(elem, eventname, listener);
+                Event.off(elem, eventname, listener);
             }
             if (selector){
                 if (dom.matches(evt.target, selector)){
@@ -142,7 +142,7 @@
     }
 
     // Are touch events supported?
-    var isTouch = ('ontouchstart' in runtime);
+    var isTouch = ('ontouchstart' in window);
     function isMouseEvent(evt){
         switch(evt.type){
             case 'mousedown':
@@ -216,7 +216,6 @@
      *****************************/
     var dragTarget = null;
     var isDragging = false;
-    var pointerDown = false;
     var startPos = {x: 0, y: 0};
     var DELTA = 5; // movement required to trigger drag vs. tap
 
@@ -224,7 +223,7 @@
         // called when we end a drag for any reason
         dragTarget = null;
         isDragging = false;
-        pointerDown = false;
+        Event.pointerDown = false;
         trigger(document, 'drag-reset');
     }
 
@@ -235,7 +234,9 @@
             return undefined;
         }
         // console.log('init drag: ' +  evt.target.tagName.toLowerCase());
-        pointerDown = true;
+        Event.pointerDown = true;
+        Event.pointerX = evt.pageX;
+        Event.pointerY = evt.pageY;
         dragTarget = evt.target;
         startPos = {x: evt.pageX, y: evt.pageY};
         forward(dragTarget, 'drag-init', evt);
@@ -244,7 +245,7 @@
     function startDrag(evt){
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) { return undefined; }
-        if (!pointerDown) { return undefined; }
+        if (!Event.pointerDown) { return undefined; }
         // console.info('start drag: ' + dragTarget.tagName.toLowerCase());
         isDragging = true;
         forward(dragTarget, 'drag-start', evt);
@@ -252,6 +253,8 @@
     }
 
     function dragging(evt){
+        Event.pointerX = evt.pageX;
+        Event.pointerY = evt.pageY;
         if (!dragTarget) { return undefined; }
         if (!isDragging) {
             // Test if we've moved more than a delta?
@@ -272,7 +275,7 @@
     }
 
     function endDrag(evt){
-        pointerDown = false;
+        Event.pointerDown = false;
         if (!isDragging) { return undefined; }
         // console.log('end drag: ' + dragTarget.tagName.toLowerCase());
         forward(dragTarget, 'drag-end', evt);
@@ -292,25 +295,96 @@
     }
 
 
-    runtime.event = {
+    /*****************************
+    *
+    *   Keyboard events
+    *
+    ******************************/
+
+    var specialKeys = {
+        // taken from jQuery Hotkeys Plugin
+        8: "backspace", 9: "tab", 13: "return", 16: "shift", 17: "ctrl", 18: "alt", 19: "pause",
+        20: "capslock", 27: "esc", 32: "space", 33: "pageup", 34: "pagedown", 35: "end", 36: "home",
+        37: "left", 38: "up", 39: "right", 40: "down", 45: "insert", 46: "del",
+        96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
+        104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/",
+        112: "f1", 113: "f2", 114: "f3", 115: "f4", 116: "f5", 117: "f6", 118: "f7", 119: "f8",
+        120: "f9", 121: "f10", 122: "f11", 123: "f12", 144: "numlock", 145: "scroll", 191: "/", 224: "meta"
+    };
+
+    var shiftNums = {
+        // taken from jQuery Hotkeys Plugin
+        "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&",
+        "8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<",
+        ".": ">",  "/": "?",  "\\": "|"
+    }
+
+
+    function keyForEvent(evt){
+        if (specialKeys[evt.keyCode]){
+            return specialKeys[evt.keyCode];
+        }else{
+            return String.fromCharCode( evt.which ).toLowerCase();
+        }
+    }
+
+    function isKeyDown(key){
+        return this.keys[key];
+    }
+
+    function handleKeyDown(evt){
+        var key = keyForEvent(evt);
+        Event.keys[key] = true;
+        if (Event.keyHandlers[key]){
+            Event.keyHandlers.forEach(function(handler){
+                handler(evt);
+            });
+        }
+    }
+
+    function handleKeyUp(evt){
+        Event.keys[keyForEvent(evt)] = false;
+    }
+
+    function onKeyDown(key, handler){
+        if (! Event.keyHandlers[key] ){
+            Event.keyHandlers[key] = [];
+        }
+        Event.keyHandlers[key].push(handler);
+    };
+
+
+    function clearRuntime(){
+        Event.keyHandlers = {};
+    }
+
+    window.Event = {
         on: on,
+        onKeyDown: onKeyDown, // special version of on to listen for specific keys
         off: off,
         once: once,
         trigger: trigger,
         forward: forward,
         cloneEvent: cloneEvent,
         isTouch: isTouch,
-        allEvents: allEvents // for testing
+        // Variables for use by programs
+        pointerDown: false,
+        pointerX: 0,
+        pointerY: 0,
+        keys: {},
+        keyHandlers: {}
     };
 
 
-    on(document.body, 'touchstart', null, initDrag);
-    on(document.body, 'touchmove', null, dragging);
-    on(document.body, 'touchend', null, endDrag);
-    on(document.body, 'mousedown', null, initDrag);
-    on(document.body, 'mousemove', null, dragging);
-    on(window, 'mouseup', null, endDrag);
-    on(window, 'keyup', null, cancelDrag);
+    Event.on(document.body, 'touchstart', null, initDrag);
+    Event.on(document.body, 'touchmove', null, dragging);
+    Event.on(document.body, 'touchend', null, endDrag);
+    Event.on(document.body, 'mousedown', null, initDrag);
+    Event.on(document.body, 'mousemove', null, dragging);
+    Event.on(window, 'mouseup', null, endDrag);
+    Event.on(window, 'keyup', null, cancelDrag);
+    Event.on(window, 'keydown', null, handleKeyDown);
+    Event.on(window, 'keyup', null, handleKeyUp);
 
 
-})(this);
+})();

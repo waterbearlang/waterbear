@@ -45,13 +45,13 @@ AccordionProto.toggle = function(){
 
 window.WBAccordion = document.registerElement('wb-accordion', {prototype: AccordionProto});
 
-function accordionClick(event){
-    event.preventDefault();
+function accordionClick(evt){
+    evt.preventDefault();
     dom.closest(event.target, 'wb-accordion').toggle();
 }
 
-event.on(document.body, 'click', 'wb-accordion > header', accordionClick);
-event.on(document.body, 'tap', 'wb-accordion > header', accordionClick);
+Event.on(document.body, 'click', 'wb-accordion > header', accordionClick);
+Event.on(document.body, 'tap', 'wb-accordion > header', accordionClick);
 
 /* For HBox, VBox, and Splitter:
 
@@ -88,17 +88,6 @@ SplitterProto.detachedCallback = function splitterDetached(){
 };
 window.WBSplitter = document.registerElement('wb-splitter', {prototype: SplitterProto});
 
-
-document.addEventListener('childAdded', function(event){
-    if (dom.matches(event.target, 'wb-hbox, wb-vbox')){
-        console.log('%s added to %s', event.target, event.detail);
-    }
-}, false);
-document.addEventListener('childRemoved', function(event){
-    if (dom.matches(event.target, 'wb-hbox, wb-vbox')){
-        console.log('%s removed from %s', event.target, event.detail);
-    }
-}, false);
 
 // Observe child changes
 

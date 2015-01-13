@@ -103,24 +103,13 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    type (do nothing
     // console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
 };
-BlockProto.gatherValues = function(){
+BlockProto.gatherValues = function(scope){
     if (!this.values){
         this.values = dom.children(dom.child(this, 'header'), 'wb-value, wb-row');
     }
     return this.values.map(function(value){
-        return value.getValue();
+        return value.getValue(scope);
     });
-};
-BlockProto.run = function(){
-    if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
-    }
-    if (this.gatherContains){
-        return this.fn.call(this, this.gatherValues(), this.gatherContains());
-    }else{
-        return this.fn.apply(this, this.gatherValues());
-    }
 };
 
 /*****************
@@ -136,6 +125,13 @@ BlockProto.run = function(){
 ******************/
 
 var StepProto = Object.create(BlockProto);
+StepProto.run = function(scope){
+    if (!this.fn){
+        var fnName = this.getAttribute('script').split('.');
+        this.fn = runtime[fnName[0]][fnName[1]];
+    }
+    return this.fn.apply(scope, this.gatherValues(scope));
+};
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
 // Context Proto
@@ -169,6 +165,17 @@ ContextProto.gatherContains = function(){
         return [].slice.call(container.children);
     });
 }
+ContextProto.run = function(parentScope){
+    if (!this.fn){
+        var fnName = this.getAttribute('script').split('.');
+        this.fn = runtime[fnName[0]][fnName[1]];
+    }
+    var scope = util.extend({}, parentScope);
+    // expressions are eagerly evaluated against scope, contains are late-evaluated
+    // I'm not yet sure if this is the Right Thing™
+    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
+};
+
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
 /*****************
@@ -213,7 +220,8 @@ ExpressionProto.attachedCallback = function expressionAttached(){
     // console.log('Expression added to parent: %o', this.parentElement);
 };
 ExpressionProto.gatherValues = BlockProto.gatherValues;
-ExpressionProto.run = BlockProto.run;
+ExpressionProto.run = StepProto.run;
+
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
 /*****************
@@ -247,12 +255,12 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 *
 ******************/
 var RowProto = Object.create(HTMLElement.prototype);
-RowProto.getValue = function(){
+RowProto.getValue = function(scope){
     var values = dom.children(this, 'wb-value');
     if (values.length == 1){
-        return values[0].getValue();
+        return values[0].getValue(scope);
     }else if (values.length > 1){
-        return values.map(function(value){ return value.getValue(); });
+        return values.map(function(value){ return value.getValue(scope); });
     }
     return null;
 }
@@ -285,7 +293,7 @@ function toggleClosed(evt){
     }
 }
 
-event.on(workspace, 'click', 'wb-disclosure', toggleClosed);
+Event.on(workspace, 'click', 'wb-disclosure', toggleClosed);
 
 /*****************
 *
@@ -318,7 +326,7 @@ function addItem(evt){
     template.parentElement.insertBefore(newItem, template.nextElementSibling);
 }
 
-event.on(document.body, 'click', 'wb-contains .add-item', addItem);
+Event.on(document.body, 'click', 'wb-contains .add-item', addItem);
 
 /*****************
 *
@@ -338,7 +346,7 @@ function removeItem(evt){
     }
 }
 
-event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
+Event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
 
 
 
@@ -447,7 +455,7 @@ var dragStart = '';
 var dropTarget = null;
 var BLOCK_MENU = document.querySelector('sidebar');
 
-event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
+Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
     // Maybe move to object notation later
     //    return target.startDrag(evt);
@@ -468,7 +476,7 @@ event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     dragTarget.style.top = (evt.pageY - 15) + 'px';
 });
 
-event.on(document.body, 'dragging', null, function(evt){
+Event.on(document.body, 'dragging', null, function(evt){
     if (!dragTarget){ return; }
     // console.log('block dragging ' + dragTarget.tagName.toLowerCase() + ' (' + evt.pageX + ', ' + evt.pageY + ') %o', evt);
     dragTarget.style.left = (evt.pageX - 15) + 'px';
@@ -520,7 +528,7 @@ event.on(document.body, 'dragging', null, function(evt){
     app.warn('Not a target, drop to cancel drag');
 });
 
-event.on(document.body, 'drag-end', null, function(evt){
+Event.on(document.body, 'drag-end', null, function(evt){
     if (!dropTarget){
         dragTarget.parentElement.removeChild(dragTarget);
         // fall through to resetDragging()
@@ -557,14 +565,14 @@ event.on(document.body, 'drag-end', null, function(evt){
     resetDragging();
 });
 
-event.on(document.body, 'drag-cancel', null, function(evt){
+Event.on(document.body, 'drag-cancel', null, function(evt){
     dragTarget.parentElement.removeChild(dragTarget);
     resetDragging();
 });
 
 // Handle resizing inputs when their content changes
-document.addEventListener('input', function(event){
-    var target = event.target;
+Event.on(document.body, 'input', 'input', function(evt){
+    var target = evt.target;
     if (! dom.matches(target, 'wb-value > input')) return;
     resize(target);
 }, false);

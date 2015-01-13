@@ -4,15 +4,18 @@
     // resources
 
     var canvas, ctx;
-    window.addEventListener('load', function(){
+    Event.on(window, 'load', null, function(){
         canvas = dom.find('wb-playground > canvas');
         ctx = canvas.getContext('2d');
     }, false);
 
-
+    // for all of these functions, `this` is the scope object
     global.runtime = {
         control: {
             whenProgramRuns: function(args, containers){
+                containers[0].forEach(function(block){
+                    block.run(this);
+                });
             },
             whenKeyPressed: function(args, containers){
             },

@@ -38,26 +38,52 @@
                     <wb-value>key pressed<wb-value>
                 </wb-context>
                 <wb-context script="control.eachFrame">
-                    <wb-value>each frame</wb-value>
+                    <wb-row>
+                        <wb-value>each frame</wb-value>
+                        <wb-local>
+                            <wb-expression type="number" script="control.frame">
+                                <wb-value value="frame ##">frame ##</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" script="control.elapsed">
+                                <wb-value value="elapsed ##">elapsed ##</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
                 </wb-context>
                 <wb-step script="control.setVariable">
-                    <wb-value type="text">set variable</wb-value>
-                    <wb-value type="any">to</wb-value>
+                    <wb-row>
+                        <wb-value type="text" value="variable">set</wb-value>
+                        <wb-value type="any">to</wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable">variable ##</wb-expression>
+                        </wb-local>
+                    </wb-row>
                 </wb-step>
                 <wb-step script="control.incrementVariable">
                     <wb-value type="number">increment variable</wb-value>
                     <wb-value type="number" value="1">by</wb-value>
                 </wb-step>
                 <wb-context script="control.loopOver">
-                    <wb-value type="any">loop over</wb-value>
-                    <wb-locals>
-                        <wb-expression type="any" script="local.index">
-                            <wb-value>index ##</wb-value>
-                        </wb-expression>
-                        <wb-expression type="any" script="local.value">
-                            <wb-value>value ##</wb-value>
-                        </wb-expression>
-                    </wb-locals>
+                    <wb-row>
+                        <wb-value type="any">loop over</wb-value>
+                        <wb-local fortype="array,string">
+                            <wb-expression type="any" script="local.index">
+                                <wb-value>index ##</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local fortype="object">
+                            <wb-expression type="string" script="local.key">
+                                <wb-value>key ##</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local fortype="any">
+                            <wb-expression type="any" script="local.value">
+                                <wb-value>value ##</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
                 </wb-context>
                 <wb-context script="control.broadcast">
                     <wb-value type="text">broadcast</wb-value>
@@ -579,6 +605,8 @@
         </wb-playground>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
+    <!-- polyfill for custom elements -->
+    <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.min.js"></script>
     <script src="js/util.js"></script>

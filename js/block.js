@@ -54,7 +54,7 @@ function setDefaultByTag(element, tagname, top){
 // and that the header element exists
 function insertIntoHeader(){
     var parent = this.parentElement.tagName.toLowerCase();
-    if (parent === 'header' || parent === 'wb-row' ) return;
+    if (parent === 'header' || parent === 'wb-row') return;
     var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
     var head = setDefaultByTag(block, 'header');
     head.appendChild(this, true);
@@ -217,7 +217,20 @@ ExpressionProto.createdCallback = function expressionCreated(){
     }
 };
 ExpressionProto.attachedCallback = function expressionAttached(){
-    // console.log('Expression added to parent: %o', this.parentElement);
+    var siblings = dom.children(this.parentElement, 'input, select');
+    if (siblings.length){
+        siblings.forEach(function(sib){
+            sib.classList.add('hide');
+        });
+    }
+};
+ExpressionProto.detachedCallback = function expressionDetached(){
+   var siblings = dom.children(this.parentElement, 'input, select');
+    if (siblings.length){
+        siblings.forEach(function(sib){
+            sib.classList.remove('hide');
+        });
+    }
 };
 ExpressionProto.gatherValues = BlockProto.gatherValues;
 ExpressionProto.run = StepProto.run;
@@ -308,6 +321,8 @@ Event.on(workspace, 'click', 'wb-disclosure', toggleClosed);
 ******************/
 
 var LocalProto = Object.create(HTMLElement.prototype);
+LocalProto.run = StepProto.run;
+LocalProto.attachedCallback = insertIntoHeader;
 window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
 
 /*****************
@@ -468,6 +483,9 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     dragTarget = origTarget.cloneNode(true);
     document.body.appendChild(dragTarget);
     dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
+    if (origTarget.parentElement.nodeName.toLowerCase() === 'wb-local'){
+        dragStart = 'menu';
+    }
     if (dragStart === 'script'){
         origTarget.style.display = 'none';
     }
@@ -543,6 +561,8 @@ Event.on(document.body, 'drag-end', null, function(evt){
         }
     }else if(dragTarget.matches('wb-expression')){
         dropTarget.appendChild(dragTarget);
+        dropBlock = dom.closest(dropTarget, 'wb-expression, wb-step, wb-context');
+        trigger(dropBlock, 'wb-added', dragTarget);
     }else if(dragTarget.matches('wb-context, wb-step')){
         if (dropTarget.matches('wb-contains')){
             // dropping directly into a contains section

@@ -46,10 +46,10 @@ wb-row{
     display: block;
     text-align: right;
     margin-left: 20px;
-    white-space: no-wrap;
+    white-space: nowrap;
 }
 
-wb-row > wb-value{
+wb-row > wb-value, wb-row > wb-local{
     display: inline-block;
     margin-left: 0;
 }
@@ -69,6 +69,10 @@ wb-unit{
 
 wb-local{
     display: inline-block;
+}
+
+wb-local[fortype]{
+    display: none;
 }
 
 wb-context > wb-contains {

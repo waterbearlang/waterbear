@@ -75,6 +75,10 @@ wb-local[fortype]{
     display: none;
 }
 
+wb-local[fortype].show{
+    display: inline-block;
+}
+
 wb-context > wb-contains {
     display: block;
     background-color: rgba(255, 255, 255, 1.0);

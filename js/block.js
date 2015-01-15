@@ -105,7 +105,7 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
 };
 BlockProto.gatherValues = function(scope){
     if (!this.values){
-        this.values = dom.children(dom.child(this, 'header'), 'wb-value, wb-row');
+        this.values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-row');
     }
     return this.values.map(function(value){
         return value.getValue(scope);
@@ -175,9 +175,56 @@ ContextProto.run = function(parentScope){
     // I'm not yet sure if this is the Right Thing™
     return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
 };
+ContextProto.showLocals = function(evt){
+    // This is way too specific to the needs to the loopOver block
+    var blockAdded = evt.detail;
+    if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
+        console.log('yo');
+        var type = blockAdded.getAttribute('type');
+        var header = dom.child(this, 'header');
+        if (!header){
+            console.log('no header!');
+            return;
+        }
+        var row = dom.child(header, 'wb-row');
+        if (!row){
+            console.log('no row!');
+            return;
+        }
+        var locals = dom.children(row, 'wb-local[fortype]');
+        if (locals.length > 0){
+            console.log('looking for %s in all the wrong places', type);
+        }else{
+            console.log('found no matching locals')
+        }
+        locals.forEach(function(local){
+            var localtypes = local.getAttribute('fortype').split(',');
+            console.log('trying to find %s or any in %s', type, localtypes.join(','));
+            if (localtypes.indexOf(type) > -1 || localtypes.indexOf('any') > -1){
+                local.classList.add('show');
+            }
+        });
+    }
+};
+ContextProto.hideLocals = function(evt){
+    // This is way too specific to the needs to the loopOver block
+    var blockAdded = evt.detail;
+    if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
+        var header = dom.child(this, 'header');
+        if (!header) return;
+        var row = dom.child(header, 'wb-row');
+        if (!row) return;
+        var locals = dom.children(row, 'wb-local[fortypes]');
+        locals.forEach(function(local){
+            local.classList.remove('show');
+        });
+    }
+};
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
+Event.on(document.body, 'wb-added', 'wb-context', function(evt){ evt.target.showLocals(evt); });
+Event.on(document.body, 'wb-added', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
 /*****************
 *
 *  wb-expression
@@ -217,23 +264,45 @@ ExpressionProto.createdCallback = function expressionCreated(){
     }
 };
 ExpressionProto.attachedCallback = function expressionAttached(){
-    var siblings = dom.children(this.parentElement, 'input, select');
+    this.parent = this.parentElement;
+    var siblings = dom.children(this.parent, 'input, select');
     if (siblings.length){
         siblings.forEach(function(sib){
             sib.classList.add('hide');
         });
     }
+    if (this.parent.tagName.toLowerCase() !== 'wb-local'){
+        var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
+        if (blockParent){
+            Event.trigger(blockParent, 'wb-added', this);
+        }
+    }
+
 };
 ExpressionProto.detachedCallback = function expressionDetached(){
-   var siblings = dom.children(this.parentElement, 'input, select');
+   var siblings = dom.children(this.parent, 'input, select');
     if (siblings.length){
         siblings.forEach(function(sib){
             sib.classList.remove('hide');
         });
     }
+    if (this.parent.tagName.toLowerCase() !== 'wb-local'){
+        var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
+        if (blockParent){
+            Event.trigger(blockParent, 'wb-removed', this);
+        }
+    }
+    this.parent = null;
 };
 ExpressionProto.gatherValues = BlockProto.gatherValues;
-ExpressionProto.run = StepProto.run;
+ExpressionProto.run = function(scope){
+    if (!this.fn){
+        var fnName = this.getAttribute('script').split('.');
+        this.fn = runtime[fnName[0]][fnName[1]];
+    }
+    return this.fn.apply(scope, this.gatherValues(scope));
+};
+
 
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
@@ -269,7 +338,7 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 ******************/
 var RowProto = Object.create(HTMLElement.prototype);
 RowProto.getValue = function(scope){
-    var values = dom.children(this, 'wb-value');
+    var values = dom.children(this, 'wb-value[type]:not(.hide)');
     if (values.length == 1){
         return values[0].getValue(scope);
     }else if (values.length > 1){
@@ -431,11 +500,14 @@ ValueProto.createdCallback = function valueCreated(){
         resize(input);
     }
 };
-ValueProto.getValue = function(){
+ValueProto.getValue = function(scope){
     var block = dom.child(this, 'wb-expression');
     if (block){
-        console.log('found expression, returning %o', block.run());
-        return block.run();
+        console.log('found expression, returning %o', block.run(scope));
+        if (block.run(scope) === undefined){
+            // throw new Error('expressions cannot return undefined');
+        }
+        return block.run(scope);
     }
     var input = dom.child(this, 'input, select');
     if (!this.type){
@@ -455,7 +527,8 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 var convert = {
     boolean: function(text){ return text === 'true'; },
-    number: function(text){ return new Number(text); }
+    number: function(text){ return +text; },
+    any: function(text){return util.isNumber(text) ? +text : text; }
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
@@ -561,8 +634,6 @@ Event.on(document.body, 'drag-end', null, function(evt){
         }
     }else if(dragTarget.matches('wb-expression')){
         dropTarget.appendChild(dragTarget);
-        dropBlock = dom.closest(dropTarget, 'wb-expression, wb-step, wb-context');
-        trigger(dropBlock, 'wb-added', dragTarget);
     }else if(dragTarget.matches('wb-context, wb-step')){
         if (dropTarget.matches('wb-contains')){
             // dropping directly into a contains section

@@ -15,6 +15,13 @@
         return item;
     }
 
+    // check if a string is a number (works on numbers too)
+    function isNumber(check){
+        check = check + "";
+        return check.trim().length > 0 ? !isNaN(check) : false;
+    }
+
+    // extend an object. to (shallow) copy an object, pass {} for target
     function extend(target, source){
         if (source === null || typeof obj !== 'object') return source;
         for (var attr in source) {
@@ -298,7 +305,8 @@
         deg2rad: deg2rad,
         randInt: randInt,
         noise: noise,
-        choice: choice
+        choice: choice,
+        isNumber: isNumber
     };
 
 

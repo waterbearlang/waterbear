@@ -40,9 +40,10 @@ function preload(){
 }
 
 function run(){
+    var scope = {};
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            block.run();
+            block.run(scope);
         }
     });
 }

@@ -42,12 +42,12 @@
                         <wb-value>each frame</wb-value>
                         <wb-local>
                             <wb-expression type="number" script="control.frame">
-                                <wb-value value="frame ##">frame ##</wb-value>
+                                <wb-value value="frame">frame</wb-value>
                             </wb-expression>
                         </wb-local>
                         <wb-local>
                             <wb-expression type="number" script="control.elapsed">
-                                <wb-value value="elapsed ##">elapsed ##</wb-value>
+                                <wb-value value="elapsed">elapsed</wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
@@ -57,7 +57,9 @@
                         <wb-value type="text" value="variable">set</wb-value>
                         <wb-value type="any">to</wb-value>
                         <wb-local>
-                            <wb-expression type="any" script="control.getVariable">variable ##</wb-expression>
+                            <wb-expression type="any" script="control.getVariable">
+                                <wb-value value="variable">variable</wb-value>
+                            </wb-expression>
                         </wb-local>
                     </wb-row>
                 </wb-step>
@@ -70,17 +72,17 @@
                         <wb-value type="any">loop over</wb-value>
                         <wb-local fortype="array,string">
                             <wb-expression type="any" script="local.index">
-                                <wb-value>index ##</wb-value>
+                                <wb-value value="index">index</wb-value>
                             </wb-expression>
                         </wb-local>
                         <wb-local fortype="object">
                             <wb-expression type="string" script="local.key">
-                                <wb-value>key ##</wb-value>
+                                <wb-value value="key">key</wb-value>
                             </wb-expression>
                         </wb-local>
                         <wb-local fortype="any">
                             <wb-expression type="any" script="local.value">
-                                <wb-value>value ##</wb-value>
+                                <wb-value value="value">value</wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
@@ -94,7 +96,7 @@
                     <wb-value>message with data</wb-value>
                     <wb-locals>
                         <wb-expression type="any" script="local.data">
-                            <wb-value>data ##</wb-value>
+                            <wb-value value="data">data</wb-value>
                         </wb-expression>
                     </wb-locals>
                 </wb-context>
@@ -116,6 +118,9 @@
                     <wb-value type="any">then</wb-value>
                     <wb-value type="any">else</wb-value>
                 </wb-expression>
+                <wb-step script="control.log">
+                    <wb-value type="any">log</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="sprite">
                 <header>

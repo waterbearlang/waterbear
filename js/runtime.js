@@ -31,6 +31,12 @@
 
     // for all of these functions, `this` is the scope object
     global.runtime = {
+        local: {
+            //temporary fix for locals
+            value: function(){
+                return this.value;
+            }
+        },
         control: {
             whenProgramRuns: function(args, containers){
                 var self = this;
@@ -58,11 +64,52 @@
                 //FIXME: Make sure this is named properly
                 this[name] = value;
             },
+            getVariable: function(name){
+                console.log('get %s from %o', name, this);
+                return this[name];
+            },
             incrementVariable: function(variable, value){
                 this[name] += value;
             },
             loopOver: function(args, containers){
                 // FIXME: this has to work over arrays, strings, objects, and numbers
+                var self = this;
+                var list = args[0];
+                var type = util.type(list);
+                var i =0,len,keys;
+                switch(type){
+                    case 'array': // fall through
+                    case 'string':
+                        len = list.length;
+                        break;
+                    case 'object':
+                        keys = Object.keys(list);
+                        len = keys.length;
+                        break;
+                    case 'number':
+                        len = list;
+                        break;
+                }
+                for (var i = 0; i < len; i++){
+                    switch(type){
+                        case 'array': // fall through
+                        case 'string':
+                            this.index = i;
+                            this.value = list[i];
+                            break;
+                        case 'object':
+                            this.key = keys[i];
+                            this.value = list[this.key];
+                            break;
+                        case 'number':
+                            this.value = i;
+                            break;
+                    }
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+
+                }
             },
             broadcast: function(eventName, data){
                 // Handle with and without data
@@ -103,6 +150,9 @@
             },
             ternary: function(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;
+            },
+            log: function(item){
+                console.log(item);
             }
         },
         sprite: {
@@ -285,8 +335,8 @@
             choice: util.choice
         },
         vector: {
-            create: function(x,y){ return new Vector(x,y); },
-            createPolar: function(r,m){ return Vector.fromPolar(r,m); },
+            create: function(x,y){ return new util.Vector(x,y); },
+            createPolar: function(r,m){ return util.Vector.fromPolar(r,m); },
             rotate: function(v,a){ return v.rotate(a); },
             rotateTo: function(v,a){ return v.rotateTo(a); },
             magnitude: function(v){ return v.magnitude(); },

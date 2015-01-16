@@ -553,6 +553,7 @@ var dropTarget = null;
 var BLOCK_MENU = document.querySelector('sidebar');
 var blockTop = 0;
 
+/* When the block has started to be dragged. */
 Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
     // Maybe move to object notation later
@@ -561,6 +562,9 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     // Show trash can, should be in app.js, not block.js
     blockTop = BLOCK_MENU.scrollTop;
     BLOCK_MENU.classList.add('trashcan');
+
+    // Add a dragging class for extra styles (e.g., dragging cursor).
+    document.body.classList.add('block-dragging');
 
     // FIXME: Highlight droppable places (or grey out non-droppable)
 
@@ -702,6 +706,8 @@ function resetDragging(){
     // Hide trash can, should be in app.js, not block.js
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
+    // Remove dragging class.
+    document.body.classList.remove('block-dragging');
 }
 
 

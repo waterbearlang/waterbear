@@ -12,6 +12,15 @@ wb-step, wb-context, wb-expression{
     position: relative;
 }
 
+body:not(.block-dragging) wb-step,
+body:not(.block-dragging) wb-context,
+body:not(.block-dragging) wb-expression {
+    cursor: move;
+    /* More appropriate, but less compatible. */
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
 wb-expression{
     border-radius: 0;
     text-align: right;
@@ -29,7 +38,16 @@ wb-value select{
 wb-step.dragging, wb-context.dragging, wb-expression.dragging{
     opacity: 0.5;
     position: absolute;
+    /* Necessary for dragging events. */
     pointer-events: none;
+}
+
+/* This class is probably added on the body or the workspace container. */
+.block-dragging {
+    cursor: move;
+    /* More appropriate, but less compatible. */
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
 }
 
 wb-expression > header{
@@ -117,6 +135,7 @@ wb-context > header > wb-disclosure:after{
     position: absolute;
     top: 5px;
     left: 0px;
+    cursor: default;
 }
 
 wb-context[closed] > header > wb-disclosure:after{

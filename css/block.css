@@ -10,6 +10,11 @@ wb-step, wb-context, wb-expression{
     float: left;
     clear: left;
     position: relative;
+
+    cursor: move;
+    /* More appropriate, but less compatible. */
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 }
 
 wb-expression{

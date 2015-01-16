@@ -10,7 +10,11 @@ wb-step, wb-context, wb-expression{
     float: left;
     clear: left;
     position: relative;
+}
 
+body:not(.block-dragging) wb-step,
+body:not(.block-dragging) wb-context,
+body:not(.block-dragging) wb-expression {
     cursor: move;
     /* More appropriate, but less compatible. */
     cursor: -moz-grab;
@@ -40,10 +44,10 @@ wb-step.dragging, wb-context.dragging, wb-expression.dragging{
 
 /* This class is probably added on the body or the workspace container. */
 .block-dragging {
-    cursor: move !important;
+    cursor: move;
     /* More appropriate, but less compatible. */
-    cursor: -moz-grabbing !important;
-    cursor: -webkit-grabbing !important;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
 }
 
 wb-expression > header{

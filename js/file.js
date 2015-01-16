@@ -10,18 +10,21 @@
    even if the user leaves the site or restarts their browser. SessionStorage
    is volatile and will be deleted if they restart the browser.*/
 
-// global variable wb is initialized in the HTML before any javascript files
-// are loaded (in template/template.html)
-(function(wb){
+/* WARNING !!!!
+
+   Not everything in this file has been ported from the old waterbear
+   Especially watch out for references to "wb"
+*/
+
+(function(){
 'use strict';
+
     function saveCurrentScripts(){
-        if (!wb.getState('scriptModified')){
-            // console.log('nothing to save');
-            // nothing to save
-            return;
+        // super simplistic for now
+        var script = scriptsToString();
+        if (script){
+            localStorage['__simple_currentWaterbearScript'] = script;
         }
-        document.querySelector('.block-menu').scrollIntoView();
-        localStorage['__' + wb.language + '_current_scripts'] = scriptsToString();
     }
 
     // Save script to gist;
@@ -85,26 +88,9 @@
     //Potential FIXME: I feel that title should be the filename, but uName || name
     //determines what is shown in the workspace.
     function scriptsToString(title, description, name){
-        if (!title){ title = ''; }
-        if (!description){ description = ''; }
-        if (!name){ name = 'Workspace';}
-        var blocks = wb.findAll(document.body, '.workspace .scripts-workspace');
-        var json = {
-            title: title,
-            description: description,
-            date: Date.now(),
-            waterbearVersion: '2.0',
-            blocks: blocks.map(wb.block.description)
-        };
-        if (json.blocks.length){
-            if(json.blocks[0].sockets[0].name){
-                json.blocks[0].sockets[0].name = name;
-            }else if(json.blocks[0].sockets[0].uName){
-                json.blocks[0].sockets[0].uName = name;
-            }
-        }
-
-        return JSON.stringify(json, null, '    ');
+        // super simplistic for now
+        var script = document.querySelector('wb-workspace > wb-contains').innerHTML;
+        return script;
     }
 
 
@@ -152,32 +138,10 @@
         input.click();
     }
 
-    function loadScriptsFromObject(fileObject){
+    function loadScriptsFromString(text){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
-        console.log('start loadScriptsFromObject');
-        wb.setState('scriptReady', false);
-        Event.once(document.body, 'wb-ready', null, wb.onReady);
-        if (!fileObject){
-            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
-            return wb.createWorkspace();
-        }
-        var blocks = fileObject.blocks.map(wb.block.create);
-        if (!blocks.length){
-            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
-            return wb.createWorkspace();
-        }
-        if (blocks.length > 1){
-            console.error('not really expecting multiple blocks here right now');
-            console.error(blocks);
-        }
-        blocks.forEach(function(block){
-            wb.wireUpWorkspace(block);
-        });
-        wb.loaded = true;
-        console.log('initialize: script');
-        Event.trigger(document.body, 'wb-initialize', {component: 'script'});
-        console.log('end loadScriptsFromObject');
+        document.querySelector('wb-workspace > wb-contains').innerHTML = text;
     }
 
     function loadScriptsFromGist(gist){
@@ -204,40 +168,10 @@
         });
     }
 
-    function loadScriptsFromJson(jsonblob){
-        // wb.clearScripts(null, true);
-        wb.loaded = true;
-        loadScriptsFromObject(JSON.parse(jsonblob));
-        wb.setState('scriptModified', false);
-    }
-
     function loadCurrentScripts(queryParsed){
-        console.log('loadCurrentScripts(%s)', JSON.stringify(queryParsed));
-        if (wb.loaded) return;
-        wb.setState('scriptReady', false);
-        Event.once(document.body, 'wb-ready', null, wb.onReady);
-        if (queryParsed.gist){
-            console.log("Loading gist %s", queryParsed.gist);
-            ajax.get("https://api.github.com/gists/"+queryParsed.gist, function(data){
-                loadScriptsFromGist({data:JSON.parse(data)});
-            }, function(statusCode, x){
-              alert("Can't save to gist:\n" + statusCode + " (" + x.statusText + ") ");
-            });
-        }else if (queryParsed.example){
-            console.log('loading example %s', queryParsed.example);
-            loadScriptsFromExample(queryParsed.example);
-        }else if (localStorage['__' + wb.language + '_current_scripts']){
-            console.log('loading current script from local storage');
-            var fileObject = JSON.parse(localStorage['__' + wb.language + '_current_scripts']);
-            if (fileObject){
-                loadScriptsFromObject(fileObject);
-            }
-        }else{
-            console.log('no script to load, starting a new script');
-            Event.trigger(document.body, 'wb-initialize', {component: 'script'});
-            wb.createWorkspace('Workspace');
+        if (localStorage['__simple_currentWaterbearScript']){
+            loadScriptsFromString(localStorage['__simple_currentWaterbearScript']);
         }
-        wb.loaded = true;
     }
 
 	function loadScriptsFromFile(file){
@@ -264,14 +198,20 @@
         }
     }
 
-    wb.saveCurrentScripts = saveCurrentScripts;
-    wb.saveCurrentScriptsToGist = saveCurrentScriptsToGist;
-    wb.loadRecentGists = loadRecentGists;
-    wb.createDownloadUrl = createDownloadUrl;
-    wb.loadScriptsFromGistId = loadScriptsFromGistId;
-    wb.loadScriptsFromExample = loadScriptsFromExample;
-    wb.loadScriptsFromFilesystem = loadScriptsFromFilesystem;
-    wb.loadCurrentScripts = loadCurrentScripts;
-    wb.getFiles = getFiles;
+    Event.on(window, 'load', null, loadCurrentScripts);
+    Event.on(window, 'beforeunload', null, saveCurrentScripts);
 
-})(wb);
+    window.File = {
+        scriptsToString: scriptsToString,
+        saveCurrentScripts: saveCurrentScripts,
+        saveCurrentScriptsToGist: saveCurrentScriptsToGist,
+        loadRecentGists: loadRecentGists,
+        createDownloadUrl: createDownloadUrl,
+        loadScriptsFromGistId: loadScriptsFromGistId,
+        loadScriptsFromExample: loadScriptsFromExample,
+        loadScriptsFromFilesystem: loadScriptsFromFilesystem,
+        loadCurrentScripts: loadCurrentScripts,
+        getFiles: getFiles
+    }
+
+})();

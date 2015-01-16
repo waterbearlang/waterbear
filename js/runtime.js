@@ -62,10 +62,11 @@
             },
             setVariable: function(name, value){
                 //FIXME: Make sure this is named properly
+                // console.log('setting variable %s to value %s', name, value);
                 this[name] = value;
             },
             getVariable: function(name){
-                console.log('get %s from %o', name, this);
+                // console.log('get %s from %o', name, this);
                 return this[name];
             },
             incrementVariable: function(variable, value){

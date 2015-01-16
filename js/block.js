@@ -105,7 +105,7 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
 };
 BlockProto.gatherValues = function(scope){
     if (!this.values){
-        this.values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-row');
+        this.values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
     }
     return this.values.map(function(value){
         return value.getValue(scope);
@@ -130,6 +130,7 @@ StepProto.run = function(scope){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
+    // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
@@ -173,33 +174,25 @@ ContextProto.run = function(parentScope){
     var scope = util.extend({}, parentScope);
     // expressions are eagerly evaluated against scope, contains are late-evaluated
     // I'm not yet sure if this is the Right Thing™
+    // console.log('calling context %s with scope %o, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
     var blockAdded = evt.detail;
     if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
-        console.log('yo');
         var type = blockAdded.getAttribute('type');
         var header = dom.child(this, 'header');
         if (!header){
-            console.log('no header!');
             return;
         }
         var row = dom.child(header, 'wb-row');
         if (!row){
-            console.log('no row!');
             return;
         }
         var locals = dom.children(row, 'wb-local[fortype]');
-        if (locals.length > 0){
-            console.log('looking for %s in all the wrong places', type);
-        }else{
-            console.log('found no matching locals')
-        }
         locals.forEach(function(local){
             var localtypes = local.getAttribute('fortype').split(',');
-            console.log('trying to find %s or any in %s', type, localtypes.join(','));
             if (localtypes.indexOf(type) > -1 || localtypes.indexOf('any') > -1){
                 local.classList.add('show');
             }
@@ -300,6 +293,7 @@ ExpressionProto.run = function(scope){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
+    // console.log('calling expression %s with scope %o and values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
@@ -503,7 +497,6 @@ ValueProto.createdCallback = function valueCreated(){
 ValueProto.getValue = function(scope){
     var block = dom.child(this, 'wb-expression');
     if (block){
-        console.log('found expression, returning %o', block.run(scope));
         if (block.run(scope) === undefined){
             // throw new Error('expressions cannot return undefined');
         }
@@ -511,16 +504,19 @@ ValueProto.getValue = function(scope){
     }
     var input = dom.child(this, 'input, select');
     if (!this.type){
-        this.type = this.getAttribute('type');
+        this.type = this.getAttribute('type') || 'text';
     }
+    var value;
     if (input){
-        if (convert[this.type]){
-            return convert[this.type](input.value);
-        }else{
-            return input.value;
-        }
+        value = input.value;
+    }else{
+        value = this.getAttribute('value');
     }
-    return null;
+    if (convert[this.type]){
+        return convert[this.type](value);
+    }else{
+        return value;
+    }
 };
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
@@ -542,6 +538,7 @@ var origTarget = null;
 var dragStart = '';
 var dropTarget = null;
 var BLOCK_MENU = document.querySelector('sidebar');
+var blockTop = 0;
 
 Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
@@ -549,6 +546,7 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     //    return target.startDrag(evt);
 
     // Show trash can, should be in app.js, not block.js
+    blockTop = BLOCK_MENU.scrollTop;
     BLOCK_MENU.classList.add('trashcan');
 
     // FIXME: Highlight droppable places (or grey out non-droppable)
@@ -560,7 +558,7 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
         dragStart = 'menu';
     }
     if (dragStart === 'script'){
-        origTarget.style.display = 'none';
+        origTarget.classList.add('singularity');
     }
     dragTarget.classList.add('dragging');
     dragTarget.style.left = (evt.pageX - 15) + 'px';
@@ -637,7 +635,12 @@ Event.on(document.body, 'drag-end', null, function(evt){
     }else if(dragTarget.matches('wb-context, wb-step')){
         if (dropTarget.matches('wb-contains')){
             // dropping directly into a contains section
-            dropTarget.insertBefore(dragTarget, dropTarget.firstElementChild);
+            // insert as the first block unless dropped after the entire script
+            if (dropTarget.children.length && evt.y > dropTarget.lastElementChild.getBoundingClientRect().bottom){
+                dropTarget.appendChild(dragTarget);
+            }else{
+                dropTarget.insertBefore(dragTarget, dropTarget.firstElementChild);
+            }
         }else{
             // dropping on a block in the contains, insert after that block
             dropTarget.parentElement.insertBefore(dragTarget, dropTarget.nextElementSibling);
@@ -676,7 +679,7 @@ function resetDragging(){
         dragTarget.removeAttribute('style');
     }
     if (origTarget){
-        delete origTarget.style.display;
+        origTarget.classList.remove('singularity');
     }
     dragTarget = null;
     origTarget = null;
@@ -685,6 +688,7 @@ function resetDragging(){
     app.info('');
     // Hide trash can, should be in app.js, not block.js
     BLOCK_MENU.classList.remove('trashcan');
+    BLOCK_MENU.scrollTop = blockTop;
 }
 
 

@@ -131,6 +131,12 @@ wb-context[closed] > wb-contains{
     display: none;
 }
 
+/* almost hide, but leave enough that it still has a bounding box */
+.singularity{
+    max-height: 1px;
+    overflow: hidden;
+}
+
 wb-expression:before{
     content: '';
     width: 15px;

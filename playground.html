@@ -54,14 +54,14 @@
                 </wb-context>
                 <wb-step script="control.setVariable">
                     <wb-row>
-                        <wb-value type="text" value="variable">set</wb-value>
-                        <wb-value type="any">to</wb-value>
+                    <wb-value type="text" value="variable">set</wb-value>
                         <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="variable">variable</wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
+                    <wb-value type="any">to</wb-value>
                 </wb-step>
                 <wb-step script="control.incrementVariable">
                     <wb-value type="number">increment variable</wb-value>

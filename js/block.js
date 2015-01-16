@@ -553,7 +553,6 @@ var dropTarget = null;
 var BLOCK_MENU = document.querySelector('sidebar');
 var blockTop = 0;
 
-/* When the block has started to be dragged. */
 Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
     // Maybe move to object notation later
@@ -562,9 +561,6 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     // Show trash can, should be in app.js, not block.js
     blockTop = BLOCK_MENU.scrollTop;
     BLOCK_MENU.classList.add('trashcan');
-
-    // Add a dragging class for extra styles (e.g., dragging cursor).
-    document.body.classList.add('block-dragging');
 
     // FIXME: Highlight droppable places (or grey out non-droppable)
 
@@ -587,7 +583,7 @@ Event.on(document.body, 'dragging', null, function(evt){
     // console.log('block dragging ' + dragTarget.tagName.toLowerCase() + ' (' + evt.pageX + ', ' + evt.pageY + ') %o', evt);
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
-    var potentialDropTarget = document.elementFromPoint(evt.x, evt.y);
+    var potentialDropTarget = document.elementFromPoint(evt.pageX, evt.pageY);
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         app.warn('drop here to delete block(s)');
@@ -655,7 +651,7 @@ Event.on(document.body, 'drag-end', null, function(evt){
         if (dropTarget.matches('wb-contains')){
             // dropping directly into a contains section
             // insert as the first block unless dropped after the entire script
-            if (dropTarget.children.length && evt.y > dropTarget.lastElementChild.getBoundingClientRect().bottom){
+            if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
                 dropTarget.appendChild(dragTarget);
             }else{
                 dropTarget.insertBefore(dragTarget, dropTarget.firstElementChild);
@@ -708,8 +704,6 @@ function resetDragging(){
     // Hide trash can, should be in app.js, not block.js
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
-    // Remove dragging class.
-    document.body.classList.remove('block-dragging');
 }
 
 

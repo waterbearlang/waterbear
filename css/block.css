@@ -135,6 +135,7 @@ wb-context > header > wb-disclosure:after{
     position: absolute;
     top: 5px;
     left: 0px;
+    cursor: default;
 }
 
 wb-context[closed] > header > wb-disclosure:after{

@@ -197,8 +197,6 @@
                     return evt;
                 }
             }
-			evt.x = evt.pageX;
-			evt.y = evt.pageY;
         }
         return evt;
     }

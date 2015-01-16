@@ -585,14 +585,26 @@ Event.on(document.body, 'dragging', null, function(evt){
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
     var potentialDropTarget = document.elementFromPoint(evt.x, evt.y);
+
+    // TODO: awesome cursor changes and feedback when there's an invalid drop.
+
+    // Check if we're on the sidebar.
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         app.warn('drop here to delete block(s)');
         return;
     }
+
+    // When we're dragging an expression...
     if (dragTarget.matches('wb-expression')){
+       // Check if we're on a literal-block.
+       if (potentialDropTarget.matches('wb-value[literal], wb-value[literal] *')) {
+          app.warn("cannot drop on direct input value");
+          return;
+       }
+
         // FIXME
-        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]');
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([literal])');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');

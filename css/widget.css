@@ -124,7 +124,6 @@ wb-accordion > header {
     font-size: 16px;
     color: #777;
     border: 1px solid #CCC;
-    background: linear-gradient(to bottom, #999 0%, transparent 35%); /* W3C */
 }
 
 wb-accordion[open=true] > header{
@@ -139,7 +138,6 @@ wb-accordion[open=true] > header{
     left: 10px;
     top: 5px;
     fill: #666;
-    z-index: -1;
 }
 
 wb-accordion > header:after{
@@ -150,7 +148,6 @@ wb-accordion > header:after{
     width: 15px;
     height: 100%;
     background-color: #CCC; /* over-ride colours in app.css */
-    z-index: -1;
 }
 
 

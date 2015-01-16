@@ -632,7 +632,9 @@ Event.on(document.body, 'dragging', null, function(evt){
 
 Event.on(document.body, 'drag-end', null, function(evt){
     if (!dropTarget){
-        dragTarget.parentElement.removeChild(dragTarget);
+        if(dragTarget){
+	    dragTarget.parentElement.removeChild(dragTarget);
+	}
         // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone

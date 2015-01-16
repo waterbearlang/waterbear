@@ -1,0 +1,143 @@
+/* Layout for the application */
+
+html, body{
+    width:100%;
+    height:100%;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+sidebar{
+    flex: 0 0 200px;
+    overflow-y: auto;
+    position: relative;
+}
+
+body > header{
+    flex: 0 0 34px;
+    background: #111111;
+    color: #FFFFFF;
+}
+
+body > header img{
+    border: 0;
+    padding-top: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+body > header > h1{
+    margin: 0;
+    display: inline;
+    padding: 7px;
+    font-size: 20px;
+    color: #fff;
+    vertical-align: top;
+    line-height: 34px;
+}
+
+.menu{
+    flex: 0 0 34px;
+    background-color: #666666;
+    color: #FFFFFF;
+    margin: 0px;
+    padding: 0px;
+}
+
+.menu button{
+    background-color: #666666;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 2px #111111 outset;
+    margin: 3px;
+    font-size: 18px;
+}
+
+/* Show trash for sidebar while dragging */
+
+sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{
+    display: none;
+}
+
+sidebar.trashcan:after{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    background-image: url("../images/icon/recycle.svg");
+    background-size: contain;
+    background-position: 50%;
+    z-index: 100;
+}
+
+/* Feedback area for messages */
+
+.feedback{
+    position: relative;
+    border: 2px #CCC inset;
+    font-size: 20px;
+    padding: 5px 20px;
+}
+
+.feedback:empty:after{
+    content: "messages"; /* FIXME: No text allowed in CSS! */
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    padding: 5px 20px;
+    font-weight: bold;
+    color: #CCC;
+    z-index: -1;
+}
+
+/* Format Workspace */
+
+wb-workspace > wb-contains{
+    border: 2px inset #CCC;
+    position: relative;
+}
+
+wb-contains:empty::before{
+    display: block;
+    content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+
+}
+
+
+/* Accordion Colors and Icons */
+wb-accordion.control > header:after{ background-color: hsl(0, 93%, 56%); }
+wb-accordion.sprite > header:after{ background-color: hsl(156, 93%, 56%); }
+wb-accordion.music > header:after{ background-color: hsl(312, 93%, 56%); }
+wb-accordion.sound > header:after{ background-color: hsl(108, 93%, 56%); }
+wb-accordion.array > header:after{ background-color: hsl(264, 93%, 56%); }
+wb-accordion.boolean > header:after{ background-color: hsl(60, 93%, 56%); }
+wb-accordion.canvas > header:after{ background-color: hsl(216, 93%, 56%); }
+wb-accordion.color > header:after{ background-color: hsl(12, 93%, 56%); }
+wb-accordion.image > header:after{ background-color: hsl(168, 93%, 56%); }
+wb-accordion.math > header:after{ background-color: hsl(324, 93%, 56%); }
+wb-accordion.random > header:after{ background-color: hsl(120, 93%, 56%); }
+wb-accordion.vector > header:after{ background-color: hsl(276, 93%, 56%); }
+wb-accordion.object > header:after{ background-color: hsl(72, 93%, 56%); }
+wb-accordion.string > header:after{ background-color: hsl(228, 93%, 56%); }
+wb-accordion.path > header:after{ background-color: hsl(24, 93%, 56%); }
+wb-accordion.point > header:after{ background-color: hsl(180, 93%, 56%); }
+wb-accordion.rect > header:after{ background-color: hsl(336, 93%, 56%); }
+wb-accordion.sense > header:after{ background-color: hsl(132, 93%, 56%); }
+wb-accordion.motion > header:after{ background-color: hsl(288, 93%, 56%); }
+wb-accordion.shape > header:after{ background-color: hsl(84, 93%, 56%); }
+wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
+wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
+wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }

@@ -34,7 +34,16 @@ wb-value select{
 wb-step.dragging, wb-context.dragging, wb-expression.dragging{
     opacity: 0.5;
     position: absolute;
+    /* Necessary for dragging events. */
     pointer-events: none;
+}
+
+/* This class is probably added on the body or the workspace container. */
+.block-dragging {
+    cursor: move !important;
+    /* More appropriate, but less compatible. */
+    cursor: -moz-grabbing !important;
+    cursor: -webkit-grabbing !important;
 }
 
 wb-expression > header{

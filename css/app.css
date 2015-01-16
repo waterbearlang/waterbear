@@ -77,6 +77,27 @@ sidebar.trashcan:after{
     z-index: 100;
 }
 
+/* Feedback area for messages */
+
+.feedback{
+    position: relative;
+    border: 2px #CCC inset;
+    font-size: 20px;
+    padding: 5px 20px;
+}
+
+.feedback:empty:after{
+    content: "messages"; /* FIXME: No text allowed in CSS! */
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 20px;
+    padding: 5px 20px;
+    font-weight: bold;
+    color: #CCC;
+    z-index: -1;
+}
+
 /* Format Workspace */
 
 wb-workspace > wb-contains{

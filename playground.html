@@ -94,11 +94,11 @@
                 <wb-context script="control.receive">
                     <wb-value type="text">when I receive</wb-value>
                     <wb-value>message with data</wb-value>
-                    <wb-locals>
+                    <wb-local>
                         <wb-expression type="any" script="local.data">
                             <wb-value value="data">data</wb-value>
                         </wb-expression>
-                    </wb-locals>
+                    </wb-local>
                 </wb-context>
                 <wb-context script="control.if">
                     <wb-value type="boolean" value="true">if</wb-value>
@@ -597,7 +597,6 @@
         <wb-workspace>
             <header>Workspace Title</header>
             <output class="feedback"></output>
-            <wb-locals></wb-locals>
             <wb-contains></wb-contains>
         </wb-workspace>
         <wb-splitter></wb-splitter>

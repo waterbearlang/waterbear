@@ -446,9 +446,18 @@ ValueProto.createdCallback = function valueCreated(){
     // Add holder, input or select, or block
     // console.log('Value created');
     // See if we're already initialized (if cloned, for instance)
-    if (dom.child(this, 'input, select, wb-expression')){ return; }
-    var types = (this.getAttribute('type') || '').split(',');
     var value = this.getAttribute('value');
+    var input;
+    if (dom.child(this, 'input, select, wb-expression')){
+        if (value){
+            input = dom.child(this, 'input, select');
+            if (input){
+                input.value = value;
+            }
+        }
+        return;
+    }
+    var types = (this.getAttribute('type') || '').split(',');
     var input;
     switch(types[0]){
         // FIXME: Support multiple types on a value (comma-separated)
@@ -520,6 +529,10 @@ ValueProto.getValue = function(scope){
 };
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
+
+Event.on(document.body, 'change', 'wb-contains input, wb-contains select', function(evt){
+    dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
+});
 
 var convert = {
     boolean: function(text){ return text === 'true'; },

@@ -434,7 +434,13 @@ Event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
 *
 *  Instantiated as new WBValue or as <wb-value>
 *
-*  Attributes: class, id, type (mandatory, can be comma-separated list), value, literal, min, max
+*  Attributes: class, id, type (mandatory), value, allow, min, max
+*
+*    type:  Waterbear type of applicable input. Can be comma-separated list.
+*    allow: unset, 'literal' or 'block'. If unset, both literals can be
+*           typed in or expression blocks can be dragged over. If set to
+*           'literal', only literals may be typed in. If set to 'block',
+*           only expression blocks may be dragged into the value block.
 *
 *  Children: text, input, select, wb-expression
 *
@@ -597,14 +603,14 @@ Event.on(document.body, 'dragging', null, function(evt){
 
     // When we're dragging an expression...
     if (dragTarget.matches('wb-expression')){
-       // Check if we're on a literal-block.
-       if (potentialDropTarget.matches('wb-value[literal], wb-value[literal] *')) {
+       // Check if we're on a literal block.
+       if (potentialDropTarget.matches('wb-value[allow=literal], wb-value[allow=literal] *')) {
           app.warn("cannot drop on direct input value");
           return;
        }
 
         // FIXME
-        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([literal])');
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow=literal])');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');

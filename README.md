@@ -1,5 +1,7 @@
 # Waterbear
 
+[![Build Status](https://travis-ci.org/waterbearlang/waterbear.svg)](https://travis-ci.org/waterbearlang/waterbear)
+
 > "It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self-critical?" --Alan Perlis
 
 ## Description

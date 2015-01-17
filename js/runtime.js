@@ -71,6 +71,9 @@
                 // console.log('get %s from %o', name, this);
                 return this[name];
             },
+            incrementVariable: function(variable, value){
+                this[name] += value;
+            },
             loopOver: function(args, containers){
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
@@ -299,8 +302,6 @@
                 return images[path];
             },
             drawAtPoint: function(img, pt, w, h){
-                w = w ? w : undefined;
-                h = h ? h : undefined;
                 ctx.drawImage(img, pt.x, pt.y, w, h);
             }
         },

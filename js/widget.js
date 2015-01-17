@@ -29,6 +29,8 @@ AccordionProto.open = function(){
         existing.close();
     }
     this.setAttribute('open', 'true');
+    this.scrollIntoView();
+    
 }
 
 AccordionProto.close = function(){

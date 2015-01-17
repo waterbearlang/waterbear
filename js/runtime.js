@@ -30,16 +30,16 @@
     var lastTime = new Date().valueOf();
 
     function startEventLoop(){
-        Event.frame = 0;
-        Event.sinceLastTick = 0;
+        runtime.control._frame = 0;
+        runtime.control._sinceLastTick = 0;
         requestAnimationFrame(frameHandler);
     }
 
     function frameHandler(){
         // where to put these? Event already has some global state.
         var currTime = new Date().valueOf();
-        Event.sinceLastTick = currTime - lastTime;
-        Event.frame++;
+        runtime.control._elapsed = currTime - lastTime;
+        runtime.control._frame++;
         lastTime = currTime;
         perFrameHandlers.forEach(function(handler){
             handler();
@@ -81,6 +81,12 @@
                         block.run(self);
                     });
                 });
+            },
+            frame: function(){
+                return runtime.control._frame;
+            },
+            elapsed: function(){
+                return runtime.control._elapsed;
             },
             setVariable: function(name, value){
                 //FIXME: Make sure this is named properly

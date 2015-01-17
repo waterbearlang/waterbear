@@ -39,10 +39,10 @@
             prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
             //save gist id to local storage
-            var localGists = localStorage['__' + wb.language + '_recent_gists'];
+            var localGists = localStorage['__' + File.language + '_recent_gists'];
             var gistArray = localGists === undefined ? [] : JSON.parse(localGists);
             gistArray.push(gistID);
-            localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
+            localStorage['__' + File.language + '_recent_gists'] = JSON.stringify(gistArray);
 
         }, JSON.stringify({
             "description": title,
@@ -72,7 +72,7 @@
 
             button.appendChild(buttonText);
             button.classList.add('load-gist');
-            button.dataset.href = wb.language + ".html?gist=" + gist;
+            button.dataset.href = File.language + ".html?gist=" + gist;
             button.dataset.gist = gist;
 
             node.appendChild(button);
@@ -80,7 +80,7 @@
 
             // move this to a live event handler at the bottom of the file:
             button.addEventListener('click', function(){
-                wb.loadScriptsFromGistId(this.dataset.gist);
+                File.loadScriptsFromGistId(this.dataset.gist);
             });
         }
     }

@@ -54,26 +54,31 @@ function handleFileButton(evt){
         buttons: [{
             text: "Save Gist",
             handler: function(modal) {
+                File.saveCurrentScriptsToGist(evt);
                 modal.hide();
             }
         }, {
             text: "Save File",
             handler: function(modal) {
+                File.createDownloadUrl(evt);
                 modal.hide();
             }
         }, {
             text: "Open Gist",
             handler: function(modal) {
+                File.loadScriptsFromGistId(evt);
                 modal.hide();
             }
         }, {
             text: "Open File",
             handler: function(modal) {
+                File.loadScriptsFromFile(evt);
                 modal.hide();
             }
         },{
             text: "New",
             handler: function(modal) {
+                //delete inner html
                 modal.hide();
             },
             primary: true

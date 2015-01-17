@@ -98,7 +98,8 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overflow: hidden;
+    overflow-x: visible;
+    overflow-y: visible;
     padding-left: 6px;
 }
 

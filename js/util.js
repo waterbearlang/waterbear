@@ -167,6 +167,28 @@
     }
 
 
+    // Get Rect!
+    function Rect(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    Rect.prototype.getPosition = function () {
+        return new Vector(this.x, this.y);
+    };
+
+    Rect.prototype.getSize = function () {
+        return new Vector(this.width, this.height);
+    };
+    
+    /* Creates from two vectors or two points. They're basically the same. */
+    Rect.fromVectors = function (position, size) {
+        return new Rect(position.x, position.y, size.x, size.y);
+    };
+
+
     // Utilities for math
 
     var add = new Method()
@@ -298,6 +320,7 @@
         type: type,
         Method: Method,
         Vector: Vector,
+        Rect: Rect,
         add: add,
         subtract: subtract,
         multiply: multiply,

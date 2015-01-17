@@ -1,13 +1,30 @@
 (function(global){
     'use strict';
 
-    // resources
-
+    // canvas/stage stuff
     var canvas, ctx;
     Event.on(window, 'load', null, function(){
         canvas = dom.find('wb-playground > canvas');
         ctx = canvas.getContext('2d');
+        handleResize();
     }, false);
+
+    function handleResize(){
+        var rect = canvas.getBoundingClientRect();
+        Event.stage = {
+            top: Math.round(rect.top),
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            bottom: Math.round(rect.bottom),
+            width: Math.round(rect.right) - Math.round(rect.left),
+            height: Math.round(rect.bottom) - Math.round(rect.top)
+        };
+        canvas.setAttribute('width', Event.stage.width);
+        canvas.setAttribute('height', Event.stage.height);
+    }
+
+    // Initialize the stage.
+    Event.on(window, 'resize', null, handleResize);
 
     var perFrameHandlers = [];
     var lastTime = new Date().valueOf();
@@ -31,7 +48,10 @@
     }
 
     // for all of these functions, `this` is the scope object
-    global.runtime = {
+    //
+    // **If the functions don't have dependencies beyond util.js, and event.js
+    // they should go in runtime-simple.js.***
+    global.runtime = util.extend((global.runtime || {} ), {
         startEventLoop: startEventLoop,
         local: {
             //temporary fix for locals
@@ -70,6 +90,9 @@
             getVariable: function(name){
                 // console.log('get %s from %o', name, this);
                 return this[name];
+            },
+            incrementVariable: function(variable, value){
+                this[name] += value;
             },
             loopOver: function(args, containers){
                 // FIXME: this has to work over arrays, strings, objects, and numbers
@@ -212,55 +235,6 @@
                 };
             }
         },
-        array: {
-            create: function(){
-                return [].slice.call(arguments);
-            },
-            copy: function(a){
-                return a.slice();
-            },
-            itemAt: function(a,i){
-                return a[i];
-            },
-            join: function(a,s){
-                return a.join(s);
-            },
-            append: function(a,item){
-                a.push(item);
-            },
-            prepend: function(a,item){
-                a.unshift(item);
-            },
-            length: function(a){
-                return a.length;
-            },
-            removeItem: function(a,i){
-                a.splice(i,1);
-            },
-            pop: function(a){
-                return a.pop();
-            },
-            shift: function(a){
-                return a.shift();
-            },
-            reverse: function(a){
-                return a.reverse();
-            }
-        },
-        'boolean': {
-            and: function(a,b){
-                return a && b;
-            },
-            or: function(a,b){
-                return a || b;
-            },
-            xor: function(a,b){
-                return !a !== !b;
-            },
-            not: function(a){
-                return !a;
-            }
-        },
         color: {
             namedColor: function(name){
                 // FIXME: We may need to return hex or other color value
@@ -299,117 +273,62 @@
                 return images[path];
             },
             drawAtPoint: function(img, pt, w, h){
-                w = w ? w : undefined;
-                h = h ? h : undefined;
                 ctx.drawImage(img, pt.x, pt.y, w, h);
             }
-        },
-        math: {
-            add: util.add,
-            subtract: util.subtract,
-            multiply: util.multiply,
-            divide: util.divide,
-            equal: function(a,b){ return a === b; },
-            notEqual: function(a,b){ return a !== b; },
-            lt: function(a,b){ return a < b; },
-            lte: function(a,b){ return a <= b; },
-            gt: function(a,b){ return a > b; },
-            gte: function(a,b){ return a >= b; },
-            mod: function(a,b){ return a % b; },
-            round: Math.round,
-            abs: Math.abs,
-            floor: Math.floor,
-            ceil: Math.ceil,
-            max: Math.max,
-            min: Math.min,
-            cos: function(a){ return Math.cos(util.deg2rad(a)); },
-            sin: function(a){ return Math.sin(util.deg2rad(a)); },
-            tan: function(a){ return Math.tan(util.deg2rad(a)); },
-            asin: function(a){ return Math.asin(util.deg2rad(a)); },
-            acos: function(a){ return Math.acos(util.deg2rad(a)); },
-            atan: function(a){ return Math.atan(util.deg2rad(a)); },
-            pow: function(a,b){ return Math.pow(a, b); },
-            sqrt: function(a,b){ return Math.sqrt(a); },
-            pi: function(){ return Math.PI; },
-            e: function(){ return Math.E; },
-            tau: function(){ return Math.PI * 2; }
-
-        },
-        random: {
-            randFloat: Math.random,
-            randInt: util.randInt,
-            noise: util.noise,
-            choice: util.choice
-        },
-        vector: {
-            create: function(x,y){ return new util.Vector(x,y); },
-            fromPoint: function(pt){ return new util.Vector(pt.x, pt.y); },
-            createPolar: function(r,m){ return util.Vector.fromPolar(r,m); },
-            rotate: function(v,a){ return v.rotate(a); },
-            rotateTo: function(v,a){ return v.rotateTo(a); },
-            magnitude: function(v){ return v.magnitude(); },
-            degrees: function(v){ return v.degrees(); },
-            x: function(v){ return v.x; },
-            y: function(v){ return v.y; },
-            normalize: function(v){ return v.normalize(); }
         },
         object: {
         },
         string: {
-        },
+			toString: function(x){ return x.toString() },
+			split: function(x,y){ return x.split(y); },
+			concatenate: function(x,y){ return x.concat(y); },
+			repeat: function(x,n){
+				var str = "";
+				for(var i=0; i<n; i++){
+					str = str.concat(x);
+				}
+				return str;
+			},
+			getChar: function(n,x){ return x.charAt(n-1); },
+			getCharFromEnd: function(n,x){ return x.charAt(x.length-n-1); },
+			substring: function(x,a,b){ return x.substring(a-1,a+b-1); },
+			substring2: function(x,a,b){ return x.substring(a-1,b) },
+			isSubstring: function(x,y){
+				if(y.indexOf(x)===-1){
+					return false;
+				}
+				else{
+					return true;
+				}
+			},
+			substringPosition: function(x,y){ return y.indexOf(x)+1; },
+			replaceSubstring: function(x,y,z){ return x.replace(y,z); },
+			trimWhitespace: function(x){ return x.trim(); },
+			uppercase: function(x){ return x.toUpperCase(); },
+			lowercase: function(x){ return x.toLowerCase(); },
+			matches: function(x,y){ return x===y; },
+			doesntMatch: function(x,y){ return !(x===y); },
+			startsWith: function(x,y){ return (x.lastIndexOf(y, 0) === 0); },
+			endsWith: function(x,y){ return x.indexOf(y, x.length - y.length) !== -1; },
+        	alert: function(x){ alert(x); },
+			comment: function(args, containers){},
+		},
         path: {
         },
-        point: {
-            create: function(x,y){
-                return new util.Point(x,y);
-            },
-            fromVector: function(vec){
-                return new util.Point(vec.x, vec.y);
-            },
-            fromArray: function(arr){
-                return new util.Point(arr[0], arr[1]);
-            },
-            randomPoint: function(){
-                return new util.Point(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
-            },
-            x: function(pt){
-                return pt.x;
-            },
-            y: function(pt){
-                return pt.y;
-            },
-            toArray: function(pt){
-                return [pt.x, pt.y];
-            }
-        },
-        rect: {
-            fromCoordinates: function (x, y, width, height) {
-                return util.Rect(x, y, width, height);
-            },
-            fromVectors: function (point, size) {
-                return util.Rect.fromVectors(point, size);
-            },
-            fromArray: function (a) {
-                if (a.length < 4) {
-                    // TODO: Runtime error?
-                    new Error('Array given must take at least four elements.');
-                }
-                return new util.Rect(a[0], a[1], a[2], a[3]);
-            },
-            getPosition: function (rect) { return rect.getPosition(); },
-            getSize: function (rect) { return rect.getSize(); },
-            asArray: function (rect) {
-                return [rect.x, rect.y, rect.width, rect.height];
-            },
-            getX: function (rect) { return rect.x; },
-            getY: function (rect) { return rect.y; },
-            getWidth: function (rect) { return rect.width; },
-            getHeight: function (rect) { return rect.height; }
-        },
-       
+
         motion: {
         },
         shape: {
+            fillShape: function(shp){
+                shp();
+                ctx.fill();
+            },
+            circle: function(pt, rad){
+                return function(){
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                }
+            }
         },
         geolocation: {
         },
@@ -433,6 +352,6 @@
                 return textMetric.width;
             }
         }
-    };
+    });
 
 })(window);

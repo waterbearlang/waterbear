@@ -183,6 +183,7 @@ wb-expression[type=object]:before{ background-image: url(../images/icon/object.s
 wb-expression[type=path]:before{ background-image: url(../images/icon/path.svg); }
 wb-expression[type=point]:before{ background-image: url(../images/icon/point.svg); }
 wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg); }
+wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
 
 /* Used for input resizing */
 .sekrit-svg{

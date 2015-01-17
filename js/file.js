@@ -39,16 +39,16 @@
             prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
             //save gist id to local storage
-            var localGists = localStorage['__' + wb.language + '_recent_gists'];
+            var localGists = localStorage['__' + File.language + '_recent_gists'];
             var gistArray = localGists === undefined ? [] : JSON.parse(localGists);
             gistArray.push(gistID);
-            localStorage['__' + wb.language + '_recent_gists'] = JSON.stringify(gistArray);
+            localStorage['__' + File.language + '_recent_gists'] = JSON.stringify(gistArray);
 
         }, JSON.stringify({
             "description": title,
             "public": true,
             "files": {
-                "script.json": {
+                "script.wb": {
                     "content": scriptsToString(title, '', title)
                 },
             }
@@ -58,7 +58,7 @@
     }
     //populate the gist submenu with recent gists
     function loadRecentGists() {
-        var localGists = localStorage['__' + wb.language + '_recent_gists'];
+        var localGists = localStorage['__' + File.language + '_recent_gists'];
         var gistArray = localGists === undefined ? [] : JSON.parse(localGists);
         var gistContainer = document.querySelector("#recent_gists");
         gistContainer.innerHTML = '';
@@ -72,7 +72,7 @@
 
             button.appendChild(buttonText);
             button.classList.add('load-gist');
-            button.dataset.href = wb.language + ".html?gist=" + gist;
+            button.dataset.href = File.language + ".html?gist=" + gist;
             button.dataset.gist = gist;
 
             node.appendChild(button);
@@ -80,7 +80,7 @@
 
             // move this to a live event handler at the bottom of the file:
             button.addEventListener('click', function(){
-                wb.loadScriptsFromGistId(this.dataset.gist);
+                File.loadScriptsFromGistId(this.dataset.gist);
             });
         }
     }
@@ -93,18 +93,23 @@
         return script;
     }
 
+    function clearScripts(){
+        var script = document.querySelector('wb-workspace > wb-contains');
+        script.innerHTML = "";
+    }
+
 
     function createDownloadUrl(evt){
         evt.preventDefault();
         var name = prompt("Save file as: ");
         if( !name ) return;
         // var URL = window.webkitURL || window.URL;
-        var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
+        var file = new Blob([scriptsToString('','',name)], {type: 'wb'});
         var reader = new FileReader();
         var a = document.createElement('a');
         reader.onloadend = function(){
             a.href = reader.result;
-            a.download = name + '.json';
+            a.download = name + '.wb';
             a.target = '_blank';
             document.body.appendChild(a);
             a.click();
@@ -130,7 +135,7 @@
     function loadScriptsFromFilesystem(event){
         var input = document.createElement('input');
         input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'application/json');
+        input.setAttribute('accept', 'text/wb');
         input.addEventListener('change', function(evt){
             var file = input.files[0];
             loadScriptsFromFile(file);
@@ -148,16 +153,16 @@
         var keys = Object.keys(gist.data.files);
         var file;
         keys.forEach(function(key){
-            if (/.*\.json/.test(key)){
+            if (/.*\.wb/.test(key)){
                 // it's a json file
                 file = gist.data.files[key].content;
             }
         });
         if (!file){
-            console.error('no json file found in gist: %o', gist);
+            console.error('no wb file found in gist: %o', gist);
             return;
         }
-        loadScriptsFromJson(file);
+        loadScriptsFromString(file);
     }
 
     function loadScriptsFromExample(name){
@@ -176,14 +181,15 @@
 
 	function loadScriptsFromFile(file){
 		var fileName = file.name;
-		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-			console.error("File is not a JSON file");
+		if (fileName.indexOf('.wb', fileName.length - 3) === -1) {
+			console.error("File is not a WB file");
+            window.alert("Please load a file of type WB.");
 			return;
 		}
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-            loadScriptsFromJson(evt.target.result);
+            loadScriptsFromString(evt.target.result);
 		};
 	}
 
@@ -207,6 +213,7 @@
         saveCurrentScriptsToGist: saveCurrentScriptsToGist,
         loadRecentGists: loadRecentGists,
         createDownloadUrl: createDownloadUrl,
+        clearScripts: clearScripts,
         loadScriptsFromGistId: loadScriptsFromGistId,
         loadScriptsFromExample: loadScriptsFromExample,
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,

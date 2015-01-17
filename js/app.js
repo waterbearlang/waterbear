@@ -31,7 +31,6 @@ function preload(){
     var assets = dom.findAll('wb-workspace > wb-contains wb-expression[isAsset=true]').map(function(asset){
         return asset.gatherValues()[0];
     });
-    console.log('%s assets to load', assets.length);
     if (assets.length){
         sounds.load(assets);
         sounds.whenLoaded = run;
@@ -41,7 +40,6 @@ function preload(){
 }
 
 function run(){
-    console.log('run');
     var scope = {};
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
@@ -50,6 +48,53 @@ function run(){
         }
     });
 }
+
+function handleFileButton(evt){
+    var fileModel = nanoModal("Select an option or click away to exit.", 
+        {overlayClose: true, // Can't close the modal by clicking on the overlay.
+        buttons: [{
+            text: "Save Gist",
+            handler: function(modal) {
+                File.saveCurrentScriptsToGist(evt);
+                modal.hide();
+            }
+        }, {
+            text: "Save File",
+            handler: function(modal) {
+                File.createDownloadUrl(evt);
+                modal.hide();
+            }
+        }, {
+            text: "Open Gist",
+            handler: function(modal) {
+                File.loadScriptsFromGistId(evt);
+                modal.hide();
+            }
+        }, {
+            text: "Open File",
+            handler: function(modal) {
+                File.loadScriptsFromFilesystem(evt);
+                modal.hide();
+            }
+        },{
+            text: "New",
+            handler: function(modal) {
+                File.clearScripts();
+                modal.hide();
+            },
+            primary: true
+        }]
+    });
+    fileModel.show();
+}
+
+Event.on(document.body, 'click', '.open-files', handleFileButton);
+
+function handleExampleButton(evt){
+    window.alert('No current examples or templates available. Check back later!');
+}
+
+Event.on(document.body, 'click', '.open-example', handleExampleButton);
 
 window.app = {
     message: message,

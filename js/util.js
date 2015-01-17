@@ -23,7 +23,7 @@
 
     // extend an object. to (shallow) copy an object, pass {} for target
     function extend(target, source){
-        if (source === null || typeof obj !== 'object') return source;
+        if (source === null || typeof source !== 'object') return source;
         for (var attr in source) {
             if (source.hasOwnProperty(attr)){
                 target[attr] = source[attr];
@@ -182,7 +182,13 @@
     function Rect(x, y, width, height) {
         this.x = x;
         this.y = y;
+        if (width < 0) {
+            throw new Error('Rect width must be non-negative.');
+        }
         this.width = width;
+        if (height < 0) {
+            throw new Error('Rect height must be non-negative.');
+        }
         this.height = height;
     }
 

@@ -576,6 +576,37 @@
                     <img class="cat-icon" src="images/icon/rect.svg" />
                     Rects
                 </header>
+                <wb-expression type="rect" script="rect.fromCoordinates">
+                    <wb-value type="number" value="0">x</wb-value>
+                    <wb-value type="number" value="0">y</wb-value>
+                    <wb-value type="number" value="0">width</wb-value>
+                    <wb-value type="number" value="0">height</wb-value>
+                </wb-expression>
+                <wb-expression type="rect" script="rect.fromVectors">
+                    <wb-value type="point,vector" allow="expression">position</wb-value>
+                    <wb-value type="point,vector" allow="expression">size</wb-value>
+                </wb-expression>
+                <wb-expression type="rect" script="rect.fromArray">
+                    <wb-value type="array" allow="expression">from array</wb-value>
+                </wb-expression>
+                <wb-expression type="point" script="rect.getPosition">
+                    <wb-value type="rect" allow="expression">position of</wb-value>
+                </wb-expression>
+                <wb-expression type="vector" script="rect.getSize">
+                    <wb-value type="rect" allow="expression">size of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="rect.getX">
+                    <wb-value type="rect" allow="expression">x of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="rect.getY">
+                    <wb-value type="rect" allow="expression">y of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="rect.getWidth">
+                    <wb-value type="rect" allow="expression">width of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="rect.getHeight">
+                    <wb-value type="rect" allow="expression">height of</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="sense">
                 <header>

@@ -69,9 +69,6 @@
                 // console.log('get %s from %o', name, this);
                 return this[name];
             },
-            incrementVariable: function(variable, value){
-                this[name] += value;
-            },
             loopOver: function(args, containers){
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;

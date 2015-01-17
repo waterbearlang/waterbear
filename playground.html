@@ -721,6 +721,28 @@
                     <img class="cat-icon" src="images/icon/size.svg" />
                     Sizes
                 </header>
+                <wb-expression type="size" script="rect.fromCoordinates">
+                    <wb-value type="number" value="0">size from height</wb-value>
+                    <wb-value type="text" value="px">height units</wb-value>
+                    <wb-value type="number" value="0">width</wb-value>
+                    <wb-value type="text" value="px">width units</wb-value>
+                </wb-expression>
+                <wb-expression type="size" script="rect.fromVectors">
+                    <wb-value type="array" allow="expression">size from array</wb-value>
+                    <wb-value type="text" value="px">width units</wb-value>
+                    <wb-value type="text" value="px">height units</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="rect.fromVectors">
+                    <wb-value type="size" allow="expression">width from size</wb-value>
+                    <wb-value type="text" value="px">width units</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="rect.fromVectors">
+                    <wb-value type="array" allow="expression">height from size</wb-value>
+                    <wb-value type="text" value="px">height units</wb-value>
+                </wb-expression>
+                <wb-expression type="size" script="rect.fromArray">
+                    <wb-value type="array" allow="expression">size as array</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="text">
                 <header>

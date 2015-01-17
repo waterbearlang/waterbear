@@ -89,6 +89,9 @@
                 // console.log('get %s from %o', name, this);
                 return this[name];
             },
+            incrementVariable: function(variable, value){
+                this[name] += value;
+            },
             loopOver: function(args, containers){
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
@@ -276,7 +279,40 @@
         object: {
         },
         string: {
-        },
+			toString: function(x){ return x.toString() },
+			split: function(x,y){ return x.split(y); },
+			concatenate: function(x,y){ return x.concat(y); },
+			repeat: function(x,n){ 
+				var str = "";
+				for(var i=0; i<n; i++){
+					str = str.concat(x);
+				}
+				return str; 
+			},
+			getChar: function(n,x){ return x.charAt(n-1); },
+			getCharFromEnd: function(n,x){ return x.charAt(x.length-n-1); },
+			substring: function(x,a,b){ return x.substring(a-1,a+b-1); },
+			substring2: function(x,a,b){ return x.substring(a-1,b) }, 
+			isSubstring: function(x,y){ 
+				if(y.indexOf(x)===-1){
+					return false;
+				}
+				else{
+					return true;
+				}
+			},
+			substringPosition: function(x,y){ return y.indexOf(x)+1; },
+			replaceSubstring: function(x,y,z){ return x.replace(y,z); },
+			trimWhitespace: function(x){ return x.trim(); },
+			uppercase: function(x){ return x.toUpperCase(); },
+			lowercase: function(x){ return x.toLowerCase(); },
+			matches: function(x,y){ return x===y; },
+			doesntMatch: function(x,y){ return !(x===y); },
+			startsWith: function(x,y){ return (x.lastIndexOf(y, 0) === 0); },
+			endsWith: function(x,y){ return x.indexOf(y, x.length - y.length) !== -1; },
+        	alert: function(x){ alert(x); },
+			comment: function(args, containers){},
+		},
         path: {
         },
         motion: {

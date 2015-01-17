@@ -15,6 +15,7 @@ body{
 sidebar{
     flex: 0 0 200px;
     overflow-y: auto;
+    overflow-x: auto;
     position: relative;
 }
 

@@ -165,7 +165,7 @@ ContextProto.gatherContains = function(){
     return dom.children(this, 'wb-contains').map(function(container){
         return [].slice.call(container.children);
     });
-}
+};
 ContextProto.run = function(parentScope){
     if (!this.fn){
         var fnName = this.getAttribute('script').split('.');
@@ -339,7 +339,7 @@ RowProto.getValue = function(scope){
         return values.map(function(value){ return value.getValue(scope); });
     }
     return null;
-}
+};
 RowProto.attachedCallback = insertIntoHeader;
 window.WBRow = document.registerElement('wb-row', {prototype: RowProto});
 
@@ -434,7 +434,13 @@ Event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
 *
 *  Instantiated as new WBValue or as <wb-value>
 *
-*  Attributes: class, id, type (mandatory, can be comma-separated list), value, min, max
+*  Attributes: class, id, type (mandatory), value, allow, min, max
+*
+*    type:  Waterbear type of applicable input. Can be comma-separated list.
+*    allow: unset, 'literal' or 'block'. If unset, both literals can be
+*           typed in or expression blocks can be dragged over. If set to
+*           'literal', only literals may be typed in. If set to 'block',
+*           only expression blocks may be dragged into the value block.
 *
 *  Children: text, input, select, wb-expression
 *
@@ -444,7 +450,6 @@ Event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
 var ValueProto = Object.create(HTMLElement.prototype);
 ValueProto.createdCallback = function valueCreated(){
     // Add holder, input or select, or block
-    // console.log('Value created');
     // See if we're already initialized (if cloned, for instance)
     var value = this.getAttribute('value');
     var input;
@@ -457,8 +462,8 @@ ValueProto.createdCallback = function valueCreated(){
         }
         return;
     }
+    // Sets the proper HTML input for the given Waterbear type.
     var types = (this.getAttribute('type') || '').split(',');
-    var input;
     switch(types[0]){
         // FIXME: Support multiple types on a value (comma-separated)
         case 'number':
@@ -506,9 +511,6 @@ ValueProto.createdCallback = function valueCreated(){
 ValueProto.getValue = function(scope){
     var block = dom.child(this, 'wb-expression');
     if (block){
-        if (block.run(scope) === undefined){
-            // throw new Error('expressions cannot return undefined');
-        }
         return block.run(scope);
     }
     var input = dom.child(this, 'input, select');
@@ -571,6 +573,8 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     dragTarget = origTarget.cloneNode(true);
     document.body.appendChild(dragTarget);
     dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
+    // Warning here: origTarget may be null, and thus, not have a
+    // parentElement.
     if (origTarget.parentElement.nodeName.toLowerCase() === 'wb-local'){
         dragStart = 'menu';
     }
@@ -584,18 +588,29 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
 
 Event.on(document.body, 'dragging', null, function(evt){
     if (!dragTarget){ return; }
-    // console.log('block dragging ' + dragTarget.tagName.toLowerCase() + ' (' + evt.pageX + ', ' + evt.pageY + ') %o', evt);
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
     var potentialDropTarget = document.elementFromPoint(evt.x, evt.y);
+
+    // TODO: awesome cursor changes and feedback when there's an invalid drop.
+
+    // Check if we're on the sidebar.
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         app.warn('drop here to delete block(s)');
         return;
     }
+
+    // When we're dragging an expression...
     if (dragTarget.matches('wb-expression')){
+       // Check if we're on a literal block.
+       if (potentialDropTarget.matches('wb-value[allow=literal], wb-value[allow=literal] *')) {
+          app.warn("cannot drop on direct input value");
+          return;
+       }
+
         // FIXME
-        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]');
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow=literal])');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');
@@ -636,10 +651,10 @@ Event.on(document.body, 'dragging', null, function(evt){
 
 Event.on(document.body, 'drag-end', null, function(evt){
     if (!dropTarget){
-        if(dragTarget){
-	    dragTarget.parentElement.removeChild(dragTarget);
-	}
-        // fall through to resetDragging()
+       if(dragTarget){
+          dragTarget.parentElement.removeChild(dragTarget);
+       }
+       // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         dragTarget.parentElement.removeChild(dragTarget);

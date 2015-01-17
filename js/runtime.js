@@ -338,8 +338,7 @@
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
                 ctx.font = sizeString + " " + fontStyle;
-                console.log(size);
-                console.log(sizeString + " " + fontStyle);
+                
             },
             textAlign: function (alignment){ctx.textAlign = alignment;},
             textBaseline: function (baseline){ctx.textBaseline = baseline;},

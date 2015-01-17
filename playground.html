@@ -16,11 +16,8 @@
     	<h1>Waterbear with Custom Elements</h1>
     </header>
     <div class="menu">
-        <button class="open-files">Files…</button>
-        <button class="open-example">Examples…</button>
-        <button class="open-tags">Tags…</button>
-        <button class="do-undo">Undo</button>
-        <button class="do-redo">Redo</button>
+        <button class="open-files">File</button>
+        <button class="open-example">Examples</button>
     </div>
     <wb-hbox>
         <sidebar>
@@ -742,6 +739,7 @@
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <!-- polyfill for custom elements -->
+    <script src="lib/ajax.js"></script>
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.min.js"></script>

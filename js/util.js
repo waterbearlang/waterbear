@@ -23,7 +23,7 @@
 
     // extend an object. to (shallow) copy an object, pass {} for target
     function extend(target, source){
-        if (source === null || typeof obj !== 'object') return source;
+        if (source === null || typeof source !== 'object') return source;
         for (var attr in source) {
             if (source.hasOwnProperty(attr)){
                 target[attr] = source[attr];

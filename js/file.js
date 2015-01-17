@@ -58,7 +58,7 @@
     }
     //populate the gist submenu with recent gists
     function loadRecentGists() {
-        var localGists = localStorage['__' + wb.language + '_recent_gists'];
+        var localGists = localStorage['__' + File.language + '_recent_gists'];
         var gistArray = localGists === undefined ? [] : JSON.parse(localGists);
         var gistContainer = document.querySelector("#recent_gists");
         gistContainer.innerHTML = '';
@@ -99,12 +99,12 @@
         var name = prompt("Save file as: ");
         if( !name ) return;
         // var URL = window.webkitURL || window.URL;
-        var file = new Blob([scriptsToString('','',name)], {type: 'application/json'});
+        var file = new Blob([scriptsToString('','',name)], {type: 'text/html'});
         var reader = new FileReader();
         var a = document.createElement('a');
         reader.onloadend = function(){
             a.href = reader.result;
-            a.download = name + '.json';
+            a.download = name + '.html';
             a.target = '_blank';
             document.body.appendChild(a);
             a.click();
@@ -130,7 +130,7 @@
     function loadScriptsFromFilesystem(event){
         var input = document.createElement('input');
         input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'application/json');
+        input.setAttribute('accept', 'text/html');
         input.addEventListener('change', function(evt){
             var file = input.files[0];
             loadScriptsFromFile(file);
@@ -157,7 +157,7 @@
             console.error('no json file found in gist: %o', gist);
             return;
         }
-        loadScriptsFromJson(file);
+        loadScriptsFromString(file);
     }
 
     function loadScriptsFromExample(name){
@@ -176,14 +176,14 @@
 
 	function loadScriptsFromFile(file){
 		var fileName = file.name;
-		if (fileName.indexOf('.json', fileName.length - 5) === -1) {
-			console.error("File is not a JSON file");
+		if (fileName.indexOf('.html', fileName.length - 5) === -1) {
+			console.error("File is not a HTML file");
 			return;
 		}
 		var reader = new FileReader();
 		reader.readAsText( file );
 		reader.onload = function (evt){
-            loadScriptsFromJson(evt.target.result);
+            loadScriptsFromString(evt.target.result);
 		};
 	}
 

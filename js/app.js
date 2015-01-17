@@ -72,7 +72,7 @@ function handleFileButton(evt){
         }, {
             text: "Open File",
             handler: function(modal) {
-                File.loadScriptsFromFile(evt);
+                File.loadScriptsFromFilesystem(evt);
                 modal.hide();
             }
         },{

@@ -31,6 +31,7 @@ function preload(){
     var assets = dom.findAll('wb-workspace > wb-contains wb-expression[isAsset=true]').map(function(asset){
         return asset.gatherValues()[0];
     });
+    console.log('%s assets to load', assets.length);
     if (assets.length){
         sounds.load(assets);
         sounds.whenLoaded = run;
@@ -40,7 +41,9 @@ function preload(){
 }
 
 function run(){
+    console.log('run');
     var scope = {};
+    runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
             block.run(scope);

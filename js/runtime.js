@@ -10,27 +10,29 @@
     }, false);
 
     var perFrameHandlers = [];
+    var lastTime = new Date().valueOf();
 
     function startEventLoop(){
-        var perFrameHandlers = [];
         Event.frame = 0;
         Event.sinceLastTick = 0;
-        var lastTime = new Date().valueOf();
+        requestAnimationFrame(frameHandler);
+    }
 
-        requestAnimationFrame(function(){
-            // where to put these? Event already has some global state.
-            var currTime = new Date().valueOf();
-            Event.sinceLastTick = currTime - lastTime;
-            Event.frame++;
-            lastTime = currTime;
-            perFrameHandlers.forEach(function(handler){
-                handler();
-            });
+    function frameHandler(){
+        // where to put these? Event already has some global state.
+        var currTime = new Date().valueOf();
+        Event.sinceLastTick = currTime - lastTime;
+        Event.frame++;
+        lastTime = currTime;
+        perFrameHandlers.forEach(function(handler){
+            handler();
         });
+        requestAnimationFrame(frameHandler);
     }
 
     // for all of these functions, `this` is the scope object
     global.runtime = {
+        startEventLoop: startEventLoop,
         local: {
             //temporary fix for locals
             value: function(){
@@ -68,9 +70,6 @@
             getVariable: function(name){
                 // console.log('get %s from %o', name, this);
                 return this[name];
-            },
-            incrementVariable: function(variable, value){
-                this[name] += value;
             },
             loopOver: function(args, containers){
                 // FIXME: this has to work over arrays, strings, objects, and numbers
@@ -165,7 +164,6 @@
             // called after pre-loader has loaded sound file
             init: function(url, result){
                 // initialized by loader
-                console.log('sound %s loaded', url);
                 return sounds(url);
             },
             get: function(url){
@@ -297,6 +295,14 @@
             }
         },
         image: {
+            get: function(path){
+                return images[path];
+            },
+            drawAtPoint: function(img, pt, w, h){
+                w = w ? w : undefined;
+                h = h ? h : undefined;
+                ctx.drawImage(img, pt.x, pt.y, w, h);
+            }
         },
         math: {
             add: util.add,
@@ -337,6 +343,7 @@
         },
         vector: {
             create: function(x,y){ return new util.Vector(x,y); },
+            fromPoint: function(pt){ return new util.Vector(pt.x, pt.y); },
             createPolar: function(r,m){ return util.Vector.fromPolar(r,m); },
             rotate: function(v,a){ return v.rotate(a); },
             rotateTo: function(v,a){ return v.rotateTo(a); },
@@ -353,8 +360,51 @@
         path: {
         },
         point: {
+            create: function(x,y){
+                return new util.Point(x,y);
+            },
+            fromVector: function(vec){
+                return new util.Point(vec.x, vec.y);
+            },
+            fromArray: function(arr){
+                return new util.Point(arr[0], arr[1]);
+            },
+            randomPoint: function(){
+                return new util.Point(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
+            },
+            x: function(pt){
+                return pt.x;
+            },
+            y: function(pt){
+                return pt.y;
+            },
+            toArray: function(pt){
+                return [pt.x, pt.y];
+            }
         },
         rect: {
+            fromCoordinates: function (x, y, width, height) {
+                return util.Rect(x, y, width, height);
+            },
+            fromVectors: function (point, size) {
+                return util.Rect.fromVectors(point, size);
+            },
+            fromArray: function (a) {
+                if (a.length < 4) {
+                    // TODO: Runtime error?
+                    new Error('Array given must take at least four elements.');
+                }
+                return new util.Rect(a[0], a[1], a[2], a[3]);
+            },
+            getPosition: function (rect) { return rect.getPosition(); },
+            getSize: function (rect) { return rect.getSize(); },
+            asArray: function (rect) {
+                return [rect.x, rect.y, rect.width, rect.height];
+            },
+            getX: function (rect) { return rect.x; },
+            getY: function (rect) { return rect.y; },
+            getWidth: function (rect) { return rect.width; },
+            getHeight: function (rect) { return rect.height; }
         },
         motion: {
         },

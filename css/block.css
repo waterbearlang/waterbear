@@ -7,9 +7,9 @@ wb-step, wb-context, wb-expression{
     border-color: #CEBD3E;
     border-width: 2px;
     border-style: solid;
-    float: left;
     clear: left;
     position: relative;
+    
 }
 
 body:not(.block-dragging) wb-step,

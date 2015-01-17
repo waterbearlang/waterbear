@@ -166,6 +166,17 @@
         return '<' + this.x + ',' + this.y + '>';
     }
 
+    // Point
+
+    function Point(x,y){
+        this.x = x;
+        this.y = y;
+    }
+
+    Point.prototype.toString = function(){
+        return '[' + this.x + ',' + this.y + ']';
+    };
+
 
     // Utilities for math
 
@@ -298,6 +309,7 @@
         type: type,
         Method: Method,
         Vector: Vector,
+        Point: Point,
         add: add,
         subtract: subtract,
         multiply: multiply,

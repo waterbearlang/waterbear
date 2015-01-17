@@ -358,6 +358,19 @@
         Event.keyHandlers = {};
     }
 
+    var canvas = document.querySelector('wb-playground canvas');
+    function handleResize(){
+        var rect = canvas.getBoundingClientRect();
+        Event.stage = {
+            top: Math.round(rect.top),
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            bottom: Math.round(rect.bottom),
+            width: Math.round(rect.right) - Math.round(rect.left),
+            height: Math.round(rect.bottom) - Math.round(rect.top)
+        };
+    }
+
     window.Event = {
         on: on,
         onKeyDown: onKeyDown, // special version of on to listen for specific keys
@@ -371,9 +384,12 @@
         pointerDown: false,
         pointerX: 0,
         pointerY: 0,
+        stagePointerX: 0,
+        stagePointerY: 0,
         keys: {},
         keyHandlers: {}
     };
+    handleResize();
 
 
     Event.on(document.body, 'touchstart', null, initDrag);
@@ -385,6 +401,7 @@
     Event.on(window, 'keyup', null, cancelDrag);
     Event.on(window, 'keydown', null, handleKeyDown);
     Event.on(window, 'keyup', null, handleKeyUp);
+    Event.on(window, 'resize', null, handleResize);
 
 
 })();

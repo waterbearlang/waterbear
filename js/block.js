@@ -564,6 +564,7 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     blockTop = BLOCK_MENU.scrollTop;
     BLOCK_MENU.classList.add('trashcan');
 
+    document.body.classList.add('block-dragging');
     // FIXME: Highlight droppable places (or grey out non-droppable)
 
     dragTarget = origTarget.cloneNode(true);
@@ -715,6 +716,7 @@ function resetDragging(){
     // Hide trash can, should be in app.js, not block.js
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
+    document.body.classList.remove('block-dragging');
 }
 
 

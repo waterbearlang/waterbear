@@ -19,6 +19,8 @@
             width: Math.round(rect.right) - Math.round(rect.left),
             height: Math.round(rect.bottom) - Math.round(rect.top)
         };
+        canvas.setAttribute('width', Event.stage.width);
+        canvas.setAttribute('height', Event.stage.height);
     }
 
     // Initialize the stage.
@@ -280,18 +282,18 @@
 			toString: function(x){ return x.toString() },
 			split: function(x,y){ return x.split(y); },
 			concatenate: function(x,y){ return x.concat(y); },
-			repeat: function(x,n){ 
+			repeat: function(x,n){
 				var str = "";
 				for(var i=0; i<n; i++){
 					str = str.concat(x);
 				}
-				return str; 
+				return str;
 			},
 			getChar: function(n,x){ return x.charAt(n-1); },
 			getCharFromEnd: function(n,x){ return x.charAt(x.length-n-1); },
 			substring: function(x,a,b){ return x.substring(a-1,a+b-1); },
-			substring2: function(x,a,b){ return x.substring(a-1,b) }, 
-			isSubstring: function(x,y){ 
+			substring2: function(x,a,b){ return x.substring(a-1,b) },
+			isSubstring: function(x,y){
 				if(y.indexOf(x)===-1){
 					return false;
 				}
@@ -316,6 +318,16 @@
         motion: {
         },
         shape: {
+            fillShape: function(shp){
+                shp();
+                ctx.fill();
+            },
+            circle: function(pt, rad){
+                return function(){
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                }
+            }
         },
         geolocation: {
         },

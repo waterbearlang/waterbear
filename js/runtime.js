@@ -406,9 +406,7 @@
             getWidth: function (rect) { return rect.width; },
             getHeight: function (rect) { return rect.height; }
         },
-        sensing:{
-
-        },
+       
         motion: {
         },
         shape: {
@@ -416,6 +414,19 @@
         geolocation: {
         },
         size: {
+        },
+        text:{
+            setFont: function (size, fontStyle){
+                var sizeString = size[0] + size[1];
+                ctx.font = sizeString + " " + fontStyle;
+            },
+            textAlign: function (alignment){},
+            textBaseline: function (baseline){},
+            fillText: function (text, x, y){},
+            fillTextWidth: function (text, x, y, width){},
+            strokeText: function (text, x, y){},
+            strokeTextWidth: function (text, x, y, width){},
+            width: function (text){return text.offsetWidth();}
         }
     };
 

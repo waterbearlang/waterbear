@@ -31,7 +31,10 @@
     }
 
     // for all of these functions, `this` is the scope object
-    global.runtime = {
+    //
+    // **If the functions don't have crazy dependencies (i.e., rely on the
+    // DOM, sound libraries, etc). they should go in runtime-simple.js).**
+    global.runtime = util.extend((global.runtime || {} ), {
         startEventLoop: startEventLoop,
         local: {
             //temporary fix for locals
@@ -414,6 +417,6 @@
         },
         size: {
         }
-    };
+    });
 
 })(window);

@@ -548,73 +548,79 @@
                     <wb-value type="any">convert</wb-value>to string
                 </wb-expression>
 				<wb-expression script="string.split" type="array">
-                    <wb-value type="string">split</wb-value>
-                    <wb-value type="string">on separator</wb-value>
+                    <wb-value type="text">split</wb-value>
+                    <wb-value type="text">on separator</wb-value>
                 </wb-expression>
 				<wb-expression script="string.concatenate" type="string">
-                    <wb-value type="string">concatenate</wb-value>
-                    <wb-value type="string">with</wb-value>
+                    <wb-value type="text,string">concatenate</wb-value>
+                    <wb-value type="text,string">with</wb-value>
                 </wb-expression>
 				<wb-expression script="string.repeat" type="string">
-                    <wb-value type="string">repeat</wb-value>
+                    <wb-value type="text,string">repeat</wb-value>
                     <wb-value type="number" value="0"></wb-value>times
                 </wb-expression>
 				<wb-expression script="string.getChar" type="string">
-                    <wb-value type="number" value="0">get character</wb-value>
-                    <wb-value type="string">from</wb-value>
+                    <wb-value type="number" value="1">get character</wb-value>
+                    <wb-value type="text,string">from</wb-value>
                 </wb-expression>
 				<wb-expression script="string.getCharFromEnd" type="string">
-                    <wb-value type="number" value="0">get character</wb-value>
-                    <wb-value type="string">from end of</wb-value>
+                    <wb-value type="number" value="1">get character</wb-value>
+                    <wb-value type="text,string">from end of</wb-value>
                 </wb-expression>
 				<wb-expression script="string.substring" type="string">
-                    <wb-value type="string">substring of</wb-value>
-                    <wb-value type="number" value="0">starting at</wb-value>
+                    <wb-value type="text,string">substring of</wb-value>
+                    <wb-value type="number" value="1">starting at</wb-value>
 					<wb-value type="number" value="0">of length</wb-value>
                 </wb-expression>
 				<wb-expression script="string.substring2" type="string">
-                    <wb-value type="string">substring of</wb-value>
-                    <wb-value type="number" value="0">from</wb-value>
-					<wb-value type="number" value="0">to</wb-value>
+                    <wb-value type="text,string">substring of</wb-value>
+                    <wb-value type="number" value="1">from</wb-value>
+					<wb-value type="number" value="1">to</wb-value>
                 </wb-expression>
 				<wb-expression script="string.isSubstring" type="boolean">
-                    <wb-value type="string"></wb-value>
-                    <wb-value type="string">is substring of</wb-value>
+                    <wb-value type="text,string"></wb-value>
+                    <wb-value type="text,string">is substring of</wb-value>
                 </wb-expression>
 				<wb-expression script="string.substringPosition" type="number">
-                    <wb-value type="string">position of</wb-value>
-                    <wb-value type="string">in</wb-value>
+                    <wb-value type="text,string">position of</wb-value>
+                    <wb-value type="text,string">in</wb-value>
                 </wb-expression>
 				<wb-expression script="string.replaceSubstring" type="string">
-                    <wb-value type="string">in</wb-value>
-                    <wb-value type="string">replace</wb-value>
-					<wb-value type="string">with</wb-value>
+                    <wb-value type="text,string">in</wb-value>
+                    <wb-value type="text,string">replace</wb-value>
+					<wb-value type="text,string">with</wb-value>
                 </wb-expression>
 				<wb-expression script="string.trimWhitespace" type="string">
-                    <wb-value type="string">trim whitespace of</wb-value>
+                    <wb-value type="text,string">trim whitespace of</wb-value>
                 </wb-expression>
 				<wb-expression script="string.uppercase" type="string">
-                    <wb-value type="string">convert</wb-value> to uppercase
+                    <wb-value type="text,string">convert</wb-value> to uppercase
                 </wb-expression>
 				<wb-expression script="string.lowercase" type="string">
-                    <wb-value type="string">convert</wb-value> to lowercase
+                    <wb-value type="text,string">convert</wb-value> to lowercase
                 </wb-expression>
 				<wb-expression script="string.matches" type="boolean">
-                    <wb-value type="string"></wb-value>
-					<wb-value type="string">matches</wb-value>
+                    <wb-value type="text,string"></wb-value>
+					<wb-value type="text,string">matches</wb-value>
                 </wb-expression>
 				<wb-expression script="string.doesntMatch" type="boolean">
-                    <wb-value type="string"></wb-value>
-					<wb-value type="string">doesn't match</wb-value>
+                    <wb-value type="text,string"></wb-value>
+					<wb-value type="text,string">doesn't match</wb-value>
                 </wb-expression>
 				<wb-expression script="string.startsWith" type="boolean">
-                    <wb-value type="string"></wb-value>
-					<wb-value type="string">starts with</wb-value>
+                    <wb-value type="text,string"></wb-value>
+					<wb-value type="text,string">starts with</wb-value>
                 </wb-expression>
 				<wb-expression script="string.endsWith" type="boolean">
-                    <wb-value type="string"></wb-value>
-					<wb-value type="string">ends with</wb-value>
+                    <wb-value type="text,string"></wb-value>
+					<wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
+				<wb-step script="string.alert">
+					<wb-value type="text,string">alert</wb-value>
+				</wb-step>
+				<wb-context script="string.comment">
+					<wb-value>comment</wb-value>
+				</wb-context>
             </wb-accordion>
             <wb-accordion class="path">
                 <header>

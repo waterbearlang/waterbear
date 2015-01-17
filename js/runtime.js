@@ -359,6 +359,7 @@
         object: {
         },
         string: {
+			toString: function(x){ return x.toString() },
 			split: function(x,y){ return x.split(y); },
 			concatenate: function(x,y){ return x.concat(y); },
 			repeat: function(x,n){ 
@@ -389,7 +390,8 @@
 			doesntMatch: function(x,y){ return !(x===y); },
 			startsWith: function(x,y){ return (x.lastIndexOf(y, 0) === 0); },
 			endsWith: function(x,y){ return x.indexOf(y, x.length - y.length) !== -1; },
-        	toString: function(x){ return x.toString() }
+        	alert: function(x){ alert(x); },
+			comment: function(args, containers){},
 		},
         path: {
         },

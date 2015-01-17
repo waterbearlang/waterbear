@@ -99,12 +99,12 @@
         var name = prompt("Save file as: ");
         if( !name ) return;
         // var URL = window.webkitURL || window.URL;
-        var file = new Blob([scriptsToString('','',name)], {type: 'text/html'});
+        var file = new Blob([scriptsToString('','',name)], {type: 'wb'});
         var reader = new FileReader();
         var a = document.createElement('a');
         reader.onloadend = function(){
             a.href = reader.result;
-            a.download = name + '.html';
+            a.download = name + '.wb';
             a.target = '_blank';
             document.body.appendChild(a);
             a.click();
@@ -130,7 +130,7 @@
     function loadScriptsFromFilesystem(event){
         var input = document.createElement('input');
         input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'text/html');
+        input.setAttribute('accept', 'text/wb');
         input.addEventListener('change', function(evt){
             var file = input.files[0];
             loadScriptsFromFile(file);
@@ -176,8 +176,9 @@
 
 	function loadScriptsFromFile(file){
 		var fileName = file.name;
-		if (fileName.indexOf('.html', fileName.length - 5) === -1) {
-			console.error("File is not a HTML file");
+		if (fileName.indexOf('.wb', fileName.length - 3) === -1) {
+			console.error("File is not a WB file");
+            window.alert("Please load a file of type WB.");
 			return;
 		}
 		var reader = new FileReader();

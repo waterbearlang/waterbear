@@ -6,6 +6,17 @@
     var cos = Math.cos, sin = Math.sin, atan2 = Math.atan2, sqrt = Math.sqrt, floor = Math.floor, PI = Math.PI;
     var DEGREE = PI / 180;
 
+    // Polyfill for Function.prototype.bind (PhantomJS doesn't support it for
+    // some bizarre reason).
+    if (!Function.prototype.bind) {
+        Function.prototype.bind = function (obj) {
+            var fn = this;
+            return function () {
+                return fn.apply(obj, arguments);
+            };
+        };
+    }
+
     // properly delete from a list
     function deleteItem(list, item){
         var idx = list.indexOf(item);

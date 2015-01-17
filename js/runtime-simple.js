@@ -142,8 +142,7 @@
             },
             fromArray: function (a) {
                 if (a.length < 4) {
-                    // TODO: Runtime error?
-                    new Error('Array given must take at least four elements.');
+                    throw new Error('Array must have at least four elements.');
                 }
                 return new util.Rect(a[0], a[1], a[2], a[3]);
             },

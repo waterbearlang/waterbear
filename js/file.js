@@ -48,7 +48,7 @@
             "description": title,
             "public": true,
             "files": {
-                "script.json": {
+                "script.wb": {
                     "content": scriptsToString(title, '', title)
                 },
             }
@@ -148,13 +148,13 @@
         var keys = Object.keys(gist.data.files);
         var file;
         keys.forEach(function(key){
-            if (/.*\.json/.test(key)){
+            if (/.*\.wb/.test(key)){
                 // it's a json file
                 file = gist.data.files[key].content;
             }
         });
         if (!file){
-            console.error('no json file found in gist: %o', gist);
+            console.error('no wb file found in gist: %o', gist);
             return;
         }
         loadScriptsFromString(file);

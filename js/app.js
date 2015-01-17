@@ -79,6 +79,7 @@ function handleFileButton(evt){
             text: "New",
             handler: function(modal) {
                 //delete inner html
+                
                 modal.hide();
             },
             primary: true

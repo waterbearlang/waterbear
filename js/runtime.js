@@ -352,6 +352,28 @@
         point: {
         },
         rect: {
+            fromCoordinates: function (x, y, width, height) {
+                return util.Rect(x, y, width, height);
+            },
+            fromVectors: function (point, size) {
+                return util.Rect.fromVectors(point, size);
+            },
+            fromArray: function (a) {
+                if (a.length < 4) {
+                    // TODO: Runtime error?
+                    new Error('Array given must take at least four elements.');
+                }
+                return new util.Rect(a[0], a[1], a[2], a[3]);
+            },
+            getPosition: function (rect) { return rect.getPosition(); },
+            getSize: function (rect) { return rect.getSize(); },
+            asArray: function (rect) {
+                return [rect.x, rect.y, rect.width, rect.height];
+            },
+            getX: function (rect) { return rect.x; },
+            getY: function (rect) { return rect.y; },
+            getWidth: function (rect) { return rect.width; },
+            getHeight: function (rect) { return rect.height; }
         },
         motion: {
         },

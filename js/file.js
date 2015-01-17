@@ -93,6 +93,11 @@
         return script;
     }
 
+    function clearScripts(){
+        var script = document.querySelector('wb-workspace > wb-contains');
+        script.innerHTML = "";
+    }
+
 
     function createDownloadUrl(evt){
         evt.preventDefault();
@@ -208,6 +213,7 @@
         saveCurrentScriptsToGist: saveCurrentScriptsToGist,
         loadRecentGists: loadRecentGists,
         createDownloadUrl: createDownloadUrl,
+        clearScripts: clearScripts,
         loadScriptsFromGistId: loadScriptsFromGistId,
         loadScriptsFromExample: loadScriptsFromExample,
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,

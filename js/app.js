@@ -48,6 +48,42 @@ function run(){
     });
 }
 
+function handleFileButton(evt){
+    var fileModel = nanoModal("Select an option or click away to exit.", 
+        {overlayClose: true, // Can't close the modal by clicking on the overlay.
+        buttons: [{
+            text: "Save Gist",
+            handler: function(modal) {
+                modal.hide();
+            }
+        }, {
+            text: "Save File",
+            handler: function(modal) {
+                modal.hide();
+            }
+        }, {
+            text: "Open Gist",
+            handler: function(modal) {
+                modal.hide();
+            }
+        }, {
+            text: "Open File",
+            handler: function(modal) {
+                modal.hide();
+            }
+        },{
+            text: "New",
+            handler: function(modal) {
+                modal.hide();
+            },
+            primary: true
+        }]
+    });
+    fileModel.show();
+}
+
+Event.on(document.body, 'click', '.open-files', handleFileButton);
+
 window.app = {
     message: message,
     error: error,

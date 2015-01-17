@@ -406,6 +406,9 @@
             getWidth: function (rect) { return rect.width; },
             getHeight: function (rect) { return rect.height; }
         },
+        sensing:{
+
+        },
         motion: {
         },
         shape: {

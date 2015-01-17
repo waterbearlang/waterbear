@@ -1,13 +1,28 @@
 (function(global){
     'use strict';
 
-    // resources
-
+    // canvas/stage stuff
     var canvas, ctx;
     Event.on(window, 'load', null, function(){
         canvas = dom.find('wb-playground > canvas');
         ctx = canvas.getContext('2d');
+        handleResize();
     }, false);
+
+    function handleResize(){
+        var rect = canvas.getBoundingClientRect();
+        Event.stage = {
+            top: Math.round(rect.top),
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            bottom: Math.round(rect.bottom),
+            width: Math.round(rect.right) - Math.round(rect.left),
+            height: Math.round(rect.bottom) - Math.round(rect.top)
+        };
+    }
+
+    // Initialize the stage.
+    Event.on(window, 'resize', null, handleResize);
 
     var perFrameHandlers = [];
     var lastTime = new Date().valueOf();

@@ -523,8 +523,9 @@ ValueProto.getValue = function(scope){
     }else{
         value = this.getAttribute('value');
     }
-    if (convert[this.type]){
-        return convert[this.type](value);
+    var primaryType = this.type.split(',')[0];
+    if (convert[primaryType]){
+        return convert[primaryType](value);
     }else{
         return value;
     }
@@ -617,7 +618,7 @@ Event.on(document.body, 'dragging', null, function(evt){
             }
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
-            if (dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
+            if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
                 app.warn('drop here to add block to script');
             }else{
                 app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');

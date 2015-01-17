@@ -105,7 +105,11 @@
         if (this._default){
             return this._default.apply(this, arguments);
         }
-        throw new Exception('no match found for ' + signature.split('_').join(' '));
+        throw new Error('no match found for ' + signature.split('_').join(' ') + ': ' +
+            [].slice.call(arguments).map(function(arg){
+                return 'type(' + arg + ') = ' + type(arg);
+            }).join(',')
+        );
     };
     // Wrap .send() so we don't have to call mymultimethod.send()
     Method.prototype.fn = function fn(){

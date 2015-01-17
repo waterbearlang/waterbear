@@ -89,6 +89,12 @@ function handleFileButton(evt){
 
 Event.on(document.body, 'click', '.open-files', handleFileButton);
 
+function handleExampleButton(evt){
+    window.alert('No current examples or templates available. Check back later!');
+}
+
+Event.on(document.body, 'click', '.open-example', handleExampleButton);
+
 window.app = {
     message: message,
     error: error,

@@ -166,6 +166,17 @@
         return '<' + this.x + ',' + this.y + '>';
     }
 
+    // Point
+
+    function Point(x,y){
+        this.x = x;
+        this.y = y;
+    }
+
+    Point.prototype.toString = function(){
+        return '[' + this.x + ',' + this.y + ']';
+    };
+
 
     // Get Rect!
     function Rect(x, y, width, height) {
@@ -182,7 +193,7 @@
     Rect.prototype.getSize = function () {
         return new Vector(this.width, this.height);
     };
-    
+
     /* Creates from two vectors or two points. They're basically the same. */
     Rect.fromVectors = function (position, size) {
         return new Rect(position.x, position.y, size.x, size.y);
@@ -321,6 +332,7 @@
         Method: Method,
         Vector: Vector,
         Rect: Rect,
+        Point: Point,
         add: add,
         subtract: subtract,
         multiply: multiply,

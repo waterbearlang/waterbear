@@ -271,8 +271,6 @@
                 return images[path];
             },
             drawAtPoint: function(img, pt, w, h){
-                w = w ? w : undefined;
-                h = h ? h : undefined;
                 ctx.drawImage(img, pt.x, pt.y, w, h);
             }
         },

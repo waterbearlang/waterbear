@@ -185,7 +185,7 @@ wb-expression[type=point]:before{ background-image: url(../images/icon/point.svg
 wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg); }
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
 
-/* block background colour */
+/* block background colour by category*/
 wb-expression.control, wb-step.control, wb-context.control{ background-color: hsl(0, 93%, 56%); border-color: hsl(0, 93%, 50%); }
 wb-expression.sprite, wb-step.sprite, wb-context.sprite{ background-color: hsl(156, 93%, 56%); border-color: hsl(156, 93%, 50%); }
 wb-expression.music, wb-step.music, wb-context.music{ background-color: hsl(312, 93%, 56%); border-color: hsl(312, 93%, 50%); }
@@ -209,6 +209,25 @@ wb-expression.shape, wb-step.shape, wb-context.shape{ background-color: hsl(84, 
 wb-expression.geolocation, wb-step.geolocation, wb-context.geolocation{ background-color: hsl(240, 93%, 56%); border-color: hsl(240, 93%, 50%);}
 wb-expression.size, wb-step.size, wb-context.size{ background-color: hsl(192, 93%, 56%); border-color: hsl(192, 93%, 50%);}
 wb-expression.text, wb-step.text, wb-context.text{ background-color: hsl(348, 93%, 56%); border-color: hsl(348, 93%, 50%);}
+
+/* block background colour by return type 
+wb-expression[type=number]{ background-color:  }
+wb-expression[type=color]{ background-color: }
+wb-expression[type=text]{ background-color: }
+wb-expression[type=boolean]{ background-color: }
+wb-expression[type=sprite]{ background-color: }
+wb-expression[type=any]{ background-color: }
+wb-expression[type=sound]{ background-color: }
+wb-expression[type=array]{ background-color: }
+wb-expression[type=image]{ background-color: }
+wb-expression[type=shape]{ background-color: }
+wb-expression[type=vector]{ background-color: }
+wb-expression[type=object]{ background-color: }
+wb-expression[type=path]{ background-color: }
+wb-expression[type=point]{ background-color: }
+wb-expression[type=rect]{ background-color: }
+wb-expression[type=string]{ background-color: }
+*/
 
 /* Used for input resizing */
 .sekrit-svg{

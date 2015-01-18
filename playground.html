@@ -720,34 +720,56 @@
                     <img class="cat-icon" src="images/icon/size.svg" />
                     Sizes
                 </header>
+                <wb-expression type="size" script="size.fromCoordinates">
+                    <wb-value type="number" value="0">size from width</wb-value>
+                    <wb-value type="text" value="px">width units</wb-value>
+                    <wb-value type="number" value="0">height</wb-value>
+                    <wb-value type="text" value="px">height units</wb-value>
+                </wb-expression>
+                <wb-expression type="size" script="size.fromArray">
+                    <wb-value type="array" allow="expression">size from array</wb-value>
+                    <wb-value type="text" value="px">width units</wb-value>
+                    <wb-value type="text" value="px">height units</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="size.getWidth">
+                    <wb-value type="size" allow="expression">width from size</wb-value>
+                    <wb-value type="text" value="px">width units</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="size.getHeight">
+                    <wb-value type="size" allow="expression">height from size</wb-value>
+                    <wb-value type="text" value="px">height units</wb-value>
+                </wb-expression>
+                <wb-expression type="array" script="size.toArray">
+                    <wb-value type="size" allow="expression">size as array</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="text">
                 <header>
                     <img class="cat-icon" src="images/icon/text.svg" />
                     Text
                 </header>
-                
+
                  <wb-step script="text.setFont">
                     <wb-row>
                         <wb-value type = "number" value = "12">font</wb-value>
                         <wb-value type="list" allow="literal"
                         options="px,em,%,pt" value="px"></wb-value>
                     </wb-row>
-                    <wb-value type = "text" value = "sans-serif"></wb-value> 
+                    <wb-value type = "text" value = "sans-serif"></wb-value>
                 </wb-step>
                 <wb-step script="text.textAlign">
                     <wb-row>
                         <wb-value type="list"  allow="literal"
                         options="left,right,center,start,end"
                         value="left">align text to the</wb-value>
-                    </wb-row>   
+                    </wb-row>
                 </wb-step>
                 <wb-step script="text.textBaseline">
                     <wb-row>
                         <wb-value type="list"  allow="literal"
                         options="alphabetic,top,hanging,middle,bottom,ideographic"
                         value="alphabetic">text baseline</wb-value>
-                    </wb-row>   
+                    </wb-row>
                 </wb-step>
                 <wb-step script = "text.fillText">
                     <wb-value type = "text,string">fill text</wb-value>
@@ -773,7 +795,7 @@
                 </wb-step>
                 <wb-expression type = "number" script = "text.width">
                     <wb-value type = "text,string">width of text</wb-value>
-                </wb-expression>               
+                </wb-expression>
             </wb-accordion>
         </sidebar>
         <wb-splitter></wb-splitter>
@@ -804,5 +826,15 @@
     <script src="js/block.js"></script>
 	<script src="js/app.js"></script>
     <script src="js/file.js"></script>
+    <script>
+        <!-- Google Analytics -->
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-58671174-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
 </html>

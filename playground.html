@@ -16,8 +16,11 @@
     	<h1>Waterbear with Custom Elements</h1>
     </header>
     <div class="menu">
-        <button class="open-files">File</button>
-        <button class="open-example">Examples</button>
+        <button class="open-files">Files…</button>
+        <button class="open-example">Examples…</button>
+        <button class="open-tags">Tags…</button>
+        <button class="do-undo">Undo</button>
+        <button class="do-redo">Redo</button>
     </div>
     <wb-hbox>
         <sidebar>
@@ -27,14 +30,14 @@
                     <img class="cat-icon" src="images/icon/control.svg" />
                     Controls
                 </header>
-                <wb-context script="control.whenProgramRuns">
+                <wb-context script="control.whenProgramRuns" class="control">
                     <wb-value>when program runs</wb-value>
                 </wb-context>
-                <wb-context script="control.whenKeyPressed">
+                <wb-context script="control.whenKeyPressed" class="control">
                     <wb-value type="list" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
                 </wb-context>
-                <wb-context script="control.eachFrame">
+                <wb-context script="control.eachFrame" class="control">
                     <wb-row>
                         <wb-value>each frame</wb-value>
                         <wb-local>
@@ -49,7 +52,7 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-step script="control.setVariable">
+                <wb-step script="control.setVariable" class="control">
                     <wb-row>
                     <wb-value type="text" value="variable">set</wb-value>
                         <wb-local>
@@ -80,11 +83,11 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-context script="control.broadcast">
+                <wb-context script="control.broadcast" class="control">
                     <wb-value type="text">broadcast</wb-value>
                     <wb-value type="any" optional="true">message with data</wb-value>
                 </wb-context>
-                <wb-context script="control.receive">
+                <wb-context script="control.receive" class="control">
                     <wb-value type="text">when I receive</wb-value>
                     <wb-value>message with data</wb-value>
                     <wb-local>
@@ -93,10 +96,10 @@
                         </wb-expression>
                     </wb-local>
                 </wb-context>
-                <wb-context script="control.if">
+                <wb-context script="control.if" class="control">
                     <wb-value type="boolean" value="true">if</wb-value>
                 </wb-context>
-                <wb-context script="control.ifElse">
+                <wb-context script="control.ifElse" class="control">
                     <header>
                         <wb-value type="boolean" value="true">if</wb-value>
                     </header>
@@ -111,7 +114,7 @@
                     <wb-value type="any">then</wb-value>
                     <wb-value type="any">else</wb-value>
                 </wb-expression>
-                <wb-step script="control.log">
+                <wb-step script="control.log" class="control">
                     <wb-value type="any">log</wb-value>
                 </wb-step>
             </wb-accordion>
@@ -129,32 +132,32 @@
                 <wb-expression type="sound" isAsset="true" script="sound.get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
                 </wb-expression>
-                <wb-step script="sound.play">
+                <wb-step script="sound.play" class="sound">
                     <wb-value type="sound">play</wb-value>
                 </wb-step>
-                <wb-step script="sound.setLoop">
+                <wb-step script="sound.setLoop" class="sound">
                     <wb-value type="sound">set loop</wb-value>
                     <wb-value type="boolean" value="true"></wb-value>
                 </wb-step>
-                <wb-step script="sound.setVolume">
+                <wb-step script="sound.setVolume" class="sound">
                     <wb-value type="sound">set volume</wb-value>
                     <wb-value type="number" min="0" max="5" value="0.9"></wb-value>
                 </wb-step>
-                <wb-step script="sound.pause">
+                <wb-step script="sound.pause" class="sound">
                     <wb-value type="sound">pause</wb-value>
                 </wb-step>
-                <wb-step script="sound.playFrom">
+                <wb-step script="sound.playFrom" class="sound">
                     <wb-value type="sound">play</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="2">from</wb-value>
                         <wb-unit>seconds</wb-unit>
                     <wb-row>
                 </wb-step>
-                <wb-step script="sound.pan">
+                <wb-step script="sound.pan" class="sound">
                     <wb-value type="sound">balance</wb-value>
                     <wb-value type="number" min="-1" max="1" value="0"></wb-value>
                 </wb-step>
-                <wb-step script="sound.echo_DelayFeedbackFilter">
+                <wb-step script="sound.echo_DelayFeedbackFilter" class="sound">
                     <wb-value type="sound">set echo</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="0.2">delay</wb-value>
@@ -169,10 +172,10 @@
                         <wb-unit>Hz</wb-unit>
                     </wb-row>
                 </wb-step>
-                <wb-step script="sound.stopEcho">
+                <wb-step script="sound.stopEcho" class="sound">
                     <wb-value type="sound">echo off</wb-value>
                 </wb-step>
-                <wb-step script="sound.reverb_DurationDecayReverse">
+                <wb-step script="sound.reverb_DurationDecayReverse" class="sound">
                     <wb-value type="sound">set reverb</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="2">duration</wb-value>
@@ -184,7 +187,7 @@
                     </wb-row>
                     <wb-value type="boolean" value="false">reverse</wb-value>
                 </wb-step>
-                <wb-step script="sound.stopReverb">
+                <wb-step script="sound.stopReverb" class="sound">
                     <wb-value type="sound">reverb off</wb-value>
                 </wb-step>
                 <wb-expression type="sound" script="sound.effect">
@@ -250,18 +253,18 @@
                     <wb-value type="array">join</wb-value>
                     <wb-value type="string">with</wb-value>
                 </wb-expression>
-                <wb-step script="array.append">
+                <wb-step script="array.append" class="array">
                     <wb-value type="array"></wb-value>
                     <wb-value type="any">append</wb-value>
                 </wb-step>
-                <wb-step script="array.prepend">
+                <wb-step script="array.prepend" class="array">
                     <wb-value type="array"></wb-value>
                     <wb-value type="any">prepend</wb-value>
                 </wb-step>
                 <wb-expression type="number" script="array.length">
                     <wb-value type="array,string">length</wb-value>
                 </wb-expression>
-                <wb-step script="array.removeItem">
+                <wb-step script="array.removeItem" class="array">
                     <wb-value type="array"></wb-value>
                     <wb-value type="number" min="0" value="0">remove item at</wb-value>
                 </wb-step>
@@ -335,13 +338,13 @@
                     <wb-value type="number" min="0" max="100" value="0">lightness</wb-value>
                     <wb-value type="number" min="0" max="100" value="0">alpha</wb-value>
                 </wb-expression>
-                <wb-step script="color.fill">
+                <wb-step script="color.fill" class="color">
                     <wb-value type="color" value="#0000FF">fill style</wb-value>
                 </wb-step>
-                <wb-step script="color.stroke">
+                <wb-step script="color.stroke" class="color">
                     <wb-value type="color" value="00FF00">stroke style</wb-value>
                 </wb-step>
-                <wb-step script="color.shadow">
+                <wb-step script="color.shadow" class="color">
                     <wb-value type="color" value="#FF0000">shadow color</wb-value>
                 </wb-step>
             </wb-accordion>
@@ -353,7 +356,7 @@
                 <wb-expression type="image" isAsset="true" script="image.get">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.jpg">image from url</wb-value>
                 </wb-expression>
-                <wb-step script="image.drawAtPoint">
+                <wb-step script="image.drawAtPoint" class="image">
                     <wb-value type="image" allow="block">draw</wb-value>
                     <wb-value type="point" allow="block">at</wb-value>
                     <wb-value type="number" value="50">wide</wb-value>
@@ -601,14 +604,14 @@
                 </wb-expression>
                 <wb-expression script="string.endsWith" type="boolean">
                     <wb-value type="text,string"></wb-value>
-                    <wb-value type="text,string">ends with</wb-value>
+					<wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
-                <wb-step script="string.alert">
-                    <wb-value type="text,string">alert</wb-value>
-                </wb-step>
-                <wb-context script="string.comment">
-                    <wb-value>comment</wb-value>
-                </wb-context>
+				<wb-step script="string.alert" class="string">
+					<wb-value type="text,string">alert</wb-value>
+				</wb-step>
+				<wb-context script="string.comment" class="string">
+					<wb-value>comment</wb-value>
+				</wb-context>
             </wb-accordion>
             <wb-accordion class="path">
                 <header>
@@ -790,14 +793,12 @@
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <!-- polyfill for custom elements -->
-    <script src="lib/ajax.js"></script>
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.min.js"></script>
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
     <script src="js/runtime.js"></script>
-    <script src="js/runtime-simple.js"></script>
 	<script src="js/dom.js"></script>
     <script src="js/widget.js"></script>
     <script src="js/block.js"></script>

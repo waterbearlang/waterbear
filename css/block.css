@@ -1,4 +1,4 @@
-/* Custom Elements for Waterbear blocks */
+/* Custom Elements for Waterbear blocks*/
 
 wb-step, wb-context, wb-expression{
     display: inline-block;
@@ -184,6 +184,31 @@ wb-expression[type=path]:before{ background-image: url(../images/icon/path.svg);
 wb-expression[type=point]:before{ background-image: url(../images/icon/point.svg); }
 wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg); }
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
+
+/* block background colour */
+wb-expression.control, wb-step.control, wb-context.control{ background-color: hsl(0, 93%, 56%); border-color: hsl(0, 93%, 50%); }
+wb-expression.sprite, wb-step.sprite, wb-context.sprite{ background-color: hsl(156, 93%, 56%); border-color: hsl(156, 93%, 50%); }
+wb-expression.music, wb-step.music, wb-context.music{ background-color: hsl(312, 93%, 56%); border-color: hsl(312, 93%, 50%); }
+wb-expression.sound, wb-step.sound, wb-context.sound{ background-color: hsl(108, 93%, 56%); border-color: hsl(108, 93%, 50%);}
+wb-expression.array, wb-step.array, wb-context.array{ background-color: hsl(264, 93%, 56%); border-color: hsl(264, 93%, 50%);}
+wb-expression.boolean, wb-step.boolean, wb-context.boolean{ background-color: hsl(60, 93%, 56%); border-color: hsl(60, 93%, 50%);}
+wb-expression.canvas, wb-step.canvas, wb-context.canvas{ background-color: hsl(216, 93%, 56%); border-color: hsl(216, 93%, 50%);}
+wb-expression.color, wb-step.color, wb-context.color{ background-color: hsl(12, 93%, 56%); border-color: hsl(12, 93%, 50%);}
+wb-expression.image, wb-step.image, wb-context.image{ background-color: hsl(168, 93%, 56%); border-color: hsl(168, 93%, 50%);}
+wb-expression.math, wb-step.math, wb-context.math{ background-color: hsl(324, 93%, 56%); border-color: hsl(324, 93%, 50%);}
+wb-expression.random, wb-step.random, wb-context.random{ background-color: hsl(120, 93%, 56%); border-color: hsl(120, 93%, 50%);}
+wb-expression.vector, wb-step.vector, wb-context.vector{ background-color: hsl(276, 93%, 56%); border-color: hsl(276, 93%, 50%);}
+wb-expression.object, wb-step.object, wb-context.object{ background-color: hsl(72, 93%, 56%); border-color: hsl(72, 93%, 50%);}
+wb-expression.string, wb-step.string, wb-context.string{ background-color: hsl(228, 93%, 56%); border-color: hsl(228, 93%, 50%);}
+wb-expression.path, wb-step.path, wb-context.path{ background-color: hsl(24, 93%, 56%); border-color: hsl(24, 93%, 50%);}
+wb-expression.point, wb-step.point, wb-context.point{ background-color: hsl(180, 93%, 56%); border-color: hsl(180, 93%, 50%);}
+wb-expression.rect, wb-step.rect, wb-context.rect{ background-color: hsl(336, 93%, 56%); border-color: hsl(336, 93%, 50%);}
+wb-expression.sense, wb-step.sense, wb-context.sense{ background-color: hsl(132, 93%, 56%); border-color: hsl(132, 93%, 50%);}
+wb-expression.motion, wb-step.motion, wb-context.motion{ background-color: hsl(288, 93%, 56%); border-color: hsl(288, 93%, 50%);}
+wb-expression.shape, wb-step.shape, wb-context.shape{ background-color: hsl(84, 93%, 56%); border-color: hsl(84, 93%, 50%);}
+wb-expression.geolocation, wb-step.geolocation, wb-context.geolocation{ background-color: hsl(240, 93%, 56%); border-color: hsl(240, 93%, 50%);}
+wb-expression.size, wb-step.size, wb-context.size{ background-color: hsl(192, 93%, 56%); border-color: hsl(192, 93%, 50%);}
+wb-expression.text, wb-step.text, wb-context.text{ background-color: hsl(348, 93%, 56%); border-color: hsl(348, 93%, 50%);}
 
 /* Used for input resizing */
 .sekrit-svg{

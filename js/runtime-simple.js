@@ -157,5 +157,22 @@
             getHeight: function (rect) { return rect.height; }
         },
 
+        size: {
+            fromCoordinates: function (width, widthUnits, height, heightUnits) {
+                return new util.Size(width, widthUnits, height, heightUnits);
+            },
+            fromArray: function (a, widthUnits, heightUnits) {
+                if (a.length < 2) {
+                    throw new Error('Array must have at least two elements.');
+                }
+                return new util.Size(a[0], widthUnits, a[1], heightUnits);
+            },
+            toArray: function (size) {
+                return [size.width, size.height];
+            },
+            getWidth: function (size) { return size.width; },
+            getHeight: function (size) { return size.height; }
+        },
+
     });
 }(window));

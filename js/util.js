@@ -177,19 +177,31 @@
         return '[' + this.x + ',' + this.y + ']';
     };
 
+    // Size
+
+    function Size(width, widthUnit, height, heightUnit){
+        if (height < 0) {
+            throw new Error('Size height must be non-negative.');
+        }
+        this.height = height;
+        this.heightUnit = heightUnit;
+        if (width < 0) {
+            throw new Error('Size width must be non-negative.');
+        }
+        this.width = width;
+        this.widthUnit = widthUnit;
+    }
+
+    Size.prototype.toString = function(){
+        return '[' + this.width + ',' + this.height + ']';
+    };
+
 
     // Get Rect!
     function Rect(x, y, width, height) {
         this.x = x;
         this.y = y;
-        if (width < 0) {
-            throw new Error('Rect width must be non-negative.');
-        }
-        this.width = width;
-        if (height < 0) {
-            throw new Error('Rect height must be non-negative.');
-        }
-        this.height = height;
+        this.size = new Size(width, 'px', height, 'px');
     }
 
     Rect.prototype.getPosition = function () {
@@ -197,12 +209,12 @@
     };
 
     Rect.prototype.getSize = function () {
-        return new Vector(this.width, this.height);
+        return new Vector(this.size.width, this.size.height);
     };
 
     /* Creates from two vectors or two points. They're basically the same. */
     Rect.fromVectors = function (position, size) {
-        return new Rect(position.x, position.y, size.x, size.y);
+        return new Rect(position.x, position.y, size.width, size.height);
     };
 
 

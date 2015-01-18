@@ -135,6 +135,56 @@ StepProto.run = function(scope){
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
+var variableLocalsToUpdate = null;
+var oldVariableName = '';
+
+function handleVariableFocus(evt){
+    // Gather all the locals so we can update them
+    // TODO: Cancel if the new variable name is already in scope
+    var input = evt.target;
+    if (!input.parentElement.hasAttribute('isVariable')){
+        return
+    }
+    var parentContext = dom.closest(input, 'wb-contains');
+    var variableName = input.parentElement.getAttribute('value');
+    variableLocalsToUpdate = dom.findAll(parentContext, 'wb-expression[script="control.getVariable"]')
+                                          .filter(function(expr){
+        var value = dom.find(expr, 'wb-value');
+        return (value && value.getAttribute('value') === variableName);
+    });
+}
+
+function handleVariableInput(evt){
+    // Actually change the locals while we update
+    var input = evt.target;
+    if (!input.parentElement.hasAttribute('isVariable')){
+        return;
+    }
+    var newVariableName = input.value;
+    variableLocalsToUpdate.forEach(function(expr){
+        expr.setAttribute('value', newVariableName);
+        var val = dom.find(expr, 'wb-value');
+        val.setAttribute('value', newVariableName);
+        val.textContent = newVariableName;
+    });
+}
+
+function handleVariableBlur(evt){
+    // Cleanup
+    var input = evt.target;
+    if (!input.parentElement.hasAttribute('isVariable')){
+        return;
+    }
+    variableLocalsToUpdate = null;
+    oldVariableName = '';
+}
+
+Event.on(document.body, 'focus', '[isVariable] input', handleVariableFocus); // Mozilla
+Event.on(document.body, 'focusin', '[isVariable] input', handleVariableFocus); // All other browsers
+Event.on(document.body, 'input', '[isVariable] input', handleVariableInput);
+Event.on(document.body, 'blur',  '[isVariable] input', handleVariableBlur); // Mozilla
+Event.on(document.body, 'focusout',  '[isVariable] input', handleVariableBlur); // All other browsers
+
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
 

@@ -358,6 +358,7 @@
 
     // exports
     window.util = {
+        Size: Size,
         extend: extend,
         deleteItem: deleteItem,
         setDefault: setDefault,

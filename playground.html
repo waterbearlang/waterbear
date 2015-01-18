@@ -31,7 +31,7 @@
                     <wb-value>when program runs</wb-value>
                 </wb-context>
                 <wb-context script="control.whenKeyPressed">
-                    <wb-value type="list" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
+                    <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
                 </wb-context>
                 <wb-context script="control.eachFrame">
@@ -51,7 +51,7 @@
                 </wb-context>
                 <wb-step script="control.setVariable">
                     <wb-row>
-                    <wb-value type="text" value="variable">set</wb-value>
+                    <wb-value type="text" allow="literal" value="variable">set</wb-value>
                         <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="variable">variable</wb-value>
@@ -201,7 +201,7 @@
                         <wb-value type="number" min="0" value="0.3">decay</wb-value>
                         <wb-unit>seconds</wb-unit>
                     </wb-row>
-                    <wb-value type="list" options="triangle,square,sawtooth" value="triangle">waveform</wb-value>
+                    <wb-value type="list" options="triangle,square,sawtooth" allow="literal" value="triangle">waveform</wb-value>
                     <wb-value type="number" min="0" max="10" value="1">volume</wb-value>
                     <wb-value type="number" min="-1" max="1" value="0">balance</wb-value>
                     <wb-row>
@@ -308,7 +308,7 @@
                     Colors
                 </header>
                 <wb-expression type="color" script="color.namedColor">
-                    <wb-value type="list" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuschia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
+                    <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuschia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
                 </wb-expression>
                 <wb-expression type="color" script="color.rgb">
                     <wb-value type="number" min="0" max="255" value="0">red</wb-value>
@@ -727,21 +727,21 @@
                  <wb-step script="text.setFont">
                     <wb-row>
                         <wb-value type = "number" value = "12">font</wb-value>
-                        <wb-value type="list" 
+                        <wb-value type="list" allow="literal"
                         options="px,em,%,pt" value="px"></wb-value>
                     </wb-row>
                     <wb-value type = "text" value = "sans-serif"></wb-value> 
                 </wb-step>
                 <wb-step script="text.textAlign">
                     <wb-row>
-                        <wb-value type="list" 
+                        <wb-value type="list"  allow="literal"
                         options="left,right,center,start,end"
                         value="left">align text to the</wb-value>
                     </wb-row>   
                 </wb-step>
                 <wb-step script="text.textBaseline">
                     <wb-row>
-                        <wb-value type="list" 
+                        <wb-value type="list"  allow="literal"
                         options="alphabetic,top,hanging,middle,bottom,ideographic"
                         value="alphabetic">text baseline</wb-value>
                     </wb-row>   

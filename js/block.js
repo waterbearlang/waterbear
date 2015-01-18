@@ -586,9 +586,13 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
 
 Event.on(document.body, 'dragging', null, function(evt){
     if (!dragTarget){ return; }
+
+    // FIXME: hardcoded margin (???) values.
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
     var potentialDropTarget = document.elementFromPoint(evt.pageX, evt.pageY);
+
+    // Check if the user dragged over the sidebar.
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         app.warn('drop here to delete block(s)');
@@ -611,11 +615,7 @@ Event.on(document.body, 'dragging', null, function(evt){
                 dropTarget = null;
                 return;
             }
-            if (dom.child(dropTarget, 'select')){
-                app.warn('cannot currently drop an expression on a drop-down');
-                dropTarget = null;
-                return;
-            }
+
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
             if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){

@@ -60,10 +60,6 @@
                     </wb-row>
                     <wb-value type="any">to</wb-value>
                 </wb-step>
-                <wb-step script="control.incrementVariable">
-                    <wb-value type="number">increment variable</wb-value>
-                    <wb-value type="number" value="1">by</wb-value>
-                </wb-step>
                 <wb-context script="control.loopOver">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
@@ -379,7 +375,7 @@
                 </wb-expression>
                 <wb-expression script="math.multiply" type="number">
                     <wb-value type="number,vector,array" value="0"></wb-value>
-                    <wb-value type="number,vector">×</wb-value>
+                    <wb-value type="number,vector" value="0">×</wb-value>
                 </wb-expression>
                 <wb-expression script="math.divide" type="number">
                     <wb-value type="number,vector,array" value="0"></wb-value>
@@ -409,20 +405,20 @@
                     <wb-value type="number" value="0"></wb-value>
                     <wb-value type="number" value="0">≥</wb-value>
                 </wb-expression>
-                <wb-expression type="boolean" script="math.mod">
+                <wb-expression type="number" script="math.mod">
                     <wb-value type="number" value="0"></wb-value>
                     <wb-value type="number" value="0">modulus</wb-value>
                 </wb-expression>
-                <wb-expression type="boolean" script="math.round">
+                <wb-expression type="number" script="math.round">
                     <wb-value type="number" value="0">round</wb-value>
                 </wb-expression>
-                <wb-expression type="boolean" script="math.abs">
+                <wb-expression type="number" script="math.abs">
                     <wb-value type="number" value="0">absolute value</wb-value>
                 </wb-expression>
-                <wb-expression type="boolean" script="math.floor">
+                <wb-expression type="number" script="math.floor">
                     <wb-value type="number" value="0">floor</wb-value>
                 </wb-expression>
-                <wb-expression type="boolean" script="math.abs">
+                <wb-expression type="number" script="math.ceil">
                     <wb-value type="number" value="0">ceiling</wb-value>
                 </wb-expression>
                 <wb-expression type="boolean" script="math.lt">
@@ -536,83 +532,83 @@
                     <img class="cat-icon" src="images/icon/string.svg" />
                     Strings
                 </header>
-				<wb-expression script="string.toString" type="string">
+                <wb-expression script="string.toString" type="string">
                     <wb-value type="any">convert</wb-value>to string
                 </wb-expression>
-				<wb-expression script="string.split" type="array">
+                <wb-expression script="string.split" type="array">
                     <wb-value type="text">split</wb-value>
                     <wb-value type="text">on separator</wb-value>
                 </wb-expression>
-				<wb-expression script="string.concatenate" type="string">
+                <wb-expression script="string.concatenate" type="string">
                     <wb-value type="text,string">concatenate</wb-value>
                     <wb-value type="text,string">with</wb-value>
                 </wb-expression>
-				<wb-expression script="string.repeat" type="string">
+                <wb-expression script="string.repeat" type="string">
                     <wb-value type="text,string">repeat</wb-value>
-                    <wb-value type="number" value="0"></wb-value>times
+                    <wb-value type="number" value="0" min="1"></wb-value>times
                 </wb-expression>
-				<wb-expression script="string.getChar" type="string">
-                    <wb-value type="number" value="1">get character</wb-value>
+                <wb-expression script="string.getChar" type="string">
+                    <wb-value type="number" value="1" min="1">get character</wb-value>
                     <wb-value type="text,string">from</wb-value>
                 </wb-expression>
-				<wb-expression script="string.getCharFromEnd" type="string">
-                    <wb-value type="number" value="1">get character</wb-value>
+                <wb-expression script="string.getCharFromEnd" type="string">
+                    <wb-value type="number" value="1" min="1">get character</wb-value>
                     <wb-value type="text,string">from end of</wb-value>
                 </wb-expression>
-				<wb-expression script="string.substring" type="string">
+                <wb-expression script="string.substring" type="string">
                     <wb-value type="text,string">substring of</wb-value>
-                    <wb-value type="number" value="1">starting at</wb-value>
-					<wb-value type="number" value="0">of length</wb-value>
+                    <wb-value type="number" value="1" min="1">starting at</wb-value>
+                    <wb-value type="number" value="0" min="0">of length</wb-value>
                 </wb-expression>
-				<wb-expression script="string.substring2" type="string">
+                <wb-expression script="string.substring2" type="string">
                     <wb-value type="text,string">substring of</wb-value>
-                    <wb-value type="number" value="1">from</wb-value>
-					<wb-value type="number" value="1">to</wb-value>
+                    <wb-value type="number" value="1" min="1">from</wb-value>
+                    <wb-value type="number" value="1" min="1">to</wb-value>
                 </wb-expression>
-				<wb-expression script="string.isSubstring" type="boolean">
+                <wb-expression script="string.isSubstring" type="boolean">
                     <wb-value type="text,string"></wb-value>
                     <wb-value type="text,string">is substring of</wb-value>
                 </wb-expression>
-				<wb-expression script="string.substringPosition" type="number">
+                <wb-expression script="string.substringPosition" type="number">
                     <wb-value type="text,string">position of</wb-value>
                     <wb-value type="text,string">in</wb-value>
                 </wb-expression>
-				<wb-expression script="string.replaceSubstring" type="string">
+                <wb-expression script="string.replaceSubstring" type="string">
                     <wb-value type="text,string">in</wb-value>
                     <wb-value type="text,string">replace</wb-value>
-					<wb-value type="text,string">with</wb-value>
+                    <wb-value type="text,string">with</wb-value>
                 </wb-expression>
-				<wb-expression script="string.trimWhitespace" type="string">
+                <wb-expression script="string.trimWhitespace" type="string">
                     <wb-value type="text,string">trim whitespace of</wb-value>
                 </wb-expression>
-				<wb-expression script="string.uppercase" type="string">
+                <wb-expression script="string.uppercase" type="string">
                     <wb-value type="text,string">convert</wb-value> to uppercase
                 </wb-expression>
-				<wb-expression script="string.lowercase" type="string">
+                <wb-expression script="string.lowercase" type="string">
                     <wb-value type="text,string">convert</wb-value> to lowercase
                 </wb-expression>
-				<wb-expression script="string.matches" type="boolean">
+                <wb-expression script="string.matches" type="boolean">
                     <wb-value type="text,string"></wb-value>
-					<wb-value type="text,string">matches</wb-value>
+                    <wb-value type="text,string">matches</wb-value>
                 </wb-expression>
-				<wb-expression script="string.doesntMatch" type="boolean">
+                <wb-expression script="string.doesntMatch" type="boolean">
                     <wb-value type="text,string"></wb-value>
-					<wb-value type="text,string">doesn't match</wb-value>
+                    <wb-value type="text,string">doesn't match</wb-value>
                 </wb-expression>
-				<wb-expression script="string.startsWith" type="boolean">
+                <wb-expression script="string.startsWith" type="boolean">
                     <wb-value type="text,string"></wb-value>
-					<wb-value type="text,string">starts with</wb-value>
+                    <wb-value type="text,string">starts with</wb-value>
                 </wb-expression>
-				<wb-expression script="string.endsWith" type="boolean">
+                <wb-expression script="string.endsWith" type="boolean">
                     <wb-value type="text,string"></wb-value>
-					<wb-value type="text,string">ends with</wb-value>
+                    <wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
-				<wb-step script="string.alert">
-					<wb-value type="text,string">alert</wb-value>
-				</wb-step>
-				<wb-context script="string.comment">
-					<wb-value>comment</wb-value>
-				</wb-context>
+                <wb-step script="string.alert">
+                    <wb-value type="text,string">alert</wb-value>
+                </wb-step>
+                <wb-context script="string.comment">
+                    <wb-value>comment</wb-value>
+                </wb-context>
             </wb-accordion>
             <wb-accordion class="path">
                 <header>
@@ -656,8 +652,8 @@
                 <wb-expression type="rect" script="rect.fromCoordinates">
                     <wb-value type="number" value="0">x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
-                    <wb-value type="number" value="0">width</wb-value>
-                    <wb-value type="number" value="0">height</wb-value>
+                    <wb-value type="number" value="0" min="0">width</wb-value>
+                    <wb-value type="number" value="0" min="0">height</wb-value>
                 </wb-expression>
                 <wb-expression type="rect" script="rect.fromVectors">
                     <wb-value type="point,vector" allow="expression">position</wb-value>
@@ -707,7 +703,7 @@
                 </wb-step>
                 <wb-expression type="shape" script="shape.circle">
                     <wb-value type="point">circle at</wb-value>
-                    <wb-value type="number">radius</wb-value>
+                    <wb-value type="number" min="0">radius</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="geolocation">
@@ -749,6 +745,54 @@
                     <img class="cat-icon" src="images/icon/text.svg" />
                     Text
                 </header>
+                
+                 <wb-step script="text.setFont">
+                    <wb-row>
+                        <wb-value type = "number" value = "12">font</wb-value>
+                        <wb-value type="list" 
+                        options="px,em,%,pt" value="px"></wb-value>
+                    </wb-row>
+                    <wb-value type = "text" value = "sans-serif"></wb-value> 
+                </wb-step>
+                <wb-step script="text.textAlign">
+                    <wb-row>
+                        <wb-value type="list" 
+                        options="left,right,center,start,end"
+                        value="left">align text to the</wb-value>
+                    </wb-row>   
+                </wb-step>
+                <wb-step script="text.textBaseline">
+                    <wb-row>
+                        <wb-value type="list" 
+                        options="alphabetic,top,hanging,middle,bottom,ideographic"
+                        value="alphabetic">text baseline</wb-value>
+                    </wb-row>   
+                </wb-step>
+                <wb-step script = "text.fillText">
+                    <wb-value type = "text,string">fill text</wb-value>
+                    <wb-value type = "number">x</wb-value>
+                    <wb-value type = "number">y</wb-value>
+                </wb-step>
+                <wb-step script = "text.fillTextWidth">
+                    <wb-value type = "text,string">fill text</wb-value>
+                    <wb-value type = "number">x</wb-value>
+                    <wb-value type = "number">y</wb-value>
+                    <wb-value type = "number">max width</wb-value>
+                </wb-step>
+                <wb-step script = "text.strokeText">
+                    <wb-value type = "text,string">stroke text</wb-value>
+                    <wb-value type = "number">x</wb-value>
+                    <wb-value type = "number">y</wb-value>
+                </wb-step>
+                <wb-step script = "text.strokeTextWidth">
+                    <wb-value type = "text,string">stroke text</wb-value>
+                    <wb-value type = "number">x</wb-value>
+                    <wb-value type = "number">y</wb-value>
+                    <wb-value type = "number">max width</wb-value>
+                </wb-step>
+                <wb-expression type = "number" script = "text.width">
+                    <wb-value type = "text,string">width of text</wb-value>
+                </wb-expression>               
             </wb-accordion>
         </sidebar>
         <wb-splitter></wb-splitter>

@@ -22,7 +22,71 @@
 /* TODO: vectors */
 /* TODO: objects */
 /* TODO: strings */
-/* TODO: points */
+
+QUnit.module('points');
+QUnit.test('create', function (assert) {
+    var point = runtime.point;
+
+    var p1 = point.create(1, 5);
+    var p2 = point.create(-4, 20);
+
+    assert.ok(p1 instanceof util.Point, 'Creating a point from coordinates');
+    assert.ok(p2 instanceof util.Point, 'Creating a point from negative coordinates');
+});
+
+QUnit.test('fromVector', function (assert) {
+    var point = runtime.point;
+
+    var zero = new util.Vector(0, 0);
+    var identity = new util.Vector(1, 1);
+    var negVector = new util.Vector(-1, -1);
+
+    var p1 = point.fromVector(zero);
+    var p2 = point.fromVector(identity);
+    var p3 = point.fromVector(negVector);
+
+    assert.ok(p1 instanceof util.Point, 'Creating a point from zero vector');
+    assert.ok(p2 instanceof util.Point, 'Creating a point from identity vector');
+    assert.ok(p3 instanceof util.Point, 'Creating a point from negative vector');
+});
+
+QUnit.test('fromArray', function (assert) {
+    var point = runtime.point;
+
+    QUnit.ok(point.fromArray([4, 5]) instanceof util.Point,
+             'Creating a point from an array');
+    QUnit.throws(
+        function () { rect.fromArray([1]); },
+        'Creating from an array with less than two elements should throw'
+    );
+});
+
+QUnit.test('x', function (assert) {
+    var point = runtime.point;
+
+    var p1 = new util.Point(2, 3);
+    var x = point.x(p1);
+
+    assert.equal(x, 2, 'Getting the x position of a point');
+});
+
+QUnit.test('y', function (assert) {
+    var point = runtime.point;
+
+    var p1 = new util.Point(2, 3);
+    var y = point.y(p1);
+
+    assert.equal(y, 3, 'Getting the y position of a point');
+});
+
+QUnit.test('toArray', function (assert) {
+    var point = runtime.point;
+
+    var p1 = new util.Point(2, 3);
+    var array = point.toArray(p1);
+
+    assert.deepEqual(array, [2,3], 'Getting array from point');
+});
 
 QUnit.module('rect');
 QUnit.test('fromCoordinates', function (assert) {

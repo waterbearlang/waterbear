@@ -30,7 +30,7 @@ AccordionProto.open = function(){
     }
     this.setAttribute('open', 'true');
     this.scrollIntoView();
-    
+
 }
 
 AccordionProto.close = function(){
@@ -91,6 +91,71 @@ SplitterProto.detachedCallback = function splitterDetached(){
 window.WBSplitter = document.registerElement('wb-splitter', {prototype: SplitterProto});
 
 
+// Splitter dragging
+var dragSplitter = null;
+var prevPanel = null;
+var direction = null;
+var minPosition = 0;
+var maxPosition = 0;
+var slop = 0;
+/* FIXME: next value should be determined dynamically */
+var splitterThickness = 8;
+
+Event.on(document.body, 'drag-start', 'wb-splitter', function(evt){
+    dragSplitter = evt.target;
+    direction = dragSplitter.parentElement.localName === 'wb-vbox' ? 'vertical' : 'horizontal';
+    prevPanel = dragSplitter.previousElementSibling;
+    var prevBox = prevPanel.getBoundingClientRect();
+    console.log('prevBox: %o', prevBox);
+    var nextBox = dragSplitter.nextElementSibling.getBoundingClientRect();
+    minPosition = direction === 'vertical' ? prevBox.top : prevBox.left;
+    maxPosition = direction === 'vertical' ? nextBox.bottom : nextBox.right;
+    slop = direction === 'vertical' ? evt.clientY - prevBox.bottom : evt.clientX - prevBox.right;
+    // maxPosition = maxPosition - /* evt.target.thickness */;
+});
+
+Event.on(document.body, 'dragging', null, function(evt){
+    var currPos = direction === 'vertical' ? evt.clientY - slop : evt.clientX - slop;
+    if (currPos > minPosition && currPos < maxPosition){
+        prevPanel.style.flex = '0 0 ' + (currPos - minPosition) + 'px';
+    }
+});
+
+Event.on(document.body, 'drag-end', null, function(evt){
+    // clear variables
+    dragSplitter = null;
+    prevPanel = null;
+    direction = null;
+    minPosition = 0;
+    maxPosition = 0;
+    slop = 0;
+    // persist
+    var splitters = dom.findAll('wb-splitter');
+    localStorage.__splitterPositions = JSON.stringify(splitters.map(function(splitter){
+        return getComputedStyle(splitter.previousElementSibling)['flex'];
+    }));
+});
+
+Event.on(window, 'load', null, function(evt){
+    if (localStorage.__splitterPositions){
+        var splitters = dom.findAll('wb-splitter');
+        var positions = JSON.parse(localStorage.__splitterPositions);
+        for (var i = 0; i < positions.length; i++){
+            splitters[i].previousElementSibling.style.flex = positions[i];
+        }
+    }
+});
+
+Event.on(window, 'dblclick', 'wb-splitter', function(evt){
+    var panel = evt.target.previousElementSibling;
+    var width = parseInt(getComputedStyle(panel)['flexBasis'], 10);
+    if (width < 5){
+        panel.style.flex = '';
+    }else{
+        panel.style.flex = '0 0 0';
+    }
+});
+
 // Observe child changes
 
 var observer = new MutationObserver(function(mutations){
@@ -115,6 +180,6 @@ var observer = new MutationObserver(function(mutations){
 
 var config = { childList: true, subtree: true };
 
-observer.observe(document.body, config);
+// observer.observe(document.body, config);
 
 })();

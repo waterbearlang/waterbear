@@ -224,12 +224,12 @@
     };
 
     Rect.prototype.getSize = function () {
-        return new Vector(this.size.width, this.size.height);
+        return new Size(this.size.width, 'px', this.size.height, 'px');
     };
 
     /* Creates from two vectors or two points. They're basically the same. */
     Rect.fromVectors = function (position, size) {
-        return new Rect(position.x, position.y, size.width, size.height);
+        return new Rect(position.x, position.y, size.x, size.y);
     };
 
 

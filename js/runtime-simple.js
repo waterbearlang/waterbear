@@ -149,12 +149,12 @@
             getPosition: function (rect) { return rect.getPosition(); },
             getSize: function (rect) { return rect.getSize(); },
             asArray: function (rect) {
-                return [rect.x, rect.y, rect.width, rect.height];
+                return [rect.x, rect.y, rect.size.width, rect.size.height];
             },
             getX: function (rect) { return rect.x; },
             getY: function (rect) { return rect.y; },
-            getWidth: function (rect) { return rect.width; },
-            getHeight: function (rect) { return rect.height; }
+            getWidth: function (rect) { return rect.size.width; },
+            getHeight: function (rect) { return rect.size.height; }
         },
 
         size: {

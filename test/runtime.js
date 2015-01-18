@@ -95,10 +95,10 @@ QUnit.test('getSize', function (assert) {
     var r1 = rect.fromCoordinates(0, 0, 536, 231);
     var size = rect.getSize(r1);
     
-    assert.ok(size instanceof util.Vector,
-             'Size is returned as a Vector');
-    assert.strictEqual(size.x, 536);
-    assert.strictEqual(size.y, 231);
+    assert.ok(size instanceof util.Size,
+             'Size is returned as a Size');
+    assert.strictEqual(size.width, 536);
+    assert.strictEqual(size.height, 231);
 });
 
 QUnit.test('asArray', function (assert) {

@@ -149,12 +149,29 @@
             getPosition: function (rect) { return rect.getPosition(); },
             getSize: function (rect) { return rect.getSize(); },
             asArray: function (rect) {
-                return [rect.x, rect.y, rect.width, rect.height];
+                return [rect.x, rect.y, rect.size.width, rect.size.height];
             },
             getX: function (rect) { return rect.x; },
             getY: function (rect) { return rect.y; },
-            getWidth: function (rect) { return rect.width; },
-            getHeight: function (rect) { return rect.height; }
+            getWidth: function (rect) { return rect.size.width; },
+            getHeight: function (rect) { return rect.size.height; }
+        },
+
+        size: {
+            fromCoordinates: function (width, widthUnits, height, heightUnits) {
+                return new util.Size(width, widthUnits, height, heightUnits);
+            },
+            fromArray: function (a, widthUnits, heightUnits) {
+                if (a.length < 2) {
+                    throw new Error('Array must have at least two elements.');
+                }
+                return new util.Size(a[0], widthUnits, a[1], heightUnits);
+            },
+            toArray: function (size) {
+                return [size.width, size.height];
+            },
+            getWidth: function (size) { return size.width; },
+            getHeight: function (size) { return size.height; }
         },
 
     });

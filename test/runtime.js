@@ -21,6 +21,56 @@
 /* TODO: random */
 /* TODO: vectors */
 /* TODO: objects */
+QUnit.module('objects');
+QUnit.test('empty', function (assert) {
+    var object = runtime.object;
+
+    // you guys, is this test even... like... does it even?
+    assert.ok(object.empty() instanceof Object,
+              'Creating an empty object');
+    assert.strictEqual(Object.keys(object.empty()).length, 0,
+                       "Checking that it's actually empty");
+});
+
+QUnit.test('create', function (assert) {
+    var object = runtime.object;
+
+    // omigosh you guys. like, omigosh
+    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+
+    assert.ok(o1 instanceof Object,
+              'Creating an object');
+    assert.strictEqual(Object.keys(o1).length, 3,
+                       'Asserting it has three keys');
+    assert.strictEqual(o1.hi, 'immakitty');
+    assert.strictEqual(o1['1'], 2);
+    assert.strictEqual(o1['true'], false);
+});
+
+QUnit.test('getValue', function (assert) {
+    var object = runtime.object;
+
+    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+
+    assert.strictEqual(object.getValue(o1, 'hi'), 'immakitty',
+                       'Got element one');
+    assert.strictEqual(object.getValue(o1, '1'), 2,
+                       'Got element two');
+    assert.strictEqual(object.getValue(o1, 'true'), false,
+                       'Got element three');
+});
+
+QUnit.test('getKeys', function (assert) {
+    var object = runtime.object;
+
+    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var actual = object.getKeys(o1);
+    var expected = ['hi', '1', 'true'];
+    assert.deepEqual(actual.sort(), expected.sort(),
+                     'Retrieved the keys in insertion order');
+});
+
+
 /* TODO: strings */
 
 QUnit.module('points');

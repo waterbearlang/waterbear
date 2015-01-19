@@ -174,5 +174,30 @@
             getHeight: function (size) { return size.height; }
         },
 
+        object: {
+            empty: function () {
+                return {};
+            },
+            create: function () {
+                var i, key, val, obj;
+                console.assert((arguments.length % 2) === 0,
+                               'object constructor does not have key/value pairs!');
+                obj = {};
+                // Get key/value pairs from arguments.
+                for (i = 0; i < arguments.length; i += 2) {
+                    key = arguments[i];
+                    val = arguments[i + 1];
+                    obj[key] = val;
+                }
+                return obj;
+            },
+            getValue: function (obj, key) {
+                return obj[key];
+            },
+            getKeys: function (obj) {
+                return Object.keys(obj);
+            }
+        },
+
     });
 }(window));

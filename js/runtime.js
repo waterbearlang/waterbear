@@ -282,8 +282,6 @@
                 ctx.drawImage(img, pt.x, pt.y, w, h);
             }
         },
-        object: {
-        },
         string: {
 			toString: function(x){ return x.toString() },
 			split: function(x,y){ return x.split(y); },

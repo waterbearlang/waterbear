@@ -58,6 +58,7 @@ wb-value{
     display: block;
     text-align: right;
     margin-left: 20px;
+    
 }
 
 wb-row{
@@ -76,6 +77,7 @@ wb-value > * {
     vertical-align: middle;
     margin: 0px 5px;
 }
+
 
 wb-value > input[type=color]{
     padding: 0;
@@ -156,6 +158,70 @@ wb-context[closed] > wb-contains{
     overflow: hidden;
 }
 
+
+wb-value[type=number] > input{
+background: url(../images/icon/math.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=color] > input{
+background: url(../images/icon/color.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=text] > input{
+background: url(../images/icon/text.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=boolean] > input{
+background: url(../images/icon/boolean.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=sprite] > input{
+background: url(../images/icon/sprite.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=sound] > input{
+background: url(../images/icon/sound.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=array] > input{
+background: url(../images/icon/array.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=image] > input{
+background: url(../images/icon/image.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=shape] > input{
+background: url(../images/icon/shape.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=vector] > input{
+background: url(../images/icon/vector.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=object] > input{
+background: url(../images/icon/object.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=path] > input{
+background: url(../images/icon/path.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=point] > input{
+background: url(../images/icon/point.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=rect] > input{
+background: url(../images/icon/rect.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value[type=string] > input{
+background: url(../images/icon/string.svg) no-repeat scroll 3px 3px;
+background-color : #FFFFFF;
+}
+wb-value > input{
+padding-left:20px;
+}
 wb-expression:before{
     content: '';
     width: 15px;
@@ -167,7 +233,6 @@ wb-expression:before{
     background-size: contain;
     /* Over-ride background-image for each type of expression */
 }
-
 wb-expression[type=number]:before{ background-image: url(../images/icon/math.svg); }
 wb-expression[type=color]:before{ background-image: url(../images/icon/color.svg); }
 wb-expression[type=text]:before{ background-image: url(../images/icon/text.svg); }

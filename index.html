@@ -96,8 +96,8 @@
 		.button:before{
 			content: "";
 			position: absolute;
-			width: 0; 
-			height: 0; 
+			width: 0;
+			height: 0;
 			top: -2px;
 			left:100%;
 			border-top: 22.5px solid transparent;
@@ -108,8 +108,8 @@
 		.button:after{
 			content: "";
 			position: absolute;
-			width: 0; 
-			height: 0; 
+			width: 0;
+			height: 0;
 			top: 0;
 			left:100%;
 			margin-left: 0px;
@@ -139,6 +139,7 @@
 			flex-align:center;
 			align-items:center;
 		}
+
 		.s2 .s2-4 ul{
 			padding:0px;
 			margin-left:auto;
@@ -191,23 +192,23 @@
 		}
         /* Individual circles */
         .community{
-            background-image: url(images/mascot-community.png);
+            background-image: url(images/mascot/mascot-community.png);
             background-size: 150px;
             background-position: 0 30px;
         }
         .scratch{
-            background-image: url(images/mascot-dancing.png);
+            background-image: url(images/mascot/mascot-dancing.png);
             background-size: 150px;
             background-position: 0 30px;
         }
         .tardigrade{
-            background-image: url(images/mascot-space.png);
+            background-image: url(images/mascot/mascot-space.png);
             background-size: 200px;
             background-color: #000;
             background-position: -25px 0;
         }
         .github{
-            background-image: url(images/mascot-github.png);
+            background-image: url(images/mascot/mascot-github.png);
             background-size: 100px;
             background-position: 20px 10px;
         }
@@ -229,7 +230,7 @@
 		}
 		.s4 .s4-1 blockquote{
 			font-size:18px;
-			
+
 			color:#fff;
 		}
 		.s4 .s4-1 blockquote i{
@@ -302,12 +303,12 @@
 	</style>
 </head>
 <body>
-	<header class="s1"><img class="logo" src="images/waterbear_icon_logo.svg" />&nbsp;waterbear</header>
+	<header class="s1"><img class="logo" src="images/logo/waterbear_icon_logo.svg" />&nbsp;waterbear</header>
 	<section class="s2">
 		<div>
 			<div class="s2-1"></div>
 			<div class="s2-2 steampunk">
-                <img src="images/steampunk.png" />
+                <img src="images/png/steampunk.png" />
             </div>
 			<div class="s2-3">
 				<div>
@@ -315,7 +316,7 @@
 					<h1>WATERBEAR</h1>
 					<h2>welcomes you!</h2>
 					<p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming.</p>
-					<a class="button" href="languages/javascript/">Try it out</a>
+					<a class="button" href="playground.html">Try it out</a>
 				</div>
 			</div>
 			<!--div class="s2-4">
@@ -333,7 +334,7 @@
 			<div class="s3-1">
 				<div class="circle community"></div>
 				<h2>Community</h2>
-				<p>[Need information to be here]</p>
+				<p>Join our community of people using Waterbear to solve problems. Whether you are using it to build cool projects, teaching others to code, or contributing to expand Waterbear's capabilities, we would love to hear about how you use Waterbear. <a href="mailto:discuss@lists.waterbearlang.com.">Email us</a> and join the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a>.</p>
 			</div>
 			<div class="s3-2">
 				<div class="circle scratch"></div>
@@ -354,7 +355,7 @@
 	</section>
 	<section class="s4">
 		<div class="s4-1"><p><b>Waterbear</b> is also a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming. It's good for kids, artists, and anyone who would like to make thir computer do something new without having to become a "programmer" (although it could lead to that).</p><blockquote>"It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self critical"<br><br><i>— Alan Perlis, first recipient of the Turing Award</i></blockquote><p>Waterbear's system of draggable, snappable blocks are build using clean HTML5, CSS3, and Javascript. The Javascript playground for Waterbear allows you to create Waterbear scripts, see the Javascript it will generate, and run it right in the browser.</p></div>
-		<div class="s4-2"><iframe width="100%" height="300px" src="languages/javascript/?view=result&amp;example=dance"></iframe></div>
+		<div class="s4-2"><iframe width="100%" height="300px" src="playground.html?view=result&amp;example=dance"></iframe></div>
 	</section>
 	<section class="s5">
 		<div class="s5-1">
@@ -392,5 +393,15 @@
 			e.classList.add('checked');
 		}
 	</script>
+    <script>
+        <!-- Google Analytics -->
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-58671174-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
 </html>

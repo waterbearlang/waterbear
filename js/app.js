@@ -16,7 +16,7 @@ function error(text){
 }
 
 function warn(text){
-    message('orange', text);F
+    message('orange', text);
 }
 
 function info(text){

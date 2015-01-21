@@ -228,12 +228,14 @@ wb-value > input{
 padding-left:20px;
 }
 
-
+/*
 wb-value[value:empty] > input{
 background: url(../images/icon/math.svg) no-repeat scroll 3px 3px;
 background-color : #FFFFFF;
 padding-left:20px;
 }
+
+*/
 wb-expression:before{
     content: '';
     width: 15px;

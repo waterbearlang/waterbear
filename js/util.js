@@ -232,6 +232,26 @@
         return new Rect(position.x, position.y, size.x, size.y);
     };
 
+    //Paths
+    
+
+    
+    //Pathset
+    function Pathset(pathArray){
+        var len = pathArray.length;
+        var i = 0;
+        while (i<len){
+            if(!(pathArray[i] instanceof Path)){ 
+                throw new Error('Only paths may be added to a Pathset, ' + pathArray[i] + " is not.");
+            }
+        }
+        
+        this.pathArray = pathArray;
+    }
+    Pathset.prototype.getPathArray = function(){
+        return pathArray;
+    }
+
 
     // Utilities for math
 

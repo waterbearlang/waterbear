@@ -318,6 +318,16 @@
 			comment: function(args, containers){},
 		},
         path: {
+            moveTo: function(point){},
+            lineTo: function(point){},
+            bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){},
+            quadraticCurveTo: function(toPoint, controlPoint){},
+            arcTo: function(toPoint, controlPoint1, controlPoint2){},
+            closePath: function(){},
+            pathSet: function(pathArray){},
+            fill: function(pathSet){},
+            stroke: function(pathSet){},
+            fillRule: function(rule){}
         },
 
         motion: {

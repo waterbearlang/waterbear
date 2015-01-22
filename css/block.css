@@ -58,6 +58,7 @@ wb-value{
     display: block;
     text-align: right;
     margin-left: 20px;
+    white-space:nowrap;
     
 }
 
@@ -158,84 +159,29 @@ wb-context[closed] > wb-contains{
     overflow: hidden;
 }
 
-
-wb-value[type=number] > input{
-background: url(../images/icon/math.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=color] > input{
-background: url(../images/icon/color.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=text] > input{
-background: url(../images/icon/text.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=boolean] > input{
-background: url(../images/icon/boolean.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=sprite] > input{
-background: url(../images/icon/sprite.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=sound] > input{
-background: url(../images/icon/sound.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=array] > input{
-background: url(../images/icon/array.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=image] > input{
-background: url(../images/icon/image.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=shape] > input{
-background: url(../images/icon/shape.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=vector] > input{
-background: url(../images/icon/vector.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=object] > input{
-background: url(../images/icon/object.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=path] > input{
-background: url(../images/icon/path.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=point] > input{
-background: url(../images/icon/point.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=rect] > input{
-background: url(../images/icon/rect.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=string] > input{
-background: url(../images/icon/string.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-wb-value[type=text] > input{
-background: url(../images/icon/text.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-}
-
 wb-value > input{
 padding-left:20px;
+background:  #FFFFFF no-repeat 3px 3px;
+
 }
 
-/*
-wb-value[value:empty] > input{
-background: url(../images/icon/math.svg) no-repeat scroll 3px 3px;
-background-color : #FFFFFF;
-padding-left:20px;
-}
+wb-value[type=number] > input{background-image: url(../images/icon/math.svg);}
+wb-value[type=color] > input{background-image: url(../images/icon/color.svg);}
+wb-value[type=text] > input{background-image: url(../images/icon/text.svg);}
+wb-value[type=boolean] > input{background-image: url(../images/icon/boolean.svg);}
+wb-value[type=sprite] > input{background-image: url(../images/icon/sprite.svg);}
+wb-value[type=sound] > input{background-image: url(../images/icon/sound.svg);}
+wb-value[type=array] > input{background-image: url(../images/icon/array.svg);}
+wb-value[type=image] > input{background-image: url(../images/icon/image.svg);}
+wb-value[type=shape] > input{background-image: url(../images/icon/shape.svg);}
+wb-value[type=vector] > input{background-image: url(../images/icon/vector.svg);}
+wb-value[type=object] > input{background-image: url(../images/icon/object.svg);}
+wb-value[type=path] > input{background-image: url(../images/icon/path.svg);}
+wb-value[type=point] > input{background-image: url(../images/icon/point.svg);}
+wb-value[type=rect] > input{background-image: url(../images/icon/rect.svg);}
+wb-value[type=string] > input{background-image: url(../images/icon/string.svg);}
+wb-value[type=text] > input{background-image: url(../images/icon/text.svg);}
 
-*/
 wb-expression:before{
     content: '';
     width: 15px;

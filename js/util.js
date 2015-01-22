@@ -191,7 +191,12 @@
     Point.prototype.toString = function(){
         return '[' + this.x + ',' + this.y + ']';
     };
-
+    Point.prototype.getX = function(){
+        return this.x;
+    }
+    Point.prototype.getY = function(){
+        return this.y;
+    }
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -233,8 +238,10 @@
     };
 
     //Paths
+    function path(){
+        return this;
+    }
     
-
     
     //Pathset
     function Pathset(pathArray){

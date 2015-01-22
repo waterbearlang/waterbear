@@ -615,43 +615,43 @@
                     <img class="cat-icon" src="images/icon/path.svg" />
                     Paths
                 </header>
-                <wb-expression script = "path.moveTo" type="Path">
-                    <wb-value type="Point">move to point</wb-value>
+                <wb-expression script = "path.moveTo" type="path">
+                    <wb-value type="point">move to point</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.lineTo" type ="Path">
-                    <wb-value type="Point">draw a line to</wb-value>
+                <wb-expression script = "path.lineTo" type ="path">
+                    <wb-value type="point">draw a line to</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.bezierCurveTo" type ="Path">
-                    <wb-value type="Point">draw a bezier curve to</wb-value>
-                    <wb-value type="Point">first control point</wb-value>
-                    <wb-value type="Point">second control point</wb-value>
+                <wb-expression script = "path.bezierCurveTo" type ="path">
+                    <wb-value type="point">draw a bezier curve to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.quadraticCurveTo" type ="Path">
-                    <wb-value type="Point">draw a quadric curve to</wb-value>
-                    <wb-value type="Point">control point</wb-value>
+                <wb-expression script = "path.quadraticCurveTo" type ="path">
+                    <wb-value type="point">draw a quadric curve to</wb-value>
+                    <wb-value type="point">control point</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.arcTo" type ="Path">
-                    <wb-value type="Point">draw an arc to</wb-value>
-                    <wb-value type="Point">first control point</wb-value>
-                    <wb-value type="Point">second control point</wb-value>
+                <wb-expression script = "path.arcTo" type ="path">
+                    <wb-value type="point">draw an arc to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
                 </wb-expression>
-                <wb-expression script="path.closePath" type ="Path">
+                <wb-expression script="path.closePath" type ="path">
                     close path
                 </wb-expression>
-                <wb-expression script="path.pathSet" type="Pathset">
+                <wb-expression script="path.pathSet" type="pathset">
                     <wb-value>create set of paths</wb-value>
                     <wb-row>
-                        <wb-value type="Path"></wb-value>
+                        <wb-value type="path"></wb-value>
                         <button class="remove-item">-</button>
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
 
                 <wb-step script=path.fill>
-                    <wb-value type="Pathset">fill the path</wb-value>
+                    <wb-value type="pathset">fill the path</wb-value>
                 </wb-step>
                 <wb-step script=path.stroke>
-                    <wb-value type="Pathset">stroke the path</wb-value>
+                    <wb-value type="pathset">stroke the path</wb-value>
                 </wb-step>
                 <wb-step script=path.fillRule>
                     <wb-value type="list" allow="literal"

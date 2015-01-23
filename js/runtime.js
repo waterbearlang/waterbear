@@ -319,40 +319,37 @@
 		},
         path:{
             
-            lineTo: function(toPoint){ctx.lineTo(toPoint.getX(), toPoint.getY());},
+            lineTo: function(toPoint){return new util.Path(ctx.lineTo, new Array(toPoint.getX(), toPoint.getY()))},
+
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
-                ctx.bezierCurveTo(controlPoint1.getX(), controlPoint1.getY(),
+                return new util.Path(ctx.bezierCurveTo, new Array(controlPoint1.getX(), controlPoint1.getY(),
                 controlPoint2.getX(), controlPoint2.getY(), toPoint.getX(),
-                toPoint.getY());
+                toPoint.getY()));
             },
             moveTo: function(toPoint){
-                console.log(toPoint.toString()); //TODO
-                ctx.moveTo(toPoint.getX(), toPoint.getY());
+                return new util.Path(ctx.moveTo, new Array(toPoint.getX(), toPoint.getY()));
             },
             quadraticCurveTo: function(toPoint, controlPoint){
-                ctx.quadraticCurveTo(controlPoint.getX(),
-                controlPoint.getY(),toPoint.getX(), toPoint.getY());
+                return new util.Path(ctx.quadraticCurveTo, new Array(controlPoint.getX(),
+                controlPoint.getY(),toPoint.getX(), toPoint.getY()));
             },
             arcTo: function(toPoint, controlPoint1, controlPoint2){
-                ctx.arcTo(controlPoint1.getX(),
+                return new util.Path(ctx.arcTo, new Array(controlPoint1.getX(),
                 controlPoint1.getY(),controlPoint2.getX(), controlPoint2.getY(),
-                toPoint.getX(), toPoint.getY());
+                toPoint.getX(), toPoint.getY()));
             },
-            closePath: function(){ctx.closePath()},
+            closePath: function(){return new util.Path(ctx.closePath)},
             pathSet: function(args){
-                console.log(arguments); //TODO
                 ctx.beginPath();
                 var i;
                 for(i=0; i<arguments.length; i++){
-                    arguments[i].run(self);
+                    arguments[i].draw();
                 }    
             },
             fill: function(pathSet){
-                pathSet.run(self);
                 ctx.fill();
             },
             stroke: function(pathSet){
-                pathSet.run(self);
                 ctx.stroke();
             },
             fillRule: function(rule){}

@@ -238,8 +238,19 @@
     };
 
     //Paths
-    function path(){
-        return this;
+    function Path(funcToCall, inputPoints){
+        this.funcToCall = funcToCall;
+        this.inputPoints = inputPoints;
+    }
+    
+    Path.prototype.draw = function(){
+        if(inputPoints !== undefined){
+            funcToCall.apply(null, inputPoints);
+        }
+        else{
+            funcToCall();
+        }
+            
     }
     
     
@@ -403,6 +414,7 @@
         noise: noise,
         choice: choice,
         isNumber: isNumber
+        Path: Path
     };
 
 

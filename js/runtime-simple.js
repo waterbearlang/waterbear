@@ -221,9 +221,21 @@
                     });
                 });
             },
-            /* Returns the distance in meters. */
-            // TODO: Consider whether it should return a more nuanced type.
+            /* Returns the distance between two points in meters. */
+            // taken from old-waterbear, in turn taken from
+            // http://www.movable-type.co.uk/scripts/latlong.html
+            // It kind of assumes that Earth is a perfect sphere, which it's
+            // not.
             distanceBetween: function (a, b) {
+                var lat1 = a.coords.latitude;
+                var lon1 = a.coords.longitude;
+                var lat2 = b.coords.latitude;
+                var lon2 = b.coords.longitude;
+
+                var R = 6371000; // km
+                return Math.acos(Math.sin(lat1)*Math.sin(lat2) + 
+                                 Math.cos(lat1)*Math.cos(lat2) *
+                                 Math.cos(lon2-lon1)) * R;
             },
             /* Returns latitude in degrees. */
             // TODO: should this return a "degrees" object?

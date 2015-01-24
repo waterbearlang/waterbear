@@ -12,8 +12,8 @@
 /* Assertion passes if the numbers are equal... enough (within a tolerance).
  * Use with wishy-washy floating point numbers. */
 QUnit.assert.fuzzyEqual = function(actual, expected, epsilon, message ) {
-  var absoluteDifference = Math.abs(expected - actual);
-  QUnit.push(absoluteDifference <= epsilon, actual, expected, message);
+    var absoluteDifference = Math.abs(expected - actual);
+    QUnit.push(absoluteDifference <= epsilon, actual, expected, message);
 };
 
 /* TODO: control */
@@ -255,11 +255,43 @@ QUnit.test('get{X,Y,Width,Height}', function (assert) {
 /* TODO: motion */
 /* TODO: shapes */
 
-/* TODO: geolocation */
 QUnit.module('Geolocation');
 QUnit.test('currentLocation', function (assert) {
-    /* TODO: this test! */
-    assert.ok(false, 'Pull request merge blocker!');
+    var geolocation = runtime.geolocation,
+        lat = 53.526748,
+        lon = -113.527410,
+        alt = 645;
+
+    assert.expect(4);
+
+    /* First, stub the API... */
+    var stub = sinon.stub(navigator.geolocation, 'watchPosition')
+        .callsArgWithAsync(0, mockLocation({
+            latitude: lat,
+            longitude: lon,
+            altitude: alt
+        }));
+
+    /* Subscribe to the locationchanged event... */
+    var done = assert.async();
+    Event.on(window, 'locationchanged', null, function () {
+        var location = geolocation.currentLocation();
+        assert.strictEqual(location.coords.latitude, lat,
+                           'API returned expected latitude'); 
+        assert.strictEqual(location.coords.longitude, lon,
+                           'API returned expected longitude'); 
+        assert.strictEqual(location.coords.altitude, alt,
+                           'API returned expected altitude'); 
+        done();
+    });
+
+    /* Before we get the ball rolling, though, make sure currentLocation is
+     * initial null. */
+    assert.strictEqual(util.geolocation.currentLocation, null,
+                       'Current location starts null');
+
+    util.geolocation.startTrackingLocation();
+    stub.restore();
 });
 
 QUnit.test('distanceBetween', function (assert) {
@@ -315,7 +347,7 @@ QUnit.test('[getters]', function (assert) {
                         'Fetch speed in degrees');
 });
 
-/* Creates a prompt. */
+/* Creates a geolation object, as if created by the API itself. */
 function mockLocation(options) {
     if (!options) options = {};
 
@@ -335,7 +367,7 @@ function mockLocation(options) {
             // In m/s. Can be null.
             speed: options.speed || 0,
         },
-        timestamp: options.timestamp || ""+(new Date())
+        timestamp: options.timestamp || Date.now()
     };
 
     return location;

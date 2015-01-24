@@ -9,6 +9,13 @@
  * anything in those files in your tests).
  */
 
+/* Assertion passes if the numbers are equal... enough (within a tolerance).
+ * Use with wishy-washy floating point numbers. */
+QUnit.assert.fuzzyEquals = function(actual, expected, epsilon, message ) {
+  var absoluteDifference = Math.abs(expected - actual);
+  QUnit.push(absoluteDifference <= epsilon, actual, expected, message);
+};
+
 /* TODO: control */
 /* TODO: sprite */
 /* TODO: sound */
@@ -138,6 +145,8 @@ QUnit.test('toArray', function (assert) {
     assert.deepEqual(array, [2,3], 'Getting array from point');
 });
 
+
+
 QUnit.module('rect');
 QUnit.test('fromCoordinates', function (assert) {
     var rect = runtime.rect;
@@ -193,10 +202,10 @@ QUnit.test('fromArray', function (assert) {
 
 QUnit.test('getPosition', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromCoordinates(37, 42, 1, 1);
     var position = rect.getPosition(r1);
-    
+
     assert.ok(position instanceof util.Vector,
              'Position is returned as a Vector');
     assert.strictEqual(position.x, 37);
@@ -205,10 +214,10 @@ QUnit.test('getPosition', function (assert) {
 
 QUnit.test('getSize', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromCoordinates(0, 0, 536, 231);
     var size = rect.getSize(r1);
-    
+
     assert.ok(size instanceof util.Size,
              'Size is returned as a Size');
     assert.strictEqual(size.width, 536);
@@ -217,9 +226,9 @@ QUnit.test('getSize', function (assert) {
 
 QUnit.test('asArray', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromVectors(new util.Vector(0, 0), new util.Vector(1, 1));
-    
+
     assert.deepEqual(rect.asArray(r1), [0, 0, 1, 1],
              'Rect can be returned as an array');
 });
@@ -227,10 +236,10 @@ QUnit.test('asArray', function (assert) {
 // Four methods combined into one!
 QUnit.test('get{X,Y,Width,Height}', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromVectors(new util.Vector(37, 42),
                               new util.Vector(536, 231));
-    
+
     assert.strictEqual(rect.getX(r1), 37,
              'getX works');
     assert.strictEqual(rect.getY(r1), 42,
@@ -245,6 +254,83 @@ QUnit.test('get{X,Y,Width,Height}', function (assert) {
 /* TODO: sensing */
 /* TODO: motion */
 /* TODO: shapes */
+
 /* TODO: geolocation */
+QUnit.module('Geolocation');
+QUnit.test('currentLocation', function (assert) {
+    /* TODO: this test! */
+    assert.ok(false, 'Pull request merge blocker!');
+});
+
+QUnit.test('distanceBetween', function (assert) {
+    var geolocation = runtime.geolocation;
+
+    var pointA = mockLocation({latitude: "53.526748", longitude: "-113.527410"});
+    var pointB = mockLocation({latitude: "43.662108", longitude: "-79.380023"});
+
+    // Answer found using:
+    // http://www.daftlogic.com/projects-google-maps-distance-calculator.htm
+    var actual = 2710127.747;
+    var desiredAccuracy = 3.0; // 3 meter margin of error.
+
+    // FIXME: sanity test
+    assert.fuzzyEquals(1, 1, 0.1, 'actually equal');
+    assert.fuzzyEquals(1, 2, 3, 'somewhat equal');
+    assert.fuzzyEquals(Math.PI, Math.E, 1, 'somewhat equal constants');
+    assert.fuzzyEquals(1, 10, 3, 'definitely not equal');
+
+    var distance = geolocation.distanceBetween(pointA, pointB);
+    assert.fuzzyEquals(distance, actual, desiredAccuracy, 'Geolocation');
+});
+
+QUnit.test('[getters]', function (assert) {
+    var geolocation = runtime.geolocation;
+    var location = mockLocation({
+        latitude: '43.662108',
+        longitude: '-79.380023',
+        altitude: 76,
+        heading: 337.89,
+        speed: 1.0
+    });
+
+    // These must stay as strings for as long as possible.
+    assert.strictEquals(geolocation.latitude(location), '43.662108',
+                        'Fetch latitude as decimal string');
+    assert.strictEquals(geolocation.longitude(location), '-79.380023',
+                        'Fetch longitude as decimal string');
+    assert.fuzzyEquals(geolocation.altitude(location), 76, 1,
+                        'Fetch altitude as double');
+    assert.fuzzyEquals(geolocation.speed(location), 1.0, 5,
+                        'Fetch speed in m/s');
+    assert.fuzzyEquals(geolocation.heading(location), 338.0, 5,
+                        'Fetch speed in degrees');
+});
+
+/* Creates a prompt. */
+function mockLocation(options) {
+    if (!options) options = {};
+
+    var location = {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Coordinates
+        coords: {
+            latitude: options.latitude || "40.714224",
+            longitude: options.longitude || "-73.961452",
+            // In meters.
+            altitude: options.altitude || null,
+            // In meters.
+            accuracy: options.accuracy || 645,
+            // In meters.
+            altitudeAccuracy: options.altitudeAccuracy || 100,
+            // Specified in degrees. Can be NaN (when there is no speed) and null -_-.
+            heading: options.heading || NaN,
+            // In m/s. Can be null.
+            speed: options.speed || 0,
+        },
+        timestamp: options.timestamp || ""+(new Date())
+    };
+
+    return location;
+}
+
 /* TODO: sizes */
 /* TODO: text */

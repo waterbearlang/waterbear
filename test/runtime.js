@@ -264,17 +264,32 @@ QUnit.test('currentLocation', function (assert) {
 
 QUnit.test('distanceBetween', function (assert) {
     var geolocation = runtime.geolocation;
+    var distance;
 
     var pointA = mockLocation({latitude: "53.526748", longitude: "-113.527410"});
     var pointB = mockLocation({latitude: "43.662108", longitude: "-79.380023"});
+    var pointC = mockLocation({latitude: "53.523256", longitude: "-113.512348"});
+    var pointD = mockLocation({latitude: "21.882504", longitude: "33.710796"});
 
-    // Answer found using:
-    // http://www.daftlogic.com/projects-google-maps-distance-calculator.htm
     var actual = 2710127.747;
-    var desiredAccuracy = 3.0; // 3 meter margin of error.
 
-    var distance = geolocation.distanceBetween(pointA, pointB);
-    assert.fuzzyEqual(distance, actual, desiredAccuracy, 'Geolocation');
+    // Answers found using:
+    // http://www.daftlogic.com/projects-google-maps-distance-calculator.htm
+    distance = geolocation.distanceBetween(pointA, pointA);
+    assert.fuzzyEqual(distance, 0, 10, // ±10 m
+                      'Location between the same point');
+    distance = geolocation.distanceBetween(pointA, pointB);
+    assert.fuzzyEqual(distance, actual, 1000, // ±1 km
+                      'Location between points across Canada');
+    distance = geolocation.distanceBetween(pointA, pointB);
+    assert.fuzzyEqual(distance, actual, desiredAccuracy,
+                      'Location between points across Canada');
+    distance = geolocation.distanceBetween(pointA, pointC);
+    assert.fuzzyEqual(distance, 1058.173, 100, // ±100 m
+                      'Location between points around 1 km');
+    distance = geolocation.distanceBetween(pointA, pointD);
+    assert.fuzzyEqual(distance, 11070578.184, 100000, // ±100 km
+                      'Location between points across the world');
 });
 
 QUnit.test('[getters]', function (assert) {

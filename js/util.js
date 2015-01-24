@@ -356,6 +356,53 @@
       return list[Math.floor(Math.random() * list.length)];
     }
 
+
+
+    /*
+     * Geolocation mini-module.
+     */
+    var geolocationModule  = (function () {
+        var startedTracking = false,
+            currentLocation = null,
+            geolocationModule;
+
+        /* Handle if geolocation is not supported. */
+        if (!navigator.geolocation) {
+            return {
+                startTrackingLocation: function () {
+                    // TODO: I dunno lol. An error or warning of some sort?
+                    app.warn('This app tracks your location, but your browser ' +
+                             'does not support geolocation.');
+                    // There are scenarios where geolocation can be optionally
+                    // used in a program.
+                },
+                currentLocation: null
+            };
+        }
+
+        geolocationModule = {
+            startTrackingLocation: function () {
+                if (startedTracking)
+                    return;
+                startedTracking = true;
+
+                navigator.geolocation.watchPosition(function (location) {
+                    currentLocation = location;
+                });
+            }
+        };
+
+        /* Define a read-only getter for the current location. */
+        Object.defineProperty(geolocationModule, 'currentLocation', {
+            get: function () {
+                return currentLocation;
+            }
+        });
+
+        return geolocationModule;
+    })();
+
+
     // exports
     window.util = {
         Size: Size,
@@ -375,7 +422,8 @@
         randInt: randInt,
         noise: noise,
         choice: choice,
-        isNumber: isNumber
+        isNumber: isNumber,
+        geolocation: geolocationModule
     };
 
 

@@ -11,7 +11,7 @@
 
 /* Assertion passes if the numbers are equal... enough (within a tolerance).
  * Use with wishy-washy floating point numbers. */
-QUnit.assert.fuzzyEquals = function(actual, expected, epsilon, message ) {
+QUnit.assert.fuzzyEqual = function(actual, expected, epsilon, message ) {
   var absoluteDifference = Math.abs(expected - actual);
   QUnit.push(absoluteDifference <= epsilon, actual, expected, message);
 };
@@ -273,14 +273,8 @@ QUnit.test('distanceBetween', function (assert) {
     var actual = 2710127.747;
     var desiredAccuracy = 3.0; // 3 meter margin of error.
 
-    // FIXME: sanity test
-    assert.fuzzyEquals(1, 1, 0.1, 'actually equal');
-    assert.fuzzyEquals(1, 2, 3, 'somewhat equal');
-    assert.fuzzyEquals(Math.PI, Math.E, 1, 'somewhat equal constants');
-    assert.fuzzyEquals(1, 10, 3, 'definitely not equal');
-
     var distance = geolocation.distanceBetween(pointA, pointB);
-    assert.fuzzyEquals(distance, actual, desiredAccuracy, 'Geolocation');
+    assert.fuzzyEqual(distance, actual, desiredAccuracy, 'Geolocation');
 });
 
 QUnit.test('[getters]', function (assert) {
@@ -294,15 +288,15 @@ QUnit.test('[getters]', function (assert) {
     });
 
     // These must stay as strings for as long as possible.
-    assert.strictEquals(geolocation.latitude(location), '43.662108',
+    assert.strictEqual(geolocation.latitude(location), '43.662108',
                         'Fetch latitude as decimal string');
-    assert.strictEquals(geolocation.longitude(location), '-79.380023',
+    assert.strictEqual(geolocation.longitude(location), '-79.380023',
                         'Fetch longitude as decimal string');
-    assert.fuzzyEquals(geolocation.altitude(location), 76, 1,
+    assert.fuzzyEqual(geolocation.altitude(location), 76, 1,
                         'Fetch altitude as double');
-    assert.fuzzyEquals(geolocation.speed(location), 1.0, 5,
+    assert.fuzzyEqual(geolocation.speed(location), 1.0, 5,
                         'Fetch speed in m/s');
-    assert.fuzzyEquals(geolocation.heading(location), 338.0, 5,
+    assert.fuzzyEqual(geolocation.heading(location), 338.0, 5,
                         'Fetch speed in degrees');
 });
 

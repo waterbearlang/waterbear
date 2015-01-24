@@ -199,5 +199,58 @@
             }
         },
 
+        /*
+         * The underlying JavaScript object is the same object that is passed
+         * to the getCurrentLocation callback.
+         */
+        geolocation: {
+            /* Synchronous "get current location" */
+            currentLocation: function () {
+                return util.geolocation.currentLocation;
+            },
+
+            /* Asynchronous update event. */
+            whenLocationUpdated: function() {
+                // TODO
+            },
+
+            /* Returns the distance in meters. */
+            // TODO: Consider whether it should return a more nuanced type.
+            distanceBetween: function (a, b) {
+            },
+
+            /* Returns latitude in degrees. */
+            // TODO: should this return a "degrees" object?
+            latitude: function (location) {
+                return location.coords.latitude;
+            },
+
+            /* Returns longitude in degrees. */
+            // TODO: should this return a "degrees" object?
+            longitude: function (location) {
+                return location.coords.longitude;
+            },
+
+            /* Returns altitude as a unit? */
+            altitude: function (location) {
+                return location.coords.altitude;
+            },
+
+            /* Returns degrees from north. */
+            heading: function (location) {
+                // TODO: What do we do when this is NaN or NULL?
+                return location.coords.heading;
+            },
+
+            /* Returns estimated speed. */
+            speed: function (location) {
+                // TODO: What do we do when this is NaN or NULL?
+                return location.coords.speed;
+            },
+        },
+
+
     });
+
+
 }(window));

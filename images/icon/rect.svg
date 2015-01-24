@@ -1,0 +1,9 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30">
+        <g id='rects'>
+            <path d="M18.981,15.979h-7.327V9.02c0-0.276-0.224-0.5-0.5-0.5H4.193V1.019c0-0.553-0.448-1-1-1s-1,0.447-1,1v14.961H1.019
+                c-0.552,0-1,0.447-1,1s0.448,1,1,1h1.175v1.002c0,0.553,0.448,1,1,1s1-0.447,1-1v-1.002h14.788c0.552,0,1-0.447,1-1
+                S19.534,15.979,18.981,15.979z M4.193,9.52h6.461v6.46H4.193V9.52z"/>
+            <circle cx="7.174" cy="13" r="1"/>
+        </g>
+</svg>

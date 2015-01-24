@@ -1,0 +1,407 @@
+<html>
+<head>
+	<title>Waterbear: Welcome</title>
+	<link href='stylesheets/fonts/stylesheet.css' rel='stylesheet'>
+	<link href='stylesheets/fonts/font-awesome/css/font-awesome.min.css' rel='stylesheet'>
+	<script src="lib/prefixfree.min.js"></script>
+	<meta charset="utf-8">
+    <meta name="description" content="Waterbear is a toolkit for creating drag-and-drop programming languages.">
+    <link rel="shortcut icon" href="/favicon.ico?v=2" />
+	<style>
+		html, body{
+			margin:0px;
+			padding:0px;
+			background-color:#f9f9f9;
+			width:100%;
+			font-family: "Open Sans";
+		}
+		*::selection{
+			background:#0af;
+			color:#fff;
+		}
+		section{
+			min-height: 100px;
+		}
+		.s1{
+			width:100%;
+			background:#333;
+			font-family: "Titillium Web", sans-serif;
+			color:#fff;
+			padding:10px 50px;
+			font-size: 25px;
+			box-sizing:border-box;
+			position:fixed;
+			z-index: 123456789;
+			box-shadow:0px 0px 20px #000;
+		}
+		.s2{
+			display:flex;
+			flex-align:center;
+			align-items:center;
+			height:100%;
+		}
+		.s2 > div{
+			display:flex;
+			width:100%;
+		}
+		.s2 .s2-2.steampunk{
+			flex:1000;
+	        min-width:200px;
+	        max-width:300px;
+		}
+
+        .steampunk img{
+            width: 100%;
+        }
+
+		.s2 .s2-1{
+			flex:1 0 0;
+			max-width: 400px;
+			min-width: 10px;
+		}
+		.s2 .s2-3{
+			flex:1;
+			max-width: 325px;
+			min-width: 325px;
+			padding-left: 50px;
+			display:flex;
+			flex-align:center;
+			align-items:center;
+		}
+		.s2 .s2-3 h1{
+			font-family: "Titillium Web", sans-serif;
+			color:#09f;
+			font-size: 50px;
+			margin:0px;
+		}
+		.s2 .s2-3 h2{
+			font-family: "Merriweather", sans-serif;
+			font-style: italic;
+			font-size: 25px;
+			margin:0px;
+		}
+		.s2 .s2-3 p{color:#999}
+		.button{
+			background:transparent;
+			outline:none;
+			border:2px solid #222;
+            text-decoration: none;
+			font-size: 20px;
+			font-family: "Titillium Web", sans-serif;
+			padding: 5px 20px;
+			transition:color .3s ease, border-color .3s ease;
+			cursor:pointer;
+			position: relative;
+		}
+		.button:before{
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 0;
+			top: -2px;
+			left:100%;
+			border-top: 22.5px solid transparent;
+			border-bottom: 22.5px solid transparent;
+			border-left: 0px solid #000;
+			transition:border .3s ease;
+		}
+		.button:after{
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 0;
+			top: 0;
+			left:100%;
+			margin-left: 0px;
+			border-top: 20.5px solid transparent;
+			border-bottom: 20.5px solid transparent;
+			border-left: 0px solid #999;
+			transition:border .3s ease;
+		}
+		.button:hover::before{
+			border-left-width:22.5px;
+			border-left-color:#09f;
+		}
+		.button:hover::after{
+			border-left-width:20.5px;
+			border-left-color:#f9f9f9;
+		}
+		.button:hover{
+			color:#09f;
+			border-color:#09f;
+			border-right:none;
+			transition:color .3s ease, border-color .3s ease;
+		}
+		.s2 .s2-4{
+			flex:1 0 0;
+			min-width: 100px;
+			display:flex;
+			flex-align:center;
+			align-items:center;
+		}
+
+		.s2 .s2-4 ul{
+			padding:0px;
+			margin-left:auto;
+			display:inline-block;
+		}
+		.s2 .s2-4 ul li{
+			list-style: none;
+			width:15px;
+			height:15px;
+			background:#222;
+			margin:15px 30px;
+			border-radius: 50%;
+			cursor:pointer;
+			box-shadow:inset 0px 0px 0px 8px #222;
+			transition:box-shadow .3s ease, background .5s ease;
+		}
+		.s2 .s2-4 ul li:hover{
+			box-shadow:inset 0px 0px 0px 8px #09f;
+			background:#09f;
+		}
+		.s2 .s2-4 ul li.checked{
+			background:none;
+			box-shadow:inset 0px 0px 0px 2px #222;
+		}
+
+		.s3{
+			background:#e9e9e9;
+			display:flex;
+		}
+		.s3 > div{
+			flex:1;
+			min-width: 400px;
+			margin:50px;
+			display:flex;
+		}
+		.s3 > div > div{
+			flex:1;
+			text-align: left;
+			color:#666;
+			padding:0px 20px;
+		}
+		.circle{
+			width:150px;
+			height:150px;
+			background-color:#fff;
+			border-radius: 50%;
+			margin:auto;
+			border:1px solid #aaa;
+            background-repeat: no-repeat;
+		}
+        /* Individual circles */
+        .community{
+            background-image: url(images/mascot/mascot-community.png);
+            background-size: 150px;
+            background-position: 0 30px;
+        }
+        .scratch{
+            background-image: url(images/mascot/mascot-dancing.png);
+            background-size: 150px;
+            background-position: 0 30px;
+        }
+        .tardigrade{
+            background-image: url(images/mascot/mascot-space.png);
+            background-size: 200px;
+            background-color: #000;
+            background-position: -25px 0;
+        }
+        .github{
+            background-image: url(images/mascot/mascot-github.png);
+            background-size: 100px;
+            background-position: 20px 10px;
+        }
+		.s3 > div > div h2{
+			font-family: "Titillium Web", sans-serif;
+			color:#09f;
+			text-align: center;
+		}
+		.s4{
+			background:#09f;
+		}
+		.s4{
+			display:flex;
+			padding:25px;
+		}
+		.s4 .s4-1{
+			flex:1;
+			padding:25px;
+		}
+		.s4 .s4-1 blockquote{
+			font-size:18px;
+
+			color:#fff;
+		}
+		.s4 .s4-1 blockquote i{
+			font-size: 15px;
+			font-weight: 100;
+			color:#000;
+		}
+		.s4 .s4-2{
+			flex:1;
+			padding:25px;
+			display:flex;
+			flex-align:center;
+			align-items:center;
+		}
+		.s5{
+			background:#fff;
+			box-shadow:0px 0px 20px rgba(0,0,0,0.4);
+			display:flex;
+			padding:25px;
+		}
+		.s5-1, .s5-2, .s5-3, .s5-4{
+			flex:1;
+			padding:25px;
+		}
+		.s5-1 h2, .s5-2 h2, .s5-3 h2, .s5-4 h2{
+			font-family: "Titillium Web", sans-serif;
+			font-size:20px;
+			margin:0px;
+			margin-bottom:5px;
+		}
+		.s5-1 a, .s5-2 a, .s5-3 a{
+			text-decoration: none;
+			color:#09f;
+			font-style: italic;
+			font-family: "Merriweather", sans-serif;
+			font-weight: bold;
+		}
+		.s5-1 a:hover, .s5-2 a:hover, .s5-3 a:hover{
+			text-decoration: underline;
+		}
+		.s5-2 label{
+			color:#999;
+		}
+		.btn{
+			display:block;
+			margin-top:10px;
+			margin-bottom: 10px;
+			background-color:#09f;
+			color:#fff;
+			padding:5px 10px;
+			font-size:18px;
+			border-radius: 3px;
+			cursor:pointer;
+			transition:all .2s;
+			border:1px solid transparent;
+		}
+		.btn:hover{
+			background-color:transparent;
+			color:#09f;
+			border:1px solid #09f;
+		}
+
+		.btn:before{
+			margin-right:10px;
+			font-size:22px;
+		}
+		.btn.fa-envelope:before{
+			font-size:18px;
+		}
+	</style>
+</head>
+<body>
+	<header class="s1"><img class="logo" src="images/logo/waterbear_icon_logo.svg" />&nbsp;waterbear</header>
+	<section class="s2">
+		<div>
+			<div class="s2-1"></div>
+			<div class="s2-2 steampunk">
+                <img src="images/png/steampunk.png" />
+            </div>
+			<div class="s2-3">
+				<div>
+					<h2>The</h2>
+					<h1>WATERBEAR</h1>
+					<h2>welcomes you!</h2>
+					<p>Waterbear is a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming.</p>
+					<a class="button" href="playground.html">Try it out</a>
+				</div>
+			</div>
+			<!--div class="s2-4">
+				<ul>
+					<li onclick="s2_4li_click(this)" class="checked"></li>
+					<li onclick="s2_4li_click(this)"></li>
+					<li onclick="s2_4li_click(this)"></li>
+					<li onclick="s2_4li_click(this)"></li>
+				</ul>
+			</div-->
+		</div>
+	</section>
+	<section class="s3">
+		<div>
+			<div class="s3-1">
+				<div class="circle community"></div>
+				<h2>Community</h2>
+				<p>Join our community of people using Waterbear to solve problems. Whether you are using it to build cool projects, teaching others to code, or contributing to expand Waterbear's capabilities, we would love to hear about how you use Waterbear. <a href="mailto:discuss@lists.waterbearlang.com.">Email us</a> and join the <a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">mailing list</a>.</p>
+			</div>
+			<div class="s3-2">
+				<div class="circle scratch"></div>
+				<h2>Same Step</h2>
+				<p>Our blocks are heavily inspired by MIT's <a href="http://scratch.mit.edu">Scratch</a> language, but the goal is not to slavishly duplicate Scratch, or to create a programming language, but to create a visual suntax tool that can be used with a variety of languages and projects, and to make it as widely available as possible. Waterbear runs in a variety of web browsers, including Mobile Safari on the iPad</p>
+			</div>
+			<div class="s3-3">
+				<div class="circle tardigrade"></div>
+				<h2>The Reason Why</h2>
+				<p>Waterbears, also known as tardigrades, or moss piglets, are probably the most resilient creatures on Earth, able to survive extremes of heat and cold, pressure (high pressure and the vacuum of space), dehydration, radiation, environmental toxins. Since we want to be able to create code that is robust, they are an appropriate mascot. Also, they are cute.<br><i>[mostly via <a href="https://en.wikipedia.org/wiki/Tardigrade">Wikipedia</a>]</i></p>
+			</div>
+			<div class="s3-4">
+				<div class="circle github"></div>
+				<h2>Fork us</h2>
+				<p>Our Waterbear is beta software and under active development as we work to improve the interface, organize the blocks, and build curriculum around it. <a href="https://github.com/waterbearlang/waterbear">Fork us on Github</a> and help us to make Waterbear even better!</p>
+			</div>
+		</div>
+	</section>
+	<section class="s4">
+		<div class="s4-1"><p><b>Waterbear</b> is also a toolkit for making programming more accessible and fun. Having a visual language means you don't have to focus on learning a syntax to start programming. It's good for kids, artists, and anyone who would like to make thir computer do something new without having to become a "programmer" (although it could lead to that).</p><blockquote>"It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail and learning to be self critical"<br><br><i>— Alan Perlis, first recipient of the Turing Award</i></blockquote><p>Waterbear's system of draggable, snappable blocks are build using clean HTML5, CSS3, and Javascript. The Javascript playground for Waterbear allows you to create Waterbear scripts, see the Javascript it will generate, and run it right in the browser.</p></div>
+		<div class="s4-2"><iframe width="100%" height="300px" src="playground.html?view=result&amp;example=dance"></iframe></div>
+	</section>
+	<section class="s5">
+		<div class="s5-1">
+			<h2>Wiki</h2>
+			Our featured pages from the Wiki.<br><br>
+            <a href="https://github.com/waterbearlang/waterbear/wiki/Hello-Waterbear">Introduction: Hello Waterbear</a><br><br>
+			<a href="https://github.com/waterbearlang/waterbear/wiki/Contributors-and-Acknowledgements">Contributors</a><br><br>
+			<a href="https://github.com/waterbearlang/waterbear/wiki/How-to-Contribute">How to Contribute</a>
+		</div>
+		<div class="s5-2">
+			<h2>Friends</h2>
+			Other projects based on Waterbear.<br><br>
+			<a href="#">ProcessingJS</a><br>
+			<label>write Processing with blocks</label><br><br>
+			<a href="#">NodeJS</a><br>
+			<label>use blocks for server-side development</label>
+		</div>
+		<div class="s5-3">
+			<h2>Help us</h2>
+			Waterbear is better with your help.<br><br>
+			<a href="http://lists.waterbearlang.com/listinfo.cgi/discuss-waterbearlang.com">Discuss Waterbear on the mailing list</a><br><br>
+			<a href="https://github.com/waterbearlang/waterbear/issues">File an issue or feature request</a>
+		</div>
+		<div class="s5-4">
+			<h2>Keep in touch</h2>
+			<a class="btn fa fa-github" href="https://github.com/waterbearlang/waterbear/">Fork us</a>
+			<a class="btn fa fa-twitter" href="https://twitter.com/waterbearlang">Follow us</a>
+			<a class="btn fa fa-envelope" href="mailto:discuss@lists.waterbearlang.com.">Mail us</a>
+		</div>
+	</section>
+
+	<script>
+		function s2_4li_click(e){
+			document.querySelector('.checked').classList.remove('checked');
+			e.classList.add('checked');
+		}
+	</script>
+    <script>
+        <!-- Google Analytics -->
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-58671174-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>

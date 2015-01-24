@@ -1,0 +1,154 @@
+/* Custom Elements that are not necessarily Waterbear specific */
+
+wb-search, wb-accordion{
+    display: block;
+}
+
+
+/* HBOX, VBOX layout widgets */
+
+wb-hbox, wb-vbox{
+    display: flex;
+    flex: 1 1;
+    position: relative;
+}
+wb-hbox{
+    flex-direction: row;
+    height: 100%;
+}
+wb-vbox{
+    flex-direction: column;
+}
+
+wb-hbox > *{
+    flex: 1 1 auto;
+}
+
+wb-vbox > *{
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+
+wb-splitter{
+    display: block;
+    z-index: 100;
+    flex: 0 0 8px;
+}
+
+wb-hbox > wb-splitter{
+    background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
+    background-image-size: 8px 8px;
+    cursor: ew-resize;
+}
+
+wb-vbox > wb-splitter{
+    background-image: linear-gradient(0deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
+    background-image-size: 8px 8px;
+    cursor: ns-resize;
+}
+
+/* Workspace */
+
+wb-workspace{
+    display: flex;
+    flex-direction: column;
+    flex: 2 1;
+}
+
+wb-workspace > header{
+    flex: 0 0 34px;
+}
+
+wb-workspace > output{
+    flex: 0 0 34px;
+}
+
+wb-workspace > wb-locals{
+    flex: 1 1;
+}
+
+wb-workspace > wb-contains{
+    flex: 3 1;
+    overflow-y: auto;
+}
+
+/* Playground */
+
+wb-playground{
+    display: flex;
+    flex-direction: column;
+    flex: 3 1;
+}
+
+wb-playground > header{
+    flex: 0 0 34px;
+}
+
+wb-playground > canvas{
+    flex: 1 1;
+}
+
+/* Search */
+
+wb-search{
+    height: 34px;
+}
+
+/* ACCORDION */
+
+wb-accordion{
+    overflow-x: visible;
+    overflow-y: visible;
+    padding-left: 6px;
+}
+
+wb-accordion[open=true]{
+    padding-bottom: 6px;
+}
+
+wb-accordion > :not(header){
+    display: none;
+}
+
+wb-accordion[open=true] > :not(header){
+    display: inline-block;
+}
+
+wb-accordion > header {
+    display: block;
+    position: relative;
+    margin-left: -6px;
+    padding-left: 45px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 16px;
+    color: #777;
+    border: 1px solid #CCC;
+}
+
+wb-accordion[open=true] > header{
+    margin-bottom: 6px;
+}
+
+.cat-icon{
+    width: 30px;
+    height: 30px;
+    display: inline;
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    fill: #666;
+}
+
+wb-accordion > header:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 100%;
+    background-color: #CCC; /* over-ride colours in app.css */
+}
+
+

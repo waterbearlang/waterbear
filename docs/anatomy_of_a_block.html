@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Anatomy of a block</title>
+        <style>
+            div{
+                margin: 2em;
+                border: 2px solid #FF8800;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;
+                border-radius: 10px;
+            }
+            h1,h2,h3{
+                padding: 0px;
+                margin: 5px 10px;
+            }
+            p{
+                margin: 5px 20px;
+            }
+        </style>
+        
+    </head>
+    <body>
+        <h1>Anatomy of a block</h1>
+        <section>
+            <h2>Event Handler or Step Block</h2>
+            <p>An event handler is the starting point for a sequential script, a step is one piece of the sequence. The primary difference is that triggers lack flaps to snap to, as they are always the first block in a sequence. Context blocks may contain other blocks: step blocks nested in either .next or .contained, and value blocks nested in .socket. When value blocks are nested, they replace the input element of the socket.</p>
+            <div class="wrapper">
+                <h3>&lt;div class="block eventhandler|step [group] step context"&gt;</h3>
+                    <div class="label">
+                        <div class="socket">
+                            <span class="name">[name text]</span>
+                        <h3>&lt;p&gt;</h3>
+                            <p><em>[A block may have zero or more input sockets]</em></p>
+                            <div class="label">
+                                <h3>&lt;label&gt;</h3>
+                                    <p><em>[optional text]</em></p>
+                                    <div class="socket">
+                                        <h3>&lt;div class="socket [type]"&gt;</h3>
+                                        <div class="input">
+                                            <h3>&lt;input type="[type]" value="[value]" /&gt;</h3>
+                                        </div>
+                                        <h3>&lt;/div&gt;</h3>
+                                    </div>
+                                    <p><em>[optional text]</em></p>
+                                <h3>&lt;/label&gt;</h3>
+                            </div>
+                        <h3>&lt;/p&gt;</h3>
+                    </div>
+                    <div class="flap|trigger">
+                        <h3>&lt;b class="flap|trigger"&gt;<em>This element is to hang styling on (for triggers) and for drag-n-drop snapping to slots (for other steps).</em>&lt;/b&gt;</h3>
+                    </div>
+                    <div class="contained">
+                        <h3>&lt;div class="contained"&gt;<em>Any step may have zero or more containers for subscripts, generally used for flow control</em></h3>
+                        <div class="slot">
+                            <h3>&lt;i class="slot"&gt;<em>This element is for snapping to on drag</em>&lt;/i&gt;</h3>
+                        </div>
+                        <h3>&lt;/div&gt;</h3>
+                    </div>
+                    <h3>&lt;/div&gt;</h3>
+                </div>
+                <div class="next">
+                    <h3>&lt;div class="next"&gt;</h3>
+                    <div class="slot">
+                        <h3>&lt;i class="slot"&gt;<em>This element is for snapping to on drag</em>&lt;/i&gt;</h3>
+                    </div>
+                    <h3><em>Next snapped element will go here</em></h3>
+                    <h3>&lt;/div&gt;</h3>
+                </div>
+                <h3>&lt;/div&gt;</h3>
+            </div>
+        </section>
+        <section>
+            <h2>Value Block</h2>
+            <p>Value blocks return values, are typed, and can be nested.</p>
+            <div class="wrapper">
+                <h3>&lt;div class="wrapper value [type] [group]"&gt;</h3>
+                <div class="block [type]">
+                    <h3>&lt;div class="block"&gt;</h3>
+                    <div class="labelblock">
+                        <h3>&lt;p&gt;</h3>
+                            <p><em>[A block may have zero or more input sockets]</em></p>
+                            <div class="label">
+                                <h3>&lt;label&gt;</h3>
+                                    <p><em>[optional text]</em></p>
+                                    <div class="socket">
+                                        <h3>&lt;div class="socket [type]"&gt;</h3>
+                                        <div class="input">
+                                            <h3>&lt;input type="[type]" value="[value]" /&gt;</h3>
+                                        </div>
+                                        <h3>&lt;/div&gt;</h3>
+                                    </div>
+                                    <p><em>[optional text]</em></p>
+                                <h3>&lt;/label&gt;</h3>
+                            </div>
+                        <h3>&lt;/p&gt;</h3>
+                    </div>
+                    <h3>&lt;/div&gt;</h3>
+                </div>
+                <h3>&lt;/div&gt;</h3>
+            </div>
+        </section>
+    </body>
+</html>

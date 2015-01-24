@@ -1,0 +1,7 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30">
+        <g id='canvas'>
+            <path d="M0,0v20h20V0H0z M17.496,17.496H2.504V2.504h14.991V17.496z"/>
+            <path d="M3.917,3.917v12.167h12.167V3.917H3.917z M15.162,15.162H4.838V4.838h10.325V15.162z"/>
+        </g>
+</svg>

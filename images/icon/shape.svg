@@ -1,0 +1,8 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30">
+        <g id='shapes'>
+            <circle cx="24.467" cy="13.036" r="5.167"/>
+            <path d="M24.561,6.349V1.797H8.728V13.13h9.052C17.78,9.385,20.816,6.349,24.561,6.349z"/>
+            <polygon points="7.394,14.38 7.394,7.834 6.311,5.958 0.366,16.255 12.256,16.255 11.174,14.38    "/>
+        </g>
+</svg>

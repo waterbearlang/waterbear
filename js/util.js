@@ -360,10 +360,20 @@
 
     /*
      * Geolocation mini-module.
+     *
+     * Call startTrackingLocation(). The currentLocation property will be
+     * updated.
+     *
+     * Events:
+     *
+     *  - locationchanged: bound on window. Register to this get location
+     *                     updates immediately without polling
+     *                     currentLocation.
      */
     var geolocationModule  = (function () {
         var startedTracking = false,
             currentLocation = null,
+            watchID = null,
             geolocationModule;
 
         /* Handle if geolocation is not supported. */
@@ -386,9 +396,12 @@
                     return;
                 startedTracking = true;
 
-                navigator.geolocation.watchPosition(function (location) {
-                    currentLocation = location;
+                watchID = navigator.geolocation.watchPosition(
+                    onLocationChange, onLocationError, {
                 });
+
+                /* TODO: need to call clearWatch() with the handle when there
+                 * are no more geolocation blocks in the script. */
             }
         };
 
@@ -398,6 +411,16 @@
                 return currentLocation;
             }
         });
+
+        function onLocationChange(location) {
+            currentLocation = location;
+            Event.trigger(window, 'locationchanged', location);
+        }
+
+        function onLocationError(positionError) {
+            /* TODO: probably something better than this... */
+            console.warn('Unable to fetch location.');
+        }
 
         return geolocationModule;
     })();

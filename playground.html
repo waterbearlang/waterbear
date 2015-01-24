@@ -711,6 +711,37 @@
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
                     Geolocation
                 </header>
+
+                <wb-expression type="geolocation" script="geolocation.currentLocation">
+                    my current location
+                </wb-expression>
+
+                <wb-context script="geolocation.whenLocationUpdated">
+                    <wb-row>
+                        <wb-value>when my location changes</wb-value>
+                        <wb-local>
+                            <wb-expression type="geolocation" script="geolocation.currentLocation">
+                                <wb-value value="location">my current location</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-context>
+
+                <wb-expression type="number" script="geolocation.latitude">
+                    <wb-value type="geolocation" allow="expression">latitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.longitude">
+                    <wb-value type="geolocation" allow="expression">longitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.altitude">
+                    <wb-value type="geolocation" allow="expression">altitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.heading">
+                    <wb-value type="geolocation" allow="expression">heading of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.speed">
+                    <wb-value type="geolocation" allow="expression">speed of</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="size">
                 <header>

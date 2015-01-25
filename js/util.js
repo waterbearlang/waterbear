@@ -376,25 +376,21 @@
             watchID = null,
             geolocationModule;
 
-        /* Handle if geolocation is not supported. */
-        if (!navigator.geolocation) {
-            return {
-                startTrackingLocation: function () {
-                    // TODO: I dunno lol. An error or warning of some sort?
-                    app.warn('This app tracks your location, but your browser ' +
-                             'does not support geolocation.');
-                    // There are scenarios where geolocation can be optionally
-                    // used in a program.
-                },
-                currentLocation: null
-            };
-        }
-
         geolocationModule = {
             startTrackingLocation: function () {
                 if (startedTracking)
                     return;
                 startedTracking = true;
+
+                /* Handle if geolocation is not supported. */
+                if (!navigator.geolocation) {
+                    // TODO: I dunno lol. An error or warning of some sort?
+                    app.warn('This app tracks your location, but your browser ' +
+                             'does not support geolocation.');
+                    // There are scenarios where geolocation can be optionally
+                    // used in a program.
+                    return;
+                }
 
                 watchID = navigator.geolocation.watchPosition(
                     onLocationChange, onLocationError, {
@@ -413,6 +409,7 @@
         });
 
         function onLocationChange(location) {
+            console.log('look imma changin');
             currentLocation = location;
             Event.trigger(window, 'locationchanged', location);
         }

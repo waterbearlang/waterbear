@@ -263,10 +263,23 @@ QUnit.test('currentLocation', function (assert) {
         alt = 645;
 
     assert.expect(4);
-
+    
     /* First, stub the API... */
-    var stub = sinon.stub(navigator.geolocation, 'watchPosition')
-        .callsArgWithAsync(0, mockLocation({
+    var stub;
+    
+    if (navigator.geolocation) {
+        /* On user agents with geolocation. */ 
+        stub = sinon.stub(navigator.geolocation, 'watchPosition');
+    } else {
+        /* Create the API if it does not exist (like on PhantomJS). */
+        stub = sinon.stub();
+        navigator.geolocation = {
+            watchPosition: stub,
+            clearWatch: function () {}
+        };
+    }
+
+    stub.callsArgWithAsync(0, mockLocation({
             latitude: lat,
             longitude: lon,
             altitude: alt
@@ -275,6 +288,7 @@ QUnit.test('currentLocation', function (assert) {
     /* Subscribe to the locationchanged event... */
     var done = assert.async();
     Event.on(window, 'locationchanged', null, function () {
+        console.log('hey look imma do stuff');
         var location = geolocation.currentLocation();
         assert.strictEqual(location.coords.latitude, lat,
                            'API returned expected latitude'); 
@@ -291,7 +305,9 @@ QUnit.test('currentLocation', function (assert) {
                        'Current location starts null');
 
     util.geolocation.startTrackingLocation();
-    stub.restore();
+    if (stub.restore) {
+        stub.restore();
+    }
 });
 
 QUnit.test('distanceBetween', function (assert) {

@@ -298,10 +298,10 @@ QUnit.test('distanceBetween', function (assert) {
     var geolocation = runtime.geolocation;
     var distance;
 
-    var pointA = mockLocation({latitude: "53.526748", longitude: "-113.527410"});
-    var pointB = mockLocation({latitude: "43.662108", longitude: "-79.380023"});
-    var pointC = mockLocation({latitude: "53.523256", longitude: "-113.512348"});
-    var pointD = mockLocation({latitude: "21.882504", longitude: "33.710796"});
+    var pointA = mockLocation({latitude: 53.526748, longitude: -113.527410});
+    var pointB = mockLocation({latitude: 43.662108, longitude: -79.380023});
+    var pointC = mockLocation({latitude: 53.523256, longitude: -113.512348});
+    var pointD = mockLocation({latitude: 21.882504, longitude: 33.710796});
 
     var actual = 2710127.747;
 
@@ -309,35 +309,31 @@ QUnit.test('distanceBetween', function (assert) {
     // http://www.daftlogic.com/projects-google-maps-distance-calculator.htm
     distance = geolocation.distanceBetween(pointA, pointA);
     assert.fuzzyEqual(distance, 0, 10, // ±10 m
-                      'Location between the same point');
+                      'Distance between the same point');
     distance = geolocation.distanceBetween(pointA, pointB);
-    assert.fuzzyEqual(distance, actual, 1000, // ±1 km
-                      'Location between points across Canada');
-    distance = geolocation.distanceBetween(pointA, pointB);
-    assert.fuzzyEqual(distance, actual, desiredAccuracy,
-                      'Location between points across Canada');
+    assert.fuzzyEqual(distance, actual, 4000, // ±4 km
+                      'Distance between points across Canada');
     distance = geolocation.distanceBetween(pointA, pointC);
-    assert.fuzzyEqual(distance, 1058.173, 100, // ±100 m
-                      'Location between points around 1 km');
+    assert.fuzzyEqual(distance, 1058.173, 20, // ±20 m
+                      'Distance between points around 1 km');
     distance = geolocation.distanceBetween(pointA, pointD);
-    assert.fuzzyEqual(distance, 11070578.184, 100000, // ±100 km
-                      'Location between points across the world');
+    assert.fuzzyEqual(distance, 11070578.184, 25000, // ±25 km
+                      'Distance between points across the world');
 });
 
 QUnit.test('[getters]', function (assert) {
     var geolocation = runtime.geolocation;
     var location = mockLocation({
-        latitude: '43.662108',
-        longitude: '-79.380023',
+        latitude: 43.662108,
+        longitude: -79.380023,
         altitude: 76,
         heading: 337.89,
         speed: 1.0
     });
 
-    // These must stay as strings for as long as possible.
-    assert.strictEqual(geolocation.latitude(location), '43.662108',
+    assert.fuzzyEqual(geolocation.latitude(location), 43.662108, 0.0625,
                         'Fetch latitude as decimal string');
-    assert.strictEqual(geolocation.longitude(location), '-79.380023',
+    assert.fuzzyEqual(geolocation.longitude(location), -79.380023, 0.0625,
                         'Fetch longitude as decimal string');
     assert.fuzzyEqual(geolocation.altitude(location), 76, 1,
                         'Fetch altitude as double');
@@ -347,7 +343,7 @@ QUnit.test('[getters]', function (assert) {
                         'Fetch speed in degrees');
 });
 
-/* Creates a geolation object, as if created by the API itself. */
+/* Creates a violation object, as if created by the API itself. */
 function mockLocation(options) {
     if (!options) options = {};
 

@@ -409,7 +409,6 @@
         });
 
         function onLocationChange(location) {
-            console.log('look imma changin');
             currentLocation = location;
             Event.trigger(window, 'locationchanged', location);
         }

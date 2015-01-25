@@ -9,13 +9,6 @@
  * anything in those files in your tests).
  */
 
-/* Assertion passes if the numbers are equal... enough (within a tolerance).
- * Use with wishy-washy floating point numbers. */
-QUnit.assert.fuzzyEqual = function(actual, expected, epsilon, message ) {
-    var absoluteDifference = Math.abs(expected - actual);
-    QUnit.push(absoluteDifference <= epsilon, actual, expected, message);
-};
-
 /* TODO: control */
 /* TODO: sprite */
 /* TODO: sound */
@@ -256,7 +249,7 @@ QUnit.test('get{X,Y,Width,Height}', function (assert) {
 /* TODO: shapes */
 
 QUnit.module('Geolocation');
-QUnit.test('currentLocation', function (assert) {
+QUnit.testBrowser('currentLocation', function (assert) {
     var geolocation = runtime.geolocation,
         lat = 53.526748,
         lon = -113.527410,
@@ -288,7 +281,6 @@ QUnit.test('currentLocation', function (assert) {
     /* Subscribe to the locationchanged event... */
     var done = assert.async();
     Event.on(window, 'locationchanged', null, function () {
-        console.log('hey look imma do stuff');
         var location = geolocation.currentLocation();
         assert.strictEqual(location.coords.latitude, lat,
                            'API returned expected latitude'); 

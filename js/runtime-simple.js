@@ -6,6 +6,13 @@
  * fewer dependencies.
  */
 (function (global) {
+    /** Converts numeric degrees to radians */
+    if (!Number.prototype.toRadians) {
+      Number.prototype.toRadians = function() {
+        return this * Math.PI / 180;
+      };
+    }
+
     global.runtime = util.extend((global.runtime || {} ), {
         array: {
             create: function(){
@@ -221,21 +228,27 @@
                     });
                 });
             },
-            /* Returns the distance between two points in meters. */
-            // taken from old-waterbear, in turn taken from
-            // http://www.movable-type.co.uk/scripts/latlong.html
-            // It kind of assumes that Earth is a perfect sphere, which it's
-            // not.
-            distanceBetween: function (a, b) {
-                var lat1 = a.coords.latitude;
-                var lon1 = a.coords.longitude;
-                var lat2 = b.coords.latitude;
-                var lon2 = b.coords.longitude;
+            // Returns the distance between two points in meters.
+            // taken from http://www.movable-type.co.uk/scripts/latlong.html
+            // Using the haversine formula.
+            distanceBetween: function (p1, p2) {
+                var R = 6371000; // m
+                var lat1 = p1.coords.latitude;
+                var lon1 = p1.coords.longitude;
+                var lat2 = p2.coords.latitude;
+                var lon2 = p2.coords.longitude;
 
-                var R = 6371000; // km
-                return Math.acos(Math.sin(lat1)*Math.sin(lat2) + 
-                                 Math.cos(lat1)*Math.cos(lat2) *
-                                 Math.cos(lon2-lon1)) * R;
+                var φ1 = lat1.toRadians();
+                var φ2 = lat2.toRadians();
+                var Δφ = (lat2-lat1).toRadians();
+                var Δλ = (lon2-lon1).toRadians();
+
+                var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                        Math.cos(φ1) * Math.cos(φ2) *
+                        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+                return R * c;
             },
             /* Returns latitude in degrees. */
             // TODO: should this return a "degrees" object?

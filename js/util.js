@@ -238,17 +238,20 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints){
+    function Path(funcToCall, inputPoints, ctx){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
+        this.ctx = ctx;
+        
     }
     
     Path.prototype.draw = function(){
-        if(inputPoints !== undefined){
-            funcToCall.apply(null, inputPoints);
+        if(this.inputPoints !== undefined){
+            this.funcToCall.apply(this.ctx, this.inputPoints);
         }
         else{
-            funcToCall();
+            console.log(this.funcToCall);
+            this.funcToCall.apply(this.ctx, new Array());
         }
             
     }
@@ -413,8 +416,9 @@
         randInt: randInt,
         noise: noise,
         choice: choice,
-        isNumber: isNumber
-        Path: Path
+        isNumber: isNumber,
+        Path: Path,
+        Pathset: Pathset
     };
 
 

@@ -319,26 +319,26 @@
 		},
         path:{
             
-            lineTo: function(toPoint){return new util.Path(ctx.lineTo, new Array(toPoint.getX(), toPoint.getY()))},
+            lineTo: function(toPoint){return new util.Path(ctx.lineTo, new Array(toPoint.getX(), toPoint.getY()), ctx)},
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
                 return new util.Path(ctx.bezierCurveTo, new Array(controlPoint1.getX(), controlPoint1.getY(),
                 controlPoint2.getX(), controlPoint2.getY(), toPoint.getX(),
-                toPoint.getY()));
+                toPoint.getY()), ctx);
             },
             moveTo: function(toPoint){
-                return new util.Path(ctx.moveTo, new Array(toPoint.getX(), toPoint.getY()));
+                return new util.Path(ctx.moveTo, new Array(toPoint.getX(), toPoint.getY()), ctx);
             },
             quadraticCurveTo: function(toPoint, controlPoint){
                 return new util.Path(ctx.quadraticCurveTo, new Array(controlPoint.getX(),
-                controlPoint.getY(),toPoint.getX(), toPoint.getY()));
+                controlPoint.getY(),toPoint.getX(), toPoint.getY()), ctx);
             },
             arcTo: function(toPoint, controlPoint1, controlPoint2){
                 return new util.Path(ctx.arcTo, new Array(controlPoint1.getX(),
                 controlPoint1.getY(),controlPoint2.getX(), controlPoint2.getY(),
-                toPoint.getX(), toPoint.getY()));
+                toPoint.getX(), toPoint.getY()), ctx);
             },
-            closePath: function(){return new util.Path(ctx.closePath)},
+            closePath: function(){return new util.Path(ctx.closePath, undefined, ctx)},
             pathSet: function(args){
                 ctx.beginPath();
                 var i;

@@ -371,16 +371,20 @@
      *                     currentLocation.
      */
     var geolocationModule  = (function () {
-        var startedTracking = false,
+        var hasLocation = false,
             currentLocation = null,
             watchID = null,
             geolocationModule;
 
         geolocationModule = {
+            /**
+             * Starts fetching the location, periodically, and sets the
+             * currentLocation property of this module. Use
+             * geolocation.isTracking to check whether geolocation is ready.
+             */
             startTrackingLocation: function () {
-                if (startedTracking)
+                if (watchID !== null)
                     return;
-                startedTracking = true;
 
                 /* Handle if geolocation is not supported. */
                 if (!navigator.geolocation) {
@@ -402,13 +406,21 @@
         };
 
         /* Define a read-only getter for the current location. */
-        Object.defineProperty(geolocationModule, 'currentLocation', {
-            get: function () {
-                return currentLocation;
+        Object.defineProperties(geolocationModule, {
+            currentLocation: {
+                get: function () {
+                    return currentLocation;
+                }
+            },
+            isTracking: {
+                get: function () {
+                    return hasLocation;
+                }
             }
         });
 
         function onLocationChange(location) {
+            hasLocation = true;
             currentLocation = location;
             Event.trigger(window, 'locationchanged', location);
         }
@@ -416,6 +428,10 @@
         function onLocationError(positionError) {
             /* TODO: probably something better than this... */
             console.warn('Unable to fetch location.');
+            currentLocation = null;
+            // Say the location is changed, so that things waiting on location
+            // changed aren't waiting forever (e.g., asset loading).
+            Event.trigger(window, 'locationchanged', location);
         }
 
         return geolocationModule;

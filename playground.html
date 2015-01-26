@@ -526,6 +526,24 @@
                     <img class="cat-icon" src="images/icon/object.svg" />
                     Objects
                 </header>
+                <wb-expression type="object" script="object.empty">
+                    empty object
+                </wb-expression>
+                <wb-expression type="object" script="object.create">
+                    <wb-row>
+                        key <wb-value type="any"></wb-value>
+                        with value <wb-value type="any"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+                <wb-expression type="any" script="object.getValue">
+                    <wb-value type="object" allow="expression">from</wb-value>
+                    <wb-value type="string">value of</wb-value>
+                </wb-expression>
+                <wb-expression type="array" script="object.getKeys">
+                    <wb-value type="object" allow="expression">keys from</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="string">
                 <header>

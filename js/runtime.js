@@ -47,6 +47,7 @@
         requestAnimationFrame(frameHandler);
     }
 
+
     // for all of these functions, `this` is the scope object
     //
     // **If the functions don't have dependencies beyond util.js, and event.js
@@ -100,7 +101,7 @@
             incrementVariable: function(variable, value){
                 this[name] += value;
             },
-            loopOver: function(args, containers){
+            loopOver: function(args, containers) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
                 var list = args[0];
@@ -119,7 +120,10 @@
                         len = list;
                         break;
                 }
-                for (var i = 0; i < len; i++){
+
+                /* For every element in the container place
+                 * the index and value into the scope. */
+                for (i = 0; i < len; i++){
                     switch(type){
                         case 'array': // fall through
                         case 'string':
@@ -134,10 +138,11 @@
                             this.value = i;
                             break;
                     }
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
+                    containers[0].forEach(runBlock);
+                }
 
+                function runBlock(block){
+                    block.run(self);
                 }
             },
             broadcast: function(eventName, data){
@@ -187,6 +192,7 @@
         sprite: {
         },
         sound: {
+
             // sounds is the soundsForGames library that we wrap:
             // https://github.com/kittykatattack/soundForGames
 
@@ -283,40 +289,40 @@
             }
         },
         string: {
-			toString: function(x){ return x.toString() },
-			split: function(x,y){ return x.split(y); },
-			concatenate: function(x,y){ return x.concat(y); },
-			repeat: function(x,n){
-				var str = "";
-				for(var i=0; i<n; i++){
-					str = str.concat(x);
-				}
-				return str;
-			},
-			getChar: function(n,x){ return x.charAt(n-1); },
-			getCharFromEnd: function(n,x){ return x.charAt(x.length-n-1); },
-			substring: function(x,a,b){ return x.substring(a-1,a+b-1); },
-			substring2: function(x,a,b){ return x.substring(a-1,b) },
-			isSubstring: function(x,y){
-				if(y.indexOf(x)===-1){
-					return false;
-				}
-				else{
-					return true;
-				}
-			},
-			substringPosition: function(x,y){ return y.indexOf(x)+1; },
-			replaceSubstring: function(x,y,z){ return x.replace(y,z); },
-			trimWhitespace: function(x){ return x.trim(); },
-			uppercase: function(x){ return x.toUpperCase(); },
-			lowercase: function(x){ return x.toLowerCase(); },
-			matches: function(x,y){ return x===y; },
-			doesntMatch: function(x,y){ return !(x===y); },
-			startsWith: function(x,y){ return (x.lastIndexOf(y, 0) === 0); },
-			endsWith: function(x,y){ return x.indexOf(y, x.length - y.length) !== -1; },
-        	alert: function(x){ alert(x); },
-			comment: function(args, containers){},
-		},
+            toString: function(x){ return x.toString(); },
+            split: function(x,y){ return x.split(y); },
+            concatenate: function(x,y){ return x.concat(y); },
+            repeat: function(x,n){
+                var str = "";
+                for(var i=0; i<n; i++){
+                    str = str.concat(x);
+                }
+                return str;
+            },
+            getChar: function(n,x){ return x.charAt(n-1); },
+            getCharFromEnd: function(n,x){ return x.charAt(x.length-n-1); },
+            substring: function(x,a,b){ return x.substring(a-1,a+b-1); },
+            substring2: function(x,a,b){ return x.substring(a-1,b); },
+            isSubstring: function(x,y){
+                if(y.indexOf(x)===-1){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            },
+            substringPosition: function(x,y){ return y.indexOf(x)+1; },
+            replaceSubstring: function(x,y,z){ return x.replace(y,z); },
+            trimWhitespace: function(x){ return x.trim(); },
+            uppercase: function(x){ return x.toUpperCase(); },
+            lowercase: function(x){ return x.toLowerCase(); },
+            matches: function(x,y){ return x===y; },
+            doesntMatch: function(x,y){ return x!==y; },
+            startsWith: function(x,y){ return (x.lastIndexOf(y, 0) === 0); },
+            endsWith: function(x,y){ return x.indexOf(y, x.length - y.length) !== -1; },
+            alert: function(x){ alert(x); },
+            comment: function(args, containers){},
+        },
         path: {
         },
 
@@ -331,25 +337,24 @@
                 return function(){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                }
+                };
             }
         },
-        geolocation: {
-        },
+
         size: {
         },
         text:{
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
                 ctx.font = sizeString + " " + fontStyle;
-                
+
             },
             textAlign: function (alignment){ctx.textAlign = alignment;},
             textBaseline: function (baseline){ctx.textBaseline = baseline;},
-            fillText: function (text, x, y){ctx.fillText(text, x, y)},
-            fillTextWidth: function (text, x, y, width){ctx.fillText(text, x, y, width)},
-            strokeText: function (text, x, y){ctx.strokeText(text, x, y)},
-            strokeTextWidth: function (text, x, y, width){ctx.strokeText(text, x, y, width)},
+            fillText: function (text, x, y){ctx.fillText(text, x, y);},
+            fillTextWidth: function (text, x, y, width){ctx.fillText(text, x, y, width);},
+            strokeText: function (text, x, y){ctx.strokeText(text, x, y);},
+            strokeTextWidth: function (text, x, y, width){ctx.strokeText(text, x, y, width);},
             width: function (text){
                 var textMetric = ctx.measureText(text);
                 return textMetric.width;

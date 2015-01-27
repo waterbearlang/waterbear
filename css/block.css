@@ -181,6 +181,7 @@ wb-value[type=point] > input{background-image: url(../images/icon/point.svg);}
 wb-value[type=rect] > input{background-image: url(../images/icon/rect.svg);}
 wb-value[type=string] > input{background-image: url(../images/icon/string.svg);}
 wb-value[type=text] > input{background-image: url(../images/icon/text.svg);}
+wb-value[type=geolocation] > input{ background-image: url(../images/icon/geolocation.svg);}
 
 wb-expression:before{
     content: '';
@@ -209,6 +210,7 @@ wb-expression[type=path]:before{ background-image: url(../images/icon/path.svg);
 wb-expression[type=point]:before{ background-image: url(../images/icon/point.svg); }
 wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg); }
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
+wb-expression[type=geolocation]:before{ background-image: url(../images/icon/geolocation.svg); }
 
 /* Used for input resizing */
 .sekrit-svg{

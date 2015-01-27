@@ -31,6 +31,21 @@ function preload(){
     var assets = dom.findAll('wb-workspace > wb-contains wb-expression[isAsset=true]').map(function(asset){
         return asset.gatherValues()[0];
     });
+
+    // FIXME: hack to load geolocation when it's needed.
+    if (dom.find('wb-workspace wb-expression[script="geolocation.currentLocation"]') !== null) {
+        assets.push(function (ready) {
+            if (util.geolocation.isTracking) {
+                ready();
+            } else {
+                util.geolocation.startTrackingLocation();
+                // Listen to the first locationchanged event which will
+                // signify that geolocation is ready.
+                Event.once(window, 'locationchanged', null, ready);
+            }
+        });
+    }
+
     if (assets.length){
         sounds.load(assets);
         sounds.whenLoaded = run;

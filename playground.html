@@ -526,6 +526,24 @@
                     <img class="cat-icon" src="images/icon/object.svg" />
                     Objects
                 </header>
+                <wb-expression type="object" script="object.empty">
+                    empty object
+                </wb-expression>
+                <wb-expression type="object" script="object.create">
+                    <wb-row>
+                        key <wb-value type="any"></wb-value>
+                        with value <wb-value type="any"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+                <wb-expression type="any" script="object.getValue">
+                    <wb-value type="object" allow="expression">from</wb-value>
+                    <wb-value type="string">value of</wb-value>
+                </wb-expression>
+                <wb-expression type="array" script="object.getKeys">
+                    <wb-value type="object" allow="expression">keys from</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="string">
                 <header>
@@ -762,6 +780,37 @@
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
                     Geolocation
                 </header>
+
+                <wb-expression type="geolocation" script="geolocation.currentLocation">
+                    my current location
+                </wb-expression>
+
+                <wb-context script="geolocation.whenLocationUpdated">
+                    <wb-row>
+                        <wb-value>when my location changes</wb-value>
+                        <wb-local>
+                            <wb-expression type="geolocation" script="geolocation.currentLocation">
+                                <wb-value value="location">my current location</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-context>
+
+                <wb-expression type="number" script="geolocation.latitude">
+                    <wb-value type="geolocation" allow="expression">latitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.longitude">
+                    <wb-value type="geolocation" allow="expression">longitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.altitude">
+                    <wb-value type="geolocation" allow="expression">altitude (m) of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.heading">
+                    <wb-value type="geolocation" allow="expression">direction from north of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.speed">
+                    <wb-value type="geolocation" allow="expression">speed (m/s) of</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="size">
                 <header>

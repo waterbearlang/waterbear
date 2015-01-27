@@ -397,6 +397,88 @@
       return list[Math.floor(Math.random() * list.length)];
     }
 
+
+
+    /*
+     * Geolocation mini-module.
+     *
+     * Call startTrackingLocation(). The currentLocation property will be
+     * updated.
+     *
+     * Events:
+     *
+     *  - locationchanged: bound on window. Register to this get location
+     *                     updates immediately without polling
+     *                     currentLocation.
+     */
+    var geolocationModule  = (function () {
+        var hasLocation = false,
+            currentLocation = null,
+            watchID = null,
+            geolocationModule;
+
+        geolocationModule = {
+            /**
+             * Starts fetching the location, periodically, and sets the
+             * currentLocation property of this module. Use
+             * geolocation.isTracking to check whether geolocation is ready.
+             */
+            startTrackingLocation: function () {
+                if (watchID !== null)
+                    return;
+
+                /* Handle if geolocation is not supported. */
+                if (!navigator.geolocation) {
+                    // TODO: I dunno lol. An error or warning of some sort?
+                    app.warn('This app tracks your location, but your browser ' +
+                             'does not support geolocation.');
+                    // There are scenarios where geolocation can be optionally
+                    // used in a program.
+                    return;
+                }
+
+                watchID = navigator.geolocation.watchPosition(
+                    onLocationChange, onLocationError, {
+                });
+
+                /* TODO: need to call clearWatch() with the handle when there
+                 * are no more geolocation blocks in the script. */
+            }
+        };
+
+        /* Define a read-only getter for the current location. */
+        Object.defineProperties(geolocationModule, {
+            currentLocation: {
+                get: function () {
+                    return currentLocation;
+                }
+            },
+            isTracking: {
+                get: function () {
+                    return hasLocation;
+                }
+            }
+        });
+
+        function onLocationChange(location) {
+            hasLocation = true;
+            currentLocation = location;
+            Event.trigger(window, 'locationchanged', location);
+        }
+
+        function onLocationError(positionError) {
+            /* TODO: probably something better than this... */
+            console.warn('Unable to fetch location.');
+            currentLocation = null;
+            // Say the location is changed, so that things waiting on location
+            // changed aren't waiting forever (e.g., asset loading).
+            Event.trigger(window, 'locationchanged', location);
+        }
+
+        return geolocationModule;
+    })();
+
+
     // exports
     window.util = {
         Size: Size,
@@ -419,6 +501,7 @@
         isNumber: isNumber,
         Path: Path,
         Pathset: Pathset
+        geolocation: geolocationModule
     };
 
 

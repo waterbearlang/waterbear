@@ -36,7 +36,7 @@ QUnit.test('create', function (assert) {
     var object = runtime.object;
 
     // omigosh you guys. like, omigosh
-    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var o1 = object.create(['hi', 'immakitty'], [1, 2], [true, false]);
 
     assert.ok(o1 instanceof Object,
               'Creating an object');
@@ -50,7 +50,7 @@ QUnit.test('create', function (assert) {
 QUnit.test('getValue', function (assert) {
     var object = runtime.object;
 
-    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var o1 = object.create(['hi', 'immakitty'], [1, 2], [true, false]);
 
     assert.strictEqual(object.getValue(o1, 'hi'), 'immakitty',
                        'Got element one');
@@ -63,7 +63,7 @@ QUnit.test('getValue', function (assert) {
 QUnit.test('getKeys', function (assert) {
     var object = runtime.object;
 
-    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var o1 = object.create(['hi', 'immakitty'], [1, 2], [true, false]);
     var actual = object.getKeys(o1);
     var expected = ['hi', '1', 'true'];
     assert.deepEqual(actual.sort(), expected.sort(),
@@ -138,6 +138,8 @@ QUnit.test('toArray', function (assert) {
     assert.deepEqual(array, [2,3], 'Getting array from point');
 });
 
+
+
 QUnit.module('rect');
 QUnit.test('fromCoordinates', function (assert) {
     var rect = runtime.rect;
@@ -193,10 +195,10 @@ QUnit.test('fromArray', function (assert) {
 
 QUnit.test('getPosition', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromCoordinates(37, 42, 1, 1);
     var position = rect.getPosition(r1);
-    
+
     assert.ok(position instanceof util.Vector,
              'Position is returned as a Vector');
     assert.strictEqual(position.x, 37);
@@ -205,10 +207,10 @@ QUnit.test('getPosition', function (assert) {
 
 QUnit.test('getSize', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromCoordinates(0, 0, 536, 231);
     var size = rect.getSize(r1);
-    
+
     assert.ok(size instanceof util.Size,
              'Size is returned as a Size');
     assert.strictEqual(size.width, 536);
@@ -217,9 +219,9 @@ QUnit.test('getSize', function (assert) {
 
 QUnit.test('asArray', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromVectors(new util.Vector(0, 0), new util.Vector(1, 1));
-    
+
     assert.deepEqual(rect.asArray(r1), [0, 0, 1, 1],
              'Rect can be returned as an array');
 });
@@ -227,10 +229,10 @@ QUnit.test('asArray', function (assert) {
 // Four methods combined into one!
 QUnit.test('get{X,Y,Width,Height}', function (assert) {
     var rect = runtime.rect;
-    
+
     var r1 = rect.fromVectors(new util.Vector(37, 42),
                               new util.Vector(536, 231));
-    
+
     assert.strictEqual(rect.getX(r1), 37,
              'getX works');
     assert.strictEqual(rect.getY(r1), 42,
@@ -245,6 +247,135 @@ QUnit.test('get{X,Y,Width,Height}', function (assert) {
 /* TODO: sensing */
 /* TODO: motion */
 /* TODO: shapes */
-/* TODO: geolocation */
+
+QUnit.module('Geolocation');
+QUnit.testBrowser('currentLocation', function (assert) {
+    var geolocation = runtime.geolocation,
+        lat = 53.526748,
+        lon = -113.527410,
+        alt = 645;
+
+    assert.expect(4);
+    
+    /* First, stub the API... */
+    var stub;
+    
+    if (navigator.geolocation) {
+        /* On user agents with geolocation. */ 
+        stub = sinon.stub(navigator.geolocation, 'watchPosition');
+    } else {
+        /* Create the API if it does not exist (like on PhantomJS). */
+        stub = sinon.stub();
+        navigator.geolocation = {
+            watchPosition: stub,
+            clearWatch: function () {}
+        };
+    }
+
+    stub.callsArgWithAsync(0, mockLocation({
+            latitude: lat,
+            longitude: lon,
+            altitude: alt
+        }));
+
+    /* Subscribe to the locationchanged event... */
+    var done = assert.async();
+    Event.on(window, 'locationchanged', null, function () {
+        var location = geolocation.currentLocation();
+        assert.strictEqual(location.coords.latitude, lat,
+                           'API returned expected latitude'); 
+        assert.strictEqual(location.coords.longitude, lon,
+                           'API returned expected longitude'); 
+        assert.strictEqual(location.coords.altitude, alt,
+                           'API returned expected altitude'); 
+        done();
+    });
+
+    /* Before we get the ball rolling, though, make sure currentLocation is
+     * initial null. */
+    assert.strictEqual(util.geolocation.currentLocation, null,
+                       'Current location starts null');
+
+    util.geolocation.startTrackingLocation();
+    if (stub.restore) {
+        stub.restore();
+    }
+});
+
+QUnit.test('distanceBetween', function (assert) {
+    var geolocation = runtime.geolocation;
+    var distance;
+
+    var pointA = mockLocation({latitude: 53.526748, longitude: -113.527410});
+    var pointB = mockLocation({latitude: 43.662108, longitude: -79.380023});
+    var pointC = mockLocation({latitude: 53.523256, longitude: -113.512348});
+    var pointD = mockLocation({latitude: 21.882504, longitude: 33.710796});
+
+    var actual = 2710127.747;
+
+    // Answers found using:
+    // http://www.daftlogic.com/projects-google-maps-distance-calculator.htm
+    distance = geolocation.distanceBetween(pointA, pointA);
+    assert.fuzzyEqual(distance, 0, 10, // ±10 m
+                      'Distance between the same point');
+    distance = geolocation.distanceBetween(pointA, pointB);
+    assert.fuzzyEqual(distance, actual, 4000, // ±4 km
+                      'Distance between points across Canada');
+    distance = geolocation.distanceBetween(pointA, pointC);
+    assert.fuzzyEqual(distance, 1058.173, 20, // ±20 m
+                      'Distance between points around 1 km');
+    distance = geolocation.distanceBetween(pointA, pointD);
+    assert.fuzzyEqual(distance, 11070578.184, 25000, // ±25 km
+                      'Distance between points across the world');
+});
+
+QUnit.test('[getters]', function (assert) {
+    var geolocation = runtime.geolocation;
+    var location = mockLocation({
+        latitude: 43.662108,
+        longitude: -79.380023,
+        altitude: 76,
+        heading: 337.89,
+        speed: 1.0
+    });
+
+    assert.fuzzyEqual(geolocation.latitude(location), 43.662108, 0.0625,
+                        'Fetch latitude as decimal string');
+    assert.fuzzyEqual(geolocation.longitude(location), -79.380023, 0.0625,
+                        'Fetch longitude as decimal string');
+    assert.fuzzyEqual(geolocation.altitude(location), 76, 1,
+                        'Fetch altitude as double');
+    assert.fuzzyEqual(geolocation.speed(location), 1.0, 5,
+                        'Fetch speed in m/s');
+    assert.fuzzyEqual(geolocation.heading(location), 338.0, 5,
+                        'Fetch speed in degrees');
+});
+
+/* Creates a violation object, as if created by the API itself. */
+function mockLocation(options) {
+    if (!options) options = {};
+
+    var location = {
+        // https://developer.mozilla.org/en-US/docs/Web/API/Coordinates
+        coords: {
+            latitude: options.latitude || "40.714224",
+            longitude: options.longitude || "-73.961452",
+            // In meters.
+            altitude: options.altitude || null,
+            // In meters.
+            accuracy: options.accuracy || 645,
+            // In meters.
+            altitudeAccuracy: options.altitudeAccuracy || 100,
+            // Specified in degrees. Can be NaN (when there is no speed) and null -_-.
+            heading: options.heading || NaN,
+            // In m/s. Can be null.
+            speed: options.speed || 0,
+        },
+        timestamp: options.timestamp || Date.now()
+    };
+
+    return location;
+}
+
 /* TODO: sizes */
 /* TODO: text */

@@ -36,7 +36,7 @@ QUnit.test('create', function (assert) {
     var object = runtime.object;
 
     // omigosh you guys. like, omigosh
-    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var o1 = object.create(['hi', 'immakitty'], [1, 2], [true, false]);
 
     assert.ok(o1 instanceof Object,
               'Creating an object');
@@ -50,7 +50,7 @@ QUnit.test('create', function (assert) {
 QUnit.test('getValue', function (assert) {
     var object = runtime.object;
 
-    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var o1 = object.create(['hi', 'immakitty'], [1, 2], [true, false]);
 
     assert.strictEqual(object.getValue(o1, 'hi'), 'immakitty',
                        'Got element one');
@@ -63,7 +63,7 @@ QUnit.test('getValue', function (assert) {
 QUnit.test('getKeys', function (assert) {
     var object = runtime.object;
 
-    var o1 = object.create('hi', 'immakitty', 1, 2, true, false);
+    var o1 = object.create(['hi', 'immakitty'], [1, 2], [true, false]);
     var actual = object.getKeys(o1);
     var expected = ['hi', '1', 'true'];
     assert.deepEqual(actual.sort(), expected.sort(),

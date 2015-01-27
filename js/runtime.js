@@ -347,12 +347,18 @@
                 }    
             },
             fill: function(pathSet){
+                ctx.closePath();
                 ctx.fill();
             },
             stroke: function(pathSet){
                 ctx.stroke();
             },
-            fillRule: function(rule){}
+            lineStyle: function(width, color, capStyle, joinStyle){
+                ctx.lineWidth = width;
+                ctx.strokeStyle = color;
+                ctx.lineCap = capStyle;
+                ctx.lineJoin = joinStyle;
+            }
         },
 
         motion: {

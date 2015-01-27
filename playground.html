@@ -615,6 +615,15 @@
                     <img class="cat-icon" src="images/icon/path.svg" />
                     Paths
                 </header>
+                <wb-step script = "path.lineStyle" type="path">
+                    <wb-value type="number">line width</wb-value>
+                    <wb-value type="color" value="#0000FF">line color</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="butt,round,square" value="butt">cap style</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="round,bevel,miter" value="round">join style</wb-value>
+                    
+                </wb-step>
                 <wb-expression script = "path.moveTo" type="path">
                     <wb-value type="point">move to point</wb-value>
                 </wb-expression>

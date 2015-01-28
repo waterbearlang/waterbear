@@ -633,6 +633,57 @@
                     <img class="cat-icon" src="images/icon/path.svg" />
                     Paths
                 </header>
+                <wb-step script = "path.lineStyle" type="path">
+                    <wb-value type="number">line width</wb-value>
+                    <wb-value type="color" value="#0000FF">line color</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="butt,round,square" value="butt">cap style</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="round,bevel,miter" value="round">join style</wb-value>
+                    
+                </wb-step>
+                <wb-expression script = "path.moveTo" type="path">
+                    <wb-value type="point">move to point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.lineTo" type ="path">
+                    <wb-value type="point">draw a line to</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.bezierCurveTo" type ="path">
+                    <wb-value type="point">draw a bezier curve to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.quadraticCurveTo" type ="path">
+                    <wb-value type="point">draw a quadric curve to</wb-value>
+                    <wb-value type="point">control point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.arcTo" type ="path">
+                    <wb-value type="point">draw an arc to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
+                </wb-expression>
+                <wb-expression script="path.closePath" type ="path">
+                    close path
+                </wb-expression>
+                <wb-expression script="path.pathSet" type="pathset">
+                    <wb-value>create set of paths</wb-value>
+                    <wb-row>
+                        <wb-value type="path"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+
+                <wb-step script=path.fill>
+                    <wb-value type="pathset">fill the path</wb-value>
+                </wb-step>
+                <wb-step script=path.stroke>
+                    <wb-value type="pathset">stroke the path</wb-value>
+                </wb-step>
+                <wb-step script=path.fillRule>
+                    <wb-value type="list" allow="literal"
+                        options="non-zero, even-odd" value="non-zero">fill rule</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="point">
                 <header>

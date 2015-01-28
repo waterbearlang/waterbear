@@ -191,7 +191,12 @@
     Point.prototype.toString = function(){
         return '[' + this.x + ',' + this.y + ']';
     };
-
+    Point.prototype.getX = function(){
+        return this.x;
+    }
+    Point.prototype.getY = function(){
+        return this.y;
+    }
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -231,6 +236,42 @@
     Rect.fromVectors = function (position, size) {
         return new Rect(position.x, position.y, size.x, size.y);
     };
+
+    //Paths
+    function Path(funcToCall, inputPoints, ctx){
+        this.funcToCall = funcToCall;
+        this.inputPoints = inputPoints;
+        this.ctx = ctx;
+        
+    }
+    
+    Path.prototype.draw = function(){
+        if(this.inputPoints !== undefined){
+            this.funcToCall.apply(this.ctx, this.inputPoints);
+        }
+        else{
+            console.log(this.funcToCall);
+            this.funcToCall.apply(this.ctx, new Array());
+        }
+            
+    }
+    
+    
+    //Pathset
+    function Pathset(pathArray){
+        var len = pathArray.length;
+        var i = 0;
+        while (i<len){
+            if(!(pathArray[i] instanceof Path)){ 
+                throw new Error('Only paths may be added to a Pathset, ' + pathArray[i] + " is not.");
+            }
+        }
+        
+        this.pathArray = pathArray;
+    }
+    Pathset.prototype.getPathArray = function(){
+        return pathArray;
+    }
 
 
     // Utilities for math
@@ -458,7 +499,9 @@
         noise: noise,
         choice: choice,
         isNumber: isNumber,
-        geolocation: geolocationModule
+        Path: Path,
+        Pathset: Pathset,
+        geolocation: geolocationModule,
     };
 
 

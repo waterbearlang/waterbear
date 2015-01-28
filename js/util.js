@@ -500,8 +500,8 @@
         choice: choice,
         isNumber: isNumber,
         Path: Path,
-        Pathset: Pathset
-        geolocation: geolocationModule
+        Pathset: Pathset,
+        geolocation: geolocationModule,
     };
 
 

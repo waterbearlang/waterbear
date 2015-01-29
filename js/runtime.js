@@ -1,6 +1,7 @@
 (function(global){
     'use strict';
 
+    // Dependencies: ctx, canvas, Event, runtime, sound, soundEffect,
     // canvas/stage stuff
     var canvas, ctx;
     Event.on(window, 'load', null, function(){

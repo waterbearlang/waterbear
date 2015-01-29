@@ -177,6 +177,12 @@
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
 
+    Vector.prototype.rotateRads = function rotate(rads){
+        var newAngle = this.radians + rads;
+        var mag = this.magnitude();
+        return new Vector(cos(newAngle) * mag, sin(newAngle) * mag);
+    }
+
     Vector.prototype.toString = function strv(){
         return '<' + this.x + ',' + this.y + '>';
     }
@@ -436,6 +442,67 @@
 
         return geolocationModule;
     })();
+
+    /******************************
+    *
+    * Sprite mini-library
+    *
+    *
+    *******************************/
+
+    function Sprite(drawable){
+        // drawable can be a shape function, an image, or text
+        // wrap image with a function, make sure all are centred on 0,0
+        this.drawable = drawable || defaultDrawable;
+        this.position = new Vector(0,0);
+        this.facing = new Vector(-PI/2,0.1);
+        this.velocity = new Vector(0,0.1);
+    }
+
+    Sprite.prototype.accelerate = function(speed){
+        this.velocity = add(this.velocity, multiply(this.facing, speed));
+        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.applyForce = function(vec){
+        this.velocity = add(this.velocity, vec);
+    }
+
+    Sprite.prototype.rotate = function(r){
+        this.facing = this.facing.rotate(r);
+        console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.move = function(){
+        this.position = add(this.position, this.velocity);
+    }
+
+    Sprite.prototype.draw = function(ctx){
+        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
+        ctx.translate(this.position.x, this.position.y);
+        this.drawable.draw(ctx);
+        ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    function defaultDrawable(ctx){
+        // ctx.save();
+        var width = PI - PI/6;
+        var length = 20;
+        var frontX = cos(this.facing.rad) * length + this.position.x;
+        var frontY = sin(this.facing.rad) * length + this.position.y;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(frontX, frontY);
+        ctx.lineTo(cos(this.facing.rad - width) * length + this.position.x,
+                   sin(this.facing.rad - width) * length + this.position.y);
+        ctx.moveTo(frontX, frontY);
+        ctx.lineTo(cos(this.facing.rad + width) * length + this.position.x,
+                   sin(this.facing.rad + width) * length + this.position.y);
+        ctx.stroke();
+        // ctx.restore();
+
+    }
 
 
     // exports

@@ -755,6 +755,19 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Sensing
                 </header>
+				<wb-expression type="number" script="sensing.mouseX"> Mouse x </wb-expression>
+				<wb-expression type="number" script="sensing.mouseY"> Mouse Y </wb-expression>
+				<wb-expression type="boolean" script="sensing.mouseDown"> Mouse Down </wb-expression>
+				<wb-expression type="boolean" script="sensing.keyPressed">  
+					<wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
+                	Pressed?
+				</wb-expression>
+				<wb-expression type="number" script="sensing.stageWidth"> Stage Width </wb-expression>
+				<wb-expression type="number" script="sensing.stageHeight"> Stage Height </wb-expression>
+				<wb-expression type="number" script="sensing.centerX"> Center x </wb-expression>
+				<wb-expression type="number" script="sensing.centerY"> Center y </wb-expression>
+				<wb-expression type="number" script="sensing.randomX"> Random x </wb-expression>
+				<wb-expression type="number" script="sensing.randomY"> Random y </wb-expression>
             </wb-accordion>
             <wb-accordion class="motion">
                 <header>

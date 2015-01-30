@@ -386,6 +386,26 @@
 
         size: {
         },
+		
+		sensing: {
+			keyPressed: function(key){
+				if(Event.keys[key])
+					return true;
+				else
+					return false;
+			},
+			mouseX: function(){ return Event.pointerX-Event.stage.left; },	//TODO
+			mouseY: function(){ return Event.pointerY-Event.stage.top; },	//TODO
+			mouseDown: function(){ return Event.pointerDown; }, 			//TODO
+			stageWidth: function(){ return Event.stage.width; },
+			stageHeight: function(){ return Event.stage.height; },
+			centerX: function(){ return (Event.stage.width / 2); },
+			centerY: function(){ return (Event.stage.height / 2); },
+			randomX: function(){ return Math.random() * Event.stage.width; },
+			randomY: function(){ return Math.random() * Event.stage.height; },
+			
+		},
+		
         text:{
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];

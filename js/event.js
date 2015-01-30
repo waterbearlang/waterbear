@@ -329,14 +329,14 @@
     }
 
     function isKeyDown(key){
-        return this.keys[key];
+		return Event.keys[key];
     }
 
     function handleKeyDown(evt){
         var key = keyForEvent(evt);
         Event.keys[key] = true;
         if (Event.keyHandlers[key]){
-            Event.keyHandlers.forEach(function(handler){
+			Event.keyHandlers[key].forEach(function(handler){
                 handler(evt);
             });
         }

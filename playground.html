@@ -677,13 +677,13 @@
                     </wb-row>
                 </wb-expression>
 
-                <wb-step script=path.fill>
+                <wb-step script=path.fill class="path">
                     <wb-value type="pathset">fill the path</wb-value>
                 </wb-step>
-                <wb-step script=path.stroke>
+                <wb-step script=path.stroke class="path">
                     <wb-value type="pathset">stroke the path</wb-value>
                 </wb-step>
-                <wb-step script=path.fillRule>
+                <wb-step script=path.fillRule class="path">
                     <wb-value type="list" allow="literal"
                         options="non-zero, even-odd" value="non-zero">fill rule</wb-value>
                 </wb-step>
@@ -788,7 +788,7 @@
                     my current location
                 </wb-expression>
 
-                <wb-context script="geolocation.whenLocationUpdated">
+                <wb-context script="geolocation.whenLocationUpdated" class="geolocation">
                     <wb-row>
                         <wb-value>when my location changes</wb-value>
                         <wb-local>

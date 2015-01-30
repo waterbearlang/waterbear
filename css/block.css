@@ -250,10 +250,12 @@ wb-expression[type=image],wb-local wb-expression[type=image]{ background-color: 
 wb-expression[type=shape],wb-local wb-expression[type=shape]{ background-color: hsl(84, 93%, 56%); border-color: hsl(84, 93%, 40%); }
 wb-expression[type=vector],wb-local wb-expression[type=vector]{ background-color: hsl(276, 93%, 56%); border-color: hsl(276, 93%, 40%); }
 wb-expression[type=object],wb-local wb-expression[type=object]{ background-color: hsl(72, 93%, 56%); border-color: hsl(72, 93%, 40%); }
-wb-expression[type=path],wb-local wb-expression[type=path]{ background-color: hsl(24, 93%, 56%); border-color: hsl(24, 93%, 40%); }
+wb-expression[type=path],wb-expression[type=pathset],wb-local wb-expression[type=path],wb-step[type=path]{ background-color: hsl(24, 93%, 56%); border-color: hsl(24, 93%, 40%); }
 wb-expression[type=point],wb-local wb-expression[type=point]{ background-color: hsl(180, 93%, 56%); border-color: hsl(180, 93%, 40%); }
 wb-expression[type=rect],wb-local wb-expression[type=rect]{ background-color: hsl(336, 93%, 56%); border-color: hsl(336, 93%, 40%); }
 wb-expression[type=string],wb-local wb-expression[type=string]{ background-color: hsl(228, 93%, 56%); border-color: hsl(228, 93%, 40%); }
+wb-expression[type=geolocation]{ background-color: hsl(240, 93%, 56%); border-color: hsl(240, 93%, 40%); }
+wb-expression[type=size]{background-color: hsl(192, 93%, 56%); border-color: hsl(192, 93%, 40%);}
 
 /* Used for input resizing */
 .sekrit-svg{

@@ -560,6 +560,7 @@
         multiply: multiply,
         divide: divide,
         deg2rad: deg2rad,
+        rad2deg: rad2deg,
         randInt: randInt,
         noise: noise,
         choice: choice,

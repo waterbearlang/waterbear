@@ -329,7 +329,7 @@
     }
 
     function isKeyDown(key){
-		return Event.keys[key];
+		return this.keys[key];
     }
 
     function handleKeyDown(evt){

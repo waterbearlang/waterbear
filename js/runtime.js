@@ -10,6 +10,8 @@
                 _canvas = dom.find('wb-playground > canvas');
             }
             if (!_canvas){
+                // We're not running in Waterbear
+                // Just put a canvas in so tests pass
                 _canvas = document.createElement('canvas');
                 _canvas.setAttribute('width', '200');
                 _canvas.setAttribute('height', '200');

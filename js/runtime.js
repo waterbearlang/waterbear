@@ -657,6 +657,24 @@
         },
 
         sprite: {
+            create: function(imgShapeOrText){
+                return new Sprite(imgShapeOrText);
+            },
+            accelerate: function(spt, speed){
+                spt.accelerate(speed);
+            },
+            rotate: function(spt, angle){
+                spt.rotate(angle);
+            },
+            move: function(spt){
+                spt.move();
+            },
+            draw: function(spt){
+                spt.draw();
+            },
+            applyForce: function(spt, vec){
+                spt.applyForce(vec);
+            }
         },
 
         stage: {

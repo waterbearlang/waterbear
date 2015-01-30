@@ -47,6 +47,7 @@
         requestAnimationFrame(frameHandler);
     }
 
+
     // for all of these functions, `this` is the scope object
     //
     // **If the functions don't have dependencies beyond util.js, and event.js
@@ -100,7 +101,7 @@
             incrementVariable: function(variable, value){
                 this[name] += value;
             },
-            loopOver: function(args, containers){
+            loopOver: function(args, containers) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
                 var list = args[0];
@@ -119,7 +120,10 @@
                         len = list;
                         break;
                 }
-                for (var i = 0; i < len; i++){
+
+                /* For every element in the container place
+                 * the index and value into the scope. */
+                for (i = 0; i < len; i++){
                     switch(type){
                         case 'array': // fall through
                         case 'string':
@@ -134,10 +138,11 @@
                             this.value = i;
                             break;
                     }
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
+                    containers[0].forEach(runBlock);
+                }
 
+                function runBlock(block){
+                    block.run(self);
                 }
             },
             broadcast: function(eventName, data){
@@ -187,6 +192,7 @@
         sprite: {
         },
         sound: {
+
             // sounds is the soundsForGames library that we wrap:
             // https://github.com/kittykatattack/soundForGames
 
@@ -282,9 +288,8 @@
                 ctx.drawImage(img, pt.x, pt.y, w, h);
             }
         },
-        object: {
-        },
         string: {
+
 			toString: function(x){ return x.toString() },
 			split: function(x,y){ return x.split(y); },
 			concatenate: function(x,y){ return x.concat(y); },
@@ -319,7 +324,49 @@
         	alert: function(x){ alert(x); },
 			comment: function(args, containers){},
 		},
-        path: {
+        path:{
+            
+            lineTo: function(toPoint){return new util.Path(ctx.lineTo, new Array(toPoint.getX(), toPoint.getY()), ctx)},
+
+            bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
+                return new util.Path(ctx.bezierCurveTo, new Array(controlPoint1.getX(), controlPoint1.getY(),
+                controlPoint2.getX(), controlPoint2.getY(), toPoint.getX(),
+                toPoint.getY()), ctx);
+            },
+            moveTo: function(toPoint){
+                return new util.Path(ctx.moveTo, new Array(toPoint.getX(), toPoint.getY()), ctx);
+            },
+            quadraticCurveTo: function(toPoint, controlPoint){
+                return new util.Path(ctx.quadraticCurveTo, new Array(controlPoint.getX(),
+                controlPoint.getY(),toPoint.getX(), toPoint.getY()), ctx);
+            },
+            arcTo: function(toPoint, controlPoint1, controlPoint2){
+                return new util.Path(ctx.arcTo, new Array(controlPoint1.getX(),
+                controlPoint1.getY(),controlPoint2.getX(), controlPoint2.getY(),
+                toPoint.getX(), toPoint.getY()), ctx);
+            },
+            closePath: function(){return new util.Path(ctx.closePath, undefined, ctx)},
+            pathSet: function(args){
+                ctx.beginPath();
+                var i;
+                for(i=0; i<arguments.length; i++){
+                    arguments[i].draw();
+                }    
+            },
+            fill: function(pathSet){
+                ctx.closePath();
+                ctx.fill();
+            },
+            stroke: function(pathSet){
+                ctx.stroke();
+            },
+            lineStyle: function(width, color, capStyle, joinStyle){
+                ctx.lineWidth = width;
+                ctx.strokeStyle = color;
+                ctx.lineCap = capStyle;
+                ctx.lineJoin = joinStyle;
+            }
+
         },
 
         motion: {
@@ -333,25 +380,24 @@
                 return function(){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                }
+                };
             }
         },
-        geolocation: {
-        },
+
         size: {
         },
         text:{
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
                 ctx.font = sizeString + " " + fontStyle;
-                
+
             },
             textAlign: function (alignment){ctx.textAlign = alignment;},
             textBaseline: function (baseline){ctx.textBaseline = baseline;},
-            fillText: function (text, x, y){ctx.fillText(text, x, y)},
-            fillTextWidth: function (text, x, y, width){ctx.fillText(text, x, y, width)},
-            strokeText: function (text, x, y){ctx.strokeText(text, x, y)},
-            strokeTextWidth: function (text, x, y, width){ctx.strokeText(text, x, y, width)},
+            fillText: function (text, x, y){ctx.fillText(text, x, y);},
+            fillTextWidth: function (text, x, y, width){ctx.fillText(text, x, y, width);},
+            strokeText: function (text, x, y){ctx.strokeText(text, x, y);},
+            strokeTextWidth: function (text, x, y, width){ctx.strokeText(text, x, y, width);},
             width: function (text){
                 var textMetric = ctx.measureText(text);
                 return textMetric.width;

@@ -54,7 +54,7 @@
                 </wb-context>
                 <wb-step script="control.setVariable" class="control">
                     <wb-row>
-                    <wb-value type="text" allow="literal" value="variable">set</wb-value>
+                    <wb-value type="text" isVariable="true" allow="literal" value="variable">set</wb-value>
                         <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="variable">variable</wb-value>
@@ -529,6 +529,24 @@
                     <img class="cat-icon" src="images/icon/object.svg" />
                     Objects
                 </header>
+                <wb-expression type="object" script="object.empty">
+                    empty object
+                </wb-expression>
+                <wb-expression type="object" script="object.create">
+                    <wb-row>
+                        key <wb-value type="any"></wb-value>
+                        with value <wb-value type="any"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+                <wb-expression type="any" script="object.getValue">
+                    <wb-value type="object" allow="expression">from</wb-value>
+                    <wb-value type="string">value of</wb-value>
+                </wb-expression>
+                <wb-expression type="array" script="object.getKeys">
+                    <wb-value type="object" allow="expression">keys from</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="string">
                 <header>
@@ -618,6 +636,57 @@
                     <img class="cat-icon" src="images/icon/path.svg" />
                     Paths
                 </header>
+                <wb-step script = "path.lineStyle" type="path">
+                    <wb-value type="number">line width</wb-value>
+                    <wb-value type="color" value="#0000FF">line color</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="butt,round,square" value="butt">cap style</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="round,bevel,miter" value="round">join style</wb-value>
+                    
+                </wb-step>
+                <wb-expression script = "path.moveTo" type="path">
+                    <wb-value type="point">move to point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.lineTo" type ="path">
+                    <wb-value type="point">draw a line to</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.bezierCurveTo" type ="path">
+                    <wb-value type="point">draw a bezier curve to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.quadraticCurveTo" type ="path">
+                    <wb-value type="point">draw a quadric curve to</wb-value>
+                    <wb-value type="point">control point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.arcTo" type ="path">
+                    <wb-value type="point">draw an arc to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
+                </wb-expression>
+                <wb-expression script="path.closePath" type ="path">
+                    close path
+                </wb-expression>
+                <wb-expression script="path.pathSet" type="pathset">
+                    <wb-value>create set of paths</wb-value>
+                    <wb-row>
+                        <wb-value type="path"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+
+                <wb-step script=path.fill>
+                    <wb-value type="pathset">fill the path</wb-value>
+                </wb-step>
+                <wb-step script=path.stroke>
+                    <wb-value type="pathset">stroke the path</wb-value>
+                </wb-step>
+                <wb-step script=path.fillRule>
+                    <wb-value type="list" allow="literal"
+                        options="non-zero, even-odd" value="non-zero">fill rule</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="point">
                 <header>
@@ -638,7 +707,7 @@
                     <wb-value>random point</wb-value>
                 </wb-expression>
                 <wb-expression type="number" script="point.x">
-                    <wb-value type="point,vector">x of</wb-value>
+                    <wb-value type="point,vector" >x of</wb-value>
                 </wb-expression>
                 <wb-expression type="number" script="point.y">
                     <wb-value type="point,vector">y of</wb-value>
@@ -714,6 +783,37 @@
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
                     Geolocation
                 </header>
+
+                <wb-expression type="geolocation" script="geolocation.currentLocation">
+                    my current location
+                </wb-expression>
+
+                <wb-context script="geolocation.whenLocationUpdated">
+                    <wb-row>
+                        <wb-value>when my location changes</wb-value>
+                        <wb-local>
+                            <wb-expression type="geolocation" script="geolocation.currentLocation">
+                                <wb-value value="location">my current location</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-context>
+
+                <wb-expression type="number" script="geolocation.latitude">
+                    <wb-value type="geolocation" allow="expression">latitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.longitude">
+                    <wb-value type="geolocation" allow="expression">longitude of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.altitude">
+                    <wb-value type="geolocation" allow="expression">altitude (m) of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.heading">
+                    <wb-value type="geolocation" allow="expression">direction from north of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="geolocation.speed">
+                    <wb-value type="geolocation" allow="expression">speed (m/s) of</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="size">
                 <header>

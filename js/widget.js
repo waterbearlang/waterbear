@@ -49,7 +49,9 @@ window.WBAccordion = document.registerElement('wb-accordion', {prototype: Accord
 
 function accordionClick(evt){
     evt.preventDefault();
+    evt.stopPropagation();
     dom.closest(evt.target, 'wb-accordion').toggle();
+    evt.target.scrollIntoView(true);
 }
 
 Event.on(document.body, 'click', 'wb-accordion > header', accordionClick);

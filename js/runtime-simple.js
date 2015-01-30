@@ -6,6 +6,13 @@
  * fewer dependencies.
  */
 (function (global) {
+    /** Converts numeric degrees to radians */
+    if (!Number.prototype.toRadians) {
+      Number.prototype.toRadians = function() {
+        return this * Math.PI / 180;
+      };
+    }
+
     global.runtime = util.extend((global.runtime || {} ), {
         array: {
             create: function(){
@@ -174,5 +181,101 @@
             getHeight: function (size) { return size.height; }
         },
 
+        object: {
+            empty: function () {
+                return {};
+            },
+            create: function () {
+                var i, key, val, obj;
+                obj = {};
+                // Get key/value pairs from arguments.
+                for (i = 0; i < arguments.length; i++) {
+                    key = arguments[i][0];
+                    val = arguments[i][1];
+                    obj[key] = val;
+                }
+                return obj;
+            },
+            getValue: function (obj, key) {
+                return obj[key];
+            },
+            getKeys: function (obj) {
+                return Object.keys(obj);
+            }
+        },
+
+        /*
+         * The underlying JavaScript object is the same object that is passed
+         * to the getCurrentLocation callback.
+         */
+        geolocation: {
+            /* Synchronous "get current location" */
+            currentLocation: function () {
+                return util.geolocation.currentLocation;
+            },
+            /* Asynchronous update event. Context. */
+            whenLocationUpdated: function(args, containers) {
+                var currentScope = this,
+                    steps = containers[0];
+
+                Event.on(window, 'locationchanged', null, function (event) {
+                    // TODO: probably factor out augmenting scope and running
+                    // the block stuff to somewhere else.
+                    steps.forEach(function (block) {
+                        block.run(currentScope);
+                    });
+                });
+            },
+            // Returns the distance between two points in meters.
+            // taken from http://www.movable-type.co.uk/scripts/latlong.html
+            // Using the haversine formula.
+            distanceBetween: function (p1, p2) {
+                var R = 6371000; // m
+                var lat1 = p1.coords.latitude;
+                var lon1 = p1.coords.longitude;
+                var lat2 = p2.coords.latitude;
+                var lon2 = p2.coords.longitude;
+
+                var φ1 = lat1.toRadians();
+                var φ2 = lat2.toRadians();
+                var Δφ = (lat2-lat1).toRadians();
+                var Δλ = (lon2-lon1).toRadians();
+
+                var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                        Math.cos(φ1) * Math.cos(φ2) *
+                        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+                return R * c;
+            },
+            /* Returns latitude in degrees. */
+            // TODO: should this return a "degrees" object?
+            latitude: function (location) {
+                return location.coords.latitude;
+            },
+            /* Returns longitude in degrees. */
+            // TODO: should this return a "degrees" object?
+            longitude: function (location) {
+                return location.coords.longitude;
+            },
+            /* Returns altitude as a unit? */
+            altitude: function (location) {
+                return location.coords.altitude;
+            },
+            /* Returns degrees from north. */
+            heading: function (location) {
+                // TODO: What do we do when this is NaN or NULL?
+                return location.coords.heading;
+            },
+            /* Returns estimated speed. */
+            speed: function (location) {
+                // TODO: What do we do when this is NaN or NULL?
+                return location.coords.speed;
+            },
+        },
+
+
     });
+
+
 }(window));

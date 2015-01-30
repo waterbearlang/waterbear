@@ -244,35 +244,33 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints, ctx){
+    function Path(funcToCall, inputPoints){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
-        this.ctx = ctx;
-        
     }
-    
-    Path.prototype.draw = function(){
+
+    Path.prototype.draw = function(ctx){
         if(this.inputPoints !== undefined){
-            this.funcToCall.apply(this.ctx, this.inputPoints);
+            this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
             console.log(this.funcToCall);
-            this.funcToCall.apply(this.ctx, new Array());
+            this.funcToCall.apply(ctx, new Array());
         }
-            
+
     }
-    
-    
+
+
     //Pathset
     function Pathset(pathArray){
         var len = pathArray.length;
         var i = 0;
         while (i<len){
-            if(!(pathArray[i] instanceof Path)){ 
+            if(!(pathArray[i] instanceof Path)){
                 throw new Error('Only paths may be added to a Pathset, ' + pathArray[i] + " is not.");
             }
         }
-        
+
         this.pathArray = pathArray;
     }
     Pathset.prototype.getPathArray = function(){

@@ -3,16 +3,33 @@
 
     // Dependencies: ctx, canvas, Event, runtime, sound, soundEffect,
     // canvas/stage stuff
-    var canvas, ctx;
+    var _canvas, _ctx;
+    function canvas(){
+        if (!_canvas){
+            if (dom.find){
+                _canvas = dom.find('wb-playground > canvas');
+            }else{
+                _canvas = document.createElement('canvas');
+                _canvas.setAttribute('width', '200');
+                _canvas.setAttribute('height', '200');
+            }
+            return _canvas;
+        }
+    }
+    function ctx(){
+        if (!_ctx){
+            _ctx = canvas().getContext('2d');
+        }
+        return _ctx;
+    }
     Event.on(window, 'load', null, function(){
-        canvas = dom.find('wb-playground > canvas');
-        ctx = canvas.getContext('2d');
         handleResize();
     }, false);
 
     function handleResize(){
-        var rect = canvas.getBoundingClientRect();
+        var rect = canvas().getBoundingClientRect();
         Event.stage = {
+            // FIXME: Move these to runtime.stage
             top: Math.round(rect.top),
             left: Math.round(rect.left),
             right: Math.round(rect.right),
@@ -20,8 +37,8 @@
             width: Math.round(rect.right) - Math.round(rect.left),
             height: Math.round(rect.bottom) - Math.round(rect.top)
         };
-        canvas.setAttribute('width', Event.stage.width);
-        canvas.setAttribute('height', Event.stage.height);
+        canvas().setAttribute('width', Event.stage.width);
+        canvas().setAttribute('height', Event.stage.height);
     }
 
     // Initialize the stage.
@@ -248,6 +265,8 @@
                 };
             }
         },
+        stage: {
+        },
         color: {
             namedColor: function(name){
                 // FIXME: We may need to return hex or other color value
@@ -272,13 +291,13 @@
                 return "#"+(~~(Math.random()*(1<<30))).toString(16).toUpperCase().slice(0,6);
             },
             fill: function(color){
-                ctx.fillStyle = color;
+                ctx().fillStyle = color;
             },
             stroke: function(color){
-                ctx.strokeStyle = color;
+                ctx().strokeStyle = color;
             },
             shadow: function(color){
-                ctx.shadowColor = color;
+                ctx().shadowColor = color;
             }
         },
         image: {
@@ -286,7 +305,19 @@
                 return images[path];
             },
             drawAtPoint: function(img, pt, w, h){
-                ctx.drawImage(img, pt.x, pt.y, w, h);
+                ctx().drawImage(img, pt.x, pt.y, w, h);
+            },
+            drawAtPointWithSize: function(img, pt, sz){
+                ctx().drawImage(img, pt.x, pt.y, sz.w, sz.h);
+            },
+            getScaledAtOrigin: function(path, sz){
+                var img = images[path];
+                return {
+                    name: 'Image',
+                    function draw(inner_ctx){
+                        inner_ctx.drawImage(img, -sz.w/2, -sz.h/2, sz.w, sz.h);
+                    };
+                }
             }
         },
         string: {
@@ -326,7 +357,7 @@
 			comment: function(args, containers){},
 		},
         path:{
-            
+
             lineTo: function(toPoint){return new util.Path(ctx.lineTo, new Array(toPoint.getX(), toPoint.getY()), ctx)},
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
@@ -352,7 +383,7 @@
                 var i;
                 for(i=0; i<arguments.length; i++){
                     arguments[i].draw();
-                }    
+                }
             },
             fill: function(pathSet){
                 ctx.closePath();

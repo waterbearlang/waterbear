@@ -524,7 +524,6 @@
     }
 
     function defaultDrawable(ctx){
-        // ctx.save();
         var width = PI - PI/6;
         var length = 20;
         var frontX = cos(this.facing.rad) * length + this.position.x;
@@ -539,8 +538,6 @@
         ctx.lineTo(cos(this.facing.rad + width) * length + this.position.x,
                    sin(this.facing.rad + width) * length + this.position.y);
         ctx.stroke();
-        // ctx.restore();
-
     }
 
 

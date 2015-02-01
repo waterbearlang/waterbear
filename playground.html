@@ -782,6 +782,13 @@
                     <img class="cat-icon" src="images/icon/motion.svg" />
                     Motion
                 </header>
+                <wb-context script="motion.whenDeviceTurned">
+                    <wb-value type="list" allow="literal" options="upright,downright,downleft,upleft,up,down,right,left">when device turned</wb-value>
+                    
+                </wb-context>
+                <wb-expression type="motion" script="motion.tiltDirection">
+                    tilt direction
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="shape">
                 <header>

@@ -451,7 +451,7 @@
                     steps = containers[0];
 
                 Event.on(window, 'motionchanged', null, function (event) {
-                        if args[0] === util.motion.direction {
+                        if (args[0] === util.motion.direction) {
                             steps.forEach(function (block) {
                             block.run(currentScope);
                         });
@@ -586,19 +586,6 @@
             getY: function (rect) { return rect.y; },
             getWidth: function (rect) { return rect.size.width; },
             getHeight: function (rect) { return rect.size.height; }
-        },
-
-        shape: {
-            fillShape: function(shp){
-                shp();
-                ctx().fill();
-            },
-            circle: function(pt, rad){
-                return function(){
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                };
-            }
         },
 
         size: {

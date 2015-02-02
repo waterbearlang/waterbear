@@ -577,6 +577,22 @@
                     ctx().beginPath();
                     ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                
+            },
+            rectangle: function(pt, width, height, orientation){
+                ctx().beginPath();
+                if(orientation == "center"){
+                    ctx().moveTo(pt.x - width/2, pt.y - height/2);
+                    ctx().lineTo(pt.x + width/2, pt.y - height/2);
+                    ctx().lineTo(pt.x + width/2, pt.y + height/2);
+                    ctx().lineTo(pt.x - width/2, pt.y + height/2);
+                    ctx().lineTo(pt.x - width/2, pt.y - height/2);
+                }
+                else{
+                    ctx().lineTo(pt.x + width, pt.y);
+                    ctx().lineTo(pt.x + width, pt.y + height);
+                    ctx().lineTo(pt.x, pt.y + height);
+                    ctx().lineTo(pt.x, pt.y);
+                }
             }
             
         },

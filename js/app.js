@@ -46,6 +46,16 @@ function preload(){
         });
     }
 
+    // FIXME: hack to load motion when it's needed.
+    if (dom.find('wb-workspace wb-expression[script="motion.tiltDirection"]') !== null) {
+        assets.push(function (ready) {
+            util.motion.startTrackingMotion();
+            // Listen to the first motionchanged event which will
+            // signify that motion is ready.
+            Event.once(window, 'motionchanged', null, ready);
+        });
+    }
+
     if (assets.length){
         sounds.load(assets);
         sounds.whenLoaded = run;

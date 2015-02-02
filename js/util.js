@@ -412,7 +412,7 @@
      *
      */
     var motionModule  = (function () {
-        var direction = ""
+        var direction = "",
             motionModule;
 
         motionModule = {
@@ -421,8 +421,6 @@
              * direction property of this module. 
              */
             startTrackingMotion: function () {
-                if (watchID !== null)
-                    return;
 
                 /* Handle if motion is not supported. */
                 if (!window.DeviceOrientationEvent) {

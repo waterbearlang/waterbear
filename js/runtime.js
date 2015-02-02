@@ -593,7 +593,12 @@
                     ctx().lineTo(pt.x, pt.y + height);
                     ctx().lineTo(pt.x, pt.y);
                 }
-            }
+            },
+            ellipse: function(pt, rad1, rad2, rot){
+                    ctx().beginPath();
+                    ctx().ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+               
+            },
             
         },
 

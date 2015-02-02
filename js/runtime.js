@@ -472,24 +472,24 @@
 
         path:{
 
-            lineTo: function(toPoint){return new util.Path(ctx().lineTo, new Array(toPoint.getX(), toPoint.getY()))},
+            lineTo: function(toPoint){return new util.Path(ctx().lineTo, new Array(toPoint.x, toPoint.y))},
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
-                return new util.Path(ctx().bezierCurveTo, new Array(controlPoint1.getX(), controlPoint1.getY(),
-                controlPoint2.getX(), controlPoint2.getY(), toPoint.getX(),
-                toPoint.getY()));
+                return new util.Path(ctx().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
+                controlPoint2.x, controlPoint2.y, toPoint.x,
+                toPoint.y));
             },
             moveTo: function(toPoint){
-                return new util.Path(ctx().moveTo, new Array(toPoint.getX(), toPoint.getY()));
+                return new util.Path(ctx().moveTo, new Array(toPoint.x, toPoint.y));
             },
             quadraticCurveTo: function(toPoint, controlPoint){
-                return new util.Path(ctx().quadraticCurveTo, new Array(controlPoint.getX(),
-                controlPoint.getY(),toPoint.getX(), toPoint.getY()));
+                return new util.Path(ctx().quadraticCurveTo, new Array(controlPoint.x,
+                controlPoint.y,toPoint.x, toPoint.y));
             },
-            arcTo: function(toPoint, controlPoint1, controlPoint2){
-                return new util.Path(ctx().arcTo, new Array(controlPoint1.getX(),
-                controlPoint1.getY(),controlPoint2.getX(), controlPoint2.getY(),
-                toPoint.getX(), toPoint.getY()));
+            arcTo: function(radius, controlPoint1, controlPoint2){
+                return new util.Path(ctx().arcTo, new Array(controlPoint1.x,
+                controlPoint1.y,controlPoint2.x, controlPoint2.y,
+                radius));
             },
             closePath: function(){return new util.Path(ctx().closePath)},
             pathSet: function(args){
@@ -500,13 +500,7 @@
                     arguments[i].draw(theCtx);
                 }
             },
-            fill: function(pathSet){
-                ctx().closePath();
-                ctx().fill();
-            },
-            stroke: function(pathSet){
-                ctx().stroke();
-            },
+            
             lineStyle: function(width, color, capStyle, joinStyle){
                 ctx().lineWidth = width;
                 ctx().strokeStyle = color;
@@ -572,16 +566,19 @@
         },
 
         shape: {
-            fillShape: function(shp){
-                shp();
+            fill: function(pathSet){
                 ctx().fill();
             },
+            stroke: function(pathSet){
+                ctx().stroke();
+            },
+           
             circle: function(pt, rad){
-                return function(){
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                };
+                    ctx().beginPath();
+                    ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+               
             }
+            
         },
 
         size: {

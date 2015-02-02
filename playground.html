@@ -707,7 +707,7 @@
                     <wb-value type="point">control point</wb-value>
                 </wb-expression>
                 <wb-expression script = "path.arcTo" type ="path">
-                    <wb-value type="point">draw an arc to</wb-value>
+                    <wb-value type="number">draw an arc with radius</wb-value>
                     <wb-value type="point">first control point</wb-value>
                     <wb-value type="point">second control point</wb-value>
                 </wb-expression>
@@ -722,26 +722,20 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-
-                <wb-step script=path.fill>
-                    <wb-value type="pathset">fill the path</wb-value>
-                </wb-step>
-                <wb-step script=path.stroke>
-                    <wb-value type="pathset">stroke the path</wb-value>
-                </wb-step>
-                <wb-step script=path.fillRule>
-                    <wb-value type="list" allow="literal"
-                        options="non-zero, even-odd" value="non-zero">fill rule</wb-value>
-                </wb-step>
             </wb-accordion>
             <wb-accordion class="shape">
                 <header>
                     <img class="cat-icon" src="images/icon/shape.svg" />
                     Shapes
                 </header>
-                <wb-step script="shape.fillShape">
-                    <wb-value type="shape">fill shape</wb-value>
+                 <wb-step script=shape.fill>
+                    <wb-value type="shape">fill the shape</wb-value>
                 </wb-step>
+                <wb-step script=shape.stroke>
+                    <wb-value type="shape">stroke the shape</wb-value>
+                </wb-step>
+                
+                
                 <wb-expression type="shape" script="shape.circle">
                     <wb-value type="point">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
@@ -941,7 +935,6 @@
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
     <script src="js/runtime.js"></script>
-    <script src="js/runtime-simple.js"></script>
 	<script src="js/dom.js"></script>
     <script src="js/widget.js"></script>
     <script src="js/block.js"></script>

@@ -412,7 +412,7 @@
      *
      */
     var motionModule  = (function () {
-        var direction = ""
+        var direction = "",
             motionModule;
 
         motionModule = {

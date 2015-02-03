@@ -726,12 +726,12 @@
         shape: {
             fillShape: function(shp){
                 shp();
-                ctx.fill();
+                ctx().fill();
             },
             circle: function(pt, rad){
                 return function(){
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                    ctx().beginPath();
+                    ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                 };
             }
         },
@@ -739,17 +739,17 @@
         text:{
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
-                ctx.font = sizeString + " " + fontStyle;
+                ctx().font = sizeString + " " + fontStyle;
 
             },
-            textAlign: function (alignment){ctx.textAlign = alignment;},
-            textBaseline: function (baseline){ctx.textBaseline = baseline;},
-            fillText: function (text, x, y){ctx.fillText(text, x, y);},
-            fillTextWidth: function (text, x, y, width){ctx.fillText(text, x, y, width);},
-            strokeText: function (text, x, y){ctx.strokeText(text, x, y);},
-            strokeTextWidth: function (text, x, y, width){ctx.strokeText(text, x, y, width);},
+            textAlign: function (alignment){ctx().textAlign = alignment;},
+            textBaseline: function (baseline){ctx().textBaseline = baseline;},
+            fillText: function (text, x, y){ctx().fillText(text, x, y);},
+            fillTextWidth: function (text, x, y, width){ctx().fillText(text, x, y, width);},
+            strokeText: function (text, x, y){ctx().strokeText(text, x, y);},
+            strokeTextWidth: function (text, x, y, width){ctx().strokeText(text, x, y, width);},
             width: function (text){
-                var textMetric = ctx.measureText(text);
+                var textMetric = ctx().measureText(text);
                 return textMetric.width;
             }
         }

@@ -402,6 +402,80 @@
     }
 
 
+    /*
+     * Motion mini-module.
+     *
+     * Call startTrackingMotion(). The direction property will be
+     * updated.
+     *
+     * Events:
+     *
+     */
+    var motionModule  = (function () {
+        var direction = "",
+            motionModule;
+
+        motionModule = {
+            /**
+             * Starts fetching the motion, periodically, and sets the
+             * direction property of this module. 
+             */
+            startTrackingMotion: function () {
+
+                /* Handle if motion is not supported. */
+                if (!window.DeviceOrientationEvent) {
+                    app.warn('This app tracks your motion, but your browser ' +
+                             'does not have an accelerometer.');
+                    return;
+                }
+
+                window.addEventListener('deviceorientation', onMotionChange);
+            }
+        };
+
+        /* Define a read-only getter for the current direction. */
+        Object.defineProperties(motionModule, {
+            direction: {
+                get: function () {
+                    return direction;
+                }
+            }
+        });
+
+        function onMotionChange(eventData) {
+            // gamma is the left-to-right tilt in degrees, where right is positive
+            var left_right = eventData.gamma;
+
+            // beta is the front-to-back tilt in degrees, where front is positive
+            var front_back = eventData.beta;
+
+            limit = 10;
+
+            direction = "";
+
+            if(left_right > limit && front_back > limit) {
+                direction = "upright";
+            } else if(left_right > limit && front_back < -limit) {
+                direction = "downright";
+            } else if(left_right < -limit && front_back < -limit) {
+                direction = "downleft";
+            } else if(left_right < -limit && front_back > limit) {
+                direction = "upleft";
+            } else if(front_back > limit) {
+                direction = "up";
+            } else if(left_right > limit) {
+                direction = "right";
+            } else if(front_back < -limit) {
+                direction = "down";
+            } else if(left_right < -limit) {
+                direction = "left";
+            }
+
+            Event.trigger(window, 'motionchanged', direction);
+        }
+
+        return motionModule;
+    })();
 
     /*
      * Geolocation mini-module.
@@ -565,6 +639,7 @@
         Path: Path,
         Pathset: Pathset,
         geolocation: geolocationModule,
+        motion: motionModule,
     };
 
 

@@ -445,6 +445,23 @@
         },
 
         motion: {
+            /* Asynchronous update event. Context. */
+            whenDeviceTurned: function(args, containers) {
+                var currentScope = this,
+                    steps = containers[0];
+
+                Event.on(window, 'motionchanged', null, function (event) {
+                        if (args[0] === util.motion.direction) {
+                            steps.forEach(function (block) {
+                            block.run(currentScope);
+                        });
+                    }
+                });
+            },
+            /* Synchronous "get current location" */
+            tiltDirection: function(){
+                return util.motion.direction;
+            }
         },
 
         object: {
@@ -569,19 +586,6 @@
             getY: function (rect) { return rect.y; },
             getWidth: function (rect) { return rect.size.width; },
             getHeight: function (rect) { return rect.size.height; }
-        },
-
-        shape: {
-            fillShape: function(shp){
-                shp();
-                ctx().fill();
-            },
-            circle: function(pt, rad){
-                return function(){
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                };
-            }
         },
 
         size: {
@@ -719,6 +723,18 @@
             comment: function(args, containers){},
         },
 
+        shape: {
+            fillShape: function(shp){
+                shp();
+                ctx.fill();
+            },
+            circle: function(pt, rad){
+                return function(){
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                };
+            }
+        },
 
         text:{
             setFont: function (size, fontStyle){

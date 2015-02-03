@@ -41,7 +41,11 @@
         return base + '?' + parts.join('&');
     }
 
-    wb.urlToQueryParams = urlToQueryParams;
-    wb.queryParamsToUrl = queryParamsToUrl;
-    runtime.wb = wb;
+    runtime.query = {
+        params: function (){
+            return urlToQueryParams(location.toString());
+        },
+        urlToQueryParams: urlToQueryParams,
+        queryParamsToUrl: queryParamsToUrl
+    };
 })(this);

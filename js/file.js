@@ -36,6 +36,7 @@
         ajax.post("https://api.github.com/gists", function(data){
             //var raw_url = JSON.parse(data).files["script.json"].raw_url;
             var gistID = JSON.parse(data).url.split("/").pop();
+            gistUrl(gistID);
             prompt("This is your Gist ID. Copy to clipboard: Ctrl+C, Enter", gistID);
 
             //save gist id to local storage
@@ -56,6 +57,7 @@
             alert("Can't save to Gist:\n" + statusCode + " (" + x.statusText + ") ");
         });
     }
+
     //populate the gist submenu with recent gists
     function loadRecentGists() {
         var localGists = localStorage['__' + File.language + '_recent_gists'];
@@ -122,14 +124,28 @@
         var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
         // console.log("Loading gist " + id);
         if( !gistID ) return;
-        ajax.get("https://api.github.com/gists/"+gistID, function(data){
+        getScriptFromGist(id);
+    }
+
+    function getScriptFromGistId(id){
+        ajax.get("https://api.github.com/gists/"+ id, function(data){
             loadScriptsFromGist({data:JSON.parse(data)});
+            gistUrl(id);
         }, function(statusCode, x){
             alert("Can't load from Gist:\n" + statusCode + " (" + x.statusText + ") ");
+            return;
         });
+    }
+
+    function gistUrl(gistID){
         var path = location.href.split('?')[0];
         path += "?gist=" + gistID;
-        history.pushState(null, '', path);
+        history.replaceState(null, '', path);
+    }
+
+    function bareUrl(gistID){
+        var path = location.href.split('?')[0];
+        history.replaceState(null, '', path);
     }
 
     function loadScriptsFromFilesystem(event){
@@ -174,7 +190,12 @@
     }
 
     function loadCurrentScripts(queryParsed){
-        if (localStorage['__simple_currentWaterbearScript']){
+        var params = query.params();
+        if (params.gist){
+            getScriptFromGistId(params.gist);
+        }else if (params.example){
+            loadScriptsFromExample(params.example);
+        }else if (localStorage['__simple_currentWaterbearScript']){
             loadScriptsFromString(localStorage['__simple_currentWaterbearScript']);
         }
     }
@@ -206,6 +227,9 @@
 
     Event.on(window, 'load', null, loadCurrentScripts);
     Event.on(window, 'beforeunload', null, saveCurrentScripts);
+    Event.on(document.body, 'wb-added', null, bareUrl); // Remove gist or other argument on script change
+    Event.on(document.body, 'wb-removed', null, bareUrl);
+    Event.on(document.body, 'wb-changed', null, bareUrl);
 
     window.File = {
         scriptsToString: scriptsToString,

@@ -747,6 +747,7 @@ Event.on(document.body, 'input', 'input', function(evt){
     var target = evt.target;
     if (! dom.matches(target, 'wb-value > input')) return;
     resize(target);
+    Event.trigger(target, 'wb-changed', evt.target.value);
 }, false);
 
 

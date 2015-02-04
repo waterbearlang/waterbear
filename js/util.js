@@ -254,7 +254,7 @@
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
-            console.log(this.funcToCall);
+            // console.log(this.funcToCall);
             this.funcToCall.apply(ctx, new Array());
         }
 
@@ -418,7 +418,7 @@
         motionModule = {
             /**
              * Starts fetching the motion, periodically, and sets the
-             * direction property of this module. 
+             * direction property of this module.
              */
             startTrackingMotion: function () {
 
@@ -583,7 +583,7 @@
 
     Sprite.prototype.rotate = function(r){
         this.facing = this.facing.rotate(r);
-        console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+        //console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
     }
 
     Sprite.prototype.move = function(){

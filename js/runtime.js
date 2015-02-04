@@ -46,6 +46,7 @@
 
     // Initialize the stage.
     Event.on(window, 'resize', null, handleResize);
+    Event.on(document.body, 'wb-resize', null, handleResize);
 
     var perFrameHandlers = [];
     var lastTime = new Date().valueOf();
@@ -735,7 +736,7 @@
                 };
             },
         },
-		
+
 		sensing: {
 			keyPressed: function(key){
 				if(Event.keys[key])
@@ -759,10 +760,10 @@
                     	block.run(self);
                 	});
 				};
-				window.setTimeout(function(){ runBlocks(container); }, milliseconds);	
+				window.setTimeout(function(){ runBlocks(container); }, milliseconds);
 			},
 			resetTimer: function(){}, //TODO
-			
+
 		},
         text:{
             setFont: function (size, fontStyle){

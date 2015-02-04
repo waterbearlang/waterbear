@@ -240,6 +240,7 @@
 
     //Paths
     function Path(funcToCall, inputPoints){
+        console.log(funcToCall); //TODO
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
     }
@@ -260,15 +261,24 @@
         var len = pathArray.length;
         var i = 0;
         while (i<len){
+            console.log(i);
             if(!(pathArray[i] instanceof Path)){
                 throw new Error('Only paths may be added to a Shape, ' + pathArray[i] + " is not.");
             }
+            i = i+1;
         }
 
         this.pathArray = pathArray;
     }
     Shape.prototype.getPathArray = function(){
         return pathArray;
+    }
+    Shape.prototype.draw = function(ctx){
+        ctx.beginPath();
+        var i;
+        for(i=0; i<this.pathArray.length; i++){
+            this.pathArray[i].draw(ctx);
+        }
     }
 
 

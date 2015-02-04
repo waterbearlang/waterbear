@@ -491,15 +491,8 @@
                 controlPoint1.y,controlPoint2.x, controlPoint2.y,
                 radius));
             },
-            closePath: function(){return new util.Path(ctx().closePath)},
-            pathSet: function(args){
-                var theCtx = ctx();
-                theCtx.beginPath();
-                var i;
-                for(i=0; i<arguments.length; i++){
-                    arguments[i].draw(theCtx);
-                }
-            },
+            closePath: function(){return new util.Path(ctx().closePath);},
+            pathSet: function(args){return new util.Shape(arguments);},
             
             lineStyle: function(width, color, capStyle, joinStyle){
                 ctx().lineWidth = width;
@@ -566,10 +559,13 @@
         },
 
         shape: {
-            fill: function(pathSet){
+            fill: function(shapeArg){
+                console.log(shapeArg);
+                shapeArg.draw(ctx());
                 ctx().fill();
             },
-            stroke: function(pathSet){
+            stroke: function(shapeArg){
+                shapeArg.draw(ctx());
                 ctx().stroke();
             },
            

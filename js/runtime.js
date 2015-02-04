@@ -733,9 +733,7 @@
                     ctx().beginPath();
                     ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                 };
-            }
-        },
-        size: {
+            },
         },
 		
 		sensing: {
@@ -745,15 +743,25 @@
 				else
 					return false;
 			},
-			mouseX: function(){ return Event.pointerX-Event.stage.left; },	//TODO
-			mouseY: function(){ return Event.pointerY-Event.stage.top; },	//TODO
-			mouseDown: function(){ return Event.pointerDown; }, 			//TODO
+			mouseX: function(){ return (Event.pointerX-Event.stage.left); },	//TODO
+			mouseY: function(){ return (Event.pointerY-Event.stage.top); },		//TODO
+			mouseDown: function(){ return Event.pointerDown; },
 			stageWidth: function(){ return Event.stage.width; },
 			stageHeight: function(){ return Event.stage.height; },
 			centerX: function(){ return (Event.stage.width / 2); },
 			centerY: function(){ return (Event.stage.height / 2); },
 			randomX: function(){ return Math.random() * Event.stage.width; },
 			randomY: function(){ return Math.random() * Event.stage.height; },
+			timer: function(milliseconds, container){
+				var self = this;
+				var runBlocks = function(cntr){
+					cntr[0].forEach(function(block){
+                    	block.run(self);
+                	});
+				};
+				window.setTimeout(function(){ runBlocks(container); }, milliseconds);	
+			},
+			resetTimer: function(){}, //TODO
 			
 		},
         text:{

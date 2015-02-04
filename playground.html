@@ -776,19 +776,43 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Sensing
                 </header>
-				<wb-expression type="number" script="sensing.mouseX"> Mouse x </wb-expression>
-				<wb-expression type="number" script="sensing.mouseY"> Mouse Y </wb-expression>
-				<wb-expression type="boolean" script="sensing.mouseDown"> Mouse Down </wb-expression>
+				<wb-expression type="number" script="sensing.mouseX"> 
+					<wb-value>Mouse x</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="sensing.mouseY"> 
+					<wb-value>Mouse y</wb-value>
+				</wb-expression>
+				<wb-expression type="boolean" script="sensing.mouseDown"> 
+					<wb-value>Mouse Down</wb-value> 
+				</wb-expression>
 				<wb-expression type="boolean" script="sensing.keyPressed">  
 					<wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
-                	Pressed?
+                	<wb-value>Pressed?</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="sensing.stageWidth"> Stage Width </wb-expression>
-				<wb-expression type="number" script="sensing.stageHeight"> Stage Height </wb-expression>
-				<wb-expression type="number" script="sensing.centerX"> Center x </wb-expression>
-				<wb-expression type="number" script="sensing.centerY"> Center y </wb-expression>
-				<wb-expression type="number" script="sensing.randomX"> Random x </wb-expression>
-				<wb-expression type="number" script="sensing.randomY"> Random y </wb-expression>
+				<wb-expression type="number" script="sensing.stageWidth"> 
+					<wb-value>Stage Width</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="sensing.stageHeight"> 
+					<wb-value>Stage Height</wb-value>
+				</wb-expression>
+				<wb-expression type="number" script="sensing.centerX"> 
+					<wb-value>Center x</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="sensing.centerY">
+					<wb-value>Center y</wb-value>
+				</wb-expression>
+				<wb-expression type="number" script="sensing.randomX"> 
+					<wb-value>Random x</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="sensing.randomY"> 
+					<wb-value>Random y<wb-value> 
+				</wb-expression>
+				<wb-context class="sensing" script="sensing.timer">
+                    <wb-value type="number" min="0" value="0">milliseconds</wb-value>
+                </wb-context>
+				<wb-step class="sensing" script="sensing.resetTimer">
+					<wb-value>Reset Timer</wb-value>
+				</wb-step>
             </wb-accordion>
             <wb-accordion class="motion">
                 <header>

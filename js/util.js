@@ -240,7 +240,6 @@
 
     //Paths
     function Path(funcToCall, inputPoints){
-        console.log(funcToCall); //TODO
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
     }
@@ -261,7 +260,6 @@
         var len = pathArray.length;
         var i = 0;
         while (i<len){
-            console.log(i);
             if(!(pathArray[i] instanceof Path)){
                 throw new Error('Only paths may be added to a Shape, ' + pathArray[i] + " is not.");
             }

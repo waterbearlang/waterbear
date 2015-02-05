@@ -242,9 +242,9 @@
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
         this.ctx = ctx;
-        
+
     }
-    
+
     Path.prototype.draw = function(){
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(this.ctx, this.inputPoints);
@@ -253,20 +253,20 @@
             console.log(this.funcToCall);
             this.funcToCall.apply(this.ctx, new Array());
         }
-            
+
     }
-    
-    
+
+
     //Pathset
     function Pathset(pathArray){
         var len = pathArray.length;
         var i = 0;
         while (i<len){
-            if(!(pathArray[i] instanceof Path)){ 
+            if(!(pathArray[i] instanceof Path)){
                 throw new Error('Only paths may be added to a Pathset, ' + pathArray[i] + " is not.");
             }
         }
-        
+
         this.pathArray = pathArray;
     }
     Pathset.prototype.getPathArray = function(){
@@ -479,148 +479,218 @@
     })();
 
     /**
-     * Asset loading module.
-     * FIXME: rename from `sounds` to assets!
+     *  assets
+     *  ------
      *
-     * Exports three globals:
-     * - sounds
-     * - images
-     * - videos
+     *  `assets` is an module that ensures that sounds, images, and other
+     *  things are loaded before the start of the script.
+     *
+     *  `assets.load` works by determining whether the asset is needed by
+     *  matching a selector against the document (usually this means elements
+     *  inside the script). Once those elements are matched, they're passed to
+     *  a provided callback that should set in place the asynchronous loading
+     *  of said elements.
+     *
+     *  Once all elements are done loading, the provided callback is called.
+     *
+     *  Here's how could use the `assets` object to execute loading callbacks
+     *  and call a `setup` method when all the files have finished loading:
+     *
+     *      assets.load({
+     *          'wb-expression[isAsset=true]': function () { ... },
+     *          'wb-expression[script="geolocation"]': function () { ... },
+     *          'wb-expression[script="motion"]': function () { ... }
+     *      }).whenLoaded(function () { ... });
+     *
+     *  TODO: document helpers!
+     *
+     *  You can now access these loaded media assets in you application code like this:
+     *
+     *  var shoot = assets.sounds["sounds/shoot.wav"],
+     *      steampunk = assets.images["images/mascot-steampunk.png"],
+     *      bounce = assets.videos["videos/bounce.mov"];
      *
      */
-    /*
-    sounds
-    ------
-
-    `sounds` is an object that you can use to store all your loaded sound fles.
-    It also has a helpful `load` method that manages asset loading. You can load sounds at
-    any time during the game by using the `sounds.load` method. You don't have to use
-    the `sounds` object or its `load` method, but it's a really convenient way to
-    work with sound file assets.
-
-    Here's how could use the `sound` object to load three sound files from a `sounds` folder and
-    call a `setup` method when all the files have finished loading:
-
-        sounds.load([
-          "sounds/shoot.wav",
-          "sounds/music.wav",
-          "sounds/bounce.mp3"
-        ]);
-        sounds.whenLoaded = setup;
-
-    You can now access these loaded sounds in you application code like this:
-
-    var shoot = sounds["sounds/shoot.wav"],
-        music = sounds["sounds/music.wav"],
-        bounce = sounds["sounds/bounce.mp3"];
-
-    */
     (function () {
         // We're going to use the loader to load images and video too, since it is here
 
-        var images = {}; /* WB */
-        var videos = {}; /* WB */
-        var sounds = {
-          //Properties to help track the assets being loaded.
-          toLoad: 0,
-          loaded: 0,
+        var assets = {
 
-          //File extensions for different types of sounds.
-          audioExtensions: ["mp3", "ogg", "wav", "webm"],
-          imageExtensions: ["gif", "png", "jpg", "jpeg", "bmp"],
-          videoExtensions: ["mov", "mpg", "mpeg"],
+            /**
+             * Loads stuff based on dependencies.
+             * Passed an object of selector-callback pairs.
+             */
+            load: function (dependencies) {
+                //Properties to help track the assets being loaded.
+                var toLoad = 0;
+                var loaded = 0;
+                var whenLoaded, selector, matchedElements, matchCallback;
 
-          //The callback function that should run when all assets have loaded.
-          //Assign this when you load the fonts, like this: `assets.whenLoaded = makeSprites;`.
-          whenLoaded: undefined,
+                /* Default whenLoaded callback. */
+                whenLoaded = function () {
+                    console.warn(toLoad, 'assets loaded.');
+                };
 
-          //The load method creates and loads all the assets. Use it like this:
-          //`assets.load(["images/anyImage.png", "fonts/anyFont.otf"]);`.
+                /* Try every selector. */
+                for (selector in dependencies) {
+                    matchedElements = dom.findAll(selector);
 
-          load: function(sources) {
-            console.log("Loading assets..");
+                    // No need to call the matched elements.
+                    if (!matchedElements.length)
+                        continue;
 
-            //Get a reference to this asset object so we can
-            //refer to it in the `forEach` loop ahead.
-            var self = this;
-            var handleLoad = self.loadHandler.bind(self);
+                    toLoad++;
 
-            //Find the number of files that need to be loaded.
-            self.toLoad = sources.length;
-            sources.forEach(function(source){
+                    matchCallback = dependencies[selector];
+                    // Call the callback. When it's ready,
+                    // it MUST call ready!
+                    matchCallback(matchedElements, ready);
+                }
 
-              // FIXME: ad hoc code asset.
-              // if source is function, call it with the "done" callback.
-              if (util.type(source) === 'function') {
-                source(handleLoad);
-                return;
-              }
+                // Called when all assets are loaded.
+                function ready() {
+                    console.assert(loaded < toLoad);
+                    loaded++;
+                    if (loaded === toLoad && whenLoaded) {
+                        whenLoaded();
+                    }
+                }
 
-              //Find the file extension of the asset.
-              var extension = source.split('.').pop().toLowerCase();
+                // We need at least *ONE* async callback so that ready is
+                // called; fake it here when there's notthing to load.
+                if (toLoad === 0) {
+                    setTimeout(function () {
+                        ready();
+                    }, 0);
+                }
 
-              //#### Sounds
-              //Load audio files that have file extensions that match
-              //the `audioExtensions` array.
-              if (self.audioExtensions.indexOf(extension) !== -1) {
+                /* Returns an object that looks and acts like a promise
+                 * object. */
+                return {
+                    // Pass the callback function that should run when all assets
+                    // have loaded.  
+                    whenLoaded: function(callback) { whenLoaded = callback; },
+                };
 
-                //Create a sound sprite.
-                var soundSprite = makeSound(source, self.loadHandler.bind(self));
+            },
 
-                //Get the sound file name.
-                soundSprite.name = source;
+            /*
+             * Data.
+             */
 
-                //If you just want to extract the file name with the
-                //extension, you can do it like this:
-                //soundSprite.name = source.split("/").pop();
-                //Assign the sound as a property of the assets object so
-                //we can access it like this: `assets["sounds/sound.mp3"]`.
-                self[soundSprite.name] = soundSprite;
-              }
+            //File extensions for different types of sounds.
+            audioExtensions: ["mp3", "ogg", "wav", "webm"],
+            //File extensions for different types of images.
+            imageExtensions: ["gif", "png", "jpg", "jpeg", "bmp"],
+            //File extensions for different types of videos.
+            videoExtensions: ["mov", "mpg", "mpeg"],
 
-              //Display a message if the file type isn't recognized.
-              else if (self.imageExtensions.indexOf(extension) !== -1){
-                var imageSprite = new Image();
-                imageSprite.name = source;
-                images[source] = imageSprite;
-                imageSprite.addEventListener('load', self.loadHandler.bind(self), false);
-                imageSprite.src = source;
-              }else if (self.videoExtensions.indexOf(extension) !== -1){
-                var videoSprite = new Video();
-                videoSprite.name = source;
-                videos[source] = videoSprite;
-                videoSprite.addEventListener('canplay', self.loadHandler.bind(self), false);
-                videoSprite.src = source;
-              }else{
-                console.log("File type not recognized: " + source);
-              }
-            });
-          },
+            /*
+             * Storage.
+             * See assets.loadMedia
+             */
 
-          //#### loadHandler
-          //The `loadHandler` will be called each time an asset finishes loading.
-          loadHandler: function () {
-            var self = this;
-            self.loaded += 1;
-            console.log(self.loaded);
+            // All loaded sounds are stored here.
+            sounds: {},
+            // All loaded images are stored here.
+            images: {},
+            // All loaded videos are stored here.
+            videos: {},
 
-            //Check whether everything has loaded.
-            if (self.toLoad === self.loaded) {
+            /*
+             * Selector helper functions
+             */
 
-              //If it has, run the callback function that was assigned to the `whenLoaded` property
-              console.log("Assets finished loading");
+            // Returns a callback for use with a selector in assets.load()
+            // that calls setup, and then waits for the particularly named
+            // event. When the event is finally fired, ready is called.
+            waitFor: function (eventName, setup) {
+                return function (ignoredElements, ready) {
+                    setup();
+                    Event.once(window, eventName, null, ready);
+                };
+            },
 
-              //Reset `loaded` and `toLoaded` so we can load more assets
-              //later if we want to.
-              self.toLoad = 0;
-              self.loaded = 0;
-              self.whenLoaded();
-            }
-          }
+            // Loading media.
+            // This was adapted from the old sounds library.
+            // Incidentally, this was also most of the old asset loader.
+            loadMedia: function (elements, ready) {
+                /* These counters are similar but COMPLETELY UNRELATED to
+                 * assets.load(). When ALL media are loaded, only then will
+                 * the counter be incremented by one in assets.load().
+                 */
+                var toLoad = 0;
+                var loaded = 0;
+
+                /**
+                 * For each matched wb-expression, get its first value.
+                 * We assume that this is the filename of the asset to load.
+                 */
+                var sources = elements.map(function(asset){
+                    return asset.gatherValues()[0];
+                });
+
+                //Find the number of files that need to be loaded.
+                toLoad = sources.length;
+                sources.forEach(function(source){
+
+                    //Find the file extension of the asset.
+                    var extension = source.split('.').pop().toLowerCase();
+
+                    //#### Sounds
+                    //Load audio files that have file extensions that match
+                    //the `audioExtensions` array.
+                    if (assets.audioExtensions.indexOf(extension) !== -1) {
+
+                        //Create a sound sprite.
+                        var soundSprite = makeSound(source, loadHandler);
+
+                        //Get the sound file name.
+                        soundSprite.name = source;
+
+                        //If you just want to extract the file name with the
+                        //extension, you can do it like this:
+                        //soundSprite.name = source.split("/").pop();
+                        //Assign the sound as a property of the assets object so
+                        //we can access it like this: `assets.sounds["sounds/sound.mp3"]`.
+                        assets.sounds[soundSprite.name] = soundSprite;
+                    }
+                    else if (assets.imageExtensions.indexOf(extension) !== -1){
+                        var imageSprite = new Image();
+                        imageSprite.name = source;
+                        assets.images[source] = imageSprite;
+                        imageSprite.addEventListener('load', loadHandler, false);
+                        imageSprite.src = source;
+                    }else if (assets.videoExtensions.indexOf(extension) !== -1){
+                        var videoSprite = new Video();
+                        videoSprite.name = source;
+                        assets.videos[source] = videoSprite;
+                        videoSprite.addEventListener('canplay', loadHandler, false);
+                        videoSprite.src = source;
+                    }else{
+                        //Display a message if the file type isn't recognized.
+                        console.log("File type not recognized: " + source);
+                    }
+
+
+                    //#### loadHandler
+                    //The `loadHandler` will be called each time an asset finishes loading.
+                    function loadHandler () {
+                        loaded += 1;
+
+                        //Check whether everything has loaded.
+                        if (toLoad === loaded) {
+
+                            //If it has, say that we're ready!
+                            ready();
+                        }
+                    }
+
+                });
+            }, /* loadMedia */
         };
-        window.sounds = sounds;
-        window.images = images;
-        window.videos = videos;
+
+        window.assets = assets;
     })();
 
 

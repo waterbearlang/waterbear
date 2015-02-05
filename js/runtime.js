@@ -738,14 +738,20 @@
         },
 
 		sensing: {
+			ask: function(args){
+				var message = args[0];
+				var name = args[1];
+				var answer = prompt(message);
+				this[name] = answer;
+			},
 			keyPressed: function(key){
 				if(Event.keys[key])
 					return true;
 				else
 					return false;
 			},
-			mouseX: function(){ return (Event.pointerX-Event.stage.left); },	//TODO
-			mouseY: function(){ return (Event.pointerY-Event.stage.top); },		//TODO
+			mouseX: function(){ return (Event.pointerX-Event.stage.left); },
+			mouseY: function(){ return (Event.pointerY-Event.stage.top); },
 			mouseDown: function(){ return Event.pointerDown; },
 			stageWidth: function(){ return Event.stage.width; },
 			stageHeight: function(){ return Event.stage.height; },
@@ -762,7 +768,9 @@
 				};
 				window.setTimeout(function(){ runBlocks(container); }, milliseconds);
 			},
-			resetTimer: function(){}, //TODO
+			resetTimer: function(){
+				
+			}, //TODO
 
 		},
         text:{

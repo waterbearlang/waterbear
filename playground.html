@@ -776,6 +776,17 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Sensing
                 </header>
+				<wb-step script="sensing.ask">
+					<wb-row>
+						<wb-value type="text,string">Ask</wb-value>
+                   		<wb-value type="text" isVariable="true" allow="literal" value="variable">and store in variable</wb-value>
+                    	<wb-local>
+                        	<wb-expression type="any" script="control.getVariable">
+                            	<wb-value value="variable">variable</wb-value>
+                        	</wb-expression>
+						</wb-local>
+					</wb-row>
+                </wb-step>
 				<wb-expression type="number" script="sensing.mouseX"> 
 					<wb-value>Mouse x</wb-value> 
 				</wb-expression>

@@ -197,12 +197,7 @@
     Point.prototype.toString = function(){
         return '[' + this.x + ',' + this.y + ']';
     };
-    Point.prototype.getX = function(){
-        return this.x;
-    }
-    Point.prototype.getY = function(){
-        return this.y;
-    }
+   
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -254,27 +249,34 @@
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
-            console.log(this.funcToCall);
             this.funcToCall.apply(ctx, new Array());
         }
 
     }
 
 
-    //Pathset
-    function Pathset(pathArray){
+    //Shape
+    function Shape(pathArray){
         var len = pathArray.length;
         var i = 0;
         while (i<len){
             if(!(pathArray[i] instanceof Path)){
-                throw new Error('Only paths may be added to a Pathset, ' + pathArray[i] + " is not.");
+                throw new Error('Only paths may be added to a Shape, ' + pathArray[i] + " is not.");
             }
+            i = i+1;
         }
 
         this.pathArray = pathArray;
     }
-    Pathset.prototype.getPathArray = function(){
+    Shape.prototype.getPathArray = function(){
         return pathArray;
+    }
+    Shape.prototype.draw = function(ctx){
+        ctx.beginPath();
+        var i;
+        for(i=0; i<this.pathArray.length; i++){
+            this.pathArray[i].draw(ctx);
+        }
     }
 
 
@@ -637,7 +639,7 @@
         choice: choice,
         isNumber: isNumber,
         Path: Path,
-        Pathset: Pathset,
+        Shape: Shape,
         geolocation: geolocationModule,
         motion: motionModule,
     };

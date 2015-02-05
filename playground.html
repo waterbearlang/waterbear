@@ -649,6 +649,34 @@
                     <wb-value>comment</wb-value>
                 </wb-context>
             </wb-accordion>
+            <wb-accordion class="point">
+                <header>
+                    <img class="cat-icon" src="images/icon/point.svg" />
+                    Points
+                </header>
+                <wb-expression type="point" script="point.create">
+                    <wb-value type="number" value="0">x</wb-value>
+                    <wb-value type="number" value="0">y</wb-value>
+                </wb-expression>
+                <wb-expression type="point" script="point.fromVector">
+                    <wb-value type="vector">from vector</wb-value>
+                </wb-expression>
+                <wb-expression type="point" script="point.fromArray">
+                    <wb-value type="array">from array</wb-value>
+                </wb-expression>
+                <wb-expression type="point" script="point.randomPoint">
+                    <wb-value>random point</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="point.x">
+                    <wb-value type="point,vector" >x of</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="point.y">
+                    <wb-value type="point,vector">y of</wb-value>
+                </wb-expression>
+                <wb-expression type="array" script="point.toArray">
+                    <wb-value type="point,vector">as array</wb-value>
+                </wb-expression>
+            </wb-accordion> 
             <wb-accordion class="path">
                 <header>
                     <img class="cat-icon" src="images/icon/path.svg" />
@@ -679,7 +707,7 @@
                     <wb-value type="point">control point</wb-value>
                 </wb-expression>
                 <wb-expression script = "path.arcTo" type ="path">
-                    <wb-value type="point">draw an arc to</wb-value>
+                    <wb-value type="number">draw an arc with radius</wb-value>
                     <wb-value type="point">first control point</wb-value>
                     <wb-value type="point">second control point</wb-value>
                 </wb-expression>
@@ -694,44 +722,35 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-
-                <wb-step script=path.fill>
-                    <wb-value type="pathset">fill the path</wb-value>
-                </wb-step>
-                <wb-step script=path.stroke>
-                    <wb-value type="pathset">stroke the path</wb-value>
-                </wb-step>
-                <wb-step script=path.fillRule>
-                    <wb-value type="list" allow="literal"
-                        options="non-zero, even-odd" value="non-zero">fill rule</wb-value>
-                </wb-step>
             </wb-accordion>
-            <wb-accordion class="point">
+            <wb-accordion class="shape">
                 <header>
-                    <img class="cat-icon" src="images/icon/point.svg" />
-                    Points
+                    <img class="cat-icon" src="images/icon/shape.svg" />
+                    Shapes
                 </header>
-                <wb-expression type="point" script="point.create">
-                    <wb-value type="number" value="0">x</wb-value>
-                    <wb-value type="number" value="0">y</wb-value>
+                 <wb-step script=shape.fill>
+                    <wb-value type="shape">fill the shape</wb-value>
+                </wb-step>
+                <wb-step script=shape.stroke>
+                    <wb-value type="shape">stroke the shape</wb-value>
+                </wb-step>
+                
+                
+                <wb-expression type="shape" script="shape.circle">
+                    <wb-value type="point">circle at</wb-value>
+                    <wb-value type="number" min="0">radius</wb-value>
                 </wb-expression>
-                <wb-expression type="point" script="point.fromVector">
-                    <wb-value type="vector">from vector</wb-value>
+                <wb-expression type="shape" script="shape.ellipse">
+                    <wb-value type="point">ellipse at</wb-value>
+                    <wb-value type="number" min="0">horizontal radius</wb-value>
+                    <wb-value type="number" min="0">verticle radius</wb-value>
+                    <wb-value type="number" min="0">rotation</wb-value>
                 </wb-expression>
-                <wb-expression type="point" script="point.fromArray">
-                    <wb-value type="array">from array</wb-value>
-                </wb-expression>
-                <wb-expression type="point" script="point.randomPoint">
-                    <wb-value>random point</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="point.x">
-                    <wb-value type="point,vector" >x of</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="point.y">
-                    <wb-value type="point,vector">y of</wb-value>
-                </wb-expression>
-                <wb-expression type="array" script="point.toArray">
-                    <wb-value type="point,vector">as array</wb-value>
+                <wb-expression type="shape" script="shape.rectangle">
+                    <wb-value type="point">rectangle at</wb-value>
+                    <wb-value type="number" min="0">width</wb-value>
+                    <wb-value type="number" min="0">height</wb-value>
+                    <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">
@@ -790,19 +809,7 @@
                     tilt direction
                 </wb-expression>
             </wb-accordion>
-            <wb-accordion class="shape">
-                <header>
-                    <img class="cat-icon" src="images/icon/shape.svg" />
-                    Shapes
-                </header>
-                <wb-step script="shape.fillShape">
-                    <wb-value type="shape">fill shape</wb-value>
-                </wb-step>
-                <wb-expression type="shape" script="shape.circle">
-                    <wb-value type="point">circle at</wb-value>
-                    <wb-value type="number" min="0">radius</wb-value>
-                </wb-expression>
-            </wb-accordion>
+            
             <wb-accordion class="geolocation">
                 <header>
                     <img class="cat-icon" src="images/icon/geolocation.svg" />

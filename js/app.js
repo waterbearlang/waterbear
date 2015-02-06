@@ -30,10 +30,10 @@ Event.on(document.body, 'click', '.do-run', preload);
 function preload(){
     assets.load({
         'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
-        'wb-contains wb-expression[script="geolocation"]':
+        'wb-contains wb-expression[script^="geolocation."]':
             assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
         'wb-contains wb-expression[script="motion.tiltDirection"]':
-            assets.waitFor('motionchanged')
+            assets.waitFor('motionchanged', util.motion.startTrackingMotion)
     }).whenLoaded(run);
 }
 

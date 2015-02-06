@@ -612,7 +612,9 @@
             },
 
             // Loading media.
-            // This was adapted from the old sounds library.
+            // This was adapted from the old sounds library:
+            // the soundsForGames:
+            // https://github.com/kittykatattack/soundForGames
             // Incidentally, this was also most of the old asset loader.
             loadMedia: function (elements, ready) {
                 /* These counters are similar but COMPLETELY UNRELATED to

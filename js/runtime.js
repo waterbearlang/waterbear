@@ -575,8 +575,12 @@
             getWidth: function (rect) { return rect.size.width; },
             getHeight: function (rect) { return rect.size.height; }
         },
-
+		
         shape: {
+			fillShape: function(shp){
+                shp();
+                ctx().fill();
+            },		
             fill: function(shapeArg){
                 console.log(shapeArg);
                 shapeArg.draw(ctx());
@@ -586,11 +590,11 @@
                 shapeArg.draw(ctx());
                 ctx().stroke();
             },
-           
             circle: function(pt, rad){
+                return function(){
                     ctx().beginPath();
                     ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-               
+                };
             },
             rectangle: function(pt, width, height, orientation){
                 ctx().beginPath();
@@ -748,18 +752,6 @@
             endsWith: function(x,y){ return x.indexOf(y, x.length - y.length) !== -1; },
             alert: function(x){ alert(x); },
             comment: function(args, containers){},
-        },
-        shape: {
-            fillShape: function(shp){
-                shp();
-                ctx().fill();
-            },
-            circle: function(pt, rad){
-                return function(){
-                    ctx().beginPath();
-                    ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                };
-            },
         },
 
 		sensing: {

@@ -249,10 +249,6 @@
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
-<<<<<<< HEAD
-            // console.log(this.funcToCall);
-=======
->>>>>>> b8d2fd6a58f186c6c25b8d4ac160fae48f504983
             this.funcToCall.apply(ctx, new Array());
         }
 

@@ -486,12 +486,11 @@
      *  things are loaded before the start of the script.
      *
      *  `assets.load` works by determining whether the asset is needed by
-     *  matching a selector against the document (usually this means elements
-     *  inside the script). Once those elements are matched, they're passed to
-     *  a provided callback that should set in place the asynchronous loading
-     *  of said elements.
-     *
-     *  Once all elements are done loading, the provided callback is called.
+     *  matching a selector on the document (usually this means elements
+     *  inside the script). Once elements are matched, they're passed to a
+     *  given callback that should set in place the asynchronous loading of
+     *  said elements.  Once all elements are done loading, the callback
+     *  provided with the selector is called.
      *
      *  Here's how could use the `assets` object to execute loading callbacks
      *  and call a `setup` method when all the files have finished loading:
@@ -502,13 +501,26 @@
      *          'wb-expression[script="motion"]': function () { ... }
      *      }).whenLoaded(function () { ... });
      *
-     *  TODO: document helpers!
-     *
-     *  You can now access these loaded media assets in you application code like this:
+     *  You can now access these loaded media assets in you application code
+     *  like this:
      *
      *  var shoot = assets.sounds["sounds/shoot.wav"],
      *      steampunk = assets.images["images/mascot-steampunk.png"],
      *      bounce = assets.videos["videos/bounce.mov"];
+     *
+     *  helpers
+     *  =======
+     *
+     *  A common use of assets is loading images, sounds, and videos.
+     *  Together, these are called *media*. Use `assets.loadMedia` as the
+     *  callback for the selector matching all elements that specify the file
+     *  path of some media to load as its first element of
+     *  WBExpression.gatherValues().
+     *
+     *  Another use is to initialize a resource that singles it's ready by
+     *  triggering an event. For this use case, use `assets.waitFor` given a
+     *  function that will setup the resource, and the name of an event to
+     *  listen to that will signal that it's ready.
      *
      */
     (function () {

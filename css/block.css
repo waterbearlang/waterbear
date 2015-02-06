@@ -164,7 +164,6 @@ padding-left:20px;
 background:  #FFFFFF no-repeat 3px 3px;
 
 }
-
 wb-value[type*=number] > input{background-image: url(../images/icon/math.svg);}
 wb-value[type*=color] > input{background-image: url(../images/icon/color.svg);}
 wb-value[type*=text] > input{background-image: url(../images/icon/text.svg);}
@@ -209,7 +208,7 @@ wb-value[type*=number][type*=vector][type*=array] > input{
     background-position: 3px 3px, 20px 3px, 37px 3px;
 }
 
-
+wb-workspace wb-value[selected=true] > input{border-color: blue}
 wb-expression:before{
     content: '';
     width: 15px;

@@ -32,8 +32,8 @@ function preload(){
         'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
         'wb-contains wb-expression[script="geolocation"]':
             assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
-        'wb-contains wb-expression[script="motion"]':
-            assets.waitFor('motionready')
+        'wb-contains wb-expression[script="motion.tiltDirection"]':
+            assets.waitFor('motionchanged')
     }).whenLoaded(run);
 }
 

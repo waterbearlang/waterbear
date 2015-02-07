@@ -28,40 +28,13 @@ function info(text){
 Event.on(document.body, 'click', '.do-run', preload);
 
 function preload(){
-    var assets = dom.findAll('wb-workspace > wb-contains wb-expression[isAsset=true]').map(function(asset){
-        return asset.gatherValues()[0];
-    });
-
-    // FIXME: hack to load geolocation when it's needed.
-    if (dom.find('wb-workspace wb-expression[script="geolocation.currentLocation"]') !== null) {
-        assets.push(function (ready) {
-            if (util.geolocation.isTracking) {
-                ready();
-            } else {
-                util.geolocation.startTrackingLocation();
-                // Listen to the first locationchanged event which will
-                // signify that geolocation is ready.
-                Event.once(window, 'locationchanged', null, ready);
-            }
-        });
-    }
-
-    // FIXME: hack to load motion when it's needed.
-    if (dom.find('wb-workspace wb-expression[script="motion.tiltDirection"]') !== null) {
-        assets.push(function (ready) {
-            util.motion.startTrackingMotion();
-            // Listen to the first motionchanged event which will
-            // signify that motion is ready.
-            Event.once(window, 'motionchanged', null, ready);
-        });
-    }
-
-    if (assets.length){
-        sounds.load(assets);
-        sounds.whenLoaded = run;
-    }else{
-        run();
-    }
+    assets.load({
+        'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
+        'wb-contains wb-expression[script^="geolocation."]':
+            assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
+        'wb-contains wb-expression[script="motion.tiltDirection"]':
+            assets.waitFor('motionchanged', util.motion.startTrackingMotion)
+    }).whenLoaded(run);
 }
 
 function run(){
@@ -80,30 +53,35 @@ function handleFileButton(evt){
         buttons: [{
             text: "Save Gist",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'saveGist']);
                 File.saveCurrentScriptsToGist(evt);
                 modal.hide();
             }
         }, {
             text: "Save File",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'saveFile']);
                 File.createDownloadUrl(evt);
                 modal.hide();
             }
         }, {
             text: "Open Gist",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'openGist']);
                 File.loadScriptsFromGistId(evt);
                 modal.hide();
             }
         }, {
             text: "Open File",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'openFile']);
                 File.loadScriptsFromFilesystem(evt);
                 modal.hide();
             }
         },{
             text: "New",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'new']);
                 File.clearScripts();
                 modal.hide();
             },

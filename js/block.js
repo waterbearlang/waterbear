@@ -638,6 +638,8 @@ Event.on(document.body, 'dragging', null, function(evt){
     if (!dragTarget){ return; }
 
     // FIXME: hardcoded margin (???) values.
+    // Essentially, the block is always dragged at an area 15 px away from the
+    // top-left corner.
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
     var potentialDropTarget = document.elementFromPoint(evt.pageX, evt.pageY);
@@ -675,23 +677,29 @@ Event.on(document.body, 'dragging', null, function(evt){
                 dropTarget = null;
             }
         }else{
-            app.warn('expressions blocks can only be dropped on values');
+           // Pretend the expression is a step.
+           dropTargetIsContainer(potentialDropTarget);
         }
         return;
     }else{
-        dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
-        // FIXME: Don't drop onto locals
-        if (dropTarget){
-            if (dropTarget.matches('wb-contains')){
-                app.warn('drop to add to top of the block container');
-            }else{
-                app.warn('drop to add after this block');
-            }
-            return;
-        }
+       // It's a step or a context.
+       dropTargetIsContainer(potentialDropTarget);
+       return;
     }
     app.warn('Not a target, drop to cancel drag');
 });
+
+function dropTargetIsContainer(potentialDropTarget){
+   dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
+   // FIXME: Don't drop onto locals
+   if (dropTarget){
+      if (dropTarget.matches('wb-contains')){
+         app.warn('drop to add to top of the block container');
+      }else{
+         app.warn('drop to add after this block');
+      }
+   }
+}
 
 Event.on(document.body, 'drag-end', null, function(evt){
     if (!dropTarget){
@@ -709,7 +717,14 @@ Event.on(document.body, 'drag-end', null, function(evt){
             origTarget = null;
         }
     }else if(dragTarget.matches('wb-expression')){
-        dropTarget.appendChild(dragTarget);
+      if (dropTarget.matches('wb-value')) {
+         dropTarget.appendChild(dragTarget);
+      } else {
+          // Create variable block to wrap the expression.
+          var variableBlock = createVariableBlock(dragTarget);
+          dropTarget.appendChild(variableBlock);
+      }
+
     }else if(dragTarget.matches('wb-context, wb-step')){
         if (dropTarget.matches('wb-contains')){
             // dropping directly into a contains section
@@ -769,6 +784,26 @@ function resetDragging(){
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
     document.body.classList.remove('block-dragging');
+}
+
+/**
+ * Creates a new "set variable" step.
+ * If `initialValue` is not null, it should be a <wb-expression>.
+ *
+ */
+function createVariableBlock(initialValue) {
+   // Make ourselves a clone of the original.
+   var originalSetVariable = dom.find('sidebar wb-step[script="control.setVariable"]');
+   console.assert(originalSetVariable, 'Could not find setVariable block');
+   var variableStep = originalSetVariable.cloneNode(true);
+
+   // Set the expression here.
+   variableStep
+      .querySelector('wb-value[type="any"]')
+      .appendChild(initialValue);
+   // TODO: autogenerate a good name.
+
+   return variableStep;
 }
 
 

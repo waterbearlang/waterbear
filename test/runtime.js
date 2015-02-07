@@ -21,6 +21,10 @@
 /* TODO: random */
 /* TODO: vectors */
 /* TODO: objects */
+
+/* This should get rid of testing errors caused by Google Analytics*/
+var _gaq = _gaq || [];
+
 QUnit.module('objects');
 QUnit.test('empty', function (assert) {
     var object = runtime.object;

@@ -641,6 +641,12 @@
 
                 // Called when all assets are loaded.
                 function ready() {
+                    /* No assets to load; just call whenLoaded. */
+                    if (toLoad === 0) {
+                        whenLoaded();
+                        return;
+                    }
+
                     console.assert(loaded < toLoad);
                     loaded++;
                     if (loaded === toLoad && whenLoaded) {

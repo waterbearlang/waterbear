@@ -80,30 +80,35 @@ function handleFileButton(evt){
         buttons: [{
             text: "Save Gist",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'saveGist']);
                 File.saveCurrentScriptsToGist(evt);
                 modal.hide();
             }
         }, {
             text: "Save File",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'saveFile']);
                 File.createDownloadUrl(evt);
                 modal.hide();
             }
         }, {
             text: "Open Gist",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'openGist']);
                 File.loadScriptsFromGistId(evt);
                 modal.hide();
             }
         }, {
             text: "Open File",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'openFile']);
                 File.loadScriptsFromFilesystem(evt);
                 modal.hide();
             }
         },{
             text: "New",
             handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'new']);
                 File.clearScripts();
                 modal.hide();
             },

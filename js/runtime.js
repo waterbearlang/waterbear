@@ -443,7 +443,7 @@
         image: {
             get: function(path){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'get']);
-                return images[path];
+                return assets.images[path];
             },
             drawAtPoint: function(img, pt, w, h){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'drawAtPoint']);
@@ -727,16 +727,8 @@
 
         sound: {
 
-            // sounds is the soundsForGames library that we wrap:
-            // https://github.com/kittykatattack/soundForGames
-
-            // called after pre-loader has loaded sound file
-            init: function(url, result){
-                // initialized by loader
-                return sounds(url);
-            },
             get: function(url){
-                return sounds[url]; // already cached by sounds library
+                return assets.sounds[url]; // already cached by sounds library
             },
             play: function(sound){
                 sound.play();

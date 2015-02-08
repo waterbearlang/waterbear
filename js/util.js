@@ -177,6 +177,12 @@
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
 
+    Vector.prototype.rotateRads = function rotate(rads){
+        var newAngle = this.radians + rads;
+        var mag = this.magnitude();
+        return new Vector(cos(newAngle) * mag, sin(newAngle) * mag);
+    }
+
     Vector.prototype.toString = function strv(){
         return '<' + this.x + ',' + this.y + '>';
     }
@@ -191,12 +197,7 @@
     Point.prototype.toString = function(){
         return '[' + this.x + ',' + this.y + ']';
     };
-    Point.prototype.getX = function(){
-        return this.x;
-    }
-    Point.prototype.getY = function(){
-        return this.y;
-    }
+   
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -238,39 +239,44 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints, ctx){
+    function Path(funcToCall, inputPoints){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
-        this.ctx = ctx;
-        
     }
-    
-    Path.prototype.draw = function(){
+
+    Path.prototype.draw = function(ctx){
         if(this.inputPoints !== undefined){
-            this.funcToCall.apply(this.ctx, this.inputPoints);
+            this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
-            console.log(this.funcToCall);
-            this.funcToCall.apply(this.ctx, new Array());
+            this.funcToCall.apply(ctx, new Array());
         }
-            
+
     }
-    
-    
-    //Pathset
-    function Pathset(pathArray){
+
+
+    //Shape
+    function Shape(pathArray){
         var len = pathArray.length;
         var i = 0;
         while (i<len){
-            if(!(pathArray[i] instanceof Path)){ 
-                throw new Error('Only paths may be added to a Pathset, ' + pathArray[i] + " is not.");
+            if(!(pathArray[i] instanceof Path)){
+                throw new Error('Only paths may be added to a Shape, ' + pathArray[i] + " is not.");
             }
+            i = i+1;
         }
-        
+
         this.pathArray = pathArray;
     }
-    Pathset.prototype.getPathArray = function(){
+    Shape.prototype.getPathArray = function(){
         return pathArray;
+    }
+    Shape.prototype.draw = function(ctx){
+        ctx.beginPath();
+        var i;
+        for(i=0; i<this.pathArray.length; i++){
+            this.pathArray[i].draw(ctx);
+        }
     }
 
 
@@ -398,6 +404,80 @@
     }
 
 
+    /*
+     * Motion mini-module.
+     *
+     * Call startTrackingMotion(). The direction property will be
+     * updated.
+     *
+     * Events:
+     *
+     */
+    var motionModule  = (function () {
+        var direction = "",
+            motionModule;
+
+        motionModule = {
+            /**
+             * Starts fetching the motion, periodically, and sets the
+             * direction property of this module. 
+             */
+            startTrackingMotion: function () {
+
+                /* Handle if motion is not supported. */
+                if (!window.DeviceOrientationEvent) {
+                    app.warn('This app tracks your motion, but your browser ' +
+                             'does not have an accelerometer.');
+                    return;
+                }
+
+                window.addEventListener('deviceorientation', onMotionChange);
+            }
+        };
+
+        /* Define a read-only getter for the current direction. */
+        Object.defineProperties(motionModule, {
+            direction: {
+                get: function () {
+                    return direction;
+                }
+            }
+        });
+
+        function onMotionChange(eventData) {
+            // gamma is the left-to-right tilt in degrees, where right is positive
+            var left_right = eventData.gamma;
+
+            // beta is the front-to-back tilt in degrees, where front is positive
+            var front_back = eventData.beta;
+
+            limit = 10;
+
+            direction = "";
+
+            if(left_right > limit && front_back > limit) {
+                direction = "upright";
+            } else if(left_right > limit && front_back < -limit) {
+                direction = "downright";
+            } else if(left_right < -limit && front_back < -limit) {
+                direction = "downleft";
+            } else if(left_right < -limit && front_back > limit) {
+                direction = "upleft";
+            } else if(front_back > limit) {
+                direction = "up";
+            } else if(left_right > limit) {
+                direction = "right";
+            } else if(front_back < -limit) {
+                direction = "down";
+            } else if(left_right < -limit) {
+                direction = "left";
+            }
+
+            Event.trigger(window, 'motionchanged', direction);
+        }
+
+        return motionModule;
+    })();
 
     /*
      * Geolocation mini-module.
@@ -478,6 +558,301 @@
         return geolocationModule;
     })();
 
+    /**
+     *  assets
+     *  ------
+     *
+     *  `assets` is an module that ensures that sounds, images, and other
+     *  things are loaded before the start of the script.
+     *
+     *  `assets.load` works by determining whether the asset is needed by
+     *  matching a selector on the document (usually this means elements
+     *  inside the script). Once elements are matched, they're passed to a
+     *  given callback that should set in place the asynchronous loading of
+     *  said elements.  Once all elements are done loading, the callback
+     *  provided with the selector is called.
+     *
+     *  Here's how could use the `assets` object to execute loading callbacks
+     *  and call a `setup` method when all the files have finished loading:
+     *
+     *      assets.load({
+     *          'wb-expression[isAsset=true]': function () { ... },
+     *          'wb-expression[script="geolocation"]': function () { ... },
+     *          'wb-expression[script="motion"]': function () { ... }
+     *      }).whenLoaded(function () { ... });
+     *
+     *  You can now access these loaded media assets in you application code
+     *  like this:
+     *
+     *  var shoot = assets.sounds["sounds/shoot.wav"],
+     *      steampunk = assets.images["images/mascot-steampunk.png"],
+     *      bounce = assets.videos["videos/bounce.mov"];
+     *
+     *  helpers
+     *  =======
+     *
+     *  A common use of assets is loading images, sounds, and videos.
+     *  Together, these are called *media*. Use `assets.loadMedia` as the
+     *  callback for the selector matching all elements that specify the file
+     *  path of some media to load as its first element of
+     *  WBExpression.gatherValues().
+     *
+     *  Another use is to initialize a resource that singles it's ready by
+     *  triggering an event. For this use case, use `assets.waitFor` given a
+     *  function that will setup the resource, and the name of an event to
+     *  listen to that will signal that it's ready.
+     *
+     */
+    (function () {
+        // We're going to use the loader to load images and video too, since it is here
+
+        var assets = {
+
+            /**
+             * Loads stuff based on dependencies.
+             * Passed an object of selector-callback pairs.
+             */
+            load: function (dependencies) {
+                //Properties to help track the assets being loaded.
+                var toLoad = 0;
+                var loaded = 0;
+                var whenLoaded, selector, matchedElements, matchCallback;
+
+                /* Default whenLoaded callback. */
+                whenLoaded = function () {
+                    console.warn(toLoad, 'assets loaded.');
+                };
+
+                /* Try every selector. */
+                for (selector in dependencies) {
+                    matchedElements = dom.findAll(selector);
+
+                    // No need to call the matched elements.
+                    if (!matchedElements.length)
+                        continue;
+
+                    toLoad++;
+
+                    matchCallback = dependencies[selector];
+                    // Call the callback. When it's ready,
+                    // it MUST call ready!
+                    matchCallback(matchedElements, ready);
+                }
+
+                // Called when all assets are loaded.
+                function ready() {
+                    /* No assets to load; just call whenLoaded. */
+                    if (toLoad === 0) {
+                        whenLoaded();
+                        return;
+                    }
+
+                    console.assert(loaded < toLoad);
+                    loaded++;
+                    if (loaded === toLoad && whenLoaded) {
+                        whenLoaded();
+                    }
+                }
+
+                // We need at least *ONE* async callback so that ready is
+                // called; fake it here when there's notthing to load.
+                if (toLoad === 0) {
+                    setTimeout(function () {
+                        ready();
+                    }, 0);
+                }
+
+                /* Returns an object that looks and acts like a promise
+                 * object. */
+                return {
+                    // Pass the callback function that should run when all assets
+                    // have loaded.  
+                    whenLoaded: function(callback) { whenLoaded = callback; },
+                };
+
+            },
+
+            /*
+             * Data.
+             */
+
+            //File extensions for different types of sounds.
+            audioExtensions: ["mp3", "ogg", "wav", "webm"],
+            //File extensions for different types of images.
+            imageExtensions: ["gif", "png", "jpg", "jpeg", "bmp"],
+            //File extensions for different types of videos.
+            videoExtensions: ["mov", "mpg", "mpeg"],
+
+            /*
+             * Storage.
+             * See assets.loadMedia
+             */
+
+            // All loaded sounds are stored here.
+            sounds: {},
+            // All loaded images are stored here.
+            images: {},
+            // All loaded videos are stored here.
+            videos: {},
+
+            /*
+             * Selector helper functions
+             */
+
+            // Returns a callback for use with a selector in assets.load()
+            // that calls setup, and then waits for the particularly named
+            // event. When the event is finally fired, ready is called.
+            waitFor: function (eventName, setup) {
+                return function (ignoredElements, ready) {
+                    setup();
+                    Event.once(window, eventName, null, ready);
+                };
+            },
+
+            // Loading media.
+            // This was adapted from the old sounds library:
+            // the soundsForGames:
+            // https://github.com/kittykatattack/soundForGames
+            // Incidentally, this was also most of the old asset loader.
+            loadMedia: function (elements, ready) {
+                /* These counters are similar but COMPLETELY UNRELATED to
+                 * assets.load(). When ALL media are loaded, only then will
+                 * the counter be incremented by one in assets.load().
+                 */
+                var toLoad = 0;
+                var loaded = 0;
+
+                /**
+                 * For each matched wb-expression, get its first value.
+                 * We assume that this is the filename of the asset to load.
+                 */
+                var sources = elements.map(function(asset){
+                    return asset.gatherValues()[0];
+                });
+
+                //Find the number of files that need to be loaded.
+                toLoad = sources.length;
+                sources.forEach(function(source){
+
+                    //Find the file extension of the asset.
+                    var extension = source.split('.').pop().toLowerCase();
+
+                    //#### Sounds
+                    //Load audio files that have file extensions that match
+                    //the `audioExtensions` array.
+                    if (assets.audioExtensions.indexOf(extension) !== -1) {
+
+                        //Create a sound sprite.
+                        var soundSprite = makeSound(source, loadHandler);
+
+                        //Get the sound file name.
+                        soundSprite.name = source;
+
+                        //If you just want to extract the file name with the
+                        //extension, you can do it like this:
+                        //soundSprite.name = source.split("/").pop();
+                        //Assign the sound as a property of the assets object so
+                        //we can access it like this: `assets.sounds["sounds/sound.mp3"]`.
+                        assets.sounds[soundSprite.name] = soundSprite;
+                    }
+                    else if (assets.imageExtensions.indexOf(extension) !== -1){
+                        var imageSprite = new Image();
+                        imageSprite.name = source;
+                        assets.images[source] = imageSprite;
+                        imageSprite.addEventListener('load', loadHandler, false);
+                        imageSprite.src = source;
+                    }else if (assets.videoExtensions.indexOf(extension) !== -1){
+                        var videoSprite = new Video();
+                        videoSprite.name = source;
+                        assets.videos[source] = videoSprite;
+                        videoSprite.addEventListener('canplay', loadHandler, false);
+                        videoSprite.src = source;
+                    }else{
+                        //Display a message if the file type isn't recognized.
+                        console.log("File type not recognized: " + source);
+                    }
+
+
+                    //#### loadHandler
+                    //The `loadHandler` will be called each time an asset finishes loading.
+                    function loadHandler () {
+                        loaded += 1;
+
+                        //Check whether everything has loaded.
+                        if (toLoad === loaded) {
+
+                            //If it has, say that we're ready!
+                            ready();
+                        }
+                    }
+
+                });
+            }, /* loadMedia */
+        };
+
+        window.assets = assets;
+    })();
+
+
+
+    /******************************
+    *
+    * Sprite mini-library
+    *
+    *
+    *******************************/
+
+    function Sprite(drawable){
+        // drawable can be a shape function, an image, or text
+        // wrap image with a function, make sure all are centred on 0,0
+        this.drawable = drawable || defaultDrawable;
+        this.position = new Vector(0,0);
+        this.facing = new Vector(-PI/2,0.1);
+        this.velocity = new Vector(0,0.1);
+    }
+
+    Sprite.prototype.accelerate = function(speed){
+        this.velocity = add(this.velocity, multiply(this.facing, speed));
+        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.applyForce = function(vec){
+        this.velocity = add(this.velocity, vec);
+    }
+
+    Sprite.prototype.rotate = function(r){
+        this.facing = this.facing.rotate(r);
+        console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.move = function(){
+        this.position = add(this.position, this.velocity);
+    }
+
+    Sprite.prototype.draw = function(ctx){
+        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
+        ctx.translate(this.position.x, this.position.y);
+        this.drawable.draw(ctx);
+        ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    function defaultDrawable(ctx){
+        var width = PI - PI/6;
+        var length = 20;
+        var frontX = cos(this.facing.rad) * length + this.position.x;
+        var frontY = sin(this.facing.rad) * length + this.position.y;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(frontX, frontY);
+        ctx.lineTo(cos(this.facing.rad - width) * length + this.position.x,
+                   sin(this.facing.rad - width) * length + this.position.y);
+        ctx.moveTo(frontX, frontY);
+        ctx.lineTo(cos(this.facing.rad + width) * length + this.position.x,
+                   sin(this.facing.rad + width) * length + this.position.y);
+        ctx.stroke();
+    }
+
 
     // exports
     window.util = {
@@ -495,13 +870,15 @@
         multiply: multiply,
         divide: divide,
         deg2rad: deg2rad,
+        rad2deg: rad2deg,
         randInt: randInt,
         noise: noise,
         choice: choice,
         isNumber: isNumber,
         Path: Path,
-        Pathset: Pathset,
+        Shape: Shape,
         geolocation: geolocationModule,
+        motion: motionModule,
     };
 
 

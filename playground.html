@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="css/block.css" />
 	<link rel="stylesheet" href="css/app.css" />
     <script src="lib/prefixfree.min.js"></script>
+    <script type="text/javascript">
+      <!-- Google Analytics -->
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-58671174-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
 </head>
 <body>
     <header>
@@ -16,11 +29,8 @@
     	<h1>Waterbear with Custom Elements</h1>
     </header>
     <div class="menu">
-        <button class="open-files">Files…</button>
-        <button class="open-example">Examples…</button>
-        <button class="open-tags">Tags…</button>
-        <button class="do-undo">Undo</button>
-        <button class="do-redo">Redo</button>
+        <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
+        <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
     </div>
     <wb-hbox>
         <sidebar>
@@ -123,6 +133,27 @@
                     <img class="cat-icon" src="images/icon/sprite.svg" />
                     Sprites
                 </header>
+                <wb-expression type="sprite" script="sprite.create" />
+                    <wb-value type="image,shape,text">sprite with</wb-value>
+                </wb-expression>
+                <wb-step script="sprite.accelerate">
+                    <wb-value type="sprite"></wb-value>
+                    <wb-value type="number">accelerate by</wb-value>
+                </wb-step>
+                <wb-step script="sprite.rotate">
+                    <wb-value type="sprite"></wb-value>
+                    <wb-value type="number">rotate by</wb-value>
+                </wb-step>
+                <wb-step script="sprite.move">
+                    <wb-value type="sprite">move</wb-value>
+                </wb-step>
+                <wb-step script="sprite.draw">
+                    <wb-value type="sprite">draw</wb-value>
+                </wb-step>
+                <wb-step script="sprite.applyForce">
+                    <wb-value type="sprite"></wb-value>
+                    <wb-value type="vector">apply forcef</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="sound">
                 <header>
@@ -631,63 +662,6 @@
 					<wb-value>comment</wb-value>
 				</wb-context>
             </wb-accordion>
-            <wb-accordion class="path">
-                <header>
-                    <img class="cat-icon" src="images/icon/path.svg" />
-                    Paths
-                </header>
-                <wb-step script = "path.lineStyle" type="path">
-                    <wb-value type="number">line width</wb-value>
-                    <wb-value type="color" value="#0000FF">line color</wb-value>
-                    <wb-value type="list" allow="literal"
-                        options="butt,round,square" value="butt">cap style</wb-value>
-                    <wb-value type="list" allow="literal"
-                        options="round,bevel,miter" value="round">join style</wb-value>
-                    
-                </wb-step>
-                <wb-expression script = "path.moveTo" type="path">
-                    <wb-value type="point">move to point</wb-value>
-                </wb-expression>
-                <wb-expression script = "path.lineTo" type ="path">
-                    <wb-value type="point">draw a line to</wb-value>
-                </wb-expression>
-                <wb-expression script = "path.bezierCurveTo" type ="path">
-                    <wb-value type="point">draw a bezier curve to</wb-value>
-                    <wb-value type="point">first control point</wb-value>
-                    <wb-value type="point">second control point</wb-value>
-                </wb-expression>
-                <wb-expression script = "path.quadraticCurveTo" type ="path">
-                    <wb-value type="point">draw a quadric curve to</wb-value>
-                    <wb-value type="point">control point</wb-value>
-                </wb-expression>
-                <wb-expression script = "path.arcTo" type ="path">
-                    <wb-value type="point">draw an arc to</wb-value>
-                    <wb-value type="point">first control point</wb-value>
-                    <wb-value type="point">second control point</wb-value>
-                </wb-expression>
-                <wb-expression script="path.closePath" type ="path">
-                    close path
-                </wb-expression>
-                <wb-expression script="path.pathSet" type="pathset">
-                    <wb-value>create set of paths</wb-value>
-                    <wb-row>
-                        <wb-value type="path"></wb-value>
-                        <button class="remove-item">-</button>
-                        <button class="add-item">+</button>
-                    </wb-row>
-                </wb-expression>
-
-                <wb-step script=path.fill class="path">
-                    <wb-value type="pathset">fill the path</wb-value>
-                </wb-step>
-                <wb-step script=path.stroke class="path">
-                    <wb-value type="pathset">stroke the path</wb-value>
-                </wb-step>
-                <wb-step script=path.fillRule class="path">
-                    <wb-value type="list" allow="literal"
-                        options="non-zero, even-odd" value="non-zero">fill rule</wb-value>
-                </wb-step>
-            </wb-accordion>
             <wb-accordion class="point">
                 <header>
                     <img class="cat-icon" src="images/icon/point.svg" />
@@ -714,6 +688,82 @@
                 </wb-expression>
                 <wb-expression type="array" script="point.toArray">
                     <wb-value type="point,vector">as array</wb-value>
+                </wb-expression>
+            </wb-accordion> 
+            <wb-accordion class="path">
+                <header>
+                    <img class="cat-icon" src="images/icon/path.svg" />
+                    Paths
+                </header>
+                <wb-step script = "path.lineStyle" type="path">
+                    <wb-value type="number">line width</wb-value>
+                    <wb-value type="color" value="#0000FF">line color</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="butt,round,square" value="butt">cap style</wb-value>
+                    <wb-value type="list" allow="literal"
+                        options="round,bevel,miter" value="round">join style</wb-value>
+
+                </wb-step>
+                <wb-expression script = "path.moveTo" type="path">
+                    <wb-value type="point">move to point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.lineTo" type ="path">
+                    <wb-value type="point">draw a line to</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.bezierCurveTo" type ="path">
+                    <wb-value type="point">draw a bezier curve to</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.quadraticCurveTo" type ="path">
+                    <wb-value type="point">draw a quadric curve to</wb-value>
+                    <wb-value type="point">control point</wb-value>
+                </wb-expression>
+                <wb-expression script = "path.arcTo" type ="path">
+                    <wb-value type="number">draw an arc with radius</wb-value>
+                    <wb-value type="point">first control point</wb-value>
+                    <wb-value type="point">second control point</wb-value>
+                </wb-expression>
+                <wb-expression script="path.closePath" type ="path">
+                    close path
+                </wb-expression>
+                <wb-expression script="path.pathSet" type="shape">
+                    <wb-value>create set of paths</wb-value>
+                    <wb-row>
+                        <wb-value type="path"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+            </wb-accordion>
+            <wb-accordion class="shape">
+                <header>
+                    <img class="cat-icon" src="images/icon/shape.svg" />
+                    Shapes
+                </header>
+                 <wb-step script=shape.fill>
+                    <wb-value type="shape">fill the shape</wb-value>
+                </wb-step>
+                <wb-step script=shape.stroke>
+                    <wb-value type="shape">stroke the shape</wb-value>
+                </wb-step>
+                
+                
+                <wb-expression type="shape" script="shape.circle">
+                    <wb-value type="point">circle at</wb-value>
+                    <wb-value type="number" min="0">radius</wb-value>
+                </wb-expression>
+                <wb-expression type="shape" script="shape.ellipse">
+                    <wb-value type="point">ellipse at</wb-value>
+                    <wb-value type="number" min="0">horizontal radius</wb-value>
+                    <wb-value type="number" min="0">verticle radius</wb-value>
+                    <wb-value type="number" min="0">rotation</wb-value>
+                </wb-expression>
+                <wb-expression type="shape" script="shape.rectangle">
+                    <wb-value type="point">rectangle at</wb-value>
+                    <wb-value type="number" min="0">width</wb-value>
+                    <wb-value type="number" min="0">height</wb-value>
+                    <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">
@@ -764,6 +814,13 @@
                     <img class="cat-icon" src="images/icon/motion.svg" />
                     Motion
                 </header>
+				<wb-context script="motion.whenDeviceTurned">
+                    <wb-value type="list" allow="literal" options="upright,downright,downleft,upleft,up,down,right,left">when device turned</wb-value>
+
+                </wb-context>
+                <wb-expression type="motion" script="motion.tiltDirection">
+                    tilt direction
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="shape">
                 <header>
@@ -776,8 +833,9 @@
                 <wb-expression type="shape" script="shape.circle">
                     <wb-value type="point">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
-                </wb-expression>
+				</wb-expression>
             </wb-accordion>
+            
             <wb-accordion class="geolocation">
                 <header>
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
@@ -906,8 +964,8 @@
         <wb-splitter></wb-splitter>
         <wb-playground>
             <div class="menu">
-                <button class="do-run">Run</button>
-                <button class="do-stop">Stop</button>
+                <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
+                <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
             </div>
             <canvas></canvas>
         </wb-playground>
@@ -925,15 +983,7 @@
     <script src="js/block.js"></script>
 	<script src="js/app.js"></script>
     <script src="js/file.js"></script>
-    <script>
-        <!-- Google Analytics -->
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-58671174-1', 'auto');
-        ga('send', 'pageview');
-    </script>
+    <script src="js/queryparams.js"></script>
+    
 </body>
 </html>

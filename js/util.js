@@ -420,7 +420,7 @@
         motionModule = {
             /**
              * Starts fetching the motion, periodically, and sets the
-             * direction property of this module. 
+             * direction property of this module.
              */
             startTrackingMotion: function () {
 

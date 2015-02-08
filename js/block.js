@@ -22,7 +22,7 @@
 var svgText = document.querySelector('.resize-tester');
 function resize(input){
     if (!input){
-        console.err('No input');
+        console.error('No input');
         return;
     }
     var textStyle = window.getComputedStyle(input);

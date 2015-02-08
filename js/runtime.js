@@ -46,6 +46,7 @@
 
     // Initialize the stage.
     Event.on(window, 'resize', null, handleResize);
+    Event.on(document.body, 'wb-resize', null, handleResize);
 
     var perFrameHandlers = [];
     var lastTime = new Date().valueOf();
@@ -172,7 +173,32 @@
                 return !a;
             }
         },
-
+		canvas: {
+			canvasWidth: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasWidth']);
+				return Event.stage.width; 
+			},
+			canvasHeight: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasHeight']);
+				return Event.stage.height; 
+			},
+			centerX: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerX']);
+				return (Event.stage.width / 2); 
+			},
+			centerY: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerY']);
+				return (Event.stage.height / 2); 
+			},
+			randomX: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomX']);
+				return Math.random() * Event.stage.width; 
+			},
+			randomY: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomY']);
+				return Math.random() * Event.stage.height; 
+			},
+        },
         color: {
             namedColor: function(name){
                 // FIXME: We may need to return hex or other color value
@@ -356,12 +382,22 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'ternary']);
                 return cond ? iftrue : otherwise;
             },
+			ask: function(args){
+				_gaq.push(['_trackEvent', 'Blocks', 'Control', 'ask']);
+				var message = args[0];
+				var name = args[1];
+				var answer = prompt(message);
+				runtime.control.setVariable(name, answer);
+			},
+			comment: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Control', 'comment']);
+            },
             log: function(item){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'log']);
                 console.log(item);
             }
         },
-
+		
         /*
          * The underlying JavaScript object is the same object that is passed
          * to the getCurrentLocation callback.
@@ -464,7 +500,27 @@
                 };
             }
         },
-
+		input: {
+			keyPressed: function(key){
+				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'keyPressed']);
+				if(Event.keys[key])
+					return true;
+				else
+					return false;
+			},
+			mouseX: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseX']);
+				return (Event.pointerX-Event.stage.left); 
+			},
+			mouseY: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseY']);
+				return (Event.pointerY-Event.stage.top); 
+			},
+			mouseDown: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseDown']);
+				return Event.pointerDown; 
+			},
+		},
         math: {
             add: util.add,
             subtract: util.subtract,
@@ -656,7 +712,7 @@
             toArray: function(pt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Point', 'toArray']);
                 return [pt.x, pt.y];
-            }
+            },
         },
 
         random: {
@@ -711,8 +767,8 @@
                 return rect.size.height;
             }
         },
-
-        shape: {
+		
+        shape: {	
             fill: function(shapeArg){
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'fill']);
                 console.log(shapeArg);
@@ -724,12 +780,10 @@
                 shapeArg.draw(ctx());
                 ctx().stroke();
             },
-           
             circle: function(pt, rad){
-                    _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'circle']);
-                    ctx().beginPath();
-                    ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-               
+                _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'circle']);
+                ctx().beginPath();
+                ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
             },
             rectangle: function(pt, width, height, orientation){
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'rectangle']);
@@ -870,8 +924,7 @@
             }
         },
 
-        stage: {
-        },
+        
 
         string: {
 
@@ -960,10 +1013,9 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'alert']);
                 alert(x); 
             },
-            comment: function(args, containers){
-                _gaq.push(['_trackEvent', 'Blocks', 'String', 'comment']);
-            },
+            
         },
+
         text:{
             setFont: function (size, fontStyle){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'setFont']);

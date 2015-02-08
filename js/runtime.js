@@ -173,9 +173,7 @@
                 return !a;
             }
         },
-
 		canvas: {
-			
 			canvasWidth: function(){ 
 				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasWidth']);
 				return Event.stage.width; 
@@ -192,9 +190,7 @@
 				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerY']);
 				return (Event.stage.height / 2); 
 			},
-			
         },
-		
         color: {
             namedColor: function(name){
                 // FIXME: We may need to return hex or other color value
@@ -496,7 +492,6 @@
                 };
             }
         },
-
 		input: {
 			keyPressed: function(key){
 				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'keyPressed']);
@@ -518,7 +513,6 @@
 				return Event.pointerDown; 
 			},
 		},
-		
         math: {
             add: util.add,
             subtract: util.subtract,
@@ -711,8 +705,14 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Point', 'toArray']);
                 return [pt.x, pt.y];
             },
-			randomX: function(){ return Math.random() * Event.stage.width; },
-			randomY: function(){ return Math.random() * Event.stage.height; },
+			randomX: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Point', 'randomX']);
+				return Math.random() * Event.stage.width; 
+			},
+			randomY: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Point', 'randomY']);
+				return Math.random() * Event.stage.height; 
+			},
         },
 
         random: {
@@ -768,11 +768,7 @@
             }
         },
 		
-        shape: {
-			fillShape: function(shp){
-                shp();
-                ctx().fill();
-            },		
+        shape: {	
             fill: function(shapeArg){
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'fill']);
                 console.log(shapeArg);
@@ -927,6 +923,8 @@
                 spt.applyForce(vec);
             }
         },
+
+        
 
         string: {
 

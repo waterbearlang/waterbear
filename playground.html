@@ -127,6 +127,20 @@
                 <wb-step script="control.log">
                     <wb-value type="any">log</wb-value>
                 </wb-step>
+				<wb-step script="control.ask">
+					<wb-row>
+						<wb-value type="text,string">Ask</wb-value>
+                   		<wb-value type="text" isVariable="true" allow="literal" value="variable">and store in variable</wb-value>
+                    	<wb-local>
+                        	<wb-expression type="any" script="control.getVariable">
+                            	<wb-value value="variable">variable</wb-value>
+                        	</wb-expression>
+						</wb-local>
+					</wb-row>
+                </wb-step>
+				<wb-context script="control.comment">
+                    <wb-value type="text">comment</wb-value>
+                </wb-context>
             </wb-accordion>
             <wb-accordion class="sprite">
                 <header>
@@ -335,6 +349,18 @@
                     <img class="cat-icon" src="images/icon/canvas.svg" />
                     Canvas
                 </header>
+				<wb-expression type="number" script="canvas.canvasWidth"> 
+					<wb-value>Canvas Width</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="canvas.canvasHeight"> 
+					<wb-value>Canvas Height</wb-value>
+				</wb-expression>
+				<wb-expression type="number" script="canvas.centerX"> 
+					<wb-value>Center x</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="canvas.centerY">
+					<wb-value>Center y</wb-value>
+				</wb-expression>
             </wb-accordion>
             <wb-accordion class="color">
                 <header>
@@ -658,9 +684,6 @@
                 <wb-step script="string.alert">
                     <wb-value type="text,string">alert</wb-value>
                 </wb-step>
-                <wb-context script="string.comment">
-                    <wb-value>comment</wb-value>
-                </wb-context>
             </wb-accordion>
             <wb-accordion class="point">
                 <header>
@@ -689,6 +712,12 @@
                 <wb-expression type="array" script="point.toArray">
                     <wb-value type="point,vector">as array</wb-value>
                 </wb-expression>
+				<wb-expression type="number" script="point.randomX"> 
+					<wb-value>Random x</wb-value> 
+				</wb-expression>
+				<wb-expression type="number" script="point.randomY"> 
+					<wb-value>Random y<wb-value> 
+				</wb-expression>
             </wb-accordion> 
             <wb-accordion class="path">
                 <header>
@@ -806,68 +835,21 @@
             <wb-accordion class="sense">
                 <header>
                     <img class="cat-icon" src="images/icon/sense.svg" />
-                    Sensing
+                    Input
                 </header>
-				<wb-step script="sensing.ask">
-					<wb-row>
-						<wb-value type="text,string">Ask</wb-value>
-                   		<wb-value type="text" isVariable="true" allow="literal" value="variable">and store in variable</wb-value>
-                    	<wb-local>
-                        	<wb-expression type="any" script="control.getVariable">
-                            	<wb-value value="variable">variable</wb-value>
-                        	</wb-expression>
-						</wb-local>
-					</wb-row>
-                </wb-step>
-				<wb-expression type="number" script="sensing.mouseX"> 
+				<wb-expression type="number" script="input.mouseX"> 
 					<wb-value>Mouse x</wb-value> 
 				</wb-expression>
-				<wb-expression type="number" script="sensing.mouseY"> 
+				<wb-expression type="number" script="input.mouseY"> 
 					<wb-value>Mouse y</wb-value>
 				</wb-expression>
-				<wb-expression type="boolean" script="sensing.mouseDown"> 
+				<wb-expression type="boolean" script="input.mouseDown"> 
 					<wb-value>Mouse Down</wb-value> 
 				</wb-expression>
-				<wb-expression type="boolean" script="sensing.keyPressed">  
+				<wb-expression type="boolean" script="input.keyPressed">  
 					<wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
                 	<wb-value>Pressed?</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="sensing.stageWidth"> 
-					<wb-value>Stage Width</wb-value> 
-				</wb-expression>
-				<wb-expression type="number" script="sensing.stageHeight"> 
-					<wb-value>Stage Height</wb-value>
-				</wb-expression>
-				<wb-expression type="number" script="sensing.centerX"> 
-					<wb-value>Center x</wb-value> 
-				</wb-expression>
-				<wb-expression type="number" script="sensing.centerY">
-					<wb-value>Center y</wb-value>
-				</wb-expression>
-				<wb-expression type="number" script="sensing.randomX"> 
-					<wb-value>Random x</wb-value> 
-				</wb-expression>
-				<wb-expression type="number" script="sensing.randomY"> 
-					<wb-value>Random y<wb-value> 
-				</wb-expression>
-				<wb-context class="sensing" script="sensing.timer">
-                    
-					<wb-row>
-                   		<wb-value type="text" isVariable="true" allow="literal" value="variable">Timer Name:</wb-value>
-                    	<wb-local>
-                        	<wb-expression type="any" script="control.getVariable">
-                            	<wb-value value="variable">variable</wb-value>
-                        	</wb-expression>
-						</wb-local>
-						
-						<wb-value type="number" min="0" value="0">Milliseconds:</wb-value>
-					</wb-row>
-					
-					
-                </wb-context>
-				<wb-step class="sensing" script="sensing.resetTimer">
-					<wb-value>Reset Timer</wb-value>
-				</wb-step>
             </wb-accordion>
             <wb-accordion class="motion">
                 <header>

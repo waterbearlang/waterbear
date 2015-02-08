@@ -190,6 +190,14 @@
 				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerY']);
 				return (Event.stage.height / 2); 
 			},
+			randomX: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomX']);
+				return Math.random() * Event.stage.width; 
+			},
+			randomY: function(){ 
+				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomY']);
+				return Math.random() * Event.stage.height; 
+			},
         },
         color: {
             namedColor: function(name){
@@ -705,14 +713,6 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Point', 'toArray']);
                 return [pt.x, pt.y];
             },
-			randomX: function(){ 
-				_gaq.push(['_trackEvent', 'Blocks', 'Point', 'randomX']);
-				return Math.random() * Event.stage.width; 
-			},
-			randomY: function(){ 
-				_gaq.push(['_trackEvent', 'Blocks', 'Point', 'randomY']);
-				return Math.random() * Event.stage.height; 
-			},
         },
 
         random: {

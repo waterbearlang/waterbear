@@ -189,13 +189,6 @@
                 evt.target = touch.target;
                 evt.pageX = touch.pageX;
                 evt.pageY = touch.pageY;
-            }else{
-                // is this necessary or desirable?
-                //if (evt.which !== 1){ // left mouse button
-                //    evt.invalid = true;
-                //    evt.invalidReason = 'Not the left mouse button';
-                //    return evt;
-                //}
             }
         }
         return evt;

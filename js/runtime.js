@@ -1069,9 +1069,45 @@
                 var textMetric = ctx().measureText(text);
                 return textMetric.width;
             }
+        },
+        vector: {
+            create: function create(x,y){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'create']);
+                return new util.Vector(x,y);
+            },
+            fromPolar: function fromPolar(deg, mag){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'fromPolar']);
+                return util.Vector.fromPolar(deg, mag);
+            },
+            rotateTo: function rotateTo(vec, deg){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'rotateTo']);
+                return vec.rotateTo(deg);
+            },
+            rotate: function rotate(vec, deg){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'rotate']);
+                return vec.rotate(deg);
+            },
+            magnitude: function magnitude(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'magnitude']);
+                return vec.magnitude();
+            },
+            degrees: function degrees(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'degrees']);
+                return vec.degrees();
+            },
+            normalize: function normalize(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'normalize']);
+                return vec.normalize();
+            },
+            x: function x(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'x']);
+                return vec.x;
+            },
+            y: function y(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'y']);
+                return vec.y;
+            }
         }
-
-
     });
 
 })(window);

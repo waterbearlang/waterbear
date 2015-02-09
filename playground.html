@@ -148,25 +148,39 @@
                     Sprites
                 </header>
                 <wb-expression type="sprite" script="sprite.create" />
-                    <wb-value type="image,shape,text">sprite with</wb-value>
+                    <wb-value type="image,shape,sprite">sprite with</wb-value>
                 </wb-expression>
                 <wb-step script="sprite.accelerate">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">accelerate by</wb-value>
                 </wb-step>
                 <wb-step script="sprite.rotate">
-                    <wb-value type="sprite"></wb-value>
-                    <wb-value type="number">rotate by</wb-value>
+                    <wb-value type="sprite">rotate</wb-value>
+                    <wb-row>
+                        <wb-value type="number">by</wb-value>
+                        <wb-unit>degrees</wb-unit>
+                    </wb-row>
+                </wb-step>
+                <wb-step script="sprite.rotateTo">
+                    <wb-value type="sprite">rotate</wb-value>
+                    <wb-row>
+                        <wb-value type="number">to</wb-value>
+                        <wb-unit>degrees</wb-unit>
+                    </wb-row>
                 </wb-step>
                 <wb-step script="sprite.move">
                     <wb-value type="sprite">move</wb-value>
+                </wb-step>
+                <wb-step script="sprite.moveTo">
+                    <wb-value type="sprite"></wb-value>
+                    <wb-value type="point,vector">move to</wb-value>
                 </wb-step>
                 <wb-step script="sprite.draw">
                     <wb-value type="sprite">draw</wb-value>
                 </wb-step>
                 <wb-step script="sprite.applyForce">
                     <wb-value type="sprite"></wb-value>
-                    <wb-value type="vector">apply forcef</wb-value>
+                    <wb-value type="vector">apply force</wb-value>
                 </wb-step>
             </wb-accordion>
             <wb-accordion class="sound">
@@ -349,23 +363,23 @@
                     <img class="cat-icon" src="images/icon/canvas.svg" />
                     Canvas
                 </header>
-				<wb-expression type="number" script="canvas.canvasWidth"> 
-					<wb-value>Canvas Width</wb-value> 
+				<wb-expression type="number" script="canvas.canvasWidth">
+					<wb-value>Canvas Width</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.canvasHeight"> 
+				<wb-expression type="number" script="canvas.canvasHeight">
 					<wb-value>Canvas Height</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.centerX"> 
-					<wb-value>Center x</wb-value> 
+				<wb-expression type="number" script="canvas.centerX">
+					<wb-value>Center x</wb-value>
 				</wb-expression>
 				<wb-expression type="number" script="canvas.centerY">
 					<wb-value>Center y</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.randomX"> 
-					<wb-value>Random x</wb-value> 
+				<wb-expression type="number" script="canvas.randomX">
+					<wb-value>Random x</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.randomY"> 
-					<wb-value>Random y<wb-value> 
+				<wb-expression type="number" script="canvas.randomY">
+					<wb-value>Random y<wb-value>
 				</wb-expression>
             </wb-accordion>
             <wb-accordion class="color">
@@ -419,11 +433,25 @@
                 <wb-expression type="image" isAsset="true" script="image.get">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.jpg">image from url</wb-value>
                 </wb-expression>
+                <wb-step script="image.setWidth">
+                    <wb-value type="image" allow="block">set</wb-value>
+                    <wb-value type="number">width</wb-value>
+                </wb-step>
+                <wb-step script="image.setHeight">
+                    <wb-value type="image" allow="block">set</wb-value>
+                    <wb-value type="number">height</wb-value>
+                </wb-step>
+                <wb-step script="image.scale">
+                    <wb-value type="image" allow="block">scale</wb-value>
+                    <wb-value type="number">by</wb-value>
+                </wb-step>
+                <wb-step script="image.setSize">
+                    <wb-value type="image" allow="block">set</wb-value>
+                    <wb-value type="size">size</wb-value>
+                </wb-step>
                 <wb-step script="image.drawAtPoint">
                     <wb-value type="image" allow="block">draw</wb-value>
                     <wb-value type="point" allow="block">at</wb-value>
-                    <wb-value type="number" value="50">wide</wb-value>
-                    <wb-value type="number" value="50">high</wb-value>
                 </wb-step>
             </wb-accordion>
             <wb-accordion class="math">
@@ -565,11 +593,17 @@
                 </wb-expression>
                 <wb-expression type="vector" script="vector.rotateTo">
                     <wb-value type="vector">rotate</wb-value>
-                    <wb-value type="number" value="0">to</wb-value>
+                    <wb-row>
+                        <wb-value type="number" value="0">to</wb-value>
+                        <wb-unit>degrees</wb-unit>
+                    </wb-row>
                 </wb-expression>
                 <wb-expression type="vector" script="vector.rotate">
                     <wb-value type="vector">rotate</wb-value>
-                    <wb-value type="number" value="0">by</wb-value>
+                    <wb-row>
+                        <wb-value type="number" value="0">by</wb-value>
+                        <wb-unit>degrees</wb-unit>
+                    </wb-row>
                 </wb-expression>
                 <wb-expression type="number" script="vector.degrees">
                     <wb-value type="vector">degrees</wb-value>
@@ -718,7 +752,7 @@
                 <wb-expression type="array" script="point.toArray">
                     <wb-value type="point,vector">as array</wb-value>
                 </wb-expression>
-            </wb-accordion> 
+            </wb-accordion>
             <wb-accordion class="path">
                 <header>
                     <img class="cat-icon" src="images/icon/path.svg" />
@@ -776,8 +810,8 @@
                 <wb-step script=shape.stroke>
                     <wb-value type="shape">stroke the shape</wb-value>
                 </wb-step>
-                
-                
+
+
                 <wb-expression type="shape" script="shape.circle">
                     <wb-value type="point">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
@@ -837,16 +871,16 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Input
                 </header>
-				<wb-expression type="number" script="input.mouseX"> 
-					<wb-value>Mouse x</wb-value> 
+				<wb-expression type="number" script="input.mouseX">
+					<wb-value>Mouse x</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="input.mouseY"> 
+				<wb-expression type="number" script="input.mouseY">
 					<wb-value>Mouse y</wb-value>
 				</wb-expression>
-				<wb-expression type="boolean" script="input.mouseDown"> 
-					<wb-value>Mouse Down</wb-value> 
+				<wb-expression type="boolean" script="input.mouseDown">
+					<wb-value>Mouse Down</wb-value>
 				</wb-expression>
-				<wb-expression type="boolean" script="input.keyPressed">  
+				<wb-expression type="boolean" script="input.keyPressed">
 					<wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
                 	<wb-value>Pressed?</wb-value>
 				</wb-expression>
@@ -864,7 +898,7 @@
                     tilt direction
                 </wb-expression>
             </wb-accordion>
-            
+
             <wb-accordion class="geolocation">
                 <header>
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
@@ -1015,6 +1049,6 @@
 	<script src="js/app.js"></script>
     <script src="js/file.js"></script>
     <script src="js/queryparams.js"></script>
-    
+
 </body>
 </html>

@@ -9,7 +9,7 @@ wb-step, wb-context, wb-expression{
     border-style: solid;
     clear: left;
     position: relative;
-    
+
 }
 
 body:not(.block-dragging) wb-step,
@@ -59,7 +59,7 @@ wb-value{
     text-align: right;
     margin-left: 20px;
     white-space:nowrap;
-    
+
 }
 
 wb-row{
@@ -203,8 +203,8 @@ wb-value[type*=point][type*=vector] > input{
     background-image: url(../images/icon/point.svg), url(../images/icon/vector.svg);
     background-position: 3px 3px, 20px 3px;
 }
-wb-value[type*=image][type*=shape][type*=text] > input{
-    background-image: url(../images/icon/image.svg), url(../images/icon/shape.svg), url(../images/icon/text.svg);
+wb-value[type*=image][type*=shape][type*=sprite] > input{
+    background-image: url(../images/icon/image.svg), url(../images/icon/shape.svg), url(../images/icon/sprite.svg);
     background-position: 3px 3px, 20px 3px, 37px 3px;
 }
 wb-value[type*=number][type*=vector][type*=array] > input{

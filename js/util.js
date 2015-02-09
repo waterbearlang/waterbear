@@ -197,7 +197,7 @@
     Point.prototype.toString = function(){
         return '[' + this.x + ',' + this.y + ']';
     };
-   
+
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -666,7 +666,7 @@
                  * object. */
                 return {
                     // Pass the callback function that should run when all assets
-                    // have loaded.  
+                    // have loaded.
                     whenLoaded: function(callback) { whenLoaded = callback; },
                 };
 
@@ -756,11 +756,8 @@
                         assets.sounds[soundSprite.name] = soundSprite;
                     }
                     else if (assets.imageExtensions.indexOf(extension) !== -1){
-                        var imageSprite = new Image();
-                        imageSprite.name = source;
+                        var imageSprite = new WBImage(source, loadHandler);
                         assets.images[source] = imageSprite;
-                        imageSprite.addEventListener('load', loadHandler, false);
-                        imageSprite.src = source;
                     }else if (assets.videoExtensions.indexOf(extension) !== -1){
                         var videoSprite = new Video();
                         videoSprite.name = source;
@@ -794,6 +791,56 @@
     })();
 
 
+    /****************************
+    *
+    * Image, loadable, drawable
+    *
+    *****************************/
+
+    function WBImage(src, loadHandler){
+        self = this;
+        function selfLoad(evt){
+            self.width = self.origWidth = self._image.width;
+            self.height = self.origHeight = self._image.height;
+            self.origProportion = self.origWidth / self.origHeight;
+            loadHandler(evt);
+        }
+        this.name = src;
+        this._image = new Image();
+        this._image.addEventListener('load', selfLoad, false);
+        this._image.src = src;
+    }
+
+    WBImage.prototype.draw = function(ctx){
+        ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+    }
+
+    WBImage.prototype.drawAtPoint = function(ctx, pt){
+        ctx.translate(pt.x, pt.y);
+        this.draw(ctx);
+        ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    WBImage.prototype.setWidth = function(w){
+        this.width = w;
+        this.height = this.width * this.origProportion;
+    }
+
+    WBImage.prototype.setHeight = function(h){
+        this.height = h;
+        this.width = this.height / this.origProportion;
+    }
+
+    WBImage.prototype.setSize = function(sz){
+        this.width = sz.w;
+        this.height = sz.h;
+    }
+
+    WBImage.prototype.scale = function(scaleFactor){
+        this.width = this.origWidth * scaleFactor;
+        this.height = this.origHeight * scaleFactor;
+    }
+
 
     /******************************
     *
@@ -822,11 +869,19 @@
 
     Sprite.prototype.rotate = function(r){
         this.facing = this.facing.rotate(r);
-        console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.rotateTo = function(r){
+        this.facing = this.facing.rotateTo(r);
     }
 
     Sprite.prototype.move = function(){
         this.position = add(this.position, this.velocity);
+    }
+
+    Sprite.prototype.moveTo = function(pt){
+        this.position = this.pt;
     }
 
     Sprite.prototype.draw = function(ctx){
@@ -877,8 +932,10 @@
         isNumber: isNumber,
         Path: Path,
         Shape: Shape,
+        Sprite: Sprite,
         geolocation: geolocationModule,
         motion: motionModule,
+        WBImage: WBImage
     };
 
 

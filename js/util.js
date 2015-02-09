@@ -222,6 +222,8 @@
     function Rect(x, y, width, height) {
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
         this.size = new Size(width, 'px', height, 'px');
     }
 
@@ -889,6 +891,45 @@
         ctx.translate(this.position.x, this.position.y);
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    Sprite.prototype.bounceWithinRect = function(r){
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.velocity.x *= -1;
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.velocity.x *= -1;
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.velocity.y *= -1;
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.velocity.y *= -1;
+        }
+    }
+
+    Sprite.prototype.wrapAroundRect = function(r){
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.position = new Vector(this.position.x - r.x, this.position.y);
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.position = new Vector(this.position.x + r.x + r.width, this.position.y);
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.position = new Vector(this.position.x, this.position.y - r.y);
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.position = new Vector(this.position.x, this.position.y + r.y + r.height);
+        }
+    }
+
+    Sprite.prototype.stayWithinRect = function(r){
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.position = new Vector(r.x + r.width, this.position.y);
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.position = new Vector(r.x, this.position.y);
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.position = new Vector(this.position.x, r.y + r.height);
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.position = new Vector(this.postition.x, r.y);
+        }
     }
 
     function defaultDrawable(ctx){

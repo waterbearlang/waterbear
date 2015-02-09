@@ -44,6 +44,10 @@
         canvas().setAttribute('height', Event.stage.height);
     }
 
+    function canvasRect(){
+        return new util.Rect(0,0,Event.stage.width,Event.stage.height);
+    }
+
     // Initialize the stage.
     Event.on(window, 'resize', null, handleResize);
     Event.on(document.body, 'wb-resize', null, handleResize);
@@ -98,7 +102,7 @@
     // text
     // vector
 
-    global.runtime = util.extend((global.runtime || {} ), {
+    global.runtime = {
         startEventLoop: startEventLoop,
 
         local: {
@@ -941,6 +945,18 @@
             applyForce: function(spt, vec){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'applyForce']);
                 spt.applyForce(vec);
+            },
+            bounceAtEdge: function(spt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'bounceAtEdge']);
+                spt.bounceWithinRect(canvasRect());
+            },
+            wrapAtEdge: function(spt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'wrapAtEdge']);
+                spt.wrapWithinRect(canvasRect());
+            },
+            stopAtEdge: function(spt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'stopAtEdge']);
+                spt.stayWithinRect(canvasRect());
             }
         },
 
@@ -1106,8 +1122,12 @@
             y: function y(vec){
                 _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'y']);
                 return vec.y;
+            },
+            randomUnitVector: function randomUnitVector(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'randomUnitVector']);
+                return util.Vector.fromPolar(util.randInt(0,359), 1);
             }
         }
-    });
+    };
 
 })(window);

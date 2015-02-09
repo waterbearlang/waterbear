@@ -182,6 +182,15 @@
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">apply force</wb-value>
                 </wb-step>
+                <wb-step script="sprite.bounceAtEdge">
+                    <wb-value type="sprite">bounce at edge</wb-value>
+                </wb-step>
+                <wb-step script="sprite.wrapAtEdge">
+                    <wb-value type="sprite">wrap at edge</wb-value>
+                </wb-step>
+                <wb-step script="sprite.stopAtEdge">
+                    <wb-value type="sprite">stop at edge</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="sound">
                 <header>
@@ -619,6 +628,9 @@
                 </wb-expression>
                 <wb-expression type="vector" script="vector.normalize">
                     <wb-value type="vector">normalize</wb-value>
+                </wb-expression>
+                <wb-expression type="vector" script="vector.randomUnitVector">
+                    <wb-value>random unit vector</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="object">

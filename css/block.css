@@ -261,7 +261,7 @@ wb-expression.string, wb-step.string, wb-context.string{ background-color: hsl(2
 wb-expression.path, wb-step.path, wb-context.path{ background-color: hsl(24, 93%, 56%); border-color: hsl(24, 93%, 40%);}
 wb-expression.point, wb-step.point, wb-context.point{ background-color: hsl(180, 93%, 56%); border-color: hsl(180, 93%, 40%);}
 wb-expression.rect, wb-step.rect, wb-context.rect{ background-color: hsl(336, 93%, 56%); border-color: hsl(336, 93%, 40%);}
-wb-expression.sense, wb-step.sense, wb-context.sense{ background-color: hsl(132, 93%, 56%); border-color: hsl(132, 93%, 40%);}
+wb-expression.input, wb-step.input, wb-context.input{ background-color: hsl(132, 93%, 56%); border-color: hsl(132, 93%, 40%);}
 wb-expression.motion, wb-step.motion, wb-context.motion{ background-color: hsl(288, 93%, 56%); border-color: hsl(288, 93%, 40%);}
 wb-expression.shape, wb-step.shape, wb-context.shape{ background-color: hsl(84, 93%, 56%); border-color: hsl(84, 93%, 40%);}
 wb-expression.geolocation, wb-step.geolocation, wb-context.geolocation{ background-color: hsl(240, 93%, 56%); border-color: hsl(240, 93%, 40%);}
@@ -287,6 +287,7 @@ wb-expression[type=rect],wb-local wb-expression[type=rect]{ background-color: hs
 wb-expression[type=string],wb-local wb-expression[type=string]{ background-color: hsl(228, 93%, 56%); border-color: hsl(228, 93%, 40%); }
 wb-expression[type=geolocation]{ background-color: hsl(240, 93%, 56%); border-color: hsl(240, 93%, 40%); }
 wb-expression[type=size]{background-color: hsl(192, 93%, 56%); border-color: hsl(192, 93%, 40%);}
+wb-expression[type=motion]{background-color: hsl(288, 93%, 56%); border-color: hsl(288, 93%, 40%);}
 
 /* Used for input resizing */
 .sekrit-svg{

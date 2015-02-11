@@ -141,6 +141,9 @@
 				<wb-context script="control.comment" class="control">
                     <wb-value type="text">comment</wb-value>
                 </wb-context>
+                <wb-step script="control.alert" class="control">
+                    <wb-value type="text,string">alert</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="sprite">
                 <header>
@@ -150,21 +153,21 @@
                 <wb-expression type="sprite" script="sprite.create" />
                     <wb-value type="image,shape,text">sprite with</wb-value>
                 </wb-expression>
-                <wb-step script="sprite.accelerate">
+                <wb-step script="sprite.accelerate" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">accelerate by</wb-value>
                 </wb-step>
-                <wb-step script="sprite.rotate">
+                <wb-step script="sprite.rotate" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">rotate by</wb-value>
                 </wb-step>
-                <wb-step script="sprite.move">
+                <wb-step script="sprite.move" class="sprite">
                     <wb-value type="sprite">move</wb-value>
                 </wb-step>
-                <wb-step script="sprite.draw">
+                <wb-step script="sprite.draw" class="sprite">
                     <wb-value type="sprite">draw</wb-value>
                 </wb-step>
-                <wb-step script="sprite.applyForce">
+                <wb-step script="sprite.applyForce" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">apply forcef</wb-value>
                 </wb-step>
@@ -687,9 +690,6 @@
                     <wb-value type="text,string"></wb-value>
                     <wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
-                <wb-step script="string.alert" class="string">
-                    <wb-value type="text,string">alert</wb-value>
-                </wb-step>
             </wb-accordion>
             <wb-accordion class="point">
                 <header>
@@ -763,20 +763,18 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-            </wb-accordion>
+            </wb-accordion>          
             <wb-accordion class="shape">
                 <header>
                     <img class="cat-icon" src="images/icon/shape.svg" />
                     Shapes
                 </header>
-                 <wb-step script=shape.fill>
+                 <wb-step script=shape.fill class="shape">
                     <wb-value type="shape">fill the shape</wb-value>
                 </wb-step>
-                <wb-step script=shape.stroke>
+                <wb-step script=shape.stroke class="shape">
                     <wb-value type="shape">stroke the shape</wb-value>
                 </wb-step>
-                
-                
                 <wb-expression type="shape" script="shape.circle">
                     <wb-value type="point">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
@@ -836,7 +834,6 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Input
                 </header>
-
                 <wb-expression type="number" script="input.mouseX">
                     <wb-value>Mouse x</wb-value>
                 </wb-expression>
@@ -850,7 +847,7 @@
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
                     <wb-value>Pressed?</wb-value>
                 </wb-expression>
-                <wb-context script="input.whenKeyPressed">
+                <wb-context script="input.whenKeyPressed" class="input">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
                         </wb-context>
@@ -860,28 +857,14 @@
                     <img class="cat-icon" src="images/icon/motion.svg" />
                     Motion
                 </header>
-				<wb-context script="motion.whenDeviceTurned">
+				<wb-context script="motion.whenDeviceTurned" class="motion">
                     <wb-value type="list" allow="literal" options="upright,downright,downleft,upleft,up,down,right,left">when device turned</wb-value>
 
                 </wb-context>
                 <wb-expression type="motion" script="motion.tiltDirection">
                     tilt direction
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="shape">
-                <header>
-                    <img class="cat-icon" src="images/icon/shape.svg" />
-                    Shapes
-                </header>
-                <wb-step script="shape.fillShape" class="shape">
-                    <wb-value type="shape">fill shape</wb-value>
-                </wb-step>
-                <wb-expression type="shape" script="shape.circle">
-                    <wb-value type="point">circle at</wb-value>
-                    <wb-value type="number" min="0">radius</wb-value>
-				</wb-expression>
-            </wb-accordion>
-            
+            </wb-accordion>   
             <wb-accordion class="geolocation">
                 <header>
                     <img class="cat-icon" src="images/icon/geolocation.svg" />

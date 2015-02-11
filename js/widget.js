@@ -96,6 +96,7 @@ window.WBSplitter = document.registerElement('wb-splitter', {prototype: Splitter
 // Splitter dragging
 var dragSplitter = null;
 var prevPanel = null;
+var nextPanel = null;
 var direction = null;
 var minPosition = 0;
 var maxPosition = 0;
@@ -108,8 +109,8 @@ Event.on(document.body, 'drag-start', 'wb-splitter', function(evt){
     direction = dragSplitter.parentElement.localName === 'wb-vbox' ? 'vertical' : 'horizontal';
     prevPanel = dragSplitter.previousElementSibling;
     var prevBox = prevPanel.getBoundingClientRect();
-    console.log('prevBox: %o', prevBox);
-    var nextBox = dragSplitter.nextElementSibling.getBoundingClientRect();
+    nextPanel = dragSplitter.nextElementSibling;
+    var nextBox = nextPanel.getBoundingClientRect();
     minPosition = direction === 'vertical' ? prevBox.top : prevBox.left;
     maxPosition = direction === 'vertical' ? nextBox.bottom : nextBox.right;
     slop = direction === 'vertical' ? evt.clientY - prevBox.bottom : evt.clientX - prevBox.right;
@@ -117,6 +118,7 @@ Event.on(document.body, 'drag-start', 'wb-splitter', function(evt){
 });
 
 Event.on(document.body, 'dragging', null, function(evt){
+    if (!dragSplitter) return;
     var currPos = direction === 'vertical' ? evt.clientY - slop : evt.clientX - slop;
     if (currPos > minPosition && currPos < maxPosition){
         prevPanel.style.flex = '0 0 ' + (currPos - minPosition) + 'px';
@@ -125,8 +127,12 @@ Event.on(document.body, 'dragging', null, function(evt){
 
 Event.on(document.body, 'drag-end', null, function(evt){
     // clear variables
+    if (!dragSplitter) return;
+    Event.trigger(prevPanel, 'wb-resize');
+    Event.trigger(nextPanel, 'wb-resize');
     dragSplitter = null;
     prevPanel = null;
+    nextPanel = null;
     direction = null;
     minPosition = 0;
     maxPosition = 0;

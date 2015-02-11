@@ -189,13 +189,6 @@
                 evt.target = touch.target;
                 evt.pageX = touch.pageX;
                 evt.pageY = touch.pageY;
-            }else{
-                // is this necessary or desirable?
-                if (evt.which !== 1){ // left mouse button
-                    evt.invalid = true;
-                    evt.invalidReason = 'Not the left mouse button';
-                    return evt;
-                }
             }
         }
         return evt;
@@ -237,7 +230,7 @@
         Event.pointerDown = true;
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
-        dragTarget = evt.target;
+		dragTarget = evt.target;
         startPos = {x: evt.pageX, y: evt.pageY};
         forward(dragTarget, 'drag-init', evt);
     }
@@ -255,7 +248,7 @@
     function dragging(evt){
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
-        if (!dragTarget) { return undefined; }
+		if (!dragTarget) { return undefined; }
         if (!isDragging) {
             // Test if we've moved more than a delta?
             // Otherwise this could block legitimate click/tap events
@@ -329,14 +322,14 @@
     }
 
     function isKeyDown(key){
-        return this.keys[key];
+		return this.keys[key];
     }
 
     function handleKeyDown(evt){
         var key = keyForEvent(evt);
         Event.keys[key] = true;
         if (Event.keyHandlers[key]){
-            Event.keyHandlers.forEach(function(handler){
+			Event.keyHandlers[key].forEach(function(handler){
                 handler(evt);
             });
         }

@@ -420,7 +420,7 @@
         motionModule = {
             /**
              * Starts fetching the motion, periodically, and sets the
-             * direction property of this module. 
+             * direction property of this module.
              */
             startTrackingMotion: function () {
 
@@ -451,7 +451,7 @@
             // beta is the front-to-back tilt in degrees, where front is positive
             var front_back = eventData.beta;
 
-            limit = 10;
+            var limit = 10;
 
             direction = "";
 

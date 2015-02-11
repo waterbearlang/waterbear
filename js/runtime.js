@@ -922,7 +922,7 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'accelerate']);
                 spt.accelerate(speed);
             },
-            rotate: function(spt, angle){
+            rotate: function(spt, angle, _){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'rotate']);
                 spt.rotate(angle);
             },
@@ -952,7 +952,7 @@
             },
             wrapAtEdge: function(spt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'wrapAtEdge']);
-                spt.wrapWithinRect(canvasRect());
+                spt.wrapAroundRect(canvasRect());
             },
             stopAtEdge: function(spt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'stopAtEdge']);

@@ -134,18 +134,21 @@
 
     // angle between two vectors in radians
     function angle(v1, v2){
-        var diff = v1.rad - v2.rad;
+        var diff = v1.radians() - v2.radians();
         return atan2(sin(diff), cos(diff));
     }
 
     // Create a vector from an angle in degrees and a magnitude (length)
     function Vector(x,y){
-        this.x = x;
-        this.y = y;
+        this.x = Number(x);
+        this.y = Number(y);
     }
     Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
+    }
+    Vector.fromPoint = function(pt){
+        return new Vector(pt.x, pt.y);
     }
 
     Vector.prototype.magnitude = function(){
@@ -161,10 +164,11 @@
 
     // Make magnitude equal to 1
     Vector.prototype.normalize = function normalize(){
-        if (this.magnitude() !== 0){
-            return multiply(vec, 1 / vec.magnitude());
+        var mag = this.magnitude();
+        if (mag === 0 || mag === 1){
+            return this;
         }
-        return vec;
+        return multiply(this, 1 / mag);
     }
 
     Vector.prototype.rotateTo = function rotateTo(degrees){
@@ -172,7 +176,7 @@
     }
 
     Vector.prototype.rotate = function rotate(degrees){
-        var radians = this.radians + deg2rad(degrees);
+        var radians = this.radians() + deg2rad(degrees);
         var mag = this.magnitude();
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
@@ -856,8 +860,8 @@
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
         this.position = new Vector(0,0);
-        this.facing = new Vector(-PI/2,0.1);
-        this.velocity = new Vector(0,0.1);
+        this.facing = new Vector(1,0);
+        this.velocity = new Vector(0,0);
     }
 
     Sprite.prototype.accelerate = function(speed){
@@ -883,37 +887,37 @@
     }
 
     Sprite.prototype.moveTo = function(pt){
-        this.position = this.pt;
+        this.position = new Vector(pt.x, pt.y);
     }
 
     Sprite.prototype.draw = function(ctx){
-        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
         ctx.translate(this.position.x, this.position.y);
+        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
     Sprite.prototype.bounceWithinRect = function(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
-            this.velocity.x *= -1;
+            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }else if (this.position.x < r.x && this.velocity.x < 0){
-            this.velocity.x *= -1;
+            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }
         if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
-            this.velocity.y *= -1;
+            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
         }else if (this.position.y < r.y && this.velocity.y < 0){
-            this.velocity.y *= -1;
+            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
         }
     }
 
     Sprite.prototype.wrapAroundRect = function(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
-            this.position = new Vector(this.position.x - r.x, this.position.y);
+            this.position = new Vector(this.position.x - r.width, this.position.y);
         }else if (this.position.x < r.x && this.velocity.x < 0){
             this.position = new Vector(this.position.x + r.x + r.width, this.position.y);
         }
         if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
-            this.position = new Vector(this.position.x, this.position.y - r.y);
+            this.position = new Vector(this.position.x, this.position.y - r.height);
         }else if (this.position.y < r.y && this.velocity.y < 0){
             this.position = new Vector(this.position.x, this.position.y + r.y + r.height);
         }
@@ -928,7 +932,7 @@
         if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
             this.position = new Vector(this.position.x, r.y + r.height);
         }else if (this.position.y < r.y && this.velocity.y < 0){
-            this.position = new Vector(this.postition.x, r.y);
+            this.position = new Vector(this.position.x, r.y);
         }
     }
 
@@ -967,6 +971,7 @@
         divide: divide,
         deg2rad: deg2rad,
         rad2deg: rad2deg,
+        angle: angle,
         randInt: randInt,
         noise: noise,
         choice: choice,

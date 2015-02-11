@@ -10,7 +10,14 @@
  */
 
 /* TODO: control */
-/* TODO: sprite */
+
+/* sprite */
+
+// QUnit.module('sprites');
+// QUnit.test('create', function(assert){
+
+// });
+
 /* TODO: sound */
 /* TODO: arrays */
 /* TODO: boolean */
@@ -19,7 +26,75 @@
 /* TODO: images */
 /* TODO: math */
 /* TODO: random */
-/* TODO: vectors */
+
+/* vectors */
+
+var iota = 0.0001;
+function equalish(a,b){
+    // for testing floating point "equality" as "close enough"
+    if (a < (b - iota)){
+        return false;
+    }else if (a > (b + iota)){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+QUnit.module('vectors');
+QUnit.test('create', function(assert){
+    var vec = new util.Vector(1,1);
+    assert.ok(vec, 'Vector must exist');
+    assert.strictEqual(vec.x, 1, 'X should be 1 here');
+    assert.strictEqual(vec.y, 1, 'Y should be 1 here');
+});
+QUnit.test('utilities', function(assert){
+    assert.strictEqual(util.deg2rad(180), Math.PI, '180 degrees == PI radians');
+    assert.strictEqual(util.rad2deg(Math.PI / 2), 90, 'Half PI radians == 90 degrees');
+    var v1 = new util.Vector(1,0);
+    var v2 = new util.Vector(0,1);
+    assert.strictEqual(util.angle(v1,v2), -Math.PI / 2, 'Angle between <1,0> and <0,1> should be -PI/2');
+});
+QUnit.test('fromPolar', function(assert){
+    var vec = util.Vector.fromPolar(90, 1);
+    assert.ok(equalish(vec.x, 0)); // Probably all floating-point tests should use this pattern
+    assert.strictEqual(vec.y, 1);
+});
+QUnit.test('magnitude', function(assert){
+    var vec = new util.Vector(3,4);
+    assert.strictEqual(vec.magnitude(), 5);
+});
+QUnit.test('radians', function(assert){
+    assert.ok(equalish(new util.Vector(1,0).radians(), 0));
+    assert.ok(equalish(new util.Vector(0,1).radians(), Math.PI/2));
+    assert.ok(equalish(new util.Vector(-1,0).radians(), Math.PI));
+});
+QUnit.test('degrees', function(assert){
+    assert.ok(equalish(new util.Vector(1,0).degrees(), 0));
+    assert.ok(equalish(new util.Vector(0,1).degrees(), 90));
+    assert.ok(equalish(new util.Vector(-1,0).degrees(), 180));
+});
+QUnit.test('normalize', function(assert){
+    assert.ok(equalish(new util.Vector(5,0).normalize().x, 1));
+    assert.ok(equalish(new util.Vector(0,5).normalize().y, 1));
+});
+QUnit.test('rotateTo', function(assert){
+    assert.ok(equalish(new util.Vector(5,0).rotateTo(0).x, 5));
+    assert.ok(equalish(new util.Vector(0,5).rotateTo(90).y, 5));
+});
+QUnit.test('rotate', function(assert){
+    assert.ok(equalish(new util.Vector(5,0).rotate(90).y, 5));
+    assert.ok(equalish(new util.Vector(5,0).rotate(-90).y, -5));
+});
+QUnit.test('rotateRads', function(assert){
+    assert.ok(equalish(new util.Vector(5,0).rotateRads(Math.PI/2).y, 5));
+    assert.ok(equalish(new util.Vector(5,0).rotateRads(-Math.PI/2).y, -5));
+});
+QUnit.test('toString', function(assert){
+    assert.strictEqual(new util.Vector(5,0).toString(), '<5,0>');
+    assert.strictEqual(new util.Vector(0,5).toString(), '<0,5>');
+});
+
 /* TODO: objects */
 
 /* This should get rid of testing errors caused by Google Analytics*/
@@ -260,12 +335,12 @@ QUnit.testBrowser('currentLocation', function (assert) {
         alt = 645;
 
     assert.expect(4);
-    
+
     /* First, stub the API... */
     var stub;
-    
+
     if (navigator.geolocation) {
-        /* On user agents with geolocation. */ 
+        /* On user agents with geolocation. */
         stub = sinon.stub(navigator.geolocation, 'watchPosition');
     } else {
         /* Create the API if it does not exist (like on PhantomJS). */
@@ -287,11 +362,11 @@ QUnit.testBrowser('currentLocation', function (assert) {
     Event.on(window, 'locationchanged', null, function () {
         var location = geolocation.currentLocation();
         assert.strictEqual(location.coords.latitude, lat,
-                           'API returned expected latitude'); 
+                           'API returned expected latitude');
         assert.strictEqual(location.coords.longitude, lon,
-                           'API returned expected longitude'); 
+                           'API returned expected longitude');
         assert.strictEqual(location.coords.altitude, alt,
-                           'API returned expected altitude'); 
+                           'API returned expected altitude');
         done();
     });
 

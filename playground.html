@@ -120,6 +120,20 @@
                     <wb-value type="any">then</wb-value>
                     <wb-value type="any">else</wb-value>
                 </wb-expression>
+				<wb-context class="sensing" script="control.timer">
+						<wb-row>
+                   		<wb-value type="text" isVariable="true" allow="literal" value="variable">Timer Name:</wb-value>
+                    	<wb-local>
+                        	<wb-expression type="any" script="control.getID">
+                            	<wb-value value="variable"></wb-value>
+                        	</wb-expression>
+						</wb-local>
+						</wb-row>
+						<wb-value type="number" min="0" value="0">Milliseconds:</wb-value>
+                </wb-context>
+				<wb-step class="sensing" script="control.resetTimer">
+					<wb-value type="number">Reset Timer</wb-value>
+				</wb-step>
                 <wb-step script="control.log">
                     <wb-value type="any">log</wb-value>
                 </wb-step>

@@ -387,7 +387,26 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'log']);
                 console.log(item);
             }
+			timer: function(args, container){
+				var name = args[0];
+				var milliseconds = args[1];
+				var self = this;
+				var runBlocks = function(cntr){
+					cntr[0].forEach(function(block){
+                    	block.run(self);
+                	});
+				};
+				runtime[name] = window.setTimeout(function(){ runBlocks(container); }, milliseconds);
+			},
+			getID: function(name){
+				console.log("getID: " + name);
+				return runtime[name];
+			},
+			resetTimer: function(name){
+				
+			}, //TODO
         },
+		
 
         /*
          * The underlying JavaScript object is the same object that is passed

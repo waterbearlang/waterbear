@@ -177,31 +177,31 @@
                 return !a;
             }
         },
-		canvas: {
-			canvasWidth: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasWidth']);
-				return Event.stage.width;
-			},
-			canvasHeight: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasHeight']);
-				return Event.stage.height;
-			},
-			centerX: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerX']);
-				return (Event.stage.width / 2);
-			},
-			centerY: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerY']);
-				return (Event.stage.height / 2);
-			},
-			randomX: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomX']);
-				return Math.random() * Event.stage.width;
-			},
-			randomY: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomY']);
-				return Math.random() * Event.stage.height;
-			},
+        canvas: {
+            canvasWidth: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasWidth']);
+                return Event.stage.width;
+            },
+            canvasHeight: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasHeight']);
+                return Event.stage.height;
+            },
+            centerX: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerX']);
+                return (Event.stage.width / 2);
+            },
+            centerY: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerY']);
+                return (Event.stage.height / 2);
+            },
+            randomX: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomX']);
+                return Math.random() * Event.stage.width;
+            },
+            randomY: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomY']);
+                return Math.random() * Event.stage.height;
+            },
         },
         color: {
             namedColor: function(name){
@@ -386,14 +386,14 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'ternary']);
                 return cond ? iftrue : otherwise;
             },
-			ask: function(args){
-				_gaq.push(['_trackEvent', 'Blocks', 'Control', 'ask']);
-				var message = args[0];
-				var name = args[1];
-				var answer = prompt(message);
-				runtime.control.setVariable(name, answer);
-			},
-			comment: function(){
+            ask: function(args){
+                _gaq.push(['_trackEvent', 'Blocks', 'Control', 'ask']);
+                var message = args[0];
+                var name = args[1];
+                var answer = prompt(message);
+                runtime.control.setVariable(name, answer);
+            },
+            comment: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'comment']);
             },
             log: function(item){
@@ -415,8 +415,8 @@
             /* Asynchronous update event. Context. */
             whenLocationUpdated: function(args, containers) {
                 _gaq.push(['_trackEvent', 'Blocks', 'GeoLocation', 'whenLocationUpdated']);
-                var currentScope = this,
-                    steps = containers[0];
+                var currentScope = this;
+                var steps = containers[0];
 
                 Event.on(window, 'locationchanged', null, function (event) {
                     // TODO: probably factor out augmenting scope and running
@@ -516,27 +516,28 @@
             //     };
             // }
         },
-		input: {
-			keyPressed: function(key){
-				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'keyPressed']);
-				if(Event.keys[key])
-					return true;
-				else
-					return false;
-			},
-			mouseX: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseX']);
-				return (Event.pointerX-Event.stage.left);
-			},
-			mouseY: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseY']);
-				return (Event.pointerY-Event.stage.top);
-			},
-			mouseDown: function(){
-				_gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseDown']);
-				return Event.pointerDown;
-			},
-		},
+        input: {
+            keyPressed: function(key){
+                _gaq.push(['_trackEvent', 'Blocks', 'Input', 'keyPressed']);
+                if(Event.keys[key])
+                    return true;
+                else
+                    return false;
+            },
+            mouseX: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseX']);
+                return (Event.pointerX-Event.stage.left);
+            },
+            mouseY: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseY']);
+                return (Event.pointerY-Event.stage.top);
+            },
+            mouseDown: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseDown']);
+                return Event.pointerDown;
+            },
+        },
+
         math: {
             add: util.add,
             subtract: util.subtract,
@@ -544,25 +545,32 @@
             divide: util.divide,
             equal: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'equal']);
-                return a === b; },
+                return a === b;
+            },
             notEqual: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'notEqual']);
-                return a !== b; },
+                return a !== b;
+            },
             lt: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'lt']);
-                return a < b; },
+                return a < b;
+            },
             lte: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'lte']);
-                return a <= b; },
+                return a <= b;
+            },
             gt: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'gt']);
-                return a > b; },
+                return a > b;
+            },
             gte: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'gte']);
-                return a >= b; },
+                return a >= b;
+            },
             mod: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'mod']);
-                return a % b; },
+                return a % b;
+            },
             round: Math.round,
             abs: Math.abs,
             floor: Math.floor,
@@ -571,37 +579,48 @@
             min: Math.min,
             cos: function(a){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'cos']);
-                return Math.cos(util.deg2rad(a)); },
+                return Math.cos(util.deg2rad(a));
+            },
             sin: function(a){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'sin']);
-                return Math.sin(util.deg2rad(a)); },
+                return Math.sin(util.deg2rad(a));
+            },
             tan: function(a){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'tan']);
-                return Math.tan(util.deg2rad(a)); },
+                return Math.tan(util.deg2rad(a));
+            },
             asin: function(a){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'asin']);
-                return Math.asin(util.deg2rad(a)); },
+                return Math.asin(util.deg2rad(a));
+            },
             acos: function(a){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'acos']);
-                return Math.acos(util.deg2rad(a)); },
+                return Math.acos(util.deg2rad(a));
+            },
             atan: function(a){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'atan']);
-                return Math.atan(util.deg2rad(a)); },
+                return Math.atan(util.deg2rad(a));
+            },
             pow: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'pow']);
-                return Math.pow(a, b); },
+                return Math.pow(a, b);
+            },
             sqrt: function(a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'sqrt']);
-                return Math.sqrt(a); },
+                return Math.sqrt(a);
+            },
             pi: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'pi']);
-                return Math.PI; },
+                return Math.PI;
+            },
             e: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'e']);
-                return Math.E; },
+                return Math.E;
+            },
             tau: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Math', 'tau']);
-                return Math.PI * 2; }
+                return Math.PI * 2;
+            }
         },
 
         motion: {
@@ -609,11 +628,11 @@
             whenDeviceTurned: function(args, containers) {
                 _gaq.push(['_trackEvent', 'Blocks', 'Motion', 'whenDeviceTurned']);
                 var currentScope = this,
-                    steps = containers[0];
+                steps = containers[0];
 
                 Event.on(window, 'motionchanged', null, function (event) {
-                        if (args[0] === util.motion.direction) {
-                            steps.forEach(function (block) {
+                    if (args[0] === util.motion.direction) {
+                        steps.forEach(function (block) {
                             block.run(currentScope);
                         });
                     }
@@ -663,8 +682,8 @@
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'bezierCurveTo']);
                 return new util.Path(ctx().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                controlPoint2.x, controlPoint2.y, toPoint.x,
-                toPoint.y));
+                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
+                                                                    toPoint.y));
             },
             moveTo: function(toPoint){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'moveTo']);
@@ -673,13 +692,13 @@
             quadraticCurveTo: function(toPoint, controlPoint){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'quadraticCurveTo']);
                 return new util.Path(ctx().quadraticCurveTo, new Array(controlPoint.x,
-                controlPoint.y,toPoint.x, toPoint.y));
+                                                                       controlPoint.y,toPoint.x, toPoint.y));
             },
             arcTo: function(radius, controlPoint1, controlPoint2){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'arcTo']);
                 return new util.Path(ctx().arcTo, new Array(controlPoint1.x,
-                controlPoint1.y,controlPoint2.x, controlPoint2.y,
-                radius));
+                                                            controlPoint1.y,controlPoint2.x, controlPoint2.y,
+                                                            radius));
             },
             closePath: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'closePath']);
@@ -819,10 +838,9 @@
                 }
             },
             ellipse: function(pt, rad1, rad2, rot){
-                    _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'ellipse']);
-                    ctx().beginPath();
-                    ctx().ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
-
+                _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'ellipse']);
+                ctx().beginPath();
+                ctx().ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
             },
 
         },
@@ -902,7 +920,7 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'effect']);
                 return {
                     play: function(){
-                       soundEffect(
+                        soundEffect(
                             frequency, attack, decay, waveform,
                             volume, balance, wait,
                             pitchBend, reverseBend, random, dissonance,
@@ -964,7 +982,7 @@
 
             toString: function(x){
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'toString']);
-                return x.toString()
+                return x.toString();
             },
             split: function(x,y){
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'split']);
@@ -996,7 +1014,7 @@
             },
             substring2: function(x,a,b){
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'substring2']);
-                return x.substring(a-1,b)
+                return x.substring(a-1,b);
             },
             isSubstring: function(x,y){
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'isSubstring']);

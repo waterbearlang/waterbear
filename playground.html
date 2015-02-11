@@ -127,7 +127,7 @@
                 <wb-step script="control.log" class="control">
                     <wb-value type="any">log</wb-value>
                 </wb-step>
-				<wb-step script="control.ask">
+				<wb-step script="control.ask" class="control">
 					<wb-row>
 						<wb-value type="text,string">Ask</wb-value>
                    		<wb-value type="text" isVariable="true" allow="literal" value="variable">and store in variable</wb-value>
@@ -138,7 +138,7 @@
 						</wb-local>
 					</wb-row>
                 </wb-step>
-				<wb-context script="control.comment">
+				<wb-context script="control.comment" class="control">
                     <wb-value type="text">comment</wb-value>
                 </wb-context>
             </wb-accordion>
@@ -687,7 +687,7 @@
                     <wb-value type="text,string"></wb-value>
                     <wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
-                <wb-step script="string.alert">
+                <wb-step script="string.alert" class="string">
                     <wb-value type="text,string">alert</wb-value>
                 </wb-step>
             </wb-accordion>

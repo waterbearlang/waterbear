@@ -255,15 +255,6 @@
                     block.run(self);
                 });
             },
-            whenKeyPressed: function(args, containers){
-                _gaq.push(['_trackEvent', 'Blocks', 'Control', 'whenKeyPressed']);
-                var self = this;
-                Event.onKeyDown(args[0], function(){
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
-                });
-            },
             eachFrame: function(args, containers){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'eachFrame']);
                 var self = this;
@@ -535,6 +526,15 @@
             mouseDown: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Input', 'mouseDown']);
                 return Event.pointerDown;
+            },
+            whenKeyPressed: function(args, containers){
+                _gaq.push(['_trackEvent', 'Blocks', 'Input', 'whenKeyPressed']);
+                var self = this;
+                Event.onKeyDown(args[0], function(){
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                });
             },
         },
 

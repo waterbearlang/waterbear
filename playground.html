@@ -730,7 +730,7 @@
                     <wb-value type="list" allow="literal"
                         options="butt,round,square" value="butt">cap style</wb-value>
                     <wb-value type="list" allow="literal" 
-						options="round,bevel,miter" value="round">join style</wb-value>
+                        options="round,bevel,miter" value="round">join style</wb-value>
                 </wb-step>
                 <wb-expression script = "path.moveTo" type="path">
                     <wb-value type="point">move to point</wb-value>
@@ -857,9 +857,8 @@
                     <img class="cat-icon" src="images/icon/motion.svg" />
                     Motion
                 </header>
-				<wb-context script="motion.whenDeviceTurned" class="motion">
+                <wb-context script="motion.whenDeviceTurned" class="motion">
                     <wb-value type="list" allow="literal" options="upright,downright,downleft,upleft,up,down,right,left">when device turned</wb-value>
-
                 </wb-context>
                 <wb-expression type="motion" script="motion.tiltDirection">
                     tilt direction
@@ -1001,6 +1000,7 @@
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <!-- polyfill for custom elements -->
+    <script src="lib/ajax.js"></script>
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.min.js"></script>

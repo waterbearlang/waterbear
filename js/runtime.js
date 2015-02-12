@@ -386,7 +386,7 @@
             log: function(item){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'log']);
                 console.log(item);
-            }
+            },
             alert: function(x){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'alert']);
                 alert(x);

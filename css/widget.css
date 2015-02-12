@@ -98,12 +98,11 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overflow-x: auto;
-    overflow-y: hidden;
     padding-left: 6px;
 }
 
 wb-accordion[open=true]{
+    overflow-x: auto;
     padding-bottom: 6px;
     margin-bottom: 17px;
 }
@@ -132,10 +131,6 @@ wb-accordion > header {
 
 wb-accordion[open=true] > header{
     margin-bottom: 6px;
-}
-
-wb-accordion[open=false] > header{
-    margin-bottom: 0px;
 }
 
 .cat-icon{

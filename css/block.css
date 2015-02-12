@@ -10,13 +10,6 @@ wb-step, wb-context, wb-expression{
     margin: 5px 5px 2px 2px;
     clear: left;
     position: relative;
-
-}
-
-wb-accordion{
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 5px;
 }
 
 body:not(.block-dragging) wb-step,

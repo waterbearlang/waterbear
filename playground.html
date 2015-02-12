@@ -40,10 +40,14 @@
                     <img class="cat-icon" src="images/icon/control.svg" />
                     Controls
                 </header>
-                <wb-context script="control.whenProgramRuns">
+                <wb-context script="control.whenProgramRuns" class="control">
                     <wb-value>when program runs</wb-value>
                 </wb-context>
-                <wb-context script="control.eachFrame">
+                <wb-context script="control.whenKeyPressed" class="control">
+                    <wb-value type="list" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
+                    <wb-value>key pressed<wb-value>
+                </wb-context>
+                <wb-context script="control.eachFrame" class="control">
                     <wb-row>
                         <wb-value>each frame</wb-value>
                         <wb-local>
@@ -58,7 +62,7 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-step script="control.setVariable">
+                <wb-step script="control.setVariable" class="control">
                     <wb-row>
                     <wb-value type="text" isVariable="true" allow="literal" value="variable">set</wb-value>
                         <wb-local>
@@ -69,7 +73,7 @@
                     </wb-row>
                     <wb-value type="any">to</wb-value>
                 </wb-step>
-                <wb-context script="control.loopOver">
+                <wb-context script="control.loopOver" class="control">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
                         <wb-local fortype="array,string">
@@ -89,11 +93,11 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-context script="control.broadcast">
+                <wb-context script="control.broadcast" class="control">
                     <wb-value type="text">broadcast</wb-value>
                     <wb-value type="any" optional="true">message with data</wb-value>
                 </wb-context>
-                <wb-context script="control.receive">
+                <wb-context script="control.receive" class="control">
                     <wb-value type="text">when I receive</wb-value>
                     <wb-value>message with data</wb-value>
                     <wb-local>
@@ -102,10 +106,10 @@
                         </wb-expression>
                     </wb-local>
                 </wb-context>
-                <wb-context script="control.if">
+                <wb-context script="control.if" class="control">
                     <wb-value type="boolean" value="true">if</wb-value>
                 </wb-context>
-                <wb-context script="control.ifElse">
+                <wb-context script="control.ifElse" class="control">
                     <header>
                         <wb-value type="boolean" value="true">if</wb-value>
                     </header>
@@ -115,15 +119,15 @@
                     </header>
                     <wb-contains></wb-contains>
                 </wb-context>
-                <wb-expression type="any" script="control.ternary">
+                <wb-expression class="control" type="any" script="control.ternary">
                     <wb-value type="boolean" value="true">if</wb-value>
                     <wb-value type="any">then</wb-value>
                     <wb-value type="any">else</wb-value>
                 </wb-expression>
-                <wb-step script="control.log">
+                <wb-step script="control.log" class="control">
                     <wb-value type="any">log</wb-value>
                 </wb-step>
-				<wb-step script="control.ask">
+				<wb-step script="control.ask" class="control">
 					<wb-row>
 						<wb-value type="text,string">Ask</wb-value>
                    		<wb-value type="text" isVariable="true" allow="literal" value="variable">and store in variable</wb-value>
@@ -134,9 +138,12 @@
 						</wb-local>
 					</wb-row>
                 </wb-step>
-				<wb-context script="control.comment">
+				<wb-context script="control.comment" class="control">
                     <wb-value type="text">comment</wb-value>
                 </wb-context>
+                <wb-step script="control.alert" class="control">
+                    <wb-value type="text,string">alert</wb-value>
+                </wb-step>
             </wb-accordion>
             <wb-accordion class="sprite">
                 <header>
@@ -146,21 +153,21 @@
                 <wb-expression type="sprite" script="sprite.create" />
                     <wb-value type="image,shape,text">sprite with</wb-value>
                 </wb-expression>
-                <wb-step script="sprite.accelerate">
+                <wb-step script="sprite.accelerate" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">accelerate by</wb-value>
                 </wb-step>
-                <wb-step script="sprite.rotate">
+                <wb-step script="sprite.rotate" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">rotate by</wb-value>
                 </wb-step>
-                <wb-step script="sprite.move">
+                <wb-step script="sprite.move" class="sprite">
                     <wb-value type="sprite">move</wb-value>
                 </wb-step>
-                <wb-step script="sprite.draw">
+                <wb-step script="sprite.draw" class="sprite">
                     <wb-value type="sprite">draw</wb-value>
                 </wb-step>
-                <wb-step script="sprite.applyForce">
+                <wb-step script="sprite.applyForce" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">apply forcef</wb-value>
                 </wb-step>
@@ -173,32 +180,32 @@
                 <wb-expression type="sound" isAsset="true" script="sound.get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
                 </wb-expression>
-                <wb-step script="sound.play">
+                <wb-step script="sound.play" class="sound">
                     <wb-value type="sound">play</wb-value>
                 </wb-step>
-                <wb-step script="sound.setLoop">
+                <wb-step script="sound.setLoop" class="sound">
                     <wb-value type="sound">set loop</wb-value>
                     <wb-value type="boolean" value="true"></wb-value>
                 </wb-step>
-                <wb-step script="sound.setVolume">
+                <wb-step script="sound.setVolume" class="sound">
                     <wb-value type="sound">set volume</wb-value>
                     <wb-value type="number" min="0" max="5" value="0.9"></wb-value>
                 </wb-step>
-                <wb-step script="sound.pause">
+                <wb-step script="sound.pause" class="sound">
                     <wb-value type="sound">pause</wb-value>
                 </wb-step>
-                <wb-step script="sound.playFrom">
+                <wb-step script="sound.playFrom" class="sound">
                     <wb-value type="sound">play</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="2">from</wb-value>
                         <wb-unit>seconds</wb-unit>
                     <wb-row>
                 </wb-step>
-                <wb-step script="sound.pan">
+                <wb-step script="sound.pan" class="sound">
                     <wb-value type="sound">balance</wb-value>
                     <wb-value type="number" min="-1" max="1" value="0"></wb-value>
                 </wb-step>
-                <wb-step script="sound.echo_DelayFeedbackFilter">
+                <wb-step script="sound.echo_DelayFeedbackFilter" class="sound">
                     <wb-value type="sound">set echo</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="0.2">delay</wb-value>
@@ -213,10 +220,10 @@
                         <wb-unit>Hz</wb-unit>
                     </wb-row>
                 </wb-step>
-                <wb-step script="sound.stopEcho">
+                <wb-step script="sound.stopEcho" class="sound">
                     <wb-value type="sound">echo off</wb-value>
                 </wb-step>
-                <wb-step script="sound.reverb_DurationDecayReverse">
+                <wb-step script="sound.reverb_DurationDecayReverse" class="sound">
                     <wb-value type="sound">set reverb</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="2">duration</wb-value>
@@ -228,7 +235,7 @@
                     </wb-row>
                     <wb-value type="boolean" value="false">reverse</wb-value>
                 </wb-step>
-                <wb-step script="sound.stopReverb">
+                <wb-step script="sound.stopReverb" class="sound">
                     <wb-value type="sound">reverb off</wb-value>
                 </wb-step>
                 <wb-expression type="sound" script="sound.effect">
@@ -294,18 +301,18 @@
                     <wb-value type="array">join</wb-value>
                     <wb-value type="string">with</wb-value>
                 </wb-expression>
-                <wb-step script="array.append">
+                <wb-step script="array.append" class="array">
                     <wb-value type="array"></wb-value>
                     <wb-value type="any">append</wb-value>
                 </wb-step>
-                <wb-step script="array.prepend">
+                <wb-step script="array.prepend" class="array">
                     <wb-value type="array"></wb-value>
                     <wb-value type="any">prepend</wb-value>
                 </wb-step>
                 <wb-expression type="number" script="array.length">
                     <wb-value type="array,string">length</wb-value>
                 </wb-expression>
-                <wb-step script="array.removeItem">
+                <wb-step script="array.removeItem" class="array">
                     <wb-value type="array"></wb-value>
                     <wb-value type="number" min="0" value="0">remove item at</wb-value>
                 </wb-step>
@@ -397,13 +404,13 @@
                     <wb-value type="number" min="0" max="100" value="0">lightness</wb-value>
                     <wb-value type="number" min="0" max="100" value="0">alpha</wb-value>
                 </wb-expression>
-                <wb-step script="color.fill">
+                <wb-step script="color.fill" class="color">
                     <wb-value type="color" value="#0000FF">fill style</wb-value>
                 </wb-step>
-                <wb-step script="color.stroke">
+                <wb-step script="color.stroke" class="color">
                     <wb-value type="color" value="00FF00">stroke style</wb-value>
                 </wb-step>
-                <wb-step script="color.shadow">
+                <wb-step script="color.shadow" class="color">
                     <wb-value type="color" value="#FF0000">shadow color</wb-value>
                 </wb-step>
             </wb-accordion>
@@ -415,7 +422,7 @@
                 <wb-expression type="image" isAsset="true" script="image.get">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.jpg">image from url</wb-value>
                 </wb-expression>
-                <wb-step script="image.drawAtPoint">
+                <wb-step script="image.drawAtPoint" class="image">
                     <wb-value type="image" allow="block">draw</wb-value>
                     <wb-value type="point" allow="block">at</wb-value>
                     <wb-value type="number" value="50">wide</wb-value>
@@ -683,9 +690,6 @@
                     <wb-value type="text,string"></wb-value>
                     <wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
-                <wb-step script="string.alert">
-                    <wb-value type="text,string">alert</wb-value>
-                </wb-step>
             </wb-accordion>
             <wb-accordion class="point">
                 <header>
@@ -725,9 +729,8 @@
                     <wb-value type="color" value="#0000FF">line color</wb-value>
                     <wb-value type="list" allow="literal"
                         options="butt,round,square" value="butt">cap style</wb-value>
-                    <wb-value type="list" allow="literal"
+                    <wb-value type="list" allow="literal" 
                         options="round,bevel,miter" value="round">join style</wb-value>
-
                 </wb-step>
                 <wb-expression script = "path.moveTo" type="path">
                     <wb-value type="point">move to point</wb-value>
@@ -760,20 +763,18 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-            </wb-accordion>
+            </wb-accordion>          
             <wb-accordion class="shape">
                 <header>
                     <img class="cat-icon" src="images/icon/shape.svg" />
                     Shapes
                 </header>
-                 <wb-step script=shape.fill>
+                 <wb-step script=shape.fill class="shape">
                     <wb-value type="shape">fill the shape</wb-value>
                 </wb-step>
-                <wb-step script=shape.stroke>
+                <wb-step script=shape.stroke class="shape">
                     <wb-value type="shape">stroke the shape</wb-value>
                 </wb-step>
-                
-                
                 <wb-expression type="shape" script="shape.circle">
                     <wb-value type="point">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
@@ -833,7 +834,6 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Input
                 </header>
-
                 <wb-expression type="number" script="input.mouseX">
                     <wb-value>Mouse x</wb-value>
                 </wb-expression>
@@ -847,7 +847,7 @@
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
                     <wb-value>Pressed?</wb-value>
                 </wb-expression>
-                <wb-context script="input.whenKeyPressed">
+                <wb-context script="input.whenKeyPressed" class="input">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
                         </wb-context>
@@ -857,15 +857,13 @@
                     <img class="cat-icon" src="images/icon/motion.svg" />
                     Motion
                 </header>
-                <wb-context script="motion.whenDeviceTurned">
+                <wb-context script="motion.whenDeviceTurned" class="motion">
                     <wb-value type="list" allow="literal" options="upright,downright,downleft,upleft,up,down,right,left">when device turned</wb-value>
-
                 </wb-context>
                 <wb-expression type="motion" script="motion.tiltDirection">
                     tilt direction
                 </wb-expression>
-            </wb-accordion>
-            
+            </wb-accordion>   
             <wb-accordion class="geolocation">
                 <header>
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
@@ -876,7 +874,7 @@
                     my current location
                 </wb-expression>
 
-                <wb-context script="geolocation.whenLocationUpdated">
+                <wb-context script="geolocation.whenLocationUpdated" class="geolocation">
                     <wb-row>
                         <wb-value>when my location changes</wb-value>
                         <wb-local>
@@ -935,9 +933,8 @@
                 <header>
                     <img class="cat-icon" src="images/icon/text.svg" />
                     Text
-                </header>
-
-                 <wb-step script="text.setFont">
+                </header>      
+                <wb-step script="text.setFont" class="text">
                     <wb-row>
                         <wb-value type = "number" value = "12">font</wb-value>
                         <wb-value type="list" allow="literal"
@@ -945,37 +942,37 @@
                     </wb-row>
                     <wb-value type = "text" value = "sans-serif"></wb-value>
                 </wb-step>
-                <wb-step script="text.textAlign">
+                <wb-step script="text.textAlign" class="text">
                     <wb-row>
                         <wb-value type="list"  allow="literal"
                         options="left,right,center,start,end"
                         value="left">align text to the</wb-value>
                     </wb-row>
                 </wb-step>
-                <wb-step script="text.textBaseline">
+                <wb-step script="text.textBaseline" class="text">
                     <wb-row>
                         <wb-value type="list"  allow="literal"
                         options="alphabetic,top,hanging,middle,bottom,ideographic"
                         value="alphabetic">text baseline</wb-value>
                     </wb-row>
                 </wb-step>
-                <wb-step script = "text.fillText">
+                <wb-step script = "text.fillText" class="text">
                     <wb-value type = "text,string">fill text</wb-value>
                     <wb-value type = "number">x</wb-value>
                     <wb-value type = "number">y</wb-value>
                 </wb-step>
-                <wb-step script = "text.fillTextWidth">
+                <wb-step script = "text.fillTextWidth" class="text">
                     <wb-value type = "text,string">fill text</wb-value>
                     <wb-value type = "number">x</wb-value>
                     <wb-value type = "number">y</wb-value>
                     <wb-value type = "number">max width</wb-value>
                 </wb-step>
-                <wb-step script = "text.strokeText">
+                <wb-step script = "text.strokeText" class="text">
                     <wb-value type = "text,string">stroke text</wb-value>
                     <wb-value type = "number">x</wb-value>
                     <wb-value type = "number">y</wb-value>
                 </wb-step>
-                <wb-step script = "text.strokeTextWidth">
+                <wb-step script = "text.strokeTextWidth" class="text">
                     <wb-value type = "text,string">stroke text</wb-value>
                     <wb-value type = "number">x</wb-value>
                     <wb-value type = "number">y</wb-value>

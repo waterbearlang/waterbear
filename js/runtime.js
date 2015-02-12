@@ -390,7 +390,11 @@
             log: function(item){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'log']);
                 console.log(item);
-            }
+            },
+            alert: function(x){
+                _gaq.push(['_trackEvent', 'Blocks', 'Control', 'alert']);
+                alert(x);
+            },
         },
 
         /*
@@ -1050,11 +1054,7 @@
             endsWith: function(x,y){
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'endsWith']);
                 return x.indexOf(y, x.length - y.length) !== -1;
-            },
-            alert: function(x){
-                _gaq.push(['_trackEvent', 'Blocks', 'String', 'alert']);
-                alert(x);
-            },
+            }
         },
 
         text:{

@@ -98,13 +98,14 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overflow-x: visible;
-    overflow-y: visible;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding-left: 6px;
 }
 
 wb-accordion[open=true]{
     padding-bottom: 6px;
+    margin-bottom: 20px;
 }
 
 wb-accordion > :not(header){

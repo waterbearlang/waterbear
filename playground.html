@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-	<title>Waterbear with Custom Elements</title>
+	<title>Waterbear Playground</title>
 	<link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/widget.css" />
     <link rel="stylesheet" href="css/block.css" />
@@ -352,23 +352,23 @@
                     <img class="cat-icon" src="images/icon/canvas.svg" />
                     Canvas
                 </header>
-				<wb-expression type="number" script="canvas.canvasWidth"> 
-					<wb-value>Canvas Width</wb-value> 
+				<wb-expression type="number" script="canvas.canvasWidth">
+					<wb-value>Canvas Width</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.canvasHeight"> 
+				<wb-expression type="number" script="canvas.canvasHeight">
 					<wb-value>Canvas Height</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.centerX"> 
-					<wb-value>Center x</wb-value> 
+				<wb-expression type="number" script="canvas.centerX">
+					<wb-value>Center x</wb-value>
 				</wb-expression>
 				<wb-expression type="number" script="canvas.centerY">
 					<wb-value>Center y</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.randomX"> 
-					<wb-value>Random x</wb-value> 
+				<wb-expression type="number" script="canvas.randomX">
+					<wb-value>Random x</wb-value>
 				</wb-expression>
-				<wb-expression type="number" script="canvas.randomY"> 
-					<wb-value>Random y<wb-value> 
+				<wb-expression type="number" script="canvas.randomY">
+					<wb-value>Random y<wb-value>
 				</wb-expression>
             </wb-accordion>
             <wb-accordion class="color">
@@ -718,7 +718,7 @@
                 <wb-expression type="array" script="point.toArray">
                     <wb-value type="point,vector">as array</wb-value>
                 </wb-expression>
-            </wb-accordion> 
+            </wb-accordion>
             <wb-accordion class="path">
                 <header>
                     <img class="cat-icon" src="images/icon/path.svg" />
@@ -729,7 +729,7 @@
                     <wb-value type="color" value="#0000FF">line color</wb-value>
                     <wb-value type="list" allow="literal"
                         options="butt,round,square" value="butt">cap style</wb-value>
-                    <wb-value type="list" allow="literal" 
+                    <wb-value type="list" allow="literal"
                         options="round,bevel,miter" value="round">join style</wb-value>
                 </wb-step>
                 <wb-expression script = "path.moveTo" type="path">
@@ -763,7 +763,7 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-            </wb-accordion>          
+            </wb-accordion>
             <wb-accordion class="shape">
                 <header>
                     <img class="cat-icon" src="images/icon/shape.svg" />
@@ -863,7 +863,7 @@
                 <wb-expression type="motion" script="motion.tiltDirection">
                     tilt direction
                 </wb-expression>
-            </wb-accordion>   
+            </wb-accordion>
             <wb-accordion class="geolocation">
                 <header>
                     <img class="cat-icon" src="images/icon/geolocation.svg" />
@@ -933,7 +933,7 @@
                 <header>
                     <img class="cat-icon" src="images/icon/text.svg" />
                     Text
-                </header>      
+                </header>
                 <wb-step script="text.setFont" class="text">
                     <wb-row>
                         <wb-value type = "number" value = "12">font</wb-value>
@@ -1013,6 +1013,6 @@
 	<script src="js/app.js"></script>
     <script src="js/file.js"></script>
     <script src="js/queryparams.js"></script>
-    
+
 </body>
 </html>

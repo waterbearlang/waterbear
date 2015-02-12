@@ -177,12 +177,12 @@
                 return !a;
             }
         },
-        canvas: {
-            canvasWidth: function(){
+        stage: {
+            stageWidth: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasWidth']);
                 return Event.stage.width;
             },
-            canvasHeight: function(){
+            stageHeight: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasHeight']);
                 return Event.stage.height;
             },

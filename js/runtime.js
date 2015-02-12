@@ -44,6 +44,10 @@
         canvas().setAttribute('height', Event.stage.height);
     }
 
+    function canvasRect(){
+        return new util.Rect(0,0,Event.stage.width,Event.stage.height);
+    }
+
     // Initialize the stage.
     Event.on(window, 'resize', null, handleResize);
     Event.on(document.body, 'wb-resize', null, handleResize);
@@ -98,7 +102,7 @@
     // text
     // vector
 
-    global.runtime = util.extend((global.runtime || {} ), {
+    global.runtime = {
         startEventLoop: startEventLoop,
 
         local: {
@@ -386,25 +390,11 @@
             log: function(item){
                 _gaq.push(['_trackEvent', 'Blocks', 'Control', 'log']);
                 console.log(item);
-            }
-			timer: function(args, container){
-				var name = args[0];
-				var milliseconds = args[1];
-				var self = this;
-				var runBlocks = function(cntr){
-					cntr[0].forEach(function(block){
-                    	block.run(self);
-                	});
-				};
-				runtime[name] = window.setTimeout(function(){ runBlocks(container); }, milliseconds);
-			},
-			getID: function(name){
-				console.log("getID: " + name);
-				return runtime[name];
-			},
-			resetTimer: function(name){
-				
-			}, //TODO
+            },
+            alert: function(x){
+                _gaq.push(['_trackEvent', 'Blocks', 'Control', 'alert']);
+                alert(x);
+            },
         },
 		
 
@@ -491,23 +481,25 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'get']);
                 return assets.images[path];
             },
-            drawAtPoint: function(img, pt, w, h){
+            drawAtPoint: function(img, pt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'drawAtPoint']);
-                ctx().drawImage(img, pt.x, pt.y, w, h);
+                img.drawAtPoint(ctx, pt);
             },
-            drawAtPointWithSize: function(img, pt, sz){
-                _gaq.push(['_trackEvent', 'Blocks', 'Image', 'drawAtPointWithSize']);
-                ctx().drawImage(img, pt.x, pt.y, sz.w, sz.h);
+            setWidth: function(img, w){
+                _gaq.push(['_trackEvent', 'Blocks', 'Image', 'setWidth']);
+                img.setWidth(w);
             },
-            getScaledAtOrigin: function(path, sz){
-                _gaq.push(['_trackEvent', 'Blocks', 'Image', 'getScaledAtOrigin']);
-                var img = images[path];
-                return {
-                    name: 'Image',
-                    draw: function draw(inner_ctx){
-                        inner_ctx.drawImage(img, -sz.w/2, -sz.h/2, sz.w, sz.h);
-                    }
-                };
+            setHeight: function(img, h){
+                _gaq.push(['_trackEvent', 'Blocks', 'Image', 'setHeight']);
+                img.setHeight(h);
+            },
+            setSize: function(img, sz){
+                _gaq.push(['_trackEvent', 'Blocks', 'Image', 'setSize']);
+                img.setSize(sz);
+            },
+            scale: function(img, scaleFactor){
+                _gaq.push(['_trackEvent', 'Blocks', 'Image', 'scale']);
+                img.scale(scaleFactor);
             }
         },
         input: {
@@ -540,6 +532,7 @@
                 });
             },
         },
+
         math: {
             add: util.add,
             subtract: util.subtract,
@@ -843,7 +836,6 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'ellipse']);
                 ctx().beginPath();
                 ctx().ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
-
             },
 
         },
@@ -935,33 +927,51 @@
         },
 
         sprite: {
-            create: function(imgShapeOrText){
+            create: function(imgShapeOrSprite){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sprite', 'create']);
-                return new Sprite(imgShapeOrText);
+                return new util.Sprite(imgShapeOrSprite);
             },
             accelerate: function(spt, speed){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'accelerate']);
                 spt.accelerate(speed);
             },
-            rotate: function(spt, angle){
+            rotate: function(spt, angle, _){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'rotate']);
                 spt.rotate(angle);
+            },
+            rotateTo: function(spt, angle){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'rotateTo']);
+                spt.rotateTo(angle);
             },
             move: function(spt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'move']);
                 spt.move();
             },
+            moveTo: function(spt, pt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'moveTo']);
+                spt.moveTo(pt);
+            },
             draw: function(spt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'draw']);
-                spt.draw();
+                spt.draw(ctx());
             },
             applyForce: function(spt, vec){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'applyForce']);
                 spt.applyForce(vec);
+            },
+            bounceAtEdge: function(spt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'bounceAtEdge']);
+                spt.bounceWithinRect(canvasRect());
+            },
+            wrapAtEdge: function(spt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'wrapAtEdge']);
+                spt.wrapAroundRect(canvasRect());
+            },
+            stopAtEdge: function(spt){
+                _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'stopAtEdge']);
+                spt.stayWithinRect(canvasRect());
             }
         },
-
-
 
         string: {
 
@@ -1045,12 +1055,7 @@
             endsWith: function(x,y){
                 _gaq.push(['_trackEvent', 'Blocks', 'String', 'endsWith']);
                 return x.indexOf(y, x.length - y.length) !== -1;
-            },
-            alert: function(x){
-                _gaq.push(['_trackEvent', 'Blocks', 'String', 'alert']);
-                alert(x);
-            },
-
+            }
         },
 
         text:{
@@ -1089,9 +1094,49 @@
                 var textMetric = ctx().measureText(text);
                 return textMetric.width;
             }
+        },
+        vector: {
+            create: function create(x,y){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'create']);
+                return new util.Vector(x,y);
+            },
+            fromPolar: function fromPolar(deg, mag){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'fromPolar']);
+                return util.Vector.fromPolar(deg, mag);
+            },
+            rotateTo: function rotateTo(vec, deg){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'rotateTo']);
+                return vec.rotateTo(deg);
+            },
+            rotate: function rotate(vec, deg){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'rotate']);
+                return vec.rotate(deg);
+            },
+            magnitude: function magnitude(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'magnitude']);
+                return vec.magnitude();
+            },
+            degrees: function degrees(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'degrees']);
+                return vec.degrees();
+            },
+            normalize: function normalize(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'normalize']);
+                return vec.normalize();
+            },
+            x: function x(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'x']);
+                return vec.x;
+            },
+            y: function y(vec){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'y']);
+                return vec.y;
+            },
+            randomUnitVector: function randomUnitVector(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Vector', 'randomUnitVector']);
+                return util.Vector.fromPolar(util.randInt(0,359), 1);
+            }
         }
-
-
-    });
+    };
 
 })(window);

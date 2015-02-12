@@ -134,7 +134,7 @@
 
     // angle between two vectors in radians
     function angle(v1, v2){
-        var diff = v1.rad - v2.rad;
+        var diff = v1.radians() - v2.radians();
         return atan2(sin(diff), cos(diff));
     }
 
@@ -146,6 +146,9 @@
     Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
+    }
+    Vector.fromPoint = function(pt){
+        return new Vector(pt.x, pt.y);
     }
 
     Vector.prototype.magnitude = function(){
@@ -161,10 +164,11 @@
 
     // Make magnitude equal to 1
     Vector.prototype.normalize = function normalize(){
-        if (this.magnitude() !== 0){
-            return multiply(vec, 1 / vec.magnitude());
+        var mag = this.magnitude();
+        if (mag === 0 || mag === 1){
+            return this;
         }
-        return vec;
+        return multiply(this, 1 / mag);
     }
 
     Vector.prototype.rotateTo = function rotateTo(degrees){
@@ -172,13 +176,13 @@
     }
 
     Vector.prototype.rotate = function rotate(degrees){
-        var radians = this.radians + deg2rad(degrees);
+        var radians = this.radians() + deg2rad(degrees);
         var mag = this.magnitude();
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
 
     Vector.prototype.rotateRads = function rotate(rads){
-        var newAngle = this.radians + rads;
+        var newAngle = this.radians() + rads;
         var mag = this.magnitude();
         return new Vector(cos(newAngle) * mag, sin(newAngle) * mag);
     }
@@ -197,7 +201,7 @@
     Point.prototype.toString = function(){
         return '[' + this.x + ',' + this.y + ']';
     };
-   
+
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -222,6 +226,8 @@
     function Rect(x, y, width, height) {
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
         this.size = new Size(width, 'px', height, 'px');
     }
 
@@ -666,7 +672,7 @@
                  * object. */
                 return {
                     // Pass the callback function that should run when all assets
-                    // have loaded.  
+                    // have loaded.
                     whenLoaded: function(callback) { whenLoaded = callback; },
                 };
 
@@ -756,11 +762,8 @@
                         assets.sounds[soundSprite.name] = soundSprite;
                     }
                     else if (assets.imageExtensions.indexOf(extension) !== -1){
-                        var imageSprite = new Image();
-                        imageSprite.name = source;
+                        var imageSprite = new WBImage(source, loadHandler);
                         assets.images[source] = imageSprite;
-                        imageSprite.addEventListener('load', loadHandler, false);
-                        imageSprite.src = source;
                     }else if (assets.videoExtensions.indexOf(extension) !== -1){
                         var videoSprite = new Video();
                         videoSprite.name = source;
@@ -794,6 +797,56 @@
     })();
 
 
+    /****************************
+    *
+    * Image, loadable, drawable
+    *
+    *****************************/
+
+    function WBImage(src, loadHandler){
+        self = this;
+        function selfLoad(evt){
+            self.width = self.origWidth = self._image.width;
+            self.height = self.origHeight = self._image.height;
+            self.origProportion = self.origWidth / self.origHeight;
+            loadHandler(evt);
+        }
+        this.name = src;
+        this._image = new Image();
+        this._image.addEventListener('load', selfLoad, false);
+        this._image.src = src;
+    }
+
+    WBImage.prototype.draw = function(ctx){
+        ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+    }
+
+    WBImage.prototype.drawAtPoint = function(ctx, pt){
+        ctx.translate(pt.x, pt.y);
+        this.draw(ctx);
+        ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    WBImage.prototype.setWidth = function(w){
+        this.width = w;
+        this.height = this.width * this.origProportion;
+    }
+
+    WBImage.prototype.setHeight = function(h){
+        this.height = h;
+        this.width = this.height / this.origProportion;
+    }
+
+    WBImage.prototype.setSize = function(sz){
+        this.width = sz.w;
+        this.height = sz.h;
+    }
+
+    WBImage.prototype.scale = function(scaleFactor){
+        this.width = this.origWidth * scaleFactor;
+        this.height = this.origHeight * scaleFactor;
+    }
+
 
     /******************************
     *
@@ -807,8 +860,8 @@
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
         this.position = new Vector(0,0);
-        this.facing = new Vector(-PI/2,0.1);
-        this.velocity = new Vector(0,0.1);
+        this.facing = new Vector(1,0);
+        this.velocity = new Vector(0,0);
     }
 
     Sprite.prototype.accelerate = function(speed){
@@ -822,18 +875,65 @@
 
     Sprite.prototype.rotate = function(r){
         this.facing = this.facing.rotate(r);
-        console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.rotateTo = function(r){
+        this.facing = this.facing.rotateTo(r);
     }
 
     Sprite.prototype.move = function(){
         this.position = add(this.position, this.velocity);
     }
 
+    Sprite.prototype.moveTo = function(pt){
+        this.position = new Vector(pt.x, pt.y);
+    }
+
     Sprite.prototype.draw = function(ctx){
-        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
         ctx.translate(this.position.x, this.position.y);
+        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    Sprite.prototype.bounceWithinRect = function(r){
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
+        }
+    }
+
+    Sprite.prototype.wrapAroundRect = function(r){
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.position = new Vector(this.position.x - r.width, this.position.y);
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.position = new Vector(this.position.x + r.x + r.width, this.position.y);
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.position = new Vector(this.position.x, this.position.y - r.height);
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.position = new Vector(this.position.x, this.position.y + r.y + r.height);
+        }
+    }
+
+    Sprite.prototype.stayWithinRect = function(r){
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.position = new Vector(r.x + r.width, this.position.y);
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.position = new Vector(r.x, this.position.y);
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.position = new Vector(this.position.x, r.y + r.height);
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.position = new Vector(this.position.x, r.y);
+        }
     }
 
     function defaultDrawable(ctx){
@@ -871,14 +971,17 @@
         divide: divide,
         deg2rad: deg2rad,
         rad2deg: rad2deg,
+        angle: angle,
         randInt: randInt,
         noise: noise,
         choice: choice,
         isNumber: isNumber,
         Path: Path,
         Shape: Shape,
+        Sprite: Sprite,
         geolocation: geolocationModule,
         motion: motionModule,
+        WBImage: WBImage
     };
 
 

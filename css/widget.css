@@ -105,11 +105,13 @@ wb-accordion{
 
 wb-accordion[open=true]{
     padding-bottom: 6px;
-    margin-bottom: 20px;
+    margin-bottom: 17px;
 }
 
 wb-accordion > :not(header){
     display: none;
+    float: left;
+    clear: left;
 }
 
 wb-accordion[open=true] > :not(header){
@@ -130,6 +132,10 @@ wb-accordion > header {
 
 wb-accordion[open=true] > header{
     margin-bottom: 6px;
+}
+
+wb-accordion[open=false] > header{
+    margin-bottom: 0px;
 }
 
 .cat-icon{

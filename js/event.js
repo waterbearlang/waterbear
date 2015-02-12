@@ -100,7 +100,7 @@
     function off(elem, eventname, handler){
         var ns_name = eventname.split(':');
         var namespace = 'global';
-        if (ns_name.length === 1){
+        if (ns_name.length === 2){
             namespace = ns_name[0];
             eventname = ns_name[1];
         }

@@ -140,8 +140,8 @@
 
     // Create a vector from an angle in degrees and a magnitude (length)
     function Vector(x,y){
-        this.x = Number(x);
-        this.y = Number(y);
+        this.x = x;
+        this.y = y;
     }
     Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
@@ -182,7 +182,7 @@
     }
 
     Vector.prototype.rotateRads = function rotate(rads){
-        var newAngle = this.radians + rads;
+        var newAngle = this.radians() + rads;
         var mag = this.magnitude();
         return new Vector(cos(newAngle) * mag, sin(newAngle) * mag);
     }

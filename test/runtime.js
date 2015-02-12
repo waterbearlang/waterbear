@@ -30,16 +30,6 @@
 /* vectors */
 
 var iota = 0.0001;
-function equalish(a,b){
-    // for testing floating point "equality" as "close enough"
-    if (a < (b - iota)){
-        return false;
-    }else if (a > (b + iota)){
-        return false;
-    }else{
-        return true;
-    }
-}
 
 QUnit.module('vectors');
 QUnit.test('create', function(assert){
@@ -57,7 +47,7 @@ QUnit.test('utilities', function(assert){
 });
 QUnit.test('fromPolar', function(assert){
     var vec = util.Vector.fromPolar(90, 1);
-    assert.ok(equalish(vec.x, 0)); // Probably all floating-point tests should use this pattern
+    assert.fuzzyEqual(vec.x, 0, iota); // Probably all floating-point tests should use this pattern
     assert.strictEqual(vec.y, 1);
 });
 QUnit.test('magnitude', function(assert){
@@ -65,30 +55,30 @@ QUnit.test('magnitude', function(assert){
     assert.strictEqual(vec.magnitude(), 5);
 });
 QUnit.test('radians', function(assert){
-    assert.ok(equalish(new util.Vector(1,0).radians(), 0));
-    assert.ok(equalish(new util.Vector(0,1).radians(), Math.PI/2));
-    assert.ok(equalish(new util.Vector(-1,0).radians(), Math.PI));
+    assert.fuzzyEqual(new util.Vector(1,0).radians(), 0, iota);
+    assert.fuzzyEqual(new util.Vector(0,1).radians(), Math.PI/2, iota);
+    assert.fuzzyEqual(new util.Vector(-1,0).radians(), Math.PI, iota);
 });
 QUnit.test('degrees', function(assert){
-    assert.ok(equalish(new util.Vector(1,0).degrees(), 0));
-    assert.ok(equalish(new util.Vector(0,1).degrees(), 90));
-    assert.ok(equalish(new util.Vector(-1,0).degrees(), 180));
+    assert.fuzzyEqual(new util.Vector(1,0).degrees(), 0, iota);
+    assert.fuzzyEqual(new util.Vector(0,1).degrees(), 90, iota);
+    assert.fuzzyEqual(new util.Vector(-1,0).degrees(), 180, iota);
 });
 QUnit.test('normalize', function(assert){
-    assert.ok(equalish(new util.Vector(5,0).normalize().x, 1));
-    assert.ok(equalish(new util.Vector(0,5).normalize().y, 1));
+    assert.fuzzyEqual(new util.Vector(5,0).normalize().x, 1, iota);
+    assert.fuzzyEqual(new util.Vector(0,5).normalize().y, 1, iota);
 });
 QUnit.test('rotateTo', function(assert){
-    assert.ok(equalish(new util.Vector(5,0).rotateTo(0).x, 5));
-    assert.ok(equalish(new util.Vector(0,5).rotateTo(90).y, 5));
+    assert.fuzzyEqual(new util.Vector(5,0).rotateTo(0).x, 5, iota);
+    assert.fuzzyEqual(new util.Vector(0,5).rotateTo(90).y, 5, iota);
 });
 QUnit.test('rotate', function(assert){
-    assert.ok(equalish(new util.Vector(5,0).rotate(90).y, 5));
-    assert.ok(equalish(new util.Vector(5,0).rotate(-90).y, -5));
+    assert.fuzzyEqual(new util.Vector(5,0).rotate(90).y, 5, iota);
+    assert.fuzzyEqual(new util.Vector(5,0).rotate(-90).y, -5, iota);
 });
 QUnit.test('rotateRads', function(assert){
-    assert.ok(equalish(new util.Vector(5,0).rotateRads(Math.PI/2).y, 5));
-    assert.ok(equalish(new util.Vector(5,0).rotateRads(-Math.PI/2).y, -5));
+    assert.fuzzyEqual(new util.Vector(5,0).rotateRads(Math.PI/2).y, 5, iota);
+    assert.fuzzyEqual(new util.Vector(5,0).rotateRads(-Math.PI/2).y, -5, iota);
 });
 QUnit.test('toString', function(assert){
     assert.strictEqual(new util.Vector(5,0).toString(), '<5,0>');

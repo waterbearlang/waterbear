@@ -496,16 +496,6 @@
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'scale']);
                 img.scale(scaleFactor);
             }
-            // getScaledAtOrigin: function(path, sz){
-            //     _gaq.push(['_trackEvent', 'Blocks', 'Image', 'getScaledAtOrigin']);
-            //     var img = images[path];
-            //     return {
-            //         name: 'Image',
-            //         draw: function draw(inner_ctx){
-            //             inner_ctx.drawImage(img, -sz.w/2, -sz.h/2, sz.w, sz.h);
-            //         }
-            //     };
-            // }
         },
         input: {
             keyPressed: function(key){

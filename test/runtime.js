@@ -23,7 +23,7 @@
 
 QUnit.module('boolean');
 QUnit.test('and', function(assert){
-    var bool = runtime.'boolean';
+    var bool = runtime.boolean;
     
     var b1 = bool.and(true, true);
     var b2 = bool.and(true, false);
@@ -36,7 +36,7 @@ QUnit.test('and', function(assert){
     assert.ok(!b4, "false and false = false");
 });
 QUnit.test('or', function(assert){
-    var bool = runtime.'boolean';
+    var bool = runtime.boolean;
     
     var b1 = bool.or(true, true);
     var b2 = bool.or(true, false);
@@ -49,7 +49,7 @@ QUnit.test('or', function(assert){
     assert.ok(!b4, "false or false = false");
 });
 QUnit.test('xor', function(assert){
-    var bool = runtime.'boolean';
+    var bool = runtime.boolean;
     
     var b1 = bool.xor(true, true);
     var b2 = bool.xor(true, false);
@@ -62,7 +62,7 @@ QUnit.test('xor', function(assert){
     assert.ok(!b4, "false xor false = false");
 });
 QUnit.test('not', function(assert){
-    var bool = runtime.'boolean';
+    var bool = runtime.boolean;
     
     var b1 = bool.not(true);
     var b2 = bool.not(false);

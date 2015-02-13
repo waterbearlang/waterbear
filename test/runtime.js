@@ -20,7 +20,57 @@
 
 /* TODO: sound */
 /* TODO: arrays */
-/* TODO: boolean */
+
+QUnit.module('boolean');
+QUnit.test('and', function(assert){
+    var bool = runtime.'boolean';
+    
+    var b1 = bool.and(true, true);
+    var b2 = bool.and(true, false);
+    var b3 = bool.and(false, true);
+    var b4 = bool.and(false, false);
+    
+    assert.ok(b1, "true and true = true");
+    assert.ok(!b2, "true and false = false");
+    assert.ok(!b3, "false and true = false");
+    assert.ok(!b4, "false and false = false");
+});
+QUnit.test('or', function(assert){
+    var bool = runtime.'boolean';
+    
+    var b1 = bool.or(true, true);
+    var b2 = bool.or(true, false);
+    var b3 = bool.or(false, true);
+    var b4 = bool.or(false, false);
+    
+    assert.ok(b1, "true or true = true");
+    assert.ok(b2, "true or false = true");
+    assert.ok(b3, "false or true = true");
+    assert.ok(!b4, "false or false = false");
+});
+QUnit.test('xor', function(assert){
+    var bool = runtime.'boolean';
+    
+    var b1 = bool.xor(true, true);
+    var b2 = bool.xor(true, false);
+    var b3 = bool.xor(false, true);
+    var b4 = bool.xor(false, false);
+    
+    assert.ok(!b1, "true xor true = false");
+    assert.ok(b2, "true xor false = true");
+    assert.ok(b3, "false xor true = true");
+    assert.ok(!b4, "false xor false = false");
+});
+QUnit.test('not', function(assert){
+    var bool = runtime.'boolean';
+    
+    var b1 = bool.not(true);
+    var b2 = bool.not(false);
+    
+    assert.ok(!b1, "not true = false");
+    assert.ok(b2, "not false = true");
+});
+
 /* TODO: canvas */
 /* TODO: colors */
 /* TODO: images */

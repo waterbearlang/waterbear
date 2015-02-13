@@ -177,32 +177,6 @@
                 return !a;
             }
         },
-        stage: {
-            stageWidth: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'stageWidth']);
-                return Event.stage.width;
-            },
-            stageHeight: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'stageHeight']);
-                return Event.stage.height;
-            },
-            centerX: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'centerX']);
-                return (Event.stage.width / 2);
-            },
-            centerY: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'centerY']);
-                return (Event.stage.height / 2);
-            },
-            randomX: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'randomX']);
-                return Math.random() * Event.stage.width;
-            },
-            randomY: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'randomY']);
-                return Math.random() * Event.stage.height;
-            },
-        },
         color: {
             namedColor: function(name){
                 // FIXME: We may need to return hex or other color value
@@ -971,7 +945,42 @@
                 spt.stayWithinRect(canvasRect());
             }
         },
-
+        stage: {
+            clearTo: new util.Method()
+                .when(['string'], function(clr){ // unfortunately colors are still strings
+                    var r = canvasRect();
+                    ctx().fillStyle = clr;
+                    ctx().fillRect(r.x, r.y, r.width, r.height);
+                })
+                .when(['wbimage'], function(img){
+                    img.drawInRect(ctx(), canvasRect());
+                })
+            .fn(),
+            stageWidth: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'stageWidth']);
+                return Event.stage.width;
+            },
+            stageHeight: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'stageHeight']);
+                return Event.stage.height;
+            },
+            centerX: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'centerX']);
+                return (Event.stage.width / 2);
+            },
+            centerY: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'centerY']);
+                return (Event.stage.height / 2);
+            },
+            randomX: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'randomX']);
+                return Math.random() * Event.stage.width;
+            },
+            randomY: function(){
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'randomY']);
+                return Math.random() * Event.stage.height;
+            },
+        },
         string: {
 
             toString: function(x){

@@ -819,33 +819,37 @@
 
     WBImage.prototype.draw = function(ctx){
         ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
-    }
+    };
 
     WBImage.prototype.drawAtPoint = function(ctx, pt){
         ctx.translate(pt.x, pt.y);
         this.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
-    }
+    };
+
+    WBImage.prototype.drawInRect = function(ctx, r){
+        ctx.drawImage(this._image, r.x, r.y, r.width, r.height);
+    };
 
     WBImage.prototype.setWidth = function(w){
         this.width = w;
         this.height = this.width * this.origProportion;
-    }
+    };
 
     WBImage.prototype.setHeight = function(h){
         this.height = h;
         this.width = this.height / this.origProportion;
-    }
+    };
 
     WBImage.prototype.setSize = function(sz){
         this.width = sz.w;
         this.height = sz.h;
-    }
+    };
 
     WBImage.prototype.scale = function(scaleFactor){
         this.width = this.origWidth * scaleFactor;
         this.height = this.origHeight * scaleFactor;
-    }
+    };
 
 
     /******************************

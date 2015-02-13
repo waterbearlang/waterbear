@@ -7,9 +7,10 @@ wb-step, wb-context, wb-expression{
     border-color: #CEBD3E;
     border-width: 2px;
     border-style: solid;
+    margin: 5px 5px 2px 2px;
+    float: left;
     clear: left;
     position: relative;
-
 }
 
 body:not(.block-dragging) wb-step,
@@ -59,7 +60,6 @@ wb-value{
     text-align: right;
     margin-left: 20px;
     white-space:nowrap;
-
 }
 
 wb-row{
@@ -104,7 +104,7 @@ wb-context > wb-contains {
     display: block;
     background-color: rgba(255, 255, 255, 1.0);
     position: relative;
-    padding-top: 10px;
+    padding-top: 7px;
     margin-left: 10px;
     margin-bottom: 0;
     padding-bottom: 1px;

@@ -396,6 +396,7 @@
                 alert(x);
             },
         },
+		
 
         /*
          * The underlying JavaScript object is the same object that is passed

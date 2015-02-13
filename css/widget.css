@@ -99,8 +99,7 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overflow-x: visible;
-    overflow-y: visible;
+    overfow: visible;
     padding-left: 6px;
 }
 
@@ -114,6 +113,7 @@ wb-accordion > :not(header){
 
 wb-accordion[open=true] > :not(header){
     display: inline-block;
+    margin-bottom: 6px;
 }
 
 wb-accordion > header {
@@ -125,6 +125,7 @@ wb-accordion > header {
     padding-bottom: 6px;
     font-size: 16px;
     color: #777;
+    clear: left;
     border: 1px solid #CCC;
 }
 

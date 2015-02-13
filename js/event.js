@@ -44,10 +44,11 @@
         if (ns_name.length === 2){
             namespace = ns_name[0];
             eventname = ns_name[1];
-        }else{
-            // console.warn('Setting event handler in global namespace: %o : %s', elem, eventname);
         }
         if (typeof elem === 'string'){
+            // Bind all elements matched by `elem` selector. Not recommended due to
+            // multiple event listeners used when one could suffice and be
+            // matched using the `selector` argument.
             return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
                 return on(e, eventname, selector, handler);
             });
@@ -60,20 +61,21 @@
             console.error('second argument must be eventname: %s', eventname);
             throw new Error('second argument must be eventname: ' + eventname);
         }
-        if (selector && typeof selector !== 'string'){ console.error('third argument must be selector or null'); }
-        if (typeof handler !== 'function'){ console.error('fourth argument must be handler'); }
+        if (selector && typeof selector !== 'string'){
+            throw new TypeError('third argument must be selector String or null');
+        }
+        if (typeof handler !== 'function'){
+            throw new TypeError('fourth argument must be handler');
+        }
         var listener = function listener(originalEvent){
             var evt;
-            // console.log('event %s', originalEvent.type);
             if (originalEvent.detail && originalEvent.detail.forwarded){
-                // console.log('unwrapping forwarded event %s: %o', originalEvent.type, originalEvent.detail.forwarded);
                 evt = blend(originalEvent.detail.forwarded);
                 evt.type = originalEvent.type;
             }else{
                 evt = blend(originalEvent); // normalize between touch and mouse events
             }
             if (evt.invalid){
-                // console.log('event is not valid: %o', evt);
                 return;
             }
             if (onceOnly){
@@ -100,7 +102,8 @@
     function off(elem, eventname, handler){
         var ns_name = eventname.split(':');
         var namespace = 'global';
-        if (ns_name.length === 1){
+        if (ns_name.length === 2){
+            // It's a scoped event.
             namespace = ns_name[0];
             eventname = ns_name[1];
         }
@@ -130,7 +133,6 @@
             elem = document.querySelector(elemOrSelector);
         }
         var evt = new CustomEvent(eventname, {bubbles: true, cancelable: true, detail: data});
-        // console.log('dispatching %s for %o', eventname, elem);
         elem.dispatchEvent(evt);
     }
 
@@ -189,13 +191,6 @@
                 evt.target = touch.target;
                 evt.pageX = touch.pageX;
                 evt.pageY = touch.pageY;
-            }else{
-                // is this necessary or desirable?
-                if (evt.which !== 1){ // left mouse button
-                    evt.invalid = true;
-                    evt.invalidReason = 'Not the left mouse button';
-                    return evt;
-                }
             }
         }
         return evt;
@@ -233,7 +228,6 @@
         if (dom.closest(evt.target, 'input, select')){
             return undefined;
         }
-        // console.log('init drag: ' +  evt.target.tagName.toLowerCase());
         Event.pointerDown = true;
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
@@ -246,7 +240,6 @@
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) { return undefined; }
         if (!Event.pointerDown) { return undefined; }
-        // console.info('start drag: ' + dragTarget.tagName.toLowerCase());
         isDragging = true;
         forward(dragTarget, 'drag-start', evt);
         return false;
@@ -261,14 +254,12 @@
             // Otherwise this could block legitimate click/tap events
             // var distanceMoved = Math.sqrt(Math.pow(evt.pageX - startPos.x, 2) + Math.pow(evt.pageY - startPos.y));
             // if (distanceMoved < DELTA){
-                // console.info('Have not moved enough yet');
             //     return undefined;
             // }
             if (startDrag(evt) === undefined) {
                 return undefined;
             }
         }
-        // console.log('dragging: ' + dragTarget.tagName.toLowerCase() + ' (' + evt.pageX + ', ' + evt.pageY + ')');
         evt.preventDefault();
         forward(dragTarget, 'dragging', evt);
         return false;
@@ -277,7 +268,6 @@
     function endDrag(evt){
         Event.pointerDown = false;
         if (!isDragging) { return undefined; }
-        // console.log('end drag: ' + dragTarget.tagName.toLowerCase());
         forward(dragTarget, 'drag-end', evt);
         // FIXME: Don't prevent default unless we've dragged more than delta
         evt.preventDefault();
@@ -317,7 +307,7 @@
         "`": "~", "1": "!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^", "7": "&",
         "8": "*", "9": "(", "0": ")", "-": "_", "=": "+", ";": ": ", "'": "\"", ",": "<",
         ".": ">",  "/": "?",  "\\": "|"
-    }
+    };
 
 
     function keyForEvent(evt){
@@ -328,15 +318,11 @@
         }
     }
 
-    function isKeyDown(key){
-        return this.keys[key];
-    }
-
     function handleKeyDown(evt){
         var key = keyForEvent(evt);
         Event.keys[key] = true;
         if (Event.keyHandlers[key]){
-            Event.keyHandlers.forEach(function(handler){
+            Event.keyHandlers[key].forEach(function(handler){
                 handler(evt);
             });
         }
@@ -351,14 +337,12 @@
             Event.keyHandlers[key] = [];
         }
         Event.keyHandlers[key].push(handler);
-    };
+    }
 
 
     function clearRuntime(){
         Event.keyHandlers = {};
     }
-
-    var canvas = document.querySelector('wb-playground canvas');
 
     window.Event = {
         on: on,

@@ -252,10 +252,10 @@
         if (!isDragging) {
             // Test if we've moved more than a delta?
             // Otherwise this could block legitimate click/tap events
-            // var distanceMoved = Math.sqrt(Math.pow(evt.pageX - startPos.x, 2) + Math.pow(evt.pageY - startPos.y));
-            // if (distanceMoved < DELTA){
-            //     return undefined;
-            // }
+            var distanceMoved = Math.sqrt(Math.pow(evt.pageX - startPos.x, 2) + Math.pow(evt.pageY - startPos.y));
+            if (distanceMoved < DELTA){
+                return undefined;
+            }
             if (startDrag(evt) === undefined) {
                 return undefined;
             }

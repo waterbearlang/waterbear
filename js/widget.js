@@ -55,7 +55,7 @@ function accordionClick(evt){
 }
 
 Event.on(document.body, 'click', 'wb-accordion > header', accordionClick);
-Event.on(document.body, 'tap', 'wb-accordion > header', accordionClick);
+// Event.on(document.body, 'tap', 'wb-accordion > header', accordionClick);
 
 /* For HBox, VBox, and Splitter:
 

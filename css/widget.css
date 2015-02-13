@@ -11,6 +11,7 @@ wb-hbox, wb-vbox{
     display: flex;
     flex: 1 1;
     position: relative;
+    overflow: hidden;
 }
 wb-hbox{
     flex-direction: row;
@@ -98,23 +99,21 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
+    overfow: visible;
     padding-left: 6px;
 }
 
 wb-accordion[open=true]{
-    overflow-x: auto;
     padding-bottom: 6px;
-    margin-bottom: 17px;
 }
 
 wb-accordion > :not(header){
     display: none;
-    float: left;
-    clear: left;
 }
 
 wb-accordion[open=true] > :not(header){
     display: inline-block;
+    margin-bottom: 6px;
 }
 
 wb-accordion > header {
@@ -126,6 +125,7 @@ wb-accordion > header {
     padding-bottom: 6px;
     font-size: 16px;
     color: #777;
+    clear: left;
     border: 1px solid #CCC;
 }
 

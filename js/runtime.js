@@ -179,27 +179,27 @@
         },
         stage: {
             stageWidth: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasWidth']);
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'stageWidth']);
                 return Event.stage.width;
             },
             stageHeight: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'canvasHeight']);
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'stageHeight']);
                 return Event.stage.height;
             },
             centerX: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerX']);
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'centerX']);
                 return (Event.stage.width / 2);
             },
             centerY: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'centerY']);
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'centerY']);
                 return (Event.stage.height / 2);
             },
             randomX: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomX']);
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'randomX']);
                 return Math.random() * Event.stage.width;
             },
             randomY: function(){
-                _gaq.push(['_trackEvent', 'Blocks', 'Canvas', 'randomY']);
+                _gaq.push(['_trackEvent', 'Blocks', 'Stage', 'randomY']);
                 return Math.random() * Event.stage.height;
             },
         },

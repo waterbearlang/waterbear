@@ -25,7 +25,7 @@ function info(text){
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on(document.body, 'click', '.do-run', preload);
+Event.on(document.body, 'ui:click', '.do-run', preload);
 
 function preload(){
     assets.load({
@@ -91,13 +91,13 @@ function handleFileButton(evt){
     fileModel.show();
 }
 
-Event.on(document.body, 'click', '.open-files', handleFileButton);
+Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
     window.alert('No current examples or templates available. Check back later!');
 }
 
-Event.on(document.body, 'click', '.open-example', handleExampleButton);
+Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 
 window.app = {
     message: message,

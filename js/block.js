@@ -179,11 +179,11 @@ function handleVariableBlur(evt){
     oldVariableName = '';
 }
 
-Event.on(document.body, 'focus', '[isVariable] input', handleVariableFocus); // Mozilla
-Event.on(document.body, 'focusin', '[isVariable] input', handleVariableFocus); // All other browsers
-Event.on(document.body, 'input', '[isVariable] input', handleVariableInput);
-Event.on(document.body, 'blur',  '[isVariable] input', handleVariableBlur); // Mozilla
-Event.on(document.body, 'focusout',  '[isVariable] input', handleVariableBlur); // All other browsers
+Event.on(document.body, 'editor:focus', '[isVariable] input', handleVariableFocus); // Mozilla
+Event.on(document.body, 'editor:focusin', '[isVariable] input', handleVariableFocus); // All other browsers
+Event.on(document.body, 'editor:input', '[isVariable] input', handleVariableInput);
+Event.on(document.body, 'editor:blur',  '[isVariable] input', handleVariableBlur); // Mozilla
+Event.on(document.body, 'editor:focusout',  '[isVariable] input', handleVariableBlur); // All other browsers
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
@@ -266,8 +266,8 @@ ContextProto.hideLocals = function(evt){
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
-Event.on(document.body, 'wb-added', 'wb-context', function(evt){ evt.target.showLocals(evt); });
-Event.on(document.body, 'wb-added', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
+Event.on(document.body, 'editor:wb-added', 'wb-context', function(evt){ evt.target.showLocals(evt); });
+Event.on(document.body, 'editor:wb-added', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
 /*****************
 *
 *  wb-expression
@@ -419,7 +419,7 @@ function toggleClosed(evt){
     }
 }
 
-Event.on(workspace, 'click', 'wb-disclosure', toggleClosed);
+Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 
 /*****************
 *
@@ -454,7 +454,7 @@ function addItem(evt){
     template.parentElement.insertBefore(newItem, template.nextElementSibling);
 }
 
-Event.on(document.body, 'click', 'wb-contains .add-item', addItem);
+Event.on(document.body, 'editor:click', 'wb-contains .add-item', addItem);
 
 /*****************
 *
@@ -474,7 +474,7 @@ function removeItem(evt){
     }
 }
 
-Event.on(document.body, 'click', 'wb-contains .remove-item', removeItem);
+Event.on(document.body, 'editor:click', 'wb-contains .remove-item', removeItem);
 
 
 
@@ -583,7 +583,7 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-Event.on(document.body, 'change', 'wb-contains input, wb-contains select', function(evt){
+Event.on(document.body, 'editor:change', 'wb-contains input, wb-contains select', function(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
 });
 
@@ -606,7 +606,7 @@ var dropTarget = null;
 var BLOCK_MENU = document.querySelector('sidebar');
 var blockTop = 0;
 
-Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
+Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
     // Maybe move to object notation later
     //    return target.startDrag(evt);
@@ -634,7 +634,7 @@ Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-contex
     dragTarget.style.top = (evt.pageY - 15) + 'px';
 });
 
-Event.on(document.body, 'dragging', null, function(evt){
+Event.on(document.body, 'editor:dragging', null, function(evt){
     if (!dragTarget){ return; }
 
     // FIXME: hardcoded margin (???) values.
@@ -701,7 +701,7 @@ function dropTargetIsContainer(potentialDropTarget){
    }
 }
 
-Event.on(document.body, 'drag-end', null, function(evt){
+Event.on(document.body, 'editor:drag-end', null, function(evt){
     if (!dropTarget){
        if(dragTarget){
           dragTarget.parentElement.removeChild(dragTarget);
@@ -752,13 +752,13 @@ Event.on(document.body, 'drag-end', null, function(evt){
     resetDragging();
 });
 
-Event.on(document.body, 'drag-cancel', null, function(evt){
+Event.on(document.body, 'editor:drag-cancel', null, function(evt){
     dragTarget.parentElement.removeChild(dragTarget);
     resetDragging();
 });
 
 // Handle resizing inputs when their content changes
-Event.on(document.body, 'input', 'input', function(evt){
+Event.on(document.body, 'editor:input', 'input', function(evt){
     var target = evt.target;
     if (! dom.matches(target, 'wb-value > input')) return;
     resize(target);

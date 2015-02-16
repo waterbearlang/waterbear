@@ -377,19 +377,20 @@
         stagePointerX: 0,
         stagePointerY: 0,
         keys: {},
-        keyHandlers: {}
+        keyHandlers: {},
+        clearRuntime: clearRuntime
     };
 
 
-    Event.on(document.body, 'touchstart', null, initDrag);
-    Event.on(document.body, 'touchmove', null, dragging);
-    Event.on(document.body, 'touchend', null, endDrag);
-    Event.on(document.body, 'mousedown', null, initDrag);
-    Event.on(document.body, 'mousemove', null, dragging);
-    Event.on(window, 'mouseup', null, endDrag);
-    Event.on(window, 'keyup', null, cancelDrag);
-    Event.on(window, 'keydown', null, handleKeyDown);
-    Event.on(window, 'keyup', null, handleKeyUp);
+    Event.on(document.body, 'dragging:touchstart', null, initDrag);
+    Event.on(document.body, 'dragging:touchmove', null, dragging);
+    Event.on(document.body, 'dragging:touchend', null, endDrag);
+    Event.on(document.body, 'dragging:mousedown', null, initDrag);
+    Event.on(document.body, 'dragging:mousemove', null, dragging);
+    Event.on(window, 'dragging:mouseup', null, endDrag);
+    Event.on(window, 'dragging:keyup', null, cancelDrag);
+    Event.on(window, 'input:keydown', null, handleKeyDown);
+    Event.on(window, 'input:keyup', null, handleKeyUp);
 
 
 })();

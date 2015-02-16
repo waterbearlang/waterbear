@@ -120,6 +120,7 @@
     }
 
     function off(elem, eventname, handler){
+        var events;
         var ns_name = eventname.split(':');
         var namespace = 'global';
         if (ns_name.length === 2){
@@ -127,14 +128,21 @@
             namespace = ns_name[0];
             eventname = ns_name[1];
         }
+        events = allEvents[namespace];
+
+        if (!events) {
+            // No events registered for the given namespace.
+            return;
+        }
+
         // Copy the array, because we'll be modifying it.
-        allEvents[namespace].slice().forEach(function(scopedEvent, idx){
+        events.slice().forEach(function(scopedEvent, idx){
             // Pass in null element to remove listeners from all elements
             var el = elem || scopedEvent.element;
             var name = eventname === '*' ? scopedEvent.name : eventname;
             var listener = handler || scopedEvent.listener;
-            if (el === scopedEvent.element && eventname === scopedEvent.name){
-                elem.removeEventListener(name, listener);
+            if (el === scopedEvent.element && name === scopedEvent.name){
+                el.removeEventListener(name, listener);
                 allEvents[namespace].splice(idx, 1); // remove the event from allEvents
             }
         });

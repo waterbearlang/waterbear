@@ -48,17 +48,37 @@
         return new util.Rect(0,0,Event.stage.width,Event.stage.height);
     }
 
+    function clearRuntime() {
+        /* FIXME: Event.clearRuntime() should be moved to runtime.js.
+         * See: https://github.com/waterbearlang/waterbear/issues/968 */
+        Event.clearRuntime();
+        clearPerFrameHandlers();
+        /* Clear all runtime event handlers. */
+        Event.off(null, 'runtime:*');
+    }
+
+    var perFrameHandlers;
+    var lastTime;
+
+    function clearPerFrameHandlers() {
+        perFrameHandlers = [];
+        lastTime = new Date().valueOf();
+    }
+
     // Initialize the stage.
     Event.on(window, 'ui:resize', null, handleResize);
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
-    var perFrameHandlers = [];
-    var lastTime = new Date().valueOf();
 
     function startEventLoop(){
+        clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
         requestAnimationFrame(frameHandler);
+    }
+
+    function stopEventLoop() {
+        /* TODO: Dunno lol there be more in here? */
     }
 
     function frameHandler(){
@@ -104,6 +124,8 @@
 
     global.runtime = {
         startEventLoop: startEventLoop,
+        stopEventLoop: stopEventLoop,
+        clear: clearRuntime,
 
         local: {
             //temporary fix for locals

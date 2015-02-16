@@ -41,18 +41,20 @@
     function on(elem, eventname, selector, handler, onceOnly){
         var ns_name = eventname.split(':');
         var namespace = 'global';
-        if (ns_name.length === 2){
-            namespace = ns_name[0];
-            eventname = ns_name[1];
-        }
+        // Note: Must do this part before possibly reassigning `eventname`
         if (typeof elem === 'string'){
             // Bind all elements matched by `elem` selector. Not recommended due to
             // multiple event listeners used when one could suffice and be
             // matched using the `selector` argument.
             return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
-                return on(e, eventname, selector, handler);
+                return on(e, eventname, selector, handler, onceOnly);
             });
         }
+        if (ns_name.length === 2){
+            namespace = ns_name[0];
+            eventname = ns_name[1];
+        }
+
         if (!isDomObject(elem)){
             console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element, document, or window');

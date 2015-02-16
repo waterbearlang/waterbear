@@ -483,7 +483,7 @@
             },
             drawAtPoint: function(img, pt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'drawAtPoint']);
-                img.drawAtPoint(ctx, pt);
+                img.drawAtPoint(ctx(), pt);
             },
             setWidth: function(img, w){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'setWidth']);

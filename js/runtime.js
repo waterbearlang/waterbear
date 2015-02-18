@@ -25,7 +25,7 @@
         }
         return _ctx;
     }
-    Event.on(window, 'load', null, function(){
+    Event.on(window, 'ui:load', null, function(){
         handleResize();
     }, false);
 
@@ -48,17 +48,37 @@
         return new util.Rect(0,0,Event.stage.width,Event.stage.height);
     }
 
-    // Initialize the stage.
-    Event.on(window, 'resize', null, handleResize);
-    Event.on(document.body, 'wb-resize', null, handleResize);
+    function clearRuntime() {
+        /* FIXME: Event.clearRuntime() should be moved to runtime.js.
+         * See: https://github.com/waterbearlang/waterbear/issues/968 */
+        Event.clearRuntime();
+        clearPerFrameHandlers();
+        /* Clear all runtime event handlers. */
+        Event.off(null, 'runtime:*');
+    }
 
-    var perFrameHandlers = [];
-    var lastTime = new Date().valueOf();
+    var perFrameHandlers;
+    var lastTime;
+
+    function clearPerFrameHandlers() {
+        perFrameHandlers = [];
+        lastTime = new Date().valueOf();
+    }
+
+    // Initialize the stage.
+    Event.on(window, 'ui:resize', null, handleResize);
+    Event.on(document.body, 'ui:wb-resize', null, handleResize);
+
 
     function startEventLoop(){
+        clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
         requestAnimationFrame(frameHandler);
+    }
+
+    function stopEventLoop() {
+        /* TODO: Dunno lol there be more in here? */
     }
 
     function frameHandler(){
@@ -104,6 +124,8 @@
 
     global.runtime = {
         startEventLoop: startEventLoop,
+        stopEventLoop: stopEventLoop,
+        clear: clearRuntime,
 
         local: {
             //temporary fix for locals
@@ -342,7 +364,7 @@
                 // Handle with and without data
                 // Has a local for the data
                 var self = this;
-                Event.on(document.body, args[0], null, function(evt){
+                Event.on(document.body, 'runtime:' + args[0], null, function(evt){
                     // FIXME: how do I get the local from here?
                     // As an arg would be easiest
                     self[args[1]] = evt.detail;
@@ -414,7 +436,7 @@
                 var currentScope = this;
                 var steps = containers[0];
 
-                Event.on(window, 'locationchanged', null, function (event) {
+                Event.on(window, 'runtime:locationchanged', null, function (event) {
                     // TODO: probably factor out augmenting scope and running
                     // the block stuff to somewhere else.
                     steps.forEach(function (block) {
@@ -483,7 +505,7 @@
             },
             drawAtPoint: function(img, pt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'drawAtPoint']);
-                img.drawAtPoint(ctx, pt);
+                img.drawAtPoint(ctx(), pt);
             },
             setWidth: function(img, w){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'setWidth']);
@@ -625,7 +647,7 @@
                 var currentScope = this,
                 steps = containers[0];
 
-                Event.on(window, 'motionchanged', null, function (event) {
+                Event.on(window, 'runtime:motionchanged', null, function (event) {
                     if (args[0] === util.motion.direction) {
                         steps.forEach(function (block) {
                             block.run(currentScope);

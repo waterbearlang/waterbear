@@ -711,7 +711,7 @@
             waitFor: function (eventName, setup) {
                 return function (ignoredElements, ready) {
                     setup();
-                    Event.once(window, eventName, null, ready);
+                    Event.once(window, 'runtime:' + eventName, null, ready);
                 };
             },
 

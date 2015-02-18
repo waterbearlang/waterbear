@@ -105,5 +105,4 @@ window.app = {
     warn: warn,
     info: info
 };
-
 })();

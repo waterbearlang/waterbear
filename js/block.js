@@ -583,6 +583,27 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
+ValueProto.toggleSelect = function(){
+    if (this.getAttribute('selected') === 'true'){
+        this.close();
+    }else{
+        this.open();
+    }
+}
+ValueProto.open = function(){
+    // If there are other accordions in this group open, close them
+    var existing = false;/*this.parentElement.querySelector('wb-accordion[open=true]');*/
+    if (existing){
+        existing.close();
+    }
+    this.setAttribute('selected', 'true');
+}
+
+ValueProto.close = function(){
+    this.removeAttribute('selected');
+}
+
+
 Event.on(document.body, 'change', 'wb-contains input, wb-contains select', function(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
 });
@@ -595,6 +616,12 @@ var convert = {
 
 var ContainsProto = Object.create(HTMLElement.prototype);
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
+
+//TODO
+Event.on(document.body, 'click', 'wb-value > input', function(evt){
+    dom.closest(evt.target, 'wb-value').toggleSelect();
+    console.log("Test");
+})
 
 
 /* DRAGGING */

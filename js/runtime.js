@@ -19,7 +19,7 @@
         }
         return _canvas;
     }
-    function ctx(){
+    function getContext(){
         if (!_ctx){
             _ctx = canvas().getContext('2d');
         }
@@ -235,15 +235,15 @@
             },
             fill: function(color){
                 _gaq.push(['_trackEvent', 'Blocks', 'Color', 'fill']);
-                ctx().fillStyle = color;
+                getContext().fillStyle = color;
             },
             stroke: function(color){
                 _gaq.push(['_trackEvent', 'Blocks', 'Color', 'stroke']);
-                ctx().strokeStyle = color;
+                getContext().strokeStyle = color;
             },
             shadow: function(color){
                 _gaq.push(['_trackEvent', 'Blocks', 'Color', 'shadow']);
-                ctx().shadowColor = color;
+                getContext().shadowColor = color;
             }
         },
 
@@ -483,7 +483,7 @@
             },
             drawAtPoint: function(img, pt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'drawAtPoint']);
-                img.drawAtPoint(ctx, pt);
+                img.drawAtPoint(getContext(), pt);
             },
             setWidth: function(img, w){
                 _gaq.push(['_trackEvent', 'Blocks', 'Image', 'setWidth']);
@@ -671,33 +671,33 @@
 
             lineTo: function(toPoint){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'lineTo']);
-                return new util.Path(ctx().lineTo, new Array(toPoint.x, toPoint.y))
+                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y))
             },
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'bezierCurveTo']);
-                return new util.Path(ctx().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
+                return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
                                                                     controlPoint2.x, controlPoint2.y, toPoint.x,
                                                                     toPoint.y));
             },
             moveTo: function(toPoint){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'moveTo']);
-                return new util.Path(ctx().moveTo, new Array(toPoint.x, toPoint.y));
+                return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));
             },
             quadraticCurveTo: function(toPoint, controlPoint){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'quadraticCurveTo']);
-                return new util.Path(ctx().quadraticCurveTo, new Array(controlPoint.x,
+                return new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
                                                                        controlPoint.y,toPoint.x, toPoint.y));
             },
             arcTo: function(radius, controlPoint1, controlPoint2){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'arcTo']);
-                return new util.Path(ctx().arcTo, new Array(controlPoint1.x,
+                return new util.Path(getContext().arcTo, new Array(controlPoint1.x,
                                                             controlPoint1.y,controlPoint2.x, controlPoint2.y,
                                                             radius));
             },
             closePath: function(){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'closePath']);
-                return new util.Path(ctx().closePath);
+                return new util.Path(getContext().closePath);
             },
             pathSet: function(args){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'pathSet']);
@@ -706,10 +706,10 @@
 
             lineStyle: function(width, color, capStyle, joinStyle){
                 _gaq.push(['_trackEvent', 'Blocks', 'Path', 'lineStyle']);
-                ctx().lineWidth = width;
-                ctx().strokeStyle = color;
-                ctx().lineCap = capStyle;
-                ctx().lineJoin = joinStyle;
+                getContext().lineWidth = width;
+                getContext().strokeStyle = color;
+                getContext().lineCap = capStyle;
+                getContext().lineJoin = joinStyle;
             }
 
         },
@@ -802,12 +802,12 @@
             fill: function(shapeArg){
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'fill']);
                 console.log(shapeArg);
-                shapeArg.draw(ctx());
-                ctx().fill();
+                shapeArg.draw(getContext());
+                getContext().fill();
             },
             stroke: function(shapeArg){
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'stroke']);
-                shapeArg.draw(ctx());
+                shapeArg.draw(getContext());
                 ctx.stroke();
             },
             circle: function(pt, rad){
@@ -959,7 +959,7 @@
             },
             draw: function(spt){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'draw']);
-                spt.draw(ctx());
+                spt.draw(getContext());
             },
             applyForce: function(spt, vec){
                 _gaq.push(['_trackEvent', 'Blocks', 'Sound', 'applyForce']);
@@ -1068,36 +1068,36 @@
             setFont: function (size, fontStyle){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'setFont']);
                 var sizeString = size[0] + size[1];
-                ctx().font = sizeString + " " + fontStyle;
+                getContext().font = sizeString + " " + fontStyle;
 
             },
             textAlign: function (alignment){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'textAlign']);
-                ctx().textAlign = alignment;
+                getContext().textAlign = alignment;
             },
             textBaseline: function (baseline){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'textBaseline']);
-                ctx().textBaseline = baseline;
+                getContext().textBaseline = baseline;
             },
             fillText: function (text, x, y){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'fillText']);
-                ctx().fillText(text, x, y);
+                getContext().fillText(text, x, y);
             },
             fillTextWidth: function (text, x, y, width){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'fillTextWidth']);
-                ctx().fillText(text, x, y, width);
+                getContext().fillText(text, x, y, width);
             },
             strokeText: function (text, x, y){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'strokeText']);
-                ctx().strokeText(text, x, y);
+                getContext().strokeText(text, x, y);
             },
             strokeTextWidth: function (text, x, y, width){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'strokeTextWidth']);
-                ctx().strokeText(text, x, y, width);
+                getContext().strokeText(text, x, y, width);
             },
             width: function (text){
                 _gaq.push(['_trackEvent', 'Blocks', 'Text', 'width']);
-                var textMetric = ctx().measureText(text);
+                var textMetric = getContext().measureText(text);
                 return textMetric.width;
             }
         },

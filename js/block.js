@@ -130,6 +130,7 @@ StepProto.run = function(scope){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
+    _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
     // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
@@ -224,6 +225,7 @@ ContextProto.run = function(parentScope){
     var scope = util.extend({}, parentScope);
     // expressions are eagerly evaluated against scope, contains are late-evaluated
     // I'm not yet sure if this is the Right Thing™
+    _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
     // console.log('calling context %s with scope %o, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
 };
@@ -343,6 +345,7 @@ ExpressionProto.run = function(scope){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
+    _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
     // console.log('calling expression %s with scope %o and values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };

@@ -396,7 +396,7 @@
                 alert(x);
             },
         },
-		
+
 
         /*
          * The underlying JavaScript object is the same object that is passed
@@ -808,34 +808,40 @@
             stroke: function(shapeArg){
                 _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'stroke']);
                 shapeArg.draw(ctx());
-                ctx().stroke();
+                ctx.stroke();
             },
             circle: function(pt, rad){
-                _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'circle']);
-                ctx().beginPath();
-                ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                return new util.Shape(function(ctx){
+                    _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'circle']);
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                });
             },
             rectangle: function(pt, width, height, orientation){
-                _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'rectangle']);
-                ctx().beginPath();
-                if(orientation == "center"){
-                    ctx().moveTo(pt.x - width/2, pt.y - height/2);
-                    ctx().lineTo(pt.x + width/2, pt.y - height/2);
-                    ctx().lineTo(pt.x + width/2, pt.y + height/2);
-                    ctx().lineTo(pt.x - width/2, pt.y + height/2);
-                    ctx().lineTo(pt.x - width/2, pt.y - height/2);
-                }
-                else{
-                    ctx().lineTo(pt.x + width, pt.y);
-                    ctx().lineTo(pt.x + width, pt.y + height);
-                    ctx().lineTo(pt.x, pt.y + height);
-                    ctx().lineTo(pt.x, pt.y);
-                }
+                return new util.Shape(function(ctx){
+                    _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'rectangle']);
+                    ctx.beginPath();
+                    if(orientation == "center"){
+                        ctx.moveTo(pt.x - width/2, pt.y - height/2);
+                        ctx.lineTo(pt.x + width/2, pt.y - height/2);
+                        ctx.lineTo(pt.x + width/2, pt.y + height/2);
+                        ctx.lineTo(pt.x - width/2, pt.y + height/2);
+                        ctx.lineTo(pt.x - width/2, pt.y - height/2);
+                    }
+                    else{
+                        ctx.lineTo(pt.x + width, pt.y);
+                        ctx.lineTo(pt.x + width, pt.y + height);
+                        ctx.lineTo(pt.x, pt.y + height);
+                        ctx.lineTo(pt.x, pt.y);
+                    }
+                });
             },
             ellipse: function(pt, rad1, rad2, rot){
-                _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'ellipse']);
-                ctx().beginPath();
-                ctx().ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+                return new util.Shape(function(ctx){
+                    _gaq.push(['_trackEvent', 'Blocks', 'Shape', 'ellipse']);
+                    ctx.beginPath();
+                    ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+                });
             },
 
         },
@@ -1138,5 +1144,10 @@
             }
         }
     };
+
+    function checkAllBlocksHaveRuntimeFunctions(){
+    }
+
+    global.addEventListener('load', checkAllBlocksHaveRuntimeFunctions, false);
 
 })(window);

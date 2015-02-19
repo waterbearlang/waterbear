@@ -225,11 +225,11 @@
         }
     }
 
-    Event.on(window, 'load', null, loadCurrentScripts);
-    Event.on(window, 'beforeunload', null, saveCurrentScripts);
-    Event.on(document.body, 'wb-added', null, bareUrl); // Remove gist or other argument on script change
-    Event.on(document.body, 'wb-removed', null, bareUrl);
-    Event.on(document.body, 'wb-changed', null, bareUrl);
+    Event.on(window, 'ui:load', null, loadCurrentScripts);
+    Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
+    Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
+    Event.on(document.body, 'ui:wb-removed', null, bareUrl);
+    Event.on(document.body, 'ui:wb-changed', null, bareUrl);
 
     window.File = {
         scriptsToString: scriptsToString,
@@ -243,6 +243,6 @@
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,
         loadCurrentScripts: loadCurrentScripts,
         getFiles: getFiles
-    }
+    };
 
 })();

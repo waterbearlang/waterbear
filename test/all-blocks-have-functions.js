@@ -21,7 +21,7 @@ var page = webPage.create();
 page.open(pageName, function (status) {
     'use strict';
 
-    /* Evalaute some JavaScript in the page context that counts how many of
+    /* Evaluate some JavaScript in the page context that counts how many of
      * the blocks have INVALID script attributes. */
     var badScripts = page.evaluate(function () {
         var selector = 'sidebar wb-context, sidebar wb-expression, sidebar wb-step';

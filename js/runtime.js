@@ -184,26 +184,6 @@
                 return !a;
             }
         },
-        stage: {
-            stageWidth: function(){
-                return Event.stage.width;
-            },
-            stageHeight: function(){
-                return Event.stage.height;
-            },
-            centerX: function(){
-                return (Event.stage.width / 2);
-            },
-            centerY: function(){
-                return (Event.stage.height / 2);
-            },
-            randomX: function(){
-                return Math.random() * Event.stage.width;
-            },
-            randomY: function(){
-                return Math.random() * Event.stage.height;
-            },
-        },
         color: {
             namedColor: function(name){
                 // FIXME: We may need to return hex or other color value
@@ -849,7 +829,36 @@
                 spt.stayWithinRect(canvasRect());
             }
         },
-
+        stage: {
+            clearTo: new util.Method()
+                .when(['string'], function(clr){ // unfortunately colors are still strings
+                    var r = canvasRect();
+                    ctx().fillStyle = clr;
+                    ctx().fillRect(r.x, r.y, r.width, r.height);
+                })
+                .when(['wbimage'], function(img){
+                    img.drawInRect(ctx(), canvasRect());
+                })
+            .fn(),
+            stageWidth: function(){
+                return Event.stage.width;
+            },
+            stageHeight: function(){
+                return Event.stage.height;
+            },
+            centerX: function(){
+                return (Event.stage.width / 2);
+            },
+            centerY: function(){
+                return (Event.stage.height / 2);
+            },
+            randomX: function(){
+                return Math.random() * Event.stage.width;
+            },
+            randomY: function(){
+                return Math.random() * Event.stage.height;
+            },
+        },
         string: {
 
             toString: function(x){

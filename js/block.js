@@ -82,7 +82,9 @@ BlockProto.attachedCallback = function blockAttached(){
     //    Are there other expression blocks that add locals?
     // 2) Added to contains of setup block, add globally (to file)
     // 3) Otherwise, when added to contains add to locals view of closest context
-    if (dom.matches(this.parentElement, 'wb-contains')) return;
+    if (!this.parentElement || dom.matches(this.parentElement, 'wb-contains')){
+        return;
+    }
     var parent = dom.parent(this, 'wb-context');
     if (parent){
         setDefaultByTag(parent, 'wb-contains').appendChild(this);
@@ -302,15 +304,22 @@ var typeMapping = {
 
 var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
-    // console.log('Expression created');
+    console.log('Expression created');
     var header = setDefaultByTag(this, 'header', true);
     if (this.getAttribute('context') === 'true'){
         setDefaultByTag(this, 'wb-disclosure');
     }
 };
 ExpressionProto.attachedCallback = function expressionAttached(){
+    if (!this.parentElement){
+        console.log('no parentElement, parent is %s', this.parentNode);
+        return;
+    }else{
+        console.log('parentElement is %s', this.parentElement);
+    }
     this.parent = this.parentElement;
     var siblings = dom.children(this.parent, 'input, select');
+    console.log('siblings: %o', siblings);
     if (siblings.length){
         siblings.forEach(function(sib){
             sib.classList.add('hide');
@@ -325,7 +334,8 @@ ExpressionProto.attachedCallback = function expressionAttached(){
 
 };
 ExpressionProto.detachedCallback = function expressionDetached(){
-   var siblings = dom.children(this.parent, 'input, select');
+    if (!this.parent) return;
+    var siblings = dom.children(this.parent, 'input, select');
     if (siblings.length){
         siblings.forEach(function(sib){
             sib.classList.remove('hide');
@@ -453,7 +463,7 @@ function addItem(evt){
     var self = evt.target;
     var template = dom.closest(self, 'wb-row');
     // we want to clone the row and it's children, but not their contents
-    var newItem = template.cloneNode(true);
+    var newItem = dom.clone(template);
     template.parentElement.insertBefore(newItem, template.nextElementSibling);
 }
 
@@ -529,6 +539,11 @@ ValueProto.createdCallback = function valueCreated(){
             if (this.hasAttribute('max')){
                 input.setAttribute('max', this.getAttribute('max'));
             }
+            this.appendChild(input);
+            input.value = value;
+            break;
+        case 'image':
+            input = elem('input', {type: 'wb-image'});
             this.appendChild(input);
             input.value = value;
             break;
@@ -621,7 +636,7 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
     document.body.classList.add('block-dragging');
     // FIXME: Highlight droppable places (or grey out non-droppable)
 
-    dragTarget = origTarget.cloneNode(true);
+    dragTarget = dom.clone(origTarget);
     document.body.appendChild(dragTarget);
     dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
     // Warning here: origTarget may be null, and thus, not have a
@@ -798,7 +813,7 @@ function createVariableBlock(initialValue) {
    // Make ourselves a clone of the original.
    var originalSetVariable = dom.find('sidebar wb-step[script="control.setVariable"]');
    console.assert(originalSetVariable, 'Could not find setVariable block');
-   var variableStep = originalSetVariable.cloneNode(true);
+   var variableStep = dom.clone(originalSetVariable);
 
    // Set the expression here.
    variableStep

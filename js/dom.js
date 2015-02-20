@@ -53,6 +53,14 @@
         return elem; // for chaining
     }
 
+    var cloner = document.createElement('div');
+    function clone(elem){
+        // Cloned custom elements in Firefox do not preserve custom element lifecycle events
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=1050113
+        cloner.innerHTML = elem.outerHTML;
+        return cloner.removeChild(cloner.firstChild);
+    }
+
     function appendChildren(e, children){
         // Children can be a single child or an array
         // Each child can be a string or a node
@@ -247,6 +255,7 @@
         html: html,
         svg: svg,
         elemToObj: elemToObject,
+        clone: clone,
         remove: remove,
         insertAfter: insertAfter,
         matches: matches,

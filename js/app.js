@@ -25,24 +25,34 @@ function info(text){
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on(document.body, 'click', '.do-run', preload);
+Event.on(document.body, 'ui:click', '.do-run', startScript);
+Event.on(document.body, 'ui:click', '.do-stop', stopScript);
 
-function preload(){
-    assets.load({
+function startScript() {
+    preload().whenLoaded(runScript);
+}
+
+function stopScript() {
+    runtime.stopEventLoop();
+    runtime.clear();
+}
+
+function preload() {
+    return assets.load({
         'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
         'wb-contains wb-expression[script^="geolocation."]':
             assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
         'wb-contains wb-expression[script="motion.tiltDirection"]':
             assets.waitFor('motionchanged', util.motion.startTrackingMotion)
-    }).whenLoaded(run);
+    });
 }
 
-function run(){
-    var scope = {};
+function runScript(){
+    var globalScope = {};
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            block.run(scope);
+            block.run(globalScope);
         }
     });
 }
@@ -92,13 +102,13 @@ function handleFileButton(evt){
     fileModel.show();
 }
 
-Event.on(document.body, 'click', '.open-files', handleFileButton);
+Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
     window.alert('No current examples or templates available. Check back later!');
 }
 
-Event.on(document.body, 'click', '.open-example', handleExampleButton);
+Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 
 window.app = {
     message: message,

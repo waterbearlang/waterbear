@@ -81,7 +81,7 @@ wb-value > * {
 
 
 wb-value > input[type=color]{
-    padding: 0;
+    padding: 0 0 0 20px ;
 }
 
 wb-unit{
@@ -232,7 +232,7 @@ wb-expression[type=sprite]:before{ background-image: url(../images/icon/sprite.s
 wb-expression[type=any]:before{ background-image: url(../images/icon/control.svg); }
 wb-expression[type=sound]:before{ background-image: url(../images/icon/sound.svg); }
 wb-expression[type=array]:before{ background-image: url(../images/icon/array.svg); }
-wb-expression[type=image]:before{ background-image: url(../images/icon/image.svg); }
+wb-expression[type=wb-image]:before{ background-image: url(../images/icon/image.svg); }
 wb-expression[type=shape]:before{ background-image: url(../images/icon/shape.svg); }
 wb-expression[type=vector]:before{ background-image: url(../images/icon/vector.svg); }
 wb-expression[type=object]:before{ background-image: url(../images/icon/object.svg); }
@@ -277,7 +277,7 @@ wb-expression[type=sprite],wb-local wb-expression[type=sprite]{ background-color
 wb-expression[type=any],wb-local wb-expression[type=any]{ background-color: hsl(0, 93%, 56%); border-color: hsl(0, 93%, 40%); }
 wb-expression[type=sound],wb-local wb-expression[type=sound]{ background-color: hsl(108, 93%, 56%); border-color: hsl(108, 93%, 40%); }
 wb-expression[type=array],wb-local wb-expression[type=array]{ background-color: hsl(264, 93%, 56%); border-color: hsl(264, 93%, 40%); }
-wb-expression[type=image],wb-local wb-expression[type=image]{ background-color: hsl(168, 93%, 56%); border-color: hsl(168, 93%, 40%); }
+wb-expression[type=wb-image],wb-local wb-expression[type=wb-image]{ background-color: hsl(168, 93%, 56%); border-color: hsl(168, 93%, 40%); }
 wb-expression[type=shape],wb-local wb-expression[type=shape]{ background-color: hsl(84, 93%, 56%); border-color: hsl(84, 93%, 40%); }
 wb-expression[type=vector],wb-local wb-expression[type=vector]{ background-color: hsl(276, 93%, 56%); border-color: hsl(276, 93%, 40%); }
 wb-expression[type=object],wb-local wb-expression[type=object]{ background-color: hsl(72, 93%, 56%); border-color: hsl(72, 93%, 40%); }

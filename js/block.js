@@ -624,9 +624,9 @@ ValueProto.select = function(){
     this.setAttribute('selected', 'true');
     selectedType = this.getAttribute('type');
     selectedTypeList = selectedType.split(',');
-    console.log(selectedTypeList);
+    //console.log(selectedTypeList);
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
-    console.log(sidebarBlocks);
+    //console.log(sidebarBlocks);
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
     
 }
@@ -638,7 +638,7 @@ ValueProto.deselect = function(){
     sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');} 
     selectedType = 'null';
-    console.log(BLOCK_MENU.querySelectorAll('wb-expression[filtered = true]'));
+    //console.log(BLOCK_MENU.querySelectorAll('wb-expression[filtered = true]'));
 }
 
 
@@ -659,7 +659,7 @@ window.WBContains = document.registerElement('wb-contains', {prototype: Contains
 Event.on(document.body, 'click', 'wb-value > input', function(evt){
     if(dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')){
         dom.closest(evt.target, 'wb-value').toggleSelect();
-        console.log("Test"); //TODO
+        //console.log("Test");
     }
 })
 
@@ -787,7 +787,7 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
     }else if(dragTarget.matches('wb-expression')){
       if (dropTarget.matches('wb-value')) {
          dropTarget.appendChild(dragTarget);
-         dropTarget.deselect(); //TODO
+         dropTarget.deselect();
          BLOCK_MENU.removeAttribute('filtered');
       } else {
           // Create variable block to wrap the expression.

@@ -611,7 +611,7 @@ ValueProto.select = function(){
     console.log(selectedTypeList);
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
     console.log(sidebarBlocks);
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filered', 'true');}
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
     
 }
 
@@ -620,7 +620,7 @@ ValueProto.deselect = function(){
     var sidebarBlocks;
     this.removeAttribute('selected');
     sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filered');} 
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');} 
     selectedType = 'null';
     console.log(BLOCK_MENU.querySelectorAll('wb-expression[filtered = true]'));
 }

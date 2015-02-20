@@ -99,7 +99,7 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overfow: visible;
+    overflow: visible;
     padding-left: 6px;
 }
 

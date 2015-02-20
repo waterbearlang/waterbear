@@ -26,6 +26,11 @@ wb-expression{
     text-align: right;
 }
 
+sidebar[filtered=true] wb-step, sidebar[filtered=true] wb-context{
+    display: none;
+}
+
+
 wb-value > wb-expression{
     float: none;
     clear: none;
@@ -287,6 +292,9 @@ wb-expression[type=string],wb-local wb-expression[type=string]{ background-color
 wb-expression[type=geolocation]{ background-color: hsl(240, 93%, 56%); border-color: hsl(240, 93%, 40%); }
 wb-expression[type=size]{background-color: hsl(192, 93%, 56%); border-color: hsl(192, 93%, 40%);}
 wb-expression[type=motion]{background-color: hsl(288, 93%, 56%); border-color: hsl(288, 93%, 40%);}
+
+
+
 
 /* Used for input resizing */
 .sekrit-svg{

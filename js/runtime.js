@@ -19,7 +19,7 @@
         }
         return _canvas;
     }
-    function ctx(){
+    function getContext(){
         if (!_ctx){
             _ctx = canvas().getContext('2d');
         }
@@ -228,13 +228,13 @@
                 return "#"+(~~(Math.random()*(1<<30))).toString(16).toUpperCase().slice(0,6);
             },
             fill: function(color){
-                ctx().fillStyle = color;
+                getContext().fillStyle = color;
             },
             stroke: function(color){
-                ctx().strokeStyle = color;
+                getContext().strokeStyle = color;
             },
             shadow: function(color){
-                ctx().shadowColor = color;
+                getContext().shadowColor = color;
             }
         },
 
@@ -370,7 +370,7 @@
                 alert(x);
             },
         },
-		
+
 
         /*
          * The underlying JavaScript object is the same object that is passed
@@ -447,7 +447,7 @@
                 return assets.images[path];
             },
             drawAtPoint: function(img, pt){
-                img.drawAtPoint(ctx(), pt);
+                img.drawAtPoint(getContext(), pt);
             },
             setWidth: function(img, w){
                 img.setWidth(w);
@@ -601,38 +601,38 @@
         path:{
 
             lineTo: function(toPoint){
-                return new util.Path(ctx().lineTo, new Array(toPoint.x, toPoint.y))
+                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y))
             },
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
-                return new util.Path(ctx().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
+                return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
                                                                     controlPoint2.x, controlPoint2.y, toPoint.x,
                                                                     toPoint.y));
             },
             moveTo: function(toPoint){
-                return new util.Path(ctx().moveTo, new Array(toPoint.x, toPoint.y));
+                return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));
             },
             quadraticCurveTo: function(toPoint, controlPoint){
-                return new util.Path(ctx().quadraticCurveTo, new Array(controlPoint.x,
+                return new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
                                                                        controlPoint.y,toPoint.x, toPoint.y));
             },
             arcTo: function(radius, controlPoint1, controlPoint2){
-                return new util.Path(ctx().arcTo, new Array(controlPoint1.x,
+                return new util.Path(getContext().arcTo, new Array(controlPoint1.x,
                                                             controlPoint1.y,controlPoint2.x, controlPoint2.y,
                                                             radius));
             },
             closePath: function(){
-                return new util.Path(ctx().closePath);
+                return new util.Path(getContext().closePath);
             },
             pathSet: function(args){
                 return new util.Shape(arguments);
             },
 
             lineStyle: function(width, color, capStyle, joinStyle){
-                ctx().lineWidth = width;
-                ctx().strokeStyle = color;
-                ctx().lineCap = capStyle;
-                ctx().lineJoin = joinStyle;
+                getContext().lineWidth = width;
+                getContext().strokeStyle = color;
+                getContext().lineCap = capStyle;
+                getContext().lineJoin = joinStyle;
             }
 
         },
@@ -706,39 +706,43 @@
 
         shape: {
             fill: function(shapeArg){
-                console.log(shapeArg);
-                shapeArg.draw(ctx());
-                ctx().fill();
+                shapeArg.draw(getContext());
+                getContext().fill();
             },
             stroke: function(shapeArg){
-                shapeArg.draw(ctx());
-                ctx().stroke();
+                shapeArg.draw(getContext());
+                ctx.stroke();
             },
             circle: function(pt, rad){
-                ctx().beginPath();
-                ctx().arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                return new util.Shape(function(ctx){
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                });
             },
             rectangle: function(pt, width, height, orientation){
-                ctx().beginPath();
-                if(orientation == "center"){
-                    ctx().moveTo(pt.x - width/2, pt.y - height/2);
-                    ctx().lineTo(pt.x + width/2, pt.y - height/2);
-                    ctx().lineTo(pt.x + width/2, pt.y + height/2);
-                    ctx().lineTo(pt.x - width/2, pt.y + height/2);
-                    ctx().lineTo(pt.x - width/2, pt.y - height/2);
-                }
-                else{
-                    ctx().lineTo(pt.x + width, pt.y);
-                    ctx().lineTo(pt.x + width, pt.y + height);
-                    ctx().lineTo(pt.x, pt.y + height);
-                    ctx().lineTo(pt.x, pt.y);
-                }
+                return new util.Shape(function(ctx){
+                    ctx.beginPath();
+                    if(orientation == "center"){
+                        ctx.moveTo(pt.x - width/2, pt.y - height/2);
+                        ctx.lineTo(pt.x + width/2, pt.y - height/2);
+                        ctx.lineTo(pt.x + width/2, pt.y + height/2);
+                        ctx.lineTo(pt.x - width/2, pt.y + height/2);
+                        ctx.lineTo(pt.x - width/2, pt.y - height/2);
+                    }
+                    else{
+                        ctx.lineTo(pt.x + width, pt.y);
+                        ctx.lineTo(pt.x + width, pt.y + height);
+                        ctx.lineTo(pt.x, pt.y + height);
+                        ctx.lineTo(pt.x, pt.y);
+                    }
+                });
             },
             ellipse: function(pt, rad1, rad2, rot){
-                ctx().beginPath();
-                ctx().ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+                return new util.Shape(function(ctx){
+                    ctx.beginPath();
+                    ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+                });
             },
-
         },
         size: {
             fromCoordinates: function (width, widthUnits, height, heightUnits) {
@@ -830,7 +834,7 @@
                 spt.moveTo(pt);
             },
             draw: function(spt){
-                spt.draw(ctx());
+                spt.draw(getContext());
             },
             applyForce: function(spt, vec){
                 spt.applyForce(vec);
@@ -916,29 +920,29 @@
         text:{
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
-                ctx().font = sizeString + " " + fontStyle;
+                getContext().font = sizeString + " " + fontStyle;
 
             },
             textAlign: function (alignment){
-                ctx().textAlign = alignment;
+                getContext().textAlign = alignment;
             },
             textBaseline: function (baseline){
-                ctx().textBaseline = baseline;
+                getContext().textBaseline = baseline;
             },
             fillText: function (text, x, y){
-                ctx().fillText(text, x, y);
+                getContext().fillText(text, x, y);
             },
             fillTextWidth: function (text, x, y, width){
-                ctx().fillText(text, x, y, width);
+                getContext().fillText(text, x, y, width);
             },
             strokeText: function (text, x, y){
-                ctx().strokeText(text, x, y);
+                getContext().strokeText(text, x, y);
             },
             strokeTextWidth: function (text, x, y, width){
-                ctx().strokeText(text, x, y, width);
+                getContext().strokeText(text, x, y, width);
             },
             width: function (text){
-                var textMetric = ctx().measureText(text);
+                var textMetric = getContext().measureText(text);
                 return textMetric.width;
             }
         },
@@ -975,5 +979,6 @@
             }
         }
     };
+
 
 })(window);

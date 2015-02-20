@@ -706,7 +706,6 @@
 
         shape: {
             fill: function(shapeArg){
-                console.log(shapeArg);
                 shapeArg.draw(getContext());
                 getContext().fill();
             },

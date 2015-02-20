@@ -47,6 +47,7 @@ function run(){
     });
 }
 
+
 function handleFileButton(evt){
     var fileModel = nanoModal("Select an option or click away to exit.", 
         {overlayClose: true, // Can't close the modal by clicking on the overlay.

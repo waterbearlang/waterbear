@@ -15,6 +15,8 @@
 'use strict';
     var elem = dom.html;
     var workspace = dom.find(document.body, 'wb-workspace');
+    var selectedType = 'null';
+    var BLOCK_MENU = document.querySelector('sidebar');
 
 // Utility
 
@@ -585,22 +587,42 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
-        this.close();
+        BLOCK_MENU.removeAttribute('filtered');
+        this.deselect();
+        
     }else{
-        this.open();
-    }
-}
-ValueProto.open = function(){
-    // If there are other accordions in this group open, close them
-    var existing = false;/*this.parentElement.querySelector('wb-accordion[open=true]');*/
-    if (existing){
-        existing.close();
-    }
-    this.setAttribute('selected', 'true');
+        this.select();
+        BLOCK_MENU.setAttribute('filtered', 'true');
+    }   
 }
 
-ValueProto.close = function(){
+ValueProto.select = function(){
+    var i = 0;
+    var sidebarBlocks=[];
+    var selectedTypeList;
+    var existing = workspace.querySelectorAll('wb-value[selected=true]');
+    if (existing.length !== 0){
+        var i =0;
+        for(i=0; i< existing.length; i++){ existing[i].deselect();}
+    }
+    this.setAttribute('selected', 'true');
+    selectedType = this.getAttribute('type');
+    selectedTypeList = selectedType.split(',');
+    console.log(selectedTypeList);
+    for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
+    console.log(sidebarBlocks);
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filered', 'true');}
+    
+}
+
+ValueProto.deselect = function(){
+    var i = 0;
+    var sidebarBlocks;
     this.removeAttribute('selected');
+    sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filered');} 
+    selectedType = 'null';
+    console.log(BLOCK_MENU.querySelectorAll('wb-expression[filtered = true]'));
 }
 
 
@@ -617,11 +639,14 @@ var convert = {
 var ContainsProto = Object.create(HTMLElement.prototype);
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
-//TODO
 Event.on(document.body, 'click', 'wb-value > input', function(evt){
-    dom.closest(evt.target, 'wb-value').toggleSelect();
-    console.log("Test");
+    if(dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')){
+        dom.closest(evt.target, 'wb-value').toggleSelect();
+        console.log("Test"); //TODO
+    }
 })
+
+
 
 
 /* DRAGGING */
@@ -630,7 +655,6 @@ var dragTarget = null;
 var origTarget = null;
 var dragStart = '';
 var dropTarget = null;
-var BLOCK_MENU = document.querySelector('sidebar');
 var blockTop = 0;
 
 Event.on(document.body, 'drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){

@@ -26,9 +26,6 @@ wb-expression{
     text-align: right;
 }
 
-sidebar[filtered=true] wb-step, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]){
-    display: none;
-}
 
 
 wb-value > wb-expression{

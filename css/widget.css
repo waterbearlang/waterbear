@@ -116,6 +116,14 @@ wb-accordion[open=true] > :not(header){
     display: inline-block;
 }
 
+sidebar[filtered=true] wb-accordion > :not(header){
+    display: inline-block;
+}
+
+sidebar[filtered=true] wb-step, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]){
+    display: none!important;
+}
+
 wb-accordion > header {
     display: block;
     position: relative;

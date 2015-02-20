@@ -29,6 +29,8 @@ Event.on(document.body, 'ui:click', '.do-run', startScript);
 Event.on(document.body, 'ui:click', '.do-stop', stopScript);
 
 function startScript() {
+    // Do any necessary cleanup (e.g., clear event handlers).
+    stopScript();
     preload().whenLoaded(runScript);
 }
 

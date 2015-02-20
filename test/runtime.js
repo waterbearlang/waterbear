@@ -399,7 +399,7 @@ QUnit.testBrowser('currentLocation', function (assert) {
 
     /* Subscribe to the locationchanged event... */
     var done = assert.async();
-    Event.on(window, 'locationchanged', null, function () {
+    Event.on(window, 'test:locationchanged', null, function () {
         var location = geolocation.currentLocation();
         assert.strictEqual(location.coords.latitude, lat,
                            'API returned expected latitude');

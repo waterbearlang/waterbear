@@ -19,6 +19,13 @@
     // Maintain references to events so we can mass-remove them later
     var allEvents = {};
 
+    // Give all scoped events a class for future reference.
+    function ScopedEvent(elem, eventname, listener) {
+        this.element = elem;
+        this.name = eventname;
+        this.listener = listener;
+    }
+
     // Refactor this into an constructor with prototype methods
     function cloneEvent(evt){
         var newEvent = {};
@@ -38,28 +45,17 @@
         return newEvent;
     }
 
-    function on(elem, eventname, selector, handler, onceOnly){
-        var ns_name = eventname.split(':');
-        var namespace = 'global';
-        if (ns_name.length === 2){
-            namespace = ns_name[0];
-            eventname = ns_name[1];
-        }
-        if (typeof elem === 'string'){
-            // Bind all elements matched by `elem` selector. Not recommended due to
-            // multiple event listeners used when one could suffice and be
-            // matched using the `selector` argument.
-            return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
-                return on(e, eventname, selector, handler);
-            });
+    function on(elem, originalEventname, selector, handler, onceOnly){
+        var eventname, ns_name, namespace;
+
+        // Argument validation.
+        if (typeof originalEventname !== 'string'){
+            console.error('second argument must be eventname: %s', eventname);
+            throw new Error('second argument must be eventname: ' + eventname);
         }
         if (!isDomObject(elem)){
             console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element, document, or window');
-        }
-        if (typeof eventname !== 'string'){
-            console.error('second argument must be eventname: %s', eventname);
-            throw new Error('second argument must be eventname: ' + eventname);
         }
         if (selector && typeof selector !== 'string'){
             throw new TypeError('third argument must be selector String or null');
@@ -67,6 +63,30 @@
         if (typeof handler !== 'function'){
             throw new TypeError('fourth argument must be handler');
         }
+
+        // Allow use of selector for `elem`.
+        if (typeof elem === 'string'){
+            // Bind all elements matched by `elem` selector. Not recommended due to
+            // multiple event listeners used when one could suffice and be
+            // matched using the `selector` argument.
+            return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
+                return on(e, originalEventname, selector, handler, onceOnly);
+            });
+        }
+
+        // Check for presence of namespace.
+        ns_name = originalEventname.split(':');
+        if (ns_name.length === 2){
+            namespace = ns_name[0];
+            eventname = ns_name[1];
+        } else if (ns_name.length === 1) {
+            namespace = 'global';
+            eventname = originalEventname;
+            console.warn('Registering `' + eventname + '` in the global namespace');
+        } else {
+            throw new Error('Invalid namespace: ' + originalEventname);
+        }
+
         var listener = function listener(originalEvent){
             var evt;
             if (originalEvent.detail && originalEvent.detail.forwarded){
@@ -79,7 +99,7 @@
                 return;
             }
             if (onceOnly){
-                Event.off(elem, eventname, listener);
+                Event.off(elem, originalEventname, listener);
             }
             if (selector){
                 if (dom.matches(evt.target, selector)){
@@ -95,11 +115,12 @@
             }
         };
         elem.addEventListener(eventname, listener, false);
-        util.setDefault(allEvents, namespace, []).push([elem, eventname, listener]);
+        util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
     }
 
     function off(elem, eventname, handler){
+        var events;
         var ns_name = eventname.split(':');
         var namespace = 'global';
         if (ns_name.length === 2){
@@ -107,20 +128,24 @@
             namespace = ns_name[0];
             eventname = ns_name[1];
         }
-        if (handler){
-            elem.removeEventListener(eventname, handler);
-        }else{
-            allEvents[namespace].slice().forEach(function(elem_name_hand, idx){
-                // Pass in null element to remove listeners from all elements
-                var el = elem || elem_name_hand[0];
-                var en = eventname === '*' ? elem_name_hand[1] : eventname;
-                var hd = elem_name_hand[2];
-                if (el === elem_name_hand[0] && eventname === elem_name_hand[1]){
-                    elem.removeEventListener(elem_name_hand[1], elem_name_hand[2]);
-                    allEvents[namespace].splice(idx, 1); // remove elem_name_hand from allEvents
-                }
-            });
+        events = allEvents[namespace];
+
+        if (!events) {
+            // No events registered for the given namespace.
+            return;
         }
+
+        // Copy the array, because we'll be modifying it.
+        events.slice().forEach(function(scopedEvent, idx){
+            // Pass in null element to remove listeners from all elements
+            var el = elem || scopedEvent.element;
+            var name = eventname === '*' ? scopedEvent.name : eventname;
+            var listener = handler || scopedEvent.listener;
+            if (el === scopedEvent.element && name === scopedEvent.name){
+                el.removeEventListener(name, listener);
+                allEvents[namespace].splice(idx, 1); // remove the event from allEvents
+            }
+        });
     }
 
     function once(elem, eventname, selector, handler){
@@ -360,19 +385,20 @@
         stagePointerX: 0,
         stagePointerY: 0,
         keys: {},
-        keyHandlers: {}
+        keyHandlers: {},
+        clearRuntime: clearRuntime
     };
 
 
-    Event.on(document.body, 'touchstart', null, initDrag);
-    Event.on(document.body, 'touchmove', null, dragging);
-    Event.on(document.body, 'touchend', null, endDrag);
-    Event.on(document.body, 'mousedown', null, initDrag);
-    Event.on(document.body, 'mousemove', null, dragging);
-    Event.on(window, 'mouseup', null, endDrag);
-    Event.on(window, 'keyup', null, cancelDrag);
-    Event.on(window, 'keydown', null, handleKeyDown);
-    Event.on(window, 'keyup', null, handleKeyUp);
+    Event.on(document.body, 'dragging:touchstart', null, initDrag);
+    Event.on(document.body, 'dragging:touchmove', null, dragging);
+    Event.on(document.body, 'dragging:touchend', null, endDrag);
+    Event.on(document.body, 'dragging:mousedown', null, initDrag);
+    Event.on(document.body, 'dragging:mousemove', null, dragging);
+    Event.on(window, 'dragging:mouseup', null, endDrag);
+    Event.on(window, 'dragging:keyup', null, cancelDrag);
+    Event.on(window, 'input:keydown', null, handleKeyDown);
+    Event.on(window, 'input:keyup', null, handleKeyUp);
 
 
 })();

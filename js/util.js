@@ -262,26 +262,32 @@
 
 
     //Shape
-    function Shape(pathArray){
-        var len = pathArray.length;
-        var i = 0;
-        while (i<len){
-            if(!(pathArray[i] instanceof Path)){
-                throw new Error('Only paths may be added to a Shape, ' + pathArray[i] + " is not.");
+    function Shape(pathArrayOrFunction){
+        if (type(pathArrayOrFunction) === 'function'){
+            this._draw = pathArrayOrFunction;
+        }else if (type(pathArrayOrFunction) === 'array'){
+            var len = pathArrayOrFunction.length;
+            var i = 0;
+            while (i<len){
+                if(!(pathArrayOrFunction[i] instanceof Path)){
+                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
+                }
+                i = i+1;
             }
-            i = i+1;
+            this.pathArray = pathArrayOrFunction;
+        }else{
+            throw new Error('Can only add a path array or a draw function to Shape');
         }
-
-        this.pathArray = pathArray;
-    }
-    Shape.prototype.getPathArray = function(){
-        return pathArray;
     }
     Shape.prototype.draw = function(ctx){
-        ctx.beginPath();
-        var i;
-        for(i=0; i<this.pathArray.length; i++){
-            this.pathArray[i].draw(ctx);
+        if (this.pathArray){
+            ctx.beginPath();
+            var i;
+            for(i=0; i<this.pathArray.length; i++){
+                this.pathArray[i].draw(ctx);
+            }
+        }else if (this._draw){
+            this._draw(ctx);
         }
     }
 
@@ -711,7 +717,7 @@
             waitFor: function (eventName, setup) {
                 return function (ignoredElements, ready) {
                     setup();
-                    Event.once(window, eventName, null, ready);
+                    Event.once(window, 'runtime:' + eventName, null, ready);
                 };
             },
 

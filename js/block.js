@@ -602,12 +602,13 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
-        BLOCK_MENU.removeAttribute('filtered');
-        this.deselect();
+       BLOCK_MENU.removeAttribute('filtered');
+       this.deselect();
+        
         
     }else{
-        this.select();
         BLOCK_MENU.setAttribute('filtered', 'true');
+        this.select();
     }   
 }
 
@@ -786,6 +787,8 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
     }else if(dragTarget.matches('wb-expression')){
       if (dropTarget.matches('wb-value')) {
          dropTarget.appendChild(dragTarget);
+         dropTarget.deselect(); //TODO
+         BLOCK_MENU.removeAttribute('filtered');
       } else {
           // Create variable block to wrap the expression.
           var variableBlock = createVariableBlock(dragTarget);

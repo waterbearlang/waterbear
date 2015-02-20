@@ -122,6 +122,10 @@ sidebar[filtered=true] wb-accordion > :not(header){
 
 sidebar[filtered=true] wb-step, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]){
     display: none!important;
+    margin-bottom: 6px;
+}
+sidebar[filtered=true] wb-accordion{
+    padding-bottom: 6px;
 }
 
 wb-accordion > header {

@@ -304,7 +304,7 @@ var typeMapping = {
 
 var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
-    console.log('Expression created');
+    // console.log('Expression created');
     var header = setDefaultByTag(this, 'header', true);
     if (this.getAttribute('context') === 'true'){
         setDefaultByTag(this, 'wb-disclosure');
@@ -312,14 +312,10 @@ ExpressionProto.createdCallback = function expressionCreated(){
 };
 ExpressionProto.attachedCallback = function expressionAttached(){
     if (!this.parentElement){
-        console.log('no parentElement, parent is %s', this.parentNode);
         return;
-    }else{
-        console.log('parentElement is %s', this.parentElement);
     }
     this.parent = this.parentElement;
     var siblings = dom.children(this.parent, 'input, select');
-    console.log('siblings: %o', siblings);
     if (siblings.length){
         siblings.forEach(function(sib){
             sib.classList.add('hide');

@@ -266,7 +266,7 @@
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
         }else if (type(pathArrayOrFunction) === 'array'){
-            var len = pathArray.length;
+            var len = pathArrayOrFunction.length;
             var i = 0;
             while (i<len){
                 if(!(pathArrayOrFunction[i] instanceof Path)){
@@ -278,9 +278,6 @@
         }else{
             throw new Error('Can only add a path array or a draw function to Shape');
         }
-    }
-    Shape.prototype.getPathArray = function(){
-        return pathArray;
     }
     Shape.prototype.draw = function(ctx){
         if (this.pathArray){

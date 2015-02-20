@@ -981,9 +981,5 @@
         }
     };
 
-    function checkAllBlocksHaveRuntimeFunctions(){
-    }
-
-    global.addEventListener('load', checkAllBlocksHaveRuntimeFunctions, false);
 
 })(window);

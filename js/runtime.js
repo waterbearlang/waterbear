@@ -880,7 +880,7 @@
             getChar: function(n,x){
                 if(n<0)
                     n = x.length + n;
-                
+
                 return x.charAt(n);
             },
             getCharFromEnd: function(n,x){
@@ -972,7 +972,7 @@
             create: function create(x,y){
                 return new util.Vector(x,y);
             },
-            fromPolar: function fromPolar(deg, mag){
+            createPolar: function fromPolar(deg, mag){
                 return util.Vector.fromPolar(deg, mag);
             },
             rotateTo: function rotateTo(vec, deg){

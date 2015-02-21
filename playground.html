@@ -73,17 +73,17 @@
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
                         <wb-local fortype="array,string">
-                            <wb-expression type="any" script="local.index">
+                            <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="index">index</wb-value>
                             </wb-expression>
                         </wb-local>
                         <wb-local fortype="object">
-                            <wb-expression type="string" script="local.key">
+                            <wb-expression type="string" script="control.getVariable">
                                 <wb-value value="key">key</wb-value>
                             </wb-expression>
                         </wb-local>
                         <wb-local fortype="any">
-                            <wb-expression type="any" script="local.value">
+                            <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="value">value</wb-value>
                             </wb-expression>
                         </wb-local>
@@ -97,7 +97,7 @@
                     <wb-value type="text">when I receive</wb-value>
                     <wb-value>message with data</wb-value>
                     <wb-local>
-                        <wb-expression type="any" script="local.data">
+                        <wb-expression type="any" script="control.getVariable">
                             <wb-value value="data">data</wb-value>
                         </wb-expression>
                     </wb-local>

@@ -239,6 +239,7 @@
         createDownloadUrl: createDownloadUrl,
         clearScripts: clearScripts,
         loadScriptsFromGistId: loadScriptsFromGistId,
+        getScriptFromGistId: getScriptFromGistId,
         loadScriptsFromExample: loadScriptsFromExample,
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,
         loadCurrentScripts: loadCurrentScripts,

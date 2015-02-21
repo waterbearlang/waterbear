@@ -856,6 +856,10 @@
         this.width = this.origWidth * scaleFactor;
         this.height = this.origHeight * scaleFactor;
     };
+    
+    WBImage.prototype.toString = function(){
+        return this.name + "; " + this.width + "px wide by " + this.height + "px high";
+    };
 
 
     /******************************

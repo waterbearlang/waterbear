@@ -106,7 +106,18 @@ function handleFileButton(evt){
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
-    window.alert('No current examples or templates available. Check back later!');
+    var fileModel = nanoModal("Load an example program.", 
+        {overlayClose: true, // Can't close the modal by clicking on the overlay.
+        buttons: [{
+            text: "Waterbear in Space",
+            handler: function(modal) {
+                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
+                File.getScriptFromGistId('e06514193419705e6224');
+                modal.hide();
+            }
+        }]
+    });
+    fileModel.show();
 }
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);

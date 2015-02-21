@@ -878,16 +878,29 @@
                 return str;
             },
             getChar: function(n,x){
-                return x.charAt(n-1);
+                if(n<0)
+                    n = x.length + n;
+                
+                return x.charAt(n);
             },
             getCharFromEnd: function(n,x){
-                return x.charAt(x.length-n-1);
+                if(n<=0)
+                    n = n*(-1)-1;
+                else
+                    n = x.length-n;
+                return x.charAt(n);
             },
             substring: function(x,a,b){
-                return x.substring(a-1,a+b-1);
+                if(a<0)
+                    return "";
+                else
+                    return x.substring(a,a+b);
             },
             substring2: function(x,a,b){
-                return x.substring(a-1,b);
+                if(a<0 || a>x.length)
+                    return "";
+                else
+                    return x.substring(a,b);
             },
             isSubstring: function(x,y){
                 if(y.indexOf(x)===-1){
@@ -898,10 +911,10 @@
                 }
             },
             substringPosition: function(x,y){
-                return y.indexOf(x)+1;
+                return y.indexOf(x);
             },
             replaceSubstring: function(x,y,z){
-                return x.replace(y,z);
+                return x.replace(new RegExp(y, 'g'), z);
             },
             trimWhitespace: function(x){
                 return x.trim();

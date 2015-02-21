@@ -599,7 +599,7 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-
+//toggle an inputs 'filter' selection
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
        BLOCK_MENU.removeAttribute('filtered');
@@ -612,6 +612,7 @@ ValueProto.toggleSelect = function(){
     }   
 }
 
+//select an inout field and filter the sidebar by it
 ValueProto.select = function(){
     var i = 0;
     var sidebarBlocks=[];
@@ -624,13 +625,12 @@ ValueProto.select = function(){
     this.setAttribute('selected', 'true');
     selectedType = this.getAttribute('type');
     selectedTypeList = selectedType.split(',');
-    //console.log(selectedTypeList);
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
-    //console.log(sidebarBlocks);
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
     
 }
 
+//deselect an inout field and unfilter the sidebar
 ValueProto.deselect = function(){
     var i = 0;
     var sidebarBlocks;
@@ -638,11 +638,10 @@ ValueProto.deselect = function(){
     sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');} 
     selectedType = 'null';
-    //console.log(BLOCK_MENU.querySelectorAll('wb-expression[filtered = true]'));
 }
 
 
-
+//when a user clicks on an inout box in the workspace
 Event.on(document.body, 'editor:change', 'wb-contains input, wb-contains select', function(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
 });
@@ -656,14 +655,22 @@ var convert = {
 var ContainsProto = Object.create(HTMLElement.prototype);
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
-Event.on(document.body, 'click', 'wb-value > input', function(evt){
+Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
     if(dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')){
         dom.closest(evt.target, 'wb-value').toggleSelect();
         //console.log("Test");
     }
 })
 
-
+//deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
+Event.on(document.body, 'ui:click', '.availableBlocks', function(evt){
+    var existing = workspace.querySelectorAll('wb-value[selected=true]');
+    if (existing.length !== 0){
+        var i =0;
+        for(i=0; i< existing.length; i++){ existing[i].deselect();}
+    }
+    BLOCK_MENU.removeAttribute('filtered');
+});
 
 
 /* DRAGGING */

@@ -60,6 +60,10 @@ body > header > h1{
     font-size: 18px;
 }
 
+sidebar button.availableBlocks{
+    display: none; /*hide when the accordions are showing */
+}
+
 /* Show trash for sidebar while dragging */
 
 sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{

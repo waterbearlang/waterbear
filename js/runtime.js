@@ -972,7 +972,7 @@
             create: function create(x,y){
                 return new util.Vector(x,y);
             },
-            creatPolar: function fromPolar(deg, mag){
+            createPolar: function fromPolar(deg, mag){
                 return util.Vector.fromPolar(deg, mag);
             },
             rotateTo: function rotateTo(vec, deg){

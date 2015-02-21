@@ -131,6 +131,20 @@
             //temporary fix for locals
             value: function(){
                 return this.value;
+            },
+            index: function () {
+                console.assert(false, 'Not implemented');
+                // FIXME: loopover cannot handle locals for nested loops!
+                return this.index;
+            },
+            key: function () {
+                console.assert(false, 'Not implemented');
+                // FIXME: loopover cannot handle locals for nested loops!
+                return this.key;
+            },
+            data: function () {
+                console.assert(false, 'Not implemented');
+                // FIXME: how do we get the name of the local?
             }
         },
 

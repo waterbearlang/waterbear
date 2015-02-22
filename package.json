@@ -1,0 +1,27 @@
+{
+  "name": "waterbear",
+  "version": "0.2.0",
+  "description": "Visual programming language for non-programmers.",
+  "private": true,
+  "directories": {
+    "doc": "docs",
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./run_tests.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waterbearlang/waterbear.git"
+  },
+  "author": "Dethe Elza <dethe@livingcode.org>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/waterbearlang/waterbear/issues"
+  },
+  "homepage": "https//waterbearlang.com/",
+  "devDependencies": {
+    "node-qunit-phantomjs": "^1.2.0"
+  }
+}

@@ -22,6 +22,7 @@
   },
   "homepage": "https//waterbearlang.com/",
   "devDependencies": {
+    "css-validator": "^0.5.1",
     "node-qunit-phantomjs": "^1.2.0"
   }
 }

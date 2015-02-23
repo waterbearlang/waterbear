@@ -17,9 +17,20 @@ wb-hbox{
     height: 100%;
 }
 wb-vbox{
+    position: relative;
     flex-direction: column;
 }
-
+wb-leftbox, wb-rightbox{
+    flex-direction: column;
+}
+wb-workbox, wb-displaybox{
+    display: flex;
+    flex: 1 1;
+    position: relative;
+    overflow: hidden;
+    flex-direction: row;
+    height: 100%;
+}
 wb-hbox > *{
     flex: 1 1 auto;
 }
@@ -36,7 +47,7 @@ wb-splitter{
     flex: 0 0 8px;
 }
 
-wb-hbox > wb-splitter{
+wb-hbox > wb-splitter, wb-workbox > wb-splitter{
     background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
     background-image-size: 8px 8px;
     cursor: ew-resize;

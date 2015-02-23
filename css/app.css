@@ -60,6 +60,25 @@ body > header > h1{
     font-size: 18px;
 }
 
+.tabs-menu{
+    flex: 0 0 34px;
+    background-color: yellowgreen;
+    color: #FFFFFF;
+    margin: 0px;
+    padding: 0px;
+    border-color: #000000;
+    border-width: medium;
+    border-style: solid;
+}
+
+.tabs-menu button{
+    background-color: #666666;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 2px #111111 outset;
+    margin: 3px;
+    font-size: 18px;
+}
 /* Show trash for sidebar while dragging */
 
 sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{

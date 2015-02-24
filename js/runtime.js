@@ -621,8 +621,8 @@
             closePath: function(){
                 return new util.Path(getContext().closePath);
             },
-            pathSet: function(args){
-                return new util.Shape(arguments);
+            pathSet: function(args, args2){
+                return new util.Shape(Array.prototype.slice.call(arguments));
             },
 
             lineStyle: function(width, color, capStyle, joinStyle){

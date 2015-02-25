@@ -66,18 +66,29 @@ body > header > h1{
     color: #FFFFFF;
     margin: 0px;
     padding: 0px;
-    border-color: #000000;
-    border-width: medium;
-    border-style: solid;
+    position: relative;
 }
-
+.tabs-menu:after{
+    position: absolute;
+    content: "";
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid #FFF;
+    z-index: 1;
+}
 .tabs-menu button{
+    margin: 0 10px;
+    padding: 0 10px;
+    border: 2px #111111 outset;
     background-color: #666666;
     color: #FFFFFF;
-    border-radius: 5px;
-    border: 2px #111111 outset;
-    margin: 3px;
-    font-size: 18px;
+    display: inline-block;
+    height: 100%;
+}
+.tabs-menu button[pressed='true']{
+    background-color: #FFFFFF;
+    color: #666666;
 }
 /* Show trash for sidebar while dragging */
 

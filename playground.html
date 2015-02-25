@@ -1039,14 +1039,23 @@
         <wb-splitter></wb-splitter>
         <wb-vbox>
             <div class="tabs-menu">
-                <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
-                <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
+                <button class="show-canvas" pressed='true'>Results</button>
+                <button class="show-tutorial">Tutorial</button>
             </div>
-            <wb-displaybox>
+            <wb-displaybox class="canvas" selected='true'>
                 <wb-playground>
                     <div class="menu">
                         <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
                         <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                    </div>
+                    <canvas></canvas>
+                </wb-playground>
+            </wb-displaybox>
+            <wb-displaybox class="tutorial">
+                <wb-playground>
+                    <div class="menu">
+                        <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Example</button>
+                        <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Example</button>
                     </div>
                     <canvas></canvas>
                 </wb-playground>

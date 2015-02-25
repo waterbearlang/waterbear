@@ -36,6 +36,9 @@ wb-displaybox{
     border-width: medium;
     border-style: solid;
 }
+wb-displaybox:not([selected='true']){
+    display: none;
+}
 wb-hbox > *{
     flex: 1 1 auto;
 }

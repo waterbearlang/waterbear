@@ -23,6 +23,31 @@ function info(text){
     message('#333', text);
 }
 
+// For switching between the tutorial and canvas
+Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
+    var tab = dom.closest(evt.target, 'button');
+    if(tab.getAttribute('pressed') !== 'true'){
+        var existing = tab.parentElement.querySelector('button[pressed=true]');
+        if(existing){existing.removeAttribute('pressed');}
+        tab.setAttribute('pressed', 'true');
+        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
+        if(existing){existing.removeAttribute('selected');}
+        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
+        tabAssoc.setAttribute('selected', 'true');
+    }
+});
+Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
+    var tab = dom.closest(evt.target, 'button');   
+    if(tab.getAttribute('pressed') !== 'true'){
+        var existing = tab.parentElement.querySelector('button[pressed=true]');
+        if(existing){existing.removeAttribute('pressed');}
+        tab.setAttribute('pressed', 'true');
+        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
+        if(existing){existing.removeAttribute('selected');}
+        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
+        tabAssoc.setAttribute('selected', 'true');
+    }
+});
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
 Event.on(document.body, 'ui:click', '.do-run', startScript);

@@ -54,7 +54,7 @@ wb-splitter{
 
 wb-hbox > wb-splitter, wb-workbox > wb-splitter{
     background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
-    background-image-size: 8px 8px;
+    background-size: 8px 8px;
     cursor: ew-resize;
 }
 
@@ -114,7 +114,7 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overfow: visible;
+    overflow: visible;
     padding-left: 6px;
 }
 

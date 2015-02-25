@@ -622,7 +622,7 @@
                 return new util.Path(getContext().closePath);
             },
             pathSet: function(args){
-                return new util.Shape(arguments);
+                return new util.Shape(Array.prototype.slice.call(arguments));
             },
 
             lineStyle: function(width, color, capStyle, joinStyle){

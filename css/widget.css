@@ -31,6 +31,11 @@ wb-workbox, wb-displaybox{
     flex-direction: row;
     height: 100%;
 }
+wb-displaybox{
+    border-color: #000000;
+    border-width: medium;
+    border-style: solid;
+}
 wb-hbox > *{
     flex: 1 1 auto;
 }

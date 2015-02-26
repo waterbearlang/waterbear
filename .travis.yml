@@ -1,4 +1,4 @@
 language: node_js
-before_script:
-  - npm install -g node-qunit-phantomjs
-script: ./tests.sh
+# The following are the default, but explicit is better.
+install: npm install
+script: npm test

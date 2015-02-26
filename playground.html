@@ -1053,11 +1053,15 @@
             </wb-displaybox>
             <wb-displaybox class="tutorial">
                 <wb-playground>
-                    <div class="menu">
-                        <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Example</button>
-                        <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Example</button>
-                    </div>
-                    <canvas></canvas>
+                    <wb-hbox class="tutorial-header">
+                        <select>
+                            <option> op1 </option>
+                            <option> op2 </option>
+                        </select>
+                        <h1>Waterbear Turorials</h1>
+                    </wb-hbox>
+                    <wb-hbox class="tutorial">description box </wb-hbox>
+                    <wb-hbox class="tutorial-output"> output and expected output </wb-hbox>
                 </wb-playground>
             </wb-displaybox>
         </wb-vbox>

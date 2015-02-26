@@ -13,6 +13,3 @@ set -x # Print every command.
 
 node-qunit-phantomjs test/runtime.html
 phantomjs test/all-blocks-have-functions.js playground.html
-node test/validate-css.js css/app.css
-node test/validate-css.js css/block.css
-node test/validate-css.js css/widget.css

@@ -1848,7 +1848,7 @@ QUnit.dump = (function() {
 					var len, i, val,
 						open = dump.HTML ? "&lt;" : "<",
 						close = dump.HTML ? "&gt;" : ">",
-						tag = node.localName,
+						tag = node.nodeName.toLowerCase(),
 						ret = open + tag,
 						attrs = node.attributes;
 

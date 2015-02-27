@@ -618,12 +618,12 @@
     };
 
     ascii.element = function (element) {
-        var tagName = element.localName;
+        var tagName = element.tagName.toLowerCase();
         var attrs = element.attributes, attr, pairs = [], attrName, i, l, val;
 
         for (i = 0, l = attrs.length; i < l; ++i) {
             attr = attrs.item(i);
-            attrName = attr.localName.replace("html:", "");
+            attrName = attr.nodeName.toLowerCase().replace("html:", "");
             val = attr.nodeValue;
             if (attrName !== "contenteditable" || val !== "inherit") {
                 if (!!val) { pairs.push(attrName + "=\"" + val + "\""); }

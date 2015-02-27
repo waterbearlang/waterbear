@@ -289,6 +289,8 @@
         }else if (this._draw){
             this._draw(ctx);
         }
+        ctx.fill();
+        ctx.stroke();
     }
 
 

@@ -22,9 +22,25 @@
     function getContext(){
         if (!_ctx){
             _ctx = canvas().getContext('2d');
+            // Save the default state.
+            _ctx.save();
         }
         return _ctx;
     }
+    function resetCanvas() {
+        // No context to reset!
+        if (!_ctx) {
+            return;
+        }
+
+        var el = canvas();
+        var ctx = getContext();
+        ctx.clearRect(0, 0, el.width, el.height);
+        // Restore the default state and push it back on the stack again.
+        ctx.restore();
+        ctx.save();
+    }
+
     Event.on(window, 'ui:load', null, function(){
         handleResize();
     }, false);
@@ -126,6 +142,7 @@
         startEventLoop: startEventLoop,
         stopEventLoop: stopEventLoop,
         clear: clearRuntime,
+        resetCanvas: resetCanvas,
 
         local: {
             //temporary fix for locals
@@ -605,7 +622,7 @@
                 return new util.Path(getContext().closePath);
             },
             pathSet: function(args){
-                return new util.Shape(arguments);
+                return new util.Shape(Array.prototype.slice.call(arguments));
             },
 
             lineStyle: function(width, color, capStyle, joinStyle){

@@ -27,7 +27,7 @@ page.open(pageName, function (status) {
         var selector = 'sidebar wb-context, sidebar wb-expression, sidebar wb-step';
         var allBlocks = document.querySelectorAll(selector);
         var badScripts = [];
-    
+
         /* Check the script for each block. */
         Array.prototype.forEach.call(allBlocks, function (block) {
             var scriptAttr = block.attributes.script;
@@ -69,7 +69,7 @@ page.open(pageName, function (status) {
 
         function addBadScript(block, reason) {
             badScripts.push({
-                'element': block.tagName.toLowerCase(),
+                'element': block.localName,
                 'script': block.attributes.script ?
                     block.attributes.script.value :
                     '<unknown>',

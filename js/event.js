@@ -114,7 +114,12 @@
                 handler(evt);
             }
         };
-        elem.addEventListener(eventname, listener, false);
+        /// liveFix is needed because Firefox doesn't support "focusin" events and "focus" events don't bubble
+        var liveFix = false;
+        if (selector && (eventname === 'focus' || eventname === 'blur')){ // any others?
+            liveFix = true;
+        }
+        elem.addEventListener(eventname, listener, liveFix);
         util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
     }

@@ -53,7 +53,7 @@ function setDefaultByTag(element, tagname, top){
 // Make sure these elements are always inserted into a header element
 // and that the header element exists
 function insertIntoHeader(){
-    var parent = this.parentElement.tagName.toLowerCase();
+    var parent = this.parentElement.localName;
     if (parent === 'header' || parent === 'wb-row') return;
     var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
     var head = setDefaultByTag(block, 'header');
@@ -72,7 +72,7 @@ var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
     setDefaultByTag(this, 'header', true);
-    // console.log('%s created with %s children', this.tagName.toLowerCase(), this.children.length);
+    // console.log('%s created with %s children', this.localName, this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
     // Add locals
@@ -91,11 +91,11 @@ BlockProto.attachedCallback = function blockAttached(){
     }else{
         // console.warn('free-floating block: %o, OK for now', this);
     }
-    // console.log('%s attached', this.tagName.toLowerCase());
+    // console.log('%s attached', this.localName);
 };
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
-    // console.log('%s detached', this.tagName.toLowerCase());
+    // console.log('%s detached', this.localName);
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -103,7 +103,7 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    title or help (do nothing)
     //    script (do nothing)
     //    type (do nothing
-    // console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
+    // console.log('%s[%s] %s -> %s', this.localName, attrName, oldVal, newVal);
 };
 BlockProto.gatherValues = function(scope){
     if (!this.values){
@@ -145,7 +145,7 @@ function handleVariableFocus(evt){
     // Gather all the locals so we can update them
     // TODO: Cancel if the new variable name is already in scope
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isVariable')){
+    if (!input.parentElement.hasAttribute('isvariable')){
         return
     }
     var parentContext = dom.closest(input, 'wb-contains');
@@ -160,7 +160,7 @@ function handleVariableFocus(evt){
 function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isVariable')){
+    if (!input.parentElement.hasAttribute('isvariable')){
         return;
     }
     var newVariableName = input.value;
@@ -175,18 +175,18 @@ function handleVariableInput(evt){
 function handleVariableBlur(evt){
     // Cleanup
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isVariable')){
+    if (!input.parentElement.hasAttribute('isvariable')){
         return;
     }
     variableLocalsToUpdate = null;
     oldVariableName = '';
 }
 
-Event.on(document.body, 'editor:focus', '[isVariable] input', handleVariableFocus); // Mozilla
-Event.on(document.body, 'editor:focusin', '[isVariable] input', handleVariableFocus); // All other browsers
-Event.on(document.body, 'editor:input', '[isVariable] input', handleVariableInput);
-Event.on(document.body, 'editor:blur',  '[isVariable] input', handleVariableBlur); // Mozilla
-Event.on(document.body, 'editor:focusout',  '[isVariable] input', handleVariableBlur); // All other browsers
+Event.on(document.body, 'editor:focus', '[isvariable] input', handleVariableFocus); // Mozilla
+Event.on(document.body, 'editor:focusin', '[isvariable] input', handleVariableFocus); // All other browsers
+Event.on(document.body, 'editor:input', '[isvariable] input', handleVariableInput);
+Event.on(document.body, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
+Event.on(document.body, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
@@ -234,7 +234,7 @@ ContextProto.run = function(parentScope){
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
     var blockAdded = evt.detail;
-    if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
+    if (blockAdded && blockAdded.localName === 'wb-expression'){
         var type = blockAdded.getAttribute('type');
         var header = dom.child(this, 'header');
         if (!header){
@@ -256,7 +256,7 @@ ContextProto.showLocals = function(evt){
 ContextProto.hideLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
     var blockAdded = evt.detail;
-    if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
+    if (blockAdded && blockAdded.localName === 'wb-expression'){
         var header = dom.child(this, 'header');
         if (!header) return;
         var row = dom.child(header, 'wb-row');
@@ -321,7 +321,7 @@ ExpressionProto.attachedCallback = function expressionAttached(){
             sib.classList.add('hide');
         });
     }
-    if (this.parent.tagName.toLowerCase() !== 'wb-local'){
+    if (this.parent.localName !== 'wb-local'){
         var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
         if (blockParent){
             Event.trigger(blockParent, 'wb-added', this);
@@ -337,7 +337,7 @@ ExpressionProto.detachedCallback = function expressionDetached(){
             sib.classList.remove('hide');
         });
     }
-    if (this.parent.tagName.toLowerCase() !== 'wb-local'){
+    if (this.parent.localName !== 'wb-local'){
         var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
         if (blockParent){
             Event.trigger(blockParent, 'wb-removed', this);
@@ -420,7 +420,7 @@ window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: Disc
 function toggleClosed(evt){
     console.log('toggle');
     var block = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
-    console.log('%s closed = %s', block.tagName.toLowerCase(), block.getAttribute('closed'));
+    console.log('%s closed = %s', block.localName, block.getAttribute('closed'));
     if (block.hasAttribute('closed')){
         block.removeAttribute('closed');
     }else{
@@ -637,7 +637,7 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
     dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
     // Warning here: origTarget may be null, and thus, not have a
     // parentElement.
-    if (origTarget.parentElement.nodeName.toLowerCase() === 'wb-local'){
+    if (origTarget.parentElement.localName === 'wb-local'){
         dragStart = 'menu';
     }
     if (dragStart === 'script'){

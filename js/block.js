@@ -634,7 +634,7 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
 
     dragTarget = dom.clone(origTarget);
     document.body.appendChild(dragTarget);
-    dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
+    dragStart = dom.matches(origTarget, 'wb-contains *, wb-value *') ? 'script' : 'menu';
     // Warning here: origTarget may be null, and thus, not have a
     // parentElement.
     if (origTarget.parentElement.localName === 'wb-local'){
@@ -715,54 +715,52 @@ function dropTargetIsContainer(potentialDropTarget){
    }
 }
 
+function addToContains(block, evt){
+    // dropping directly into a contains section
+    // insert as the first block unless dropped after the entire script
+    if (dropTarget.matches('wb-contains')){
+        if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
+            dropTarget.appendChild(block);
+        }else{
+            dropTarget.insertBefore(block, dropTarget.firstElementChild);
+        }
+    }else{
+        // dropping on a block in the contains, insert after that block
+        dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
+    }
+}
+
 Event.on(document.body, 'editor:drag-end', null, function(evt){
+    if (dragStart === 'script'){
+        origTarget.parentElement.removeChild(origTarget);
+        origTarget = null;
+    }
     if (!dropTarget){
-       if(dragTarget){
-          dragTarget.parentElement.removeChild(dragTarget);
-       }
+        // console.log('no dropTarget');
+        if(dragTarget){
+            dragTarget.parentElement.removeChild(dragTarget);
+        }
        // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
+        // console.log('delete both clone and original');
         dragTarget.parentElement.removeChild(dragTarget);
-        if (dragStart === 'script'){
-            // only delete original if it is in the script, not menu
-            // FIXME: Don't delete originals in locals
-            origTarget.parentElement.removeChild(origTarget);
-            origTarget = null;
-        }
     }else if(dragTarget.matches('wb-expression')){
-      if (dropTarget.matches('wb-value')) {
-         dropTarget.appendChild(dragTarget);
-      } else {
-          // Create variable block to wrap the expression.
-          var variableBlock = createVariableBlock(dragTarget);
-          dropTarget.appendChild(variableBlock);
-      }
-
+        if (dropTarget.matches('wb-value')) {
+            // console.log('add expression to value');
+            dropTarget.appendChild(dragTarget);
+        }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
+            // Create variable block to wrap the expression.
+            // console.log('create a variable block and add expression to it');
+            addToContains(createVariableBlock(dragTarget), evt);
+        }
     }else if(dragTarget.matches('wb-context, wb-step')){
-        if (dropTarget.matches('wb-contains')){
-            // dropping directly into a contains section
-            // insert as the first block unless dropped after the entire script
-            if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
-                dropTarget.appendChild(dragTarget);
-            }else{
-                dropTarget.insertBefore(dragTarget, dropTarget.firstElementChild);
-            }
-        }else{
-            // dropping on a block in the contains, insert after that block
-            dropTarget.parentElement.insertBefore(dragTarget, dropTarget.nextElementSibling);
-        }
-        if (dragStart === 'script'){
-            // only delete original if it is in the script, not menu
-            // FIXME: Don't delete originals in locals
-            // FIXME: Duplicated code, refactor
-            origTarget.parentElement.removeChild(origTarget);
-            origTarget = null;
-        }
+        // console.log('add to contains');
+        addToContains(dragTarget, evt);
     }else{
+        // console.log('no match, delete the cloned element (and show the original)');
         dragTarget.parentElement.removeChild(dragTarget);
     }
-
     resetDragging();
 });
 

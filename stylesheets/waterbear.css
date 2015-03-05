@@ -1,5 +1,6 @@
 body{
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* Helvetica/Arial-based sans serif stack */
+    font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.2em;
     line-height: 1.6em;
 }
@@ -73,4 +74,289 @@ h5{ font-size: 100%; }
 .attribution{
     text-align: right;
     font-style: italic;
+}
+
+html, body{
+    margin:0px;
+    padding:0px;
+    background-color:#f9f9f9;
+    width:100%;
+}
+*::selection{
+    background:#0af;
+    color:#fff;
+}
+section{
+    min-height: 100px;
+}
+.s1{
+    width:100%;
+    background:#333;
+    color:#fff;
+    padding:10px 50px;
+    font-size: 25px;
+    box-sizing:border-box;
+    position:fixed;
+    z-index: 123456789;
+    box-shadow:0px 0px 20px #000;
+}
+.s2{
+    display:flex;
+    flex-align:center;
+    align-items:center;
+    height:100%;
+}
+.s2 > div{
+    display:flex;
+    width:100%;
+}
+.s2 .s2-2.steampunk{
+    flex:1000;
+    min-width:200px;
+    max-width:300px;
+}
+
+.steampunk img{
+    width: 100%;
+}
+
+.s2 .s2-1{
+    flex:1 0 0;
+    max-width: 400px;
+    min-width: 10px;
+}
+.s2 .s2-3{
+    flex:1;
+    max-width: 325px;
+    min-width: 325px;
+    padding-left: 50px;
+    display:flex;
+    flex-align:center;
+    align-items:center;
+}
+.s2 .s2-3 h1{
+    color:#09f;
+    font-size: 50px;
+    margin:0px;
+}
+.s2 .s2-3 h2{
+    font-style: italic;
+    font-size: 25px;
+    margin:0px;
+}
+.s2 .s2-3 p{color:#999}
+.button{
+    background:transparent;
+    outline:none;
+    border:2px solid #222;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px 20px;
+    transition:color .3s ease, border-color .3s ease;
+    cursor:pointer;
+    position: relative;
+}
+.button:before{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: -2px;
+    left:100%;
+    border-top: 22.5px solid transparent;
+    border-bottom: 22.5px solid transparent;
+    border-left: 0px solid #000;
+    transition:border .3s ease;
+}
+.button:after{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 0;
+    left:100%;
+    margin-left: 0px;
+    border-top: 20.5px solid transparent;
+    border-bottom: 20.5px solid transparent;
+    border-left: 0px solid #999;
+    transition:border .3s ease;
+}
+.button:hover::before{
+    border-left-width:22.5px;
+    border-left-color:#09f;
+}
+.button:hover::after{
+    border-left-width:20.5px;
+    border-left-color:#f9f9f9;
+}
+.button:hover{
+    color:#09f;
+    border-color:#09f;
+    border-right:none;
+    transition:color .3s ease, border-color .3s ease;
+}
+.s2 .s2-4{
+    flex:1 0 0;
+    min-width: 100px;
+    display:flex;
+    flex-align:center;
+    align-items:center;
+}
+
+.s2 .s2-4 ul{
+    padding:0px;
+    margin-left:auto;
+    display:inline-block;
+}
+.s2 .s2-4 ul li{
+    list-style: none;
+    width:15px;
+    height:15px;
+    background:#222;
+    margin:15px 30px;
+    border-radius: 50%;
+    cursor:pointer;
+    box-shadow:inset 0px 0px 0px 8px #222;
+    transition:box-shadow .3s ease, background .5s ease;
+}
+.s2 .s2-4 ul li:hover{
+    box-shadow:inset 0px 0px 0px 8px #09f;
+    background:#09f;
+}
+.s2 .s2-4 ul li.checked{
+    background:none;
+    box-shadow:inset 0px 0px 0px 2px #222;
+}
+
+.s3{
+    background:#e9e9e9;
+    display:flex;
+}
+.s3 > div{
+    flex:1;
+    min-width: 400px;
+    margin:50px;
+    display:flex;
+}
+.s3 > div > div{
+    flex:1;
+    text-align: left;
+    color:#666;
+    padding:0px 20px;
+}
+.circle{
+    width:150px;
+    height:150px;
+    background-color:#fff;
+    border-radius: 50%;
+    margin:auto;
+    border:1px solid #aaa;
+    background-repeat: no-repeat;
+}
+/* Individual circles */
+.community{
+    background-image: url(../images/mascot/mascot-community.png);
+    background-size: 150px;
+    background-position: 0 30px;
+}
+.scratch{
+    background-image: url(../images/mascot/mascot-dancing.png);
+    background-size: 150px;
+    background-position: 0 30px;
+}
+.tardigrade{
+    background-image: url(../images/mascot/mascot-space.png);
+    background-size: 200px;
+    background-color: #000;
+    background-position: -25px 0;
+}
+.github{
+    background-image: url(../images/mascot/mascot-github.png);
+    background-size: 100px;
+    background-position: 20px 10px;
+}
+.s3 > div > div h2{
+    color:#09f;
+    text-align: center;
+}
+.s4{
+    background:#09f;
+}
+.s4{
+    display:flex;
+    padding:25px;
+}
+.s4 .s4-1{
+    flex:1;
+    padding:25px;
+}
+.s4 .s4-1 blockquote{
+    font-size:18px;
+
+    color:#fff;
+}
+.s4 .s4-1 blockquote i{
+    font-size: 15px;
+    font-weight: 100;
+    color:#000;
+}
+.s4 .s4-2{
+    flex:1;
+    padding:25px;
+    display:flex;
+    flex-align:center;
+    align-items:center;
+}
+.s5{
+    background:#fff;
+    box-shadow:0px 0px 20px rgba(0,0,0,0.4);
+    display:flex;
+    padding:25px;
+}
+.s5-1, .s5-2, .s5-3, .s5-4{
+    flex:1;
+    padding:25px;
+}
+.s5-1 h2, .s5-2 h2, .s5-3 h2, .s5-4 h2{
+    font-size:20px;
+    margin:0px;
+    margin-bottom:5px;
+}
+.s5-1 a, .s5-2 a, .s5-3 a{
+    text-decoration: none;
+    color:#09f;
+    font-style: italic;
+    font-weight: bold;
+}
+.s5-1 a:hover, .s5-2 a:hover, .s5-3 a:hover{
+    text-decoration: underline;
+}
+.s5-2 label{
+    color:#999;
+}
+.btn{
+    display:block;
+    margin-top:10px;
+    margin-bottom: 10px;
+    background-color:#09f;
+    color:#fff;
+    padding:5px 10px;
+    font-size:18px;
+    border-radius: 3px;
+    cursor:pointer;
+    transition:all .2s;
+    border:1px solid transparent;
+}
+.btn:hover{
+    background-color:transparent;
+    color:#09f;
+    border:1px solid #09f;
+}
+
+.btn:before{
+    margin-right:10px;
+    font-size:22px;
+}
+.btn.fa-envelope:before{
+    font-size:18px;
 }

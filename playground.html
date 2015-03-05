@@ -153,12 +153,24 @@
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">accelerate by</wb-value>
                 </wb-step>
+                <wb-step class="sprite" script="sprite.setVelocity">
+                    <wb-value type="sprite"></wb-value>
+                    <wb-value type="vector">set velocity to</wb-value>
+                </wb-step>
+                <wb-expression type="number" script="sprite.getXvel">
+                    <wb-value type="sprite">get X velocity</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="sprite.getYvel">
+                    <wb-value type="sprite">get Y velocity</wb-value>
+                </wb-expression>
                 <wb-step script="sprite.rotate" class="sprite">
                     <wb-value type="sprite">rotate</wb-value>
                     <wb-value type="number">by</wb-value>
                 </wb-step>
                 <wb-step script="sprite.rotateTo" class="sprite">
-                    <wb-value type="sprite">rotate</wb-value>
+                    <wb-row>
+                        <wb-value type="sprite">rotate</wb-value>
+                    </wb-row>
                     <wb-row>
                         <wb-value type="number">to</wb-value>
                         <wb-unit>degrees</wb-unit>
@@ -167,7 +179,7 @@
                 <wb-step script="sprite.move" class="sprite">
                     <wb-value type="sprite">move</wb-value>
                 </wb-step>
-                <wb-step script="sprite.moveTo">
+                <wb-step script="sprite.moveTo" class="sprite">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="point,vector">move to</wb-value>
                 </wb-step>
@@ -178,13 +190,13 @@
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">apply force</wb-value>
                 </wb-step>
-                <wb-step script="sprite.bounceAtEdge">
+                <wb-step script="sprite.bounceAtEdge" class="sprite">
                     <wb-value type="sprite">bounce at edge</wb-value>
                 </wb-step>
-                <wb-step script="sprite.wrapAtEdge">
+                <wb-step script="sprite.wrapAtEdge" class="sprite">
                     <wb-value type="sprite">wrap at edge</wb-value>
                 </wb-step>
-                <wb-step script="sprite.stopAtEdge">
+                <wb-step script="sprite.stopAtEdge" class="sprite">
                     <wb-value type="sprite">stop at edge</wb-value>
                 </wb-step>
             </wb-accordion>

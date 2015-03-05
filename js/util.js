@@ -143,6 +143,7 @@
         this.x = x;
         this.y = y;
     }
+    
     Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
@@ -151,6 +152,14 @@
         return new Vector(pt.x, pt.y);
     }
 
+    Vector.prototype.getX = function(){
+        return this.x;
+    }
+    
+    Vector.prototype.getY = function(){
+        return this.y;
+    }
+    
     Vector.prototype.magnitude = function(){
         return sqrt(this.x * this.x + this.y * this.y);
     }
@@ -883,6 +892,18 @@
     Sprite.prototype.accelerate = function(speed){
         this.velocity = add(this.velocity, multiply(this.facing, speed));
         // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+    
+    Sprite.prototype.setVelocity = function(vec){
+        this.velocity = vec;
+    }
+    
+    Sprite.prototype.getXvel = function(){
+        return this.velocity.getX();
+    }
+    
+    Sprite.prototype.getYvel = function(){
+        return this.velocity.getY();
     }
 
     Sprite.prototype.applyForce = function(vec){

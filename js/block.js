@@ -736,23 +736,29 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
         origTarget = null;
     }
     if (!dropTarget){
-       if(dragTarget){
-          dragTarget.parentElement.removeChild(dragTarget);
-       }
+        // console.log('no dropTarget');
+        if(dragTarget){
+            dragTarget.parentElement.removeChild(dragTarget);
+        }
        // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
+        // console.log('delete both clone and original');
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
-      if (dropTarget.matches('wb-value')) {
-         dropTarget.appendChild(dragTarget);
-      } else if (dragTarget.matches('wb-context, wb-step')){
-          // Create variable block to wrap the expression.
-          addToContains(createVariableBlock(dragTarget), evt);
-      }
+        if (dropTarget.matches('wb-value')) {
+            // console.log('add expression to value');
+            dropTarget.appendChild(dragTarget);
+        }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
+            // Create variable block to wrap the expression.
+            // console.log('create a variable block and add expression to it');
+            addToContains(createVariableBlock(dragTarget), evt);
+        }
     }else if(dragTarget.matches('wb-context, wb-step')){
+        // console.log('add to contains');
         addToContains(dragTarget, evt);
     }else{
+        // console.log('no match, delete the cloned element (and show the original)');
         dragTarget.parentElement.removeChild(dragTarget);
     }
     resetDragging();

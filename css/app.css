@@ -144,3 +144,13 @@ wb-accordion.shape > header:after{ background-color: hsl(84, 93%, 56%); }
 wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
 wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
 wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
+
+/* Prevent selecting text while dragging */
+.dragging *{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

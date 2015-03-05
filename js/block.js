@@ -650,7 +650,8 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
 
 Event.on(document.body, 'editor:dragging', null, function(evt){
     if (!dragTarget){ return; }
-
+    evt.preventDefault();
+    evt.stopPropagation();
     // FIXME: hardcoded margin (???) values.
     // Essentially, the block is always dragged at an area 15 px away from the
     // top-left corner.

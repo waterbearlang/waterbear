@@ -818,7 +818,16 @@
             accelerate: function(spt, speed){
                 spt.accelerate(speed);
             },
-            rotate: function(spt, angle, _){
+            setVelocity: function(spt, vec){
+                spt.setVelocity(vec);
+            },
+            getXvel: function(spt){
+                return spt.getXvel();
+            },
+            getYvel: function(spt){
+                return spt.getYvel();
+            },
+            rotate: function(spt, angle){
                 spt.rotate(angle);
             },
             rotateTo: function(spt, angle){

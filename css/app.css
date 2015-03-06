@@ -68,16 +68,17 @@ body > header > h1{
     padding: 0px;
     position: relative;
     white-space: nowrap;
+    border: 1px solid #000;    
 }
-.tabs-menu:after{
+/*.tabs-menu:after{
     position: absolute;
     content: "";
     width: 100%;
     bottom: 0;
     left: 0;
-    border-bottom: 1px solid #FFF;
+    
     z-index: 1;
-}
+}*/
 .tabs-menu button{
     margin: 0 10px;
     padding: 0 10px;
@@ -86,7 +87,7 @@ body > header > h1{
     color: #FFFFFF;
     display: inline-block;
     height: 30px;
-    width: 200px;
+    width: 150px;
 }
 .tabs-menu button[pressed='true']{
     background-color: #FFFFFF;
@@ -177,7 +178,12 @@ wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
 wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
 wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
 
-
+.tutorial{
+    margin: 0 auto;
+    width: 100%;
+    flex-direction: column;
+    overflow-y: auto;
+}
 
 .tutorial-header{
     border-style: solid;
@@ -185,19 +191,43 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     padding: 10px 10px;
     background-color: slateblue;
     font-size: 35px;
+    position: relative;
+    height: 30px;
+    max-height: 30px;
+    min-height: 30px;
+    display: inline-block;
+    margin: 0 auto;
+    width: 100%;
+    flex-direction: row;
 }
 .tutorial-header > h1{
     padding-left:20px;
+    display: inline-block;
 }
-.tutorial{
-    display: flex;
+.tutorial-header > select{
+    display: inline-block;
+    width: 200px;
+}
+.tutorial-main{
+    background-color: palegoldenrod;
+    display: inline-block;
+    height: 300px;
+    min-height: 300px;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
     flex-direction: row;
-    flex: 2 1 45%;
 }
 .tutorial-output{
-    display: flex;
+    display: inline-block;
+    height: 200px;
+    max-height: 200px;
+    min-height: 200px;
+    background: coral;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
     flex-direction: row;
-    flex: 2 1 45%;
 }
 
 

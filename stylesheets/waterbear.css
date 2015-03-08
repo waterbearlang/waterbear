@@ -105,14 +105,6 @@ section{
     z-index: 123456789;
     box-shadow:0px 0px 20px #000;
 }
-.s1:after{
-    content: '';
-    font-size: 25px;
-    padding: 10px 50px;
-    box-sizing: border-box;
-    width: 100%;
-    display: block;
-}
 
 .s2{
     display:flex;

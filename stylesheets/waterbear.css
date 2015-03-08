@@ -10,9 +10,9 @@ h1, h2, h3, h4, h5, h6{
 }
 
 h1{ font-size: 300%; }
-h2{ font-size: 200%; }
-h3{ font-size: 150%; }
-h4{ font-size: 120%; }
+h2{ font-size: 150%; }
+h3{ font-size: 120%; }
+h4{ font-size: 100%; font-weight: bold; }
 h5{ font-size: 100%; }
 
 
@@ -53,7 +53,6 @@ h5{ font-size: 100%; }
 .tardigrade{
     width: 300px;
     height: 200px;
-    float: left;
     margin-right: 20px;
     margin-bottom: 20px;
 }
@@ -100,6 +99,15 @@ section{
     z-index: 123456789;
     box-shadow:0px 0px 20px #000;
 }
+.s1:after{
+    content: '';
+    font-size: 25px;
+    padding: 10px 50px;
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+}
+
 .s2{
     display:flex;
     flex-align:center;

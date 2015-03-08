@@ -10,10 +10,15 @@ h1, h2, h3, h4, h5, h6{
 }
 
 h1{ font-size: 300%; }
-h2{ font-size: 150%; }
+h2{ font-size: 120%; font-weight: bold; }
 h3{ font-size: 120%; }
 h4{ font-size: 100%; font-weight: bold; }
 h5{ font-size: 100%; }
+
+p{
+    font-size: 1em;
+    line-height: 1.2;
+}
 
 
 .content{
@@ -96,6 +101,7 @@ section{
     font-size: 25px;
     box-sizing:border-box;
     position:fixed;
+    top: 0px;
     z-index: 123456789;
     box-shadow:0px 0px 20px #000;
 }
@@ -113,6 +119,7 @@ section{
     flex-align:center;
     align-items:center;
     height:100%;
+    margin-top: 64px;
 }
 .s2 > div{
     display:flex;
@@ -146,13 +153,20 @@ section{
     color:#09f;
     font-size: 50px;
     margin:0px;
+    font-weight: bold;
 }
 .s2 .s2-3 h2{
     font-style: italic;
     font-size: 25px;
+    font-weight: bold;
     margin:0px;
 }
-.s2 .s2-3 p{color:#999}
+
+.s2 .s2-3 p{
+    color:#999;
+    line-height: 1.2;
+}
+
 .button{
     background:transparent;
     outline:none;
@@ -367,4 +381,7 @@ section{
 }
 .btn.fa-envelope:before{
     font-size:18px;
+}
+.btn.fa {
+    display: block; /* yes, for real */
 }

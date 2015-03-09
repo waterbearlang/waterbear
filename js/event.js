@@ -114,7 +114,12 @@
                 handler(evt);
             }
         };
-        elem.addEventListener(eventname, listener, false);
+        /// liveFix is needed because Firefox doesn't support "focusin" events and "focus" events don't bubble
+        var liveFix = false;
+        if (selector && (eventname === 'focus' || eventname === 'blur')){ // any others?
+            liveFix = true;
+        }
+        elem.addEventListener(eventname, listener, liveFix);
         util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
     }
@@ -244,6 +249,7 @@
         dragTarget = null;
         isDragging = false;
         Event.pointerDown = false;
+        document.body.classList.remove('dragging');
         trigger(document, 'drag-reset');
     }
 
@@ -253,6 +259,8 @@
         if (dom.closest(evt.target, 'input, select')){
             return undefined;
         }
+        // prevent text selection while dragging
+        document.body.classList.add('dragging');
         Event.pointerDown = true;
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
@@ -286,6 +294,7 @@
             }
         }
         evt.preventDefault();
+        evt.stopPropagation();
         forward(dragTarget, 'dragging', evt);
         return false;
     }

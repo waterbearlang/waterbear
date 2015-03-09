@@ -183,7 +183,7 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     margin: 0 auto;
     width: 100%;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 .tutorial-header{
@@ -200,6 +200,9 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     margin: 0 auto;
     width: 100%;
     flex-direction: row;
+    white-space: nowrap;
+    overflow-x: visible;
+    min-width: 750px;
 }
 .tutorial-header > h1{
     padding-left:20px;
@@ -224,6 +227,9 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     margin: 0 auto;
     width: 100%;
     flex-direction: row;
+    white-space: nowrap;
+    overflow-x: visible;
+    min-width: 750px;
 }
 .tutorial-output{
     display: inline-block;
@@ -237,6 +243,9 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     width: 100%;
     flex-direction: row;
     font-size:20px;
+    white-space: nowrap;
+    overflow-x: visible;
+    min-width: 750px;
 }
 .tutorial-output > div{
     flex-direction: column;
@@ -264,6 +273,9 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     margin: 0 auto;
     width: 100%;
     flex-direction: row;
+    white-space: nowrap;
+    overflow-x: visible;
+    min-width: 750px;
 }
 .tutorial-finished[completed=true]{
     padding-top: 20px;

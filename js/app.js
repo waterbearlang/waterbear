@@ -23,6 +23,24 @@ function info(text){
     message('#333', text);
 }
 
+//For displaying the finished block
+Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var finished = button.parentElement.parentElement.parentElement.querySelector('wb-hbox[class="tutorial-finished"]');
+    finished.setAttribute('completed', 'true');
+
+});
+
+//For switching to the next step
+//at this point it just removes the finish block
+Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var tut = button.parentElement.parentElement.parentElement.parentElement;
+    tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
+    tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
+    
+});
+
 // For switching between the tutorial and canvas
 Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
     var tab = dom.closest(evt.target, 'button');

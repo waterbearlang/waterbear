@@ -28,8 +28,14 @@
         <a href="index.html"><img src="images/logo/waterbear_icon_logo.svg" /></a>
     	<h1>Waterbear with Custom Elements</h1>
     </header>
-    
     <wb-hbox>
+        <wb-vbox>
+        
+        <div class="menu">
+            <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
+            <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
+        </div>
+        <wb-workbox>
         <sidebar>
             <wb-search></wb-search>
             <wb-accordion class="control">

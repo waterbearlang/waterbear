@@ -73,6 +73,7 @@ wb-workspace{
     display: flex;
     flex-direction: column;
     flex: 2 1;
+    overflow-x: auto;
 }
 
 wb-workspace > header{

@@ -848,6 +848,14 @@
         ctx.drawImage(this._image, r.x, r.y, r.width, r.height);
     };
 
+    WBImage.prototype.getHeight = function(){
+        return this.height;
+    };
+    
+    WBImage.prototype.getWidth = function(){
+        return this.width;
+    };    
+    
     WBImage.prototype.setWidth = function(w){
         this.width = w;
         this.height = this.width / this.origProportion;

@@ -453,6 +453,12 @@
                 <wb-expression type="wb-image" isAsset="true" script="image.get" class="image">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                 </wb-expression>
+                <wb-expression type="number" script="image.getWidth">
+                    <wb-value type="wb-image" allow="block">image width</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="image.getHeight">
+                    <wb-value type="wb-image" allow="block">image height</wb-value>
+                </wb-expression>
                 <wb-step script="image.setWidth" class="image">
                     <wb-value type="wb-image" allow="block">set</wb-value>
                     <wb-value type="number">width</wb-value>

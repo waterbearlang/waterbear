@@ -446,6 +446,12 @@
             drawAtPoint: function(img, pt){
                 img.drawAtPoint(getContext(), pt);
             },
+            getWidth: function(img){
+                return img.getWidth();
+            },
+            getHeight: function(img){
+                return img.getHeight();
+            },
             setWidth: function(img, w){
                 img.setWidth(w);
             },

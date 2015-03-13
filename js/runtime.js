@@ -833,6 +833,12 @@
             getYvel: function(spt){
                 return spt.getYvel();
             },
+            getXpos: function(spt){
+                return spt.getXpos();
+            },
+            getYpos: function(spt){
+                return spt.getYpos();
+            },
             rotate: function(spt, angle){
                 spt.rotate(angle);
             },

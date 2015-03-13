@@ -913,6 +913,14 @@
     Sprite.prototype.getYvel = function(){
         return this.velocity.getY();
     }
+    
+    Sprite.prototype.getXpos = function(){
+        return this.position.getX();
+    }
+    
+    Sprite.prototype.getYpos = function(){
+        return this.position.getY();
+    }
 
     Sprite.prototype.applyForce = function(vec){
         this.velocity = add(this.velocity, vec);

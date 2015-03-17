@@ -60,6 +60,11 @@ body > header > h1{
     font-size: 18px;
 }
 
+.menu button[disabled] {
+    color: #999;
+    border-color: #333;
+}
+
 /* Show trash for sidebar while dragging */
 
 sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{

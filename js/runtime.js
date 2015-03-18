@@ -446,6 +446,12 @@
             drawAtPoint: function(img, pt){
                 img.drawAtPoint(getContext(), pt);
             },
+            getWidth: function(img){
+                return img.getWidth();
+            },
+            getHeight: function(img){
+                return img.getHeight();
+            },
             setWidth: function(img, w){
                 img.setWidth(w);
             },
@@ -826,6 +832,12 @@
             },
             getYvel: function(spt){
                 return spt.getYvel();
+            },
+            getXpos: function(spt){
+                return spt.getXpos();
+            },
+            getYpos: function(spt){
+                return spt.getYpos();
             },
             rotate: function(spt, angle){
                 spt.rotate(angle);

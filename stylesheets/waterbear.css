@@ -353,6 +353,7 @@ section{
     margin-bottom: 10px;
     background-color:#09f;
     color:#fff;
+    fill:#fff;
     padding:5px 10px;
     font-size:18px;
     border-radius: 3px;
@@ -363,16 +364,20 @@ section{
 .btn:hover{
     background-color:transparent;
     color:#09f;
+    fill:#09f;
     border:1px solid #09f;
 }
 
-.btn:before{
-    margin-right:10px;
-    font-size:22px;
+.ico:before{
+    display: inline-block;
+    position: relative;
+    top: 4px; /* The icons down a bit. */
+    width: 20px;
+    height: 20px;
+    margin-right: 0.25em;
 }
-.btn.fa-envelope:before{
-    font-size:18px;
-}
-.btn.fa {
-    display: block; /* yes, for real */
-}
+
+.ico.ico-github:before{ content: url(../images/landing/github.svg) }
+.ico.ico-twitter:before{ content: url(../images/landing/twitter.svg) }
+.ico.ico-mailing-list:before{ content: url(../images/landing/email.svg) }
+.ico.ico-blog:before{ content: url(../images/landing/external.svg) }

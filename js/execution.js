@@ -27,14 +27,19 @@ window.WaterbearProcess = (function () {
     }
 
     /**
-     * Runes the next instruction, updating the instruction pointer and stack
+     * Runes the next instruction, updating the instruction pointer and scope
      * as appropriate.
+     *
+     * Returns: true if this context has more instructions to execute.
      */
     Context.prototype.doNext = function next() {
+        assert(this.currentInstruction !== null, 'current instruction undefined.');
+
         /* The scope is mutable so... it gets mutated. */
         this.currentInstruction.run(this.scope);
-
         this.currentInstruction = this.next();
+
+        return this.currentInstruction !== null;
     };
 
     /**
@@ -42,11 +47,14 @@ window.WaterbearProcess = (function () {
      */
     Context.prototype.next = function next() {
         var nextInstruction;
-        assert(false, 'Not implemented');
-        /* TODO */
 
-        assert(typeof nextInstruction.run === 'function',
+        /* FIXME: TERIBLE SEPERATION OF CONCERNS AND ALSO WRONG. */
+        nextInstruction = this.currentInstruction.nextSibling;
+
+        assert(nextInstruction === null || typeof nextInstruction.run === 'function',
                'Block does not have a callable property `run`');
+
+        return nextInstruction;
     };
 
     /**
@@ -78,7 +86,7 @@ window.WaterbearProcess = (function () {
         this.shouldBreak = false;
         /* Run as quickly as possible. */
         this.delay = 0;
-        this.nextCallback = null;
+        this.nextTimeout = null;
 
         this.doNextStep = this.nextStep.bind(this);
 
@@ -121,22 +129,23 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Resume executing immediately. Execution is fast as the rate given to `setRate`
-     * (default: unlimited).
+     * Resume executing immediately. Execution is as fast as the rate given to
+     * `setRate` (default: unlimited).
      */
-    Process.prototype.resumeAsync = function () {
+    Process.prototype.resumeAsync = function resumeAsync() {
         assert(this.started);
 
         this.paused = false;
-        enqueue(this.doNextStep);
+        this.nextTimeout = enqueue(this.doNextStep);
     };
 
     /**
      * Requests execution to pause before the next instruction.
      */
-    Process.prototype.pause = function disableBreakpoints() {
+    Process.prototype.pause = function pause() {
         assert(this.started);
-        /* TODO: */
+        this.paused = true;
+        this.cancelNextTimeout();
         return this;
     };
 
@@ -155,23 +164,14 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Requests execution to stop.
-     */
-    Process.prototype.pause = function disableBreakpoints() {
-        assert(this.started);
-
-        this.paused = false;
-        return this;
-    };
-
-    /**
      * Requests to cleanly terminates the current process.
      * Once this has happened, this process should no longer be used.
      * `cb` is called once the process has cleanly terminated.
      */
     Process.prototype.terminate = function terminate(cb) {
         assert(this.started);
-        /* TODO: */
+        this.pause();
+        /* TODO: I dunno what else should be cleaned. */
         return this;
     };
 
@@ -201,13 +201,35 @@ window.WaterbearProcess = (function () {
      * CALL (which is the only way anything will ever work :/).
      */
     Process.prototype.nextStep = function nextStep() {
+        var hasNext;
         if (this.paused) {
             return;
         }
 
+        /* TODO: Decide if we should break. */
+        /* TODO: Decide if we should switch to a different context. */
+
         /* Setup the next step to run after delay. */
-        this.currentContext.doNext();
-        setTimeout(this.doNextStep, this.delay);
+        hasNext = this.currentContext.doNext();
+
+        if (hasNext) {
+            this.nextTimeout = setTimeout(this.doNextStep, this.delay);
+        } else {
+            /* TODO: this context is now terminated... */
+            /* FIXME: Remove this console.log. */
+            console.log('Context execution halted...');
+        }
+    };
+
+    /**
+     * Prevents the next callback from running.
+     */
+    Process.prototype.cancelNextTimeout = function cancelNextTimeout() {
+        if (this.nextTimeout !== null) {
+            clearTimeout(this.nextTimeout);
+            this.nextTimeout = null;
+        }
+        return this;
     };
 
 

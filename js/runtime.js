@@ -97,6 +97,7 @@
         /* TODO: Dunno lol there be more in here? */
     }
 
+    /* TODO: I laterally don't know how I'm going to do this. */
     function frameHandler(){
         // where to put these? Event already has some global state.
         var currTime = new Date().valueOf();

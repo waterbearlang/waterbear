@@ -23,6 +23,49 @@ function info(text){
     message('#333', text);
 }
 
+//For displaying the finished block
+Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var finished = button.parentElement.parentElement.parentElement.querySelector('wb-hbox[class="tutorial-finished"]');
+    finished.setAttribute('completed', 'true');
+
+});
+
+//For switching to the next step
+//at this point it just removes the finish block
+Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var tut = button.parentElement.parentElement.parentElement.parentElement;
+    tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
+    tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
+    
+});
+
+// For switching between the tutorial and canvas
+Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
+    var tab = dom.closest(evt.target, 'button');
+    if(tab.getAttribute('pressed') !== 'true'){
+        var existing = tab.parentElement.querySelector('button[pressed=true]');
+        if(existing){existing.removeAttribute('pressed');}
+        tab.setAttribute('pressed', 'true');
+        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
+        if(existing){existing.removeAttribute('selected');}
+        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
+        tabAssoc.setAttribute('selected', 'true');
+    }
+});
+Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
+    var tab = dom.closest(evt.target, 'button');   
+    if(tab.getAttribute('pressed') !== 'true'){
+        var existing = tab.parentElement.querySelector('button[pressed=true]');
+        if(existing){existing.removeAttribute('pressed');}
+        tab.setAttribute('pressed', 'true');
+        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
+        if(existing){existing.removeAttribute('selected');}
+        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
+        tabAssoc.setAttribute('selected', 'true');
+    }
+});
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
 Event.on(document.body, 'ui:click', '.do-run', startScript);

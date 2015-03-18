@@ -14,17 +14,51 @@ window.WaterbearProcess = (function () {
 
     var assert = console.assert.bind(console);
 
+    /* TODO: When the context is exhausted... now what? There are no more
+     * instructions! */
+
     /**
      * An execution context! Think of it as a thread: it keeps track of the
      * current scope (thus, "the stack")
      **/
     function Context(instruction, scope) {
-        this.instructionPointer = instruction;
+        this.currentInstruction = instruction;
         this.scope = scope;
     }
 
+    /**
+     * Runes the next instruction, updating the instruction pointer and stack
+     * as appropriate.
+     */
+    Context.prototype.doNext = function next() {
+        /* The scope is mutable so... it gets mutated. */
+        this.currentInstruction.run(this.scope);
+
+        this.currentInstruction = this.next();
+    };
+
+    /**
+     * Get the next instruction in this context.
+     */
     Context.prototype.next = function next() {
-        /* TODO: Get the next instruction IN THIS CONTEXT! */
+        var nextInstruction;
+        assert(false, 'Not implemented');
+        /* TODO */
+
+        assert(typeof nextInstruction.run === 'function',
+               'Block does not have a callable property `run`');
+    };
+
+    /**
+     * Creates the root context -- that is, the context from which all other
+     * contexts originate from.
+     */
+    Context.createRootContext = function createRootContext() {
+        var globalScope = {},
+            /* FIXME: THIS DOM STUFF DOES NOT BELONG HERE! */
+            firstInstruction = dom.find('wb-workspace > wb-contains > *');
+
+        return new Context(firstInstruction, globalScope);
     };
 
 
@@ -38,10 +72,15 @@ window.WaterbearProcess = (function () {
         /* Set some essential state. */
         this.contexts = [];
         this.currentContext = null;
+        this.paused = false;
+
         /* Disable breakpoints. */
         this.shouldBreak = false;
         /* Run as quickly as possible. */
-        this.rate = 0;
+        this.delay = 0;
+        this.nextCallback = null;
+
+        this.doNextStep = this.nextStep.bind(this);
 
         Object.defineProperties(this, {
             /* `started` is trapped in this closure, thus it can only be
@@ -62,12 +101,34 @@ window.WaterbearProcess = (function () {
     /**
      * Starts (asynchronous!) execution from scratch. Can only be called once.
      */
-    Process.prototype.start = function start(firstInstrction) {
+    Process.prototype.start = function start(firstInstruction) {
         assert(!this.started, 'Waterbear already started!');
         this.setStarted();
 
-        /* TODO: Create a new context and start asynchronous execution. */
+        /* TODO: Create a new context. */
+        if (firstInstruction === undefined) {
+            this.currentContext = Context.createRootContext();
+        } else {
+            assert(false, 'Not implemented: Start on specific instruction.');
+        }
+
+        this.contexts.push(this.currentContext);
+
+        /* This starts asynchronous execution. */
+        this.resumeAsync();
+
         return this;
+    };
+
+    /**
+     * Resume executing immediately. Execution is fast as the rate given to `setRate`
+     * (default: unlimited).
+     */
+    Process.prototype.resumeAsync = function () {
+        assert(this.started);
+
+        this.paused = false;
+        enqueue(this.doNextStep);
     };
 
     /**
@@ -80,13 +141,14 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Sets rate of execution in instructions per second.
-     * If rate is not provided or underfined, the rate is unlimited.
+     * Sets rate of execution in milliseconds / instruction.
+     * If rate is not provided or undefined, the rate is unlimited.
      */
     Process.prototype.setRate = function setRate(rate) {
         if (rate === undefined) {
             this.rate = 0;
         } else {
+            assert((+rate) > 0, 'Must provide positive number for rate.');
             this.rate = +rate;
         }
         return this;
@@ -97,12 +159,13 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.pause = function disableBreakpoints() {
         assert(this.started);
-        /* TODO: */
+
+        this.paused = false;
         return this;
     };
 
     /**
-     * Reqests to cleanly terminates the current process.
+     * Requests to cleanly terminates the current process.
      * Once this has happened, this process should no longer be used.
      * `cb` is called once the process has cleanly terminated.
      */
@@ -130,13 +193,29 @@ window.WaterbearProcess = (function () {
         return this;
     };
 
+    /** Internal methods **/
+
+    /**
+     * Note: the constructor should bind an alias to this method called
+     * `doNextStep` which simply calls this but BINDS `this` TO THE METHOD
+     * CALL (which is the only way anything will ever work :/).
+     */
+    Process.prototype.nextStep = function nextStep() {
+        if (this.paused) {
+            return;
+        }
+
+        /* Setup the next step to run after delay. */
+        this.currentContext.doNext();
+        setTimeout(this.doNextStep, this.delay);
+    };
 
 
     /**
      * Execute `fn` asynchronously. Its execution will happen as soon as
      * possible, but note that it may yield to several other "threads".
      */
-    function enque(fn) {
+    function enqueue(fn) {
         return setTimeout(fn, 0);
     }
 

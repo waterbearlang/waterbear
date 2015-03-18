@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var process;
+
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
 // not attributes, CSS, or JavaScript. Once the messages have stabilized, move them
@@ -27,6 +29,12 @@ function info(text){
 
 Event.on(document.body, 'ui:click', '.do-run', startScript);
 Event.on(document.body, 'ui:click', '.do-stop', stopScript);
+Event.on(document.body, 'ui:click', '.do-pause', function () {
+    /* TODO */
+});
+Event.on(document.body, 'ui:click', '.do-step', function () {
+    /* TODO */
+});
 
 function startScript() {
     // Do any necessary cleanup (e.g., clear event handlers).
@@ -36,8 +44,12 @@ function startScript() {
 }
 
 function stopScript() {
-    runtime.stopEventLoop();
-    runtime.clear();
+    if (process) {
+        process.terminate();
+        process = null;
+        runtime.stopEventLoop();
+        runtime.clear();
+    }
 }
 
 function preload() {
@@ -51,13 +63,8 @@ function preload() {
 }
 
 function runScript(){
-    var globalScope = {};
     runtime.startEventLoop();
-    dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
-        if (block.run){
-            block.run(globalScope);
-        }
-    });
+    process = new WaterbearProcess().start();
 }
 
 function handleFileButton(evt){

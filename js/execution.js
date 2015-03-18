@@ -48,8 +48,8 @@ window.WaterbearProcess = (function () {
     Context.prototype.next = function next() {
         var nextInstruction;
 
-        /* FIXME: TERIBLE SEPERATION OF CONCERNS AND ALSO WRONG. */
-        nextInstruction = this.currentInstruction.nextSibling;
+        /* FIXME: TERRIBLE SEPARATION OF CONCERNS AND ALSO WRONG. */
+        nextInstruction = this.currentInstruction.nextElementSibling;
 
         assert(nextInstruction === null || typeof nextInstruction.run === 'function',
                'Block does not have a callable property `run`');
@@ -113,10 +113,10 @@ window.WaterbearProcess = (function () {
         assert(!this.started, 'Waterbear already started!');
         this.setStarted();
 
-        /* TODO: Create a new context. */
         if (firstInstruction === undefined) {
             this.currentContext = Context.createRootContext();
         } else {
+            /* TODO: Create a new context. */
             assert(false, 'Not implemented: Start on specific instruction.');
         }
 
@@ -137,6 +137,7 @@ window.WaterbearProcess = (function () {
 
         this.paused = false;
         this.nextTimeout = enqueue(this.doNextStep);
+        return this;
     };
 
     /**
@@ -209,10 +210,10 @@ window.WaterbearProcess = (function () {
         /* TODO: Decide if we should break. */
         /* TODO: Decide if we should switch to a different context. */
 
-        /* Setup the next step to run after delay. */
         hasNext = this.currentContext.doNext();
 
         if (hasNext) {
+            /* Setup the next step to run after delay. */
             this.nextTimeout = setTimeout(this.doNextStep, this.delay);
         } else {
             /* TODO: this context is now terminated... */
@@ -238,6 +239,7 @@ window.WaterbearProcess = (function () {
      * possible, but note that it may yield to several other "threads".
      */
     function enqueue(fn) {
+        /* FIXME: Use setImmediate or equivalent. */
         return setTimeout(fn, 0);
     }
 

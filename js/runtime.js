@@ -871,11 +871,11 @@
             clearTo: new util.Method()
                 .when(['string'], function(clr){ // unfortunately colors are still strings
                     var r = canvasRect();
-                    ctx().fillStyle = clr;
-                    ctx().fillRect(r.x, r.y, r.width, r.height);
+                    getContext().fillStyle = clr;
+                    getContext().fillRect(r.x, r.y, r.width, r.height);
                 })
                 .when(['wbimage'], function(img){
-                    img.drawInRect(ctx(), canvasRect());
+                    img.drawInRect(getContext(), canvasRect());
                 })
             .fn(),
             stageWidth: function(){

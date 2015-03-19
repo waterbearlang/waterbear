@@ -49,6 +49,7 @@ window.WaterbearProcess = (function () {
         var nextInstruction;
 
         /* FIXME: TERRIBLE SEPARATION OF CONCERNS AND ALSO WRONG. */
+        /* TODO: This is the responsibility of the next() callbacks. */
         nextInstruction = this.currentInstruction.nextElementSibling;
 
         assert(nextInstruction === null || typeof nextInstruction.run === 'function',
@@ -73,6 +74,10 @@ window.WaterbearProcess = (function () {
     /**
      * Encapsulates the execution of a Waterbear program. There may be several
      * "threads", so this encompasses all of them. ALL OF THEM.
+     *
+     * This is a "one-time use" object! This means that once `start` is
+     * called, it cannot be started all over again. Similarly, once
+     * `terminate` is called, you can consider this object useless.
      */
     function Process() {
         var started = false;
@@ -90,6 +95,12 @@ window.WaterbearProcess = (function () {
 
         this.doNextStep = this.nextStep.bind(this);
 
+        /*
+         * This `started` tomfoolery ensures that the Process object is a
+         * "one-time use" object.  Once it's started, it can't be started
+         * again; and once it's terminated, it's gone for good. Want to start
+         * again? Instantiate a brand new Process()!
+         */
         Object.defineProperties(this, {
             /* `started` is trapped in this closure, thus it can only be
              * changed in this constructor, or any function defined within this
@@ -98,7 +109,7 @@ window.WaterbearProcess = (function () {
                 get: function () { return started; },
                 enumerable: true
             },
-            /* There's no going back once this function gets called! */
+            /* Once this is called, started can never be `false`. */
             setStarted: {
                 value: function () { started = true; },
                 enumerable: false

@@ -46,6 +46,7 @@ function startScript() {
 function stopScript() {
     if (process) {
         process.terminate();
+        /* Throw out the now-useless process. */
         process = null;
         runtime.stopEventLoop();
         runtime.clear();
@@ -64,6 +65,9 @@ function preload() {
 
 function runScript(){
     runtime.startEventLoop();
+    console.assert(!process, 'Tried to run, but Process instance already exists!');
+    /* Create brand new Process instance (because each process can only be
+     * started once). */
     process = new WaterbearProcess().start();
 }
 

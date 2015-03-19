@@ -142,7 +142,9 @@
         startEventLoop: startEventLoop,
         stopEventLoop: stopEventLoop,
         clear: clearRuntime,
-        resetCanvas: resetCanvas,
+        resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
+        getStage: canvas,
+        resetStage: resetCanvas,
 
         local: {
             //temporary fix for locals

@@ -38,7 +38,7 @@ Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
     var tut = button.parentElement.parentElement.parentElement.parentElement;
     tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
     tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
-    
+
 });
 
 // For switching between the tutorial and canvas
@@ -55,7 +55,7 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
     }
 });
 Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
-    var tab = dom.closest(evt.target, 'button');   
+    var tab = dom.closest(evt.target, 'button');
     if(tab.getAttribute('pressed') !== 'true'){
         var existing = tab.parentElement.querySelector('button[pressed=true]');
         if(existing){existing.removeAttribute('pressed');}
@@ -93,18 +93,22 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on(document.body, 'ui:click', '.do-run', startScript);
-Event.on(document.body, 'ui:click', '.do-stop', stopScript);
+Event.on('.do-run', 'ui:click', null, startScript);
+Event.on('.do-stop', 'ui:click', null, stopScript);
 
-function startScript() {
+function startScript(evt){
     // Do any necessary cleanup (e.g., clear event handlers).
-    stopScript();
-    runtime.resetCanvas();
+    stopScript(evt);
+    runtime.resetStage();
+    evt.target.blur();
+    runtime.getStage().focus();
     preload().whenLoaded(runScript);
 }
 
-function stopScript() {
+function stopScript(evt){
     runtime.stopEventLoop();
+    evt.target.blur();
+    runtime.getStage().focus()
     runtime.clear();
 }
 
@@ -129,7 +133,7 @@ function runScript(){
 }
 
 function handleFileButton(evt){
-    var fileModel = nanoModal("Select an option or click away to exit.", 
+    var fileModel = nanoModal("Select an option or click away to exit.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
             text: "Save Gist",
@@ -175,7 +179,7 @@ function handleFileButton(evt){
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
-    var fileModel = nanoModal("Load an example program.", 
+    var fileModel = nanoModal("Load an example program.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
             text: "Waterbear in Space",

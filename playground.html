@@ -1087,9 +1087,13 @@
                         <img src="images/png/steampunk.png">
                     </div>
                     <div>
-                        <h6> Actual output:</h6>
+                        <wb-hbox>
+                            <h6> Actual output:</h6>
+                            <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
+                            <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                        </wb-hbox>
                         <div class = "canvas-holder">
-                            <canvas width = '250' height = '190' ></canvas>
+                            
                         </div>
                     </div>
                     <div class="complete">

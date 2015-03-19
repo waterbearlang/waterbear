@@ -7,7 +7,7 @@
     function canvas(){
         if (!_canvas){
             if (dom.find){
-                _canvas = dom.find('wb-playground > canvas');
+                _canvas = dom.find('canvas');
             }
             if (!_canvas){
                 // We're not running in Waterbear
@@ -19,6 +19,7 @@
         }
         return _canvas;
     }
+    
     function getContext(){
         if (!_ctx){
             _ctx = canvas().getContext('2d');
@@ -145,6 +146,7 @@
         resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
         getStage: canvas,
         resetStage: resetCanvas,
+        handleResize: handleResize,
 
         local: {
             //temporary fix for locals

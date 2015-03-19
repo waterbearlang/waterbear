@@ -51,7 +51,7 @@ body > header > h1{
     padding: 0px;
 }
 
-.menu button{
+.menu button, .do-run, .do-stop{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
@@ -245,15 +245,17 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     display: inline-block;
     vertical-align: top;
 }
-.tutorial-output > div > img, .tutorial-output > div > div.canvas-holder{
+.tutorial-output > div > img, div.canvas-holder{
     flex-direction: column;
-    padding-top: 10px;
     border: black;
     border-style: solid;
     border-width: 4px;
-    margin-top: 10px;
+    margin-top: 20px;
     width: 250px;
     height: 190px;   
+}
+.tutorial-output > div > div.canvas-holder{
+    margin-top:7px;
 }
 .tutorial-finished{
     display: inline-block;

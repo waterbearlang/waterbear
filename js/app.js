@@ -52,6 +52,9 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
         tabAssoc.setAttribute('selected', 'true');
+        var tutCanvas = dom.find('div.canvas-holder > canvas');
+        dom.find('wb-playground').appendChild( tutCanvas);
+        runtime.handleResize();
     }
 });
 Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
@@ -65,30 +68,28 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
         tabAssoc.setAttribute('selected', 'true');
         var playCanvas = dom.find('wb-playground > canvas');
-        var tutCanvas = dom.find('div.canvas-holder > canvas');
-        dom.find('div.canvas-holder').replaceChild(playCanvas, tutCanvas);
-        var rect = tutCanvas.getBoundingClientRect();
+        dom.find('div.canvas-holder').appendChild(playCanvas);
+        
+        /*
+        var rect = playCanvas.parentElement.getBoundingClientRect();
         Event.stage = {
             // FIXME: Move these to runtime.stage
-            top: Math.round(300),
-            left: Math.round(300),
-            right: Math.round(550),
-            bottom: Math.round(490),
-            width: Math.round(550) - Math.round(300),
-            height: Math.round(490) - Math.round(300)
+            top: Math.round(rect.top),
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            bottom: Math.round(rect.bottom),
+            width: Math.round(rect.right) - Math.round(rect.left),
+            height: Math.round(rect.bottom) - Math.round(rect.top)
         };
+        
         playCanvas.setAttribute('width', Event.stage.width);
         playCanvas.setAttribute('height', Event.stage.height);
-        runtime.resetCanvas();
-
-
         /*
-        playCanvas.setAttribute('height', tutCanvas.getAttribute('height'));
-        playCanvas.setAttribute('width', tutCanvas.getAttribute('width'));
-        runtime.resetCanvas();
-        */
-       
         
+        */
+        playCanvas.setAttribute('height', '190');
+        playCanvas.setAttribute('width', '250');
+        runtime.handleResize();
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

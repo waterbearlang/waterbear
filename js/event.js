@@ -48,6 +48,16 @@
     function on(elem, originalEventname, selector, handler, onceOnly){
         var eventname, ns_name, namespace;
 
+        // Allow use of selector for `elem`.
+        if (typeof elem === 'string'){
+            // Bind all elements matched by `elem` selector. Not recommended due to
+            // multiple event listeners used when one could suffice and be
+            // matched using the `selector` argument.
+            return [].slice.call(document.querySelectorAll(elem)).map(function(e){
+                return on(e, originalEventname, selector, handler, onceOnly);
+            });
+        }
+
         // Argument validation.
         if (typeof originalEventname !== 'string'){
             console.error('second argument must be eventname: %s', eventname);
@@ -62,16 +72,6 @@
         }
         if (typeof handler !== 'function'){
             throw new TypeError('fourth argument must be handler');
-        }
-
-        // Allow use of selector for `elem`.
-        if (typeof elem === 'string'){
-            // Bind all elements matched by `elem` selector. Not recommended due to
-            // multiple event listeners used when one could suffice and be
-            // matched using the `selector` argument.
-            return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
-                return on(e, originalEventname, selector, handler, onceOnly);
-            });
         }
 
         // Check for presence of namespace.

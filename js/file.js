@@ -96,6 +96,7 @@
     }
 
     function clearScripts(){
+        bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
     }

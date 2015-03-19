@@ -66,9 +66,29 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         tabAssoc.setAttribute('selected', 'true');
         var playCanvas = dom.find('wb-playground > canvas');
         var tutCanvas = dom.find('div.canvas-holder > canvas');
+        dom.find('div.canvas-holder').replaceChild(playCanvas, tutCanvas);
+        var rect = tutCanvas.getBoundingClientRect();
+        Event.stage = {
+            // FIXME: Move these to runtime.stage
+            top: Math.round(300),
+            left: Math.round(300),
+            right: Math.round(550),
+            bottom: Math.round(490),
+            width: Math.round(550) - Math.round(300),
+            height: Math.round(490) - Math.round(300)
+        };
+        playCanvas.setAttribute('width', Event.stage.width);
+        playCanvas.setAttribute('height', Event.stage.height);
+        runtime.resetCanvas();
+
+
+        /*
         playCanvas.setAttribute('height', tutCanvas.getAttribute('height'));
         playCanvas.setAttribute('width', tutCanvas.getAttribute('width'));
-        dom.find('div.canvas-holder').replaceChild(playCanvas, tutCanvas);
+        runtime.resetCanvas();
+        */
+       
+        
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

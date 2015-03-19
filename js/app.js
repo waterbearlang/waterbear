@@ -70,23 +70,6 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         var playCanvas = dom.find('wb-playground > canvas');
         dom.find('div.canvas-holder').appendChild(playCanvas);
         
-        /*
-        var rect = playCanvas.parentElement.getBoundingClientRect();
-        Event.stage = {
-            // FIXME: Move these to runtime.stage
-            top: Math.round(rect.top),
-            left: Math.round(rect.left),
-            right: Math.round(rect.right),
-            bottom: Math.round(rect.bottom),
-            width: Math.round(rect.right) - Math.round(rect.left),
-            height: Math.round(rect.bottom) - Math.round(rect.top)
-        };
-        
-        playCanvas.setAttribute('width', Event.stage.width);
-        playCanvas.setAttribute('height', Event.stage.height);
-        /*
-        
-        */
         playCanvas.setAttribute('height', '190');
         playCanvas.setAttribute('width', '250');
         runtime.handleResize();

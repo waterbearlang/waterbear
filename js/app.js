@@ -64,6 +64,11 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
         tabAssoc.setAttribute('selected', 'true');
+        var playCanvas = dom.find('wb-playground > canvas');
+        var tutCanvas = dom.find('div.canvas-holder > canvas');
+        playCanvas.setAttribute('height', tutCanvas.getAttribute('height'));
+        playCanvas.setAttribute('width', tutCanvas.getAttribute('width'));
+        dom.find('div.canvas-holder').replaceChild(playCanvas, tutCanvas);
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

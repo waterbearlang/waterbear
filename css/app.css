@@ -70,15 +70,7 @@ body > header > h1{
     white-space: nowrap;
     border: 1px solid #000;    
 }
-/*.tabs-menu:after{
-    position: absolute;
-    content: "";
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    
-    z-index: 1;
-}*/
+
 .tabs-menu button{
     margin: 0 10px;
     padding: 0 10px;
@@ -251,8 +243,9 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     flex-direction: column;
     padding: 10px 10px;
     display: inline-block;
+    vertical-align: top;
 }
-.tutorial-output > div > img, .tutorial-output > div > canvas{
+.tutorial-output > div > img, .tutorial-output > div > div.canvas-holder{
     flex-direction: column;
     padding-top: 10px;
     border: black;
@@ -260,8 +253,7 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     border-width: 4px;
     margin-top: 10px;
     width: 250px;
-    height: 190px;
-    
+    height: 190px;   
 }
 .tutorial-finished{
     display: inline-block;

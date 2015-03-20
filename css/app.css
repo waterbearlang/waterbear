@@ -68,7 +68,7 @@ body > header > h1{
     padding: 0px;
     position: relative;
     white-space: nowrap;
-    border: 1px solid #000;    
+    border: 1px solid #000;
 }
 
 .tabs-menu button{
@@ -146,29 +146,29 @@ wb-contains:empty::before{
 
 
 /* Accordion Colors and Icons */
-wb-accordion.control > header:after{ background-color: hsl(0, 93%, 56%); }
-wb-accordion.sprite > header:after{ background-color: hsl(156, 93%, 56%); }
-wb-accordion.music > header:after{ background-color: hsl(312, 93%, 56%); }
-wb-accordion.sound > header:after{ background-color: hsl(108, 93%, 56%); }
-wb-accordion.array > header:after{ background-color: hsl(264, 93%, 56%); }
-wb-accordion.boolean > header:after{ background-color: hsl(60, 93%, 56%); }
-wb-accordion.canvas > header:after{ background-color: hsl(216, 93%, 56%); }
-wb-accordion.color > header:after{ background-color: hsl(12, 93%, 56%); }
-wb-accordion.image > header:after{ background-color: hsl(168, 93%, 56%); }
-wb-accordion.math > header:after{ background-color: hsl(324, 93%, 56%); }
-wb-accordion.random > header:after{ background-color: hsl(120, 93%, 56%); }
-wb-accordion.vector > header:after{ background-color: hsl(276, 93%, 56%); }
-wb-accordion.object > header:after{ background-color: hsl(72, 93%, 56%); }
-wb-accordion.string > header:after{ background-color: hsl(228, 93%, 56%); }
-wb-accordion.path > header:after{ background-color: hsl(24, 93%, 56%); }
-wb-accordion.point > header:after{ background-color: hsl(180, 93%, 56%); }
-wb-accordion.rect > header:after{ background-color: hsl(336, 93%, 56%); }
-wb-accordion.sense > header:after{ background-color: hsl(132, 93%, 56%); }
-wb-accordion.motion > header:after{ background-color: hsl(288, 93%, 56%); }
-wb-accordion.shape > header:after{ background-color: hsl(84, 93%, 56%); }
-wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
-wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
-wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
+wb-accordion.control > header:after{ background-color: hsl(0, 53%, 56%); }
+wb-accordion.sprite > header:after{ background-color: hsl(156, 53%, 56%); }
+wb-accordion.music > header:after{ background-color: hsl(312, 53%, 56%); }
+wb-accordion.sound > header:after{ background-color: hsl(108, 53%, 56%); }
+wb-accordion.array > header:after{ background-color: hsl(264, 53%, 56%); }
+wb-accordion.boolean > header:after{ background-color: hsl(60, 53%, 56%); }
+wb-accordion.canvas > header:after{ background-color: hsl(216, 53%, 56%); }
+wb-accordion.color > header:after{ background-color: hsl(12, 53%, 56%); }
+wb-accordion.image > header:after{ background-color: hsl(168, 53%, 56%); }
+wb-accordion.math > header:after{ background-color: hsl(324, 53%, 56%); }
+wb-accordion.random > header:after{ background-color: hsl(120, 53%, 56%); }
+wb-accordion.vector > header:after{ background-color: hsl(276, 53%, 56%); }
+wb-accordion.object > header:after{ background-color: hsl(72, 53%, 56%); }
+wb-accordion.string > header:after{ background-color: hsl(228, 53%, 56%); }
+wb-accordion.path > header:after{ background-color: hsl(24, 53%, 56%); }
+wb-accordion.point > header:after{ background-color: hsl(180, 53%, 56%); }
+wb-accordion.rect > header:after{ background-color: hsl(336, 53%, 56%); }
+wb-accordion.sense > header:after{ background-color: hsl(132, 53%, 56%); }
+wb-accordion.motion > header:after{ background-color: hsl(288, 53%, 56%); }
+wb-accordion.shape > header:after{ background-color: hsl(84, 53%, 56%); }
+wb-accordion.geolocation > header:after{ background-color: hsl(240, 53%, 56%); }
+wb-accordion.size > header:after{ background-color: hsl(192, 53%, 56%); }
+wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 
 
 .tutorial{
@@ -213,7 +213,7 @@ wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
     background-color: palegoldenrod;
     display: inline-block;
     height: 400px;
-    min-height: 350px;  
+    min-height: 350px;
     max-height: 400px;
     position: relative;
     margin: 0 auto;

@@ -62,13 +62,16 @@ body > header > h1{
 
 .tabs-menu{
     flex: 0 0 34px;
-    background-color: yellowgreen;
     color: #FFFFFF;
     margin: 0px;
-    padding: 0px;
+    padding-top: 4px;
+    padding-left: 6px;
+
     position: relative;
     white-space: nowrap;
-    border: 1px solid #000;
+    border: none;
+    background-color: #666666;
+    height: 34px;
 }
 /*.tabs-menu:after{
     position: absolute;
@@ -80,17 +83,15 @@ body > header > h1{
     z-index: 1;
 }*/
 .tabs-menu button{
-    margin: 0 10px;
-    padding: 0 10px;
-    border: 2px #111111 outset;
+    border: 2px solid #111111;
+    border-radius: 5px;
     background-color: #666666;
     color: #FFFFFF;
-    display: inline-block;
     height: 30px;
     width: 150px;
 }
 .tabs-menu button[pressed='true']{
-    background-color: #FFFFFF;
+    background-color: #C4C4C4;
     color: #666666;
 }
 /* Show trash for sidebar while dragging */

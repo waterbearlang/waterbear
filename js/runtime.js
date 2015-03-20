@@ -97,7 +97,7 @@
     }
 
     function stopEventLoop() {
-        /* TODO: Dunno lol there be more in here? */
+        /* Cancel any stray frame handlers. */
         cancelAnimationFrame(currentAnimationFrameHandler);
         currentAnimationFrameHandler = null;
     }

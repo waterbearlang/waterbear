@@ -86,15 +86,20 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
 
+    var currentAnimationFrameHandler = null;
     function startEventLoop(){
         clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
-        requestAnimationFrame(frameHandler);
+        if (!currentAnimationFrameHandler){
+            currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
+        }
     }
 
     function stopEventLoop() {
         /* TODO: Dunno lol there be more in here? */
+        cancelAnimationFrame(currentAnimationFrameHandler);
+        currentAnimationFrameHandler = null;
     }
 
     function frameHandler(){
@@ -106,7 +111,7 @@
         perFrameHandlers.forEach(function(handler){
             handler();
         });
-        requestAnimationFrame(frameHandler);
+        currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
     }
 
 

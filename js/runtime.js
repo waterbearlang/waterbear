@@ -47,18 +47,20 @@
     }, false);
 
     function handleResize(){
-        var rect = canvas().getBoundingClientRect();
-        Event.stage = {
-            // FIXME: Move these to runtime.stage
-            top: Math.round(rect.top),
-            left: Math.round(rect.left),
-            right: Math.round(rect.right),
-            bottom: Math.round(rect.bottom),
-            width: Math.round(rect.right) - Math.round(rect.left),
-            height: Math.round(rect.bottom) - Math.round(rect.top)
-        };
-        canvas().setAttribute('width', Event.stage.width);
-        canvas().setAttribute('height', Event.stage.height);
+        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground (and not the tutorial)
+            var rect = canvas().getBoundingClientRect();
+            Event.stage = {
+                // FIXME: Move these to runtime.stage
+                top: Math.round(rect.top),
+                left: Math.round(rect.left),
+                right: Math.round(rect.right),
+                bottom: Math.round(rect.bottom),
+                width: Math.round(rect.right) - Math.round(rect.left),
+                height: Math.round(rect.bottom) - Math.round(rect.top)
+            };
+            canvas().setAttribute('width', Event.stage.width);
+            canvas().setAttribute('height', Event.stage.height);
+        }
     }
 
     function canvasRect(){

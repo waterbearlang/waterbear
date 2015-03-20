@@ -54,6 +54,7 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
         tabAssoc.setAttribute('selected', 'true');
         var tutCanvas = dom.find('div.canvas-holder > canvas');
         dom.find('wb-playground').appendChild( tutCanvas);
+        tutCanvas.removeAttribute('style');
         runtime.handleResize();
     }
 });
@@ -69,10 +70,9 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         tabAssoc.setAttribute('selected', 'true');
         var playCanvas = dom.find('wb-playground > canvas');
         dom.find('div.canvas-holder').appendChild(playCanvas);
+        playCanvas.style.width = '250px';
+        playCanvas.style.height = '190px';
         
-        playCanvas.setAttribute('height', '190');
-        playCanvas.setAttribute('width', '250');
-        runtime.handleResize();
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

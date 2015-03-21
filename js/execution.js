@@ -3,8 +3,8 @@
  * blocks. It goes in here!
  *
  * The exported class `Process` is kind of similar to a Unix process in that
- * there is one shared memory, but it contains a bunch of "threads" that may
- * run concurrently.
+ * there is one shared memory, but it contains a bunch of "strands" (kind of
+ * like threads) that may run concurrently.
  *
  * @author Eddie Antonio Santos @eddieantonio
  * Date:   March 2015
@@ -14,14 +14,15 @@ window.WaterbearProcess = (function () {
 
     var assert = console.assert.bind(console);
 
-    /* TODO: When the context is exhausted... now what? There are no more
+    /* TODO: When the strand is terminated... now what? There are no more
      * instructions! */
 
     /**
-     * An execution context! Think of it as a thread: it keeps track of the
-     * current scope (thus, "the stack")
-     **/
-    function Context(instruction, scope) {
+     * A single execution strand! Think of it as a thread: it keeps track of the
+     * current scope (thus, "the stack"), and thus, has a bunch of nested
+     * "frames.
+     */
+    function Strand(instruction, scope) {
         this.currentInstruction = instruction;
         this.scope = scope;
     }
@@ -30,9 +31,9 @@ window.WaterbearProcess = (function () {
      * Runes the next instruction, updating the instruction pointer and scope
      * as appropriate.
      *
-     * Returns: true if this context has more instructions to execute.
+     * Returns: true if this strand has more instructions to execute.
      */
-    Context.prototype.doNext = function next() {
+    Strand.prototype.doNext = function next() {
         assert(this.currentInstruction !== null, 'current instruction undefined.');
 
         /* The scope is mutable so... it gets mutated. */
@@ -43,9 +44,9 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Get the next instruction in this context.
+     * Get the next instruction in this strand.
      */
-    Context.prototype.next = function next() {
+    Strand.prototype.next = function next() {
         var nextInstruction;
 
         /* FIXME: TERRIBLE SEPARATION OF CONCERNS AND ALSO WRONG. */
@@ -59,15 +60,15 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Creates the root context -- that is, the context from which all other
-     * contexts originate from.
+     * Creates the root strand -- that is, the strand from which all other
+     * strands originate from.
      */
-    Context.createRootContext = function createRootContext() {
+    Strand.createRootStrand = function createRootStrand() {
         var globalScope = {},
             /* FIXME: THIS DOM STUFF DOES NOT BELONG HERE! */
             firstInstruction = dom.find('wb-workspace > wb-contains > *');
 
-        return new Context(firstInstruction, globalScope);
+        return new Strand(firstInstruction, globalScope);
     };
 
 
@@ -83,8 +84,8 @@ window.WaterbearProcess = (function () {
         var started = false;
 
         /* Set some essential state. */
-        this.contexts = [];
-        this.currentContext = null;
+        this.strands = [];
+        this.currentStrand = null;
         this.paused = false;
 
         /* Disable breakpoints. */
@@ -125,13 +126,13 @@ window.WaterbearProcess = (function () {
         this.setStarted();
 
         if (firstInstruction === undefined) {
-            this.currentContext = Context.createRootContext();
+            this.currentStrand = Strand.createRootStrand();
         } else {
-            /* TODO: Create a new context. */
+            /* TODO: Create a brand new strand. */
             assert(false, 'Not implemented: Start on specific instruction.');
         }
 
-        this.contexts.push(this.currentContext);
+        this.strands.push(this.currentStrand);
 
         /* This starts asynchronous execution. */
         this.resumeAsync();
@@ -219,17 +220,18 @@ window.WaterbearProcess = (function () {
         }
 
         /* TODO: Decide if we should break. */
-        /* TODO: Decide if we should switch to a different context. */
+        /* TODO: Decide if we should switch to a different strand. */
 
-        hasNext = this.currentContext.doNext();
+        hasNext = this.currentStrand.doNext();
 
         if (hasNext) {
             /* Setup the next step to run after delay. */
             this.nextTimeout = setTimeout(this.doNextStep, this.delay);
         } else {
-            /* TODO: this context is now terminated... */
+            /* TODO: this strand is now terminated... */
+            /* Remove it from the list and... :/ */
             /* FIXME: Remove this console.log. */
-            console.log('Context execution halted...');
+            console.log('Strand execution halted...');
         }
     };
 

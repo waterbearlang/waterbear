@@ -17,20 +17,81 @@ window.WaterbearProcess = (function () {
     /* TODO: When the strand is terminated... now what? There are no more
      * instructions! */
 
+
+    /**
+     * Information for execution of a single ("stack") frame of execution.
+     * Several frames make up a strand.
+     */
+    function Frame(context, args, continuationCallback) {
+        this.context = context;
+        this.args = args;
+        this.shouldContinue = continuationCallback;
+    }
+
+    /**
+     * Pseudo-property: returns the numbered containers belonging to 
+     * the underlying context.
+     */
+    Object.defineProperty(Frame.prototype, 'containers', {
+        get: function () {
+            return this.context.gatherContainers();
+        }
+    });
+
+    /**
+     * Causes the parent of the container to reevaluate its arguments.
+     * These are then set to the this.args array.
+     *
+     * If the container does not have arguments, then this.args is null.
+     */
+    Frame.prototype.reevaluateArguments = function reevaluateArguments() {
+        this.args = this.container.gatherValues();
+    };
+
+    /**
+     * Creates a new (usually root) frame from a <wb-contains> element.
+     * That is, this frame does *NOT* have a context!.
+     */
+    Frame.createFromContainer = function createFromContainer(container) {
+        return {
+            container: container,
+            context: null,
+            args: null,
+            reevaluateArguments: function () {
+                throw new Error('Cannot reevaluate arguments ' +
+                                'for context-less container.');
+            },
+            shouldContinue: null
+        };
+    };
+
+    /**
+     * Creates a new frame from the given <wb-context>.
+     */
+    Frame.createFromContext = function createFromContext(context, args, callback) {
+        return new Frame(context, args, callback);
+    };
+
+
+
     /**
      * A single execution strand! Think of it as a thread: it keeps track of the
      * current scope (thus, "the stack"), and thus, has a bunch of nested
      * "frames.
      */
     function Strand(instruction, scope) {
+        /* TODO: should this still be the same API. */
         this.currentInstruction = instruction;
         this.scope = scope || {};
         /* The initial frame has null everything, basically. */
         this.frames = [{args: null, container: null}];
+
+        /* Private use: */
+        this.undertakenAction = null;
     }
 
     /**
-     * Runes the next instruction, updating the instruction pointer and scope
+     * Runs the next instruction, updating the instruction pointer and scope
      * as appropriate.
      *
      * Returns: true if this strand has more instructions to execute.
@@ -40,8 +101,9 @@ window.WaterbearProcess = (function () {
 
         /* The scope is mutable so... it gets mutated. */
         if (this.currentInstruction.tagName === 'WB-CONTEXT') {
+            /** TODO: Split this into private method. */
             var frameState = {};
-            this.frames.push(frameState);
+            this.frames.unshift(frameState);
             this.currentInstruction.run(this, frameState);
         } else {
             assert(this.currentInstruction.tagName == 'WB-STEP');
@@ -79,8 +141,9 @@ window.WaterbearProcess = (function () {
     /**
      * Creates a new frame of execution without creating a new scope.
      */
-    Strand.prototype.newFrame = function newFrame() {
+    Strand.prototype.newFrame = function newFrame(container, continuationCallback) {
         assert(false, 'Not implemented.');
+        this.undertakenAction = true;
     };
 
     /**
@@ -88,22 +151,30 @@ window.WaterbearProcess = (function () {
      * all new variables defined in this scope will disappear once this frame
      * has ended.
      */
-    Strand.prototype.newScope = function newScope() {
+    Strand.prototype.newScope = function newScope(container, continuationCallback) {
         assert(false, 'Not implemented.');
+        this.undertakenAction = true;
     };
 
     /**
      * Starts a new thread whose blocks will be run before each animation
      * frame.
      */
-    Strand.prototype.newFrameHandler = function newFrameHandler() {
+    Strand.prototype.newFrameHandler = function newFrameHandler(container) {
         assert(false, 'Not implemented.');
+        this.undertakenAction = true;
     };
 
-    /** Pseudo-property: currentFrame is the top frame in the frames stack. */
+    Strand.prototype.noOperation = function noOperation() {
+        this.undertakenAction = true;
+    };
+
+    /**
+     * Pseudo-property: currentFrame is the top frame in the frames stack.
+     */
     Object.defineProperty(Strand.prototype, 'currentFrame', {
         get: function () {
-            return this.frames[this.frames.length - 1];
+            return this.frames[0];
         }
     });
 
@@ -118,6 +189,7 @@ window.WaterbearProcess = (function () {
 
         return new Strand(firstInstruction, globalScope);
     };
+
 
 
     /**

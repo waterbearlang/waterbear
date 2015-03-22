@@ -136,6 +136,10 @@ StepProto.run = function(scope){
     // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
+StepProto.next = function() {
+    debugger
+    this.parentElement.next.apply(this, arguments);
+};
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
 var variableLocalsToUpdate = null;
@@ -146,7 +150,7 @@ function handleVariableFocus(evt){
     // TODO: Cancel if the new variable name is already in scope
     var input = evt.target;
     if (!input.parentElement.hasAttribute('isvariable')){
-        return
+        return;
     }
     var parentContext = dom.closest(input, 'wb-contains');
     var variableName = input.parentElement.getAttribute('value');
@@ -211,25 +215,40 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(header, 'wb-disclosure');
     setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
-    // console.log('Context created');
 };
+/*
+ * TODO: SOMETHING. WITH THIS. MAYBE CHANGE HOW CONTAINS WORKS.
+ */
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
     return dom.children(this, 'wb-contains').map(function(container){
+       // PERHAPS THIS SHOULD RETURN CONTAINS BLOCKS.
         return [].slice.call(container.children);
     });
 };
-ContextProto.run = function(parentScope){
+ContextProto.run = function(strand, state){
+   /* Set this function's setup(), next(), and beforeScript(). */
     if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+        this.setupCallbacks();
     }
-    var scope = util.extend({}, parentScope);
-    // expressions are eagerly evaluated against scope, contains are late-evaluated
-    // I'm not yet sure if this is the Right Thing™
+
+    /* Google analytics event tracking. */
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling context %s with scope %o, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
-    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
+
+    /* Evaluate arguments (maybe) and get containers. */
+    // expressions are evaluated if and only if shouldEvaluateValues returns
+    // true. Containers are evaluated when needed.
+    state.containers = this.gatherContains();
+    if (this.shouldEvaluateValues(strand, state.containers, this)) {
+        state.args =  this.gatherValues(strand.scope);
+    } else {
+        state.args = null;
+    }
+
+    /* Call setup! */
+    /* TODO: Should this be the outward facing API? After all, 
+     * args and contains are already passed via `this`... **/
+    return this.setup.call(state, strand, state.args, state.containers, this);
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
@@ -267,6 +286,42 @@ ContextProto.hideLocals = function(evt){
         });
     }
 };
+/**
+ * Sets up the next(), setup(), and shouldEvaluateValues() callbacks.
+ */
+ContextProto.setupCallbacks = function() {
+    /* Fetch the callback object from runtime. */ 
+    var qualifiedName = this.getAttribute('script').split('.');
+    var category = qualifiedName[0], name = qualifiedName[1];
+    var callbacks = runtime[category][name];
+
+    console.assert(!!callbacks, 'Could not find script: ' + qualifiedName);
+
+    /* Pretend that the single function is an actually a callback object with
+     * that has only defined setup. */
+    if (typeof callbacks === 'function') {
+        callbacks = {
+            setup: callbacks, // Actually the setup() callback.
+            next: undefined,
+            shouldEvaluateValues: undefined
+        };
+    }
+
+    this.setup = callbacks.setup;
+    this.next = callbacks.next || defaultNextCallback; 
+    this.shouldEvaluateValues =
+        callbacks.shouldEvaluateValues || defaultShouldEvaluateValues; 
+};
+
+/** Default: Always get the next DOM element and assume it's a wb-contains. */
+function defaultNextCallback(strand, args, containers, elem) {
+    return elem.nextElementSibling;
+}
+
+/** Default: Always evaluate arugments before calling setup(). */
+function defaultShouldEvaluateValues(strand, containers, elem) {
+    return true;
+}
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 

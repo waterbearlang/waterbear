@@ -24,7 +24,9 @@ window.WaterbearProcess = (function () {
      */
     function Strand(instruction, scope) {
         this.currentInstruction = instruction;
-        this.scope = scope;
+        this.scope = scope || {};
+        /* The initial frame has null everything, basically. */
+        this.frames = [{args: null, container: null}];
     }
 
     /**
@@ -37,7 +39,14 @@ window.WaterbearProcess = (function () {
         assert(this.currentInstruction !== null, 'current instruction undefined.');
 
         /* The scope is mutable so... it gets mutated. */
-        this.currentInstruction.run(this.scope);
+        if (this.currentInstruction.tagName === 'WB-CONTEXT') {
+            var frameState = {};
+            this.frames.push(frameState);
+            this.currentInstruction.run(this, frameState);
+        } else {
+            assert(this.currentInstruction.tagName == 'WB-STEP');
+            this.currentInstruction.run(this.scope);
+        }
         this.currentInstruction = this.next();
 
         return this.currentInstruction !== null;
@@ -49,15 +58,54 @@ window.WaterbearProcess = (function () {
     Strand.prototype.next = function next() {
         var nextInstruction;
 
-        /* FIXME: TERRIBLE SEPARATION OF CONCERNS AND ALSO WRONG. */
-        /* TODO: This is the responsibility of the next() callbacks. */
-        nextInstruction = this.currentInstruction.nextElementSibling;
+        /* Delegate to the block itself. It takes these arugments:
+         *  strand: reference to this object.
+         *  args: frame args
+         *  containers: frame containers
+         *  elem: current element
+         */
+        nextInstruction =
+            this.currentInstruction.next(this,
+                                         this.currentFrame.args,
+                                         this.currentFrame.containers,
+                                         this.currentInstruction);
 
         assert(nextInstruction === null || typeof nextInstruction.run === 'function',
                'Block does not have a callable property `run`');
 
         return nextInstruction;
     };
+
+    /**
+     * Creates a new frame of execution without creating a new scope.
+     */
+    Strand.prototype.newFrame = function newFrame() {
+        assert(false, 'Not implemented.');
+    };
+
+    /**
+     * Creates a new frame of execution with a new scope. That is,
+     * all new variables defined in this scope will disappear once this frame
+     * has ended.
+     */
+    Strand.prototype.newScope = function newScope() {
+        assert(false, 'Not implemented.');
+    };
+
+    /**
+     * Starts a new thread whose blocks will be run before each animation
+     * frame.
+     */
+    Strand.prototype.newFrameHandler = function newFrameHandler() {
+        assert(false, 'Not implemented.');
+    };
+
+    /** Pseudo-property: currentFrame is the top frame in the frames stack. */
+    Object.defineProperty(Strand.prototype, 'currentFrame', {
+        get: function () {
+            return this.frames[this.frames.length - 1];
+        }
+    });
 
     /**
      * Creates the root strand -- that is, the strand from which all other

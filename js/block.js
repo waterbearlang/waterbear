@@ -133,12 +133,11 @@ StepProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 StepProto.next = function() {
-    debugger
-    this.parentElement.next.apply(this, arguments);
+    /* Delegate to parent container. */
+    return this.parentElement.next.apply(this, arguments);
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
@@ -663,6 +662,10 @@ var convert = {
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
+ContainsProto.next = function(strand, args, contaiers, elem) {
+    return elem.nextElementSibling;
+};
+
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
 

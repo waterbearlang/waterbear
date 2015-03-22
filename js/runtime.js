@@ -268,6 +268,10 @@
             incrementVariable: function(variable, value){
                 this[name] += value;
             },
+
+            /**
+             * THIS IS THE OLD API WITH THE NEW API.
+             */
             loopOver: function(args, containers) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
@@ -312,6 +316,10 @@
                     block.run(self);
                 }
             },
+
+            /**
+             * TODO: Handle these cases!
+             */
             broadcast: function(eventName, data){
                 // Handle with and without data
                 Event.trigger(document.body, eventName, data);
@@ -329,26 +337,24 @@
                     });
                 });
             },
-            'if': function(args, containers){
+            /**
+             * TODO: THIS IS THE NEW API.
+             */
+            'if': function(strand, frame, containers, args){
                 if (args[0]){
-                    var self = this;
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
+                    strand.newScope(containers[0]);
+                } else {
+                    /* TODO: Should this be a thing? */
+                    strand.noOperation();
                 }
             },
-            ifElse: function(args, containers){
-                var self = this;
-                if (args[0]){
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
-                }else{
-                    containers[1].forEach(function(block){
-                        block.run(self);
-                    });
-                }
+            ifElse: function(containers, args){
+                var branch = args[0] ? containers[0] : containers[1];
+                strand.newScope(branch);
             },
+
+
+            /* TODO: How do we make this _lazy_? */
             ternary: function(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;
             },
@@ -357,6 +363,10 @@
                 var name = args[1];
                 var answer = prompt(message);
                 runtime.control.setVariable(name, answer);
+            },
+            /** TODO: Need to... do stuff. */
+            commentContext: function (strand) {
+                strand.noOperation();
             },
             comment: function(){
             },

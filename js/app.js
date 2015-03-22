@@ -170,6 +170,17 @@ function handleExampleButton(evt){
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 
+Event.on(document.body, 'dragging:touchstart', null, Event.initDrag);
+Event.on(document.body, 'dragging:touchmove', null, Event.dragging);
+Event.on(document.body, 'dragging:touchend', null, Event.endDrag);
+Event.on(document.body, 'dragging:mousedown', null, Event.initDrag);
+Event.on(document.body, 'dragging:mousemove', null, Event.dragging);
+Event.on(window, 'dragging:mouseup', null, Event.endDrag);
+Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
+Event.on(window, 'input:keydown', null, Event.handleKeyDown);
+Event.on(window, 'input:keyup', null, Event.handleKeyUp);
+
+
 window.app = {
     message: message,
     error: error,

@@ -122,7 +122,7 @@
         var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
         // console.log("Loading gist " + id);
         if( !gistID ) return;
-        getScriptFromGist(id);
+        getScriptFromGistId(id);
     }
 
     function getScriptFromGistId(id){
@@ -161,6 +161,7 @@
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
         document.querySelector('wb-workspace > wb-contains').innerHTML = text;
+        Event.trigger(window, 'script-load', text);
     }
 
     function loadScriptsFromGist(gist){
@@ -193,7 +194,7 @@
             getScriptFromGistId(params.gist);
         }else if (params.example){
             loadScriptsFromExample(params.example);
-        }else if (localStorage['__simple_currentWaterbearScript']){
+        }else if (page === 'playground' && localStorage['__simple_currentWaterbearScript']){
             loadScriptsFromString(localStorage['__simple_currentWaterbearScript']);
         }
     }
@@ -222,12 +223,14 @@
             loadScriptsFromFile(file);
         }
     }
-
+    var page = location.pathname.split('/').pop().split('.')[0];
     Event.on(window, 'ui:load', null, loadCurrentScripts);
-    Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
-    Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
-    Event.on(document.body, 'ui:wb-removed', null, bareUrl);
-    Event.on(document.body, 'ui:wb-changed', null, bareUrl);
+    if (page === 'playground'){
+        Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
+        Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
+        Event.on(document.body, 'ui:wb-removed', null, bareUrl);
+        Event.on(document.body, 'ui:wb-changed', null, bareUrl);
+    }
 
     window.File = {
         scriptsToString: scriptsToString,

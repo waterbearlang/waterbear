@@ -14,10 +14,6 @@ window.WaterbearProcess = (function () {
 
     var assert = console.assert.bind(console);
 
-    /* TODO: When the strand is terminated... now what? There are no more
-     * instructions! */
-
-
     /**
      * Information for execution of a single ("stack") frame of execution.
      * Several frames make up a strand.
@@ -26,7 +22,7 @@ window.WaterbearProcess = (function () {
         this.context = context;
         this.activeContainer = activeContainer;
         this.args = null;
-        this.shouldContinue = continuationCallback;
+        this.shouldContinue = continuationCallback || null;
     }
 
     /**
@@ -84,6 +80,12 @@ window.WaterbearProcess = (function () {
      */
     Frame.createFromContext = function (context, container, callback) {
         return new Frame(context, container, callback);
+    };
+
+    Frame.createFromFrame = function (frame) {
+        return new Frame(frame.context,
+                         frame.container,
+                         frame.shouldContinue);
     };
 
 
@@ -188,9 +190,7 @@ window.WaterbearProcess = (function () {
 
     /* Private use: */
 
-    /**
-     * Get the next instruction in this strand.
-     */
+    /** Get the next instruction in this strand.  */
     Strand.prototype.next = function next() {
         var nextInstruction;
 
@@ -200,13 +200,15 @@ window.WaterbearProcess = (function () {
         assert(nextInstruction === null || typeof nextInstruction.run === 'function',
                'Block does not have a callable property `run`');
 
-        /* TODO: Frame handling stuff here. */
-        debugger
+        /* Handle frame stuff here. */
+        if (nextInstruction === null) {
+            return this.switchFrame();
+        }
 
         return nextInstruction;
     };
 
-
+    /** Add a frame to the execution stack. */
     Strand.prototype.pushNewFrameFromThisContext = function (container, callback) {
         var frame, context;
         context = this.currentInstruction;
@@ -216,7 +218,28 @@ window.WaterbearProcess = (function () {
         this.frames.unshift(frame);
         
         this.currentInstruction = this.currentFrame.firstInstruction;
-        debugger
+    };
+
+    /**
+     * Called when there's a possibility to restart this frame, or yield to
+     * the previous frame.
+     *
+     * Returns the next instruction to run.
+     */
+    Strand.prototype.switchFrame = function switchFrame() {
+        var oldFrame = this.currentFrame;
+        var nextContainer = oldFrame.shouldContinue && oldFrame.shouldContinue();
+
+        assert(nextContainer === null || nextContainer.tagName === 'WB-CONTAINS');
+
+        if (nextContainer === null) {
+            /* This frame has been exhausted! */
+            this.frames.shift();
+            return oldFrame.context && oldFrame.context.next();
+        } else {
+            this.frames[0] = Frame.createFromFrame(oldFrame);
+            return this.currentFrame.firstInstruction;
+        }
     };
 
     /**
@@ -391,7 +414,7 @@ window.WaterbearProcess = (function () {
             return;
         }
 
-        /* TODO: Decide if we should break. */
+        /* TODO: Decide if we should pause at this instruction. */
         /* TODO: Decide if we should switch to a different strand. */
 
         hasNext = this.currentStrand.doNext();
@@ -404,6 +427,7 @@ window.WaterbearProcess = (function () {
             /* Remove it from the list and... :/ */
             /* FIXME: Remove this console.log. */
             console.log('Strand execution halted...');
+            /* TODO: Now what? There are no more instructions! */
         }
     };
 

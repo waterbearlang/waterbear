@@ -91,6 +91,16 @@ window.WaterbearProcess = (function () {
     }
 
     /**
+     * Pseudo-property: currentFrame is the active (or top-most) frame in the
+     * frames stack.
+     */
+    Object.defineProperty(Strand.prototype, 'currentFrame', {
+        get: function () {
+            return this.frames[0];
+        }
+    });
+
+    /**
      * Runs the next instruction, updating the instruction pointer and scope
      * as appropriate.
      *
@@ -168,15 +178,6 @@ window.WaterbearProcess = (function () {
     Strand.prototype.noOperation = function noOperation() {
         this.undertakenAction = true;
     };
-
-    /**
-     * Pseudo-property: currentFrame is the top frame in the frames stack.
-     */
-    Object.defineProperty(Strand.prototype, 'currentFrame', {
-        get: function () {
-            return this.frames[0];
-        }
-    });
 
     /**
      * Creates the root strand -- that is, the strand from which all other

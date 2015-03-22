@@ -113,6 +113,12 @@ BlockProto.gatherValues = function(scope){
         return value.getValue(scope);
     });
 };
+/* Applicable for both <wb-step> and <wb-context>.
+ * The next element is simply the nextElementSibling. */
+BlockProto.next = function() {
+    return this.nextElementSibling;
+};
+
 
 /*****************
 *
@@ -134,10 +140,6 @@ StepProto.run = function(scope){
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
     return this.fn.apply(scope, this.gatherValues(scope));
-};
-StepProto.next = function() {
-    /* Delegate to parent container. */
-    return this.parentElement.next.apply(this, arguments);
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
@@ -638,10 +640,6 @@ var convert = {
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
-/* Gets the given element's next instruction. */
-ContainsProto.next = function(strand, args, contaiers, elem) {
-    return elem.nextElementSibling;
-};
 /* You sure love Object.defineProperty, dontcha, Eddie? */
 Object.defineProperty(ContainsProto, 'firstInstruction', {
    get: function () {

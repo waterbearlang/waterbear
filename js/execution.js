@@ -83,7 +83,7 @@ window.WaterbearProcess = (function () {
      * container.
      */
     Frame.createFromContext = function (context, container, callback) {
-        return new Frame(context, container, args, callback);
+        return new Frame(context, container, callback);
     };
 
 
@@ -95,6 +95,7 @@ window.WaterbearProcess = (function () {
      */
     function Strand(initialFrame, scope) {
         this.currentInstruction = initialFrame.firstInstruction;
+        /* FIXME: scope is an actual property of the frame, not the strand. */
         this.scope = scope || {};
         this.frames = [initialFrame];
 
@@ -118,19 +119,22 @@ window.WaterbearProcess = (function () {
      *
      * Returns: true if this strand has more instructions to execute.
      */
-    Strand.prototype.doNext = function next() {
-        assert(this.currentInstruction !== null, 'current instruction undefined.');
+    Strand.prototype.doNext = function doNext() {
+        assert(this.currentInstruction !== null,
+               'Cannot `doNext` when current instruction undefined.');
 
-        /** TODO: SPLIT THIS INTO A PRIVATE METHOD TOO. */
-        if (this.currentInstruction.tagName === 'WB-CONTEXT') {
-            /** TODO: Split this into private method. */
+        if (isContext(this.currentInstruction)) {
+            /* This *WILL* set the next instruction. */
+            this.undertakenAction = false;
             this.currentInstruction.run(this, this.currentFrame);
-            /* SOMEWHERE, FRAMES GET ADDED TO THE STACK. */
+            assert(this.undertakenAction,
+                  'API error: runtime function did not call one of ' +
+                    'strand.{newFrame, newScope, newFrameHandler, newEventHandler, noOperation}');
         } else {
             assert(this.currentInstruction.tagName == 'WB-STEP');
             this.currentInstruction.run(this.scope);
+            this.currentInstruction = this.next();
         }
-        this.currentInstruction = this.next();
 
         return this.currentInstruction !== null;
     };
@@ -140,6 +144,7 @@ window.WaterbearProcess = (function () {
      */
     Strand.prototype.newFrame = function newFrame(container, continuationCallback) {
         assert(false, 'Not implemented.');
+        this.pushNewFrameFromThisContext(container, callback);
         this.undertakenAction = true;
     };
 
@@ -149,17 +154,25 @@ window.WaterbearProcess = (function () {
      * has ended.
      */
     Strand.prototype.newScope = function newScope(container, continuationCallback) {
-        assert(false, 'Not implemented.');
+
+        /* Augment the current scope! */
+        this.scope = Object.create(this.scope);
+
+        this.pushNewFrameFromThisContext(container, continuationCallback);
         this.undertakenAction = true;
     };
 
     /**
      * Starts a new thread whose blocks will be run before each animation
      * frame.
+     *
+     * NOTE: the "frame" in "frame handler" is for **animation** frames. Do
+     * not confuse this with execution frames (the Frame class in this file).
      */
     Strand.prototype.newFrameHandler = function newFrameHandler(container) {
         assert(false, 'Not implemented.');
         this.undertakenAction = true;
+        this.currentInstruction = this.currentInstruction.next();
     };
 
     /**
@@ -170,6 +183,7 @@ window.WaterbearProcess = (function () {
      */
     Strand.prototype.noOperation = function noOperation() {
         this.undertakenAction = true;
+        this.currentInstruction = this.currentInstruction.next();
     };
 
     /* Private use: */
@@ -180,24 +194,29 @@ window.WaterbearProcess = (function () {
     Strand.prototype.next = function next() {
         var nextInstruction;
 
-        /* Delegate to the block itself. It takes these arugments:
-         *  strand: reference to this object.
-         *  args: frame args
-         *  containers: frame containers
-         *  elem: current element
-         */
-        nextInstruction =
-            this.currentInstruction.next(this,
-                                         this.currentFrame.args,
-                                         this.currentFrame.containers,
-                                         this.currentInstruction);
+        /* Delegate to the block itself. */
+        nextInstruction = this.currentInstruction.next();
 
         assert(nextInstruction === null || typeof nextInstruction.run === 'function',
                'Block does not have a callable property `run`');
 
-        /* TODO: Frame stuff here. */
+        /* TODO: Frame handling stuff here. */
+        debugger
 
         return nextInstruction;
+    };
+
+
+    Strand.prototype.pushNewFrameFromThisContext = function (container, callback) {
+        var frame, context;
+        context = this.currentInstruction;
+
+        assert(isContext(context));
+        frame = Frame.createFromContext(context, container, callback);
+        this.frames.unshift(frame);
+        
+        this.currentInstruction = this.currentFrame.firstInstruction;
+        debugger
     };
 
     /**
@@ -212,6 +231,13 @@ window.WaterbearProcess = (function () {
 
         return new Strand(frame, globalScope);
     };
+
+    /* Returns true if it's a context block. */
+    function isContext(block) {
+        /* FIXME: This probably shouldn't rely on the DOM. Probably. */
+        return block.tagName === 'WB-CONTEXT';
+    }
+
 
 
 

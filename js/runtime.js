@@ -236,16 +236,21 @@
         },
 
         control: {
-            whenProgramRuns: function(args, containers){
-                var self = this;
-                containers[0].forEach(function(block){
-                    block.run(self);
-                });
+            whenProgramRuns: function(strand, frame, containers, args){
+                strand.newFrame(containers[0]);
             },
-            eachFrame: function(args, containers){
+            eachFrame: function(strand, frame, containers, args){
                 var self = this;
+                var container = containers[0];
+
+                /* FIXME: need to support this in the debugger. */
+                console.warn('`each frame` not yet implemented!');
+                /* Silences the assertion error given by strand. */
+                strand.noOperation();
+
+                /* FIXME: Really, need to support frame stuff in debugger. */
                 perFrameHandlers.push(function(){
-                    containers[0].forEach(function(block){
+                    Array.prototype.forEach.call(container.children, function(block){
                         block.run(self);
                     });
                 });
@@ -269,9 +274,6 @@
                 this[name] += value;
             },
 
-            /**
-             * THIS IS THE OLD API WITH THE NEW API.
-             */
             loopOver: function(args, containers) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
@@ -316,14 +318,16 @@
                     block.run(self);
                 }
             },
-
             /**
-             * TODO: Handle these cases!
+             * FIXME: Update to new API.
              */
             broadcast: function(eventName, data){
                 // Handle with and without data
                 Event.trigger(document.body, eventName, data);
             },
+            /**
+             * FIXME: Update to new API.
+             */
             receive: function(args, containers){
                 // Handle with and without data
                 // Has a local for the data
@@ -337,9 +341,6 @@
                     });
                 });
             },
-            /**
-             * TODO: THIS IS THE NEW API.
-             */
             'if': function(strand, frame, containers, args){
                 if (args[0]){
                     strand.newScope(containers[0]);
@@ -348,13 +349,11 @@
                     strand.noOperation();
                 }
             },
-            ifElse: function(containers, args){
+            ifElse: function(strand, frame, containers, args){
                 var branch = args[0] ? containers[0] : containers[1];
                 strand.newScope(branch);
             },
-
-
-            /* TODO: How do we make this _lazy_? */
+            /* FIXME: How do we make this _lazy_? */
             ternary: function(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;
             },
@@ -364,7 +363,6 @@
                 var answer = prompt(message);
                 runtime.control.setVariable(name, answer);
             },
-            /** TODO: Need to... do stuff. */
             commentContext: function (strand) {
                 strand.noOperation();
             },

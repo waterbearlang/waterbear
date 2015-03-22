@@ -145,8 +145,7 @@ window.WaterbearProcess = (function () {
      * Creates a new frame of execution without creating a new scope.
      */
     Strand.prototype.newFrame = function newFrame(container, continuationCallback) {
-        assert(false, 'Not implemented.');
-        this.pushNewFrameFromThisContext(container, callback);
+        this.pushNewFrameFromThisContext(container, continuationCallback);
         this.undertakenAction = true;
     };
 

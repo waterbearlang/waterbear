@@ -215,39 +215,28 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
 };
-/*
- * TODO: SOMETHING. WITH THIS. MAYBE CHANGE HOW CONTAINS WORKS.
- */
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
-    return dom.children(this, 'wb-contains').map(function(container){
-       // PERHAPS THIS SHOULD RETURN CONTAINS BLOCKS.
-        return [].slice.call(container.children);
-    });
+    return dom.children(this, 'wb-contains');
 };
-ContextProto.run = function(strand, state){
-   /* Set this function's setup(), next(), and beforeScript(). */
-    if (!this.fn){
+ContextProto.run = function(strand, frame){
+   var args, containers;
+   /* Set this function's setup() callback */
+    if (!this.setup){
         this.setupCallbacks();
     }
 
     /* Google analytics event tracking. */
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
 
-    /* Evaluate arguments (maybe) and get containers. */
+    /* FIXME: Allow for optional evaluation of values. */
     // expressions are evaluated if and only if shouldEvaluateValues returns
     // true. Containers are evaluated when needed.
-    state.containers = this.gatherContains();
-    if (this.shouldEvaluateValues(strand, state.containers, this)) {
-        state.args =  this.gatherValues(strand.scope);
-    } else {
-        state.args = null;
-    }
+    args = this.gatherValues(strand.scope);
+    containers = this.gatherContains();
 
     /* Call setup! */
-    /* TODO: Should this be the outward facing API? After all, 
-     * args and contains are already passed via `this`... **/
-    return this.setup.call(state, strand, state.args, state.containers, this);
+    return this.setup.call(strand.scope, strand, frame, containers, args);
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
@@ -286,30 +275,17 @@ ContextProto.hideLocals = function(evt){
     }
 };
 /**
- * Sets up the next(), setup(), and shouldEvaluateValues() callbacks.
+ * Prepares the setup() callback.
  */
 ContextProto.setupCallbacks = function() {
     /* Fetch the callback object from runtime. */ 
     var qualifiedName = this.getAttribute('script').split('.');
     var category = qualifiedName[0], name = qualifiedName[1];
-    var callbacks = runtime[category][name];
+    var callback = runtime[category][name];
 
-    console.assert(!!callbacks, 'Could not find script: ' + qualifiedName);
+    console.assert(!!callback, 'Could not find script: ' + qualifiedName);
 
-    /* Pretend that the single function is an actually a callback object with
-     * that has only defined setup. */
-    if (typeof callbacks === 'function') {
-        callbacks = {
-            setup: callbacks, // Actually the setup() callback.
-            next: undefined,
-            shouldEvaluateValues: undefined
-        };
-    }
-
-    this.setup = callbacks.setup;
-    this.next = callbacks.next || defaultNextCallback; 
-    this.shouldEvaluateValues =
-        callbacks.shouldEvaluateValues || defaultShouldEvaluateValues; 
+    this.setup = callback;
 };
 
 /** Default: Always get the next DOM element and assume it's a wb-contains. */
@@ -662,9 +638,16 @@ var convert = {
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
+/* Gets the given element's next instruction. */
 ContainsProto.next = function(strand, args, contaiers, elem) {
     return elem.nextElementSibling;
 };
+/* You sure love Object.defineProperty, dontcha, Eddie? */
+Object.defineProperty(ContainsProto, 'firstInstruction', {
+   get: function () {
+      return this.firstElementChild;
+   }
+});
 
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 

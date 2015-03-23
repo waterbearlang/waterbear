@@ -98,6 +98,9 @@ window.WaterbearProcess = (function () {
     function Strand(initialFrame, scope) {
         this.currentInstruction = initialFrame.firstInstruction;
         /* FIXME: scope is an actual property of the frame, not the strand. */
+        /* FIXME: Strand should contain a reference to the process. */
+
+        /* FIXME: More argument checking? */
         this.scope = scope || {};
         this.frames = [initialFrame];
 
@@ -134,6 +137,7 @@ window.WaterbearProcess = (function () {
                     'strand.{newFrame, newScope, newFrameHandler, newEventHandler, noOperation}');
         } else {
             assert(this.currentInstruction.tagName == 'WB-STEP');
+            /* TODO: wrap this with error handling of some kind. */
             this.currentInstruction.run(this.scope);
             this.currentInstruction = this.next();
         }
@@ -171,6 +175,30 @@ window.WaterbearProcess = (function () {
      * not confuse this with execution frames (the Frame class in this file).
      */
     Strand.prototype.newFrameHandler = function newFrameHandler(container) {
+        /* FIXME: Write this! */
+        assert(false, 'Not implemented.');
+        this.undertakenAction = true;
+        this.currentInstruction = this.currentInstruction.next();
+    };
+
+    /**
+     * Registers a new event handler for the given event.
+     *
+     * TODO: Write more docs for this.
+     */
+    Strand.prototype.newEventHandler = function newEventHandler(event, container) {
+        /* FIXME: Write this! */
+        assert(false, 'Not implemented.');
+        this.undertakenAction = true;
+        this.currentInstruction = this.currentInstruction.next();
+    };
+
+    /**
+     * Starts a new strand, seperate from this one.  It inherits the current
+     * scope.
+     */
+    Strand.prototype.newStrand = function newStrand(container) {
+        /* FIXME: Write this! */
         assert(false, 'Not implemented.');
         this.undertakenAction = true;
         this.currentInstruction = this.currentInstruction.next();

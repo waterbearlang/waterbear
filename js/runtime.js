@@ -239,6 +239,13 @@
             whenProgramRuns: function(strand, frame, containers, args){
                 strand.newFrame(containers[0]);
             },
+            /* FIXME FIXME FIXME FIXME FIXME FIXME */
+            /* FIXME FIXME FIXME FIXME FIXME FIXME */
+            /* FIXME FIXME FIXME FIXME FIXME FIXME */
+            /*
+             * Must implement Strand#newFrameHandler. Until then, we have
+             * this. :/
+             */
             eachFrame: function(strand, frame, containers, args){
                 var self = this;
                 var container = containers[0];
@@ -250,6 +257,7 @@
 
                 /* FIXME: Really, need to support frame stuff in debugger. */
                 perFrameHandlers.push(function(){
+                    /* XXX: So that I don't break existing scripts. */
                     Array.prototype.forEach.call(container.children, function(block){
                         block.run(self);
                     });
@@ -318,15 +326,13 @@
                     block.run(self);
                 }
             },
-            /**
-             * FIXME: Update to new API.
-             */
             broadcast: function(eventName, data){
                 // Handle with and without data
                 Event.trigger(document.body, eventName, data);
             },
             /**
              * FIXME: Update to new API.
+             * FIXME: Must implement Strand#newEventHandler.
              */
             receive: function(args, containers){
                 // Handle with and without data

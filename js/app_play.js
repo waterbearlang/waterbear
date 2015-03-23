@@ -66,6 +66,11 @@ function runScript(){
     });
 }
 
+function setBreakoutUrl(){
+    var link = dom.find('.do-breakout');
+    link.setAttribute('href', location.href.replace('play.html', 'playground.html'));
+}
+
 Event.on(document.body, 'dragging:touchstart', null, Event.trackPointerDown);
 Event.on(document.body, 'dragging:touchmove', null, Event.trackPointerPosition);
 Event.on(document.body, 'dragging:touchend', null, Event.trackPointerUp);
@@ -75,6 +80,7 @@ Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 
 Event.on(window, 'ui:load', null, preload);
+Event.on(window, 'ui:load', null, setBreakoutUrl);
 Event.on(window, 'ui:script-load', null, preload);
 Event.on(window, 'ui:asset-load', null, runScript);
 

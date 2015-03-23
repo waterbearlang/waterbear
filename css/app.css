@@ -51,13 +51,20 @@ body > header > h1{
     padding: 0px;
 }
 
-.menu button{
+.menu button, .menu a{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
     border: 2px #111111 outset;
     margin: 3px;
     font-size: 18px;
+}
+
+.menu a{
+    float: right;
+    text-decoration: none;
+    padding: 2px 6px 3px;
+    display: inline-block;
 }
 
 .tabs-menu{

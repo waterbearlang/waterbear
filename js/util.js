@@ -51,6 +51,30 @@
                                    function(fn){ setTimeout(fn, 20); };
 
 
+    // Throttle back repeated calls
+    // source: http://www.elvarion.com/html5-optimization-tips-throttle-input-and-requestanimationframe/
+    function throttle(fn, threshold, scope) {
+        threshhold || (threshhold = 250);
+        var last,
+            deferTimer;
+        return function () {
+            var context = scope || this,
+                now = +new Date,
+                args = arguments;
+            if (last && now < last + threshhold) {
+                // hold on to it
+                clearTimeout(deferTimer);
+                deferTimer = setTimeout(function () {
+                    last = now;
+                    fn.apply(context, args);
+                }, threshhold);
+            } else {
+                last = now;
+                fn.apply(context, args);
+            }
+        };
+    }
+
     // add defaultValue if key does't exist in an object yet and return it
     // otherwise return current valud of key
     function setDefault(obj, key, defaultValue){

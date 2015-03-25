@@ -309,6 +309,16 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     overflow-y:auto;
     clear: both;
 }
+.tutorial-block-menu{
+    position: absolute;
+    bottom: 5px;
+    width:inherit;
+}
+.tutorial-blocks{
+    border:gray;
+    border-style:solid;
+    border-width:2px;
+}
 
 /* Prevent selecting text while dragging */
 .dragging *{

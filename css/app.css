@@ -247,11 +247,11 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     border-width: 4px;
     margin-top: 20px;
     width: 250px;
-    height: 190px;   
+    height: 190px;
 }
 .tutorial-output > div > div.canvas-holder{
     margin-top:7px;
-    
+
 }
 
 
@@ -318,4 +318,12 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+/* Take it out of sight */
+.hidden{
+    position: absolute;
+    width: 200px; /* sometimes we need it to still flow, even hidden */
+    height: 200px;
+    left: -1000px;
 }

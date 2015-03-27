@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 
+var process;
+
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
 // not attributes, CSS, or JavaScript. Once the messages have stabilized, move them
@@ -79,6 +81,12 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 
 Event.on('.do-run', 'ui:click', null, startScript);
 Event.on('.do-stop', 'ui:click', null, stopScript);
+Event.on('.do-pause', 'ui:click', null, function () {
+    /* TODO */
+});
+Event.on('.do-step', 'ui:click', null, function () {
+    /* TODO */
+});
 
 function startScript(evt){
     // Do any necessary cleanup (e.g., clear event handlers).
@@ -89,11 +97,16 @@ function startScript(evt){
     preload().whenLoaded(runScript);
 }
 
-function stopScript(evt){
-    runtime.stopEventLoop();
+function stopScript(evt) {
+    if (process) {
+        process.terminate();
+        /* Throw out the now-useless process. */
+        process = null;
+        runtime.stopEventLoop();
+        runtime.clear();
+    }
     evt.target.blur();
-    runtime.getStage().focus()
-    runtime.clear();
+    runtime.getStage().focus();
 }
 
 function stopAndClearScripts(){
@@ -114,13 +127,11 @@ function preload() {
 }
 
 function runScript(){
-    var globalScope = {};
     runtime.startEventLoop();
-    dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
-        if (block.run){
-            block.run(globalScope);
-        }
-    });
+    console.assert(!process, 'Tried to run, but Process instance already exists!');
+    /* Create brand new Process instance (because each process can only be
+     * started once). */
+    process = new WaterbearProcess().start();
 }
 
 function handleFileButton(evt){

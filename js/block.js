@@ -131,6 +131,12 @@ BlockProto.gatherValues = function(scope){
         return value.getValue(scope);
     });
 };
+/* Applicable for both <wb-step> and <wb-context>.
+ * The next element is simply the nextElementSibling. */
+BlockProto.next = function() {
+    return this.nextElementSibling;
+};
+
 
 /*****************
 *
@@ -151,7 +157,6 @@ StepProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
@@ -163,7 +168,7 @@ function handleVariableFocus(evt){
     // Gather all the locals so we can update them
     var input = evt.target;
     if (!input.parentElement.hasAttribute('isvariable')){
-        return
+        return;
     }
     var parentContext = dom.closest(input, 'wb-contains');
     var variableName = input.parentElement.getAttribute('value');
@@ -270,25 +275,29 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(header, 'wb-disclosure');
     setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
-    // console.log('Context created');
 };
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
-    return dom.children(this, 'wb-contains').map(function(container){
-        return [].slice.call(container.children);
-    });
+    return dom.children(this, 'wb-contains');
 };
-ContextProto.run = function(parentScope){
-    if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+ContextProto.run = function(strand, frame){
+   var args, containers;
+   /* Set this function's setup() callback */
+    if (!this.setup){
+        this.setupCallbacks();
     }
-    var scope = util.extend({}, parentScope);
-    // expressions are eagerly evaluated against scope, contains are late-evaluated
-    // I'm not yet sure if this is the Right Thing™
+
+    /* Google analytics event tracking. */
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling context %s with scope %o, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
-    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
+
+    /* FIXME: Allow for optional evaluation of values. */
+    // expressions are evaluated if and only if shouldEvaluateValues returns
+    // true. Containers are evaluated when needed.
+    args = this.gatherValues(strand.scope);
+    containers = this.gatherContains();
+
+    /* Call setup! */
+    return this.setup.call(strand.scope, strand, this, containers, args);
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
@@ -326,6 +335,29 @@ ContextProto.hideLocals = function(evt){
         });
     }
 };
+/**
+ * Prepares the setup() callback.
+ */
+ContextProto.setupCallbacks = function() {
+    /* Fetch the callback object from runtime. */ 
+    var qualifiedName = this.getAttribute('script').split('.');
+    var category = qualifiedName[0], name = qualifiedName[1];
+    var callback = runtime[category][name];
+
+    console.assert(!!callback, 'Could not find script: ' + qualifiedName);
+
+    this.setup = callback;
+};
+
+/** Default: Always get the next DOM element and assume it's a wb-contains. */
+function defaultNextCallback(strand, args, containers, elem) {
+    return elem.nextElementSibling;
+}
+
+/** Default: Always evaluate arugments before calling setup(). */
+function defaultShouldEvaluateValues(strand, containers, elem) {
+    return true;
+}
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
@@ -667,6 +699,13 @@ var convert = {
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
+/* You sure love Object.defineProperty, dontcha, Eddie? */
+Object.defineProperty(ContainsProto, 'firstInstruction', {
+   get: function () {
+      return this.firstElementChild;
+   }
+});
+
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
 

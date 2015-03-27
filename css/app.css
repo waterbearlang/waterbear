@@ -51,7 +51,13 @@ body > header > h1{
     padding: 0px;
 }
 
-.menu button{
+.menu button[disabled] {
+    color: #999;
+    border-color: #333;
+}
+
+.menu button, .menu a, .do-run, .do-stop{
+
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
@@ -60,42 +66,37 @@ body > header > h1{
     font-size: 18px;
 }
 
-.menu button[disabled] {
-    color: #999;
-    border-color: #333;
+.menu a{
+    float: right;
+    text-decoration: none;
+    padding: 2px 6px 3px;
+    display: inline-block;
 }
 
 .tabs-menu{
     flex: 0 0 34px;
-    background-color: yellowgreen;
     color: #FFFFFF;
     margin: 0px;
-    padding: 0px;
+    padding-top: 4px;
+    padding-left: 6px;
+
     position: relative;
     white-space: nowrap;
-    border: 1px solid #000;
+    border: none;
+    background-color: #666666;
+    height: 34px;
 }
-/*.tabs-menu:after{
-    position: absolute;
-    content: "";
-    width: 100%;
-    bottom: 0;
-    left: 0;
 
-    z-index: 1;
-}*/
 .tabs-menu button{
-    margin: 0 10px;
-    padding: 0 10px;
-    border: 2px #111111 outset;
+    border: 2px solid #111111;
+    border-radius: 5px;
     background-color: #666666;
     color: #FFFFFF;
-    display: inline-block;
     height: 30px;
     width: 150px;
 }
 .tabs-menu button[pressed='true']{
-    background-color: #FFFFFF;
+    background-color: #C4C4C4;
     color: #666666;
 }
 /* Show trash for sidebar while dragging */
@@ -184,155 +185,117 @@ wb-accordion.size > header:after{ background-color: hsl(192, 53%, 56%); }
 wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 
 
+
+/* Tutorial Tab*/
 .tutorial{
-    margin: 0 auto;
     width: 100%;
     flex-direction: column;
     overflow: auto;
 }
 
 .tutorial-header{
-    border-style: solid;
-    border-width: 1px;
     padding: 10px 10px;
-    background-color: slateblue;
     font-size: 35px;
-    position: relative;
-    height: 30px;
-    max-height: 30px;
     min-height: 30px;
-    display: inline-block;
-    margin: 0 auto;
     width: 100%;
-    flex-direction: row;
-    white-space: nowrap;
-    overflow-x: visible;
-    min-width: 750px;
+    min-width: 500px;
 }
-.tutorial-header > h1{
-    padding-left:20px;
-    display: inline-block;
-}
-.tutorial-header > h2{
-    padding-right:20px;
-    display: inline-block;
-    float:right;
-}
-.tutorial-header > select{
-    display: inline-block;
-    width: 200px;
-}
+
 .tutorial-main{
-    background-color: palegoldenrod;
-    display: inline-block;
     height: 400px;
     min-height: 350px;
     max-height: 400px;
-    position: relative;
-    margin: 0 auto;
     width: 100%;
-    flex-direction: row;
-    white-space: nowrap;
+    min-width: 500px;
     overflow-x: visible;
-    min-width: 750px;
 }
+
+.tutorial-desc{
+    height: 90%;
+    max-height: 315px;
+    width: 90%;
+    border: 2px solid black;
+    border-radius: 2px;
+    margin: 10px;
+    padding: 10px;
+    flex-direction: row;
+    overflow-y:auto;
+}
+
 .tutorial-output{
-    display: inline-block;
     height: 250px;
     max-height: 250px;
     min-height: 250px;
-    background: coral;
-    position: relative;
-    margin: 0 auto;
+    width: 100%;
+    min-width: 500px;
+    font-size:20px;
+}
+
+.tutorial-actions{
+    height: 30px;
+    max-height: 30px;
+    min-height: 30px;
     padding-bottom: 10px;
     width: 100%;
-    flex-direction: row;
     font-size:20px;
-    white-space: nowrap;
-    overflow-x: visible;
-    min-width: 750px;
+    min-width: 500px;
 }
+
 .tutorial-output > div{
-    flex-direction: column;
-    padding: 10px 10px;
-    display: inline-block;
+    padding: 10px;
 }
-.tutorial-output > div > img, .tutorial-output > div > canvas{
+.tutorial-output > div > img, div.canvas-holder{
     flex-direction: column;
-    padding-top: 10px;
     border: black;
     border-style: solid;
     border-width: 4px;
-    margin-top: 10px;
+    margin-top: 20px;
     width: 250px;
-    height: 190px;
-
+    height: 190px;   
 }
+.tutorial-output > div > div.canvas-holder{
+    margin-top:7px;
+    
+}
+
+
 .tutorial-finished{
     display: inline-block;
     height: 500px;
     max-height:0px;
     min-height: 0px;
-    background: violet;
-    position: relative;
-    margin: 0 auto;
     width: 100%;
     flex-direction: row;
-    white-space: nowrap;
     overflow-x: visible;
-    min-width: 750px;
+    min-width: 500px;
+    margin: 10px;
 }
+
 .tutorial-finished[completed=true]{
-    padding-top: 20px;
     max-height:500px;
     min-height:500px;
 }
+
 .tutorial-next{
     flex-direction: row;
+    margin: 10px;
 }
-.tutorial-next > img{
-    width: 250px;
-    height: 190px;
+
+.tutorial-next > div > img{
+    height: 100px;
 }
+
+.congrats{
+    float: left;
+}
+
 .tutorial-next > div > button{
-    background-color: yellow;
     color: #000000;
     border-radius: 5px;
     border: 2px #111111 outset;
-    margin: 3px;
     font-size: 18px;
-    margin-top: 20px;
 }
-.tutorial-next > *{
-    display: inline-block;
-    padding-left: 100px;
-    font-size:30px;
-}
-.tutorial-next > div{
-    vertical-align: top;
-    padding-top: 20px;
-    padding-left: 50px;
-}
-.tutorial-desc{
-    background-color: white;
-    display: inline-block;
-    height: 90%;
-    max-height: 315px;
-    position: relative;
-    width: 90%;
-    border: black;
-    border-style: solid;
-    border-width: 1px;
-    top: 10px;
-    left: 10px;
-    flex-direction: row;
-    overflow-y:auto;
-}
-.complete{
-    background-color:yellow;
-    vertical-align: top;
-    margin-top: 50px;
-}
+
 .complete button{
     background-color: #666666;
     color: #FFFFFF;
@@ -340,20 +303,15 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     border: 2px #111111 outset;
     margin: 3px;
     font-size: 18px;
-    margin-top: 20px;
 }
+
 .tutorial-solution{
-    background-color: white;
-    display: inline-block;
     max-height: 250px;
-    position: relative;
+    min-height: 250px;
     width: 90%;
-    border: black;
-    border-style: solid;
-    border-width: 1px;
+    border: 1px solid black;
     overflow-y:auto;
-    margin-top:20px;
-    margin-left:30px;
+    clear: both;
 }
 
 /* Prevent selecting text while dragging */

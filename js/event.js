@@ -278,6 +278,20 @@
         return false;
     }
 
+    // Used when we're not tracking dragging
+    function trackPointerPosition(evt){
+        Event.pointerX = evt.pageX;
+        Event.pointerY = evt.pageY;
+    }
+
+    function trackPointerDown(evt){
+        Event.pointerDown = true;
+    }
+
+    function trackPointerUp(evt){
+        Event.pointerDown = false;
+    }
+
     function dragging(evt){
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
@@ -395,19 +409,16 @@
         stagePointerY: 0,
         keys: {},
         keyHandlers: {},
-        clearRuntime: clearRuntime
+        clearRuntime: clearRuntime,
+        initDrag: initDrag,
+        dragging: dragging,
+        endDrag: endDrag,
+        cancelDrag: cancelDrag,
+        trackPointerPosition: trackPointerPosition,
+        trackPointerDown: trackPointerDown,
+        trackPointerUp: trackPointerUp,
+        handleKeyUp: handleKeyUp,
+        handleKeyDown: handleKeyDown
     };
-
-
-    Event.on(document.body, 'dragging:touchstart', null, initDrag);
-    Event.on(document.body, 'dragging:touchmove', null, dragging);
-    Event.on(document.body, 'dragging:touchend', null, endDrag);
-    Event.on(document.body, 'dragging:mousedown', null, initDrag);
-    Event.on(document.body, 'dragging:mousemove', null, dragging);
-    Event.on(window, 'dragging:mouseup', null, endDrag);
-    Event.on(window, 'dragging:keyup', null, cancelDrag);
-    Event.on(window, 'input:keydown', null, handleKeyDown);
-    Event.on(window, 'input:keyup', null, handleKeyUp);
-
 
 })();

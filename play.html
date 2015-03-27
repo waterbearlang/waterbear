@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Waterbear Play</title>
+	<link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/widget.css" />
+    <link rel="stylesheet" href="css/block.css" />
+	<link rel="stylesheet" href="css/app.css" />
+    <script src="lib/prefixfree.min.js"></script>
+    <script type="text/javascript">
+      <!-- Google Analytics -->
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-58671174-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</head>
+<body>
+    <header>
+        <a href="index.html"><img src="images/logo/waterbear_icon_logo.svg" /></a>
+    	<h1>Waterbear Play</h1>
+    </header>
+    <wb-workspace style="display:none">
+        <header>Workspace</header>
+        <output class="feedback"></output>
+        <wb-contains></wb-contains>
+    </wb-workspace>
+    <wb-playground>
+        <div class="menu">
+            <a class="do-breakout" target="_blank" href="playground.html">Open in Workshop</a>
+            <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
+            <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+        </div>
+        <canvas></canvas>
+    </wb-playground>
+    <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
+    <script src="lib/ajax.js"></script>
+    <script src="lib/document-register-element.js"></script><!-- polyfill for custom elements -->
+    <script src="lib/sound.js"></script>
+    <script src="lib/nanomodal.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/event.js"></script>
+    <script src="js/runtime.js"></script>
+	<script src="js/dom.js"></script>
+    <script src="js/block.js"></script>
+	<script src="js/app_play.js"></script>
+    <script src="js/file.js"></script>
+    <script src="js/queryparams.js"></script>
+
+</body>
+</html>

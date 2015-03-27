@@ -54,6 +54,10 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
         tabAssoc.setAttribute('selected', 'true');
+        var tutCanvas = dom.find('div.canvas-holder > canvas');
+        dom.find('wb-playground').appendChild( tutCanvas);
+        tutCanvas.removeAttribute('style');
+        runtime.handleResize();
     }
 });
 Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
@@ -66,6 +70,11 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
         tabAssoc.setAttribute('selected', 'true');
+        var playCanvas = dom.find('wb-playground > canvas');
+        dom.find('div.canvas-holder').appendChild(playCanvas);
+        playCanvas.style.width = '250px';
+        playCanvas.style.height = '190px';
+        
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
@@ -98,6 +107,13 @@ function stopScript(evt) {
     }
     evt.target.blur();
     runtime.getStage().focus();
+}
+
+function stopAndClearScripts(){
+    runtime.stopEventLoop();
+    runtime.clear();
+    runtime.resetStage();
+    File.clearScripts();
 }
 
 function preload() {
@@ -139,6 +155,7 @@ function handleFileButton(evt){
             text: "Open Gist",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'openGist']);
+                stopAndClearScripts();
                 File.loadScriptsFromGistId(evt);
                 modal.hide();
             }
@@ -146,6 +163,7 @@ function handleFileButton(evt){
             text: "Open File",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'openFile']);
+                stopAndClearScripts();
                 File.loadScriptsFromFilesystem(evt);
                 modal.hide();
             }
@@ -153,7 +171,7 @@ function handleFileButton(evt){
             text: "New",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'new']);
-                File.clearScripts();
+                stopAndClearScripts();
                 modal.hide();
             },
             primary: true
@@ -171,7 +189,16 @@ function handleExampleButton(evt){
             text: "Waterbear in Space",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
-                File.getScriptFromGistId('e06514193419705e6224');
+                stopAndClearScripts();
+                File.loadScriptsFromExample('waterbear_in_space');
+                modal.hide();
+            }
+        },{
+            text: "Noise 3D",
+            handler: function(modal){
+                _gaq.push(['_trackEvent', 'Tutorial', 'Noise3D']);
+                stopAndClearScripts();
+                File.loadScriptsFromExample('noise3d');
                 modal.hide();
             }
         }]
@@ -180,6 +207,17 @@ function handleExampleButton(evt){
 }
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
+
+Event.on(document.body, 'dragging:touchstart', null, Event.initDrag);
+Event.on(document.body, 'dragging:touchmove', null, Event.dragging);
+Event.on(document.body, 'dragging:touchend', null, Event.endDrag);
+Event.on(document.body, 'dragging:mousedown', null, Event.initDrag);
+Event.on(document.body, 'dragging:mousemove', null, Event.dragging);
+Event.on(window, 'dragging:mouseup', null, Event.endDrag);
+Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
+Event.on(window, 'input:keydown', null, Event.handleKeyDown);
+Event.on(window, 'input:keyup', null, Event.handleKeyUp);
+
 
 window.app = {
     message: message,

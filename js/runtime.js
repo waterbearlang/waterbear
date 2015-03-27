@@ -282,48 +282,74 @@
                 this[name] += value;
             },
 
-            loopOver: function(args, containers) {
-                // FIXME: this has to work over arrays, strings, objects, and numbers
-                var self = this;
-                var list = args[0];
-                var type = util.type(list);
-                var i =0,len,keys;
+            loopOver: function(strand, frame, containers, args) {
+                var scope = this;
+                var iterable = args[0];
+                var container = containers[0];
+                var type = util.type(iterable);
+
+                var value, length, keys;
+                var index = 0;
+
+                /* Get the length, based on type. */
                 switch(type){
                     case 'array': // fall through
                     case 'string':
-                        len = list.length;
+                        length = iterable.length;
                         break;
                     case 'object':
-                        keys = Object.keys(list);
-                        len = keys.length;
+                        keys = Object.keys(iterable);
+                        length = keys.length;
                         break;
                     case 'number':
-                        len = list;
+                        length = iterable;
+                        break;
+                    case 'boolean':
+                        /* Leave it undefined! */
                         break;
                 }
 
-                /* For every element in the container place
-                 * the index and value into the scope. */
-                for (i = 0; i < len; i++){
-                    switch(type){
-                        case 'array': // fall through
-                        case 'string':
-                            this.index = i;
-                            this.value = list[i];
-                            break;
-                        case 'object':
-                            this.key = keys[i];
-                            this.value = list[this.key];
-                            break;
-                        case 'number':
-                            this.value = i;
-                            break;
-                    }
-                    containers[0].forEach(runBlock);
+                /* Pick the appropriate "should do another iteration"
+                 * callback, based on type. */
+                var shouldContinue = ({
+                    boolean: function () { return value; },
+                    number: function () { return value <= length; },
+                    object: function () { return index < length; },
+                    array: function () { return index < length; },
+                    string: function () { return index < length; },
+                }[type]);
+
+                var getValue = ({
+                    boolean: function () {
+                        /* Reevaluate the loop-condition. */
+                        return frame.gatherValues(scope)[0];
+                    },
+                    number: function () { return index + 1; },
+                    string: function () { return iterable[index]; },
+                    array: function () { return iterable[index]; },
+                    object: function () { return iterable[keys[index]]; },
+                }[type]);
+
+                /* Check if the array is empty, boolean starts false, etc. */
+                updateState();
+                if (!shouldContinue()) {
+                    strand.noOperation();
+                    return;
                 }
 
-                function runBlock(block){
-                    block.run(self);
+                /* Spawn then new frame. */
+                strand.newScope(container, function() {
+                    index++;
+                    updateState();
+
+                    return shouldContinue() ? container : null;
+                });
+                function updateState() {
+                    /* Set the locals. */
+                    scope.value = value = getValue();
+                    /* Use the key value  if we have an object. */
+                    scope.index = keys === undefined ? index : keys[index];
+
                 }
             },
             broadcast: function(eventName, data){

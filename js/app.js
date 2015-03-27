@@ -25,25 +25,70 @@ function info(text){
     message('#333', text);
 }
 
+//For displaying the finished block
+Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var finished = button.parentElement.parentElement.parentElement.querySelector('wb-hbox[class="tutorial-finished"]');
+    finished.setAttribute('completed', 'true');
+
+});
+
+//For switching to the next step
+//at this point it just removes the finish block
+Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var tut = button.parentElement.parentElement.parentElement.parentElement;
+    tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
+    tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
+
+});
+
+// For switching between the tutorial and canvas
+Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
+    var tab = dom.closest(evt.target, 'button');
+    if(tab.getAttribute('pressed') !== 'true'){
+        var existing = tab.parentElement.querySelector('button[pressed=true]');
+        if(existing){existing.removeAttribute('pressed');}
+        tab.setAttribute('pressed', 'true');
+        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
+        if(existing){existing.removeAttribute('selected');}
+        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
+        tabAssoc.setAttribute('selected', 'true');
+    }
+});
+Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
+    var tab = dom.closest(evt.target, 'button');
+    if(tab.getAttribute('pressed') !== 'true'){
+        var existing = tab.parentElement.querySelector('button[pressed=true]');
+        if(existing){existing.removeAttribute('pressed');}
+        tab.setAttribute('pressed', 'true');
+        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
+        if(existing){existing.removeAttribute('selected');}
+        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
+        tabAssoc.setAttribute('selected', 'true');
+    }
+});
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on(document.body, 'ui:click', '.do-run', startScript);
-Event.on(document.body, 'ui:click', '.do-stop', stopScript);
-Event.on(document.body, 'ui:click', '.do-pause', function () {
+Event.on('.do-run', 'ui:click', null, startScript);
+Event.on('.do-stop', 'ui:click', null, stopScript);
+Event.on('.do-pause', 'ui:click', null, function () {
     /* TODO */
 });
-Event.on(document.body, 'ui:click', '.do-step', function () {
+Event.on('.do-step', 'ui:click', null, function () {
     /* TODO */
 });
 
-function startScript() {
+function startScript(evt){
     // Do any necessary cleanup (e.g., clear event handlers).
-    stopScript();
-    runtime.resetCanvas();
+    stopScript(evt);
+    runtime.resetStage();
+    evt.target.blur();
+    runtime.getStage().focus();
     preload().whenLoaded(runScript);
 }
 
-function stopScript() {
+function stopScript(evt) {
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */
@@ -51,6 +96,8 @@ function stopScript() {
         runtime.stopEventLoop();
         runtime.clear();
     }
+    evt.target.blur();
+    runtime.getStage().focus();
 }
 
 function preload() {
@@ -72,7 +119,7 @@ function runScript(){
 }
 
 function handleFileButton(evt){
-    var fileModel = nanoModal("Select an option or click away to exit.", 
+    var fileModel = nanoModal("Select an option or click away to exit.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
             text: "Save Gist",
@@ -118,7 +165,7 @@ function handleFileButton(evt){
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
-    var fileModel = nanoModal("Load an example program.", 
+    var fileModel = nanoModal("Load an example program.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
             text: "Waterbear in Space",

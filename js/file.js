@@ -21,10 +21,7 @@
 
     function saveCurrentScripts(){
         // super simplistic for now
-        var script = scriptsToString();
-        if (script){
-            localStorage['__simple_currentWaterbearScript'] = script;
-        }
+        localStorage['__simple_currentWaterbearScript'] = scriptsToString();
     }
 
     // Save script to gist;
@@ -96,6 +93,7 @@
     }
 
     function clearScripts(){
+        bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
     }

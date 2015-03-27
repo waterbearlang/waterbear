@@ -86,15 +86,20 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
 
+    var currentAnimationFrameHandler = null;
     function startEventLoop(){
         clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
-        requestAnimationFrame(frameHandler);
+        if (!currentAnimationFrameHandler){
+            currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
+        }
     }
 
     function stopEventLoop() {
-        /* TODO: Dunno lol there be more in here? */
+        /* Cancel any stray frame handlers. */
+        cancelAnimationFrame(currentAnimationFrameHandler);
+        currentAnimationFrameHandler = null;
     }
 
     function frameHandler(){
@@ -106,7 +111,7 @@
         perFrameHandlers.forEach(function(handler){
             handler();
         });
-        requestAnimationFrame(frameHandler);
+        currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
     }
 
 
@@ -142,7 +147,9 @@
         startEventLoop: startEventLoop,
         stopEventLoop: stopEventLoop,
         clear: clearRuntime,
-        resetCanvas: resetCanvas,
+        resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
+        getStage: canvas,
+        resetStage: resetCanvas,
 
         local: {
             //temporary fix for locals
@@ -485,6 +492,12 @@
             },
             drawAtPoint: function(img, pt){
                 img.drawAtPoint(getContext(), pt);
+            },
+            getWidth: function(img){
+                return img.getWidth();
+            },
+            getHeight: function(img){
+                return img.getHeight();
             },
             setWidth: function(img, w){
                 img.setWidth(w);
@@ -867,6 +880,12 @@
             getYvel: function(spt){
                 return spt.getYvel();
             },
+            getXpos: function(spt){
+                return spt.getXpos();
+            },
+            getYpos: function(spt){
+                return spt.getYpos();
+            },
             rotate: function(spt, angle){
                 spt.rotate(angle);
             },
@@ -899,11 +918,11 @@
             clearTo: new util.Method()
                 .when(['string'], function(clr){ // unfortunately colors are still strings
                     var r = canvasRect();
-                    ctx().fillStyle = clr;
-                    ctx().fillRect(r.x, r.y, r.width, r.height);
+                    getContext().fillStyle = clr;
+                    getContext().fillRect(r.x, r.y, r.width, r.height);
                 })
                 .when(['wbimage'], function(img){
-                    img.drawInRect(ctx(), canvasRect());
+                    img.drawInRect(getContext(), canvasRect());
                 })
             .fn(),
             stageWidth: function(){

@@ -848,6 +848,14 @@
         ctx.drawImage(this._image, r.x, r.y, r.width, r.height);
     };
 
+    WBImage.prototype.getHeight = function(){
+        return this.height;
+    };
+    
+    WBImage.prototype.getWidth = function(){
+        return this.width;
+    };    
+    
     WBImage.prototype.setWidth = function(w){
         this.width = w;
         this.height = this.width / this.origProportion;
@@ -904,6 +912,14 @@
     
     Sprite.prototype.getYvel = function(){
         return this.velocity.getY();
+    }
+    
+    Sprite.prototype.getXpos = function(){
+        return this.position.getX();
+    }
+    
+    Sprite.prototype.getYpos = function(){
+        return this.position.getY();
     }
 
     Sprite.prototype.applyForce = function(vec){

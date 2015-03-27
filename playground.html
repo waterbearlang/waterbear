@@ -28,11 +28,14 @@
         <a href="index.html"><img src="images/logo/waterbear_icon_logo.svg" /></a>
     	<h1>Waterbear with Custom Elements</h1>
     </header>
-    <div class="menu">
-        <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
-        <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
-    </div>
     <wb-hbox>
+        <wb-vbox>
+
+        <div class="menu">
+            <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
+            <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
+        </div>
+        <wb-workbox>
         <sidebar>
             <wb-search></wb-search>
             <wb-accordion class="control">
@@ -135,8 +138,11 @@
                     </wb-row>
                 </wb-step>
                 <wb-context script="control.commentContext" class="control">
-                    <wb-value type="text">comment</wb-value>
+                    <wb-value>ignore blocks</wb-value>
                 </wb-context>
+                <wb-step script="control.comment" class="control">
+                    <wb-value type="text">comment</wb-value>
+                </wb-step>
                 <wb-step script="control.alert" class="control">
                     <wb-value type="text,string">alert</wb-value>
                 </wb-step>
@@ -162,6 +168,12 @@
                 </wb-expression>
                 <wb-expression type="number" script="sprite.getYvel">
                     <wb-value type="sprite">get Y velocity</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="sprite.getXpos">
+                    <wb-value type="sprite">get X position</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="sprite.getYpos">
+                    <wb-value type="sprite">get Y position</wb-value>
                 </wb-expression>
                 <wb-step script="sprite.rotate" class="sprite">
                     <wb-value type="sprite">rotate</wb-value>
@@ -408,7 +420,7 @@
                     Colors
                 </header>
                 <wb-expression type="color" script="color.namedColor">
-                    <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuschia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
+                    <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
                 </wb-expression>
                 <wb-expression type="color" script="color.rgb">
                     <wb-value type="number" min="0" max="255" value="0">red</wb-value>
@@ -452,6 +464,12 @@
                 </header>
                 <wb-expression type="wb-image" isAsset="true" script="image.get" class="image">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="image.getWidth">
+                    <wb-value type="wb-image" allow="block">image width</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="image.getHeight">
+                    <wb-value type="wb-image" allow="block">image height</wb-value>
                 </wb-expression>
                 <wb-step script="image.setWidth" class="image">
                     <wb-value type="wb-image" allow="block">set</wb-value>
@@ -904,162 +922,200 @@
                 <wb-context script="input.whenKeyPressed" class="input">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
-                        </wb-context>
-            </wb-accordion>
-            <wb-accordion class="motion">
-                <header>
-                    <img class="cat-icon" src="images/icon/motion.svg" />
-                    Motion
-                </header>
-                <wb-context script="motion.whenDeviceTurned" class="motion">
-                    <wb-value type="list" allow="literal" options="upright,downright,downleft,upleft,up,down,right,left">when device turned</wb-value>
-                </wb-context>
-                <wb-expression type="motion" script="motion.tiltDirection">
-                    tilt direction
-                </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="geolocation">
-                <header>
-                    <img class="cat-icon" src="images/icon/geolocation.svg" />
-                    Geolocation
-                </header>
+                    </wb-context>
+                    <wb-expression type="motion" script="motion.tiltDirection">
+                        tilt direction
+                    </wb-expression>
+                </wb-accordion>
+                <wb-accordion class="geolocation">
+                    <header>
+                        <img class="cat-icon" src="images/icon/geolocation.svg" />
+                        Geolocation
+                    </header>
 
-                <wb-expression type="geolocation" script="geolocation.currentLocation">
-                    my current location
-                </wb-expression>
+                    <wb-expression type="geolocation" script="geolocation.currentLocation">
+                        my current location
+                    </wb-expression>
 
-                <wb-context script="geolocation.whenLocationUpdated" class="geolocation">
-                    <wb-row>
-                        <wb-value>when my location changes</wb-value>
-                        <wb-local>
-                            <wb-expression type="geolocation" script="geolocation.currentLocation">
-                                <wb-value value="location">my current location</wb-value>
-                            </wb-expression>
-                        </wb-local>
-                    </wb-row>
-                </wb-context>
+                    <wb-context script="geolocation.whenLocationUpdated" class="geolocation">
+                        <wb-row>
+                            <wb-value>when my location changes</wb-value>
+                            <wb-local>
+                                <wb-expression type="geolocation" script="geolocation.currentLocation">
+                                    <wb-value value="location">my current location</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                        </wb-row>
+                    </wb-context>
 
-                <wb-expression type="number" script="geolocation.latitude">
-                    <wb-value type="geolocation" allow="expression">latitude of</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="geolocation.longitude">
-                    <wb-value type="geolocation" allow="expression">longitude of</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="geolocation.altitude">
-                    <wb-value type="geolocation" allow="expression">altitude (m) of</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="geolocation.heading">
-                    <wb-value type="geolocation" allow="expression">direction from north of</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="geolocation.speed">
-                    <wb-value type="geolocation" allow="expression">speed (m/s) of</wb-value>
-                </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="size">
-                <header>
-                    <img class="cat-icon" src="images/icon/size.svg" />
-                    Sizes
-                </header>
-                <wb-expression type="size" script="size.fromCoordinates">
-                    <wb-value type="number" value="0">size from width</wb-value>
-                    <wb-value type="text" value="px">width units</wb-value>
-                    <wb-value type="number" value="0">height</wb-value>
-                    <wb-value type="text" value="px">height units</wb-value>
-                </wb-expression>
-                <wb-expression type="size" script="size.fromArray">
-                    <wb-value type="array" allow="expression">size from array</wb-value>
-                    <wb-value type="text" value="px">width units</wb-value>
-                    <wb-value type="text" value="px">height units</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="size.getWidth">
-                    <wb-value type="size" allow="expression">width from size</wb-value>
-                    <wb-value type="text" value="px">width units</wb-value>
-                </wb-expression>
-                <wb-expression type="number" script="size.getHeight">
-                    <wb-value type="size" allow="expression">height from size</wb-value>
-                    <wb-value type="text" value="px">height units</wb-value>
-                </wb-expression>
-                <wb-expression type="array" script="size.toArray">
-                    <wb-value type="size" allow="expression">size as array</wb-value>
-                </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="text">
-                <header>
-                    <img class="cat-icon" src="images/icon/text.svg" />
-                    Text
-                </header>
-                <wb-step script="text.setFont" class="text">
-                    <wb-row>
-                        <wb-value type = "number" value = "12">font</wb-value>
-                        <wb-value type="list" allow="literal"
-                        options="px,em,%,pt" value="px"></wb-value>
-                    </wb-row>
-                    <wb-value type = "text" value = "sans-serif"></wb-value>
-                </wb-step>
-                <wb-step script="text.textAlign" class="text">
-                    <wb-row>
-                        <wb-value type="list"  allow="literal"
-                        options="left,right,center,start,end"
-                        value="left">align text to the</wb-value>
-                    </wb-row>
-                </wb-step>
-                <wb-step script="text.textBaseline" class="text">
-                    <wb-row>
-                        <wb-value type="list"  allow="literal"
-                        options="alphabetic,top,hanging,middle,bottom,ideographic"
-                        value="alphabetic">text baseline</wb-value>
-                    </wb-row>
-                </wb-step>
-                <wb-step script = "text.fillText" class="text">
-                    <wb-value type = "text,string">fill text</wb-value>
-                    <wb-value type = "number">x</wb-value>
-                    <wb-value type = "number">y</wb-value>
-                </wb-step>
-                <wb-step script = "text.fillTextWidth" class="text">
-                    <wb-value type = "text,string">fill text</wb-value>
-                    <wb-value type = "number">x</wb-value>
-                    <wb-value type = "number">y</wb-value>
-                    <wb-value type = "number">max width</wb-value>
-                </wb-step>
-                <wb-step script = "text.strokeText" class="text">
-                    <wb-value type = "text,string">stroke text</wb-value>
-                    <wb-value type = "number">x</wb-value>
-                    <wb-value type = "number">y</wb-value>
-                </wb-step>
-                <wb-step script = "text.strokeTextWidth" class="text">
-                    <wb-value type = "text,string">stroke text</wb-value>
-                    <wb-value type = "number">x</wb-value>
-                    <wb-value type = "number">y</wb-value>
-                    <wb-value type = "number">max width</wb-value>
-                </wb-step>
-                <wb-expression type = "number" script = "text.width">
-                    <wb-value type = "text,string">width of text</wb-value>
-                </wb-expression>
-            </wb-accordion>
-        </sidebar>
-        <wb-splitter></wb-splitter>
-        <wb-workspace>
-            <header>Workspace</header>
-            <output class="feedback"></output>
-            <wb-contains></wb-contains>
-        </wb-workspace>
-        <wb-splitter></wb-splitter>
-        <wb-playground>
-            <div class="menu">
-                <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
-                <button class="do-pause" disabled onclick="_gaq.push(['_trackEvent', 'Action', 'pause']);">Pause</button>
-                <button class="do-step" onclick="_gaq.push(['_trackEvent', 'Action', 'step']);">Step</button>
-            </div>
-            <canvas></canvas>
-        </wb-playground>
+                    <wb-expression type="number" script="geolocation.latitude">
+                        <wb-value type="geolocation" allow="expression">latitude of</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="geolocation.longitude">
+                        <wb-value type="geolocation" allow="expression">longitude of</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="geolocation.altitude">
+                        <wb-value type="geolocation" allow="expression">altitude (m) of</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="geolocation.heading">
+                        <wb-value type="geolocation" allow="expression">direction from north of</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="geolocation.speed">
+                        <wb-value type="geolocation" allow="expression">speed (m/s) of</wb-value>
+                    </wb-expression>
+                </wb-accordion>
+                <wb-accordion class="size">
+                    <header>
+                        <img class="cat-icon" src="images/icon/size.svg" />
+                        Sizes
+                    </header>
+                    <wb-expression type="size" script="size.fromCoordinates">
+                        <wb-value type="number" value="0">size from width</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                        <wb-value type="number" value="0">height</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-expression type="size" script="size.fromArray">
+                        <wb-value type="array" allow="expression">size from array</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="size.getWidth">
+                        <wb-value type="size" allow="expression">width from size</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="size.getHeight">
+                        <wb-value type="size" allow="expression">height from size</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-expression type="array" script="size.toArray">
+                        <wb-value type="size" allow="expression">size as array</wb-value>
+                    </wb-expression>
+                </wb-accordion>
+                <wb-accordion class="text">
+                    <header>
+                        <img class="cat-icon" src="images/icon/text.svg" />
+                        Text
+                    </header>
+                    <wb-step script="text.setFont" class="text">
+                        <wb-row>
+                            <wb-value type = "number" value = "12">font</wb-value>
+                            <wb-value type="list" allow="literal"
+                            options="px,em,%,pt" value="px"></wb-value>
+                        </wb-row>
+                        <wb-value type = "text" value = "sans-serif"></wb-value>
+                    </wb-step>
+                    <wb-step script="text.textAlign" class="text">
+                        <wb-row>
+                            <wb-value type="list"  allow="literal"
+                            options="left,right,center,start,end"
+                            value="left">align text to the</wb-value>
+                        </wb-row>
+                    </wb-step>
+                    <wb-step script="text.textBaseline" class="text">
+                        <wb-row>
+                            <wb-value type="list"  allow="literal"
+                            options="alphabetic,top,hanging,middle,bottom,ideographic"
+                            value="alphabetic">text baseline</wb-value>
+                        </wb-row>
+                    </wb-step>
+                    <wb-step script = "text.fillText" class="text">
+                        <wb-value type = "text,string">fill text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                    <wb-step script = "text.fillTextWidth" class="text">
+                        <wb-value type = "text,string">fill text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                        <wb-value type = "number">max width</wb-value>
+                    </wb-step>
+                    <wb-step script = "text.strokeText" class="text">
+                        <wb-value type = "text,string">stroke text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                    <wb-step script = "text.strokeTextWidth" class="text">
+                        <wb-value type = "text,string">stroke text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                        <wb-value type = "number">max width</wb-value>
+                    </wb-step>
+                    <wb-expression type = "number" script = "text.width">
+                        <wb-value type = "text,string">width of text</wb-value>
+                    </wb-expression>
+                </wb-accordion>
+            </sidebar>
+            <wb-splitter></wb-splitter>
+            <wb-workspace>
+                <header>Workspace</header>
+                <output class="feedback"></output>
+                <wb-contains></wb-contains>
+            </wb-workspace>
+        </wb-workbox>
+    </wb-vbox>
+    <wb-splitter></wb-splitter>
+    <wb-vbox>
+        <div class="tabs-menu">
+            <button class="show-canvas" pressed='true'>Results</button>
+            <button class="show-tutorial">Tutorial</button>
+        </div>
+        <wb-displaybox class="canvas" selected='true'>
+            <wb-playground>
+                <div class="menu">
+                    <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
+                    <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                </div>
+                <canvas></canvas>
+            </wb-playground>
+        </wb-displaybox>
+        <wb-displaybox class="tutorial">
+                <wb-hbox class="tutorial-header">
+                    <select name=content>
+                        <option> op1 </option>
+                        <option> op2 </option>
+                    </select>
+                    <h1>Waterbear Turorials</h1>
+                    <h2>filler</h2>
+                </wb-hbox>
+                <wb-hbox class="tutorial-main">
+                    <div class="tutorial-desc"> This is only a test</div>
+                </wb-hbox>
+                <wb-hbox class="tutorial-output">
+                    <div>
+                        <h6> Expected output:</h6>
+                        <img src="images/png/steampunk.png">
+                    </div>
+                    <div>
+                        <h6> Actual output:</h6>
+                        <canvas></canvas>
+                    </div>
+                    <div class="complete">
+                        <div> Look the same?<br><br>Click 'Complete'!</div>
+                        <button class="tutorial-complete">Complete</button>
+                    </div>
+                </wb-hbox>
+                <wb-hbox class="tutorial-finished">
+                    <div class="tutorial-next">
+                        <img src="images/png/steampunk.png">
+                        <div>
+                            Congratulations!<br><br><br>Move on to the next step!<br><button class="nextTutorial">Next Step Name</button>
+
+                        </div>
+                    </div>
+                    <wb-hbox class="tutorial-solution">
+                        <div> This is our solution</div>
+                    </wb-hbox>
+                </wb-hbox>
+            </wb-displaybox>
+        </wb-vbox>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <!-- polyfill for custom elements -->
     <script src="lib/ajax.js"></script>
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
-    <script src="lib/nanomodal.min.js"></script>
+    <script src="lib/nanomodal.js"></script>
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
     <script src="js/runtime.js"></script>

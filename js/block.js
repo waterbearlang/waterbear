@@ -238,7 +238,7 @@ ContextProto.run = function(strand, frame){
     containers = this.gatherContains();
 
     /* Call setup! */
-    return this.setup.call(strand.scope, strand, frame, containers, args);
+    return this.setup.call(strand.scope, strand, this, containers, args);
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block

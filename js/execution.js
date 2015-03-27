@@ -44,16 +44,6 @@ window.WaterbearProcess = (function () {
     });
 
     /**
-     * Causes the parent of the container to reevaluate its arguments.
-     * These are then set to the this.args array.
-     *
-     * If the container does not have arguments, then this.args is null.
-     */
-    Frame.prototype.reevaluateArguments = function reevaluateArguments() {
-        this.args = this.context.gatherValues();
-    };
-
-    /**
      * Creates a new (usually root) frame from a <wb-contains> element.
      * That is, this frame does *NOT* have a context!.
      */
@@ -66,10 +56,6 @@ window.WaterbearProcess = (function () {
             containers: null,
             context: null,
             args: null,
-            reevaluateArguments: function () {
-                throw new Error('Cannot reevaluate arguments ' +
-                                'for context-less container.');
-            },
             shouldContinue: null,
         };
     };

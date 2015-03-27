@@ -52,11 +52,12 @@ window.WaterbearProcess = (function () {
          * Sneaky sneaky! */
         return {
             activeContainer: container,
-            firstInstruction: container.firstInstruction,
-            containers: null,
             context: null,
             args: null,
             shouldContinue: null,
+            /* Pseudo-properties. */
+            firstInstruction: container.firstInstruction,
+            containers: null,
         };
     };
 
@@ -70,7 +71,7 @@ window.WaterbearProcess = (function () {
 
     Frame.createFromFrame = function (frame) {
         return new Frame(frame.context,
-                         frame.container,
+                         frame.activeContainer,
                          frame.shouldContinue);
     };
 

@@ -206,7 +206,23 @@ function handleExampleButton(evt){
     fileModel.show();
 }
 
+function handleTutorialButton(evt){
+    var fileModel = nanoModal("Load a tutorial.",
+        {overlayClose: true, // Can't close the modal by clicking on the overlay.
+        buttons: [{
+            text: "Waterbear in Space",
+            handler: function(modal) {
+                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
+                File.loadTutorialFromName('wb_in_space');
+                modal.hide();
+            }
+        }]
+    });
+    fileModel.show();
+}
+
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
+Event.on(document.body, 'ui:click', '.open-tutorial', handleTutorialButton);
 
 Event.on(document.body, 'dragging:touchstart', null, Event.initDrag);
 Event.on(document.body, 'dragging:touchmove', null, Event.dragging);

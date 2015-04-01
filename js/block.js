@@ -936,20 +936,33 @@ Event.on(document.body, 'editor:wb-added', 'wb-expression', updateVariable);
 
 function updateVariable(evt){
     var setVariableBlock = evt.detail;
+    if (! dom.matches(setVariableBlock, 'wb-workspace *')){
+        return;
+    }
     if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
         return;
     }
     var valueBlock = evt.target;
-    setTypeOfVariable(valueBlock, setVariableBlock);
+    var type = valueBlock.getAttribute('type');
+    setTypeOfVariable(setVariableBlock, type);
+    updateLocalInstances(setVariableBlock, type);
 }
 
-// FIXME: Listen on wb-added instead?
-// And on wb-removed to undo?
-function setTypeOfVariable(initialValue, variableStep){
+
+function setTypeOfVariable(variableStep, type){
    // Set type of variable to match type of object
    variableStep
-       .querySelector('[script="control.getVariable"]')
-       .setAttribute('type', initialValue.getAttribute('type'));
+       .querySelector('[script="control.getVariable"]') // get local expression
+       .setAttribute('type', type);
+}
+
+function updateLocalInstances(variableStep, type){
+    var parentContext = dom.closest(variableStep, 'wb-contains');
+    var variableName = dom.find(variableStep, 'wb-value').getAttribute('value');
+    var variableLocalsToUpdate = getVariablesToUpdate(parentContext, variableName);
+    variableLocalsToUpdate.forEach(function(varinstance){
+        dom.closest(varinstance, 'wb-expression').setAttribute('type', type);
+    });
 }
 
 /* Add custom events for adding and removing blocks from the DOM */

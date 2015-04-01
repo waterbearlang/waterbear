@@ -158,11 +158,7 @@ function handleVariableFocus(evt){
     }
     var parentContext = dom.closest(input, 'wb-contains');
     var variableName = input.parentElement.getAttribute('value');
-    variableLocalsToUpdate = dom.findAll(parentContext, 'wb-expression[script="control.getVariable"]')
-                                          .filter(function(expr){
-        var value = dom.find(expr, 'wb-value');
-        return (value && value.getAttribute('value') === variableName);
-    });
+    variableLocalsToUpdate = getVariablesToUpdate(parentContext, variableName);
 }
 
 function handleVariableInput(evt){
@@ -172,7 +168,7 @@ function handleVariableInput(evt){
         return;
     }
     var newVariableName = input.value;
-    updateVariableNameInInstances(variableLocalsToUpdate, newVariableName);
+    updateVariableNameInInstances(newVariableName, variableLocalsToUpdate);
 }
 
 function handleVariableBlur(evt){
@@ -181,12 +177,12 @@ function handleVariableBlur(evt){
     if (!input.parentElement.hasAttribute('isvariable')){
         return;
     }
-    var oldVariableName = input.value; // keep this one around to find instances
-    ensureNameIsUniqueInContext(input);
-    var newVariableName = input.value;
-    if (oldVariableName !== newVariableName){
-        updateVariableNameInInstances(variableLocalsToUpdate, newVariableName);
-    }
+    // var oldVariableName = input.value; // keep this one around to find instances
+    ensureNameIsUniqueInContext(input, variableLocalsToUpdate);
+    // var newVariableName = input.value;
+    // if (oldVariableName !== newVariableName){
+    //     updateVariableNameInInstances(newVariableName, variableLocalsToUpdate);
+    // }
     variableLocalsToUpdate = null;
     oldVariableName = '';
 }
@@ -196,35 +192,50 @@ function trailingNumber(str){
     return Number((str.match(/\d+$/) || [0])[0]);
 }
 
-function ensureNameIsUniqueInContext(input){
-    var parentContext = dom.closest(input, 'wb-contains')
+function ensureNameIsUniqueInContext(input, variablesToUpdate){
+    var parentContext = dom.closest(input, 'wb-contains');
     // Find other variable names in scope
-    var variablesToTestAgainst = dom.findAll(parentContext, 'wb-expression[script="control.setVariable"]')
-        .map(function(expr){
-            var value = dom.find(expr, 'wb-value');
-            return value && value.getAttribute('value');
-        }).sort();
+    var variablesToTestAgainst = dom.findAll(parentContext, 'wb-step[script="control.setVariable"]')
+        .map(function(expr){return dom.find(expr, 'input');})
+        .filter(function(inputElem){ return inputElem && inputElem !== input; })
+        .map(function(inputElem){return inputElem.value; })
+        .sort();
     var newVariableName = input.value; // we may be changing this one
+    var oldVariableName = input.value;
     // Compare against other variable names, update if there is a match
     while(variablesToTestAgainst.indexOf(newVariableName) > -1){
-        console.log('flunked %s', newVariableName);
         var incrementalNumber = trailingNumber(newVariableName);
-        var baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+        var baseName;
+        if (incrementalNumber){
+            baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+        }else{
+            baseName = newVariableName + ' ';
+        }
         newVariableName = baseName + (incrementalNumber + 1);
+    }
+    if (newVariableName !== oldVariableName){
+        input.value = newVariableName;
+        if (variablesToUpdate === undefined){
+            variablesToUpdate = getVariablesToUpdate(parentContext, oldVariableName);
+        }
+        updateVariableNameInInstances(newVariableName, variablesToUpdate);
     }
 }
 
-function updateVariableNameInInstances(variableLocalsToUpdate, newVariableName){
-    variableLocalsToUpdate.forEach(function(expr){
-        expr.setAttribute('value', newVariableName);
-        var val = dom.find(expr, 'wb-value');
-        val.setAttribute('value', newVariableName);
-        val.textContent = newVariableName;
+function getVariablesToUpdate(parentContext, variableName){
+    return dom.findAll(parentContext, 'wb-expression[script="control.getVariable"]')
+            .map(function(expr){ return dom.find(expr, 'wb-value'); })
+            .filter(function(value){ return value && value.getAttribute('value') === variableName; })
+}
+
+function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
+    variableLocalsToUpdate.forEach(function(wbvalue){
+        wbvalue.setAttribute('value', newVariableName);
+        wbvalue.textContent = newVariableName;
     });
 }
 
 function uniquifyVariableName(evt){
-    console.log('step added');
     var setVariableBlock = evt.target;
     var input = dom.find(setVariableBlock, 'input');
     ensureNameIsUniqueInContext(input);
@@ -551,7 +562,6 @@ Event.on(workspace, 'editor:click', 'wb-contains .add-item', addItem);
 ******************/
 
 function removeItem(evt){
-    console.log('removing a row');
     var self = evt.target;
     var row = dom.closest(self, 'wb-row');
     // we want to remove the row, but not if it is the last one
@@ -561,7 +571,6 @@ function removeItem(evt){
 }
 
 Event.on(workspace, 'editor:click', 'wb-contains .remove-item', removeItem);
-
 
 
 /*****************
@@ -683,6 +692,22 @@ var convert = {
     number: function(text){ return +text; },
     any: function(text){return util.isNumber(text) ? +text : text; }
 };
+
+/*****************
+*
+*  wb-contains
+*
+*  Instantiated as new WBContains or as <wb-contains>. Contains is a semi-block. It never
+*  exists by itself, only as a child of a <wb-context> (and every <wb-context has at least one
+*  <wb-contains> child, implicitly if not explicitly). Sometimes we need to test for other blocks
+*  being in a <wb-context>, which is why sometimes it is block-ish.
+*
+*  Attributes: class, id
+*
+*  Children: wb-step, wb-context
+*
+******************/
+
 
 var ContainsProto = Object.create(HTMLElement.prototype);
 /* You sure love Object.defineProperty, dontcha, Eddie? */
@@ -883,6 +908,8 @@ function resetDragging(){
     document.body.classList.remove('block-dragging');
 }
 
+/* End Dragging */
+
 /**
  * Creates a new "set variable" step.
  * If `initialValue` is not null, it should be a <wb-expression>.
@@ -914,7 +941,6 @@ function updateVariable(evt){
     }
     var valueBlock = evt.target;
     setTypeOfVariable(valueBlock, setVariableBlock);
-    console.log('setVariableBlock: %o', setVariableBlock);
 }
 
 // FIXME: Listen on wb-added instead?
@@ -937,13 +963,13 @@ var blockObserver = new MutationObserver(function(mutations){
             return;
         }
         [].slice.apply(mutation.removedNodes)
-                .filter(function(node){return dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
+                .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
                 .forEach(function(node){
             Event.trigger(blockParent, 'wb-removedChild', node);
             Event.trigger(node, 'wb-removed', blockParent);
         });
         [].slice.apply(mutation.addedNodes)
-                .filter(function(node){return dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
+                .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
                 .forEach(function(node){
             Event.trigger(blockParent, 'wb-addedChild', node);
             Event.trigger(node, 'wb-added', blockParent);

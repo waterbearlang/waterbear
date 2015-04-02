@@ -758,7 +758,7 @@ function dropTargetIsContainer(potentialDropTarget){
 function addToContains(block, evt){
     // dropping directly into a contains section
     // insert as the first block unless dropped after the entire script
-    var addBlockEvent = {type:'add-block', addedBlock:block, addedTo:dropTarget};
+    var addBlockEvent = {type:'add-block', addedBlock:block, addedTo:dropTarget, nextBlock:null};
     if (dropTarget.matches('wb-contains')){
         if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
             dropTarget.appendChild(block);
@@ -770,6 +770,7 @@ function addToContains(block, evt){
         dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
         addBlockEvent.addedTo = dropTarget.parentElement;
     }
+    addBlockEvent.nextBlock = block.nextElementSibling;
     Event.addNewEvent(addBlockEvent);
 }
 
@@ -813,7 +814,7 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
         if (dropTarget.matches('wb-value')) {
             // console.log('add expression to value');
             dropTarget.appendChild(dragTarget);
-            var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget};
+            var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling};
             Event.addNewEvent(addValueEvent);
         }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.

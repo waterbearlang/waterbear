@@ -234,6 +234,8 @@ Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 
+Event.on(window, 'input:keyup', null, Event.undoKeyCombo);
+Event.on(window, 'input:keyup', null, Event.redoKeyCombo);
 
 window.app = {
     message: message,

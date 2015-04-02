@@ -758,6 +758,7 @@ function dropTargetIsContainer(potentialDropTarget){
 function addToContains(block, evt){
     // dropping directly into a contains section
     // insert as the first block unless dropped after the entire script
+    var addBlockEvent = {type:'add-block', addedBlock:block, addedTo:dropTarget};
     if (dropTarget.matches('wb-contains')){
         if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
             dropTarget.appendChild(block);
@@ -767,34 +768,59 @@ function addToContains(block, evt){
     }else{
         // dropping on a block in the contains, insert after that block
         dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
+        addBlockEvent.addedTo = dropTarget.parentElement;
     }
+    Event.addNewEvent(addBlockEvent);
 }
 
+/**
+    Variable Glossary:
+    dragStart = 'script' or 'menu', depending on where the original block is located (local vars also use 'menu' so they aren't hidden)
+    origTarget = the original block that has been cloned to be dragged
+            - hidden if it's in the script
+            - not hidden if it's in the menu, or is a local variable block
+    dragTarget = the cloned block that is being dragged
+    dropTarget = the block (or position) the clone is being dropped into
+**/
 Event.on(document.body, 'editor:drag-end', null, function(evt){
+    var originalBlock = origTarget;
+    var originalParent = null;
+    var nextElem = null;
     if (dragStart === 'script'){
+        if(origTarget){
+            originalParent = origTarget.parentElement;
+            nextElem = origTarget.nextElementSibling;
+        }
         origTarget.parentElement.removeChild(origTarget);
         origTarget = null;
     }
-    if (!dropTarget){
+    if (!dropTarget){                       
         // console.log('no dropTarget');
         if(dragTarget){
             dragTarget.parentElement.removeChild(dragTarget);
         }
        // fall through to resetDragging()
-    }else if (dropTarget === BLOCK_MENU){
+    }else if (dropTarget === BLOCK_MENU){   
         // Drop on script menu to delete block, always delete clone
         // console.log('delete both clone and original');
+        if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
+            originalBlock.classList.remove('singularity');  //un-hide block
+            var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
+            Event.addNewEvent(deleteEvent);                 //add new event to undo
+        }
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
-        if (dropTarget.matches('wb-value')) {
+        if (dropTarget.matches('wb-value')) {       
             // console.log('add expression to value');
             dropTarget.appendChild(dragTarget);
-        }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
+            var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget};
+            Event.addNewEvent(addValueEvent);
+        }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){  /** DROPPING AN EXPRESSION ONTO A BLOCK **/
             // Create variable block to wrap the expression.
             // console.log('create a variable block and add expression to it');
             addToContains(createVariableBlock(dragTarget), evt);
         }
-    }else if(dragTarget.matches('wb-context, wb-step')){
+    }else if(dragTarget.matches('wb-context, wb-step')){    /** DRAGGING A CONTEXT/STEP **/
         // console.log('add to contains');
         addToContains(dragTarget, evt);
     }else{

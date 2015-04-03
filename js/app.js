@@ -238,6 +238,7 @@ Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);
 Event.on(window, 'input:keyup', null, Event.undoKeyCombo);
 Event.on(window, 'input:keyup', null, Event.redoKeyCombo);
+Event.clearStacks();
 
 window.app = {
     message: message,

@@ -33,8 +33,8 @@
 
         <div class="menu">
             <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
-            <button class="undo" title="Ctrl-Z or ⌘-Z" onclick="_gaq.push(['_trackEvent', 'Undo', 'undo']);">Undo</button>
-            <button class="redo" title="Ctrl-Y or ⌘-Shift-Z" onclick="_gaq.push(['_trackEvent', 'Redo', 'redo']);">Redo</button>
+            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z" onclick="_gaq.push(['_trackEvent', 'Undo', 'undo']);">Undo</button>
+            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z" onclick="_gaq.push(['_trackEvent', 'Redo', 'redo']);">Redo</button>
             <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
             <button class="open-tutorial" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);">Tutorials</button>
 

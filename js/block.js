@@ -755,22 +755,26 @@ function dropTargetIsContainer(potentialDropTarget){
    }
 }
 
-function addToContains(block, evt){
+function addToContains(block, evt, addBlockEvent){
     // dropping directly into a contains section
     // insert as the first block unless dropped after the entire script
-    var addBlockEvent = {type:'add-block', addedBlock:block, addedTo:dropTarget, nextBlock:null};
+    addBlockEvent.addedBlock = block;
+    if(dragStart === 'script'){
+        addBlockEvent.type = 'move-block';
+    }
     if (dropTarget.matches('wb-contains')){
         if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
             dropTarget.appendChild(block);
         }else{
+            addBlockEvent.nextBlock = dropTarget.firstElementChild;
             dropTarget.insertBefore(block, dropTarget.firstElementChild);
         }
     }else{
         // dropping on a block in the contains, insert after that block
-        dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
+        addBlockEvent.nextBlock = dropTarget.nextElementSibling;
         addBlockEvent.addedTo = dropTarget.parentElement;
+        dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
     }
-    addBlockEvent.nextBlock = block.nextElementSibling;
     Event.addNewEvent(addBlockEvent);
 }
 
@@ -814,16 +818,22 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
         if (dropTarget.matches('wb-value')) {
             // console.log('add expression to value');
             dropTarget.appendChild(dragTarget);
-            var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling};
+            var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling, originalParent:originalParent, originalNextEl: nextElem};
+            if (dragStart === 'script'){
+                addValueEvent.type = 'move-block'
+            }
             Event.addNewEvent(addValueEvent);
+            
         }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.
             // console.log('create a variable block and add expression to it');
-            addToContains(createVariableBlock(dragTarget), evt);
+            var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
+            addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
     }else if(dragTarget.matches('wb-context, wb-step')){
         // console.log('add to contains');
-        addToContains(dragTarget, evt);
+        var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
+        addToContains(dragTarget, evt, addBlockEvent);
     }else{
         // console.log('no match, delete the cloned element (and show the original)');
         dragTarget.parentElement.removeChild(dragTarget);

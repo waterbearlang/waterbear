@@ -402,7 +402,7 @@
         else{
             var toUndo = undoStack.pop();
             redoStack.push(toUndo);
-                
+            setButtonStatus();
             if(toUndo.type === 'delete-block'){ //add the block back into the parent expression
                 var deletedBlock = toUndo.deletedBlock;
                 var deletedFrom = toUndo.deletedFrom;
@@ -414,10 +414,25 @@
                     deletedFrom.appendChild(deletedBlock);
                 }
             }
-            if(toUndo.type === 'add-block'){ //remove the block from  the parent expression
+            else if(toUndo.type === 'add-block'){ //remove the block from  the parent expression
                 var addedBlock = toUndo.addedBlock;
                 var addedTo = toUndo.addedTo;
                 addedTo.removeChild(addedBlock);
+            }
+            else if(toUndo.type === 'move-block'){
+                var addedBlock = toUndo.addedBlock;
+                var addedTo = toUndo.addedTo;
+                var origParent = toUndo.originalParent;
+                var origNextEl = toUndo.originalNextEl;
+                //remove from parent expression
+                addedTo.removeChild(addedBlock);
+                //add back to original parent expression
+                if(origNextEl){
+                    origParent.insertBefore(addedBlock, origNextEl);
+                }
+                else{
+                    origParent.appendChild(addedBlock);
+                }
             }
         }
     }
@@ -429,16 +444,30 @@
         else{
             var toRedo = redoStack.pop();
             undoStack.push(toRedo);
-            
+            setButtonStatus();
             if(toRedo.type === 'delete-block'){ //add the block back into the parent expression
                 var deletedBlock = toRedo.deletedBlock;
                 var deletedFrom = toRedo.deletedFrom;
                 deletedFrom.removeChild(deletedBlock);
             }
-            if(toRedo.type === 'add-block'){ //remove the block from  the parent expression
+            else if(toRedo.type === 'add-block'){ //remove the block from  the parent expression
                 var addedBlock = toRedo.addedBlock;
                 var addedTo = toRedo.addedTo;
                 var nextBlock = toRedo.nextBlock;
+                if(nextBlock){
+                    addedTo.insertBefore(addedBlock, nextBlock);
+                }
+                else{
+                    addedTo.appendChild(addedBlock);
+                }
+            }
+            else if(toRedo.type === 'move-block'){
+                var addedBlock = toRedo.addedBlock;
+                var addedTo = toRedo.addedTo;
+                var origParent = toRedo.originalParent;
+                var nextBlock = toRedo.nextBlock;
+                
+                origParent.removeChild(addedBlock);
                 if(nextBlock){
                     addedTo.insertBefore(addedBlock, nextBlock);
                 }
@@ -473,14 +502,26 @@
         redoEvent();
     }
     
+    function setButtonStatus(){
+        if(undoStack.length === 0){
+            document.getElementById('undoButton').disabled = true;
+        }
+        else{
+            document.getElementById('undoButton').disabled = false;
+        }
+        if(redoStack.length === 0){
+            document.getElementById('redoButton').disabled = true;
+        }
+        else{
+            document.getElementById('redoButton').disabled = false;
+        }
+    }
+    
     //add a new event to the undo stack
     function addNewEvent(evt){
-        console.log("Adding new event.");
         redoStack = [];
-        if(evt.type === "delete-block"){
-            console.log("block deletion occured");
-        }
         undoStack.push(evt);
+        setButtonStatus();
     }
     
     window.Event = {

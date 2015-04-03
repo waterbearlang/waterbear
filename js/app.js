@@ -234,6 +234,8 @@ Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 
+Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
+Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);
 Event.on(window, 'input:keyup', null, Event.undoKeyCombo);
 Event.on(window, 'input:keyup', null, Event.redoKeyCombo);
 

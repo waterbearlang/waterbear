@@ -396,39 +396,55 @@
     var redoStack = [];
     
     function undoEvent(toUndo){
-        if(toUndo.type === 'delete-block'){ //add the block back into the parent expression
-            var deletedBlock = toUndo.deletedBlock;
-            var deletedFrom = toUndo.deletedFrom;
-            var nextBlock = toUndo.nextBlock;
-            if(nextBlock){
-                deletedFrom.insertBefore(deletedBlock, nextBlock);
-            }
-            else{
-                deletedFrom.appendChild(deletedBlock);
-            }
+        if(undoStack.length==0){
+            console.log("Empty undo stack.");
         }
-        if(toUndo.type === 'add-block'){ //remove the block from  the parent expression
-            var addedBlock = toUndo.addedBlock;
-            var addedTo = toUndo.addedTo;
-            addedTo.removeChild(addedBlock);
+        else{
+            var toUndo = undoStack.pop();
+            redoStack.push(toUndo);
+                
+            if(toUndo.type === 'delete-block'){ //add the block back into the parent expression
+                var deletedBlock = toUndo.deletedBlock;
+                var deletedFrom = toUndo.deletedFrom;
+                var nextBlock = toUndo.nextBlock;
+                if(nextBlock){
+                    deletedFrom.insertBefore(deletedBlock, nextBlock);
+                }
+                else{
+                    deletedFrom.appendChild(deletedBlock);
+                }
+            }
+            if(toUndo.type === 'add-block'){ //remove the block from  the parent expression
+                var addedBlock = toUndo.addedBlock;
+                var addedTo = toUndo.addedTo;
+                addedTo.removeChild(addedBlock);
+            }
         }
     }
     
-    function redoEvent(toRedo){
-        if(toRedo.type === 'delete-block'){ //add the block back into the parent expression
-            var deletedBlock = toRedo.deletedBlock;
-            var deletedFrom = toRedo.deletedFrom;
-            deletedFrom.removeChild(deletedBlock);
+    function redoEvent(){
+        if(redoStack.length == 0){
+            console.log("Empty redo stack");
         }
-        if(toRedo.type === 'add-block'){ //remove the block from  the parent expression
-            var addedBlock = toRedo.addedBlock;
-            var addedTo = toRedo.addedTo;
-            var nextBlock = toRedo.nextBlock;
-            if(nextBlock){
-                addedTo.insertBefore(addedBlock, nextBlock);
+        else{
+            var toRedo = redoStack.pop();
+            undoStack.push(toRedo);
+            
+            if(toRedo.type === 'delete-block'){ //add the block back into the parent expression
+                var deletedBlock = toRedo.deletedBlock;
+                var deletedFrom = toRedo.deletedFrom;
+                deletedFrom.removeChild(deletedBlock);
             }
-            else{
-                addedTo.appendChild(addedBlock);
+            if(toRedo.type === 'add-block'){ //remove the block from  the parent expression
+                var addedBlock = toRedo.addedBlock;
+                var addedTo = toRedo.addedTo;
+                var nextBlock = toRedo.nextBlock;
+                if(nextBlock){
+                    addedTo.insertBefore(addedBlock, nextBlock);
+                }
+                else{
+                    addedTo.appendChild(addedBlock);
+                }
             }
         }
     }
@@ -436,29 +452,25 @@
     function undoKeyCombo(evt) {
         if(keyForEvent(evt) == 'z' && Event.keys['ctrl']) {
             evt.preventDefault();
-            if(undoStack.length==0){
-                console.log("Empty undo stack.");
-            }
-            else{
-                var toUndo = undoStack.pop();
-                redoStack.push(toUndo);
-                undoEvent(toUndo);
-            }
+            undoEvent();
         }
     }
     
     function redoKeyCombo(evt) {
         if(keyForEvent(evt) == 'y' && Event.keys['ctrl']) {
             evt.preventDefault();
-            if(redoStack.length == 0){
-                console.log("Empty redo stack");
-            }
-            else{
-                var toRedo = redoStack.pop();
-                undoStack.push(toRedo);
-                redoEvent(toRedo);
-            }
+            redoEvent();
         }
+    }
+    
+    function handleUndoButton(evt) {
+        evt.preventDefault();
+        undoEvent();
+    }
+    
+    function handleRedoButton(evt) {
+        evt.preventDefault();
+        redoEvent();
     }
     
     //add a new event to the undo stack
@@ -500,6 +512,8 @@
         handleKeyDown: handleKeyDown,
         undoKeyCombo: undoKeyCombo,
         redoKeyCombo: redoKeyCombo,
+        handleUndoButton: handleUndoButton,
+        handleRedoButton: handleRedoButton,
         addNewEvent: addNewEvent  
     };
 

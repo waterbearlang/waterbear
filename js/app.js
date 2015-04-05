@@ -2,6 +2,7 @@
 'use strict';
 
 var process;
+var currentTutorialStep = 0;
 
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
@@ -40,6 +41,8 @@ Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
     var tut = button.parentElement.parentElement.parentElement.parentElement;
     tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
     tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
+
+    showCurrentTutorialStep(currentTutorialStep);
 
 });
 
@@ -206,6 +209,8 @@ function handleExampleButton(evt){
     fileModel.show();
 }
 
+
+
 function handleTutorialButton(evt){
     var fileModel = nanoModal("Load a tutorial.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
@@ -214,12 +219,26 @@ function handleTutorialButton(evt){
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
                 File.loadTutorialFromName('wb_in_space');
+                currentTutorialStep = 0;
+                showCurrentTutorialStep(0);
                 modal.hide();
             }
         }]
     });
     fileModel.show();
 }
+
+function showCurrentTutorialStep(step) {
+    var tutorialSteps = document.getElementsByClassName('tutorial-step');
+    for(var i=0; i<4; i = i+1){
+        tutorialSteps[i].classList.add('.tutorial-hidden');
+        console.log(tutorialSteps[i].clasName);
+    }
+    tutorialSteps[step].classList.remove('tutorial-hidden');
+    currentTutorialStep++;
+}
+
+
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 Event.on(document.body, 'ui:click', '.open-tutorial', handleTutorialButton);

@@ -396,10 +396,7 @@
     var redoStack = [];
     
     function undoEvent(toUndo){
-        if(undoStack.length==0){
-            console.log("Empty undo stack.");
-        }
-        else{
+        if(undoStack.length!==0){
             var toUndo = undoStack.pop();
             redoStack.push(toUndo);
             setButtonStatus();
@@ -438,10 +435,7 @@
     }
     
     function redoEvent(){
-        if(redoStack.length == 0){
-            console.log("Empty redo stack");
-        }
-        else{
+        if(redoStack.length !== 0){
             var toRedo = redoStack.pop();
             undoStack.push(toRedo);
             setButtonStatus();

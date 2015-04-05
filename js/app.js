@@ -209,8 +209,6 @@ function handleExampleButton(evt){
     fileModel.show();
 }
 
-
-
 function handleTutorialButton(evt){
     var fileModel = nanoModal("Load a tutorial.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
@@ -219,26 +217,22 @@ function handleTutorialButton(evt){
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
                 File.loadTutorialFromName('wb_in_space');
-                currentTutorialStep = 0;
-                showCurrentTutorialStep(0);
                 modal.hide();
+                currentTutorialStep = 0;
             }
         }]
     });
     fileModel.show();
 }
 
-function showCurrentTutorialStep(step) {
+function showCurrentTutorialStep() {
     var tutorialSteps = document.getElementsByClassName('tutorial-step');
-    for(var i=0; i<4; i = i+1){
-        tutorialSteps[i].classList.add('.tutorial-hidden');
-        console.log(tutorialSteps[i].clasName);
+    for(var i=0; i<tutorialSteps.length; i = i+1){
+        tutorialSteps[i].classList.add('tutorial-hidden');
     }
-    tutorialSteps[step].classList.remove('tutorial-hidden');
+    tutorialSteps[currentTutorialStep].classList.remove('tutorial-hidden');
     currentTutorialStep++;
 }
-
-
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 Event.on(document.body, 'ui:click', '.open-tutorial', handleTutorialButton);
@@ -252,6 +246,7 @@ Event.on(window, 'dragging:mouseup', null, Event.endDrag);
 Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
+Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
 
 
 window.app = {

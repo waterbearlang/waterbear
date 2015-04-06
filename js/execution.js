@@ -533,14 +533,10 @@ window.WaterbearProcess = (function () {
         this.lastTime = currTime;
 
         if (this.delay === 0) {
-            /* FIXME: Absurd slow down for Noise3D. */
-            console.profile('one-frame');
             /* Run ALL of the frame handlers synchronously. */
             this.perFrameHandlers.forEach(function (strand){
                 strand.startSync();
             });
-            console.profileEnd('one-frame');
-            debugger
         } else {
             throw new Error('Slow down frame handler not implemented.');
         }
@@ -576,7 +572,7 @@ window.WaterbearProcess = (function () {
                'Must have at least one per-frame handler defined.');
 
         /* Alias to handleAnimationFrame, but bound to `this`. */
-        this.onAnimationFrame = this.handleAnimationFrame.bind(this)
+        this.onAnimationFrame = this.handleAnimationFrame.bind(this);
 
         if (!this.currentAnimationFrameHandler){
             this.currentAnimationFrameHandler =

@@ -102,7 +102,6 @@ function stopScript(evt) {
         process.terminate();
         /* Throw out the now-useless process. */
         process = null;
-        runtime.stopEventLoop();
         runtime.clear();
     }
     evt.target.blur();
@@ -110,7 +109,6 @@ function stopScript(evt) {
 }
 
 function stopAndClearScripts(){
-    runtime.stopEventLoop();
     runtime.clear();
     runtime.resetStage();
     File.clearScripts();
@@ -127,7 +125,6 @@ function preload() {
 }
 
 function runScript(){
-    runtime.startEventLoop();
     console.assert(!process, 'Tried to run, but Process instance already exists!');
     /* Create brand new Process instance (because each process can only be
      * started once). */

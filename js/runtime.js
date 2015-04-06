@@ -68,23 +68,11 @@
     }
 
     function clearRuntime() {
-        console.warn('Ensure all aspects of frame state are cleared.');
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
         Event.clearRuntime();
-        clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
-    }
-
-    var perFrameHandlers;
-    var lastTime;
-    var currentAnimationFrameHandler = null;
-
-    function clearPerFrameHandlers() {
-        console.warn('Using old clearPerFrameHandlers');
-        perFrameHandlers = [];
-        lastTime = new Date().valueOf();
     }
 
     // Initialize the stage.
@@ -92,28 +80,10 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
 
-    function startEventLoop(){
-        console.warn('Using old startEventLoop');
-        clearPerFrameHandlers();
-        runtime.control._frame = 0;
-        runtime.control._sinceLastTick = 0;
-    }
-
-    function stopEventLoop() {
-        console.warn('Using old stopEventLoop');
-    }
-
-    function frameHandler(){
-        console.warn('Using old frame handler.');
-        // where to put these? Event already has some global state.
-    }
-
-
     // for all of these functions, `this` is the scope object
     //
     // Contents of runtime (please add new handlers alphabetically)
     //
-    // startEventLoop -> exposed for testing only
     // local - special for variables
     // array
     // boolean
@@ -138,8 +108,6 @@
     // vector
 
     global.runtime = {
-        startEventLoop: startEventLoop,
-        stopEventLoop: stopEventLoop,
         clear: clearRuntime,
         resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
         getStage: canvas,
@@ -241,17 +209,9 @@
             whenProgramRuns: function(strand, frame, containers, args){
                 strand.newFrame(containers[0]);
             },
-            /* FIXME FIXME FIXME FIXME FIXME FIXME */
-            /* FIXME FIXME FIXME FIXME FIXME FIXME */
-            /* FIXME FIXME FIXME FIXME FIXME FIXME */
-            /*
-             * Must implement Strand#newFrameHandler. Until then, we have
-             * this. :/
-             */
             eachFrame: function(strand, frame, containers, args){
                 var container = containers[0];
-
-                /* I should change to this interface: */
+                /* Delegate to new frame handler. */
                 strand.newFrameHandler(container);
             },
             frame: function(){

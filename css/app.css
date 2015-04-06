@@ -325,6 +325,23 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 .tutorial-hidden{
     display:none;
 }
+.tutorial-block-menu{
+    position: relative;
+    bottom: 5px;
+    width:inherit;
+    padding-top:20px;
+    
+}
+.tutorial-blocks{
+    border:gray;
+    border-style:solid;
+    border-width:2px;
+    
+}
+.tutorial-blocks > wb-expression, .tutorial-blocks > wb-step, .tutorial-blocks > wb-context{
+    display: inline-block;
+    float: none;
+}
 
 /* Prevent selecting text while dragging */
 .dragging *{

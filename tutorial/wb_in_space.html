@@ -8,11 +8,28 @@
 “sprite with”<br />
 “image from url”<br />
 “draw”<br /><br />
+            <div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-expression type="size" script="size.fromArray">
+                        <wb-value type="array" allow="expression">size from array</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-step script = "text.strokeText" class="text">
+                        <wb-value type = "text,string">stroke text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                </div>
+            </div>
 Strategy Hints: <br />
 Did you remember to draw your sprite? This will make your objects appear on the canvas. <br />
 Did you make this code run “when program runs”? Putting your sprite blocks within this block will execute them when the program runs, which is what you want.<br />
 Did Waterbear make a variable block? This means you can now refer to this with the smaller block in the top right hand corner. <br />
 Can you only see part of an image? That’s fine! We’ll move it later.
+        
+            
         </div>
     </wb-hbox>
     <wb-hbox class="tutorial-output">
@@ -73,6 +90,21 @@ Can you only see part of an image? That’s fine! We’ll move it later.
 “stage height”<br />
 “stage weidth”<br /><br />
 Strategy Hints:<br />
+            <div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-expression type="size" script="size.fromArray">
+                        <wb-value type="array" allow="expression">size from array</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-step script = "text.strokeText" class="text">
+                        <wb-value type = "text,string">stroke text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                </div>
+            </div>
 Did you remember to make your fill style black?<br />
 Did you remember to fill in the shape you made?<br />
 Try to make a width and height using stage height and stage width blocks.<br />
@@ -137,6 +169,21 @@ Blocks to use:<br />
 “variable”<br />
 “center x”<br />
 “center y”<br /><br />
+            <div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-expression type="size" script="size.fromArray">
+                        <wb-value type="array" allow="expression">size from array</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-step script = "text.strokeText" class="text">
+                        <wb-value type = "text,string">stroke text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                </div>
+            </div>
 Strategy Hints: Try setting the position using the “center x” and “center y” blocks.
         </div>
     </wb-hbox>
@@ -198,6 +245,22 @@ Instructions: Use some math to only rotate back and forth.<br />
 “Rotate by”<br />
 “sine”<br />
 “x multiply” <br /><br />
+
+            <div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-expression type="size" script="size.fromArray">
+                        <wb-value type="array" allow="expression">size from array</wb-value>
+                        <wb-value type="text" value="px">width units</wb-value>
+                        <wb-value type="text" value="px">height units</wb-value>
+                    </wb-expression>
+                    <wb-step script = "text.strokeText" class="text">
+                        <wb-value type = "text,string">stroke text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                </div>
+            </div>
 Strategy Hints: Think about a <a href="http://www.google.com/url?q=http%3A%2F%2Fsciencevibe.com%2Fwp-content%2Fuploads%2F2015%2F02%2Fcosinesine.gif&sa=D&sntz=1&usg=AFQjCNGwRfIm9g3dt63sHjGrBOPdL_i73g">sine graph</a> and how it moves. It will give you values between 1 and -1, and since it moves back and forth, it can help us make the Waterbear move back and forth. By taking the sine of the frame, we can get values to try rotating the Waterbear by. Try using the sin(frame) to implement this.
         </div>
     </wb-hbox>

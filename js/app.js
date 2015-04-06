@@ -29,7 +29,15 @@ function info(text){
 //For displaying the finished block
 Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
     var button = dom.closest(evt.target, 'button');
-    var finished = button.parentElement.parentElement.parentElement.querySelector('wb-hbox[class="tutorial-finished"]');
+    var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-next");
+    console.log(finished);
+    finished.setAttribute('completed', 'true');
+
+});
+Event.on(document.body, 'ui:click', '.tutorial-see-solution', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-solution");
+    console.log(finished);
     finished.setAttribute('completed', 'true');
 
 });
@@ -82,8 +90,8 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on('.do-run', 'ui:click', null, startScript);
-Event.on('.do-stop', 'ui:click', null, stopScript);
+Event.on(document.body, 'ui:click', '.do-run', startScript);
+Event.on(document.body, 'ui:click', '.do-stop', stopScript);
 Event.on('.do-pause', 'ui:click', null, function () {
     /* TODO */
 });

@@ -97,29 +97,15 @@
         clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
-        if (!currentAnimationFrameHandler){
-            currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
-        }
     }
 
     function stopEventLoop() {
         console.warn('Using old stopEventLoop');
-        /* Cancel any stray frame handlers. */
-        cancelAnimationFrame(currentAnimationFrameHandler);
-        currentAnimationFrameHandler = null;
     }
 
     function frameHandler(){
         console.warn('Using old frame handler.');
         // where to put these? Event already has some global state.
-        var currTime = new Date().valueOf();
-        runtime.control._elapsed = currTime - lastTime;
-        runtime.control._frame++;
-        lastTime = currTime;
-        perFrameHandlers.forEach(function(handler){
-            handler();
-        });
-        currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
     }
 
 
@@ -263,24 +249,10 @@
              * this. :/
              */
             eachFrame: function(strand, frame, containers, args){
-                var self = this;
                 var container = containers[0];
 
-                /* FIXME: need to support this in the debugger. */
-                console.warn('`each frame` not yet implemented!');
-                /* Silences the assertion error given by strand. */
-                strand.noOperation();
-
-                /* FIXME: Really, need to support frame stuff in debugger. */
-                perFrameHandlers.push(function(){
-                    /* XXX: So that I don't break existing scripts. */
-                    Array.prototype.forEach.call(container.children, function(block){
-                        block.run(self);
-                    });
-                });
-
                 /* I should change to this interface: */
-                //strand.newFrameHandler(container);
+                strand.newFrameHandler(container);
             },
             frame: function(){
                 return runtime.control._frame;

@@ -90,8 +90,8 @@ window.WaterbearProcess = (function () {
      * "frames" -- a stack frames!
      */
     function Strand(initialFrame, process) {
+        this.process = process;
         this.currentInstruction = initialFrame.firstInstruction;
-        /* FIXME: Strand should contain a reference to the process. */
 
         this.frames = [initialFrame];
 
@@ -176,8 +176,10 @@ window.WaterbearProcess = (function () {
      * not confuse this with execution frames (the Frame class in this file).
      */
     Strand.prototype.newFrameHandler = function newFrameHandler(container) {
-        /* TODO: Write this! */
-        assert(false, 'Not implemented.');
+        /* Delegate to the process. */
+        this.process.addFrameHandler(container);
+
+        /* Just go on our merry way. */
         this.undertakenAction = true;
         this.currentInstruction = this.currentInstruction.next();
     };
@@ -287,16 +289,63 @@ window.WaterbearProcess = (function () {
         return new Strand(frame, process);
     };
 
+
     /**
      * A strand that whose root frame can be run many, many times.
      * Used for event and frame handlers.
+     *
+     * @see Strand for constructor arguments.
      */
-    function ReentrantStrand() {
+    function ReusableStrand(initialFrame) {
+        /* Call super() constructor. */
+        Strand.apply(this, arguments);
+
+        this.rootFrame = initialFrame;
     }
 
     /* Inherit methods from Strand. */
-    ReentrantStrand.prototype = Object.create(Strand.prototype);
+    ReusableStrand.prototype = Object.create(Strand.prototype);
 
+    /**
+     * Runs everything nested within synchronously.
+     */
+    ReusableStrand.prototype.startSync = function () {
+        var thereAreMoreInstructions;
+
+        /* Reset to the initial frame. */
+        this.resetFrames();
+
+        do {
+            thereAreMoreInstructions = this.doNext();
+        } while (thereAreMoreInstructions);
+    };
+
+    /**
+     * Unsupported operation.
+     */
+    ReusableStrand.prototype.newFrameHandler = function () {
+        throw new Error("Nesting frame handlers is a bad idea, m'kay?");
+    };
+
+    /**
+     * Unsupported operation.
+     */
+    ReusableStrand.prototype.newEventHandler = function () {
+        throw new Error("Refusing to create events within an event/frame.");
+    };
+
+    /*
+     * Private methods!
+     */
+
+    /**
+     * Clears all frames in the frame stack EXCEPT for the root frame.
+     * The next instruction is set as the first instruction in the root frame.
+     */
+    ReusableStrand.prototype.resetFrames = function () {
+        this.frames = [Frame.createFromFrame(this.rootFrame)];
+        this.currentInstruction =  this.currentFrame.firstInstruction;
+    };
 
 
 
@@ -314,8 +363,8 @@ window.WaterbearProcess = (function () {
         /* Set some essential state. */
         this.strands = [];
 
-        /* Related to frame handlers -- probably should split this out
-         * into its own class. */
+        /* Related to frame handlers -- probably should split this out into
+         * its own class. */
         this.perFrameHandlers = [];
         this.lastTime = new Date().valueOf();
         this.currentAnimationFrameHandler = null;
@@ -404,10 +453,10 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.setRate = function setRate(rate) {
         if (rate === undefined) {
-            this.rate = 0;
+            this.delay = 0;
         } else {
             assert((+rate) > 0, 'Must provide positive number for rate.');
-            this.rate = +rate;
+            this.delay = +rate;
         }
         return this;
     };
@@ -476,37 +525,62 @@ window.WaterbearProcess = (function () {
 
         /* Do I dare change these not quite global variables? */
         runtime.control._elapsed = currTime - this.lastTime;
-        /* FIXME: This does not allow multiple eachFrame handlers! */
+        /* FIXME: This does not trivially allow for multiple eachFrame
+         * handlers! */
         runtime.control._frame++;
         /* Why, yes, I do dare. */
 
         this.lastTime = currTime;
 
-        perFrameHandlers.forEach(function(handler){
-            /* TODO: Strand stuff... here... */
-            handler();
-        });
-        this.currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
+        if (this.delay === 0) {
+            /* FIXME: Absurd slow down for Noise3D. */
+            console.profile('one-frame');
+            /* Run ALL of the frame handlers synchronously. */
+            this.perFrameHandlers.forEach(function (strand){
+                strand.startSync();
+            });
+            console.profileEnd('one-frame');
+            debugger
+        } else {
+            throw new Error('Slow down frame handler not implemented.');
+        }
+
+        /* Enqueue the next call for this function. */
+        this.currentAnimationFrameHandler =
+            requestAnimationFrame(this.onAnimationFrame);
     };
 
     /**
      * Register this container as a frame handler.
      */
     Process.prototype.addFrameHandler = function addFrameHandler(container) {
-        /* TODO: */
-        throw new Error('Not implemented!');
+        if (this.perFrameHandlers.length > 0) {
+            throw new Error('Cannot install more than one per-frame handler. Yet!');
+        }
+
+        var frame = Frame.createFromContainer(container, this.currentStrand.scope);
+        var strand = new ReusableStrand(frame, this);
+        this.perFrameHandlers.push(strand);
+
+        this.startEventLoop();
     };
 
     /**
      * Starts requestAnimationFrame loop.
      */
     Process.prototype.startEventLoop = function() {
-        this.clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
-        if (!currentAnimationFrameHandler){
+
+        assert(this.perFrameHandlers.length > 0,
+               'Must have at least one per-frame handler defined.');
+
+        /* Alias to handleAnimationFrame, but bound to `this`. */
+        this.onAnimationFrame = this.handleAnimationFrame.bind(this)
+
+        if (!this.currentAnimationFrameHandler){
             this.currentAnimationFrameHandler =
-                requestAnimationFrame(this.handleAnimationFrame.bind(this));
+                requestAnimationFrame(this.onAnimationFrame);
         }
     };
 

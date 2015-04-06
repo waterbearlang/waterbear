@@ -328,7 +328,6 @@
                 if (args[0]){
                     strand.newScope(containers[0]);
                 } else {
-                    /* TODO: Should this be a thing? */
                     strand.noOperation();
                 }
             },
@@ -375,8 +374,7 @@
                 var steps = containers[0];
 
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
-                    // TODO: probably factor out augmenting scope and running
-                    // the block stuff to somewhere else.
+                    // TODO: Update to strand.newEventHandler()
                     steps.forEach(function (block) {
                         block.run(currentScope);
                     });

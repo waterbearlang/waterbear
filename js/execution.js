@@ -532,12 +532,13 @@ window.WaterbearProcess = (function () {
 
         this.lastTime = currTime;
 
-        if (this.delay === 0) {
+        if (!this.paused && this.delay === 0) {
             /* Run ALL of the frame handlers synchronously. */
             this.perFrameHandlers.forEach(function (strand){
                 strand.startSync();
             });
         } else {
+            /* TODO: Run one step when paused or in slow down mode. */
             throw new Error('Slow down frame handler not implemented.');
         }
 

@@ -68,6 +68,7 @@
     }
 
     function clearRuntime() {
+        console.warn('Ensure all aspects of frame state are cleared.');
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
         Event.clearRuntime();
@@ -78,8 +79,10 @@
 
     var perFrameHandlers;
     var lastTime;
+    var currentAnimationFrameHandler = null;
 
     function clearPerFrameHandlers() {
+        console.warn('Using old clearPerFrameHandlers');
         perFrameHandlers = [];
         lastTime = new Date().valueOf();
     }
@@ -89,8 +92,8 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
 
-    var currentAnimationFrameHandler = null;
     function startEventLoop(){
+        console.warn('Using old startEventLoop');
         clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
@@ -100,12 +103,14 @@
     }
 
     function stopEventLoop() {
+        console.warn('Using old stopEventLoop');
         /* Cancel any stray frame handlers. */
         cancelAnimationFrame(currentAnimationFrameHandler);
         currentAnimationFrameHandler = null;
     }
 
     function frameHandler(){
+        console.warn('Using old frame handler.');
         // where to put these? Event already has some global state.
         var currTime = new Date().valueOf();
         runtime.control._elapsed = currTime - lastTime;
@@ -273,6 +278,9 @@
                         block.run(self);
                     });
                 });
+
+                /* I should change to this interface: */
+                //strand.newFrameHandler(container);
             },
             frame: function(){
                 return runtime.control._frame;

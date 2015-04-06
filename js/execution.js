@@ -162,9 +162,9 @@ window.WaterbearProcess = (function () {
     Strand.prototype.newScope = function newScope(container, continuationCallback) {
 
         /* Augment the current scope! */
-        var newScope = Object.create(this.scope);
+        var scope = Object.create(this.scope);
 
-        this.pushNewFrameFromThisContext(container, newScope, continuationCallback);
+        this.pushNewFrameFromThisContext(container, scope, continuationCallback);
         this.undertakenAction = true;
     };
 
@@ -313,6 +313,13 @@ window.WaterbearProcess = (function () {
 
         /* Set some essential state. */
         this.strands = [];
+
+        /* Related to frame handlers -- probably should split this out
+         * into its own class. */
+        this.perFrameHandlers = [];
+        this.lastTime = new Date().valueOf();
+        this.currentAnimationFrameHandler = null;
+
         this.currentStrand = null;
         this.paused = false;
 
@@ -413,10 +420,9 @@ window.WaterbearProcess = (function () {
     Process.prototype.terminate = function terminate(cb) {
         assert(this.started);
         this.pause();
-        /* TODO: Clear frame handlers. */
+        this.clearPerFrameHandlers();
         return this;
     };
-
 
     /**
      * Enables all breakpoints. Execution will pause on all breakpoints.
@@ -465,9 +471,54 @@ window.WaterbearProcess = (function () {
     /**
      * Runs blocks during requestAnimationFrame().
      */
-    Process.prototype.frameHandlers = function onAnimationFrame() {
+    Process.prototype.handleAnimationFrame = function onAnimationFrame() {
+        var currTime = new Date().valueOf();
+
+        /* Do I dare change these not quite global variables? */
+        runtime.control._elapsed = currTime - this.lastTime;
+        /* FIXME: This does not allow multiple eachFrame handlers! */
+        runtime.control._frame++;
+        /* Why, yes, I do dare. */
+
+        this.lastTime = currTime;
+
+        perFrameHandlers.forEach(function(handler){
+            /* TODO: Strand stuff... here... */
+            handler();
+        });
+        this.currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
+    };
+
+    /**
+     * Register this container as a frame handler.
+     */
+    Process.prototype.addFrameHandler = function addFrameHandler(container) {
         /* TODO: */
-        throw new Error('Not implemented.');
+        throw new Error('Not implemented!');
+    };
+
+    /**
+     * Starts requestAnimationFrame loop.
+     */
+    Process.prototype.startEventLoop = function() {
+        this.clearPerFrameHandlers();
+        runtime.control._frame = 0;
+        runtime.control._sinceLastTick = 0;
+        if (!currentAnimationFrameHandler){
+            this.currentAnimationFrameHandler =
+                requestAnimationFrame(this.handleAnimationFrame.bind(this));
+        }
+    };
+
+    /**
+     * Cancels all per-frame handlers, and the current
+     * `requestAnimationFrame`.
+     */
+    Process.prototype.clearPerFrameHandlers = function () {
+        this.perFrameHandlers = [];
+        this.lastTime = new Date().valueOf();
+        cancelAnimationFrame(this.currentAnimationFrameHandler);
+        this.currentAnimationFrameHandler = null;
     };
 
     /**
@@ -480,7 +531,6 @@ window.WaterbearProcess = (function () {
         }
         return this;
     };
-
 
     /**
      * Execute `fn` asynchronously. Its execution will happen as soon as

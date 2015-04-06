@@ -314,6 +314,10 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     clear: both;
 }
 
+.tutorial-hidden{
+    display:none;
+}
+
 /* Prevent selecting text while dragging */
 .dragging *{
     -webkit-touch-callout: none;

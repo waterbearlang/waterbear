@@ -2,6 +2,7 @@
 'use strict';
 
 var process;
+var currentTutorialStep = 0;
 
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
@@ -40,6 +41,8 @@ Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
     var tut = button.parentElement.parentElement.parentElement.parentElement;
     tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
     tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
+
+    showCurrentTutorialStep(currentTutorialStep);
 
 });
 
@@ -215,10 +218,20 @@ function handleTutorialButton(evt){
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
                 File.loadTutorialFromName('wb_in_space');
                 modal.hide();
+                currentTutorialStep = 0;
             }
         }]
     });
     fileModel.show();
+}
+
+function showCurrentTutorialStep() {
+    var tutorialSteps = document.getElementsByClassName('tutorial-step');
+    for(var i=0; i<tutorialSteps.length; i = i+1){
+        tutorialSteps[i].classList.add('tutorial-hidden');
+    }
+    tutorialSteps[currentTutorialStep].classList.remove('tutorial-hidden');
+    currentTutorialStep++;
 }
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
@@ -233,6 +246,7 @@ Event.on(window, 'dragging:mouseup', null, Event.endDrag);
 Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
+Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
 
 
 window.app = {

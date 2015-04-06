@@ -65,7 +65,7 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
         tabAssoc.setAttribute('selected', 'true');
-        var tutCanvas = dom.find('div.canvas-holder > canvas');
+        var tutCanvas = dom.find('canvas');
         dom.find('wb-playground').appendChild( tutCanvas);
         tutCanvas.removeAttribute('style');
         runtime.handleResize();
@@ -81,8 +81,8 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
         tabAssoc.setAttribute('selected', 'true');
-        var playCanvas = dom.find('wb-playground > canvas');
-        dom.find('div.canvas-holder').appendChild(playCanvas);
+        var playCanvas = dom.find('canvas');
+        dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(playCanvas);
         playCanvas.style.width = '250px';
         playCanvas.style.height = '190px';
         
@@ -226,22 +226,36 @@ function handleTutorialButton(evt){
             text: "Waterbear in Space",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
+                var tutButton = dom.find('button.show-tutorial');
+                var tutCanvas = dom.find('canvas');
                 File.loadTutorialFromName('wb_in_space');
                 modal.hide();
                 currentTutorialStep = 0;
-                dom.find('button.show-tutorial').removeAttribute('hidden');
+                
+                tutButton.removeAttribute('hidden');
+                
             }
         }]
     });
     fileModel.show();
 }
 
+function switchTutorialCanvas(){
+    var tutCanvas = dom.find('canvas');
+        var target = dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder');
+        target.appendChild(tutCanvas);
+}
+
 function showCurrentTutorialStep() {
     var tutorialSteps = document.getElementsByClassName('tutorial-step');
     for(var i=0; i<tutorialSteps.length; i = i+1){
         tutorialSteps[i].classList.add('tutorial-hidden');
+        tutorialSteps[i].classList.remove('tutorial-current');
     }
     tutorialSteps[currentTutorialStep].classList.remove('tutorial-hidden');
+    tutorialSteps[currentTutorialStep].classList.add('tutorial-current');
+    if(currentTutorialStep > 0)
+        switchTutorialCanvas();
     currentTutorialStep++;
 }
 

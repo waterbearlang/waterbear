@@ -90,8 +90,8 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on('.do-run', 'ui:click', null, startScript);
-Event.on('.do-stop', 'ui:click', null, stopScript);
+Event.on(document.body, 'ui:click', '.do-run', startScript);
+Event.on(document.body, 'ui:click','.do-stop', stopScript);
 Event.on('.do-pause', 'ui:click', null, function () {
     /* TODO */
 });

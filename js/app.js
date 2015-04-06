@@ -101,6 +101,7 @@ Event.on('.do-step', 'ui:click', null, function () {
 
 function startScript(evt){
     // Do any necessary cleanup (e.g., clear event handlers).
+    console.log("starting script");
     stopScript(evt);
     runtime.resetStage();
     evt.target.blur();
@@ -109,6 +110,7 @@ function startScript(evt){
 }
 
 function stopScript(evt) {
+    console.log("stopping script");
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */
@@ -227,6 +229,7 @@ function handleTutorialButton(evt){
                 File.loadTutorialFromName('wb_in_space');
                 modal.hide();
                 currentTutorialStep = 0;
+                dom.find('button.show-tutorial').removeAttribute('hidden');
             }
         }]
     });

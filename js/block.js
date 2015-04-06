@@ -153,7 +153,8 @@ var oldVariableName = '';
 function handleVariableFocus(evt){
     // Gather all the locals so we can update them
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isvariable')){
+    var parent = dom.closest(input, 'wb-expression, wb-step, wb-context, wb-contains')
+    if (parent.getAttribute('script') !== 'control.setVariable'){
         return;
     }
     var parentContext = dom.closest(input, 'wb-contains');
@@ -164,7 +165,8 @@ function handleVariableFocus(evt){
 function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isvariable')){
+    var parent = dom.closest(input, 'wb-expression, wb-step, wb-context, wb-contains')
+    if (parent.getAttribute('script') !== 'control.setVariable'){
         return;
     }
     var newVariableName = input.value;
@@ -174,7 +176,8 @@ function handleVariableInput(evt){
 function handleVariableBlur(evt){
     // Cleanup
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isvariable')){
+    var parent = dom.closest(input, 'wb-expression, wb-step, wb-context, wb-contains')
+    if (parent.getAttribute('script') !== 'control.setVariable'){
         return;
     }
     // var oldVariableName = input.value; // keep this one around to find instances
@@ -241,13 +244,13 @@ function uniquifyVariableName(evt){
     ensureNameIsUniqueInContext(input);
 }
 
-Event.on(workspace, 'editor:focus', '[isvariable] input', handleVariableFocus); // Mozilla
-Event.on(workspace, 'editor:focusin', '[isvariable] input', handleVariableFocus); // All other browsers
-Event.on(workspace, 'editor:input', '[isvariable] input', handleVariableInput);
-Event.on(workspace, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
-Event.on(workspace, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
+Event.on(workspace, 'editor:focus', '[script="control.setVariable"] input', handleVariableFocus); // Mozilla
+Event.on(workspace, 'editor:focusin', '[script="control.setVariable"] input', handleVariableFocus); // All other browsers
+Event.on(workspace, 'editor:input', '[script="control.setVariable"] input', handleVariableInput);
+Event.on(workspace, 'editor:blur',  '[script="control.setVariable"] input', handleVariableBlur); // Mozilla
+Event.on(workspace, 'editor:focusout',  '[script="control.setVariable"] input', handleVariableBlur); // All other browsers
 
-Event.on(workspace, 'editor:wb-added', 'wb-step[script="control.setVariable"]', uniquifyVariableName);
+Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', uniquifyVariableName);
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>

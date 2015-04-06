@@ -233,12 +233,13 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 
 .tutorial-actions{
     height: 30px;
-    max-height: 30px;
-    min-height: 30px;
+    max-height: 40px;
+    min-height: 40px;
     padding-bottom: 10px;
     width: 100%;
     font-size:20px;
     min-width: 500px;
+    margin: 10px;
 }
 
 .tutorial-output > div{
@@ -262,8 +263,8 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 .tutorial-finished{
     display: inline-block;
     height: 500px;
-    max-height:0px;
-    min-height: 0px;
+    max-height:500px;
+    min-height:500px;
     width: 100%;
     flex-direction: row;
     overflow-x: visible;
@@ -271,14 +272,16 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     margin: 10px;
 }
 
-.tutorial-finished[completed=true]{
-    max-height:500px;
-    min-height:500px;
-}
-
 .tutorial-next{
     flex-direction: row;
     margin: 10px;
+    min-height: 150px;
+    max-height: 150px;
+    display: none;
+}
+
+.tutorial-next[completed=true]{
+    display: block;
 }
 
 .tutorial-next > div > img{
@@ -312,6 +315,11 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     border: 1px solid black;
     overflow-y:auto;
     clear: both;
+    display: none;
+}
+
+.tutorial-solution[completed=true]{
+    display: block;
 }
 
 .tutorial-hidden{

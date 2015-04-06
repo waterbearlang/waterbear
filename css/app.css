@@ -233,12 +233,13 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 
 .tutorial-actions{
     height: 30px;
-    max-height: 30px;
-    min-height: 30px;
+    max-height: 40px;
+    min-height: 40px;
     padding-bottom: 10px;
     width: 100%;
     font-size:20px;
     min-width: 500px;
+    margin: 10px;
 }
 
 .tutorial-output > div{

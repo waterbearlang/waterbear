@@ -435,7 +435,7 @@ window.WaterbearProcess = (function () {
 
         if (hasNext) {
             /* Setup the next step to run after delay. */
-            this.nextTimeout = setTimeout(this.doNextStep, this.delay);
+            this.nextTimeout = enqueue(this.doNextStep, this.delay);
         } else {
             /* TODO: this strand is now terminated... */
             /* Remove it from the list and... :/ */
@@ -461,11 +461,13 @@ window.WaterbearProcess = (function () {
      * Execute `fn` asynchronously. Its execution will happen as soon as
      * possible, but note that it may yield to several other "threads".
      */
-    function enqueue(fn) {
-        /* FIXME: Use setImmediate or equivalent. */
-        return setTimeout(fn, 0);
+    function enqueue(fn, delay) {
+        if (delay) {
+            return setTimeout(fn, delay);
+        } else {
+            return setImmediate(fn);
+        }
     }
-
 
     /* This is the export of the module. */
     return Process;

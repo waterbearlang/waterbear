@@ -85,19 +85,27 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 Event.on('.do-run', 'ui:click', null, startScript);
 Event.on('.do-stop', 'ui:click', null, stopScript);
 Event.on('.do-pause', 'ui:click', null, function () {
-    /* TODO */
+    console.assert(!!process, 'Trying to pause a process that DOES NOT EXIST');
+
+
 });
-Event.on('.do-step', 'ui:click', null, function () {
+Event.on('.do-step', 'ui:click', null, function (evt) {
+    if (!process) {
+        /* Start a new process, paused. */
+        return startScript(evt, { startPaused: true });
+    }
+
+    /* Step through the existing process. */
     /* TODO */
 });
 
-function startScript(evt){
+function startScript(evt, options) {
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
     runtime.resetStage();
     evt.target.blur();
     runtime.getStage().focus();
-    preload().whenLoaded(runScript);
+    preload().whenLoaded(runScript.bind(null, options));
 }
 
 function stopScript(evt) {
@@ -120,21 +128,27 @@ function stopAndClearScripts(){
 }
 
 function preload() {
+    /**
+     * Asynchronously loads/intiializes stuff... that's needed by the script.
+     */
     return assets.load({
+        /* Selector for blocks that require loading  : function that begins the loading. */
         'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
         'wb-contains wb-expression[script^="geolocation."]':
+        /* assets.waitFor waits for the given event to be triggered to signal
+         * that the asset is loaded. */
             assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
         'wb-contains wb-expression[script="motion.tiltDirection"]':
             assets.waitFor('motionchanged', util.motion.startTrackingMotion)
     });
 }
 
-function runScript(){
+function runScript(options) {
     runtime.startEventLoop();
     console.assert(!process, 'Tried to run, but Process instance already exists!');
     /* Create brand new Process instance (because each process can only be
      * started once). */
-    process = new WaterbearProcess().start();
+    process = new WaterbearProcess(options).start();
 }
 
 function handleFileButton(evt){

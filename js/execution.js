@@ -285,19 +285,31 @@ window.WaterbearProcess = (function () {
      * This is a "one-time use" object! This means that once `start` is
      * called, it cannot be started all over again. Similarly, once
      * `terminate` is called, you can consider this object useless.
+     *
+     * Options:
+     *  - startPaused:  Whether to start paused. Calling `start()` will
+     *                  immediately pause on the first instruction.
+     *  - emitter:      Callback with signature:
+     *                      function(eventName: String, data: Object) -> Any
+     *                  Called when Process wants to trigger events.
+     *                  If not provided, events are silently discarded.
      */
-    function Process() {
+    function Process(options) {
         var started = false;
+        /* Default to empty. */
+        options = options || {};
 
         /* Set some essential state. */
         this.strands = [];
         this.currentStrand = null;
-        this.paused = false;
+        this.paused = (!!options.startPaused) || false;
+
+        this.emitter = options.emitter || null;
 
         /* Disable breakpoints. */
         this.shouldBreak = false;
         /* Run as quickly as possible. */
-        this.delay = 0;
+        this.rate = 0;
         this.nextTimeout = null;
 
         /* `doNextStep` is the same as `nextStep`, but it is bound to this
@@ -344,7 +356,7 @@ window.WaterbearProcess = (function () {
         this.strands.push(this.currentStrand);
 
         /* This starts asynchronous execution. */
-        this.resumeAsync();
+        this.scheduleNextStep();
 
         return this;
     };
@@ -353,11 +365,11 @@ window.WaterbearProcess = (function () {
      * Resume executing immediately. Execution is as fast as the rate given to
      * `setRate` (default: unlimited).
      */
-    Process.prototype.resumeAsync = function resumeAsync() {
+    Process.prototype.resume = function resume() {
         assert(this.started);
 
         this.paused = false;
-        this.nextTimeout = enqueue(this.doNextStep);
+        this.scheduleNextStep();
         return this;
     };
 
@@ -374,6 +386,8 @@ window.WaterbearProcess = (function () {
     /**
      * Sets rate of execution in milliseconds / instruction.
      * If rate is not provided or undefined, the rate is unlimited.
+     *
+     * @see Process#unlimited(), alias of Process#setRate().
      */
     Process.prototype.setRate = function setRate(rate) {
         if (rate === undefined) {
@@ -383,6 +397,14 @@ window.WaterbearProcess = (function () {
             this.rate = +rate;
         }
         return this;
+    };
+
+    /**
+     * Process will run unlimited, without any delay in its execution.
+     * @see Process#setRate()
+     */
+    Process.prototype.unlimited = function unlimited() {
+        return this.setRate();
     };
 
     /**
@@ -415,7 +437,7 @@ window.WaterbearProcess = (function () {
         return this;
     };
 
-    /** Internal methods **/
+    /*= Internal methods =*/
 
     /**
      * Note: the constructor should bind an alias to this method called
@@ -424,18 +446,13 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.nextStep = function nextStep() {
         var hasNext;
-        if (this.paused) {
-            return;
-        }
-
-        /* TODO: Decide if we should pause at this instruction. */
-        /* TODO: Decide if we should switch to a different strand. */
+        this.nextTimeout = null;
 
         hasNext = this.currentStrand.doNext();
 
         if (hasNext) {
             /* Setup the next step to run after delay. */
-            this.nextTimeout = setTimeout(this.doNextStep, this.delay);
+            this.scheduleNextStep();
         } else {
             /* TODO: this strand is now terminated... */
             /* Remove it from the list and... :/ */
@@ -446,6 +463,34 @@ window.WaterbearProcess = (function () {
     };
 
     /**
+     * Uses the emitter provided in options to emit events.
+     */
+    Process.prototype.emit = function emit(name, data) {
+        if (this.emit === null) {
+            return;
+        }
+        return this.emit(name, data);
+    };
+
+    /**
+     * (Maybe) schedules the next instruction to run.
+     */
+    Process.prototype.scheduleNextStep = function scheduleNextStep() {
+        assert(this.nextTimeout === null,
+               'Tried to schedule a callback when one is already scheduled.');
+
+        /* TODO: Decide if we should pause at this instruction due to a
+         * breakpoint, error condition, etc. */
+        /* TODO: Decide if we should switch to a different strand. */
+
+        if (this.paused) {
+            return;
+        }
+
+        this.nextTimeout = enqueue(this.doNextStep, this.rate);
+    };
+
+    /**
      * Prevents the next callback from running.
      */
     Process.prototype.cancelNextTimeout = function cancelNextTimeout() {
@@ -453,7 +498,6 @@ window.WaterbearProcess = (function () {
             clearTimeout(this.nextTimeout);
             this.nextTimeout = null;
         }
-        return this;
     };
 
 

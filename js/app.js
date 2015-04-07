@@ -240,13 +240,18 @@ function handleTutorialButton(evt){
                 modal.hide();
                 currentTutorialStep = 0;
                 tutButton.removeAttribute('hidden');
-                /*
-                if(tutButton.getAttribute('pressed') === 'true'){
-                    dom.find('wb-playground').appendChild(canvasRef);
-                    showCanvas();
-                }
-                */
                 
+            }
+        },{
+            text: "Waterbear Piano",
+            handler: function(modal) {
+                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearPiano']);
+                var tutButton = dom.find('button.show-tutorial');
+                canvasRef = dom.find('canvas');
+                File.loadTutorialFromName('wb-piano');
+                modal.hide();
+                currentTutorialStep = 0;
+                tutButton.removeAttribute('hidden');
             }
         }]
     });

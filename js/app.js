@@ -95,7 +95,7 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(playCanvas);
         playCanvas.style.width = '250px';
         playCanvas.style.height = '190px';
-        
+
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
@@ -243,7 +243,7 @@ function handleTutorialButton(evt){
                     showCanvas();
                 }
                 */
-                
+
             }
         }]
     });
@@ -286,6 +286,11 @@ Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
 
+Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
+Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);
+Event.on(window, 'input:keydown', null, Event.undoKeyCombo);
+Event.on(window, 'input:keydown', null, Event.redoKeyCombo);
+Event.clearStacks();
 
 window.app = {
     message: message,

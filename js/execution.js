@@ -510,7 +510,7 @@ window.WaterbearProcess = (function () {
 
         if (hasNext) {
             /* Setup the next step to run after delay. */
-            this.nextTimeout = setTimeout(this.doNextStep, this.delay);
+            this.nextTimeout = enqueue(this.doNextStep, this.delay);
         } else {
             /* TODO: this strand is now terminated... */
             /* Remove it from the list and... :/ */
@@ -607,13 +607,17 @@ window.WaterbearProcess = (function () {
      * Execute `fn` asynchronously. Its execution will happen as soon as
      * possible, but note that it may yield to several other "threads".
      */
-    function enqueue(fn) {
-        /* FIXME #1085: Use setImmediate or equivalent. */
-        return setTimeout(fn, 0);
+    function enqueue(fn, delay) {
+        if (delay) {
+            return setTimeout(fn, delay);
+        } else {
+            return setImmediate(fn);
+        }
     }
 
-
-    /* Returns true if it's a context block. */
+    /**
+     * Returns true if the argument is a <wb-context> block.
+     */
     function isContext(block) {
         /* FIXME: This probably should NOT rely on the DOM. Probably. */
         return block.tagName === 'WB-CONTEXT';

@@ -703,7 +703,7 @@
             },
             stroke: function(shapeArg){
                 shapeArg.draw(getContext());
-                ctx.stroke();
+                getContext().stroke();
             },
             circle: function(pt, rad){
                 return new util.Shape(function(ctx){
@@ -722,6 +722,7 @@
                         ctx.lineTo(pt.x - width/2, pt.y - height/2);
                     }
                     else{
+                        ctx.moveTo(pt.x, pt.y);
                         ctx.lineTo(pt.x + width, pt.y);
                         ctx.lineTo(pt.x + width, pt.y + height);
                         ctx.lineTo(pt.x, pt.y + height);

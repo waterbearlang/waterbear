@@ -939,7 +939,7 @@
                     <wb-value>Pressed?</wb-value>
                 </wb-expression>
                 <wb-context script="input.whenKeyPressed" class="input">
-                    <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
+                    <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
                     </wb-context>
                     <wb-expression type="motion" script="motion.tiltDirection">
@@ -1077,7 +1077,7 @@
     <wb-vbox>
         <div class="tabs-menu">
             <button class="show-canvas" pressed='true'>Results</button>
-            <button class="show-tutorial">Tutorial</button>
+            <button class="show-tutorial" hidden='true'>Tutorial</button>
         </div>
         <wb-displaybox class="canvas" selected='true'>
             <wb-playground>
@@ -1090,54 +1090,8 @@
         </wb-displaybox>
         <wb-displaybox class="tutorial">
             <div class="tutorial-content">
-                <wb-hbox class="tutorial-header">
-                    <h1>Waterbear Tutorials</h1>
-                </wb-hbox>
-                <wb-hbox class="tutorial-main">
-                    <div class="tutorial-desc"> Awesome tutorial instructions are soon to come. Please check back for more information soon! We'll make a blog post announcement when it's ready!</div>
-                </wb-hbox>
-                <wb-hbox class="tutorial-output">
-                    <div>
-                        <h6> Expected output:</h6>
-                        <img src="images/png/steampunk.png">
-                    </div>
-                    <div>
-                        <wb-hbox>
-                            <h6> Actual output:</h6>
-                            <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                            <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
-                        </wb-hbox>
-                        <div class = "canvas-holder">
-
-                        </div>
-                    </div>
-                </wb-hbox>
-                <wb-hbox class="tutorial-actions">
-                    <div class="complete">
-                        Look the same? Click 'Complete'!
-                        <button class="tutorial-complete">Complete</button>
-                    </div>
-                </wb-hbox>
-                <wb-hbox class="tutorial-actions">
-                    <div class="complete">
-                        Really stuck? Check out our sample solution.
-                        <button class="tutorial-complete">Solution</button>
-                    </div>
-                </wb-hbox>
-                <wb-hbox class="tutorial-finished">
-                    <div class="tutorial-next">
-                        <div class="congrats">
-                            <img src="images/png/steampunk.png">
-                        </div>
-                        <div class="congrats">
-                            Congratulations! Move on to the next step!
-                            <button class="nextTutorial">Next Step</button>
-                        </div>
-                    </div>
-                    <wb-hbox class="tutorial-solution">
-                        <div> This is our solution</div>
-                    </wb-hbox>
-                </wb-hbox>
+                <h1>Waterbear Tutorials</h1>
+                Select a tutorial from the menu.
                 </div>
             </wb-displaybox>
         </wb-vbox>
@@ -1148,6 +1102,7 @@
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.js"></script>
+    <script src="lib/setImmediate-1.0.2.js"></script>
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
     <script src="js/runtime.js"></script>

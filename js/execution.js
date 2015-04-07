@@ -340,6 +340,16 @@ window.WaterbearProcess = (function () {
     }
 
     /**
+     * Psuedo-property: The next instruction to execute in the currently
+     * scheduled strand.
+     */
+    Object.defineProperty(Process.prototype, 'nextInstruction', {
+        get: function () {
+            return this.currentStrand.currentInstruction;
+        }
+    });
+
+    /**
      * Starts (asynchronous!) execution from scratch. Can only be called once.
      */
     Process.prototype.start = function start(firstInstruction) {
@@ -356,8 +366,9 @@ window.WaterbearProcess = (function () {
         this.strands.push(this.currentStrand);
 
         /* This starts asynchronous execution. */
-        this.scheduleNextStep();
+        this.scheduleNextStep(false);
 
+        this.emit('started');
         return this;
     };
 
@@ -370,6 +381,22 @@ window.WaterbearProcess = (function () {
 
         this.paused = false;
         this.scheduleNextStep();
+
+        this.emit('resume');
+        return this;
+    };
+
+    /**
+     * Does one step of the next scheduled strand. Asynchronous.
+     * When the 
+     */
+    Process.prototype.step = function step() {
+        if (!this.paused) {
+            throw new Error('Can only step while paused.');
+        }
+
+        /* Do one step, discarding its handler. */
+        this.scheduleNextStep(true);
         return this;
     };
 
@@ -379,7 +406,8 @@ window.WaterbearProcess = (function () {
     Process.prototype.pause = function pause() {
         assert(this.started);
         this.paused = true;
-        this.cancelNextTimeout();
+
+        this.emit('pause');
         return this;
     };
 
@@ -414,7 +442,7 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.terminate = function terminate(cb) {
         assert(this.started);
-        this.pause();
+        this.cancelNextTimeout();
         /* TODO: I dunno what else should be cleaned. */
         return this;
     };
@@ -466,24 +494,33 @@ window.WaterbearProcess = (function () {
      * Uses the emitter provided in options to emit events.
      */
     Process.prototype.emit = function emit(name, data) {
-        if (this.emit === null) {
+        if (this.emitter === null) {
             return;
         }
-        return this.emit(name, data);
+        return this.emitter(name, data);
     };
 
     /**
      * (Maybe) schedules the next instruction to run.
      */
-    Process.prototype.scheduleNextStep = function scheduleNextStep() {
+    Process.prototype.scheduleNextStep = function scheduleNextStep(stepRequested) {
         assert(this.nextTimeout === null,
                'Tried to schedule a callback when one is already scheduled.');
 
         /* TODO: Decide if we should pause at this instruction due to a
          * breakpoint, error condition, etc. */
         /* TODO: Decide if we should switch to a different strand. */
+        /* TODO: do stuff if step*/
+        /* TODO: schedule animation frame, if necessary. */
 
+        /* Issue an event of which step is the next to execute. */
         if (this.paused) {
+            /* This is enqueuing on behalf of a step. */
+            this.emit('step', {target: this.nextInstruction});
+        }
+
+        if (this.paused && !stepRequested) {
+            /* Paused and not requested from a step. */
             return;
         }
 

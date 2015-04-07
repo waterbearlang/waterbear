@@ -87,7 +87,11 @@ Event.on('.do-stop', 'ui:click', null, stopScript);
 Event.on('.do-pause', 'ui:click', null, function () {
     console.assert(!!process, 'Trying to pause a process that DOES NOT EXIST');
 
-
+    if (!process) {
+        console.warn('Clicked pause when there is no process running.');
+        return;
+    }
+    process.pause();
 });
 Event.on('.do-step', 'ui:click', null, function (evt) {
     if (!process) {
@@ -96,7 +100,7 @@ Event.on('.do-step', 'ui:click', null, function (evt) {
     }
 
     /* Step through the existing process. */
-    /* TODO */
+    process.step();
 });
 
 function startScript(evt, options) {
@@ -105,6 +109,15 @@ function startScript(evt, options) {
     runtime.resetStage();
     evt.target.blur();
     runtime.getStage().focus();
+
+    /* Add emitter. */
+    if (options === undefined) {
+        options = {};
+    }
+    options.emitter = options.emitter || function emitGlobalEvent(name, data) {
+        return Event.trigger(window, name, data);
+    };
+
     preload().whenLoaded(runScript.bind(null, options));
 }
 
@@ -261,6 +274,29 @@ Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
+
+/* Handle debugger events. */
+Event.on(window, 'process:step', null, function (evt) {
+    var block = evt.detail.target;
+    var oldBlocks;
+    document.body.classList.add('debugger-paused');
+
+    /* Update the paused element. */
+    oldBlocks = document.querySelectorAll('.wb-paused');
+    console.assert(oldBlocks.length <= 1);
+    
+    if (oldBlocks.length) {
+        oldBlocks[0].classList.remove('wb-paused');
+    }
+
+    block.classList.add('wb-paused');
+});
+Event.on(window, 'process:pause', null, function (evt) {
+    /* No-op: wb-paused added on step. */
+});
+Event.on(window, 'process:resume', null, function (evt) {
+    document.body.classList.remove('wb-paused');
+});
 
 
 window.app = {

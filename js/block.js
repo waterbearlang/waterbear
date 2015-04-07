@@ -759,7 +759,7 @@ function addToContains(block, evt, addBlockEvent){
     // dropping directly into a contains section
     // insert as the first block unless dropped after the entire script
     addBlockEvent.addedBlock = block;
-    if(dragStart === 'script'){
+    if(dragStart === 'script' && addBlockEvent.type !== 'add-var-block'){
         addBlockEvent.type = 'move-block';
     }
     if (dropTarget.matches('wb-contains')){
@@ -828,6 +828,10 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
             // Create variable block to wrap the expression.
             // console.log('create a variable block and add expression to it');
             var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
+            if(dragStart==='script'){
+                addBlockEvent.type = 'add-var-block';
+                addBlockEvent.insideBlock = dragTarget;
+            }
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
     }else if(dragTarget.matches('wb-context, wb-step')){

@@ -149,11 +149,29 @@ wb-context[closed] > wb-contains{
     display: none;
 }
 
-/* TODO: Better styles for paused. */
+/*
+ * Adds a glow to paused blocks. Makes 'em look ghosty.
+ */
+@keyframes paused-glow {
+    from {
+        box-shadow: 0 4px 10px rgba(63, 112, 223, 0.6);
+    }
+    to {
+        box-shadow: 0 4px 24px rgba(63, 112, 223, 1);
+    }
+}
+
+wb-step[script],
+wb-context[script] {
+    /* This gives a nifty slidy animation for when a block is paused. */
+    transition: transform 750ms, background-color 750ms;
+}
+
 wb-step[script].wb-paused,
 wb-context[script].wb-paused {
-    background-color: #EEE;
-    border-color: #CCC;
+    transform: translate(.5em, 0px);
+    background-color: white;
+    animation: paused-glow 1250ms ease-in-out infinite alternate;
 }
 
 .hide{

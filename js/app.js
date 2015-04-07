@@ -280,10 +280,11 @@ function showCurrentTutorialStep() {
     currentTutorialStep++;
 }
 Event.on(document.body, 'ui:click', '.load-solution', function(evt){
-    console.log("triggered event");
     var buttonPressed = dom.closest(evt.target, 'button');
     var gistId = buttonPressed.getAttribute('gistID');
-    console.log(gistId);
+    console.log("trying to load gist " + gistId);
+    stopAndClearScripts();
+    File.loadScriptsFromGistId(gistId);
     
 });
 

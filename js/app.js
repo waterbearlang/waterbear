@@ -3,6 +3,7 @@
 
 var process;
 var currentTutorialStep = 0;
+var canvasRef;
 
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
@@ -55,8 +56,16 @@ Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
 });
 
 // For switching between the tutorial and canvas
-Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
-    var tab = dom.closest(evt.target, 'button');
+Event.on(document.body, 'ui:click', '.show-canvas', showCanvas);
+
+
+function showCanvas(evt){
+    if(evt){
+        var tab = dom.closest(evt.target, 'button');
+    }
+    else{//because I am using this to jump out of tutorials w/o a click
+        var tab = dom.find('button.show-canvas');
+    }
     if(tab.getAttribute('pressed') !== 'true'){
         var existing = tab.parentElement.querySelector('button[pressed=true]');
         if(existing){existing.removeAttribute('pressed');}
@@ -70,7 +79,8 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
         tutCanvas.removeAttribute('style');
         runtime.handleResize();
     }
-});
+}
+
 Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
     var tab = dom.closest(evt.target, 'button');
     if(tab.getAttribute('pressed') !== 'true'){
@@ -101,7 +111,6 @@ Event.on('.do-step', 'ui:click', null, function () {
 
 function startScript(evt){
     // Do any necessary cleanup (e.g., clear event handlers).
-    console.log("starting script");
     stopScript(evt);
     runtime.resetStage();
     evt.target.blur();
@@ -110,7 +119,6 @@ function startScript(evt){
 }
 
 function stopScript(evt) {
-    console.log("stopping script");
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */
@@ -227,12 +235,17 @@ function handleTutorialButton(evt){
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
                 var tutButton = dom.find('button.show-tutorial');
-                var tutCanvas = dom.find('canvas');
+                canvasRef = dom.find('canvas');
                 File.loadTutorialFromName('wb_in_space');
                 modal.hide();
                 currentTutorialStep = 0;
-                
                 tutButton.removeAttribute('hidden');
+                /*
+                if(tutButton.getAttribute('pressed') === 'true'){
+                    dom.find('wb-playground').appendChild(canvasRef);
+                    showCanvas();
+                }
+                */
                 
             }
         }]
@@ -256,6 +269,9 @@ function showCurrentTutorialStep() {
     tutorialSteps[currentTutorialStep].classList.add('tutorial-current');
     if(currentTutorialStep > 0)
         switchTutorialCanvas();
+    else{
+        dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(canvasRef);
+    }
     currentTutorialStep++;
 }
 

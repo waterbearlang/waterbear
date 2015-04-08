@@ -95,7 +95,7 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(playCanvas);
         playCanvas.style.width = '250px';
         playCanvas.style.height = '190px';
-        
+
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
@@ -123,7 +123,6 @@ function stopScript(evt) {
         process.terminate();
         /* Throw out the now-useless process. */
         process = null;
-        runtime.stopEventLoop();
         runtime.clear();
     }
     evt.target.blur();
@@ -131,7 +130,6 @@ function stopScript(evt) {
 }
 
 function stopAndClearScripts(){
-    runtime.stopEventLoop();
     runtime.clear();
     runtime.resetStage();
     File.clearScripts();
@@ -148,7 +146,6 @@ function preload() {
 }
 
 function runScript(){
-    runtime.startEventLoop();
     console.assert(!process, 'Tried to run, but Process instance already exists!');
     /* Create brand new Process instance (because each process can only be
      * started once). */
@@ -240,7 +237,6 @@ function handleTutorialButton(evt){
                 modal.hide();
                 currentTutorialStep = 0;
                 tutButton.removeAttribute('hidden');
-                
             }
         },{
             text: "Waterbear Piano",
@@ -305,6 +301,11 @@ Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
 
+Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
+Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);
+Event.on(window, 'input:keydown', null, Event.undoKeyCombo);
+Event.on(window, 'input:keydown', null, Event.redoKeyCombo);
+Event.clearStacks();
 
 window.app = {
     message: message,

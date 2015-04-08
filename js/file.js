@@ -96,6 +96,7 @@
         bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
+        Event.clearStacks();
     }
 
 
@@ -117,12 +118,13 @@
         reader.readAsDataURL(file);
     }
 
+    // test gist: 0b852cb35b84833e7b48
     function loadScriptsFromGistId(id){
         //we may get an event passed to this function so make sure we have a valid id or ask for one
-        var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+        var gistID = isNaN(parseInt(id, 16)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
         // console.log("Loading gist " + id);
         if( !gistID ) return;
-        getScriptFromGistId(id);
+        getScriptFromGistId(gistID);
     }
 
     function getScriptFromGistId(id){

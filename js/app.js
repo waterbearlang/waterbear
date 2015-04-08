@@ -278,7 +278,6 @@ function showCurrentTutorialStep() {
 Event.on(document.body, 'ui:click', '.load-solution', function(evt){
     var buttonPressed = dom.closest(evt.target, 'button');
     var gistId = buttonPressed.getAttribute('gistID');
-    console.log("trying to load gist " + gistId);
     stopAndClearScripts();
     File.loadScriptsFromGistId(gistId);
     

@@ -275,6 +275,16 @@ function showCurrentTutorialStep() {
     }
     currentTutorialStep++;
 }
+Event.on(document.body, 'ui:click', '.load-solution', function(evt){
+    var buttonPressed = dom.closest(evt.target, 'button');
+    var gistId = buttonPressed.getAttribute('gistID');
+    stopAndClearScripts();
+    File.loadScriptsFromGistId(gistId);
+    
+});
+
+
+
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 Event.on(document.body, 'ui:click', '.open-tutorial', handleTutorialButton);

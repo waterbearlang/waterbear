@@ -114,6 +114,8 @@ Event.on('.do-pause', 'ui:click', null, function () {
 Event.on('.do-step', 'ui:click', null, function (evt) {
     if (!process) {
         /* Start a new process, paused. */
+        /* FIXME: when loading a new script... this process should be
+         * stopped. */
         return startScript(evt, { startPaused: true });
     }
 

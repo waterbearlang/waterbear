@@ -16,6 +16,10 @@
       _gaq.push(['_trackPageview']);
 
       (function() {
+        if (!(window.location.port in {80:null,443:null})) {
+          console.warn('Disabling Google Analytics.');
+          return;
+        }
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
@@ -1085,7 +1089,7 @@
             <wb-playground>
                 <div class="menu">
                     <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                    <button class="do-stop" disabled onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                    <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
                     <button class="do-pause" disabled onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Pause</button>
                     <button class="do-step" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Next</button>
                 </div>

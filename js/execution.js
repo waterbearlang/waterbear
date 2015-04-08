@@ -321,6 +321,17 @@ window.WaterbearProcess = (function () {
     };
 
     /**
+     * Resets the frame if the current instruction is undefined.
+     * Delegates to Strand.
+     */
+    ReusableStrand.prototype.doNext = function doNext() {
+        if (!this.currentInstruction) {
+            this.resetFrames();
+        }
+        return Strand.prototype.doNext.apply(this, arguments);
+    };
+
+    /**
      * Unsupported operation.
      */
     ReusableStrand.prototype.newFrameHandler = function () {
@@ -364,6 +375,8 @@ window.WaterbearProcess = (function () {
      *                      function(eventName: String, data: Object) -> Any
      *                  Called when Process wants to trigger events.
      *                  If not provided, events are silently discarded.
+     *
+     * @todo More rich process abstraction.
      */
     function Process(options) {
         var started = false;
@@ -378,6 +391,8 @@ window.WaterbearProcess = (function () {
         this.perFrameHandlers = [];
         this.lastTime = new Date().valueOf();
         this.currentAnimationFrameHandler = null;
+        /* Indicates that the next block should step. */
+        this.shouldStep = false;
 
         this.currentStrand = null;
         this.paused = (!!options.startPaused) || false;
@@ -442,7 +457,7 @@ window.WaterbearProcess = (function () {
         this.strands.push(this.currentStrand);
 
         /* This starts asynchronous execution. */
-        this.scheduleNextStep(false);
+        this.scheduleNextStep();
 
         this.emit('started');
         return this;
@@ -471,8 +486,10 @@ window.WaterbearProcess = (function () {
             throw new Error('Can only step while paused.');
         }
 
+        this.shouldStep = true;
+
         /* Do one step, discarding its handler. */
-        this.scheduleNextStep(true);
+        this.scheduleNextStep();
         return this;
     };
 
@@ -550,6 +567,9 @@ window.WaterbearProcess = (function () {
     Process.prototype.nextStep = function nextStep() {
         var hasNext;
         this.nextTimeout = null;
+        this.shouldStep = null;
+
+        assert(!!this.currentStrand, "No strand to request.");
 
         hasNext = this.currentStrand.doNext();
 
@@ -557,8 +577,9 @@ window.WaterbearProcess = (function () {
             /* Setup the next step to run after delay. */
             this.scheduleNextStep();
         } else {
-            /* TODO: this strand is now terminated... */
-            /* Remove it from the list and... :/ */
+            /* Remove the current strand. */
+            assert(this.currentStrand === this.strands[0]);
+            this.strands.unshift();
         }
     };
 
@@ -575,7 +596,7 @@ window.WaterbearProcess = (function () {
     /**
      * (Maybe) schedules the next instruction to run.
      */
-    Process.prototype.scheduleNextStep = function scheduleNextStep(stepRequested) {
+    Process.prototype.scheduleNextStep = function scheduleNextStep() {
         assert(this.nextTimeout === null,
                'Tried to schedule a callback when one is already scheduled.');
 
@@ -586,17 +607,24 @@ window.WaterbearProcess = (function () {
         /* TODO: schedule animation frame, if necessary. */
 
         /* Issue an event of which step is the next to execute. */
-        if (this.paused) {
+        if (this.paused || this.shouldStep) {
             /* This is enqueuing on behalf of a step. */
             this.emit('step', {target: this.nextInstruction});
         }
 
-        if (this.paused && !stepRequested) {
-            /* Paused and not requested from a step. */
-            return;
+        if (this.paused && !this.shouldStep) {
+            if (this.shouldStep) {
+                /* Paused and no step requested. */
+                /* Do not schedule anything. */
+                return;
+            }
         }
 
-        this.nextTimeout = enqueue(this.doNextStep, this.delay);
+        if (!this.paused || (this.shouldStep && this.strands.length)) {
+            /* Either we're running at full speed, or the next step is
+             * requested. */
+            this.nextTimeout = enqueue(this.doNextStep, this.delay);
+        }
     };
 
     /**
@@ -604,6 +632,12 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.handleAnimationFrame = function onAnimationFrame() {
         var currTime = new Date().valueOf();
+        var oldStrand = this.currentStrand;
+        this.shouldStep = null;
+        debugger
+
+        assert(this.perFrameHandlers.length === 1);
+        this.currentStrand = this.perFrameHandlers[0];
 
         /* Do I dare change these not quite global variables? */
         runtime.control._elapsed = currTime - this.lastTime;
@@ -615,14 +649,20 @@ window.WaterbearProcess = (function () {
         this.lastTime = currTime;
 
         if (!this.paused && this.delay === 0) {
+            /* Running normally. */
             /* Run ALL of the frame handlers synchronously. */
             this.perFrameHandlers.forEach(function (strand){
                 strand.startSync();
             });
+        } else if (this.paused && this.shouldStep) {
+            /* Running delayed. Run one step. */
+            this.currentStrand.doNext();
         } else {
-            /* TODO: Run one step when paused or in slow down mode. */
+            /* TODO: Run slowly down mode. */
             throw new Error('Slow down frame handler not implemented.');
         }
+
+        this.currentStrand = oldStrand;
 
         /* Enqueue the next call for this function. */
         this.currentAnimationFrameHandler =
@@ -633,6 +673,7 @@ window.WaterbearProcess = (function () {
      * Register this container as a frame handler.
      */
     Process.prototype.addFrameHandler = function addFrameHandler(container) {
+        debugger
         if (this.perFrameHandlers.length > 0) {
             throw new Error('Cannot install more than one per-frame handler. Yet!');
         }
@@ -648,6 +689,7 @@ window.WaterbearProcess = (function () {
      * Starts requestAnimationFrame loop.
      */
     Process.prototype.startEventLoop = function() {
+        debugger
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
 
@@ -679,7 +721,7 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.cancelNextTimeout = function cancelNextTimeout() {
         if (this.nextTimeout !== null) {
-            clearTimeout(this.nextTimeout);
+            cancel(this.nextTimeout);
             this.nextTimeout = null;
         }
     };
@@ -690,10 +732,19 @@ window.WaterbearProcess = (function () {
      */
     function enqueue(fn, delay) {
         if (delay) {
-            return setTimeout(fn, delay);
+            return {timeout: setTimeout(fn, delay)};
         } else {
-            return setImmediate(fn);
+            return {immediate: setImmediate(fn)};
         }
+    }
+
+    function cancel(handle) {
+        if (handle.immediate) {
+            return clearImmediate(handle.immediate);
+        } else if (handle.timeout) {
+            return clearTimeout(handle.timeout);
+        }
+        throw new TypeError('Unknown handle.');
     }
 
     /**

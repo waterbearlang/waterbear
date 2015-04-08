@@ -15,13 +15,14 @@ window.WaterbearProcess = (function () {
     var assert = console.assert.bind(console);
 
     /**
-     * Information for execution of a single ("stack") frame of execution.
-     * Several frames make up a strand.
+     * Information for execution of a single frame (as in "stack frame" or
+     * even "activation record", if you will) of execution. Several frames
+     * make up a strand.
      */
-    function Frame(context, activeContainer, continuationCallback) {
+    function Frame(context, activeContainer, scope, continuationCallback) {
         this.context = context;
         this.activeContainer = activeContainer;
-        this.args = null;
+        this.scope = scope;
         this.shouldContinue = continuationCallback || null;
     }
 
@@ -47,14 +48,16 @@ window.WaterbearProcess = (function () {
      * Creates a new (usually root) frame from a <wb-contains> element.
      * That is, this frame does *NOT* have a context!.
      */
-    Frame.createFromContainer = function createFromContainer(container) {
+    Frame.createFromContainer = function createFromContainer(container, scope) {
         /* Note: this does not actually instantiate an actual Frame object.
          * Sneaky sneaky! */
+        var actualScope = scope || Object.create(null);
         return {
             activeContainer: container,
             context: null,
             args: null,
             shouldContinue: null,
+            scope: actualScope,
             /* Pseudo-properties. */
             firstInstruction: container.firstInstruction,
             containers: null,
@@ -65,13 +68,17 @@ window.WaterbearProcess = (function () {
      * Creates a new frame from the given <wb-context>, active on the given
      * container.
      */
-    Frame.createFromContext = function (context, container, callback) {
-        return new Frame(context, container, callback);
+    Frame.createFromContext = function (context, container, scope, callback) {
+        return new Frame(context, container, scope, callback);
     };
 
+    /**
+     * Creates a new frame from an existing frame.
+     */
     Frame.createFromFrame = function (frame) {
         return new Frame(frame.context,
                          frame.activeContainer,
+                         frame.scope,
                          frame.shouldContinue);
     };
 
@@ -82,13 +89,10 @@ window.WaterbearProcess = (function () {
      * current scope (thus, "the stack"), and thus, has a bunch of nested
      * "frames" -- a stack frames!
      */
-    function Strand(initialFrame, scope) {
+    function Strand(initialFrame, process) {
+        this.process = process;
         this.currentInstruction = initialFrame.firstInstruction;
-        /* FIXME: scope is an actual property of the frame, not the strand. */
-        /* FIXME: Strand should contain a reference to the process. */
 
-        /* FIXME: More argument checking? */
-        this.scope = scope || {};
         this.frames = [initialFrame];
 
         /* Private use: */
@@ -102,6 +106,16 @@ window.WaterbearProcess = (function () {
     Object.defineProperty(Strand.prototype, 'currentFrame', {
         get: function () {
             return this.frames[0];
+        }
+    });
+
+    /**
+     * Pseudo-property: scope of the strand is the scope active in the
+     * current frame.
+     */
+    Object.defineProperty(Strand.prototype, 'scope', {
+        get: function () {
+            return this.currentFrame.scope;
         }
     });
 
@@ -136,7 +150,7 @@ window.WaterbearProcess = (function () {
      * Creates a new frame of execution without creating a new scope.
      */
     Strand.prototype.newFrame = function newFrame(container, continuationCallback) {
-        this.pushNewFrameFromThisContext(container, continuationCallback);
+        this.pushNewFrameFromThisContext(container, this.scope, continuationCallback);
         this.undertakenAction = true;
     };
 
@@ -148,9 +162,9 @@ window.WaterbearProcess = (function () {
     Strand.prototype.newScope = function newScope(container, continuationCallback) {
 
         /* Augment the current scope! */
-        this.scope = Object.create(this.scope);
+        var scope = Object.create(this.scope);
 
-        this.pushNewFrameFromThisContext(container, continuationCallback);
+        this.pushNewFrameFromThisContext(container, scope, continuationCallback);
         this.undertakenAction = true;
     };
 
@@ -162,8 +176,10 @@ window.WaterbearProcess = (function () {
      * not confuse this with execution frames (the Frame class in this file).
      */
     Strand.prototype.newFrameHandler = function newFrameHandler(container) {
-        /* FIXME: Write this! */
-        assert(false, 'Not implemented.');
+        /* Delegate to the process. */
+        this.process.addFrameHandler(container);
+
+        /* Just go on our merry way. */
         this.undertakenAction = true;
         this.currentInstruction = this.currentInstruction.next();
     };
@@ -223,12 +239,12 @@ window.WaterbearProcess = (function () {
     };
 
     /** Add a frame to the execution stack. */
-    Strand.prototype.pushNewFrameFromThisContext = function (container, callback) {
+    Strand.prototype.pushNewFrameFromThisContext = function (container, scope, callback) {
         var frame, context;
         context = this.currentInstruction;
 
         assert(isContext(context));
-        frame = Frame.createFromContext(context, container, callback);
+        frame = Frame.createFromContext(context, container, scope, callback);
         this.frames.unshift(frame);
         
         this.currentInstruction = this.currentFrame.firstInstruction;
@@ -242,6 +258,8 @@ window.WaterbearProcess = (function () {
      */
     Strand.prototype.switchFrame = function switchFrame() {
         var oldFrame = this.currentFrame;
+        /* Ask shouldContinue() if we should switch to a new container-- if
+         * shouldContinue exists! */
         var nextContainer = oldFrame.shouldContinue && oldFrame.shouldContinue();
 
         assert(nextContainer === null || nextContainer.tagName === 'WB-CONTAINS');
@@ -260,21 +278,74 @@ window.WaterbearProcess = (function () {
      * Creates the root strand -- that is, the strand from which all other
      * strands originate from.
      */
-    Strand.createRootStrand = function createRootStrand() {
+    Strand.createRootStrand = function createRootStrand(process) {
         var globalScope = {},
             /* FIXME: THIS DOM STUFF DOES NOT BELONG HERE! */
             container = dom.find('wb-workspace > wb-contains'),
-            frame = Frame.createFromContainer(container);
+            frame = Frame.createFromContainer(container, globalScope);
 
-        return new Strand(frame, globalScope);
+        assert(!!process, "Must be called with a process.");
+
+        return new Strand(frame, process);
     };
 
-    /* Returns true if it's a context block. */
-    function isContext(block) {
-        /* FIXME: This probably shouldn't rely on the DOM. Probably. */
-        return block.tagName === 'WB-CONTEXT';
+
+    /**
+     * A strand that whose root frame can be run many, many times.
+     * Used for event and frame handlers.
+     *
+     * @see Strand for constructor arguments.
+     */
+    function ReusableStrand(initialFrame) {
+        /* Call super() constructor. */
+        Strand.apply(this, arguments);
+
+        this.rootFrame = initialFrame;
     }
 
+    /* Inherit methods from Strand. */
+    ReusableStrand.prototype = Object.create(Strand.prototype);
+
+    /**
+     * Runs everything nested within synchronously.
+     */
+    ReusableStrand.prototype.startSync = function () {
+        var thereAreMoreInstructions;
+
+        /* Reset to the initial frame. */
+        this.resetFrames();
+
+        do {
+            thereAreMoreInstructions = this.doNext();
+        } while (thereAreMoreInstructions);
+    };
+
+    /**
+     * Unsupported operation.
+     */
+    ReusableStrand.prototype.newFrameHandler = function () {
+        throw new Error("Nesting frame handlers is a bad idea, m'kay?");
+    };
+
+    /**
+     * Unsupported operation.
+     */
+    ReusableStrand.prototype.newEventHandler = function () {
+        throw new Error("Refusing to create events within an event/frame.");
+    };
+
+    /*
+     * Private methods!
+     */
+
+    /**
+     * Clears all frames in the frame stack EXCEPT for the root frame.
+     * The next instruction is set as the first instruction in the root frame.
+     */
+    ReusableStrand.prototype.resetFrames = function () {
+        this.frames = [Frame.createFromFrame(this.rootFrame)];
+        this.currentInstruction =  this.currentFrame.firstInstruction;
+    };
 
 
 
@@ -301,6 +372,13 @@ window.WaterbearProcess = (function () {
 
         /* Set some essential state. */
         this.strands = [];
+
+        /* Related to frame handlers -- probably should split this out into
+         * its own class. */
+        this.perFrameHandlers = [];
+        this.lastTime = new Date().valueOf();
+        this.currentAnimationFrameHandler = null;
+
         this.currentStrand = null;
         this.paused = (!!options.startPaused) || false;
 
@@ -309,7 +387,7 @@ window.WaterbearProcess = (function () {
         /* Disable breakpoints. */
         this.shouldBreak = false;
         /* Run as quickly as possible. */
-        this.rate = 0;
+        this.delay = 0;
         this.nextTimeout = null;
 
         /* `doNextStep` is the same as `nextStep`, but it is bound to this
@@ -352,16 +430,14 @@ window.WaterbearProcess = (function () {
     /**
      * Starts (asynchronous!) execution from scratch. Can only be called once.
      */
-    Process.prototype.start = function start(firstInstruction) {
+    Process.prototype.start = function start() {
         assert(!this.started, 'Waterbear already started!');
         this.setStarted();
 
-        if (firstInstruction === undefined) {
-            this.currentStrand = Strand.createRootStrand();
-        } else {
-            /* TODO: Create a brand new strand. */
-            assert(false, 'Not implemented: Start on specific instruction.');
-        }
+        /* NOTE: There was a plan to start a process on any arbitrary
+         * instruction, but it didn't seem to be as useful as I had first
+         * thought. */
+        this.currentStrand = Strand.createRootStrand(this);
 
         this.strands.push(this.currentStrand);
 
@@ -419,10 +495,10 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.setRate = function setRate(rate) {
         if (rate === undefined) {
-            this.rate = 0;
+            this.delay = 0;
         } else {
             assert((+rate) > 0, 'Must provide positive number for rate.');
-            this.rate = +rate;
+            this.delay = +rate;
         }
         return this;
     };
@@ -443,10 +519,9 @@ window.WaterbearProcess = (function () {
     Process.prototype.terminate = function terminate(cb) {
         assert(this.started);
         this.cancelNextTimeout();
-        /* TODO: I dunno what else should be cleaned. */
+        this.clearPerFrameHandlers();
         return this;
     };
-
 
     /**
      * Enables all breakpoints. Execution will pause on all breakpoints.
@@ -484,9 +559,6 @@ window.WaterbearProcess = (function () {
         } else {
             /* TODO: this strand is now terminated... */
             /* Remove it from the list and... :/ */
-            /* FIXME: Remove this console.log. */
-            console.log('Strand execution halted...');
-            /* TODO: Now what? There are no more instructions! */
         }
     };
 
@@ -524,7 +596,82 @@ window.WaterbearProcess = (function () {
             return;
         }
 
-        this.nextTimeout = enqueue(this.doNextStep, this.rate);
+        this.nextTimeout = enqueue(this.doNextStep, this.delay);
+    };
+
+    /**
+     * Runs blocks during requestAnimationFrame().
+     */
+    Process.prototype.handleAnimationFrame = function onAnimationFrame() {
+        var currTime = new Date().valueOf();
+
+        /* Do I dare change these not quite global variables? */
+        runtime.control._elapsed = currTime - this.lastTime;
+        /* FIXME: This does not trivially allow for multiple eachFrame
+         * handlers! */
+        runtime.control._frame++;
+        /* Why, yes, I do dare. */
+
+        this.lastTime = currTime;
+
+        if (!this.paused && this.delay === 0) {
+            /* Run ALL of the frame handlers synchronously. */
+            this.perFrameHandlers.forEach(function (strand){
+                strand.startSync();
+            });
+        } else {
+            /* TODO: Run one step when paused or in slow down mode. */
+            throw new Error('Slow down frame handler not implemented.');
+        }
+
+        /* Enqueue the next call for this function. */
+        this.currentAnimationFrameHandler =
+            requestAnimationFrame(this.onAnimationFrame);
+    };
+
+    /**
+     * Register this container as a frame handler.
+     */
+    Process.prototype.addFrameHandler = function addFrameHandler(container) {
+        if (this.perFrameHandlers.length > 0) {
+            throw new Error('Cannot install more than one per-frame handler. Yet!');
+        }
+
+        var frame = Frame.createFromContainer(container, this.currentStrand.scope);
+        var strand = new ReusableStrand(frame, this);
+        this.perFrameHandlers.push(strand);
+
+        this.startEventLoop();
+    };
+
+    /**
+     * Starts requestAnimationFrame loop.
+     */
+    Process.prototype.startEventLoop = function() {
+        runtime.control._frame = 0;
+        runtime.control._sinceLastTick = 0;
+
+        assert(this.perFrameHandlers.length > 0,
+               'Must have at least one per-frame handler defined.');
+
+        /* Alias to handleAnimationFrame, but bound to `this`. */
+        this.onAnimationFrame = this.handleAnimationFrame.bind(this);
+
+        if (!this.currentAnimationFrameHandler){
+            this.currentAnimationFrameHandler =
+                requestAnimationFrame(this.onAnimationFrame);
+        }
+    };
+
+    /**
+     * Cancels all per-frame handlers, and the current
+     * `requestAnimationFrame`.
+     */
+    Process.prototype.clearPerFrameHandlers = function () {
+        this.perFrameHandlers = [];
+        this.lastTime = new Date().valueOf();
+        cancelAnimationFrame(this.currentAnimationFrameHandler);
+        this.currentAnimationFrameHandler = null;
     };
 
     /**
@@ -537,14 +684,24 @@ window.WaterbearProcess = (function () {
         }
     };
 
-
     /**
      * Execute `fn` asynchronously. Its execution will happen as soon as
      * possible, but note that it may yield to several other "threads".
      */
-    function enqueue(fn) {
-        /* FIXME: Use setImmediate or equivalent. */
-        return setTimeout(fn, 0);
+    function enqueue(fn, delay) {
+        if (delay) {
+            return setTimeout(fn, delay);
+        } else {
+            return setImmediate(fn);
+        }
+    }
+
+    /**
+     * Returns true if the argument is a <wb-context> block.
+     */
+    function isContext(block) {
+        /* FIXME: This probably should NOT rely on the DOM. Probably. */
+        return block.tagName === 'WB-CONTEXT';
     }
 
 

@@ -33,6 +33,8 @@
 
         <div class="menu">
             <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
+            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z" onclick="_gaq.push(['_trackEvent', 'Undo', 'undo']);">Undo</button>
+            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z" onclick="_gaq.push(['_trackEvent', 'Redo', 'redo']);">Redo</button>
             <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
             <button class="open-tutorial" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);">Tutorials</button>
         </div>
@@ -1102,6 +1104,7 @@
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.js"></script>
+    <script src="lib/setImmediate-1.0.2.js"></script>
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
     <script src="js/runtime.js"></script>

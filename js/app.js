@@ -129,6 +129,12 @@ Event.on('.do-step', 'ui:click', null, function (evt) {
     /* Step through the existing process. */
     process.step();
 });
+Event.on('.do-continue', 'ui:click', null, function (evt) {
+    if (process) {
+        process.resume();
+    }
+});
+
 
 function startScript(evt, options) {
     // Do any necessary cleanup (e.g., clear event handlers).
@@ -336,7 +342,7 @@ Event.on(window, 'process:step', null, function (evt) {
     /* Update the paused element. */
     oldBlocks = document.querySelectorAll('.wb-paused');
     console.assert(oldBlocks.length <= 1);
-    
+
     if (oldBlocks.length) {
         oldBlocks[0].classList.remove('wb-paused');
     }

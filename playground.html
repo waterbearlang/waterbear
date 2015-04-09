@@ -1090,8 +1090,9 @@
                 <div class="menu">
                     <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
                     <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
-                    <button class="do-pause" disabled onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Pause</button>
-                    <button class="do-step" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Next</button>
+                    <button class="do-pause" onclick="_gaq.push(['_trackEvent', 'Action', 'pause']);">Pause</button>
+                    <button class="do-continue" onclick="_gaq.push(['_trackEvent', 'Action', 'continue']);">Continue</button>
+                    <button class="do-step" onclick="_gaq.push(['_trackEvent', 'Action', 'step']);">Next</button>
                 </div>
                 <canvas></canvas>
             </wb-playground>

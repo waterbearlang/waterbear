@@ -321,8 +321,11 @@ window.WaterbearProcess = (function () {
     ReusableStrand.prototype.startSync = function () {
         var thereAreMoreInstructions;
 
-        /* Reset to the initial frame. */
-        this.resetFrames();
+        /* Check if we're in the middle of the frame. */
+        if (this.currentInstruction === null) {
+            /* Reset to the initial frame. */
+            this.resetFrames();
+        }
 
         do {
             thereAreMoreInstructions = this.doNext();
@@ -694,7 +697,8 @@ window.WaterbearProcess = (function () {
             this.shouldStep = false;
             frameStrand.doNext();
             /* XXX: ugh, this is ugly... */
-            this.emitNextInstruction(frameStrand.currentInstruction || frameStrand.firstEverInstructionNoReallyYouGuys);
+            this.emitNextInstruction(frameStrand.currentInstruction ||
+                                     frameStrand.firstEverInstructionNoReallyYouGuys);
         }
 
         /* Enqueue the next call for this function. */

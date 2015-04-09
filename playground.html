@@ -16,10 +16,6 @@
       _gaq.push(['_trackPageview']);
 
       (function() {
-        if (!(window.location.port in {80:null,443:null})) {
-          console.warn('Disabling Google Analytics.');
-          return;
-        }
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);

@@ -209,7 +209,7 @@ window.WaterbearProcess = (function () {
 
     /**
      * Explicitly specifies that no action be undertaken.
-     * 
+     *
      * This must be called to silence the warning that would otherwise be
      * raised.
      */
@@ -246,7 +246,7 @@ window.WaterbearProcess = (function () {
         assert(isContext(context));
         frame = Frame.createFromContext(context, container, scope, callback);
         this.frames.unshift(frame);
-        
+
         this.currentInstruction = this.currentFrame.firstInstruction;
     };
 
@@ -394,9 +394,11 @@ window.WaterbearProcess = (function () {
         /* Indicates that the next block should step. */
         this.shouldStep = false;
 
+        /* Can only be one strand scheduled at a time. */
         this.currentStrand = null;
         this.paused = (!!options.startPaused) || false;
 
+        /* Set an optional emitter. */
         this.emitter = options.emitter || null;
 
         /* Disable breakpoints. */
@@ -460,6 +462,10 @@ window.WaterbearProcess = (function () {
         this.scheduleNextStep();
 
         this.emit('started');
+        if (this.paused) {
+            this.emit('paused');
+        }
+
         return this;
     };
 
@@ -479,7 +485,7 @@ window.WaterbearProcess = (function () {
 
     /**
      * Does one step of the next scheduled strand. Asynchronous.
-     * When the 
+     * When the
      */
     Process.prototype.step = function step() {
         if (!this.paused) {
@@ -567,20 +573,23 @@ window.WaterbearProcess = (function () {
     Process.prototype.nextStep = function nextStep() {
         var hasNext;
         this.nextTimeout = null;
-        this.shouldStep = null;
+        this.shouldStep = false;
 
-        assert(!!this.currentStrand, "No strand to request.");
+        assert(!!this.currentStrand, "No strand to run!");
 
         hasNext = this.currentStrand.doNext();
 
-        if (hasNext) {
-            /* Setup the next step to run after delay. */
-            this.scheduleNextStep();
-        } else {
+        if (!hasNext) {
             /* Remove the current strand. */
-            assert(this.currentStrand === this.strands[0]);
-            this.strands.unshift();
+            assert(this.currentStrand === this.strands[0],
+                   'More than one strand currently unsupported.');
+            this.strands.shift();
+            /* Schedule the next strand. */
+            this.currentStrand = this.strands[0] || null;
         }
+
+        /* Setup the next step to run after delay. */
+        this.scheduleNextStep();
     };
 
     /**
@@ -595,49 +604,50 @@ window.WaterbearProcess = (function () {
 
     /**
      * (Maybe) schedules the next instruction to run.
+     *
+     * Note that this will NOT run
      */
     Process.prototype.scheduleNextStep = function scheduleNextStep() {
         assert(this.nextTimeout === null,
                'Tried to schedule a callback when one is already scheduled.');
 
+        if (this.strands.length < 1) {
+            /* Nothing to schedule. */
+            return;
+        }
+
         /* TODO: Decide if we should pause at this instruction due to a
          * breakpoint, error condition, etc. */
-        /* TODO: Decide if we should switch to a different strand. */
-        /* TODO: do stuff if step*/
-        /* TODO: schedule animation frame, if necessary. */
+
+        /* TODO: Should we switch to a different strand? */
 
         /* Issue an event of which step is the next to execute. */
-        if (this.paused || this.shouldStep) {
+        if (this.paused && this.nextInstruction) {
             /* This is enqueuing on behalf of a step. */
             this.emit('step', {target: this.nextInstruction});
         }
 
-        if (this.paused && !this.shouldStep) {
-            if (this.shouldStep) {
-                /* Paused and no step requested. */
-                /* Do not schedule anything. */
-                return;
-            }
-        }
-
-        if (!this.paused || (this.shouldStep && this.strands.length)) {
+        if (!this.paused || this.shouldStep) {
             /* Either we're running at full speed, or the next step is
              * requested. */
-            this.nextTimeout = enqueue(this.doNextStep, this.delay);
+            this.scheduleRegularStrandInstructionExecution();
         }
+    };
+
+    Process.prototype.scheduleRegularStrandInstructionExecution = function () {
+        assert(this.strands.length && this.currentStrand !== null,
+               'Trieds to schedule a standard thread, but none exist.');
+        this.nextTimeout = enqueue(this.doNextStep, this.delay);
     };
 
     /**
      * Runs blocks during requestAnimationFrame().
      */
     Process.prototype.handleAnimationFrame = function onAnimationFrame() {
+        assert(this.perFrameHandlers.length === 1,
+              'animation frame supports exactly per-frame handler.');
+        var frameStrand = this.perFrameHandlers[0];
         var currTime = new Date().valueOf();
-        var oldStrand = this.currentStrand;
-        this.shouldStep = null;
-        debugger
-
-        assert(this.perFrameHandlers.length === 1);
-        this.currentStrand = this.perFrameHandlers[0];
 
         /* Do I dare change these not quite global variables? */
         runtime.control._elapsed = currTime - this.lastTime;
@@ -648,21 +658,19 @@ window.WaterbearProcess = (function () {
 
         this.lastTime = currTime;
 
+        //debugger
+
         if (!this.paused && this.delay === 0) {
             /* Running normally. */
             /* Run ALL of the frame handlers synchronously. */
             this.perFrameHandlers.forEach(function (strand){
                 strand.startSync();
             });
-        } else if (this.paused && this.shouldStep) {
-            /* Running delayed. Run one step. */
-            this.currentStrand.doNext();
-        } else {
-            /* TODO: Run slowly down mode. */
-            throw new Error('Slow down frame handler not implemented.');
+        } else if (this.shouldStep && this.currentStrand === null) {
+            /* Running is delayed or paused. Run one step. */
+            this.shouldStep = false;
+            frameStrand.doNext();
         }
-
-        this.currentStrand = oldStrand;
 
         /* Enqueue the next call for this function. */
         this.currentAnimationFrameHandler =
@@ -673,15 +681,14 @@ window.WaterbearProcess = (function () {
      * Register this container as a frame handler.
      */
     Process.prototype.addFrameHandler = function addFrameHandler(container) {
-        debugger
         if (this.perFrameHandlers.length > 0) {
             throw new Error('Cannot install more than one per-frame handler. Yet!');
         }
 
         var frame = Frame.createFromContainer(container, this.currentStrand.scope);
         var strand = new ReusableStrand(frame, this);
-        this.perFrameHandlers.push(strand);
 
+        this.perFrameHandlers.push(strand);
         this.startEventLoop();
     };
 
@@ -689,7 +696,6 @@ window.WaterbearProcess = (function () {
      * Starts requestAnimationFrame loop.
      */
     Process.prototype.startEventLoop = function() {
-        debugger
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
 

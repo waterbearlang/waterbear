@@ -113,10 +113,17 @@ Event.on('.do-pause', 'ui:click', null, function () {
 });
 Event.on('.do-step', 'ui:click', null, function (evt) {
     if (!process) {
-        /* Start a new process, paused. */
         /* FIXME: when loading a new script... this process should be
          * stopped. */
-        return startScript(evt, { startPaused: true });
+        /* Start a new process, paused. */
+        startScript(evt, { startPaused: true });
+        /* Step the process once it's created. */
+        /*
+        Event.once(window, 'process:paused', null, function () {
+            process.step();
+        });
+        */
+        return;
     }
 
     /* Step through the existing process. */
@@ -134,8 +141,13 @@ function startScript(evt, options) {
     if (options === undefined) {
         options = {};
     }
+    /* Certain events DEMAND that the emitting be done asynchronously, so
+     * use setImmediate to emulate this.
+     */
     options.emitter = options.emitter || function emitGlobalEvent(name, data) {
-        return Event.trigger(window, name, data);
+        return setImmediate(function asynchronousEmit() {
+            Event.trigger(window, name, data);
+        });
     };
 
     preload().whenLoaded(runScript.bind(null, options));

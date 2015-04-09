@@ -307,6 +307,15 @@ window.WaterbearProcess = (function () {
     ReusableStrand.prototype = Object.create(Strand.prototype);
 
     /**
+     * Psuedo-instruction. This is how you can tell I've been up too late.
+     */
+    Object.defineProperty(ReusableStrand.prototype, 'firstEverInstructionNoReallyYouGuys', {
+        get: function () {
+            return this.rootFrame.firstInstruction;
+        }
+    });
+
+    /**
      * Runs everything nested within synchronously.
      */
     ReusableStrand.prototype.startSync = function () {
@@ -624,7 +633,7 @@ window.WaterbearProcess = (function () {
         /* Issue an event of which step is the next to execute. */
         if (this.paused && this.nextInstruction) {
             /* This is enqueuing on behalf of a step. */
-            this.emit('step', {target: this.nextInstruction});
+            this.emitNextInstruction();
         }
 
         if (!this.paused || this.shouldStep) {
@@ -634,10 +643,26 @@ window.WaterbearProcess = (function () {
         }
     };
 
+    /**
+     * It schedules the execution of the next regular strand instruction!
+     */
     Process.prototype.scheduleRegularStrandInstructionExecution = function () {
         assert(this.strands.length && this.currentStrand !== null,
                'Trieds to schedule a standard thread, but none exist.');
         this.nextTimeout = enqueue(this.doNextStep, this.delay);
+    };
+
+    /**
+     * Emits 'step' for the next scheduled instruction.
+     */
+    Process.prototype.emitNextInstruction = function (instruction) {
+        /* Called with no arguments, assume the nextInstruction. */
+        if (arguments.length === 0) {
+            instruction = this.nextInstruction;
+        }
+
+        assert(!!instruction, 'Must emit a valid instruction.');
+        this.emit('step', {target: instruction});
     };
 
     /**
@@ -658,8 +683,6 @@ window.WaterbearProcess = (function () {
 
         this.lastTime = currTime;
 
-        //debugger
-
         if (!this.paused && this.delay === 0) {
             /* Running normally. */
             /* Run ALL of the frame handlers synchronously. */
@@ -670,6 +693,8 @@ window.WaterbearProcess = (function () {
             /* Running is delayed or paused. Run one step. */
             this.shouldStep = false;
             frameStrand.doNext();
+            /* XXX: ugh, this is ugly... */
+            this.emitNextInstruction(frameStrand.currentInstruction || frameStrand.firstEverInstructionNoReallyYouGuys);
         }
 
         /* Enqueue the next call for this function. */
@@ -690,6 +715,11 @@ window.WaterbearProcess = (function () {
 
         this.perFrameHandlers.push(strand);
         this.startEventLoop();
+
+        /* HACK! */
+        if (this.paused) {
+            this.emitNextInstruction(strand.firstEverInstructionNoReallyYouGuys);
+        }
     };
 
     /**

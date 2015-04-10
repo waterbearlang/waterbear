@@ -169,9 +169,9 @@ function updateVariable(evt){
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariable);
 
 function createLocalAssociation(evt){
-    console.log('createLocalAssociation');
     var setVariableBlock = evt.target;
     if (!setVariableBlock.hasAttribute('id')){
+        console.log('createLocalAssociation');
         var id = randomId();
         setVariableBlock.setAttribute('id', id);
         var local = dom.find(setVariableBlock, 'wb-local [script="control.getVariable"]');
@@ -216,6 +216,7 @@ function trailingNumber(str){
 function ensureNameIsUniqueInContext(input){
     var parentContext = dom.closest(input, 'wb-contains');
     var setVariable = dom.closest(input, '[script="control.setVariable"]');
+    var valueBlock = dom.closest(input, 'wb-value');
     // Find other variable names in scope
     var variablesToTestAgainst = dom.findAll(parentContext, '[script="control.setVariable"]')
         .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
@@ -234,9 +235,10 @@ function ensureNameIsUniqueInContext(input){
         }
         newVariableName = baseName + (incrementalNumber + 1);
     }
-    console.log('old name: "%s", new name: "%s"', oldVariableName, newVariableName);
     if (newVariableName !== oldVariableName){
+        console.log('old name: "%s", new name: "%s"', oldVariableName, newVariableName);
         input.value = newVariableName;
+        valueBlock.setAttribute('value', newVariableName);
         var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
         console.log('%s variables to update', variablesToUpdate.length);
         if (variablesToUpdate.length){

@@ -168,30 +168,18 @@ function updateVariableType(evt){
     setTypeOfVariable(setVariableBlock, type);
     updateLocalInstancesType(setVariableBlock, type);
 }
-Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 
-function createLocalAssociation(evt){
+function createVariableToLocalAssociation(evt){
     var setVariableBlock = evt.target;
     if (!setVariableBlock.hasAttribute('id')){
-        console.log('createLocalAssociation');
+        console.log('createVariableToLocalAssociation');
         var id = randomId();
         setVariableBlock.setAttribute('id', id);
         var local = dom.find(setVariableBlock, 'wb-local [script="control.getVariable"]');
         local.setAttribute('for', id);
     }
 }
-Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createLocalAssociation);
 
-
-var oldVariableName = '';
-
-// function handleVariableFocus(evt){
-//     // Gather all the locals so we can update them
-//     var input = evt.target;
-//     var parent = dom.closest(input, '[script="control.setVariable"]');
-//     var parentContext = dom.closest(input, 'wb-contains');
-//     variableLocalsToUpdate = getVariablesToUpdate(parentContext, parent.id);
-// }
 
 function handleVariableInput(evt){
     // Actually change the locals while we update
@@ -204,10 +192,7 @@ function handleVariableInput(evt){
 
 function handleVariableBlur(evt){
     // Cleanup
-    var input = evt.target;
-    var parent = dom.closest(input, '[script="control.setVariable"]');
-    ensureNameIsUniqueInContext(input);
-    oldVariableName = '';
+    ensureNameIsUniqueInContext(evt.target);
 }
 
 function trailingNumber(str){
@@ -267,16 +252,6 @@ function uniquifyVariableName(evt){
     ensureNameIsUniqueInContext(input);
 }
 
-// Event.on(workspace, 'editor:focus', '[script="control.setVariable"] input', handleVariableFocus); // Mozilla
-// Event.on(workspace, 'editor:focusin', '[script="control.setVariable"] input', handleVariableFocus); // All other browsers
-Event.on(workspace, 'editor:input', '[script="control.setVariable"] input', handleVariableInput);
-Event.on(workspace, 'editor:blur',  '[script="control.setVariable"] input', handleVariableBlur); // Mozilla
-Event.on(workspace, 'editor:focusout',  '[script="control.setVariable"] input', handleVariableBlur); // All other browsers
-
-Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', uniquifyVariableName);
-
-// Context Proto
-// Instantiated as new WBContext or as <wb-context>
 
 /*****************
 *
@@ -296,7 +271,7 @@ ContextProto.createdCallback = function contextCreated(){
     BlockProto.createdCallback.call(this);
     var header = dom.child(this, 'header');
     setDefaultByTag(header, 'wb-disclosure');
-variableLocalsToUpdate    setDefaultByTag(this, 'wb-contains');
+    setDefaultByTag(this, 'wb-contains');
 };
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
@@ -383,8 +358,6 @@ function defaultShouldEvaluateValues(strand, containers, elem) {
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
-Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.showLocals(evt); });
-Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
 /*****************
 *
 *  wb-expression
@@ -541,7 +514,6 @@ function toggleClosed(evt){
     }
 }
 
-Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 
 /*****************
 *
@@ -576,7 +548,6 @@ function addItem(evt){
     template.parentElement.insertBefore(newItem, template.nextElementSibling);
 }
 
-Event.on(workspace, 'editor:click', 'wb-contains .add-item', addItem);
 
 /*****************
 *
@@ -594,8 +565,6 @@ function removeItem(evt){
         row.parentElement.removeChild(row);
     }
 }
-
-Event.on(workspace, 'editor:click', 'wb-contains .remove-item', removeItem);
 
 
 /*****************
@@ -708,9 +677,10 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-Event.on(workspace, 'editor:change', 'wb-contains input, wb-contains select', function(evt){
+function changeValueOnInputChange(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
-});
+}
+
 
 var convert = {
     boolean: function(text){ return text === 'true'; },
@@ -754,7 +724,7 @@ var dropTarget = null;
 var BLOCK_MENU = document.querySelector('sidebar');
 var blockTop = 0;
 
-Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
+function startDragBlock(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
     // Maybe move to object notation later
     //    return target.startDrag(evt);
@@ -780,9 +750,9 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
     dragTarget.classList.add('dragging');
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
-});
+}
 
-Event.on(document.body, 'editor:dragging', null, function(evt){
+function dragBlock(evt){
     if (!dragTarget){ return; }
     evt.preventDefault();
     evt.stopPropagation();
@@ -836,7 +806,7 @@ Event.on(document.body, 'editor:dragging', null, function(evt){
        return;
     }
     app.warn('Not a target, drop to cancel drag');
-});
+}
 
 function dropTargetIsContainer(potentialDropTarget){
    dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
@@ -865,7 +835,7 @@ function addToContains(block, evt){
     }
 }
 
-Event.on(document.body, 'editor:drag-end', null, function(evt){
+function endDragBlock(evt){
     if (dragStart === 'script'){
         origTarget.parentElement.removeChild(origTarget);
         origTarget = null;
@@ -897,22 +867,20 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
         dragTarget.parentElement.removeChild(dragTarget);
     }
     resetDragging();
-});
+}
 
-Event.on(document.body, 'editor:drag-cancel', null, function(evt){
+function cancelDragBlock(evt){
     dragTarget.parentElement.removeChild(dragTarget);
     resetDragging();
-});
+}
 
 // Handle resizing inputs when their content changes
-Event.on(document.body, 'editor:input', 'input', function(evt){
+function resizeInputOnChange(evt){
     var target = evt.target;
     if (! dom.matches(target, 'wb-value > input')) return;
     resize(target);
     Event.trigger(target, 'wb-changed', evt.target.value);
-}, false);
-
-
+}
 
 function resetDragging(){
     if (dragTarget){
@@ -973,37 +941,72 @@ function updateLocalInstancesType(variableStep, type){
 
 /* Add custom events for adding and removing blocks from the DOM */
 
-var blockObserver = new MutationObserver(function(mutations){
-    mutations.forEach(function(mutation){
-        // send childAdded or childRemove event to parent element
-        var parent = mutation.target;
-        var blockParent = dom.closest(parent, 'wb-step, wb-context, wb-expression, wb-contains');
-        if (!blockParent){
-            return;
-        }
-        [].slice.apply(mutation.removedNodes)
-                .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
-                .forEach(function(node){
-            Event.trigger(blockParent, 'wb-removedChild', node);
-            Event.trigger(node, 'wb-removed', blockParent);
-        });
-        [].slice.apply(mutation.addedNodes)
-                .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
-                .forEach(function(node){
-            Event.trigger(blockParent, 'wb-addedChild', node);
-            Event.trigger(node, 'wb-added', blockParent);
+function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
+
+    var blockObserver = new MutationObserver(function(mutations){
+        mutations.forEach(function(mutation){
+            // send childAdded or childRemove event to parent element
+            var parent = mutation.target;
+            var blockParent = dom.closest(parent, parentList);
+            if (!blockParent){
+                return;
+            }
+            [].slice.apply(mutation.removedNodes)
+                    .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
+                    .forEach(function(node){
+                Event.trigger(blockParent, eventPrefix + 'removedChild', node);
+                Event.trigger(node, eventPrefix + 'removed', blockParent);
+            });
+            [].slice.apply(mutation.addedNodes)
+                    .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only block elements
+                    .forEach(function(node){
+                Event.trigger(blockParent, 'wb-addedChild', node);
+                Event.trigger(node, 'wb-added', blockParent);
+            });
         });
     });
-});
 
-var blockObserverConfig = { childList: true, subtree: true };
+    var blockObserverConfig = { childList: true, subtree: true };
 
-// Only observe after script is loaded?
-blockObserver.observe(document.body, blockObserverConfig);
+    // Only observe after script is loaded?
+    blockObserver.observe(document.body, blockObserverConfig);
+
+};
+
+registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context, wb-expression, wb-contains', 'wb-step, wb-context, wb-expression');
+
+// Exports
 
 window.block = {
     randomId: randomId
 }
+
+// Event handling
+
+Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
+Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);
+Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', uniquifyVariableName);
+
+Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.showLocals(evt); });
+Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
+
+Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
+
+// Add/remove rows from expressions
+Event.on(workspace, 'editor:click', 'wb-contains .add-item', addItem);
+Event.on(workspace, 'editor:click', 'wb-contains .remove-item', removeItem);
+
+Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', startDragBlock);
+Event.on(document.body, 'editor:dragging', null, dragBlock);
+Event.on(document.body, 'editor:drag-end', null, endDragBlock);
+Event.on(document.body, 'editor:drag-cancel', null, cancelDragBlock);
+
+Event.on(workspace, 'editor:input', 'input', resizeInputOnChange);
+Event.on(workspace, 'editor:change', 'wb-contains input, wb-contains select', changeValueOnInputChange);
+
+Event.on(workspace, 'editor:input', '[script="control.setVariable"] input', handleVariableInput);
+Event.on(workspace, 'editor:blur',  '[script="control.setVariable"] input', handleVariableBlur); // Mozilla
+Event.on(workspace, 'editor:focusout',  '[script="control.setVariable"] input', handleVariableBlur); // All other browsers
 
 
 })();

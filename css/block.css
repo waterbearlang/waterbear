@@ -25,6 +25,7 @@ body:not(.block-dragging) wb-expression {
 wb-expression{
     border-radius: 0;
     text-align: right;
+    padding-left: 20px;
 }
 
 wb-value > wb-expression{
@@ -52,7 +53,9 @@ wb-step.dragging, wb-context.dragging, wb-expression.dragging{
 }
 
 wb-expression > header{
-    margin-left: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
 }
 
 wb-value{
@@ -62,11 +65,26 @@ wb-value{
     white-space:nowrap;
 }
 
+wb-value wb-expression{
+    transform: scale(75%);
+}
+
 wb-row{
     display: block;
     text-align: right;
     margin-left: 20px;
     white-space: nowrap;
+}
+
+wb-local{
+    padding: 0;
+    border: 3px solid white;
+    border-radius: 3px;
+}
+
+wb-local > wb-expression {
+    margin: 0;
+    font-size: .75em;
 }
 
 wb-row > wb-value, wb-row > wb-local{
@@ -219,15 +237,14 @@ wb-value[type*=number][type*=vector][type*=array] > input{
     background-position: 3px 3px, 20px 3px, 37px 3px;
 }
 
-
 wb-expression:before{
     content: '';
-    width: 15px;
-    height: 15px;
+    width: 1em;
+    height: 1em;
     display: block;
-    float: left;
-    margin-left: 5px;
-    margin-top: 5px;
+    position: absolute;
+    top: .3em;
+    left: .3em;
     background-size: contain;
     /* Over-ride background-image for each type of expression */
 }

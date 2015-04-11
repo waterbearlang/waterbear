@@ -153,7 +153,7 @@ StepProto.run = function(scope){
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
-function updateVariable(evt){
+function updateVariableType(evt){
     var setVariableBlock = evt.detail;
     // ignore variables not in the workspace (in scripts)
     if (! dom.matches(setVariableBlock, 'wb-workspace *')){
@@ -166,9 +166,9 @@ function updateVariable(evt){
     var valueBlock = evt.target;
     var type = valueBlock.getAttribute('type');
     setTypeOfVariable(setVariableBlock, type);
-    updateLocalInstances(setVariableBlock, type);
+    updateLocalInstancesType(setVariableBlock, type);
 }
-Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariable);
+Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 
 function createLocalAssociation(evt){
     var setVariableBlock = evt.target;
@@ -296,7 +296,7 @@ ContextProto.createdCallback = function contextCreated(){
     BlockProto.createdCallback.call(this);
     var header = dom.child(this, 'header');
     setDefaultByTag(header, 'wb-disclosure');
-    setDefaultByTag(this, 'wb-contains');
+variableLocalsToUpdate    setDefaultByTag(this, 'wb-contains');
 };
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
@@ -950,14 +950,12 @@ function createVariableBlock(initialValue) {
    variableStep
       .querySelector('wb-value[type="any"]')
       .appendChild(initialValue);
-
-   // TODO: autogenerate a good name.
-
    return variableStep;
 }
 
 
-
+// FIXME: This should be a method on Step
+// And really, Variable should be a subclass of Step, but that screws up the selectors
 function setTypeOfVariable(variableStep, type){
    // Set type of variable to match type of object
    variableStep
@@ -965,7 +963,7 @@ function setTypeOfVariable(variableStep, type){
        .setAttribute('type', type);
 }
 
-function updateLocalInstances(variableStep, type){
+function updateLocalInstancesType(variableStep, type){
     var parentContext = dom.closest(variableStep, 'wb-contains');
     var variableLocalsToUpdate = getVariablesToUpdate(parentContext, variableStep.id);
     variableLocalsToUpdate.forEach(function(varinstance){

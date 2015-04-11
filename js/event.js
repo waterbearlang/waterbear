@@ -48,6 +48,16 @@
     function on(elem, originalEventname, selector, handler, onceOnly){
         var eventname, ns_name, namespace;
 
+        // Allow use of selector for `elem`.
+        if (typeof elem === 'string'){
+            // Bind all elements matched by `elem` selector. Not recommended due to
+            // multiple event listeners used when one could suffice and be
+            // matched using the `selector` argument.
+            return [].slice.call(document.querySelectorAll(elem)).map(function(e){
+                return on(e, originalEventname, selector, handler, onceOnly);
+            });
+        }
+
         // Argument validation.
         if (typeof originalEventname !== 'string'){
             console.error('second argument must be eventname: %s', eventname);
@@ -62,16 +72,6 @@
         }
         if (typeof handler !== 'function'){
             throw new TypeError('fourth argument must be handler');
-        }
-
-        // Allow use of selector for `elem`.
-        if (typeof elem === 'string'){
-            // Bind all elements matched by `elem` selector. Not recommended due to
-            // multiple event listeners used when one could suffice and be
-            // matched using the `selector` argument.
-            return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
-                return on(e, originalEventname, selector, handler, onceOnly);
-            });
         }
 
         // Check for presence of namespace.
@@ -114,7 +114,12 @@
                 handler(evt);
             }
         };
-        elem.addEventListener(eventname, listener, false);
+        /// liveFix is needed because Firefox doesn't support "focusin" events and "focus" events don't bubble
+        var liveFix = false;
+        if (selector && (eventname === 'focus' || eventname === 'blur')){ // any others?
+            liveFix = true;
+        }
+        elem.addEventListener(eventname, listener, liveFix);
         util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
     }
@@ -244,6 +249,7 @@
         dragTarget = null;
         isDragging = false;
         Event.pointerDown = false;
+        document.body.classList.remove('dragging');
         trigger(document, 'drag-reset');
     }
 
@@ -253,6 +259,8 @@
         if (dom.closest(evt.target, 'input, select')){
             return undefined;
         }
+        // prevent text selection while dragging
+        document.body.classList.add('dragging');
         Event.pointerDown = true;
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
@@ -268,6 +276,20 @@
         isDragging = true;
         forward(dragTarget, 'drag-start', evt);
         return false;
+    }
+
+    // Used when we're not tracking dragging
+    function trackPointerPosition(evt){
+        Event.pointerX = evt.pageX;
+        Event.pointerY = evt.pageY;
+    }
+
+    function trackPointerDown(evt){
+        Event.pointerDown = true;
+    }
+
+    function trackPointerUp(evt){
+        Event.pointerDown = false;
     }
 
     function dragging(evt){
@@ -286,6 +308,7 @@
             }
         }
         evt.preventDefault();
+        evt.stopPropagation();
         forward(dragTarget, 'dragging', evt);
         return false;
     }
@@ -364,9 +387,185 @@
         Event.keyHandlers[key].push(handler);
     }
 
-
     function clearRuntime(){
         Event.keyHandlers = {};
+    }
+
+    /**UNDO and REDO events**/
+    var undoStack = [];
+    var redoStack = [];
+
+    function undoEvent(toUndo){
+        if(undoStack.length!==0){
+            var toUndo = undoStack.pop();
+            redoStack.push(toUndo);
+            setButtonStatus();
+            if(toUndo.type === 'delete-block'){
+                undoDelete(toUndo);
+            }
+            else if(toUndo.type === 'add-block'){
+                undoAdd(toUndo);
+            }
+            else {
+                undoMove(toUndo);
+            }
+        }
+    }
+
+    function undoAdd(toUndo){
+        var addedBlock = toUndo.addedBlock;
+        var addedTo = toUndo.addedTo;
+        addedTo.removeChild(addedBlock);
+    }
+
+    function undoDelete(toUndo){
+        var deletedBlock = toUndo.deletedBlock;
+        var deletedFrom = toUndo.deletedFrom;
+        var nextBlock = toUndo.nextBlock;
+        if(nextBlock){
+            deletedFrom.insertBefore(deletedBlock, nextBlock);
+        }
+        else{
+            deletedFrom.appendChild(deletedBlock);
+        }
+    }
+
+    function undoMove(toUndo){
+        var addedBlock = toUndo.addedBlock;
+        var addedTo = toUndo.addedTo;
+        var origParent = toUndo.originalParent;
+        var origNextEl = toUndo.originalNextEl;
+        //remove from parent expression
+        addedTo.removeChild(addedBlock);
+
+        if(toUndo.type === 'add-var-block'){
+            addedBlock = toUndo.insideBlock;
+        }
+
+        //add back to original parent expression
+        if(origNextEl){
+            origParent.insertBefore(addedBlock, origNextEl);
+        }
+        else{
+            origParent.appendChild(addedBlock);
+        }
+    }
+
+    function redoEvent(){
+        if(redoStack.length !== 0){
+            var toRedo = redoStack.pop();
+            undoStack.push(toRedo);
+            setButtonStatus();
+            if(toRedo.type === 'delete-block'){
+                redoDelete(toRedo);
+            }
+            else if(toRedo.type === 'add-block'){
+                redoAdd(toRedo);
+            }
+            else {
+                redoMove(toRedo);
+            }
+        }
+    }
+
+    function redoAdd(toRedo){
+        var addedBlock = toRedo.addedBlock;
+        var addedTo = toRedo.addedTo;
+        var nextBlock = toRedo.nextBlock;
+        if(nextBlock){
+            addedTo.insertBefore(addedBlock, nextBlock);
+        }
+        else{
+            addedTo.appendChild(addedBlock);
+        }
+    }
+
+    function redoDelete(toRedo){
+        var deletedBlock = toRedo.deletedBlock;
+        var deletedFrom = toRedo.deletedFrom;
+        deletedFrom.removeChild(deletedBlock);
+    }
+
+    function redoMove(toRedo){
+        var addedBlock = toRedo.addedBlock;
+        var addedTo = toRedo.addedTo;
+        var origParent = toRedo.originalParent;
+        var nextBlock = toRedo.nextBlock;
+
+        //remove the block from it's original parent again
+        if(toRedo.type === 'move-block'){
+            origParent.removeChild(addedBlock);
+        }
+        else{ //type is add-var-block; must add back into setVariable block too
+            origParent.removeChild(toRedo.insideBlock);
+            addedBlock
+                .querySelector('wb-value[type="any"]')
+                .appendChild(toRedo.insideBlock);
+        }
+
+        //add block back to where it was before the undo
+        if(nextBlock){
+            addedTo.insertBefore(addedBlock, nextBlock);
+        }
+        else{
+            addedTo.appendChild(addedBlock);
+        }
+    }
+
+    function undoKeyCombo(evt) {
+        if((keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
+           (keyForEvent(evt) == 'z' && Event.keys['meta'])) {
+            console.log('undo');
+            evt.preventDefault();
+            undoEvent();
+        }
+    }
+
+    function redoKeyCombo(evt) {
+        if((keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
+           (keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
+            console.log('redo');
+            evt.preventDefault();
+            redoEvent();
+        }
+    }
+
+    function handleUndoButton(evt) {
+        evt.preventDefault();
+        undoEvent();
+    }
+
+    function handleRedoButton(evt) {
+        evt.preventDefault();
+        redoEvent();
+    }
+
+    function setButtonStatus(){
+        if(undoStack.length === 0){
+            document.getElementById('undoButton').disabled = true;
+        }
+        else{
+            document.getElementById('undoButton').disabled = false;
+        }
+        if(redoStack.length === 0){
+            document.getElementById('redoButton').disabled = true;
+        }
+        else{
+            document.getElementById('redoButton').disabled = false;
+        }
+    }
+
+    function clearStacks(){
+        undoStack = [];
+        redoStack = [];
+        setButtonStatus();
+    }
+
+    //add a new event to the undo stack
+    function addNewEvent(evt){
+        redoStack = [];
+        undoStack.push(evt);
+        setButtonStatus();
     }
 
     window.Event = {
@@ -386,19 +585,22 @@
         stagePointerY: 0,
         keys: {},
         keyHandlers: {},
-        clearRuntime: clearRuntime
+        clearRuntime: clearRuntime,
+        initDrag: initDrag,
+        dragging: dragging,
+        endDrag: endDrag,
+        cancelDrag: cancelDrag,
+        trackPointerPosition: trackPointerPosition,
+        trackPointerDown: trackPointerDown,
+        trackPointerUp: trackPointerUp,
+        handleKeyUp: handleKeyUp,
+        handleKeyDown: handleKeyDown,
+        undoKeyCombo: undoKeyCombo,
+        redoKeyCombo: redoKeyCombo,
+        handleUndoButton: handleUndoButton,
+        handleRedoButton: handleRedoButton,
+        addNewEvent: addNewEvent,
+        clearStacks: clearStacks
     };
-
-
-    Event.on(document.body, 'dragging:touchstart', null, initDrag);
-    Event.on(document.body, 'dragging:touchmove', null, dragging);
-    Event.on(document.body, 'dragging:touchend', null, endDrag);
-    Event.on(document.body, 'dragging:mousedown', null, initDrag);
-    Event.on(document.body, 'dragging:mousemove', null, dragging);
-    Event.on(window, 'dragging:mouseup', null, endDrag);
-    Event.on(window, 'dragging:keyup', null, cancelDrag);
-    Event.on(window, 'input:keydown', null, handleKeyDown);
-    Event.on(window, 'input:keyup', null, handleKeyUp);
-
 
 })();

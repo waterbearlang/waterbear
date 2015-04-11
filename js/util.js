@@ -143,12 +143,21 @@
         this.x = x;
         this.y = y;
     }
+
     Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
     Vector.fromPoint = function(pt){
         return new Vector(pt.x, pt.y);
+    }
+
+    Vector.prototype.getX = function(){
+        return this.x;
+    }
+
+    Vector.prototype.getY = function(){
+        return this.y;
     }
 
     Vector.prototype.magnitude = function(){
@@ -289,6 +298,8 @@
         }else if (this._draw){
             this._draw(ctx);
         }
+        ctx.fill();
+        ctx.stroke();
     }
 
 
@@ -632,7 +643,7 @@
 
                 /* Default whenLoaded callback. */
                 whenLoaded = function () {
-                    console.warn(toLoad, 'assets loaded.');
+                    // console.log('default asset load');
                 };
 
                 /* Try every selector. */
@@ -655,13 +666,15 @@
                 function ready() {
                     /* No assets to load; just call whenLoaded. */
                     if (toLoad === 0) {
+                        Event.trigger(window, 'asset-load');
                         whenLoaded();
                         return;
                     }
 
                     console.assert(loaded < toLoad);
                     loaded++;
-                    if (loaded === toLoad && whenLoaded) {
+                    if (loaded === toLoad) {
+                        Event.trigger(window, 'asset-load');
                         whenLoaded();
                     }
                 }
@@ -837,14 +850,22 @@
         ctx.drawImage(this._image, r.x, r.y, r.width, r.height);
     };
 
+    WBImage.prototype.getHeight = function(){
+        return this.height;
+    };
+
+    WBImage.prototype.getWidth = function(){
+        return this.width;
+    };
+
     WBImage.prototype.setWidth = function(w){
         this.width = w;
-        this.height = this.width * this.origProportion;
+        this.height = this.width / this.origProportion;
     };
 
     WBImage.prototype.setHeight = function(h){
         this.height = h;
-        this.width = this.height / this.origProportion;
+        this.width = this.height * this.origProportion;
     };
 
     WBImage.prototype.setSize = function(sz){
@@ -856,7 +877,7 @@
         this.width = this.origWidth * scaleFactor;
         this.height = this.origHeight * scaleFactor;
     };
-    
+
     WBImage.prototype.toString = function(){
         return this.name + "; " + this.width + "px wide by " + this.height + "px high";
     };
@@ -881,6 +902,26 @@
     Sprite.prototype.accelerate = function(speed){
         this.velocity = add(this.velocity, multiply(this.facing, speed));
         // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+    }
+
+    Sprite.prototype.setVelocity = function(vec){
+        this.velocity = vec;
+    }
+
+    Sprite.prototype.getXvel = function(){
+        return this.velocity.getX();
+    }
+
+    Sprite.prototype.getYvel = function(){
+        return this.velocity.getY();
+    }
+
+    Sprite.prototype.getXpos = function(){
+        return this.position.getX();
+    }
+
+    Sprite.prototype.getYpos = function(){
+        return this.position.getY();
     }
 
     Sprite.prototype.applyForce = function(vec){

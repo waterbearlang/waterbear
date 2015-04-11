@@ -55,7 +55,7 @@ function setDefaultByTag(element, tagname, top){
 // Make sure these elements are always inserted into a header element
 // and that the header element exists
 function insertIntoHeader(){
-    var parent = this.parentElement.tagName.toLowerCase();
+    var parent = this.parentElement.localName;
     if (parent === 'header' || parent === 'wb-row') return;
     var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
     var head = setDefaultByTag(block, 'header');
@@ -74,7 +74,7 @@ var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
     setDefaultByTag(this, 'header', true);
-    // console.log('%s created with %s children', this.tagName.toLowerCase(), this.children.length);
+    // console.log('%s created with %s children', this.localName, this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
     // Add locals
@@ -93,11 +93,11 @@ BlockProto.attachedCallback = function blockAttached(){
     }else{
         // console.warn('free-floating block: %o, OK for now', this);
     }
-    // console.log('%s attached', this.tagName.toLowerCase());
+    // console.log('%s attached', this.localName);
 };
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
-    // console.log('%s detached', this.tagName.toLowerCase());
+    // console.log('%s detached', this.localName);
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -105,7 +105,7 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    title or help (do nothing)
     //    script (do nothing)
     //    type (do nothing
-    // console.log('%s[%s] %s -> %s', this.tagName.toLowerCase(), attrName, oldVal, newVal);
+    // console.log('%s[%s] %s -> %s', this.localName, attrName, oldVal, newVal);
 };
 BlockProto.gatherValues = function(scope){
     if (!this.values){
@@ -115,6 +115,12 @@ BlockProto.gatherValues = function(scope){
         return value.getValue(scope);
     });
 };
+/* Applicable for both <wb-step> and <wb-context>.
+ * The next element is simply the nextElementSibling. */
+BlockProto.next = function() {
+    return this.nextElementSibling;
+};
+
 
 /*****************
 *
@@ -135,7 +141,6 @@ StepProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
@@ -147,8 +152,8 @@ function handleVariableFocus(evt){
     // Gather all the locals so we can update them
     // TODO: Cancel if the new variable name is already in scope
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isVariable')){
-        return
+    if (!input.parentElement.hasAttribute('isvariable')){
+        return;
     }
     var parentContext = dom.closest(input, 'wb-contains');
     var variableName = input.parentElement.getAttribute('value');
@@ -162,7 +167,7 @@ function handleVariableFocus(evt){
 function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isVariable')){
+    if (!input.parentElement.hasAttribute('isvariable')){
         return;
     }
     var newVariableName = input.value;
@@ -177,18 +182,18 @@ function handleVariableInput(evt){
 function handleVariableBlur(evt){
     // Cleanup
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isVariable')){
+    if (!input.parentElement.hasAttribute('isvariable')){
         return;
     }
     variableLocalsToUpdate = null;
     oldVariableName = '';
 }
 
-Event.on(document.body, 'editor:focus', '[isVariable] input', handleVariableFocus); // Mozilla
-Event.on(document.body, 'editor:focusin', '[isVariable] input', handleVariableFocus); // All other browsers
-Event.on(document.body, 'editor:input', '[isVariable] input', handleVariableInput);
-Event.on(document.body, 'editor:blur',  '[isVariable] input', handleVariableBlur); // Mozilla
-Event.on(document.body, 'editor:focusout',  '[isVariable] input', handleVariableBlur); // All other browsers
+Event.on(document.body, 'editor:focus', '[isvariable] input', handleVariableFocus); // Mozilla
+Event.on(document.body, 'editor:focusin', '[isvariable] input', handleVariableFocus); // All other browsers
+Event.on(document.body, 'editor:input', '[isvariable] input', handleVariableInput);
+Event.on(document.body, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
+Event.on(document.body, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
@@ -213,30 +218,34 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(header, 'wb-disclosure');
     setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
-    // console.log('Context created');
 };
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
-    return dom.children(this, 'wb-contains').map(function(container){
-        return [].slice.call(container.children);
-    });
+    return dom.children(this, 'wb-contains');
 };
-ContextProto.run = function(parentScope){
-    if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+ContextProto.run = function(strand, frame){
+   var args, containers;
+   /* Set this function's setup() callback */
+    if (!this.setup){
+        this.setupCallbacks();
     }
-    var scope = util.extend({}, parentScope);
-    // expressions are eagerly evaluated against scope, contains are late-evaluated
-    // I'm not yet sure if this is the Right Thing™
+
+    /* Google analytics event tracking. */
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling context %s with scope %o, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
-    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
+
+    /* FIXME: Allow for optional evaluation of values. */
+    // expressions are evaluated if and only if shouldEvaluateValues returns
+    // true. Containers are evaluated when needed.
+    args = this.gatherValues(strand.scope);
+    containers = this.gatherContains();
+
+    /* Call setup! */
+    return this.setup.call(strand.scope, strand, this, containers, args);
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
     var blockAdded = evt.detail;
-    if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
+    if (blockAdded && blockAdded.localName === 'wb-expression'){
         var type = blockAdded.getAttribute('type');
         var header = dom.child(this, 'header');
         if (!header){
@@ -258,7 +267,7 @@ ContextProto.showLocals = function(evt){
 ContextProto.hideLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
     var blockAdded = evt.detail;
-    if (blockAdded && blockAdded.tagName.toLowerCase() === 'wb-expression'){
+    if (blockAdded && blockAdded.localName === 'wb-expression'){
         var header = dom.child(this, 'header');
         if (!header) return;
         var row = dom.child(header, 'wb-row');
@@ -269,6 +278,29 @@ ContextProto.hideLocals = function(evt){
         });
     }
 };
+/**
+ * Prepares the setup() callback.
+ */
+ContextProto.setupCallbacks = function() {
+    /* Fetch the callback object from runtime. */ 
+    var qualifiedName = this.getAttribute('script').split('.');
+    var category = qualifiedName[0], name = qualifiedName[1];
+    var callback = runtime[category][name];
+
+    console.assert(!!callback, 'Could not find script: ' + qualifiedName);
+
+    this.setup = callback;
+};
+
+/** Default: Always get the next DOM element and assume it's a wb-contains. */
+function defaultNextCallback(strand, args, containers, elem) {
+    return elem.nextElementSibling;
+}
+
+/** Default: Always evaluate arugments before calling setup(). */
+function defaultShouldEvaluateValues(strand, containers, elem) {
+    return true;
+}
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
@@ -323,7 +355,7 @@ ExpressionProto.attachedCallback = function expressionAttached(){
             sib.classList.add('hide');
         });
     }
-    if (this.parent.tagName.toLowerCase() !== 'wb-local'){
+    if (this.parent.localName !== 'wb-local'){
         var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
         if (blockParent){
             Event.trigger(blockParent, 'wb-added', this);
@@ -339,7 +371,7 @@ ExpressionProto.detachedCallback = function expressionDetached(){
             sib.classList.remove('hide');
         });
     }
-    if (this.parent.tagName.toLowerCase() !== 'wb-local'){
+    if (this.parent.localName !== 'wb-local'){
         var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
         if (blockParent){
             Event.trigger(blockParent, 'wb-removed', this);
@@ -422,7 +454,7 @@ window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: Disc
 function toggleClosed(evt){
     console.log('toggle');
     var block = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
-    console.log('%s closed = %s', block.tagName.toLowerCase(), block.getAttribute('closed'));
+    console.log('%s closed = %s', block.localName, block.getAttribute('closed'));
     if (block.hasAttribute('closed')){
         block.removeAttribute('closed');
     }else{
@@ -653,12 +685,19 @@ var convert = {
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
+/* You sure love Object.defineProperty, dontcha, Eddie? */
+Object.defineProperty(ContainsProto, 'firstInstruction', {
+   get: function () {
+      return this.firstElementChild;
+   }
+});
+
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
 Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
     if(dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')){
         dom.closest(evt.target, 'wb-value').toggleSelect();
-        //console.log("Test");
+        console.log("Test");
     }
 })
 
@@ -695,10 +734,10 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
 
     dragTarget = dom.clone(origTarget);
     document.body.appendChild(dragTarget);
-    dragStart = dom.matches(origTarget, 'wb-contains *') ? 'script' : 'menu';
+    dragStart = dom.matches(origTarget, 'wb-contains *, wb-value *') ? 'script' : 'menu';
     // Warning here: origTarget may be null, and thus, not have a
     // parentElement.
-    if (origTarget.parentElement.nodeName.toLowerCase() === 'wb-local'){
+    if (origTarget.parentElement.localName === 'wb-local'){
         dragStart = 'menu';
     }
     if (dragStart === 'script'){
@@ -711,7 +750,8 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
 
 Event.on(document.body, 'editor:dragging', null, function(evt){
     if (!dragTarget){ return; }
-
+    evt.preventDefault();
+    evt.stopPropagation();
     // FIXME: hardcoded margin (???) values.
     // Essentially, the block is always dragged at an area 15 px away from the
     // top-left corner.
@@ -776,56 +816,96 @@ function dropTargetIsContainer(potentialDropTarget){
    }
 }
 
+function addToContains(block, evt, addBlockEvent){
+    // dropping directly into a contains section
+    // insert as the first block unless dropped after the entire script
+    addBlockEvent.addedBlock = block;
+    if(dragStart === 'script' && addBlockEvent.type !== 'add-var-block'){
+        addBlockEvent.type = 'move-block';
+    }
+    if (dropTarget.matches('wb-contains')){
+        if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
+            dropTarget.appendChild(block);
+        }else{
+            addBlockEvent.nextBlock = dropTarget.firstElementChild;
+            dropTarget.insertBefore(block, dropTarget.firstElementChild);
+        }
+    }else{
+        // dropping on a block in the contains, insert after that block
+        addBlockEvent.nextBlock = dropTarget.nextElementSibling;
+        addBlockEvent.addedTo = dropTarget.parentElement;
+        dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
+    }
+    Event.addNewEvent(addBlockEvent);
+}
+
+/**
+    Variable Glossary:
+    dragStart = 'script' or 'menu', depending on where the original block is located (local vars also use 'menu' so they aren't hidden)
+    origTarget = the original block that has been cloned to be dragged
+            - hidden if it's in the script
+            - not hidden if it's in the menu, or is a local variable block
+    dragTarget = the cloned block that is being dragged
+    dropTarget = the block (or position) the clone is being dropped into
+**/
 Event.on(document.body, 'editor:drag-end', null, function(evt){
+    var originalBlock = origTarget;
+    var originalParent = null;
+    var nextElem = null;
+    if (dragStart === 'script'){
+        if(origTarget){
+            originalParent = origTarget.parentElement;
+            nextElem = origTarget.nextElementSibling;
+        }
+        origTarget.parentElement.removeChild(origTarget);
+        origTarget = null;
+    }
     if (!dropTarget){
-       if(dragTarget){
-          dragTarget.parentElement.removeChild(dragTarget);
-       }
+        // console.log('no dropTarget');
+        if(dragTarget){
+            dragTarget.parentElement.removeChild(dragTarget);
+        }
        // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
+        // console.log('delete both clone and original');
+        if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
+            originalBlock.classList.remove('singularity');  //un-hide block
+            var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
+            Event.addNewEvent(deleteEvent);                 //add new event to undo
+        }
         dragTarget.parentElement.removeChild(dragTarget);
-        if (dragStart === 'script'){
-            // only delete original if it is in the script, not menu
-            // FIXME: Don't delete originals in locals
-            origTarget.parentElement.removeChild(origTarget);
-            origTarget = null;
-        }
     }else if(dragTarget.matches('wb-expression')){
-      if (dropTarget.matches('wb-value')) {
-         dropTarget.appendChild(dragTarget);
-         dropTarget.deselect();
-         BLOCK_MENU.removeAttribute('filtered');
-      } else {
-          // Create variable block to wrap the expression.
-          var variableBlock = createVariableBlock(dragTarget);
-          dropTarget.appendChild(variableBlock);
-      }
 
-    }else if(dragTarget.matches('wb-context, wb-step')){
-        if (dropTarget.matches('wb-contains')){
-            // dropping directly into a contains section
-            // insert as the first block unless dropped after the entire script
-            if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
-                dropTarget.appendChild(dragTarget);
-            }else{
-                dropTarget.insertBefore(dragTarget, dropTarget.firstElementChild);
+        if (dropTarget.matches('wb-value')) {
+            // console.log('add expression to value');
+            dropTarget.appendChild(dragTarget);
+            dropTarget.deselect();
+            BLOCK_MENU.removeAttribute('filtered');
+            var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling, originalParent:originalParent, originalNextEl: nextElem};
+            if (dragStart === 'script'){
+                addValueEvent.type = 'move-block'
             }
-        }else{
-            // dropping on a block in the contains, insert after that block
-            dropTarget.parentElement.insertBefore(dragTarget, dropTarget.nextElementSibling);
+            Event.addNewEvent(addValueEvent);
+            
+        }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
+            // Create variable block to wrap the expression.
+            // console.log('create a variable block and add expression to it');
+            var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
+            if(dragStart==='script'){
+                addBlockEvent.type = 'add-var-block';
+                addBlockEvent.insideBlock = dragTarget;
+            }
+            addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
-        if (dragStart === 'script'){
-            // only delete original if it is in the script, not menu
-            // FIXME: Don't delete originals in locals
-            // FIXME: Duplicated code, refactor
-            origTarget.parentElement.removeChild(origTarget);
-            origTarget = null;
-        }
+    }else if(dragTarget.matches('wb-context, wb-step')){
+        // console.log('add to contains');
+        var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
+        addToContains(dragTarget, evt, addBlockEvent);
     }else{
+        // console.log('no match, delete the cloned element (and show the original)');
         dragTarget.parentElement.removeChild(dragTarget);
     }
-
     resetDragging();
 });
 

@@ -21,10 +21,7 @@
 
     function saveCurrentScripts(){
         // super simplistic for now
-        var script = scriptsToString();
-        if (script){
-            localStorage['__simple_currentWaterbearScript'] = script;
-        }
+        localStorage['__simple_currentWaterbearScript'] = scriptsToString();
     }
 
     // Save script to gist;
@@ -96,8 +93,10 @@
     }
 
     function clearScripts(){
+        bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
+        Event.clearStacks();
     }
 
 
@@ -119,12 +118,13 @@
         reader.readAsDataURL(file);
     }
 
+    // test gist: 0b852cb35b84833e7b48
     function loadScriptsFromGistId(id){
         //we may get an event passed to this function so make sure we have a valid id or ask for one
-        var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+        var gistID = isNaN(parseInt(id, 16)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
         // console.log("Loading gist " + id);
         if( !gistID ) return;
-        getScriptFromGist(id);
+        getScriptFromGistId(gistID);
     }
 
     function getScriptFromGistId(id){
@@ -143,7 +143,14 @@
         history.replaceState(null, '', path);
     }
 
+    function exampleUrl(example){
+        var path = location.href.split('?')[0];
+        path += '?example=' + example;
+        history.replaceState(null, '', path);
+    }
+
     function bareUrl(gistID){
+        console.log('bareUrl');
         var path = location.href.split('?')[0];
         history.replaceState(null, '', path);
     }
@@ -163,6 +170,7 @@
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
         document.querySelector('wb-workspace > wb-contains').innerHTML = text;
+        Event.trigger(window, 'script-load', text);
     }
 
     function loadScriptsFromGist(gist){
@@ -182,8 +190,9 @@
     }
 
     function loadScriptsFromExample(name){
-        ajax.get('examples/' + name + '.json?b=' + Math.random(), function(exampleJson){
-            loadScriptsFromJson(exampleJson);
+        ajax.get('example/' + name + '.wb?b=' + Math.random(), function(exampleText){
+            loadScriptsFromString(exampleText);
+            exampleUrl(name);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });
@@ -195,7 +204,7 @@
             getScriptFromGistId(params.gist);
         }else if (params.example){
             loadScriptsFromExample(params.example);
-        }else if (localStorage['__simple_currentWaterbearScript']){
+        }else if (page === 'playground' && localStorage['__simple_currentWaterbearScript']){
             loadScriptsFromString(localStorage['__simple_currentWaterbearScript']);
         }
     }
@@ -224,12 +233,28 @@
             loadScriptsFromFile(file);
         }
     }
-
+    var page = location.pathname.split('/').pop().split('.')[0];
     Event.on(window, 'ui:load', null, loadCurrentScripts);
-    Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
-    Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
-    Event.on(document.body, 'ui:wb-removed', null, bareUrl);
-    Event.on(document.body, 'ui:wb-changed', null, bareUrl);
+    if (page === 'playground'){
+        Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
+        Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
+        Event.on(document.body, 'ui:wb-removed', null, bareUrl);
+        Event.on(document.body, 'ui:wb-changed', null, bareUrl);
+    }
+
+    function loadTutorialFromName(name){
+        ajax.get('tutorial/' + name + '.html', function(exampleText){
+            loadTutorialFromString(exampleText);
+        }, function(statusCode, xhr){
+            console.error(statusCode + xhr);
+        });
+    }
+
+    function loadTutorialFromString(text){
+        var tutorial = document.getElementsByClassName('tutorial-content');
+        tutorial[0].innerHTML = text;
+        Event.trigger(window, 'tutorial-load', text);
+    }
 
     window.File = {
         scriptsToString: scriptsToString,
@@ -243,6 +268,7 @@
         loadScriptsFromExample: loadScriptsFromExample,
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,
         loadCurrentScripts: loadCurrentScripts,
+        loadTutorialFromName: loadTutorialFromName,
         getFiles: getFiles
     };
 

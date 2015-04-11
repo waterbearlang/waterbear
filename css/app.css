@@ -51,7 +51,13 @@ body > header > h1{
     padding: 0px;
 }
 
-.menu button{
+.menu button[disabled] {
+    color: #999;
+    border-color: #333;
+}
+
+.menu button, .menu a, .do-run, .do-stop{
+
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
@@ -60,8 +66,43 @@ body > header > h1{
     font-size: 18px;
 }
 
+
 sidebar button.availableBlocks{
     display: none; /*hide when the accordions are showing */
+}
+
+.menu a{
+    float: right;
+    text-decoration: none;
+    padding: 2px 6px 3px;
+    display: inline-block;
+}
+
+.tabs-menu{
+    flex: 0 0 34px;
+    color: #FFFFFF;
+    margin: 0px;
+    padding-top: 4px;
+    padding-left: 6px;
+
+    position: relative;
+    white-space: nowrap;
+    border: none;
+    background-color: #666666;
+    height: 34px;
+}
+
+.tabs-menu button{
+    border: 2px solid #111111;
+    border-radius: 5px;
+    background-color: #666666;
+    color: #FFFFFF;
+    height: 30px;
+    width: 150px;
+}
+.tabs-menu button[pressed='true']{
+    background-color: #C4C4C4;
+    color: #666666;
 }
 
 /* Show trash for sidebar while dragging */
@@ -126,26 +167,195 @@ wb-contains:empty::before{
 
 
 /* Accordion Colors and Icons */
-wb-accordion.control > header:after{ background-color: hsl(0, 93%, 56%); }
-wb-accordion.sprite > header:after{ background-color: hsl(156, 93%, 56%); }
-wb-accordion.music > header:after{ background-color: hsl(312, 93%, 56%); }
-wb-accordion.sound > header:after{ background-color: hsl(108, 93%, 56%); }
-wb-accordion.array > header:after{ background-color: hsl(264, 93%, 56%); }
-wb-accordion.boolean > header:after{ background-color: hsl(60, 93%, 56%); }
-wb-accordion.canvas > header:after{ background-color: hsl(216, 93%, 56%); }
-wb-accordion.color > header:after{ background-color: hsl(12, 93%, 56%); }
-wb-accordion.image > header:after{ background-color: hsl(168, 93%, 56%); }
-wb-accordion.math > header:after{ background-color: hsl(324, 93%, 56%); }
-wb-accordion.random > header:after{ background-color: hsl(120, 93%, 56%); }
-wb-accordion.vector > header:after{ background-color: hsl(276, 93%, 56%); }
-wb-accordion.object > header:after{ background-color: hsl(72, 93%, 56%); }
-wb-accordion.string > header:after{ background-color: hsl(228, 93%, 56%); }
-wb-accordion.path > header:after{ background-color: hsl(24, 93%, 56%); }
-wb-accordion.point > header:after{ background-color: hsl(180, 93%, 56%); }
-wb-accordion.rect > header:after{ background-color: hsl(336, 93%, 56%); }
-wb-accordion.sense > header:after{ background-color: hsl(132, 93%, 56%); }
-wb-accordion.motion > header:after{ background-color: hsl(288, 93%, 56%); }
-wb-accordion.shape > header:after{ background-color: hsl(84, 93%, 56%); }
-wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
-wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
-wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
+wb-accordion.control > header:after{ background-color: hsl(0, 53%, 56%); }
+wb-accordion.sprite > header:after{ background-color: hsl(156, 53%, 56%); }
+wb-accordion.music > header:after{ background-color: hsl(312, 53%, 56%); }
+wb-accordion.sound > header:after{ background-color: hsl(108, 53%, 56%); }
+wb-accordion.array > header:after{ background-color: hsl(264, 53%, 56%); }
+wb-accordion.boolean > header:after{ background-color: hsl(60, 53%, 56%); }
+wb-accordion.canvas > header:after{ background-color: hsl(216, 53%, 56%); }
+wb-accordion.color > header:after{ background-color: hsl(12, 53%, 56%); }
+wb-accordion.image > header:after{ background-color: hsl(168, 53%, 56%); }
+wb-accordion.math > header:after{ background-color: hsl(324, 53%, 56%); }
+wb-accordion.random > header:after{ background-color: hsl(120, 53%, 56%); }
+wb-accordion.vector > header:after{ background-color: hsl(276, 53%, 56%); }
+wb-accordion.object > header:after{ background-color: hsl(72, 53%, 56%); }
+wb-accordion.string > header:after{ background-color: hsl(228, 53%, 56%); }
+wb-accordion.path > header:after{ background-color: hsl(24, 53%, 56%); }
+wb-accordion.point > header:after{ background-color: hsl(180, 53%, 56%); }
+wb-accordion.rect > header:after{ background-color: hsl(336, 53%, 56%); }
+wb-accordion.sense > header:after{ background-color: hsl(132, 53%, 56%); }
+wb-accordion.motion > header:after{ background-color: hsl(288, 53%, 56%); }
+wb-accordion.shape > header:after{ background-color: hsl(84, 53%, 56%); }
+wb-accordion.geolocation > header:after{ background-color: hsl(240, 53%, 56%); }
+wb-accordion.size > header:after{ background-color: hsl(192, 53%, 56%); }
+wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
+
+
+
+/* Tutorial Tab*/
+.tutorial{
+    width: 100%;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.tutorial-header{
+    padding: 10px 10px;
+    font-size: 35px;
+    min-height: 30px;
+    width: 100%;
+    min-width: 500px;
+}
+
+.tutorial-main{
+    height: 400px;
+    min-height: 350px;
+    max-height: 400px;
+    width: 100%;
+    min-width: 500px;
+    overflow-x: visible;
+}
+
+.tutorial-desc{
+    height: 90%;
+    max-height: 315px;
+    width: 90%;
+    border: 2px solid black;
+    border-radius: 2px;
+    margin: 10px;
+    padding: 10px;
+    flex-direction: row;
+    overflow-y:auto;
+}
+
+.tutorial-output{
+    height: 250px;
+    max-height: 250px;
+    min-height: 250px;
+    width: 100%;
+    min-width: 500px;
+    font-size:20px;
+}
+
+.tutorial-actions{
+    height: 30px;
+    max-height: 40px;
+    min-height: 40px;
+    padding-bottom: 10px;
+    width: 100%;
+    font-size:20px;
+    min-width: 500px;
+    margin: 10px;
+}
+
+.tutorial-output > div{
+    padding: 10px;
+}
+.tutorial-output > div > img, div.canvas-holder{
+    flex-direction: column;
+    border: black;
+    border-style: solid;
+    border-width: 4px;
+    margin-top: 20px;
+    width: 250px;
+    height: 190px;   
+}
+.tutorial-output > div > div.canvas-holder{
+    margin-top:7px;
+    
+}
+
+
+.tutorial-finished{
+    display: inline-block;
+    height: 500px;
+    max-height:500px;
+    min-height:500px;
+    width: 100%;
+    flex-direction: row;
+    overflow-x: visible;
+    min-width: 500px;
+    margin: 10px;
+}
+
+.tutorial-next{
+    flex-direction: row;
+    margin: 10px;
+    min-height: 150px;
+    max-height: 150px;
+    display: none;
+}
+
+.tutorial-next[completed=true]{
+    display: block;
+}
+
+.tutorial-next > div > img{
+    height: 100px;
+}
+
+.congrats{
+    float: left;
+}
+
+.tutorial-next > div > button{
+    color: #000000;
+    border-radius: 5px;
+    border: 2px #111111 outset;
+    font-size: 18px;
+}
+
+.complete button, .tutorial-solution > button{
+    background-color: #666666;
+    color: #FFFFFF;
+    border-radius: 5px;
+    border: 2px #111111 outset;
+    margin: 3px;
+    font-size: 18px;
+}
+
+.tutorial-solution{
+    max-height: 250px;
+    min-height: 250px;
+    width: 90%;
+    border: 1px solid black;
+    overflow-y:auto;
+    clear: both;
+    display: none;
+}
+
+.tutorial-solution[completed=true]{
+    display: block;
+}
+
+.tutorial-hidden{
+    display:none;
+}
+.tutorial-block-menu{
+    position: relative;
+    bottom: 5px;
+    width:inherit;
+    padding-top:20px;
+    
+}
+.tutorial-blocks{
+    border:gray;
+    border-style:solid;
+    border-width:2px;
+    
+}
+.tutorial-blocks > wb-expression, .tutorial-blocks > wb-step, .tutorial-blocks > wb-context{
+    display: inline-block;
+    float: none;
+}
+
+/* Prevent selecting text while dragging */
+.dragging *{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

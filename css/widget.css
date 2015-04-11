@@ -4,7 +4,6 @@ wb-search, wb-accordion{
     display: block;
 }
 
-
 /* HBOX, VBOX layout widgets */
 
 wb-hbox, wb-vbox{
@@ -18,9 +17,28 @@ wb-hbox{
     height: 100%;
 }
 wb-vbox{
+    position: relative;
     flex-direction: column;
 }
-
+wb-leftbox, wb-rightbox{
+    flex-direction: column;
+}
+wb-workbox, wb-displaybox{
+    display: flex;
+    flex: 1 1;
+    position: relative;
+    overflow: hidden;
+    flex-direction: row;
+    height: 100%;
+}
+wb-displaybox{
+    border-color: #000000;
+    border-width: medium;
+    border-style: solid;
+}
+wb-displaybox:not([selected='true']){
+    display: none;
+}
 wb-hbox > *{
     flex: 1 1 auto;
 }
@@ -37,9 +55,9 @@ wb-splitter{
     flex: 0 0 8px;
 }
 
-wb-hbox > wb-splitter{
+wb-hbox > wb-splitter, wb-workbox > wb-splitter{
     background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
-    background-image-size: 8px 8px;
+    background-size: 8px 8px;
     cursor: ew-resize;
 }
 
@@ -55,6 +73,7 @@ wb-workspace{
     display: flex;
     flex-direction: column;
     flex: 2 1;
+    overflow-x: auto;
 }
 
 wb-workspace > header{
@@ -99,7 +118,7 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overfow: visible;
+    overflow: visible;
     padding-left: 6px;
 }
 
@@ -122,7 +141,7 @@ sidebar[filtered=true] wb-accordion > :not(header){
     display: inline-block; /*display everything*/
 }
 
-sidebar[filtered=true] wb-step, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]), sidebar[filtered=true] wb-accordion > header{
+sidebar[filtered=true] wb-step, sidebar[filtered=true] p, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]), sidebar[filtered=true] wb-accordion > header{
     display: none!important; /* hide everything but the filtered expressions */
     margin-bottom: 6px;
 }

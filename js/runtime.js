@@ -7,7 +7,7 @@
     function canvas(){
         if (!_canvas){
             if (dom.find){
-                _canvas = dom.find('wb-playground > canvas');
+                _canvas = dom.find('canvas');
             }
             if (!_canvas){
                 // We're not running in Waterbear
@@ -19,29 +19,48 @@
         }
         return _canvas;
     }
+    
     function getContext(){
         if (!_ctx){
             _ctx = canvas().getContext('2d');
+            // Save the default state.
+            _ctx.save();
         }
         return _ctx;
     }
+    function resetCanvas() {
+        // No context to reset!
+        if (!_ctx) {
+            return;
+        }
+
+        var el = canvas();
+        var ctx = getContext();
+        ctx.clearRect(0, 0, el.width, el.height);
+        // Restore the default state and push it back on the stack again.
+        ctx.restore();
+        ctx.save();
+    }
+
     Event.on(window, 'ui:load', null, function(){
         handleResize();
     }, false);
 
     function handleResize(){
-        var rect = canvas().getBoundingClientRect();
-        Event.stage = {
-            // FIXME: Move these to runtime.stage
-            top: Math.round(rect.top),
-            left: Math.round(rect.left),
-            right: Math.round(rect.right),
-            bottom: Math.round(rect.bottom),
-            width: Math.round(rect.right) - Math.round(rect.left),
-            height: Math.round(rect.bottom) - Math.round(rect.top)
-        };
-        canvas().setAttribute('width', Event.stage.width);
-        canvas().setAttribute('height', Event.stage.height);
+        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground (and not the tutorial)
+            var rect = canvas().getBoundingClientRect();
+            Event.stage = {
+                // FIXME: Move these to runtime.stage
+                top: Math.round(rect.top),
+                left: Math.round(rect.left),
+                right: Math.round(rect.right),
+                bottom: Math.round(rect.bottom),
+                width: Math.round(rect.right) - Math.round(rect.left),
+                height: Math.round(rect.bottom) - Math.round(rect.top)
+            };
+            canvas().setAttribute('width', Event.stage.width);
+            canvas().setAttribute('height', Event.stage.height);
+        }
     }
 
     function canvasRect(){
@@ -52,17 +71,8 @@
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
         Event.clearRuntime();
-        clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
-    }
-
-    var perFrameHandlers;
-    var lastTime;
-
-    function clearPerFrameHandlers() {
-        perFrameHandlers = [];
-        lastTime = new Date().valueOf();
     }
 
     // Initialize the stage.
@@ -70,35 +80,10 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
 
-    function startEventLoop(){
-        clearPerFrameHandlers();
-        runtime.control._frame = 0;
-        runtime.control._sinceLastTick = 0;
-        requestAnimationFrame(frameHandler);
-    }
-
-    function stopEventLoop() {
-        /* TODO: Dunno lol there be more in here? */
-    }
-
-    function frameHandler(){
-        // where to put these? Event already has some global state.
-        var currTime = new Date().valueOf();
-        runtime.control._elapsed = currTime - lastTime;
-        runtime.control._frame++;
-        lastTime = currTime;
-        perFrameHandlers.forEach(function(handler){
-            handler();
-        });
-        requestAnimationFrame(frameHandler);
-    }
-
-
     // for all of these functions, `this` is the scope object
     //
     // Contents of runtime (please add new handlers alphabetically)
     //
-    // startEventLoop -> exposed for testing only
     // local - special for variables
     // array
     // boolean
@@ -123,9 +108,11 @@
     // vector
 
     global.runtime = {
-        startEventLoop: startEventLoop,
-        stopEventLoop: stopEventLoop,
         clear: clearRuntime,
+        resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
+        getStage: canvas,
+        resetStage: resetCanvas,
+        handleResize: handleResize,
 
         local: {
             //temporary fix for locals
@@ -219,19 +206,13 @@
         },
 
         control: {
-            whenProgramRuns: function(args, containers){
-                var self = this;
-                containers[0].forEach(function(block){
-                    block.run(self);
-                });
+            whenProgramRuns: function(strand, frame, containers, args){
+                strand.newFrame(containers[0]);
             },
-            eachFrame: function(args, containers){
-                var self = this;
-                perFrameHandlers.push(function(){
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
-                });
+            eachFrame: function(strand, frame, containers, args){
+                var container = containers[0];
+                /* Delegate to new frame handler. */
+                strand.newFrameHandler(container);
             },
             frame: function(){
                 return runtime.control._frame;
@@ -251,54 +232,85 @@
             incrementVariable: function(variable, value){
                 this[name] += value;
             },
-            loopOver: function(args, containers) {
-                // FIXME: this has to work over arrays, strings, objects, and numbers
-                var self = this;
-                var list = args[0];
-                var type = util.type(list);
-                var i =0,len,keys;
+
+            loopOver: function(strand, frame, containers, args) {
+                var scope = this;
+                var iterable = args[0];
+                var container = containers[0];
+                var type = util.type(iterable);
+
+                var value, length, keys;
+                var index = 0;
+
+                /* Get the length, based on type. */
                 switch(type){
                     case 'array': // fall through
                     case 'string':
-                        len = list.length;
+                        length = iterable.length;
                         break;
                     case 'object':
-                        keys = Object.keys(list);
-                        len = keys.length;
+                        keys = Object.keys(iterable);
+                        length = keys.length;
                         break;
                     case 'number':
-                        len = list;
+                        length = iterable;
+                        break;
+                    case 'boolean':
+                        /* Leave it undefined! */
                         break;
                 }
 
-                /* For every element in the container place
-                 * the index and value into the scope. */
-                for (i = 0; i < len; i++){
-                    switch(type){
-                        case 'array': // fall through
-                        case 'string':
-                            this.index = i;
-                            this.value = list[i];
-                            break;
-                        case 'object':
-                            this.key = keys[i];
-                            this.value = list[this.key];
-                            break;
-                        case 'number':
-                            this.value = i;
-                            break;
-                    }
-                    containers[0].forEach(runBlock);
+                /* Pick the appropriate "should do another iteration"
+                 * callback, based on type. */
+                var shouldContinue = ({
+                    boolean: function () { return value; },
+                    number: function () { return value <= length; },
+                    object: function () { return index < length; },
+                    array: function () { return index < length; },
+                    string: function () { return index < length; },
+                }[type]);
+
+                var getValue = ({
+                    boolean: function () {
+                        /* Reevaluate the loop-condition. */
+                        return frame.gatherValues(scope)[0];
+                    },
+                    number: function () { return index + 1; },
+                    string: function () { return iterable[index]; },
+                    array: function () { return iterable[index]; },
+                    object: function () { return iterable[keys[index]]; },
+                }[type]);
+
+                /* Check if the array is empty, boolean starts false, etc. */
+                updateState();
+                if (!shouldContinue()) {
+                    strand.noOperation();
+                    return;
                 }
 
-                function runBlock(block){
-                    block.run(self);
+                /* Spawn then new frame. */
+                strand.newScope(container, function() {
+                    index++;
+                    updateState();
+
+                    return shouldContinue() ? container : null;
+                });
+                function updateState() {
+                    /* Set the locals. */
+                    scope.value = value = getValue();
+                    /* Use the key value  if we have an object. */
+                    scope.index = keys === undefined ? index : keys[index];
+
                 }
             },
             broadcast: function(eventName, data){
                 // Handle with and without data
                 Event.trigger(document.body, eventName, data);
             },
+            /**
+             * FIXME: Update to new API.
+             * FIXME: Must implement Strand#newEventHandler.
+             */
             receive: function(args, containers){
                 // Handle with and without data
                 // Has a local for the data
@@ -312,26 +324,18 @@
                     });
                 });
             },
-            'if': function(args, containers){
+            'if': function(strand, frame, containers, args){
                 if (args[0]){
-                    var self = this;
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
+                    strand.newScope(containers[0]);
+                } else {
+                    strand.noOperation();
                 }
             },
-            ifElse: function(args, containers){
-                var self = this;
-                if (args[0]){
-                    containers[0].forEach(function(block){
-                        block.run(self);
-                    });
-                }else{
-                    containers[1].forEach(function(block){
-                        block.run(self);
-                    });
-                }
+            ifElse: function(strand, frame, containers, args){
+                var branch = args[0] ? containers[0] : containers[1];
+                strand.newScope(branch);
             },
+            /* FIXME: How do we make this _lazy_? */
             ternary: function(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;
             },
@@ -340,6 +344,9 @@
                 var name = args[1];
                 var answer = prompt(message);
                 runtime.control.setVariable(name, answer);
+            },
+            commentContext: function (strand) {
+                strand.noOperation();
             },
             comment: function(){
             },
@@ -367,8 +374,7 @@
                 var steps = containers[0];
 
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
-                    // TODO: probably factor out augmenting scope and running
-                    // the block stuff to somewhere else.
+                    // TODO: Update to strand.newEventHandler()
                     steps.forEach(function (block) {
                         block.run(currentScope);
                     });
@@ -428,6 +434,12 @@
             },
             drawAtPoint: function(img, pt){
                 img.drawAtPoint(getContext(), pt);
+            },
+            getWidth: function(img){
+                return img.getWidth();
+            },
+            getHeight: function(img){
+                return img.getHeight();
             },
             setWidth: function(img, w){
                 img.setWidth(w);
@@ -605,7 +617,7 @@
                 return new util.Path(getContext().closePath);
             },
             pathSet: function(args){
-                return new util.Shape(arguments);
+                return new util.Shape(Array.prototype.slice.call(arguments));
             },
 
             lineStyle: function(width, color, capStyle, joinStyle){
@@ -691,7 +703,7 @@
             },
             stroke: function(shapeArg){
                 shapeArg.draw(getContext());
-                ctx.stroke();
+                getContext().stroke();
             },
             circle: function(pt, rad){
                 return new util.Shape(function(ctx){
@@ -710,6 +722,7 @@
                         ctx.lineTo(pt.x - width/2, pt.y - height/2);
                     }
                     else{
+                        ctx.moveTo(pt.x, pt.y);
                         ctx.lineTo(pt.x + width, pt.y);
                         ctx.lineTo(pt.x + width, pt.y + height);
                         ctx.lineTo(pt.x, pt.y + height);
@@ -801,7 +814,22 @@
             accelerate: function(spt, speed){
                 spt.accelerate(speed);
             },
-            rotate: function(spt, angle, _){
+            setVelocity: function(spt, vec){
+                spt.setVelocity(vec);
+            },
+            getXvel: function(spt){
+                return spt.getXvel();
+            },
+            getYvel: function(spt){
+                return spt.getYvel();
+            },
+            getXpos: function(spt){
+                return spt.getXpos();
+            },
+            getYpos: function(spt){
+                return spt.getYpos();
+            },
+            rotate: function(spt, angle){
                 spt.rotate(angle);
             },
             rotateTo: function(spt, angle){
@@ -833,11 +861,11 @@
             clearTo: new util.Method()
                 .when(['string'], function(clr){ // unfortunately colors are still strings
                     var r = canvasRect();
-                    ctx().fillStyle = clr;
-                    ctx().fillRect(r.x, r.y, r.width, r.height);
+                    getContext().fillStyle = clr;
+                    getContext().fillRect(r.x, r.y, r.width, r.height);
                 })
                 .when(['wbimage'], function(img){
-                    img.drawInRect(ctx(), canvasRect());
+                    img.drawInRect(getContext(), canvasRect());
                 })
             .fn(),
             stageWidth: function(){
@@ -880,7 +908,7 @@
             getChar: function(n,x){
                 if(n<0)
                     n = x.length + n;
-                
+
                 return x.charAt(n);
             },
             getCharFromEnd: function(n,x){
@@ -972,7 +1000,7 @@
             create: function create(x,y){
                 return new util.Vector(x,y);
             },
-            fromPolar: function fromPolar(deg, mag){
+            createPolar: function fromPolar(deg, mag){
                 return util.Vector.fromPolar(deg, mag);
             },
             rotateTo: function rotateTo(vec, deg){

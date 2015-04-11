@@ -629,16 +629,13 @@
         trackPointerUp: trackPointerUp,
         handleKeyUp: handleKeyUp,
         handleKeyDown: handleKeyDown,
-<<<<<<< HEAD
-        registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents
-=======
+        registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents,
         undoKeyCombo: undoKeyCombo,
         redoKeyCombo: redoKeyCombo,
         handleUndoButton: handleUndoButton,
         handleRedoButton: handleRedoButton,
         addNewEvent: addNewEvent,
         clearStacks: clearStacks
->>>>>>> d19d06e393a5b738862b2c2279f361c7ce2c9d2c
     };
 
 })();

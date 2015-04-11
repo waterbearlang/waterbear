@@ -348,12 +348,13 @@ Event.on(window, 'process:step', null, function (evt) {
     }
 
     block.classList.add('wb-paused');
+    block.scrollIntoView(true);
 });
 Event.on(window, 'process:pause', null, function (evt) {
-    /* No-op: wb-paused added on step. */
+    document.body.classList.add('debugger-paused');
 });
 Event.on(window, 'process:resume', null, function (evt) {
-    document.body.classList.remove('wb-paused');
+    document.body.classList.remove('debugger-paused');
 });
 
 Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);

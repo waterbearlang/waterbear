@@ -11,16 +11,16 @@
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
+                    <wb-expression type="wb-image" isAsset="true" script="image.get" class="image">
+                        <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                     </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-expression type="sprite" script="sprite.create" />
+                        <wb-value type="wb-image,shape,sprite">sprite with</wb-value>
+                    </wb-expression>
+                    <wb-step script="sprite.draw" class="sprite">
+                        <wb-value type="sprite">draw</wb-value>
                     </wb-step>
+                    
                 </div>
             </div>
 Strategy Hints: <br />
@@ -126,27 +126,28 @@ Can you only see part of an image? That’s fine! We’ll move it later.
     </wb-hbox>
     <wb-hbox class="tutorial-main">
         <div class="tutorial-desc"> Step 2 : Make the background black<br /><br />Instructions: Time to draw outer space. Create a rectangle the size of the canvas and make it black.<br /><br />
-        Blocks to use:<br />
-“Fill the shape”<br />
-“Rectangle at”<br />
-“Fill style”<br />
-“Point x,y”<br />
-“stage height”<br />
-“stage weidth”<br /><br />
-Strategy Hints:<br />
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
-                    </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-step script=shape.fill class="shape">
+                        <wb-value type="shape">fill the shape</wb-value>
                     </wb-step>
+                    <wb-expression type="shape" script="shape.rectangle" class="shape">
+                        <wb-value type="point">rectangle at</wb-value>
+                        <wb-value type="number" min="0">width</wb-value>
+                        <wb-value type="number" min="0">height</wb-value>
+                        <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
+                    </wb-expression>
+                        <wb-expression type="point" script="point.create">
+                        <wb-value type="number" value="0">x</wb-value>
+                        <wb-value type="number" value="0">y</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="stage.stageWidth">
+					    <wb-value>Stage Width</wb-value>
+				    </wb-expression>
+				    <wb-expression type="number" script="stage.stageHeight">
+					    <wb-value>Stage Height</wb-value>
+				    </wb-expression>
                 </div>
             </div>
 Did you remember to make your fill style black?<br />
@@ -254,25 +255,33 @@ Try positioning the rectangle at the origin (0,0).
         <div class="tutorial-desc">
             Step 3 : Move Waterbear to the center of the canvas<br /><br />
 Instructions: Move the waterbear to the center of the canvas so you can see all of him.<br /><br />
-Blocks to use:<br />
-“move to”<br />
-“point x, y”<br />
-“variable”<br />
-“center x”<br />
-“center y”<br /><br />
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
+                    <wb-expression script = "path.moveTo" type="path">
+                        <wb-value type="point">move to point</wb-value>
+                    </wb-expression>  
+                    <wb-expression type="point" script="point.create">
+                        <wb-value type="number" value="0">x</wb-value>
+                        <wb-value type="number" value="0">y</wb-value>
                     </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-step script="control.setVariable" class="control">
+                        <wb-row>
+                        <wb-value type="text" isvariable="true" allow="literal" value="variable">set</wb-value>
+                            <wb-local>
+                                <wb-expression type="any" script="control.getVariable">
+                                    <wb-value value="variable">variable</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                        </wb-row>
+                        <wb-value type="any">to</wb-value>
                     </wb-step>
+                    <wb-expression type="number" script="stage.centerX">
+					    <wb-value>Center x</wb-value>
+				    </wb-expression>
+				    <wb-expression type="number" script="stage.centerY">
+					    <wb-value>Center y</wb-value>
+				    </wb-expression>
                 </div>
             </div>
 Strategy Hints: Try setting the position using the “center x” and “center y” blocks.
@@ -399,16 +408,32 @@ Instructions: Use some math to only rotate back and forth.<br />
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
-                    </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-context script="control.eachFrame" class="control">
+                        <wb-row>
+                            <wb-value>each frame</wb-value>
+                            <wb-local>
+                                <wb-expression type="number" script="control.frame">
+                                    <wb-value value="frame">frame</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                            <wb-local>
+                                    <wb-expression type="number" script="control.elapsed">
+                                    <wb-value value="elapsed">elapsed</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                        </wb-row>
+                    </wb-context>
+                    <wb-step script="sprite.rotate" class="sprite">
+                        <wb-value type="sprite">rotate</wb-value>
+                        <wb-value type="number">by</wb-value>
                     </wb-step>
+                    <wb-expression type="number" script="math.sin">
+                        <wb-value type="number" value="0">sine</wb-value>
+                    </wb-expression>
+                    <wb-expression script="math.multiply" type="number">
+                        <wb-value type="number,vector,array" value="0"></wb-value>
+                        <wb-value type="number,vector" value="0">×</wb-value>
+                    </wb-expression>
                 </div>
             </div>
 Strategy Hints: Think about a <a href="http://www.google.com/url?q=http%3A%2F%2Fsciencevibe.com%2Fwp-content%2Fuploads%2F2015%2F02%2Fcosinesine.gif&sa=D&sntz=1&usg=AFQjCNGwRfIm9g3dt63sHjGrBOPdL_i73g">sine graph</a> and how it moves. It will give you values between 1 and -1, and since it moves back and forth, it can help us make the Waterbear move back and forth. By taking the sine of the frame, we can get values to try rotating the Waterbear by. Try using the sin(frame) to implement this.

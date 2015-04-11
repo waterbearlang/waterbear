@@ -138,7 +138,7 @@ window.WaterbearProcess = (function () {
                     'strand.{newFrame, newScope, newFrameHandler, newEventHandler, noOperation}');
         } else {
             assert(this.currentInstruction.tagName == 'WB-STEP');
-            /* TODO: wrap this with error handling of some kind. */
+            /* FIXME: (#904) wrap this with error handling of some kind. */
             this.currentInstruction.run(this.scope);
             this.currentInstruction = this.next();
         }
@@ -190,18 +190,7 @@ window.WaterbearProcess = (function () {
      * TODO: Write more docs for this.
      */
     Strand.prototype.newEventHandler = function newEventHandler(event, container) {
-        /* FIXME: Write this! */
-        assert(false, 'Not implemented.');
-        this.undertakenAction = true;
-        this.currentInstruction = this.currentInstruction.next();
-    };
-
-    /**
-     * Starts a new strand, seperate from this one.  It inherits the current
-     * scope.
-     */
-    Strand.prototype.newStrand = function newStrand(container) {
-        /* FIXME: Write this! */
+        /* FIXME: (#1083) Write this! */
         assert(false, 'Not implemented.');
         this.undertakenAction = true;
         this.currentInstruction = this.currentInstruction.next();
@@ -280,7 +269,7 @@ window.WaterbearProcess = (function () {
      */
     Strand.createRootStrand = function createRootStrand(process) {
         var globalScope = {},
-            /* FIXME: THIS DOM STUFF DOES NOT BELONG HERE! */
+            /* FIXME: (#1112) Rely less on the DOM.! */
             container = dom.find('wb-workspace > wb-contains'),
             frame = Frame.createFromContainer(container, globalScope);
 
@@ -307,9 +296,10 @@ window.WaterbearProcess = (function () {
     ReusableStrand.prototype = Object.create(Strand.prototype);
 
     /**
-     * Psuedo-instruction. This is how you can tell I've been up too late.
+     * Psuedo-property: Yields the first instruction of the root frame.  In
+     * other words, the very first instruction that should ever be executed.
      */
-    Object.defineProperty(ReusableStrand.prototype, 'firstEverInstructionNoReallyYouGuys', {
+    Object.defineProperty(ReusableStrand.prototype, 'firstInstruction', {
         get: function () {
             return this.rootFrame.firstInstruction;
         }
@@ -496,8 +486,9 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Does one step of the next scheduled strand. Asynchronous.
-     * When the
+     * Does one step of the next scheduled strand. Asynchronously!
+     * When the only strand left belongs to per-frame handlers, these will be
+     * scheduled and executed.
      */
     Process.prototype.step = function step() {
         if (!this.paused) {
@@ -628,10 +619,8 @@ window.WaterbearProcess = (function () {
             return;
         }
 
-        /* TODO: Decide if we should pause at this instruction due to a
+        /* TODO: (#1058) Decide if we should pause at this instruction due to a
          * breakpoint, error condition, etc. */
-
-        /* TODO: Should we switch to a different strand? */
 
         /* Issue an event of which step is the next to execute. */
         if (this.paused && this.nextInstruction) {
@@ -679,7 +668,7 @@ window.WaterbearProcess = (function () {
 
         /* Do I dare change these not quite global variables? */
         runtime.control._elapsed = currTime - this.lastTime;
-        /* FIXME: This does not trivially allow for multiple eachFrame
+        /* FIXME: (#1120) This does not trivially allow for multiple eachFrame
          * handlers! */
         runtime.control._frame++;
         /* Why, yes, I do dare. */
@@ -696,9 +685,10 @@ window.WaterbearProcess = (function () {
             /* Running is delayed or paused. Run one step. */
             this.shouldStep = false;
             frameStrand.doNext();
-            /* XXX: ugh, this is ugly... */
+            /* Execute the queue instruction, or the first if no instruction
+             * is queued. */
             this.emitNextInstruction(frameStrand.currentInstruction ||
-                                     frameStrand.firstEverInstructionNoReallyYouGuys);
+                                     frameStrand.firstInstruction);
         }
 
         /* Enqueue the next call for this function. */
@@ -707,7 +697,11 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Register this container as a frame handler.
+     * To be called by Strand#newFrameHandler.
+     * Given a container, creates a special strand for per-frame handlers, and
+     * adds it to the list of tracked frame handlers.
+     *
+     * @todo Support more than one frame handler.
      */
     Process.prototype.addFrameHandler = function addFrameHandler(container) {
         if (this.perFrameHandlers.length > 0) {
@@ -720,9 +714,9 @@ window.WaterbearProcess = (function () {
         this.perFrameHandlers.push(strand);
         this.startEventLoop();
 
-        /* HACK! */
+        /* Schedule the first instruction of the brand new frame handler. */
         if (this.paused) {
-            this.emitNextInstruction(strand.firstEverInstructionNoReallyYouGuys);
+            this.emitNextInstruction(strand.firstInstruction);
         }
     };
 
@@ -791,7 +785,7 @@ window.WaterbearProcess = (function () {
      * Returns true if the argument is a <wb-context> block.
      */
     function isContext(block) {
-        /* FIXME: This probably should NOT rely on the DOM. Probably. */
+        /* FIXME: (#1112) This probably should NOT rely on the DOM. Probably. */
         return block.tagName === 'WB-CONTEXT';
     }
 

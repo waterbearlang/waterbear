@@ -113,8 +113,8 @@ Event.on('.do-pause', 'ui:click', null, function () {
 });
 Event.on('.do-step', 'ui:click', null, function (evt) {
     if (!process) {
-        /* FIXME: when loading a new script... this process should be
-         * stopped. */
+        /* FIXME: (#1119) when loading a new script this process should be
+         * stopped/disposed. */
         /* Start a new process, paused. */
         startScript(evt, { startPaused: true });
         /* Step the process once it's created. */
@@ -178,7 +178,7 @@ function stopAndClearScripts(){
 
 function preload() {
     /**
-     * Asynchronously loads/intiializes stuff... that's needed by the script.
+     * Asynchronously loads/initializes stuff needed by the script.
      */
     return assets.load({
         /* Selector for blocks that require loading  : function that begins the loading. */

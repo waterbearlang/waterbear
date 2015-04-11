@@ -226,6 +226,39 @@
         return evt;
     }
 
+    /* Add custom events for adding and removing blocks from the DOM */
+
+    function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
+
+        var blockObserver = new MutationObserver(function(mutations){
+            mutations.forEach(function(mutation){
+                // send childAdded or childRemove event to parent element
+                var parent = mutation.target;
+                var blockParent = dom.closest(parent, parentList);
+                if (!blockParent){
+                    return;
+                }
+                [].slice.apply(mutation.removedNodes)
+                        .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
+                        .forEach(function(node){
+                    Event.trigger(blockParent, eventPrefix + 'removedChild', node);
+                    Event.trigger(node, eventPrefix + 'removed', blockParent);
+                });
+                [].slice.apply(mutation.addedNodes)
+                        .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only block elements
+                        .forEach(function(node){
+                    Event.trigger(blockParent, 'wb-addedChild', node);
+                    Event.trigger(node, 'wb-added', blockParent);
+                });
+            });
+        });
+
+        var blockObserverConfig = { childList: true, subtree: true };
+
+        // Only observe after script is loaded?
+        blockObserver.observe(document.body, blockObserverConfig);
+
+    };
 
 
     /****************************
@@ -419,7 +452,8 @@
         trackPointerDown: trackPointerDown,
         trackPointerUp: trackPointerUp,
         handleKeyUp: handleKeyUp,
-        handleKeyDown: handleKeyDown
+        handleKeyDown: handleKeyDown,
+        registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents
     };
 
 })();

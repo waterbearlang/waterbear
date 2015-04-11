@@ -71,17 +71,8 @@
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
         Event.clearRuntime();
-        clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
-    }
-
-    var perFrameHandlers;
-    var lastTime;
-
-    function clearPerFrameHandlers() {
-        perFrameHandlers = [];
-        lastTime = new Date().valueOf();
     }
 
     // Initialize the stage.
@@ -89,40 +80,10 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
 
-    var currentAnimationFrameHandler = null;
-    function startEventLoop(){
-        clearPerFrameHandlers();
-        runtime.control._frame = 0;
-        runtime.control._sinceLastTick = 0;
-        if (!currentAnimationFrameHandler){
-            currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
-        }
-    }
-
-    function stopEventLoop() {
-        /* Cancel any stray frame handlers. */
-        cancelAnimationFrame(currentAnimationFrameHandler);
-        currentAnimationFrameHandler = null;
-    }
-
-    function frameHandler(){
-        // where to put these? Event already has some global state.
-        var currTime = new Date().valueOf();
-        runtime.control._elapsed = currTime - lastTime;
-        runtime.control._frame++;
-        lastTime = currTime;
-        perFrameHandlers.forEach(function(handler){
-            handler();
-        });
-        currentAnimationFrameHandler = requestAnimationFrame(frameHandler);
-    }
-
-
     // for all of these functions, `this` is the scope object
     //
     // Contents of runtime (please add new handlers alphabetically)
     //
-    // startEventLoop -> exposed for testing only
     // local - special for variables
     // array
     // boolean
@@ -147,8 +108,6 @@
     // vector
 
     global.runtime = {
-        startEventLoop: startEventLoop,
-        stopEventLoop: stopEventLoop,
         clear: clearRuntime,
         resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
         getStage: canvas,
@@ -250,29 +209,10 @@
             whenProgramRuns: function(strand, frame, containers, args){
                 strand.newFrame(containers[0]);
             },
-            /* FIXME FIXME FIXME FIXME FIXME FIXME */
-            /* FIXME FIXME FIXME FIXME FIXME FIXME */
-            /* FIXME FIXME FIXME FIXME FIXME FIXME */
-            /*
-             * Must implement Strand#newFrameHandler. Until then, we have
-             * this. :/
-             */
             eachFrame: function(strand, frame, containers, args){
-                var self = this;
                 var container = containers[0];
-
-                /* FIXME: need to support this in the debugger. */
-                console.warn('`each frame` not yet implemented!');
-                /* Silences the assertion error given by strand. */
-                strand.noOperation();
-
-                /* FIXME: Really, need to support frame stuff in debugger. */
-                perFrameHandlers.push(function(){
-                    /* XXX: So that I don't break existing scripts. */
-                    Array.prototype.forEach.call(container.children, function(block){
-                        block.run(self);
-                    });
-                });
+                /* Delegate to new frame handler. */
+                strand.newFrameHandler(container);
             },
             frame: function(){
                 return runtime.control._frame;
@@ -388,7 +328,6 @@
                 if (args[0]){
                     strand.newScope(containers[0]);
                 } else {
-                    /* TODO: Should this be a thing? */
                     strand.noOperation();
                 }
             },
@@ -435,8 +374,7 @@
                 var steps = containers[0];
 
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
-                    // TODO: probably factor out augmenting scope and running
-                    // the block stuff to somewhere else.
+                    // TODO: Update to strand.newEventHandler()
                     steps.forEach(function (block) {
                         block.run(currentScope);
                     });
@@ -765,7 +703,7 @@
             },
             stroke: function(shapeArg){
                 shapeArg.draw(getContext());
-                ctx.stroke();
+                getContext().stroke();
             },
             circle: function(pt, rad){
                 return new util.Shape(function(ctx){
@@ -784,6 +722,7 @@
                         ctx.lineTo(pt.x - width/2, pt.y - height/2);
                     }
                     else{
+                        ctx.moveTo(pt.x, pt.y);
                         ctx.lineTo(pt.x + width, pt.y);
                         ctx.lineTo(pt.x + width, pt.y + height);
                         ctx.lineTo(pt.x, pt.y + height);

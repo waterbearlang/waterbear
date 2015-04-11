@@ -119,6 +119,12 @@ BlockProto.next = function() {
     return this.nextElementSibling;
 };
 
+/**
+ * Tells you whether this block is a context block.  Obviously, only
+ * ContextProto should override this property.
+ */
+BlockProto.isContext =  false;
+
 
 /*****************
 *
@@ -289,6 +295,12 @@ ContextProto.setupCallbacks = function() {
 
     this.setup = callback;
 };
+
+/**
+ * Some code (e.g., execution.js) wants to know if they're dealing with a
+ * context block. This is a surefire way of doing that.
+ */
+ContextProto.isContext = true;
 
 /** Default: Always get the next DOM element and assume it's a wb-contains. */
 function defaultNextCallback(strand, args, containers, elem) {

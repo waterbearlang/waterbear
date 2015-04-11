@@ -785,8 +785,7 @@ window.WaterbearProcess = (function () {
      * Returns true if the argument is a <wb-context> block.
      */
     function isContext(block) {
-        /* FIXME: (#1112) This probably should NOT rely on the DOM. Probably. */
-        return block.tagName === 'WB-CONTEXT';
+        return block.isContext;
     }
 
 

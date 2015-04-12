@@ -80,6 +80,7 @@ wb-local{
     padding: 0;
     border: 3px solid white;
     border-radius: 3px;
+    margin: 2px 0;
 }
 
 wb-local > wb-expression {

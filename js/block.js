@@ -697,7 +697,6 @@ window.WBContains = document.registerElement('wb-contains', {prototype: Contains
 Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
     if(dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')){
         dom.closest(evt.target, 'wb-value').toggleSelect();
-        console.log("Test");
     }
 })
 

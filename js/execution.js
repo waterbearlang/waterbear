@@ -137,6 +137,12 @@ window.WaterbearProcess = (function () {
      * of the next instruction to execute, and has an execution stack, which is
      * organized into several {@link Frame frames}. Maintains the scope.
      *
+     * @todo Can use a mechanism similar to Frames in order to implement
+     * step-over/step-out. In order to step-out, the rest of the frame must be
+     * implemented. To step-over, simply execute until the frame is finished.
+     * The default of "step" is to step-in. Perhaps this behaviour should be
+     * changed before v1.0!
+     *
      * @constructor
      * @param {Frame} rootFrame - The bottommost frame in the frame stack.
      * @param {Process} process - The parent process.

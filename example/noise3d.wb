@@ -1,13 +1,15 @@
-<wb-step script="control.setVariable" class="" style=""><header><wb-row>
-                    <wb-value type="text" value="variable">set<input type="text" style="width: 56.7548828125px;"></wb-value>
+<wb-step script="control.setVariable" class="control" id="k6e53ae" style=""><header><wb-row>
+                        <wb-value type="text" allow="literal" value="variable">set<input type="text" style="width: 53.0192794799805px;"></wb-value>
+                        <wb-value type="any" value="400">to<input type="any" style="width: 33.3109588623047px;"></wb-value>
+                    </wb-row><wb-row>
                         <wb-local>
-                            <wb-expression type="any" script="control.getVariable"><header><wb-value value="variable">variable</wb-value></header>
-
+                            <wb-expression type="any" script="control.getVariable" for="k6e53ae" value="variable"><header>variable</header>
+                                
                             </wb-expression>
                         </wb-local>
-                    </wb-row><wb-value type="any" value="400">to<input type="any" style="width: 35.86669921875px;"></wb-value></header>
-
-
+                    </wb-row></header>
+                    
+                    
                 </wb-step><wb-context script="control.eachFrame" class="" style=""><header><wb-disclosure></wb-disclosure><wb-row>
                         <wb-value>each frame</wb-value>
                         <wb-local>
@@ -23,8 +25,8 @@
                     </wb-row></header>
 
                 <wb-contains><wb-context script="control.loopOver" class=""><header><wb-disclosure></wb-disclosure><wb-row>
-                        <wb-value type="any" value="2500">loop over<input type="any" style="width: 42.822265625px;" class="hide"><wb-expression type="any" script="control.getVariable" class="" style=""><header><wb-value value="variable">variable</wb-value></header>
-
+                        <wb-value type="any" value="2500">loop over<input type="any" style="width: 42.822265625px;" class="hide"><wb-expression type="any" script="control.getVariable" for="k6e53ae" value="variable" class="" style=""><header>variable</header>
+                                
                             </wb-expression></wb-value>
                         <wb-local fortype="array,string">
                             <wb-expression type="any" script="local.index"><header><wb-value value="index">index</wb-value></header>

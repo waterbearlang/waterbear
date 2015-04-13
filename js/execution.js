@@ -31,12 +31,12 @@
  * instructions, at which point the frame will pop-out, and the remaining
  * instructions in the parent frame are run in order.
  *
- * To recap: a {@link Process} is made of one or more instances of {@link
- * Strand}, which will start a new {@link Frame} stack with one frame: the root
- * frame. Execution of the root frame may push and execute a frames on top of
- * the stack. A strand is finished once its root frame has no more remaining
- * instructions (however, see {@link ReusableStrand}). A process is finished
- * once it has no more remaining strands.
+ * **To recap**: a {@link Process} is made of one or more instances of {@link
+ * Strand}, which will start a new {@link Frame} stack with one frame: the
+ * root frame. Execution of the root frame may push and execute a frames on
+ * top of the stack. A strand is finished once its root frame has no more
+ * remaining instructions (however, see {@link ReusableStrand}). A process is
+ * finished once it has no more remaining strands.
  *
  * [fibres]: http://en.wikipedia.org/wiki/Fiber_(computer_science)
  * [requestAnimationFrame]: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
@@ -59,7 +59,7 @@ window.WaterbearProcess = (function () {
      * @param {ContextBlock} context - Associated context block. Can be `null`.
      * @param {Container} activeContainer - The first container to be run.
      * @param {Scope} scope - The scope to use.
-     * @param {Function} [continuationCallback] - Called at end of execution.
+     * @param {Frame~continuationCallback} [continuationCallback] - callback.
      * @alias Frame
      */
     function Frame(context, activeContainer, scope, continuationCallback) {
@@ -319,7 +319,7 @@ window.WaterbearProcess = (function () {
      */
     Strand.prototype.switchFrame = function switchFrame() {
         var oldFrame = this.currentFrame;
-        /* Ask shouldContinue() if we should switch to a new container-- if
+        /* Ask shouldContinue() if we should switch to a new container -- if
          * shouldContinue exists! */
         var nextContainer = oldFrame.shouldContinue && oldFrame.shouldContinue();
 
@@ -371,7 +371,7 @@ window.WaterbearProcess = (function () {
     ReusableStrand.prototype = Object.create(Strand.prototype);
 
     /**
-     * Psuedo-property: Yields the first instruction of the root frame.  In
+     * Pseudo-property: Yields the first instruction of the root frame.  In
      * other words, the very first instruction that should ever be executed.
      *
      * @member {Block} ReusableStrand#firstInstruction 
@@ -442,7 +442,7 @@ window.WaterbearProcess = (function () {
 
     /**
      * Encapsulates the execution of a Waterbear program. Composed of several
-     * {@link Strand} instances, and this should encompase all of the state for
+     * {@link Strand} instances, and this should encompass all of the state for
      * a single run of Waterbear.
      *
      * This is a "one-time use" object! This means that once {@link
@@ -529,7 +529,7 @@ window.WaterbearProcess = (function () {
     }
 
     /**
-     * Psuedo-property: The next instruction to execute in the currently
+     * Pseudo-property: The next instruction to execute in the currently
      * scheduled strand.
      *
      * @member {Block} Process#nextInstruction 
@@ -742,7 +742,7 @@ window.WaterbearProcess = (function () {
      */
     Process.prototype.scheduleRegularStrandInstructionExecution = function () {
         assert(this.strands.length && this.currentStrand !== null,
-               'Trieds to schedule a standard thread, but none exist.');
+               'Tried to schedule a standard thread, but none exist.');
         this.nextTimeout = enqueue(this.doNextStep, this.delay);
     };
 
@@ -770,8 +770,8 @@ window.WaterbearProcess = (function () {
 
         /* Do I dare change these not quite global variables? */
         runtime.control._elapsed = currTime - this.lastTime;
-        /* FIXME: (#1120) This does not trivially allow for multiple eachFrame
-         * handlers! */
+        /* FIXME: (#1120) This does not trivially allow for multiple
+         * `each frame` handlers! */
         runtime.control._frame++;
         /* Why, yes, I do dare. */
 
@@ -896,27 +896,42 @@ window.WaterbearProcess = (function () {
     /*= Additional Documentation. */
 
     /**
+     * An optional callback, that if provided, is called at the end of the
+     * execution of all of the instructions in the initial container of a
+     * frame. It must return the next container to execute or `null` if it
+     * should yield to the frame stack.
+     *
+     * @callback Frame~continuationCallback
+     * @returns {?Container} The container where execution will continue.
+     * `null` if the frame is exhausted and it should not continue.
+     */
+
+    /**
+     * Provide a callback that will emit events. These events SHOULD always
+     * fire asynchronously.
      * @callback Process~emitter
      * @param {String} name - Event name
      * @param {Object} data - payload
      */
 
     /**
-     * A step or a context block. As of April 2015, this is represented as a
+     * A step or a context block. As of April 2015, this is implemented as a
      * custom element defined in `block.js`.
-     * @typedef {Object} Frame~Block
+     * @typedef {Object} Block
      */
 
     /**
-     * A context block. As of April 2015, this is represented as a
-     * custom element defined in `block.js`.
-     * @typedef {Object} Frame~ContextBlock
+     * A context block. As of April 2015, this is implemented as a custom
+     * element defined in `block.js`.
+     * @typedef {Object} ContextBlock
+     * @extends Block
      * @see Block
      */
 
     /**
-     * A container of multiple {@link Block blocks}.
-     * @typedef {Object} Frame~Container
+     * An array for multiple {@link Block blocks}. As of April 2015, this is
+     * implemented as a custom element defined in `block.js`.
+     * @typedef {Object} Container
      */
 
     /* This is the export of the module. */

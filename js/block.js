@@ -113,16 +113,15 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    type (do nothing
 };
 BlockProto.gatherValues = function(scope){
-    if (!this.values){
-        this.values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
-    }
-    return this.values.map(function(value){
+    var values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
+    return values.map(function(value){
         return value.getValue(scope);
     });
 };
+
 /* Applicable for both <wb-step> and <wb-context>.
  * The next element is simply the nextElementSibling. */
-BlockProto.next = function() {
+BlockProto.next = function next() {
     return this.nextElementSibling;
 };
 
@@ -146,6 +145,7 @@ StepProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
+    var values = this.gatherValues(scope);
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
@@ -236,7 +236,7 @@ function ensureNameIsUniqueInContext(input){
 }
 
 function getVariablesToUpdate(parentContext, setVarId){
-    return dom.findAll(parentContext, '[for="' + setVarId + '"]');
+    return dom.findAll(workspace, '[for="' + setVarId + '"]');
 }
 
 function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
@@ -430,7 +430,13 @@ ExpressionProto.detachedCallback = function expressionDetached(){
     }
     this.parent = null;
 };
-ExpressionProto.gatherValues = BlockProto.gatherValues;
+ExpressionProto.gatherValues = function gatherValues(scope){
+    var value = this.getAttribute('value');
+    if (!value){
+        return BlockProto.gatherValues.call(this, scope);
+    }
+    return [value];
+};
 ExpressionProto.run = function(scope){
     if (!this.fn){
         var fnName = this.getAttribute('script').split('.');
@@ -976,7 +982,8 @@ function updateLocalInstancesType(variableStep, type){
 // Exports
 
 window.block = {
-    randomId: randomId
+    randomId: randomId,
+    getVariablesToUpdate: getVariablesToUpdate
 }
 
 // Event handling

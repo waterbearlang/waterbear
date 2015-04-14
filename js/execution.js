@@ -536,7 +536,10 @@ window.WaterbearProcess = (function () {
      */
     Object.defineProperty(Process.prototype, 'nextInstruction', {
         get: function () {
-            return this.currentStrand.currentInstruction;
+            return (this.currentStrand !== null) ?
+                this.currentStrand.currentInstruction :
+                /* FIXME: (#1120) Support multiple frame handlers. */
+                this.perFrameHandlers[0].firstInstruction;
         }
     });
 
@@ -559,7 +562,7 @@ window.WaterbearProcess = (function () {
 
         this.emit('started');
         if (this.paused) {
-            this.emit('paused');
+            this.emit('paused', {target: this.nextInstruction});
         }
 
         return this;
@@ -603,7 +606,7 @@ window.WaterbearProcess = (function () {
         assert(this.started);
         this.paused = true;
 
-        this.emit('pause');
+        this.emit('pause', {target: this.nextInstruction});
         return this;
     };
 

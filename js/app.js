@@ -359,27 +359,30 @@ Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
 
 /* Handle debugger events. */
 Event.on(window, 'process:step', null, function (evt) {
-    var block = evt.detail.target;
+    displayPausedOnInstruction(evt.detail.target);
+});
+Event.on(window, 'process:pause', null, function (evt) {
+    displayPausedOnInstruction(evt.detail.target);
+});
+Event.on(window, 'process:resume', null, function (evt) {
+    document.body.classList.remove('debugger-paused');
+});
+
+function displayPausedOnInstruction(block) {
     var oldBlocks;
     document.body.classList.add('debugger-paused');
 
     /* Update the paused element. */
-    oldBlocks = document.querySelectorAll('.wb-paused');
-    console.assert(oldBlocks.length <= 1);
+    oldBlocks = dom.findAll(document.body, '.wb-paused');
 
+    console.assert(oldBlocks.length <= 1);
     if (oldBlocks.length) {
         oldBlocks[0].classList.remove('wb-paused');
     }
 
     block.classList.add('wb-paused');
-    block.scrollIntoView(true);
-});
-Event.on(window, 'process:pause', null, function (evt) {
-    document.body.classList.add('debugger-paused');
-});
-Event.on(window, 'process:resume', null, function (evt) {
-    document.body.classList.remove('debugger-paused');
-});
+    block.scrollIntoView();
+}
 
 Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);

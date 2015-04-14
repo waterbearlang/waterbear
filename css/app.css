@@ -75,6 +75,28 @@ body > header > h1{
     display: none;
 }
 
+/* Ugh, this is not ideal... */
+.debugger-indicator {
+    transition: color 250ms ease;
+}
+
+/* So I really like glowy things, it seems. */
+@keyframes debugger-glow {
+    from {
+        /*color: hsl(182, 89%, 60%); */
+        text-shadow: 0 0 16px hsla(182, 89%, 60%, 0.8);
+    }
+    to {
+        /* color: hsl(194, 89%, 60%);*/
+        text-shadow: 0 0 4px hsla(194, 89%, 60%, 0.4);
+    }
+}
+
+.debugger .debugger-indicator {
+    color: hsl(182, 89%, 60%);
+    animation: debugger-glow 1s ease infinite alternate;
+}
+
 .menu a{
     float: right;
     text-decoration: none;

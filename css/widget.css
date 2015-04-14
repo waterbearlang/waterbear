@@ -93,6 +93,23 @@ wb-workspace > wb-contains{
     overflow-y: auto;
 }
 
+@keyframes slidy-stripes {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: 56px;
+    }
+}
+
+.debugger-paused wb-workspace > wb-contains {
+    background: repeating-linear-gradient(45deg,
+        rgba(34,34,34,0.1),
+        rgba(34,34,34,0.1) 10px,
+        transparent 10px,
+        transparent 20px );
+    animation: slidy-stripes 1.5s linear infinite;
+}
 
 /* Playground */
 

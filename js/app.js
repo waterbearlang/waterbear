@@ -147,6 +147,17 @@ Event.on('.do-continue', 'ui:click', null, function (evt) {
     }
 });
 
+/**
+ * Resets any weird UI debugging state.
+ */
+function resetDebuggerState() {
+    var classes = document.body.classList;
+    
+    classes.remove('debugger-paused');
+    dom.findAll(document.body, '.wb-paused').forEach(function (el) {
+        el.classList.remove('wb-paused');
+    });
+}
 
 function startScript(evt, options) {
     // Do any necessary cleanup (e.g., clear event handlers).
@@ -172,6 +183,7 @@ function startScript(evt, options) {
 }
 
 function stopScript(evt) {
+    resetDebuggerState();
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */

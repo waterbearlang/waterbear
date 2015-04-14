@@ -28,6 +28,8 @@ wb-expression{
     padding-left: 20px;
 }
 
+
+
 wb-value > wb-expression{
     float: none;
     clear: none;
@@ -168,11 +170,29 @@ wb-context[closed] > wb-contains{
     display: none;
 }
 
-/* TODO: Better styles for paused. */
+/*
+ * Adds a glow to paused blocks. Makes 'em look ghosty.
+ */
+@keyframes paused-glow {
+    from {
+        box-shadow: 0 4px 10px rgba(63, 112, 223, 0.6);
+    }
+    to {
+        box-shadow: 0 4px 24px rgba(63, 112, 223, 1);
+    }
+}
+
+wb-step[script],
+wb-context[script] {
+    /* This gives a nifty slidy animation for when a block is paused. */
+    transition: transform 750ms, background-color 750ms;
+}
+
 wb-step[script].wb-paused,
 wb-context[script].wb-paused {
-    background-color: #EEE;
-    border-color: #CCC;
+    transform: translate(.5em, 0px);
+    background-color: white;
+    animation: paused-glow 1250ms ease-in-out infinite alternate;
 }
 
 .hide{
@@ -190,10 +210,9 @@ padding-left:20px;
 background:  #FFFFFF no-repeat 3px 3px;
 
 }
+
 wb-value[type=any] >input{padding-left:5px;}
 wb-value[type*=","][value] >input{padding-left: 60px;}
-
-
 wb-value[type*=number] > input{background-image: url(../images/icon/math.svg);}
 wb-value[type*=color] > input{background-image: url(../images/icon/color.svg);}
 wb-value[type*=text] > input{background-image: url(../images/icon/text.svg);}
@@ -238,6 +257,7 @@ wb-value[type*=number][type*=vector][type*=array] > input{
     background-position: 3px 3px, 20px 3px, 37px 3px;
 }
 
+wb-workspace wb-value[selected=true] > input{border-color: blue}
 wb-expression:before{
     content: '';
     width: 1em;
@@ -313,6 +333,9 @@ wb-expression[type=string],wb-local wb-expression[type=string]{ background-color
 wb-expression[type=geolocation]{ background-color: hsl(240, 53%, 56%); border-color: hsl(240, 53%, 40%); }
 wb-expression[type=size]{background-color: hsl(192, 53%, 56%); border-color: hsl(192, 53%, 40%);}
 wb-expression[type=motion]{background-color: hsl(288, 53%, 56%); border-color: hsl(288, 53%, 40%);}
+
+
+
 
 /* Used for input resizing */
 .sekrit-svg{

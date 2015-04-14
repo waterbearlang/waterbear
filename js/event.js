@@ -563,11 +563,13 @@
 
     function handleUndoButton(evt) {
         evt.preventDefault();
+        _gaq.push(['_trackEvent', 'Undo', 'undo']);
         undoEvent();
     }
 
     function handleRedoButton(evt) {
         evt.preventDefault();
+        _gaq.push(['_trackEvent', 'Redo', 'redo']);
         redoEvent();
     }
 

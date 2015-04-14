@@ -93,6 +93,24 @@ wb-workspace > wb-contains{
     overflow-y: auto;
 }
 
+@keyframes slidy-stripes {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: 56px;
+    }
+}
+
+.debugger-paused wb-workspace > wb-contains {
+    background: repeating-linear-gradient(45deg,
+        rgba(34,34,34,0.1),
+        rgba(34,34,34,0.1) 10px,
+        transparent 10px,
+        transparent 20px );
+    animation: slidy-stripes 1.5s linear infinite;
+}
+
 /* Playground */
 
 wb-playground{
@@ -135,6 +153,43 @@ wb-accordion[open=true] > :not(header){
     margin-bottom: 6px;
 }
 
+/* Sidebar Filtering */
+
+sidebar[filtered=true] wb-accordion > :not(header){
+    display: inline-block; /*display everything*/
+}
+
+sidebar[filtered=true] wb-step, sidebar[filtered=true] p, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]), sidebar[filtered=true] wb-accordion > header{
+    display: none!important; /* hide everything but the filtered expressions */
+    margin-bottom: 6px;
+}
+
+sidebar[filtered=true] button.availableBlocks{
+    display: block;
+    position: relative;
+    margin-left: -6px;
+    padding-left: 45px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 16px;
+    color: #000000;
+    background-color: #FFFFFF;
+    clear: left;
+    border: 1px solid #CCC;
+    margin-bottom: 6px;
+    width: 100%;
+}
+
+sidebar[filtered=true] button.availableBlocks:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 100%;
+    background-color: #000000; /* over-ride colours in app.css */
+}
+
 wb-accordion > header {
     display: block;
     position: relative;
@@ -147,6 +202,8 @@ wb-accordion > header {
     clear: left;
     border: 1px solid #CCC;
 }
+
+
 
 wb-accordion[open=true] > header{
     margin-bottom: 6px;
@@ -172,4 +229,67 @@ wb-accordion > header:after{
     background-color: #CCC; /* over-ride colours in app.css */
 }
 
+/* Debugger */
 
+wb-debugger {
+    flex: 0 0 auto;
+    max-height: 0;
+    overflow: hidden;
+    transition: all .25s ease;
+}
+
+.debugger wb-debugger {
+    max-height: 24px;
+}
+
+wb-debug-menu {
+    display: flex;
+}
+
+wb-button-splitter {
+    box-sizing: content-box;
+    border-left: solid 1px rgba(0,0,0,0.4);
+    height: 10px;
+    display: inline-block;
+    width: 0;
+    padding: 0;
+}
+
+wb-debug-menu > button,
+wb-debug-menu > input[type=checkbox] {
+    /*font-size: 0;*/
+    border: 0;
+    color: #666;
+    border-left: 1px solid #eee;
+    /* text-shadow: -.5pt -.5pt 1pt rgba(0, 0, 0, 0.3), .5pt .5pt 1pt
+     * rgba(255, 255, 255, 1); */
+    border-radius: 1px;
+    min-width: 62px;
+    height: 24px;
+    background: linear-gradient(to top, #eee, #fff);
+}
+
+wb-debug-menu > button:first-child {
+    border: 0;
+}
+
+/* Hide the pause button when paused. */
+.debugger-paused .do-pause {
+    display: none;
+}
+
+/* Hide the continue button when running. */
+body:not(.debugger-paused) .do-pause + .do-continue {
+    display: none;
+}
+
+/* FIXME: This stuff is not ready yet... */
+.do-step-in,
+.do-step-out,
+wb-button-splitter,
+.do-toggle-breakpoints,
+.do-toggle-lineno,
+.do-toggle-breakpoints + label,
+.do-toggle-lineno + label {
+    display: none !important;
+}

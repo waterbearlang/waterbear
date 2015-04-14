@@ -15,6 +15,8 @@
 'use strict';
     var elem = dom.html;
     var workspace = dom.find(document.body, 'wb-workspace');
+    var selectedType = 'null';
+    var BLOCK_MENU = document.querySelector('sidebar');
 
 // Utility
 
@@ -124,6 +126,12 @@ BlockProto.gatherValues = function(scope){
 BlockProto.next = function next() {
     return this.nextElementSibling;
 };
+
+/**
+ * Tells you whether this block is a context block.  Obviously, only
+ * ContextProto should override this property.
+ */
+BlockProto.isContext =  false;
 
 
 /*****************
@@ -349,6 +357,12 @@ ContextProto.setupCallbacks = function() {
 
     this.setup = callback;
 };
+
+/**
+ * Some code (e.g., execution.js) wants to know if they're dealing with a
+ * context block. This is a surefire way of doing that.
+ */
+ContextProto.isContext = true;
 
 /** Default: Always get the next DOM element and assume it's a wb-contains. */
 function defaultNextCallback(strand, args, containers, elem) {
@@ -683,6 +697,49 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
+//toggle an inputs 'filter' selection
+ValueProto.toggleSelect = function(){
+    if (this.getAttribute('selected') === 'true'){
+       BLOCK_MENU.removeAttribute('filtered');
+       this.deselect();
+
+
+    }else{
+        BLOCK_MENU.setAttribute('filtered', 'true');
+        this.select();
+    }
+}
+
+//select an inout field and filter the sidebar by it
+ValueProto.select = function(){
+    var i = 0;
+    var sidebarBlocks=[];
+    var selectedTypeList;
+    var existing = workspace.querySelectorAll('wb-value[selected=true]');
+    if (existing.length !== 0){
+        var i =0;
+        for(i=0; i< existing.length; i++){ existing[i].deselect();}
+    }
+    this.setAttribute('selected', 'true');
+    selectedType = this.getAttribute('type');
+    selectedTypeList = selectedType.split(',');
+    for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
+
+}
+
+//deselect an inout field and unfilter the sidebar
+ValueProto.deselect = function(){
+    var i = 0;
+    var sidebarBlocks;
+    this.removeAttribute('selected');
+    sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');}
+    selectedType = 'null';
+}
+
+
+//when a user clicks on an inout box in the workspace
 function changeValueOnInputChange(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
     // evt.stopPropagation();
@@ -721,6 +778,22 @@ Object.defineProperty(ContainsProto, 'firstInstruction', {
 
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
+Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
+    if(dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')){
+        dom.closest(evt.target, 'wb-value').toggleSelect();
+    }
+})
+
+//deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
+Event.on(document.body, 'ui:click', '.availableBlocks', function(evt){
+    var existing = workspace.querySelectorAll('wb-value[selected=true]');
+    if (existing.length !== 0){
+        var i =0;
+        for(i=0; i< existing.length; i++){ existing[i].deselect();}
+    }
+    BLOCK_MENU.removeAttribute('filtered');
+});
+
 
 /* DRAGGING */
 
@@ -728,7 +801,6 @@ var dragTarget = null;
 var origTarget = null;
 var dragStart = '';
 var dropTarget = null;
-var BLOCK_MENU = document.querySelector('sidebar');
 var blockTop = 0;
 
 function startDragBlock(evt){
@@ -885,8 +957,11 @@ function endDragBlock(evt){
         }
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
+
         if (dropTarget.matches('wb-value')) {
             dropTarget.appendChild(dragTarget);
+            dropTarget.deselect();
+            BLOCK_MENU.removeAttribute('filtered');
             var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling, originalParent:originalParent, originalNextEl: nextElem};
             if (dragStart === 'script'){
                 addValueEvent.type = 'move-block'

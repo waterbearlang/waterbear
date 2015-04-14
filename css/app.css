@@ -56,14 +56,49 @@ body > header > h1{
     border-color: #333;
 }
 
-.menu button, .menu a, .do-run, .do-stop{
-
+.menu button, .menu a, .check-button, .do-run, .do-stop{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
     border: 2px #111111 outset;
     margin: 3px;
     font-size: 18px;
+}
+
+/* Emulate button styles. */
+.check-button {
+    font: normal normal normal 18px/normal '.HelveticaNeueDeskInterface-Regular';
+    padding: 2px 6px 3px;
+}
+
+.check-button input[type="checkbox"] {
+    display: none;
+}
+
+/* Ugh, this is not ideal... */
+.debugger-indicator {
+    transition: color 250ms ease;
+}
+
+/* So I really like glowy things, it seems. */
+@keyframes debugger-glow {
+    from {
+        /*color: hsl(182, 89%, 60%); */
+        text-shadow: 0 0 16px hsla(182, 89%, 60%, 0.8);
+    }
+    to {
+        /* color: hsl(194, 89%, 60%);*/
+        text-shadow: 0 0 4px hsla(194, 89%, 60%, 0.4);
+    }
+}
+
+.debugger .debugger-indicator {
+    color: hsl(182, 89%, 60%);
+    animation: debugger-glow 1s ease infinite alternate;
+}
+
+sidebar button.availableBlocks{
+    display: none; /*hide when the accordions are showing */
 }
 
 .menu a{
@@ -99,6 +134,7 @@ body > header > h1{
     background-color: #C4C4C4;
     color: #666666;
 }
+
 /* Show trash for sidebar while dragging */
 
 sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{
@@ -118,6 +154,7 @@ sidebar.trashcan:after{
     background-position: 50%;
     z-index: 100;
 }
+
 
 /* Feedback area for messages */
 
@@ -252,11 +289,11 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     border-width: 4px;
     margin-top: 20px;
     width: 250px;
-    height: 190px;   
+    height: 190px;
 }
 .tutorial-output > div > div.canvas-holder{
     margin-top:7px;
-    
+
 }
 
 
@@ -330,13 +367,13 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     bottom: 5px;
     width:inherit;
     padding-top:20px;
-    
+
 }
 .tutorial-blocks{
     border:gray;
     border-style:solid;
     border-width:2px;
-    
+
 }
 .tutorial-blocks > wb-expression, .tutorial-blocks > wb-step, .tutorial-blocks > wb-context{
     display: inline-block;

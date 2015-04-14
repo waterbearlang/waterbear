@@ -56,14 +56,23 @@ body > header > h1{
     border-color: #333;
 }
 
-.menu button, .menu a, .do-run, .do-stop{
-
+.menu button, .menu a, .check-button, .do-run, .do-stop{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
     border: 2px #111111 outset;
     margin: 3px;
     font-size: 18px;
+}
+
+/* Emulate button styles. */
+.check-button {
+    font: normal normal normal 18px/normal '.HelveticaNeueDeskInterface-Regular';
+    padding: 2px 6px 3px;
+}
+
+.check-button input[type="checkbox"] {
+    display: none;
 }
 
 .menu a{

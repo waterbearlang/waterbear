@@ -1086,19 +1086,31 @@
                 <div class="menu">
                     <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
                     <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
-                    <button class="do-pause" onclick="_gaq.push(['_trackEvent', 'Action', 'pause']);">Pause</button>
-                    <button class="do-continue" onclick="_gaq.push(['_trackEvent', 'Action', 'continue']);">Continue</button>
-                    <button class="do-step" onclick="_gaq.push(['_trackEvent', 'Action', 'step']);">Next</button>
+                    <label class="check-button"><input type="checkbox" class="toggle-debugger">Debugger</label>
+                    <!-- TODO: toggle debugger -->
+                    <!-- TODO: google analytics -->
                 </div>
                 <canvas></canvas>
             </wb-playground>
         </wb-displaybox>
+        <wb-debugger>
+            <wb-debug-menu>
+                <button class="do-pause">Pause</button>
+                <button class="do-continue">Continue</button>
+                <button class="do-step">Next</button>
+                <button class="do-step-in">Step in</button>
+                <button class="do-step-out">Step out</button>
+                <wb-button-splitter></wb-button-splitter>
+                <input id="tb0" type="checkbox" class="do-toggle-breakpoints"><label for="tb0">Toggle Breakpoints</label>
+                <input id="tc0" type="checkbox" class="do-toggle-lineno"><label for="tc0">Toggle Counts</label>
+            </wb-debug-menu>
+        </wb-debugber>
         <wb-displaybox class="tutorial">
             <div class="tutorial-content">
                 <h1>Waterbear Tutorials</h1>
                 Select a tutorial from the menu.
-                </div>
-            </wb-displaybox>
+            </div>
+        </wb-displaybox>
         </wb-vbox>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>

@@ -32,15 +32,16 @@
         <wb-vbox>
 
         <div class="menu">
-            <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
-            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z" onclick="_gaq.push(['_trackEvent', 'Undo', 'undo']);">Undo</button>
-            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z" onclick="_gaq.push(['_trackEvent', 'Redo', 'redo']);">Redo</button>
-            <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
-            <button class="open-tutorial" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);">Tutorials</button>
+            <button class="open-files">File</button>
+            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
+            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
+            <button class="open-example">Examples</button>
+            <button class="open-tutorial">Tutorials</button>
         </div>
         <wb-workbox>
         <sidebar>
             <wb-search></wb-search>
+            <button class="availableBlocks">Remove Filter</button>
             <wb-accordion class="control">
                 <header>
                     <img class="cat-icon" src="images/icon/control.svg" />
@@ -1084,8 +1085,8 @@
         <wb-displaybox class="canvas" selected='true'>
             <wb-playground>
                 <div class="menu">
-                    <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                    <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                    <button class="do-run">Run</button>
+                    <button class="do-stop">Stop</button>
                     <label class="check-button debugger-indicator"><input type="checkbox" class="toggle-debugger">Debugger</label>
                 </div>
                 <canvas></canvas>

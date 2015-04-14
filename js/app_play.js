@@ -1,6 +1,7 @@
 (function(){
 'use strict';
 
+var process;
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
 // not attributes, CSS, or JavaScript. Once the messages have stabilized, move them
@@ -31,19 +32,29 @@ Event.on('.do-run', 'ui:click', null, startScript);
 Event.on('.do-stop', 'ui:click', null, stopScript);
 
 function startScript(evt){
+    _gaq.push(['_trackEvent', 'Actions', 'run']);
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
     runtime.resetStage();
-    evt.target.blur();
+    if (evt) {
+        evt.target.blur();
+    }
     runtime.getStage().focus();
     preload().whenLoaded(runScript);
 }
 
-function stopScript(evt){
-    runtime.stopEventLoop();
-    evt.target.blur();
-    runtime.getStage().focus()
-    runtime.clear();
+function stopScript(evt) {
+    _gaq.push(['_trackEvent', 'Action', 'stop']);
+    if (process) {
+        process.terminate();
+        /* Throw out the now-useless process. */
+        process = null;
+        runtime.clear();
+    }
+    if (evt) {
+        evt.target.blur();
+    }
+    runtime.getStage().focus();
 }
 
 function preload() {
@@ -56,14 +67,12 @@ function preload() {
     });
 }
 
+
 function runScript(){
-    var globalScope = {};
-    runtime.startEventLoop();
-    dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
-        if (block.run){
-            block.run(globalScope);
-        }
-    });
+    console.assert(!process, 'Tried to run, but Process instance already exists!');
+    /* Create brand new Process instance (because each process can only be
+     * started once). */
+    process = new WaterbearProcess().start();
 }
 
 function setBreakoutUrl(){
@@ -79,9 +88,8 @@ Event.on(document.body, 'dragging:mousemove', null, Event.trackPointerPosition);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 
-Event.on(window, 'ui:load', null, preload);
 Event.on(window, 'ui:load', null, setBreakoutUrl);
-Event.on(window, 'ui:script-load', null, preload);
+Event.on(window, 'ui:script-load', null, startScript);
 Event.on(window, 'ui:asset-load', null, runScript);
 
 window.app = {

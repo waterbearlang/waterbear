@@ -1,0 +1,1053 @@
+ <div class="tutorial-step">
+    <wb-hbox class="tutorial-header">
+        <h1>Waterbear Piano Step 1</h1>
+    </wb-hbox>
+    <wb-hbox class="tutorial-main">
+        <div class="tutorial-desc"> Goal: Make a piano in Waterbear!<br />
+            Step 1 : Draw the piano on the screen.<br /><br />Instructions: Let's start by drawing the piano! We will draw ours with one black rectangle for a base, and seven white rectangles for keys. It might help to put labels on the keys to indicate what notes you will want them to play!<br /><br />Note: Waterbear has some built in notes, from A to G, with the sharps and flats between.<br /><br />You can draw things overtop one another. The stroke shape block will give the shape a border. It doesn't matter where the screen the piano is drawn<br /><br />Blocks to use:<br />
+            <div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-step script="color.fill" class="color">
+                        <wb-value type="color" value="#0000FF">fill style</wb-value>
+                    </wb-step>
+                    <wb-step script="color.stroke" class="color">
+                        <wb-value type="color" value="00FF00">stroke style</wb-value>
+                    </wb-step>
+                    <wb-step script=shape.fill class="shape">
+                        <wb-value type="shape">fill the shape</wb-value>
+                    </wb-step>
+                    <wb-step script=shape.stroke class="shape">
+                        <wb-value type="shape">stroke the shape</wb-value>
+                    </wb-step>
+                    <wb-expression type="shape" script="shape.rectangle" class="shape">
+                        <wb-value type="point">rectangle at</wb-value>
+                        <wb-value type="number" min="0">width</wb-value>
+                        <wb-value type="number" min="0">height</wb-value>
+                        <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
+                    </wb-expression>
+                    <wb-step script = "text.fillText" class="text">
+                        <wb-value type = "text,string">fill text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                    <wb-step script="text.setFont" class="text">
+                        <wb-row>
+                            <wb-value type = "number" value = "12">font</wb-value>
+                            <wb-value type="list" allow="literal"
+                            options="px,em,%,pt" value="px"></wb-value>
+                        </wb-row>
+                        <wb-value type = "text" value = "sans-serif"></wb-value>
+                    </wb-step>
+                    <wb-expression type="color" script="color.namedColor">
+                        <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
+                    </wb-expression>
+                    <wb-expression type="point" script="point.create">
+                        <wb-value type="number" value="0">x</wb-value>
+                        <wb-value type="number" value="0">y</wb-value>
+                    </wb-expression>
+                </div>
+            </div>
+Strategy Hints: <br />
+Make sure do draw the shapes in order: The back of the piano has to be drawn before the keys, or it will draw overtop of them!<br /> The "stroke color" is the border color, and "fill color" is the inside. If you give the keys a black border it seems like there's space between them!<br />Make sure not to write black text on the piano base, or white text on the keys
+        
+            
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-output">
+        <div>
+            <h6> Expected output:</h6>
+            <img src="images/tutorials/piano.png">
+        </div>
+        <div>
+            <wb-hbox>
+                <h6> Actual output:</h6>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
+            </wb-hbox>
+            <div class = "canvas-holder">
+                
+            </div>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-actions">
+        <div class="complete">
+            Look the same? Click 'Complete'!
+            <button class="tutorial-complete">Complete</button>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-actions">
+        <div class="complete">
+            Really stuck? Check out our sample solution.
+            <button class="tutorial-see-solution">Solution</button>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-finished">
+        <div class="tutorial-next">
+            <div class="congrats">
+                <img src="images/png/steampunk.png">
+            </div>
+            <div class="congrats">
+                Woohoo Progress! Great work, but there is more to do. Go to the next step. 
+                <button class="nextTutorial">Next Step</button>
+            </div>
+        </div>
+        <wb-hbox class="tutorial-solution">
+            <div> This is our solution</div>
+            <button class="load-solution" gistID = 'f76ece5781539d8f6b30'>Load our Solution</button>
+            <div> 
+                <wb-step script="shape.fill" class="shape" style=""><header><wb-value type="shape">fill the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="10">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="10">y<input type="number" style="width: 30px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="400">width<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" min="0" value="390">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="color.stroke" class="color"><header><wb-value type="color" value="00FF00">stroke style<input type="color" style="width: 66.8873291015625px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="color.fill" class="color"><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="text.setFont" class="text" style=""><header><wb-row>
+                                            <wb-value type="number" value="30">font<input type="number" style="width: 30px;"></wb-value>
+                                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"><select style="width: 30px;"><option selected="selected">px</option><option>em</option><option>%</option><option>pt</option></select></wb-value>
+                                        </wb-row><wb-value type="text" value="sans-serif"><input type="text" style="width: 72.7704315185547px;"></wb-value></header>
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="My Waterbear Piano">fill text<input type="text" style="width: 136.482574462891px;"></wb-value><wb-value type="number" value="80">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="100">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="35">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="85">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="135">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="185">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="235">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="285">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="335">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                    
+                                    
+                                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                                    
+                                    
+                                    
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                                    
+                                </wb-expression></wb-value></header>
+                                    
+                                </wb-step><wb-step script="text.setFont" class="text" style=""><header><wb-row>
+                                            <wb-value type="number" value="20">font<input type="number" style="width: 30px;"></wb-value>
+                                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"><select style="width: 30px;"><option selected="selected">px</option><option>em</option><option>%</option><option>pt</option></select></wb-value>
+                                        </wb-row><wb-value type="text" value="sans-serif"><input type="text" style="width: 72.7704315185547px;"></wb-value></header>
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="A">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="55">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="B">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="105">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="C">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="155">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="D">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="205">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="E">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="255">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="F">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="305">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="G">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="355">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                                        
+                                        
+                                        
+                                    </wb-step>
+
+            </div>
+        </wb-hbox>
+    </wb-hbox>
+ </div>
+
+  <div class="tutorial-step">
+    <wb-hbox class="tutorial-header">
+        <h1>Waterbear in Space Step 2</h1>
+    </wb-hbox>
+    <wb-hbox class="tutorial-main">
+        <div class="tutorial-desc"> Step 2 : Add the notes<br /><br />Instructions: Let's make some music! We are going to use the keyboard like, well, a keyboard! The "when key pressed" block waits until a button on the keyboard is pressed, then executes the blocks inside. Pick a key on the keyboard to each key on the piano, and when that key is pressed, play the right note!<br /><br /> You can use the following notes:<br />
+sounds/pianoA.wav<br />
+sounds/pianoB.wav<br />
+sounds/pianoBFlat.wav<br />
+sounds/pianoC.wav<br />
+sounds/pianoCSharp.wav<br />
+sounds/pianoD.wav<br />
+sounds/pianoE.wav<br />
+sounds/pianoEFlat.wav<br />
+sounds/pianoF.wav<br />
+sounds/pianoFSharp.wav<br />
+sounds/pianoG.wav<br />
+        <br /><br />
+
+            <div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-step script="sound.play" class="sound">
+                        <wb-value type="sound">play</wb-value>
+                    </wb-step>
+                    <wb-expression type="sound" isAsset="true" script="sound.get">
+                        <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
+                    </wb-expression>
+                    <wb-context script="input.whenKeyPressed" class="input">
+                        <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
+                        <wb-value>key pressed<wb-value>
+                    </wb-context>
+                </div>
+            </div>
+Strategy Hints:<br />
+Make sure the sounds you used are spelled correctly.<br />
+Did you remember to change the letter int he drop down menu for each "when key pressed" block?
+</div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-output">
+        <div>
+            <h6> Expected output:</h6>
+            <img src="images/tutorials/piano.png">
+        </div>
+        <div>
+            <wb-hbox>
+                <h6> Actual output:</h6>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
+            </wb-hbox>
+            <div class = "canvas-holder">
+                
+            </div>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-actions">
+        <div class="complete">
+            Look the same? Click 'Complete'!
+            <button class="tutorial-complete">Complete</button>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-actions">
+        <div class="complete">
+            Really stuck? Check out our sample solution.
+            <button class="tutorial-see-solution">Solution</button>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-finished">
+        <div class="tutorial-next">
+            <div class="congrats">
+                <img src="images/png/steampunk.png">
+            </div>
+            <div class="congrats">
+                Getting there! But it still looks a bit off. Let’s try the next step. 
+                <button class="nextTutorial">Next Step</button>
+            </div>
+        </div>
+        <wb-hbox class="tutorial-solution">
+            <div> This is our solution</div>
+            <button class="load-solution" gistId = '280386f5d350d0566cfd'>Load our Solution</button>
+            <div>
+                <wb-step script="shape.fill" class="shape" style=""><header><wb-value type="shape">fill the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="10">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="10">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="400">width<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" min="0" value="390">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.stroke" class="color"><header><wb-value type="color" value="00FF00">stroke style<input type="color" style="width: 66.8873291015625px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color"><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.setFont" class="text" style=""><header><wb-row>
+                            <wb-value type="number" value="30">font<input type="number" style="width: 30px;"></wb-value>
+                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"><select style="width: 30px;"><option selected="selected">px</option><option>em</option><option>%</option><option>pt</option></select></wb-value>
+                        </wb-row><wb-value type="text" value="sans-serif"><input type="text" style="width: 72.7704315185547px;"></wb-value></header>
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="My Waterbear Piano">fill text<input type="text" style="width: 136.482574462891px;"></wb-value><wb-value type="number" value="80">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="100">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="35">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="85">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="135">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="185">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="235">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="285">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="335">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.setFont" class="text" style=""><header><wb-row>
+                            <wb-value type="number" value="20">font<input type="number" style="width: 30px;"></wb-value>
+                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"><select style="width: 30px;"><option selected="selected">px</option><option>em</option><option>%</option><option>pt</option></select></wb-value>
+                        </wb-row><wb-value type="text" value="sans-serif"><input type="text" style="width: 72.7704315185547px;"></wb-value></header>
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="A">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="55">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="B">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="105">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="C">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="155">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="D">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="205">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="E">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="255">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="F">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="305">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="G">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="355">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-context script="input.whenKeyPressed" class="input"><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoA.wav">sound from url<input type="text" style="width: 130.586441040039px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="s" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound" style=""><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoB.wav">sound from url<input type="text" style="width: 130.586441040039px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input"><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="d" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoC.wav">sound from url<input type="text" style="width: 131.321838378906px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="f" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoD.wav">sound from url<input type="text" style="width: 131.321838378906px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="g" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoE.wav">sound from url<input type="text" style="width: 130.586441040039px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="h" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoF.wav">sound from url<input type="text" style="width: 129.838043212891px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="j" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoG.wav">sound from url<input type="text" style="width: 132.063735961914px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context>
+            </div>
+        </wb-hbox>
+    </wb-hbox>
+ </div>
+
+ <div class="tutorial-step">
+    <wb-hbox class="tutorial-header">
+        <h1>Waterbear Piano Step 3</h1>
+    </wb-hbox>
+    <wb-hbox class="tutorial-main">
+        <div class="tutorial-desc">
+            Step 3 : Let's add some animation<br /><br />
+Instructions: We didnt draw that piano for nothing! When we press a key, let's make the corresponding piano keychange colour for a second. You can do this  by drawing a different color rectangle (we will use grey) over the key that was pressed, and then redrawing the key in white.<br /><br />
+Blocks to use:<br />
+<div class="tutorial-block-menu">
+                <div>Here are the blocks you'll need:</div>
+                <div class="tutorial-blocks">
+                    <wb-step script="color.fill" class="color">
+                        <wb-value type="color" value="#0000FF">fill style</wb-value>
+                    </wb-step>
+                    <wb-step script="color.stroke" class="color">
+                        <wb-value type="color" value="00FF00">stroke style</wb-value>
+                    </wb-step>
+                    <wb-step script=shape.fill class="shape">
+                        <wb-value type="shape">fill the shape</wb-value>
+                    </wb-step>
+                    <wb-step script=shape.stroke class="shape">
+                        <wb-value type="shape">stroke the shape</wb-value>
+                    </wb-step>
+                    <wb-expression type="shape" script="shape.rectangle" class="shape">
+                        <wb-value type="point">rectangle at</wb-value>
+                        <wb-value type="number" min="0">width</wb-value>
+                        <wb-value type="number" min="0">height</wb-value>
+                        <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
+                    </wb-expression>
+                    <wb-step script = "text.fillText" class="text">
+                        <wb-value type = "text,string">fill text</wb-value>
+                        <wb-value type = "number">x</wb-value>
+                        <wb-value type = "number">y</wb-value>
+                    </wb-step>
+                    <wb-step script="text.setFont" class="text">
+                        <wb-row>
+                            <wb-value type = "number" value = "12">font</wb-value>
+                            <wb-value type="list" allow="literal"
+                            options="px,em,%,pt" value="px"></wb-value>
+                        </wb-row>
+                        <wb-value type = "text" value = "sans-serif"></wb-value>
+                    </wb-step>
+                    <wb-expression type="color" script="color.namedColor">
+                        <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
+                    </wb-expression>
+                    <wb-expression type="point" script="point.create">
+                        <wb-value type="number" value="0">x</wb-value>
+                        <wb-value type="number" value="0">y</wb-value>
+                    </wb-expression>
+                </div>
+            </div>
+           
+Strategy Hints:<br /> Did you redraw the text as well as the rectangle for the key?<br /> Look back at the blocks from the original drawing, the rectangles for the animation will have the same size and location of the originals!<br />Make sure you are not just drawing the same rectangle, no matter what key is pressed.<br />You will have to change the fill color multiple times
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-output">
+        <div>
+            <h6> Expected output:</h6>
+            <img src="images/tutorials/piano.png">
+        </div>
+        <div>
+            <wb-hbox>
+                <h6> Actual output:</h6>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
+            </wb-hbox>
+            <div class = "canvas-holder">
+                
+            </div>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-actions">
+        <div class="complete">
+            Look the same? Click 'Complete'!
+            <button class="tutorial-complete">Complete</button>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-actions">
+        <div class="complete">
+            Really stuck? Check out our sample solution.
+            <button class="tutorial-see-solution">Solution</button>
+        </div>
+    </wb-hbox>
+    <wb-hbox class="tutorial-finished">
+        <div class="tutorial-next">
+            <div class="congrats">
+                <img src="images/png/steampunk.png">
+            </div>
+            <div class="congrats">
+                Congrats! You did it! Now use your imagination to make it even better. You could add sharps, or find even more notes! 
+            </div>
+        </div>
+        <wb-hbox class="tutorial-solution">
+            <div> This is our solution</div>
+            <button class="load-solution" gistID = '73c7a5edfda855898587'>Load our Solution</button>
+            <div>
+                <wb-step script="shape.fill" class="shape" style=""><header><wb-value type="shape">fill the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="10">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="10">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="400">width<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" min="0" value="390">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.stroke" class="color"><header><wb-value type="color" value="00FF00">stroke style<input type="color" style="width: 66.8873291015625px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color"><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.setFont" class="text" style=""><header><wb-row>
+                            <wb-value type="number" value="30">font<input type="number" style="width: 30px;"></wb-value>
+                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"><select style="width: 30px;"><option selected="selected">px</option><option>em</option><option>%</option><option>pt</option></select></wb-value>
+                        </wb-row><wb-value type="text" value="sans-serif"><input type="text" style="width: 72.7704315185547px;"></wb-value></header>
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="My Waterbear Piano">fill text<input type="text" style="width: 136.482574462891px;"></wb-value><wb-value type="number" value="80">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="100">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="35">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="85">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="135">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="185">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="235">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="285">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="335">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.setFont" class="text" style=""><header><wb-row>
+                            <wb-value type="number" value="20">font<input type="number" style="width: 30px;"></wb-value>
+                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"><select style="width: 30px;"><option selected="selected">px</option><option>em</option><option>%</option><option>pt</option></select></wb-value>
+                        </wb-row><wb-value type="text" value="sans-serif"><input type="text" style="width: 72.7704315185547px;"></wb-value></header>
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="A">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="55">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="B">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="105">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="C">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="155">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="D">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="205">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="E">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="255">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="F">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="305">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="G">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="355">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step><wb-context script="input.whenKeyPressed" class="input"><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoA.wav">sound from url<input type="text" style="width: 130.586441040039px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color"><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="35">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="35">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="A">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="55">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="s" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound" style=""><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoB.wav">sound from url<input type="text" style="width: 130.586441040039px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="85">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape"><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="85">x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="B">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="105">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input"><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="d" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoC.wav">sound from url<input type="text" style="width: 131.321838378906px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="135">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="135">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="C">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="155">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="f" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoD.wav">sound from url<input type="text" style="width: 131.321838378906px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="185">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="185">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="D">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="205">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input" style=""><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="g" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoE.wav">sound from url<input type="text" style="width: 130.586441040039px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="235">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="235">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="E">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="255">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input"><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="h" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoF.wav">sound from url<input type="text" style="width: 129.838043212891px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="285">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color"><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="285">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color"><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="F">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="305">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context><wb-context script="input.whenKeyPressed" class="input"><header><wb-disclosure></wb-disclosure><wb-local></wb-local><wb-value type="list" allow="literal" value="j" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-value>
+                    </wb-value><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                    <wb-contains><wb-step script="sound.play" class="sound"><header><wb-value type="sound">play<input type="sound" readonly="" style="width: 30px;" class="hide"><wb-expression type="sound" isasset="true" script="sound.get" class="" style=""><header><wb-value type="text" value="sounds/pianoG.wav">sound from url<input type="text" style="width: 132.063735961914px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="grey"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="335">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="shape.stroke" class="shape" style=""><header><wb-value type="shape">stroke the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.rectangle" class="shape" style=""><header><wb-value type="point">rectangle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="335">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="150">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="250">height<input type="number" min="0" style="width: 37.2374267578125px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">orientation<select style="width: 52.7782287597656px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#0000FF">fill style<input type="color" style="width: 59.4683532714844px;" class="hide"><wb-expression type="color" script="color.namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"><select style="width: 46.1141662597656px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step script="text.fillText" class="text" style=""><header><wb-value type="text,string" value="G">fill text<input type="text" style="width: 30px;"></wb-value><wb-value type="number" value="355">x<input type="number" style="width: 37.2374267578125px;"></wb-value><wb-value type="number" value="390">y<input type="number" style="width: 37.2374267578125px;"></wb-value></header>
+                        
+                        
+                        
+                    </wb-step></wb-contains></wb-context>
+            </div>
+        </wb-hbox>
+    </wb-hbox>
+ </div>
+

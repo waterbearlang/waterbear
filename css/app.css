@@ -97,6 +97,10 @@ body > header > h1{
     animation: debugger-glow 1s ease infinite alternate;
 }
 
+sidebar button.availableBlocks{
+    display: none; /*hide when the accordions are showing */
+}
+
 .menu a{
     float: right;
     text-decoration: none;
@@ -130,6 +134,7 @@ body > header > h1{
     background-color: #C4C4C4;
     color: #666666;
 }
+
 /* Show trash for sidebar while dragging */
 
 sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{
@@ -149,6 +154,7 @@ sidebar.trashcan:after{
     background-position: 50%;
     z-index: 100;
 }
+
 
 /* Feedback area for messages */
 
@@ -283,11 +289,11 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     border-width: 4px;
     margin-top: 20px;
     width: 250px;
-    height: 190px;   
+    height: 190px;
 }
 .tutorial-output > div > div.canvas-holder{
     margin-top:7px;
-    
+
 }
 
 
@@ -330,7 +336,7 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     font-size: 18px;
 }
 
-.complete button{
+.complete button, .tutorial-solution > button{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
@@ -361,13 +367,13 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
     bottom: 5px;
     width:inherit;
     padding-top:20px;
-    
+
 }
 .tutorial-blocks{
     border:gray;
     border-style:solid;
     border-width:2px;
-    
+
 }
 .tutorial-blocks > wb-expression, .tutorial-blocks > wb-step, .tutorial-blocks > wb-context{
     display: inline-block;

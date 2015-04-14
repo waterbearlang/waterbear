@@ -152,7 +152,7 @@ Event.on('.do-continue', 'ui:click', null, function (evt) {
  */
 function resetDebuggerState() {
     var classes = document.body.classList;
-    
+
     classes.remove('debugger-paused');
     dom.findAll(document.body, '.wb-paused').forEach(function (el) {
         el.classList.remove('wb-paused');
@@ -223,7 +223,9 @@ function runScript(options) {
     process = new WaterbearProcess(options).start();
 }
 
+
 function handleFileButton(evt){
+    _gaq.push(['_trackEvent', 'File', 'file']);
     var fileModel = nanoModal("Select an option or click away to exit.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
@@ -272,6 +274,7 @@ function handleFileButton(evt){
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
+    _gaq.push(['_trackEvent', 'Tutorial', 'examples']);
     var fileModel = nanoModal("Load an example program.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
@@ -296,6 +299,7 @@ function handleExampleButton(evt){
 }
 
 function handleTutorialButton(evt){
+    _gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);
     var fileModel = nanoModal("Load a tutorial.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
@@ -308,13 +312,17 @@ function handleTutorialButton(evt){
                 modal.hide();
                 currentTutorialStep = 0;
                 tutButton.removeAttribute('hidden');
-                /*
-                if(tutButton.getAttribute('pressed') === 'true'){
-                    dom.find('wb-playground').appendChild(canvasRef);
-                    showCanvas();
-                }
-                */
-
+            }
+        },{
+            text: "Waterbear Piano",
+            handler: function(modal) {
+                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearPiano']);
+                var tutButton = dom.find('button.show-tutorial');
+                canvasRef = dom.find('canvas');
+                File.loadTutorialFromName('wb-piano');
+                modal.hide();
+                currentTutorialStep = 0;
+                tutButton.removeAttribute('hidden');
             }
         }]
     });
@@ -342,6 +350,16 @@ function showCurrentTutorialStep() {
     }
     currentTutorialStep++;
 }
+Event.on(document.body, 'ui:click', '.load-solution', function(evt){
+    var buttonPressed = dom.closest(evt.target, 'button');
+    var gistId = buttonPressed.getAttribute('gistID');
+    stopAndClearScripts();
+    File.loadScriptsFromGistId(gistId);
+
+});
+
+
+
 
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
 Event.on(document.body, 'ui:click', '.open-tutorial', handleTutorialButton);
@@ -396,5 +414,4 @@ window.app = {
     warn: warn,
     info: info
 };
-
 })();

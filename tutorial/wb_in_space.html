@@ -11,16 +11,16 @@
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
+                    <wb-expression type="wb-image" isAsset="true" script="image.get" class="image">
+                        <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                     </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-expression type="sprite" script="sprite.create" />
+                        <wb-value type="wb-image,shape,sprite">sprite with</wb-value>
+                    </wb-expression>
+                    <wb-step script="sprite.draw" class="sprite">
+                        <wb-value type="sprite">draw</wb-value>
                     </wb-step>
+                    
                 </div>
             </div>
 Strategy Hints: <br />
@@ -40,8 +40,8 @@ Can you only see part of an image? That’s fine! We’ll move it later.
         <div>
             <wb-hbox>
                 <h6> Actual output:</h6>
-                <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
             </wb-hbox>
             <div class = "canvas-holder">
                 
@@ -72,6 +72,50 @@ Can you only see part of an image? That’s fine! We’ll move it later.
         </div>
         <wb-hbox class="tutorial-solution">
             <div> This is our solution</div>
+            <button class="load-solution" gistID = '86a406788a39bcd3d1ab'>Load our Solution</button>
+            <div>
+                <wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot image">set<input type="text" style="width: 84.2753524780273px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot image"><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" script="image.get" class="image" style=""><header><wb-value type="text" value="images/mascot/mascot-space.png">image from url<input type="text" style="width: 186.204177856445px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="image.setHeight" class="image" style=""><header><wb-value type="wb-image" allow="block">set<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number">height<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.divide" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="stage.stageHeight" class="" style=""><header><wb-value>Stage Height</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" value="2">÷<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot">set<input type="text" style="width: 51.3983459472656px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot"><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" script="sprite.create" class=""><header><wb-value type="wb-image,shape,sprite">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="sprite.draw" class="sprite"><header><wb-value type="sprite">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class="" style=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-step>
+            </div>
         </wb-hbox>
     </wb-hbox>
  </div>
@@ -82,27 +126,28 @@ Can you only see part of an image? That’s fine! We’ll move it later.
     </wb-hbox>
     <wb-hbox class="tutorial-main">
         <div class="tutorial-desc"> Step 2 : Make the background black<br /><br />Instructions: Time to draw outer space. Create a rectangle the size of the canvas and make it black.<br /><br />
-        Blocks to use:<br />
-“Fill the shape”<br />
-“Rectangle at”<br />
-“Fill style”<br />
-“Point x,y”<br />
-“stage height”<br />
-“stage weidth”<br /><br />
-Strategy Hints:<br />
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
-                    </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-step script=shape.fill class="shape">
+                        <wb-value type="shape">fill the shape</wb-value>
                     </wb-step>
+                    <wb-expression type="shape" script="shape.rectangle" class="shape">
+                        <wb-value type="point">rectangle at</wb-value>
+                        <wb-value type="number" min="0">width</wb-value>
+                        <wb-value type="number" min="0">height</wb-value>
+                        <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
+                    </wb-expression>
+                        <wb-expression type="point" script="point.create">
+                        <wb-value type="number" value="0">x</wb-value>
+                        <wb-value type="number" value="0">y</wb-value>
+                    </wb-expression>
+                    <wb-expression type="number" script="stage.stageWidth">
+					    <wb-value>Stage Width</wb-value>
+				    </wb-expression>
+				    <wb-expression type="number" script="stage.stageHeight">
+					    <wb-value>Stage Height</wb-value>
+				    </wb-expression>
                 </div>
             </div>
 Did you remember to make your fill style black?<br />
@@ -119,8 +164,8 @@ Try positioning the rectangle at the origin (0,0).
         <div>
             <wb-hbox>
                 <h6> Actual output:</h6>
-                <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
             </wb-hbox>
             <div class = "canvas-holder">
                 
@@ -151,6 +196,53 @@ Try positioning the rectangle at the origin (0,0).
         </div>
         <wb-hbox class="tutorial-solution">
             <div> This is our solution</div>
+            <button class="load-solution" gistID = 'c1311ac6e70ba10bbccd'>Load our Solution</button>
+            <div>
+                <wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot image">set<input type="text" style="width: 84.2753524780273px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot image"><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" script="image.get" class="image" style=""><header><wb-value type="text" value="images/mascot/mascot-space.png">image from url<input type="text" style="width: 186.204177856445px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="image.setHeight" class="image" style=""><header><wb-value type="wb-image" allow="block">set<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number">height<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.divide" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="stage.stageHeight" class="" style=""><header><wb-value>Stage Height</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" value="2">÷<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot">set<input type="text" style="width: 51.3983459472656px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot"><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" script="sprite.create" class=""><header><wb-value type="wb-image,shape,sprite">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="stage.clearTo" class=""><header><wb-value type="color,wb-image">clear to<input type="color" style="width: 57.7255706787109px;"></wb-value></header>
+                    
+                </wb-step><wb-step script="sprite.draw" class="sprite"><header><wb-value type="sprite">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class="" style=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-step>
+
+            </div>
         </wb-hbox>
     </wb-hbox>
  </div>
@@ -163,25 +255,33 @@ Try positioning the rectangle at the origin (0,0).
         <div class="tutorial-desc">
             Step 3 : Move Waterbear to the center of the canvas<br /><br />
 Instructions: Move the waterbear to the center of the canvas so you can see all of him.<br /><br />
-Blocks to use:<br />
-“move to”<br />
-“point x, y”<br />
-“variable”<br />
-“center x”<br />
-“center y”<br /><br />
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
+                    <wb-expression script = "path.moveTo" type="path">
+                        <wb-value type="point">move to point</wb-value>
+                    </wb-expression>  
+                    <wb-expression type="point" script="point.create">
+                        <wb-value type="number" value="0">x</wb-value>
+                        <wb-value type="number" value="0">y</wb-value>
                     </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-step script="control.setVariable" class="control">
+                        <wb-row>
+                        <wb-value type="text" isvariable="true" allow="literal" value="variable">set</wb-value>
+                            <wb-local>
+                                <wb-expression type="any" script="control.getVariable">
+                                    <wb-value value="variable">variable</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                        </wb-row>
+                        <wb-value type="any">to</wb-value>
                     </wb-step>
+                    <wb-expression type="number" script="stage.centerX">
+					    <wb-value>Center x</wb-value>
+				    </wb-expression>
+				    <wb-expression type="number" script="stage.centerY">
+					    <wb-value>Center y</wb-value>
+				    </wb-expression>
                 </div>
             </div>
 Strategy Hints: Try setting the position using the “center x” and “center y” blocks.
@@ -195,8 +295,8 @@ Strategy Hints: Try setting the position using the “center x” and “center 
         <div>
             <wb-hbox>
                 <h6> Actual output:</h6>
-                <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
             </wb-hbox>
             <div class = "canvas-holder">
                 
@@ -227,6 +327,65 @@ Strategy Hints: Try setting the position using the “center x” and “center 
         </div>
         <wb-hbox class="tutorial-solution">
             <div> This is our solution</div>
+            <button class="load-solution" gistID = 'b56941f26a535222b7eb'>Load our Solution</button>
+            <div>
+                <wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot image">set<input type="text" style="width: 84.2753524780273px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot image"><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" script="image.get" class="image" style=""><header><wb-value type="text" value="images/mascot/mascot-space.png">image from url<input type="text" style="width: 186.204177856445px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="image.setHeight" class="image" style=""><header><wb-value type="wb-image" allow="block">set<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number">height<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.divide" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="stage.stageHeight" class="" style=""><header><wb-value>Stage Height</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" value="2">÷<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot">set<input type="text" style="width: 51.3983459472656px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot"><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" script="sprite.create" class=""><header><wb-value type="wb-image,shape,sprite">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="stage.clearTo" class=""><header><wb-value type="color,wb-image">clear to<input type="color" style="width: 57.7255706787109px;"></wb-value></header>
+                    
+                </wb-step><wb-step script="sprite.moveTo" class="" style=""><header><wb-value type="sprite"><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class="" style=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="point,vector">move to<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="300">x<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerX" class=""><header><wb-value>Center x</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" value="280">y<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerY" class=""><header><wb-value>Center y</wb-value></header>
+					
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="sprite.draw" class="sprite"><header><wb-value type="sprite">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class="" style=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-step>
+
+            </div>
         </wb-hbox>
     </wb-hbox>
  </div>
@@ -249,16 +408,32 @@ Instructions: Use some math to only rotate back and forth.<br />
             <div class="tutorial-block-menu">
                 <div>Here are the blocks you'll need:</div>
                 <div class="tutorial-blocks">
-                    <wb-expression type="size" script="size.fromArray">
-                        <wb-value type="array" allow="expression">size from array</wb-value>
-                        <wb-value type="text" value="px">width units</wb-value>
-                        <wb-value type="text" value="px">height units</wb-value>
-                    </wb-expression>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-context script="control.eachFrame" class="control">
+                        <wb-row>
+                            <wb-value>each frame</wb-value>
+                            <wb-local>
+                                <wb-expression type="number" script="control.frame">
+                                    <wb-value value="frame">frame</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                            <wb-local>
+                                    <wb-expression type="number" script="control.elapsed">
+                                    <wb-value value="elapsed">elapsed</wb-value>
+                                </wb-expression>
+                            </wb-local>
+                        </wb-row>
+                    </wb-context>
+                    <wb-step script="sprite.rotate" class="sprite">
+                        <wb-value type="sprite">rotate</wb-value>
+                        <wb-value type="number">by</wb-value>
                     </wb-step>
+                    <wb-expression type="number" script="math.sin">
+                        <wb-value type="number" value="0">sine</wb-value>
+                    </wb-expression>
+                    <wb-expression script="math.multiply" type="number">
+                        <wb-value type="number,vector,array" value="0"></wb-value>
+                        <wb-value type="number,vector" value="0">×</wb-value>
+                    </wb-expression>
                 </div>
             </div>
 Strategy Hints: Think about a <a href="http://www.google.com/url?q=http%3A%2F%2Fsciencevibe.com%2Fwp-content%2Fuploads%2F2015%2F02%2Fcosinesine.gif&sa=D&sntz=1&usg=AFQjCNGwRfIm9g3dt63sHjGrBOPdL_i73g">sine graph</a> and how it moves. It will give you values between 1 and -1, and since it moves back and forth, it can help us make the Waterbear move back and forth. By taking the sine of the frame, we can get values to try rotating the Waterbear by. Try using the sin(frame) to implement this.
@@ -272,8 +447,8 @@ Strategy Hints: Think about a <a href="http://www.google.com/url?q=http%3A%2F%2F
         <div>
             <wb-hbox>
                 <h6> Actual output:</h6>
-                <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
             </wb-hbox>
             <div class = "canvas-holder">
                 
@@ -303,6 +478,90 @@ Strategy Hints: Think about a <a href="http://www.google.com/url?q=http%3A%2F%2F
         </div>
         <wb-hbox class="tutorial-solution">
             <div> This is our solution</div>
+            <button class="load-solution" gistID = '61334f242afa6be834cc'>Load our Solution</button>
+            <div>
+                <wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot image">set<input type="text" style="width: 84.2753524780273px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot image"><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" script="image.get" class="image" style=""><header><wb-value type="text" value="images/mascot/mascot-space.png">image from url<input type="text" style="width: 186.204177856445px;"></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="image.setHeight" class="image" style=""><header><wb-value type="wb-image" allow="block">set<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number">height<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.divide" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="stage.stageHeight" class="" style=""><header><wb-value>Stage Height</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" value="2">÷<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="control.setVariable" class="control"><header><wb-row>
+                    <wb-value type="text" isvariable="true" allow="literal" value="mascot">set<input type="text" style="width: 51.3983459472656px;"></wb-value>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable" value="mascot"><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" script="sprite.create" class=""><header><wb-value type="wb-image,shape,sprite">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot image" class="" style=""><header><wb-value value="mascot image">mascot image</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="sprite.moveTo" class="" style=""><header><wb-value type="sprite"><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class="" style=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="point,vector">move to<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="300">x<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerX" class=""><header><wb-value>Center x</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" value="280">y<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerY" class=""><header><wb-value>Center y</wb-value></header>
+					
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-context script="control.eachFrame" class="control"><header><wb-disclosure></wb-disclosure><wb-row>
+                        <wb-value>each frame</wb-value>
+                        <wb-local>
+                            <wb-expression type="number" script="control.frame"><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" script="control.elapsed"><header><wb-value value="elapsed">elapsed</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local><wb-local></wb-local></header>
+                    
+                <wb-contains><wb-step script="stage.clearTo" class="" style=""><header><wb-value type="color,wb-image">clear to<input type="color" style="width: 57.7255706787109px;"></wb-value></header>
+                    
+                </wb-step><wb-step script="sprite.rotate" class="sprite" style=""><header><wb-value type="sprite">rotate<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number" value="-1">by<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.multiply" type="number" class=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="math.sin" class=""><header><wb-value type="number" value="0">sine<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.frame" class=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value><wb-value type="number,vector" value="1.2">×<input type="number" style="width: 30.203239440918px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step script="sprite.draw" class="sprite"><header><wb-value type="sprite">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" value="mascot" class="" style=""><header><wb-value value="mascot">mascot</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context>
+            </div>
         </wb-hbox>
     </wb-hbox>
  </div>

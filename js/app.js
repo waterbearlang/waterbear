@@ -100,27 +100,90 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
+/*
+ * Run/Stop
+ */
 Event.on(document.body, 'ui:click', '.do-run', startScript);
 Event.on(document.body, 'ui:click','.do-stop', stopScript);
-Event.on('.do-pause', 'ui:click', null, function () {
-    /* TODO */
+
+/*
+ * Debugger UI
+ */
+Event.on('.toggle-debugger', 'ui:click', null, function () {
+    var action = !!dom.matches(document.body, '.debugger') ? 'disable' : 'enable';
+    _gaq.push(['_trackEvent', 'Action', action+'-debugger']);
+    document.body.classList.toggle('debugger');
 });
-Event.on('.do-step', 'ui:click', null, function () {
-    /* TODO */
+Event.on('.do-pause', 'ui:click', null, function () {
+    console.assert(!!process, 'Trying to pause a process that DOES NOT EXIST');
+    _gaq.push(['_trackEvent', 'Action', 'pause']);
+
+    if (!process) {
+        console.warn('Clicked pause when there is no process running.');
+        return;
+    }
+    process.pause();
+});
+Event.on('.do-step', 'ui:click', null, function (evt) {
+    _gaq.push(['_trackEvent', 'Action', 'single-step']);
+
+    if (!process) {
+        /* FIXME: (#1119) when loading a new script this process should be
+         * stopped/disposed. */
+        /* Start a new process, paused. */
+        startScript(evt, { startPaused: true });
+        /* Step the process once it's created. */
+        return;
+    }
+
+    /* Step through the existing process. */
+    process.step();
+});
+Event.on('.do-continue', 'ui:click', null, function (evt) {
+    _gaq.push(['_trackEvent', 'Action', 'continue']);
+
+    if (process) {
+        process.resume();
+    }
 });
 
-function startScript(evt){
-    _gaq.push(['_trackEvent', 'Actions', 'run']);
+/**
+ * Resets any weird UI debugging state.
+ */
+function resetDebuggerState() {
+    var classes = document.body.classList;
+
+    classes.remove('debugger-paused');
+    dom.findAll(document.body, '.wb-paused').forEach(function (el) {
+        el.classList.remove('wb-paused');
+    });
+}
+
+function startScript(evt, options) {
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
     runtime.resetStage();
     evt.target.blur();
     runtime.getStage().focus();
-    preload().whenLoaded(runScript);
+
+    /* Add emitter. */
+    if (options === undefined) {
+        options = {};
+    }
+    /* Certain events DEMAND that the emitting be done asynchronously, so
+     * use setImmediate to emulate this.
+     */
+    options.emitter = options.emitter || function emitGlobalEvent(name, data) {
+        return setImmediate(function asynchronousEmit() {
+            Event.trigger(window, name, data);
+        });
+    };
+
+    preload().whenLoaded(runScript.bind(null, options));
 }
 
 function stopScript(evt) {
-    _gaq.push(['_trackEvent', 'Action', 'stop']);
+    resetDebuggerState();
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */
@@ -138,20 +201,26 @@ function stopAndClearScripts(){
 }
 
 function preload() {
+    /**
+     * Asynchronously loads/initializes stuff needed by the script.
+     */
     return assets.load({
+        /* Selector for blocks that require loading  : function that begins the loading. */
         'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
         'wb-contains wb-expression[script^="geolocation."]':
+        /* assets.waitFor waits for the given event to be triggered to signal
+         * that the asset is loaded. */
             assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
         'wb-contains wb-expression[script="motion.tiltDirection"]':
             assets.waitFor('motionchanged', util.motion.startTrackingMotion)
     });
 }
 
-function runScript(){
+function runScript(options) {
     console.assert(!process, 'Tried to run, but Process instance already exists!');
     /* Create brand new Process instance (because each process can only be
      * started once). */
-    process = new WaterbearProcess().start();
+    process = new WaterbearProcess(options).start();
 }
 
 
@@ -286,7 +355,7 @@ Event.on(document.body, 'ui:click', '.load-solution', function(evt){
     var gistId = buttonPressed.getAttribute('gistID');
     stopAndClearScripts();
     File.loadScriptsFromGistId(gistId);
-    
+
 });
 
 
@@ -305,6 +374,33 @@ Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
 Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
+
+/* Handle debugger events. */
+Event.on(window, 'process:step', null, function (evt) {
+    displayPausedOnInstruction(evt.detail.target);
+});
+Event.on(window, 'process:pause', null, function (evt) {
+    displayPausedOnInstruction(evt.detail.target);
+});
+Event.on(window, 'process:resume', null, function (evt) {
+    document.body.classList.remove('debugger-paused');
+});
+
+function displayPausedOnInstruction(block) {
+    var oldBlocks;
+    document.body.classList.add('debugger-paused');
+
+    /* Update the paused element. */
+    oldBlocks = dom.findAll(document.body, '.wb-paused');
+
+    console.assert(oldBlocks.length <= 1);
+    if (oldBlocks.length) {
+        oldBlocks[0].classList.remove('wb-paused');
+    }
+
+    block.classList.add('wb-paused');
+    block.scrollIntoView();
+}
 
 Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);

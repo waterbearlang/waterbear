@@ -19,7 +19,7 @@
         }
         return _canvas;
     }
-    
+
     function getContext(){
         if (!_ctx){
             _ctx = canvas().getContext('2d');
@@ -220,13 +220,13 @@
             elapsed: function(){
                 return runtime.control._elapsed;
             },
-            setVariable: function(name, value){
+            setVariable: function(nameValuePair){
                 //FIXME: Make sure this is named properly
-                // console.log('setting variable %s to value %s', name, value);
+                var name = nameValuePair[0];
+                var value = nameValuePair[1];
                 this[name] = value;
             },
             getVariable: function(name){
-                // console.log('get %s from %o', name, this);
                 return this[name];
             },
             incrementVariable: function(variable, value){

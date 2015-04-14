@@ -20,6 +20,12 @@
 
 // Utility
 
+function randomId(){
+    // Based on Paul Irish's random hex color:http://www.paulirish.com/2009/random-hex-color-code-snippets/
+    // Theoretically could return non-unique values, not going to let that keep me up at night
+    return 'k'+Math.floor(Math.random()*16777215).toString(16); // 'k' because ids have to start with a letter
+}
+
 // FIXME: insert this into the document rather than including in markup
 var svgText = document.querySelector('.resize-tester');
 function resize(input){
@@ -74,9 +80,12 @@ var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
     setDefaultByTag(this, 'header', true);
-    // console.log('%s created with %s children', this.localName, this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
+    // Attached only fires the first time an element is added to the DOM
+    // If you want a notification every time block is added to DOM (moved, etc.) use wb-added
+    // (also wb-removed, wb-addedChild, wb-removedChild)
+    // Attached will fire when re-loading a script too, so program defensively
     // Add locals
     // Make sure they have unique names in scope
     // Handle special cases:
@@ -93,11 +102,10 @@ BlockProto.attachedCallback = function blockAttached(){
     }else{
         // console.warn('free-floating block: %o, OK for now', this);
     }
-    // console.log('%s attached', this.localName);
 };
+
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
-    // console.log('%s detached', this.localName);
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -105,19 +113,17 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    title or help (do nothing)
     //    script (do nothing)
     //    type (do nothing
-    // console.log('%s[%s] %s -> %s', this.localName, attrName, oldVal, newVal);
 };
 BlockProto.gatherValues = function(scope){
-    if (!this.values){
-        this.values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
-    }
-    return this.values.map(function(value){
+    var values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
+    return values.map(function(value){
         return value.getValue(scope);
     });
 };
+
 /* Applicable for both <wb-step> and <wb-context>.
  * The next element is simply the nextElementSibling. */
-BlockProto.next = function() {
+BlockProto.next = function next() {
     return this.nextElementSibling;
 };
 
@@ -147,62 +153,117 @@ StepProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
+    var values = this.gatherValues(scope);
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
-var variableLocalsToUpdate = null;
-var oldVariableName = '';
-
-function handleVariableFocus(evt){
-    // Gather all the locals so we can update them
-    // TODO: Cancel if the new variable name is already in scope
-    var input = evt.target;
-    if (!input.parentElement.hasAttribute('isvariable')){
+function updateVariableType(evt){
+    var setVariableBlock = evt.detail;
+    // ignore variables not in the workspace (in scripts)
+    if (! dom.matches(setVariableBlock, 'wb-workspace *')){
         return;
     }
-    var parentContext = dom.closest(input, 'wb-contains');
-    var variableName = input.parentElement.getAttribute('value');
-    variableLocalsToUpdate = dom.findAll(parentContext, 'wb-expression[script="control.getVariable"]')
-                                          .filter(function(expr){
-        var value = dom.find(expr, 'wb-value');
-        return (value && value.getAttribute('value') === variableName);
-    });
+    // ignore blocks that are not setVariable
+    if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
+        return;
+    }
+    var valueBlock = evt.target;
+    var type = valueBlock.getAttribute('type');
+    setTypeOfVariable(setVariableBlock, type);
+    updateLocalInstancesType(setVariableBlock, type);
 }
+
+function createVariableToLocalAssociation(evt){
+    var setVariableBlock = evt.target;
+    if (!setVariableBlock.hasAttribute('id')){
+        var id = randomId();
+        setVariableBlock.setAttribute('id', id);
+        var local = dom.find(setVariableBlock, 'wb-local [script="control.getVariable"]');
+        local.setAttribute('for', id);
+    }
+}
+
 
 function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isvariable')){
+    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
+    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
         return;
     }
+    // keep from literal value matching
+    if (! dom.matches(input.parentElement, ':first-of-type')){
+        return;
+    }
+    var context = dom.closest(stepBlock, 'wb-contains');
     var newVariableName = input.value;
-    variableLocalsToUpdate.forEach(function(expr){
-        expr.setAttribute('value', newVariableName);
-        var val = dom.find(expr, 'wb-value');
-        val.setAttribute('value', newVariableName);
-        val.textContent = newVariableName;
-    });
+    updateVariableNameInInstances(newVariableName, getVariablesToUpdate(context, stepBlock.id));
+    // evt.stopPropagation();
 }
 
 function handleVariableBlur(evt){
     // Cleanup
     var input = evt.target;
-    if (!input.parentElement.hasAttribute('isvariable')){
+    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
+    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
         return;
     }
-    variableLocalsToUpdate = null;
-    oldVariableName = '';
+    ensureNameIsUniqueInContext(input);
 }
 
-Event.on(document.body, 'editor:focus', '[isvariable] input', handleVariableFocus); // Mozilla
-Event.on(document.body, 'editor:focusin', '[isvariable] input', handleVariableFocus); // All other browsers
-Event.on(document.body, 'editor:input', '[isvariable] input', handleVariableInput);
-Event.on(document.body, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
-Event.on(document.body, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
+function trailingNumber(str){
+    // return trailing number as a number or zero if no trailing number
+    return Number((str.match(/\d+$/) || [0])[0]);
+}
 
-// Context Proto
-// Instantiated as new WBContext or as <wb-context>
+function ensureNameIsUniqueInContext(input){
+    var parentContext = dom.closest(input, 'wb-contains');
+    var setVariable = dom.closest(input, '[script="control.setVariable"]');
+    var valueBlock = dom.closest(input, 'wb-value');
+    // Find other variable names in scope
+    var variablesToTestAgainst = dom.findAll(parentContext, '[script="control.setVariable"]')
+        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
+        .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
+        .sort();
+    var newVariableName = input.value; // we may be changing this one
+    var oldVariableName = input.value;
+    // Compare against other variable names, update if there is a match
+    while(variablesToTestAgainst.indexOf(newVariableName) > -1){
+        var incrementalNumber = trailingNumber(newVariableName);
+        var baseName;
+        if (incrementalNumber){
+            baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+        }else{
+            baseName = newVariableName + ' ';
+        }
+        newVariableName = baseName + (incrementalNumber + 1);
+    }
+    if (newVariableName !== oldVariableName){
+        input.value = newVariableName;
+        valueBlock.setAttribute('value', newVariableName);
+        var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
+        updateVariableNameInInstances(newVariableName, variablesToUpdate);
+    }
+}
+
+function getVariablesToUpdate(parentContext, setVarId){
+    return dom.findAll(workspace, '[for="' + setVarId + '"]');
+}
+
+function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
+    variableLocalsToUpdate.forEach(function(wbvalue){
+        wbvalue.setAttribute('value', newVariableName);
+        dom.find(wbvalue, 'header').textContent = newVariableName;
+    });
+}
+
+function uniquifyVariableName(evt){
+    var setVariableBlock = evt.target;
+    var input = dom.find(setVariableBlock, 'input');
+    ensureNameIsUniqueInContext(input);
+}
+
 
 /*****************
 *
@@ -222,7 +283,6 @@ ContextProto.createdCallback = function contextCreated(){
     BlockProto.createdCallback.call(this);
     var header = dom.child(this, 'header');
     setDefaultByTag(header, 'wb-disclosure');
-    setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
 };
 ContextProto.gatherContains = function(){
@@ -250,7 +310,7 @@ ContextProto.run = function(strand, frame){
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
-    var blockAdded = evt.detail;
+    var blockAdded = evt.target;
     if (blockAdded && blockAdded.localName === 'wb-expression'){
         var type = blockAdded.getAttribute('type');
         var header = dom.child(this, 'header');
@@ -272,7 +332,7 @@ ContextProto.showLocals = function(evt){
 };
 ContextProto.hideLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
-    var blockAdded = evt.detail;
+    var blockAdded = evt.target;
     if (blockAdded && blockAdded.localName === 'wb-expression'){
         var header = dom.child(this, 'header');
         if (!header) return;
@@ -288,7 +348,7 @@ ContextProto.hideLocals = function(evt){
  * Prepares the setup() callback.
  */
 ContextProto.setupCallbacks = function() {
-    /* Fetch the callback object from runtime. */ 
+    /* Fetch the callback object from runtime. */
     var qualifiedName = this.getAttribute('script').split('.');
     var category = qualifiedName[0], name = qualifiedName[1];
     var callback = runtime[category][name];
@@ -316,8 +376,6 @@ function defaultShouldEvaluateValues(strand, containers, elem) {
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
-Event.on(document.body, 'editor:wb-added', 'wb-context', function(evt){ evt.target.showLocals(evt); });
-Event.on(document.body, 'editor:wb-added', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
 /*****************
 *
 *  wb-expression
@@ -350,7 +408,6 @@ var typeMapping = {
 
 var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
-    // console.log('Expression created');
     var header = setDefaultByTag(this, 'header', true);
     if (this.getAttribute('context') === 'true'){
         setDefaultByTag(this, 'wb-disclosure');
@@ -370,7 +427,7 @@ ExpressionProto.attachedCallback = function expressionAttached(){
     if (this.parent.localName !== 'wb-local'){
         var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
         if (blockParent){
-            Event.trigger(blockParent, 'wb-added', this);
+            Event.trigger(this, 'wb-added', blockParent);
         }
     }
 
@@ -391,14 +448,19 @@ ExpressionProto.detachedCallback = function expressionDetached(){
     }
     this.parent = null;
 };
-ExpressionProto.gatherValues = BlockProto.gatherValues;
+ExpressionProto.gatherValues = function gatherValues(scope){
+    var value = this.getAttribute('value');
+    if (!value){
+        return BlockProto.gatherValues.call(this, scope);
+    }
+    return [value];
+};
 ExpressionProto.run = function(scope){
     if (!this.fn){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling expression %s with scope %o and values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
@@ -464,9 +526,7 @@ DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
 function toggleClosed(evt){
-    console.log('toggle');
     var block = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
-    console.log('%s closed = %s', block.localName, block.getAttribute('closed'));
     if (block.hasAttribute('closed')){
         block.removeAttribute('closed');
     }else{
@@ -474,7 +534,6 @@ function toggleClosed(evt){
     }
 }
 
-Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 
 /*****************
 *
@@ -509,7 +568,6 @@ function addItem(evt){
     template.parentElement.insertBefore(newItem, template.nextElementSibling);
 }
 
-Event.on(document.body, 'editor:click', 'wb-contains .add-item', addItem);
 
 /*****************
 *
@@ -520,7 +578,6 @@ Event.on(document.body, 'editor:click', 'wb-contains .add-item', addItem);
 ******************/
 
 function removeItem(evt){
-    console.log('removing a row');
     var self = evt.target;
     var row = dom.closest(self, 'wb-row');
     // we want to remove the row, but not if it is the last one
@@ -528,9 +585,6 @@ function removeItem(evt){
         row.parentElement.removeChild(row);
     }
 }
-
-Event.on(document.body, 'editor:click', 'wb-contains .remove-item', removeItem);
-
 
 
 /*****************
@@ -648,12 +702,12 @@ ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
        BLOCK_MENU.removeAttribute('filtered');
        this.deselect();
-        
-        
+
+
     }else{
         BLOCK_MENU.setAttribute('filtered', 'true');
         this.select();
-    }   
+    }
 }
 
 //select an inout field and filter the sidebar by it
@@ -671,7 +725,7 @@ ValueProto.select = function(){
     selectedTypeList = selectedType.split(',');
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
-    
+
 }
 
 //deselect an inout field and unfilter the sidebar
@@ -680,21 +734,39 @@ ValueProto.deselect = function(){
     var sidebarBlocks;
     this.removeAttribute('selected');
     sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');} 
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');}
     selectedType = 'null';
 }
 
 
 //when a user clicks on an inout box in the workspace
-Event.on(document.body, 'editor:change', 'wb-contains input, wb-contains select', function(evt){
+function changeValueOnInputChange(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
-});
+    // evt.stopPropagation();
+}
+
 
 var convert = {
     boolean: function(text){ return text === 'true'; },
     number: function(text){ return +text; },
     any: function(text){return util.isNumber(text) ? +text : text; }
 };
+
+/*****************
+*
+*  wb-contains
+*
+*  Instantiated as new WBContains or as <wb-contains>. Contains is a semi-block. It never
+*  exists by itself, only as a child of a <wb-context> (and every <wb-context has at least one
+*  <wb-contains> child, implicitly if not explicitly). Sometimes we need to test for other blocks
+*  being in a <wb-context>, which is why sometimes it is block-ish.
+*
+*  Attributes: class, id
+*
+*  Children: wb-step, wb-context
+*
+******************/
+
 
 var ContainsProto = Object.create(HTMLElement.prototype);
 /* You sure love Object.defineProperty, dontcha, Eddie? */
@@ -731,7 +803,7 @@ var dragStart = '';
 var dropTarget = null;
 var blockTop = 0;
 
-Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', function(evt){
+function startDragBlock(evt){
     origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
     // Maybe move to object notation later
     //    return target.startDrag(evt);
@@ -757,9 +829,9 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
     dragTarget.classList.add('dragging');
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
-});
+}
 
-Event.on(document.body, 'editor:dragging', null, function(evt){
+function dragBlock(evt){
     if (!dragTarget){ return; }
     evt.preventDefault();
     evt.stopPropagation();
@@ -780,13 +852,13 @@ Event.on(document.body, 'editor:dragging', null, function(evt){
     // When we're dragging an expression...
     if (dragTarget.matches('wb-expression')){
        // Check if we're on a literal block.
-       if (potentialDropTarget.matches('wb-value[allow=literal], wb-value[allow=literal] *')) {
+       if (potentialDropTarget.matches('wb-value[allow="literal"], wb-value[allow="literal"] *')) {
           app.warn("cannot drop on direct input value");
           return;
        }
 
         // FIXME
-        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow=literal])');
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');
@@ -813,7 +885,7 @@ Event.on(document.body, 'editor:dragging', null, function(evt){
        return;
     }
     app.warn('Not a target, drop to cancel drag');
-});
+}
 
 function dropTargetIsContainer(potentialDropTarget){
    dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
@@ -859,7 +931,7 @@ function addToContains(block, evt, addBlockEvent){
     dragTarget = the cloned block that is being dragged
     dropTarget = the block (or position) the clone is being dropped into
 **/
-Event.on(document.body, 'editor:drag-end', null, function(evt){
+function endDragBlock(evt){
     var originalBlock = origTarget;
     var originalParent = null;
     var nextElem = null;
@@ -872,14 +944,12 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
         origTarget = null;
     }
     if (!dropTarget){
-        // console.log('no dropTarget');
         if(dragTarget){
             dragTarget.parentElement.removeChild(dragTarget);
         }
        // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
-        // console.log('delete both clone and original');
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
             originalBlock.classList.remove('singularity');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
@@ -889,7 +959,6 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
     }else if(dragTarget.matches('wb-expression')){
 
         if (dropTarget.matches('wb-value')) {
-            // console.log('add expression to value');
             dropTarget.appendChild(dragTarget);
             dropTarget.deselect();
             BLOCK_MENU.removeAttribute('filtered');
@@ -898,10 +967,9 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
                 addValueEvent.type = 'move-block'
             }
             Event.addNewEvent(addValueEvent);
-            
+
         }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.
-            // console.log('create a variable block and add expression to it');
             var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
             if(dragStart==='script'){
                 addBlockEvent.type = 'add-var-block';
@@ -910,30 +978,26 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
     }else if(dragTarget.matches('wb-context, wb-step')){
-        // console.log('add to contains');
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
         addToContains(dragTarget, evt, addBlockEvent);
     }else{
-        // console.log('no match, delete the cloned element (and show the original)');
         dragTarget.parentElement.removeChild(dragTarget);
     }
     resetDragging();
-});
+}
 
-Event.on(document.body, 'editor:drag-cancel', null, function(evt){
+function cancelDragBlock(evt){
     dragTarget.parentElement.removeChild(dragTarget);
     resetDragging();
-});
+}
 
 // Handle resizing inputs when their content changes
-Event.on(document.body, 'editor:input', 'input', function(evt){
+function resizeInputOnChange(evt){
     var target = evt.target;
     if (! dom.matches(target, 'wb-value > input')) return;
     resize(target);
     Event.trigger(target, 'wb-changed', evt.target.value);
-}, false);
-
-
+}
 
 function resetDragging(){
     if (dragTarget){
@@ -954,6 +1018,8 @@ function resetDragging(){
     document.body.classList.remove('block-dragging');
 }
 
+/* End Dragging */
+
 /**
  * Creates a new "set variable" step.
  * If `initialValue` is not null, it should be a <wb-expression>.
@@ -969,10 +1035,64 @@ function createVariableBlock(initialValue) {
    variableStep
       .querySelector('wb-value[type="any"]')
       .appendChild(initialValue);
-   // TODO: autogenerate a good name.
-
    return variableStep;
 }
+
+
+// FIXME: This should be a method on Step
+// And really, Variable should be a subclass of Step, but that screws up the selectors
+function setTypeOfVariable(variableStep, type){
+   // Set type of variable to match type of object
+   variableStep
+       .querySelector('[script="control.getVariable"]') // get local expression
+       .setAttribute('type', type);
+}
+
+function updateLocalInstancesType(variableStep, type){
+    var parentContext = dom.closest(variableStep, 'wb-contains');
+    var variableLocalsToUpdate = getVariablesToUpdate(parentContext, variableStep.id);
+    variableLocalsToUpdate.forEach(function(varinstance){
+        dom.closest(varinstance, 'wb-expression').setAttribute('type', type);
+    });
+}
+
+
+// Exports
+
+window.block = {
+    randomId: randomId,
+    getVariablesToUpdate: getVariablesToUpdate
+}
+
+// Event handling
+
+// Make sure wb-added, wb-removed, wb-addedChild, wb-removedChild events are triggered
+Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context, wb-expression, wb-contains', 'wb-step, wb-context, wb-expression');
+
+Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
+Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);
+Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', uniquifyVariableName);
+
+Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.showLocals(evt); });
+Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
+
+Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
+
+// Add/remove rows from expressions
+Event.on(workspace, 'editor:click', '.add-item', addItem);
+Event.on(workspace, 'editor:click', '.remove-item', removeItem);
+
+Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', startDragBlock);
+Event.on(document.body, 'editor:dragging', null, dragBlock);
+Event.on(document.body, 'editor:drag-end', null, endDragBlock);
+Event.on(document.body, 'editor:drag-cancel', null, cancelDragBlock);
+
+Event.on(workspace, 'editor:input', 'input', resizeInputOnChange);
+Event.on(workspace, 'editor:input', 'input, select', changeValueOnInputChange);
+
+Event.on(workspace, 'editor:input', '[script="control.setVariable"] input', handleVariableInput);
+Event.on(workspace, 'editor:blur',  '[script="control.setVariable"] input', handleVariableBlur); // Mozilla
+Event.on(workspace, 'editor:focusout',  '[script="control.setVariable"] input', handleVariableBlur); // All other browsers
 
 
 })();

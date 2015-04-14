@@ -150,7 +150,6 @@
     }
 
     function bareUrl(gistID){
-        console.log('bareUrl');
         var path = location.href.split('?')[0];
         history.replaceState(null, '', path);
     }

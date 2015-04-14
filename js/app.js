@@ -100,10 +100,23 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
+/*
+ * Run/Stop
+ */
 Event.on(document.body, 'ui:click', '.do-run', startScript);
 Event.on(document.body, 'ui:click','.do-stop', stopScript);
+
+/*
+ * Debugger UI
+ */
+Event.on('.toggle-debugger', 'ui:click', null, function () {
+    var action = !!dom.matches(document.body, '.debugger') ? 'disable' : 'enable';
+    _gaq.push(['_trackEvent', 'Action', action+'-debugger']);
+    document.body.classList.toggle('debugger');
+});
 Event.on('.do-pause', 'ui:click', null, function () {
     console.assert(!!process, 'Trying to pause a process that DOES NOT EXIST');
+    _gaq.push(['_trackEvent', 'Action', 'pause']);
 
     if (!process) {
         console.warn('Clicked pause when there is no process running.');
@@ -112,17 +125,14 @@ Event.on('.do-pause', 'ui:click', null, function () {
     process.pause();
 });
 Event.on('.do-step', 'ui:click', null, function (evt) {
+    _gaq.push(['_trackEvent', 'Action', 'single-step']);
+
     if (!process) {
         /* FIXME: (#1119) when loading a new script this process should be
          * stopped/disposed. */
         /* Start a new process, paused. */
         startScript(evt, { startPaused: true });
         /* Step the process once it's created. */
-        /*
-        Event.once(window, 'process:paused', null, function () {
-            process.step();
-        });
-        */
         return;
     }
 
@@ -130,6 +140,8 @@ Event.on('.do-step', 'ui:click', null, function (evt) {
     process.step();
 });
 Event.on('.do-continue', 'ui:click', null, function (evt) {
+    _gaq.push(['_trackEvent', 'Action', 'continue']);
+
     if (process) {
         process.resume();
     }

@@ -32,6 +32,7 @@ Event.on('.do-run', 'ui:click', null, startScript);
 Event.on('.do-stop', 'ui:click', null, stopScript);
 
 function startScript(evt){
+    _gaq.push(['_trackEvent', 'Actions', 'run']);
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
     runtime.resetStage();
@@ -43,6 +44,7 @@ function startScript(evt){
 }
 
 function stopScript(evt) {
+    _gaq.push(['_trackEvent', 'Action', 'stop']);
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */

@@ -110,6 +110,7 @@ Event.on('.do-step', 'ui:click', null, function () {
 });
 
 function startScript(evt){
+    _gaq.push(['_trackEvent', 'Actions', 'run']);
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
     runtime.resetStage();
@@ -119,6 +120,7 @@ function startScript(evt){
 }
 
 function stopScript(evt) {
+    _gaq.push(['_trackEvent', 'Action', 'stop']);
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */
@@ -153,6 +155,7 @@ function runScript(){
 }
 
 function handleFileButton(evt){
+    _gaq.push(['_trackEvent', 'File', 'file']);
     var fileModel = nanoModal("Select an option or click away to exit.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
@@ -201,6 +204,7 @@ function handleFileButton(evt){
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
+    _gaq.push(['_trackEvent', 'Tutorial', 'examples']);
     var fileModel = nanoModal("Load an example program.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
@@ -225,6 +229,7 @@ function handleExampleButton(evt){
 }
 
 function handleTutorialButton(evt){
+    _gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);
     var fileModel = nanoModal("Load a tutorial.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{

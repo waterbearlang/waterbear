@@ -66,6 +66,11 @@ body > header > h1{
     font-size: 18px;
 }
 
+
+sidebar button.availableBlocks{
+    display: none; /*hide when the accordions are showing */
+}
+
 .menu a{
     float: right;
     text-decoration: none;
@@ -99,6 +104,7 @@ body > header > h1{
     background-color: #C4C4C4;
     color: #666666;
 }
+
 /* Show trash for sidebar while dragging */
 
 sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{
@@ -118,6 +124,7 @@ sidebar.trashcan:after{
     background-position: 50%;
     z-index: 100;
 }
+
 
 /* Feedback area for messages */
 

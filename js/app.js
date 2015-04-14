@@ -154,6 +154,7 @@ function runScript(){
     process = new WaterbearProcess().start();
 }
 
+
 function handleFileButton(evt){
     _gaq.push(['_trackEvent', 'File', 'file']);
     var fileModel = nanoModal("Select an option or click away to exit.",
@@ -317,5 +318,4 @@ window.app = {
     warn: warn,
     info: info
 };
-
 })();

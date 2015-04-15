@@ -697,6 +697,9 @@
         },
 
         shape: {
+            draw: function(shapeArg){
+                shapeArg.draw(getContext());
+            },
             fill: function(shapeArg){
                 shapeArg.draw(getContext());
                 getContext().fill();

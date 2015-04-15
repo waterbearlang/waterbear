@@ -930,7 +930,6 @@
 
     Sprite.prototype.rotate = function(r){
         this.facing = this.facing.rotate(r);
-        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
     }
 
     Sprite.prototype.rotateTo = function(r){

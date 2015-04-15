@@ -873,11 +873,8 @@
                     Shapes
                 </header>
                 <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
-                 <wb-step script=shape.fill class="shape">
-                    <wb-value type="shape">fill the shape</wb-value>
-                </wb-step>
-                <wb-step script=shape.stroke class="shape">
-                    <wb-value type="shape">stroke the shape</wb-value>
+                 <wb-step script="shape.draw" class="shape">
+                    <wb-value type="shape">draw the shape</wb-value>
                 </wb-step>
                 <wb-expression type="shape" script="shape.circle" class="shape">
                     <wb-value type="point">circle at</wb-value>
@@ -1117,7 +1114,7 @@
                 <input id="tb0" type="checkbox" class="do-toggle-breakpoints"><label for="tb0">Toggle Breakpoints</label>
                 <input id="tc0" type="checkbox" class="do-toggle-lineno"><label for="tc0">Toggle Counts</label>
             </wb-debug-menu>
-        </wb-debugber>
+        </wb-debugger>
         <wb-displaybox class="tutorial">
             <div class="tutorial-content">
                 <h1>Waterbear Tutorials</h1>

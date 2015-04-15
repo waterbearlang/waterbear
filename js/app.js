@@ -93,9 +93,9 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         tabAssoc.setAttribute('selected', 'true');
         var playCanvas = dom.find('canvas');
         dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(playCanvas);
+        // FIXME: Never hard code values like this
         playCanvas.style.width = '250px';
         playCanvas.style.height = '190px';
-
     }
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

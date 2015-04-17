@@ -434,7 +434,8 @@ window.WaterbearProcess = (function () {
      * @private
      */
     ReusableStrand.prototype.resetFrames = function () {
-        this.frames = [Frame.createFromFrame(this.rootFrame)];
+        this.rootFrame = Frame.createFromFrame(this.rootFrame);
+        this.frames = [this.rootFrame];
         this.currentInstruction =  this.currentFrame.firstInstruction;
     };
 

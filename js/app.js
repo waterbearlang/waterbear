@@ -143,6 +143,7 @@ Event.on('.do-continue', 'ui:click', null, function (evt) {
     _gaq.push(['_trackEvent', 'Action', 'continue']);
 
     if (process) {
+        resetDebuggerUI();
         process.resume();
     }
 });
@@ -150,7 +151,7 @@ Event.on('.do-continue', 'ui:click', null, function (evt) {
 /**
  * Resets any weird UI debugging state.
  */
-function resetDebuggerState() {
+function resetDebuggerUI() {
     var classes = document.body.classList;
 
     classes.remove('debugger-paused');
@@ -183,7 +184,7 @@ function startScript(evt, options) {
 }
 
 function stopScript(evt) {
-    resetDebuggerState();
+    resetDebuggerUI();
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */

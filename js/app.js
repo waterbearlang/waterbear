@@ -148,6 +148,9 @@ Event.on('.do-continue', 'ui:click', null, function (evt) {
     }
 });
 
+/* So that if it was saved with paused state, the paused indicator goes away. */
+Event.on(window, 'ui:script-load', null, resetDebuggerUI);
+
 /**
  * Resets any weird UI debugging state.
  */

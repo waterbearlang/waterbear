@@ -772,14 +772,16 @@ window.WaterbearProcess = (function () {
         var frameStrand = this.perFrameHandlers[0];
         var currTime = new Date().valueOf();
 
-        /* Do I dare change these not quite global variables? */
-        runtime.control._elapsed = currTime - this.lastTime;
-        /* FIXME: (#1120) This does not trivially allow for multiple
-         * `each frame` handlers! */
-        runtime.control._frame++;
-        /* Why, yes, I do dare. */
+        /* FIXME: (#1125) Schedule this method only when needed! */
 
-        this.lastTime = currTime;
+        if (!this.paused || this.shouldStep) {
+            /* FIXME: (#1120) This does not trivially allow for multiple
+             * `each frame` handlers! */
+            runtime.control._elapsed = currTime - this.lastTime;
+            runtime.control._frame++;
+
+            this.lastTime = currTime;
+        }
 
         if (!this.paused && this.delay === 0) {
             /* Running normally. */

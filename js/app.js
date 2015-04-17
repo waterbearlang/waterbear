@@ -143,14 +143,18 @@ Event.on('.do-continue', 'ui:click', null, function (evt) {
     _gaq.push(['_trackEvent', 'Action', 'continue']);
 
     if (process) {
+        resetDebuggerUI();
         process.resume();
     }
 });
 
+/* So that if it was saved with paused state, the paused indicator goes away. */
+Event.on(window, 'ui:script-load', null, resetDebuggerUI);
+
 /**
  * Resets any weird UI debugging state.
  */
-function resetDebuggerState() {
+function resetDebuggerUI() {
     var classes = document.body.classList;
 
     classes.remove('debugger-paused');
@@ -183,7 +187,7 @@ function startScript(evt, options) {
 }
 
 function stopScript(evt) {
-    resetDebuggerState();
+    resetDebuggerUI();
     if (process) {
         process.terminate();
         /* Throw out the now-useless process. */

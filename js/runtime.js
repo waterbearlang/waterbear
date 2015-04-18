@@ -200,8 +200,9 @@
             stroke: function(color){
                 getContext().strokeStyle = color;
             },
-            shadow: function(color){
+            shadow: function(color, blur){
                 getContext().shadowColor = color;
+                getContext().shadowBlur = blur;
             }
         },
 
@@ -297,9 +298,10 @@
                 });
                 function updateState() {
                     /* Set the locals. */
+                    /* FIXME: This has to take local names into account! */
                     scope.value = value = getValue();
                     /* Use the key value  if we have an object. */
-                    scope.index = keys === undefined ? index : keys[index];
+                    scope.indexOrKey = keys === undefined ? index : keys[index];
 
                 }
             },
@@ -707,6 +709,9 @@
             stroke: function(shapeArg){
                 shapeArg.draw(getContext());
                 getContext().stroke();
+            },
+            setLineWidth: function(width){
+                getContext().lineWidth = width;
             },
             circle: function(pt, rad){
                 return new util.Shape(function(ctx){

@@ -40,7 +40,7 @@
 
                 </wb-step><wb-step script="sprite.moveTo" class="" style=""><header><wb-value type="sprite"><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" script="control.getVariable" for="k34ed76" value="mascot" class="" style=""><header>mascot</header>
 
-                            </wb-expression></wb-value><wb-value type="point,vector">move to<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="300">x<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerX" class="singularity"><header><wb-value>Center x</wb-value></header>
+                            </wb-expression></wb-value><wb-value type="point,vector">move to<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="300">x<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerX"><header><wb-value>Center x</wb-value></header>
 
 				</wb-expression></wb-value><wb-value type="number" value="280">y<input type="number" style="width: 33.3109588623047px;" class="hide"><wb-expression type="number" script="stage.centerY" class=""><header><wb-value>Center y</wb-value></header>
 

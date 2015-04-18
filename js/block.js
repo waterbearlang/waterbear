@@ -824,7 +824,8 @@ function startDragBlock(evt){
         dragStart = 'menu';
     }
     if (dragStart === 'script'){
-        origTarget.classList.add('singularity');
+        origTarget.classList.add('hide');
+        dom.child(origTarget.parentElement, 'input, select').classList.remove('hide');
     }
     dragTarget.classList.add('dragging');
     dragTarget.style.left = (evt.pageX - 15) + 'px';
@@ -860,7 +861,7 @@ function dragBlock(evt){
         // FIXME
         dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
         if (dropTarget){
-            if (dom.child(dropTarget, 'wb-expression')){
+            if (dom.child(dropTarget, 'wb-expression:not(.hide)')){
                 app.warn('cannot drop an expression on another expression');
                 dropTarget = null;
                 return;

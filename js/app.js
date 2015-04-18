@@ -297,6 +297,14 @@ function handleExampleButton(evt){
                 File.loadScriptsFromExample('noise3d');
                 modal.hide();
             }
+        },{
+            text: "Dance",
+            handler: function(modal){
+                _gaq.push(['_trackEvent', 'Tutorial', 'Dance']);
+                stopAndClearScripts();
+                File.loadScriptsFromExample('dance');
+                modal.hide();
+            }
         }]
     });
     fileModel.show();

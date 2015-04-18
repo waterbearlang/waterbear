@@ -546,7 +546,10 @@
             },
             tau: function(){
                 return Math.PI * 2;
-            }
+            },
+            deg2rad: util.deg2rad,
+            rad2deg: util.rad2deg,
+            stringToNumber: Number
         },
 
         motion: {

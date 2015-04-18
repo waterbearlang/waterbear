@@ -824,7 +824,8 @@ function startDragBlock(evt){
         dragStart = 'menu';
     }
     if (dragStart === 'script'){
-        origTarget.classList.add('singularity');
+        origTarget.classList.add('hide');
+        dom.child(origTarget.parentElement, 'input, select').classList.remove('hide');
     }
     dragTarget.classList.add('dragging');
     dragTarget.style.left = (evt.pageX - 15) + 'px';
@@ -860,7 +861,7 @@ function dragBlock(evt){
         // FIXME
         dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
         if (dropTarget){
-            if (dom.child(dropTarget, 'wb-expression')){
+            if (dom.child(dropTarget, 'wb-expression:not(.hide)')){
                 app.warn('cannot drop an expression on another expression');
                 dropTarget = null;
                 return;
@@ -951,7 +952,7 @@ function endDragBlock(evt){
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
-            originalBlock.classList.remove('singularity');  //un-hide block
+            originalBlock.classList.remove('hide');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Event.addNewEvent(deleteEvent);                 //add new event to undo
         }
@@ -1005,7 +1006,7 @@ function resetDragging(){
         dragTarget.removeAttribute('style');
     }
     if (origTarget){
-        origTarget.classList.remove('singularity');
+        origTarget.classList.remove('hide');
     }
     dragTarget = null;
     origTarget = null;

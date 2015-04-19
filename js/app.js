@@ -31,14 +31,12 @@ function info(text){
 Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
     var button = dom.closest(evt.target, 'button');
     var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-next");
-    console.log(finished);
     finished.setAttribute('completed', 'true');
 
 });
 Event.on(document.body, 'ui:click', '.tutorial-see-solution', function(evt){
     var button = dom.closest(evt.target, 'button');
     var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-solution");
-    console.log(finished);
     finished.setAttribute('completed', 'true');
 
 });
@@ -233,6 +231,14 @@ function handleFileButton(evt){
     var fileModel = nanoModal("Select an option or click away to exit.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
+            text: "New",
+            handler: function(modal) {
+                _gaq.push(['_trackEvent', 'File', 'new']);
+                stopAndClearScripts();
+                modal.hide();
+            },
+            primary: true
+        },{
             text: "Save Gist",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'saveGist']);
@@ -262,14 +268,6 @@ function handleFileButton(evt){
                 File.loadScriptsFromFilesystem(evt);
                 modal.hide();
             }
-        },{
-            text: "New",
-            handler: function(modal) {
-                _gaq.push(['_trackEvent', 'File', 'new']);
-                stopAndClearScripts();
-                modal.hide();
-            },
-            primary: true
         }]
     });
     fileModel.show();

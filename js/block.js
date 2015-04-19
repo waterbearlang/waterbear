@@ -15,6 +15,7 @@
 'use strict';
     var elem = dom.html;
     var workspace = dom.find(document.body, 'wb-workspace');
+    var scriptspace = dom.find(document.body, 'wb-workspace > wb-contains');
     var selectedType = 'null';
     var BLOCK_MENU = document.querySelector('sidebar');
 
@@ -825,11 +826,34 @@ function startDragBlock(evt){
     }
     if (dragStart === 'script'){
         origTarget.classList.add('hide');
-        dom.child(origTarget.parentElement, 'input, select').classList.remove('hide');
+        var siblingInput = dom.child(origTarget.parentElement, 'input, select');
+        if (siblingInput){
+            siblingInput.classList.remove('hide');
+        }
     }
     dragTarget.classList.add('dragging');
     dragTarget.style.left = (evt.pageX - 15) + 'px';
     dragTarget.style.top = (evt.pageY - 15) + 'px';
+}
+
+
+function checkForScroll(evt){
+    requestAnimationFrame(checkForScroll);
+    if (!dragTarget){ return; }
+    var x = Event.pointerX;
+    var y = Event.pointerY;
+    var rect = scriptspace.getBoundingClientRect();
+    if (x < rect.left){
+        scriptspace.scrollLeft -= 5;
+    }else if (x > rect.right){
+        scriptspace.scrollLeft += 5;
+    }
+    if (y < rect.top){
+        scriptspace.scrollTop -= 5;
+    }else if (y > rect.bottom){
+        scriptspace.scrollTop += 5;
+    }
+    console.log('bottom: %s, scrollTop: %s, y: %s', rect.bottom, scriptspace.scrollTop, y);
 }
 
 function dragBlock(evt){
@@ -1087,6 +1111,9 @@ Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb
 Event.on(document.body, 'editor:dragging', null, dragBlock);
 Event.on(document.body, 'editor:drag-end', null, endDragBlock);
 Event.on(document.body, 'editor:drag-cancel', null, cancelDragBlock);
+
+requestAnimationFrame(checkForScroll);
+
 
 Event.on(workspace, 'editor:input', 'input', resizeInputOnChange);
 Event.on(workspace, 'editor:input', 'input, select', changeValueOnInputChange);

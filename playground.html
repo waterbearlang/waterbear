@@ -81,19 +81,14 @@
                 <wb-context script="control.loopOver" class="control">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
-                        <wb-local fortype="array,string">
+                    </wb-row>
+                    </wb-row>
+                        <wb-local>
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="index">index</wb-value>
+                                <wb-value value="indexOrKey">index/key</wb-value>
                             </wb-expression>
                         </wb-local>
-                    </wb-row>
-                    </wb-row>
-                        <wb-local fortype="object">
-                            <wb-expression type="string" script="control.getVariable">
-                                <wb-value value="key">key</wb-value>
-                            </wb-expression>
-                        </wb-local>
-                        <wb-local fortype="any">
+                        <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="value">value</wb-value>
                             </wb-expression>
@@ -475,6 +470,7 @@
                 </wb-step>
                 <wb-step script="color.shadow" class="color">
                     <wb-value type="color" value="#FF0000">shadow color</wb-value>
+                    <wb-value type="number" value="2">shadow blur</wb-value>
                 </wb-step>
             </wb-accordion>
             <wb-accordion class="image">
@@ -519,6 +515,9 @@
                     Math
                 </header>
                 <p>In addition to performing math on numbers you can also use many operations on arrays and vectors too.</p>
+                <wb-expression script="math.stringToNumber" type="number">
+                    <wb-value type="string" value="0">as number</wb-value>
+                </wb-expression>
                 <wb-expression script="math.add" type="number">
                     <wb-value type="number,vector,array" value="0"></wb-value>
                     <wb-value type="number,vector,array" value="0">+</wb-value>
@@ -615,6 +614,12 @@
                 </wb-expression>
                 <wb-expression type="number" script="math.tau">
                     <wb-value>tau</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.deg2rad">
+                    <wb-value type="number" value="0">degrees to radians</wb-value>
+                </wb-expression>
+                <wb-expression type="number" script="math.rad2deg">
+                    <wb-value type="number" value="0">radians to degrees</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="random">
@@ -872,6 +877,9 @@
                 <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
                  <wb-step script="shape.draw" class="shape">
                     <wb-value type="shape">draw the shape</wb-value>
+                </wb-step>
+                <wb-step script="shape.setLineWidth" class="shape">
+                    <wb-value type="number" value="1">line width</wb-value>
                 </wb-step>
                 <wb-expression type="shape" script="shape.circle" class="shape">
                     <wb-value type="point">circle at</wb-value>

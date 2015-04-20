@@ -280,7 +280,7 @@ function handleExampleButton(evt){
     var fileModel = nanoModal("Load an example program.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
-            text: "Waterbear in Space",
+            text: "Space Bear",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
                 stopAndClearScripts();

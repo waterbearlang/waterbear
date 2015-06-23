@@ -176,12 +176,19 @@ function updateVariableType(evt){
 }
 
 function createVariableToLocalAssociation(evt){
-    var setVariableBlock = evt.target;
-    if (!setVariableBlock.hasAttribute('id')){
-        var id = randomId();
-        setVariableBlock.setAttribute('id', id);
-        var local = dom.find(setVariableBlock, 'wb-local [script="control.getVariable"]');
-        local.setAttribute('for', id);
+    var blockWithLocals = evt.target;
+    var id;
+    if (!blockWithLocals.hasAttribute('id')){
+        id = randomId();
+        blockWithLocals.setAttribute('id', id);
+    }else{
+        id = blockWithLocals.id;
+    }
+    var locals = dom.findAll(workspace, '#' + id + ' > wb-row > wb-local');
+    if (locals.length){
+        locals.forEach(function(local){
+            local.setAttribute('for', id);
+        });
     }
 }
 
@@ -1123,4 +1130,3 @@ Event.on(workspace, 'editor:focusout',  '[script="control.setVariable"] input', 
 
 
 })();
-

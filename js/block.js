@@ -266,7 +266,7 @@ function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
 }
 
 function uniquifyVariableName(evt){
-    var setVariableBlock = evt.target;
+    var setVariableBlock = evt.target; // expects a block (wb-step, wb-context) 
     var input = dom.find(setVariableBlock, 'input');
     ensureNameIsUniqueInContext(input);
 }
@@ -1113,6 +1113,7 @@ Event.on(document.body, 'editor:dragging', null, dragBlock);
 Event.on(document.body, 'editor:drag-end', null, endDragBlock);
 Event.on(document.body, 'editor:drag-cancel', null, cancelDragBlock);
 
+// allow blocks to be dragged to parts of the script which are out of current view
 requestAnimationFrame(checkForScroll);
 
 

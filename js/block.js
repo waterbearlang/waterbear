@@ -440,12 +440,10 @@ function handleVariableInput(evt){
     var input = evt.target;
     var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
     if (! dom.matches(stepBlock, '[script="control.getVariable"]')){
-        console.log('block is not getVariable');
         return;
     }
     // keep from literal value matching
     if (! dom.matches(input.parentElement, ':first-of-type')){
-        console.log('Matching literal, bailing'); // ???
         return;
     }
     var context = dom.closest(stepBlock, 'wb-contains');
@@ -516,7 +514,6 @@ function getLocalInstancesToUpdate(parentContext, setVarId){
 }
 
 function updateVariableNameInInstances(newVariableName, localInstances){
-    console.log('updating %s instances to %s', localInstances.length, newVariableName);
     localInstances.forEach(function(instance){
         var wbValue = dom.find(instance, 'wb-value');
         wbValue.setAttribute('value', newVariableName);
@@ -1152,9 +1149,7 @@ function setTypeOfVariable(variableStep, type){
 function updateLocalInstancesType(variableStep, type){
     var parentContext = dom.closest(variableStep, 'wb-contains');
     var localInstances = getLocalInstancesToUpdate(parentContext, variableStep.id);
-    console.log('updating type of %s (%s) for %s instances to %s', variableStep.localName, variableStep.id, localInstances, type);
     localInstances.forEach(function(instance){
-        console.log('updating % instance', instance.localName);
         // set instance
         dom.closest(instance, 'wb-expression').setAttribute('type', type);
         // FIXME: needs to percolate to container, esp. if in setVariable

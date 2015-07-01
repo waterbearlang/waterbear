@@ -119,9 +119,26 @@ BlockProto.hasLocal = function(){
 }
 
 BlockProto.getLocals = function(){
-    // For Steps this should work, but for contexts we need to gather the steps and contexts
+    // Default, over-ride in each subclass
     return [];
 }
+
+BlockProto.getInstances = function(){
+    var instances = [];
+    var self = this;
+    this.getLocals().forEach(function(theLocal){
+        instances = instances.concat(getLocalInstances(self, theLocal.id));
+    });
+    return instances;
+}
+
+BlockProto.removeInstances = function(){
+    var instances = this.getInstances();
+    instances.forEach(function(instance){
+        instance.parentElement.removeChild(instance);
+    });
+}
+
 
 BlockProto.getAncestorContexts = function(){
     var context = dom.parent(this, 'wb-context, wb-workspace');
@@ -448,7 +465,7 @@ function handleVariableInput(evt){
     }
     var context = dom.closest(stepBlock, 'wb-contains');
     var newVariableName = input.value;
-    updateVariableNameInInstances(newVariableName, getLocalInstancesToUpdate(context, stepBlock.id));
+    updateVariableNameInInstances(newVariableName, getLocalInstances(context, stepBlock.id));
     // evt.stopPropagation();
 }
 
@@ -493,7 +510,7 @@ function ensureNameIsUniqueInContext(input){
     if (newVariableName !== oldVariableName){
         input.value = newVariableName;
         valueBlock.setAttribute('value', newVariableName);
-        var variablesToUpdate = getLocalInstancesToUpdate(parentContext, getVariable.id);
+        var variablesToUpdate = getLocalInstances(parentContext, getVariable.id);
         updateVariableNameInInstances(newVariableName, variablesToUpdate);
     }
 }
@@ -509,7 +526,7 @@ function incrementName(name){
     return baseName + (incrementalNumber + 1);
 }
 
-function getLocalInstancesToUpdate(parentContext, setVarId){
+function getLocalInstances(parentContext, setVarId){
     return dom.findAll(workspace, '[for="' + setVarId + '"]');
 }
 
@@ -1052,6 +1069,7 @@ function endDragBlock(evt){
             originalBlock.classList.remove('hide');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Undo.addNewEvent(deleteEvent);                 //add new event to undo
+            originalBlock.removeInstances(); // FIXME: Make this undo-able!
         }
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
@@ -1148,7 +1166,7 @@ function setTypeOfVariable(variableStep, type){
 
 function updateLocalInstancesType(variableStep, type){
     var parentContext = dom.closest(variableStep, 'wb-contains');
-    var localInstances = getLocalInstancesToUpdate(parentContext, variableStep.id);
+    var localInstances = getLocalInstances(parentContext, variableStep.id);
     localInstances.forEach(function(instance){
         // set instance
         dom.closest(instance, 'wb-expression').setAttribute('type', type);
@@ -1160,7 +1178,7 @@ function updateLocalInstancesType(variableStep, type){
 // Exports
 
 window.block = {
-    getLocalInstancesToUpdate: getLocalInstancesToUpdate
+    getLocalInstances: getLocalInstances
 }
 
 // Event handling

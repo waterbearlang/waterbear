@@ -9,19 +9,7 @@
     <link rel="stylesheet" href="css/block.css" />
 	<link rel="stylesheet" href="css/app.css" />
     <script src="lib/prefixfree.min.js"></script>
-    <script type="text/javascript">
-      <!-- Google Analytics -->
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-58671174-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
+    <script src="lib/ga.js"></script>
 </head>
 <body>
     <header>
@@ -48,7 +36,7 @@
                     Controls
                 </header>
                 <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
-                <wb-context script="control.eachFrame" class="control">
+                <wb-context script="control.eachFrame" class="control" toplevel="true">
                     <wb-row>
                         <wb-value>each frame</wb-value>
                     </wb-row>
@@ -67,30 +55,30 @@
                 </wb-context>
                 <wb-step script="control.setVariable" class="control">
                     <wb-row>
-                        <wb-value type="text" allow="literal" value="variable">set</wb-value>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="any" script="control.getVariable">
+								<wb-value type="text" allow="literal" value="variable"></wb-value>
+							</wb-expression>
+						</wb-local>
                         <wb-value type="any">to</wb-value>
                     </wb-row>
                     <wb-row>
-                        <wb-local>
-                            <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="variable">variable</wb-value>
-                            </wb-expression>
-                        </wb-local>
                     </wb-row>
                 </wb-step>
                 <wb-context script="control.loopOver" class="control">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
                     </wb-row>
-                    </wb-row>
-                        <wb-local>
+                    <wb-row>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="indexOrKey">index/key</wb-value>
+                                <wb-value type="text" allow="literal" value="indexOrKey"></wb-value>
                             </wb-expression>
                         </wb-local>
-                        <wb-local>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="value">value</wb-value>
+                                <wb-value type="text" allow="literal" value="value"></wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
@@ -101,13 +89,13 @@
                 </wb-step>
                 <wb-context script="control.receive" class="control">
                     <wb-row>
-                        <wb-value type="text">when I receive</wb-value>
-                        <wb-value>message with data</wb-value>
+                        <wb-value type="text">when I receive message</wb-value>
                     </wb-row>
                     <wb-row>
-                        <wb-local>
+						<wb-value>with data</wb-value>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="data">data</wb-value>
+                                <wb-value type="text" allow="literal" value="data"></wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
@@ -136,12 +124,10 @@
                 <wb-step script="control.ask" class="control">
                     <wb-row>
                         <wb-value type="text,string">Ask</wb-value>
-                        <wb-value type="text" isvariable="true" allow="literal" value="variable">and store in variable</wb-value>
-                    </wb-row>
-                    <wb-row>
-                        <wb-local>
+                        <wb-value>and store answer as</wb-value>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="variable">variable</wb-value>
+                                <wb-value type="text" allow="literal" value="answer"></wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
@@ -1129,14 +1115,16 @@
     </wb-hbox>
     <output class="feedback"></output>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
-    <!-- polyfill for custom elements -->
     <script src="lib/ajax.js"></script>
+	<!-- polyfill for custom elements -->
     <script src="lib/document-register-element.js"></script>
     <script src="lib/sound.js"></script>
     <script src="lib/nanomodal.js"></script>
+	<!-- polyfill for setImmediate -->
     <script src="lib/setImmediate-1.0.2.js"></script>
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
+	<script src="js/undo.js"></script>
     <script src="js/runtime.js"></script>
 	<script src="js/dom.js"></script>
     <script src="js/widget.js"></script>

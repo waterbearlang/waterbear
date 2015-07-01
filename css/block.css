@@ -54,45 +54,39 @@ wb-step.dragging, wb-context.dragging, wb-expression.dragging{
     cursor: -webkit-grabbing;
 }
 
-wb-expression > header{
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 3px;
-}
-
 wb-value{
     display: block;
     text-align: right;
-    margin-left: 20px;
+    margin-right: 10px;
     white-space:nowrap;
 }
 
-wb-value wb-expression{
-    transform: scale(75%);
-}
-
 wb-row{
-    display: block;
+    display: flex;
+    flex-direction: row;
     text-align: right;
     margin-left: 20px;
     white-space: nowrap;
 }
 
 wb-local{
+    display: block;
+    /*flex: 1;*/
     padding: 0;
-    border: 3px solid white;
+    border: 2px solid white;
     border-radius: 3px;
-    margin: 2px 0;
+    margin: 0;
+    background-color: green;
 }
 
 wb-local > wb-expression {
     margin: 0;
-    font-size: .75em;
 }
 
 wb-row > wb-value, wb-row > wb-local{
-    display: inline-block;
+    display: block;
     margin-left: 0;
+    margin-right: 4px;
 }
 
 wb-value > * {
@@ -109,16 +103,12 @@ wb-unit{
     display: inline-block;
 }
 
-wb-local{
-    display: inline-block;
-}
-
 wb-local[fortype]{
     display: none;
 }
 
 wb-local[fortype].show{
-    display: inline-block;
+    display: block;
 }
 
 wb-context > wb-contains {
@@ -343,5 +333,3 @@ wb-expression[type=motion]{background-color: hsl(288, 53%, 56%); border-color: h
 .wb-icons{
     display: none;
 }
-
-

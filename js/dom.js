@@ -53,12 +53,31 @@
         return elem; // for chaining
     }
 
+    function walk(node, fn){
+        for (var i = 0; i < node.children.length; i++){
+            walk(node.children[i], fn);
+        }
+        return fn(node);
+    }
+
+    function replaceId(node){
+        // Remember: Only YOU can keep all IDs unique in the face of cloning
+        if (node.id){
+            node.id = util.randomId();
+        }
+    }
+
     var cloner = document.createElement('div');
     function clone(elem){
         // Cloned custom elements in Firefox do not preserve custom element lifecycle events
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1050113
         cloner.innerHTML = elem.outerHTML;
-        return cloner.removeChild(cloner.firstChild);
+        var clonedNode = cloner.removeChild(cloner.firstChild);
+        walk(clonedNode, replaceId); // replace any cloned IDs with unique ones
+        // Trigger on original elem, because clonedNode isn't in the DOM, so
+        // event doesn't bubble to document.body for capture
+        Event.trigger(elem, 'wb-cloned', clonedNode);
+        return clonedNode;
     }
 
     function appendChildren(e, children){

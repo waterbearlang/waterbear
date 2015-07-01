@@ -1007,6 +1007,11 @@
         ctx.stroke();
     }
 
+    function randomId(){
+        // Based on Paul Irish's random hex color:http://www.paulirish.com/2009/random-hex-color-code-snippets/
+        // Theoretically could return non-unique values, not going to let that keep me up at night
+        return 'k'+Math.floor(Math.random()*16777215).toString(16); // 'k' because ids have to start with a letter
+    }
 
     // exports
     window.util = {
@@ -1035,7 +1040,8 @@
         Sprite: Sprite,
         geolocation: geolocationModule,
         motion: motionModule,
-        WBImage: WBImage
+        WBImage: WBImage,
+        randomId: randomId
     };
 
 

@@ -74,6 +74,9 @@
         cloner.innerHTML = elem.outerHTML;
         var clonedNode = cloner.removeChild(cloner.firstChild);
         walk(clonedNode, replaceId); // replace any cloned IDs with unique ones
+        // Trigger on original elem, because clonedNode isn't in the DOM, so
+        // event doesn't bubble to document.body for capture
+        Event.trigger(elem, 'wb-cloned', clonedNode);
         return clonedNode;
     }
 

@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8" />
+<!DOCTYPE html><html lang="en"><head>
+	<meta charset="utf-8">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
 	<title>Waterbear Playground</title>
-	<link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/widget.css" />
-    <link rel="stylesheet" href="css/block.css" />
-	<link rel="stylesheet" href="css/app.css" />
-	<link rel="stylesheet" href="lib/notiFire.css" />
+	<link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/widget.css">
+    <link rel="stylesheet" href="css/block.css">
+	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="lib/notiFire.css">
     <script src="lib/prefixfree.min.js"></script>
     <script src="lib/ga.js"></script>
 </head>
 <body>
     <header>
-        <a href="index.html"><img src="images/logo/waterbear_icon_logo.svg" /></a>
+        <a href="index.html"><img src="images/logo/waterbear_icon_logo.svg"></a>
     	<h1>Waterbear with Custom Elements</h1>
     </header>
     <wb-hbox>
@@ -33,7 +31,7 @@
             <button class="availableBlocks">Remove Filter</button>
             <wb-accordion class="control">
                 <header>
-                    <img class="cat-icon" src="images/icon/control.svg" />
+                    <img class="cat-icon" src="images/icon/control.svg">
                     Controls
                 </header>
                 <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
@@ -145,11 +143,11 @@
             </wb-accordion>
             <wb-accordion class="sprite">
                 <header>
-                    <img class="cat-icon" src="images/icon/sprite.svg" />
+                    <img class="cat-icon" src="images/icon/sprite.svg">
                     Sprites
                 </header>
                 <p>Sprites are images or shapes that can have momentum and heading direction applied to them for animation and games.</p>
-                <wb-expression type="sprite" script="sprite.create" />
+                <wb-expression type="sprite" script="sprite.create">
                     <wb-value type="wb-image,shape,sprite">sprite with</wb-value>
                 </wb-expression>
                 <wb-step script="sprite.accelerate" class="sprite">
@@ -211,11 +209,11 @@
             </wb-accordion>
             <wb-accordion class="sound">
                 <header>
-                    <img class="cat-icon" src="images/icon/sound.svg" />
+                    <img class="cat-icon" src="images/icon/sound.svg">
                     Sound
                 </header>
                 <p>Play and manipulate existing sound files or synthesize new sounds.</p>
-                <wb-expression type="sound" isAsset="true" script="sound.get">
+                <wb-expression type="sound" isasset="true" script="sound.get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
                 </wb-expression>
                 <wb-step script="sound.play" class="sound">
@@ -238,7 +236,7 @@
                         <wb-value type="number" min="0" value="2">from</wb-value>
                         <wb-unit>seconds</wb-unit>
                     <wb-row>
-                </wb-step>
+                </wb-row></wb-row></wb-step>
                 <wb-step script="sound.pan" class="sound">
                     <wb-value type="sound">balance</wb-value>
                     <wb-value type="number" min="-1" max="1" value="0"></wb-value>
@@ -317,7 +315,7 @@
             </wb-accordion>
             <wb-accordion class="array">
                 <header>
-                    <img class="cat-icon" src="images/icon/array.svg" />
+                    <img class="cat-icon" src="images/icon/array.svg">
                     Arrays
                 </header>
                 <p>Arrays are lists of things. You can add, remove, and loop over these lists.</p>
@@ -367,7 +365,7 @@
             </wb-accordion>
             <wb-accordion class="boolean">
                 <header>
-                    <img class="cat-icon" src="images/icon/boolean.svg" />
+                    <img class="cat-icon" src="images/icon/boolean.svg">
                     Boolean
                 </header>
                 <p>Booleans are either True or False. There are many operations for comparing and mixing them.</p>
@@ -389,7 +387,7 @@
             </wb-accordion>
             <wb-accordion class="stage">
                 <header>
-                    <img class="cat-icon" src="images/icon/stage.svg" />
+                    <img class="cat-icon" src="images/icon/stage.svg">
                     Stage
                 </header>
                 <p>Stage is the area where scripts are performed.</p>
@@ -413,11 +411,11 @@
 				</wb-expression>
 				<wb-expression type="number" script="stage.randomY">
 					<wb-value>Random y<wb-value>
-				</wb-expression>
+				</wb-value></wb-value></wb-expression>
             </wb-accordion>
             <wb-accordion class="color">
                 <header>
-                    <img class="cat-icon" src="images/icon/color.svg" />
+                    <img class="cat-icon" src="images/icon/color.svg">
                     Colors
                 </header>
                 <p>There are several ways to specify colors.</p>
@@ -462,11 +460,11 @@
             </wb-accordion>
             <wb-accordion class="image">
                 <header>
-                    <img class="cat-icon" src="images/icon/image.svg" />
+                    <img class="cat-icon" src="images/icon/image.svg">
                     Images
                 </header>
                 <p>Images are pictures loaded from the web. They can be positioned and resized.</p>
-                <wb-expression type="wb-image" isAsset="true" script="image.get" class="image">
+                <wb-expression type="wb-image" isasset="true" script="image.get" class="image">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                 </wb-expression>
                 <wb-expression type="number" script="image.getWidth">
@@ -498,7 +496,7 @@
             </wb-accordion>
             <wb-accordion class="math">
                 <header>
-                    <img class="cat-icon" src="images/icon/math.svg" />
+                    <img class="cat-icon" src="images/icon/math.svg">
                     Math
                 </header>
                 <p>In addition to performing math on numbers you can also use many operations on arrays and vectors too.</p>
@@ -567,8 +565,8 @@
                 </wb-expression>
                 <wb-expression script="math.pow" type="number">
                     <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">to the power of</wb-number>
-                </wb-expression>
+                    <wb-value type="number" value="0">to the power of
+                </wb-value></wb-expression>
                 <wb-expression type="number" script="math.max">
                     <wb-value type="number" value="0">max</wb-value>
                 </wb-expression>
@@ -611,7 +609,7 @@
             </wb-accordion>
             <wb-accordion class="random">
                 <header>
-                    <img class="cat-icon" src="images/icon/random.svg" />
+                    <img class="cat-icon" src="images/icon/random.svg">
                     Random
                 </header>
                 <p>There are many types of randomness in Waterbear.</p>
@@ -633,7 +631,7 @@
             </wb-accordion>
             <wb-accordion class="vector">
                 <header>
-                    <img class="cat-icon" src="images/icon/vector.svg" />
+                    <img class="cat-icon" src="images/icon/vector.svg">
                     Vectors
                 </header>
                 <p>Waterbear vectors are 2-D objects expressing x and y coordinates, but also a direction and magnitude (useful for speed, acceleration, distance).</p>
@@ -680,7 +678,7 @@
             </wb-accordion>
             <wb-accordion class="object">
                 <header>
-                    <img class="cat-icon" src="images/icon/object.svg" />
+                    <img class="cat-icon" src="images/icon/object.svg">
                     Objects
                 </header>
                 <p>Objects are general-purpose containers where you can associate names (keys) with objects (values) like in a dictionary.</p>
@@ -705,7 +703,7 @@
             </wb-accordion>
             <wb-accordion class="string">
                 <header>
-                    <img class="cat-icon" src="images/icon/string.svg" />
+                    <img class="cat-icon" src="images/icon/string.svg">
                     Strings
                 </header>
                 <p>Strings are simple bits of text. You can search them, combine them, and break them up.</p>
@@ -783,7 +781,7 @@
             </wb-accordion>
             <wb-accordion class="point">
                 <header>
-                    <img class="cat-icon" src="images/icon/point.svg" />
+                    <img class="cat-icon" src="images/icon/point.svg">
                     Points
                 </header>
                 <p>Points are x,y coordinates like vectors but without magnitude and direction.</p>
@@ -801,7 +799,7 @@
                     <wb-value>random point</wb-value>
                 </wb-expression>
                 <wb-expression type="number" script="point.x">
-                    <wb-value type="point,vector" >x of</wb-value>
+                    <wb-value type="point,vector">x of</wb-value>
                 </wb-expression>
                 <wb-expression type="number" script="point.y">
                     <wb-value type="point,vector">y of</wb-value>
@@ -812,39 +810,37 @@
             </wb-accordion>
             <wb-accordion class="path">
                 <header>
-                    <img class="cat-icon" src="images/icon/path.svg" />
+                    <img class="cat-icon" src="images/icon/path.svg">
                     Paths
                 </header>
                 <p>Paths are drawing instructions for producing an image from a series of points.</p>
-                <wb-step script = "path.lineStyle" type="path">
+                <wb-step script="path.lineStyle" type="path">
                     <wb-value type="number">line width</wb-value>
                     <wb-value type="color" value="#0000FF">line color</wb-value>
-                    <wb-value type="list" allow="literal"
-                        options="butt,round,square" value="butt">cap style</wb-value>
-                    <wb-value type="list" allow="literal"
-                        options="round,bevel,miter" value="round">join style</wb-value>
+                    <wb-value type="list" allow="literal" options="butt,round,square" value="butt">cap style</wb-value>
+                    <wb-value type="list" allow="literal" options="round,bevel,miter" value="round">join style</wb-value>
                 </wb-step>
-                <wb-expression script = "path.moveTo" type="path">
+                <wb-expression script="path.moveTo" type="path">
                     <wb-value type="point">move to point</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.lineTo" type ="path">
+                <wb-expression script="path.lineTo" type="path">
                     <wb-value type="point">draw a line to</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.bezierCurveTo" type ="path">
+                <wb-expression script="path.bezierCurveTo" type="path">
                     <wb-value type="point">draw a bezier curve to</wb-value>
                     <wb-value type="point">first control point</wb-value>
                     <wb-value type="point">second control point</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.quadraticCurveTo" type ="path">
+                <wb-expression script="path.quadraticCurveTo" type="path">
                     <wb-value type="point">draw a quadric curve to</wb-value>
                     <wb-value type="point">control point</wb-value>
                 </wb-expression>
-                <wb-expression script = "path.arcTo" type ="path">
+                <wb-expression script="path.arcTo" type="path">
                     <wb-value type="number">draw an arc with radius</wb-value>
                     <wb-value type="point">first control point</wb-value>
                     <wb-value type="point">second control point</wb-value>
                 </wb-expression>
-                <wb-expression script="path.closePath" type ="path">
+                <wb-expression script="path.closePath" type="path">
                     close path
                 </wb-expression>
                 <wb-expression script="path.pathSet" type="shape">
@@ -858,7 +854,7 @@
             </wb-accordion>
             <wb-accordion class="shape">
                 <header>
-                    <img class="cat-icon" src="images/icon/shape.svg" />
+                    <img class="cat-icon" src="images/icon/shape.svg">
                     Shapes
                 </header>
                 <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
@@ -887,7 +883,7 @@
             </wb-accordion>
             <wb-accordion class="rect">
                 <header>
-                    <img class="cat-icon" src="images/icon/rect.svg" />
+                    <img class="cat-icon" src="images/icon/rect.svg">
                     Rects
                 </header>
                 <p>It turns out to be frequently useful to be able to represent a rectangle.</p>
@@ -925,7 +921,7 @@
             </wb-accordion>
             <wb-accordion class="sense">
                 <header>
-                    <img class="cat-icon" src="images/icon/sense.svg" />
+                    <img class="cat-icon" src="images/icon/sense.svg">
                     Input
                 </header>
                 <p>Programs can get input from the mouse, touch, key presses, and more.</p>
@@ -945,14 +941,14 @@
                 <wb-context script="input.whenKeyPressed" class="input">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
-                    </wb-context>
+                    </wb-value></wb-value></wb-context>
                     <wb-expression type="motion" script="motion.tiltDirection">
                         tilt direction
                     </wb-expression>
                 </wb-accordion>
                 <wb-accordion class="geolocation">
                     <header>
-                        <img class="cat-icon" src="images/icon/geolocation.svg" />
+                        <img class="cat-icon" src="images/icon/geolocation.svg">
                         Geolocation
                     </header>
                     <p>Where in the world is your progam running?</p>
@@ -989,7 +985,7 @@
                 </wb-accordion>
                 <wb-accordion class="size">
                     <header>
-                        <img class="cat-icon" src="images/icon/size.svg" />
+                        <img class="cat-icon" src="images/icon/size.svg">
                         Sizes
                     </header>
                     <p>A size captures both width and height in one convenient package.</p>
@@ -1018,56 +1014,51 @@
                 </wb-accordion>
                 <wb-accordion class="text">
                     <header>
-                        <img class="cat-icon" src="images/icon/text.svg" />
+                        <img class="cat-icon" src="images/icon/text.svg">
                         Text
                     </header>
                     <p>Text is like a string, but formatted for printing to the screen.</p>
                     <wb-step script="text.setFont" class="text">
                         <wb-row>
-                            <wb-value type = "number" value = "12">font</wb-value>
-                            <wb-value type="list" allow="literal"
-                            options="px,em,%,pt" value="px"></wb-value>
+                            <wb-value type="number" value="12">font</wb-value>
+                            <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"></wb-value>
                         </wb-row>
-                        <wb-value type = "text" value = "sans-serif"></wb-value>
+                        <wb-value type="text" value="sans-serif"></wb-value>
                     </wb-step>
                     <wb-step script="text.textAlign" class="text">
                         <wb-row>
-                            <wb-value type="list"  allow="literal"
-                            options="left,right,center,start,end"
-                            value="left">align text to the</wb-value>
+                            <wb-value type="list" allow="literal" options="left,right,center,start,end" value="left">align text to the</wb-value>
                         </wb-row>
                     </wb-step>
                     <wb-step script="text.textBaseline" class="text">
                         <wb-row>
-                            <wb-value type="list"  allow="literal"
-                            options="alphabetic,top,hanging,middle,bottom,ideographic"
-                            value="alphabetic">text baseline</wb-value>
+                            <wb-value type="list" allow="literal" options="alphabetic,top,hanging,middle,bottom,ideographic" value="alphabetic">text baseline</wb-value>
                         </wb-row>
                     </wb-step>
-                    <wb-step script = "text.fillText" class="text">
-                        <wb-value type = "text,string">fill text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-step script="text.fillText" class="text">
+                        <wb-value type="text,string">fill text</wb-value>
+                        <wb-value type="number">x</wb-value>
+                        <wb-value type="number">y</wb-value>
                     </wb-step>
-                    <wb-step script = "text.fillTextWidth" class="text">
-                        <wb-value type = "text,string">fill text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
-                        <wb-value type = "number">max width</wb-value>
+                    <wb-step script="text.fillTextWidth" class="text">
+                        <wb-value type="text,string">fill text</wb-value>
+                        <wb-value type="number">x</wb-value>
+                        <wb-value type="number">y</wb-value>
+                        <wb-value type="number">max width</wb-value>
                     </wb-step>
-                    <wb-step script = "text.strokeText" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
+                    <wb-step script="text.strokeText" class="text">
+                        <wb-value type="text,string">stroke text</wb-value>
+                        <wb-value type="number">x</wb-value>
+                        <wb-value type="number">y</wb-value>
                     </wb-step>
-                    <wb-step script = "text.strokeTextWidth" class="text">
-                        <wb-value type = "text,string">stroke text</wb-value>
-                        <wb-value type = "number">x</wb-value>
-                        <wb-value type = "number">y</wb-value>
-                        <wb-value type = "number">max width</wb-value>
+                    <wb-step script="text.strokeTextWidth" class="text">
+                        <wb-value type="text,string">stroke text</wb-value>
+                        <wb-value type="number">x</wb-value>
+                        <wb-value type="number">y</wb-value>
+                        <wb-value type="number">max width</wb-value>
                     </wb-step>
-                    <wb-expression type = "number" script = "text.width">
-                        <wb-value type = "text,string">width of text</wb-value>
+                    <wb-expression type="number" script="text.width">
+                        <wb-value type="text,string">width of text</wb-value>
                     </wb-expression>
                 </wb-accordion>
             </sidebar>
@@ -1081,10 +1072,10 @@
     <wb-splitter></wb-splitter>
     <wb-vbox>
         <div class="tabs-menu">
-            <button class="show-canvas" pressed='true'>Results</button>
-            <button class="show-tutorial" hidden='true'>Tutorial</button>
+            <button class="show-canvas" pressed="true">Results</button>
+            <button class="show-tutorial" hidden="true">Tutorial</button>
         </div>
-        <wb-displaybox class="canvas" selected='true'>
+        <wb-displaybox class="canvas" selected="true">
             <wb-playground>
                 <div class="menu">
                     <button class="do-run">Run</button>
@@ -1136,5 +1127,6 @@
     <script src="js/file.js"></script>
     <script src="js/queryparams.js"></script>
 
-</body>
-</html>
+
+
+</body></html>

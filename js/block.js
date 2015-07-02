@@ -116,25 +116,58 @@ BlockProto.gatherValues = function(scope){
 
 BlockProto.hasLocal = function(){
     return !!this.getLocals().length;
-}
+};
 
 BlockProto.getLocals = function(){
     // Default, over-ride in each subclass
     return [];
-}
+};
+
+BlockProto.getFreeInstances = function(){
+    // get contained instances, so we can get the local from them
+    return dom.findAll(this, '[for]');
+};
 
 BlockProto.getInstances = function(){
+    // Get instances from locals
     var instances = [];
     var self = this;
     this.getLocals().forEach(function(theLocal){
         instances = instances.concat(getLocalInstances(self, theLocal.id));
     });
     return instances;
+};
+
+// Validation maintenance
+BlockProto.removeInstances = function(){
+    // Called when block they are instances of is being removed
+    var instances = this.getInstances();
+    if (instances.length){
+        app.warn('Removing ' + instances.length + ' instances of '
+    + this.getAttribute('script') + ' because their value was removed', true);
+    }
+    instances.forEach(function(instance){
+        // FIXME: Some animation here would be nice
+        instance.parentElement.removeChild(instance);
+    });
 }
 
-BlockProto.removeInstances = function(){
-    var instances = this.getInstances();
-    instances.forEach(function(instance){
+// Validation maintenance
+BlockProto.removeOutOfScopeInstances = function(){
+    // Called when a block is dragged to a new location, to cull any instances
+    // which would now be out of scope.
+    var context = dom.closest(this, 'wb-contains');
+    var invalidInstances = this.getInstances().filter(function(instance){
+        // FIXME? Do I need to test against each wb-contains?
+        // this will allow instances to be in the header of the context
+        return !context.contains(instance);
+    });
+    if (invalidInstances.length){
+    app.warn('Removing ' + invalidInstances.length + ' instances of '
++ this.getAttribute('script') + ' because the are no longer in scope', true);
+    }
+    invalidInstances.forEach(function(instance){
+        // FIXME: Some animation here would be nice
         instance.parentElement.removeChild(instance);
     });
 }
@@ -404,6 +437,7 @@ ExpressionProto.detachedCallback = function expressionDetached(){
     }
     this.parent = null;
 };
+
 ExpressionProto.gatherValues = function gatherValues(scope){
     var value = this.getAttribute('value');
     if (!value){
@@ -411,6 +445,11 @@ ExpressionProto.gatherValues = function gatherValues(scope){
     }
     return [value];
 };
+
+ExpressionProto.removeInstances = function(){
+    /* do nothing */
+};
+
 ExpressionProto.run = function(scope){
     if (!this.fn){
         var fnName = this.getAttribute('script').split('.');
@@ -868,6 +907,8 @@ ContainsProto.getAllContextLocals = function(){
     return dom.closest(this, 'wb-context, wb-workspace').getAllContextLocals();
 }
 
+ContainsProto.getFreeInstances = BlockProto.getFreeInstances;
+
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
 Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
@@ -960,7 +1001,7 @@ function dragBlock(evt){
     // Check if the user dragged over the sidebar.
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
-        app.warn('drop here to delete block(s)');
+        app.tip('drop here to delete block(s)');
         return;
     }
 
@@ -984,7 +1025,7 @@ function dragBlock(evt){
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
             if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
-                app.warn('drop here to add block to script');
+                app.tip('drop here to add block to script');
             }else{
                 app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');
                 dropTarget = null;
@@ -1005,22 +1046,39 @@ function dragBlock(evt){
 function dropTargetIsContainer(potentialDropTarget){
    dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
    // FIXME: Don't drop onto locals
+   if (dropTarget && dragTarget){
+       var localId = dragTarget.getAttribute('for');
+       if (localId){
+           var local = document.getElementById(localId);
+           var localContext = dom.closest(local, 'wb-contains');
+           if (!localContext.contains(dropTarget) && localContext !== dropTarget){
+               dropTarget = null;
+               app.warn('instances can only be dropped within the scope of their local');
+           }
+       }
+   }
    if (dropTarget){
       if (dropTarget.matches('wb-contains')){
-         app.warn('drop to add to top of the block container');
+         app.tip('drop to add to top of the block container');
       }else{
-         app.warn('drop to add after this block');
+         app.tip('drop to add after this block');
       }
    }
 }
 
-function addToContains(block, evt, addBlockEvent){
+function addToContains(block, evt, addBlockEvent, originalBlock){
     // dropping directly into a contains section
     // insert as the first block unless dropped after the entire script
-    addBlockEvent.addedBlock = block;
     if(dragStart === 'script' && addBlockEvent.type !== 'add-var-block'){
         addBlockEvent.type = 'move-block';
+        // Move a step or context block within the script
+        // Maintain original IDs for locals
+        var clonedBlock = block;
+        block = originalBlock;
+        clonedBlock.parentElement.removeChild(clonedBlock);
+        block.classList.remove('hide');
     }
+    addBlockEvent.addedBlock = block;
     if (dropTarget.matches('wb-contains')){
         if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
             dropTarget.appendChild(block);
@@ -1033,6 +1091,10 @@ function addToContains(block, evt, addBlockEvent){
         addBlockEvent.nextBlock = dropTarget.nextElementSibling;
         addBlockEvent.addedTo = dropTarget.parentElement;
         dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
+    }
+    if (addBlockEvent.type === 'move-block'){
+        // how can it now be out of context?
+        block.removeOutOfScopeInstances();
     }
     Undo.addNewEvent(addBlockEvent);
 }
@@ -1094,8 +1156,8 @@ function endDragBlock(evt){
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
     }else if(dragTarget.matches('wb-context, wb-step')){
-        var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
-        addToContains(dragTarget, evt, addBlockEvent);
+        var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
+        addToContains(dragTarget, evt, addBlockEvent, originalBlock);
     }else{
         dragTarget.parentElement.removeChild(dragTarget);
     }
@@ -1169,16 +1231,20 @@ function updateLocalInstancesType(variableStep, type){
     var localInstances = getLocalInstances(parentContext, variableStep.id);
     localInstances.forEach(function(instance){
         // set instance
-        dom.closest(instance, 'wb-expression').setAttribute('type', type);
+        var expr = dom.closest(instance, 'wb-expression');
+        expr.setAttribute('type', type);
         // FIXME: needs to percolate to container, esp. if in setVariable
+        // Is this instance still valid now?
+        var types = dom.parent(expr, 'wb-value').getAttribute('type').split(',');
+        if (types.indexOf('any') < 0 && types.indexOf(type) < 0){
+            // FIXME: Should we just mark these and refuse to run the script
+            // while it is invalid? Not sure if auto-removing them is good UI.
+            // Maybe mark then and provide a button to remove all of them at
+            // user discretion?
+            app.warn('Removing instance of ' + instance.getAttribute('script') + ' because it now has a type which is illegal in this position', true);
+            instance.parentElement.removeChild(instance);
+        }
     });
-}
-
-
-// Exports
-
-window.block = {
-    getLocalInstances: getLocalInstances
 }
 
 // Event handling

@@ -23,5 +23,8 @@
   "homepage": "https//waterbearlang.com/",
   "devDependencies": {
     "node-qunit-phantomjs": "^1.2.0"
+  },
+  "dependencies": {
+    "messg": "^1.3.4"
   }
 }

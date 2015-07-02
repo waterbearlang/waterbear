@@ -22,6 +22,17 @@ body:not(.block-dragging) wb-expression {
     cursor: -webkit-grab;
 }
 
+.no-drop{
+    cursor: no-drop;
+}
+
+.ok-drop{
+    cursor: move;
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
 wb-expression{
     border-radius: 0;
     text-align: right;

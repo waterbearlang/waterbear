@@ -216,7 +216,7 @@
                 }else{
                     evt.invalid = true;
                     evt.invalidReason = 'Multiple touches present';
-                    console.log('multiple touches');
+                    console.warn('multiple touches');
                     return evt;
                 }
                 evt.target = touch.target;
@@ -299,7 +299,6 @@
             return undefined;
         }
         // prevent text selection while dragging
-        document.body.classList.add('dragging');
         Event.pointerDown = true;
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
@@ -312,6 +311,7 @@
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) { return undefined; }
         if (!Event.pointerDown) { return undefined; }
+        document.body.classList.add('dragging');
         isDragging = true;
         forward(dragTarget, 'drag-start', evt);
         return false;

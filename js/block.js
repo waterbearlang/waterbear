@@ -1264,31 +1264,36 @@ function updateLocalInstancesType(variableStep, type){
 
 // Manage block selections
 
-function selectValue(evt){
+function manageSelections(evt){
+    var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
+    if (!block) return;
+    if (block.localName == 'wb-value'){
+        selectByValue(block);
+    }else{
+        selectByBlock(block);
+    }
+}
+
+function selectByValue(valueBlock){
     // Todo:
     // * make sure this is a valid block to select
     // * move selection to next block as needed
-    var value = evt.target;
-    if (value.localName === 'input'){
-        value = dom.closest(value, 'wb-value');
-    }
     var oldValue = dom.find(workspace, '.selected-value');
     if (oldValue){
-        if (oldValue === value){
+        if (oldValue === valueBlock){
             /* nothing to do */
             return;
         }else{
             oldValue.classList.remove('selected-value');
         }
     }
-    value.classList.add('selected-value');
+    valueBlock.classList.add('selected-value');
 }
 
-function selectBlock(evt){
+function selectByBlock(block){
     // Todo:
     // * make sure this is a valid block to select
     // * move selection to next block as needed
-    var block = evt.target;
     var oldBlock = dom.find(workspace, '.selected-block');
     if (oldBlock){
         if (oldBlock === block){
@@ -1334,7 +1339,6 @@ Event.on(workspace, 'editor:blur',  'wb-local input', handleVariableBlur); // Mo
 Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); // All other browsers
 
 /* Some helpers for selections */
-Event.on(workspace, 'editor:click', 'wb-value, input', selectValue);
-Event.on(workspace, 'editor:click', 'wb-step, wb-context, wb-contains, wb-expression', selectBlock);
+Event.on(workspace, 'editor:click', '*', manageSelections);
 
 })();

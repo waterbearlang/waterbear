@@ -42,7 +42,7 @@ page.open(pageName, function (status) {
                 return;
             }
 
-            var namespace = namespaceAttr.value, functionName = functionAttr;
+            var namespace = namespaceAttr.value, functionName = functionAttr.value;
 
             var element = runtime[namespace];
 
@@ -54,12 +54,12 @@ page.open(pageName, function (status) {
             var fun = element[functionName];
 
             if (typeof fun === 'undefined') {
-                addBadScript(block, 'function ' + functionName + ' is undefined');
+                addBadScript(block, 'function ' + namespace + '.' + functionName + ' is undefined');
                 return;
             }
 
             if (typeof fun !== 'function') {
-                addBadScript(block, 'function' + functionName + ' is not a function');
+                addBadScript(block, 'function' + namespace + '.' + functionName + ' is not a function');
                 return;
             }
         });

@@ -26,11 +26,18 @@ body:not(.block-dragging) wb-expression {
     cursor: no-drop;
 }
 
-.ok-drop{
+.drop-target{
     cursor: move;
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
+}
+
+wb-contains.drop-target{
+    background-color: #ffffe0;
+}
+wb-value.drop-target input{
+    background-color: #fafad2;
 }
 
 wb-expression{
@@ -282,56 +289,6 @@ wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg);
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
 wb-expression[type=geolocation]:before{ background-image: url(../images/icon/geolocation.svg); }
 wb-expression[type=size]:before{ background-image: url(../images/icon/size.svg);}
-
-/* block background colour by category*/
-[ns="control"], .block-dragging [ns="control"].drop-target{ background-color: hsl(0, 53%, 56%); border-color: hsl(0, 53%, 40%); }
-.block-dragging [ns="control"]{ background-color: hsl(0, 43%, 46%); border-color: hsl(0, 53%, 40%); }
-[ns="sprite"]{ background-color: hsl(156, 53%, 56%); border-color: hsl(156, 53%, 40%); }
-[ns="music"]{ background-color: hsl(312, 53%, 56%); border-color: hsl(312, 53%, 40%); }
-[ns="sound"]{ background-color: hsl(108, 53%, 56%); border-color: hsl(108, 53%, 40%);}
-[ns="array"]{ background-color: hsl(264, 53%, 56%); border-color: hsl(264, 53%, 40%);}
-[ns="boolean"]{ background-color: hsl(60, 53%, 56%); border-color: hsl(60, 53%, 40%);}
-[ns="canvas"]{ background-color: hsl(216, 53%, 56%); border-color: hsl(216, 53%, 40%);}
-[ns="color"]{ background-color: hsl(12, 53%, 56%); border-color: hsl(12, 53%, 40%);}
-[ns="image"]{ background-color: hsl(168, 53%, 56%); border-color: hsl(168, 53%, 40%);}
-[ns="math"]{ background-color: hsl(324, 53%, 56%); border-color: hsl(324, 53%, 40%);}
-[ns="random"]{ background-color: hsl(120, 53%, 56%); border-color: hsl(120, 53%, 40%);}
-[ns="vector"]{ background-color: hsl(276, 53%, 56%); border-color: hsl(276, 53%, 40%);}
-[ns="object"]{ background-color: hsl(72, 53%, 56%); border-color: hsl(72, 53%, 40%);}
-[ns="string"]{ background-color: hsl(228, 53%, 56%); border-color: hsl(228, 53%, 40%);}
-[ns="path"]{ background-color: hsl(24, 53%, 56%); border-color: hsl(24, 53%, 40%);}
-[ns="point"]{ background-color: hsl(180, 53%, 56%); border-color: hsl(180, 53%, 40%);}
-[ns="rect"]{ background-color: hsl(336, 53%, 56%); border-color: hsl(336, 53%, 40%);}
-[ns="input"]{ background-color: hsl(132, 53%, 56%); border-color: hsl(132, 53%, 40%);}
-[ns="motion"]{ background-color: hsl(288, 53%, 56%); border-color: hsl(288, 53%, 40%);}
-[ns="shape"]{ background-color: hsl(84, 53%, 56%); border-color: hsl(84, 53%, 40%);}
-[ns="geolocation"]{ background-color: hsl(240, 53%, 56%); border-color: hsl(240, 53%, 40%);}
-[ns="size"]{ background-color: hsl(192, 53%, 56%); border-color: hsl(192, 53%, 40%);}
-[ns="text"]{ background-color: hsl(348, 53%, 56%); border-color: hsl(348, 53%, 40%);}
-
-/* block background colour by return type */
-wb-expression[type=number]{ background-color: hsl(324, 53%, 56%); border-color: hsl(324, 53%, 40%); }
-wb-expression[type=color]{ background-color: hsl(12, 53%, 56%); border-color: hsl(12, 53%, 40%); }
-wb-expression[type=text]{ background-color: hsl(348, 53%, 56%); border-color: hsl(348, 53%, 40%); }
-wb-expression[type=boolean]{ background-color: hsl(60, 53%, 56%); border-color: hsl(60, 53%, 40%); }
-wb-expression[type=sprite]{ background-color: hsl(156, 53%, 56%); border-color: hsl(156, 53%, 40%); }
-wb-expression[type=any]{ background-color: hsl(0, 53%, 56%); border-color: hsl(0, 53%, 40%); }
-wb-expression[type=sound]{ background-color: hsl(108, 53%, 56%); border-color: hsl(108, 53%, 40%); }
-wb-expression[type=array]{ background-color: hsl(264, 53%, 56%); border-color: hsl(264, 53%, 40%); }
-wb-expression[type=wb-image]{ background-color: hsl(168, 53%, 56%); border-color: hsl(168, 53%, 40%); }
-wb-expression[type=shape]{ background-color: hsl(84, 53%, 56%); border-color: hsl(84, 53%, 40%); }
-wb-expression[type=vector]{ background-color: hsl(276, 53%, 56%); border-color: hsl(276, 53%, 40%); }
-wb-expression[type=object]{ background-color: hsl(72, 53%, 56%); border-color: hsl(72, 53%, 40%); }
-wb-expression[type=path],wb-expression[type=pathset]{ background-color: hsl(24, 53%, 56%); border-color: hsl(24, 53%, 40%); }
-wb-expression[type=point]{ background-color: hsl(180, 53%, 56%); border-color: hsl(180, 53%, 40%); }
-wb-expression[type=rect]{ background-color: hsl(336, 53%, 56%); border-color: hsl(336, 53%, 40%); }
-wb-expression[type=string]{ background-color: hsl(228, 53%, 56%); border-color: hsl(228, 53%, 40%); }
-wb-expression[type=geolocation]{ background-color: hsl(240, 53%, 56%); border-color: hsl(240, 53%, 40%); }
-wb-expression[type=size]{background-color: hsl(192, 53%, 56%); border-color: hsl(192, 53%, 40%);}
-wb-expression[type=motion]{background-color: hsl(288, 53%, 56%); border-color: hsl(288, 53%, 40%);}
-
-
-
 
 /* Used for input resizing */
 .sekrit-svg{

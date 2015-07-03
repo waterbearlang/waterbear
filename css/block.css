@@ -36,8 +36,14 @@ body:not(.block-dragging) wb-expression {
 wb-contains.drop-target{
     background-color: #ffffe0;
 }
-wb-value.drop-target input{
+wb-contains.selected-block{
+    background-color: #ccffcc; /* not sure if selected and drop-target should be the same highlight colour? Which is least surprising? */
+}
+wb-value.drop-target input:first-of-type{
     background-color: #fafad2;
+}
+wb-value.selected-value input:first-of-type{
+    background-color: #ccffcc;
 }
 
 wb-expression{

@@ -284,7 +284,8 @@ wb-expression[type=geolocation]:before{ background-image: url(../images/icon/geo
 wb-expression[type=size]:before{ background-image: url(../images/icon/size.svg);}
 
 /* block background colour by category*/
-[ns="control"]{ background-color: hsl(0, 53%, 56%); border-color: hsl(0, 53%, 40%); }
+[ns="control"], .block-dragging [ns="control"].drop-target{ background-color: hsl(0, 53%, 56%); border-color: hsl(0, 53%, 40%); }
+.block-dragging [ns="control"]{ background-color: hsl(0, 43%, 46%); border-color: hsl(0, 53%, 40%); }
 [ns="sprite"]{ background-color: hsl(156, 53%, 56%); border-color: hsl(156, 53%, 40%); }
 [ns="music"]{ background-color: hsl(312, 53%, 56%); border-color: hsl(312, 53%, 40%); }
 [ns="sound"]{ background-color: hsl(108, 53%, 56%); border-color: hsl(108, 53%, 40%);}

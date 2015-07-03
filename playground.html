@@ -35,7 +35,7 @@
                     Controls
                 </header>
                 <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
-                <wb-context ns="control" class="control" toplevel="true" fn="eachFrame">
+                <wb-context ns="control" toplevel="true" fn="eachFrame">
                     <wb-row>
                         <wb-value>each frame</wb-value>
                     </wb-row>
@@ -52,7 +52,7 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-step ns="control" class="control" fn="setVariable">
+                <wb-step ns="control" fn="setVariable">
                     <wb-row>
                         <wb-value>set</wb-value>
 						<wb-local renameable="true">
@@ -65,7 +65,7 @@
                     <wb-row>
                     </wb-row>
                 </wb-step>
-                <wb-context ns="control" class="control" fn="loopOver">
+                <wb-context ns="control" fn="loopOver">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
                     </wb-row>
@@ -82,11 +82,11 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-step ns="control" class="control" fn="broadcast">
+                <wb-step ns="control" fn="broadcast">
                     <wb-value type="text">broadcast</wb-value>
                     <wb-value type="any" optional="true">message with data</wb-value>
                 </wb-step>
-                <wb-context ns="control" class="control" fn="receive">
+                <wb-context ns="control" fn="receive">
                     <wb-row>
                         <wb-value type="text">when I receive message</wb-value>
                     </wb-row>
@@ -99,10 +99,10 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-context ns="control" class="control" fn="if">
+                <wb-context ns="control" fn="if">
                     <wb-value type="boolean" value="true">if</wb-value>
                 </wb-context>
-                <wb-context ns="control" class="control" fn="ifElse">
+                <wb-context ns="control" fn="ifElse">
                     <header>
                         <wb-value type="boolean" value="true">if</wb-value>
                     </header>
@@ -112,15 +112,15 @@
                     </header>
                     <wb-contains></wb-contains>
                 </wb-context>
-                <wb-expression class="control" type="any" ns="control" fn="ternary">
+                <wb-expression type="any" ns="control" fn="ternary">
                     <wb-value type="boolean" value="true">if</wb-value>
                     <wb-value type="any">then</wb-value>
                     <wb-value type="any">else</wb-value>
                 </wb-expression>
-                <wb-step ns="control" class="control" fn="log">
+                <wb-step ns="control" fn="log">
                     <wb-value type="any">log</wb-value>
                 </wb-step>
-                <wb-step ns="control" class="control" fn="ask">
+                <wb-step ns="control" fn="ask">
                     <wb-row>
                         <wb-value type="text,string">Ask</wb-value>
                         <wb-value>and store answer as</wb-value>
@@ -131,13 +131,13 @@
                         </wb-local>
                     </wb-row>
                 </wb-step>
-                <wb-context ns="control" class="control" fn="commentContext">
+                <wb-context ns="control" fn="commentContext">
                     <wb-value>ignore blocks</wb-value>
                 </wb-context>
-                <wb-step ns="control" class="control" fn="comment">
+                <wb-step ns="control" fn="comment">
                     <wb-value type="text">comment</wb-value>
                 </wb-step>
-                <wb-step ns="control" class="control" fn="alert">
+                <wb-step ns="control" fn="alert">
                     <wb-value type="text,string">alert</wb-value>
                 </wb-step>
             </wb-accordion>
@@ -150,11 +150,11 @@
                 <wb-expression type="sprite" ns="sprite" fn="create">
                     <wb-value type="wb-image,shape,sprite">sprite with</wb-value>
                 </wb-expression>
-                <wb-step ns="sprite" class="sprite" fn="accelerate">
+                <wb-step ns="sprite" fn="accelerate">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="number">accelerate by</wb-value>
                 </wb-step>
-                <wb-step class="sprite" ns="sprite" fn="setVelocity">
+                <wb-step ns="sprite" fn="setVelocity">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">set velocity to</wb-value>
                 </wb-step>
@@ -170,11 +170,11 @@
                 <wb-expression type="number" ns="sprite" fn="getYpos">
                     <wb-value type="sprite">get Y position</wb-value>
                 </wb-expression>
-                <wb-step ns="sprite" class="sprite" fn="rotate">
+                <wb-step ns="sprite" fn="rotate">
                     <wb-value type="sprite">rotate</wb-value>
                     <wb-value type="number">by</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="rotateTo">
+                <wb-step ns="sprite" fn="rotateTo">
                     <wb-row>
                         <wb-value type="sprite">rotate</wb-value>
                     </wb-row>
@@ -183,27 +183,27 @@
                         <wb-unit>degrees</wb-unit>
                     </wb-row>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="move">
+                <wb-step ns="sprite" fn="move">
                     <wb-value type="sprite">move</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="moveTo">
+                <wb-step ns="sprite" fn="moveTo">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="point,vector">move to</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="draw">
+                <wb-step ns="sprite" fn="draw">
                     <wb-value type="sprite">draw</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="applyForce">
+                <wb-step ns="sprite" fn="applyForce">
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">apply force</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="bounceAtEdge">
+                <wb-step ns="sprite" fn="bounceAtEdge">
                     <wb-value type="sprite">bounce at edge</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="wrapAtEdge">
+                <wb-step ns="sprite" fn="wrapAtEdge">
                     <wb-value type="sprite">wrap at edge</wb-value>
                 </wb-step>
-                <wb-step ns="sprite" class="sprite" fn="stopAtEdge">
+                <wb-step ns="sprite" fn="stopAtEdge">
                     <wb-value type="sprite">stop at edge</wb-value>
                 </wb-step>
             </wb-accordion>
@@ -216,32 +216,32 @@
                 <wb-expression type="sound" isasset="true" ns="sound" fn="get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
                 </wb-expression>
-                <wb-step ns="sound" class="sound" fn="play">
+                <wb-step ns="sound" fn="play">
                     <wb-value type="sound">play</wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="setLoop">
+                <wb-step ns="sound" fn="setLoop">
                     <wb-value type="sound">set loop</wb-value>
                     <wb-value type="boolean" value="true"></wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="setVolume">
+                <wb-step ns="sound" fn="setVolume">
                     <wb-value type="sound">set volume</wb-value>
                     <wb-value type="number" min="0" max="5" value="0.9"></wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="pause">
+                <wb-step ns="sound" fn="pause">
                     <wb-value type="sound">pause</wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="playFrom">
+                <wb-step ns="sound" fn="playFrom">
                     <wb-value type="sound">play</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="2">from</wb-value>
                         <wb-unit>seconds</wb-unit>
                     <wb-row>
                 </wb-row></wb-row></wb-step>
-                <wb-step ns="sound" class="sound" fn="pan">
+                <wb-step ns="sound" fn="pan">
                     <wb-value type="sound">balance</wb-value>
                     <wb-value type="number" min="-1" max="1" value="0"></wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="echo_DelayFeedbackFilter">
+                <wb-step ns="sound" fn="echo_DelayFeedbackFilter">
                     <wb-value type="sound">set echo</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="0.2">delay</wb-value>
@@ -256,10 +256,10 @@
                         <wb-unit>Hz</wb-unit>
                     </wb-row>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="stopEcho">
+                <wb-step ns="sound" fn="stopEcho">
                     <wb-value type="sound">echo off</wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="reverb_DurationDecayReverse">
+                <wb-step ns="sound" fn="reverb_DurationDecayReverse">
                     <wb-value type="sound">set reverb</wb-value>
                     <wb-row>
                         <wb-value type="number" min="0" value="2">duration</wb-value>
@@ -271,7 +271,7 @@
                     </wb-row>
                     <wb-value type="boolean" value="false">reverse</wb-value>
                 </wb-step>
-                <wb-step ns="sound" class="sound" fn="stopReverb">
+                <wb-step ns="sound" fn="stopReverb">
                     <wb-value type="sound">reverb off</wb-value>
                 </wb-step>
                 <wb-expression type="sound" ns="sound" fn="effect">
@@ -338,18 +338,18 @@
                     <wb-value type="array">join</wb-value>
                     <wb-value type="string">with</wb-value>
                 </wb-expression>
-                <wb-step ns="array" class="array" fn="append">
+                <wb-step ns="array" fn="append">
                     <wb-value type="array"></wb-value>
                     <wb-value type="any">append</wb-value>
                 </wb-step>
-                <wb-step ns="array" class="array" fn="prepend">
+                <wb-step ns="array" fn="prepend">
                     <wb-value type="array"></wb-value>
                     <wb-value type="any">prepend</wb-value>
                 </wb-step>
                 <wb-expression type="number" ns="array" fn="length">
                     <wb-value type="array,string">length</wb-value>
                 </wb-expression>
-                <wb-step ns="array" class="array" fn="removeItem">
+                <wb-step ns="array" fn="removeItem">
                     <wb-value type="array"></wb-value>
                     <wb-value type="number" min="0" value="0">remove item at</wb-value>
                 </wb-step>
@@ -447,13 +447,13 @@
                     <wb-value type="number" min="0" max="100" value="0">lightness</wb-value>
                     <wb-value type="number" min="0" max="100" value="0">alpha</wb-value>
                 </wb-expression>
-                <wb-step ns="color" class="color" fn="fill">
+                <wb-step ns="color" fn="fill">
                     <wb-value type="color" value="#0000FF">fill style</wb-value>
                 </wb-step>
-                <wb-step ns="color" class="color" fn="stroke">
+                <wb-step ns="color" fn="stroke">
                     <wb-value type="color" value="00FF00">stroke style</wb-value>
                 </wb-step>
-                <wb-step ns="color" class="color" fn="shadow">
+                <wb-step ns="color" fn="shadow">
                     <wb-value type="color" value="#FF0000">shadow color</wb-value>
                     <wb-value type="number" value="2">shadow blur</wb-value>
                 </wb-step>
@@ -464,7 +464,7 @@
                     Images
                 </header>
                 <p>Images are pictures loaded from the web. They can be positioned and resized.</p>
-                <wb-expression type="wb-image" isasset="true" ns="image" class="image" fn="get">
+                <wb-expression type="wb-image" isasset="true" ns="image" fn="get">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="image" fn="getWidth">
@@ -473,23 +473,23 @@
                 <wb-expression type="number" ns="image" fn="getHeight">
                     <wb-value type="wb-image" allow="block">image height</wb-value>
                 </wb-expression>
-                <wb-step ns="image" class="image" fn="setWidth">
+                <wb-step ns="image" fn="setWidth">
                     <wb-value type="wb-image" allow="block">set</wb-value>
                     <wb-value type="number">width</wb-value>
                 </wb-step>
-                <wb-step ns="image" class="image" fn="setHeight">
+                <wb-step ns="image" fn="setHeight">
                     <wb-value type="wb-image" allow="block">set</wb-value>
                     <wb-value type="number">height</wb-value>
                 </wb-step>
-                <wb-step ns="image" class="image" fn="scale">
+                <wb-step ns="image" fn="scale">
                     <wb-value type="wb-image" allow="block">scale</wb-value>
                     <wb-value type="number">by</wb-value>
                 </wb-step>
-                <wb-step ns="image" class="image" fn="setSize">
+                <wb-step ns="image" fn="setSize">
                     <wb-value type="wb-image" allow="block">set</wb-value>
                     <wb-value type="size">size</wb-value>
                 </wb-step>
-                <wb-step ns="image" class="image" fn="drawAtPoint">
+                <wb-step ns="image" fn="drawAtPoint">
                     <wb-value type="wb-image" allow="block">draw</wb-value>
                     <wb-value type="point" allow="block">at</wb-value>
                 </wb-step>
@@ -858,23 +858,23 @@
                     Shapes
                 </header>
                 <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
-                 <wb-step ns="shape" class="shape" fn="draw">
+                 <wb-step ns="shape" fn="draw">
                     <wb-value type="shape">draw the shape</wb-value>
                 </wb-step>
-                <wb-step ns="shape" class="shape" fn="setLineWidth">
+                <wb-step ns="shape" fn="setLineWidth">
                     <wb-value type="number" value="1">line width</wb-value>
                 </wb-step>
-                <wb-expression type="shape" ns="shape" class="shape" fn="circle">
+                <wb-expression type="shape" ns="shape" fn="circle">
                     <wb-value type="point">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
                 </wb-expression>
-                <wb-expression type="shape" ns="shape" class="shape" fn="ellipse">
+                <wb-expression type="shape" ns="shape" fn="ellipse">
                     <wb-value type="point">ellipse at</wb-value>
                     <wb-value type="number" min="0">horizontal radius</wb-value>
                     <wb-value type="number" min="0">verticle radius</wb-value>
                     <wb-value type="number" min="0">rotation</wb-value>
                 </wb-expression>
-                <wb-expression type="shape" ns="shape" class="shape" fn="rectangle">
+                <wb-expression type="shape" ns="shape" fn="rectangle">
                     <wb-value type="point">rectangle at</wb-value>
                     <wb-value type="number" min="0">width</wb-value>
                     <wb-value type="number" min="0">height</wb-value>
@@ -887,35 +887,35 @@
                     Rects
                 </header>
                 <p>It turns out to be frequently useful to be able to represent a rectangle.</p>
-                <wb-expression type="rect" ns="rect" class="rect" fn="fromCoordinates">
+                <wb-expression type="rect" ns="rect" fn="fromCoordinates">
                     <wb-value type="number" value="0">x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
                     <wb-value type="number" value="0" min="0">width</wb-value>
                     <wb-value type="number" value="0" min="0">height</wb-value>
                 </wb-expression>
-                <wb-expression type="rect" ns="rect" class="rect" fn="fromVectors">
+                <wb-expression type="rect" ns="rect" fn="fromVectors">
                     <wb-value type="point,vector" allow="expression">position</wb-value>
                     <wb-value type="point,vector" allow="expression">size</wb-value>
                 </wb-expression>
-                <wb-expression type="rect" ns="rect" class="rect" fn="fromArray">
+                <wb-expression type="rect" ns="rect" fn="fromArray">
                     <wb-value type="array" allow="expression">from array</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="rect" class="rect" fn="getPosition">
+                <wb-expression type="point" ns="rect" fn="getPosition">
                     <wb-value type="rect" allow="expression">position of</wb-value>
                 </wb-expression>
-                <wb-expression type="vector" ns="rect" class="rect" fn="getSize">
+                <wb-expression type="vector" ns="rect" fn="getSize">
                     <wb-value type="rect" allow="expression">size of</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="rect" class="rect" fn="getX">
+                <wb-expression type="number" ns="rect" fn="getX">
                     <wb-value type="rect" allow="expression">x of</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="rect" class="rect" fn="getY">
+                <wb-expression type="number" ns="rect" fn="getY">
                     <wb-value type="rect" allow="expression">y of</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="rect" class="rect" fn="getWidth">
+                <wb-expression type="number" ns="rect" fn="getWidth">
                     <wb-value type="rect" allow="expression">width of</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="rect" class="rect" fn="getHeight">
+                <wb-expression type="number" ns="rect" fn="getHeight">
                     <wb-value type="rect" allow="expression">height of</wb-value>
                 </wb-expression>
             </wb-accordion>
@@ -938,7 +938,7 @@
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
                     <wb-value>Pressed?</wb-value>
                 </wb-expression>
-                <wb-context ns="input" class="input" fn="whenKeyPressed">
+                <wb-context ns="input" fn="whenKeyPressed">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
                     <wb-value>key pressed<wb-value>
                     </wb-value></wb-value></wb-context>
@@ -955,7 +955,7 @@
                     <wb-expression type="geolocation" ns="geolocation" fn="currentLocation">
                         my current location
                     </wb-expression>
-                    <wb-context ns="geolocation" class="geolocation" fn="whenLocationUpdated">
+                    <wb-context ns="geolocation" fn="whenLocationUpdated">
                         <wb-row>
                             <wb-value>when my location changes</wb-value>
                         <wb-row>
@@ -1018,40 +1018,40 @@
                         Text
                     </header>
                     <p>Text is like a string, but formatted for printing to the screen.</p>
-                    <wb-step ns="text" class="text" fn="setFont">
+                    <wb-step ns="text" fn="setFont">
                         <wb-row>
                             <wb-value type="number" value="12">font</wb-value>
                             <wb-value type="list" allow="literal" options="px,em,%,pt" value="px"></wb-value>
                         </wb-row>
                         <wb-value type="text" value="sans-serif"></wb-value>
                     </wb-step>
-                    <wb-step ns="text" class="text" fn="textAlign">
+                    <wb-step ns="text" fn="textAlign">
                         <wb-row>
                             <wb-value type="list" allow="literal" options="left,right,center,start,end" value="left">align text to the</wb-value>
                         </wb-row>
                     </wb-step>
-                    <wb-step ns="text" class="text" fn="textBaseline">
+                    <wb-step ns="text" fn="textBaseline">
                         <wb-row>
                             <wb-value type="list" allow="literal" options="alphabetic,top,hanging,middle,bottom,ideographic" value="alphabetic">text baseline</wb-value>
                         </wb-row>
                     </wb-step>
-                    <wb-step ns="text" class="text" fn="fillText">
+                    <wb-step ns="text" fn="fillText">
                         <wb-value type="text,string">fill text</wb-value>
                         <wb-value type="number">x</wb-value>
                         <wb-value type="number">y</wb-value>
                     </wb-step>
-                    <wb-step ns="text" class="text" fn="fillTextWidth">
+                    <wb-step ns="text" fn="fillTextWidth">
                         <wb-value type="text,string">fill text</wb-value>
                         <wb-value type="number">x</wb-value>
                         <wb-value type="number">y</wb-value>
                         <wb-value type="number">max width</wb-value>
                     </wb-step>
-                    <wb-step ns="text" class="text" fn="strokeText">
+                    <wb-step ns="text" fn="strokeText">
                         <wb-value type="text,string">stroke text</wb-value>
                         <wb-value type="number">x</wb-value>
                         <wb-value type="number">y</wb-value>
                     </wb-step>
-                    <wb-step ns="text" class="text" fn="strokeTextWidth">
+                    <wb-step ns="text" fn="strokeTextWidth">
                         <wb-value type="text,string">stroke text</wb-value>
                         <wb-value type="number">x</wb-value>
                         <wb-value type="number">y</wb-value>

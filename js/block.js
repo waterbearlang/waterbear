@@ -955,7 +955,7 @@ function startDragBlock(evt){
     blockTop = BLOCK_MENU.scrollTop;
     BLOCK_MENU.classList.add('trashcan');
 
-    document.body.classList.add('block-dragging');
+    workspace.classList.add('block-dragging');
     // FIXME: Highlight droppable places (or grey out non-droppable)
 
     dragTarget = dom.clone(origTarget);
@@ -1212,7 +1212,11 @@ function resetDragging(){
     // Hide trash can, should be in app.js, not block.js
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
-    document.body.classList.remove('block-dragging');
+    workspace.classList.remove('block-dragging');
+    var dropTarget = dom.find(document.body, '.drop-target');
+    if (dropTarget){
+        dropTarget.classList.remove('drop-target');
+    }
     dom.findAll(document.body, '.no-drop').forEach(function(e){
         e.classList.remove('no-drop');
     })

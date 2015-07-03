@@ -217,11 +217,11 @@ function preload() {
     return assets.load({
         /* Selector for blocks that require loading  : function that begins the loading. */
         'wb-contains wb-expression[isasset=true]': assets.loadMedia,
-        'wb-contains wb-expression[script^="geolocation."]':
+        'wb-contains wb-expression[ns="geolocation"]':
         /* assets.waitFor waits for the given event to be triggered to signal
          * that the asset is loaded. */
             assets.waitFor('locationchanged', util.geolocation.startTrackingLocation),
-        'wb-contains wb-expression[script="motion.tiltDirection"]':
+        'wb-contains wb-expression[fn="tiltDirection"]':
             assets.waitFor('motionchanged', util.motion.startTrackingMotion)
     });
 }

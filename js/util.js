@@ -599,9 +599,9 @@
      *  and call a `setup` method when all the files have finished loading:
      *
      *      assets.load({
-     *          'wb-expression[isAsset=true]': function () { ... },
-     *          'wb-expression[script="geolocation"]': function () { ... },
-     *          'wb-expression[script="motion"]': function () { ... }
+     *          'wb-expression[isasset=true]': function () { ... },
+     *          'wb-expression[fn="geolocation"]': function () { ... },
+     *          'wb-expression[fn="motion"]': function () { ... }
      *      }).whenLoaded(function () { ... });
      *
      *  You can now access these loaded media assets in you application code

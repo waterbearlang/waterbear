@@ -144,7 +144,7 @@ BlockProto.removeInstances = function(){
     var instances = this.getInstances();
     if (instances.length){
         app.warn('Removing ' + instances.length + ' instances of '
-    + this.getAttribute('script') + ' because their value was removed', true);
+    + this.getAttribute('fn') + ' because their value was removed', true);
     }
     instances.forEach(function(instance){
         // FIXME: Some animation here would be nice
@@ -164,7 +164,7 @@ BlockProto.removeOutOfScopeInstances = function(){
     });
     if (invalidInstances.length){
     app.warn('Removing ' + invalidInstances.length + ' instances of '
-+ this.getAttribute('script') + ' because the are no longer in scope', true);
++ this.getAttribute('fn') + ' because the are no longer in scope', true);
     }
     invalidInstances.forEach(function(instance){
         // FIXME: Some animation here would be nice
@@ -211,8 +211,9 @@ BlockProto.isContext =  false;
 var StepProto = Object.create(BlockProto);
 StepProto.run = function(scope){
     if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+        var nsName = this.getAttribute('ns');
+        var fnName = this.getAttribute('fn');
+        this.fn = runtime[nsName][fnName];
     }
     var values = this.gatherValues(scope);
     return this.fn.apply(scope, this.gatherValues(scope));
@@ -316,11 +317,16 @@ ContextProto.run = function(strand, frame){
  */
 ContextProto.setupCallbacks = function() {
     /* Fetch the callback object from runtime. */
-    var qualifiedName = this.getAttribute('script').split('.');
-    var category = qualifiedName[0], name = qualifiedName[1];
-    var callback = runtime[category][name];
+    var ns = this.getAttribute('ns');
+    var fn = this.getAttribute('fn');
+    try{
+        var callback = runtime[ns][fn];
+    }catch(e){
+        console.log('Cannot retrieve function for %o (%s.%s)', this, ns, fn);
+        throw e;
+    }
 
-    console.assert(!!callback, 'Could not find script: ' + qualifiedName);
+    console.assert(!!callback, 'Could not find script: ' + fn);
 
     this.setup = callback;
 };
@@ -452,8 +458,9 @@ ExpressionProto.removeInstances = function(){
 
 ExpressionProto.run = function(scope){
     if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+        var nsName = this.getAttribute('ns');
+        var fnName = this.getAttribute('fn');
+        this.fn = runtime[nsName][fnName];
     }
     return this.fn.apply(scope, this.gatherValues(scope));
 };
@@ -470,10 +477,10 @@ function updateVariableType(evt){
     var setVariableBlock = evt.detail; // detail holds block added to
     var valueBlock = evt.target;  // target holds block that was added
     // ignore if not setVariable
-    if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
+    if (setVariableBlock.getAttribute('fn') !== 'setVariable'){
         return;
     }
-    var getVariableBlock = dom.find(setVariableBlock, '[script="control.getVariable"]');
+    var getVariableBlock = dom.find(setVariableBlock, '[fn="getVariable"]');
     var type = valueBlock.getAttribute('type');
     setTypeOfVariable(setVariableBlock, type);
     updateLocalInstancesType(getVariableBlock, type);
@@ -495,7 +502,7 @@ function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
     var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
-    if (! dom.matches(stepBlock, '[script="control.getVariable"]')){
+    if (! dom.matches(stepBlock, '[fn="getVariable"]')){
         return;
     }
     // keep from literal value matching
@@ -512,7 +519,7 @@ function handleVariableBlur(evt){
     // Cleanup
     var input = evt.target;
     var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
-    if (! dom.matches(stepBlock, '[script="control.getVariable"]')){
+    if (! dom.matches(stepBlock, '[fn="getVariable"]')){
         return;
     }
     ensureNameIsUniqueInContext(input);
@@ -525,7 +532,7 @@ function trailingNumber(str){
 
 function ensureNameIsUniqueInContext(input){
     var parentContext = dom.closest(input, 'wb-contains');
-    var getVariable = dom.closest(input, '[script="control.getVariable"]');
+    var getVariable = dom.closest(input, '[fn="getVariable"]');
     var valueBlock = dom.closest(input, 'wb-value');
     // Find other variable names in scope
     // 1. Get list of setVariable blocks contained by parentContext
@@ -533,7 +540,7 @@ function ensureNameIsUniqueInContext(input){
     // 3. Return the value of the input of the block
     // 4. Sort the resulting list
     var variablesToTestAgainst = parentContext.getAllContextLocals()
-        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== getVariable && setVarBlock.getAttribute('script') === 'control.getVariable'; })
+        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== getVariable && setVarBlock.getAttribute('fn') === 'getVariable'; })
         .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
         .sort();
     var newVariableName = input.value; // we may be changing this one
@@ -626,7 +633,7 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 ******************/
 var RowProto = Object.create(HTMLElement.prototype);
 RowProto.getValue = function(scope){
-    var values = dom.children(this, 'wb-value[type]:not(.hide)');
+    var values = dom.children(this, 'wb-value[type]:not(.hide), wb-local');
     if (values.length == 1){
         return values[0].getValue(scope);
     }else if (values.length > 1){
@@ -677,6 +684,9 @@ function toggleClosed(evt){
 var LocalProto = Object.create(HTMLElement.prototype);
 LocalProto.run = StepProto.run;
 LocalProto.attachedCallback = insertIntoHeader;
+LocalProto.getValue = function(scope){
+    return dom.find(this, 'wb-value').getValue();
+}
 window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
 
 /*****************
@@ -1220,7 +1230,7 @@ function resetDragging(){
  */
 function createVariableBlock(initialValue) {
    // Make ourselves a clone of the original.
-   var originalSetVariable = dom.find('sidebar wb-step[script="control.setVariable"]');
+   var originalSetVariable = dom.find('sidebar wb-step[fn="setVariable"]');
    console.assert(originalSetVariable, 'Could not find setVariable block');
    var variableStep = dom.clone(originalSetVariable);
 
@@ -1237,7 +1247,7 @@ function createVariableBlock(initialValue) {
 function setTypeOfVariable(variableStep, type){
    // Set type of variable to match type of object
    variableStep
-       .querySelector('[script="control.getVariable"]') // get local expression
+       .querySelector('[fn="getVariable"]') // get local expression
        .setAttribute('type', type);
 }
 
@@ -1256,7 +1266,7 @@ function updateLocalInstancesType(variableStep, type){
             // while it is invalid? Not sure if auto-removing them is good UI.
             // Maybe mark then and provide a button to remove all of them at
             // user discretion?
-            app.warn('Removing instance of ' + instance.getAttribute('script') + ' because it now has a type which is illegal in this position', true);
+            app.warn('Removing instance of ' + instance.getAttribute('fn') + ' because it now has a type which is illegal in this position', true);
             instance.parentElement.removeChild(instance);
         }
     });
@@ -1314,7 +1324,7 @@ Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context,
 
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 Event.on(workspace, 'editor:wb-added', 'wb-context, wb-step', uniquifyVariableNames);
-Event.on(document.body, 'editor:wb-cloned', '[script="control.getVariable"]', createLocalToInstanceAssociation);
+Event.on(document.body, 'editor:wb-cloned', '[fn="getVariable"]', createLocalToInstanceAssociation);
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 

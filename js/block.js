@@ -114,6 +114,25 @@ BlockProto.gatherValues = function(scope){
     });
 };
 
+BlockProto.hasLocal = function(){
+    return !!this.getLocals().length;
+}
+
+BlockProto.getLocals = function(){
+    // For Steps this should work, but for contexts we need to gather the steps and contexts
+    return [];
+}
+
+BlockProto.getAncestorContexts = function(){
+    var context = dom.parent(this, 'wb-context, wb-workspace');
+    var contexts = [context];
+    while(context.tagName.toLowerCase() !== 'wb-workspace'){
+        context = dom.parent(context, 'wb-context, wb-workspace');
+        contexts.push(context);
+    }
+    return contexts.reverse();
+}
+
 /* Applicable for both <wb-step> and <wb-context>.
  * The next element is simply the nextElementSibling. */
 BlockProto.next = function next() {
@@ -148,6 +167,14 @@ StepProto.run = function(scope){
     var values = this.gatherValues(scope);
     return this.fn.apply(scope, this.gatherValues(scope));
 };
+
+StepProto.getLocals = function(){
+    // For Steps this should work, but for contexts we need to gather the steps and contexts
+    return dom.findAll(dom.child(this, 'header'), 'wb-local > *');
+}
+
+StepProto.getDecendentLocals = StepProto.getLocals;
+
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
 
@@ -171,10 +198,55 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(header, 'wb-disclosure');
     setDefaultByTag(this, 'wb-contains');
 };
+
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
     return dom.children(this, 'wb-contains');
 };
+
+ContextProto.getLocals = function(){
+    // Doesn't get locals from decendent or ancestor contexts
+    // Use getDecendentLocals() and getAllContextLocals for those
+    var locals = dom.findAll(dom.child(this, 'header'), 'wb-local > *');
+    var splice = locals.splice;
+    var containers = this.gatherContains();
+    for (var i = 0; i < containers.length; i++){
+        var container = containers[i];
+        var stepChildren = dom.children(container, 'wb-step');
+        for (var j = 0; j < stepChildren.length; j++){
+            // add each container's child's locals
+            locals = locals.concat(stepChildren[j].getLocals());
+        }
+    }
+    return locals;
+}
+
+ContextProto.getDescendantLocals = function(){
+    /* Wouldn't it be easier and faster to just find 'wb-local > *'? */
+    var locals = dom.findAll(dom.child(this, 'header'), 'wb-local > *');
+    var splice = locals.splice;
+    var containers = this.gatherContains();
+    for (var i = 0; i < containers.length; i++){
+        var container = containers[i];
+        for (var j = 0; j < container.length; j++){
+            // add each container's child's locals
+            console.log('get descendant locals of %s', container[i].tagName)
+            locals = locals.concat(container[i].getDescendantLocals());
+        }
+    }
+    return locals;
+}
+
+ContextProto.getAllContextLocals = function(){
+    // get locals from both ancestors and descendants
+    var locals = [];
+    this.getAncestorContexts().forEach(function(context){
+        locals = locals.concat(context.getLocals());
+    });
+    locals = locals.concat(this.getDescendantLocals());
+    return locals;
+}
+
 ContextProto.run = function(strand, frame){
    var args, containers;
    /* Set this function's setup() callback */
@@ -223,6 +295,23 @@ function defaultShouldEvaluateValues(strand, containers, elem) {
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
+/*****************
+*
+* wb-workspace
+*
+* Instantiated as new WBWorkspace or as <wb-workspace>
+*
+******************/
+
+var WorkspaceProto = Object.create(HTMLElement.prototype);
+
+WorkspaceProto.getLocals = ContextProto.getLocals;
+WorkspaceProto.getDescendantLocals = ContextProto.getDescendantLocals;
+// Workspace is the bottom of the context chain, getAllContextLocals and getDescendantLocals are the same
+WorkspaceProto.getAllContextLocals = ContextProto.getDescendantLocals;
+WorkspaceProto.gatherContains = ContextProto.gatherContains;
+
+window.WBWorkspace = document.registerElement('wb-workspace', {prototype: WorkspaceProto});
 /*****************
 *
 *  wb-expression
@@ -388,6 +477,14 @@ function trailingNumber(str){
     return Number((str.match(/\d+$/) || [0])[0]);
 }
 
+function variablesInContext(context){
+    // We don't want to shadow variables in ancestor contexts, but we
+    // also don't want to cause decendants to shadow us. So we need all the
+    // variables above and below. Siblings can still have the same name,
+    // so we're not enforcing global uniqueness, but kinda close.
+
+}
+
 function ensureNameIsUniqueInContext(input){
     var parentContext = dom.closest(input, 'wb-contains');
     var setVariable = dom.closest(input, '[script="control.setVariable"]');
@@ -419,9 +516,9 @@ function incrementName(name){
     var incrementalNumber = trailingNumber(name);
     var baseName;
     if (incrementalNumber){
-        baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+        baseName = name.slice(0, -(''+incrementalNumber).length); // trim off number
     }else{
-        baseName = newVariableName + ' ';
+        baseName = name + ' ';
     }
     return baseName + (incrementalNumber + 1);
 }
@@ -680,7 +777,7 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-//toggle an inputs 'filter' selection
+//toggle an input's 'filter' selection
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
        BLOCK_MENU.removeAttribute('filtered');
@@ -693,7 +790,7 @@ ValueProto.toggleSelect = function(){
     }
 }
 
-//select an inout field and filter the sidebar by it
+//select an input field and filter the sidebar by it
 ValueProto.select = function(){
     var i = 0;
     var sidebarBlocks=[];
@@ -711,7 +808,7 @@ ValueProto.select = function(){
 
 }
 
-//deselect an inout field and unfilter the sidebar
+//deselect an input field and unfilter the sidebar
 ValueProto.deselect = function(){
     var i = 0;
     var sidebarBlocks;
@@ -722,7 +819,7 @@ ValueProto.deselect = function(){
 }
 
 
-//when a user clicks on an inout box in the workspace
+//when a user clicks on an input box in the workspace
 function changeValueOnInputChange(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
     // evt.stopPropagation();

@@ -78,7 +78,6 @@ var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
     setDefaultByTag(this, 'header', true);
-    // console.log('%s created with %s children', this.localName, this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
     // Attached only fires the first time an element is added to the DOM
@@ -105,7 +104,6 @@ BlockProto.attachedCallback = function blockAttached(){
 
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
-    // console.log('%s detached', this.localName);
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -113,7 +111,6 @@ BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     //    title or help (do nothing)
     //    script (do nothing)
     //    type (do nothing
-    // console.log('%s[%s] %s -> %s', this.localName, attrName, oldVal, newVal);
 };
 BlockProto.gatherValues = function(scope){
     if (!this.values){
@@ -172,7 +169,6 @@ function updateVariableType(evt){
 function createVariableToLocalAssociation(evt){
     var setVariableBlock = evt.target;
     if (!setVariableBlock.hasAttribute('id')){
-        console.log('createVariableToLocalAssociation');
         var id = randomId();
         setVariableBlock.setAttribute('id', id);
         var local = dom.find(setVariableBlock, 'wb-local [script="control.getVariable"]');
@@ -223,14 +219,9 @@ function ensureNameIsUniqueInContext(input){
         newVariableName = baseName + (incrementalNumber + 1);
     }
     if (newVariableName !== oldVariableName){
-        console.log('old name: "%s", new name: "%s"', oldVariableName, newVariableName);
         input.value = newVariableName;
         valueBlock.setAttribute('value', newVariableName);
         var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
-        console.log('%s variables to update', variablesToUpdate.length);
-        if (variablesToUpdate.length){
-            console.log(variablesToUpdate[0]);
-        }
         updateVariableNameInInstances(newVariableName, variablesToUpdate);
     }
 }
@@ -390,7 +381,6 @@ var typeMapping = {
 
 var ExpressionProto = Object.create(HTMLElement.prototype);
 ExpressionProto.createdCallback = function expressionCreated(){
-    // console.log('Expression created');
     var header = setDefaultByTag(this, 'header', true);
     if (this.getAttribute('context') === 'true'){
         setDefaultByTag(this, 'wb-disclosure');
@@ -438,7 +428,6 @@ ExpressionProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling expression %s with scope %o and values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
@@ -504,9 +493,7 @@ DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
 function toggleClosed(evt){
-    // console.log('toggle');
     var block = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
-    // console.log('%s closed = %s', block.localName, block.getAttribute('closed'));
     if (block.hasAttribute('closed')){
         block.removeAttribute('closed');
     }else{
@@ -862,7 +849,6 @@ function endDragBlock(evt){
         origTarget = null;
     }
     if (!dropTarget){
-        // console.log('no dropTarget');
         if(dragTarget){
             dragTarget.parentElement.removeChild(dragTarget);
         }
@@ -875,7 +861,7 @@ function endDragBlock(evt){
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Event.addNewEvent(deleteEvent);                 //add new event to undo
         }
-        dragTarget.parentElement.removeChild(dragTarget);
+            dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
         if (dropTarget.matches('wb-value')) {
             // console.log('add expression to value');
@@ -901,7 +887,6 @@ function endDragBlock(evt){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
         addToContains(dragTarget, evt, addBlockEvent);
     }else{
-        // console.log('no match, delete the cloned element (and show the original)');
         dragTarget.parentElement.removeChild(dragTarget);
     }
     resetDragging();
@@ -977,41 +962,6 @@ function updateLocalInstancesType(variableStep, type){
     });
 }
 
-/* Add custom events for adding and removing blocks from the DOM */
-
-function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
-
-    var blockObserver = new MutationObserver(function(mutations){
-        mutations.forEach(function(mutation){
-            // send childAdded or childRemove event to parent element
-            var parent = mutation.target;
-            var blockParent = dom.closest(parent, parentList);
-            if (!blockParent){
-                return;
-            }
-            [].slice.apply(mutation.removedNodes)
-                    .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
-                    .forEach(function(node){
-                Event.trigger(blockParent, eventPrefix + 'removedChild', node);
-                Event.trigger(node, eventPrefix + 'removed', blockParent);
-            });
-            [].slice.apply(mutation.addedNodes)
-                    .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only block elements
-                    .forEach(function(node){
-                Event.trigger(blockParent, 'wb-addedChild', node);
-                Event.trigger(node, 'wb-added', blockParent);
-            });
-        });
-    });
-
-    var blockObserverConfig = { childList: true, subtree: true };
-
-    // Only observe after script is loaded?
-    blockObserver.observe(document.body, blockObserverConfig);
-
-};
-
-registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context, wb-expression, wb-contains', 'wb-step, wb-context, wb-expression');
 
 // Exports
 
@@ -1020,6 +970,9 @@ window.block = {
 }
 
 // Event handling
+
+// Make sure wb-added, wb-removed, wb-addedChild, wb-removedChild events are triggered
+Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context, wb-expression, wb-contains', 'wb-step, wb-context, wb-expression');
 
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);

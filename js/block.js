@@ -952,7 +952,7 @@ function endDragBlock(evt){
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
-            originalBlock.classList.remove('singularity');  //un-hide block
+            originalBlock.classList.remove('hide');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Event.addNewEvent(deleteEvent);                 //add new event to undo
         }
@@ -1006,7 +1006,7 @@ function resetDragging(){
         dragTarget.removeAttribute('style');
     }
     if (origTarget){
-        origTarget.classList.remove('singularity');
+        origTarget.classList.remove('hide');
     }
     dragTarget = null;
     origTarget = null;

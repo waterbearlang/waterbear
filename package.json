@@ -1,6 +1,6 @@
 {
   "name": "waterbear",
-  "version": "0.2.0",
+  "version": "0.8.0",
   "description": "Visual programming language for non-programmers.",
   "private": true,
   "directories": {
@@ -22,9 +22,9 @@
   },
   "homepage": "https//waterbearlang.com/",
   "devDependencies": {
-    "node-qunit-phantomjs": "^1.2.0"
+    "node-qunit-phantomjs": "^1.2.0",
+    "parse5": "^1.5.0"
   },
   "dependencies": {
-    "messg": "^1.3.4"
   }
 }

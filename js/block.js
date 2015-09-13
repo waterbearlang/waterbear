@@ -144,7 +144,7 @@ BlockProto.removeInstances = function(){
     var instances = this.getInstances();
     if (instances.length){
         app.warn('Removing ' + instances.length + ' instances of '
-    + this.getAttribute('script') + ' because their value was removed', true);
+    + this.getAttribute('fn') + ' because their value was removed', true);
     }
     instances.forEach(function(instance){
         // FIXME: Some animation here would be nice
@@ -164,7 +164,7 @@ BlockProto.removeOutOfScopeInstances = function(){
     });
     if (invalidInstances.length){
     app.warn('Removing ' + invalidInstances.length + ' instances of '
-+ this.getAttribute('script') + ' because the are no longer in scope', true);
++ this.getAttribute('fn') + ' because the are no longer in scope', true);
     }
     invalidInstances.forEach(function(instance){
         // FIXME: Some animation here would be nice
@@ -211,8 +211,9 @@ BlockProto.isContext =  false;
 var StepProto = Object.create(BlockProto);
 StepProto.run = function(scope){
     if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+        var nsName = this.getAttribute('ns');
+        var fnName = this.getAttribute('fn');
+        this.fn = runtime[nsName][fnName];
     }
     var values = this.gatherValues(scope);
     return this.fn.apply(scope, this.gatherValues(scope));
@@ -316,11 +317,16 @@ ContextProto.run = function(strand, frame){
  */
 ContextProto.setupCallbacks = function() {
     /* Fetch the callback object from runtime. */
-    var qualifiedName = this.getAttribute('script').split('.');
-    var category = qualifiedName[0], name = qualifiedName[1];
-    var callback = runtime[category][name];
+    var ns = this.getAttribute('ns');
+    var fn = this.getAttribute('fn');
+    try{
+        var callback = runtime[ns][fn];
+    }catch(e){
+        console.log('Cannot retrieve function for %o (%s.%s)', this, ns, fn);
+        throw e;
+    }
 
-    console.assert(!!callback, 'Could not find script: ' + qualifiedName);
+    console.assert(!!callback, 'Could not find script: ' + fn);
 
     this.setup = callback;
 };
@@ -452,8 +458,9 @@ ExpressionProto.removeInstances = function(){
 
 ExpressionProto.run = function(scope){
     if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+        var nsName = this.getAttribute('ns');
+        var fnName = this.getAttribute('fn');
+        this.fn = runtime[nsName][fnName];
     }
     return this.fn.apply(scope, this.gatherValues(scope));
 };
@@ -470,10 +477,10 @@ function updateVariableType(evt){
     var setVariableBlock = evt.detail; // detail holds block added to
     var valueBlock = evt.target;  // target holds block that was added
     // ignore if not setVariable
-    if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
+    if (setVariableBlock.getAttribute('fn') !== 'setVariable'){
         return;
     }
-    var getVariableBlock = dom.find(setVariableBlock, '[script="control.getVariable"]');
+    var getVariableBlock = dom.find(setVariableBlock, '[fn="getVariable"]');
     var type = valueBlock.getAttribute('type');
     setTypeOfVariable(setVariableBlock, type);
     updateLocalInstancesType(getVariableBlock, type);
@@ -495,7 +502,7 @@ function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
     var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
-    if (! dom.matches(stepBlock, '[script="control.getVariable"]')){
+    if (! dom.matches(stepBlock, '[fn="getVariable"]')){
         return;
     }
     // keep from literal value matching
@@ -512,7 +519,7 @@ function handleVariableBlur(evt){
     // Cleanup
     var input = evt.target;
     var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
-    if (! dom.matches(stepBlock, '[script="control.getVariable"]')){
+    if (! dom.matches(stepBlock, '[fn="getVariable"]')){
         return;
     }
     ensureNameIsUniqueInContext(input);
@@ -525,7 +532,7 @@ function trailingNumber(str){
 
 function ensureNameIsUniqueInContext(input){
     var parentContext = dom.closest(input, 'wb-contains');
-    var getVariable = dom.closest(input, '[script="control.getVariable"]');
+    var getVariable = dom.closest(input, '[fn="getVariable"]');
     var valueBlock = dom.closest(input, 'wb-value');
     // Find other variable names in scope
     // 1. Get list of setVariable blocks contained by parentContext
@@ -533,7 +540,7 @@ function ensureNameIsUniqueInContext(input){
     // 3. Return the value of the input of the block
     // 4. Sort the resulting list
     var variablesToTestAgainst = parentContext.getAllContextLocals()
-        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== getVariable && setVarBlock.getAttribute('script') === 'control.getVariable'; })
+        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== getVariable && setVarBlock.getAttribute('fn') === 'getVariable'; })
         .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
         .sort();
     var newVariableName = input.value; // we may be changing this one
@@ -626,7 +633,7 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 ******************/
 var RowProto = Object.create(HTMLElement.prototype);
 RowProto.getValue = function(scope){
-    var values = dom.children(this, 'wb-value[type]:not(.hide)');
+    var values = dom.children(this, 'wb-value[type]:not(.hide), wb-local');
     if (values.length == 1){
         return values[0].getValue(scope);
     }else if (values.length > 1){
@@ -677,6 +684,9 @@ function toggleClosed(evt){
 var LocalProto = Object.create(HTMLElement.prototype);
 LocalProto.run = StepProto.run;
 LocalProto.attachedCallback = insertIntoHeader;
+LocalProto.getValue = function(scope){
+    return dom.find(this, 'wb-value').getValue();
+}
 window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
 
 /*****************
@@ -945,7 +955,7 @@ function startDragBlock(evt){
     blockTop = BLOCK_MENU.scrollTop;
     BLOCK_MENU.classList.add('trashcan');
 
-    document.body.classList.add('block-dragging');
+    workspace.classList.add('block-dragging');
     // FIXME: Highlight droppable places (or grey out non-droppable)
 
     dragTarget = dom.clone(origTarget);
@@ -987,6 +997,16 @@ function checkForScroll(evt){
     }
 }
 
+function markDropTarget(block){
+    var oldDropTargets = dom.findAll(workspace, '.drop-target');
+    oldDropTargets.forEach(function(dt){
+        if (dt !== dropTarget){
+            dt.classList.remove('drop-target');
+        }
+    });
+    block.classList.add('drop-target');
+}
+
 function dragBlock(evt){
     if (!dragTarget){ return; }
     evt.preventDefault();
@@ -1002,7 +1022,7 @@ function dragBlock(evt){
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         dropTarget.classList.add('no-drop');
-        app.tip('drop here to delete block(s)');
+        app.warn('drop here to delete block(s)');
         return;
     }
 
@@ -1017,6 +1037,7 @@ function dragBlock(evt){
 
         // FIXME
         dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
+
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression:not(.hide)')){
                 dropTarget.classList.add('no-drop');
@@ -1028,7 +1049,7 @@ function dragBlock(evt){
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
             if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
-                dropTarget.classList.add('ok-drop');
+                markDropTarget(dropTarget);
                 app.tip('drop here to add block to script');
             }else{
                 dropTarget.classList.add('no-drop');
@@ -1064,13 +1085,14 @@ function dropTargetIsContainer(potentialDropTarget){
        }
    }
    if (dropTarget){
-      dropTarget.classList.add('ok-drop');
+       markDropTarget(dropTarget);
       if (dropTarget.matches('wb-contains')){
          app.tip('drop to add to top of the block container');
       }else{
          app.tip('drop to add after this block');
       }
   }else{
+      app.warn('drop anywhere else (or hit Esc) to cancel the drag');
       potentialDropTarget.classList.add('no-drop');
   }
 }
@@ -1126,25 +1148,26 @@ function endDragBlock(evt){
             originalParent = origTarget.parentElement;
             nextElem = origTarget.nextElementSibling;
         }
-        origTarget.parentElement.removeChild(origTarget);
-        origTarget = null;
+    }
+    if (!dragTarget){
+        // Sometimes we get spurious drags, ignore
+        return cancelDragBlock();
     }
     if (!dropTarget){
-        if(dragTarget){
-            dragTarget.parentElement.removeChild(dragTarget);
-        }
-       // fall through to resetDragging()
-    }else if (dropTarget === BLOCK_MENU){
+        // No legal target, probably outside of workspace
+        return cancelDragBlock();
+    }
+    if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
             originalBlock.classList.remove('hide');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Undo.addNewEvent(deleteEvent);                 //add new event to undo
             originalBlock.removeInstances(); // FIXME: Make this undo-able!
+            originalBlock.parentElement.removeChild(originalBlock);
         }
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
-
         if (dropTarget.matches('wb-value')) {
             dropTarget.appendChild(dragTarget);
             dropTarget.deselect();
@@ -1168,13 +1191,16 @@ function endDragBlock(evt){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
         addToContains(dragTarget, evt, addBlockEvent, originalBlock);
     }else{
-        dragTarget.parentElement.removeChild(dragTarget);
+        /* something unexpected, cancel drag */
+        return cancelDragBlock();
     }
     resetDragging();
 }
 
-function cancelDragBlock(evt){
-    dragTarget.parentElement.removeChild(dragTarget);
+function cancelDragBlock(){
+    if (dragTarget){
+        dragTarget.parentElement.removeChild(dragTarget);
+    }
     resetDragging();
 }
 
@@ -1202,13 +1228,14 @@ function resetDragging(){
     // Hide trash can, should be in app.js, not block.js
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
-    document.body.classList.remove('block-dragging');
-    dom.findAll(document.body, 'no-drop').forEach(function(e){
+    workspace.classList.remove('block-dragging');
+    var dropTarget = dom.find(document.body, '.drop-target');
+    if (dropTarget){
+        dropTarget.classList.remove('drop-target');
+    }
+    dom.findAll(document.body, '.no-drop').forEach(function(e){
         e.classList.remove('no-drop');
     })
-    dom.findAll(document.body, 'ok-drop').forEach(function(e){
-        e.classList.remove('ok-drop');
-    });
 }
 
 /* End Dragging */
@@ -1220,7 +1247,7 @@ function resetDragging(){
  */
 function createVariableBlock(initialValue) {
    // Make ourselves a clone of the original.
-   var originalSetVariable = dom.find('sidebar wb-step[script="control.setVariable"]');
+   var originalSetVariable = dom.find('sidebar wb-step[fn="setVariable"]');
    console.assert(originalSetVariable, 'Could not find setVariable block');
    var variableStep = dom.clone(originalSetVariable);
 
@@ -1237,7 +1264,7 @@ function createVariableBlock(initialValue) {
 function setTypeOfVariable(variableStep, type){
    // Set type of variable to match type of object
    variableStep
-       .querySelector('[script="control.getVariable"]') // get local expression
+       .querySelector('[fn="getVariable"]') // get local expression
        .setAttribute('type', type);
 }
 
@@ -1256,10 +1283,55 @@ function updateLocalInstancesType(variableStep, type){
             // while it is invalid? Not sure if auto-removing them is good UI.
             // Maybe mark then and provide a button to remove all of them at
             // user discretion?
-            app.warn('Removing instance of ' + instance.getAttribute('script') + ' because it now has a type which is illegal in this position', true);
+            app.warn('Removing instance of ' + instance.getAttribute('fn') + ' because it now has a type which is illegal in this position', true);
             instance.parentElement.removeChild(instance);
         }
     });
+}
+
+// Manage block selections
+
+function manageSelections(evt){
+    var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
+    if (!block) return;
+    if (block.localName == 'wb-value'){
+        selectByValue(block);
+        selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
+    }else{
+        selectByBlock(block);
+    }
+}
+
+function selectByValue(valueBlock){
+    // Todo:
+    // * make sure this is a valid block to select
+    // * move selection to next block as needed
+    var oldValue = dom.find(workspace, '.selected-value');
+    if (oldValue){
+        if (oldValue === valueBlock){
+            /* nothing to do */
+            return;
+        }else{
+            oldValue.classList.remove('selected-value');
+        }
+    }
+    valueBlock.classList.add('selected-value');
+}
+
+function selectByBlock(block){
+    // Todo:
+    // * make sure this is a valid block to select
+    // * move selection to next block as needed
+    var oldBlock = dom.find(workspace, '.selected-block');
+    if (oldBlock){
+        if (oldBlock === block){
+            /* nothing to do */
+            return;
+        }else{
+            oldBlock.classList.remove('selected-block');
+        }
+    }
+    block.classList.add('selected-block');
 }
 
 // Event handling
@@ -1270,7 +1342,7 @@ Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context,
 
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 Event.on(workspace, 'editor:wb-added', 'wb-context, wb-step', uniquifyVariableNames);
-Event.on(document.body, 'editor:wb-cloned', '[script="control.getVariable"]', createLocalToInstanceAssociation);
+Event.on(document.body, 'editor:wb-cloned', '[fn="getVariable"]', createLocalToInstanceAssociation);
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 
@@ -1294,5 +1366,7 @@ Event.on(workspace, 'editor:input', 'wb-local input', handleVariableInput);
 Event.on(workspace, 'editor:blur',  'wb-local input', handleVariableBlur); // Mozilla
 Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); // All other browsers
 
+/* Some helpers for selections */
+Event.on(workspace, 'editor:click', '*', manageSelections);
 
 })();

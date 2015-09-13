@@ -415,7 +415,22 @@
     }
     
     function redoEvent(toRedo){
-        console.log("redoing event of type: " + toRedo.type);
+        if(toRedo.type === 'delete-block'){ //add the block back into the parent expression
+            var deletedBlock = toRedo.deletedBlock;
+            var deletedFrom = toRedo.deletedFrom;
+            deletedFrom.removeChild(deletedBlock);
+        }
+        if(toRedo.type === 'add-block'){ //remove the block from  the parent expression
+            var addedBlock = toRedo.addedBlock;
+            var addedTo = toRedo.addedTo;
+            var nextBlock = toRedo.nextBlock;
+            if(nextBlock){
+                addedTo.insertBefore(addedBlock, nextBlock);
+            }
+            else{
+                addedTo.appendChild(addedBlock);
+            }
+        }
     }
     
     function undoKeyCombo(evt) {

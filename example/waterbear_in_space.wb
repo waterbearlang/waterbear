@@ -1,4 +1,4 @@
-<html><head></head><body><wb-step ns="control" fn="setVariable" id="kf2cf25" style=""><header><wb-row>
+<wb-step ns="control" fn="setVariable" id="kf2cf25" style=""><header><wb-row>
                         <wb-value type="text" allow="literal" value="mascot image">set<input type="text" style="width: 84.2753524780273px;"></wb-value>
                         <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" ns="image" fn="get"><header><wb-value type="text" value="images/mascot/mascot-space.png">image from url<input type="text" style="width: 186.204177856445px;"></wb-value></header>
 
@@ -83,4 +83,3 @@
                             </wb-expression></wb-value></header>
 
                 </wb-step></wb-contains></wb-context>
-</body></html>

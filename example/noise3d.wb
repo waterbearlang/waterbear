@@ -1,4 +1,4 @@
-<html><head></head><body><wb-step ns="control" fn="setVariable" id="k6e53ae" style=""><header><wb-row>
+<wb-step ns="control" fn="setVariable" id="k6e53ae" style=""><header><wb-row>
                         <wb-value type="text" allow="literal" value="variable">set<input type="text" style="width: 53.0192794799805px;"></wb-value>
                         <wb-value type="any" value="400">to<input type="any" style="width: 33.3109588623047px;"></wb-value>
                     </wb-row><wb-row>
@@ -106,4 +106,3 @@
                 </wb-expression></wb-value></header>
 
                 </wb-step></wb-contains></wb-context></wb-contains></wb-context>
-</body></html>

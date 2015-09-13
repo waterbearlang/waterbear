@@ -1,4 +1,4 @@
-<html><head></head><body><wb-step ns="control" fn="setVariable" id="k519f6"><header><wb-row>
+<wb-step ns="control" fn="setVariable" id="k519f6"><header><wb-row>
                         <wb-value type="text" allow="literal" value="mindist">set<input type="text" style="width: 50.6717071533203px;"></wb-value>
                         <wb-value type="any" value="150">to<input type="any" style="width: 33.3109588623047px;"></wb-value>
                     </wb-row><wb-row>
@@ -80,8 +80,8 @@
                         <wb-local>
                             <wb-expression type=" number"="" ns="control" fn="getVariable" for="k1b4b88" value="angle"><header>angle</header>
 
-                            
-                        
+
+
                     </wb-value></header>
 
 
@@ -118,7 +118,7 @@
                             <wb-expression type=" number"=""><header>distance</header>
 
                             </wb-expression>
-                        
+
                     </wb-expression></wb-value></header>
 
 
@@ -184,7 +184,6 @@
                 </wb-expression></wb-expression></wb-step></wb-expression></wb-value><wb-value type="number" min="0" value="8">radius<input type="number" min="0" style="width: 30px;"></wb-value></wb-row></header>
 
 
-                
+
 
                 </wb-step></wb-contains></wb-context></wb-contains></wb-context>
-</body></html>

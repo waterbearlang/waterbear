@@ -387,11 +387,75 @@
         Event.keyHandlers[key].push(handler);
     }
 
-
     function clearRuntime(){
         Event.keyHandlers = {};
     }
 
+    /**UNDO and REDO events**/
+    var undoStack = [];
+    var redoStack = [];
+    
+    function undoEvent(toUndo){
+        if(toUndo.type === 'delete-block'){ //add the block back into the parent expression
+            var deletedBlock = toUndo.deletedBlock;
+            var deletedFrom = toUndo.deletedFrom;
+            var nextBlock = toUndo.nextBlock;
+            if(nextBlock){
+                deletedFrom.insertBefore(deletedBlock, nextBlock);
+            }
+            else{
+                deletedFrom.appendChild(deletedBlock);
+            }
+        }
+        if(toUndo.type === 'add-block'){ //remove the block from  the parent expression
+            var addedBlock = toUndo.addedBlock;
+            var addedTo = toUndo.addedTo;
+            addedTo.removeChild(addedBlock);
+        }
+    }
+    
+    function redoEvent(toRedo){
+        console.log("redoing event of type: " + toRedo.type);
+    }
+    
+    function undoKeyCombo(evt) {
+        if(keyForEvent(evt) == 'z' && Event.keys['ctrl']) {
+            evt.preventDefault();
+            if(undoStack.length==0){
+                console.log("Empty undo stack.");
+            }
+            else{
+                var toUndo = undoStack.pop();
+                redoStack.push(toUndo);
+                undoEvent(toUndo);
+            }
+        }
+    }
+    
+    function redoKeyCombo(evt) {
+        if(keyForEvent(evt) == 'y' && Event.keys['ctrl']) {
+            evt.preventDefault();
+            if(redoStack.length == 0){
+                console.log("Empty redo stack");
+            }
+            else{
+                var toRedo = redoStack.pop();
+                undoStack.push(toRedo);
+                redoEvent(toRedo);
+            }
+        }
+    }
+    
+    //add a new event to the undo stack
+    function addNewEvent(evt){
+        console.log("Adding new event.");
+        redoStack = [];
+        if(evt.type === "delete-block"){
+            console.log("block deletion occured");
+        }
+        undoStack.push(evt);
+    }
+    
     window.Event = {
         on: on,
         onKeyDown: onKeyDown, // special version of on to listen for specific keys
@@ -418,7 +482,10 @@
         trackPointerDown: trackPointerDown,
         trackPointerUp: trackPointerUp,
         handleKeyUp: handleKeyUp,
-        handleKeyDown: handleKeyDown
+        handleKeyDown: handleKeyDown,
+        undoKeyCombo: undoKeyCombo,
+        redoKeyCombo: redoKeyCombo,
+        addNewEvent: addNewEvent  
     };
 
 })();

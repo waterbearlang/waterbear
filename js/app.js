@@ -216,7 +216,7 @@ function preload() {
      */
     return assets.load({
         /* Selector for blocks that require loading  : function that begins the loading. */
-        'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
+        'wb-contains wb-expression[isasset=true]': assets.loadMedia,
         'wb-contains wb-expression[script^="geolocation."]':
         /* assets.waitFor waits for the given event to be triggered to signal
          * that the asset is loaded. */

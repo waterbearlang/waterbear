@@ -51,7 +51,9 @@ body > header > h1{
     padding: 0px;
 }
 
-.menu button, .menu a{
+
+.menu button, .menu a, .do-run, .do-stop{
+
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
@@ -80,15 +82,7 @@ body > header > h1{
     background-color: #666666;
     height: 34px;
 }
-/*.tabs-menu:after{
-    position: absolute;
-    content: "";
-    width: 100%;
-    bottom: 0;
-    left: 0;
 
-    z-index: 1;
-}*/
 .tabs-menu button{
     border: 2px solid #111111;
     border-radius: 5px;
@@ -246,13 +240,20 @@ wb-accordion.text > header:after{ background-color: hsl(348, 53%, 56%); }
 .tutorial-output > div{
     padding: 10px;
 }
-
-.tutorial-output > div > img, .tutorial-output > div > canvas{
-    padding-top: 10px;
-    border: 2px solid black;
-    width: 210px;
-    height: 190px;
+.tutorial-output > div > img, div.canvas-holder{
+    flex-direction: column;
+    border: black;
+    border-style: solid;
+    border-width: 4px;
+    margin-top: 20px;
+    width: 250px;
+    height: 190px;   
 }
+.tutorial-output > div > div.canvas-holder{
+    margin-top:7px;
+    
+}
+
 
 .tutorial-finished{
     display: inline-block;

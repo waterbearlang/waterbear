@@ -191,42 +191,6 @@ ContextProto.run = function(strand, frame){
     /* Call setup! */
     return this.setup.call(strand.scope, strand, this, containers, args);
 };
-ContextProto.showLocals = function(evt){
-    // This is way too specific to the needs to the loopOver block
-    var blockAdded = evt.target;
-    if (blockAdded && blockAdded.localName === 'wb-expression'){
-        var type = blockAdded.getAttribute('type');
-        var header = dom.child(this, 'header');
-        if (!header){
-            return;
-        }
-        var row = dom.child(header, 'wb-row');
-        if (!row){
-            return;
-        }
-        var locals = dom.children(row, 'wb-local[fortype]');
-        locals.forEach(function(local){
-            var localtypes = local.getAttribute('fortype').split(',');
-            if (localtypes.indexOf(type) > -1 || localtypes.indexOf('any') > -1){
-                local.classList.add('show');
-            }
-        });
-    }
-};
-ContextProto.hideLocals = function(evt){
-    // This is way too specific to the needs to the loopOver block
-    var blockAdded = evt.target;
-    if (blockAdded && blockAdded.localName === 'wb-expression'){
-        var header = dom.child(this, 'header');
-        if (!header) return;
-        var row = dom.child(header, 'wb-row');
-        if (!row) return;
-        var locals = dom.children(row, 'wb-local[fortypes]');
-        locals.forEach(function(local){
-            local.classList.remove('show');
-        });
-    }
-};
 /**
  * Prepares the setup() callback.
  */
@@ -1113,9 +1077,6 @@ Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context,
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);
 Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', uniquifyVariableName);
-
-Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.showLocals(evt); });
-Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 

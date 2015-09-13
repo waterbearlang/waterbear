@@ -1071,6 +1071,7 @@ function dropTargetIsContainer(potentialDropTarget){
          app.tip('drop to add after this block');
       }
   }else{
+      app.warn('drop anywhere else (or hit Esc) to cancel the drag');
       potentialDropTarget.classList.add('no-drop');
   }
 }
@@ -1126,14 +1127,10 @@ function endDragBlock(evt){
             originalParent = origTarget.parentElement;
             nextElem = origTarget.nextElementSibling;
         }
-        origTarget.parentElement.removeChild(origTarget);
-        origTarget = null;
     }
     if (!dropTarget){
-        if(dragTarget){
-            dragTarget.parentElement.removeChild(dragTarget);
-        }
-       // fall through to resetDragging()
+        // No legal target, probably outside of workspace
+        return cancelDragBlock();
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
@@ -1141,10 +1138,10 @@ function endDragBlock(evt){
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Undo.addNewEvent(deleteEvent);                 //add new event to undo
             originalBlock.removeInstances(); // FIXME: Make this undo-able!
+            originalBlock.parentElement.removeChild(originalBlock);
         }
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
-
         if (dropTarget.matches('wb-value')) {
             dropTarget.appendChild(dragTarget);
             dropTarget.deselect();
@@ -1168,13 +1165,16 @@ function endDragBlock(evt){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
         addToContains(dragTarget, evt, addBlockEvent, originalBlock);
     }else{
-        dragTarget.parentElement.removeChild(dragTarget);
+        /* something unexpected, cancel drag */
+        return cancelDragBlock();
     }
     resetDragging();
 }
 
-function cancelDragBlock(evt){
-    dragTarget.parentElement.removeChild(dragTarget);
+function cancelDragBlock(){
+    if (dragTarget){
+        dragTarget.parentElement.removeChild(dragTarget);
+    }
     resetDragging();
 }
 
@@ -1203,10 +1203,10 @@ function resetDragging(){
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
     document.body.classList.remove('block-dragging');
-    dom.findAll(document.body, 'no-drop').forEach(function(e){
+    dom.findAll(document.body, '.no-drop').forEach(function(e){
         e.classList.remove('no-drop');
     })
-    dom.findAll(document.body, 'ok-drop').forEach(function(e){
+    dom.findAll(document.body, '.ok-drop').forEach(function(e){
         e.classList.remove('ok-drop');
     });
 }
@@ -1262,6 +1262,45 @@ function updateLocalInstancesType(variableStep, type){
     });
 }
 
+// Manage block selections
+
+function selectValue(evt){
+    // Todo:
+    // * make sure this is a valid block to select
+    // * move selection to next block as needed
+    var value = evt.target;
+    if (value.localName === 'input'){
+        value = dom.closest(value, 'wb-value');
+    }
+    var oldValue = dom.find(workspace, '.selected-value');
+    if (oldValue){
+        if (oldValue === value){
+            /* nothing to do */
+            return;
+        }else{
+            oldValue.classList.remove('selected-value');
+        }
+    }
+    value.classList.add('selected-value');
+}
+
+function selectBlock(evt){
+    // Todo:
+    // * make sure this is a valid block to select
+    // * move selection to next block as needed
+    var block = evt.target;
+    var oldBlock = dom.find(workspace, '.selected-block');
+    if (oldBlock){
+        if (oldBlock === block){
+            /* nothing to do */
+            return;
+        }else{
+            oldBlock.classList.remove('selected-block');
+        }
+    }
+    block.classList.add('selected-block');
+}
+
 // Event handling
 
 // Make sure wb-added, wb-removed, wb-addedChild, wb-removedChild events are triggered
@@ -1294,5 +1333,8 @@ Event.on(workspace, 'editor:input', 'wb-local input', handleVariableInput);
 Event.on(workspace, 'editor:blur',  'wb-local input', handleVariableBlur); // Mozilla
 Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); // All other browsers
 
+/* Some helpers for selections */
+Event.on(workspace, 'editor:click', 'wb-value, input', selectValue);
+Event.on(workspace, 'editor:click', 'wb-step, wb-context, wb-contains, wb-expression', selectBlock);
 
 })();

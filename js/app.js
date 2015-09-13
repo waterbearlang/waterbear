@@ -19,8 +19,12 @@ function error(text){
     message('red', text);
 }
 
-function warn(text){
-    message('orange', text);
+function warn(text, persist){
+    if (persist){
+        notifire({msg: text, types: 'warning', position: 'right', timeout: 5000})
+    }else{
+        message('orange', text);
+    }
 }
 
 function info(text){

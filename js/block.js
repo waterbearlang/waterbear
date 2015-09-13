@@ -134,6 +134,10 @@ BlockProto.getInstances = function(){
 
 BlockProto.removeInstances = function(){
     var instances = this.getInstances();
+    if (instances.length){
+        app.warn('Removing ' + instances.length + ' instances of '
+    + this.getAttribute('script') + ' because their value was removed', true);
+    }
     instances.forEach(function(instance){
         instance.parentElement.removeChild(instance);
     });

@@ -96,6 +96,7 @@
         bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
+        Event.clearStacks();
     }
 
 

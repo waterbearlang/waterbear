@@ -517,6 +517,12 @@
         }
     }
     
+    function clearStacks(){
+        undoStack = [];
+        redoStack = [];
+        setButtonStatus();
+    }
+    
     //add a new event to the undo stack
     function addNewEvent(evt){
         redoStack = [];
@@ -555,7 +561,8 @@
         redoKeyCombo: redoKeyCombo,
         handleUndoButton: handleUndoButton,
         handleRedoButton: handleRedoButton,
-        addNewEvent: addNewEvent  
+        addNewEvent: addNewEvent,  
+        clearStacks: clearStacks
     };
 
 })();

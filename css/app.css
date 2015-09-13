@@ -43,6 +43,12 @@ body > header > h1{
     line-height: 34px;
 }
 
+body > output{
+    flex: 0 0 24px;
+    background: #EFEDEA;
+    color: #111111;
+}
+
 .menu{
     flex: 0 0 34px;
     background-color: #666666;
@@ -182,6 +188,7 @@ sidebar.trashcan:after{
 wb-workspace > wb-contains{
     border: 2px inset #CCC;
     position: relative;
+    padding-bottom: 16px;
 }
 
 wb-contains:empty::before{

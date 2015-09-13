@@ -73,7 +73,7 @@ wb-workspace{
     display: flex;
     flex-direction: column;
     flex: 2 1;
-    overflow-x: auto;
+    /*overflow-x: auto;*/
 }
 
 wb-workspace > header{
@@ -90,7 +90,7 @@ wb-workspace > wb-locals{
 
 wb-workspace > wb-contains{
     flex: 3 1;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 @keyframes slidey-stripes {

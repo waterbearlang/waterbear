@@ -216,6 +216,7 @@
                 }else{
                     evt.invalid = true;
                     evt.invalidReason = 'Multiple touches present';
+                    console.log('multiple touches');
                     return evt;
                 }
                 evt.target = touch.target;

@@ -3,6 +3,7 @@
 
 var process;
 var currentTutorialStep = 0;
+var canvasRef;
 
 // FIXME: This feedback is important and useful, but using it this way violates
 // our localization principle: All user-visible text should be in HTML text,
@@ -29,7 +30,15 @@ function info(text){
 //For displaying the finished block
 Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
     var button = dom.closest(evt.target, 'button');
-    var finished = button.parentElement.parentElement.parentElement.querySelector('wb-hbox[class="tutorial-finished"]');
+    var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-next");
+    console.log(finished);
+    finished.setAttribute('completed', 'true');
+
+});
+Event.on(document.body, 'ui:click', '.tutorial-see-solution', function(evt){
+    var button = dom.closest(evt.target, 'button');
+    var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-solution");
+    console.log(finished);
     finished.setAttribute('completed', 'true');
 
 });
@@ -47,8 +56,16 @@ Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
 });
 
 // For switching between the tutorial and canvas
-Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
-    var tab = dom.closest(evt.target, 'button');
+Event.on(document.body, 'ui:click', '.show-canvas', showCanvas);
+
+
+function showCanvas(evt){
+    if(evt){
+        var tab = dom.closest(evt.target, 'button');
+    }
+    else{//because I am using this to jump out of tutorials w/o a click
+        var tab = dom.find('button.show-canvas');
+    }
     if(tab.getAttribute('pressed') !== 'true'){
         var existing = tab.parentElement.querySelector('button[pressed=true]');
         if(existing){existing.removeAttribute('pressed');}
@@ -57,12 +74,13 @@ Event.on(document.body, 'ui:click', '.show-canvas', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
         tabAssoc.setAttribute('selected', 'true');
-        var tutCanvas = dom.find('div.canvas-holder > canvas');
+        var tutCanvas = dom.find('canvas');
         dom.find('wb-playground').appendChild( tutCanvas);
         tutCanvas.removeAttribute('style');
         runtime.handleResize();
     }
-});
+}
+
 Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
     var tab = dom.closest(evt.target, 'button');
     if(tab.getAttribute('pressed') !== 'true'){
@@ -73,8 +91,8 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
         if(existing){existing.removeAttribute('selected');}
         var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
         tabAssoc.setAttribute('selected', 'true');
-        var playCanvas = dom.find('wb-playground > canvas');
-        dom.find('div.canvas-holder').appendChild(playCanvas);
+        var playCanvas = dom.find('canvas');
+        dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(playCanvas);
         playCanvas.style.width = '250px';
         playCanvas.style.height = '190px';
         
@@ -82,8 +100,8 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 });
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
-Event.on('.do-run', 'ui:click', null, startScript);
-Event.on('.do-stop', 'ui:click', null, stopScript);
+Event.on(document.body, 'ui:click', '.do-run', startScript);
+Event.on(document.body, 'ui:click','.do-stop', stopScript);
 Event.on('.do-pause', 'ui:click', null, function () {
     /* TODO */
 });
@@ -216,21 +234,44 @@ function handleTutorialButton(evt){
             text: "Waterbear in Space",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
+                var tutButton = dom.find('button.show-tutorial');
+                canvasRef = dom.find('canvas');
                 File.loadTutorialFromName('wb_in_space');
                 modal.hide();
                 currentTutorialStep = 0;
+                tutButton.removeAttribute('hidden');
+                /*
+                if(tutButton.getAttribute('pressed') === 'true'){
+                    dom.find('wb-playground').appendChild(canvasRef);
+                    showCanvas();
+                }
+                */
+                
             }
         }]
     });
     fileModel.show();
 }
 
+function switchTutorialCanvas(){
+    var tutCanvas = dom.find('canvas');
+        var target = dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder');
+        target.appendChild(tutCanvas);
+}
+
 function showCurrentTutorialStep() {
     var tutorialSteps = document.getElementsByClassName('tutorial-step');
     for(var i=0; i<tutorialSteps.length; i = i+1){
         tutorialSteps[i].classList.add('tutorial-hidden');
+        tutorialSteps[i].classList.remove('tutorial-current');
     }
     tutorialSteps[currentTutorialStep].classList.remove('tutorial-hidden');
+    tutorialSteps[currentTutorialStep].classList.add('tutorial-current');
+    if(currentTutorialStep > 0)
+        switchTutorialCanvas();
+    else{
+        dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(canvasRef);
+    }
     currentTutorialStep++;
 }
 

@@ -296,57 +296,21 @@ ContextProto.getAllContextLocals = function(){
     return locals;
 }
 
-ContextProto.run = function(strand, frame){
-   var args, containers;
-   /* Set this function's setup() callback */
-    if (!this.setup){
-        this.setupCallbacks();
+ContextProto.run = function(parentScope){
+    if (!this.fn){
+        var nsName = this.getAttribute('ns');
+        var fnName = this.getAttribute('fn');
+        this.fn = runtime[nsName][fnName];
     }
-
-    /* FIXME: Allow for optional evaluation of values. */
-    // expressions are evaluated if and only if shouldEvaluateValues returns
-    // true. Containers are evaluated when needed.
-    args = this.gatherValues(strand.scope);
-    containers = this.gatherContains();
-
-    /* Call setup! */
-    return this.setup.call(strand.scope, strand, this, containers, args);
+    var scope = Object.create(parentScope); // use parentScope as prototype
+    // expressions are eagerly evaluated against scope, contains are late-evaluated
+    // I'm not yet sure if this is the Right Thing™
+    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
 };
+
 /**
  * Prepares the setup() callback.
  */
-ContextProto.setupCallbacks = function() {
-    /* Fetch the callback object from runtime. */
-    var ns = this.getAttribute('ns');
-    var fn = this.getAttribute('fn');
-    try{
-        var callback = runtime[ns][fn];
-    }catch(e){
-        console.log('Cannot retrieve function for %o (%s.%s)', this, ns, fn);
-        throw e;
-    }
-
-    console.assert(!!callback, 'Could not find script: ' + fn);
-
-    this.setup = callback;
-};
-
-/**
- * Some code (e.g., execution.js) wants to know if they're dealing with a
- * context block. This is a surefire way of doing that.
- */
-ContextProto.isContext = true;
-
-/** Default: Always get the next DOM element and assume it's a wb-contains. */
-/* FIXME: That is a dangerous assumption! */
-function defaultNextCallback(strand, args, containers, elem) {
-    return elem.nextElementSibling;
-}
-
-/** Default: Always evaluate arugments before calling setup(). */
-function defaultShouldEvaluateValues(strand, containers, elem) {
-    return true;
-}
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 

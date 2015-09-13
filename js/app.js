@@ -226,13 +226,15 @@ function preload() {
     });
 }
 
-function runScript(options) {
-    console.assert(!process, 'Tried to run, but Process instance already exists!');
-    /* Create brand new Process instance (because each process can only be
-     * started once). */
-    process = new WaterbearProcess(options).start();
+function runScript(){
+    var globalScope = {};
+    runtime.startEventLoop();
+    dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
+        if (block.run){
+            block.run(globalScope);
+        }
+    });
 }
-
 
 function handleFileButton(evt){
     _gaq.push(['_trackEvent', 'File', 'file']);

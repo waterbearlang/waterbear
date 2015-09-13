@@ -34,6 +34,7 @@
         <div class="menu">
             <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
             <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
+            <button class="open-tutorial" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);">Tutorials</button>
         </div>
         <wb-workbox>
         <sidebar>
@@ -43,6 +44,7 @@
                     <img class="cat-icon" src="images/icon/control.svg" />
                     Controls
                 </header>
+                <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
                 <wb-context script="control.eachFrame" class="control">
                     <wb-row>
                         <wb-value>each frame</wb-value>
@@ -149,6 +151,7 @@
                     <img class="cat-icon" src="images/icon/sprite.svg" />
                     Sprites
                 </header>
+                <p>Sprites are images or shapes that can have momentum and heading direction applied to them for animation and games.</p>
                 <wb-expression type="sprite" script="sprite.create" />
                     <wb-value type="wb-image,shape,sprite">sprite with</wb-value>
                 </wb-expression>
@@ -214,6 +217,7 @@
                     <img class="cat-icon" src="images/icon/sound.svg" />
                     Sound
                 </header>
+                <p>Play and manipulate existing sound files or synthesize new sounds.</p>
                 <wb-expression type="sound" isAsset="true" script="sound.get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
                 </wb-expression>
@@ -319,6 +323,7 @@
                     <img class="cat-icon" src="images/icon/array.svg" />
                     Arrays
                 </header>
+                <p>Arrays are lists of things. You can add, remove, and loop over these lists.</p>
                 <wb-expression type="array" script="array.create">
                     <wb-value>create array</wb-value>
                     <wb-row>
@@ -368,6 +373,7 @@
                     <img class="cat-icon" src="images/icon/boolean.svg" />
                     Boolean
                 </header>
+                <p>Booleans are either True or False. There are many operations for comparing and mixing them.</p>
                 <wb-expression type="boolean" script="boolean.and">
                     <wb-value type="boolean" value="true"></wb-value>
                     <wb-value type="boolean" value="true">and</wb-value>
@@ -389,6 +395,7 @@
                     <img class="cat-icon" src="images/icon/stage.svg" />
                     Stage
                 </header>
+                <p>Stage is the area where scripts are performed.</p>
                 <wb-step script="stage.clearTo">
                     <wb-value type="color,wb-image">clear to</wb-value>
                 </wb-step>
@@ -416,6 +423,7 @@
                     <img class="cat-icon" src="images/icon/color.svg" />
                     Colors
                 </header>
+                <p>There are several ways to specify colors.</p>
                 <wb-expression type="color" script="color.namedColor">
                     <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
                 </wb-expression>
@@ -459,6 +467,7 @@
                     <img class="cat-icon" src="images/icon/image.svg" />
                     Images
                 </header>
+                <p>Images are pictures loaded from the web. They can be positioned and resized.</p>
                 <wb-expression type="wb-image" isAsset="true" script="image.get" class="image">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                 </wb-expression>
@@ -494,6 +503,7 @@
                     <img class="cat-icon" src="images/icon/math.svg" />
                     Math
                 </header>
+                <p>In addition to performing math on numbers you can also use many operations on arrays and vectors too.</p>
                 <wb-expression script="math.add" type="number">
                     <wb-value type="number,vector,array" value="0"></wb-value>
                     <wb-value type="number,vector,array" value="0">+</wb-value>
@@ -597,6 +607,7 @@
                     <img class="cat-icon" src="images/icon/random.svg" />
                     Random
                 </header>
+                <p>There are many types of randomness in Waterbear.</p>
                 <wb-expression type="number" script="random.randFloat">
                     <wb-value>random float</wb-value>
                 </wb-expression>
@@ -618,6 +629,7 @@
                     <img class="cat-icon" src="images/icon/vector.svg" />
                     Vectors
                 </header>
+                <p>Waterbear vectors are 2-D objects expressing x and y coordinates, but also a direction and magnitude (useful for speed, acceleration, distance).</p>
                 <wb-expression type="vector" script="vector.create">
                     <wb-value type="number" value="0">vector at x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
@@ -664,6 +676,7 @@
                     <img class="cat-icon" src="images/icon/object.svg" />
                     Objects
                 </header>
+                <p>Objects are general-purpose containers where you can associate names (keys) with objects (values) like in a dictionary.</p>
                 <wb-expression type="object" script="object.empty">
                     empty object
                 </wb-expression>
@@ -688,6 +701,7 @@
                     <img class="cat-icon" src="images/icon/string.svg" />
                     Strings
                 </header>
+                <p>Strings are simple bits of text. You can search them, combine them, and break them up.</p>
                 <wb-expression script="string.toString" type="string">
                     <wb-value type="any">convert</wb-value>to string
                 </wb-expression>
@@ -765,6 +779,7 @@
                     <img class="cat-icon" src="images/icon/point.svg" />
                     Points
                 </header>
+                <p>Points are x,y coordinates like vectors but without magnitude and direction.</p>
                 <wb-expression type="point" script="point.create">
                     <wb-value type="number" value="0">x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
@@ -793,6 +808,7 @@
                     <img class="cat-icon" src="images/icon/path.svg" />
                     Paths
                 </header>
+                <p>Paths are drawing instructions for producing an image from a series of points.</p>
                 <wb-step script = "path.lineStyle" type="path">
                     <wb-value type="number">line width</wb-value>
                     <wb-value type="color" value="#0000FF">line color</wb-value>
@@ -838,6 +854,7 @@
                     <img class="cat-icon" src="images/icon/shape.svg" />
                     Shapes
                 </header>
+                <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
                  <wb-step script=shape.fill class="shape">
                     <wb-value type="shape">fill the shape</wb-value>
                 </wb-step>
@@ -866,6 +883,7 @@
                     <img class="cat-icon" src="images/icon/rect.svg" />
                     Rects
                 </header>
+                <p>It turns out to be frequently useful to be able to represent a rectangle.</p>
                 <wb-expression type="rect" script="rect.fromCoordinates" class="rect">
                     <wb-value type="number" value="0">x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
@@ -903,6 +921,7 @@
                     <img class="cat-icon" src="images/icon/sense.svg" />
                     Input
                 </header>
+                <p>Programs can get input from the mouse, touch, key presses, and more.</p>
                 <wb-expression type="number" script="input.mouseX">
                     <wb-value>Mouse x</wb-value>
                 </wb-expression>
@@ -929,11 +948,10 @@
                         <img class="cat-icon" src="images/icon/geolocation.svg" />
                         Geolocation
                     </header>
-
+                    <p>Where in the world is your progam running?</p>
                     <wb-expression type="geolocation" script="geolocation.currentLocation">
                         my current location
                     </wb-expression>
-
                     <wb-context script="geolocation.whenLocationUpdated" class="geolocation">
                         <wb-row>
                             <wb-value>when my location changes</wb-value>
@@ -944,7 +962,6 @@
                             </wb-local>
                         </wb-row>
                     </wb-context>
-
                     <wb-expression type="number" script="geolocation.latitude">
                         <wb-value type="geolocation" allow="expression">latitude of</wb-value>
                     </wb-expression>
@@ -966,6 +983,7 @@
                         <img class="cat-icon" src="images/icon/size.svg" />
                         Sizes
                     </header>
+                    <p>A size captures both width and height in one convenient package.</p>
                     <wb-expression type="size" script="size.fromCoordinates">
                         <wb-value type="number" value="0">size from width</wb-value>
                         <wb-value type="text" value="px">width units</wb-value>
@@ -994,6 +1012,7 @@
                         <img class="cat-icon" src="images/icon/text.svg" />
                         Text
                     </header>
+                    <p>Text is like a string, but formatted for printing to the screen.</p>
                     <wb-step script="text.setFont" class="text">
                         <wb-row>
                             <wb-value type = "number" value = "12">font</wb-value>
@@ -1067,6 +1086,7 @@
             </wb-playground>
         </wb-displaybox>
         <wb-displaybox class="tutorial">
+            <div class="tutorial-content">
                 <wb-hbox class="tutorial-header">
                     <h1>Waterbear Tutorials</h1>
                 </wb-hbox>
@@ -1115,6 +1135,7 @@
                         <div> This is our solution</div>
                     </wb-hbox>
                 </wb-hbox>
+                </div>
             </wb-displaybox>
         </wb-vbox>
     </wb-hbox>

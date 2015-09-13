@@ -153,7 +153,6 @@ StepProto.run = function(scope){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
-    _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
     var values = this.gatherValues(scope);
     return this.fn.apply(scope, this.gatherValues(scope));
 };
@@ -303,9 +302,6 @@ ContextProto.run = function(strand, frame){
     if (!this.setup){
         this.setupCallbacks();
     }
-
-    /* Google analytics event tracking. */
-    _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
 
     /* FIXME: Allow for optional evaluation of values. */
     // expressions are evaluated if and only if shouldEvaluateValues returns
@@ -468,7 +464,6 @@ ExpressionProto.run = function(scope){
         var fnName = this.getAttribute('script').split('.');
         this.fn = runtime[fnName[0]][fnName[1]];
     }
-    _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 

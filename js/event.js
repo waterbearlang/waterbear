@@ -283,6 +283,7 @@
         dragTarget = null;
         isDragging = false;
         Event.pointerDown = false;
+        // FIXME: This doesn't appear to be called
         document.body.classList.remove('dragging');
         trigger(document, 'drag-reset');
     }
@@ -452,7 +453,8 @@
         trackPointerUp: trackPointerUp,
         handleKeyUp: handleKeyUp,
         handleKeyDown: handleKeyDown,
-        registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents
+        registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents,
+        keyForEvent: keyForEvent
     };
 
 })();

@@ -86,7 +86,7 @@ BlockProto.attachedCallback = function blockAttached(){
     //    Are there other expression blocks that add locals?
     // 2) Added to contains of setup block, add globally (to file)
     // 3) Otherwise, when added to contains add to locals view of closest context
-    if (!this.parentElement || dom.matches(this.parentElement, 'wb-contains')){
+    if (!this.parentElement || dom.matches(this.parentElement, 'wb-contains') || dom.matches(this.parentElement, 'wb-local')){
         return;
     }
     var parent = dom.parent(this, 'wb-context');
@@ -149,127 +149,6 @@ StepProto.run = function(scope){
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
-
-function updateVariableType(evt){
-    var setVariableBlock = evt.detail;
-    // ignore variables not in the workspace (in scripts)
-    if (! dom.matches(setVariableBlock, 'wb-workspace *')){
-        return;
-    }
-    // ignore blocks that are not setVariable
-    if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
-        return;
-    }
-    var valueBlock = evt.target;
-    var type = valueBlock.getAttribute('type');
-    setTypeOfVariable(setVariableBlock, type);
-    updateLocalInstancesType(setVariableBlock, type);
-}
-
-function createVariableToLocalAssociation(evt){
-    var blockWithLocals = evt.target;
-    var id;
-    if (!blockWithLocals.hasAttribute('id')){
-        id = util.randomId();
-        blockWithLocals.setAttribute('id', id);
-    }else{
-        id = blockWithLocals.id;
-    }
-    var locals = dom.findAll(workspace, '#' + id + ' > wb-row > wb-local');
-    if (locals.length){
-        locals.forEach(function(local){
-            local.setAttribute('for', id);
-        });
-    }
-}
-
-
-function handleVariableInput(evt){
-    // Actually change the locals while we update
-    var input = evt.target;
-    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
-    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
-        return;
-    }
-    // keep from literal value matching
-    if (! dom.matches(input.parentElement, ':first-of-type')){
-        return;
-    }
-    var context = dom.closest(stepBlock, 'wb-contains');
-    var newVariableName = input.value;
-    updateVariableNameInInstances(newVariableName, getVariablesToUpdate(context, stepBlock.id));
-    // evt.stopPropagation();
-}
-
-function handleVariableBlur(evt){
-    // Cleanup
-    var input = evt.target;
-    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
-    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
-        return;
-    }
-    ensureNameIsUniqueInContext(input);
-}
-
-function trailingNumber(str){
-    // return trailing number as a number or zero if no trailing number
-    return Number((str.match(/\d+$/) || [0])[0]);
-}
-
-function ensureNameIsUniqueInContext(input){
-    var parentContext = dom.closest(input, 'wb-contains');
-    var setVariable = dom.closest(input, '[script="control.setVariable"]');
-    var valueBlock = dom.closest(input, 'wb-value');
-    // Find other variable names in scope
-    // 1. Get list of setVariable blocks contained by parentContext
-    // 2. Remove this block from the list
-    // 3. Return the value of the input of the block
-    // 4. Sort the resulting list
-    var variablesToTestAgainst = dom.findAll(parentContext, '[script="control.setVariable"]')
-        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
-        .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
-        .sort();
-    var newVariableName = input.value; // we may be changing this one
-    var oldVariableName = input.value;
-    // Compare against other variable names, update if there is a match
-    while(variablesToTestAgainst.indexOf(newVariableName) > -1){
-        newVariableName = incrementName(newVariableName);
-    }
-    if (newVariableName !== oldVariableName){
-        input.value = newVariableName;
-        valueBlock.setAttribute('value', newVariableName);
-        var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
-        updateVariableNameInInstances(newVariableName, variablesToUpdate);
-    }
-}
-
-function incrementName(name){
-    var incrementalNumber = trailingNumber(name);
-    var baseName;
-    if (incrementalNumber){
-        baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
-    }else{
-        baseName = newVariableName + ' ';
-    }
-    return baseName + (incrementalNumber + 1);
-}
-
-function getVariablesToUpdate(parentContext, setVarId){
-    return dom.findAll(workspace, '[for="' + setVarId + '"]');
-}
-
-function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
-    variableLocalsToUpdate.forEach(function(wbvalue){
-        wbvalue.setAttribute('value', newVariableName);
-        dom.find(wbvalue, 'header').textContent = newVariableName;
-    });
-}
-
-function uniquifyVariableName(evt){
-    var setVariableBlock = evt.target; // expects a block (wb-step, wb-context)
-    var input = dom.find(setVariableBlock, 'input');
-    ensureNameIsUniqueInContext(input);
-}
 
 
 /*****************
@@ -433,6 +312,10 @@ ExpressionProto.attachedCallback = function expressionAttached(){
         if (blockParent){
             Event.trigger(this, 'wb-added', blockParent);
         }
+    }else{
+        if (!this.id){
+            this.id = util.randomId();
+        }
     }
 
 };
@@ -469,6 +352,139 @@ ExpressionProto.run = function(scope){
 
 
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
+
+/*******************
+*
+* Functions for managing local variables (currently only Expressions)
+*
+********************/
+function updateVariableType(evt){
+    var setVariableBlock = evt.detail;
+    // ignore variables not in the workspace (in scripts)
+    if (! dom.matches(setVariableBlock, 'wb-workspace *')){
+        return;
+    }
+    // ignore blocks that are not setVariable
+    if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
+        return;
+    }
+    var valueBlock = evt.target;
+    var type = valueBlock.getAttribute('type');
+    setTypeOfVariable(setVariableBlock, type);
+    updateLocalInstancesType(setVariableBlock, type);
+}
+
+function createVariableToLocalAssociation(evt){
+    var blockWithLocals = evt.target;
+    var id;
+    if (!blockWithLocals.hasAttribute('id')){
+        id = util.randomId();
+        blockWithLocals.setAttribute('id', id);
+    }else{
+        id = blockWithLocals.id;
+    }
+    var locals = dom.findAll(workspace, '#' + id + ' > wb-row > wb-local');
+    if (locals.length){
+        locals.forEach(function(local){
+            local.setAttribute('for', id);
+        });
+    }
+}
+
+
+function handleVariableInput(evt){
+    // Actually change the locals while we update
+    var input = evt.target;
+    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
+    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
+        return;
+    }
+    // keep from literal value matching
+    if (! dom.matches(input.parentElement, ':first-of-type')){
+        return;
+    }
+    var context = dom.closest(stepBlock, 'wb-contains');
+    var newVariableName = input.value;
+    updateVariableNameInInstances(newVariableName, getVariablesToUpdate(context, stepBlock.id));
+    // evt.stopPropagation();
+}
+
+function handleVariableBlur(evt){
+    // Cleanup
+    var input = evt.target;
+    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
+    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
+        return;
+    }
+    ensureNameIsUniqueInContext(input);
+}
+
+function trailingNumber(str){
+    // return trailing number as a number or zero if no trailing number
+    return Number((str.match(/\d+$/) || [0])[0]);
+}
+
+function ensureNameIsUniqueInContext(input){
+    var parentContext = dom.closest(input, 'wb-contains');
+    var setVariable = dom.closest(input, '[script="control.setVariable"]');
+    var valueBlock = dom.closest(input, 'wb-value');
+    // Find other variable names in scope
+    // 1. Get list of setVariable blocks contained by parentContext
+    // 2. Remove this block from the list
+    // 3. Return the value of the input of the block
+    // 4. Sort the resulting list
+    var variablesToTestAgainst = dom.findAll(parentContext, '[script="control.setVariable"]')
+        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
+        .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
+        .sort();
+    var newVariableName = input.value; // we may be changing this one
+    var oldVariableName = input.value;
+    // Compare against other variable names, update if there is a match
+    while(variablesToTestAgainst.indexOf(newVariableName) > -1){
+        newVariableName = incrementName(newVariableName);
+    }
+    if (newVariableName !== oldVariableName){
+        input.value = newVariableName;
+        valueBlock.setAttribute('value', newVariableName);
+        var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
+        updateVariableNameInInstances(newVariableName, variablesToUpdate);
+    }
+}
+
+function incrementName(name){
+    var incrementalNumber = trailingNumber(name);
+    var baseName;
+    if (incrementalNumber){
+        baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+    }else{
+        baseName = newVariableName + ' ';
+    }
+    return baseName + (incrementalNumber + 1);
+}
+
+function getVariablesToUpdate(parentContext, setVarId){
+    return dom.findAll(workspace, '[for="' + setVarId + '"]');
+}
+
+function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
+    variableLocalsToUpdate.forEach(function(wbvalue){
+        wbvalue.setAttribute('value', newVariableName);
+        dom.find(wbvalue, 'header').textContent = newVariableName;
+    });
+}
+
+function uniquifyVariableName(evt){
+    var setVariableBlock = evt.target; // expects a block (wb-step, wb-context)
+    var input = dom.find(setVariableBlock, 'input');
+    ensureNameIsUniqueInContext(input);
+}
+
+/*******************
+*
+* End functions for local variables
+*
+********************/
+
 
 /*****************
 *
@@ -945,7 +961,7 @@ function addToContains(block, evt, addBlockEvent){
         addBlockEvent.addedTo = dropTarget.parentElement;
         dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
     }
-    Event.addNewEvent(addBlockEvent);
+    Undo.addNewEvent(addBlockEvent);
 }
 
 /**
@@ -979,7 +995,7 @@ function endDragBlock(evt){
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
             originalBlock.classList.remove('hide');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
-            Event.addNewEvent(deleteEvent);                 //add new event to undo
+            Undo.addNewEvent(deleteEvent);                 //add new event to undo
         }
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
@@ -992,7 +1008,7 @@ function endDragBlock(evt){
             if (dragStart === 'script'){
                 addValueEvent.type = 'move-block'
             }
-            Event.addNewEvent(addValueEvent);
+            Undo.addNewEvent(addValueEvent);
 
         }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.

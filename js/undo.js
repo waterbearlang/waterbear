@@ -125,16 +125,16 @@
     }
 
     function undoKeyCombo(evt) {
-        if((keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
-           (keyForEvent(evt) == 'z' && Event.keys['meta'])) {
+        if((Event.keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
+           (Event.keyForEvent(evt) == 'z' && Event.keys['meta'])) {
             evt.preventDefault();
             undoEvent();
         }
     }
 
     function redoKeyCombo(evt) {
-        if((keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
-           (keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
+        if((Event.keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
+           (Event.keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
             evt.preventDefault();
             redoEvent();
         }

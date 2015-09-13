@@ -750,7 +750,6 @@ Event.on(document.body, 'editor:drag-end', null, function(evt){
         if (dropTarget.matches('wb-value')) {
             // console.log('add expression to value');
             dropTarget.appendChild(dragTarget);
-            setTypeOfVariable(dragTarget, dom.closest(dropTarget, 'wb-step'));
         }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.
             // console.log('create a variable block and add expression to it');
@@ -815,12 +814,24 @@ function createVariableBlock(initialValue) {
    variableStep
       .querySelector('wb-value[type="any"]')
       .appendChild(initialValue);
-    setTypeOfVariable(initialValue, variableStep);
+
    // TODO: autogenerate a good name.
 
    return variableStep;
 }
 
+
+Event.on(document.body, 'editor:wb-added', 'wb-step[script="control.setVariable"]', updateVariable);
+
+function updateVariable(evt){
+    var setVariableBlock = evt.target;
+    var valueBlock = evt.detail;
+    setTypeOfVariable(valueBlock, setVariableBlock);
+    console.log('setVariableBlock: %o', setVariableBlock);
+}
+
+// FIXME: Listen on wb-added instead?
+// And on wb-removed to undo?
 function setTypeOfVariable(initialValue, variableStep){
    // Set type of variable to match type of object
    variableStep

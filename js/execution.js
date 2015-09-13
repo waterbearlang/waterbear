@@ -1,13 +1,45 @@
 /**
- * Abstracts the execution state. That is, all the stuff required for running
- * blocks. It goes in here!
+ * @overview
+ * @author Eddie Antonio Santos <easantos@ualberta.ca>
+ * @description
  *
- * The exported class `Process` is kind of similar to a Unix process in that
- * there is one shared memory, but it contains a bunch of "strands" (kind of
- * like threads) that may run concurrently.
+ * This file exports a single class called {@link Process WaterbearProcess}
+ * that encapsulates *all* of the state for **one** run of a Waterbear script.
+ * In order to run the script again after one has terminated, a new {@link
+ * Process} must be instantiated.
  *
- * @author Eddie Antonio Santos @eddieantonio
- * Date:   March 2015
+ * Each `Process` consists of one or more *re-entrant* "{@link Strand strands}"
+ * (also known as [fibres][]—a similar concept to threads, but without
+ * parallelism). Strands may be the root strand, a strand per-frame handler that
+ * runs on [requestAnimationFrame][], or a context that subscribes to a given
+ * event, such as the `receive` block, the geolocation, or motion blocks.
+ *
+ * Each `Strand` keeps an **instruction pointer** which points to the *next*
+ * block to execute. {@link Strand#doNext} executes exactly one step block or
+ * initiates one context block. This automatically updates the instruction
+ * pointer, which (as of April 2015) delegates to the block to determine which
+ * block is next in the instruction stream. Context blocks are special cases,
+ * since they may establish a new **frame** of execution.
+ *
+ * A {@link Frame} (think *call frame*, *stack frame*, or if you're into
+ * antediluvian terms, an activation record) keeps track of scope for a
+ * particular **container** of blocks. A container is simply a list of blocks
+ * that will run in order. Frames represent places where a new scope may be
+ * extended, or simply where there's a new container of blocks (like the in an
+ * `if` block). A block may establish a new frame, in which case the governing
+ * `Strand` will execute every instruction of this frame until it has run out of
+ * instructions, at which point the frame will pop-out, and the remaining
+ * instructions in the parent frame are run in order.
+ *
+ * **To recap**: a {@link Process} is made of one or more instances of {@link
+ * Strand}, which will start a new {@link Frame} stack with one frame: the
+ * root frame. Execution of the root frame may push and execute a frames on
+ * top of the stack. A strand is finished once its root frame has no more
+ * remaining instructions (however, see {@link ReusableStrand}). A process is
+ * finished once it has no more remaining strands.
+ *
+ * [fibres]: http://en.wikipedia.org/wiki/Fiber_(computer_science)
+ * [requestAnimationFrame]: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
  */
 window.WaterbearProcess = (function () {
     'use strict';
@@ -15,19 +47,34 @@ window.WaterbearProcess = (function () {
     var assert = console.assert.bind(console);
 
     /**
-     * Information for execution of a single frame (as in "stack frame" or
-     * even "activation record", if you will) of execution. Several frames
-     * make up a strand.
+     * Wraps state for the execution of a single frame (as in "stack frame" or
+     * even "activation record", if you will) of execution. Several frames make
+     * up a {@link Strand}.
+     *
+     * Note that the stack behaviour of frames is maintained by the parent
+     * Strand, and not the frame. However, the current scope is ultimately a
+     * property of a frame.
+     *
+     * @constructor
+     * @param {ContextBlock} context - Associated context block. Can be `null`.
+     * @param {Container} activeContainer - The first container to be run.
+     * @param {Scope} scope - The scope to use.
+     * @param {Frame~continuationCallback} [continuationCallback] - callback.
+     * @alias Frame
      */
     function Frame(context, activeContainer, scope, continuationCallback) {
         this.context = context;
         this.activeContainer = activeContainer;
+        /** @member {Scope} Frame#scope the current scope for this frame. */
         this.scope = scope;
         this.shouldContinue = continuationCallback || null;
     }
 
     /**
-     * Pseudo-property: the containers that belong to the underlying context.
+     * Pseudo-property: the containers that belong to the associated context.
+     * Note that a frame may *not* be associated with a context, thus not have
+     * any containers.
+     * @member {Container[]} Frame#containers
      */
     Object.defineProperty(Frame.prototype, 'containers', {
         get: function () {
@@ -37,6 +84,7 @@ window.WaterbearProcess = (function () {
 
     /**
      * Pseudo-property: the first instruction of the active container
+     * @member {Block} Frame#firstInstruction
      */
     Object.defineProperty(Frame.prototype, 'firstInstruction', {
         get: function () {
@@ -45,8 +93,8 @@ window.WaterbearProcess = (function () {
     });
 
     /**
-     * Creates a new (usually root) frame from a <wb-contains> element.
-     * That is, this frame does *NOT* have a context!.
+     * Creates a new (usually root) frame from a <wb-contains> element.  That
+     * is, this frame is **NOT** associated with a context!
      */
     Frame.createFromContainer = function createFromContainer(container, scope) {
         /* Note: this does not actually instantiate an actual Frame object.
@@ -85,23 +133,38 @@ window.WaterbearProcess = (function () {
 
 
     /**
-     * A single execution strand! Think of it as a thread: it keeps track of the
-     * current scope (thus, "the stack"), and thus, has a bunch of nested
-     * "frames" -- a stack frames!
+     * A single strand of execution! Think of it like a thread: it keeps track
+     * of the next instruction to execute, and has an execution stack, which is
+     * organized into several {@link Frame frames}. Maintains the scope.
+     *
+     * @todo Can use a mechanism similar to Frames in order to implement
+     * step-over/step-out. In order to step-out, the rest of the frame must be
+     * implemented. To step-over, simply execute until the frame is finished.
+     * The default of "step" is to step-in. Perhaps this behaviour should be
+     * changed before v1.0!
+     *
+     * @constructor
+     * @param {Frame} rootFrame - The bottommost frame in the frame stack.
+     * @param {Process} process - The parent process.
+     * @alias Strand
      */
-    function Strand(initialFrame, process) {
+    function Strand(rootFrame, process) {
         this.process = process;
-        this.currentInstruction = initialFrame.firstInstruction;
+        this.currentInstruction = rootFrame.firstInstruction;
 
-        this.frames = [initialFrame];
+        this.frames = [rootFrame];
 
-        /* Private use: */
+        /* Private: used to ensure that context handler calls a method that
+         * spawns a new strand or frame. It may also call Strand#noOperation to
+         * explicitly opt out of spawning a new strand or frame. */
         this.undertakenAction = null;
     }
 
     /**
-     * Pseudo-property: currentFrame is the active (or top-most) frame in the
-     * frames stack.
+     * Pseudo-property: `currentFrame` is the active (i.e., topmost) frame in
+     * the frame stack.
+     *
+     * @member {Frame} Strand#currentFrame 
      */
     Object.defineProperty(Strand.prototype, 'currentFrame', {
         get: function () {
@@ -110,8 +173,10 @@ window.WaterbearProcess = (function () {
     });
 
     /**
-     * Pseudo-property: scope of the strand is the scope active in the
-     * current frame.
+     * Pseudo-property: alias to the current scope active in the active (i.e.,
+     * topmost) frame in the frame stack.
+     *
+     * @member {Scope} Strand#scope 
      */
     Object.defineProperty(Strand.prototype, 'scope', {
         get: function () {
@@ -138,7 +203,7 @@ window.WaterbearProcess = (function () {
                     'strand.{newFrame, newScope, newFrameHandler, newEventHandler, noOperation}');
         } else {
             assert(this.currentInstruction.tagName == 'WB-STEP');
-            /* TODO: wrap this with error handling of some kind. */
+            /* FIXME: (#904) wrap this with error handling of some kind. */
             this.currentInstruction.run(this.scope);
             this.currentInstruction = this.next();
         }
@@ -187,21 +252,10 @@ window.WaterbearProcess = (function () {
     /**
      * Registers a new event handler for the given event.
      *
-     * TODO: Write more docs for this.
+     * @todo Not implemented.
      */
     Strand.prototype.newEventHandler = function newEventHandler(event, container) {
-        /* FIXME: Write this! */
-        assert(false, 'Not implemented.');
-        this.undertakenAction = true;
-        this.currentInstruction = this.currentInstruction.next();
-    };
-
-    /**
-     * Starts a new strand, seperate from this one.  It inherits the current
-     * scope.
-     */
-    Strand.prototype.newStrand = function newStrand(container) {
-        /* FIXME: Write this! */
+        /* FIXME: (#1083) Write this! */
         assert(false, 'Not implemented.');
         this.undertakenAction = true;
         this.currentInstruction = this.currentInstruction.next();
@@ -209,7 +263,7 @@ window.WaterbearProcess = (function () {
 
     /**
      * Explicitly specifies that no action be undertaken.
-     * 
+     *
      * This must be called to silence the warning that would otherwise be
      * raised.
      */
@@ -220,7 +274,10 @@ window.WaterbearProcess = (function () {
 
     /* Private use: */
 
-    /** Get the next instruction in this strand.  */
+    /**
+     * Get the next instruction in this strand.
+     * @private
+     */
     Strand.prototype.next = function next() {
         var nextInstruction;
 
@@ -238,7 +295,10 @@ window.WaterbearProcess = (function () {
         return nextInstruction;
     };
 
-    /** Add a frame to the execution stack. */
+    /**
+     * Add a frame to the execution stack
+     * @private
+     */
     Strand.prototype.pushNewFrameFromThisContext = function (container, scope, callback) {
         var frame, context;
         context = this.currentInstruction;
@@ -246,7 +306,7 @@ window.WaterbearProcess = (function () {
         assert(isContext(context));
         frame = Frame.createFromContext(context, container, scope, callback);
         this.frames.unshift(frame);
-        
+
         this.currentInstruction = this.currentFrame.firstInstruction;
     };
 
@@ -254,11 +314,12 @@ window.WaterbearProcess = (function () {
      * Called when there's a possibility to restart this frame, or yield to
      * the previous frame.
      *
-     * Returns the next instruction to run.
+     * @returns {Block} the next instruction to run.
+     * @private
      */
     Strand.prototype.switchFrame = function switchFrame() {
         var oldFrame = this.currentFrame;
-        /* Ask shouldContinue() if we should switch to a new container-- if
+        /* Ask shouldContinue() if we should switch to a new container -- if
          * shouldContinue exists! */
         var nextContainer = oldFrame.shouldContinue && oldFrame.shouldContinue();
 
@@ -275,12 +336,12 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Creates the root strand -- that is, the strand from which all other
-     * strands originate from.
+     * Creates the root strand—that is, the strand from which all other strands
+     * originate from.
      */
     Strand.createRootStrand = function createRootStrand(process) {
         var globalScope = {},
-            /* FIXME: THIS DOM STUFF DOES NOT BELONG HERE! */
+            /* FIXME: (#1112) Rely less on the DOM.! */
             container = dom.find('wb-workspace > wb-contains'),
             frame = Frame.createFromContainer(container, globalScope);
 
@@ -292,19 +353,34 @@ window.WaterbearProcess = (function () {
 
     /**
      * A strand that whose root frame can be run many, many times.
-     * Used for event and frame handlers.
+     * Intended for implementing event handlers and frame handlers.
      *
-     * @see Strand for constructor arguments.
+     * @see Strand
+     * @constructor
+     * @extends Strand
+     * @alias ReusableStrand
      */
-    function ReusableStrand(initialFrame) {
+    function ReusableStrand(rootFrame) {
         /* Call super() constructor. */
         Strand.apply(this, arguments);
 
-        this.rootFrame = initialFrame;
+        this.rootFrame = rootFrame;
     }
 
     /* Inherit methods from Strand. */
     ReusableStrand.prototype = Object.create(Strand.prototype);
+
+    /**
+     * Pseudo-property: Yields the first instruction of the root frame.  In
+     * other words, the very first instruction that should ever be executed.
+     *
+     * @member {Block} ReusableStrand#firstInstruction 
+     */
+    Object.defineProperty(ReusableStrand.prototype, 'firstInstruction', {
+        get: function () {
+            return this.rootFrame.firstInstruction;
+        }
+    });
 
     /**
      * Runs everything nested within synchronously.
@@ -312,12 +388,26 @@ window.WaterbearProcess = (function () {
     ReusableStrand.prototype.startSync = function () {
         var thereAreMoreInstructions;
 
-        /* Reset to the initial frame. */
-        this.resetFrames();
+        /* Check if we're in the middle of the frame. */
+        if (this.currentInstruction === null) {
+            /* Reset to the initial frame. */
+            this.resetFrames();
+        }
 
         do {
             thereAreMoreInstructions = this.doNext();
         } while (thereAreMoreInstructions);
+    };
+
+    /**
+     * Resets the frame if the current instruction is undefined.
+     * Delegates to {@link Strand}.
+     */
+    ReusableStrand.prototype.doNext = function doNext() {
+        if (!this.currentInstruction) {
+            this.resetFrames();
+        }
+        return Strand.prototype.doNext.apply(this, arguments);
     };
 
     /**
@@ -341,6 +431,7 @@ window.WaterbearProcess = (function () {
     /**
      * Clears all frames in the frame stack EXCEPT for the root frame.
      * The next instruction is set as the first instruction in the root frame.
+     * @private
      */
     ReusableStrand.prototype.resetFrames = function () {
         this.frames = [Frame.createFromFrame(this.rootFrame)];
@@ -350,15 +441,41 @@ window.WaterbearProcess = (function () {
 
 
     /**
-     * Encapsulates the execution of a Waterbear program. There may be several
-     * "threads", so this encompasses all of them. ALL OF THEM.
+     * Encapsulates the execution of a Waterbear program. Composed of several
+     * {@link Strand} instances, and this should encompass all of the state for
+     * a single run of Waterbear.
      *
-     * This is a "one-time use" object! This means that once `start` is
-     * called, it cannot be started all over again. Similarly, once
-     * `terminate` is called, you can consider this object useless.
+     * This is a "one-time use" object! This means that once {@link
+     * Process#start} is called, it cannot be started all over again.
+     * Similarly, once {@link Process#terminate} is called, you can consider
+     * this object useless.
+     *
+     * Options
+     * -------
+     * <dl>
+     * <dt> `startPaused`
+     * <dd> Whether to start paused. Calling `start()` will immediately pause
+     * before executing the first instruction.
+     * <dt> `emitter`
+     * <dd> Callback with signature {@link Process~emitter (name: String, data:
+     * Object)}.
+     *
+     * Called when Process wants to trigger events.  If not provided, events
+     * are silently discarded.
+     *
+     * </dl>
+     *
+     *
+     * @todo More rich process abstraction.
+     *
+     * @constructor
+     * @param {Object} [options] - a list of options.
+     * @alias Process
      */
-    function Process() {
+    function Process(options) {
         var started = false;
+        /* Default to empty. */
+        options = options || {};
 
         /* Set some essential state. */
         this.strands = [];
@@ -368,9 +485,15 @@ window.WaterbearProcess = (function () {
         this.perFrameHandlers = [];
         this.lastTime = new Date().valueOf();
         this.currentAnimationFrameHandler = null;
+        /* Indicates that the next block should step. */
+        this.shouldStep = false;
 
+        /* Can only be one strand scheduled at a time. */
         this.currentStrand = null;
-        this.paused = false;
+        this.paused = (!!options.startPaused) || false;
+
+        /* Set an optional emitter. */
+        this.emitter = options.emitter || null;
 
         /* Disable breakpoints. */
         this.shouldBreak = false;
@@ -406,6 +529,21 @@ window.WaterbearProcess = (function () {
     }
 
     /**
+     * Pseudo-property: The next instruction to execute in the currently
+     * scheduled strand.
+     *
+     * @member {Block} Process#nextInstruction 
+     */
+    Object.defineProperty(Process.prototype, 'nextInstruction', {
+        get: function () {
+            return (this.currentStrand !== null) ?
+                this.currentStrand.currentInstruction :
+                /* FIXME: (#1120) Support multiple frame handlers. */
+                this.perFrameHandlers[0].firstInstruction;
+        }
+    });
+
+    /**
      * Starts (asynchronous!) execution from scratch. Can only be called once.
      */
     Process.prototype.start = function start() {
@@ -420,20 +558,44 @@ window.WaterbearProcess = (function () {
         this.strands.push(this.currentStrand);
 
         /* This starts asynchronous execution. */
-        this.resumeAsync();
+        this.scheduleNextStep();
+
+        this.emit('started');
+        if (this.paused) {
+            this.emit('paused', {target: this.nextInstruction});
+        }
 
         return this;
     };
 
     /**
      * Resume executing immediately. Execution is as fast as the rate given to
-     * `setRate` (default: unlimited).
+     * {@link Process#setRate} (default: unlimited).
      */
-    Process.prototype.resumeAsync = function resumeAsync() {
+    Process.prototype.resume = function resume() {
         assert(this.started);
 
         this.paused = false;
-        this.nextTimeout = enqueue(this.doNextStep);
+        this.scheduleNextStep();
+
+        this.emit('resume');
+        return this;
+    };
+
+    /**
+     * Does one step of the next scheduled strand. Asynchronously!
+     * When the only strand left belongs to per-frame handlers, these will be
+     * scheduled and executed.
+     */
+    Process.prototype.step = function step() {
+        if (!this.paused) {
+            throw new Error('Can only step while paused.');
+        }
+
+        this.shouldStep = true;
+
+        /* Do one step, discarding its handler. */
+        this.scheduleNextStep();
         return this;
     };
 
@@ -443,13 +605,16 @@ window.WaterbearProcess = (function () {
     Process.prototype.pause = function pause() {
         assert(this.started);
         this.paused = true;
-        this.cancelNextTimeout();
+
+        this.emit('pause', {target: this.nextInstruction});
         return this;
     };
 
     /**
      * Sets rate of execution in milliseconds / instruction.
      * If rate is not provided or undefined, the rate is unlimited.
+     *
+     * @see Process#unlimited
      */
     Process.prototype.setRate = function setRate(rate) {
         if (rate === undefined) {
@@ -462,14 +627,28 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Requests to cleanly terminates the current process.
-     * Once this has happened, this process should no longer be used.
-     * `cb` is called once the process has cleanly terminated.
+     * Process will run unlimited, without any delay in its execution.
+     * @see Process#setRate
      */
-    Process.prototype.terminate = function terminate(cb) {
+    Process.prototype.unlimited = function unlimited() {
+        return this.setRate();
+    };
+
+    /**
+     * Requests to cleanly terminates the current process.  Once this has
+     * happened, this process can no longer be used.
+     *
+     * @param {Process~emitter} callback the callback lol
+     */
+    Process.prototype.terminate = function terminate(callback) {
         assert(this.started);
-        this.pause();
+        this.cancelNextTimeout();
         this.clearPerFrameHandlers();
+
+        /* Call the callback as promised... */
+        if (callback) {
+            setImmediate(callback);
+        }
         return this;
     };
 
@@ -490,56 +669,131 @@ window.WaterbearProcess = (function () {
         return this;
     };
 
-    /** Internal methods **/
+    /*= Internal methods =*/
 
     /**
      * Note: the constructor should bind an alias to this method called
      * `doNextStep` which simply calls this but BINDS `this` TO THE METHOD
      * CALL (which is the only way anything will ever work :/).
+     * @private
      */
     Process.prototype.nextStep = function nextStep() {
         var hasNext;
-        if (this.paused) {
-            return;
-        }
+        this.nextTimeout = null;
+        this.shouldStep = false;
 
-        /* TODO: Decide if we should pause at this instruction. */
-        /* TODO: Decide if we should switch to a different strand. */
+        assert(!!this.currentStrand, "No strand to run!");
 
         hasNext = this.currentStrand.doNext();
 
-        if (hasNext) {
-            /* Setup the next step to run after delay. */
-            this.nextTimeout = enqueue(this.doNextStep, this.delay);
-        } else {
-            /* TODO: this strand is now terminated... */
-            /* Remove it from the list and... :/ */
+        if (!hasNext) {
+            /* Remove the current strand. */
+            assert(this.currentStrand === this.strands[0],
+                   'More than one strand currently unsupported.');
+            this.strands.shift();
+            /* Schedule the next strand. */
+            this.currentStrand = this.strands[0] || null;
         }
+
+        /* Setup the next step to run after delay. */
+        this.scheduleNextStep();
+    };
+
+    /**
+     * Uses the emitter provided in options to emit events.
+     * @private
+     */
+    Process.prototype.emit = function emit(name, data) {
+        if (this.emitter === null) {
+            return;
+        }
+        return this.emitter(name, data);
+    };
+
+    /**
+     * (Maybe) schedules the next instruction to run.
+     *
+     * @private
+     */
+    Process.prototype.scheduleNextStep = function scheduleNextStep() {
+        assert(this.nextTimeout === null,
+               'Tried to schedule a callback when one is already scheduled.');
+
+        if (this.strands.length < 1) {
+            /* Nothing to schedule. */
+            return;
+        }
+
+        /* TODO: (#1058) Decide if we should pause at this instruction due to a
+         * breakpoint, error condition, etc. */
+
+        /* Issue an event of which step is the next to execute. */
+        if (this.paused && this.nextInstruction) {
+            /* This is enqueuing on behalf of a step. */
+            this.emitNextInstruction();
+        }
+
+        if (!this.paused || this.shouldStep) {
+            /* Either we're running at full speed, or the next step is
+             * requested. */
+            this.scheduleRegularStrandInstructionExecution();
+        }
+    };
+
+    /**
+     * It schedules the execution of the next regular strand instruction!
+     */
+    Process.prototype.scheduleRegularStrandInstructionExecution = function () {
+        assert(this.strands.length && this.currentStrand !== null,
+               'Tried to schedule a standard thread, but none exist.');
+        this.nextTimeout = enqueue(this.doNextStep, this.delay);
+    };
+
+    /**
+     * Emits 'step' for the next scheduled instruction.
+     */
+    Process.prototype.emitNextInstruction = function (instruction) {
+        /* Called with no arguments, assume the nextInstruction. */
+        if (arguments.length === 0) {
+            instruction = this.nextInstruction;
+        }
+
+        assert(!!instruction, 'Must emit a valid instruction.');
+        this.emit('step', {target: instruction});
     };
 
     /**
      * Runs blocks during requestAnimationFrame().
      */
     Process.prototype.handleAnimationFrame = function onAnimationFrame() {
+        assert(this.perFrameHandlers.length === 1,
+              'animation frame supports exactly per-frame handler.');
+        var frameStrand = this.perFrameHandlers[0];
         var currTime = new Date().valueOf();
 
         /* Do I dare change these not quite global variables? */
         runtime.control._elapsed = currTime - this.lastTime;
-        /* FIXME: This does not trivially allow for multiple eachFrame
-         * handlers! */
+        /* FIXME: (#1120) This does not trivially allow for multiple
+         * `each frame` handlers! */
         runtime.control._frame++;
         /* Why, yes, I do dare. */
 
         this.lastTime = currTime;
 
         if (!this.paused && this.delay === 0) {
+            /* Running normally. */
             /* Run ALL of the frame handlers synchronously. */
             this.perFrameHandlers.forEach(function (strand){
                 strand.startSync();
             });
-        } else {
-            /* TODO: Run one step when paused or in slow down mode. */
-            throw new Error('Slow down frame handler not implemented.');
+        } else if (this.shouldStep && this.currentStrand === null) {
+            /* Running is delayed or paused. Run one step. */
+            this.shouldStep = false;
+            frameStrand.doNext();
+            /* Execute the queue instruction, or the first if no instruction
+             * is queued. */
+            this.emitNextInstruction(frameStrand.currentInstruction ||
+                                     frameStrand.firstInstruction);
         }
 
         /* Enqueue the next call for this function. */
@@ -548,7 +802,12 @@ window.WaterbearProcess = (function () {
     };
 
     /**
-     * Register this container as a frame handler.
+     * Intended to be called by {@link Strand#newFrameHandler}.
+     * Given a container, creates a special strand for per-frame handlers, and
+     * adds it to the list of tracked frame handlers.
+     *
+     * @todo Support more than one frame handler.
+     * @private
      */
     Process.prototype.addFrameHandler = function addFrameHandler(container) {
         if (this.perFrameHandlers.length > 0) {
@@ -557,9 +816,14 @@ window.WaterbearProcess = (function () {
 
         var frame = Frame.createFromContainer(container, this.currentStrand.scope);
         var strand = new ReusableStrand(frame, this);
-        this.perFrameHandlers.push(strand);
 
+        this.perFrameHandlers.push(strand);
         this.startEventLoop();
+
+        /* Schedule the first instruction of the brand new frame handler. */
+        if (this.paused) {
+            this.emitNextInstruction(strand.firstInstruction);
+        }
     };
 
     /**
@@ -594,13 +858,13 @@ window.WaterbearProcess = (function () {
 
     /**
      * Prevents the next callback from running.
+     * @private
      */
     Process.prototype.cancelNextTimeout = function cancelNextTimeout() {
         if (this.nextTimeout !== null) {
-            clearTimeout(this.nextTimeout);
+            cancel(this.nextTimeout);
             this.nextTimeout = null;
         }
-        return this;
     };
 
     /**
@@ -609,20 +873,69 @@ window.WaterbearProcess = (function () {
      */
     function enqueue(fn, delay) {
         if (delay) {
-            return setTimeout(fn, delay);
+            return {timeout: setTimeout(fn, delay)};
         } else {
-            return setImmediate(fn);
+            return {immediate: setImmediate(fn)};
         }
+    }
+
+    function cancel(handle) {
+        if (handle.immediate) {
+            return clearImmediate(handle.immediate);
+        } else if (handle.timeout) {
+            return clearTimeout(handle.timeout);
+        }
+        throw new TypeError('Unknown handle.');
     }
 
     /**
      * Returns true if the argument is a <wb-context> block.
      */
     function isContext(block) {
-        /* FIXME: This probably should NOT rely on the DOM. Probably. */
-        return block.tagName === 'WB-CONTEXT';
+        return block.isContext;
     }
 
+
+    /*= Additional Documentation. */
+
+    /**
+     * An optional callback, that if provided, is called at the end of the
+     * execution of all of the instructions in the initial container of a
+     * frame. It must return the next container to execute or `null` if it
+     * should yield to the frame stack.
+     *
+     * @callback Frame~continuationCallback
+     * @returns {?Container} The container where execution will continue.
+     * `null` if the frame is exhausted and it should not continue.
+     */
+
+    /**
+     * Provide a callback that will emit events. These events SHOULD always
+     * fire asynchronously.
+     * @callback Process~emitter
+     * @param {String} name - Event name
+     * @param {Object} data - payload
+     */
+
+    /**
+     * A step or a context block. As of April 2015, this is implemented as a
+     * custom element defined in `block.js`.
+     * @typedef {Object} Block
+     */
+
+    /**
+     * A context block. As of April 2015, this is implemented as a custom
+     * element defined in `block.js`.
+     * @typedef {Object} ContextBlock
+     * @extends Block
+     * @see Block
+     */
+
+    /**
+     * An array for multiple {@link Block blocks}. As of April 2015, this is
+     * implemented as a custom element defined in `block.js`.
+     * @typedef {Object} Container
+     */
 
     /* This is the export of the module. */
     return Process;

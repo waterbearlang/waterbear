@@ -32,15 +32,16 @@
         <wb-vbox>
 
         <div class="menu">
-            <button class="open-files" onclick="_gaq.push(['_trackEvent', 'File', 'file']);">File</button>
-            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z" onclick="_gaq.push(['_trackEvent', 'Undo', 'undo']);">Undo</button>
-            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z" onclick="_gaq.push(['_trackEvent', 'Redo', 'redo']);">Redo</button>
-            <button class="open-example" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'examples']);">Examples</button>
-            <button class="open-tutorial" onclick="_gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);">Tutorials</button>
+            <button class="open-files">File</button>
+            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
+            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
+            <button class="open-example">Examples</button>
+            <button class="open-tutorial">Tutorials</button>
         </div>
         <wb-workbox>
         <sidebar>
             <wb-search></wb-search>
+            <button class="availableBlocks">Remove Filter</button>
             <wb-accordion class="control">
                 <header>
                     <img class="cat-icon" src="images/icon/control.svg" />
@@ -1095,18 +1096,31 @@
         <wb-displaybox class="canvas" selected='true'>
             <wb-playground>
                 <div class="menu">
-                    <button class="do-run" onclick="_gaq.push(['_trackEvent', 'Actions', 'run']);">Run</button>
-                    <button class="do-stop" onclick="_gaq.push(['_trackEvent', 'Action', 'stop']);">Stop</button>
+                    <button class="do-run">Run</button>
+                    <button class="do-stop">Stop</button>
+                    <label class="check-button debugger-indicator"><input type="checkbox" class="toggle-debugger">Debugger</label>
                 </div>
                 <canvas></canvas>
             </wb-playground>
         </wb-displaybox>
+        <wb-debugger>
+            <wb-debug-menu>
+                <button class="do-pause">Pause</button>
+                <button class="do-continue">Continue</button>
+                <button class="do-step">Next</button>
+                <button class="do-step-in">Step in</button>
+                <button class="do-step-out">Step out</button>
+                <wb-button-splitter></wb-button-splitter>
+                <input id="tb0" type="checkbox" class="do-toggle-breakpoints"><label for="tb0">Toggle Breakpoints</label>
+                <input id="tc0" type="checkbox" class="do-toggle-lineno"><label for="tc0">Toggle Counts</label>
+            </wb-debug-menu>
+        </wb-debugber>
         <wb-displaybox class="tutorial">
             <div class="tutorial-content">
                 <h1>Waterbear Tutorials</h1>
                 Select a tutorial from the menu.
-                </div>
-            </wb-displaybox>
+            </div>
+        </wb-displaybox>
         </wb-vbox>
     </wb-hbox>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>

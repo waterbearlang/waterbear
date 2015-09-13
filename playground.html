@@ -50,6 +50,8 @@
                 <wb-context script="control.eachFrame" class="control">
                     <wb-row>
                         <wb-value>each frame</wb-value>
+                    </wb-row>
+                    <wb-row>
                         <wb-local>
                             <wb-expression type="number" script="control.frame">
                                 <wb-value value="frame">frame</wb-value>
@@ -64,14 +66,16 @@
                 </wb-context>
                 <wb-step script="control.setVariable" class="control">
                     <wb-row>
-                    <wb-value type="text" allow="literal" value="variable">set</wb-value>
+                        <wb-value type="text" allow="literal" value="variable">set</wb-value>
+                        <wb-value type="any">to</wb-value>
+                    </wb-row>
+                    <wb-row>
                         <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="variable">variable</wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
-                    <wb-value type="any">to</wb-value>
                 </wb-step>
                 <wb-context script="control.loopOver" class="control">
                     <wb-row>
@@ -81,6 +85,8 @@
                                 <wb-value value="index">index</wb-value>
                             </wb-expression>
                         </wb-local>
+                    </wb-row>
+                    </wb-row>
                         <wb-local fortype="object">
                             <wb-expression type="string" script="control.getVariable">
                                 <wb-value value="key">key</wb-value>
@@ -98,13 +104,17 @@
                     <wb-value type="any" optional="true">message with data</wb-value>
                 </wb-step>
                 <wb-context script="control.receive" class="control">
-                    <wb-value type="text">when I receive</wb-value>
-                    <wb-value>message with data</wb-value>
-                    <wb-local>
-                        <wb-expression type="any" script="control.getVariable">
-                            <wb-value value="data">data</wb-value>
-                        </wb-expression>
-                    </wb-local>
+                    <wb-row>
+                        <wb-value type="text">when I receive</wb-value>
+                        <wb-value>message with data</wb-value>
+                    </wb-row>
+                    <wb-row>
+                        <wb-local>
+                            <wb-expression type="any" script="control.getVariable">
+                                <wb-value value="data">data</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
                 </wb-context>
                 <wb-context script="control.if" class="control">
                     <wb-value type="boolean" value="true">if</wb-value>
@@ -131,6 +141,8 @@
                     <wb-row>
                         <wb-value type="text,string">Ask</wb-value>
                         <wb-value type="text" isvariable="true" allow="literal" value="variable">and store in variable</wb-value>
+                    </wb-row>
+                    <wb-row>
                         <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="variable">variable</wb-value>
@@ -957,6 +969,8 @@
                     <wb-context script="geolocation.whenLocationUpdated" class="geolocation">
                         <wb-row>
                             <wb-value>when my location changes</wb-value>
+                        <wb-row>
+                        </wb-row>
                             <wb-local>
                                 <wb-expression type="geolocation" script="geolocation.currentLocation">
                                     <wb-value value="location">my current location</wb-value>

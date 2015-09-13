@@ -155,9 +155,11 @@ window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
 function updateVariable(evt){
     var setVariableBlock = evt.detail;
+    // ignore variables not in the workspace (in scripts)
     if (! dom.matches(setVariableBlock, 'wb-workspace *')){
         return;
     }
+    // ignore blocks that are not setVariable
     if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
         return;
     }
@@ -255,7 +257,7 @@ function getVariablesToUpdate(parentContext, setVarId){
 function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
     variableLocalsToUpdate.forEach(function(wbvalue){
         wbvalue.setAttribute('value', newVariableName);
-        wbvalue.textContent = newVariableName;
+        dom.find(wbvalue, 'header').textContent = newVariableName;
     });
 }
 
@@ -294,7 +296,6 @@ ContextProto.createdCallback = function contextCreated(){
     BlockProto.createdCallback.call(this);
     var header = dom.child(this, 'header');
     setDefaultByTag(header, 'wb-disclosure');
-    setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
 };
 ContextProto.gatherContains = function(){

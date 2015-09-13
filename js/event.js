@@ -246,6 +246,7 @@
 
     function reset(){
         // called when we end a drag for any reason
+        console.log('reset');
         dragTarget = null;
         isDragging = false;
         Event.pointerDown = false;

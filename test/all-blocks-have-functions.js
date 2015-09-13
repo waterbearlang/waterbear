@@ -30,37 +30,36 @@ page.open(pageName, function (status) {
 
         /* Check the script for each block. */
         Array.prototype.forEach.call(allBlocks, function (block) {
-            var scriptAttr = block.attributes.script;
-            if (!scriptAttr) {
-                addBadScript(block, 'no script attribute');
+            var namespaceAttr = block.attributes.ns;
+            if (!namespaceAttr) {
+                addBadScript(block, 'no namespace (ns) attribute');
                 return;
             }
 
-            var temp = scriptAttr.value.split('.');
-
-            if (temp.length !== 2) {
-                addBadScript(block, 'invalid script name');
+            var functionAttr = block.attributes.fn;
+            if (!functionAttr){
+                addBadScript(block, 'no function (fn) attribute');
                 return;
             }
 
-            var namespace = temp[0], callbackName = temp[1];
+            var namespace = namespaceAttr.value, functionName = functionAttr;
 
             var element = runtime[namespace];
 
             if (!element) {
-                addBadScript(block, 'namespace does not exist');
+                addBadScript(block, 'namespace ' + namespace + ' does not exist');
                 return;
             }
 
-            var callback = element[callbackName];
+            var fun = element[functionName];
 
-            if (typeof callback === 'undefined') {
-                addBadScript(block, 'callback undefined');
+            if (typeof fun === 'undefined') {
+                addBadScript(block, 'function ' + functionName + ' is undefined');
                 return;
             }
 
-            if (typeof callback !== 'function') {
-                addBadScript(block, 'callback not a function');
+            if (typeof fun !== 'function') {
+                addBadScript(block, 'function' + functionName + ' is not a function');
                 return;
             }
         });
@@ -70,8 +69,8 @@ page.open(pageName, function (status) {
         function addBadScript(block, reason) {
             badScripts.push({
                 'element': block.localName,
-                'script': block.attributes.script ?
-                    block.attributes.script.value :
+                'script': block.attributes.fn ?
+                    block.attributes.fn.value :
                     '<unknown>',
                 'reason': reason,
             });

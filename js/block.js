@@ -1012,7 +1012,7 @@ function dragBlock(evt){
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         dropTarget.classList.add('no-drop');
-        app.tip('drop here to delete block(s)');
+        app.warn('drop here to delete block(s)');
         return;
     }
 
@@ -1027,6 +1027,10 @@ function dragBlock(evt){
 
         // FIXME
         dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
+        var oldDropTarget = dom.find(workspace, '.drop-target');
+        if (oldDropTarget && oldDropTarget !== dropTarget){
+            oldDropTarget.classList.remove('drop-target');
+        }
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression:not(.hide)')){
                 dropTarget.classList.add('no-drop');
@@ -1038,7 +1042,7 @@ function dragBlock(evt){
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
             if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
-                dropTarget.classList.add('ok-drop');
+                dropTarget.classList.add('drop-target');
                 app.tip('drop here to add block to script');
             }else{
                 dropTarget.classList.add('no-drop');
@@ -1074,7 +1078,7 @@ function dropTargetIsContainer(potentialDropTarget){
        }
    }
    if (dropTarget){
-      dropTarget.classList.add('ok-drop');
+      dropTarget.classList.add('drop-target');
       if (dropTarget.matches('wb-contains')){
          app.tip('drop to add to top of the block container');
       }else{
@@ -1220,9 +1224,6 @@ function resetDragging(){
     dom.findAll(document.body, '.no-drop').forEach(function(e){
         e.classList.remove('no-drop');
     })
-    dom.findAll(document.body, '.ok-drop').forEach(function(e){
-        e.classList.remove('ok-drop');
-    });
 }
 
 /* End Dragging */

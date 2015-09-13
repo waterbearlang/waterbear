@@ -412,11 +412,11 @@ function displayPausedOnInstruction(block) {
     block.scrollIntoView();
 }
 
-Event.on(document.body, 'ui:click', '.undo', Event.handleUndoButton);
-Event.on(document.body, 'ui:click', '.redo', Event.handleRedoButton);
-Event.on(window, 'input:keydown', null, Event.undoKeyCombo);
-Event.on(window, 'input:keydown', null, Event.redoKeyCombo);
-Event.clearStacks();
+Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
+Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);
+Event.on(window, 'input:keydown', null, Undo.undoKeyCombo);
+Event.on(window, 'input:keydown', null, Undo.redoKeyCombo);
+Undo.clearStacks();
 
 window.app = {
     message: message,

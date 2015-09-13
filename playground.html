@@ -48,7 +48,7 @@
                     Controls
                 </header>
                 <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
-                <wb-context script="control.eachFrame" class="control">
+                <wb-context script="control.eachFrame" class="control" toplevel="true">
                     <wb-row>
                         <wb-value>each frame</wb-value>
                     </wb-row>
@@ -68,8 +68,8 @@
                 <wb-step script="control.setVariable" class="control">
                     <wb-row>
                         <wb-value>set</wb-value>
-						<wb-local>
-							<wb-expression type="any" script="control.setVariable">
+						<wb-local renameable="true">
+							<wb-expression type="any" script="control.getVariable">
 								<wb-value type="text" allow="literal" value="variable"></wb-value>
 							</wb-expression>
 						</wb-local>
@@ -83,12 +83,12 @@
                         <wb-value type="any">loop over</wb-value>
                     </wb-row>
                     <wb-row>
-                        <wb-local>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="indexOrKey">indexOrkey</wb-value>
                             </wb-expression>
                         </wb-local>
-                        <wb-local>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="value">value</wb-value>
                             </wb-expression>
@@ -105,7 +105,7 @@
                     </wb-row>
                     <wb-row>
 						<wb-value>with data</wb-value>
-                        <wb-local>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="data">data</wb-value>
                             </wb-expression>
@@ -136,12 +136,12 @@
                 <wb-step script="control.ask" class="control">
                     <wb-row>
                         <wb-value type="text,string">Ask</wb-value>
-                        <wb-value type="text" isvariable="true" allow="literal" value="variable">and store in variable</wb-value>
+                        <wb-value type="text" isvariable="true" allow="literal" value="variable">and store in answer</wb-value>
                     </wb-row>
                     <wb-row>
-                        <wb-local>
+                        <wb-local renameable="true">
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="variable">variable</wb-value>
+                                <wb-value value="answer">answer</wb-value>
                             </wb-expression>
                         </wb-local>
                     </wb-row>
@@ -1137,6 +1137,7 @@
     <script src="lib/setImmediate-1.0.2.js"></script>
     <script src="js/util.js"></script>
     <script src="js/event.js"></script>
+	<script src="js/undo.js"></script>
     <script src="js/runtime.js"></script>
 	<script src="js/dom.js"></script>
     <script src="js/widget.js"></script>

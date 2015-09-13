@@ -229,6 +229,10 @@ function ensureNameIsUniqueInContext(input){
     var setVariable = dom.closest(input, '[script="control.setVariable"]');
     var valueBlock = dom.closest(input, 'wb-value');
     // Find other variable names in scope
+    // 1. Get list of setVariable blocks contained by parentContext
+    // 2. Remove this block from the list
+    // 3. Return the value of the input of the block
+    // 4. Sort the resulting list
     var variablesToTestAgainst = dom.findAll(parentContext, '[script="control.setVariable"]')
         .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
         .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
@@ -237,14 +241,7 @@ function ensureNameIsUniqueInContext(input){
     var oldVariableName = input.value;
     // Compare against other variable names, update if there is a match
     while(variablesToTestAgainst.indexOf(newVariableName) > -1){
-        var incrementalNumber = trailingNumber(newVariableName);
-        var baseName;
-        if (incrementalNumber){
-            baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
-        }else{
-            baseName = newVariableName + ' ';
-        }
-        newVariableName = baseName + (incrementalNumber + 1);
+        newVariableName = incrementName(newVariableName);
     }
     if (newVariableName !== oldVariableName){
         input.value = newVariableName;
@@ -252,6 +249,17 @@ function ensureNameIsUniqueInContext(input){
         var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
         updateVariableNameInInstances(newVariableName, variablesToUpdate);
     }
+}
+
+function incrementName(name){
+    var incrementalNumber = trailingNumber(name);
+    var baseName;
+    if (incrementalNumber){
+        baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+    }else{
+        baseName = newVariableName + ' ';
+    }
+    return baseName + (incrementalNumber + 1);
 }
 
 function getVariablesToUpdate(parentContext, setVarId){
@@ -266,7 +274,7 @@ function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
 }
 
 function uniquifyVariableName(evt){
-    var setVariableBlock = evt.target; // expects a block (wb-step, wb-context) 
+    var setVariableBlock = evt.target; // expects a block (wb-step, wb-context)
     var input = dom.find(setVariableBlock, 'input');
     ensureNameIsUniqueInContext(input);
 }

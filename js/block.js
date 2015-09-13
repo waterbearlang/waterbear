@@ -184,6 +184,10 @@ function handleVariableInput(evt){
     if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
         return;
     }
+    // keep from literal value matching
+    if (! dom.matches(input.parentElement, ':first-of-type')){
+        return;
+    }
     var context = dom.closest(stepBlock, 'wb-contains');
     var newVariableName = input.value;
     updateVariableNameInInstances(newVariableName, getVariablesToUpdate(context, stepBlock.id));
@@ -868,7 +872,6 @@ function endDragBlock(evt){
         origTarget = null;
     }
     if (!dropTarget){
-        // console.log('no dropTarget');
         if(dragTarget){
             dragTarget.parentElement.removeChild(dragTarget);
         }

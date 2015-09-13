@@ -400,10 +400,10 @@
             var toUndo = undoStack.pop();
             redoStack.push(toUndo);
             setButtonStatus();
-            if(toUndo.type === 'delete-block'){ //add the block back into the parent expression
+            if(toUndo.type === 'delete-block'){ 
                 undoDelete(toUndo);
             }
-            else if(toUndo.type === 'add-block'){ //remove the block from  the parent expression
+            else if(toUndo.type === 'add-block'){ 
                 undoAdd(toUndo);
             }
             else {
@@ -456,13 +456,13 @@
             var toRedo = redoStack.pop();
             undoStack.push(toRedo);
             setButtonStatus();
-            if(toRedo.type === 'delete-block'){ //add the block back into the parent expression
+            if(toRedo.type === 'delete-block'){ 
                 redoDelete(toRedo);
             }
-            else if(toRedo.type === 'add-block'){ //remove the block from  the parent expression
+            else if(toRedo.type === 'add-block'){ 
                 redoAdd(toRedo);
             }
-            else { //type is either move block or add-var-block
+            else { 
                 redoMove(toRedo);
             }
         }

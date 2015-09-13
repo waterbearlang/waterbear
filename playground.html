@@ -81,19 +81,14 @@
                 <wb-context script="control.loopOver" class="control">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
-                        <wb-local fortype="array,string">
+                    </wb-row>
+                    </wb-row>
+                        <wb-local>
                             <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="index">index</wb-value>
+                                <wb-value value="indexOrKey">index/key</wb-value>
                             </wb-expression>
                         </wb-local>
-                    </wb-row>
-                    </wb-row>
-                        <wb-local fortype="object">
-                            <wb-expression type="string" script="control.getVariable">
-                                <wb-value value="key">key</wb-value>
-                            </wb-expression>
-                        </wb-local>
-                        <wb-local fortype="any">
+                        <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="value">value</wb-value>
                             </wb-expression>

@@ -452,12 +452,6 @@
         trackPointerUp: trackPointerUp,
         handleKeyUp: handleKeyUp,
         handleKeyDown: handleKeyDown,
-        undoKeyCombo: undoKeyCombo,
-        redoKeyCombo: redoKeyCombo,
-        handleUndoButton: handleUndoButton,
-        handleRedoButton: handleRedoButton,
-        addNewEvent: addNewEvent,
-        clearStacks: clearStacks
         registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents
     };
 

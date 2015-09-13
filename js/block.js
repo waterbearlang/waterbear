@@ -75,6 +75,10 @@ BlockProto.createdCallback = function blockCreated(){
     // console.log('%s created with %s children', this.localName, this.children.length);
 };
 BlockProto.attachedCallback = function blockAttached(){
+    // Attached only fires the first time an element is added to the DOM
+    // If you want a notification every time block is added to DOM (moved, etc.) use wb-added
+    // (also wb-removed, wb-addedChild, wb-removedChild)
+    // Attached will fire when re-loading a script too, so program defensively
     // Add locals
     // Make sure they have unique names in scope
     // Handle special cases:
@@ -91,29 +95,11 @@ BlockProto.attachedCallback = function blockAttached(){
     }else{
         // console.warn('free-floating block: %o, OK for now', this);
     }
-    console.log('block attached: %o', this);
-    if (this.parentElement){
-        this.parent = this.parentElement;
-        console.log('block has parent: %o', this.parent);
-        var blockParent = dom.closest(this.parentElement, 'wb-step, wb-context');
-        console.log('blockParent: %o', blockParent);
-        if (blockParent){
-            console.log('block has blockParent, sending wb-added');
-            Event.trigger(blockParent, 'wb-added', this);
-        }
-    }
-    // console.log('%s attached', this.localName);
 };
 
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
     // console.log('%s detached', this.localName);
-    if (!this.parent) return;
-    var blockParent = dom.closest(this.parent, 'wb-step, wb-context');
-    if (blockParent){
-        Event.trigger(blockParent, 'wb-removed', this);
-    }
-    this.parent = null;
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -131,6 +117,12 @@ BlockProto.gatherValues = function(scope){
         return value.getValue(scope);
     });
 };
+/* Applicable for both <wb-step> and <wb-context>.
+ * The next element is simply the nextElementSibling. */
+BlockProto.next = function() {
+    return this.nextElementSibling;
+};
+
 
 /*****************
 *
@@ -151,7 +143,6 @@ StepProto.run = function(scope){
         this.fn = runtime[fnName[0]][fnName[1]];
     }
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling step %s with scope %s, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
@@ -163,7 +154,7 @@ function handleVariableFocus(evt){
     // Gather all the locals so we can update them
     var input = evt.target;
     if (!input.parentElement.hasAttribute('isvariable')){
-        return
+        return;
     }
     var parentContext = dom.closest(input, 'wb-contains');
     var variableName = input.parentElement.getAttribute('value');
@@ -245,7 +236,7 @@ Event.on(workspace, 'editor:input', '[isvariable] input', handleVariableInput);
 Event.on(workspace, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
 Event.on(workspace, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
 
-Event.on(workspace, 'editor:wb-added', 'wb-step[script=control.setVariable]', uniquifyVariableName);
+Event.on(workspace, 'editor:wb-added', 'wb-step[script="control.setVariable"]', uniquifyVariableName);
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
@@ -270,25 +261,29 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(header, 'wb-disclosure');
     setDefaultByTag(this, 'wb-local');
     setDefaultByTag(this, 'wb-contains');
-    // console.log('Context created');
 };
 ContextProto.gatherContains = function(){
     // returns an array of arrays of blocks (steps and contexts)
-    return dom.children(this, 'wb-contains').map(function(container){
-        return [].slice.call(container.children);
-    });
+    return dom.children(this, 'wb-contains');
 };
-ContextProto.run = function(parentScope){
-    if (!this.fn){
-        var fnName = this.getAttribute('script').split('.');
-        this.fn = runtime[fnName[0]][fnName[1]];
+ContextProto.run = function(strand, frame){
+   var args, containers;
+   /* Set this function's setup() callback */
+    if (!this.setup){
+        this.setupCallbacks();
     }
-    var scope = util.extend({}, parentScope);
-    // expressions are eagerly evaluated against scope, contains are late-evaluated
-    // I'm not yet sure if this is the Right Thing™
+
+    /* Google analytics event tracking. */
     _gaq.push(['_trackEvent', 'Blocks', this.getAttribute('script')]);
-    // console.log('calling context %s with scope %o, values %o', this.getAttribute('script'), scope, this.gatherValues(scope));
-    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
+
+    /* FIXME: Allow for optional evaluation of values. */
+    // expressions are evaluated if and only if shouldEvaluateValues returns
+    // true. Containers are evaluated when needed.
+    args = this.gatherValues(strand.scope);
+    containers = this.gatherContains();
+
+    /* Call setup! */
+    return this.setup.call(strand.scope, strand, this, containers, args);
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
@@ -326,11 +321,34 @@ ContextProto.hideLocals = function(evt){
         });
     }
 };
+/**
+ * Prepares the setup() callback.
+ */
+ContextProto.setupCallbacks = function() {
+    /* Fetch the callback object from runtime. */
+    var qualifiedName = this.getAttribute('script').split('.');
+    var category = qualifiedName[0], name = qualifiedName[1];
+    var callback = runtime[category][name];
+
+    console.assert(!!callback, 'Could not find script: ' + qualifiedName);
+
+    this.setup = callback;
+};
+
+/** Default: Always get the next DOM element and assume it's a wb-contains. */
+function defaultNextCallback(strand, args, containers, elem) {
+    return elem.nextElementSibling;
+}
+
+/** Default: Always evaluate arugments before calling setup(). */
+function defaultShouldEvaluateValues(strand, containers, elem) {
+    return true;
+}
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
-Event.on(workspace, 'editor:wb-added', 'wb-context', function(evt){ evt.detail.showLocals(evt); });
-Event.on(workspace, 'editor:wb-added', 'wb-context', function(evt){ evt.detail.hideLocals(evt); });
+Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.detail.showLocals(evt); });
+Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.detail.hideLocals(evt); });
 /*****************
 *
 *  wb-expression
@@ -667,6 +685,13 @@ var convert = {
 };
 
 var ContainsProto = Object.create(HTMLElement.prototype);
+/* You sure love Object.defineProperty, dontcha, Eddie? */
+Object.defineProperty(ContainsProto, 'firstInstruction', {
+   get: function () {
+      return this.firstElementChild;
+   }
+});
+
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
 
@@ -728,13 +753,13 @@ Event.on(document.body, 'editor:dragging', null, function(evt){
     // When we're dragging an expression...
     if (dragTarget.matches('wb-expression')){
        // Check if we're on a literal block.
-       if (potentialDropTarget.matches('wb-value[allow=literal], wb-value[allow=literal] *')) {
+       if (potentialDropTarget.matches('wb-value[allow="literal"], wb-value[allow="literal"] *')) {
           app.warn("cannot drop on direct input value");
           return;
        }
 
         // FIXME
-        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow=literal])');
+        dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression')){
                 app.warn('cannot drop an expression on another expression');
@@ -900,6 +925,37 @@ function setTypeOfVariable(initialValue, variableStep){
        .querySelector('[script="control.getVariable"]')
        .setAttribute('type', initialValue.getAttribute('type'));
 }
+
+/* Add custom events for adding and removing blocks from the DOM */
+
+var blockObserver = new MutationObserver(function(mutations){
+    mutations.forEach(function(mutation){
+        // send childAdded or childRemove event to parent element
+        var parent = mutation.target;
+        var blockParent = dom.closest(parent, 'wb-step, wb-context, wb-expression, wb-contains');
+        if (!blockParent){
+            return;
+        }
+        [].slice.apply(mutation.removedNodes)
+                .filter(function(node){return dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
+                .forEach(function(node){
+            Event.trigger(blockParent, 'wb-removedChild', node);
+            Event.trigger(node, 'wb-removed', blockParent);
+        });
+        [].slice.apply(mutation.addedNodes)
+                .filter(function(node){return dom.matches(node, 'wb-step, wb-context, wb-expression')}) // only block elements
+                .forEach(function(node){
+            Event.trigger(blockParent, 'wb-addedChild', node);
+            Event.trigger(node, 'wb-added', blockParent);
+        });
+    });
+});
+
+var blockObserverConfig = { childList: true, subtree: true };
+
+// Only observe after script is loaded?
+blockObserver.observe(document.body, blockObserverConfig);
+
 
 
 })();

@@ -51,6 +51,10 @@ body > header > h1{
     padding: 0px;
 }
 
+.menu button[disabled] {
+    color: #999;
+    border-color: #333;
+}
 
 .menu button, .menu a, .do-run, .do-stop{
 

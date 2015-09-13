@@ -149,6 +149,13 @@ wb-context[closed] > wb-contains{
     display: none;
 }
 
+/* TODO: Better styles for paused. */
+wb-step[script].wb-paused,
+wb-context[script].wb-paused {
+    background-color: #EEE;
+    border-color: #CCC;
+}
+
 .hide{
     display: none;
 }

@@ -129,17 +129,21 @@
     }
 
     function find(elem, selector){
-        if (typeof(elem) === 'string'){
+        if (typeof(elem) === 'string' && selector === undefined){
             selector = elem;
             elem = document.body;
+        }else if (typeof(elem) === 'string'){
+            elem = find(document.body, elem);
         }
         return elem.querySelector(selector);
     }
 
     function findAll(elem, selector){
-        if (typeof(elem) === 'string'){
+        if (typeof(elem) === 'string' && selector === undefined){
             selector = elem;
             elem = document.body;
+        }else if (typeof(elem) === 'string'){
+            elem = find(document.body, elem);
         }
         return [].slice.call(elem.querySelectorAll(selector));
     }

@@ -67,22 +67,22 @@
                 </wb-context>
                 <wb-step script="control.setVariable" class="control">
                     <wb-row>
-                        <wb-value type="text" allow="literal" value="variable">set</wb-value>
+                        <wb-value>set</wb-value>
+						<wb-local>
+							<wb-expression type="any" script="control.setVariable">
+								<wb-value type="text" allow="literal" value="variable"></wb-value>
+							</wb-expression>
+						</wb-local>
                         <wb-value type="any">to</wb-value>
                     </wb-row>
                     <wb-row>
-                        <wb-local>
-                            <wb-expression type="any" script="control.getVariable">
-                                <wb-value value="variable">variable</wb-value>
-                            </wb-expression>
-                        </wb-local>
                     </wb-row>
                 </wb-step>
                 <wb-context script="control.loopOver" class="control">
                     <wb-row>
                         <wb-value type="any">loop over</wb-value>
                     </wb-row>
-                    </wb-row>
+                    <wb-row>
                         <wb-local>
                             <wb-expression type="any" script="control.getVariable">
                                 <wb-value value="indexOrKey">indexOrkey</wb-value>

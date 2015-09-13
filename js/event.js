@@ -243,10 +243,12 @@
                 if (!blockParent){
                     return;
                 }
+                console.log('removed %s nodes', mutation.removedNodes.length);
                 [].slice.apply(mutation.removedNodes)
                         .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
                         .forEach(function(node){
                     Event.trigger(blockParent, eventPrefix + 'removedChild', node);
+                    console.log('triggering %s wb-removed from %s', node.localName, blockParent.localName);
                     Event.trigger(node, eventPrefix + 'removed', blockParent);
                 });
                 [].slice.apply(mutation.addedNodes)

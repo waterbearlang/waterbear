@@ -91,11 +91,29 @@ BlockProto.attachedCallback = function blockAttached(){
     }else{
         // console.warn('free-floating block: %o, OK for now', this);
     }
+    console.log('block attached: %o', this);
+    if (this.parentElement){
+        this.parent = this.parentElement;
+        console.log('block has parent: %o', this.parent);
+        var blockParent = dom.closest(this.parentElement, 'wb-step, wb-context');
+        console.log('blockParent: %o', blockParent);
+        if (blockParent){
+            console.log('block has blockParent, sending wb-added');
+            Event.trigger(blockParent, 'wb-added', this);
+        }
+    }
     // console.log('%s attached', this.localName);
 };
+
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
     // console.log('%s detached', this.localName);
+    if (!this.parent) return;
+    var blockParent = dom.closest(this.parent, 'wb-step, wb-context');
+    if (blockParent){
+        Event.trigger(blockParent, 'wb-removed', this);
+    }
+    this.parent = null;
 };
 BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
     // Attributes to watch for:
@@ -143,7 +161,6 @@ var oldVariableName = '';
 
 function handleVariableFocus(evt){
     // Gather all the locals so we can update them
-    // TODO: Cancel if the new variable name is already in scope
     var input = evt.target;
     if (!input.parentElement.hasAttribute('isvariable')){
         return
@@ -164,12 +181,7 @@ function handleVariableInput(evt){
         return;
     }
     var newVariableName = input.value;
-    variableLocalsToUpdate.forEach(function(expr){
-        expr.setAttribute('value', newVariableName);
-        var val = dom.find(expr, 'wb-value');
-        val.setAttribute('value', newVariableName);
-        val.textContent = newVariableName;
-    });
+    updateVariableNameInInstances(variableLocalsToUpdate, newVariableName);
 }
 
 function handleVariableBlur(evt){
@@ -178,15 +190,62 @@ function handleVariableBlur(evt){
     if (!input.parentElement.hasAttribute('isvariable')){
         return;
     }
+    var oldVariableName = input.value; // keep this one around to find instances
+    ensureNameIsUniqueInContext(input);
+    var newVariableName = input.value;
+    if (oldVariableName !== newVariableName){
+        updateVariableNameInInstances(variableLocalsToUpdate, newVariableName);
+    }
     variableLocalsToUpdate = null;
     oldVariableName = '';
 }
 
-Event.on(document.body, 'editor:focus', '[isvariable] input', handleVariableFocus); // Mozilla
-Event.on(document.body, 'editor:focusin', '[isvariable] input', handleVariableFocus); // All other browsers
-Event.on(document.body, 'editor:input', '[isvariable] input', handleVariableInput);
-Event.on(document.body, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
-Event.on(document.body, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
+function trailingNumber(str){
+    // return trailing number as a number or zero if no trailing number
+    return Number((str.match(/\d+$/) || [0])[0]);
+}
+
+function ensureNameIsUniqueInContext(input){
+    var parentContext = dom.closest(input, 'wb-contains')
+    // Find other variable names in scope
+    var variablesToTestAgainst = dom.findAll(parentContext, 'wb-expression[script="control.setVariable"]')
+        .map(function(expr){
+            var value = dom.find(expr, 'wb-value');
+            return value && value.getAttribute('value');
+        }).sort();
+    var newVariableName = input.value; // we may be changing this one
+    // Compare against other variable names, update if there is a match
+    while(variablesToTestAgainst.indexOf(newVariableName) > -1){
+        console.log('flunked %s', newVariableName);
+        var incrementalNumber = trailingNumber(newVariableName);
+        var baseName = newVariableName.slice(0, -(''+incrementalNumber).length); // trim off number
+        newVariableName = baseName + (incrementalNumber + 1);
+    }
+}
+
+function updateVariableNameInInstances(variableLocalsToUpdate, newVariableName){
+    variableLocalsToUpdate.forEach(function(expr){
+        expr.setAttribute('value', newVariableName);
+        var val = dom.find(expr, 'wb-value');
+        val.setAttribute('value', newVariableName);
+        val.textContent = newVariableName;
+    });
+}
+
+function uniquifyVariableName(evt){
+    console.log('step added');
+    var setVariableBlock = evt.target;
+    var input = dom.find(setVariableBlock, 'input');
+    ensureNameIsUniqueInContext(input);
+}
+
+Event.on(workspace, 'editor:focus', '[isvariable] input', handleVariableFocus); // Mozilla
+Event.on(workspace, 'editor:focusin', '[isvariable] input', handleVariableFocus); // All other browsers
+Event.on(workspace, 'editor:input', '[isvariable] input', handleVariableInput);
+Event.on(workspace, 'editor:blur',  '[isvariable] input', handleVariableBlur); // Mozilla
+Event.on(workspace, 'editor:focusout',  '[isvariable] input', handleVariableBlur); // All other browsers
+
+Event.on(workspace, 'editor:wb-added', 'wb-step[script=control.setVariable]', uniquifyVariableName);
 
 // Context Proto
 // Instantiated as new WBContext or as <wb-context>
@@ -233,7 +292,7 @@ ContextProto.run = function(parentScope){
 };
 ContextProto.showLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
-    var blockAdded = evt.detail;
+    var blockAdded = evt.target;
     if (blockAdded && blockAdded.localName === 'wb-expression'){
         var type = blockAdded.getAttribute('type');
         var header = dom.child(this, 'header');
@@ -255,7 +314,7 @@ ContextProto.showLocals = function(evt){
 };
 ContextProto.hideLocals = function(evt){
     // This is way too specific to the needs to the loopOver block
-    var blockAdded = evt.detail;
+    var blockAdded = evt.target;
     if (blockAdded && blockAdded.localName === 'wb-expression'){
         var header = dom.child(this, 'header');
         if (!header) return;
@@ -270,8 +329,8 @@ ContextProto.hideLocals = function(evt){
 
 window.WBContext = document.registerElement('wb-context', {prototype: ContextProto});
 
-Event.on(document.body, 'editor:wb-added', 'wb-context', function(evt){ evt.target.showLocals(evt); });
-Event.on(document.body, 'editor:wb-added', 'wb-context', function(evt){ evt.target.hideLocals(evt); });
+Event.on(workspace, 'editor:wb-added', 'wb-context', function(evt){ evt.detail.showLocals(evt); });
+Event.on(workspace, 'editor:wb-added', 'wb-context', function(evt){ evt.detail.hideLocals(evt); });
 /*****************
 *
 *  wb-expression
@@ -324,7 +383,7 @@ ExpressionProto.attachedCallback = function expressionAttached(){
     if (this.parent.localName !== 'wb-local'){
         var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
         if (blockParent){
-            Event.trigger(blockParent, 'wb-added', this);
+            Event.trigger(this, 'wb-added', blockParent);
         }
     }
 
@@ -418,9 +477,9 @@ DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
 function toggleClosed(evt){
-    console.log('toggle');
+    // console.log('toggle');
     var block = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
-    console.log('%s closed = %s', block.localName, block.getAttribute('closed'));
+    // console.log('%s closed = %s', block.localName, block.getAttribute('closed'));
     if (block.hasAttribute('closed')){
         block.removeAttribute('closed');
     }else{
@@ -463,7 +522,7 @@ function addItem(evt){
     template.parentElement.insertBefore(newItem, template.nextElementSibling);
 }
 
-Event.on(document.body, 'editor:click', 'wb-contains .add-item', addItem);
+Event.on(workspace, 'editor:click', 'wb-contains .add-item', addItem);
 
 /*****************
 *
@@ -483,7 +542,7 @@ function removeItem(evt){
     }
 }
 
-Event.on(document.body, 'editor:click', 'wb-contains .remove-item', removeItem);
+Event.on(workspace, 'editor:click', 'wb-contains .remove-item', removeItem);
 
 
 
@@ -597,7 +656,7 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-Event.on(document.body, 'editor:change', 'wb-contains input, wb-contains select', function(evt){
+Event.on(workspace, 'editor:change', 'wb-contains input, wb-contains select', function(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
 });
 
@@ -821,11 +880,14 @@ function createVariableBlock(initialValue) {
 }
 
 
-Event.on(document.body, 'editor:wb-added', 'wb-step[script="control.setVariable"]', updateVariable);
+Event.on(document.body, 'editor:wb-added', 'wb-expression', updateVariable);
 
 function updateVariable(evt){
-    var setVariableBlock = evt.target;
-    var valueBlock = evt.detail;
+    var setVariableBlock = evt.detail;
+    if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
+        return;
+    }
+    var valueBlock = evt.target;
     setTypeOfVariable(valueBlock, setVariableBlock);
     console.log('setVariableBlock: %o', setVariableBlock);
 }

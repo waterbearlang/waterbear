@@ -173,7 +173,7 @@ StepProto.getLocals = function(){
     return dom.findAll(dom.child(this, 'header'), 'wb-local > *');
 }
 
-StepProto.getDecendentLocals = StepProto.getLocals;
+StepProto.getDescendantLocals = StepProto.getLocals;
 
 window.WBStep = document.registerElement('wb-step', {prototype: StepProto});
 
@@ -208,7 +208,6 @@ ContextProto.getLocals = function(){
     // Doesn't get locals from decendent or ancestor contexts
     // Use getDecendentLocals() and getAllContextLocals for those
     var locals = dom.findAll(dom.child(this, 'header'), 'wb-local > *');
-    var splice = locals.splice;
     var containers = this.gatherContains();
     for (var i = 0; i < containers.length; i++){
         var container = containers[i];
@@ -224,14 +223,12 @@ ContextProto.getLocals = function(){
 ContextProto.getDescendantLocals = function(){
     /* Wouldn't it be easier and faster to just find 'wb-local > *'? */
     var locals = dom.findAll(dom.child(this, 'header'), 'wb-local > *');
-    var splice = locals.splice;
     var containers = this.gatherContains();
     for (var i = 0; i < containers.length; i++){
         var container = containers[i];
-        for (var j = 0; j < container.length; j++){
+        for (var j = 0; j < container.children.length; j++){
             // add each container's child's locals
-            console.log('get descendant locals of %s', container[i].tagName)
-            locals = locals.concat(container[i].getDescendantLocals());
+            locals = locals.concat(container.children[j].getDescendantLocals());
         }
     }
     return locals;
@@ -239,6 +236,7 @@ ContextProto.getDescendantLocals = function(){
 
 ContextProto.getAllContextLocals = function(){
     // get locals from both ancestors and descendants
+    // but not sibling contexts along ancestor axis
     var locals = [];
     this.getAncestorContexts().forEach(function(context){
         locals = locals.concat(context.getLocals());
@@ -284,6 +282,7 @@ ContextProto.setupCallbacks = function() {
 ContextProto.isContext = true;
 
 /** Default: Always get the next DOM element and assume it's a wb-contains. */
+/* FIXME: That is a dangerous assumption! */
 function defaultNextCallback(strand, args, containers, elem) {
     return elem.nextElementSibling;
 }
@@ -412,37 +411,34 @@ window.WBExpression = document.registerElement('wb-expression', {prototype: Expr
 *
 ********************/
 function updateVariableType(evt){
-    var setVariableBlock = evt.detail;
-    // ignore variables not in the workspace (in scripts)
-    if (! dom.matches(setVariableBlock, 'wb-workspace *')){
-        return;
-    }
-    // ignore blocks that are not setVariable
+    var setVariableBlock = evt.detail; // detail holds block added to
+    var valueBlock = evt.target;  // target holds block that was added
+    // ignore if not setVariable
     if (setVariableBlock.getAttribute('script') !== 'control.setVariable'){
         return;
     }
-    var valueBlock = evt.target;
     var type = valueBlock.getAttribute('type');
     setTypeOfVariable(setVariableBlock, type);
     updateLocalInstancesType(setVariableBlock, type);
 }
 
-function createVariableToLocalAssociation(evt){
-    var blockWithLocals = evt.target;
-    var id;
-    if (!blockWithLocals.hasAttribute('id')){
-        id = util.randomId();
-        blockWithLocals.setAttribute('id', id);
-    }else{
-        id = blockWithLocals.id;
-    }
-    var locals = dom.findAll(workspace, '#' + id + ' > wb-row > wb-local');
-    if (locals.length){
-        locals.forEach(function(local){
-            local.setAttribute('for', id);
-        });
-    }
-}
+/* Shouldn't need this */
+// function createVariableToLocalAssociation(evt){
+//     var blockWithLocals = evt.target;
+//     var id;
+//     if (!blockWithLocals.hasAttribute('id')){
+//         id = util.randomId();
+//         blockWithLocals.setAttribute('id', id);
+//     }else{
+//         id = blockWithLocals.id;
+//     }
+//     var locals = dom.findAll(workspace, '#' + id + ' > wb-row > wb-local');
+//     if (locals.length){
+//         locals.forEach(function(local){
+//             local.setAttribute('for', id);
+//         });
+//     }
+// }
 
 
 function handleVariableInput(evt){
@@ -487,14 +483,14 @@ function variablesInContext(context){
 
 function ensureNameIsUniqueInContext(input){
     var parentContext = dom.closest(input, 'wb-contains');
-    var setVariable = dom.closest(input, '[script="control.setVariable"]');
+    var setVariable = dom.closest(input, '[script="control.getVariable"]');
     var valueBlock = dom.closest(input, 'wb-value');
     // Find other variable names in scope
     // 1. Get list of setVariable blocks contained by parentContext
     // 2. Remove this block from the list
     // 3. Return the value of the input of the block
     // 4. Sort the resulting list
-    var variablesToTestAgainst = dom.findAll(parentContext, '[script="control.setVariable"]')
+    var variablesToTestAgainst = parentContext.getAllContextLocals()
         .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
         .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
         .sort();
@@ -534,10 +530,14 @@ function updateVariableNameInInstances(newVariableName, variableLocalsToUpdate){
     });
 }
 
-function uniquifyVariableName(evt){
-    var setVariableBlock = evt.target; // expects a block (wb-step, wb-context)
-    var input = dom.find(setVariableBlock, 'input');
-    ensureNameIsUniqueInContext(input);
+function uniquifyVariableNames(evt){
+    var blockWithLocals = evt.target;
+    blockWithLocals.getLocals().forEach(function(getVariableBlock){
+        var input = dom.find(getVariableBlock, 'input');
+        if (input){
+            ensureNameIsUniqueInContext(input);
+        }
+    });
 }
 
 /*******************
@@ -856,6 +856,10 @@ Object.defineProperty(ContainsProto, 'firstInstruction', {
    }
 });
 
+ContainsProto.getAllContextLocals = function(){
+    return dom.closest(this, 'wb-context, wb-workspace').getAllContextLocals();
+}
+
 window.WBContains = document.registerElement('wb-contains', {prototype: ContainsProto});
 
 Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
@@ -1169,11 +1173,12 @@ window.block = {
 // Event handling
 
 // Make sure wb-added, wb-removed, wb-addedChild, wb-removedChild events are triggered
+// signature is container, prefix, parentList, elementList
 Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context, wb-expression, wb-contains', 'wb-step, wb-context, wb-expression');
 
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
-Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);
-Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', uniquifyVariableName);
+// Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);
+Event.on(workspace, 'editor:wb-added', 'wb-expression, wb-context, wb-step', uniquifyVariableNames);
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 
@@ -1193,9 +1198,9 @@ requestAnimationFrame(checkForScroll);
 Event.on(workspace, 'editor:input', 'input', resizeInputOnChange);
 Event.on(workspace, 'editor:input', 'input, select', changeValueOnInputChange);
 
-Event.on(workspace, 'editor:input', '[script="control.setVariable"] input', handleVariableInput);
-Event.on(workspace, 'editor:blur',  '[script="control.setVariable"] input', handleVariableBlur); // Mozilla
-Event.on(workspace, 'editor:focusout',  '[script="control.setVariable"] input', handleVariableBlur); // All other browsers
+Event.on(workspace, 'editor:input', 'wb-local input', handleVariableInput);
+Event.on(workspace, 'editor:blur',  'wb-local input', handleVariableBlur); // Mozilla
+Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); // All other browsers
 
 
 })();

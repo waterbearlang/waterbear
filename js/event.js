@@ -228,13 +228,17 @@
     }
 
     /* Add custom events for adding and removing blocks from the DOM */
-
     function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
 
         var blockObserver = new MutationObserver(function(mutations){
             mutations.forEach(function(mutation){
                 // send childAdded or childRemove event to parent element
                 var parent = mutation.target;
+                // WARNING: Node.contains may not be supported on mobile
+                // Polyfill if needed
+                if (!root.contains(parent)){
+                    return;
+                }
                 var blockParent = dom.closest(parent, parentList);
                 if (!blockParent){
                     return;

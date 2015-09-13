@@ -87,6 +87,13 @@ function stopScript(evt){
     runtime.clear();
 }
 
+function stopAndClearScripts(){
+    runtime.stopEventLoop();
+    runtime.clear();
+    runtime.resetStage();
+    File.clearScripts();
+}
+
 function preload() {
     return assets.load({
         'wb-contains wb-expression[isAsset=true]': assets.loadMedia,
@@ -128,6 +135,7 @@ function handleFileButton(evt){
             text: "Open Gist",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'openGist']);
+                stopAndClearScripts();
                 File.loadScriptsFromGistId(evt);
                 modal.hide();
             }
@@ -135,6 +143,7 @@ function handleFileButton(evt){
             text: "Open File",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'openFile']);
+                stopAndClearScripts();
                 File.loadScriptsFromFilesystem(evt);
                 modal.hide();
             }
@@ -142,7 +151,7 @@ function handleFileButton(evt){
             text: "New",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'File', 'new']);
-                File.clearScripts();
+                stopAndClearScripts();
                 modal.hide();
             },
             primary: true
@@ -160,7 +169,16 @@ function handleExampleButton(evt){
             text: "Waterbear in Space",
             handler: function(modal) {
                 _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
-                File.getScriptFromGistId('e06514193419705e6224');
+                stopAndClearScripts();
+                File.loadScriptsFromExample('waterbear_in_space');
+                modal.hide();
+            }
+        },{
+            text: "Noise 3D",
+            handler: function(modal){
+                _gaq.push(['_trackEvent', 'Tutorial', 'Noise3D']);
+                stopAndClearScripts();
+                File.loadScriptsFromExample('noise3d');
                 modal.hide();
             }
         }]

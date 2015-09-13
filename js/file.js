@@ -181,8 +181,8 @@
     }
 
     function loadScriptsFromExample(name){
-        ajax.get('examples/' + name + '.json?b=' + Math.random(), function(exampleJson){
-            loadScriptsFromJson(exampleJson);
+        ajax.get('example/' + name + '.wb?b=' + Math.random(), function(exampleText){
+            loadScriptsFromString(exampleText);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });

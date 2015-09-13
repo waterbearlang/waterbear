@@ -840,6 +840,9 @@ function addToContains(block, evt, addBlockEvent){
     dropTarget = the block (or position) the clone is being dropped into
 **/
 function endDragBlock(evt){
+    var originalBlock = origTarget;
+    var originalParent = null;
+    var nextElem = null;
     if (dragStart === 'script'){
         if(origTarget){
             originalParent = origTarget.parentElement;
@@ -849,22 +852,21 @@ function endDragBlock(evt){
         origTarget = null;
     }
     if (!dropTarget){
+        // console.log('no dropTarget');
         if(dragTarget){
             dragTarget.parentElement.removeChild(dragTarget);
         }
        // fall through to resetDragging()
     }else if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
-        // console.log('delete both clone and original');
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
             originalBlock.classList.remove('singularity');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
             Event.addNewEvent(deleteEvent);                 //add new event to undo
         }
-            dragTarget.parentElement.removeChild(dragTarget);
+        dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
         if (dropTarget.matches('wb-value')) {
-            // console.log('add expression to value');
             dropTarget.appendChild(dragTarget);
             var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling, originalParent:originalParent, originalNextEl: nextElem};
             if (dragStart === 'script'){
@@ -874,7 +876,6 @@ function endDragBlock(evt){
 
         }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.
-            // console.log('create a variable block and add expression to it');
             var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
             if(dragStart==='script'){
                 addBlockEvent.type = 'add-var-block';
@@ -883,7 +884,6 @@ function endDragBlock(evt){
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
     }else if(dragTarget.matches('wb-context, wb-step')){
-        // console.log('add to contains');
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
         addToContains(dragTarget, evt, addBlockEvent);
     }else{

@@ -279,7 +279,6 @@
 
     function reset(){
         // called when we end a drag for any reason
-        console.log('reset');
         dragTarget = null;
         isDragging = false;
         Event.pointerDown = false;
@@ -549,7 +548,6 @@
     function undoKeyCombo(evt) {
         if((keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
            (keyForEvent(evt) == 'z' && Event.keys['meta'])) {
-            console.log('undo');
             evt.preventDefault();
             undoEvent();
         }
@@ -558,7 +556,6 @@
     function redoKeyCombo(evt) {
         if((keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
            (keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
-            console.log('redo');
             evt.preventDefault();
             redoEvent();
         }

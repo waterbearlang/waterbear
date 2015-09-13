@@ -1001,6 +1001,7 @@ function dragBlock(evt){
     // Check if the user dragged over the sidebar.
     if (potentialDropTarget.matches('sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
+        dropTarget.classList.add('no-drop');
         app.tip('drop here to delete block(s)');
         return;
     }
@@ -1009,6 +1010,7 @@ function dragBlock(evt){
     if (dragTarget.matches('wb-expression')){
        // Check if we're on a literal block.
        if (potentialDropTarget.matches('wb-value[allow="literal"], wb-value[allow="literal"] *')) {
+          potentialDropTarget.classList.add('no-drop');
           app.warn("cannot drop on direct input value");
           return;
        }
@@ -1017,6 +1019,7 @@ function dragBlock(evt){
         dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression:not(.hide)')){
+                dropTarget.classList.add('no-drop');
                 app.warn('cannot drop an expression on another expression');
                 dropTarget = null;
                 return;
@@ -1025,8 +1028,10 @@ function dragBlock(evt){
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
             if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
+                dropTarget.classList.add('ok-drop');
                 app.tip('drop here to add block to script');
             }else{
+                dropTarget.classList.add('no-drop');
                 app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');
                 dropTarget = null;
             }
@@ -1052,18 +1057,22 @@ function dropTargetIsContainer(potentialDropTarget){
            var local = document.getElementById(localId);
            var localContext = dom.closest(local, 'wb-contains');
            if (!localContext.contains(dropTarget) && localContext !== dropTarget){
+               dropTarget.classList.add('no-drop');
                dropTarget = null;
                app.warn('instances can only be dropped within the scope of their local');
            }
        }
    }
    if (dropTarget){
+      dropTarget.classList.add('ok-drop');
       if (dropTarget.matches('wb-contains')){
          app.tip('drop to add to top of the block container');
       }else{
          app.tip('drop to add after this block');
       }
-   }
+  }else{
+      potentialDropTarget.classList.add('no-drop');
+  }
 }
 
 function addToContains(block, evt, addBlockEvent, originalBlock){
@@ -1194,6 +1203,12 @@ function resetDragging(){
     BLOCK_MENU.classList.remove('trashcan');
     BLOCK_MENU.scrollTop = blockTop;
     document.body.classList.remove('block-dragging');
+    dom.findAll(document.body, 'no-drop').forEach(function(e){
+        e.classList.remove('no-drop');
+    })
+    dom.findAll(document.body, 'ok-drop').forEach(function(e){
+        e.classList.remove('ok-drop');
+    });
 }
 
 /* End Dragging */

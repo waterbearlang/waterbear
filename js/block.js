@@ -853,7 +853,6 @@ function checkForScroll(evt){
     }else if (y > rect.bottom){
         scriptspace.scrollTop += 5;
     }
-    console.log('bottom: %s, scrollTop: %s, y: %s', rect.bottom, scriptspace.scrollTop, y);
 }
 
 function dragBlock(evt){

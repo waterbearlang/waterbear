@@ -141,7 +141,14 @@
         history.replaceState(null, '', path);
     }
 
+    function exampleUrl(example){
+        var path = location.href.split('?')[0];
+        path += '?example=' + example;
+        history.replaceState(null, '', path);
+    }
+
     function bareUrl(gistID){
+        console.log('bareUrl');
         var path = location.href.split('?')[0];
         history.replaceState(null, '', path);
     }
@@ -183,6 +190,7 @@
     function loadScriptsFromExample(name){
         ajax.get('example/' + name + '.wb?b=' + Math.random(), function(exampleText){
             loadScriptsFromString(exampleText);
+            exampleUrl(name);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });

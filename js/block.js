@@ -483,7 +483,7 @@ function variablesInContext(context){
 
 function ensureNameIsUniqueInContext(input){
     var parentContext = dom.closest(input, 'wb-contains');
-    var setVariable = dom.closest(input, '[script="control.getVariable"]');
+    var getVariable = dom.closest(input, '[script="control.getVariable"]');
     var valueBlock = dom.closest(input, 'wb-value');
     // Find other variable names in scope
     // 1. Get list of setVariable blocks contained by parentContext
@@ -491,7 +491,7 @@ function ensureNameIsUniqueInContext(input){
     // 3. Return the value of the input of the block
     // 4. Sort the resulting list
     var variablesToTestAgainst = parentContext.getAllContextLocals()
-        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== setVariable; })
+        .filter(function(setVarBlock){ return setVarBlock && setVarBlock !== getVariable && setVarBlock.getAttribute('script') === 'control.getVariable'; })
         .map(function(setVarBlock){return dom.find(setVarBlock, 'input').value; })
         .sort();
     var newVariableName = input.value; // we may be changing this one
@@ -503,7 +503,7 @@ function ensureNameIsUniqueInContext(input){
     if (newVariableName !== oldVariableName){
         input.value = newVariableName;
         valueBlock.setAttribute('value', newVariableName);
-        var variablesToUpdate = getVariablesToUpdate(parentContext, setVariable.id);
+        var variablesToUpdate = getVariablesToUpdate(parentContext, getVariable.id);
         updateVariableNameInInstances(newVariableName, variablesToUpdate);
     }
 }
@@ -1178,7 +1178,7 @@ Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context,
 
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 // Event.on(workspace, 'editor:wb-added', '[script="control.setVariable"]', createVariableToLocalAssociation);
-Event.on(workspace, 'editor:wb-added', 'wb-expression, wb-context, wb-step', uniquifyVariableNames);
+Event.on(workspace, 'editor:wb-added', 'wb-context, wb-step', uniquifyVariableNames);
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 

@@ -470,6 +470,7 @@
                 </wb-step>
                 <wb-step script="color.shadow" class="color">
                     <wb-value type="color" value="#FF0000">shadow color</wb-value>
+                    <wb-value type="number" value="2">shadow blur</wb-value>
                 </wb-step>
             </wb-accordion>
             <wb-accordion class="image">
@@ -514,6 +515,9 @@
                     Math
                 </header>
                 <p>In addition to performing math on numbers you can also use many operations on arrays and vectors too.</p>
+                <wb-expression script="math.stringToNumber" type="number">
+                    <wb-value type="string" value="0">as number</wb-value>
+                </wb-expression>
                 <wb-expression script="math.add" type="number">
                     <wb-value type="number,vector,array" value="0"></wb-value>
                     <wb-value type="number,vector,array" value="0">+</wb-value>
@@ -867,6 +871,9 @@
                 <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
                  <wb-step script="shape.draw" class="shape">
                     <wb-value type="shape">draw the shape</wb-value>
+                </wb-step>
+                <wb-step script="shape.setLineWidth" class="shape">
+                    <wb-value type="number" value="1">line width</wb-value>
                 </wb-step>
                 <wb-expression type="shape" script="shape.circle" class="shape">
                     <wb-value type="point">circle at</wb-value>

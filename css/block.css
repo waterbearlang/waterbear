@@ -199,12 +199,6 @@ wb-context[script].wb-paused {
     display: none;
 }
 
-/* almost hide, but leave enough that it still has a bounding box */
-.singularity{
-    max-height: 1px;
-    overflow: hidden;
-}
-
 wb-value > input{
 padding-left:20px;
 background:  #FFFFFF no-repeat 3px 3px;

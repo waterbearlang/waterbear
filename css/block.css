@@ -206,7 +206,7 @@ background:  #FFFFFF no-repeat 3px 3px;
 
 }
 
-wb-value[type=any] >input{padding-left:5px;}
+wb-value[type=any] >input{background-image: url(../images/icon/control.svg);}
 wb-value[type*=","][value] >input{padding-left: 60px;}
 wb-value[type*=number] > input{background-image: url(../images/icon/math.svg);}
 wb-value[type*=color] > input{background-image: url(../images/icon/color.svg);}
@@ -344,5 +344,3 @@ wb-expression[type=motion]{background-color: hsl(288, 53%, 56%); border-color: h
 .wb-icons{
     display: none;
 }
-
-/* Some animations */

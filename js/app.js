@@ -27,6 +27,10 @@ function warn(text, persist){
     }
 }
 
+function tip(text){
+    message('green', text);
+}
+
 function info(text){
     message('#333', text);
 }
@@ -426,6 +430,7 @@ window.app = {
     message: message,
     error: error,
     warn: warn,
+    tip: tip,
     info: info
 };
 })();

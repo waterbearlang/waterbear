@@ -19,14 +19,6 @@
     var selectedType = 'null';
     var BLOCK_MENU = document.querySelector('sidebar');
 
-// Utility
-
-function randomId(){
-    // Based on Paul Irish's random hex color:http://www.paulirish.com/2009/random-hex-color-code-snippets/
-    // Theoretically could return non-unique values, not going to let that keep me up at night
-    return 'k'+Math.floor(Math.random()*16777215).toString(16); // 'k' because ids have to start with a letter
-}
-
 // FIXME: insert this into the document rather than including in markup
 var svgText = document.querySelector('.resize-tester');
 function resize(input){
@@ -178,7 +170,7 @@ function createVariableToLocalAssociation(evt){
     var blockWithLocals = evt.target;
     var id;
     if (!blockWithLocals.hasAttribute('id')){
-        id = randomId();
+        id = util.randomId();
         blockWithLocals.setAttribute('id', id);
     }else{
         id = blockWithLocals.id;
@@ -1094,7 +1086,6 @@ function updateLocalInstancesType(variableStep, type){
 // Exports
 
 window.block = {
-    randomId: randomId,
     getVariablesToUpdate: getVariablesToUpdate
 }
 

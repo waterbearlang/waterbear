@@ -1041,7 +1041,7 @@
         geolocation: geolocationModule,
         motion: motionModule,
         WBImage: WBImage,
-        randomId = randomId
+        randomId: randomId
     };
 
 

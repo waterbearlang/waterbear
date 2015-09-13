@@ -66,31 +66,35 @@ var hsljump = 15 * 7
 var hues = {};
 /* medium was found through trial and error. Light and dark are guesses for now */
 
-var light = [63, 66];
-var medium = [53, 56];
-var dark = [43, 46];
-var borderLight = [63,50];
-var borderMedium = [53,40];
-var borderDark = [43,30];
+/* background saturation and lightness */
+var bgHighlighted = [95, 50];
+var bgNormal = [50, 50];
+var bgFaded = [50, 75];
+/* border saturation and lightness */
+var bdHighlighted = [50, 75];
+var bdNormal = [50, 30];
+var bdFaded = [50, 60];
 
 for (var i = 0; i < namespaces.length; i++){
     hues[namespaces[i]] = i * hsljump % 360;
 }
+/* Color template used as part of all other templates */
+var colorTemplate = '{background-color: hsl(${hue}, ${bgSaturation}%, ${bgLightness}%); border-color: hsl(${hue}, ${bdSaturation}%, ${bdLightness}%); }'
 /* Block templates by namespace */
-/* light: applied when a block is selected, unless user is dragging */
-var nsTemplateLight = '[ns="${ns}"].selected-block{background-color: hsl(${hue}, ${backgroundSat}%, ${backgroundLight}%); border-color: hsl(${hue}, ${borderSat}%, ${borderLight}%); }';
-/* medium: default, also highlight while dragging for drop-targets */
-var nsTemplateMedium = '[ns="${ns}"], .block-dragging [ns="${ns}"].drop-target{ background-color: hsl(${hue}, ${backgroundSat}%, ${backgroundLight}%); border-color: hsl(${hue}, ${borderSat}%, ${borderLight}%); }';
-/* dark: all script blocks while dragging, including selected, except for drop targets */
-var nsTemplateDark = '.block-dragging [ns="${ns}"],.block-dragging [ns="${ns}"].selected-block{background-color: hsl(${hue}, ${backgroundSat}%, ${backgroundLight}%); border-color: hsl(${hue}, ${borderSat}%, ${borderLight}%); }';
+/* highlight: applied when a block is selected, unless user is dragging */
+var nsTemplateHighlighted = '[ns="${ns}"].selected-block' + colorTemplate;
+/* normal: default, also highlight while dragging for drop-targets */
+var nsTemplateNormal = '[ns="${ns}"], .block-dragging [ns="${ns}"].drop-target, .block-dragging [ns="${ns}"].drop-target.selected-block' + colorTemplate;
+/* faded: all script blocks while dragging, including selected, except for drop targets */
+var nsTemplateFaded = '.block-dragging [ns="${ns}"],.block-dragging [ns="${ns}"].selected-block' + colorTemplate;
 
 /* Block templates by return type */
-/* light: applied when a block is selected, unless user is dragging */
-var rtTemplateLight = 'wb-expression[type="${type}"].selected-block{ background-color: hsl(${hue}, ${backgroundSat}%, ${backgroundLight}%); border-color: hsl(${hue}, ${borderSat}%, ${borderLight}%); }'
+/* highlight: applied when a block is selected, unless user is dragging */
+var rtTemplateHighlighted = 'wb-expression[type="${type}"].selected-block' + colorTemplate;
 /* medium: default, also highlight while dragging for drop-targets */
-var rtTemplateMedium = 'wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(${hue}, ${backgroundSat}%, ${backgroundLight}%); border-color: hsl(${hue}, ${borderSat}%, ${borderLight}%); }'
+var rtTemplateNormal = 'wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target' + colorTemplate;
 /* dark: all script blocks while dragging, including selected, except for drop targets */
-var rtTemplateDark = '.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(${hue}, ${backgroundSat}%, ${backgroundLight}%); border-color: hsl(${hue}, ${borderSat}%, ${borderLight}%); }'
+var rtTemplateFaded = '.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block' + colorTemplate;
 
 
 function template(t, values){
@@ -107,17 +111,21 @@ function template(t, values){
     return output;
 }
 
+function applyTemplate(namespace, tpl, background, border){
+    console.log(template(tpl, {hue: hues[namespace], ns: namespace, bgSaturation: background[0], bgLightness: background[1], bdSaturation: border[0], 'bdLightness': border[1]}));
+}
+
 function applyAllNamespaceTemplates(namespace){
-    console.log(template(nsTemplateLight, {hue: hues[namespace], ns: namespace, backgroundSat: light[0], backgroundLight: light[1], borderSat: borderLight[0], 'borderLight': borderLight[1]}));
-    console.log(template(nsTemplateMedium, {hue: hues[namespace], ns: namespace, backgroundSat: medium[0], backgroundLight: medium[1], borderSat: borderMedium[0], borderLight: borderMedium[1]}));
-    console.log(template(nsTemplateDark, {hue: hues[namespace], ns: namespace, backgroundSat: dark[0], backgroundLight: dark[1], borderSat: borderDark[0], borderLight: borderDark[1]}));
+    applyTemplate(namespace, nsTemplateHighlighted, bgHighlighted, bdHighlighted);
+    applyTemplate(namespace, nsTemplateNormal, bgNormal, bdNormal);
+    applyTemplate(namespace, nsTemplateFaded, bgFaded, bdFaded);
 }
 
 function applyAllTypeTemplates(type){
     var namespace = typeToNamespace[type];
-    console.log(template(rtTemplateLight, {hue: hues[namespace], ns: namespace, backgroundSat: light[0], backgroundLight: light[1], borderSat: borderLight[0], 'borderLight': borderLight[1]}));
-    console.log(template(rtTemplateMedium, {hue: hues[namespace], ns: namespace, backgroundSat: medium[0], backgroundLight: medium[1], borderSat: borderMedium[0], borderLight: borderMedium[1]}));
-    console.log(template(rtTemplateDark, {hue: hues[namespace], ns: namespace, backgroundSat: dark[0], backgroundLight: dark[1], borderSat: borderDark[0], borderLight: borderDark[1]}));
+    applyTemplate(namespace, rtTemplateHighlighted, bgHighlighted, bdHighlighted);
+    applyTemplate(namespace, rtTemplateNormal, bgNormal, bdNormal);
+    applyTemplate(namespace, rtTemplateFaded, bgFaded, bdFaded);
 }
 
 function mainHeader(){

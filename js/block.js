@@ -997,6 +997,16 @@ function checkForScroll(evt){
     }
 }
 
+function markDropTarget(block){
+    var oldDropTargets = dom.findAll(workspace, '.drop-target');
+    oldDropTargets.forEach(function(dt){
+        if (dt !== dropTarget){
+            dt.classList.remove('drop-target');
+        }
+    });
+    block.classList.add('drop-target');
+}
+
 function dragBlock(evt){
     if (!dragTarget){ return; }
     evt.preventDefault();
@@ -1027,10 +1037,7 @@ function dragBlock(evt){
 
         // FIXME
         dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
-        var oldDropTarget = dom.find(workspace, '.drop-target');
-        if (oldDropTarget && oldDropTarget !== dropTarget){
-            oldDropTarget.classList.remove('drop-target');
-        }
+
         if (dropTarget){
             if (dom.child(dropTarget, 'wb-expression:not(.hide)')){
                 dropTarget.classList.add('no-drop');
@@ -1042,7 +1049,7 @@ function dragBlock(evt){
             var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
             var dragType = dragTarget.getAttribute('type');
             if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1){
-                dropTarget.classList.add('drop-target');
+                markDropTarget(dropTarget);
                 app.tip('drop here to add block to script');
             }else{
                 dropTarget.classList.add('no-drop');
@@ -1078,7 +1085,7 @@ function dropTargetIsContainer(potentialDropTarget){
        }
    }
    if (dropTarget){
-      dropTarget.classList.add('drop-target');
+       markDropTarget(dropTarget);
       if (dropTarget.matches('wb-contains')){
          app.tip('drop to add to top of the block container');
       }else{
@@ -1142,10 +1149,15 @@ function endDragBlock(evt){
             nextElem = origTarget.nextElementSibling;
         }
     }
+    if (!dragTarget){
+        // Sometimes we get spurious drags, ignore
+        return cancelDragBlock();
+    }
     if (!dropTarget){
         // No legal target, probably outside of workspace
         return cancelDragBlock();
-    }else if (dropTarget === BLOCK_MENU){
+    }
+    if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
             originalBlock.classList.remove('hide');  //un-hide block
@@ -1284,6 +1296,7 @@ function manageSelections(evt){
     if (!block) return;
     if (block.localName == 'wb-value'){
         selectByValue(block);
+        selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
     }else{
         selectByBlock(block);
     }

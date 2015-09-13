@@ -3,75 +3,75 @@
  * highlighting selected blocks.
  */
 
-[ns="control"].selected-block{background-color: hsl(0, 63%, 66%); border-color: hsl(0, 63%, 50%); }
-[ns="control"], .block-dragging [ns="control"].drop-target{ background-color: hsl(0, 53%, 56%); border-color: hsl(0, 53%, 40%); }
-.block-dragging [ns="control"],.block-dragging [ns="control"].selected-block{background-color: hsl(0, 43%, 46%); border-color: hsl(0, 43%, 30%); }
-[ns="sprite"].selected-block{background-color: hsl(105, 63%, 66%); border-color: hsl(105, 63%, 50%); }
-[ns="sprite"], .block-dragging [ns="sprite"].drop-target{ background-color: hsl(105, 53%, 56%); border-color: hsl(105, 53%, 40%); }
-.block-dragging [ns="sprite"],.block-dragging [ns="sprite"].selected-block{background-color: hsl(105, 43%, 46%); border-color: hsl(105, 43%, 30%); }
-[ns="music"].selected-block{background-color: hsl(210, 63%, 66%); border-color: hsl(210, 63%, 50%); }
-[ns="music"], .block-dragging [ns="music"].drop-target{ background-color: hsl(210, 53%, 56%); border-color: hsl(210, 53%, 40%); }
-.block-dragging [ns="music"],.block-dragging [ns="music"].selected-block{background-color: hsl(210, 43%, 46%); border-color: hsl(210, 43%, 30%); }
-[ns="sound"].selected-block{background-color: hsl(315, 63%, 66%); border-color: hsl(315, 63%, 50%); }
-[ns="sound"], .block-dragging [ns="sound"].drop-target{ background-color: hsl(315, 53%, 56%); border-color: hsl(315, 53%, 40%); }
-.block-dragging [ns="sound"],.block-dragging [ns="sound"].selected-block{background-color: hsl(315, 43%, 46%); border-color: hsl(315, 43%, 30%); }
-[ns="array"].selected-block{background-color: hsl(60, 63%, 66%); border-color: hsl(60, 63%, 50%); }
-[ns="array"], .block-dragging [ns="array"].drop-target{ background-color: hsl(60, 53%, 56%); border-color: hsl(60, 53%, 40%); }
-.block-dragging [ns="array"],.block-dragging [ns="array"].selected-block{background-color: hsl(60, 43%, 46%); border-color: hsl(60, 43%, 30%); }
-[ns="boolean"].selected-block{background-color: hsl(165, 63%, 66%); border-color: hsl(165, 63%, 50%); }
-[ns="boolean"], .block-dragging [ns="boolean"].drop-target{ background-color: hsl(165, 53%, 56%); border-color: hsl(165, 53%, 40%); }
-.block-dragging [ns="boolean"],.block-dragging [ns="boolean"].selected-block{background-color: hsl(165, 43%, 46%); border-color: hsl(165, 43%, 30%); }
-[ns="canvas"].selected-block{background-color: hsl(270, 63%, 66%); border-color: hsl(270, 63%, 50%); }
-[ns="canvas"], .block-dragging [ns="canvas"].drop-target{ background-color: hsl(270, 53%, 56%); border-color: hsl(270, 53%, 40%); }
-.block-dragging [ns="canvas"],.block-dragging [ns="canvas"].selected-block{background-color: hsl(270, 43%, 46%); border-color: hsl(270, 43%, 30%); }
-[ns="color"].selected-block{background-color: hsl(15, 63%, 66%); border-color: hsl(15, 63%, 50%); }
-[ns="color"], .block-dragging [ns="color"].drop-target{ background-color: hsl(15, 53%, 56%); border-color: hsl(15, 53%, 40%); }
-.block-dragging [ns="color"],.block-dragging [ns="color"].selected-block{background-color: hsl(15, 43%, 46%); border-color: hsl(15, 43%, 30%); }
-[ns="image"].selected-block{background-color: hsl(120, 63%, 66%); border-color: hsl(120, 63%, 50%); }
-[ns="image"], .block-dragging [ns="image"].drop-target{ background-color: hsl(120, 53%, 56%); border-color: hsl(120, 53%, 40%); }
-.block-dragging [ns="image"],.block-dragging [ns="image"].selected-block{background-color: hsl(120, 43%, 46%); border-color: hsl(120, 43%, 30%); }
-[ns="math"].selected-block{background-color: hsl(225, 63%, 66%); border-color: hsl(225, 63%, 50%); }
-[ns="math"], .block-dragging [ns="math"].drop-target{ background-color: hsl(225, 53%, 56%); border-color: hsl(225, 53%, 40%); }
-.block-dragging [ns="math"],.block-dragging [ns="math"].selected-block{background-color: hsl(225, 43%, 46%); border-color: hsl(225, 43%, 30%); }
-[ns="random"].selected-block{background-color: hsl(330, 63%, 66%); border-color: hsl(330, 63%, 50%); }
-[ns="random"], .block-dragging [ns="random"].drop-target{ background-color: hsl(330, 53%, 56%); border-color: hsl(330, 53%, 40%); }
-.block-dragging [ns="random"],.block-dragging [ns="random"].selected-block{background-color: hsl(330, 43%, 46%); border-color: hsl(330, 43%, 30%); }
-[ns="vector"].selected-block{background-color: hsl(75, 63%, 66%); border-color: hsl(75, 63%, 50%); }
-[ns="vector"], .block-dragging [ns="vector"].drop-target{ background-color: hsl(75, 53%, 56%); border-color: hsl(75, 53%, 40%); }
-.block-dragging [ns="vector"],.block-dragging [ns="vector"].selected-block{background-color: hsl(75, 43%, 46%); border-color: hsl(75, 43%, 30%); }
-[ns="object"].selected-block{background-color: hsl(180, 63%, 66%); border-color: hsl(180, 63%, 50%); }
-[ns="object"], .block-dragging [ns="object"].drop-target{ background-color: hsl(180, 53%, 56%); border-color: hsl(180, 53%, 40%); }
-.block-dragging [ns="object"],.block-dragging [ns="object"].selected-block{background-color: hsl(180, 43%, 46%); border-color: hsl(180, 43%, 30%); }
-[ns="string"].selected-block{background-color: hsl(285, 63%, 66%); border-color: hsl(285, 63%, 50%); }
-[ns="string"], .block-dragging [ns="string"].drop-target{ background-color: hsl(285, 53%, 56%); border-color: hsl(285, 53%, 40%); }
-.block-dragging [ns="string"],.block-dragging [ns="string"].selected-block{background-color: hsl(285, 43%, 46%); border-color: hsl(285, 43%, 30%); }
-[ns="path"].selected-block{background-color: hsl(30, 63%, 66%); border-color: hsl(30, 63%, 50%); }
-[ns="path"], .block-dragging [ns="path"].drop-target{ background-color: hsl(30, 53%, 56%); border-color: hsl(30, 53%, 40%); }
-.block-dragging [ns="path"],.block-dragging [ns="path"].selected-block{background-color: hsl(30, 43%, 46%); border-color: hsl(30, 43%, 30%); }
-[ns="point"].selected-block{background-color: hsl(135, 63%, 66%); border-color: hsl(135, 63%, 50%); }
-[ns="point"], .block-dragging [ns="point"].drop-target{ background-color: hsl(135, 53%, 56%); border-color: hsl(135, 53%, 40%); }
-.block-dragging [ns="point"],.block-dragging [ns="point"].selected-block{background-color: hsl(135, 43%, 46%); border-color: hsl(135, 43%, 30%); }
-[ns="rect"].selected-block{background-color: hsl(240, 63%, 66%); border-color: hsl(240, 63%, 50%); }
-[ns="rect"], .block-dragging [ns="rect"].drop-target{ background-color: hsl(240, 53%, 56%); border-color: hsl(240, 53%, 40%); }
-.block-dragging [ns="rect"],.block-dragging [ns="rect"].selected-block{background-color: hsl(240, 43%, 46%); border-color: hsl(240, 43%, 30%); }
-[ns="input"].selected-block{background-color: hsl(345, 63%, 66%); border-color: hsl(345, 63%, 50%); }
-[ns="input"], .block-dragging [ns="input"].drop-target{ background-color: hsl(345, 53%, 56%); border-color: hsl(345, 53%, 40%); }
-.block-dragging [ns="input"],.block-dragging [ns="input"].selected-block{background-color: hsl(345, 43%, 46%); border-color: hsl(345, 43%, 30%); }
-[ns="motion"].selected-block{background-color: hsl(90, 63%, 66%); border-color: hsl(90, 63%, 50%); }
-[ns="motion"], .block-dragging [ns="motion"].drop-target{ background-color: hsl(90, 53%, 56%); border-color: hsl(90, 53%, 40%); }
-.block-dragging [ns="motion"],.block-dragging [ns="motion"].selected-block{background-color: hsl(90, 43%, 46%); border-color: hsl(90, 43%, 30%); }
-[ns="shape"].selected-block{background-color: hsl(195, 63%, 66%); border-color: hsl(195, 63%, 50%); }
-[ns="shape"], .block-dragging [ns="shape"].drop-target{ background-color: hsl(195, 53%, 56%); border-color: hsl(195, 53%, 40%); }
-.block-dragging [ns="shape"],.block-dragging [ns="shape"].selected-block{background-color: hsl(195, 43%, 46%); border-color: hsl(195, 43%, 30%); }
-[ns="geolocation"].selected-block{background-color: hsl(300, 63%, 66%); border-color: hsl(300, 63%, 50%); }
-[ns="geolocation"], .block-dragging [ns="geolocation"].drop-target{ background-color: hsl(300, 53%, 56%); border-color: hsl(300, 53%, 40%); }
-.block-dragging [ns="geolocation"],.block-dragging [ns="geolocation"].selected-block{background-color: hsl(300, 43%, 46%); border-color: hsl(300, 43%, 30%); }
-[ns="size"].selected-block{background-color: hsl(45, 63%, 66%); border-color: hsl(45, 63%, 50%); }
-[ns="size"], .block-dragging [ns="size"].drop-target{ background-color: hsl(45, 53%, 56%); border-color: hsl(45, 53%, 40%); }
-.block-dragging [ns="size"],.block-dragging [ns="size"].selected-block{background-color: hsl(45, 43%, 46%); border-color: hsl(45, 43%, 30%); }
-[ns="text"].selected-block{background-color: hsl(150, 63%, 66%); border-color: hsl(150, 63%, 50%); }
-[ns="text"], .block-dragging [ns="text"].drop-target{ background-color: hsl(150, 53%, 56%); border-color: hsl(150, 53%, 40%); }
-.block-dragging [ns="text"],.block-dragging [ns="text"].selected-block{background-color: hsl(150, 43%, 46%); border-color: hsl(150, 43%, 30%); }
+[ns="control"].selected-block{background-color: hsl(0, 95%, 50%); border-color: hsl(0, 50%, 75%); }
+[ns="control"], .block-dragging [ns="control"].drop-target, .block-dragging [ns="control"].drop-target.selected-block{background-color: hsl(0, 50%, 50%); border-color: hsl(0, 50%, 30%); }
+.block-dragging [ns="control"],.block-dragging [ns="control"].selected-block{background-color: hsl(0, 50%, 75%); border-color: hsl(0, 50%, 60%); }
+[ns="sprite"].selected-block{background-color: hsl(105, 95%, 50%); border-color: hsl(105, 50%, 75%); }
+[ns="sprite"], .block-dragging [ns="sprite"].drop-target, .block-dragging [ns="sprite"].drop-target.selected-block{background-color: hsl(105, 50%, 50%); border-color: hsl(105, 50%, 30%); }
+.block-dragging [ns="sprite"],.block-dragging [ns="sprite"].selected-block{background-color: hsl(105, 50%, 75%); border-color: hsl(105, 50%, 60%); }
+[ns="music"].selected-block{background-color: hsl(210, 95%, 50%); border-color: hsl(210, 50%, 75%); }
+[ns="music"], .block-dragging [ns="music"].drop-target, .block-dragging [ns="music"].drop-target.selected-block{background-color: hsl(210, 50%, 50%); border-color: hsl(210, 50%, 30%); }
+.block-dragging [ns="music"],.block-dragging [ns="music"].selected-block{background-color: hsl(210, 50%, 75%); border-color: hsl(210, 50%, 60%); }
+[ns="sound"].selected-block{background-color: hsl(315, 95%, 50%); border-color: hsl(315, 50%, 75%); }
+[ns="sound"], .block-dragging [ns="sound"].drop-target, .block-dragging [ns="sound"].drop-target.selected-block{background-color: hsl(315, 50%, 50%); border-color: hsl(315, 50%, 30%); }
+.block-dragging [ns="sound"],.block-dragging [ns="sound"].selected-block{background-color: hsl(315, 50%, 75%); border-color: hsl(315, 50%, 60%); }
+[ns="array"].selected-block{background-color: hsl(60, 95%, 50%); border-color: hsl(60, 50%, 75%); }
+[ns="array"], .block-dragging [ns="array"].drop-target, .block-dragging [ns="array"].drop-target.selected-block{background-color: hsl(60, 50%, 50%); border-color: hsl(60, 50%, 30%); }
+.block-dragging [ns="array"],.block-dragging [ns="array"].selected-block{background-color: hsl(60, 50%, 75%); border-color: hsl(60, 50%, 60%); }
+[ns="boolean"].selected-block{background-color: hsl(165, 95%, 50%); border-color: hsl(165, 50%, 75%); }
+[ns="boolean"], .block-dragging [ns="boolean"].drop-target, .block-dragging [ns="boolean"].drop-target.selected-block{background-color: hsl(165, 50%, 50%); border-color: hsl(165, 50%, 30%); }
+.block-dragging [ns="boolean"],.block-dragging [ns="boolean"].selected-block{background-color: hsl(165, 50%, 75%); border-color: hsl(165, 50%, 60%); }
+[ns="canvas"].selected-block{background-color: hsl(270, 95%, 50%); border-color: hsl(270, 50%, 75%); }
+[ns="canvas"], .block-dragging [ns="canvas"].drop-target, .block-dragging [ns="canvas"].drop-target.selected-block{background-color: hsl(270, 50%, 50%); border-color: hsl(270, 50%, 30%); }
+.block-dragging [ns="canvas"],.block-dragging [ns="canvas"].selected-block{background-color: hsl(270, 50%, 75%); border-color: hsl(270, 50%, 60%); }
+[ns="color"].selected-block{background-color: hsl(15, 95%, 50%); border-color: hsl(15, 50%, 75%); }
+[ns="color"], .block-dragging [ns="color"].drop-target, .block-dragging [ns="color"].drop-target.selected-block{background-color: hsl(15, 50%, 50%); border-color: hsl(15, 50%, 30%); }
+.block-dragging [ns="color"],.block-dragging [ns="color"].selected-block{background-color: hsl(15, 50%, 75%); border-color: hsl(15, 50%, 60%); }
+[ns="image"].selected-block{background-color: hsl(120, 95%, 50%); border-color: hsl(120, 50%, 75%); }
+[ns="image"], .block-dragging [ns="image"].drop-target, .block-dragging [ns="image"].drop-target.selected-block{background-color: hsl(120, 50%, 50%); border-color: hsl(120, 50%, 30%); }
+.block-dragging [ns="image"],.block-dragging [ns="image"].selected-block{background-color: hsl(120, 50%, 75%); border-color: hsl(120, 50%, 60%); }
+[ns="math"].selected-block{background-color: hsl(225, 95%, 50%); border-color: hsl(225, 50%, 75%); }
+[ns="math"], .block-dragging [ns="math"].drop-target, .block-dragging [ns="math"].drop-target.selected-block{background-color: hsl(225, 50%, 50%); border-color: hsl(225, 50%, 30%); }
+.block-dragging [ns="math"],.block-dragging [ns="math"].selected-block{background-color: hsl(225, 50%, 75%); border-color: hsl(225, 50%, 60%); }
+[ns="random"].selected-block{background-color: hsl(330, 95%, 50%); border-color: hsl(330, 50%, 75%); }
+[ns="random"], .block-dragging [ns="random"].drop-target, .block-dragging [ns="random"].drop-target.selected-block{background-color: hsl(330, 50%, 50%); border-color: hsl(330, 50%, 30%); }
+.block-dragging [ns="random"],.block-dragging [ns="random"].selected-block{background-color: hsl(330, 50%, 75%); border-color: hsl(330, 50%, 60%); }
+[ns="vector"].selected-block{background-color: hsl(75, 95%, 50%); border-color: hsl(75, 50%, 75%); }
+[ns="vector"], .block-dragging [ns="vector"].drop-target, .block-dragging [ns="vector"].drop-target.selected-block{background-color: hsl(75, 50%, 50%); border-color: hsl(75, 50%, 30%); }
+.block-dragging [ns="vector"],.block-dragging [ns="vector"].selected-block{background-color: hsl(75, 50%, 75%); border-color: hsl(75, 50%, 60%); }
+[ns="object"].selected-block{background-color: hsl(180, 95%, 50%); border-color: hsl(180, 50%, 75%); }
+[ns="object"], .block-dragging [ns="object"].drop-target, .block-dragging [ns="object"].drop-target.selected-block{background-color: hsl(180, 50%, 50%); border-color: hsl(180, 50%, 30%); }
+.block-dragging [ns="object"],.block-dragging [ns="object"].selected-block{background-color: hsl(180, 50%, 75%); border-color: hsl(180, 50%, 60%); }
+[ns="string"].selected-block{background-color: hsl(285, 95%, 50%); border-color: hsl(285, 50%, 75%); }
+[ns="string"], .block-dragging [ns="string"].drop-target, .block-dragging [ns="string"].drop-target.selected-block{background-color: hsl(285, 50%, 50%); border-color: hsl(285, 50%, 30%); }
+.block-dragging [ns="string"],.block-dragging [ns="string"].selected-block{background-color: hsl(285, 50%, 75%); border-color: hsl(285, 50%, 60%); }
+[ns="path"].selected-block{background-color: hsl(30, 95%, 50%); border-color: hsl(30, 50%, 75%); }
+[ns="path"], .block-dragging [ns="path"].drop-target, .block-dragging [ns="path"].drop-target.selected-block{background-color: hsl(30, 50%, 50%); border-color: hsl(30, 50%, 30%); }
+.block-dragging [ns="path"],.block-dragging [ns="path"].selected-block{background-color: hsl(30, 50%, 75%); border-color: hsl(30, 50%, 60%); }
+[ns="point"].selected-block{background-color: hsl(135, 95%, 50%); border-color: hsl(135, 50%, 75%); }
+[ns="point"], .block-dragging [ns="point"].drop-target, .block-dragging [ns="point"].drop-target.selected-block{background-color: hsl(135, 50%, 50%); border-color: hsl(135, 50%, 30%); }
+.block-dragging [ns="point"],.block-dragging [ns="point"].selected-block{background-color: hsl(135, 50%, 75%); border-color: hsl(135, 50%, 60%); }
+[ns="rect"].selected-block{background-color: hsl(240, 95%, 50%); border-color: hsl(240, 50%, 75%); }
+[ns="rect"], .block-dragging [ns="rect"].drop-target, .block-dragging [ns="rect"].drop-target.selected-block{background-color: hsl(240, 50%, 50%); border-color: hsl(240, 50%, 30%); }
+.block-dragging [ns="rect"],.block-dragging [ns="rect"].selected-block{background-color: hsl(240, 50%, 75%); border-color: hsl(240, 50%, 60%); }
+[ns="input"].selected-block{background-color: hsl(345, 95%, 50%); border-color: hsl(345, 50%, 75%); }
+[ns="input"], .block-dragging [ns="input"].drop-target, .block-dragging [ns="input"].drop-target.selected-block{background-color: hsl(345, 50%, 50%); border-color: hsl(345, 50%, 30%); }
+.block-dragging [ns="input"],.block-dragging [ns="input"].selected-block{background-color: hsl(345, 50%, 75%); border-color: hsl(345, 50%, 60%); }
+[ns="motion"].selected-block{background-color: hsl(90, 95%, 50%); border-color: hsl(90, 50%, 75%); }
+[ns="motion"], .block-dragging [ns="motion"].drop-target, .block-dragging [ns="motion"].drop-target.selected-block{background-color: hsl(90, 50%, 50%); border-color: hsl(90, 50%, 30%); }
+.block-dragging [ns="motion"],.block-dragging [ns="motion"].selected-block{background-color: hsl(90, 50%, 75%); border-color: hsl(90, 50%, 60%); }
+[ns="shape"].selected-block{background-color: hsl(195, 95%, 50%); border-color: hsl(195, 50%, 75%); }
+[ns="shape"], .block-dragging [ns="shape"].drop-target, .block-dragging [ns="shape"].drop-target.selected-block{background-color: hsl(195, 50%, 50%); border-color: hsl(195, 50%, 30%); }
+.block-dragging [ns="shape"],.block-dragging [ns="shape"].selected-block{background-color: hsl(195, 50%, 75%); border-color: hsl(195, 50%, 60%); }
+[ns="geolocation"].selected-block{background-color: hsl(300, 95%, 50%); border-color: hsl(300, 50%, 75%); }
+[ns="geolocation"], .block-dragging [ns="geolocation"].drop-target, .block-dragging [ns="geolocation"].drop-target.selected-block{background-color: hsl(300, 50%, 50%); border-color: hsl(300, 50%, 30%); }
+.block-dragging [ns="geolocation"],.block-dragging [ns="geolocation"].selected-block{background-color: hsl(300, 50%, 75%); border-color: hsl(300, 50%, 60%); }
+[ns="size"].selected-block{background-color: hsl(45, 95%, 50%); border-color: hsl(45, 50%, 75%); }
+[ns="size"], .block-dragging [ns="size"].drop-target, .block-dragging [ns="size"].drop-target.selected-block{background-color: hsl(45, 50%, 50%); border-color: hsl(45, 50%, 30%); }
+.block-dragging [ns="size"],.block-dragging [ns="size"].selected-block{background-color: hsl(45, 50%, 75%); border-color: hsl(45, 50%, 60%); }
+[ns="text"].selected-block{background-color: hsl(150, 95%, 50%); border-color: hsl(150, 50%, 75%); }
+[ns="text"], .block-dragging [ns="text"].drop-target, .block-dragging [ns="text"].drop-target.selected-block{background-color: hsl(150, 50%, 50%); border-color: hsl(150, 50%, 30%); }
+.block-dragging [ns="text"],.block-dragging [ns="text"].selected-block{background-color: hsl(150, 50%, 75%); border-color: hsl(150, 50%, 60%); }
 
 
 
@@ -80,65 +80,65 @@
  * and highlighting selected blocks.
  */
 
-wb-expression[type="${type}"].selected-block{ background-color: hsl(225, 63%, 66%); border-color: hsl(225, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(225, 53%, 56%); border-color: hsl(225, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(225, 43%, 46%); border-color: hsl(225, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(15, 63%, 66%); border-color: hsl(15, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(15, 53%, 56%); border-color: hsl(15, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(15, 43%, 46%); border-color: hsl(15, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(150, 63%, 66%); border-color: hsl(150, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(150, 53%, 56%); border-color: hsl(150, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(150, 43%, 46%); border-color: hsl(150, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(165, 63%, 66%); border-color: hsl(165, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(165, 53%, 56%); border-color: hsl(165, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(165, 43%, 46%); border-color: hsl(165, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(105, 63%, 66%); border-color: hsl(105, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(105, 53%, 56%); border-color: hsl(105, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(105, 43%, 46%); border-color: hsl(105, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(0, 63%, 66%); border-color: hsl(0, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(0, 53%, 56%); border-color: hsl(0, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(0, 43%, 46%); border-color: hsl(0, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(315, 63%, 66%); border-color: hsl(315, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(315, 53%, 56%); border-color: hsl(315, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(315, 43%, 46%); border-color: hsl(315, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(60, 63%, 66%); border-color: hsl(60, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(60, 53%, 56%); border-color: hsl(60, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(60, 43%, 46%); border-color: hsl(60, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(120, 63%, 66%); border-color: hsl(120, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(120, 53%, 56%); border-color: hsl(120, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(120, 43%, 46%); border-color: hsl(120, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(195, 63%, 66%); border-color: hsl(195, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(195, 53%, 56%); border-color: hsl(195, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(195, 43%, 46%); border-color: hsl(195, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(75, 63%, 66%); border-color: hsl(75, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(75, 53%, 56%); border-color: hsl(75, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(75, 43%, 46%); border-color: hsl(75, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(180, 63%, 66%); border-color: hsl(180, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(180, 53%, 56%); border-color: hsl(180, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(180, 43%, 46%); border-color: hsl(180, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(30, 63%, 66%); border-color: hsl(30, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(30, 53%, 56%); border-color: hsl(30, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(30, 43%, 46%); border-color: hsl(30, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(30, 63%, 66%); border-color: hsl(30, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(30, 53%, 56%); border-color: hsl(30, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(30, 43%, 46%); border-color: hsl(30, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(135, 63%, 66%); border-color: hsl(135, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(135, 53%, 56%); border-color: hsl(135, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(135, 43%, 46%); border-color: hsl(135, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(240, 63%, 66%); border-color: hsl(240, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(240, 53%, 56%); border-color: hsl(240, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(240, 43%, 46%); border-color: hsl(240, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(285, 63%, 66%); border-color: hsl(285, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(285, 53%, 56%); border-color: hsl(285, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(285, 43%, 46%); border-color: hsl(285, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(300, 63%, 66%); border-color: hsl(300, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(300, 53%, 56%); border-color: hsl(300, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(300, 43%, 46%); border-color: hsl(300, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(45, 63%, 66%); border-color: hsl(45, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(45, 53%, 56%); border-color: hsl(45, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(45, 43%, 46%); border-color: hsl(45, 43%, 30%); }
-wb-expression[type="${type}"].selected-block{ background-color: hsl(90, 63%, 66%); border-color: hsl(90, 63%, 50%); }
-wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(90, 53%, 56%); border-color: hsl(90, 53%, 40%); }
-.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(90, 43%, 46%); border-color: hsl(90, 43%, 30%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(225, 95%, 50%); border-color: hsl(225, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(225, 50%, 50%); border-color: hsl(225, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(225, 50%, 75%); border-color: hsl(225, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(15, 95%, 50%); border-color: hsl(15, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(15, 50%, 50%); border-color: hsl(15, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(15, 50%, 75%); border-color: hsl(15, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(150, 95%, 50%); border-color: hsl(150, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(150, 50%, 50%); border-color: hsl(150, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(150, 50%, 75%); border-color: hsl(150, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(165, 95%, 50%); border-color: hsl(165, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(165, 50%, 50%); border-color: hsl(165, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(165, 50%, 75%); border-color: hsl(165, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(105, 95%, 50%); border-color: hsl(105, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(105, 50%, 50%); border-color: hsl(105, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(105, 50%, 75%); border-color: hsl(105, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(0, 95%, 50%); border-color: hsl(0, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(0, 50%, 50%); border-color: hsl(0, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(0, 50%, 75%); border-color: hsl(0, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(315, 95%, 50%); border-color: hsl(315, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(315, 50%, 50%); border-color: hsl(315, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(315, 50%, 75%); border-color: hsl(315, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(60, 95%, 50%); border-color: hsl(60, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(60, 50%, 50%); border-color: hsl(60, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(60, 50%, 75%); border-color: hsl(60, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(120, 95%, 50%); border-color: hsl(120, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(120, 50%, 50%); border-color: hsl(120, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(120, 50%, 75%); border-color: hsl(120, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(195, 95%, 50%); border-color: hsl(195, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(195, 50%, 50%); border-color: hsl(195, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(195, 50%, 75%); border-color: hsl(195, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(75, 95%, 50%); border-color: hsl(75, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(75, 50%, 50%); border-color: hsl(75, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(75, 50%, 75%); border-color: hsl(75, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(180, 95%, 50%); border-color: hsl(180, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(180, 50%, 50%); border-color: hsl(180, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(180, 50%, 75%); border-color: hsl(180, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(30, 95%, 50%); border-color: hsl(30, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(30, 50%, 50%); border-color: hsl(30, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(30, 50%, 75%); border-color: hsl(30, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(30, 95%, 50%); border-color: hsl(30, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(30, 50%, 50%); border-color: hsl(30, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(30, 50%, 75%); border-color: hsl(30, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(135, 95%, 50%); border-color: hsl(135, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(135, 50%, 50%); border-color: hsl(135, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(135, 50%, 75%); border-color: hsl(135, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(240, 95%, 50%); border-color: hsl(240, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(240, 50%, 50%); border-color: hsl(240, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(240, 50%, 75%); border-color: hsl(240, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(285, 95%, 50%); border-color: hsl(285, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(285, 50%, 50%); border-color: hsl(285, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(285, 50%, 75%); border-color: hsl(285, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(300, 95%, 50%); border-color: hsl(300, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(300, 50%, 50%); border-color: hsl(300, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(300, 50%, 75%); border-color: hsl(300, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(45, 95%, 50%); border-color: hsl(45, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(45, 50%, 50%); border-color: hsl(45, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(45, 50%, 75%); border-color: hsl(45, 50%, 60%); }
+wb-expression[type="${type}"].selected-block{background-color: hsl(90, 95%, 50%); border-color: hsl(90, 50%, 75%); }
+wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].drop-target{background-color: hsl(90, 50%, 50%); border-color: hsl(90, 50%, 30%); }
+.block-dragging wb-expression[type="${type}"], .block-dragging wb-expression[type="${type}"].selected-block{background-color: hsl(90, 50%, 75%); border-color: hsl(90, 50%, 60%); }
 
 

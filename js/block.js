@@ -180,15 +180,24 @@ function createVariableToLocalAssociation(evt){
 function handleVariableInput(evt){
     // Actually change the locals while we update
     var input = evt.target;
-    var parent = dom.closest(input, '[script="control.setVariable"]');
-    var context = dom.closest(parent, 'wb-contains');
+    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
+    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
+        return;
+    }
+    var context = dom.closest(stepBlock, 'wb-contains');
     var newVariableName = input.value;
-    updateVariableNameInInstances(newVariableName, getVariablesToUpdate(context, parent.id));
+    updateVariableNameInInstances(newVariableName, getVariablesToUpdate(context, stepBlock.id));
+    // evt.stopPropagation();
 }
 
 function handleVariableBlur(evt){
     // Cleanup
-    ensureNameIsUniqueInContext(evt.target);
+    var input = evt.target;
+    var stepBlock = dom.closest(input, 'wb-step, wb-expression, wb-context');
+    if (! dom.matches(stepBlock, '[script="control.setVariable"]')){
+        return;
+    }
+    ensureNameIsUniqueInContext(input);
 }
 
 function trailingNumber(str){
@@ -666,6 +675,7 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 function changeValueOnInputChange(evt){
     dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
+    // evt.stopPropagation();
 }
 
 
@@ -984,8 +994,8 @@ Event.on(workspace, 'editor:wb-addedChild', 'wb-context', function(evt){ evt.tar
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 
 // Add/remove rows from expressions
-Event.on(workspace, 'editor:click', 'wb-contains .add-item', addItem);
-Event.on(workspace, 'editor:click', 'wb-contains .remove-item', removeItem);
+Event.on(workspace, 'editor:click', '.add-item', addItem);
+Event.on(workspace, 'editor:click', '.remove-item', removeItem);
 
 Event.on(document.body, 'editor:drag-start', 'wb-step, wb-step *, wb-context, wb-context *, wb-expression, wb-expression *', startDragBlock);
 Event.on(document.body, 'editor:dragging', null, dragBlock);
@@ -993,7 +1003,7 @@ Event.on(document.body, 'editor:drag-end', null, endDragBlock);
 Event.on(document.body, 'editor:drag-cancel', null, cancelDragBlock);
 
 Event.on(workspace, 'editor:input', 'input', resizeInputOnChange);
-Event.on(workspace, 'editor:change', 'wb-contains input, wb-contains select', changeValueOnInputChange);
+Event.on(workspace, 'editor:input', 'input, select', changeValueOnInputChange);
 
 Event.on(workspace, 'editor:input', '[script="control.setVariable"] input', handleVariableInput);
 Event.on(workspace, 'editor:blur',  '[script="control.setVariable"] input', handleVariableBlur); // Mozilla

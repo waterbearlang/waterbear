@@ -100,35 +100,35 @@ BlockProto.attachedCallback = function blockAttached(){
 BlockProto.detachedCallback = function blockDetached(){
     // Remove locals
 };
-BlockProto.attributeChangedCallback = function(attrName, oldVal, newVal){
+BlockProto.attributeChangedCallback = function blockAttributeChangedCallback(attrName, oldVal, newVal){
     // Attributes to watch for:
     //    group or class (do nothing)
     //    title or help (do nothing)
     //    script (do nothing)
     //    type (do nothing
 };
-BlockProto.gatherValues = function(scope){
+BlockProto.gatherValues = function blockGatherValues(scope){
     var values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
     return values.map(function(value){
         return value.getValue(scope);
     });
 };
 
-BlockProto.hasLocal = function(){
+BlockProto.hasLocal = function blockHasLocal(){
     return !!this.getLocals().length;
 };
 
-BlockProto.getLocals = function(){
+BlockProto.getLocals = function blockHasLocals(){
     // Default, over-ride in each subclass
     return [];
 };
 
-BlockProto.getFreeInstances = function(){
+BlockProto.getFreeInstances = function blockGetFreeInstances(){
     // get contained instances, so we can get the local from them
     return dom.findAll(this, '[for]');
 };
 
-BlockProto.getInstances = function(){
+BlockProto.getInstances = function blockGetInstances(){
     // Get instances from locals
     var instances = [];
     var self = this;
@@ -139,7 +139,7 @@ BlockProto.getInstances = function(){
 };
 
 // Validation maintenance
-BlockProto.removeInstances = function(){
+BlockProto.removeInstances = function blockRemoveInstances(){
     // Called when block they are instances of is being removed
     var instances = this.getInstances();
     if (instances.length){
@@ -153,7 +153,7 @@ BlockProto.removeInstances = function(){
 }
 
 // Validation maintenance
-BlockProto.removeOutOfScopeInstances = function(){
+BlockProto.removeOutOfScopeInstances = function blockRemoveOutOfScopeInstances(){
     // Called when a block is dragged to a new location, to cull any instances
     // which would now be out of scope.
     var context = dom.closest(this, 'wb-contains');
@@ -173,7 +173,7 @@ BlockProto.removeOutOfScopeInstances = function(){
 }
 
 
-BlockProto.getAncestorContexts = function(){
+BlockProto.getAncestorContexts = function blockGetAncestorContexts(){
     var context = dom.parent(this, 'wb-context, wb-workspace');
     var contexts = [context];
     while(context.tagName.toLowerCase() !== 'wb-workspace'){
@@ -209,7 +209,7 @@ BlockProto.isContext =  false;
 ******************/
 
 var StepProto = Object.create(BlockProto);
-StepProto.run = function(scope){
+StepProto.run = function stepRun(scope){
     if (!this.fn){
         var nsName = this.getAttribute('ns');
         var fnName = this.getAttribute('fn');
@@ -219,7 +219,7 @@ StepProto.run = function(scope){
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
-StepProto.getLocals = function(){
+StepProto.getLocals = function stepGetLocals(){
     // For Steps this should work, but for contexts we need to gather the steps and contexts
     return dom.findAll(dom.child(this, 'header'), 'wb-local > *');
 }
@@ -250,16 +250,22 @@ ContextProto.createdCallback = function contextCreated(){
     setDefaultByTag(this, 'wb-contains');
 };
 
-ContextProto.gatherContains = function(){
-    // returns an array of arrays of blocks (steps and contexts)
+ContextProto.childContainers = function childContainers(){
     return dom.children(this, 'wb-contains');
 };
 
-ContextProto.getLocals = function(){
+ContextProto.gatherContains = function contextGatherContains(){
+    // returns an array of arrays of blocks (steps and contexts)
+    return dom.children(this, 'wb-contains').map(function(container){
+        return [].slice.call(container.children);
+    });
+};
+
+ContextProto.getLocals = function contextGetLocals(){
     // Doesn't get locals from decendent or ancestor contexts
     // Use getDecendentLocals() and getAllContextLocals for those
     var locals = dom.findAll(dom.child(this, 'header'), 'wb-local > *');
-    var containers = this.gatherContains();
+    var containers = this.childContainers();
     for (var i = 0; i < containers.length; i++){
         var container = containers[i];
         var stepChildren = dom.children(container, 'wb-step');
@@ -271,10 +277,10 @@ ContextProto.getLocals = function(){
     return locals;
 }
 
-ContextProto.getDescendantLocals = function(){
+ContextProto.getDescendantLocals = function contextGetDescendantLocals(){
     /* Wouldn't it be easier and faster to just find 'wb-local > *'? */
     var locals = dom.findAll(dom.child(this, 'header'), 'wb-local > *');
-    var containers = this.gatherContains();
+    var containers = this.childContainers();
     for (var i = 0; i < containers.length; i++){
         var container = containers[i];
         for (var j = 0; j < container.children.length; j++){
@@ -285,7 +291,7 @@ ContextProto.getDescendantLocals = function(){
     return locals;
 }
 
-ContextProto.getAllContextLocals = function(){
+ContextProto.getAllContextLocals = function contextGetAllContextLocals(){
     // get locals from both ancestors and descendants
     // but not sibling contexts along ancestor axis
     var locals = [];
@@ -296,16 +302,17 @@ ContextProto.getAllContextLocals = function(){
     return locals;
 }
 
-ContextProto.run = function(parentScope){
+ContextProto.run = function contextRun(parentScope){
     if (!this.fn){
         var nsName = this.getAttribute('ns');
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
     }
+    // var scope = util.extend({}, parentScope);
     var scope = Object.create(parentScope); // use parentScope as prototype
     // expressions are eagerly evaluated against scope, contains are late-evaluated
     // I'm not yet sure if this is the Right Thing™
-    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains());
+    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains(scope));
 };
 
 /**
@@ -329,6 +336,7 @@ WorkspaceProto.getDescendantLocals = ContextProto.getDescendantLocals;
 // Workspace is the bottom of the context chain, getAllContextLocals and getDescendantLocals are the same
 WorkspaceProto.getAllContextLocals = ContextProto.getDescendantLocals;
 WorkspaceProto.gatherContains = ContextProto.gatherContains;
+WorkspaceProto.childContainers = ContextProto.childContainers;
 
 window.WBWorkspace = document.registerElement('wb-workspace', {prototype: WorkspaceProto});
 /*****************

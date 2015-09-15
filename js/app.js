@@ -35,75 +35,6 @@ function info(text){
     message('#333', text);
 }
 
-//For displaying the finished block
-Event.on(document.body, 'ui:click', '.tutorial-complete', function(evt){
-    var button = dom.closest(evt.target, 'button');
-    var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-next");
-    finished.setAttribute('completed', 'true');
-
-});
-Event.on(document.body, 'ui:click', '.tutorial-see-solution', function(evt){
-    var button = dom.closest(evt.target, 'button');
-    var finished = button.parentElement.parentElement.parentElement.querySelector(".tutorial-solution");
-    finished.setAttribute('completed', 'true');
-
-});
-
-//For switching to the next step
-//at this point it just removes the finish block
-Event.on(document.body, 'ui:click', '.nextTutorial', function(evt){
-    var button = dom.closest(evt.target, 'button');
-    var tut = button.parentElement.parentElement.parentElement.parentElement;
-    tut.querySelector('wb-hbox[class="tutorial-finished"]').removeAttribute('completed');
-    tut.querySelector('wb-hbox[class="tutorial-header"]').scrollIntoView();
-
-    showCurrentTutorialStep(currentTutorialStep);
-
-});
-
-// For switching between the tutorial and canvas
-Event.on(document.body, 'ui:click', '.show-canvas', showCanvas);
-
-
-function showCanvas(evt){
-    if(evt){
-        var tab = dom.closest(evt.target, 'button');
-    }
-    else{//because I am using this to jump out of tutorials w/o a click
-        var tab = dom.find('button.show-canvas');
-    }
-    if(tab.getAttribute('pressed') !== 'true'){
-        var existing = tab.parentElement.querySelector('button[pressed=true]');
-        if(existing){existing.removeAttribute('pressed');}
-        tab.setAttribute('pressed', 'true');
-        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
-        if(existing){existing.removeAttribute('selected');}
-        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.canvas');
-        tabAssoc.setAttribute('selected', 'true');
-        var tutCanvas = dom.find('canvas');
-        dom.find('wb-playground').appendChild( tutCanvas);
-        tutCanvas.removeAttribute('style');
-        runtime.handleResize();
-    }
-}
-
-Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
-    var tab = dom.closest(evt.target, 'button');
-    if(tab.getAttribute('pressed') !== 'true'){
-        var existing = tab.parentElement.querySelector('button[pressed=true]');
-        if(existing){existing.removeAttribute('pressed');}
-        tab.setAttribute('pressed', 'true');
-        existing = tab.parentElement.parentElement.querySelector('wb-displaybox[selected=true]');
-        if(existing){existing.removeAttribute('selected');}
-        var tabAssoc = tab.parentElement.parentElement.querySelector('wb-displaybox.tutorial');
-        tabAssoc.setAttribute('selected', 'true');
-        var playCanvas = dom.find('canvas');
-        dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(playCanvas);
-        // FIXME: Never hard code values like this
-        playCanvas.style.width = '250px';
-        playCanvas.style.height = '190px';
-    }
-});
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
 /*
@@ -112,62 +43,6 @@ Event.on(document.body, 'ui:click', '.show-tutorial', function(evt){
 Event.on(document.body, 'ui:click', '.do-run', startScript);
 Event.on(document.body, 'ui:click','.do-stop', stopScript);
 
-/*
- * Debugger UI
- */
-Event.on('.toggle-debugger', 'ui:click', null, function () {
-    var action = !!dom.matches(document.body, '.debugger') ? 'disable' : 'enable';
-    _gaq.push(['_trackEvent', 'Action', action+'-debugger']);
-    document.body.classList.toggle('debugger');
-});
-Event.on('.do-pause', 'ui:click', null, function () {
-    console.assert(!!process, 'Trying to pause a process that DOES NOT EXIST');
-    _gaq.push(['_trackEvent', 'Action', 'pause']);
-
-    if (!process) {
-        console.warn('Clicked pause when there is no process running.');
-        return;
-    }
-    process.pause();
-});
-Event.on('.do-step', 'ui:click', null, function (evt) {
-    _gaq.push(['_trackEvent', 'Action', 'single-step']);
-
-    if (!process) {
-        /* FIXME: (#1119) when loading a new script this process should be
-         * stopped/disposed. */
-        /* Start a new process, paused. */
-        startScript(evt, { startPaused: true });
-        /* Step the process once it's created. */
-        return;
-    }
-
-    /* Step through the existing process. */
-    process.step();
-});
-Event.on('.do-continue', 'ui:click', null, function (evt) {
-    _gaq.push(['_trackEvent', 'Action', 'continue']);
-
-    if (process) {
-        resetDebuggerUI();
-        process.resume();
-    }
-});
-
-/* So that if it was saved with paused state, the paused indicator goes away. */
-Event.on(window, 'ui:script-load', null, resetDebuggerUI);
-
-/**
- * Resets any weird UI debugging state.
- */
-function resetDebuggerUI() {
-    var classes = document.body.classList;
-
-    classes.remove('debugger-paused');
-    dom.findAll(document.body, '.wb-paused').forEach(function (el) {
-        el.classList.remove('wb-paused');
-    });
-}
 
 function startScript(evt, options) {
     // Do any necessary cleanup (e.g., clear event handlers).
@@ -193,13 +68,7 @@ function startScript(evt, options) {
 }
 
 function stopScript(evt) {
-    resetDebuggerUI();
-    if (process) {
-        process.terminate();
-        /* Throw out the now-useless process. */
-        process = null;
-        runtime.clear();
-    }
+    runtime.clear();
     evt.target.blur();
     runtime.getStage().focus();
 }

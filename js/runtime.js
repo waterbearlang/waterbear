@@ -250,31 +250,31 @@
             },
             eachFrame: function eachFrame(args, containers){
                 var self = this;
-                perFrameHandlers.push(function(){
-                    containers[0].forEach(function(block){
+                perFrameHandlers.push(function runFrame(){
+                    containers[0].forEach(function runBoundBlock(block){
                         block.run(self);
                     });
                 });
             },
-            frame: function(){
+            frame: function frame(){
                 return runtime.control._frame;
             },
-            elapsed: function(){
+            elapsed: function elapsed(){
                 return runtime.control._elapsed;
             },
-            setVariable: function(nameValuePair){
+            setVariable: function setVariable(nameValuePair){
                 //FIXME: Make sure this is named properly
                 var name = nameValuePair[0];
                 var value = nameValuePair[1];
                 this[name] = value;
             },
-            getVariable: function(name){
+            getVariable: function getVariable(name){
                 return this[name];
             },
-            incrementVariable: function(variable, value){
+            incrementVariable: function incrementVariable(variable, value){
                 this[name] += value;
             },
-            loopOver: function(args, containers) {
+            loopOver: function loopOver(args, containers) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
                 var list = args[0];

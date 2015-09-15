@@ -242,13 +242,13 @@
         },
 
         control: {
-            whenProgramRuns: function(args, containers){
+            whenProgramRuns: function whenProgramRuns(args, containers){
                 var self = this;
                 containers[0].forEach(function(block){
                     block.run(self);
                 });
             },
-            eachFrame: function(args, containers){
+            eachFrame: function eachFrame(args, containers){
                 var self = this;
                 perFrameHandlers.push(function(){
                     containers[0].forEach(function(block){

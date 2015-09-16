@@ -298,6 +298,7 @@
                  * the index and value into the scope. */
                 for (i = 0; i < len; i++){
                     switch(type){
+                        // FIXME: Get names of index & value from block
                         case 'array': // fall through
                         case 'string':
                             this.index = i;
@@ -309,6 +310,7 @@
                             break;
                         case 'number':
                             this.value = i;
+                            this.index = i;
                             break;
                     }
                     containers[0].forEach(runBlock);

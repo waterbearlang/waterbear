@@ -193,6 +193,9 @@
         },
 
         'boolean': {
+            identity: function(a){
+                return a;
+            },
             and: function(a,b){
                 return a && b;
             },

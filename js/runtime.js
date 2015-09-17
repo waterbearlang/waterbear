@@ -292,6 +292,8 @@
                     case 'number':
                         len = list;
                         break;
+                    case 'boolean':
+                        len = list ? Infinity : 0
                 }
 
                 /* For every element in the container place
@@ -311,6 +313,14 @@
                         case 'number':
                             this.value = i;
                             this.index = i;
+                            break;
+                        case 'boolean':
+                            this.value = list;
+                            this.index = i;
+                            if (!list){
+                                // hopefully this will handle the case where the value changes after starting the loop
+                                return;
+                            }
                             break;
                     }
                     containers[0].forEach(runBlock);

@@ -41,6 +41,10 @@ page.open(pageName, function (status) {
                 addBadScript(block, 'no function (fn) attribute');
                 return;
             }
+            if (functionAttr.value === 'commentContext'){
+                // comments don't need functions
+                return;
+            }
 
             var namespace = namespaceAttr.value, functionName = functionAttr.value;
 

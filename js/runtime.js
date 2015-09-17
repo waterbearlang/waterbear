@@ -918,6 +918,9 @@
             centerY: function(){
                 return (Event.stage.height / 2);
             },
+            centerPoint: function(){
+                return new util.Point(Event.stage.width / 2, Event.stage.height / 2);
+            },
             randomX: function(){
                 return Math.random() * Event.stage.width;
             },

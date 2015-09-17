@@ -1,100 +1,105 @@
-<wb-step script="control.setVariable" class="control" id="k519f6"><header><wb-row>
-                        <wb-value type="text" allow="literal" value="mindist">set<input type="text" style="width: 50.6717071533203px;"></wb-value>
-                        <wb-value type="any" value="150">to<input type="any" style="width: 33.3109588623047px;"></wb-value>
+<wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="any" ns="control" fn="getVariable" id="k1f7ae3"><header><wb-value type="text" allow="literal" value="maxdist"><input type="text" style="width: 53.7683px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" value="100" class="">to<input type="any" style="width: 33.311px;"></wb-value>
                     </wb-row><wb-row>
-                        <wb-local>
-                            <wb-expression type="any" script="control.getVariable" for="k519f6" value="mindist"><header>mindist</header>
-                                
-                            </wb-expression>
-                        </wb-local>
                     </wb-row></header>
                     
                     
-                </wb-step><wb-step script="control.setVariable" class="control" id="k379e76"><header><wb-row>
-                        <wb-value type="text" allow="literal" value="maxdist">set<input type="text" style="width: 53.7682571411133px;"></wb-value>
-                        <wb-value type="any" value="100">to<input type="any" style="width: 33.3109588623047px;"></wb-value>
+                </wb-step><wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="any" ns="control" fn="getVariable" id="k46fe98" class=""><header><wb-value type="text" allow="literal" value="mindist" class=""><input type="text" style="width: 50.6717px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" value="150">to<input type="any" style="width: 33.311px;"></wb-value>
                     </wb-row><wb-row>
-                        <wb-local>
-                            <wb-expression type="any" script="control.getVariable" for="k379e76" value="maxdist"><header>maxdist</header>
-                                
-                            </wb-expression>
-                        </wb-local>
                     </wb-row></header>
                     
                     
-                </wb-step><wb-context script="control.eachFrame" class="control"><header><wb-disclosure></wb-disclosure><wb-row>
+                </wb-step><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-disclosure></wb-disclosure><wb-row>
                         <wb-value>each frame</wb-value>
                     </wb-row><wb-row>
                         <wb-local>
-                            <wb-expression type="number" script="control.frame"><header><wb-value value="frame">frame</wb-value></header>
+                            <wb-expression type="number" ns="control" fn="frame" id="kf5f414"><header><wb-value value="frame">frame</wb-value></header>
                                 
                             </wb-expression>
                         </wb-local>
                         <wb-local>
-                            <wb-expression type="number" script="control.elapsed"><header><wb-value value="elapsed">elapsed</wb-value></header>
+                            <wb-expression type="number" ns="control" fn="elapsed" id="k6f807f"><header><wb-value value="elapsed">elapsed</wb-value></header>
                                 
                             </wb-expression>
                         </wb-local>
                     </wb-row></header>
                     
                     
-                <wb-contains><wb-step script="stage.clearTo" class=""><header><wb-value type="color,wb-image" value="#000000" selected="true">clear to<input type="color" style="width: 57.7255706787109px;"></wb-value></header>
+                <wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image">clear to<input type="color" style="width: 57.7256px;"></wb-value></header>
                     
-                </wb-step><wb-step script="color.fill" class="color" style=""><header><wb-value type="color" value="#ffffff">fill style<input type="color" style="width: 40.2865600585938px;"></wb-value></header>
+                </wb-step><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#ffffff" class="">fill style<input type="color" style="width: 40.2866px;"></wb-value></header>
                     
-                </wb-step><wb-step script="color.stroke" class="color" style=""><header><wb-value type="color" value="#0433ff">stroke style<input type="color" style="width: 51.9125671386719px;"></wb-value></header>
+                </wb-step><wb-step ns="color" fn="stroke" class="" style=""><header><wb-value type="color" value="#0433ff" class="">stroke style<input type="color" style="width: 51.9126px;"></wb-value></header>
                     
-                </wb-step><wb-step script="shape.setLineWidth" class="shape" style=""><header><wb-value type="number" value="2">line width<input type="number" style="width: 30px;"></wb-value></header>
+                </wb-step><wb-step ns="shape" fn="setLineWidth" class="" style=""><header><wb-value type="number" value="2" class="">line width<input type="number" style="width: 30px;"></wb-value></header>
                     
-                </wb-step><wb-step script="color.shadow" class="color" style=""><header><wb-value type="color" value="#0433ff">shadow color<input type="color" style="width: 51.9125671386719px;"></wb-value><wb-value type="number" value="5">shadow blur<input type="number" style="width: 30px;"></wb-value></header>
-                    
-                    
-                </wb-step><wb-context script="control.loopOver" class="control"><header><wb-disclosure></wb-disclosure><wb-row>
-                        <wb-value type="any" value="60">loop over<input type="any" style="width: 30px;" class="hide"><wb-expression script="math.add" type="number" class="" style=""><header><wb-value type="number,vector,array" value="30"><input type="number" style="width: 30px;"></wb-value><wb-value type="number,vector,array" value="30">+<input type="number" style="width: 30px;"></wb-value></header>
+                </wb-step><wb-step ns="color" fn="shadow" class="" style=""><header><wb-value type="color" value="#0433ff" class="">shadow color<input type="color" style="width: 51.9126px;"></wb-value><wb-value type="number" value="5" class="">shadow blur<input type="number" style="width: 30px;"></wb-value></header>
                     
                     
-                </wb-expression></wb-value>
-                    </wb-row><wb-local>
-                            <wb-expression type="any" script="control.getVariable"><header><wb-value value="indexOrKey">index/key</wb-value></header>
-                                
-                            </wb-expression>
-                        </wb-local><wb-local>
-                            <wb-expression type="any" script="control.getVariable"><header><wb-value value="value">value</wb-value></header>
-                                
-                            </wb-expression>
-                        </wb-local></header>
-                    
-                    
-                        
-                        
-                    
-                <wb-contains><wb-step script="control.setVariable" class="control" id="k1b4b88"><header><wb-row>
-                        <wb-value type="text" allow="literal" value="angle">set<input type="text" style="width: 41.5609512329102px;"></wb-value>
-                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression script="math.multiply" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" class="" style=""><header><wb-value value="indexOrKey">index/key</wb-value></header>
-                                
-                            </wb-expression></wb-value><wb-value type="number,vector" value="6">×<input type="number" style="width: 30px;" class=""></wb-value></header>
+                </wb-step><wb-context ns="control" fn="loopOver" class="" style=""><header class=""><wb-disclosure></wb-disclosure><wb-row>
+                        <wb-value type="any" class="" value="">loop over<input type="any" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" class="" style=""><header><wb-value type="number,vector,array" value="30" class=""><input type="number" style="width: 30px;"></wb-value><wb-value type="number,vector,array" value="30">+<input type="number" style="width: 30px;"></wb-value></header>
                     
                     
                 </wb-expression></wb-value>
                     </wb-row><wb-row>
-                        <wb-local>
-                            <wb-expression type="number" script="control.getVariable" for="k1b4b88" value="angle"><header>angle</header>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="k2caa22" class=""><header><wb-value type="text" allow="literal" value="indexOrKey" class=""><input type="text" style="width: 72.2693px;" class=""></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="kcbb94c"><header><wb-value type="text" allow="literal" value="value" class=""><input type="text" style="width: 40.7337px;" class=""></wb-value></header>
                                 
                             </wb-expression>
                         </wb-local>
                     </wb-row></header>
                     
                     
-                </wb-step><wb-step script="control.setVariable" class="control" id="k4b87c2"><header><wb-row>
-                        <wb-value type="text" allow="literal" value="distance">set<input type="text" style="width: 56.5517959594727px;"></wb-value>
-                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression script="math.add" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression script="math.multiply" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="math.sin" class="" style=""><header><wb-value type="number" value="0">sine<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.add" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression script="math.multiply" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="k1b4b88" value="angle" class="" style=""><header>angle</header>
+                <wb-contains class=""><wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="number" ns="control" fn="getVariable" id="k718e64" class=""><header><wb-value type="text" allow="literal" value="angle" class=""><input type="text" style="width: 41.561px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="k2fccf" for="kcbb94c" class="" style=""><header><wb-value type="text" allow="literal" value="value" class="">value</wb-value></header>
                                 
-                            </wb-expression></wb-value><wb-value type="number,vector" value="102">×<input type="number" style="width: 33.3109588623047px;"></wb-value></header>
+                            </wb-expression></wb-value><wb-value type="number,vector" value="6" class="">×<input type="number" style="width: 30px;"></wb-value></header>
                     
                     
-                </wb-expression></wb-value><wb-value type="number,vector,array" value="0">+<input type="number" style="width: 30px;" class="hide"><wb-expression script="math.divide" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.frame" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                </wb-expression></wb-value>
+                    </wb-row><wb-row>
+                    </wb-row></header>
+                    
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="number" ns="control" fn="getVariable" id="k2bc74c" class=""><header><wb-value type="text" allow="literal" value="distance" class=""><input type="text" style="width: 56.5518px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="sin" class="" style=""><header><wb-value type="number" value="0" class="">sine<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="kd241a4" class="" for="k718e64" style=""><header><wb-value type="text" allow="literal" value="angle" class="">angle<input type="text" style="width: 41.561px;"></wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="number,vector" value="102" class="">×<input type="number" style="width: 33.311px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="divide" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="k510389" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
                                 
-                            </wb-expression></wb-value><wb-value type="number" value="0.5">÷<input type="number" style="width: 30.203239440918px;"></wb-value></header>
+                            </wb-expression></wb-value><wb-value type="number" class="selected-value" value=".5" selected="true">÷<input type="number" style="width: 30px;"></wb-value></header>
                     
                     
                 </wb-expression></wb-value></header>
@@ -102,86 +107,81 @@
                     
                 </wb-expression></wb-value></header>
                     
-                </wb-expression></wb-value><wb-value type="number,vector" value="0">×<input type="number" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" for="k379e76" value="maxdist" class=""><header>maxdist</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-expression></wb-value><wb-value type="number,vector" value="0" class="">×<input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="k8ae5fb" for="k1f7ae3" class="" style=""><header><wb-value type="text" allow="literal" value="maxdist">maxdist<input type="text" style="width: 53.7683px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
                     
-                </wb-expression></wb-value><wb-value type="number,vector,array" value="0">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="any" script="control.getVariable" for="k519f6" value="mindist" class=""><header>mindist</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-expression></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="k88af30" class="" for="k46fe98" style=""><header><wb-value type="text" allow="literal" value="mindist" class="">mindist<input type="text" style="width: 50.6717px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
                     
                 </wb-expression></wb-value>
                     </wb-row><wb-row>
-                        <wb-local>
-                            <wb-expression type="number" script="control.getVariable" for="k4b87c2" value="distance"><header>distance</header>
-                                
-                            </wb-expression>
-                        </wb-local>
                     </wb-row></header>
                     
                     
-                </wb-step><wb-step script="control.setVariable" class="control" id="kbd7ccd" style=""><header><wb-row>
-                        <wb-value type="text" allow="literal" value="x">set<input type="text" style="width: 30px;"></wb-value>
-                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression script="math.add" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression script="math.multiply" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="math.cos" class="" style=""><header><wb-value type="number" value="0">cosine<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="k1b4b88" value="angle" class="" style=""><header>angle</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-step><wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="number" ns="control" fn="getVariable" id="kbb68b3" class=""><header><wb-value type="text" allow="literal" value="x" class=""><input type="text" style="width: 30px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="cos" class="" style=""><header><wb-value type="number" value="0" class="">cosine<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="kae4b2" class="" for="k718e64" style=""><header><wb-value type="text" allow="literal" value="angle" class="">angle<input type="text" style="width: 41.561px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
-                </wb-expression></wb-value><wb-value type="number,vector" value="0">×<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="k4b87c2" value="distance" class="" style=""><header>distance</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-expression></wb-value><wb-value type="number,vector" value="0" class="">×<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="k1cbcfe" class="" for="k2bc74c" style=""><header><wb-value type="text" allow="literal" value="distance" class="">distance<input type="text" style="width: 56.5518px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
                     
-                </wb-expression></wb-value><wb-value type="number,vector,array" value="0">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="stage.centerX" class="" style=""><header><wb-value>Center x</wb-value></header>
+                </wb-expression></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="centerX" class=""><header><wb-value>Center x</wb-value></header>
 					
 				</wb-expression></wb-value></header>
                     
                     
                 </wb-expression></wb-value>
                     </wb-row><wb-row>
-                        <wb-local>
-                            <wb-expression type="number" script="control.getVariable" for="kbd7ccd" value="x"><header>x</header>
-                                
-                            </wb-expression>
-                        </wb-local>
                     </wb-row></header>
                     
                     
-                </wb-step><wb-step script="control.setVariable" class="control" id="k94e52a" style=""><header><wb-row>
-                        <wb-value type="text" allow="literal" value="y">set<input type="text" style="width: 30px;"></wb-value>
-                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression script="math.add" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression script="math.multiply" type="number" class="" style=""><header><wb-value type="number,vector,array" value="0"><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="math.sin" class="" style=""><header><wb-value type="number" value="0">sine<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="k1b4b88" value="angle" class="" style=""><header>angle</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-step><wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="number" ns="control" fn="getVariable" id="k1c4a9a" class=""><header><wb-value type="text" allow="literal" value="y" class=""><input type="text" style="width: 30px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="sin" class="" style=""><header><wb-value type="number" value="0" class="">sine<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="kf2e2c8" class="" for="k718e64"><header><wb-value type="text" allow="literal" value="angle" class="">angle<input type="text" style="width: 41.561px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
-                </wb-expression></wb-value><wb-value type="number,vector" value="0">×<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="k4b87c2" value="distance" class="" style=""><header>distance</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-expression></wb-value><wb-value type="number,vector" value="0" class="">×<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="kc3c750" class="" for="k2bc74c" style=""><header><wb-value type="text" allow="literal" value="distance" class="">distance<input type="text" style="width: 56.5518px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
                     
-                </wb-expression></wb-value><wb-value type="number,vector,array" value="0">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="stage.centerY" class="" style=""><header><wb-value>Center y</wb-value></header>
+                </wb-expression></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="centerY" class="" style=""><header><wb-value>Center y</wb-value></header>
 					
 				</wb-expression></wb-value></header>
                     
                     
                 </wb-expression></wb-value>
                     </wb-row><wb-row>
-                        <wb-local>
-                            <wb-expression type="number" script="control.getVariable" for="k94e52a" value="y"><header>y</header>
-                                
-                            </wb-expression>
-                        </wb-local>
                     </wb-row></header>
                     
                     
-                </wb-step><wb-step script="shape.draw" class="shape" style=""><header><wb-value type="shape">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" script="shape.circle" class="shape" style=""><header><wb-value type="point">circle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" script="point.create" class="" style=""><header><wb-value type="number" value="0">x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="kbd7ccd" value="x" class="" style=""><header>x</header>
-                                
-                            </wb-expression></wb-value><wb-value type="number" value="0">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" script="control.getVariable" for="k94e52a" value="y" class="" style=""><header>y</header>
-                                
-                            </wb-expression></wb-value></header>
+                </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="circle" class="" style=""><header><wb-value type="point" class="">circle at<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" ns="point" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="k9169f6" class="" for="kbb68b3" style=""><header><wb-value type="text" allow="literal" value="x" class="">x<input type="text" style="width: 30px;"></wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="k66fad8" class="selected-block" for="k1c4a9a" style=""><header><wb-value type="text" allow="literal" value="y" class="">y<input type="text" style="width: 30px;"></wb-value></header>
+								
+							</wb-expression></wb-value></header>
                     
                     
-                </wb-expression></wb-value><wb-value type="number" min="0" value="8">radius<input type="number" min="0" style="width: 30px;"></wb-value></header>
+                </wb-expression></wb-value><wb-value type="number" min="0" class="selected-value" value="8">radius<input type="number" min="0" style="width: 30px;"></wb-value></header>
                     
                     
                 </wb-expression></wb-value></header>

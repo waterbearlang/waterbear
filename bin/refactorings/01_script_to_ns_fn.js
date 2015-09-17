@@ -8,7 +8,7 @@ if (!filename){
     process.exit();
 }
 var origHtml = fs.readFileSync(filename, {encoding: 'utf-8'});
-var document = parser.parse(origHtml);
+var document = parser.parseFragment(origHtml);
 
 // Do the refactoring here
 function walk(node, fn){
@@ -38,4 +38,4 @@ walk(document, hasScript);
 
 var serializer = new parse5.Serializer();
 var refactoredHtml = serializer.serialize(document);
-fs.writeFileSync(filename + '.ref', refactoredHtml);
+fs.writeFileSync(filename, refactoredHtml);

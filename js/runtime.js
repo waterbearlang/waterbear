@@ -47,7 +47,7 @@
     }, false);
 
     function handleResize(){
-        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground (and not the tutorial)
+        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground
             var rect = canvas().getBoundingClientRect();
             Event.stage = {
                 // FIXME: Move these to runtime.stage

@@ -1,8 +1,6 @@
 (function(){
 'use strict';
 
-var process;
-var currentTutorialStep = 0;
 var canvasRef;
 
 // FIXME: This feedback is important and useful, but using it this way violates
@@ -155,13 +153,13 @@ function handleFileButton(evt){
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
 function handleExampleButton(evt){
-    _gaq.push(['_trackEvent', 'Tutorial', 'examples']);
+    _gaq.push(['_trackEvent', 'Example', 'examples']);
     var fileModel = nanoModal("Load an example program.",
         {overlayClose: true, // Can't close the modal by clicking on the overlay.
         buttons: [{
             text: "Space Bear",
             handler: function(modal) {
-                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
+                _gaq.push(['_trackEvent', 'Example', 'WaterbearInSpace']);
                 stopAndClearScripts();
                 File.loadScriptsFromExample('waterbear_in_space');
                 modal.hide();
@@ -169,7 +167,7 @@ function handleExampleButton(evt){
         },{
             text: "Noise 3D",
             handler: function(modal){
-                _gaq.push(['_trackEvent', 'Tutorial', 'Noise3D']);
+                _gaq.push(['_trackEvent', 'Example', 'Noise3D']);
                 stopAndClearScripts();
                 File.loadScriptsFromExample('noise3d');
                 modal.hide();
@@ -177,7 +175,7 @@ function handleExampleButton(evt){
         },{
             text: "Dance",
             handler: function(modal){
-                _gaq.push(['_trackEvent', 'Tutorial', 'Dance']);
+                _gaq.push(['_trackEvent', 'Example', 'Dance']);
                 stopAndClearScripts();
                 File.loadScriptsFromExample('dance');
                 modal.hide();
@@ -187,71 +185,7 @@ function handleExampleButton(evt){
     fileModel.show();
 }
 
-function handleTutorialButton(evt){
-    _gaq.push(['_trackEvent', 'Tutorial', 'tutorials']);
-    var fileModel = nanoModal("Load a tutorial.",
-        {overlayClose: true, // Can't close the modal by clicking on the overlay.
-        buttons: [{
-            text: "Waterbear in Space",
-            handler: function(modal) {
-                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearInSpace']);
-                var tutButton = dom.find('button.show-tutorial');
-                canvasRef = dom.find('canvas');
-                File.loadTutorialFromName('wb_in_space');
-                modal.hide();
-                currentTutorialStep = 0;
-                tutButton.removeAttribute('hidden');
-            }
-        },{
-            text: "Waterbear Piano",
-            handler: function(modal) {
-                _gaq.push(['_trackEvent', 'Tutorial', 'WaterbearPiano']);
-                var tutButton = dom.find('button.show-tutorial');
-                canvasRef = dom.find('canvas');
-                File.loadTutorialFromName('wb-piano');
-                modal.hide();
-                currentTutorialStep = 0;
-                tutButton.removeAttribute('hidden');
-            }
-        }]
-    });
-    fileModel.show();
-}
-
-function switchTutorialCanvas(){
-    var tutCanvas = dom.find('canvas');
-        var target = dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder');
-        target.appendChild(tutCanvas);
-}
-
-function showCurrentTutorialStep() {
-    var tutorialSteps = document.getElementsByClassName('tutorial-step');
-    for(var i=0; i<tutorialSteps.length; i = i+1){
-        tutorialSteps[i].classList.add('tutorial-hidden');
-        tutorialSteps[i].classList.remove('tutorial-current');
-    }
-    tutorialSteps[currentTutorialStep].classList.remove('tutorial-hidden');
-    tutorialSteps[currentTutorialStep].classList.add('tutorial-current');
-    if(currentTutorialStep > 0)
-        switchTutorialCanvas();
-    else{
-        dom.find('div.tutorial-current > wb-hbox.tutorial-output >div > div.canvas-holder').appendChild(canvasRef);
-    }
-    currentTutorialStep++;
-}
-Event.on(document.body, 'ui:click', '.load-solution', function(evt){
-    var buttonPressed = dom.closest(evt.target, 'button');
-    var gistId = buttonPressed.getAttribute('gistID');
-    stopAndClearScripts();
-    File.loadScriptsFromGistId(gistId);
-
-});
-
-
-
-
 Event.on(document.body, 'ui:click', '.open-example', handleExampleButton);
-Event.on(document.body, 'ui:click', '.open-tutorial', handleTutorialButton);
 
 Event.on(document.body, 'dragging:touchstart', null, Event.initDrag);
 Event.on(document.body, 'dragging:touchmove', null, Event.dragging);
@@ -262,34 +196,6 @@ Event.on(window, 'dragging:mouseup', null, Event.endDrag);
 Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
-Event.on(window, 'ui:tutorial-load', null, showCurrentTutorialStep);
-
-/* Handle debugger events. */
-Event.on(window, 'process:step', null, function (evt) {
-    displayPausedOnInstruction(evt.detail.target);
-});
-Event.on(window, 'process:pause', null, function (evt) {
-    displayPausedOnInstruction(evt.detail.target);
-});
-Event.on(window, 'process:resume', null, function (evt) {
-    document.body.classList.remove('debugger-paused');
-});
-
-function displayPausedOnInstruction(block) {
-    var oldBlocks;
-    document.body.classList.add('debugger-paused');
-
-    /* Update the paused element. */
-    oldBlocks = dom.findAll(document.body, '.wb-paused');
-
-    console.assert(oldBlocks.length <= 1);
-    if (oldBlocks.length) {
-        oldBlocks[0].classList.remove('wb-paused');
-    }
-
-    block.classList.add('wb-paused');
-    block.scrollIntoView();
-}
 
 Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);

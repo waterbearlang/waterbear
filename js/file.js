@@ -241,20 +241,6 @@
         Event.on(document.body, 'ui:wb-changed', null, bareUrl);
     }
 
-    function loadTutorialFromName(name){
-        ajax.get('tutorial/' + name + '.html', function(exampleText){
-            loadTutorialFromString(exampleText);
-        }, function(statusCode, xhr){
-            console.error(statusCode + xhr);
-        });
-    }
-
-    function loadTutorialFromString(text){
-        var tutorial = document.getElementsByClassName('tutorial-content');
-        tutorial[0].innerHTML = text;
-        Event.trigger(window, 'tutorial-load', text);
-    }
-
     window.File = {
         scriptsToString: scriptsToString,
         saveCurrentScripts: saveCurrentScripts,
@@ -267,7 +253,6 @@
         loadScriptsFromExample: loadScriptsFromExample,
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,
         loadCurrentScripts: loadCurrentScripts,
-        loadTutorialFromName: loadTutorialFromName,
         getFiles: getFiles
     };
 

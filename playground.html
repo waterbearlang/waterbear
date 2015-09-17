@@ -24,7 +24,6 @@
             <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
             <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
             <button class="open-example">Examples</button>
-            <button class="open-tutorial">Tutorials</button>
         </div>
         <wb-workbox>
         <sidebar>
@@ -1075,19 +1074,13 @@
     </wb-vbox>
     <wb-splitter></wb-splitter>
     <wb-vbox>
-            <wb-playground>
-                <div class="menu">
-                    <button class="do-run">Run</button>
-                    <button class="do-stop">Stop</button>
-                </div>
-                <canvas></canvas>
-            </wb-playground>
-        <wb-displaybox class="tutorial">
-            <div class="tutorial-content">
-                <h1>Waterbear Tutorials</h1>
-                Select a tutorial from the menu.
+        <wb-playground>
+            <div class="menu">
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
             </div>
-        </wb-displaybox>
+            <canvas></canvas>
+        </wb-playground>
     </wb-vbox>
     </wb-hbox>
     <output class="feedback"></output>

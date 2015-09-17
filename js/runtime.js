@@ -47,7 +47,7 @@
     }, false);
 
     function handleResize(){
-        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground (and not the tutorial)
+        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground
             var rect = canvas().getBoundingClientRect();
             Event.stage = {
                 // FIXME: Move these to runtime.stage
@@ -71,13 +71,46 @@
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
         Event.clearRuntime();
+        clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
+    }
+
+    var perFrameHandlers;
+    var lastTime;
+
+    function clearPerFrameHandlers() {
+        perFrameHandlers = [];
+        lastTime = new Date().valueOf();
     }
 
     // Initialize the stage.
     Event.on(window, 'ui:resize', null, handleResize);
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
+
+
+    function startEventLoop(){
+        clearPerFrameHandlers();
+        runtime.control._frame = 0;
+        runtime.control._sinceLastTick = 0;
+        requestAnimationFrame(frameHandler);
+    }
+
+    function stopEventLoop() {
+        /* TODO: Dunno lol there be more in here? */
+    }
+
+    function frameHandler(){
+        // where to put these? Event already has some global state.
+        var currTime = new Date().valueOf();
+        runtime.control._elapsed = currTime - lastTime;
+        runtime.control._frame++;
+        lastTime = currTime;
+        perFrameHandlers.forEach(function(handler){
+            handler();
+        });
+        requestAnimationFrame(frameHandler);
+    }
 
 
     // for all of these functions, `this` is the scope object
@@ -108,6 +141,8 @@
     // vector
 
     global.runtime = {
+        startEventLoop: startEventLoop,
+        stopEventLoop: stopEventLoop,
         clear: clearRuntime,
         resetCanvas: resetCanvas, // deprecated - refer to "canvas" as "stage"
         getStage: canvas,
@@ -207,112 +242,98 @@
         },
 
         control: {
-            whenProgramRuns: function(strand, frame, containers, args){
-                strand.newFrame(containers[0]);
+            whenProgramRuns: function whenProgramRuns(args, containers){
+                var self = this;
+                containers[0].forEach(function(block){
+                    block.run(self);
+                });
             },
-            eachFrame: function(strand, frame, containers, args){
-                var container = containers[0];
-                /* Delegate to new frame handler. */
-                strand.newFrameHandler(container);
+            eachFrame: function eachFrame(args, containers){
+                var self = this;
+                perFrameHandlers.push(function runFrame(){
+                    containers[0].forEach(function runBoundBlock(block){
+                        block.run(self);
+                    });
+                });
             },
-            frame: function(){
+            frame: function frame(){
                 return runtime.control._frame;
             },
-            elapsed: function(){
+            elapsed: function elapsed(){
                 return runtime.control._elapsed;
             },
-            setVariable: function(nameValuePair){
+            setVariable: function setVariable(nameValuePair){
                 //FIXME: Make sure this is named properly
                 var name = nameValuePair[0];
                 var value = nameValuePair[1];
                 this[name] = value;
             },
-            getVariable: function(name){
+            getVariable: function getVariable(name){
                 return this[name];
             },
-            incrementVariable: function(variable, value){
+            incrementVariable: function incrementVariable(variable, value){
                 this[name] += value;
             },
-
-            loopOver: function(strand, frame, containers, args) {
-                var scope = this;
-                var iterable = args[0];
-                var container = containers[0];
-                var type = util.type(iterable);
-
-                var value, length, keys;
-                var index = 0;
-
-                /* Get the length, based on type. */
+            loopOver: function loopOver(args, containers) {
+                // FIXME: this has to work over arrays, strings, objects, and numbers
+                var self = this;
+                var list = args[0];
+                var type = util.type(list);
+                var i =0,len,keys;
                 switch(type){
                     case 'array': // fall through
                     case 'string':
-                        length = iterable.length;
+                        len = list.length;
                         break;
                     case 'object':
-                        keys = Object.keys(iterable);
-                        length = keys.length;
+                        keys = Object.keys(list);
+                        len = keys.length;
                         break;
                     case 'number':
-                        length = iterable;
+                        len = list;
                         break;
                     case 'boolean':
-                        /* Leave it undefined! */
-                        break;
+                        len = list ? Infinity : 0
                 }
 
-                /* Pick the appropriate "should do another iteration"
-                 * callback, based on type. */
-                var shouldContinue = ({
-                    boolean: function () { return value; },
-                    number: function () { return value <= length; },
-                    object: function () { return index < length; },
-                    array: function () { return index < length; },
-                    string: function () { return index < length; },
-                }[type]);
-
-                var getValue = ({
-                    boolean: function () {
-                        /* Reevaluate the loop-condition. */
-                        return frame.gatherValues(scope)[0];
-                    },
-                    number: function () { return index + 1; },
-                    string: function () { return iterable[index]; },
-                    array: function () { return iterable[index]; },
-                    object: function () { return iterable[keys[index]]; },
-                }[type]);
-
-                /* Check if the array is empty, boolean starts false, etc. */
-                updateState();
-                if (!shouldContinue()) {
-                    strand.noOperation();
-                    return;
+                /* For every element in the container place
+                 * the index and value into the scope. */
+                for (i = 0; i < len; i++){
+                    switch(type){
+                        // FIXME: Get names of index & value from block
+                        case 'array': // fall through
+                        case 'string':
+                            this.index = i;
+                            this.value = list[i];
+                            break;
+                        case 'object':
+                            this.key = keys[i];
+                            this.value = list[this.key];
+                            break;
+                        case 'number':
+                            this.value = i;
+                            this.index = i;
+                            break;
+                        case 'boolean':
+                            this.value = list;
+                            this.index = i;
+                            if (!list){
+                                // hopefully this will handle the case where the value changes after starting the loop
+                                return;
+                            }
+                            break;
+                    }
+                    containers[0].forEach(runBlock);
                 }
 
-                /* Spawn then new frame. */
-                strand.newScope(container, function() {
-                    index++;
-                    updateState();
-
-                    return shouldContinue() ? container : null;
-                });
-                function updateState() {
-                    /* Set the locals. */
-                    /* FIXME: This has to take local names into account! */
-                    scope.value = value = getValue();
-                    /* Use the key value  if we have an object. */
-                    scope.indexOrKey = keys === undefined ? index : keys[index];
-
+                function runBlock(block){
+                    block.run(self);
                 }
             },
             broadcast: function(eventName, data){
                 // Handle with and without data
                 Event.trigger(document.body, eventName, data);
             },
-            /**
-             * FIXME: Update to new API.
-             * FIXME: Must implement Strand#newEventHandler.
-             */
             receive: function(args, containers){
                 // Handle with and without data
                 // Has a local for the data
@@ -326,18 +347,26 @@
                     });
                 });
             },
-            'if': function(strand, frame, containers, args){
+            'if': function(args, containers){
                 if (args[0]){
-                    strand.newScope(containers[0]);
-                } else {
-                    strand.noOperation();
+                    var self = this;
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
                 }
             },
-            ifElse: function(strand, frame, containers, args){
-                var branch = args[0] ? containers[0] : containers[1];
-                strand.newScope(branch);
+            ifElse: function(args, containers){
+                var self = this;
+                if (args[0]){
+                    containers[0].forEach(function(block){
+                        block.run(self);
+                    });
+                }else{
+                    containers[1].forEach(function(block){
+                        block.run(self);
+                    });
+                }
             },
-            /* FIXME: How do we make this _lazy_? */
             ternary: function(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;
             },
@@ -346,9 +375,6 @@
                 var name = args[1];
                 var answer = prompt(message);
                 runtime.control.setVariable(name, answer);
-            },
-            commentContext: function (strand) {
-                strand.noOperation();
             },
             comment: function(){
             },
@@ -376,7 +402,8 @@
                 var steps = containers[0];
 
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
-                    // TODO: Update to strand.newEventHandler()
+                    // TODO: probably factor out augmenting scope and running
+                    // the block stuff to somewhere else.
                     steps.forEach(function (block) {
                         block.run(currentScope);
                     });
@@ -890,6 +917,9 @@
             },
             centerY: function(){
                 return (Event.stage.height / 2);
+            },
+            centerPoint: function(){
+                return new util.Point(Event.stage.width / 2, Event.stage.height / 2);
             },
             randomX: function(){
                 return Math.random() * Event.stage.width;

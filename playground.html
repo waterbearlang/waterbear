@@ -24,7 +24,6 @@
             <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
             <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
             <button class="open-example">Examples</button>
-            <button class="open-tutorial">Tutorials</button>
         </div>
         <wb-workbox>
         <sidebar>
@@ -406,6 +405,9 @@
 				</wb-expression>
 				<wb-expression type="number" ns="stage" fn="centerY">
 					<wb-value>Center y</wb-value>
+				</wb-expression>
+				<wb-expression type="point" ns="stage" fn="centerPoint">
+					<wb-value>Center point</wb-value>
 				</wb-expression>
 				<wb-expression type="number" ns="stage" fn="randomX">
 					<wb-value>Random x</wb-value>
@@ -1072,39 +1074,14 @@
     </wb-vbox>
     <wb-splitter></wb-splitter>
     <wb-vbox>
-        <div class="tabs-menu">
-            <button class="show-canvas" pressed="true">Results</button>
-            <button class="show-tutorial" hidden="true">Tutorial</button>
-        </div>
-        <wb-displaybox class="canvas" selected="true">
-            <wb-playground>
-                <div class="menu">
-                    <button class="do-run">Run</button>
-                    <button class="do-stop">Stop</button>
-                    <label class="check-button debugger-indicator"><input type="checkbox" class="toggle-debugger">Debugger</label>
-                </div>
-                <canvas></canvas>
-            </wb-playground>
-        </wb-displaybox>
-        <wb-debugger>
-            <wb-debug-menu>
-                <button class="do-pause">Pause</button>
-                <button class="do-continue">Continue</button>
-                <button class="do-step">Next</button>
-                <button class="do-step-in">Step in</button>
-                <button class="do-step-out">Step out</button>
-                <wb-button-splitter></wb-button-splitter>
-                <input id="tb0" type="checkbox" class="do-toggle-breakpoints"><label for="tb0">Toggle Breakpoints</label>
-                <input id="tc0" type="checkbox" class="do-toggle-lineno"><label for="tc0">Toggle Counts</label>
-            </wb-debug-menu>
-        </wb-debugger>
-        <wb-displaybox class="tutorial">
-            <div class="tutorial-content">
-                <h1>Waterbear Tutorials</h1>
-                Select a tutorial from the menu.
+        <wb-playground>
+            <div class="menu">
+                <button class="do-run">Run</button>
+                <button class="do-stop">Stop</button>
             </div>
-        </wb-displaybox>
-        </wb-vbox>
+            <canvas></canvas>
+        </wb-playground>
+    </wb-vbox>
     </wb-hbox>
     <output class="feedback"></output>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
@@ -1123,12 +1100,7 @@
 	<script src="js/dom.js"></script>
     <script src="js/widget.js"></script>
     <script src="js/block.js"></script>
-    <script src="js/execution.js"></script>
 	<script src="js/app.js"></script>
     <script src="js/file.js"></script>
     <script src="js/queryparams.js"></script>
-
-
-
-
 </body></html>

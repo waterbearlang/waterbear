@@ -718,6 +718,7 @@ function removeItem(evt){
 var ValueProto = Object.create(HTMLElement.prototype);
 ValueProto.createdCallback = function valueCreated(){
     // Add holder, input or select, or block
+    var blockParent = dom.closest(this, 'wb-expression, wb-step, wb-context');
     // See if we're already initialized (if cloned, for instance)
     var value = this.getAttribute('value');
     var input;
@@ -728,6 +729,10 @@ ValueProto.createdCallback = function valueCreated(){
                 input.value = value;
             }
         }
+        return;
+    }
+    if (blockParent.localName === 'wb-expression' && blockParent.hasAttribute('for')){
+        // this is an instance variable
         return;
     }
     // Sets the proper HTML input for the given Waterbear type.

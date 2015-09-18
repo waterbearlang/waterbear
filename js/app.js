@@ -98,9 +98,6 @@ function runScript(){
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            var ns = block.getAttr('ns');
-            var fn = block.getAttr('fn');
-            console.log('running block %s:%s', ns, fn);
             block.run(globalScope);
         }
     });

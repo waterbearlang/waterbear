@@ -880,7 +880,6 @@
                 spt.moveTo(pt);
             },
             draw: function(spt){
-                console.log('draw sprite');
                 spt.draw(getContext());
             },
             applyForce: function(spt, vec){
@@ -904,7 +903,6 @@
                     getContext().fillRect(r.x, r.y, r.width, r.height);
                 })
                 .when(['wbimage'], function(img){
-                    console.log('clearTo image');
                     img.drawInRect(getContext(), canvasRect());
                 })
             .fn(),

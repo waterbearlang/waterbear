@@ -718,8 +718,13 @@ function removeItem(evt){
 var ValueProto = Object.create(HTMLElement.prototype);
 ValueProto.createdCallback = function valueCreated(){
     // Add holder, input or select, or block
+    var blockParent = dom.closest('wb-expression, wb-step, wb-context');
     // See if we're already initialized (if cloned, for instance)
     var value = this.getAttribute('value');
+    if (blockParent.localName === 'wb-expression') && blockParent.hasAttribute('for'){
+        // this is an instance variable
+        return;
+    }
     var input;
     if (dom.child(this, 'input, select, wb-expression')){
         if (value){

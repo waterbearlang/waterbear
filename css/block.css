@@ -233,7 +233,6 @@ wb-value[type*=shape] > input{background-image: url(../images/icon/shape.svg);}
 wb-value[type*=vector] > input{background-image: url(../images/icon/vector.svg);}
 wb-value[type*=object] > input{background-image: url(../images/icon/object.svg);}
 wb-value[type*=path] > input{background-image: url(../images/icon/path.svg);}
-wb-value[type*=point] > input{background-image: url(../images/icon/point.svg);}
 wb-value[type*=rect] > input{background-image: url(../images/icon/rect.svg);}
 wb-value[type*=string] > input{background-image: url(../images/icon/string.svg);}
 wb-value[type*=text] > input{background-image: url(../images/icon/text.svg);}
@@ -252,7 +251,7 @@ wb-value[type*=text][type*=string] > input{
     background-image: url(../images/icon/text.svg), url(../images/icon/string.svg);
     background-position: 3px 3px, 20px 3px;
 }
-wb-value[type*=point][type*=vector] > input{
+wb-value[type*=vector] > input{
     background-image: url(../images/icon/point.svg), url(../images/icon/vector.svg);
     background-position: 3px 3px, 20px 3px;
 }
@@ -290,7 +289,6 @@ wb-expression[type=shape]:before{ background-image: url(../images/icon/shape.svg
 wb-expression[type=vector]:before{ background-image: url(../images/icon/vector.svg); }
 wb-expression[type=object]:before{ background-image: url(../images/icon/object.svg); }
 wb-expression[type=path]:before{ background-image: url(../images/icon/path.svg); }
-wb-expression[type=point]:before{ background-image: url(../images/icon/point.svg); }
 wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg); }
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
 wb-expression[type=geolocation]:before{ background-image: url(../images/icon/geolocation.svg); }

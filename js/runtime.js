@@ -1005,7 +1005,7 @@
             },
             endsWith: function(x,y){
                 return x.indexOf(y, x.length - y.length) !== -1;
-            }
+            },
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
                 getContext().font = sizeString + " " + fontStyle;

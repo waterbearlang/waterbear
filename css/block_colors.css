@@ -48,9 +48,6 @@
 [ns="path"].selected-block{background-color: hsl(30, 95%, 50%); border-color: hsl(30, 50%, 75%); }
 [ns="path"], .block-dragging [ns="path"].drop-target, .block-dragging [ns="path"].drop-target.selected-block{background-color: hsl(30, 50%, 50%); border-color: hsl(30, 50%, 30%); }
 .block-dragging [ns="path"],.block-dragging [ns="path"].selected-block{background-color: hsl(30, 50%, 75%); border-color: hsl(30, 50%, 60%); }
-[ns="point"].selected-block{background-color: hsl(135, 95%, 50%); border-color: hsl(135, 50%, 75%); }
-[ns="point"], .block-dragging [ns="point"].drop-target, .block-dragging [ns="point"].drop-target.selected-block{background-color: hsl(135, 50%, 50%); border-color: hsl(135, 50%, 30%); }
-.block-dragging [ns="point"],.block-dragging [ns="point"].selected-block{background-color: hsl(135, 50%, 75%); border-color: hsl(135, 50%, 60%); }
 [ns="rect"].selected-block{background-color: hsl(240, 95%, 50%); border-color: hsl(240, 50%, 75%); }
 [ns="rect"], .block-dragging [ns="rect"].drop-target, .block-dragging [ns="rect"].drop-target.selected-block{background-color: hsl(240, 50%, 50%); border-color: hsl(240, 50%, 30%); }
 .block-dragging [ns="rect"],.block-dragging [ns="rect"].selected-block{background-color: hsl(240, 50%, 75%); border-color: hsl(240, 50%, 60%); }

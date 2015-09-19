@@ -200,17 +200,6 @@
         return '<' + this.x + ',' + this.y + '>';
     }
 
-    // Point
-
-    function Point(x,y){
-        this.x = x;
-        this.y = y;
-    }
-
-    Point.prototype.toString = function(){
-        return '[' + this.x + ',' + this.y + ']';
-    };
-
     // Size
 
     function Size(width, widthUnit, height, heightUnit){
@@ -1023,7 +1012,6 @@
         Method: Method,
         Vector: Vector,
         Rect: Rect,
-        Point: Point,
         add: add,
         subtract: subtract,
         multiply: multiply,

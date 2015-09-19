@@ -365,7 +365,6 @@ var typeMapping = {
     shape: 'shape',
     vector: 'vector',
     path: 'path',
-    point: 'point',
     rect: 'rect'
 };
 

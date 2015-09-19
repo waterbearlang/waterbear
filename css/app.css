@@ -215,11 +215,9 @@ wb-accordion.color > header:after{ background-color: hsl(15, 50%, 50%); }
 wb-accordion.image > header:after{ background-color: hsl(120, 50%, 50%); }
 wb-accordion.math > header:after{ background-color: hsl(225, 50%, 50%); }
 wb-accordion.random > header:after{ background-color: hsl(330, 50%, 50%); }
-wb-accordion.vector > header:after{ background-color: hsl(75, 50%, 50%); }
 wb-accordion.object > header:after{ background-color: hsl(180, 50%, 50%); }
 wb-accordion.string > header:after{ background-color: hsl(285, 50%, 50%); }
 wb-accordion.path > header:after{ background-color: hsl(30, 50%, 50%); }
-wb-accordion.point > header:after{ background-color: hsl(135, 50%, 50%); }
 wb-accordion.rect > header:after{ background-color: hsl(240, 50%, 50%); }
 wb-accordion.sense > header:after{ background-color: hsl(345, 50%, 50%); }
 wb-accordion.motion > header:after{ background-color: hsl(90, 50%, 50%); }
@@ -227,6 +225,7 @@ wb-accordion.shape > header:after{ background-color: hsl(195, 50%, 50%); }
 wb-accordion.geolocation > header:after{ background-color: hsl(300, 50%, 75%); }
 wb-accordion.size > header:after{ background-color: hsl(45, 50%, 50%); }
 wb-accordion.text > header:after{ background-color: hsl(150, 50%, 50%); }
+wb-accordion.vector > header:after{ background-color: hsl(75, 50%, 50%); }
 
 
 /* Prevent selecting text while dragging */

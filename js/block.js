@@ -1134,6 +1134,9 @@ function endDragBlock(evt){
         // No legal target, probably outside of workspace
         return cancelDragBlock();
     }
+    if(dropTarget === originalParent){
+        return cancelDragBlock();
+    }
     if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         deleteOriginalBlock(originalBlock, originalParent, nextElem);
@@ -1201,6 +1204,13 @@ function resetDragging(){
     }
     if (origTarget){
         origTarget.classList.remove('hide');
+        if(origTarget.parentElement){
+            // Hide the sibling input
+            var siblingInput = dom.child(origTarget.parentElement, 'input, select');
+            if (siblingInput){
+                siblingInput.classList.add('hide');
+            }
+        }
     }
     dragTarget = null;
     origTarget = null;

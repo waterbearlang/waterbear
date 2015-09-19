@@ -638,66 +638,66 @@
                     Points & Vectors
                 </header>
                 <p>Waterbear points and vectors are x,y coordinates but vectors also have a direction and magnitude (useful for speed, acceleration, distance).</p>
-                <wb-expression type="vector" ns="vector" fn="create">
+                <wb-expression type="vector" ns="point_vector" fn="create">
                     <wb-value type="number" value="0">vector at x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
                 </wb-expression>
-                <wb-expression type="vector" ns="vector" fn="createPolar">
+                <wb-expression type="vector" ns="point_vector" fn="createPolar">
                     <wb-value type="number" value="0">vector at angle</wb-value>
                     <wb-value type="number" value="0">magnitude</wb-value>
                 </wb-expression>
-                <wb-expression type="vector" ns="vector" fn="rotateTo">
+                <wb-expression type="vector" ns="point_vector" fn="rotateTo">
                     <wb-value type="vector">rotate</wb-value>
                     <wb-row>
                         <wb-value type="number" value="0">to</wb-value>
                         <wb-unit>degrees</wb-unit>
                     </wb-row>
                 </wb-expression>
-                <wb-expression type="vector" ns="vector" fn="rotate">
+                <wb-expression type="vector" ns="point_vector" fn="rotate">
                     <wb-value type="vector">rotate</wb-value>
                     <wb-row>
                         <wb-value type="number" value="0">by</wb-value>
                         <wb-unit>degrees</wb-unit>
                     </wb-row>
                 </wb-expression>
-                <wb-expression type="number" ns="vector" fn="degrees">
+                <wb-expression type="number" ns="point_vector" fn="degrees">
                     <wb-value type="vector">degrees</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="vector" fn="magnitude">
+                <wb-expression type="number" ns="point_vector" fn="magnitude">
                     <wb-value type="vector">magnitude</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="vector" fn="x">
+                <wb-expression type="number" ns="point_vector" fn="x">
                     <wb-value type="vector">x</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="vector" fn="y">
+                <wb-expression type="number" ns="point_vector" fn="y">
                     <wb-value type="vector">y</wb-value>
                 </wb-expression>
-                <wb-expression type="vector" ns="vector" fn="normalize">
+                <wb-expression type="vector" ns="point_vector" fn="normalize">
                     <wb-value type="vector">normalize</wb-value>
                 </wb-expression>
-                <wb-expression type="vector" ns="vector" fn="randomUnitVector">
+                <wb-expression type="vector" ns="point_vector" fn="randomUnitVector">
                     <wb-value>random unit vector</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="vector" fn="create">
+                <wb-expression type="point" ns="point_vector" fn="create">
                     <wb-value type="number" value="0">x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="vector" fn="fromVector">
+                <wb-expression type="point" ns="point_vector" fn="fromVector">
                     <wb-value type="vector">from vector</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="vector" fn="fromArray">
+                <wb-expression type="point" ns="point_vector" fn="fromArray">
                     <wb-value type="array">from array</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="vector" fn="randomPoint">
+                <wb-expression type="point" ns="point_vector" fn="randomPoint">
                     <wb-value>random point</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="vector" fn="x">
+                <wb-expression type="number" ns="point_vector" fn="x">
                     <wb-value type="point,vector">x of</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="vector" fn="y">
+                <wb-expression type="number" ns="point_vector" fn="y">
                     <wb-value type="point,vector">y of</wb-value>
                 </wb-expression>
-                <wb-expression type="array" ns="vector" fn="toArray">
+                <wb-expression type="array" ns="point_vector" fn="toArray">
                     <wb-value type="point,vector">as array</wb-value>
                 </wb-expression>
             </wb-accordion>

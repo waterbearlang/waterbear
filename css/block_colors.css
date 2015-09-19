@@ -21,9 +21,9 @@
 [ns="boolean"].selected-block{background-color: hsl(165, 95%, 50%); border-color: hsl(165, 50%, 75%); }
 [ns="boolean"], .block-dragging [ns="boolean"].drop-target, .block-dragging [ns="boolean"].drop-target.selected-block{background-color: hsl(165, 50%, 50%); border-color: hsl(165, 50%, 30%); }
 .block-dragging [ns="boolean"],.block-dragging [ns="boolean"].selected-block{background-color: hsl(165, 50%, 75%); border-color: hsl(165, 50%, 60%); }
-[ns="canvas"].selected-block{background-color: hsl(270, 95%, 50%); border-color: hsl(270, 50%, 75%); }
-[ns="canvas"], .block-dragging [ns="canvas"].drop-target, .block-dragging [ns="canvas"].drop-target.selected-block{background-color: hsl(270, 50%, 50%); border-color: hsl(270, 50%, 30%); }
-.block-dragging [ns="canvas"],.block-dragging [ns="canvas"].selected-block{background-color: hsl(270, 50%, 75%); border-color: hsl(270, 50%, 60%); }
+[ns="stage"].selected-block{background-color: hsl(270, 95%, 50%); border-color: hsl(270, 50%, 75%); }
+[ns="stage"], .block-dragging [ns="stage"].drop-target, .block-dragging [ns="stage"].drop-target.selected-block{background-color: hsl(270, 50%, 50%); border-color: hsl(270, 50%, 30%); }
+.block-dragging [ns="stage"],.block-dragging [ns="stage"].selected-block{background-color: hsl(270, 50%, 75%); border-color: hsl(270, 50%, 60%); }
 [ns="color"].selected-block{background-color: hsl(15, 95%, 50%); border-color: hsl(15, 50%, 75%); }
 [ns="color"], .block-dragging [ns="color"].drop-target, .block-dragging [ns="color"].drop-target.selected-block{background-color: hsl(15, 50%, 50%); border-color: hsl(15, 50%, 30%); }
 .block-dragging [ns="color"],.block-dragging [ns="color"].selected-block{background-color: hsl(15, 50%, 75%); border-color: hsl(15, 50%, 60%); }

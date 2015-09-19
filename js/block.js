@@ -125,7 +125,7 @@ BlockProto.getLocals = function blockHasLocals(){
 
 BlockProto.getFreeInstances = function blockGetFreeInstances(){
     // get contained instances, so we can get the local from them
-    return dom.findAll(this, '[instanceOf]');
+    return dom.findAll(this, '[instanceof]');
 };
 
 BlockProto.getInstances = function blockGetInstances(){
@@ -462,8 +462,8 @@ function createLocalToInstanceAssociation(evt){
     var localNode = evt.target;
     var instanceNode = evt.detail;
     var id = localNode.id;
-    if (!instanceNode.hasAttribute('instanceOf')){
-        instanceNode.setAttribute('instanceOf', id);
+    if (!instanceNode.hasAttribute('instanceof')){
+        instanceNode.setAttribute('instanceof', id);
     }
     var wbValue = dom.find(instanceNode, 'wb-value');
     wbValue.innerHTML = wbValue.getAttribute('value');
@@ -545,7 +545,7 @@ function incrementName(name){
 }
 
 function getLocalInstances(parentContext, setVarId){
-    return dom.findAll(workspace, '[instanceOf="' + setVarId + '"]');
+    return dom.findAll(workspace, '[instanceof="' + setVarId + '"]');
 }
 
 function updateVariableNameInInstances(newVariableName, localInstances){
@@ -731,7 +731,7 @@ ValueProto.createdCallback = function valueCreated(){
         }
         return;
     }
-    if (blockParent.localName === 'wb-expression' && blockParent.hasAttribute('instanceOf')){
+    if (blockParent.localName === 'wb-expression' && blockParent.hasAttribute('instanceof')){
         // this is an instance variable
         return;
     }
@@ -1050,7 +1050,7 @@ function dropTargetIsContainer(potentialDropTarget){
    dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
    // FIXME: Don't drop onto locals
    if (dropTarget && dragTarget){
-       var localId = dragTarget.getAttribute('instanceOf');
+       var localId = dragTarget.getAttribute('instanceof');
        if (localId){
            var local = document.getElementById(localId);
            var localContext = dom.closest(local, 'wb-contains');

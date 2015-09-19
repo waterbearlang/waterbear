@@ -69,11 +69,6 @@
 [ns="size"].selected-block{background-color: hsl(45, 95%, 50%); border-color: hsl(45, 50%, 75%); }
 [ns="size"], .block-dragging [ns="size"].drop-target, .block-dragging [ns="size"].drop-target.selected-block{background-color: hsl(45, 50%, 50%); border-color: hsl(45, 50%, 30%); }
 .block-dragging [ns="size"],.block-dragging [ns="size"].selected-block{background-color: hsl(45, 50%, 75%); border-color: hsl(45, 50%, 60%); }
-[ns="text"].selected-block{background-color: hsl(150, 95%, 50%); border-color: hsl(150, 50%, 75%); }
-[ns="text"], .block-dragging [ns="text"].drop-target, .block-dragging [ns="text"].drop-target.selected-block{background-color: hsl(150, 50%, 50%); border-color: hsl(150, 50%, 30%); }
-.block-dragging [ns="text"],.block-dragging [ns="text"].selected-block{background-color: hsl(150, 50%, 75%); border-color: hsl(150, 50%, 60%); }
-
-
 
 /* Expression block colours by return type, with handling
  * for dimming while dragging, highlighting drop-targets,

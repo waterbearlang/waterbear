@@ -216,7 +216,8 @@ StepProto.run = function stepRun(scope){
         this.fn = runtime[nsName][fnName];
     }
     var values = this.gatherValues(scope);
-    return this.fn.apply(scope, this.gatherValues(scope), this);
+    scope._block = this;
+    return this.fn.apply(scope, this.gatherValues(scope));
 };
 
 StepProto.getLocals = function stepGetLocals(){
@@ -312,6 +313,7 @@ ContextProto.run = function contextRun(parentScope){
     var scope = Object.create(parentScope); // use parentScope as prototype
     // expressions are eagerly evaluated against scope, contains are late-evaluated
     // I'm not yet sure if this is the Right Thing™ [actually, pretty sure it is not]
+    scope._block = this;
     return this.fn.call(scope, this.gatherValues(scope), this.gatherContains(scope));
 };
 
@@ -434,7 +436,8 @@ ExpressionProto.run = function(scope){
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
     }
-    return this.fn.apply(scope, this.gatherValues(scope), this);
+    scope._block = this;
+    return this.fn.apply(scope, this.gatherValues(scope));
 };
 
 
@@ -789,6 +792,7 @@ ValueProto.createdCallback = function valueCreated(){
 ValueProto.getValue = function(scope){
     var block = dom.child(this, 'wb-expression');
     if (block){
+        scope._block = block;
         return block.run(scope);
     }
     var input = dom.child(this, 'input, select');

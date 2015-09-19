@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-
+    var BLOCK_MENU = document.querySelector('sidebar');
 var canvasRef;
 
 // FIXME: This feedback is important and useful, but using it this way violates
@@ -35,12 +35,17 @@ function info(text){
 
 function clearFilter(){
     console.log("CLEAR FILTER")
-    var i = 0;
-    var sidebarBlocks;
-    this.removeAttribute('selected');
-    sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');}
-    selectedType = 'null';
+    // var sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    // for(var i=0; i< sidebarBlocks.length; i++){
+    //     sidebarBlocks[i].removeAttribute('filtered');
+    // }
+    var existing = workspace.querySelectorAll('wb-value[selected=true]');
+    if (existing.length !== 0){
+        for(var i=0; i< existing.length; i++){
+            existing[i].deselect();
+        }
+    }
+    BLOCK_MENU.removeAttribute('filtered');
 }
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

@@ -845,13 +845,18 @@ ValueProto.select = function(){
 //deselect an input field and unfilter the sidebar
 ValueProto.deselect = function(){
     console.log("DESELECT")
+    this.removeAttribute('selected');
     app.clearFilter();
+    selectedType = 'null';
 }
 
 //deselect an input field and unfilter the sidebar
 function handleOnBlur(evt){
     console.log("ON BLUR")
+    var value = dom.closest(evt.target, 'wb-value');
+    value.removeAttribute('selected');
     app.clearFilter();
+    selectedType = 'null';
 }
 
 //when a user clicks on an input box in the workspace
@@ -906,14 +911,7 @@ Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
 })
 
 //deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
-Event.on(document.body, 'ui:click', '.availableBlocks', function(evt){
-    var existing = workspace.querySelectorAll('wb-value[selected=true]');
-    if (existing.length !== 0){
-        var i =0;
-        for(i=0; i< existing.length; i++){ existing[i].deselect();}
-    }
-    BLOCK_MENU.removeAttribute('filtered');
-});
+Event.on(document.body, 'ui:click', '.availableBlocks', app.clearFilter);
 
 
 /* DRAGGING */

@@ -162,6 +162,10 @@ wb-context > wb-contains:last-child:after {
     visibility: hidden;
 }
 
+wb-disclosure{
+    position: relative;
+}
+
 wb-context > header > wb-disclosure:after{
     content: "▼";
     width: 1em;

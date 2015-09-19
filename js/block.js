@@ -844,14 +844,15 @@ ValueProto.select = function(){
 
 //deselect an input field and unfilter the sidebar
 ValueProto.deselect = function(){
-    var i = 0;
-    var sidebarBlocks;
-    this.removeAttribute('selected');
-    sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');}
-    selectedType = 'null';
+    console.log("DESELECT")
+    app.clearFilter();
 }
 
+//deselect an input field and unfilter the sidebar
+function handleOnBlur(evt){
+    console.log("ON BLUR")
+    app.clearFilter();
+}
 
 //when a user clicks on an input box in the workspace
 function changeValueOnInputChange(evt){
@@ -1345,5 +1346,8 @@ Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); /
 
 /* Some helpers for selections */
 Event.on(workspace, 'editor:click', '*', manageSelections);
+
+Event.on(workspace, 'editor:blur', 'input', handleOnBlur);
+Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
 
 })();

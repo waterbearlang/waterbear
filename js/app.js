@@ -33,6 +33,16 @@ function info(text){
     message('#333', text);
 }
 
+function clearFilter(){
+    console.log("CLEAR FILTER")
+    var i = 0;
+    var sidebarBlocks;
+    this.removeAttribute('selected');
+    sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');}
+    selectedType = 'null';
+}
+
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
 
 /*
@@ -208,6 +218,7 @@ window.app = {
     error: error,
     warn: warn,
     tip: tip,
-    info: info
+    info: info,
+    clearFilter: clearFilter
 };
 })();

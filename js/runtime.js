@@ -128,7 +128,6 @@
     // motion
     // object
     // path
-    // point
     // random
     // rect
     // shape
@@ -659,30 +658,6 @@
                 getContext().lineJoin = joinStyle;
             }
 
-        },
-
-        point: {
-            create: function(x,y){
-                return new util.Point(x,y);
-            },
-            fromVector: function(vec){
-                return new util.Point(vec.x, vec.y);
-            },
-            fromArray: function(arr){
-                return new util.Point(arr[0], arr[1]);
-            },
-            randomPoint: function(){
-                return new util.Point(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
-            },
-            x: function(pt){
-                return pt.x;
-            },
-            y: function(pt){
-                return pt.y;
-            },
-            toArray: function(pt){
-                return [pt.x, pt.y];
-            },
         },
 
         random: {

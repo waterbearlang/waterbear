@@ -188,7 +188,7 @@
                 </wb-step>
                 <wb-step ns="sprite" fn="moveTo">
                     <wb-value type="sprite"></wb-value>
-                    <wb-value type="point,vector">move to</wb-value>
+                    <wb-value type="vector">move to</wb-value>
                 </wb-step>
                 <wb-step ns="sprite" fn="draw">
                     <wb-value type="sprite">draw</wb-value>
@@ -632,7 +632,7 @@
                     <wb-value type="array">random item from</wb-value>
                 </wb-expression>
             </wb-accordion>
-            <wb-accordion class="point_vector">
+            <wb-accordion class="vector">
                 <header>
                     <img class="cat-icon" src="images/icon/vector.svg">
                     Points & Vectors
@@ -689,13 +689,13 @@
                     <wb-value>random point</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="vector" fn="x">
-                    <wb-value type="point,vector">x of</wb-value>
+                    <wb-value type="vector">x of</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="vector" fn="y">
-                    <wb-value type="point,vector">y of</wb-value>
+                    <wb-value type="vector">y of</wb-value>
                 </wb-expression>
                 <wb-expression type="array" ns="vector" fn="toArray">
-                    <wb-value type="point,vector">as array</wb-value>
+                    <wb-value type="vector">as array</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="object">
@@ -887,8 +887,8 @@
                     <wb-value type="number" value="0" min="0">height</wb-value>
                 </wb-expression>
                 <wb-expression type="rect" ns="rect" fn="fromVectors">
-                    <wb-value type="point,vector" allow="expression">position</wb-value>
-                    <wb-value type="point,vector" allow="expression">size</wb-value>
+                    <wb-value type="vector" allow="expression">position</wb-value>
+                    <wb-value type="vector" allow="expression">size</wb-value>
                 </wb-expression>
                 <wb-expression type="rect" ns="rect" fn="fromArray">
                     <wb-value type="array" allow="expression">from array</wb-value>

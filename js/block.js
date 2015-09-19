@@ -1201,6 +1201,10 @@ function resetDragging(){
     }
     if (origTarget){
         origTarget.classList.remove('hide');
+        var siblingInput = dom.child(origTarget.parentElement, 'input, select');
+        if (siblingInput){
+            siblingInput.classList.add('hide');
+        }
     }
     dragTarget = null;
     origTarget = null;

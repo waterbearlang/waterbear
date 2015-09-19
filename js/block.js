@@ -814,12 +814,10 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 //toggle an input's 'filter' selection
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
-       BLOCK_MENU.removeAttribute('filtered');
        this.deselect();
 
 
     }else{
-        BLOCK_MENU.setAttribute('filtered', 'true');
         this.select();
     }
 }
@@ -839,12 +837,11 @@ ValueProto.select = function(){
     selectedTypeList = selectedType.split(',');
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
-
+    BLOCK_MENU.setAttribute('filtered', 'true');
 }
 
 //deselect an input field and unfilter the sidebar
 ValueProto.deselect = function(){
-    console.log("DESELECT")
     this.removeAttribute('selected');
     app.clearFilter();
     selectedType = 'null';
@@ -852,7 +849,6 @@ ValueProto.deselect = function(){
 
 //deselect an input field and unfilter the sidebar
 function handleOnBlur(evt){
-    console.log("ON BLUR")
     var value = dom.closest(evt.target, 'wb-value');
     value.removeAttribute('selected');
     app.clearFilter();
@@ -910,8 +906,7 @@ Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
     }
 })
 
-//deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
-Event.on(document.body, 'ui:click', '.availableBlocks', app.clearFilter);
+
 
 
 /* DRAGGING */

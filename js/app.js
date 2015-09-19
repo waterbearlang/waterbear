@@ -1,5 +1,6 @@
 (function(){
 'use strict';
+    var workspace = dom.find(document.body, 'wb-workspace');
     var BLOCK_MENU = document.querySelector('sidebar');
 var canvasRef;
 
@@ -34,11 +35,6 @@ function info(text){
 }
 
 function clearFilter(){
-    console.log("CLEAR FILTER")
-    // var sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
-    // for(var i=0; i< sidebarBlocks.length; i++){
-    //     sidebarBlocks[i].removeAttribute('filtered');
-    // }
     var existing = workspace.querySelectorAll('wb-value[selected=true]');
     if (existing.length !== 0){
         for(var i=0; i< existing.length; i++){
@@ -216,6 +212,9 @@ Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);
 Event.on(window, 'input:keydown', null, Undo.undoKeyCombo);
 Event.on(window, 'input:keydown', null, Undo.redoKeyCombo);
+//deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
+Event.on(document.body, 'ui:click', '.availableBlocks', clearFilter);
+
 Undo.clearStacks();
 
 window.app = {

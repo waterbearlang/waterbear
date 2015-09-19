@@ -1139,7 +1139,9 @@ function endDragBlock(evt){
         if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
             originalBlock.classList.remove('hide');  //un-hide block
             var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
-            Undo.addNewEvent(deleteEvent);                 //add new event to undo
+            Undo.addNewEvent(deleteEvent);
+            Event.trigger(originalBlock,"wb-removed",this);
+            //add new event to undo
             originalBlock.removeInstances(); // FIXME: Make this undo-able!
             originalBlock.parentElement.removeChild(originalBlock);
         }

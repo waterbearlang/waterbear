@@ -93,7 +93,7 @@
     }
 
     function clearScripts(){
-        bareUrl();
+        //bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
         Undo.clearStacks();
@@ -149,7 +149,7 @@
         history.replaceState(null, '', path);
     }
 
-    function bareUrl(gistID){
+    function bareUrl(){
         var path = location.href.split('?')[0];
         history.replaceState(null, '', path);
     }
@@ -236,7 +236,7 @@
     Event.on(window, 'ui:load', null, loadCurrentScripts);
     if (page === 'playground'){
         Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
-        Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
+        //Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
         Event.on(document.body, 'ui:wb-removed', null, bareUrl);
         Event.on(document.body, 'ui:wb-changed', null, bareUrl);
     }

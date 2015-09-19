@@ -1140,6 +1140,7 @@ function endDragBlock(evt){
     if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         deleteOriginalBlock(originalBlock, originalParent, nextElem);
+        Event.trigger(originalParent,'wb-removed',this);
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
         if (dropTarget.matches('wb-value')) {

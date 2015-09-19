@@ -236,7 +236,6 @@ wb-value[type*=path] > input{background-image: url(../images/icon/path.svg);}
 wb-value[type*=point] > input{background-image: url(../images/icon/point.svg);}
 wb-value[type*=rect] > input{background-image: url(../images/icon/rect.svg);}
 wb-value[type*=string] > input{background-image: url(../images/icon/string.svg);}
-wb-value[type*=text] > input{background-image: url(../images/icon/text.svg);}
 wb-value[type*=geolocation] > input{ background-image: url(../images/icon/geolocation.svg);}
 wb-value[type*=size] > input{ background-image: url(../images/icon/size.svg);}
 
@@ -279,7 +278,6 @@ wb-expression:before{
 }
 wb-expression[type=number]:before{ background-image: url(../images/icon/math.svg); }
 wb-expression[type=color]:before{ background-image: url(../images/icon/color.svg); }
-wb-expression[type=text]:before{ background-image: url(../images/icon/text.svg); }
 wb-expression[type=boolean]:before{ background-image: url(../images/icon/boolean.svg); }
 wb-expression[type=sprite]:before{ background-image: url(../images/icon/sprite.svg); }
 wb-expression[type=any]:before{ background-image: url(../images/icon/control.svg); }

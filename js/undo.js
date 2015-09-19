@@ -22,7 +22,7 @@
                 undoMove(toUndo);
             }
         }
-    }'instanceOf'
+    }
 
     function undoAdd(toUndo){
         var addedBlock = toUndo.addedBlock;

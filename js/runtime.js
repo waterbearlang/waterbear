@@ -1013,43 +1013,43 @@
             }
         },
         vector: {
-            create: function(x,y){
+            create: function create(x,y){
                 return new util.Vector(x,y);
             },
-            createPolar: function(deg, mag){
+            createPolar: function createPolar(deg, mag){
                 return util.Vector.fromPolar(deg, mag);
             },
-            fromArray: function(arr){
+            fromArray: function fromArray(arr){
                 return new util.Vector(arr[0], arr[1]);
             },
-            toArray: function(vec){
+            toArray: function toArray(vec){
                 return [vec.x, vec.y];
             },
-            randomPoint: function(){
+            randomPoint: function randomPoint(){
                 return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
             },
-            rotateTo: function(vec, deg){
+            rotateTo: function rotateTo(vec, deg){
                 return vec.rotateTo(deg);
             },
-            rotate: function(vec, deg){
+            rotate: function rotate(vec, deg){
                 return vec.rotate(deg);
             },
-            magnitude: function(vec){
+            magnitude: function magnitude(vec){
                 return vec.magnitude();
             },
-            degrees: function(vec){
+            degrees: function degrees(vec){
                 return vec.degrees();
             },
-            normalize: function(vec){
+            normalize: function normalize(vec){
                 return vec.normalize();
             },
-            x: function(vec){
+            x: function x(vec){
                 return vec.x;
             },
-            y: function(vec){
+            y: function y(vec){
                 return vec.y;
             },
-            randomUnitVector: function(){
+            randomUnitVector: function randomUnitVector(){
                 return util.Vector.fromPolar(util.randInt(0,359), 1);
             }
         }

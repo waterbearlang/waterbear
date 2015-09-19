@@ -1038,34 +1038,43 @@
             }
         },
         vector: {
-            create: function create(x,y){
+            create: function(x,y){
                 return new util.Vector(x,y);
             },
-            createPolar: function fromPolar(deg, mag){
+            createPolar: function(deg, mag){
                 return util.Vector.fromPolar(deg, mag);
             },
-            rotateTo: function rotateTo(vec, deg){
+            fromArray: function(arr){
+                return new util.Vector(arr[0], arr[1]);
+            },
+            toArray: function(vec){
+                return [vec.x, vec.y];
+            },
+            randomVector: function(){
+                return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
+            },
+            rotateTo: function(vec, deg){
                 return vec.rotateTo(deg);
             },
-            rotate: function rotate(vec, deg){
+            rotate: function(vec, deg){
                 return vec.rotate(deg);
             },
-            magnitude: function magnitude(vec){
+            magnitude: function(vec){
                 return vec.magnitude();
             },
-            degrees: function degrees(vec){
+            degrees: function(vec){
                 return vec.degrees();
             },
-            normalize: function normalize(vec){
+            normalize: function(vec){
                 return vec.normalize();
             },
-            x: function x(vec){
+            x: function(vec){
                 return vec.x;
             },
-            y: function y(vec){
+            y: function(vec){
                 return vec.y;
             },
-            randomUnitVector: function randomUnitVector(){
+            randomUnitVector: function(){
                 return util.Vector.fromPolar(util.randInt(0,359), 1);
             }
         }

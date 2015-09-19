@@ -836,6 +836,14 @@ ValueProto.select = function(){
     }
     this.setAttribute('selected', 'true');
     selectedType = this.getAttribute('type');
+
+    // Highlight input field with one click
+    var input = this.getElementsByTagName('input');
+    if (input.length) {
+        input[0].select();
+        input[0].focus();
+    }
+
     selectedTypeList = selectedType.split(',');
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}

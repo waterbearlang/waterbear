@@ -134,6 +134,24 @@ QUnit.test('toString', function(assert){
     assert.strictEqual(new util.Vector(5,0).toString(), '<5,0>');
     assert.strictEqual(new util.Vector(0,5).toString(), '<0,5>');
 });
+QUnit.test('fromArray', function (assert) {
+    var vector = runtime.vector;
+
+    QUnit.ok(vector.fromArray([4, 5]) instanceof util.Vector,
+             'Creating a vector from an array');
+    QUnit.throws(
+        function () { rect.fromArray([1]); },
+        'Creating from an array with less than two elements should throw'
+    );
+});
+QUnit.test('toArray', function (assert) {
+    var vector = runtime.vector;
+
+    var p1 = new util.Vector(2, 3);
+    var array = vector.toArray(p1);
+
+    assert.deepEqual(array, [2,3], 'Getting array from vector');
+});
 
 /* TODO: objects */
 

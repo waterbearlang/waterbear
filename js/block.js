@@ -17,6 +17,7 @@
     var workspace = dom.find(document.body, 'wb-workspace');
     var scriptspace = dom.find(document.body, 'wb-workspace > wb-contains');
     var selectedType = 'null';
+    var selectedItem = null;
     var BLOCK_MENU = document.querySelector('sidebar');
 
 // FIXME: insert this into the document rather than including in markup
@@ -815,25 +816,15 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
        this.deselect();
-
-
-    }else{
+    }
+    else{
         this.select();
     }
 }
 
 //select an input field and filter the sidebar by it
 ValueProto.select = function(){
-    var i = 0;
-    var sidebarBlocks=[];
-    var selectedTypeList;
-    var existing = workspace.querySelectorAll('wb-value[selected=true]');
-    if (existing.length !== 0){
-        var i =0;
-        for(i=0; i< existing.length; i++){ existing[i].deselect();}
-    }
     this.setAttribute('selected', 'true');
-    selectedType = this.getAttribute('type');
 
     // Highlight input field with one click
     var input = this.getElementsByTagName('input');
@@ -842,25 +833,34 @@ ValueProto.select = function(){
         input[0].focus();
     }
 
-    selectedTypeList = selectedType.split(',');
-    for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
-    BLOCK_MENU.setAttribute('filtered', 'true');
+    selectedItem = this;
 }
 
-//deselect an input field and unfilter the sidebar
+// deselect an input field and unfilter the sidebar
 ValueProto.deselect = function(){
     this.removeAttribute('selected');
-    app.clearFilter();
     selectedType = 'null';
+    selectedItem = null;
 }
 
 //deselect an input field and unfilter the sidebar
-function handleOnBlur(evt){
+function toggleFilter(evt){
     var value = dom.closest(evt.target, 'wb-value');
-    value.removeAttribute('selected');
-    app.clearFilter();
-    selectedType = 'null';
+
+    if (BLOCK_MENU.getAttribute('filtered') === 'true'){
+        if (value && value != selectedItem){
+            value.deselect();
+        }
+        app.clearFilter();
+
+        if (value && value.matches('wb-value')){
+            app.setFilter(value);
+        }
+    }
+    else if (value){
+        app.setFilter(value);
+    }
+
 }
 
 //when a user clicks on an input box in the workspace
@@ -1363,7 +1363,9 @@ Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); /
 /* Some helpers for selections */
 Event.on(workspace, 'editor:click', '*', manageSelections);
 
-Event.on(workspace, 'editor:blur', 'input', handleOnBlur);
-Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
+// Event.on(workspace, 'editor:blur', 'input', handleOnBlur);
+// Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
+
+Event.on(workspace, 'editor:click', '*', toggleFilter);
 
 })();

@@ -494,7 +494,7 @@
                 </wb-step>
                 <wb-step ns="image" fn="drawAtPoint">
                     <wb-value type="wb-image" allow="block">draw</wb-value>
-                    <wb-value type="point" allow="block">at</wb-value>
+                    <wb-value type="vector" allow="block">at</wb-value>
                 </wb-step>
             </wb-accordion>
             <wb-accordion class="math">
@@ -678,26 +678,23 @@
                 <wb-expression type="vector" ns="vector" fn="randomUnitVector">
                     <wb-value>random unit vector</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="point" fn="create">
+                <wb-expression type="vector" ns="vector" fn="create">
                     <wb-value type="number" value="0">x</wb-value>
                     <wb-value type="number" value="0">y</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="point" fn="fromVector">
-                    <wb-value type="vector">from vector</wb-value>
-                </wb-expression>
-                <wb-expression type="point" ns="point" fn="fromArray">
+                <wb-expression type="vector" ns="vector" fn="fromArray">
                     <wb-value type="array">from array</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="point" fn="randomPoint">
+                <wb-expression type="vector" ns="vector" fn="randomPoint">
                     <wb-value>random point</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="point" fn="x">
+                <wb-expression type="number" ns="vector" fn="x">
                     <wb-value type="point,vector">x of</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="point" fn="y">
+                <wb-expression type="number" ns="vector" fn="y">
                     <wb-value type="point,vector">y of</wb-value>
                 </wb-expression>
-                <wb-expression type="array" ns="point" fn="toArray">
+                <wb-expression type="array" ns="vector" fn="toArray">
                     <wb-value type="point,vector">as array</wb-value>
                 </wb-expression>
             </wb-accordion>
@@ -817,24 +814,24 @@
                     <wb-value type="list" allow="literal" options="round,bevel,miter" value="round">join style</wb-value>
                 </wb-step>
                 <wb-expression ns="path" type="path" fn="moveTo">
-                    <wb-value type="point">move to point</wb-value>
+                    <wb-value type="vector">move to point</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="lineTo">
-                    <wb-value type="point">draw a line to</wb-value>
+                    <wb-value type="vector">draw a line to</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="bezierCurveTo">
-                    <wb-value type="point">draw a bezier curve to</wb-value>
-                    <wb-value type="point">first control point</wb-value>
-                    <wb-value type="point">second control point</wb-value>
+                    <wb-value type="vector">draw a bezier curve to</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="quadraticCurveTo">
-                    <wb-value type="point">draw a quadric curve to</wb-value>
-                    <wb-value type="point">control point</wb-value>
+                    <wb-value type="vector">draw a quadric curve to</wb-value>
+                    <wb-value type="vector">control point</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="arcTo">
                     <wb-value type="number">draw an arc with radius</wb-value>
-                    <wb-value type="point">first control point</wb-value>
-                    <wb-value type="point">second control point</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="closePath">
                     close path
@@ -861,17 +858,17 @@
                     <wb-value type="number" value="1">line width</wb-value>
                 </wb-step>
                 <wb-expression type="shape" ns="shape" fn="circle">
-                    <wb-value type="point">circle at</wb-value>
+                    <wb-value type="vector">circle at</wb-value>
                     <wb-value type="number" min="0">radius</wb-value>
                 </wb-expression>
                 <wb-expression type="shape" ns="shape" fn="ellipse">
-                    <wb-value type="point">ellipse at</wb-value>
+                    <wb-value type="vector">ellipse at</wb-value>
                     <wb-value type="number" min="0">horizontal radius</wb-value>
                     <wb-value type="number" min="0">verticle radius</wb-value>
                     <wb-value type="number" min="0">rotation</wb-value>
                 </wb-expression>
                 <wb-expression type="shape" ns="shape" fn="rectangle">
-                    <wb-value type="point">rectangle at</wb-value>
+                    <wb-value type="vector">rectangle at</wb-value>
                     <wb-value type="number" min="0">width</wb-value>
                     <wb-value type="number" min="0">height</wb-value>
                     <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
@@ -896,7 +893,7 @@
                 <wb-expression type="rect" ns="rect" fn="fromArray">
                     <wb-value type="array" allow="expression">from array</wb-value>
                 </wb-expression>
-                <wb-expression type="point" ns="rect" fn="getPosition">
+                <wb-expression type="vector" ns="rect" fn="getPosition">
                     <wb-value type="rect" allow="expression">position of</wb-value>
                 </wb-expression>
                 <wb-expression type="vector" ns="rect" fn="getSize">

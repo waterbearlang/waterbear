@@ -1050,7 +1050,7 @@
             toArray: function(vec){
                 return [vec.x, vec.y];
             },
-            randomVector: function(){
+            randomPoint: function(){
                 return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
             },
             rotateTo: function(vec, deg){

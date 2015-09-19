@@ -1142,15 +1142,12 @@ function endDragBlock(evt){
         // No legal target, probably outside of workspace
         return cancelDragBlock();
     }
+    if(dropTarget === originalParent){
+        return cancelDragBlock();
+    }
     if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
-        if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
-            originalBlock.classList.remove('hide');  //un-hide block
-            var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
-            Undo.addNewEvent(deleteEvent);                 //add new event to undo
-            originalBlock.removeInstances(); // FIXME: Make this undo-able!
-            originalBlock.parentElement.removeChild(originalBlock);
-        }
+        deleteOriginalBlock(originalBlock, originalParent, nextElem);
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
         if (dropTarget.matches('wb-value')) {
@@ -1172,6 +1169,7 @@ function endDragBlock(evt){
             }
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
+        deleteOriginalBlock(originalBlock, originalParent, nextElem);
     }else if(dragTarget.matches('wb-context, wb-step')){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
         addToContains(dragTarget, evt, addBlockEvent, originalBlock);
@@ -1180,6 +1178,16 @@ function endDragBlock(evt){
         return cancelDragBlock();
     }
     resetDragging();
+}
+
+function deleteOriginalBlock(originalBlock, originalParent, nextElem){
+    if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
+        originalBlock.classList.remove('hide');  //un-hide block
+        var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
+        Undo.addNewEvent(deleteEvent);                 //add new event to undo
+        originalBlock.removeInstances(); // FIXME: Make this undo-able!
+        originalBlock.parentElement.removeChild(originalBlock);
+    }
 }
 
 function cancelDragBlock(){
@@ -1204,6 +1212,13 @@ function resetDragging(){
     }
     if (origTarget){
         origTarget.classList.remove('hide');
+        if(origTarget.parentElement){
+            // Hide the sibling input
+            var siblingInput = dom.child(origTarget.parentElement, 'input, select');
+            if (siblingInput){
+                siblingInput.classList.add('hide');
+            }
+        }
     }
     dragTarget = null;
     origTarget = null;

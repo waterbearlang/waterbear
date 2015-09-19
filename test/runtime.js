@@ -212,7 +212,6 @@ QUnit.test('toString', function(assert) {
     var fpStr = str.toString(6.5969);
     var blnStr = str.toString(true);
     var strStr = str.toString("hello");
-    var pointStr = str.toString(new util.Point(4,-7));
     var vecStr = str.toString(new util.Vector(50,100));
     var shapeStr = str.toString(shape);
     var sprStr = str.toString(new util.Sprite(shape));
@@ -227,7 +226,6 @@ QUnit.test('toString', function(assert) {
     assert.ok(typeof(fpStr) === 'string' || fpStr instanceof String, 'floating point toString');
     assert.ok(typeof(blnStr) === 'string' || blnStr instanceof String, 'boolean toString');
     assert.ok(typeof(strStr) === 'string' || strStr instanceof String, 'string toString');
-    assert.ok(typeof(pointStr) === 'string' || pointStr instanceof String, 'point toString');
     assert.ok(typeof(vecStr) === 'string' || vecStr instanceof String, 'vector toString');
     assert.ok(typeof(shapeStr) === 'string' || shapeStr instanceof String, 'shape toString');
     assert.ok(typeof(sprStr) === 'string' || sprStr instanceof String, 'sprite toString');

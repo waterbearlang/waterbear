@@ -247,7 +247,7 @@ wb-value[type*=text][type*=string] > input{
     background-position: 3px 3px, 20px 3px;
 }
 wb-value[type*=vector] > input{
-    background-image: url(../images/icon/point.svg), url(../images/icon/vector.svg);
+    background-image: url(../images/icon/vector.svg);
     background-position: 3px 3px, 20px 3px;
 }
 wb-value[type*=image][type*=shape][type*=sprite] > input{

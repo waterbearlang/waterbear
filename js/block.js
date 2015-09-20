@@ -1153,7 +1153,6 @@ function endDragBlock(evt){
         deleteOriginalBlock(originalBlock, originalParent, nextElem);
         // This looks like a work-around for mutation events not firing
         // FIXME: get the mutation events working instead
-        Event.trigger(originalParent,'wb-removed',this);
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dom.matches(dragTarget, 'wb-expression')){
         if (dom.matches(dropTarget, 'wb-value')) {

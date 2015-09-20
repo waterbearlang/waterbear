@@ -258,7 +258,11 @@ wb-value[type*=number][type*=vector][type*=array] > input{
     background-image: url(../images/icon/math.svg), url(../images/icon/vector.svg), url(../images/icon/array.svg);
     background-position: 3px 3px, 20px 3px, 37px 3px;
 }
-
+wb-value[type*=image][type*=shape][type*=color] > input{
+    background-image: url(../images/icon/image.svg), url(../images/icon/shape.svg), url(../images/icon/color.svg);
+    background-position: 3px 3px, 20px 3px, 47px 3px;
+    padding-left: 65px;
+}
 wb-workspace wb-value[selected=true] > input{border-color: blue}
 wb-expression:before{
     content: '';

@@ -47,14 +47,16 @@ function setFilter(item){
     var sidebarBlocks=[];
 
     var selectedType = item.getAttribute('type');
-    var selectedTypeList = selectedType.split(',');
-    for(i=0; i<selectedTypeList.length; i++){
-        sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+    if (selectedType){
+        var selectedTypeList = selectedType.split(',');
+        for(i=0; i<selectedTypeList.length; i++){
+            sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+        }
+        for(i=0; i< sidebarBlocks.length; i++){
+            sidebarBlocks[i].setAttribute('filtered', 'true');
+        }
+        BLOCK_MENU.setAttribute('filtered', 'true');
     }
-    for(i=0; i< sidebarBlocks.length; i++){
-        sidebarBlocks[i].setAttribute('filtered', 'true');
-    }
-    BLOCK_MENU.setAttribute('filtered', 'true');
 }
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal

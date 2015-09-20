@@ -16,7 +16,6 @@
     var elem = dom.html;
     var workspace = dom.find(document.body, 'wb-workspace');
     var scriptspace = dom.find(document.body, 'wb-workspace > wb-contains');
-    var selectedType = 'null';
     var selectedItem = null;
     var BLOCK_MENU = document.querySelector('sidebar');
 
@@ -812,7 +811,7 @@ ValueProto.getValue = function(scope){
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
-//toggle an input's 'filter' selection
+//toggle an input's selection
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
        this.deselect();
@@ -822,7 +821,7 @@ ValueProto.toggleSelect = function(){
     }
 }
 
-//select an input field and filter the sidebar by it
+//select an input field
 ValueProto.select = function(){
     this.setAttribute('selected', 'true');
 
@@ -836,10 +835,9 @@ ValueProto.select = function(){
     selectedItem = this;
 }
 
-// deselect an input field and unfilter the sidebar
+// deselect an input field
 ValueProto.deselect = function(){
     this.removeAttribute('selected');
-    selectedType = 'null';
     selectedItem = null;
 }
 
@@ -852,6 +850,7 @@ function toggleFilter(evt){
             value.deselect();
         }
         app.clearFilter();
+
 
         if (value && value.matches('wb-value')){
             app.setFilter(value);

@@ -128,7 +128,6 @@
     // motion
     // object
     // path
-    // point
     // random
     // rect
     // shape
@@ -677,30 +676,6 @@
 
         },
 
-        point: {
-            create: function(x,y){
-                return new util.Point(x,y);
-            },
-            fromVector: function(vec){
-                return new util.Point(vec.x, vec.y);
-            },
-            fromArray: function(arr){
-                return new util.Point(arr[0], arr[1]);
-            },
-            randomPoint: function(){
-                return new util.Point(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
-            },
-            x: function(pt){
-                return pt.x;
-            },
-            y: function(pt){
-                return pt.y;
-            },
-            toArray: function(pt){
-                return [pt.x, pt.y];
-            },
-        },
-
         random: {
             randFloat: Math.random,
             randInt: util.randInt,
@@ -935,7 +910,7 @@
                 return (Event.stage.height / 2);
             },
             centerPoint: function(){
-                return new util.Point(Event.stage.width / 2, Event.stage.height / 2);
+                return new util.Vector(Event.stage.width / 2, Event.stage.height / 2);
             },
             randomX: function(){
                 return Math.random() * Event.stage.width;
@@ -1021,10 +996,7 @@
             },
             endsWith: function(x,y){
                 return x.indexOf(y, x.length - y.length) !== -1;
-            }
-        },
-
-        text:{
+            },
             setFont: function (size, fontStyle){
                 var sizeString = size[0] + size[1];
                 getContext().font = sizeString + " " + fontStyle;
@@ -1057,8 +1029,17 @@
             create: function create(x,y){
                 return new util.Vector(x,y);
             },
-            createPolar: function fromPolar(deg, mag){
+            createPolar: function createPolar(deg, mag){
                 return util.Vector.fromPolar(deg, mag);
+            },
+            fromArray: function fromArray(arr){
+                return new util.Vector(arr[0], arr[1]);
+            },
+            toArray: function toArray(vec){
+                return [vec.x, vec.y];
+            },
+            randomPoint: function randomPoint(){
+                return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
             },
             rotateTo: function rotateTo(vec, deg){
                 return vec.rotateTo(deg);

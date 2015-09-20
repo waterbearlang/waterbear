@@ -2,84 +2,84 @@
                         <wb-value class="selected-value">set</wb-value>
 						<wb-local renameable="true">
 							<wb-expression type="wb-image" ns="control" fn="getVariable" id="k453ee8" filtered="true" class=""><header><wb-value type="text" allow="literal" value="mascot image" class=""><input type="text" style="width: 84.2754px;"></wb-value></header>
-								
+
 							</wb-expression>
 						</wb-local>
                         <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" ns="image" fn="get" class="" style=""><header><wb-value type="text" value="images/mascot/mascot-steampunk.png" class="">image from url<input type="text" style="width: 211.044px;"></wb-value></header>
-                    
+
                 </wb-expression></wb-value>
                     </wb-row><wb-row>
                     </wb-row></header>
-                    
-                    
+
+
                 </wb-step><wb-step ns="image" fn="setHeight" class="" style=""><header><wb-value type="wb-image" allow="block" class="">set<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="kc352e7" filtered="true" class="" instanceof="k453ee8"><header><wb-value type="text" allow="literal" value="mascot image" class="">mascot image</wb-value></header>
-								
+
 							</wb-expression></wb-value><wb-value type="number" class="">height<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="divide" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="stageHeight" class="" style=""><header><wb-value>Stage Height</wb-value></header>
-					
+
 				</wb-expression></wb-value><wb-value type="number" class="" value="2">÷<input type="number" style="width: 30px;"></wb-value></header>
-                    
-                    
+
+
                 </wb-expression></wb-value></header>
-                    
-                    
+
+
                 </wb-step><wb-step ns="control" fn="setVariable" class="" style=""><header><wb-row>
                         <wb-value>set</wb-value>
 						<wb-local renameable="true">
 							<wb-expression type="sprite" ns="control" fn="getVariable" id="ke180dc" class=""><header><wb-value type="text" allow="literal" value="mascot" class=""><input type="text" style="width: 51.3983px;" class=""></wb-value></header>
-								
+
 							</wb-expression>
 						</wb-local>
                         <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="kc1d15" filtered="true" class="" instanceof="k453ee8" style=""><header><wb-value type="text" allow="literal" value="mascot image" class="">mascot image<input type="text" style="width: 84.2754px;"></wb-value></header>
-								
+
 							</wb-expression></wb-value></header>
-                    
+
                 </wb-expression></wb-value>
                     </wb-row><wb-row>
                     </wb-row></header>
-                    
-                    
+
+
                 </wb-step><wb-step ns="sprite" fn="moveTo" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="ka600a2" class="" instanceof="ke180dc"><header><wb-value type="text" allow="literal" value="mascot" class="">mascot</wb-value></header>
-								
-							</wb-expression></wb-value><wb-value type="point,vector" class="">move to<input type="point" readonly="" style="width: 30px;" class="hide"><wb-expression type="point" ns="stage" fn="centerPoint" class="" style=""><header><wb-value>Center point</wb-value></header>
-					
+
+							</wb-expression></wb-value><wb-value type="point,vector" class="">move to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="stage" fn="centerPoint" class="" style=""><header><wb-value>Center point</wb-value></header>
+
 				</wb-expression></wb-value></header>
-                    
-                    
+
+
                 </wb-step><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-disclosure></wb-disclosure><wb-row>
                         <wb-value>each frame</wb-value>
                     </wb-row><wb-row>
                         <wb-local>
                             <wb-expression type="number" ns="control" fn="frame" id="k4b4d63"><header><wb-value value="frame">frame</wb-value></header>
-                                
+
                             </wb-expression>
                         </wb-local>
                         <wb-local>
                             <wb-expression type="number" ns="control" fn="elapsed" id="k933377"><header><wb-value value="elapsed">elapsed</wb-value></header>
-                                
+
                             </wb-expression>
                         </wb-local>
                     </wb-row></header>
-                    
-                    
+
+
                 <wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image" class="">clear to<input type="color" style="width: 57.7256px;" class=""></wb-value></header>
-                    
+
                 </wb-step><wb-step ns="sprite" fn="rotate" class="" style=""><header><wb-value type="sprite" class="">rotate<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k46a128" class="" instanceof="ke180dc" style=""><header><wb-value type="text" allow="literal" value="mascot" class="">mascot</wb-value></header>
-								
+
 							</wb-expression></wb-value><wb-value type="number" class="">by<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="sin" class="" style=""><header><wb-value type="number" value="0" class="">sine<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="kb8ec5d" class=""><header><wb-value value="frame" class="">frame</wb-value></header>
-                                
+
                             </wb-expression></wb-value><wb-value type="number,vector,array" value="90" class="">+<input type="number" style="width: 30px;"></wb-value></header>
-                    
-                    
+
+
                 </wb-expression></wb-value></header>
-                    
+
                 </wb-expression></wb-value><wb-value type="number,vector" value=".25" class="">×<input type="number" style="width: 30.2032px;"></wb-value></header>
-                    
-                    
+
+
                 </wb-expression></wb-value></header>
-                    
-                    
+
+
                 </wb-step><wb-step ns="sprite" fn="draw" class="" style=""><header><wb-value type="sprite" class="">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kadc4f6" class="" instanceof="ke180dc" style=""><header><wb-value type="text" allow="literal" value="mascot" class="">mascot</wb-value></header>
-								
+
 							</wb-expression></wb-value></header>
-                    
+
                 </wb-step></wb-contains></wb-context>

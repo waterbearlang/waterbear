@@ -1,6 +1,7 @@
 (function(){
 'use strict';
-
+    var workspace = dom.find(document.body, 'wb-workspace');
+    var BLOCK_MENU = document.querySelector('sidebar');
 var canvasRef;
 
 // FIXME: This feedback is important and useful, but using it this way violates
@@ -31,6 +32,16 @@ function tip(text){
 
 function info(text){
     message('#333', text);
+}
+
+function clearFilter(){
+    var existing = workspace.querySelectorAll('wb-value[selected=true]');
+    if (existing.length !== 0){
+        for(var i=0; i< existing.length; i++){
+            existing[i].deselect();
+        }
+    }
+    BLOCK_MENU.removeAttribute('filtered');
 }
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
@@ -201,6 +212,9 @@ Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);
 Event.on(window, 'input:keydown', null, Undo.undoKeyCombo);
 Event.on(window, 'input:keydown', null, Undo.redoKeyCombo);
+//deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
+Event.on(document.body, 'ui:click', '.availableBlocks', clearFilter);
+
 Undo.clearStacks();
 
 window.app = {
@@ -208,6 +222,7 @@ window.app = {
     error: error,
     warn: warn,
     tip: tip,
-    info: info
+    info: info,
+    clearFilter: clearFilter
 };
 })();

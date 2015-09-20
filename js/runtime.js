@@ -877,8 +877,11 @@
                     getContext().fillStyle = clr;
                     getContext().fillRect(r.x, r.y, r.width, r.height);
                 })
-                .when(['wbimage'], function(img){
+                .when(['image'], function(img){
                     img.drawInRect(getContext(), canvasRect());
+                })
+                .when(['shape'], function(shape){
+                    shape.draw(getContext());
                 })
             .fn(),
             stageWidth: function(){

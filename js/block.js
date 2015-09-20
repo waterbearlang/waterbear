@@ -1151,8 +1151,6 @@ function endDragBlock(evt){
     if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
         deleteOriginalBlock(originalBlock, originalParent, nextElem);
-        // This looks like a work-around for mutation events not firing
-        // FIXME: get the mutation events working instead
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dom.matches(dragTarget, 'wb-expression')){
         if (dom.matches(dropTarget, 'wb-value')) {

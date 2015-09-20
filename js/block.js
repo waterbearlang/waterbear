@@ -216,6 +216,7 @@ StepProto.run = function stepRun(scope){
         this.fn = runtime[nsName][fnName];
     }
     var values = this.gatherValues(scope);
+    scope._block = this;
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
@@ -311,7 +312,8 @@ ContextProto.run = function contextRun(parentScope){
     // var scope = util.extend({}, parentScope);
     var scope = Object.create(parentScope); // use parentScope as prototype
     // expressions are eagerly evaluated against scope, contains are late-evaluated
-    // I'm not yet sure if this is the Right Thing™
+    // I'm not yet sure if this is the Right Thing™ [actually, pretty sure it is not]
+    scope._block = this;
     return this.fn.call(scope, this.gatherValues(scope), this.gatherContains(scope));
 };
 
@@ -433,6 +435,7 @@ ExpressionProto.run = function(scope){
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
     }
+    scope._block = this;
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
@@ -788,6 +791,7 @@ ValueProto.createdCallback = function valueCreated(){
 ValueProto.getValue = function(scope){
     var block = dom.child(this, 'wb-expression');
     if (block){
+        scope._block = block;
         return block.run(scope);
     }
     var input = dom.child(this, 'input, select');
@@ -996,7 +1000,7 @@ function dragBlock(evt){
     var potentialDropTarget = document.elementFromPoint(evt.pageX, evt.pageY);
 
     // Check if the user dragged over the sidebar.
-    if (potentialDropTarget.matches('sidebar, sidebar *')){
+    if (dom.matches(potentialDropTarget, 'sidebar, sidebar *')){
         dropTarget = BLOCK_MENU;
         dropTarget.classList.add('no-drop');
         app.warn('drop here to delete block(s)');
@@ -1004,12 +1008,19 @@ function dragBlock(evt){
     }
 
     // When we're dragging an expression...
-    if (dragTarget.matches('wb-expression')){
+    if (dom.matches(dragTarget, 'wb-expression')){
        // Check if we're on a literal block.
-       if (potentialDropTarget.matches('wb-value[allow="literal"], wb-value[allow="literal"] *')) {
+       if (dom.matches(potentialDropTarget, 'wb-value[allow="literal"], wb-value[allow="literal"] *')) {
           potentialDropTarget.classList.add('no-drop');
           app.warn("cannot drop on direct input value");
           return;
+       }
+       if (dom.matches(potentialDropTarget, 'wb-value[allow="variable"], wb-value[allow="variable"] *')) {
+           if (!dom.matches(dragTarget, '[fn="getVariable"]')){
+               potentialDropTarget.classList.add('no-drop');
+               app.warn("can only drop variables on update variable");
+               return;
+           }
        }
 
         // FIXME
@@ -1063,7 +1074,7 @@ function dropTargetIsContainer(potentialDropTarget){
    }
    if (dropTarget){
        markDropTarget(dropTarget);
-      if (dropTarget.matches('wb-contains')){
+      if (dom.matches(dropTarget, 'wb-contains')){
          app.tip('drop to add to top of the block container');
       }else{
          app.tip('drop to add after this block');
@@ -1087,7 +1098,7 @@ function addToContains(block, evt, addBlockEvent, originalBlock){
         block.classList.remove('hide');
     }
     addBlockEvent.addedBlock = block;
-    if (dropTarget.matches('wb-contains')){
+    if (dom.matches(dropTarget, 'wb-contains')){
         if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom){
             dropTarget.appendChild(block);
         }else{
@@ -1144,8 +1155,8 @@ function endDragBlock(evt){
         // FIXME: get the mutation events working instead
         Event.trigger(originalParent,'wb-removed',this);
         dragTarget.parentElement.removeChild(dragTarget);
-    }else if(dragTarget.matches('wb-expression')){
-        if (dropTarget.matches('wb-value')) {
+    }else if(dom.matches(dragTarget, 'wb-expression')){
+        if (dom.matches(dropTarget, 'wb-value')) {
             dropTarget.appendChild(dragTarget);
             dropTarget.deselect();
             BLOCK_MENU.removeAttribute('filtered');
@@ -1154,8 +1165,7 @@ function endDragBlock(evt){
                 addValueEvent.type = 'move-block'
             }
             Undo.addNewEvent(addValueEvent);
-
-        }else if (dropTarget.matches('wb-context, wb-step, wb-contains')){
+        }else if (dom.matches(dropTarget, 'wb-context, wb-step, wb-contains')){
             // Create variable block to wrap the expression.
             var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem};
             if(dragStart==='script'){
@@ -1165,7 +1175,7 @@ function endDragBlock(evt){
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
         deleteOriginalBlock(originalBlock, originalParent, nextElem);
-    }else if(dragTarget.matches('wb-context, wb-step')){
+    }else if(dom.matches(dragTarget, 'wb-context, wb-step')){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
         addToContains(dragTarget, evt, addBlockEvent, originalBlock);
     }else{

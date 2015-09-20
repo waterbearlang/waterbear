@@ -270,6 +270,24 @@
             getVariable: function getVariable(name){
                 return this[name];
             },
+            updateVariable: function updateVariable(values){
+                // this is one of the rare times we need access to the element
+                var scope = this; // get ready to walk up the scope tree
+                var oldValue = values[0];
+                var newValue = values[1];
+                var variableName = dom.find(scope._block, 'wb-value').getValue();
+                while( scope !== null){
+                    if (scope.hasOwnProperty(variableName)){
+                        console.assert(scope[variableName] === oldValue);
+                        scope[variableName] = newValue;
+                        break;
+                    }
+                    scope = Object.getPrototypeOf(scope);
+                }
+                if (scope === null){
+                    alert('something went horribly wrong, no variable to set');
+                }
+            },
             incrementVariable: function incrementVariable(variable, value){
                 this[name] += value;
             },

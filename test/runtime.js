@@ -11,6 +11,81 @@
 
 /* TODO: control */
 
+QUnit.module('control');
+QUnit.test('setVariable', function(assert){
+    var control = runtime.control;
+    var scope1 = {};
+    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
+    var scope3 = Object.create(scope2);
+    control.setVariable.call(scope1, ['firstname', 'Baba']);
+    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
+    control.setVariable.call(scope3, ['who', 'on first']);
+    assert.ok(scope1['firstname'] === 'Baba');
+    assert.ok(scope1['lastname'] === undefined); // shouldn't leak scopes
+    assert.ok(scope1['who'] === undefined);
+    assert.ok(scope2['firstname'] === 'Baba'); // scope chaining should work
+    assert.ok(scope2['lastname'] === "O'Reilly");
+    assert.ok(scope2['who'] === undefined);
+    assert.ok(scope3['firstname'] === 'Baba');
+    assert.ok(scope3['lastname'] === "O'Reilly");
+    assert.ok(scope3['who'] === 'on first');
+});
+QUnit.test('getVariable', function(assert){
+    var control = runtime.control;
+    var scope1 = {};
+    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
+    var scope3 = Object.create(scope2);
+    control.setVariable.call(scope1, ['firstname', 'Baba']);
+    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
+    control.setVariable.call(scope3, ['who', 'on first']);
+    assert.ok(control.getVariable.call(scope1, 'firstname') === 'Baba');
+    assert.ok(control.getVariable.call(scope1, 'lastname') === undefined); // shouldn't leak scopes
+    assert.ok(control.getVariable.call(scope1, 'who') === undefined);
+    assert.ok(control.getVariable.call(scope2, 'firstname') === 'Baba'); // scope chaining should work
+    assert.ok(control.getVariable.call(scope2, 'lastname') === "O'Reilly");
+    assert.ok(control.getVariable.call(scope2, 'who') === undefined);
+    assert.ok(control.getVariable.call(scope3, 'firstname') === 'Baba');
+    assert.ok(control.getVariable.call(scope3, 'lastname') === "O'Reilly");
+    assert.ok(control.getVariable.call(scope3, 'who') === 'on first');
+});
+QUnit.test('updateVariable', function(assert){
+    var control = runtime.control;
+    var scope1 = {};
+    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
+    var scope3 = Object.create(scope2);
+    function getValueBlock(value){
+        var outer = document.createElement('wb-expression');
+        var inner = document.createElement('wb-value');
+        inner.setAttribute('value', value);
+        outer.appendChild(inner);
+        // PhantomJS doesn't understand custom elements
+        inner.getValue = function(){
+            return this.getAttribute('value');
+        }
+        return outer;
+    }
+    control.setVariable.call(scope1, ['first', 'upper']);
+    control.setVariable.call(scope2, ['second', 'centre']);
+    control.setVariable.call(scope3, ['third', 'lowest']);
+    // updateVariable should walk the scope chain to set the variable
+    // at the level it was originally created
+    scope1._block = getValueBlock('first');
+    control.updateVariable.call(scope3, ['upper', 'top']);
+    scope2._block = getValueBlock('second');
+    control.updateVariable.call(scope3, ['centre', 'middle']);
+    scope3._block = getValueBlock('third');
+    control.updateVariable.call(scope3, ['lowest', 'bottom']);
+    assert.ok(control.getVariable.call(scope1, 'first') === 'top');
+    assert.ok(control.getVariable.call(scope1, 'second') === undefined); // shouldn't leak scopes
+    assert.ok(control.getVariable.call(scope1, 'third') === undefined);
+    assert.ok(control.getVariable.call(scope2, 'first') === 'top'); // scope chaining should work
+    assert.ok(control.getVariable.call(scope2, 'second') === 'middle');
+    assert.ok(control.getVariable.call(scope2, 'third') === undefined);
+    assert.ok(control.getVariable.call(scope3, 'first') === 'top');
+    assert.ok(control.getVariable.call(scope3, 'second') === 'middle');
+    assert.ok(control.getVariable.call(scope3, 'third') === 'bottom');
+});
+
 /* sprite */
 
 // QUnit.module('sprites');
@@ -134,24 +209,6 @@ QUnit.test('toString', function(assert){
     assert.strictEqual(new util.Vector(5,0).toString(), '<5,0>');
     assert.strictEqual(new util.Vector(0,5).toString(), '<0,5>');
 });
-QUnit.test('fromArray', function (assert) {
-    var vector = runtime.vector;
-
-    QUnit.ok(vector.fromArray([4, 5]) instanceof util.Vector,
-             'Creating a vector from an array');
-    QUnit.throws(
-        function () { rect.fromArray([1]); },
-        'Creating from an array with less than two elements should throw'
-    );
-});
-QUnit.test('toArray', function (assert) {
-    var vector = runtime.vector;
-
-    var p1 = new util.Vector(2, 3);
-    var array = vector.toArray(p1);
-
-    assert.deepEqual(array, [2,3], 'Getting array from vector');
-});
 
 /* TODO: objects */
 
@@ -230,6 +287,7 @@ QUnit.test('toString', function(assert) {
     var fpStr = str.toString(6.5969);
     var blnStr = str.toString(true);
     var strStr = str.toString("hello");
+    // var pointStr = str.toString(new util.Point(4,-7));
     var vecStr = str.toString(new util.Vector(50,100));
     var shapeStr = str.toString(shape);
     var sprStr = str.toString(new util.Sprite(shape));
@@ -244,6 +302,7 @@ QUnit.test('toString', function(assert) {
     assert.ok(typeof(fpStr) === 'string' || fpStr instanceof String, 'floating point toString');
     assert.ok(typeof(blnStr) === 'string' || blnStr instanceof String, 'boolean toString');
     assert.ok(typeof(strStr) === 'string' || strStr instanceof String, 'string toString');
+    // assert.ok(typeof(pointStr) === 'string' || pointStr instanceof String, 'point toString');
     assert.ok(typeof(vecStr) === 'string' || vecStr instanceof String, 'vector toString');
     assert.ok(typeof(shapeStr) === 'string' || shapeStr instanceof String, 'shape toString');
     assert.ok(typeof(sprStr) === 'string' || sprStr instanceof String, 'sprite toString');
@@ -567,6 +626,73 @@ QUnit.test('endsWith', function(assert){
     assert.ok(b4, 'string starts with empty string');
     assert.ok(!b5, 'string starts with same string but longer');
 });
+
+// QUnit.module('points');
+// QUnit.test('create', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = point.create(1, 5);
+//     var p2 = point.create(-4, 20);
+//
+//     assert.ok(p1 instanceof util.Point, 'Creating a point from coordinates');
+//     assert.ok(p2 instanceof util.Point, 'Creating a point from negative coordinates');
+// });
+
+// QUnit.test('fromVector', function (assert) {
+//     var point = runtime.point;
+//
+//     var zero = new util.Vector(0, 0);
+//     var identity = new util.Vector(1, 1);
+//     var negVector = new util.Vector(-1, -1);
+//
+//     var p1 = point.fromVector(zero);
+//     var p2 = point.fromVector(identity);
+//     var p3 = point.fromVector(negVector);
+//
+//     assert.ok(p1 instanceof util.Point, 'Creating a point from zero vector');
+//     assert.ok(p2 instanceof util.Point, 'Creating a point from identity vector');
+//     assert.ok(p3 instanceof util.Point, 'Creating a point from negative vector');
+// });
+
+// QUnit.test('fromArray', function (assert) {
+//     var point = runtime.point;
+//
+//     QUnit.ok(point.fromArray([4, 5]) instanceof util.Point,
+//              'Creating a point from an array');
+//     QUnit.throws(
+//         function () { rect.fromArray([1]); },
+//         'Creating from an array with less than two elements should throw'
+//     );
+// });
+
+// QUnit.test('x', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = new util.Point(2, 3);
+//     var x = point.x(p1);
+//
+//     assert.equal(x, 2, 'Getting the x position of a point');
+// });
+
+// QUnit.test('y', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = new util.Point(2, 3);
+//     var y = point.y(p1);
+//
+//     assert.equal(y, 3, 'Getting the y position of a point');
+// });
+
+// QUnit.test('toArray', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = new util.Point(2, 3);
+//     var array = point.toArray(p1);
+//
+//     assert.deepEqual(array, [2,3], 'Getting array from point');
+// });
+
+
 
 QUnit.module('rect');
 QUnit.test('fromCoordinates', function (assert) {

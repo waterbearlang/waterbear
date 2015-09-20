@@ -795,6 +795,7 @@
                 return assets.sounds[url]; // already cached by sounds library
             },
             play: function(sound){
+                console.log('sound.play()');
                 sound.play();
             },
             setLoop: function(sound, flag){
@@ -824,7 +825,7 @@
             stopReverb: function(sound){
                 sound.reverb = false;
             },
-            effect: function(frequency, attack, decay, waveform, volume, balance, wait, pitchBend, reverseBend, random, dissonance, echoDelay, echoFeedback, echoFilter){
+            effect: function(frequency, attack, decay, wait, echoDelay, echoFeedback, echoFilter, waveform, volume, balance, pitchBend, reverseBend, random, dissonance){
                 return {
                     play: function(){
                         soundEffect(

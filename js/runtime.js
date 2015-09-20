@@ -874,13 +874,16 @@
             clearTo: new util.Method()
                 .when(['string'], function(clr){ // unfortunately colors are still strings
                     var r = canvasRect();
+                    resetCanvas();
                     getContext().fillStyle = clr;
                     getContext().fillRect(r.x, r.y, r.width, r.height);
                 })
-                .when(['image'], function(img){
+                .when(['wbimage'], function(img){
+                    resetCanvas();
                     img.drawInRect(getContext(), canvasRect());
                 })
                 .when(['shape'], function(shape){
+                    resetCanvas();
                     shape.draw(getContext());
                 })
             .fn(),

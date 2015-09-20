@@ -35,13 +35,28 @@ function info(text){
 }
 
 function clearFilter(){
-    var existing = workspace.querySelectorAll('wb-value[selected=true]');
-    if (existing.length !== 0){
-        for(var i=0; i< existing.length; i++){
-            existing[i].deselect();
-        }
+    var sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    for(var i=0; i< sidebarBlocks.length; i++){
+        sidebarBlocks[i].removeAttribute('filtered');
     }
     BLOCK_MENU.removeAttribute('filtered');
+}
+
+function setFilter(item){
+    var i;
+    var sidebarBlocks=[];
+
+    var selectedType = item.getAttribute('type');
+    if (selectedType){
+        var selectedTypeList = selectedType.split(',');
+        for(i=0; i<selectedTypeList.length; i++){
+            sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+        }
+        for(i=0; i< sidebarBlocks.length; i++){
+            sidebarBlocks[i].setAttribute('filtered', 'true');
+        }
+        BLOCK_MENU.setAttribute('filtered', 'true');
+    }
 }
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
@@ -223,6 +238,7 @@ window.app = {
     warn: warn,
     tip: tip,
     info: info,
-    clearFilter: clearFilter
+    clearFilter: clearFilter,
+    setFilter: setFilter
 };
 })();

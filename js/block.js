@@ -125,7 +125,7 @@ BlockProto.getLocals = function blockHasLocals(){
 
 BlockProto.getFreeInstances = function blockGetFreeInstances(){
     // get contained instances, so we can get the local from them
-    return dom.findAll(this, '[for]');
+    return dom.findAll(this, '[instanceof]');
 };
 
 BlockProto.getInstances = function blockGetInstances(){
@@ -365,7 +365,6 @@ var typeMapping = {
     shape: 'shape',
     vector: 'vector',
     path: 'path',
-    point: 'point',
     rect: 'rect'
 };
 
@@ -462,8 +461,8 @@ function createLocalToInstanceAssociation(evt){
     var localNode = evt.target;
     var instanceNode = evt.detail;
     var id = localNode.id;
-    if (!instanceNode.hasAttribute('for')){
-        instanceNode.setAttribute('for', id);
+    if (!instanceNode.hasAttribute('instanceof')){
+        instanceNode.setAttribute('instanceof', id);
     }
     var wbValue = dom.find(instanceNode, 'wb-value');
     wbValue.innerHTML = wbValue.getAttribute('value');
@@ -545,7 +544,7 @@ function incrementName(name){
 }
 
 function getLocalInstances(parentContext, setVarId){
-    return dom.findAll(workspace, '[for="' + setVarId + '"]');
+    return dom.findAll(workspace, '[instanceof="' + setVarId + '"]');
 }
 
 function updateVariableNameInInstances(newVariableName, localInstances){
@@ -731,7 +730,7 @@ ValueProto.createdCallback = function valueCreated(){
         }
         return;
     }
-    if (blockParent.localName === 'wb-expression' && blockParent.hasAttribute('for')){
+    if (blockParent.localName === 'wb-expression' && blockParent.hasAttribute('instanceof')){
         // this is an instance variable
         return;
     }
@@ -814,12 +813,10 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 //toggle an input's 'filter' selection
 ValueProto.toggleSelect = function(){
     if (this.getAttribute('selected') === 'true'){
-       BLOCK_MENU.removeAttribute('filtered');
        this.deselect();
 
 
     }else{
-        BLOCK_MENU.setAttribute('filtered', 'true');
         this.select();
     }
 }
@@ -836,22 +833,34 @@ ValueProto.select = function(){
     }
     this.setAttribute('selected', 'true');
     selectedType = this.getAttribute('type');
+
+    // Highlight input field with one click
+    var input = this.getElementsByTagName('input');
+    if (input.length) {
+        input[0].select();
+        input[0].focus();
+    }
+
     selectedTypeList = selectedType.split(',');
     for(i=0; i<selectedTypeList.length; i++){sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));}
     for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].setAttribute('filtered', 'true');}
-
+    BLOCK_MENU.setAttribute('filtered', 'true');
 }
 
 //deselect an input field and unfilter the sidebar
 ValueProto.deselect = function(){
-    var i = 0;
-    var sidebarBlocks;
     this.removeAttribute('selected');
-    sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
-    for(i=0; i< sidebarBlocks.length; i++){ sidebarBlocks[i].removeAttribute('filtered');}
+    app.clearFilter();
     selectedType = 'null';
 }
 
+//deselect an input field and unfilter the sidebar
+function handleOnBlur(evt){
+    var value = dom.closest(evt.target, 'wb-value');
+    value.removeAttribute('selected');
+    app.clearFilter();
+    selectedType = 'null';
+}
 
 //when a user clicks on an input box in the workspace
 function changeValueOnInputChange(evt){
@@ -904,15 +913,7 @@ Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
     }
 })
 
-//deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
-Event.on(document.body, 'ui:click', '.availableBlocks', function(evt){
-    var existing = workspace.querySelectorAll('wb-value[selected=true]');
-    if (existing.length !== 0){
-        var i =0;
-        for(i=0; i< existing.length; i++){ existing[i].deselect();}
-    }
-    BLOCK_MENU.removeAttribute('filtered');
-});
+
 
 
 /* DRAGGING */
@@ -1050,7 +1051,7 @@ function dropTargetIsContainer(potentialDropTarget){
    dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
    // FIXME: Don't drop onto locals
    if (dropTarget && dragTarget){
-       var localId = dragTarget.getAttribute('for');
+       var localId = dragTarget.getAttribute('instanceof');
        if (localId){
            var local = document.getElementById(localId);
            var localContext = dom.closest(local, 'wb-contains');
@@ -1134,15 +1135,15 @@ function endDragBlock(evt){
         // No legal target, probably outside of workspace
         return cancelDragBlock();
     }
+    if(dropTarget === originalParent){
+        return cancelDragBlock();
+    }
     if (dropTarget === BLOCK_MENU){
         // Drop on script menu to delete block, always delete clone
-        if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
-            originalBlock.classList.remove('hide');  //un-hide block
-            var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
-            Undo.addNewEvent(deleteEvent);                 //add new event to undo
-            originalBlock.removeInstances(); // FIXME: Make this undo-able!
-            originalBlock.parentElement.removeChild(originalBlock);
-        }
+        deleteOriginalBlock(originalBlock, originalParent, nextElem);
+        // This looks like a work-around for mutation events not firing
+        // FIXME: get the mutation events working instead
+        Event.trigger(originalParent,'wb-removed',this);
         dragTarget.parentElement.removeChild(dragTarget);
     }else if(dragTarget.matches('wb-expression')){
         if (dropTarget.matches('wb-value')) {
@@ -1164,6 +1165,7 @@ function endDragBlock(evt){
             }
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
+        deleteOriginalBlock(originalBlock, originalParent, nextElem);
     }else if(dragTarget.matches('wb-context, wb-step')){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
         addToContains(dragTarget, evt, addBlockEvent, originalBlock);
@@ -1172,6 +1174,16 @@ function endDragBlock(evt){
         return cancelDragBlock();
     }
     resetDragging();
+}
+
+function deleteOriginalBlock(originalBlock, originalParent, nextElem){
+    if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
+        originalBlock.classList.remove('hide');  //un-hide block
+        var deleteEvent = {type:'delete-block', deletedBlock:originalBlock, deletedFrom:originalParent, nextBlock:nextElem};
+        Undo.addNewEvent(deleteEvent);                 //add new event to undo
+        originalBlock.removeInstances(); // FIXME: Make this undo-able!
+        originalBlock.parentElement.removeChild(originalBlock);
+    }
 }
 
 function cancelDragBlock(){
@@ -1196,6 +1208,13 @@ function resetDragging(){
     }
     if (origTarget){
         origTarget.classList.remove('hide');
+        if(origTarget.parentElement){
+            // Hide the sibling input
+            var siblingInput = dom.child(origTarget.parentElement, 'input, select');
+            if (siblingInput){
+                siblingInput.classList.add('hide');
+            }
+        }
     }
     dragTarget = null;
     origTarget = null;
@@ -1345,5 +1364,8 @@ Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); /
 
 /* Some helpers for selections */
 Event.on(workspace, 'editor:click', '*', manageSelections);
+
+Event.on(workspace, 'editor:blur', 'input', handleOnBlur);
+Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
 
 })();

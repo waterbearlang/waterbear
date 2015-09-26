@@ -893,17 +893,23 @@
             clearTo: new util.Method()
                 .when(['string'], function(clr){ // unfortunately colors are still strings
                     var r = canvasRect();
-                    resetCanvas();
-                    getContext().fillStyle = clr;
-                    getContext().fillRect(r.x, r.y, r.width, r.height);
+                    var c = getContext();
+                    c.save();
+                    c.fillStyle = clr;
+                    c.fillRect(r.x, r.y, r.width, r.height);
+                    c.restore();
                 })
                 .when(['wbimage'], function(img){
-                    resetCanvas();
-                    img.drawInRect(getContext(), canvasRect());
+                    var c = getContext();
+                    c.save();
+                    img.drawInRect(c, canvasRect());
+                    c.restore();
                 })
                 .when(['shape'], function(shape){
-                    resetCanvas();
-                    shape.draw(getContext());
+                    var c = getContext();
+                    c.save();
+                    shape.draw(c);
+                    c.restore();
                 })
             .fn(),
             stageWidth: function(){
@@ -1049,6 +1055,12 @@
             },
             randomPoint: function randomPoint(){
                 return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
+            },
+            unitVector: function unitVector(){
+                return new util.Vector(1,1);
+            },
+            zeroVector: function zeroVector(){
+                return new util.Vector(0,0);
             },
             rotateTo: function rotateTo(vec, deg){
                 return vec.rotateTo(deg);

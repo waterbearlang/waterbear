@@ -70,6 +70,7 @@
     function clearRuntime() {
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
+        // console.log('clearing runtime');
         Event.clearRuntime();
         clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
@@ -78,26 +79,32 @@
 
     var perFrameHandlers;
     var lastTime;
+    var animationFrameHandler;
 
     function clearPerFrameHandlers() {
         perFrameHandlers = [];
         lastTime = new Date().valueOf();
+        if (animationFrameHandler){
+            cancelAnimationFrame(animationFrameHandler);
+            animationFrameHandler = null;
+        }
     }
 
     // Initialize the stage.
     Event.on(window, 'ui:resize', null, handleResize);
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
-
     function startEventLoop(){
+        // console.log('start event loop');
         clearPerFrameHandlers();
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
-        requestAnimationFrame(frameHandler);
+        animationFrameHandler = requestAnimationFrame(frameHandler);
     }
 
     function stopEventLoop() {
         /* TODO: Dunno lol there be more in here? */
+        // console.log('stop event loop');
     }
 
     function frameHandler(){
@@ -109,7 +116,9 @@
         perFrameHandlers.forEach(function(handler){
             handler();
         });
-        requestAnimationFrame(frameHandler);
+        if (perFrameHandlers.length){
+            requestAnimationFrame(frameHandler);
+        }
     }
 
 
@@ -795,7 +804,7 @@
                 return assets.sounds[url]; // already cached by sounds library
             },
             play: function(sound){
-                console.log('sound.play()');
+                // console.log('sound.play()');
                 sound.play();
             },
             setLoop: function(sound, flag){
@@ -1084,7 +1093,9 @@
                 return vec.y;
             },
             randomUnitVector: function randomUnitVector(){
-                return util.Vector.fromPolar(util.randInt(0,359), 1);
+                var vec = util.Vector.fromPolar(Math.random() * 360, 1);
+                console.log('vector magnitude: %s', vec.magnitude());
+                return vec;
             }
         }
     };

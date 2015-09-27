@@ -1067,6 +1067,14 @@
             randomUnitVector: function randomUnitVector(){
                 return util.Vector.fromPolar(util.randInt(0,359), 1);
             }
+        },
+        date: {
+            create: function (year, month, day) {
+                return new Date(year, month-1, day);
+            },
+            now: function () {
+                return new Date();
+            }
         }
     };
 

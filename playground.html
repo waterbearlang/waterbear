@@ -390,6 +390,20 @@
                     <wb-value type="boolean" value="true">not</wb-value>
                 </wb-expression>
             </wb-accordion>
+
+            <wb-accordion class="date">
+                <header>
+                    <img class="cat-icon" src="">
+                    Date
+                </header>
+                <p>Dates are used to represent a date and to do basic calculations.</p>
+                <wb-expression type="date" ns="date" fn="now">today</wb-expression>
+                <wb-expression type="date" ns="date" fn="create">
+                    <wb-value type="number">yyyy</wb-value>
+                    <wb-value type="number">mm</wb-value>
+                    <wb-value type="number">dd</wb-value>
+                </wb-expression>
+            </wb-accordion>
             <wb-accordion class="stage">
                 <header>
                     <img class="cat-icon" src="images/icon/stage.svg">

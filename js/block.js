@@ -689,7 +689,6 @@ function addItem(evt){
 ******************/
 
 function removeItem(evt){
-    //debugger;
     var self = evt.target;
     var row = dom.closest(self, 'wb-row');
     // we want to remove the row, but not if it is the last one

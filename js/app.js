@@ -198,7 +198,8 @@ function handleExampleButton(evt){
             buttons: [
                 handleExample('Space Bear', 'waterbear_in_space'),
                 handleExample('Noise 3D', 'noise3d'),
-                handleExample('Dance', 'dance')
+                handleExample('Dance', 'dance'),
+                handleExample('Simple Bounce', 'bounce')
             ]
         }
     );

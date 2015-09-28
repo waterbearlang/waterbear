@@ -25,6 +25,7 @@
         if (!_ctx){
             _ctx = canvas().getContext('2d');
             // Save the default state.
+            _ctx.strokeStyle = 'transparent';
             _ctx.save();
         }
         return _ctx;
@@ -40,6 +41,7 @@
         ctx.clearRect(0, 0, el.width, el.height);
         // Restore the default state and push it back on the stack again.
         ctx.restore();
+        ctx.strokeStyle = 'transparent';
         ctx.save();
     }
 
@@ -854,6 +856,12 @@
             },
             setVelocity: function(spt, vec){
                 spt.setVelocity(vec);
+            },
+            getVelocity: function spriteGetVelocityExpr(spt){
+                return spt.velocity;
+            },
+            getSpeed: function spriteGetSpeedExpr(spt){
+                return spt.velocity.magnitude();
             },
             getXvel: function(spt){
                 return spt.getXvel();

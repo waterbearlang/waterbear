@@ -161,6 +161,12 @@
                     <wb-value type="sprite"></wb-value>
                     <wb-value type="vector">set velocity to</wb-value>
                 </wb-step>
+				<wb-expression type="vector" ns="sprite" fn="getVelocity">
+					<wb-value type="sprite">get velocity</wb-value>
+				</wb-expression>
+				<wb-expression type="number" ns="sprite" fn="getSpeed">
+					<wb-value type="sprite">get speed</wb-value>
+				</wb-expression>
                 <wb-expression type="number" ns="sprite" fn="getXvel">
                     <wb-value type="sprite">get X velocity</wb-value>
                 </wb-expression>
@@ -677,6 +683,11 @@
                 <wb-expression type="number" ns="vector" fn="y">
                     <wb-value type="vector">y</wb-value>
                 </wb-expression>
+				<wb-expression type="vector" ns="math" fn="multiply">
+					<!-- FIXME: Temporary workaround until type propagation works for math * -->
+					<wb-value type="vector"></wb-value>
+                    <wb-value type="number" value="1">×</wb-value>
+				</wb-expression>
                 <wb-expression type="vector" ns="vector" fn="normalize">
                     <wb-value type="vector">normalize</wb-value>
                 </wb-expression>

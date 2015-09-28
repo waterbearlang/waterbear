@@ -21,6 +21,7 @@
     }
 
     function getContext(){
+        // returns CanvasContext
         if (!_ctx){
             _ctx = canvas().getContext('2d');
             // Save the default state.
@@ -83,7 +84,6 @@
 
     function clearPerFrameHandlers() {
         perFrameHandlers = [];
-        lastTime = new Date().valueOf();
         if (animationFrameHandler){
             cancelAnimationFrame(animationFrameHandler);
             animationFrameHandler = null;
@@ -95,8 +95,9 @@
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
     function startEventLoop(){
-        // console.log('start event loop');
         clearPerFrameHandlers();
+        lastTime = new Date().valueOf();
+        runtime.control._startTime = lastTime;
         runtime.control._frame = 0;
         runtime.control._sinceLastTick = 0;
         animationFrameHandler = requestAnimationFrame(frameHandler);
@@ -107,12 +108,12 @@
         // console.log('stop event loop');
     }
 
-    function frameHandler(){
+    function frameHandler(timestamp){
         // where to put these? Event already has some global state.
-        var currTime = new Date().valueOf();
-        runtime.control._elapsed = currTime - lastTime;
+        runtime.control._elapsed = timestamp - runtime.control._startTime;
+        runtime.control._sinceLastTick = timestamp - lastTime;
         runtime.control._frame++;
-        lastTime = currTime;
+        lastTime = timestamp;
         perFrameHandlers.forEach(function(handler){
             handler();
         });
@@ -165,98 +166,92 @@
         },
 
         array: {
-            create: function(){
+            create: function arrayCreateExpr(){
                 return [].slice.call(arguments);
             },
-            copy: function(a){
+            copy: function arrayCopyExpr(a){
                 return a.slice();
             },
-            itemAt: function(a,i){
+            itemAt: function arrayItemFromExpr(a,i){
                 return a[i];
             },
-            join: function(a,s){
+            join: function arrayJoinExpr(a,s){
                 return a.join(s);
             },
-            append: function(a,item){
+            append: function arrayAppendStep(a,item){
                 a.push(item);
             },
-            prepend: function(a,item){
+            prepend: function arrayPrependStep(a,item){
                 a.unshift(item);
             },
-            length: function(a){
+            length: function arrayLengthExpr(a){
                 return a.length;
             },
-            removeItem: function(a,i){
+            removeItem: function arrayRemoveItemStep(a,i){
                 a.splice(i,1);
             },
-            pop: function(a){
+            pop: function arrayPopExpr(a){
                 return a.pop();
             },
-            shift: function(a){
+            shift: function arrayShiftExpr(a){
                 return a.shift();
             },
-            reverse: function(a){
+            reverse: function arrayReverseExpr(a){
                 return a.reverse();
             }
         },
 
         'boolean': {
-            and: function(a,b){
+            and: function booleanAndExpr(a,b){
                 return a && b;
             },
-            or: function(a,b){
+            or: function booleanOrExpr(a,b){
                 return a || b;
             },
-            xor: function(a,b){
+            xor: function booleanXorExpr(a,b){
                 return !a !== !b;
             },
-            not: function(a){
+            not: function booleanNotExpr(a){
                 return !a;
             }
         },
         color: {
-            namedColor: function(name){
+            namedColor: function colorNamedExpr(name){
                 // FIXME: We may need to return hex or other color value
                 return name;
             },
-            rgb: function(r,g,b){
+            rgb: function colorRGBExpr(r,g,b){
                 return 'rgb(' + r + ',' + g + ',' + b + ')';
             },
-            rgba: function(r,g,b,a){
+            rgba: function colorRGBAExpr(r,g,b,a){
                 return 'rgba(' + r + ',' + g + ',' + b + ',' + a/100 + ')';
             },
-            grey: function(g){
+            grey: function colorGreyExpr(g){
                 return 'rgb(' + g + ',' + g + ',' + g + ')';
             },
-            hsl: function(h,s,l){
+            hsl: function colorHSLExpr(h,s,l){
                 return 'hsl(' + h + ',' + s + '%,' + l + '%)';
             },
-            hsla: function(h,s,l,a){
+            hsla: function colorHSLAExpr(h,s,l,a){
                 return 'hsl(' + h + ',' + s + '%,' + l + '%,' + a/100 + ')';
             },
-            random: function(){
+            random: function colorRandomExpr(){
                 return "#"+(~~(Math.random()*(1<<30))).toString(16).toUpperCase().slice(0,6);
             },
-            fill: function(color){
+            fill: function colorFillStep(color){
                 getContext().fillStyle = color;
             },
-            stroke: function(color){
+            stroke: function colorStrokeStep(color){
                 getContext().strokeStyle = color;
             },
-            shadow: function(color, blur){
+            shadow: function colorShadowStep(color, blur){
                 getContext().shadowColor = color;
                 getContext().shadowBlur = blur;
             }
         },
 
         control: {
-            whenProgramRuns: function whenProgramRuns(args, containers){
-                var self = this;
-                containers[0].forEach(function(block){
-                    block.run(self);
-                });
-            },
-            eachFrame: function eachFrame(args, containers){
+            eachFrame: function controlEachFrameCtx(args, containers){
                 var self = this;
                 perFrameHandlers.push(function runFrame(){
                     containers[0].forEach(function runBoundBlock(block){
@@ -264,22 +259,22 @@
                     });
                 });
             },
-            frame: function frame(){
+            frame: function controlFrameExpr(){
                 return runtime.control._frame;
             },
-            elapsed: function elapsed(){
+            elapsed: function controlElapsedExpr(){
                 return runtime.control._elapsed;
             },
-            setVariable: function setVariable(nameValuePair){
+            setVariable: function controlSetVariableStep(nameValuePair){
                 //FIXME: Make sure this is named properly
                 var name = nameValuePair[0];
                 var value = nameValuePair[1];
                 this[name] = value;
             },
-            getVariable: function getVariable(name){
+            getVariable: function controlGetVariableExpr(name){
                 return this[name];
             },
-            updateVariable: function updateVariable(values){
+            updateVariable: function controlUpdateVariableStep(values){
                 // this is one of the rare times we need access to the element
                 var scope = this; // get ready to walk up the scope tree
                 var oldValue = values[0];
@@ -297,10 +292,11 @@
                     alert('something went horribly wrong, no variable to set');
                 }
             },
-            incrementVariable: function incrementVariable(variable, value){
+            // FIXME: This doesn't seem to have a block
+            incrementVariable: function controlIncrementVariableExpr(variable, value){
                 this[name] += value;
             },
-            loopOver: function loopOver(args, containers) {
+            loopOver: function controlLoopOverCtx(args, containers) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
                 var list = args[0];
@@ -356,11 +352,11 @@
                     block.run(self);
                 }
             },
-            broadcast: function(eventName, data){
+            broadcast: function controlBroadcastStep(eventName, data){
                 // Handle with and without data
                 Event.trigger(document.body, eventName, data);
             },
-            receive: function(args, containers){
+            receive: function controlReceiveCtx(args, containers){
                 // Handle with and without data
                 // Has a local for the data
                 var self = this;
@@ -373,7 +369,7 @@
                     });
                 });
             },
-            'if': function(args, containers){
+            'if': function controlIfCtx(args, containers){
                 if (args[0]){
                     var self = this;
                     containers[0].forEach(function(block){
@@ -381,7 +377,7 @@
                     });
                 }
             },
-            ifElse: function(args, containers){
+            ifElse: function controlIfElseCtx(args, containers){
                 var self = this;
                 if (args[0]){
                     containers[0].forEach(function(block){
@@ -393,21 +389,22 @@
                     });
                 }
             },
-            ternary: function(cond, iftrue, otherwise){
+            ternary: function controlTernaryCtx(cond, iftrue, otherwise){
                 return cond ? iftrue : otherwise;
             },
-            ask: function(args){
+            ask: function controlAskStep(args){
+                // Shouldn't this be a context? Or have an on-message handler?
                 var message = args[0];
                 var name = args[1];
                 var answer = prompt(message);
                 runtime.control.setVariable(name, answer);
             },
-            comment: function(){
+            comment: function controlCommentStep(){
             },
-            log: function(item){
+            log: function controlLogStep(item){
                 console.log(item);
             },
-            alert: function(x){
+            alert: function controlAlertStep(x){
                 alert(x);
             },
         },
@@ -1094,7 +1091,6 @@
             },
             randomUnitVector: function randomUnitVector(){
                 var vec = util.Vector.fromPolar(Math.random() * 360, 1);
-                console.log('vector magnitude: %s', vec.magnitude());
                 return vec;
             }
         }

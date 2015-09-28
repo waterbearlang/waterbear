@@ -692,7 +692,8 @@ function removeItem(evt){
     var self = evt.target;
     var row = dom.closest(self, 'wb-row');
     // we want to remove the row, but not if it is the last one
-    if (row.previousElementSibling || row.nextElementSibling){
+    if (row.previousElementSibling || (row.nextElementSibling &&
+            row.nextElementSibling.localName === 'wb-row')){
         row.parentElement.removeChild(row);
     }
 }

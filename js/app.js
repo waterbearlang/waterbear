@@ -178,36 +178,31 @@ function handleFileButton(evt){
 
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
+function handleExample(text, filename){
+    return {
+        text: text,
+        handler: function(modal){
+            _gaq.push(['_trackEvent', 'Example', text.split(/\s+/).join('')]);
+            stopAndClearScripts();
+            File.loadScriptsFromExample(filename);
+            modal.hide();
+        }
+    }
+}
+
 function handleExampleButton(evt){
     _gaq.push(['_trackEvent', 'Example', 'examples']);
     var fileModel = nanoModal("Load an example program.",
-        {overlayClose: true, // Can't close the modal by clicking on the overlay.
-        buttons: [{
-            text: "Space Bear",
-            handler: function(modal) {
-                _gaq.push(['_trackEvent', 'Example', 'WaterbearInSpace']);
-                stopAndClearScripts();
-                File.loadScriptsFromExample('waterbear_in_space');
-                modal.hide();
-            }
-        },{
-            text: "Noise 3D",
-            handler: function(modal){
-                _gaq.push(['_trackEvent', 'Example', 'Noise3D']);
-                stopAndClearScripts();
-                File.loadScriptsFromExample('noise3d');
-                modal.hide();
-            }
-        },{
-            text: "Dance",
-            handler: function(modal){
-                _gaq.push(['_trackEvent', 'Example', 'Dance']);
-                stopAndClearScripts();
-                File.loadScriptsFromExample('dance');
-                modal.hide();
-            }
-        }]
-    });
+        {
+            overlayClose: true, // Can't close the modal by clicking on the overlay.
+            buttons: [
+                handleExample('Space Bear', 'waterbear_in_space'),
+                handleExample('Noise 3D', 'noise3d'),
+                handleExample('Dance', 'dance'),
+                handleExample('Simple Bounce', 'bounce')
+            ]
+        }
+    );
     fileModel.show();
 }
 

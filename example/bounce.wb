@@ -1,0 +1,68 @@
+<wb-step ns="control" fn="setVariable" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="sprite" ns="control" fn="getVariable" id="kb0fcb3" class=""><header><wb-value type="text" allow="literal" value="sprite" class=""><input type="text" style="width: 42.2764px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="circle" class="" style=""><header><wb-value type="vector" class="">circle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" class="" style=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" min="0" class="" value="20" selected="true">radius<input type="number" min="0" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="moveTo" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k6279c7" class="" instanceof="kb0fcb3" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">move to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="randomPoint" class="" style=""><header><wb-value>random point</wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k95fb1a" class="" instanceof="kb0fcb3" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="multiply" class=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="randomUnitVector" class=""><header><wb-value>random unit vector</wb-value></header>
+                    
+                </wb-expression></wb-value><wb-value type="number" value="4" class="selected-value" selected="true">×<input type="number" style="width: 30px;"></wb-value></header>
+					<!-- FIXME: Temporary workaround until type propagation works for math * -->
+					
+                    
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#0000FF" class="">fill style<input type="color" style="width: 51.9126px;"></wb-value></header>
+                    
+                </wb-step><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-disclosure></wb-disclosure><wb-row>
+                        <wb-value>each frame</wb-value>
+                    </wb-row><wb-row>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="frame" id="k2456e7"><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="elapsed" id="k4b8817"><header><wb-value value="elapsed">elapsed</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="">clear to<input type="color" style="width: 57.7256px;" class=""></wb-value></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="move" class="" style=""><header><wb-value type="sprite" class="">move<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k41da19" class="" instanceof="kb0fcb3" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="draw" class="" style=""><header><wb-value type="sprite" class="">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kf91285" class="" instanceof="kb0fcb3" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="bounceAtEdge" class="" style=""><header><wb-value type="sprite" class="">bounce at edge<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kde0c84" class="" instanceof="kb0fcb3" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context>

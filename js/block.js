@@ -743,19 +743,6 @@ ValueProto.createdCallback = function valueCreated(){
     switch(types[0]){
         // FIXME: Support multiple types on a value (comma-separated)
         case 'number':
-            input = elem('input', {type: types[0]});
-            if(this.hasAttribute('min')) {
-                input.setAttribute('min',this.getAttribute('min'));
-            }
-            if(this.hasAttribute('max')) {
-                input.setAttribute('max',this.getAttribute('max'));
-            }
-            if(this.hasAttribute('onchange')) {
-                input.setAttribute('onchange',this.getAttribute('onchange'));
-            }
-            this.appendChild(input);
-            input.value = value;
-            break;
         case 'text':
         case 'color':
             input = elem('input', {type: types[0]});

@@ -10,13 +10,6 @@
 	<link rel="stylesheet" href="lib/notiFire.css">
     <script src="lib/prefixfree.min.js"></script>
     <script src="lib/ga.js"></script>
-    <!--dont know if script should be here. Only used in the case of the one block-->
-    <script>
-        function handleInputOnBalance(input) {
-            if(input.value < -1) input.value = -1;
-            if(input.value > 1) input.value = 1;
-            }
-    </script>
 </head>
 <body>
     <header>
@@ -257,7 +250,7 @@
                 </wb-step>
                 <wb-step ns="sound" fn="pan">
                     <wb-value type="sound">balance</wb-value>
-                    <wb-value type="number" min="-1" max="1" onchange='handleInputOnBalance(this)' value="0"></wb-value>
+                    <wb-value type="number" min="-1" max="1" value="0"></wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="echo_DelayFeedbackFilter">
                     <wb-value type="sound">set echo</wb-value>

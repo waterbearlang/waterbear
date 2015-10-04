@@ -245,7 +245,6 @@
                 if (!blockParent){
                     return;
                 }
-                console.log(mutation);
                 [].slice.apply(mutation.removedNodes)
                         .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
                         .forEach(function(node){

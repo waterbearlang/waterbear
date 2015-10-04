@@ -219,6 +219,11 @@ wb-accordion[open=true] > header{
     fill: #666;
 }
 
+.cat-icon.big-icon{
+    height:26px;
+    left:6px;
+}
+
 wb-accordion > header:after{
     content: '';
     position: absolute;

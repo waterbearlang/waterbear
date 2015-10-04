@@ -50,6 +50,11 @@
                                    window.webkitRequestAnimationFrame ||
                                    function(fn){ setTimeout(fn, 20); };
 
+   window.cancelAnimationFrame = window.cancelAnimationFrame ||
+                                 window.mozCancelAnimationFrame ||
+                                 window.msCancelAnimationFrame ||
+                                 window.webkitCancelAnimationFrame ||
+                                 function(timer){ clearTimeout(timer); };
 
     // add defaultValue if key does't exist in an object yet and return it
     // otherwise return current valud of key

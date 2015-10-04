@@ -408,13 +408,6 @@ ExpressionProto.detachedCallback = function expressionDetached(){
             sib.classList.remove('hide');
         });
     }
-    if (this.parent.localName !== 'wb-local'){
-        var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
-        // FIXME: Is this needed or was it a workaround for wb-removedChild not firing?
-        if (blockParent){
-            Event.trigger(blockParent, 'wb-removedChild', this);
-        }
-    }
     this.parent = null;
 };
 
@@ -1346,9 +1339,6 @@ Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context,
 Event.on(workspace, 'editor:wb-added', 'wb-expression', updateVariableType);
 Event.on(workspace, 'editor:wb-added', 'wb-context, wb-step', uniquifyVariableNames);
 Event.on(document.body, 'editor:wb-cloned', '[fn="getVariable"]', createLocalToInstanceAssociation);
-Event.on(workspace, 'editor:wb-removedChild', 'wb-contains, wb-context, wb-step, wb-expression', function(evt){
-    console.log('caught wb-removedChild: %o', evt);
-});
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
 

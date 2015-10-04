@@ -902,6 +902,9 @@
             },
             stopAtEdge: function(spt){
                 spt.stayWithinRect(canvasRect());
+            },
+            bounceAtEdgeOfSpirite: function(spt1, spt2){
+                spt1.bounceWithinRect(spt2);
             }
         },
         stage: {

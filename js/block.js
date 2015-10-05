@@ -77,7 +77,7 @@ BlockProto.createdCallback = function blockCreated(){
 BlockProto.attachedCallback = function blockAttached(){
     // Attached only fires the first time an element is added to the DOM
     // If you want a notification every time block is added to DOM (moved, etc.) use wb-added
-    // (also wb-removed, wb-addedChild, wb-removedChild)
+    // (also wb-addedChild, wb-removedChild [NOT wb-removed])
     // Attached will fire when re-loading a script too, so program defensively
     // Add locals
     // Make sure they have unique names in scope
@@ -407,12 +407,6 @@ ExpressionProto.detachedCallback = function expressionDetached(){
         siblings.forEach(function(sib){
             sib.classList.remove('hide');
         });
-    }
-    if (this.parent.localName !== 'wb-local'){
-        var blockParent = dom.closest(this.parent, 'wb-expression, wb-step, wb-context');
-        if (blockParent){
-            Event.trigger(blockParent, 'wb-removed', this);
-        }
     }
     this.parent = null;
 };
@@ -1339,7 +1333,7 @@ function selectByBlock(block){
 
 // Event handling
 
-// Make sure wb-added, wb-removed, wb-addedChild, wb-removedChild events are triggered
+// Make sure wb-added, wb-addedChild, wb-removedChild events are triggered
 // signature is container, prefix, parentList, elementList
 Event.registerElementsForAddRemoveEvents(workspace, 'wb-', 'wb-step, wb-context, wb-expression, wb-contains', 'wb-step, wb-context, wb-expression');
 

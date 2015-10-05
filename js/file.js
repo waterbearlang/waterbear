@@ -240,7 +240,7 @@
     if (page === 'playground'){
         Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
         Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
-        Event.on(document.body, 'ui:wb-removed', null, bareUrl);
+        Event.on(document.body, 'ui:wb-removedChild', null, bareUrl);
         Event.on(document.body, 'ui:wb-changed', null, bareUrl);
     }
 

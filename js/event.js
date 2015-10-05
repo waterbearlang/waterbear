@@ -234,8 +234,10 @@
             mutations.forEach(function(mutation){
                 // send childAdded or childRemove event to parent element
                 var parent = mutation.target;
-                // WARNING: Node.contains may not be supported on mobile
-                // Polyfill if needed
+                // if (!Node.contains){
+                //     console.error('Node.contains not found');
+                //     console.error('Find a polyfill');
+                // }
                 if (!root.contains(parent)){
                     return;
                 }
@@ -247,7 +249,9 @@
                         .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
                         .forEach(function(node){
                     Event.trigger(blockParent, eventPrefix + 'removedChild', node);
-                    Event.trigger(node, eventPrefix + 'removed', blockParent);
+                    // This won't bubble through the tree because the node is
+                    // not in the tree anymore
+                    //Event.trigger(node, eventPrefix + 'removed', blockParent);
                 });
                 [].slice.apply(mutation.addedNodes)
                         .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only block elements

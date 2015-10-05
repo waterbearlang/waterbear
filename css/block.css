@@ -288,7 +288,7 @@ wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg);
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
 wb-expression[type=geolocation]:before{ background-image: url(../images/icon/geolocation.svg); }
 wb-expression[type=size]:before{ background-image: url(../images/icon/size.svg);}
-wb-expression[type=date]:before{ background-image: url(../images/icon/calendar.svg); }
+wb-expression[type=date]:before{ background-image: url(../images/icon/calendar.svg); background-repeat: no-repeat; top: 2px; }
 
 /* Used for input resizing */
 .sekrit-svg{

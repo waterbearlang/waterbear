@@ -539,12 +539,8 @@
             subtract: util.subtract,
             multiply: util.multiply,
             divide: util.divide,
-            equal: function(a,b){
-                return a === b;
-            },
-            notEqual: function(a,b){
-                return a !== b;
-            },
+            equal: util.equal,
+            notEqual: util.notEqual,
             lt: function(a,b){
                 return a < b;
             },
@@ -1100,6 +1096,28 @@
             randomUnitVector: function randomUnitVector(){
                 var vec = util.Vector.fromPolar(Math.random() * 360, 1);
                 return vec;
+            }
+        },
+        date: {
+            create: function (year, month, day) {
+                return new Date(year, month-1, day);
+            },
+            now: function () {
+                var today = new Date()
+                today.setHours(0, 0, 0, 0)
+                return today;
+            },
+            addDays: function (date, days) {
+                date.setDate(date.getDate() + days);
+                return date;
+            },
+            addMonths: function (date, months) {
+                date.setMonth(date.getMonth() + months);
+                return date;
+            },
+            addYears: function (date, years) {
+                date.setFullYear(date.getFullYear() + years);
+                return date;
             }
         }
     };

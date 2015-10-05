@@ -396,6 +396,32 @@
                     <wb-value type="boolean" value="true">not</wb-value>
                 </wb-expression>
             </wb-accordion>
+
+            <wb-accordion class="date">
+                <header>
+                    <img class="cat-icon big-icon" src="images/icon/calendar.svg">
+                    Date
+                </header>
+                <p>Dates are used to represent a date and to do basic calculations.</p>
+                <wb-expression type="date" ns="date" fn="now">today</wb-expression>
+                <wb-expression type="date" ns="date" fn="create">
+                    <wb-value type="number">yyyy</wb-value>
+                    <wb-value type="number">mm</wb-value>
+                    <wb-value type="number">dd</wb-value>
+                </wb-expression>
+                <wb-expression type="date" ns="date" fn="addDays">
+                    <wb-value type="date">date</wb-value>
+                    <wb-value type="number">+/- days</wb-value>
+                </wb-expression>
+                <wb-expression type="date" ns="date" fn="addMonths">
+                    <wb-value type="date">date</wb-value>
+                    <wb-value type="number">+/- months</wb-value>
+                </wb-expression>
+                <wb-expression type="date" ns="date" fn="addYears">
+                    <wb-value type="date">date</wb-value>
+                    <wb-value type="number">+/- years</wb-value>
+                </wb-expression>
+            </wb-accordion>
             <wb-accordion class="stage">
                 <header>
                     <img class="cat-icon" src="images/icon/stage.svg">
@@ -522,8 +548,8 @@
                     <wb-value type="number,vector,array" value="0">+</wb-value>
                 </wb-expression>
                 <wb-expression ns="math" type="number" fn="subtract">
-                    <wb-value type="number,vector,array" value="0"></wb-value>
-                    <wb-value type="number,vector,array" value="0">−</wb-value>
+                    <wb-value type="number,vector,array,date" value="0"></wb-value>
+                    <wb-value type="number,vector,array,date" value="0">−</wb-value>
                 </wb-expression>
                 <wb-expression ns="math" type="number" fn="multiply">
                     <wb-value type="number,vector,array" value="0"></wb-value>
@@ -542,20 +568,20 @@
                     <wb-value type="any" value="0">≠</wb-value>
                 </wb-expression>
                 <wb-expression type="boolean" ns="math" fn="lt">
-                    <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">&lt;</wb-value>
+                    <wb-value type="number,date" value="0"></wb-value>
+                    <wb-value type="number,date" value="0">&lt;</wb-value>
                 </wb-expression>
                 <wb-expression type="boolean" ns="math" fn="lte">
-                    <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">≤</wb-value>
+                    <wb-value type="number,date" value="0"></wb-value>
+                    <wb-value type="number,date" value="0">≤</wb-value>
                 </wb-expression>
                 <wb-expression type="boolean" ns="math" fn="gt">
-                    <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">&gt;</wb-value>
+                    <wb-value type="number,date" value="0"></wb-value>
+                    <wb-value type="number,date" value="0">&gt;</wb-value>
                 </wb-expression>
                 <wb-expression type="boolean" ns="math" fn="gte">
-                    <wb-value type="number" value="0"></wb-value>
-                    <wb-value type="number" value="0">≥</wb-value>
+                    <wb-value type="number,date" value="0"></wb-value>
+                    <wb-value type="number,date" value="0">≥</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="math" fn="mod">
                     <wb-value type="number" value="0"></wb-value>
@@ -623,7 +649,7 @@
             </wb-accordion>
             <wb-accordion class="random">
                 <header>
-                    <img class="cat-icon" src="images/icon/random.svg">
+                    <img class="cat-icon big-icon" src="images/icon/random.svg">
                     Random
                 </header>
                 <p>There are many types of randomness in Waterbear.</p>

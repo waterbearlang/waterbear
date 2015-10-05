@@ -316,6 +316,7 @@
         .when(['vector', 'number'], function(a,b){ return new Vector(a.x - b, a.y - b); })
         .when(['vector', 'vector'], function(a,b){ return new Vector(a.x - b.x, a.y - b.y); })
         .when(['number', 'number'], function(a,b){ return a - b; })
+        .when(['date', 'date'], function(a,b){ return (a-b) / (1000 * 3600 * 24); })
         .tryInverse()
         .fn();
 
@@ -333,6 +334,16 @@
         .when(['array', 'number'], function(a,b){ return a.map(function(x){ return divide(x,b); }); })
         .when(['vector', 'number'], function(a,b){ return new Vector(a.x / b, a.y / b); })
         .when(['number', 'number'], function(a,b){ return a / b; })
+        .fn();
+
+    var equal = new Method()
+        .when(['date', 'date'], function(a,b){ console.log("date === date"); return a.valueOf() === b.valueOf(); })
+        .default(function(a,b){ console.log("Default"); return a === b; })
+        .fn();
+
+    var notEqual = new Method()
+        .when(['date', 'date'], function(a,b){ console.log("date !== date"); return a.valueOf() !== b.valueOf(); })
+        .default(function(a,b){ console.log("Default !=="); return a !== b; })
         .fn();
 
     // Random methods
@@ -1021,6 +1032,8 @@
         subtract: subtract,
         multiply: multiply,
         divide: divide,
+        equal: equal,
+        notEqual: notEqual,
         deg2rad: deg2rad,
         rad2deg: rad2deg,
         angle: angle,

@@ -28,7 +28,8 @@ var namespaces = [
     "shape",
     "geolocation",
     "size",
-    "text"
+    "text",
+    "date"
 ];
 
 var typeToNamespace = {
@@ -50,7 +51,8 @@ var typeToNamespace = {
     "string": "string",
     "geolocation": "geolocation",
     "size": "size",
-    "motion": "motion"
+    "motion": "motion",
+    "date": "date"
 }
 
 /* For 23 namespaces we want to scatter them across the hsl wheel

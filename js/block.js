@@ -1335,6 +1335,12 @@ function selectByBlock(block){
     block.classList.add('selected-block');
 }
 
+function handleInputOnBalance(evt) {
+    var input = dom.closest(evt.target, 'input');
+    if(input.value < -1) input.value = -1;
+    if(input.value > 1) input.value = 1;
+}
+    
 // Event handling
 
 // Make sure wb-added, wb-addedChild, wb-removedChild events are triggered
@@ -1346,7 +1352,7 @@ Event.on(workspace, 'editor:wb-added', 'wb-context, wb-step', uniquifyVariableNa
 Event.on(document.body, 'editor:wb-cloned', '[fn="getVariable"]', createLocalToInstanceAssociation);
 
 Event.on(workspace, 'editor:click', 'wb-disclosure', toggleClosed);
-
+Event.on(workspace,'editor:input', 'input[type="number"]', handleInputOnBalance);
 // Add/remove rows from expressions
 Event.on(workspace, 'editor:click', '.add-item', addItem);
 Event.on(workspace, 'editor:click', '.remove-item', removeItem);

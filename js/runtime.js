@@ -73,7 +73,6 @@
     function clearRuntime() {
         /* FIXME: Event.clearRuntime() should be moved to runtime.js.
          * See: https://github.com/waterbearlang/waterbear/issues/968 */
-        // console.log('clearing runtime');
         Event.clearRuntime();
         clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
@@ -107,11 +106,13 @@
 
     function stopEventLoop() {
         /* TODO: Dunno lol there be more in here? */
-        // console.log('stop event loop');
     }
 
     function frameHandler(timestamp){
         // where to put these? Event already has some global state.
+        if (lastTime === timestamp){
+            throw new Exception('There can be only one!');
+        }
         runtime.control._elapsed = timestamp - runtime.control._startTime;
         runtime.control._sinceLastTick = timestamp - lastTime;
         runtime.control._frame++;
@@ -120,7 +121,7 @@
             handler();
         });
         if (perFrameHandlers.length){
-            requestAnimationFrame(frameHandler);
+            animationFrameHandler = requestAnimationFrame(frameHandler);
         }
     }
 
@@ -402,6 +403,7 @@
                 runtime.control.setVariable(name, answer);
             },
             comment: function controlCommentStep(){
+                // do nothing, it's a comment
             },
             log: function controlLogStep(item){
                 console.log(item);
@@ -799,7 +801,6 @@
                 return assets.sounds[url]; // already cached by sounds library
             },
             play: function(sound){
-                // console.log('sound.play()');
                 sound.play();
             },
             setLoop: function(sound, flag){

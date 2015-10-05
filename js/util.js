@@ -269,13 +269,10 @@
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
         }else if (type(pathArrayOrFunction) === 'array'){
-            var len = pathArrayOrFunction.length;
-            var i = 0;
-            while (i<len){
+            for(int i =0; i < pathArrayOrFunction.length; i++){
                 if(!(pathArrayOrFunction[i] instanceof Path)){
                     throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
                 }
-                i = i+1;
             }
             this.pathArray = pathArrayOrFunction;
         }else{
@@ -898,6 +895,7 @@
     function Sprite(drawable){
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
+        debugger;
         this.drawable = drawable || defaultDrawable;
         this.position = new Vector(0,0);
         this.facing = new Vector(1,0);
@@ -957,6 +955,7 @@
     }
 
     Sprite.prototype.bounceWithinRect = function(r){
+        debugger;
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }else if (this.position.x < r.x && this.velocity.x < 0){

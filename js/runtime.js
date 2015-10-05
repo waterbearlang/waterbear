@@ -1103,19 +1103,25 @@
                 return new Date(year, month-1, day);
             },
             now: function () {
-                var today = new Date()
+                var today = new Date();
+                // Seems like "now" should have time as well, but
+                // maybe "today" shouldn't?
                 today.setHours(0, 0, 0, 0)
                 return today;
             },
-            addDays: function (date, days) {
-                date.setDate(date.getDate() + days);
+            addDays: function (prevDate, days) {
+                // we don't want to mutate an argument in place
+                var date = new Date(prevDate.valueOf()); // clone argument
+                date.setDate(prevDate.getDate() + days);
                 return date;
             },
-            addMonths: function (date, months) {
+            addMonths: function (prevDate, months) {
+                var date = new Date(prevDate.valueOf());
                 date.setMonth(date.getMonth() + months);
                 return date;
             },
-            addYears: function (date, years) {
+            addYears: function (prevDate, years) {
+                var date = new Date(prevDate.valueOf());
                 date.setFullYear(date.getFullYear() + years);
                 return date;
             }

@@ -1166,7 +1166,11 @@ function endDragBlock(evt){
             }
             addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
         }
-        deleteOriginalBlock(originalBlock, originalParent, nextElem);
+        if (dragStart === 'script'){                        //only want to undo if it was deleted from the script
+            originalBlock.classList.remove('hide');  //un-hide block
+            originalBlock.removeInstances(); // FIXME: Make this undo-able!
+            originalBlock.parentElement.removeChild(originalBlock);
+        }
     }else if(dom.matches(dragTarget, 'wb-context, wb-step')){
         var addBlockEvent = {type:'add-block', addedBlock:null, addedTo:dropTarget, nextBlock:null, originalParent:originalParent, originalNextEl:nextElem, originalId: originalBlock.id};
         addToContains(dragTarget, evt, addBlockEvent, originalBlock);

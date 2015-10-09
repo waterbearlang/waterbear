@@ -753,6 +753,7 @@
                 });
             },
             rectangle: function(pt, width, height, orientation){
+                //debugger;
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     if(orientation == "center"){
@@ -769,6 +770,10 @@
                         ctx.lineTo(pt.x, pt.y + height);
                         ctx.lineTo(pt.x, pt.y);
                     }
+                    this.x = pt.x;
+                    this.y = pt.y;
+                    this.width = width;
+                    this.height = height;
                 });
             },
             ellipse: function(pt, rad1, rad2, rot){
@@ -849,13 +854,13 @@
         },
 
         sprite: {
-            create: function(imgShapeOrSprite){
+            create: function create(imgShapeOrSprite){
                 return new util.Sprite(imgShapeOrSprite);
             },
-            accelerate: function(spt, speed){
+            accelerate: function accelerate(spt, speed){
                 spt.accelerate(speed);
             },
-            setVelocity: function(spt, vec){
+            setVelocity: function setVelocity(spt, vec){
                 spt.setVelocity(vec);
             },
             getVelocity: function spriteGetVelocityExpr(spt){
@@ -864,47 +869,50 @@
             getSpeed: function spriteGetSpeedExpr(spt){
                 return spt.velocity.magnitude();
             },
-            getXvel: function(spt){
+            getXvel: function getXvel(spt){
                 return spt.getXvel();
             },
-            getYvel: function(spt){
+            getYvel: function getYvel(spt){
                 return spt.getYvel();
             },
-            getXpos: function(spt){
+            getXpos: function getXpos(spt){
                 return spt.getXpos();
             },
-            getYpos: function(spt){
+            getYpos: function getYpos(spt){
                 return spt.getYpos();
             },
-            rotate: function(spt, angle){
+            rotate: function rotate(spt, angle){
                 spt.rotate(angle);
             },
-            rotateTo: function(spt, angle){
+            rotateTo: function rotateTo(spt, angle){
                 spt.rotateTo(angle);
             },
-            move: function(spt){
+            move: function move(spt){
                 spt.move();
             },
-            moveTo: function(spt, pt){
+            moveTo: function moveTo(spt, pt){
                 spt.moveTo(pt);
             },
-            draw: function(spt){
+            draw: function draw(spt){
                 spt.draw(getContext());
             },
-            applyForce: function(spt, vec){
+            applyForce: function applyForce(spt, vec){
                 spt.applyForce(vec);
             },
-            bounceAtEdge: function(spt){
+            bounceAtEdge: function bounceAtEdge(spt){
                 spt.bounceWithinRect(canvasRect());
             },
-            wrapAtEdge: function(spt){
+            wrapAtEdge: function wrapAtEdge(spt){
                 spt.wrapAroundRect(canvasRect());
             },
-            stopAtEdge: function(spt){
+            stopAtEdge: function stopAtEdge(spt){
                 spt.stayWithinRect(canvasRect());
             },
-            bounceAtEdgeOfSpirite: function(spt1, spt2){
+            bounceAtEdgeOfSpirite: function bounceAtEdgeOfSpirite(spt1, spt2){
                 spt1.bounceWithinRect(spt2);
+            },
+            checkForCollision: function checkForCollision(spt1, spt2){
+                return spt1.checkForCollision(spt2);
             }
         },
         stage: {

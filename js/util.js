@@ -266,10 +266,11 @@
 
     //Shape
     function Shape(pathArrayOrFunction){
+        //debugger;
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
         }else if (type(pathArrayOrFunction) === 'array'){
-            for(int i =0; i < pathArrayOrFunction.length; i++){
+            for(var i =0; i < pathArrayOrFunction.length; i++){
                 if(!(pathArrayOrFunction[i] instanceof Path)){
                     throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
                 }
@@ -280,6 +281,7 @@
         }
     }
     Shape.prototype.draw = function(ctx){
+        //debugger;
         if (this.pathArray){
             ctx.beginPath();
             var i;
@@ -895,7 +897,7 @@
     function Sprite(drawable){
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
-        debugger;
+        //debugger;
         this.drawable = drawable || defaultDrawable;
         this.position = new Vector(0,0);
         this.facing = new Vector(1,0);
@@ -954,7 +956,20 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
-    Sprite.prototype.bounceWithinRect = function(r){
+    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){ // alpha
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
+        }else if (this.position.x < r.x && this.velocity.x < 0){
+            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
+        }
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
+        }else if (this.position.y < r.y && this.velocity.y < 0){
+            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
+        }
+    }
+
+    Sprite.prototype.checkForCollision = function checkForCollision(r){ // alpha
         debugger;
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);

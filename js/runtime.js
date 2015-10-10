@@ -562,8 +562,12 @@
             abs: Math.abs,
             floor: Math.floor,
             ceil: Math.ceil,
-            max: Math.max,
-            min: Math.min,
+            max: function(a){
+            	return Math.max.apply(Math,a);
+            },
+            min: function(a){
+            	return Math.min.apply(Math,a);
+            },
             cos: function(a){
                 return Math.cos(util.deg2rad(a));
             },

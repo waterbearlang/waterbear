@@ -1337,10 +1337,11 @@ function selectByBlock(block){
 
 function handleInputOnBalance(evt) {
     var input = dom.closest(evt.target, 'input');
-    if(input.value < -1) input.value = -1;
-    if(input.value > 1) input.value = 1;
-}
-    
+    if(input.min || input.max ) {
+        if(input.value < input.min) input.value = input.min;  
+        if(input.value > input.max) input.value = input.max;
+    }
+}   
 // Event handling
 
 // Make sure wb-added, wb-addedChild, wb-removedChild events are triggered

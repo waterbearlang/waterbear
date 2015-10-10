@@ -1129,6 +1129,27 @@
                 var date = new Date(prevDate.valueOf());
                 date.setFullYear(date.getFullYear() + years);
                 return date;
+            },
+            dayOfWeek: function(date) {
+                var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                return days[date.getDay()];
+            },
+            getDay: function(date) {
+                return date.getDate();
+            },
+            getMonth: function(date) {
+                return date.getMonth()+1;
+            },
+            getMonthName: function(date) {
+                var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                              'August', 'September', 'October', 'November', 'December'];
+                return months[date.getMonth()];
+            },
+            getYear: function(date) {
+                return date.getFullYear();
+            },
+            formattedDate: function(date) {
+                return date.toLocaleDateString();
             }
         }
     };

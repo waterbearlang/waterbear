@@ -233,7 +233,7 @@ wb-value[type*=rect] > input{background-image: url(../images/icon/rect.svg);}
 wb-value[type*=string] > input{background-image: url(../images/icon/string.svg);}
 wb-value[type*=geolocation] > input{ background-image: url(../images/icon/geolocation.svg);}
 wb-value[type*=size] > input{ background-image: url(../images/icon/size.svg);}
-wb-value[type*=date] > input{ background-image: url(../images/icon/calendar.svg);}
+wb-value[type*=date] > input{ background-image: url(../images/icon/calendar.svg); height:15px; }
 
 wb-value[type*=array][type*=string] > input{
     background-image: url(../images/icon/array.svg), url(../images/icon/string.svg);

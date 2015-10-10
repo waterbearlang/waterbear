@@ -50,6 +50,11 @@
                                    window.webkitRequestAnimationFrame ||
                                    function(fn){ setTimeout(fn, 20); };
 
+   window.cancelAnimationFrame = window.cancelAnimationFrame ||
+                                 window.mozCancelAnimationFrame ||
+                                 window.msCancelAnimationFrame ||
+                                 window.webkitCancelAnimationFrame ||
+                                 function(timer){ clearTimeout(timer); };
 
     // add defaultValue if key does't exist in an object yet and return it
     // otherwise return current valud of key
@@ -143,12 +148,21 @@
         this.x = x;
         this.y = y;
     }
+
     Vector.fromPolar = function(degrees, mag){
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
     Vector.fromPoint = function(pt){
         return new Vector(pt.x, pt.y);
+    }
+
+    Vector.prototype.getX = function(){
+        return this.x;
+    }
+
+    Vector.prototype.getY = function(){
+        return this.y;
     }
 
     Vector.prototype.magnitude = function(){
@@ -190,17 +204,6 @@
     Vector.prototype.toString = function strv(){
         return '<' + this.x + ',' + this.y + '>';
     }
-
-    // Point
-
-    function Point(x,y){
-        this.x = x;
-        this.y = y;
-    }
-
-    Point.prototype.toString = function(){
-        return '[' + this.x + ',' + this.y + ']';
-    };
 
     // Size
 
@@ -262,27 +265,35 @@
 
 
     //Shape
-    function Shape(pathArray){
-        var len = pathArray.length;
-        var i = 0;
-        while (i<len){
-            if(!(pathArray[i] instanceof Path)){
-                throw new Error('Only paths may be added to a Shape, ' + pathArray[i] + " is not.");
+    function Shape(pathArrayOrFunction){
+        if (type(pathArrayOrFunction) === 'function'){
+            this._draw = pathArrayOrFunction;
+        }else if (type(pathArrayOrFunction) === 'array'){
+            var len = pathArrayOrFunction.length;
+            var i = 0;
+            while (i<len){
+                if(!(pathArrayOrFunction[i] instanceof Path)){
+                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
+                }
+                i = i+1;
             }
-            i = i+1;
+            this.pathArray = pathArrayOrFunction;
+        }else{
+            throw new Error('Can only add a path array or a draw function to Shape');
         }
-
-        this.pathArray = pathArray;
-    }
-    Shape.prototype.getPathArray = function(){
-        return pathArray;
     }
     Shape.prototype.draw = function(ctx){
-        ctx.beginPath();
-        var i;
-        for(i=0; i<this.pathArray.length; i++){
-            this.pathArray[i].draw(ctx);
+        if (this.pathArray){
+            ctx.beginPath();
+            var i;
+            for(i=0; i<this.pathArray.length; i++){
+                this.pathArray[i].draw(ctx);
+            }
+        }else if (this._draw){
+            this._draw(ctx);
         }
+        ctx.fill();
+        ctx.stroke();
     }
 
 
@@ -305,6 +316,7 @@
         .when(['vector', 'number'], function(a,b){ return new Vector(a.x - b, a.y - b); })
         .when(['vector', 'vector'], function(a,b){ return new Vector(a.x - b.x, a.y - b.y); })
         .when(['number', 'number'], function(a,b){ return a - b; })
+        .when(['date', 'date'], function(a,b){ return (a-b) / (1000 * 3600 * 24); })
         .tryInverse()
         .fn();
 
@@ -322,6 +334,16 @@
         .when(['array', 'number'], function(a,b){ return a.map(function(x){ return divide(x,b); }); })
         .when(['vector', 'number'], function(a,b){ return new Vector(a.x / b, a.y / b); })
         .when(['number', 'number'], function(a,b){ return a / b; })
+        .fn();
+
+    var equal = new Method()
+        .when(['date', 'date'], function(a,b){ console.log("date === date"); return a.valueOf() === b.valueOf(); })
+        .default(function(a,b){ console.log("Default"); return a === b; })
+        .fn();
+
+    var notEqual = new Method()
+        .when(['date', 'date'], function(a,b){ console.log("date !== date"); return a.valueOf() !== b.valueOf(); })
+        .default(function(a,b){ console.log("Default !=="); return a !== b; })
         .fn();
 
     // Random methods
@@ -582,9 +604,9 @@
      *  and call a `setup` method when all the files have finished loading:
      *
      *      assets.load({
-     *          'wb-expression[isAsset=true]': function () { ... },
-     *          'wb-expression[script="geolocation"]': function () { ... },
-     *          'wb-expression[script="motion"]': function () { ... }
+     *          'wb-expression[isasset=true]': function () { ... },
+     *          'wb-expression[fn="geolocation"]': function () { ... },
+     *          'wb-expression[fn="motion"]': function () { ... }
      *      }).whenLoaded(function () { ... });
      *
      *  You can now access these loaded media assets in you application code
@@ -626,7 +648,7 @@
 
                 /* Default whenLoaded callback. */
                 whenLoaded = function () {
-                    console.warn(toLoad, 'assets loaded.');
+                    // console.log('default asset load');
                 };
 
                 /* Try every selector. */
@@ -649,13 +671,15 @@
                 function ready() {
                     /* No assets to load; just call whenLoaded. */
                     if (toLoad === 0) {
+                        Event.trigger(window, 'asset-load');
                         whenLoaded();
                         return;
                     }
 
                     console.assert(loaded < toLoad);
                     loaded++;
-                    if (loaded === toLoad && whenLoaded) {
+                    if (loaded === toLoad) {
+                        Event.trigger(window, 'asset-load');
                         whenLoaded();
                     }
                 }
@@ -711,7 +735,7 @@
             waitFor: function (eventName, setup) {
                 return function (ignoredElements, ready) {
                     setup();
-                    Event.once(window, eventName, null, ready);
+                    Event.once(window, 'runtime:' + eventName, null, ready);
                 };
             },
 
@@ -819,33 +843,49 @@
 
     WBImage.prototype.draw = function(ctx){
         ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
-    }
+    };
 
     WBImage.prototype.drawAtPoint = function(ctx, pt){
         ctx.translate(pt.x, pt.y);
         this.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
-    }
+    };
+
+    WBImage.prototype.drawInRect = function(ctx, r){
+        ctx.drawImage(this._image, r.x, r.y, r.width, r.height);
+    };
+
+    WBImage.prototype.getHeight = function(){
+        return this.height;
+    };
+
+    WBImage.prototype.getWidth = function(){
+        return this.width;
+    };
 
     WBImage.prototype.setWidth = function(w){
         this.width = w;
-        this.height = this.width * this.origProportion;
-    }
+        this.height = this.width / this.origProportion;
+    };
 
     WBImage.prototype.setHeight = function(h){
         this.height = h;
-        this.width = this.height / this.origProportion;
-    }
+        this.width = this.height * this.origProportion;
+    };
 
     WBImage.prototype.setSize = function(sz){
         this.width = sz.w;
         this.height = sz.h;
-    }
+    };
 
     WBImage.prototype.scale = function(scaleFactor){
         this.width = this.origWidth * scaleFactor;
         this.height = this.origHeight * scaleFactor;
-    }
+    };
+
+    WBImage.prototype.toString = function(){
+        return this.name + "; " + this.width + "px wide by " + this.height + "px high";
+    };
 
 
     /******************************
@@ -869,13 +909,32 @@
         // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
     }
 
+    Sprite.prototype.setVelocity = function(vec){
+        this.velocity = vec;
+    }
+
+    Sprite.prototype.getXvel = function(){
+        return this.velocity.getX();
+    }
+
+    Sprite.prototype.getYvel = function(){
+        return this.velocity.getY();
+    }
+
+    Sprite.prototype.getXpos = function(){
+        return this.position.getX();
+    }
+
+    Sprite.prototype.getYpos = function(){
+        return this.position.getY();
+    }
+
     Sprite.prototype.applyForce = function(vec){
         this.velocity = add(this.velocity, vec);
     }
 
     Sprite.prototype.rotate = function(r){
         this.facing = this.facing.rotate(r);
-        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
     }
 
     Sprite.prototype.rotateTo = function(r){
@@ -953,6 +1012,11 @@
         ctx.stroke();
     }
 
+    function randomId(){
+        // Based on Paul Irish's random hex color:http://www.paulirish.com/2009/random-hex-color-code-snippets/
+        // Theoretically could return non-unique values, not going to let that keep me up at night
+        return 'k'+Math.floor(Math.random()*16777215).toString(16); // 'k' because ids have to start with a letter
+    }
 
     // exports
     window.util = {
@@ -964,11 +1028,12 @@
         Method: Method,
         Vector: Vector,
         Rect: Rect,
-        Point: Point,
         add: add,
         subtract: subtract,
         multiply: multiply,
         divide: divide,
+        equal: equal,
+        notEqual: notEqual,
         deg2rad: deg2rad,
         rad2deg: rad2deg,
         angle: angle,
@@ -981,7 +1046,8 @@
         Sprite: Sprite,
         geolocation: geolocationModule,
         motion: motionModule,
-        WBImage: WBImage
+        WBImage: WBImage,
+        randomId: randomId
     };
 
 

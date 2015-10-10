@@ -21,10 +21,7 @@
 
     function saveCurrentScripts(){
         // super simplistic for now
-        var script = scriptsToString();
-        if (script){
-            localStorage['__simple_currentWaterbearScript'] = script;
-        }
+        localStorage['__simple_currentWaterbearScript'] = scriptsToString();
     }
 
     // Save script to gist;
@@ -96,8 +93,10 @@
     }
 
     function clearScripts(){
+        bareUrl();
         var script = document.querySelector('wb-workspace > wb-contains');
         script.innerHTML = "";
+        Undo.clearStacks();
     }
 
 
@@ -119,12 +118,13 @@
         reader.readAsDataURL(file);
     }
 
+    // test gist: 0b852cb35b84833e7b48
     function loadScriptsFromGistId(id){
         //we may get an event passed to this function so make sure we have a valid id or ask for one
-        var gistID = isNaN(parseInt(id)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
+        var gistID = isNaN(parseInt(id, 16)) ? prompt("What Gist would you like to load? Please enter the ID of the Gist: ")  : id;
         // console.log("Loading gist " + id);
         if( !gistID ) return;
-        getScriptFromGist(id);
+        getScriptFromGistId(gistID);
     }
 
     function getScriptFromGistId(id){
@@ -143,7 +143,13 @@
         history.replaceState(null, '', path);
     }
 
-    function bareUrl(gistID){
+    function exampleUrl(example){
+        var path = location.href.split('?')[0];
+        path += '?example=' + example;
+        history.replaceState(null, '', path);
+    }
+
+    function bareUrl(){
         var path = location.href.split('?')[0];
         history.replaceState(null, '', path);
     }
@@ -162,7 +168,11 @@
     function loadScriptsFromString(text){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
+        // upgrading custom elements happens synchronously in Chrome, but
+        // asynchronously in Firefox, at least with the register-element
+        // polyfill
         document.querySelector('wb-workspace > wb-contains').innerHTML = text;
+        Event.trigger(window, 'script-load', text);
     }
 
     function loadScriptsFromGist(gist){
@@ -182,8 +192,9 @@
     }
 
     function loadScriptsFromExample(name){
-        ajax.get('examples/' + name + '.json?b=' + Math.random(), function(exampleJson){
-            loadScriptsFromJson(exampleJson);
+        ajax.get('example/' + name + '.wb?b=' + Math.random(), function(exampleText){
+            loadScriptsFromString(exampleText);
+            exampleUrl(name);
         }, function(statusCode, xhr){
             console.error(statusCode + xhr);
         });
@@ -195,7 +206,7 @@
             getScriptFromGistId(params.gist);
         }else if (params.example){
             loadScriptsFromExample(params.example);
-        }else if (localStorage['__simple_currentWaterbearScript']){
+        }else if (page === 'playground' && localStorage['__simple_currentWaterbearScript']){
             loadScriptsFromString(localStorage['__simple_currentWaterbearScript']);
         }
     }
@@ -224,12 +235,14 @@
             loadScriptsFromFile(file);
         }
     }
-
-    Event.on(window, 'load', null, loadCurrentScripts);
-    Event.on(window, 'beforeunload', null, saveCurrentScripts);
-    Event.on(document.body, 'wb-added', null, bareUrl); // Remove gist or other argument on script change
-    Event.on(document.body, 'wb-removed', null, bareUrl);
-    Event.on(document.body, 'wb-changed', null, bareUrl);
+    var page = location.pathname.split('/').pop().split('.')[0];
+    Event.on(window, 'ui:load', null, loadCurrentScripts);
+    if (page === 'playground'){
+        Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
+        Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
+        Event.on(document.body, 'ui:wb-removedChild', null, bareUrl);
+        Event.on(document.body, 'ui:wb-changed', null, bareUrl);
+    }
 
     window.File = {
         scriptsToString: scriptsToString,
@@ -239,10 +252,11 @@
         createDownloadUrl: createDownloadUrl,
         clearScripts: clearScripts,
         loadScriptsFromGistId: loadScriptsFromGistId,
+        getScriptFromGistId: getScriptFromGistId,
         loadScriptsFromExample: loadScriptsFromExample,
         loadScriptsFromFilesystem: loadScriptsFromFilesystem,
         loadCurrentScripts: loadCurrentScripts,
         getFiles: getFiles
-    }
+    };
 
 })();

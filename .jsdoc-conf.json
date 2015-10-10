@@ -1,0 +1,24 @@
+{
+    "opts": {
+        "destination": "./out/",
+        "access": "all"
+    },
+    "tags": {
+        "allowUnknownTags": false,
+        "dictionaries": ["jsdoc"]
+    },
+    "source": {
+        "include": ["js/execution.js"]
+    },
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": false
+    },
+    "markdown": {
+        "gfm": true,
+        "tables": true,
+        "breaks": false,
+        "smartypants": true
+    }
+}

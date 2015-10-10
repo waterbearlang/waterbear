@@ -54,8 +54,8 @@ function accordionClick(evt){
     evt.target.scrollIntoView(true);
 }
 
-Event.on(document.body, 'click', 'wb-accordion > header', accordionClick);
-// Event.on(document.body, 'tap', 'wb-accordion > header', accordionClick);
+Event.on(document.body, 'editor:click', 'wb-accordion > header', accordionClick);
+Event.on(document.body, 'editor:tap', 'wb-accordion > header', accordionClick);
 
 /* For HBox, VBox, and Splitter:
 
@@ -104,7 +104,7 @@ var slop = 0;
 /* FIXME: next value should be determined dynamically */
 var splitterThickness = 8;
 
-Event.on(document.body, 'drag-start', 'wb-splitter', function(evt){
+Event.on(document.body, 'ui:drag-start', 'wb-splitter', function(evt){
     dragSplitter = evt.target;
     direction = dragSplitter.parentElement.localName === 'wb-vbox' ? 'vertical' : 'horizontal';
     prevPanel = dragSplitter.previousElementSibling;
@@ -117,7 +117,7 @@ Event.on(document.body, 'drag-start', 'wb-splitter', function(evt){
     // maxPosition = maxPosition - /* evt.target.thickness */;
 });
 
-Event.on(document.body, 'dragging', null, function(evt){
+Event.on(document.body, 'ui:dragging', null, function(evt){
     if (!dragSplitter) return;
     var currPos = direction === 'vertical' ? evt.clientY - slop : evt.clientX - slop;
     if (currPos > minPosition && currPos < maxPosition){
@@ -125,7 +125,7 @@ Event.on(document.body, 'dragging', null, function(evt){
     }
 });
 
-Event.on(document.body, 'drag-end', null, function(evt){
+Event.on(document.body, 'ui:drag-end', null, function(evt){
     // clear variables
     if (!dragSplitter) return;
     Event.trigger(prevPanel, 'wb-resize');
@@ -144,7 +144,7 @@ Event.on(document.body, 'drag-end', null, function(evt){
     }));
 });
 
-Event.on(window, 'load', null, function(evt){
+Event.on(window, 'ui:load', null, function(evt){
     if (localStorage.__splitterPositions){
         var splitters = dom.findAll('wb-splitter');
         var positions = JSON.parse(localStorage.__splitterPositions);
@@ -154,7 +154,7 @@ Event.on(window, 'load', null, function(evt){
     }
 });
 
-Event.on(window, 'dblclick', 'wb-splitter', function(evt){
+Event.on(window, 'ui:dblclick', 'wb-splitter', function(evt){
     var panel = evt.target.previousElementSibling;
     var width = parseInt(getComputedStyle(panel)['flexBasis'], 10);
     if (width < 5){
@@ -164,30 +164,5 @@ Event.on(window, 'dblclick', 'wb-splitter', function(evt){
     }
 });
 
-// Observe child changes
-
-var observer = new MutationObserver(function(mutations){
-    mutations.forEach(function(mutation){
-        // send childAdded or childRemove event to parent element
-        // should I filter this to only elements (otherwise text nodes will be included)?
-        var parent = mutation.target;
-        [].slice.apply(mutation.removedNodes).forEach(function(node){
-            parent.dispatchEvent(new CustomEvent('removeChild', {
-                bubbles: true,
-                detail: node
-            }));
-        });
-        [].slice.apply(mutation.addedNodes).forEach(function(node){
-            parent.dispatchEvent(new CustomEvent('addChild', {
-                bubbles: true,
-                detail: node
-            }));
-        });
-    });
-});
-
-var config = { childList: true, subtree: true };
-
-// observer.observe(document.body, config);
 
 })();

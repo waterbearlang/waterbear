@@ -11,6 +11,81 @@
 
 /* TODO: control */
 
+QUnit.module('control');
+QUnit.test('setVariable', function(assert){
+    var control = runtime.control;
+    var scope1 = {};
+    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
+    var scope3 = Object.create(scope2);
+    control.setVariable.call(scope1, ['firstname', 'Baba']);
+    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
+    control.setVariable.call(scope3, ['who', 'on first']);
+    assert.ok(scope1['firstname'] === 'Baba');
+    assert.ok(scope1['lastname'] === undefined); // shouldn't leak scopes
+    assert.ok(scope1['who'] === undefined);
+    assert.ok(scope2['firstname'] === 'Baba'); // scope chaining should work
+    assert.ok(scope2['lastname'] === "O'Reilly");
+    assert.ok(scope2['who'] === undefined);
+    assert.ok(scope3['firstname'] === 'Baba');
+    assert.ok(scope3['lastname'] === "O'Reilly");
+    assert.ok(scope3['who'] === 'on first');
+});
+QUnit.test('getVariable', function(assert){
+    var control = runtime.control;
+    var scope1 = {};
+    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
+    var scope3 = Object.create(scope2);
+    control.setVariable.call(scope1, ['firstname', 'Baba']);
+    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
+    control.setVariable.call(scope3, ['who', 'on first']);
+    assert.ok(control.getVariable.call(scope1, 'firstname') === 'Baba');
+    assert.ok(control.getVariable.call(scope1, 'lastname') === undefined); // shouldn't leak scopes
+    assert.ok(control.getVariable.call(scope1, 'who') === undefined);
+    assert.ok(control.getVariable.call(scope2, 'firstname') === 'Baba'); // scope chaining should work
+    assert.ok(control.getVariable.call(scope2, 'lastname') === "O'Reilly");
+    assert.ok(control.getVariable.call(scope2, 'who') === undefined);
+    assert.ok(control.getVariable.call(scope3, 'firstname') === 'Baba');
+    assert.ok(control.getVariable.call(scope3, 'lastname') === "O'Reilly");
+    assert.ok(control.getVariable.call(scope3, 'who') === 'on first');
+});
+QUnit.test('updateVariable', function(assert){
+    var control = runtime.control;
+    var scope1 = {};
+    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
+    var scope3 = Object.create(scope2);
+    function getValueBlock(value){
+        var outer = document.createElement('wb-expression');
+        var inner = document.createElement('wb-value');
+        inner.setAttribute('value', value);
+        outer.appendChild(inner);
+        // PhantomJS doesn't understand custom elements
+        inner.getValue = function(){
+            return this.getAttribute('value');
+        }
+        return outer;
+    }
+    control.setVariable.call(scope1, ['first', 'upper']);
+    control.setVariable.call(scope2, ['second', 'centre']);
+    control.setVariable.call(scope3, ['third', 'lowest']);
+    // updateVariable should walk the scope chain to set the variable
+    // at the level it was originally created
+    scope1._block = getValueBlock('first');
+    control.updateVariable.call(scope3, ['upper', 'top']);
+    scope2._block = getValueBlock('second');
+    control.updateVariable.call(scope3, ['centre', 'middle']);
+    scope3._block = getValueBlock('third');
+    control.updateVariable.call(scope3, ['lowest', 'bottom']);
+    assert.ok(control.getVariable.call(scope1, 'first') === 'top');
+    assert.ok(control.getVariable.call(scope1, 'second') === undefined); // shouldn't leak scopes
+    assert.ok(control.getVariable.call(scope1, 'third') === undefined);
+    assert.ok(control.getVariable.call(scope2, 'first') === 'top'); // scope chaining should work
+    assert.ok(control.getVariable.call(scope2, 'second') === 'middle');
+    assert.ok(control.getVariable.call(scope2, 'third') === undefined);
+    assert.ok(control.getVariable.call(scope3, 'first') === 'top');
+    assert.ok(control.getVariable.call(scope3, 'second') === 'middle');
+    assert.ok(control.getVariable.call(scope3, 'third') === 'bottom');
+});
+
 /* sprite */
 
 // QUnit.module('sprites');
@@ -20,7 +95,57 @@
 
 /* TODO: sound */
 /* TODO: arrays */
-/* TODO: boolean */
+
+QUnit.module('boolean');
+QUnit.test('and', function(assert){
+    var bool = runtime.boolean;
+
+    var b1 = bool.and(true, true);
+    var b2 = bool.and(true, false);
+    var b3 = bool.and(false, true);
+    var b4 = bool.and(false, false);
+
+    assert.ok(b1, "true and true = true");
+    assert.ok(!b2, "true and false = false");
+    assert.ok(!b3, "false and true = false");
+    assert.ok(!b4, "false and false = false");
+});
+QUnit.test('or', function(assert){
+    var bool = runtime.boolean;
+
+    var b1 = bool.or(true, true);
+    var b2 = bool.or(true, false);
+    var b3 = bool.or(false, true);
+    var b4 = bool.or(false, false);
+
+    assert.ok(b1, "true or true = true");
+    assert.ok(b2, "true or false = true");
+    assert.ok(b3, "false or true = true");
+    assert.ok(!b4, "false or false = false");
+});
+QUnit.test('xor', function(assert){
+    var bool = runtime.boolean;
+
+    var b1 = bool.xor(true, true);
+    var b2 = bool.xor(true, false);
+    var b3 = bool.xor(false, true);
+    var b4 = bool.xor(false, false);
+
+    assert.ok(!b1, "true xor true = false");
+    assert.ok(b2, "true xor false = true");
+    assert.ok(b3, "false xor true = true");
+    assert.ok(!b4, "false xor false = false");
+});
+QUnit.test('not', function(assert){
+    var bool = runtime.boolean;
+
+    var b1 = bool.not(true);
+    var b2 = bool.not(false);
+
+    assert.ok(!b1, "not true = false");
+    assert.ok(b2, "not false = true");
+});
+
 /* TODO: canvas */
 /* TODO: colors */
 /* TODO: images */
@@ -139,73 +264,433 @@ QUnit.test('getKeys', function (assert) {
                      'Retrieved the keys in insertion order');
 });
 
+QUnit.module('strings');
+QUnit.test('toString', function(assert) {
+    var str = runtime.string;
 
-/* TODO: strings */
+    //TODO -- test each individual toString is correct as well
+    //colour (is just a string for now)
+    var shape = new util.Shape(function(ctx){
+                    ctx.beginPath();
+                    ctx.arc(50, 50, 10, 0, Math.PI * 2, true);
+                });
+    var geolocation = mockLocation({
+        latitude: 43.662108,
+        longitude: -79.380023,
+        altitude: 76,
+        heading: 337.89,
+        speed: 1.0
+    });
 
-QUnit.module('points');
-QUnit.test('create', function (assert) {
-    var point = runtime.point;
+    var piStr = str.toString(4);
+    var niStr = str.toString(-2);
+    var fpStr = str.toString(6.5969);
+    var blnStr = str.toString(true);
+    var strStr = str.toString("hello");
+    // var pointStr = str.toString(new util.Point(4,-7));
+    var vecStr = str.toString(new util.Vector(50,100));
+    var shapeStr = str.toString(shape);
+    var sprStr = str.toString(new util.Sprite(shape));
+    var rectStr = str.toString(new util.Rect(50, 100, 70, 30));
+    var sizeStr = str.toString(new util.Size(100, "px", 50, "px"));
+    var arrStr = str.toString([1, 0, -5, 1000]);
+    var geoStr = str.toString(geolocation);
+    var imgStr = str.toString(new util.WBImage("path/image.jpg", function(){}));
 
-    var p1 = point.create(1, 5);
-    var p2 = point.create(-4, 20);
+    assert.ok(typeof(piStr) === 'string' || piStr instanceof String, 'positive integer toString');
+    assert.ok(typeof(niStr) === 'string' || niStr instanceof String, 'negative integer toString');
+    assert.ok(typeof(fpStr) === 'string' || fpStr instanceof String, 'floating point toString');
+    assert.ok(typeof(blnStr) === 'string' || blnStr instanceof String, 'boolean toString');
+    assert.ok(typeof(strStr) === 'string' || strStr instanceof String, 'string toString');
+    // assert.ok(typeof(pointStr) === 'string' || pointStr instanceof String, 'point toString');
+    assert.ok(typeof(vecStr) === 'string' || vecStr instanceof String, 'vector toString');
+    assert.ok(typeof(shapeStr) === 'string' || shapeStr instanceof String, 'shape toString');
+    assert.ok(typeof(sprStr) === 'string' || sprStr instanceof String, 'sprite toString');
+    assert.ok(typeof(rectStr) === 'string' || rectStr instanceof String, 'rect toString');
+    assert.ok(typeof(sizeStr) === 'string' || sizeStr instanceof String, 'size toString');
+    assert.ok(typeof(arrStr) === 'string' || arrStr instanceof String, 'array toString');
+    assert.ok(typeof(geoStr) === 'string' || geoStr instanceof String, 'geolocation toString');
+    assert.ok(typeof(imgStr) === 'string' || imgStr instanceof String, 'image toString');
+});
+QUnit.test('split', function(assert) {
+   var string = runtime.string;
 
-    assert.ok(p1 instanceof util.Point, 'Creating a point from coordinates');
-    assert.ok(p2 instanceof util.Point, 'Creating a point from negative coordinates');
+    var s1 = "test,string,split";
+    var s2 = "";
+    var s3 = "noseparator"
+    var s4 = "test split on different separator and longer string test"
+
+    var s1Split = string.split(s1, ',');
+    var s2Split = string.split(s2, " ");
+    var s3Split = string.split(s3, " ");
+    var s4Split = string.split(s4, " ");
+
+    assert.deepEqual(s1Split, ["test", "string", "split"], 'splitting short string on comma');
+    assert.deepEqual(s2Split, [""], 'splitting empty string');
+    assert.deepEqual(s3Split, ["noseparator"], 'splitting string with no separator');
+    assert.deepEqual(s4Split, ["test", "split", "on", "different", "separator","and", "longer", "string", "test"], 'splitting long string on space');
+});
+QUnit.test('concatenate', function(assert) {
+    var string = runtime.string;
+
+    var s1 = "string1";
+    var s2 = "string2";
+    var s3 = "";
+
+    var c1 = string.concatenate(s1, s2);
+    var c2 = string.concatenate(s1, s3);
+    var c3 = string.concatenate(s3, s3);
+
+    assert.equal(c1, "string1string2", 'concatenate two strings');
+    assert.equal(c2, "string1", 'concatenate with empty string');
+    assert.equal(c3, "", 'concatenate two empty strings');
+
+});
+QUnit.test('repeat', function(assert){
+    var string = runtime.string;
+
+    var s = "string";
+
+    var r0 = string.repeat(s,0);
+    var r1 = string.repeat(s,1);
+    var r3 = string.repeat(s,3);
+    var rNeg = string.repeat(s,-5);
+
+    assert.equal(r0, "", 'repeat 0 times');
+    assert.equal(r1, "string", 'repeat 1 time');
+    assert.equal(r3, "stringstringstring", 'repeat 3 times');
+    assert.equal(rNeg, "", 'repeat negative times');
+
+});
+QUnit.test('getChar', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var c1 = string.getChar(0, s);
+    var c5 = string.getChar(4, s);
+    var cNeg = string.getChar(-4, s);
+    var cLarge = string.getChar(100, s);
+
+    assert.equal(c1, "h", 'get first character');
+    assert.equal(c5, " ", 'get character at index 4');
+    assert.equal(cNeg, "r", 'get character at negative position');
+    assert.equal(cLarge, "", 'get out of bounds character');
+});
+QUnit.test('getCharFromEnd', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var c1 = string.getCharFromEnd(1, s);
+    var c5 = string.getCharFromEnd(5, s);
+    var cNeg = string.getCharFromEnd(-4, s);
+    var cLarge = string.getCharFromEnd(100, s);
+
+    assert.equal(c1, "g", 'get first character from end');
+    assert.equal(c5, "t", 'get fifth character from end');
+    assert.equal(cNeg, "e", 'get negative character position');
+    assert.equal(cLarge, "", 'get out of bounds character');
+
+});
+QUnit.test('substring', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var sStart = string.substring(s, 0, 4);
+    var sMid = string.substring(s, 5, 6);
+    var cNegStart = string.substring(s, -4, 10);
+    var cNegLength = string.substring(s, 4, -6);
+    var cStartOut = string.substring(s, 100, 4);
+    var cLengthOut = string.substring(s, 0, 100);
+
+    assert.equal(sStart, "here", 'substring from start');
+    assert.equal(sMid, "is my ", 'substring from middle');
+    assert.equal(cNegStart, "", 'substring with negative start position');
+    assert.equal(cNegLength, "here", 'substring with negative length');
+    assert.equal(cStartOut, "", 'substring with out of bounds start position');
+    assert.equal(cLengthOut, "here is my string", 'substring with length too long');
+});
+QUnit.test('substring2', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var sStart = string.substring2(s, 0, 4);
+    var sMid = string.substring2(s, 5, 10);
+    var cNegStart = string.substring2(s, -4, 10);
+    var cNegLength = string.substring2(s, 0, -4);
+    var cStartOut = string.substring2(s, 100, 4);
+    var cLengthOut = string.substring2(s, 0, 100);
+
+    assert.equal(sStart, "here", 'substring from start');
+    assert.equal(sMid, "is my", 'substring from middle');
+    assert.equal(cNegStart, "", 'substring with negative start position');
+    assert.equal(cNegLength, "", 'substring with negative length');
+    assert.equal(cStartOut, "", 'substring with out of bounds start position');
+    assert.equal(cLengthOut, "here is my string", 'substring with end out of bounds');
+});
+QUnit.test('isSubstring', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var b1 = string.isSubstring("here", s);
+    var b2 = string.isSubstring("ing", s);
+    var b3 = string.isSubstring("not a sub", s);
+    var b4 = string.isSubstring("ingNo", s);
+
+    assert.ok(b1, 'substring from start');
+    assert.ok(b2, 'substring from end');
+    assert.ok(!b3, 'not substring');
+    assert.ok(!b4, 'not substring');
+});
+QUnit.test('substringPosition', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var p1 = string.substringPosition("here", s);
+    var p2 = string.substringPosition("ing", s);
+    var p3 = string.substringPosition("not a sub", s);
+    var p4 = string.substringPosition("ingNo", s);
+    var p5 = string.substringPosition("e", s);
+
+    assert.equal(p1, 0, 'substring from start');
+    assert.equal(p2, 14, 'substring from end');
+    assert.equal(p3, -1, 'not substring');
+    assert.equal(p4, -1, 'not substring');
+    assert.equal(p5, 1, 'substring appears twice');
+});
+QUnit.test('replaceSubstring', function(assert){
+    var string = runtime.string;
+
+    var s = "here is my string";
+
+    var s1 = string.replaceSubstring(s, "here is", "that was");
+    var s2 = string.replaceSubstring(s, "string", "test method for replaceSubstring");
+    var s3 = string.replaceSubstring(s, "not a sub", "no replacement");
+    var s4 = string.replaceSubstring(s, "ingNo", "no replacement");
+    var s5 = string.replaceSubstring(s, "e", "ee");
+    var s6 = string.replaceSubstring(s, " my", "");
+
+    assert.equal(s1, "that was my string", 'substring from start');
+    assert.equal(s2, "here is my test method for replaceSubstring", 'substring from end');
+    assert.equal(s3, "here is my string", 'not substring');
+    assert.equal(s4, "here is my string", 'not substring');
+    assert.equal(s5, "heeree is my string", 'substring appears twice');
+    assert.equal(s6, "here is string", 'replace with empty string');
+});
+QUnit.test('trimWhitespace', function(assert){
+    var string = runtime.string;
+
+    var s1 = "nowhitespace";
+    var s2 = "none to trim";
+    var s3 = "      leading whitespace";
+    var s4 = "trailing whitespace      ";
+    var s5 = "      both whitespace      ";
+    var s6 = "middle        whitespace";
+
+    var t1 = string.trimWhitespace(s1);
+    var t2 = string.trimWhitespace(s2);
+    var t3 = string.trimWhitespace(s3);
+    var t4 = string.trimWhitespace(s4);
+    var t5 = string.trimWhitespace(s5);
+    var t6 = string.trimWhitespace(s6);
+
+    assert.equal(t1, "nowhitespace", 'no whitespace');
+    assert.equal(t2, "none to trim", 'only spaces');
+    assert.equal(t3, "leading whitespace", 'leading whitespace');
+    assert.equal(t4, "trailing whitespace", 'trailing whitespace');
+    assert.equal(t5, "both whitespace", 'leading and trailing whitespace');
+    assert.equal(t6, "middle        whitespace", 'whitespace in middle');
+});
+QUnit.test('uppercase', function(assert){
+    var string = runtime.string;
+
+    var s1 = "all lowercase";
+    var s2 = "sOmE lOwErCaSe";
+    var s3 = "ALL UPPERCASE";
+    var s4 = "";
+
+    var c1 = string.uppercase(s1);
+    var c2 = string.uppercase(s2);
+    var c3 = string.uppercase(s3);
+    var c4 = string.uppercase(s4);
+
+    assert.equal(c1, "ALL LOWERCASE", 'all lowercase');
+    assert.equal(c2, "SOME LOWERCASE", 'some lowercase');
+    assert.equal(c3, "ALL UPPERCASE", 'all uppercase');
+    assert.equal(c4, "", 'empty string');
+
+});
+QUnit.test('lowercase', function(assert){
+    var string = runtime.string;
+
+    var s1 = "all lowercase";
+    var s2 = "sOmE lOwErCaSe";
+    var s3 = "ALL UPPERCASE";
+    var s4 = "";
+
+    var c1 = string.lowercase(s1);
+    var c2 = string.lowercase(s2);
+    var c3 = string.lowercase(s3);
+    var c4 = string.lowercase(s4);
+
+    assert.equal(c1, "all lowercase", 'all lowercase');
+    assert.equal(c2, "some lowercase", 'some lowercase');
+    assert.equal(c3, "all uppercase", 'all uppercase');
+    assert.equal(c4, "", 'empty string');
+
+});
+QUnit.test('matches', function(assert){
+    var string = runtime.string;
+
+    var s1 = "string1";
+    var s2 = "string2";
+    var s3 = "str";
+    var s4 = "";
+
+    var b1 = string.matches(s1, s1);
+    var b2 = string.matches(s1, s2);
+    var b3 = string.matches(s1, s3);
+    var b4 = string.matches(s1, s4);
+    var b5 = string.matches(s4, s1);
+
+    assert.ok(b1, 'same string');
+    assert.ok(!b2, 'different string');
+    assert.ok(!b3, 'substring');
+    assert.ok(!b4, 'string matches empty string');
+    assert.ok(!b5, 'empty string matches string');
+});
+QUnit.test('doesntMatch', function(assert){
+    var string = runtime.string;
+
+    var s1 = "string1";
+    var s2 = "string2";
+    var s3 = "str";
+    var s4 = "";
+
+    var b1 = string.doesntMatch(s1, s1);
+    var b2 = string.doesntMatch(s1, s2);
+    var b3 = string.doesntMatch(s1, s3);
+    var b4 = string.doesntMatch(s1, s4);
+    var b5 = string.doesntMatch(s4, s1);
+
+    assert.ok(!b1, 'same string');
+    assert.ok(b2, 'different string');
+    assert.ok(b3, 'substring');
+    assert.ok(b4, 'string matches empty string');
+    assert.ok(b5, 'empty string matches string');
+});
+QUnit.test('startsWith', function(assert){
+    var string = runtime.string;
+
+    var s1 = "string1";
+    var s2 = "string2";
+    var s3 = "str";
+    var s4 = "";
+    var s5 = "string1longer"
+
+    var b1 = string.startsWith(s1, s1);
+    var b2 = string.startsWith(s1, s2);
+    var b3 = string.startsWith(s1, s3);
+    var b4 = string.startsWith(s1, s4);
+    var b5 = string.startsWith(s1, s5);
+
+    assert.ok(b1, 'same string');
+    assert.ok(!b2, 'different string');
+    assert.ok(b3, 'substring');
+    assert.ok(b4, 'string starts with empty string');
+    assert.ok(!b5, 'string starts with same string but longer');
+});
+QUnit.test('endsWith', function(assert){
+    var string = runtime.string;
+
+    var s1 = "string1";
+    var s2 = "string2";
+    var s3 = "ing1";
+    var s4 = "";
+    var s5 = "longerstring1"
+
+    var b1 = string.endsWith(s1, s1);
+    var b2 = string.endsWith(s1, s2);
+    var b3 = string.endsWith(s1, s3);
+    var b4 = string.endsWith(s1, s4);
+    var b5 = string.endsWith(s1, s5);
+
+    assert.ok(b1, 'same string');
+    assert.ok(!b2, 'different string');
+    assert.ok(b3, 'substring');
+    assert.ok(b4, 'string starts with empty string');
+    assert.ok(!b5, 'string starts with same string but longer');
 });
 
-QUnit.test('fromVector', function (assert) {
-    var point = runtime.point;
+// QUnit.module('points');
+// QUnit.test('create', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = point.create(1, 5);
+//     var p2 = point.create(-4, 20);
+//
+//     assert.ok(p1 instanceof util.Point, 'Creating a point from coordinates');
+//     assert.ok(p2 instanceof util.Point, 'Creating a point from negative coordinates');
+// });
 
-    var zero = new util.Vector(0, 0);
-    var identity = new util.Vector(1, 1);
-    var negVector = new util.Vector(-1, -1);
+// QUnit.test('fromVector', function (assert) {
+//     var point = runtime.point;
+//
+//     var zero = new util.Vector(0, 0);
+//     var identity = new util.Vector(1, 1);
+//     var negVector = new util.Vector(-1, -1);
+//
+//     var p1 = point.fromVector(zero);
+//     var p2 = point.fromVector(identity);
+//     var p3 = point.fromVector(negVector);
+//
+//     assert.ok(p1 instanceof util.Point, 'Creating a point from zero vector');
+//     assert.ok(p2 instanceof util.Point, 'Creating a point from identity vector');
+//     assert.ok(p3 instanceof util.Point, 'Creating a point from negative vector');
+// });
 
-    var p1 = point.fromVector(zero);
-    var p2 = point.fromVector(identity);
-    var p3 = point.fromVector(negVector);
+// QUnit.test('fromArray', function (assert) {
+//     var point = runtime.point;
+//
+//     QUnit.ok(point.fromArray([4, 5]) instanceof util.Point,
+//              'Creating a point from an array');
+//     QUnit.throws(
+//         function () { rect.fromArray([1]); },
+//         'Creating from an array with less than two elements should throw'
+//     );
+// });
 
-    assert.ok(p1 instanceof util.Point, 'Creating a point from zero vector');
-    assert.ok(p2 instanceof util.Point, 'Creating a point from identity vector');
-    assert.ok(p3 instanceof util.Point, 'Creating a point from negative vector');
-});
+// QUnit.test('x', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = new util.Point(2, 3);
+//     var x = point.x(p1);
+//
+//     assert.equal(x, 2, 'Getting the x position of a point');
+// });
 
-QUnit.test('fromArray', function (assert) {
-    var point = runtime.point;
+// QUnit.test('y', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = new util.Point(2, 3);
+//     var y = point.y(p1);
+//
+//     assert.equal(y, 3, 'Getting the y position of a point');
+// });
 
-    QUnit.ok(point.fromArray([4, 5]) instanceof util.Point,
-             'Creating a point from an array');
-    QUnit.throws(
-        function () { rect.fromArray([1]); },
-        'Creating from an array with less than two elements should throw'
-    );
-});
-
-QUnit.test('x', function (assert) {
-    var point = runtime.point;
-
-    var p1 = new util.Point(2, 3);
-    var x = point.x(p1);
-
-    assert.equal(x, 2, 'Getting the x position of a point');
-});
-
-QUnit.test('y', function (assert) {
-    var point = runtime.point;
-
-    var p1 = new util.Point(2, 3);
-    var y = point.y(p1);
-
-    assert.equal(y, 3, 'Getting the y position of a point');
-});
-
-QUnit.test('toArray', function (assert) {
-    var point = runtime.point;
-
-    var p1 = new util.Point(2, 3);
-    var array = point.toArray(p1);
-
-    assert.deepEqual(array, [2,3], 'Getting array from point');
-});
+// QUnit.test('toArray', function (assert) {
+//     var point = runtime.point;
+//
+//     var p1 = new util.Point(2, 3);
+//     var array = point.toArray(p1);
+//
+//     assert.deepEqual(array, [2,3], 'Getting array from point');
+// });
 
 
 
@@ -349,7 +834,7 @@ QUnit.testBrowser('currentLocation', function (assert) {
 
     /* Subscribe to the locationchanged event... */
     var done = assert.async();
-    Event.on(window, 'locationchanged', null, function () {
+    Event.on(window, 'test:locationchanged', null, function () {
         var location = geolocation.currentLocation();
         assert.strictEqual(location.coords.latitude, lat,
                            'API returned expected latitude');

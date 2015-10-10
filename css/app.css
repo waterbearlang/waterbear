@@ -43,6 +43,12 @@ body > header > h1{
     line-height: 34px;
 }
 
+body > output{
+    flex: 0 0 24px;
+    background: #EFEDEA;
+    color: #111111;
+}
+
 .menu{
     flex: 0 0 34px;
     background-color: #666666;
@@ -51,13 +57,88 @@ body > header > h1{
     padding: 0px;
 }
 
-.menu button{
+.menu button[disabled] {
+    color: #999;
+    border-color: #333;
+}
+
+.menu button, .menu a, .check-button, .do-run, .do-stop{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
     border: 2px #111111 outset;
     margin: 3px;
     font-size: 18px;
+}
+
+/* Emulate button styles. */
+.check-button {
+    font: normal normal normal 18px/normal '.HelveticaNeueDeskInterface-Regular';
+    padding: 2px 6px 3px;
+}
+
+.check-button input[type="checkbox"] {
+    display: none;
+}
+
+/* Ugh, this is not ideal... */
+.debugger-indicator {
+    transition: color 250ms ease;
+}
+
+/* So I really like glowy things, it seems. */
+@keyframes debugger-glow {
+    from {
+        /*color: hsl(182, 89%, 60%); */
+        text-shadow: 0 0 16px hsla(182, 89%, 60%, 0.8);
+    }
+    to {
+        /* color: hsl(194, 89%, 60%);*/
+        text-shadow: 0 0 4px hsla(194, 89%, 60%, 0.4);
+    }
+}
+
+.debugger .debugger-indicator {
+    color: hsl(182, 89%, 60%);
+    animation: debugger-glow 1s ease infinite alternate;
+}
+
+sidebar button.availableBlocks{
+    display: none; /*hide when the accordions are showing */
+}
+
+.menu a{
+    float: right;
+    text-decoration: none;
+    padding: 2px 6px 3px;
+    display: inline-block;
+}
+
+.tabs-menu{
+    flex: 0 0 34px;
+    color: #FFFFFF;
+    margin: 0px;
+    padding-top: 4px;
+    padding-left: 6px;
+
+    position: relative;
+    white-space: nowrap;
+    border: none;
+    background-color: #666666;
+    height: 34px;
+}
+
+.tabs-menu button{
+    border: 2px solid #111111;
+    border-radius: 5px;
+    background-color: #666666;
+    color: #FFFFFF;
+    height: 30px;
+    width: 150px;
+}
+.tabs-menu button[pressed='true']{
+    background-color: #C4C4C4;
+    color: #666666;
 }
 
 /* Show trash for sidebar while dragging */
@@ -79,6 +160,7 @@ sidebar.trashcan:after{
     background-position: 50%;
     z-index: 100;
 }
+
 
 /* Feedback area for messages */
 
@@ -106,6 +188,7 @@ sidebar.trashcan:after{
 wb-workspace > wb-contains{
     border: 2px inset #CCC;
     position: relative;
+    padding-bottom: 16px;
 }
 
 wb-contains:empty::before{
@@ -121,26 +204,36 @@ wb-contains:empty::before{
 
 
 /* Accordion Colors and Icons */
-wb-accordion.control > header:after{ background-color: hsl(0, 93%, 56%); }
-wb-accordion.sprite > header:after{ background-color: hsl(156, 93%, 56%); }
-wb-accordion.music > header:after{ background-color: hsl(312, 93%, 56%); }
-wb-accordion.sound > header:after{ background-color: hsl(108, 93%, 56%); }
-wb-accordion.array > header:after{ background-color: hsl(264, 93%, 56%); }
-wb-accordion.boolean > header:after{ background-color: hsl(60, 93%, 56%); }
-wb-accordion.canvas > header:after{ background-color: hsl(216, 93%, 56%); }
-wb-accordion.color > header:after{ background-color: hsl(12, 93%, 56%); }
-wb-accordion.image > header:after{ background-color: hsl(168, 93%, 56%); }
-wb-accordion.math > header:after{ background-color: hsl(324, 93%, 56%); }
-wb-accordion.random > header:after{ background-color: hsl(120, 93%, 56%); }
-wb-accordion.vector > header:after{ background-color: hsl(276, 93%, 56%); }
-wb-accordion.object > header:after{ background-color: hsl(72, 93%, 56%); }
-wb-accordion.string > header:after{ background-color: hsl(228, 93%, 56%); }
-wb-accordion.path > header:after{ background-color: hsl(24, 93%, 56%); }
-wb-accordion.point > header:after{ background-color: hsl(180, 93%, 56%); }
-wb-accordion.rect > header:after{ background-color: hsl(336, 93%, 56%); }
-wb-accordion.sense > header:after{ background-color: hsl(132, 93%, 56%); }
-wb-accordion.motion > header:after{ background-color: hsl(288, 93%, 56%); }
-wb-accordion.shape > header:after{ background-color: hsl(84, 93%, 56%); }
-wb-accordion.geolocation > header:after{ background-color: hsl(240, 93%, 56%); }
-wb-accordion.size > header:after{ background-color: hsl(192, 93%, 56%); }
-wb-accordion.text > header:after{ background-color: hsl(348, 93%, 56%); }
+wb-accordion.control > header:after{ background-color: hsl(0, 53%, 56%); }
+wb-accordion.sprite > header:after{ background-color: hsl(105, 50%, 50%); }
+wb-accordion.music > header:after{ background-color: hsl(210, 50%, 50%); }
+wb-accordion.sound > header:after{ background-color: hsl(315, 50%, 50%); }
+wb-accordion.array > header:after{ background-color: hsl(60, 50%, 50%); }
+wb-accordion.boolean > header:after{ background-color: hsl(165, 50%, 75%); }
+wb-accordion.stage > header:after{ background-color: hsl(270, 50%, 50%); }
+wb-accordion.color > header:after{ background-color: hsl(15, 50%, 50%); }
+wb-accordion.image > header:after{ background-color: hsl(120, 50%, 50%); }
+wb-accordion.math > header:after{ background-color: hsl(225, 50%, 50%); }
+wb-accordion.random > header:after{ background-color: hsl(330, 50%, 50%); }
+wb-accordion.object > header:after{ background-color: hsl(180, 50%, 50%); }
+wb-accordion.string > header:after{ background-color: hsl(285, 50%, 50%); }
+wb-accordion.path > header:after{ background-color: hsl(30, 50%, 50%); }
+wb-accordion.rect > header:after{ background-color: hsl(240, 50%, 50%); }
+wb-accordion.sense > header:after{ background-color: hsl(345, 50%, 50%); }
+wb-accordion.motion > header:after{ background-color: hsl(90, 50%, 50%); }
+wb-accordion.shape > header:after{ background-color: hsl(195, 50%, 50%); }
+wb-accordion.geolocation > header:after{ background-color: hsl(300, 50%, 75%); }
+wb-accordion.size > header:after{ background-color: hsl(45, 50%, 50%); }
+wb-accordion.text > header:after{ background-color: hsl(150, 50%, 50%); }
+wb-accordion.vector > header:after{ background-color: hsl(75, 50%, 50%); }
+wb-accordion.date > header:after{ background-color: hsl(55, 76%, 70%); }
+
+/* Prevent selecting text while dragging */
+.dragging *{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

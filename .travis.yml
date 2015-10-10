@@ -1,4 +1,5 @@
 language: node_js
-before_script:
-  - npm install -g node-qunit-phantomjs
-script: node-qunit-phantomjs test/runtime.html
+# The following are the default, but explicit is better.
+install: npm install
+script: npm test
+sudo: false

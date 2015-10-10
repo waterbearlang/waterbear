@@ -19,6 +19,13 @@
     // Maintain references to events so we can mass-remove them later
     var allEvents = {};
 
+    // Give all scoped events a class for future reference.
+    function ScopedEvent(elem, eventname, listener) {
+        this.element = elem;
+        this.name = eventname;
+        this.listener = listener;
+    }
+
     // Refactor this into an constructor with prototype methods
     function cloneEvent(evt){
         var newEvent = {};
@@ -38,28 +45,27 @@
         return newEvent;
     }
 
-    function on(elem, eventname, selector, handler, onceOnly){
-        var ns_name = eventname.split(':');
-        var namespace = 'global';
-        if (ns_name.length === 2){
-            namespace = ns_name[0];
-            eventname = ns_name[1];
-        }
+    function on(elem, originalEventname, selector, handler, onceOnly){
+        var eventname, ns_name, namespace;
+
+        // Allow use of selector for `elem`.
         if (typeof elem === 'string'){
             // Bind all elements matched by `elem` selector. Not recommended due to
             // multiple event listeners used when one could suffice and be
             // matched using the `selector` argument.
-            return dom.makeArray(document.querySelectorAll(elem)).map(function(e){
-                return on(e, eventname, selector, handler);
+            return [].slice.call(document.querySelectorAll(elem)).map(function(e){
+                return on(e, originalEventname, selector, handler, onceOnly);
             });
+        }
+
+        // Argument validation.
+        if (typeof originalEventname !== 'string'){
+            console.error('second argument must be eventname: %s', eventname);
+            throw new Error('second argument must be eventname: ' + eventname);
         }
         if (!isDomObject(elem)){
             console.error('first argument must be element, document, or window: %o', elem);
             throw new Error('first argument must be element, document, or window');
-        }
-        if (typeof eventname !== 'string'){
-            console.error('second argument must be eventname: %s', eventname);
-            throw new Error('second argument must be eventname: ' + eventname);
         }
         if (selector && typeof selector !== 'string'){
             throw new TypeError('third argument must be selector String or null');
@@ -67,6 +73,20 @@
         if (typeof handler !== 'function'){
             throw new TypeError('fourth argument must be handler');
         }
+
+        // Check for presence of namespace.
+        ns_name = originalEventname.split(':');
+        if (ns_name.length === 2){
+            namespace = ns_name[0];
+            eventname = ns_name[1];
+        } else if (ns_name.length === 1) {
+            namespace = 'global';
+            eventname = originalEventname;
+            console.warn('Registering `' + eventname + '` in the global namespace');
+        } else {
+            throw new Error('Invalid namespace: ' + originalEventname);
+        }
+
         var listener = function listener(originalEvent){
             var evt;
             if (originalEvent.detail && originalEvent.detail.forwarded){
@@ -79,7 +99,7 @@
                 return;
             }
             if (onceOnly){
-                Event.off(elem, eventname, listener);
+                Event.off(elem, originalEventname, listener);
             }
             if (selector){
                 if (dom.matches(evt.target, selector)){
@@ -94,12 +114,18 @@
                 handler(evt);
             }
         };
-        elem.addEventListener(eventname, listener, false);
-        util.setDefault(allEvents, namespace, []).push([elem, eventname, listener]);
+        /// liveFix is needed because Firefox doesn't support "focusin" events and "focus" events don't bubble
+        var liveFix = false;
+        if (selector && (eventname === 'focus' || eventname === 'blur')){ // any others?
+            liveFix = true;
+        }
+        elem.addEventListener(eventname, listener, liveFix);
+        util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
     }
 
     function off(elem, eventname, handler){
+        var events;
         var ns_name = eventname.split(':');
         var namespace = 'global';
         if (ns_name.length === 2){
@@ -107,20 +133,24 @@
             namespace = ns_name[0];
             eventname = ns_name[1];
         }
-        if (handler){
-            elem.removeEventListener(eventname, handler);
-        }else{
-            allEvents[namespace].slice().forEach(function(elem_name_hand, idx){
-                // Pass in null element to remove listeners from all elements
-                var el = elem || elem_name_hand[0];
-                var en = eventname === '*' ? elem_name_hand[1] : eventname;
-                var hd = elem_name_hand[2];
-                if (el === elem_name_hand[0] && eventname === elem_name_hand[1]){
-                    elem.removeEventListener(elem_name_hand[1], elem_name_hand[2]);
-                    allEvents[namespace].splice(idx, 1); // remove elem_name_hand from allEvents
-                }
-            });
+        events = allEvents[namespace];
+
+        if (!events) {
+            // No events registered for the given namespace.
+            return;
         }
+
+        // Copy the array, because we'll be modifying it.
+        events.slice().forEach(function(scopedEvent, idx){
+            // Pass in null element to remove listeners from all elements
+            var el = elem || scopedEvent.element;
+            var name = eventname === '*' ? scopedEvent.name : eventname;
+            var listener = handler || scopedEvent.listener;
+            if (el === scopedEvent.element && name === scopedEvent.name){
+                el.removeEventListener(name, listener);
+                allEvents[namespace].splice(idx, 1); // remove the event from allEvents
+            }
+        });
     }
 
     function once(elem, eventname, selector, handler){
@@ -186,6 +216,7 @@
                 }else{
                     evt.invalid = true;
                     evt.invalidReason = 'Multiple touches present';
+                    console.warn('multiple touches');
                     return evt;
                 }
                 evt.target = touch.target;
@@ -196,6 +227,47 @@
         return evt;
     }
 
+    /* Add custom events for adding and removing blocks from the DOM */
+    function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
+
+        var blockObserver = new MutationObserver(function(mutations){
+            mutations.forEach(function(mutation){
+                // send childAdded or childRemove event to parent element
+                var parent = mutation.target;
+                // if (!Node.contains){
+                //     console.error('Node.contains not found');
+                //     console.error('Find a polyfill');
+                // }
+                if (!root.contains(parent)){
+                    return;
+                }
+                var blockParent = dom.closest(parent, parentList);
+                if (!blockParent){
+                    return;
+                }
+                [].slice.apply(mutation.removedNodes)
+                        .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
+                        .forEach(function(node){
+                    Event.trigger(blockParent, eventPrefix + 'removedChild', node);
+                    // This won't bubble through the tree because the node is
+                    // not in the tree anymore
+                    //Event.trigger(node, eventPrefix + 'removed', blockParent);
+                });
+                [].slice.apply(mutation.addedNodes)
+                        .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only block elements
+                        .forEach(function(node){
+                    Event.trigger(blockParent, 'wb-addedChild', node);
+                    Event.trigger(node, 'wb-added', blockParent);
+                });
+            });
+        });
+
+        var blockObserverConfig = { childList: true, subtree: true };
+
+        // Only observe after script is loaded?
+        blockObserver.observe(document.body, blockObserverConfig);
+
+    };
 
 
     /****************************
@@ -219,6 +291,8 @@
         dragTarget = null;
         isDragging = false;
         Event.pointerDown = false;
+        // FIXME: This doesn't appear to be called
+        document.body.classList.remove('dragging');
         trigger(document, 'drag-reset');
     }
 
@@ -228,6 +302,7 @@
         if (dom.closest(evt.target, 'input, select')){
             return undefined;
         }
+        // prevent text selection while dragging
         Event.pointerDown = true;
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
@@ -240,9 +315,24 @@
         // called on mousemove or touchmove if not already dragging
         if (!dragTarget) { return undefined; }
         if (!Event.pointerDown) { return undefined; }
+        document.body.classList.add('dragging');
         isDragging = true;
         forward(dragTarget, 'drag-start', evt);
         return false;
+    }
+
+    // Used when we're not tracking dragging
+    function trackPointerPosition(evt){
+        Event.pointerX = evt.pageX;
+        Event.pointerY = evt.pageY;
+    }
+
+    function trackPointerDown(evt){
+        Event.pointerDown = true;
+    }
+
+    function trackPointerUp(evt){
+        Event.pointerDown = false;
     }
 
     function dragging(evt){
@@ -261,6 +351,7 @@
             }
         }
         evt.preventDefault();
+        evt.stopPropagation();
         forward(dragTarget, 'dragging', evt);
         return false;
     }
@@ -293,9 +384,12 @@
 
     var specialKeys = {
         // taken from jQuery Hotkeys Plugin
+        // updated because browsers suck, meta returned for 4 different values
+        // see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode#Non-printable_keys_%28function_keys%29
         8: "backspace", 9: "tab", 13: "return", 16: "shift", 17: "ctrl", 18: "alt", 19: "pause",
         20: "capslock", 27: "esc", 32: "space", 33: "pageup", 34: "pagedown", 35: "end", 36: "home",
         37: "left", 38: "up", 39: "right", 40: "down", 45: "insert", 46: "del",
+        91: "meta", 92: "meta", 93: "meta", // left and right commands
         96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
         104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/",
         112: "f1", 113: "f2", 114: "f3", 115: "f4", 116: "f5", 117: "f6", 118: "f7", 119: "f8",
@@ -339,7 +433,6 @@
         Event.keyHandlers[key].push(handler);
     }
 
-
     function clearRuntime(){
         Event.keyHandlers = {};
     }
@@ -360,19 +453,19 @@
         stagePointerX: 0,
         stagePointerY: 0,
         keys: {},
-        keyHandlers: {}
+        keyHandlers: {},
+        clearRuntime: clearRuntime,
+        initDrag: initDrag,
+        dragging: dragging,
+        endDrag: endDrag,
+        cancelDrag: cancelDrag,
+        trackPointerPosition: trackPointerPosition,
+        trackPointerDown: trackPointerDown,
+        trackPointerUp: trackPointerUp,
+        handleKeyUp: handleKeyUp,
+        handleKeyDown: handleKeyDown,
+        registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents,
+        keyForEvent: keyForEvent
     };
-
-
-    Event.on(document.body, 'touchstart', null, initDrag);
-    Event.on(document.body, 'touchmove', null, dragging);
-    Event.on(document.body, 'touchend', null, endDrag);
-    Event.on(document.body, 'mousedown', null, initDrag);
-    Event.on(document.body, 'mousemove', null, dragging);
-    Event.on(window, 'mouseup', null, endDrag);
-    Event.on(window, 'keyup', null, cancelDrag);
-    Event.on(window, 'keydown', null, handleKeyDown);
-    Event.on(window, 'keyup', null, handleKeyUp);
-
 
 })();

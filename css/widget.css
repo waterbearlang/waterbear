@@ -4,7 +4,6 @@ wb-search, wb-accordion{
     display: block;
 }
 
-
 /* HBOX, VBOX layout widgets */
 
 wb-hbox, wb-vbox{
@@ -18,9 +17,28 @@ wb-hbox{
     height: 100%;
 }
 wb-vbox{
+    position: relative;
     flex-direction: column;
 }
-
+wb-leftbox, wb-rightbox{
+    flex-direction: column;
+}
+wb-workbox, wb-displaybox{
+    display: flex;
+    flex: 1 1;
+    position: relative;
+    overflow: hidden;
+    flex-direction: row;
+    height: 100%;
+}
+wb-displaybox{
+    border-color: #000000;
+    border-width: medium;
+    border-style: solid;
+}
+wb-displaybox:not([selected='true']){
+    display: none;
+}
 wb-hbox > *{
     flex: 1 1 auto;
 }
@@ -37,9 +55,9 @@ wb-splitter{
     flex: 0 0 8px;
 }
 
-wb-hbox > wb-splitter{
+wb-hbox > wb-splitter, wb-workbox > wb-splitter{
     background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
-    background-image-size: 8px 8px;
+    background-size: 8px 8px;
     cursor: ew-resize;
 }
 
@@ -71,7 +89,26 @@ wb-workspace > wb-locals{
 
 wb-workspace > wb-contains{
     flex: 3 1;
-    overflow-y: auto;
+    overflow: auto;
+}
+
+@keyframes slidey-stripes {
+    from {
+        background-position-x: 32px;
+    }
+    to {
+        background-position-x: 0;
+    }
+}
+
+.debugger-paused wb-workspace > wb-contains {
+    background: repeating-linear-gradient(45deg,
+        rgba(34,34,34,.1),
+        rgba(34,34,34,.1) 25%,
+        transparent 25%,
+        transparent 50%) 0 0/32px 32px repeat fixed transparent;
+
+    animation: slidey-stripes 1.5s linear infinite;
 }
 
 /* Playground */
@@ -99,8 +136,7 @@ wb-search{
 /* ACCORDION */
 
 wb-accordion{
-    overflow-x: visible;
-    overflow-y: visible;
+    overflow: visible;
     padding-left: 6px;
 }
 
@@ -114,6 +150,44 @@ wb-accordion > :not(header){
 
 wb-accordion[open=true] > :not(header){
     display: inline-block;
+    margin-bottom: 6px;
+}
+
+/* Sidebar Filtering */
+
+sidebar[filtered=true] wb-accordion > :not(header){
+    display: inline-block; /*display everything*/
+}
+
+sidebar[filtered=true] wb-step, sidebar[filtered=true] p, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]), sidebar[filtered=true] wb-accordion > header{
+    display: none!important; /* hide everything but the filtered expressions */
+    margin-bottom: 6px;
+}
+
+sidebar[filtered=true] button.availableBlocks{
+    display: block;
+    position: relative;
+    margin-left: -6px;
+    padding-left: 45px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 16px;
+    color: #000000;
+    background-color: #FFFFFF;
+    clear: left;
+    border: 1px solid #CCC;
+    margin-bottom: 6px;
+    width: 100%;
+}
+
+sidebar[filtered=true] button.availableBlocks:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 100%;
+    background-color: #000000; /* over-ride colours in app.css */
 }
 
 wb-accordion > header {
@@ -125,8 +199,11 @@ wb-accordion > header {
     padding-bottom: 6px;
     font-size: 16px;
     color: #777;
+    clear: left;
     border: 1px solid #CCC;
 }
+
+
 
 wb-accordion[open=true] > header{
     margin-bottom: 6px;
@@ -142,6 +219,11 @@ wb-accordion[open=true] > header{
     fill: #666;
 }
 
+.cat-icon.big-icon{
+    height:26px;
+    left:6px;
+}
+
 wb-accordion > header:after{
     content: '';
     position: absolute;
@@ -152,4 +234,67 @@ wb-accordion > header:after{
     background-color: #CCC; /* over-ride colours in app.css */
 }
 
+/* Debugger */
 
+wb-debugger {
+    flex: 0 0 auto;
+    max-height: 0;
+    overflow: hidden;
+    transition: all .25s ease;
+}
+
+.debugger wb-debugger {
+    max-height: 24px;
+}
+
+wb-debug-menu {
+    display: flex;
+}
+
+wb-button-splitter {
+    box-sizing: content-box;
+    border-left: solid 1px rgba(0,0,0,0.4);
+    height: 10px;
+    display: inline-block;
+    width: 0;
+    padding: 0;
+}
+
+wb-debug-menu > button,
+wb-debug-menu > input[type=checkbox] {
+    /*font-size: 0;*/
+    border: 0;
+    color: #666;
+    border-left: 1px solid #eee;
+    /* text-shadow: -.5pt -.5pt 1pt rgba(0, 0, 0, 0.3), .5pt .5pt 1pt
+     * rgba(255, 255, 255, 1); */
+    border-radius: 1px;
+    min-width: 62px;
+    height: 24px;
+    background: linear-gradient(to top, #eee, #fff);
+}
+
+wb-debug-menu > button:first-child {
+    border: 0;
+}
+
+/* Hide the pause button when paused. */
+.debugger-paused .do-pause {
+    display: none;
+}
+
+/* Hide the continue button when running. */
+body:not(.debugger-paused) .do-pause + .do-continue {
+    display: none;
+}
+
+/* FIXME: This stuff is not ready yet... */
+.do-step-in,
+.do-step-out,
+wb-button-splitter,
+.do-toggle-breakpoints,
+.do-toggle-lineno,
+.do-toggle-breakpoints + label,
+.do-toggle-lineno + label {
+    display: none !important;
+}

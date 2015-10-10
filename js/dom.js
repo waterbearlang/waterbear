@@ -53,6 +53,33 @@
         return elem; // for chaining
     }
 
+    function walk(node, fn){
+        for (var i = 0; i < node.children.length; i++){
+            walk(node.children[i], fn);
+        }
+        return fn(node);
+    }
+
+    function replaceId(node){
+        // Remember: Only YOU can keep all IDs unique in the face of cloning
+        if (node.id){
+            node.id = util.randomId();
+        }
+    }
+
+    var cloner = document.createElement('div');
+    function clone(elem){
+        // Cloned custom elements in Firefox do not preserve custom element lifecycle events
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=1050113
+        cloner.innerHTML = elem.outerHTML;
+        var clonedNode = cloner.removeChild(cloner.firstChild);
+        walk(clonedNode, replaceId); // replace any cloned IDs with unique ones
+        // Trigger on original elem, because clonedNode isn't in the DOM, so
+        // event doesn't bubble to document.body for capture
+        Event.trigger(elem, 'wb-cloned', clonedNode);
+        return clonedNode;
+    }
+
     function appendChildren(e, children){
         // Children can be a single child or an array
         // Each child can be a string or a node
@@ -121,17 +148,21 @@
     }
 
     function find(elem, selector){
-        if (typeof(elem) === 'string'){
+        if (typeof(elem) === 'string' && selector === undefined){
             selector = elem;
             elem = document.body;
+        }else if (typeof(elem) === 'string'){
+            elem = find(document.body, elem);
         }
         return elem.querySelector(selector);
     }
 
     function findAll(elem, selector){
-        if (typeof(elem) === 'string'){
+        if (typeof(elem) === 'string' && selector === undefined){
             selector = elem;
             elem = document.body;
+        }else if (typeof(elem) === 'string'){
+            elem = find(document.body, elem);
         }
         return [].slice.call(elem.querySelectorAll(selector));
     }
@@ -247,6 +278,7 @@
         html: html,
         svg: svg,
         elemToObj: elemToObject,
+        clone: clone,
         remove: remove,
         insertAfter: insertAfter,
         matches: matches,

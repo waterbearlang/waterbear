@@ -849,7 +849,6 @@ function toggleFilter(evt){
         }
         app.clearFilter();
 
-
         if (value && value.matches('wb-value')){
             app.setFilter(value);
         }
@@ -1340,6 +1339,20 @@ function handleInputOnBalance(evt) {
     if(input.value < -1) input.value = -1;
     if(input.value > 1) input.value = 1;
 }
+
+function handleEnter(evt) {
+    var code = (evt.keyCode ? evt.keyCode : evt.which);
+    if(code === 13){
+        var wb = dom.closest(evt.target, 'wb-value');
+        wb.deselect();
+        app.clearFilter();
+        var input = wb.getElementsByTagName('input');
+        input[0].blur();
+        var oldBlock = dom.find(workspace, '.selected-block');
+        oldBlock.classList.remove('selected-block');
+    }
+    return false;
+}
     
 // Event handling
 
@@ -1365,6 +1378,8 @@ Event.on(document.body, 'editor:drag-cancel', null, cancelDragBlock);
 // allow blocks to be dragged to parts of the script which are out of current view
 requestAnimationFrame(checkForScroll);
 
+// Hit enter to deselect
+Event.on(workspace,'editor:keydown', 'wb-value input', handleEnter);
 
 Event.on(workspace, 'editor:input', 'input', resizeInputOnChange);
 Event.on(workspace, 'editor:input', 'input, select', changeValueOnInputChange);

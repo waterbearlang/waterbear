@@ -103,6 +103,7 @@
             }
             if (selector){
                 if (dom.matches(evt.target, selector)){
+                    debugClick(evt);
                     handler(evt);
                 // }else if (dom.matches(evt.target, selector + ' *')){
                 //     // Fix for missing events that are contained in child elements
@@ -111,6 +112,7 @@
                 //     handler(evt);
                 }
             }else{
+                debugClick(evt);
                 handler(evt);
             }
         };
@@ -122,6 +124,12 @@
         elem.addEventListener(eventname, listener, liveFix);
         util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
+    }
+
+    function debugClick(evt){
+        if (evt.type === 'click'){
+            console.log('handling click: %o', evt);
+        }
     }
 
     function off(elem, eventname, handler){
@@ -284,6 +292,7 @@
     var dragTarget = null;
     var isDragging = false;
     var startPos = {x: 0, y: 0};
+    Event.distancePointerMoved = 0;
     var DELTA = 5; // movement required to trigger drag vs. tap
 
     function reset(){
@@ -308,6 +317,7 @@
         Event.pointerY = evt.pageY;
         dragTarget = evt.target;
         startPos = {x: evt.pageX, y: evt.pageY};
+        Event.distancePointerMoved = 0;
         forward(dragTarget, 'drag-init', evt);
     }
 
@@ -338,12 +348,12 @@
     function dragging(evt){
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
+        Event.distancePointerMoved = util.dist(evt.pageX, startPos.x, evt.pageY, startPos.y);
         if (!dragTarget) { return undefined; }
         if (!isDragging) {
             // Test if we've moved more than a delta?
             // Otherwise this could block legitimate click/tap events
-            var distanceMoved = Math.sqrt(Math.pow(evt.pageX - startPos.x, 2) + Math.pow(evt.pageY - startPos.y));
-            if (distanceMoved < DELTA){
+            if (Event.distancePointerMoved < DELTA){
                 return undefined;
             }
             if (startDrag(evt) === undefined) {

@@ -665,8 +665,8 @@
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
                 return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y));
+                    controlPoint2.x, controlPoint2.y, toPoint.x,
+                    toPoint.y));
             },
             moveTo: function(toPoint){
                 return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));

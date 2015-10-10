@@ -103,16 +103,9 @@
             }
             if (selector){
                 if (dom.matches(evt.target, selector)){
-                    debugClick(evt);
                     handler(evt);
-                // }else if (dom.matches(evt.target, selector + ' *')){
-                //     // Fix for missing events that are contained in child elements
-                //     // Bubble up to the nearest matching parent
-                //     evt.target = dom.closest(evt.target, selector);
-                //     handler(evt);
                 }
             }else{
-                debugClick(evt);
                 handler(evt);
             }
         };
@@ -124,12 +117,6 @@
         elem.addEventListener(eventname, listener, liveFix);
         util.setDefault(allEvents, namespace, []).push(new ScopedEvent(elem, eventname, listener));
         return listener;
-    }
-
-    function debugClick(evt){
-        if (evt.type === 'click'){
-            console.log('handling click: %o', evt);
-        }
     }
 
     function off(elem, eventname, handler){

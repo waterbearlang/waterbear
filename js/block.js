@@ -108,6 +108,10 @@ BlockProto.attributeChangedCallback = function blockAttributeChangedCallback(att
     //    type (do nothing
 };
 BlockProto.gatherValues = function blockGatherValues(scope){
+    var value = this.getAttribute('value');
+    if (value){
+        return [value];
+    }
     var values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
     return values.map(function(value){
         return value.getValue(scope);
@@ -409,14 +413,6 @@ ExpressionProto.detachedCallback = function expressionDetached(){
         });
     }
     this.parent = null;
-};
-
-ExpressionProto.gatherValues = function gatherValues(scope){
-    var value = this.getAttribute('value');
-    if (!value){
-        return BlockProto.gatherValues.call(this, scope);
-    }
-    return [value];
 };
 
 ExpressionProto.removeInstances = function(){
@@ -1340,7 +1336,7 @@ function handleInputOnBalance(evt) {
     if(input.value < -1) input.value = -1;
     if(input.value > 1) input.value = 1;
 }
-    
+
 // Event handling
 
 // Make sure wb-added, wb-addedChild, wb-removedChild events are triggered

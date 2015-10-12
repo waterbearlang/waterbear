@@ -750,9 +750,12 @@
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                    this.x = x;
+                    this.y = y;
+                    this.rad = rad;
                 });
             },
-            rectangle: function(pt, width, height, orientation){
+            rectangle: function rectangle(pt, width, height, orientation){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     var x = 0;

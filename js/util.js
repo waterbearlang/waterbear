@@ -956,7 +956,7 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
-    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){ // alpha
+    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }else if (this.position.x < r.x && this.velocity.x < 0){
@@ -969,7 +969,8 @@
         }
     }
 
-    Sprite.prototype.checkForCollision = function checkForCollision(r){ // alpha
+    Sprite.prototype.checkForCollision = function checkForCollision(r){
+
         return this.position.x < r.drawable.x + r.drawable.width &&
                 this.position.x + this.drawable.width > r.drawable.x &&
                 this.position.y < r.drawable.y + r.drawable.height &&

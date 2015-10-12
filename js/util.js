@@ -971,18 +971,44 @@
 
     Sprite.prototype.checkForCollision = function checkForCollision(other){
 
+        var collision = false;
+
+        if(this.drawable.width && other.drawable.width){
+            collision = checkForCollisionTwoRectangles(this, other);
+        }
+        else if(this.drawable.radius && other.drawable.radius){
+            collision = checkForCollisionTwoCircles(this, other);
+        }
+
+        return collision;
+
+    }
+
+    function checkForCollisionTwoCircles(this_, other){
+
+        var diff_x = this_.position.x - other.position.x;
+        var diff_y = this_.position.y - other.position.y;
+
+        var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+
+        return distance < this_.drawable.radius + other.drawable.radius;
+
+    }
+
+    function checkForCollisionTwoRectangles(this_, other){
+
         var this_x;
         var this_y;
         var other_x;
         var other_y;
 
         if(this.drawable.centered){
-            this_x = this.position.x - this.drawable.width/2;
-            this_y = this.position.y - this.drawable.height/2;
+            this_x = this_.position.x - this_.drawable.width/2;
+            this_y = this_.position.y - this_.drawable.height/2;
         }
         else{
-            this_x = this.position.x;
-            this_y = this.position.y;
+            this_x = this_.position.x;
+            this_y = this_.position.y;
         }
 
 
@@ -996,9 +1022,9 @@
         }
 
         return this_x < other_x + other.drawable.width &&
-                this_x + this.drawable.width > other_x &&
+                this_x + this_.drawable.width > other_x &&
                 this_y < other_y + other.drawable.height &&
-                this.drawable.height + this_y > other.position.y
+                this_.drawable.height + this_y > other_y;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

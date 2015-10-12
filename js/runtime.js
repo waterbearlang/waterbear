@@ -746,11 +746,11 @@
             setLineWidth: function(width){
                 getContext().lineWidth = width;
             },
-            circle: function(pt, rad){
+            circle: function circle(pt, rad){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                    this.rad = rad;
+                    this.radius = rad;
                 });
             },
             rectangle: function rectangle(pt, width, height, orientation){

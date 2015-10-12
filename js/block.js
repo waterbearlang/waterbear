@@ -1337,11 +1337,15 @@ function selectByBlock(block){
 
 function handleInputOnBalance(evt) {
     var input = dom.closest(evt.target, 'input');
-    if(input.min || input.max ) {
-        if(input.value < input.min) input.value = input.min;  
-        if(input.value > input.max) input.value = input.max;
+    if(input.min && input.value < input.min)
+    {
+        input.value = input.min;
     }
-}  
+    else if(input.max && input.value > input.max)
+    {
+        input.value = input.max;
+    }
+}
 
 function handleEnter(evt) {
     var code = (evt.keyCode ? evt.keyCode : evt.which);

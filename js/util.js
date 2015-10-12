@@ -979,10 +979,62 @@
         else if(this.drawable.radius && other.drawable.radius){
             collision = checkForCollisionTwoCircles(this, other);
         }
+        else if(this.drawable.radius && other.drawable.width){
+            collision = checkForCollisionRectangleAndCircle(other, this);
+        }
+        else if(this.drawable.width && other.drawable.radius){
+            collision = checkForCollisionRectangleAndCircle(this, other);
+        }
 
         return collision;
 
     }
+
+    function checkForCollisionRectangleAndCircle(rectangle, circle){
+        // Solution came from http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+
+        var center_x;
+        var center_y;
+
+        if(rectangle.drawable.centered){
+            center_x = rectangle.position.x;
+            center_y = rectangle.position.y;
+        }
+        else{
+            center_x = rectangle.position.x + rectangle.drawable.width/2;
+            center_y = rectangle.position.y + rectangle.drawable.height/2;
+        }
+
+        var distance_x = Math.abs(circle.position.x - center_x);
+        var distance_y = Math.abs(circle.position.y - center_y);
+
+        var collision = false;
+
+
+        if(distance_x > rectangle.drawable.width/2 + circle.drawable.radius){
+            collision = false;
+        }
+        else if(distance_y > rectangle.drawable.height/2 + circle.drawable.radius){
+            collision = false;
+        }
+        else if(distance_x <= rectangle.drawable.width/2){
+            collision = true;
+        }
+        else if(distance_y <= rectangle.drawable.height/2){
+            collision = true;
+        }
+        else{
+            var corner_distance = Math.pow(distance_x - rectangle.width/2, 2) +
+                                Math.pow(distance_y - rectangle.height/2, 2);
+
+            collision = corner_distance <= Math.pow(circle.drawable.radius, 2);
+
+        }
+
+        return collision;
+
+    }
+
 
     function checkForCollisionTwoCircles(this_, other){
 
@@ -1002,7 +1054,7 @@
         var other_x;
         var other_y;
 
-        if(this.drawable.centered){
+        if(this_.drawable.centered){
             this_x = this_.position.x - this_.drawable.width/2;
             this_y = this_.position.y - this_.drawable.height/2;
         }

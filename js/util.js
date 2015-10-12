@@ -970,17 +970,10 @@
     }
 
     Sprite.prototype.checkForCollision = function checkForCollision(r){ // alpha
-        debugger;
-        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
-            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
-        }else if (this.position.x < r.x && this.velocity.x < 0){
-            this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
-        }
-        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
-            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
-        }else if (this.position.y < r.y && this.velocity.y < 0){
-            this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
-        }
+        return this.position.x < r.drawable.x + r.drawable.width &&
+                this.position.x + this.drawable.width > r.drawable.x &&
+                this.position.y < r.drawable.y + r.drawable.height &&
+                this.drawable.height + this.position.y > r.drawable.y
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

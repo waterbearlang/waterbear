@@ -753,25 +753,27 @@
                 });
             },
             rectangle: function(pt, width, height, orientation){
-                //debugger;
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
+                    var x = 0;
+                    var y = 0;
                     if(orientation == "center"){
-                        ctx.moveTo(pt.x - width/2, pt.y - height/2);
-                        ctx.lineTo(pt.x + width/2, pt.y - height/2);
-                        ctx.lineTo(pt.x + width/2, pt.y + height/2);
-                        ctx.lineTo(pt.x - width/2, pt.y + height/2);
-                        ctx.lineTo(pt.x - width/2, pt.y - height/2);
+                        x = pt.x - width/2;
+                        y = pt.y - height/2
                     }
                     else{
-                        ctx.moveTo(pt.x, pt.y);
-                        ctx.lineTo(pt.x + width, pt.y);
-                        ctx.lineTo(pt.x + width, pt.y + height);
-                        ctx.lineTo(pt.x, pt.y + height);
-                        ctx.lineTo(pt.x, pt.y);
+                        x = pt.x;
+                        y = pt.y;
                     }
-                    this.x = pt.x;
-                    this.y = pt.y;
+
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + width, y);
+                    ctx.lineTo(x + width, y + height);
+                    ctx.lineTo(x, y + height);
+                    ctx.lineTo(x, y);
+
+                    this.x = x;
+                    this.y = y;
                     this.width = width;
                     this.height = height;
                 });

@@ -110,12 +110,16 @@ BlockProto.attributeChangedCallback = function blockAttributeChangedCallback(att
 BlockProto.gatherValues = function blockGatherValues(scope){
     var value = this.getAttribute('value');
     if (value){
-        return [value];
+        // FIXME: Does this need to be an array of function?
+        return [ value ];
     }
     var values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
-    return values.map(function(value){
-        return value.getValue(scope);
-    });
+    return Array.prototype.concat.apply(
+        [],
+        values.map(function(value){
+            return value.getValue(scope);
+        })
+    );
 };
 
 BlockProto.hasLocal = function blockHasLocal(){
@@ -219,8 +223,8 @@ StepProto.run = function stepRun(scope){
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
     }
-    var values = this.gatherValues(scope);
     scope._block = this;
+    scope._contains = undefined;
     return this.fn.apply(scope, this.gatherValues(scope));
 };
 
@@ -313,12 +317,10 @@ ContextProto.run = function contextRun(parentScope){
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
     }
-    // var scope = util.extend({}, parentScope);
     var scope = Object.create(parentScope); // use parentScope as prototype
-    // expressions are eagerly evaluated against scope, contains are late-evaluated
-    // I'm not yet sure if this is the Right Thing™ [actually, pretty sure it is not]
     scope._block = this;
-    return this.fn.call(scope, this.gatherValues(scope), this.gatherContains(scope));
+    scope._contains = this.gatherContains(scope);
+    return this.fn.apply(scope, this.gatherValues(scope));
 };
 
 /**
@@ -419,15 +421,8 @@ ExpressionProto.removeInstances = function(){
     /* do nothing */
 };
 
-ExpressionProto.run = function(scope){
-    if (!this.fn){
-        var nsName = this.getAttribute('ns');
-        var fnName = this.getAttribute('fn');
-        this.fn = runtime[nsName][fnName];
-    }
-    scope._block = this;
-    return this.fn.apply(scope, this.gatherValues(scope));
-};
+ExpressionProto.run = StepProto.run;
+ExpressionProto.gatherValues = BlockProto.gatherValues; // should ExpressionProto straight-up inherit from BlockProto yet?
 
 
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
@@ -596,14 +591,11 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 *
 ******************/
 var RowProto = Object.create(HTMLElement.prototype);
-RowProto.getValue = function(scope){
-    var values = dom.children(this, 'wb-value[type]:not(.hide), wb-local');
-    if (values.length == 1){
-        return values[0].getValue(scope);
-    }else if (values.length > 1){
-        return values.map(function(value){ return value.getValue(scope); });
-    }
-    return null;
+RowProto.getValue = function(){
+    // This will always return an array (maybe an empty array)
+    return dom
+        .children(this, 'wb-value[type]:not(.hide), wb-local')
+        .map(function(value){ return value.getValue()[0]; });
 };
 RowProto.attachedCallback = insertIntoHeader;
 window.WBRow = document.registerElement('wb-row', {prototype: RowProto});
@@ -648,7 +640,8 @@ function toggleClosed(evt){
 var LocalProto = Object.create(HTMLElement.prototype);
 LocalProto.run = StepProto.run;
 LocalProto.attachedCallback = insertIntoHeader;
-LocalProto.getValue = function(scope){
+LocalProto.getValue = function(){
+    // wb-value already returns an array
     return dom.find(this, 'wb-value').getValue();
 }
 window.WBLocal = document.registerElement('wb-local', {prototype: LocalProto});
@@ -779,28 +772,35 @@ ValueProto.createdCallback = function valueCreated(){
         resize(input);
     }
 };
-ValueProto.getValue = function(scope){
+ValueProto.getValue = function(){
+    // All versions of getValue eventually call this
+    // Return an array of one function
     var block = dom.child(this, 'wb-expression');
+    var self = this;
     if (block){
-        scope._block = block;
-        return block.run(scope);
+        return [function valueBlockGetter(scope){
+            scope._block = block;
+            return block.run(scope);
+        }];
     }
-    var input = dom.child(this, 'input, select');
-    if (!this.type){
-        this.type = this.getAttribute('type') || 'text';
-    }
-    var value;
-    if (input){
-        value = input.value;
-    }else{
-        value = this.getAttribute('value');
-    }
-    var primaryType = this.type.split(',')[0];
-    if (convert[primaryType]){
-        return convert[primaryType](value);
-    }else{
-        return value;
-    }
+    return [function valueLiteralGetter(scope){
+        var input = dom.child(self, 'input, select');
+        if (!self.type){
+            self.type = self.getAttribute('type') || 'text';
+        }
+        var value;
+        if (input){
+            value = input.value;
+        }else{
+            value = self.getAttribute('value');
+        }
+        var primaryType = self.type.split(',')[0];
+        if (convert[primaryType]){
+            return convert[primaryType](value);
+        }else{
+            return value;
+        }
+    }];
 };
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
@@ -1334,10 +1334,10 @@ function selectByBlock(block){
 function handleInputOnBalance(evt) {
     var input = dom.closest(evt.target, 'input');
     if(input.min || input.max ) {
-        if(input.value < input.min) input.value = input.min;  
+        if(input.value < input.min) input.value = input.min;
         if(input.value > input.max) input.value = input.max;
     }
-}  
+}
 
 function handleEnter(evt) {
     var code = (evt.keyCode ? evt.keyCode : evt.which);

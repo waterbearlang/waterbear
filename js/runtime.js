@@ -170,92 +170,99 @@
 
         array: {
             create: function arrayCreateExpr(){
-                return [].slice.call(arguments);
+                var scope = this;
+                return []
+                    .slice
+                    .call(arguments)
+                    .map(function(arg){
+                        return arg(scope)
+                    });
             },
             copy: function arrayCopyExpr(a){
-                return a.slice();
+                return a(this).slice();
             },
             itemAt: function arrayItemFromExpr(a,i){
-                return a[i];
+                return a(this)[i(this)];
             },
             join: function arrayJoinExpr(a,s){
-                return a.join(s);
+                return a(this).join(s(this));
             },
             append: function arrayAppendStep(a,item){
-                a.push(item);
+                a(this).push(item(this));
             },
             prepend: function arrayPrependStep(a,item){
-                a.unshift(item);
+                a(this).unshift(item(this));
             },
             length: function arrayLengthExpr(a){
-                return a.length;
+                return a(this).length;
             },
             removeItem: function arrayRemoveItemStep(a,i){
-                a.splice(i,1);
+                a(this).splice(i(this),1);
             },
             pop: function arrayPopExpr(a){
-                return a.pop();
+                return a(this).pop();
             },
             shift: function arrayShiftExpr(a){
-                return a.shift();
+                return a(this).shift();
             },
             reverse: function arrayReverseExpr(a){
-                return a.reverse();
+                return a(this).reverse();
             }
         },
 
         'boolean': {
             and: function booleanAndExpr(a,b){
-                return a && b;
+                return a(this) && b(this);
             },
             or: function booleanOrExpr(a,b){
-                return a || b;
+                return a(this) || b(this);
             },
             xor: function booleanXorExpr(a,b){
-                return !a !== !b;
+                return !a(this) !== !b(this);
             },
             not: function booleanNotExpr(a){
-                return !a;
+                return !a(this);
             }
         },
         color: {
             namedColor: function colorNamedExpr(name){
                 // FIXME: We may need to return hex or other color value
-                return name;
+                return name(this);
             },
             rgb: function colorRGBExpr(r,g,b){
-                return 'rgb(' + r + ',' + g + ',' + b + ')';
+                return 'rgb(' + r(this) + ',' + g(this) + ',' + b(this) + ')';
             },
             rgba: function colorRGBAExpr(r,g,b,a){
-                return 'rgba(' + r + ',' + g + ',' + b + ',' + a/100 + ')';
+                return 'rgba(' + r(this) + ',' + g(this) + ',' + b(this) + ',' + a()/100 + ')';
             },
             grey: function colorGreyExpr(g){
-                return 'rgb(' + g + ',' + g + ',' + g + ')';
+                return 'rgb(' + g(this) + ',' + g(this) + ',' + g(this) + ')';
             },
             hsl: function colorHSLExpr(h,s,l){
-                return 'hsl(' + h + ',' + s + '%,' + l + '%)';
+                return 'hsl(' + h(this) + ',' + s(this) + '%,' + l(this) + '%)';
             },
             hsla: function colorHSLAExpr(h,s,l,a){
-                return 'hsl(' + h + ',' + s + '%,' + l + '%,' + a/100 + ')';
+                return 'hsl(' + h(this) + ',' + s(this) + '%,' + l(this) + '%,' + a()/100 + ')';
             },
             random: function colorRandomExpr(){
                 return "#"+(~~(Math.random()*(1<<30))).toString(16).toUpperCase().slice(0,6);
             },
             fill: function colorFillStep(color){
-                getContext().fillStyle = color;
+                getContext().fillStyle = color(this);
             },
             stroke: function colorStrokeStep(color){
-                getContext().strokeStyle = color;
+                getContext().strokeStyle = color(this);
             },
             shadow: function colorShadowStep(color, blur){
-                getContext().shadowColor = color;
-                getContext().shadowBlur = blur;
+                getContext().shadowColor = color(this);
+                getContext().shadowBlur = blur(this);
             }
         },
 
         control: {
-            eachFrame: function controlEachFrameCtx(args, containers){
+            eachFrame: function controlEachFrameCtx(){
                 var self = this;
+                var containers = this._contains;
                 perFrameHandlers.push(function runFrame(){
                     containers[0].forEach(function runBoundBlock(block){
                         block.run(self);
@@ -268,25 +275,21 @@
             elapsed: function controlElapsedExpr(){
                 return runtime.control._elapsed;
             },
-            setVariable: function controlSetVariableStep(nameValuePair){
+            setVariable: function controlSetVariableStep(name, value){
                 //FIXME: Make sure this is named properly
-                var name = nameValuePair[0];
-                var value = nameValuePair[1];
-                this[name] = value;
+                this[name(this)] = value(this);
             },
             getVariable: function controlGetVariableExpr(name){
-                return this[name];
+                return this[name(this)];
             },
-            updateVariable: function controlUpdateVariableStep(values){
+            updateVariable: function controlUpdateVariableStep(oldValue, newValue){
                 // this is one of the rare times we need access to the element
                 var scope = this; // get ready to walk up the scope tree
-                var oldValue = values[0];
-                var newValue = values[1];
-                var variableName = dom.find(scope._block, 'wb-value').getValue();
+                var variableName = dom.find(scope._block, 'wb-value').getValue()(this);
                 while( scope !== null){
                     if (scope.hasOwnProperty(variableName)){
-                        console.assert(scope[variableName] === oldValue);
-                        scope[variableName] = newValue;
+                        console.assert(scope[variableName] === oldValue(this));
+                        scope[variableName] = newValue(this);
                         break;
                     }
                     scope = Object.getPrototypeOf(scope);
@@ -297,13 +300,15 @@
             },
             // FIXME: This doesn't seem to have a block
             incrementVariable: function controlIncrementVariableExpr(variable, value){
-                this[name] += value;
+                this[name(this)] += value(this);
             },
-            loopOver: function controlLoopOverCtx(args, containers) {
+            loopOver: function controlLoopOverCtx(listFn, indexName, valueName) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
-                var list = args[0];
+                var list = listFn(this);
+                var contained = this._contains[0];
                 var type = util.type(list);
+                var index, value;
                 var i =0,len,keys;
                 switch(type){
                     case 'array': // fall through
@@ -323,93 +328,99 @@
 
                 /* For every element in the container place
                  * the index and value into the scope. */
+                /* FIXME: This is the prime spot to break up processing both
+                   for debugging and to prevent freezing the browser */
                 for (i = 0; i < len; i++){
                     switch(type){
                         // FIXME: Get names of index & value from block
                         case 'array': // fall through
                         case 'string':
-                            this.index = i;
-                            this.value = list[i];
+                            index = i;
+                            value = list[i];
                             break;
                         case 'object':
-                            this.key = keys[i];
-                            this.value = list[this.key];
+                            index = keys[i];
+                            value = list[this.key];
                             break;
                         case 'number':
-                            this.value = i;
-                            this.index = i;
+                            index = i;
+                            value = i;
                             break;
                         case 'boolean':
-                            this.value = list;
-                            this.index = i;
+                            index = i;
+                            value = list;
                             if (!list){
                                 // hopefully this will handle the case where the value changes after starting the loop
                                 return;
                             }
                             break;
                     }
-                    containers[0].forEach(runBlock);
+                    contained.forEach(runBlock);
                 }
-
                 function runBlock(block){
+                    self[indexName(self)] = index;
+                    self[valueName(self)] = value;
                     block.run(self);
                 }
             },
             broadcast: function controlBroadcastStep(eventName, data){
                 // Handle with and without data
-                Event.trigger(document.body, eventName, data);
+                Event.trigger(document.body, eventName(this), data(this));
             },
-            receive: function controlReceiveCtx(args, containers){
+            receive: function controlReceiveCtx(messageName){
                 // Handle with and without data
                 // Has a local for the data
                 var self = this;
+                var contained = this._contains[0];
                 Event.on(document.body, 'runtime:' + args[0], null, function(evt){
                     // FIXME: how do I get the local from here?
                     // As an arg would be easiest
-                    self[args[1]] = evt.detail;
-                    containers[0].forEach(function(block){
+                    self[messageName(self)] = evt.detail;
+                    contained.forEach(function(block){
                         block.run(self);
                     });
                 });
             },
-            'if': function controlIfCtx(args, containers){
-                if (args[0]){
+            'if': function controlIfCtx(pred){
+                var contained = this._contains[0];
+                if (pred(this)){
                     var self = this;
-                    containers[0].forEach(function(block){
+                    contained.forEach(function(block){
                         block.run(self);
                     });
                 }
             },
-            ifElse: function controlIfElseCtx(args, containers){
+            ifElse: function controlIfElseCtx(pred){
                 var self = this;
-                if (args[0]){
-                    containers[0].forEach(function(block){
+                var containedTrue = this._contains[0];
+                var containedFalse = this._contains[1];
+                if (pred(this)){
+                    containedTrue.forEach(function(block){
                         block.run(self);
                     });
                 }else{
-                    containers[1].forEach(function(block){
+                    containedFalse.forEach(function(block){
                         block.run(self);
                     });
                 }
             },
+            /* FIXME: This doesn't appear to have a block */
             ternary: function controlTernaryCtx(cond, iftrue, otherwise){
-                return cond ? iftrue : otherwise;
+                return cond(this) ? iftrue(this) : otherwise(this);
             },
-            ask: function controlAskStep(args){
+            ask: function controlAskStep(message, name){
                 // Shouldn't this be a context? Or have an on-message handler?
-                var message = args[0];
-                var name = args[1];
-                var answer = prompt(message);
-                runtime.control.setVariable(name, answer);
+                var answer = prompt(message(this));
+                runtime.control.setVariable(name(this), answer);
             },
             comment: function controlCommentStep(){
                 // do nothing, it's a comment
             },
             log: function controlLogStep(item){
-                console.log(item);
+                console.log(item(this));
             },
             alert: function controlAlertStep(x){
-                alert(x);
+                alert(x(this));
             },
         },
 
@@ -424,13 +435,14 @@
                 return util.geolocation.currentLocation;
             },
             /* Asynchronous update event. Context. */
-            whenLocationUpdated: function(args, containers) {
+            whenLocationUpdated: function whenLocationUpdatedCtx() {
                 var currentScope = this;
-                var steps = containers[0];
+                var steps = this._contains[0];
 
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
                     // TODO: probably factor out augmenting scope and running
                     // the block stuff to somewhere else.
+                    currentScope['my current location'] = event.detail;
                     steps.forEach(function (block) {
                         block.run(currentScope);
                     });
@@ -439,8 +451,10 @@
             // Returns the distance between two points in meters.
             // taken from http://www.movable-type.co.uk/scripts/latlong.html
             // Using the haversine formula.
-            distanceBetween: function (p1, p2) {
+            distanceBetween: function (p1Fn, p2Fn) {
                 var R = 6371000; // m
+                var p1 = p1Fn();
+                var p2 = p2Fn();
                 var lat1 = p1.coords.latitude;
                 var lon1 = p1.coords.longitude;
                 var lat2 = p2.coords.latitude;
@@ -526,10 +540,11 @@
             mouseDown: function(){
                 return Event.pointerDown;
             },
-            whenKeyPressed: function(args, containers){
+            whenKeyPressed: function(key){
                 var self = this;
-                Event.onKeyDown(args[0], function(){
-                    containers[0].forEach(function(block){
+                var contained = this.contains[0];
+                Event.onKeyDown(key(), function(){
+                    contained.forEach(function(block){
                         block.run(self);
                     });
                 });

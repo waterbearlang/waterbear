@@ -969,12 +969,36 @@
         }
     }
 
-    Sprite.prototype.checkForCollision = function checkForCollision(r){
+    Sprite.prototype.checkForCollision = function checkForCollision(other){
 
-        return this.position.x < r.drawable.x + r.drawable.width &&
-                this.position.x + this.drawable.width > r.drawable.x &&
-                this.position.y < r.drawable.y + r.drawable.height &&
-                this.drawable.height + this.position.y > r.drawable.y
+        var this_x;
+        var this_y;
+        var other_x;
+        var other_y;
+
+        if(this.drawable.centered){
+            this_x = this.position.x - this.drawable.width/2;
+            this_y = this.position.y - this.drawable.height/2;
+        }
+        else{
+            this_x = this.position.x;
+            this_y = this.position.y;
+        }
+
+
+        if(other.drawable.centered){
+            other_x = other.position.x - other.drawable.width/2;
+            other_y = other.position.y - other.drawable.height/2;
+        }
+        else{
+            other_x = other.position.x;
+            other_y = other.position.y;
+        }
+
+        return this_x < other_x + other.drawable.width &&
+                this_x + this.drawable.width > other_x &&
+                this_y < other_y + other.drawable.height &&
+                this.drawable.height + this_y > other.position.y
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

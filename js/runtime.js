@@ -750,8 +750,6 @@
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                    this.x = x;
-                    this.y = y;
                     this.rad = rad;
                 });
             },
@@ -762,11 +760,13 @@
                     var y = 0;
                     if(orientation == "center"){
                         x = pt.x - width/2;
-                        y = pt.y - height/2
+                        y = pt.y - height/2;
+                        this.centered = true;
                     }
                     else{
                         x = pt.x;
                         y = pt.y;
+                        this.centered = false;
                     }
 
                     ctx.moveTo(x, y);
@@ -775,8 +775,6 @@
                     ctx.lineTo(x, y + height);
                     ctx.lineTo(x, y);
 
-                    this.x = x;
-                    this.y = y;
                     this.width = width;
                     this.height = height;
                 });

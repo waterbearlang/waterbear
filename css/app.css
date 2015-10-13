@@ -18,35 +18,43 @@ sidebar{
     overflow-y: auto;
     overflow-x: auto;
     position: relative;
+    border-radius: 5px;
+    border: 4px #111111 outset;
+    width: 195px;
+    float: left;
+    margin-top: 10px;
+    margin-left: 10px;
 }
 
 body > header{
-    flex: 0 0 34px;
-    background: #111111;
+    flex: 0 0 80px;
+    background: #9944ce;
     color: #FFFFFF;
 }
 
 body > header img{
     border: 0;
-    padding-top: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 10px;
 }
 
 body > header > h1{
-    margin: 0;
-    display: inline;
-    padding: 7px;
-    font-size: 20px;
+    display: inline-block;
+    text-align: center;
+    font-size: 40px;
     color: #fff;
-    vertical-align: top;
-    line-height: 34px;
 }
 
 body > output{
     flex: 0 0 24px;
     background: #EFEDEA;
     color: #111111;
+}
+
+.circle {
+    background-color: #FFF;
+    border-radius: 50%;
 }
 
 .menu{
@@ -57,12 +65,49 @@ body > output{
     padding: 0px;
 }
 
-.menu button[disabled] {
-    color: #999;
-    border-color: #333;
+.sideMenu {
+    background-color: #6ECE1B;
+    display: inline-block;
+    float: right;
+    width: 80px;
 }
 
-.menu button, .menu a, .check-button, .do-run, .do-stop{
+.open-files, .undo, .redo, .open-example, .do-run, .do-stop {
+    color: #FFFFFF;
+    background-color: #9944ce; 
+    height: 35px;
+    width: inherit;
+    font-size: 18px;
+    border: none;
+}
+
+.sideMenu button[disabled] {
+    background-color: black;
+}
+
+.open-files:hover, .undo:hover, .redo:hover, .open-example:hover, .do-run:hover, .do-stop:hover {
+    background-color: #bb61f4;
+}
+
+.open-example {
+    font-size: 14px;   
+}
+
+.canvas {
+    float: right;
+    border-radius: 5px;
+    border: 4px #111111 outset;
+    width: 480px;
+    height: 510px;
+}
+
+.title {
+    font-size: 30px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.menu button, .menu a, .check-button{
     background-color: #666666;
     color: #FFFFFF;
     border-radius: 5px;
@@ -166,9 +211,10 @@ sidebar.trashcan:after{
 
 .feedback{
     position: relative;
-    border: 2px #CCC inset;
+    border: none;
     font-size: 20px;
     padding: 5px 20px;
+    background-color: #fff;
 }
 
 .feedback:empty:after{
@@ -189,6 +235,10 @@ wb-workspace > wb-contains{
     border: 2px inset #CCC;
     position: relative;
     padding-bottom: 16px;
+    width: 530px;
+    border-radius: 5px;
+    border: 4px #111111 outset;
+    float: right;
 }
 
 wb-contains:empty::before{
@@ -196,8 +246,10 @@ wb-contains:empty::before{
     content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */
     width: 100%;
     height: 20px;
-    text-align: center;
+    font-size: 20px;
+    font-family: monospace;
     margin-top: auto;
+    text-align: center;
     margin-bottom: auto;
 
 }

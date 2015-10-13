@@ -74,6 +74,7 @@ wb-workspace{
     display: flex;
     flex-direction: column;
     flex: 2 1;
+    margin-left: 10px;
 }
 
 wb-workspace > header{
@@ -132,7 +133,7 @@ wb-playground > canvas{
 /* Search */
 
 wb-search{
-    height: 34px;
+    height: 0px;
 }
 
 /* ACCORDION */
@@ -199,11 +200,11 @@ wb-accordion > header {
     padding-left: 45px;
     padding-top: 6px;
     padding-bottom: 6px;
-    font-size: 16px;
-    color: #777;
+    font-size: 18px;
+    color: #000;
     clear: left;
-    border: 1px solid #CCC;
-    pointer-events: auto;
+    font-family: monospace;
+    border: none;
 }
 
 
@@ -236,7 +237,7 @@ wb-accordion > header:after{
     position: absolute;
     top: 0;
     right: 0;
-    width: 15px;
+    width: 20px;
     height: 100%;
     background-color: #CCC; /* over-ride colours in app.css */
     pointer-events: none;

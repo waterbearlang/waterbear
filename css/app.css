@@ -82,7 +82,9 @@ body > output{
 }
 
 .sideMenu button[disabled] {
-    background-color: black;
+    background-color: white;
+    color: black;
+    border: 1px black;
 }
 
 .open-files:hover, .undo:hover, .redo:hover, .open-example:hover, .do-run:hover, .do-stop:hover {

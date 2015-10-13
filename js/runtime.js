@@ -560,8 +560,22 @@
             },
             round: Math.round,
             abs: Math.abs,
+            sgn: Math.sign || function(a) {
+            	if(a == 0) return 0;
+            	return a / Math.abs(a);
+            },
             floor: Math.floor,
             ceil: Math.ceil,
+            sqrt: Math.sqrt,
+            cbrt: Math.cbrt || function(a) {
+            	return Math.pow(a,1/3);
+            },
+            root: function(a,b) {
+            	return Math.pow(a, 1/b);
+            },
+            log: function(val,base) {
+            	return Math.log(val) / Math.log(base);
+            },
             max: function(a){
             	return Math.max.apply(Math,a);
             },

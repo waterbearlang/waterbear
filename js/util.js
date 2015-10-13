@@ -325,7 +325,7 @@
         .when(['array', 'vector'], function(a,b){ return a.map(function(x){ return multiply(x,b); }); })
         .when(['vector', 'number'], function(a,b){ return new Vector(a.x * b, a.y * b); })
         .when(['number', 'vector'], function(a,b){ return new Vector(b.x * a, b.y * a); })
-        // dot product, cross product only makes sense in 3 (or more?) dimensions
+        // dot product, cross product only makes sense in 3 dimensions
         .when(['vector', 'vector'], function(a,b){ return a.x * b.x + a.y * b.y; })
         .when(['number', 'number'], function(a,b){ return a * b; })
         .fn(); // no inverse!
